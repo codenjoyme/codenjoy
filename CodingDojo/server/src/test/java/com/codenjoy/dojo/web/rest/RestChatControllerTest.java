@@ -83,5 +83,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetAllMessages() {
         // given
         assertEquals("[]", get("/rest/chat/validRoom/messages"));
+
+        // when
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:''}"));
     }
 }

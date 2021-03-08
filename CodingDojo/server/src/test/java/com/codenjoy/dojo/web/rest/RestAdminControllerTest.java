@@ -448,7 +448,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
-                fix(settings2.toString()));
+                quote(settings2.toString()));
 
         // when
         settings1.getParameters().get(0).setValue("30");
@@ -483,7 +483,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
-                fix(settings2.toString()));
+                quote(settings2.toString()));
     }
 
     // тест такой же как и прошлый, только мы апдейтим не весь сеттинг каким он пришел,
@@ -511,17 +511,17 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
-                fix(settings2.toString()));
+                quote(settings2.toString()));
 
         // when
         // обновляем сеттинги передавая только ключик и значение
         assertEquals("", post(200, "/rest/admin/room/name1/settings/first",
-                fix2("{'parameters':[" +
+                unquote("{'parameters':[" +
                         "{'name':'Parameter 1','value':30}," +
                         "{'name':'Parameter 2','value':false}]}")));
 
         assertEquals("", post(200, "/rest/admin/room/name2/settings/second",
-                fix2("{'parameters':[" +
+                unquote("{'parameters':[" +
                         "{'name':'Parameter 3','value':55}," +
                         "{'name':'Parameter 4','value':true}]}")));
 
@@ -547,7 +547,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
-                fix(settings2.toString()));
+                quote(settings2.toString()));
     }
 
     // тест такой же как и прошлый, только мы проверяем группу настроек semifinal
@@ -574,12 +574,12 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
-                fix(settings2.toString()));
+                quote(settings2.toString()));
 
         // when
         // обновляем сеттинги передавая только ключик и значение
         assertEquals("", post(200, "/rest/admin/room/name1/settings/first",
-                fix2("{'parameters':[" +
+                unquote("{'parameters':[" +
                         "{'name':'Semifinal enabled','value':true}," +
                         "{'name':'Semifinal timeout','value':500}," +
                         "{'name':'Semifinal percentage','value':false}," +
@@ -611,12 +611,12 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50','70'],'type':'editbox','value':'70','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true','false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true','false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
-                fix(settings2.toString()));
+                quote(settings2.toString()));
 
         // when
         // тут пробуем передавать строковые представления
         assertEquals("", post(200, "/rest/admin/room/name2/settings/second",
-                fix2("{'parameters':[" +
+                unquote("{'parameters':[" +
                         "{'name':'Semifinal enabled','value':'false'}," +
                         "{'name':'Semifinal timeout','value':'300'}," +
                         "{'name':'Semifinal percentage','value':'true'}," +
@@ -648,6 +648,6 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50','60'],'type':'editbox','value':'60','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
-                fix(settings2.toString()));
+                quote(settings2.toString()));
     }
 }

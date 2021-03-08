@@ -225,13 +225,13 @@ public abstract class AbstractRestControllerTest {
         }
     }
 
-    protected String fix(String input) {
+    protected String quote(String input) {
         return new SortedJSONObject(input)
                 .toString()
                 .replace('\"', '\'');
     }
 
-    protected String fix2(String input) {
+    protected String unquote(String input) {
         return new SortedJSONObject(input.replace('\'', '\"'))
                 .toString();
     }
