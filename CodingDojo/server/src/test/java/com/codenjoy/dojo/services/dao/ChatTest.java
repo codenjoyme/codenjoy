@@ -151,4 +151,41 @@ public class ChatTest {
         assertEquals("[]",
                 messages.toString());
     }
+
+    @Test
+    public void shouldGetMessageById() {
+        // given
+        service.saveMessage(new Chat.Message("room1", "player1",
+                JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200"),
+                "message1"));
+
+        service.saveMessage(new Chat.Message("room1", "player1",
+                JDBCTimeUtils.getTimeLong("2021-03-08T22:31:54.756+0200"),
+                "message2"));
+
+        service.saveMessage(new Chat.Message("room1", "player2",
+                JDBCTimeUtils.getTimeLong("2021-03-08T23:53:24.792+0200"),
+                "message3"));
+
+        service.saveMessage(new Chat.Message("room2", "player2",
+                JDBCTimeUtils.getTimeLong("2021-03-08T23:53:24.792+0200"),
+                "message4"));
+
+        // when then
+        assertEquals("Chat.Message(id=0, chatId=room1, playerId=player1, " +
+                        "time=1615231423345, text=message1)",
+                service.getMessageById(0).toString());
+
+        assertEquals("Chat.Message(id=1, chatId=room1, playerId=player1, " +
+                        "time=1615235514756, text=message2)",
+                service.getMessageById(1).toString());
+
+        assertEquals("Chat.Message(id=2, chatId=room1, playerId=player2, " +
+                        "time=1615240404792, text=message3)",
+                service.getMessageById(2).toString());
+
+        assertEquals("Chat.Message(id=3, chatId=room2, playerId=player2, " +
+                        "time=1615240404792, text=message4)",
+                service.getMessageById(3).toString());
+    }
 }
