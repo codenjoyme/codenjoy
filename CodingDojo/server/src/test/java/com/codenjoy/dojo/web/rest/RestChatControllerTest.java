@@ -88,7 +88,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetAllMessages_whenPostIt() {
         // given
-        assertEquals("[]", get("/rest/chat/validRoom/messages"));
+        assertEquals("[]", quote(get("/rest/chat/validRoom/messages")));
 
         // when
         nowIs(12345L);
@@ -154,5 +154,31 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
     public void nowIs(long time) {
         when(this.time.now()).thenReturn(time);
+    }
+
+    @Test
+    public void shouldGetMessage_whenPostIt() {
+        // given
+        assertError("java.lang.IllegalArgumentException: There is no message " +
+                        "with id: 0 in room with id: validRoom",
+            "/rest/chat/validRoom/messages/0");
+
+        // when
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        // then
+        assertEquals("{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}",
+                quote(get("/rest/chat/validRoom/messages/0")));
+
+        // when
+        nowIs(23456L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message2'}"));
+
+        // then
+        assertEquals("{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}",
+                quote(get("/rest/chat/validRoom/messages/1")));
     }
 }
