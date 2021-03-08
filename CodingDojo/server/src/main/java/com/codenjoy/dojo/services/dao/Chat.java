@@ -40,8 +40,7 @@ public class Chat {
     public Chat(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS messages (" +
-                        // TODO this works only for sqlite
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                        "id integer_primary_key, " +
                         "chat_id varchar(255), " +
                         "player_id varchar(255), " +
                         "time varchar(255), " +

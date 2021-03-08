@@ -47,10 +47,6 @@ public class PostgreSQLConnectionThreadPool extends CrudConnectionThreadPool {
         return DriverManager.getConnection("jdbc:postgresql://" + database);
     }
 
-    private void createDB(String sql) {
-        update(sql);
-    }
-
     public void removeDatabase() {
         close();
     }
@@ -58,5 +54,10 @@ public class PostgreSQLConnectionThreadPool extends CrudConnectionThreadPool {
     @Override
     String getLastInsertedIdQuery(String table, String column) {
         return "SELECT currval(pg_get_serial_sequence('" + table + "','" + column + "'))";
+    }
+
+    @Override
+    String getPkDirective() {
+        return "BIGSERIAL PRIMARY KEY";
     }
 }

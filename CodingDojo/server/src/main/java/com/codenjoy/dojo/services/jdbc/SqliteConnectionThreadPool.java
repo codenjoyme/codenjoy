@@ -58,10 +58,6 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
         return DriverManager.getConnection("jdbc:sqlite:" + database, config.toProperties());
     }
 
-    private void createDB(String sql) {
-        update(sql);
-    }
-
     public void removeDatabase() {
         close();
 
@@ -74,5 +70,9 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
     @Override
     String getLastInsertedIdQuery(String table, String column) {
         return "select last_insert_rowid()";
+    }
+
+    String getPkDirective() {
+        return "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL";
     }
 }

@@ -94,4 +94,11 @@ public abstract class CrudConnectionThreadPool extends ConnectionThreadPool {
     }
 
     abstract String getLastInsertedIdQuery(String table, String column);
+
+    void createDB(String sql) {
+        sql = sql.replaceAll("integer_primary_key", getPkDirective());
+        update(sql);
+    }
+
+    abstract String getPkDirective();
 }
