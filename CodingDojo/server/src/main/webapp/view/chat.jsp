@@ -30,6 +30,10 @@
             </div>
         </script>
     </div>
-    <textarea id="new-message"></textarea>
-    <input type="button" id="post-message">
+    <div class="message-area">
+        <textarea id="new-message"></textarea>
+    </div>
+    <div class="post-message-button">
+        <input type="button" id="post-message" value="Send">
+    </div>
 </div>

@@ -195,6 +195,16 @@ label.error {
     list-style-type: binary;
 }
 
+#leaderboard .post-message-button {
+    text-align: right;
+}
+
+#leaderboard .message-area textarea {
+    margin: 0px;
+    width: 100%;
+    height: 55px;
+}
+
 .glasses {
     width: calc(100% - 530px);
     float: left;
