@@ -165,9 +165,13 @@ label.error {
 }
 
 .chat .message-text {
-    font-family: monospace;
-    font-size: 12px;
+    font-family: sans-serif;
+    font-size: 13px;
     margin-left: 18px;
+}
+
+.chat .chat-message:nth-child(even) {
+    background-color: #fff9f6;
 }
 
 #leaderboard label:hover {
