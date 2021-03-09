@@ -52,7 +52,7 @@
             <input type="button" id="want-donate" value="Помочь проекту..."/>
         </div>
         <%@include file="canvases.jsp"%>
-        <%@include file="leaderstable.jsp"%>
+        <%@include file="leaderboard.jsp"%>
         <%@include file="advertisement.jsp"%>
         <%@include file="donate.jsp"%>
         <%@include file="widgets.jsp"%>

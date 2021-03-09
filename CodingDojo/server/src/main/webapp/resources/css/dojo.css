@@ -155,6 +155,42 @@ label.error {
 .chat {
 }
 
+#leaderboard label:hover {
+    text-decoration: underline;
+    background-color: bisque;
+}
+
+#leaderboard label {
+    color: #428bca;
+    text-decoration: none;
+    font-size: 25px;
+    padding: 2px 21px 4px 21px;
+    background-color: aliceblue;
+    font-weight: normal;
+}
+
+#leaderboard .tv-content {
+    display: none;
+    margin: -7px;
+}
+
+#leaderboard .tv-radio {
+    display: none;
+}
+
+#leaderboard .tv-radio:checked + .tv-content {
+    display: block;
+}
+
+#leaderboard .tv-tab {
+    display: inline-block;
+    cursor: pointer;
+}
+
+#leaderboard ul {
+    list-style-type: binary;
+}
+
 .glasses {
     width: calc(100% - 530px);
     float: left;
