@@ -21,6 +21,7 @@
   --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,7 +40,10 @@
     <script src="${ctx}/resources/js/${gameOnly}.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <sec:authorize access="isAuthenticated()">
+        <c:set var="authenticated" scope="request" value="true"/>
+    </sec:authorize>
+    <div id="settings" page="${page}" authenticated="${authenticated}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <%@include file="forkMe.jsp"%>
 
@@ -49,6 +53,7 @@
         </div>
         <%@include file="canvases.jsp"%>
         <%@include file="leaderstable.jsp"%>
+        <%@include file="chat.jsp"%>
         <%@include file="advertisement.jsp"%>
         <%@include file="donate.jsp"%>
         <%@include file="widgets.jsp"%>

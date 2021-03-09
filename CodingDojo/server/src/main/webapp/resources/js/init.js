@@ -38,6 +38,7 @@ setup.isDrawByOrder = false;
 setup.canvasCursor = 'auto';
 setup.loadBoardData = true;
 setup.drawCanvases = true;
+setup.enableChat = true;
 
 setup.debug = false;
 setup['debugger'] = function() {

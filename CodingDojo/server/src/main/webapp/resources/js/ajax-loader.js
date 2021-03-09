@@ -28,15 +28,28 @@ function getContext() {
     return ctx;
 }
 
+// TODO to use this method everywhere and convert it to $.ajax({
 function loadData(url, onLoad) {
     $.get(getContext() + url, {}, function (data) {
         onLoad(data);
     });
 }
 
-function sendData(url, jsonData, onSend) {
-    $.post(getContext() + url, jsonData, function (data) {
-        onSend(data);
+// TODO to use this method everywhere
+function sendData(url, jsonData, onSend, onError) {
+    $.ajax({
+        type: "POST",
+        url: getContext() + url,
+        data: JSON.stringify(jsonData),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: onSend,
+        error: function (error) {
+            console.log(error.responseText);
+            if (!!onError) {
+                onError(error);
+            }
+        }
     });
 }
 

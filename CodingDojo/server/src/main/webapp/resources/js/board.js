@@ -23,6 +23,7 @@
 pages = pages || {};
 
 pages.board = function() {
+    setup.authenticated = getSettings('authenticated');
     setup.game = getSettings('game');
     setup.room = getSettings('room');
     setup.playerId = getSettings('playerId');
@@ -95,6 +96,10 @@ function initBoardComponents(setup) {
                 setup.game, setup.enablePlayerInfo,
                 setup.enablePlayerInfoLevel, setup.drawBoard);
         }
+    }
+
+    if (setup.enableChat) {
+        initChat(setup.contextPath);
     }
 
     if (setup.enableDonate) {
