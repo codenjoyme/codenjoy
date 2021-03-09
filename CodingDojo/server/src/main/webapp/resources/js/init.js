@@ -71,19 +71,19 @@ var getSettings = function(name) {
 
 var getTickDateTime = function(time, readable) {
     var date = new Date(parseInt(time));
-    return [date.getFullYear(),
-            date.getDate().padLeft(),
-            (date.getMonth() + 1).padLeft()].join('-') +
-        (!!readable ? ' ' : 'T') +
-        getTickTime(time, readable);
+    return date.getFullYear() + '-' +
+           date.getDate().padLeft() + '-' +
+           (date.getMonth() + 1).padLeft() +
+           (!!readable ? ' ' : 'T') +
+           getTickTime(time, readable);
 }
 
 var getTickTime = function(time, readable) {
     var date = new Date(parseInt(time));
-    return [date.getHours().padLeft(),
-            date.getMinutes().padLeft(),
-            date.getSeconds().padLeft()].join(':') +
-        (!!readable ? '' : ('.' + date.getMilliseconds()));
+    return date.getHours().padLeft() + ':' +
+           date.getMinutes().padLeft() + ':' +
+           (!!readable ? '' : (date.getSeconds().padLeft() +
+                               '.' + date.getMilliseconds()));
 }
 
 var pages = pages || {};

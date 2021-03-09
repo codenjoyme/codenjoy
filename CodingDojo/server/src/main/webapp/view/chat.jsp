@@ -26,9 +26,9 @@
     <div id="chat-container">
         <script template type="text/x-jquery-tmpl">
             <div id="chat-message-{%= id %}" message="{%= id %}" author="{%= author %}" class="chat-message">
-                <span title="{%= dateTime %}" class="time">{%= time %}</span> :
-                <span class="message-author">{%= author %}</span> >
-                <span class="message-text">{%= text %}</span>
+                <span class="message-author">{%= author %}</span>
+                <span class="message-time" title="{%= dateTime %}">{%= time %}</span>
+                <div class="message-text">{%= text %}</div>
             </div>
         </script>
     </div>

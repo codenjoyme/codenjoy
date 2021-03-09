@@ -152,7 +152,16 @@ label.error {
     right: 0px;
 }
 
-.chat {
+.chat .message-author {
+
+}
+
+.chat .message-time {
+
+}
+
+.chat .message-text {
+
 }
 
 #leaderboard label:hover {
