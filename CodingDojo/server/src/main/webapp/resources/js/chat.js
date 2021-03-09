@@ -38,7 +38,7 @@ function initChat(contextPath) {
             var text = message.text;
             var room = message.roomId;
             var player = message.playerId;
-            var time = message.time;
+            var time = getTickTime(message.time, true);
 
             templateData.push({
                 id: id,

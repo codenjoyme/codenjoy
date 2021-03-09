@@ -63,6 +63,18 @@ var getSettings = function(name) {
     return value;
 }
 
+var getTickTime = function(time, readable) {
+    var date = new Date(parseInt(time));
+    return [date.getFullYear(),
+            date.getDate().padLeft(),
+            (date.getMonth() + 1).padLeft()].join('-') +
+        (!!readable ? '' : 'T') +
+        [date.getHours().padLeft(),
+            date.getMinutes().padLeft(),
+            date.getSeconds().padLeft()].join(':') +
+        (!!readable ? '' : ('.' + date.getMilliseconds()));
+}
+
 var pages = pages || {};
 
 $(document).ready(function () {

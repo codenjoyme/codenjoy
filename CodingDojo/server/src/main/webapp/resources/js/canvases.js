@@ -580,17 +580,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
         return len > 0? new Array(len).join(chr || '0')+this : this;
     }
 
-    var getTickTime = function(time) {
-        var date = new Date(parseInt(time));
-        return [date.getFullYear(),
-                date.getDate().padLeft(),
-                (date.getMonth()+1).padLeft()].join('-') + 'T' +
-                [date.getHours().padLeft(),
-                date.getMinutes().padLeft(),
-                date.getSeconds().padLeft()].join(':') + '.' +
-                date.getMilliseconds();
-    }
-
     function drawUserCanvas(playerId, data, allPlayersScreen) {
         if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер борды а не всем сразу?
             reloadCanvasesData();
@@ -606,7 +595,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             $("#score_" + playerId).html(
                 data.score + '<br>' +
                 'Message : ' + data.message + '<br>' +
-                'Time : ' + getTickTime(data.tickTime) +  '<br>' +
+                'Time : ' + getTickTime(data.tickTime, false) +  '<br>' +
                 'Mills : ' + data.tickTime +
                 '<br>' +
                 'Answer : ' + data.command + '<br>'
