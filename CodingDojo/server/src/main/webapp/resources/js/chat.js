@@ -58,6 +58,7 @@ function initChat(contextPath) {
             var newMessage = $('#new-message');
 
             var message = newMessage.val();
+            if (message == '') return;
 
             sendData('/rest/chat/' + setup.room + '/messages',
                 { text : message },
