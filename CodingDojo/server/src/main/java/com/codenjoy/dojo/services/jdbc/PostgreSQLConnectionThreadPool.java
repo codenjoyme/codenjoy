@@ -29,7 +29,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class PostgreSQLConnectionThreadPool extends CrudConnectionThreadPool {
+public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThreadPool {
 
     private static final int CONNECTIONS_COUNT = 10;
 
@@ -59,5 +59,10 @@ public class PostgreSQLConnectionThreadPool extends CrudConnectionThreadPool {
     @Override
     String getPkDirective() {
         return "BIGSERIAL PRIMARY KEY";
+    }
+
+    @Override
+    String clearLastInsertedIdQuery() {
+        return null;
     }
 }

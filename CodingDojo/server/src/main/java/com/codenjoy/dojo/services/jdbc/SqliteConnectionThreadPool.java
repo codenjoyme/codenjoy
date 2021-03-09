@@ -31,7 +31,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
+public class SqliteConnectionThreadPool extends CrudPrimaryKeyConnectionThreadPool {
 
     private static final int CONNECTIONS = 3;
     private String database;
@@ -74,5 +74,10 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
 
     String getPkDirective() {
         return "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL";
+    }
+
+    @Override
+    String clearLastInsertedIdQuery() {
+        return "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'messages'";
     }
 }

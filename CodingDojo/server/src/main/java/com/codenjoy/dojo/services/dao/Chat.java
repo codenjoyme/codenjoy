@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
+import com.codenjoy.dojo.services.jdbc.CrudPrimaryKeyConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import lombok.Builder;
 import lombok.Data;
@@ -35,10 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Chat {
-    private final CrudConnectionThreadPool pool;
+    private final CrudPrimaryKeyConnectionThreadPool pool;
 
     public Chat(ConnectionThreadPoolFactory factory) {
-        pool = factory.create(
+        pool = (CrudPrimaryKeyConnectionThreadPool) factory.create(
                 "CREATE TABLE IF NOT EXISTS messages (" +
                         "id integer_primary_key, " +
                         "chat_id varchar(255), " +
@@ -131,8 +132,7 @@ public class Chat {
     }
 
     public void removeAll() {
-        // TODO this works only for sqlite
-        pool.update("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'messages'");
+        pool.clearLastInsertedId();
         pool.update("DELETE FROM messages");
     }
 

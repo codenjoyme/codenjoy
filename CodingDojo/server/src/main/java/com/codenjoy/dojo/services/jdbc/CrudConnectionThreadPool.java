@@ -30,7 +30,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class CrudConnectionThreadPool extends ConnectionThreadPool {
+public class CrudConnectionThreadPool extends ConnectionThreadPool {
 
     public CrudConnectionThreadPool(int count, Supplier<Connection> factory) {
        super(count, factory);
@@ -87,18 +87,4 @@ public abstract class CrudConnectionThreadPool extends ConnectionThreadPool {
             return null;
         });
     }
-
-    public Integer lastInsertId(String table, String column) {
-        return select(getLastInsertedIdQuery(table, column),
-                rs -> rs.next() ? rs.getInt(1) : null);
-    }
-
-    abstract String getLastInsertedIdQuery(String table, String column);
-
-    void createDB(String sql) {
-        sql = sql.replaceAll("integer_primary_key", getPkDirective());
-        update(sql);
-    }
-
-    abstract String getPkDirective();
 }
