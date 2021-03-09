@@ -35,7 +35,7 @@ function initChat(contextPath) {
         var templateData = [];
         messages.forEach(function (message) {
             var id = message.id;
-            var text = message.text;
+            var text = message.text.split('\n').join('<br>');
             var room = message.roomId;
             var player = message.playerId;
             var author = setup.playerName(player);
@@ -57,13 +57,13 @@ function initChat(contextPath) {
             .appendTo('#chat-container');
     }
 
+    function escapeHtml(data) {
+        return $('<div />').text(data).html();
+    }
+
     function initPost() {
-        newMessage.on('keypress', function(event) {
-            if (event.which == 13) {
-                if (event.ctrlKey) {
-                    event.ctrlKey = false;
-                    return;
-                }
+        newMessage.on('keydown', function(event) {
+            if (event.which == 13 && !event.shiftKey) {
                 event.preventDefault();
                 postMessageButton.click();
             }
@@ -76,7 +76,7 @@ function initChat(contextPath) {
             }
 
             sendData('/rest/chat/' + setup.room + '/messages',
-                { text : message },
+                { text : escapeHtml(message) },
                 function (message) {
                     appendMessages([message]);
                     newMessage.val('');

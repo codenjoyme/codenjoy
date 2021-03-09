@@ -28,12 +28,12 @@
             <div id="chat-message-{%= id %}" message="{%= id %}" player="{%= player %}" class="chat-message">
                 <span class="message-author">{%= author %}</span>
                 <span class="message-time" title="{%= dateTime %}">{%= time %}</span>
-                <div class="message-text">{%= text %}</div>
+                <div class="message-text">{{html text}}</div>
             </div>
         </script>
     </div>
     <div class="message-area">
-        <textarea id="new-message"></textarea>
+        <textarea id="new-message" placeholder="Enter - submit, Shift+Enter - new line"></textarea>
     </div>
     <div class="post-message-button">
         <input type="button" id="post-message" value="Send">
