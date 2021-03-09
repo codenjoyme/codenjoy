@@ -173,6 +173,7 @@ label.error {
     font-family: sans-serif;
     font-size: 13px;
     margin-left: 18px;
+    overflow-wrap: break-word;
 }
 
 .chat .chat-message:nth-child(even) {
