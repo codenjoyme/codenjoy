@@ -125,7 +125,9 @@ public class Chat {
         );
     }
 
-    public Message saveMessage(Message message) {
+    public synchronized Message saveMessage(Message message) {
+        // synchronized тут потому что создание записи и получение новой id
+        // созданной записи должны быть одной атомарной операцией
         pool.update("INSERT INTO messages " +
                         "(chat_id, player_id, time, text) " +
                         "VALUES (?, ?, ?, ?);",
@@ -136,7 +138,6 @@ public class Chat {
                         message.getText()
                 }
         );
-        // TODO: probably race condition
         message.setId(pool.lastInsertId("messages", "id"));
         return message;
     }
