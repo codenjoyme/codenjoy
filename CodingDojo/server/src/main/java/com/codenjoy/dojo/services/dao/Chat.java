@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.dao;
  */
 
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
-import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.CrudPrimaryKeyConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import lombok.Builder;
@@ -105,16 +104,16 @@ public class Chat {
 
     public Message saveMessage(Message message) {
         pool.update("INSERT INTO messages " +
-                        "(id, chat_id, player_id, time, text) " +
-                        "VALUES (?, ?, ?, ?, ?);",
+                        "(chat_id, player_id, time, text) " +
+                        "VALUES (?, ?, ?, ?);",
                 new Object[]{
-                        null,
                         message.getChatId(),
                         message.getPlayerId(),
                         JDBCTimeUtils.toString(new Date(message.getTime())),
                         message.getText()
                 }
         );
+        // TODO: probably race condition
         message.setId(pool.lastInsertId("messages", "id"));
         return message;
     }
@@ -132,7 +131,7 @@ public class Chat {
     }
 
     public void removeAll() {
-        pool.clearLastInsertedId("message", "id");
+        pool.clearLastInsertedId("messages", "id");
         pool.update("DELETE FROM messages");
     }
 
