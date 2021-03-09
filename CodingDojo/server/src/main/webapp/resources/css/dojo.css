@@ -178,6 +178,10 @@ label.error {
     display: none;
 }
 
+#leaderboard #chat-tab {
+    display: none;
+}
+
 #leaderboard .tv-radio:checked + .tv-content {
     display: block;
 }

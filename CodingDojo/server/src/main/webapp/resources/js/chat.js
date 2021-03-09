@@ -70,11 +70,11 @@ function initChat(contextPath) {
     }
 
     if (setup.enableChat && setup.authenticated) {
-        var chat = $("#chat");
 
         loadChatMessages();
         initPost();
 
-        chat.show();
+        $("#chat").show();
+        $("#chat-tab").show();
     }
 }
