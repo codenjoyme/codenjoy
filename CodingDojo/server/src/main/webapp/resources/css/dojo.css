@@ -153,15 +153,21 @@ label.error {
 }
 
 .chat .message-author {
-
+    font-size: 14px;
+    font-weight: bold;
+    font-family: monospace;
 }
 
 .chat .message-time {
-
+    font-size: 12px;
+    font-family: monospace;
+    color: grey;
 }
 
 .chat .message-text {
-
+    font-family: monospace;
+    font-size: 12px;
+    margin-left: 18px;
 }
 
 #leaderboard label:hover {
