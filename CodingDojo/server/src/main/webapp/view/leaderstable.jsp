@@ -22,9 +22,35 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
+<style>
+    .tv-content {
+        display: none;
+    }
+    .tv-radio {
+        display: none;
+    }
+    .tv-radio:checked + .tv-content {
+        display: block;
+    }
+    .tv-tab {
+        display: inline-block;
+        cursor: pointer;
+    }
+    ul {
+        list-style-type: binary;
+    }
+</style>
+
 <div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
-    <table id="table-logs" class="table table-striped leaderboard-table">
-        <thead>
+    <div class="tabs">
+        <label class="tv-tab" for="tv-tab-1">Leaderboard</label>
+        <label class="tv-tab" for="tv-tab-2">Chat</label>
+    </div>
+
+    <input class="tv-radio" id="tv-tab-1" name="tv-group" type="radio" checked="checked"/>
+    <div class="tv-content">
+        <table id="table-logs" class="table table-striped leaderboard-table">
+            <thead>
             <th width="5%">
                 <c:choose>
                     <c:when test="${code != null}">
@@ -37,15 +63,20 @@
             </th>
             <th width="55%">Player</th>
             <th width="25%" class="center">Score</th>
-        </thead>
-        <tbody id="table-logs-body">
+            </thead>
+            <tbody id="table-logs-body">
             <!--
                 <td>1</td>
                 <td><a href="${ctx}/board/player/email?code=code">name</a></td>
                 <td class="center">score</td>
             -->
-        </tbody>
-    </table>
-    <%@include file="info.jsp"%>
-    <%@include file="chat.jsp"%>
+            </tbody>
+        </table>
+        <%@include file="info.jsp"%>
+    </div>
+
+    <input class="tv-radio" id="tv-tab-2" name="tv-group" type="radio"/>
+    <div class="tv-content">
+        <%@include file="chat.jsp"%>
+    </div>
 </div>
