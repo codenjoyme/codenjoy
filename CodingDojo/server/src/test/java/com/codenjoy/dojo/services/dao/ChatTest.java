@@ -104,11 +104,11 @@ public class ChatTest {
         List<Chat.Message> messages = chat.getMessages("room1", 10);
 
         // then
-        assertEquals("[Chat.Message(id=0, chatId=room1, playerId=player1, " +
+        assertEquals("[Chat.Message(id=1, chatId=room1, playerId=player1, " +
                         "time=1615231423345, text=message1), " +
-                        "Chat.Message(id=1, chatId=room1, playerId=player1, " +
+                        "Chat.Message(id=2, chatId=room1, playerId=player1, " +
                         "time=1615235514756, text=message2), " +
-                        "Chat.Message(id=2, chatId=room1, playerId=player2, " +
+                        "Chat.Message(id=3, chatId=room1, playerId=player2, " +
                         "time=1615240404792, text=message3)]",
                 messages.toString());
     }
@@ -138,9 +138,9 @@ public class ChatTest {
         List<Chat.Message> messages = chat.getMessages("room1", 2);
 
         // then
-        assertEquals("[Chat.Message(id=0, chatId=room1, playerId=player1, " +
+        assertEquals("[Chat.Message(id=1, chatId=room1, playerId=player1, " +
                         "time=1615231423345, text=message1), " +
-                        "Chat.Message(id=1, chatId=room1, playerId=player1, " +
+                        "Chat.Message(id=2, chatId=room1, playerId=player1, " +
                         "time=1615235514756, text=message2)]",
                 messages.toString());
     }
@@ -195,21 +195,21 @@ public class ChatTest {
                 "message4"));
 
         // when then
-        assertEquals("Chat.Message(id=0, chatId=room1, playerId=player1, " +
-                        "time=1615231423345, text=message1)",
-                chat.getMessageById(0).toString());
-
         assertEquals("Chat.Message(id=1, chatId=room1, playerId=player1, " +
-                        "time=1615235514756, text=message2)",
+                        "time=1615231423345, text=message1)",
                 chat.getMessageById(1).toString());
 
-        assertEquals("Chat.Message(id=2, chatId=room1, playerId=player2, " +
-                        "time=1615240404792, text=message3)",
+        assertEquals("Chat.Message(id=2, chatId=room1, playerId=player1, " +
+                        "time=1615235514756, text=message2)",
                 chat.getMessageById(2).toString());
 
-        assertEquals("Chat.Message(id=3, chatId=room2, playerId=player2, " +
-                        "time=1615240404792, text=message4)",
+        assertEquals("Chat.Message(id=3, chatId=room1, playerId=player2, " +
+                        "time=1615240404792, text=message3)",
                 chat.getMessageById(3).toString());
+
+        assertEquals("Chat.Message(id=4, chatId=room2, playerId=player2, " +
+                        "time=1615240404792, text=message4)",
+                chat.getMessageById(4).toString());
     }
 
     @Test
@@ -238,35 +238,25 @@ public class ChatTest {
                 JDBCTimeUtils.getTimeLong("2021-03-08T23:53:24.793+0200"),
                 "message4"));
 
-        assertEquals("[Chat.Message(id=0, chatId=room, playerId=player1, " +
+        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, " +
                         "time=1615231423345, text=message1), " +
-                        "Chat.Message(id=1, chatId=room, playerId=player1, " +
+                        "Chat.Message(id=2, chatId=room, playerId=player1, " +
                         "time=1615235514756, text=message2), " +
-                        "Chat.Message(id=2, chatId=room, playerId=player2, " +
+                        "Chat.Message(id=3, chatId=room, playerId=player2, " +
                         "time=1615240404792, text=message3), " +
-                        "Chat.Message(id=3, chatId=room, playerId=player3, " +
+                        "Chat.Message(id=4, chatId=room, playerId=player3, " +
                         "time=1615240404793, text=message4)]",
                 chat.getMessages("room", 10).toString());
 
         // when
-        chat.deleteMessage(0);
+        chat.deleteMessage(1);
 
         // then
-        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, " +
+        assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, " +
                         "time=1615235514756, text=message2), " +
-                        "Chat.Message(id=2, chatId=room, playerId=player2, " +
+                        "Chat.Message(id=3, chatId=room, playerId=player2, " +
                         "time=1615240404792, text=message3), " +
-                        "Chat.Message(id=3, chatId=room, playerId=player3, " +
-                        "time=1615240404793, text=message4)]",
-                chat.getMessages("room", 10).toString());
-
-        // when
-        chat.deleteMessage(2);
-
-        // then
-        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, " +
-                        "time=1615235514756, text=message2), " +
-                        "Chat.Message(id=3, chatId=room, playerId=player3, " +
+                        "Chat.Message(id=4, chatId=room, playerId=player3, " +
                         "time=1615240404793, text=message4)]",
                 chat.getMessages("room", 10).toString());
 
@@ -274,7 +264,17 @@ public class ChatTest {
         chat.deleteMessage(3);
 
         // then
-        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, " +
+        assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, " +
+                        "time=1615235514756, text=message2), " +
+                        "Chat.Message(id=4, chatId=room, playerId=player3, " +
+                        "time=1615240404793, text=message4)]",
+                chat.getMessages("room", 10).toString());
+
+        // when
+        chat.deleteMessage(4);
+
+        // then
+        assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, " +
                         "time=1615235514756, text=message2)]",
                 chat.getMessages("room", 10).toString());
     }
@@ -334,30 +334,30 @@ public class ChatTest {
 
         // when then
         // первое сообщение c id = afterId не включается
-        assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
-                        "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
-                        "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesAfter("room", MAX, 0).toString());
-
-        // берутся только два сверху, хотя доступные 3
-        assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
-                        "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesAfter("room", 2, 0).toString());
-
-        // можно указывать даже айдишку из другого чата - они порядковые
-        assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
-                        "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
-                        "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
+        assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
                 chat.getMessagesAfter("room", MAX, 1).toString());
 
+        // берутся только два сверху, хотя доступные 3
+        assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
+                chat.getMessagesAfter("room", 2, 1).toString());
+
+        // можно указывать даже айдишку из другого чата - они порядковые
+        assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesAfter("room", MAX, 2).toString());
+
         // минус одно сообщение с id = afterId
-        assertEquals("[Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
-                        "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesAfter("room", MAX, 3).toString());
+        assertEquals("[Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesAfter("room", MAX, 4).toString());
 
         // минус одно сообщение с id = afterId
         assertEquals("[]",
-                chat.getMessagesAfter("room", MAX, 6).toString());
+                chat.getMessagesAfter("room", MAX, 7).toString());
     }
 
     @Test
@@ -409,31 +409,31 @@ public class ChatTest {
 
         // when then
         // можно указывать даже айдишку из другого чата - они порядковые
-        assertEquals("[Chat.Message(id=0, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
-                        "Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
-                        "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
-                        "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesBefore("room", MAX, 7).toString());
+        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesBefore("room", MAX, 8).toString());
 
         // первое сообщение c id = beforeId не включается
-        assertEquals("[Chat.Message(id=0, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
-                        "Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
-                        "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBefore("room", MAX, 6).toString());
+        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
+                chat.getMessagesBefore("room", MAX, 7).toString());
 
         // берутся только два но сверху, хотя доступные 3
-        assertEquals("[Chat.Message(id=0, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
-                        "Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3)]",
-                chat.getMessagesBefore("room", 2, 6).toString());
+        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3)]",
+                chat.getMessagesBefore("room", 2, 7).toString());
 
         // минус одно сообщение с id = beforeId
-        assertEquals("[Chat.Message(id=0, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
-                        "Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3)]",
-                chat.getMessagesBefore("room", MAX, 4).toString());
+        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3)]",
+                chat.getMessagesBefore("room", MAX, 5).toString());
 
         // минус одно сообщение с id = beforeId
         assertEquals("[]",
-                chat.getMessagesBefore("room", MAX, 0).toString());
+                chat.getMessagesBefore("room", MAX, 1).toString());
     }
 
     @Test
@@ -486,29 +486,29 @@ public class ChatTest {
         // when then
         // можно указывать даже айдишку из другого чата - они порядковые
         // но первое сообщение c id = afterId не включается
-        assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
-                        "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
-                        "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesBetween("room", MAX, 0, 7).toString());
+        assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesBetween("room", MAX, 1, 8).toString());
 
         // первое сообщение c id = beforeId не включается
         // так же как и последнее сообщение c id = afterId тоже не включается
-        assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
-                        "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetween("room", MAX, 0, 6).toString());
+        assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
+                chat.getMessagesBetween("room", MAX, 1, 7).toString());
 
         // первое сообщение c id = afterId не включается
         // + берутся только два но сверху, хотя доступные 3
-        assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
-                        "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetween("room", 2, 0, 7).toString());
+        assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
+                chat.getMessagesBetween("room", 2, 1, 8).toString());
 
         // минус одно сообщение с id = beforeId
         // минус одно сообщение с id = afterId
-        assertEquals("[Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetween("room", MAX, 2, 6).toString());
+        assertEquals("[Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
+                chat.getMessagesBetween("room", MAX, 3, 7).toString());
 
         assertEquals("[]",
-                chat.getMessagesBetween("room", MAX, 4, 4).toString());
+                chat.getMessagesBetween("room", MAX, 5, 5).toString());
     }
 }
