@@ -59,7 +59,11 @@ function initChat(contextPath) {
 
     function initPost() {
         newMessage.on('keypress', function(event) {
-            if (!event.ctrlKey && event.which == 13) {
+            if (event.which == 13) {
+                if (event.ctrlKey) {
+                    event.ctrlKey = false;
+                    return;
+                }
                 event.preventDefault();
                 postMessageButton.click();
             }
