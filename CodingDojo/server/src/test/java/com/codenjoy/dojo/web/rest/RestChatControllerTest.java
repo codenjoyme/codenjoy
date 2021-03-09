@@ -224,8 +224,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 quote(get("/rest/chat/validRoom/messages?count=2")));
 
         // when then
-        // between + count
-        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
+        // between + count (ignored)
+        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
+                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}]",
                 quote(get("/rest/chat/validRoom/messages?afterId=1&beforeId=4&count=1")));
 
         // when then
@@ -283,7 +284,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetAllMessages_countByDefault() {
         // given
-        IntStream.range(0, 20).forEach(index -> {
+        int startInclusive = 1;
+        int endExclusive = 21;
+        IntStream.range(startInclusive, endExclusive).forEach(index -> {
             nowIs(12345L + index);
             post(200, "/rest/chat/validRoom/messages",
                     unquote("{text:'message" + index + "'}"));
@@ -291,20 +294,60 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
 
         // when then
-        String expected = "[{'id':1,'playerId':'player','roomId':'validRoom','text':'message0','time':12345}," +
-                "{'id':2,'playerId':'player','roomId':'validRoom','text':'message1','time':12346}," +
-                "{'id':3,'playerId':'player','roomId':'validRoom','text':'message2','time':12347}," +
-                "{'id':4,'playerId':'player','roomId':'validRoom','text':'message3','time':12348}," +
-                "{'id':5,'playerId':'player','roomId':'validRoom','text':'message4','time':12349}," +
-                "{'id':6,'playerId':'player','roomId':'validRoom','text':'message5','time':12350}," +
-                "{'id':7,'playerId':'player','roomId':'validRoom','text':'message6','time':12351}," +
-                "{'id':8,'playerId':'player','roomId':'validRoom','text':'message7','time':12352}," +
-                "{'id':9,'playerId':'player','roomId':'validRoom','text':'message8','time':12353}," +
-                "{'id':10,'playerId':'player','roomId':'validRoom','text':'message9','time':12354}]";
+        assertEquals("[{'id':11,'playerId':'player','roomId':'validRoom','text':'message11','time':12356}," +
+                        "{'id':12,'playerId':'player','roomId':'validRoom','text':'message12','time':12357}," +
+                        "{'id':13,'playerId':'player','roomId':'validRoom','text':'message13','time':12358}," +
+                        "{'id':14,'playerId':'player','roomId':'validRoom','text':'message14','time':12359}," +
+                        "{'id':15,'playerId':'player','roomId':'validRoom','text':'message15','time':12360}," +
+                        "{'id':16,'playerId':'player','roomId':'validRoom','text':'message16','time':12361}," +
+                        "{'id':17,'playerId':'player','roomId':'validRoom','text':'message17','time':12362}," +
+                        "{'id':18,'playerId':'player','roomId':'validRoom','text':'message18','time':12363}," +
+                        "{'id':19,'playerId':'player','roomId':'validRoom','text':'message19','time':12364}," +
+                        "{'id':20,'playerId':'player','roomId':'validRoom','text':'message20','time':12365}]",
+                quote(get("/rest/chat/validRoom/messages")));
 
-        assertEquals(expected, quote(get("/rest/chat/validRoom/messages")));
-        assertEquals(expected, quote(get("/rest/chat/validRoom/messages?beforeId=20")));
-        assertEquals(expected, quote(get("/rest/chat/validRoom/messages?afterId=-1")));
-        assertEquals(expected, quote(get("/rest/chat/validRoom/messages?afterId=-1&beforeId=20")));
+        assertEquals("[{'id':10,'playerId':'player','roomId':'validRoom','text':'message10','time':12355}," +
+                        "{'id':11,'playerId':'player','roomId':'validRoom','text':'message11','time':12356}," +
+                        "{'id':12,'playerId':'player','roomId':'validRoom','text':'message12','time':12357}," +
+                        "{'id':13,'playerId':'player','roomId':'validRoom','text':'message13','time':12358}," +
+                        "{'id':14,'playerId':'player','roomId':'validRoom','text':'message14','time':12359}," +
+                        "{'id':15,'playerId':'player','roomId':'validRoom','text':'message15','time':12360}," +
+                        "{'id':16,'playerId':'player','roomId':'validRoom','text':'message16','time':12361}," +
+                        "{'id':17,'playerId':'player','roomId':'validRoom','text':'message17','time':12362}," +
+                        "{'id':18,'playerId':'player','roomId':'validRoom','text':'message18','time':12363}," +
+                        "{'id':19,'playerId':'player','roomId':'validRoom','text':'message19','time':12364}]",
+                quote(get("/rest/chat/validRoom/messages?beforeId=20")));
+
+        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12347}," +
+                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12348}," +
+                        "{'id':4,'playerId':'player','roomId':'validRoom','text':'message4','time':12349}," +
+                        "{'id':5,'playerId':'player','roomId':'validRoom','text':'message5','time':12350}," +
+                        "{'id':6,'playerId':'player','roomId':'validRoom','text':'message6','time':12351}," +
+                        "{'id':7,'playerId':'player','roomId':'validRoom','text':'message7','time':12352}," +
+                        "{'id':8,'playerId':'player','roomId':'validRoom','text':'message8','time':12353}," +
+                        "{'id':9,'playerId':'player','roomId':'validRoom','text':'message9','time':12354}," +
+                        "{'id':10,'playerId':'player','roomId':'validRoom','text':'message10','time':12355}," +
+                        "{'id':11,'playerId':'player','roomId':'validRoom','text':'message11','time':12356}]",
+                quote(get("/rest/chat/validRoom/messages?afterId=1")));
+
+        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12347}," +
+                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12348}," +
+                        "{'id':4,'playerId':'player','roomId':'validRoom','text':'message4','time':12349}," +
+                        "{'id':5,'playerId':'player','roomId':'validRoom','text':'message5','time':12350}," +
+                        "{'id':6,'playerId':'player','roomId':'validRoom','text':'message6','time':12351}," +
+                        "{'id':7,'playerId':'player','roomId':'validRoom','text':'message7','time':12352}," +
+                        "{'id':8,'playerId':'player','roomId':'validRoom','text':'message8','time':12353}," +
+                        "{'id':9,'playerId':'player','roomId':'validRoom','text':'message9','time':12354}," +
+                        "{'id':10,'playerId':'player','roomId':'validRoom','text':'message10','time':12355}," +
+                        "{'id':11,'playerId':'player','roomId':'validRoom','text':'message11','time':12356}," +
+                        "{'id':12,'playerId':'player','roomId':'validRoom','text':'message12','time':12357}," +
+                        "{'id':13,'playerId':'player','roomId':'validRoom','text':'message13','time':12358}," +
+                        "{'id':14,'playerId':'player','roomId':'validRoom','text':'message14','time':12359}," +
+                        "{'id':15,'playerId':'player','roomId':'validRoom','text':'message15','time':12360}," +
+                        "{'id':16,'playerId':'player','roomId':'validRoom','text':'message16','time':12361}," +
+                        "{'id':17,'playerId':'player','roomId':'validRoom','text':'message17','time':12362}," +
+                        "{'id':18,'playerId':'player','roomId':'validRoom','text':'message18','time':12363}," +
+                        "{'id':19,'playerId':'player','roomId':'validRoom','text':'message19','time':12364}]",
+                quote(get("/rest/chat/validRoom/messages?afterId=1&beforeId=20")));
     }
 }

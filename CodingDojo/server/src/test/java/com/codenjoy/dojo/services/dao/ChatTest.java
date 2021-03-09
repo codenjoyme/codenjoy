@@ -116,6 +116,8 @@ public class ChatTest {
     @Test
     public void shouldGetAllMessages_onlyForThisRoom_whenRequestedLessThanPresent() {
         // given
+        // так как getMessages берет только последние сообщения
+        // это сообщение не включено - запросили не так много сообщений
         chat.saveMessage(new Chat.Message("room1", "player1",
                 JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200"),
                 "message1"));
@@ -124,7 +126,6 @@ public class ChatTest {
                 JDBCTimeUtils.getTimeLong("2021-03-08T22:31:54.756+0200"),
                 "message2"));
 
-        // не включен - запросили не так много сообщений
         chat.saveMessage(new Chat.Message("room1", "player2",
                 JDBCTimeUtils.getTimeLong("2021-03-08T23:53:24.792+0200"),
                 "message3"));
@@ -138,10 +139,8 @@ public class ChatTest {
         List<Chat.Message> messages = chat.getMessages("room1", 2);
 
         // then
-        assertEquals("[Chat.Message(id=1, chatId=room1, playerId=player1, " +
-                        "time=1615231423345, text=message1), " +
-                        "Chat.Message(id=2, chatId=room1, playerId=player1, " +
-                        "time=1615235514756, text=message2)]",
+        assertEquals("[Chat.Message(id=2, chatId=room1, playerId=player1, time=1615235514756, text=message2), " +
+                        "Chat.Message(id=3, chatId=room1, playerId=player2, time=1615240404792, text=message3)]",
                 messages.toString());
     }
 
@@ -421,9 +420,9 @@ public class ChatTest {
                         "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
                 chat.getMessagesBefore("room", MAX, 7).toString());
 
-        // берутся только два но сверху, хотя доступные 3
-        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
-                        "Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3)]",
+        // берутся только два но с конца, хотя доступные 3
+        assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
                 chat.getMessagesBefore("room", 2, 7).toString());
 
         // минус одно сообщение с id = beforeId
@@ -489,26 +488,20 @@ public class ChatTest {
         assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=7, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesBetween("room", MAX, 1, 8).toString());
+                chat.getMessagesBetween("room", 1, 8).toString());
 
         // первое сообщение c id = beforeId не включается
         // так же как и последнее сообщение c id = afterId тоже не включается
         assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetween("room", MAX, 1, 7).toString());
-
-        // первое сообщение c id = afterId не включается
-        // + берутся только два но сверху, хотя доступные 3
-        assertEquals("[Chat.Message(id=3, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
-                        "Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetween("room", 2, 1, 8).toString());
+                chat.getMessagesBetween("room", 1, 7).toString());
 
         // минус одно сообщение с id = beforeId
         // минус одно сообщение с id = afterId
         assertEquals("[Chat.Message(id=5, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetween("room", MAX, 3, 7).toString());
+                chat.getMessagesBetween("room", 3, 7).toString());
 
         assertEquals("[]",
-                chat.getMessagesBetween("room", MAX, 5, 5).toString());
+                chat.getMessagesBetween("room", 5, 5).toString());
     }
 }

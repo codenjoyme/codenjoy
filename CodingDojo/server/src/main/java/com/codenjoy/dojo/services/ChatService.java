@@ -46,7 +46,7 @@ public class ChatService {
         validator.checkPlayerInRoom(playerId, room);
 
         if (afterId != null && beforeId != null) {
-            return wrap(chat.getMessagesBetween(room, count, afterId, beforeId));
+            return wrap(chat.getMessagesBetween(room, afterId, beforeId));
         }
 
         if (afterId != null) {

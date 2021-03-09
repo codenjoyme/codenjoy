@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.dao;
  */
 
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
-import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.CrudPrimaryKeyConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import lombok.Builder;
@@ -53,44 +52,67 @@ public class Chat {
         pool.removeDatabase();
     }
 
+    /**
+     * @return {@param count} последних сообщений
+     *        для текущего чата {@param chatId},
+     *        посортированных в порядке возрастания времени
+     */
     public List<Message> getMessages(String chatId, int count) {
-        return pool.select("SELECT * FROM messages " +
+        return pool.select("SELECT * FROM " +
+                        "(SELECT * FROM messages " +
                         "WHERE chat_id = ? " +
-                        "ORDER BY time " +
-                        "LIMIT ?;",
+                        "ORDER BY time DESC " +
+                        "LIMIT ?)" +
+                        "ORDER BY time ASC;",
                 new Object[]{chatId, count},
                 Chat::parseMessages
         );
     }
 
-    public List<Message> getMessagesBetween(String chatId, int count, int afterId, int beforeId) {
+    /**
+     * @return все сообщения в диапазоне ({@param afterId}...{@param beforeId})
+     *        для текущего чата {@param chatId},
+     *        посортированных в порядке возрастания времени.
+     */
+    public List<Message> getMessagesBetween(String chatId, int afterId, int beforeId) {
         if (afterId > beforeId) {
             throw new IllegalArgumentException("afterId in interval should be smaller than beforeId");
         }
         return pool.select("SELECT * FROM messages " +
                         "WHERE chat_id = ? AND id > ? AND id < ?" +
-                        "ORDER BY time " +
-                        "LIMIT ?;",
-                new Object[]{chatId, afterId, beforeId, count},
+                        "ORDER BY time ASC;",
+                new Object[]{chatId, afterId, beforeId},
                 Chat::parseMessages
         );
     }
 
+    /**
+     * @return {@param count} первых сообщений начиная с {@param afterId} (но не включая его)
+     *        для текущего чата {@param chatId},
+     *        посортированных в порядке возрастания времени.
+     */
     public List<Message> getMessagesAfter(String chatId, int count, int afterId) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE chat_id = ? AND id > ?" +
-                        "ORDER BY time " +
+                        "ORDER BY time ASC " +
                         "LIMIT ?;",
                 new Object[]{chatId, afterId, count},
                 Chat::parseMessages
         );
     }
 
+    /**
+     * @return {@param count} последних сообщений перед {@param beforeId} (но не включая его)
+     *        для текущего чата {@param chatId},
+     *        посортированных в порядке возрастания времени.
+     */
     public List<Message> getMessagesBefore(String chatId, int count, int beforeId) {
-        return pool.select("SELECT * FROM messages " +
+        return pool.select("SELECT * FROM " +
+                        "(SELECT * FROM messages " +
                         "WHERE chat_id = ? AND id < ?" +
-                        "ORDER BY time " +
-                        "LIMIT ?;",
+                        "ORDER BY time DESC " +
+                        "LIMIT ?) " +
+                        "ORDER BY time ASC;",
                 new Object[]{chatId, beforeId, count},
                 Chat::parseMessages
         );
@@ -132,7 +154,7 @@ public class Chat {
     }
 
     public void removeAll() {
-        pool.clearLastInsertedId("message", "id");
+        pool.clearLastInsertedId("messages", "id");
         pool.update("DELETE FROM messages");
     }
 
