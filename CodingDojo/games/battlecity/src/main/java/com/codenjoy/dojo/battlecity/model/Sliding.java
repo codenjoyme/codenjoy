@@ -27,10 +27,11 @@ import com.codenjoy.dojo.services.Direction;
 public class Sliding {
 
     public final int slipperiness;
+    private final int prizeWorking;
     private final Field field;
-    private int prizeWorking;
 
     private int tick;
+    private int tickTankOnIceWithPrize;
     private Direction before;
 
     public Sliding(Field field, Direction before) {
@@ -46,8 +47,8 @@ public class Sliding {
             return before = tank.getDirection();
         }
 
-        if (tick == prizeWorking) {
-            prizeWorking = 0;
+        if (tickTankOnIceWithPrize == prizeWorking) {
+            tickTankOnIceWithPrize = 0;
             return before;
         }
 
@@ -59,6 +60,7 @@ public class Sliding {
         }
 
         tick++;
+        tickTankOnIceWithPrize++;
 
         return before;
     }
