@@ -34,6 +34,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -44,6 +45,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 @RunWith(SpringRunner.class)
 @ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestRoomControllerTest.ContextConfiguration.class)
+@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
 public class RestRoomControllerTest extends AbstractRestControllerTest {
 
