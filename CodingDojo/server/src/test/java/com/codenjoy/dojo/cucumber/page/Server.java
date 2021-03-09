@@ -22,6 +22,7 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
+@RequiredArgsConstructor
 public class Server {
 
     private final String SERVER_URL = "http://localhost";

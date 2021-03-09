@@ -143,7 +143,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
         assertEquals(expected1, JsonUtils.prettyPrint(get("/rest/game/first/room1/info")));
 
         String expected2 = "{\n" +
-                "  'boardSize':56,\n" +
+                "  'boardSize':5,\n" +
                 "  'clientUrl':'/codenjoy-contest/resources/user/second-servers.zip',\n" +
                 "  'helpUrl':'/codenjoy-contest/resources/help/second.html',\n" +
                 "  'info':'GameType[second]',\n" +

@@ -70,7 +70,6 @@ public class RestAdminController {
     private GameService games;
 
     @GetMapping("version")
-    @ResponseBody
     public String version() {
         List<String> list = games.getGames();
         list.add(0, "engine");
@@ -79,13 +78,11 @@ public class RestAdminController {
     }
 
     @GetMapping("/info")
-    @ResponseBody
     public Map<String, String> getInfoLogs() {
         return ticket.getInfo();
     }
 
     @GetMapping("/errors")
-    @ResponseBody
     public Map<String, Map<String, Object>> getTickets(
             @RequestParam(value = "ticket", required = false) String ticketId)
     {
@@ -300,7 +297,6 @@ public class RestAdminController {
 
     // TODO test me
     @GetMapping("/player/{player}/remove")
-    @ResponseBody
     public synchronized boolean removeUser(@PathVariable("player") String id) {
         validator.checkPlayerId(id);
 

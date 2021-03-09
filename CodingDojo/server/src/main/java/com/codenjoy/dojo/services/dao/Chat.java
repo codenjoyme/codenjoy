@@ -24,26 +24,27 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
+import com.codenjoy.dojo.services.jdbc.CrudPrimaryKeyConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import lombok.Builder;
 import lombok.Data;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Chat {
-    private final CrudConnectionThreadPool pool;
+    private final CrudPrimaryKeyConnectionThreadPool pool;
 
     public Chat(ConnectionThreadPoolFactory factory) {
-        pool = factory.create(
+        pool = (CrudPrimaryKeyConnectionThreadPool) factory.create(
                 "CREATE TABLE IF NOT EXISTS messages (" +
-                        "id varchar(255), " +
-                        "room_id varchar(255), " +
+                        "id integer_primary_key, " +
+                        "chat_id varchar(255), " +
                         "player_id varchar(255), " +
-                        "timestamp varchar(255), " +
+                        "time varchar(255), " +
                         "text varchar(255));"
         );
     }
@@ -52,45 +53,45 @@ public class Chat {
         pool.removeDatabase();
     }
 
-    public List<Message> getMessages(String roomId, int count) {
+    public List<Message> getMessages(String chatId, int count) {
         return pool.select("SELECT * FROM messages " +
-                        "WHERE room_id = ? " +
-                        "ORDER BY timestamp " +
-                        "LIMIT " + count + ";",
-                new Object[]{roomId},
+                        "WHERE chat_id = ? " +
+                        "ORDER BY time " +
+                        "LIMIT ?;",
+                new Object[]{chatId, count},
                 Chat::parseMessages
         );
     }
 
-    public List<Message> getMessagesBetweenIds(String roomId, int count, int beforeId, int afterId) {
-        if (afterId <= beforeId) {
-            throw new IllegalArgumentException("First id in interval should be smaller than second");
+    public List<Message> getMessagesBetween(String chatId, int count, int afterId, int beforeId) {
+        if (afterId > beforeId) {
+            throw new IllegalArgumentException("afterId in interval should be smaller than beforeId");
         }
         return pool.select("SELECT * FROM messages " +
-                        "WHERE room_id = ? AND id > ? AND id < ?" +
-                        "ORDER BY timestamp " +
-                        "LIMIT " + count + ";",
-                new Object[]{roomId, afterId, beforeId},
+                        "WHERE chat_id = ? AND id > ? AND id < ?" +
+                        "ORDER BY time " +
+                        "LIMIT ?;",
+                new Object[]{chatId, afterId, beforeId, count},
                 Chat::parseMessages
         );
     }
 
-    public List<Message> getMessagesAfterId(String roomId, int count, int afterId) {
+    public List<Message> getMessagesAfter(String chatId, int count, int afterId) {
         return pool.select("SELECT * FROM messages " +
-                        "WHERE room_id = ? AND id > ?" +
-                        "ORDER BY timestamp " +
-                        "LIMIT " + count + ";",
-                new Object[]{roomId, afterId},
+                        "WHERE chat_id = ? AND id > ?" +
+                        "ORDER BY time " +
+                        "LIMIT ?;",
+                new Object[]{chatId, afterId, count},
                 Chat::parseMessages
         );
     }
 
-    public List<Message> getMessagesBeforeId(String roomId, int count, int beforeId) {
+    public List<Message> getMessagesBefore(String chatId, int count, int beforeId) {
         return pool.select("SELECT * FROM messages " +
-                        "WHERE room_id = ? AND id < ?" +
-                        "ORDER BY timestamp " +
-                        "LIMIT " + count + ";",
-                new Object[]{roomId, beforeId},
+                        "WHERE chat_id = ? AND id < ?" +
+                        "ORDER BY time " +
+                        "LIMIT ?;",
+                new Object[]{chatId, beforeId, count},
                 Chat::parseMessages
         );
     }
@@ -98,38 +99,28 @@ public class Chat {
     public Message getMessageById(int messageId) {
         return pool.select("SELECT * FROM messages WHERE id = ?",
                 new Object[]{messageId},
-                Message::new
+                rs -> rs.next() ? new Message(rs) : null
         );
     }
 
-    // TODO id creation probably cause race condition, find another solution
-    @SuppressWarnings("UnusedReturnValue")
     public Message saveMessage(Message message) {
-        message.setId(generateId());
         pool.update("INSERT INTO messages " +
-                        "(id, room_id, player_id, timestamp, text) " +
+                        "(id, chat_id, player_id, time, text) " +
                         "VALUES (?, ?, ?, ?, ?);",
                 new Object[]{
-                        message.getId(),
-                        message.getRoomId(),
+                        null,
+                        message.getChatId(),
                         message.getPlayerId(),
-                        JDBCTimeUtils.toString(message.getTimestamp()),
+                        JDBCTimeUtils.toString(new Date(message.getTime())),
                         message.getText()
                 }
         );
+        message.setId(pool.lastInsertId("messages", "id"));
         return message;
     }
 
-    public boolean deleteMessage(int id, String roomId, String playerId) {
-        try {
-            pool.update(
-                    "DELETE FROM messages WHERE id = ? AND room_id = ? AND player_id = ?",
-                    new Object[]{id, roomId, playerId}
-            );
-            return true;
-        } catch (RuntimeException ex) {
-            return false;
-        }
+    public void deleteMessage(int id) {
+        pool.update("DELETE FROM messages WHERE id = ?", new Object[]{id});
     }
 
     private static List<Message> parseMessages(ResultSet rs) throws SQLException {
@@ -140,35 +131,32 @@ public class Chat {
         return messages;
     }
 
-    private int generateId() {
-        Message lastMessage = pool.select(
-                "SELECT * FROM messages ORDER BY id DESC LIMIT 1;",
-                rs -> rs.next() ? new Message(rs) : null
-        );
-        return lastMessage == null ? 0 : lastMessage.id + 1;
+    public void removeAll() {
+        pool.clearLastInsertedId("message", "id");
+        pool.update("DELETE FROM messages");
     }
 
     @Data
     public static class Message {
         private Integer id;
-        private String roomId;
+        private String chatId;
         private String playerId;
-        private LocalDateTime timestamp;
+        private long time;
         private String text;
 
         @Builder
-        private Message(String roomId, String playerId, LocalDateTime timestamp, String text) {
-            this.roomId = roomId;
+        public Message(String chatId, String playerId, long time, String text) {
+            this.chatId = chatId;
             this.playerId = playerId;
-            this.timestamp = timestamp;
+            this.time = time;
             this.text = text;
         }
 
         private Message(ResultSet rs) throws SQLException {
             this.id = rs.getInt("id");
-            this.roomId = rs.getString("room_id");
+            this.chatId = rs.getString("chat_id");
             this.playerId = rs.getString("player_id");
-            this.timestamp = JDBCTimeUtils.toLocalDateTime(rs.getString("timestamp"));
+            this.time = JDBCTimeUtils.getTimeLong(rs);
             this.text = rs.getString("text");
         }
     }

@@ -25,15 +25,16 @@ package com.codenjoy.dojo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import static com.codenjoy.dojo.services.PlayerGames.*;
+import static com.codenjoy.dojo.services.PlayerGames.ACTIVE;
+import static com.codenjoy.dojo.services.PlayerGames.withRoom;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
-/**
- * Created by Oleksandr_Baglai on 2019-10-12.
- */
 @Component
 public class Semifinal implements Tickable {
 

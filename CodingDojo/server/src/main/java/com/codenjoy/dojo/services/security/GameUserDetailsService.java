@@ -23,14 +23,14 @@ package com.codenjoy.dojo.services.security;
  */
 
 import com.codenjoy.dojo.services.dao.Registration;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GameUserDetailsService implements UserDetailsService {
 
     private final Registration registration;

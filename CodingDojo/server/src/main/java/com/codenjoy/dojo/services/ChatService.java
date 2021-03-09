@@ -23,57 +23,82 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ChatService {
-    private final Chat dao;
 
-    public List<PMessage> getMessages(String roomId, int count, Integer afterId, Integer beforeId) {
-        List<Chat.Message> messages;
+    private Validator validator;
+    private Chat chat;
+    private TimeService time;
+
+    public List<PMessage> getMessages(String room, int count,
+                                      Integer afterId, Integer beforeId,
+                                      String playerId)
+    {
+        validator.checkPlayerInRoom(playerId, room);
+
         if (afterId != null && beforeId != null) {
-            messages = dao.getMessagesBetweenIds(roomId, count, afterId, beforeId);
-        } else if (afterId != null) {
-            messages = dao.getMessagesAfterId(roomId, count, afterId);
-        } else if (beforeId != null) {
-            messages = dao.getMessagesBeforeId(roomId, count, beforeId);
-        } else {
-            messages = dao.getMessages(roomId, count);
+            return wrap(chat.getMessagesBetween(room, count, afterId, beforeId));
         }
+
+        if (afterId != null) {
+            return wrap(chat.getMessagesAfter(room, count, afterId));
+        }
+
+        if (beforeId != null) {
+            return wrap(chat.getMessagesBefore(room, count, beforeId));
+        }
+
+        return wrap(chat.getMessages(room, count));
+    }
+
+    private List<PMessage> wrap(List<Chat.Message> messages) {
         return messages.stream()
                 .map(PMessage::from)
                 .collect(Collectors.toList());
     }
 
-    public PMessage getMessage(int messageId, String roomId) {
-        Chat.Message message = dao.getMessageById(messageId);
-        if (message == null || !message.getRoomId().equals(roomId)) {
+    public PMessage getMessage(int messageId, String room, String playerId) {
+        validator.checkPlayerInRoom(playerId, room);
+
+        Chat.Message message = chat.getMessageById(messageId);
+
+        if (message == null || !message.getChatId().equals(room)) {
             throw new IllegalArgumentException(
-                    "There is no message with id: " + messageId + " in room with id: " + roomId);
+                    "There is no message with id: " + messageId +
+                            " in room with id: " + room);
         }
         return PMessage.from(message);
     }
 
-    public PMessage postMessage(String text, String roomId, Registration.User user) {
+    public PMessage postMessage(String text, String room, String playerId) {
+        validator.checkPlayerInRoom(playerId, room);
+
         Chat.Message message = Chat.Message.builder()
-                .roomId(roomId)
-                .playerId(user.getId())
-                .timestamp(LocalDateTime.now())
+                .chatId(room)
+                .playerId(playerId)
+                .time(time.now())
                 .text(text)
                 .build();
-        dao.saveMessage(message);
+
+        chat.saveMessage(message);
+
         return PMessage.from(message);
     }
 
-    public boolean deleteMessage(int messageId, String roomId, Registration.User user) {
-        return dao.deleteMessage(messageId, roomId, user.getId());
+    public boolean deleteMessage(int messageId, String room, String playerId) {
+        validator.checkPlayerInRoom(playerId, room);
+
+        chat.deleteMessage(messageId);
+
+        return true;
     }
 }

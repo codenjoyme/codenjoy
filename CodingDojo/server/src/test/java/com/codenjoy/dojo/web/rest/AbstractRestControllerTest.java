@@ -35,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.SortedJSONArray;
 import org.json.SortedJSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -192,6 +193,11 @@ public abstract class AbstractRestControllerTest {
                 .content(data));
     }
 
+    @SneakyThrows
+    protected String delete(String uri) {
+        return process(200, MockMvcRequestBuilders.delete(uri));
+    }
+
     protected String process(int status, MockHttpServletRequestBuilder post) throws Exception {
         MvcResult mvcResult = mvc.perform(post
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -225,10 +231,27 @@ public abstract class AbstractRestControllerTest {
         }
     }
 
-    protected String fix(String input) {
+    protected String quote(String input) {
+        if (input.startsWith("[")) {
+            return new SortedJSONArray(input)
+                    .toString()
+                    .replace('\"', '\'');
+        }
+
         return new SortedJSONObject(input)
                 .toString()
                 .replace('\"', '\'');
+    }
+
+    protected String unquote(String input) {
+        input = input.replace('\'', '\"');
+        if (input.startsWith("[")) {
+            return new SortedJSONArray(input)
+                    .toString();
+        }
+
+        return new SortedJSONObject(input)
+                .toString();
     }
 
     protected String quotes(String input) {

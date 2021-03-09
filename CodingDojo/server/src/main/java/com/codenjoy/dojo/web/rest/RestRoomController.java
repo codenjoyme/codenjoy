@@ -33,10 +33,7 @@ import com.codenjoy.dojo.web.rest.pojo.PlayerId;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,7 +43,7 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
  * Используется внешним сервисом для входа, выхода из
  * комнаты и проверки статуса для залогиненного/незалогиненного пользователя.
  */
-@Controller
+@RestController
 @RequestMapping("/rest")
 @AllArgsConstructor
 public class RestRoomController {
@@ -56,7 +53,6 @@ public class RestRoomController {
     private Validator validator;
 
     @GetMapping("/room/{room}/leave")
-    @ResponseBody
     public synchronized boolean leavePlayerFromRoom(@PathVariable("room") String room,
                                                     @AuthenticationPrincipal Registration.User user)
     {
@@ -83,7 +79,6 @@ public class RestRoomController {
     }
 
     @GetMapping("/room/{room}/joined")
-    @ResponseBody
     public boolean isPlayerInRoom(@PathVariable("room") String room,
                                   @AuthenticationPrincipal Registration.User user)
     {
@@ -98,7 +93,6 @@ public class RestRoomController {
     }
 
     @GetMapping("/room/{room}/player/{playerId}/joined")
-    @ResponseBody
     public boolean isPlayerInRoom(@PathVariable("room") String room,
                                   @PathVariable("playerId") String playerId)
     {
@@ -113,7 +107,6 @@ public class RestRoomController {
     }
 
     @GetMapping("/room/{room}/game/{game}/join")
-    @ResponseBody
     public synchronized PlayerId joinPlayerInRoom(@PathVariable("game") String game,
                                                   @PathVariable("room") String room,
                                                   HttpServletRequest request,

@@ -59,7 +59,7 @@ public class ConnectionThreadPool {
     }
 
     @SneakyThrows
-    public <T> T run(final For<T> runner) {
+    public <T> T run(For<T> runner) {
         Future<T> submit = executorService.submit(() -> {
             ConnectionThread thread = (ConnectionThread) Thread.currentThread();
             Connection connection = thread.getConnection();

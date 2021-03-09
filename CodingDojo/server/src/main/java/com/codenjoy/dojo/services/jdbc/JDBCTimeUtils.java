@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.sqlite.date.FastDateFormat;
 
@@ -33,11 +34,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-/**
- * Created by indigo on 13.08.2016.
- */
 @UtilityClass
 public class JDBCTimeUtils {
+
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     private static final FastDateFormat formatter = FastDateFormat.getInstance(DATE_TIME_PATTERN);
 
@@ -45,7 +44,7 @@ public class JDBCTimeUtils {
         try {
             // last version format
             String time = resultSet.getString("time");
-            return formatter.parse(time).getTime();
+            return getTimeLong(time);
         } catch (Exception e) {
             // TODO remove this block
             try {
@@ -59,16 +58,12 @@ public class JDBCTimeUtils {
         }
     }
 
-    public static LocalDateTime toLocalDateTime(String timestamp) {
-        return LocalDateTime.parse(timestamp,
-                DateTimeFormatter.ofPattern(JDBCTimeUtils.DATE_TIME_PATTERN));
-    }
-
     public static String toString(Date dateTime) {
         return formatter.format(dateTime);
     }
 
-    public static String toString(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
+    @SneakyThrows
+    public static long getTimeLong(String dateTime) {
+        return formatter.parse(dateTime).getTime();
     }
 }

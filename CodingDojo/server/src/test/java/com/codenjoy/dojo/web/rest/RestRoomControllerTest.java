@@ -86,7 +86,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
 
         // when
         assertEquals("{'code':'4020021687627278468','id':'validPlayer'}",
-                fix(get("/rest/room/validRoom/game/first/join")));
+                quote(get("/rest/room/validRoom/game/first/join")));
 
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
@@ -143,7 +143,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
         // when
         // все же зашли, комната может быть любой
         assertEquals("{'code':'4020021687627278468','id':'validPlayer'}",
-                fix(get("/rest/room/badRoom/game/first/join")));
+                quote(get("/rest/room/badRoom/game/first/join")));
 
         // then
         assertEquals("true", get("/rest/room/badRoom/player/validPlayer/joined"));

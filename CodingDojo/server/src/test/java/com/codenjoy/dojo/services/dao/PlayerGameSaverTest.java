@@ -38,7 +38,6 @@ import static org.mockito.Mockito.when;
 
 public class PlayerGameSaverTest {
 
-    private static final long TIME = 1382702580000L;
     private PlayerGameSaver saver;
 
     @Before

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.mocks.FakeGameType;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.fest.reflect.core.Reflection;
 import org.mockito.ArgumentCaptor;
@@ -47,13 +48,11 @@ import static org.mockito.Mockito.*;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
+@RequiredArgsConstructor
 public class WebsocketClients {
 
-    @Autowired
-    private Server server;
-
-    @Autowired
-    private GameService gameService;
+    private final Server server;
+    private final GameService gameService;
 
     private Map<String, WebSocketRunner> runners = new HashMap<>();
 

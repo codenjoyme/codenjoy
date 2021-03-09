@@ -100,12 +100,12 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         assertEquals("{'parameters':[" +
                         "{'def':'true','multiline':false,'name':'one','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'12','multiline':false,'name':'two','options':['12'],'type':'editbox','value':'12','valueType':'Integer'}]}",
-                fix(get("/rest/settings/first/" + NO_ROOM_NAME + "/" + SETTINGS)));
+                quote(get("/rest/settings/first/" + NO_ROOM_NAME + "/" + SETTINGS)));
 
         assertEquals("{'parameters':[" +
                         "{'def':'option1','multiline':false,'name':'three','options':['option1','option2','option3'],'type':'selectbox','value':'option1','valueType':'String'}," +
                         "{'def':'some-data','multiline':false,'name':'four','options':['some-data'],'type':'editbox','value':'some-data','valueType':'String'}]}",
-                fix(get("/rest/settings/second/" + NO_ROOM_NAME + "/" + SETTINGS)));
+                quote(get("/rest/settings/second/" + NO_ROOM_NAME + "/" + SETTINGS)));
     }
 
     @Test
@@ -122,12 +122,12 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         assertEquals("{'parameters':[" +
                         "{'def':'true','multiline':false,'name':'one','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'12','multiline':false,'name':'two','options':['12'],'type':'editbox','value':'12','valueType':'Integer'}]}",
-                fix(get("/rest/settings/first/" + NO_ROOM_NAME + "/" + SETTINGS)));
+                quote(get("/rest/settings/first/" + NO_ROOM_NAME + "/" + SETTINGS)));
 
         assertEquals("{'parameters':[" +
                         "{'def':'option1','multiline':false,'name':'three','options':['option1','option2','option3'],'type':'selectbox','value':'option1','valueType':'String'}," +
                         "{'def':'some-data','multiline':false,'name':'four','options':['some-data'],'type':'editbox','value':'some-data','valueType':'String'}]}",
-                fix(get("/rest/settings/second/" + NO_ROOM_NAME + "/" + SETTINGS)));
+                quote(get("/rest/settings/second/" + NO_ROOM_NAME + "/" + SETTINGS)));
     }
 
     @Test
@@ -146,12 +146,12 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         assertEquals("{'parameters':[" +
                         "{'def':'true','multiline':false,'name':'one','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'12','multiline':false,'name':'two','options':['12','135'],'type':'editbox','value':'135','valueType':'Integer'}]}",
-                fix(get("/rest/settings/first/" + NO_ROOM_NAME  + "/" + SETTINGS)));
+                quote(get("/rest/settings/first/" + NO_ROOM_NAME  + "/" + SETTINGS)));
 
         assertEquals("{'parameters':[" +
                         "{'def':'option1','multiline':false,'name':'three','options':['option1','option2','option3'],'type':'selectbox','value':'option2','valueType':'String'}," +
                         "{'def':'some-data','multiline':false,'name':'four','options':['some-data'],'type':'editbox','value':'some-data','valueType':'String'}]}",
-                fix(get("/rest/settings/second/" + NO_ROOM_NAME  + "/" + SETTINGS)));
+                quote(get("/rest/settings/second/" + NO_ROOM_NAME  + "/" + SETTINGS)));
     }
 
     @Test

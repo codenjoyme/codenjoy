@@ -22,6 +22,7 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -32,14 +33,14 @@ import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
+@RequiredArgsConstructor
 public class Page {
 
     public static final String CODE = "code";
     public static final String GAME = "game";
     public static final String PLAYER_ID = "playerId";
 
-    @Autowired
-    private WebDriverWrapper web;
+    private final WebDriverWrapper web;
 
     public String injectSettings(String data) {
         data = replace(data, "<PLAYER_ID>", PLAYER_ID);

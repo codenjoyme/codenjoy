@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +31,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
+@RequiredArgsConstructor
 public class AutoSaver extends Suspendable implements Tickable {
 
     public static final int TICKS = 30;
@@ -38,7 +39,7 @@ public class AutoSaver extends Suspendable implements Tickable {
     @Value("${game.save.load-on-start}")
     private boolean loadOnStart = true;
 
-    @Autowired private SaveService save;
+    private final SaveService save;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 

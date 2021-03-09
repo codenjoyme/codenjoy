@@ -23,13 +23,15 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.PlayerCommand;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_CODE_LENGTH;
@@ -241,5 +243,10 @@ public class Validator {
 
     public boolean isPlayerInRoom(String id, String room) {
         return playerService.get(id).getRoom().equals(room);
+    }
+
+    // TODO test me
+    public void checkUser(Registration.User user) {
+        checkPlayerCode(user.getId(), user.getCode());
     }
 }

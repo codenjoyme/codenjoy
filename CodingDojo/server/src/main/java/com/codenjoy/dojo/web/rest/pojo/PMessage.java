@@ -25,23 +25,22 @@ package com.codenjoy.dojo.web.rest.pojo;
 import com.codenjoy.dojo.services.dao.Chat;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
 public class PMessage {
-    private final Integer id;
+
+    private final int id;
     private final String text;
     private final String roomId;
     private final String playerId;
-    private final LocalDateTime timestamp;
+    private final long time;
 
     public static PMessage from(Chat.Message message) {
         return new PMessage(
                 message.getId(),
                 message.getText(),
-                message.getRoomId(),
+                message.getChatId(),
                 message.getPlayerId(),
-                message.getTimestamp()
+                message.getTime()
         );
     }
 }

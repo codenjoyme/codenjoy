@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 
 public class ActionLoggerTest {
 
-    private static ActionLogger logger;
+    private ActionLogger logger;
     private ExecutorService executor;
     private RoomService roomService;
     private PlayerGames playerGames;
