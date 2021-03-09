@@ -37,15 +37,17 @@ function initChat(contextPath) {
             var id = message.id;
             var text = message.text;
             var room = message.roomId;
-            var player = message.playerId;
+            var author = setup.playerName(message.playerId);
+            var dateTime = getTickDateTime(message.time, true);
             var time = getTickTime(message.time, true);
 
             templateData.push({
                 id: id,
                 text: text,
                 room: room,
-                player: player,
-                time: time
+                author: author,
+                time: time,
+                dateTime: dateTime
             });
         });
         $('#chat-container script')

@@ -45,6 +45,12 @@ setup['debugger'] = function() {
     debugger;
 }
 
+setup.playerName = function(id) {
+    if (!!setup.players) {
+        return 'Author';
+    }
+}
+
 var getSettings = function(name) {
     var value = $('#settings').attr(name);
 
@@ -63,13 +69,18 @@ var getSettings = function(name) {
     return value;
 }
 
-var getTickTime = function(time, readable) {
+var getTickDateTime = function(time, readable) {
     var date = new Date(parseInt(time));
     return [date.getFullYear(),
             date.getDate().padLeft(),
             (date.getMonth() + 1).padLeft()].join('-') +
-        (!!readable ? '' : 'T') +
-        [date.getHours().padLeft(),
+        (!!readable ? ' ' : 'T') +
+        getTickTime(time, readable);
+}
+
+var getTickTime = function(time, readable) {
+    var date = new Date(parseInt(time));
+    return [date.getHours().padLeft(),
             date.getMinutes().padLeft(),
             date.getSeconds().padLeft()].join(':') +
         (!!readable ? '' : ('.' + date.getMilliseconds()));
