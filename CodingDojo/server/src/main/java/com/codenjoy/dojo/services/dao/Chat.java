@@ -127,16 +127,16 @@ public class Chat {
 
     public Message saveMessage(Message message) {
         pool.update("INSERT INTO messages " +
-                        "(id, chat_id, player_id, time, text) " +
-                        "VALUES (?, ?, ?, ?, ?);",
+                        "(chat_id, player_id, time, text) " +
+                        "VALUES (?, ?, ?, ?);",
                 new Object[]{
-                        null,
                         message.getChatId(),
                         message.getPlayerId(),
                         JDBCTimeUtils.toString(new Date(message.getTime())),
                         message.getText()
                 }
         );
+        // TODO: probably race condition
         message.setId(pool.lastInsertId("messages", "id"));
         return message;
     }

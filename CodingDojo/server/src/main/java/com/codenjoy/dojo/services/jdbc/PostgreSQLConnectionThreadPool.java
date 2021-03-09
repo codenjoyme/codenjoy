@@ -27,7 +27,6 @@ import lombok.SneakyThrows;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThreadPool {
 
@@ -53,7 +52,7 @@ public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThre
 
     @Override
     String getLastInsertedIdQuery(String table, String column) {
-        return "SELECT currval(pg_get_serial_sequence('" + table + "','" + column + "'))";
+        return "SELECT last_value FROM " + table + "_id_seq";
     }
 
     @Override
@@ -63,6 +62,6 @@ public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThre
 
     @Override
     String clearLastInsertedIdQuery(String table, String column) {
-        return "SELECT pg_catalog.setval(pg_get_serial_sequence('" + table + "', '" + column + "'), 0)";
+        return "ALTER SEQUENCE " + table + "_id_seq RESTART";
     }
 }
