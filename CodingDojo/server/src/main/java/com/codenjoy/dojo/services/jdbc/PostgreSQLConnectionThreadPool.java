@@ -58,7 +58,7 @@ public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThre
 
     @Override
     String getPkDirective() {
-        return "BIGSERIAL PRIMARY KEY";
+        return "SERIAL PRIMARY KEY";
     }
 
     @Override
