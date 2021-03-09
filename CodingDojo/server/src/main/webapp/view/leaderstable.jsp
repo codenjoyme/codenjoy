@@ -47,4 +47,5 @@
         </tbody>
     </table>
     <%@include file="info.jsp"%>
+    <%@include file="chat.jsp"%>
 </div>

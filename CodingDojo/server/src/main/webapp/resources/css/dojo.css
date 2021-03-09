@@ -152,6 +152,9 @@ label.error {
     right: 0px;
 }
 
+.chat {
+}
+
 .glasses {
     width: calc(100% - 530px);
     float: left;

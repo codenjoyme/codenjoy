@@ -22,7 +22,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="chat" class="board" style="display:none;" zoom-on-wheel>
+<div id="chat" class="chat" style="display:none;" zoom-on-wheel>
     <div id="chat-container">
         <script template type="text/x-jquery-tmpl">
             <div id="chat-message-{%= id %}" message="{%= id %}" class="chat-message">
