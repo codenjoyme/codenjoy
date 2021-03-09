@@ -58,7 +58,14 @@ function initChat(contextPath) {
     }
 
     function initPost() {
-        $('#post-message').click(function() {
+        newMessage.on('keypress', function(event) {
+            if (!event.ctrlKey && event.which == 13) {
+                event.preventDefault();
+                postMessageButton.click();
+            }
+        });
+
+        postMessageButton.click(function() {
             var message = newMessage.val();
             if (message == '') {
                 return;
@@ -79,6 +86,7 @@ function initChat(contextPath) {
         return;
     }
 
+    var postMessageButton = $('#post-message');
     var newMessage = $('#new-message');
     var messages = $("#chat-container");
     var chat = $("#chat");

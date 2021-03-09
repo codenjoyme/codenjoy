@@ -153,8 +153,8 @@ label.error {
 }
 
 .chat .messages-container {
-    overflow-y: scroll;
-    hetight: 70vh;
+    overflow-y: auto;
+    height: 70vh;
 }
 
 .chat .message-author {
