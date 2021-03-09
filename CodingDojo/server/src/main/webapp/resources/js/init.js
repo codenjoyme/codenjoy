@@ -47,7 +47,7 @@ setup['debugger'] = function() {
 
 setup.playerName = function(id) {
     if (!!setup.players) {
-        return 'Author';
+        return setup.players[id].readableName;
     }
 }
 
