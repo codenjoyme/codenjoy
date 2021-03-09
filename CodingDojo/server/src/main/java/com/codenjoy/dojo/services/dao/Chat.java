@@ -132,7 +132,7 @@ public class Chat {
     }
 
     public void removeAll() {
-        pool.clearLastInsertedId();
+        pool.clearLastInsertedId("message", "id");
         pool.update("DELETE FROM messages");
     }
 

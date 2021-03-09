@@ -77,7 +77,7 @@ public class SqliteConnectionThreadPool extends CrudPrimaryKeyConnectionThreadPo
     }
 
     @Override
-    String clearLastInsertedIdQuery() {
-        return "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'messages'";
+    String clearLastInsertedIdQuery(String table, String column) {
+        return "UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + table + "'";
     }
 }

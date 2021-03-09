@@ -62,7 +62,7 @@ public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThre
     }
 
     @Override
-    String clearLastInsertedIdQuery() {
-        return null;
+    String clearLastInsertedIdQuery(String table, String column) {
+        return "SELECT pg_catalog.setval(pg_get_serial_sequence('" + table + "', '" + column + "'), 0)";
     }
 }

@@ -23,9 +23,9 @@ public abstract class CrudPrimaryKeyConnectionThreadPool extends CrudConnectionT
 
     abstract String getPkDirective();
 
-    abstract String clearLastInsertedIdQuery();
+    abstract String clearLastInsertedIdQuery(String table, String column);
 
-    public void clearLastInsertedId() {
-        update(clearLastInsertedIdQuery());
+    public void clearLastInsertedId(String table, String column) {
+        update(clearLastInsertedIdQuery(table, column));
     }
 }
