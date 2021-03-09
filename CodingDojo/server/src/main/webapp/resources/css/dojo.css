@@ -152,6 +152,11 @@ label.error {
     right: 0px;
 }
 
+.chat .messages-container {
+    overflow-y: scroll;
+    hetight: 70vh;
+}
+
 .chat .message-author {
     font-size: 14px;
     font-weight: bold;

@@ -81,8 +81,8 @@ var getTickDateTime = function(time, readable) {
 var getTickTime = function(time, readable) {
     var date = new Date(parseInt(time));
     return date.getHours().padLeft() + ':' +
-           date.getMinutes().padLeft() + ':' +
-           (!!readable ? '' : (date.getSeconds().padLeft() +
+           date.getMinutes().padLeft() +
+           (!!readable ? '' : (':' + date.getSeconds().padLeft() +
                                '.' + date.getMilliseconds()));
 }
 

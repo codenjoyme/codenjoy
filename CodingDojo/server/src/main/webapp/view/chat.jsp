@@ -23,9 +23,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <div id="chat" class="chat" style="display:none;" zoom-on-wheel>
-    <div id="chat-container">
+    <div id="chat-container" class="messages-container">
         <script template type="text/x-jquery-tmpl">
-            <div id="chat-message-{%= id %}" message="{%= id %}" author="{%= author %}" class="chat-message">
+            <div id="chat-message-{%= id %}" message="{%= id %}" player="{%= player %}" class="chat-message">
                 <span class="message-author">{%= author %}</span>
                 <span class="message-time" title="{%= dateTime %}">{%= time %}</span>
                 <div class="message-text">{%= text %}</div>

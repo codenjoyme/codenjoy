@@ -37,7 +37,8 @@ function initChat(contextPath) {
             var id = message.id;
             var text = message.text;
             var room = message.roomId;
-            var author = setup.playerName(message.playerId);
+            var player = message.playerId;
+            var author = setup.playerName(player);
             var dateTime = getTickDateTime(message.time, true);
             var time = getTickTime(message.time, true);
 
@@ -46,6 +47,7 @@ function initChat(contextPath) {
                 text: text,
                 room: room,
                 author: author,
+                player: player,
                 time: time,
                 dateTime: dateTime
             });
@@ -57,27 +59,34 @@ function initChat(contextPath) {
 
     function initPost() {
         $('#post-message').click(function() {
-            var newMessage = $('#new-message');
-
             var message = newMessage.val();
-            if (message == '') return;
+            if (message == '') {
+                return;
+            }
 
             sendData('/rest/chat/' + setup.room + '/messages',
                 { text : message },
                 function (message) {
                     appendMessages([message]);
+                    newMessage.val('');
+                    newMessage.focus();
+                    messages.scrollTop(messages[0].scrollHeight);
                 });
-
-            newMessage.val('');
         });
     }
 
-    if (setup.enableChat && setup.authenticated) {
-
-        loadChatMessages();
-        initPost();
-
-        $("#chat").show();
-        $("#chat-tab").show();
+    if (!setup.enableChat || !setup.authenticated) {
+        return;
     }
+
+    var newMessage = $('#new-message');
+    var messages = $("#chat-container");
+    var chat = $("#chat");
+    var chatTab = $("#chat-tab");
+
+    loadChatMessages();
+    initPost();
+
+    chat.show();
+    chatTab.show();
 }
