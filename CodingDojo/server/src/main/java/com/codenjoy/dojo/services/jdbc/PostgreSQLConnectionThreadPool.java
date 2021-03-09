@@ -33,11 +33,11 @@ public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThre
 
     private static final int CONNECTIONS_COUNT = 10;
 
-    public PostgreSQLConnectionThreadPool(String database, String... createTableSqls) {
+    public PostgreSQLConnectionThreadPool(String database, String... createTableQueries) {
         super(CONNECTIONS_COUNT, () -> getConnection(database));
 
-        for (String sql : createTableSqls) {
-            createDB(sql);
+        for (String query : createTableQueries) {
+            createDB(query);
         }
     }
 

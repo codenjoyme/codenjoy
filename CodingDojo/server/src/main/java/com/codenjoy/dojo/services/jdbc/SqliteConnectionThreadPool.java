@@ -36,13 +36,13 @@ public class SqliteConnectionThreadPool extends CrudPrimaryKeyConnectionThreadPo
     private static final int CONNECTIONS = 3;
     private String database;
 
-    public SqliteConnectionThreadPool(String database, String... createTableSqls) {
+    public SqliteConnectionThreadPool(String database, String... createTableQueries) {
         super(CONNECTIONS, () -> getConnection(database));
 
         this.database = database;
 
-        for (String sql : createTableSqls) {
-            createDB(sql);
+        for (String query : createTableQueries) {
+            createDB(query);
         }
     }
 

@@ -16,9 +16,9 @@ public abstract class CrudPrimaryKeyConnectionThreadPool extends CrudConnectionT
 
     abstract String getLastInsertedIdQuery(String table, String column);
 
-    void createDB(String sql) {
-        sql = sql.replaceAll("integer_primary_key", getPkDirective());
-        update(sql);
+    void createDB(String query) {
+        query = query.replaceAll("integer_primary_key", getPkDirective());
+        update(query);
     }
 
     abstract String getPkDirective();

@@ -30,7 +30,7 @@ public class PostgreSQLConnectionThreadPoolFactory implements ConnectionThreadPo
     private String database;
 
     @Override
-    public CrudConnectionThreadPool create(String... createTableSqls) {
-        return new PostgreSQLConnectionThreadPool(database, createTableSqls);
+    public CrudConnectionThreadPool create(String... createTableQueries) {
+        return new PostgreSQLConnectionThreadPool(database, createTableQueries);
     }
 }
