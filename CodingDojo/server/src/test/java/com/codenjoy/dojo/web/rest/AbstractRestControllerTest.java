@@ -222,7 +222,12 @@ public abstract class AbstractRestControllerTest {
 
     @SneakyThrows
     protected String delete(String uri) {
-        return process(200, MockMvcRequestBuilders.delete(uri));
+        return delete(200, uri);
+    }
+
+    @SneakyThrows
+    protected String delete(int status, String uri) {
+        return process(status, MockMvcRequestBuilders.delete(uri));
     }
 
     protected String process(int status, MockHttpServletRequestBuilder post) throws Exception {
@@ -239,6 +244,18 @@ public abstract class AbstractRestControllerTest {
         } catch (Exception e) {
             assertEquals(expected, e.getMessage());
         }
+    }
+
+    protected void assertPostError(String message, String uri, String data) {
+        String source = post(500, uri, data);
+        JSONObject error = tryParseAsJson(source);
+        assertEquals(message, error.getString("message"));
+    }
+
+    protected void assertDeleteError(String message, String uri) {
+        String source = delete(500, uri);
+        JSONObject error = tryParseAsJson(source);
+        assertEquals(message, error.getString("message"));
     }
 
     protected void assertError(String message, String uri) {

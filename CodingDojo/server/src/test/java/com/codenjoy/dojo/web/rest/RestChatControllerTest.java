@@ -86,6 +86,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         roomService.removeAll();
 
         register("player", "ip", "validRoom", "first");
+        register("otherPlayer", "ip", "otherRoom", "first");
         asUser("player", "player");
     }
 
@@ -184,6 +185,69 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // then
         assertEquals("{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}",
                 quote(get("/rest/chat/validRoom/messages/2")));
+    }
+
+    @Test
+    public void shouldGetMessage_whenNotExists() {
+        // when then
+        // вообще нет сообщения
+        assertError("java.lang.IllegalArgumentException: There is no message " +
+                        "with id: 100500 in room with id: validRoom",
+                "/rest/chat/validRoom/messages/100500");
+    }
+
+    @Test
+    public void shouldGetMessage_whenTryGetMessageFromOtherRoom_likeMessageFromMyRoom() {
+        // given
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        // when then
+        // сообщение есть но я не могу его взять, т.к. я плеер из другой комнаты
+        asUser("otherPlayer", "otherPlayer");
+
+        assertError("java.lang.IllegalArgumentException: " +
+                        "There is no message with id: 1 in room with id: otherRoom",
+                "/rest/chat/otherRoom/messages/1");
+    }
+
+    @Test
+    public void shouldGetMessage_whenTryGetMessageFromOtherRoom() {
+        // given
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        // when then
+        // сообщение есть но я не могу его взять, т.к. я плеер из другой комнаты
+        asUser("otherPlayer", "otherPlayer");
+
+        assertError("java.lang.IllegalArgumentException: " +
+                        "Player 'otherPlayer' is not in room 'validRoom'",
+                "/rest/chat/validRoom/messages/1");
+    }
+
+    @Test
+    public void shouldGetAllMessages_whenTryGetMessageFromOtherRoom() {
+        assertError("java.lang.IllegalArgumentException: " +
+                        "Player 'player' is not in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages");
+    }
+
+    @Test
+    public void shouldPostMessage_whenPostItForOtherRoom() {
+        assertPostError("java.lang.IllegalArgumentException: " +
+                        "Player 'player' is not in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages",
+                unquote("{text:'message1'}"));
+    }
+
+    @Test
+    public void shouldDeleteMessage_whenDeleteItForOtherRoom() {
+        assertDeleteError("java.lang.IllegalArgumentException: " +
+                        "Player 'player' is not in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages/1");
     }
 
     @Test
