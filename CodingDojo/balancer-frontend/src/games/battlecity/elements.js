@@ -1,322 +1,249 @@
 // vendor
 import React, { Component } from 'react';
 
-import angle_back_left from './images/sprite/angle_back_left.png';
-import angle_back_right from './images/sprite/angle_back_right.png';
-import angle_in_left from './images/sprite/angle_in_left.png';
-import angle_in_right from './images/sprite/angle_in_right.png';
-import angle_out_left from './images/sprite/angle_out_left.png';
-import angle_out_right from './images/sprite/angle_out_right.png';
-//import background from './images/sprite/background.png';
-import box from './images/sprite/box.png';
-//import door_left from './images/sprite/door_left.png';
-//import door_right from './images/sprite/door_right.png';
-import empty from './images/sprite/empty.png';
-import exit from './images/sprite/exit.png';
-import female_zombie from './images/sprite/female_zombie.png';
-import floor from './images/sprite/floor.png';
-//import fog from './images/sprite/fog.png';
-import gold from './images/sprite/gold.png';
-import hole from './images/sprite/hole.png';
-import laser_down from './images/sprite/laser_down.png';
-import laser_left from './images/sprite/laser_left.png';
-//import laser_machine_charging2_down from './images/sprite/laser_machine_charging2_down.png';
-//import laser_machine_charging2_left from './images/sprite/laser_machine_charging2_left.png';
-//import laser_machine_charging2_right from './images/sprite/laser_machine_charging2_right.png';
-//import laser_machine_charging2_up from './images/sprite/laser_machine_charging2_up.png';
-//import laser_machine_charging3_down from './images/sprite/laser_machine_charging3_down.png';
-//import laser_machine_charging3_left from './images/sprite/laser_machine_charging3_left.png';
-//import laser_machine_charging3_right from './images/sprite/laser_machine_charging3_right.png';
-//import laser_machine_charging3_up from './images/sprite/laser_machine_charging3_up.png';
-import laser_machine_charging_down from './images/sprite/laser_machine_charging_down.png';
-import laser_machine_charging_left from './images/sprite/laser_machine_charging_left.png';
-import laser_machine_charging_right from './images/sprite/laser_machine_charging_right.png';
-import laser_machine_charging_up from './images/sprite/laser_machine_charging_up.png';
-import laser_machine_ready_down from './images/sprite/laser_machine_ready_down.png';
-import laser_machine_ready_left from './images/sprite/laser_machine_ready_left.png';
-import laser_machine_ready_right from './images/sprite/laser_machine_ready_right.png';
-import laser_machine_ready_up from './images/sprite/laser_machine_ready_up.png';
-import laser_right from './images/sprite/laser_right.png';
-import laser_up from './images/sprite/laser_up.png';
-import male_zombie from './images/sprite/male_zombie.png';
-import robo from './images/sprite/robo.png';
-import robo_falling from './images/sprite/robo_falling.png';
-import robo_flying from './images/sprite/robo_flying.png';
-import robo_laser from './images/sprite/robo_laser.png';
-import robo_other from './images/sprite/robo_other.png';
-import robo_other_falling from './images/sprite/robo_other_falling.png';
-import robo_other_flying from './images/sprite/robo_other_flying.png';
-import robo_other_laser from './images/sprite/robo_other_laser.png';
-import space from './images/sprite/space.png';
-import start from './images/sprite/start.png';
-import wall_back from './images/sprite/wall_back.png';
-import wall_back_angle_left from './images/sprite/wall_back_angle_left.png';
-import wall_back_angle_right from './images/sprite/wall_back_angle_right.png';
-import wall_front from './images/sprite/wall_front.png';
-import wall_left from './images/sprite/wall_left.png';
-import wall_right from './images/sprite/wall_right.png';
-import zombie_die from './images/sprite/zombie_die.png';
-import zombie_start from './images/sprite/zombie_start.png';
-import death_ray_perk from './images/sprite/death_ray_perk.png';
-import unstoppable_laser_perk from './images/sprite/unstoppable_laser_perk.png';
-import unlimited_fire_perk from './images/sprite/unlimited_fire_perk.png';
-import jump_perk from './images/sprite/jump_perk.png';
-import move_boxes_perk from './images/sprite/move_boxes_perk.png';
-import fire_perk from './images/sprite/fire_perk.png';
+import ai_tank_down from './images/sprite/ai_tank_down.png';
+import ai_tank_left from './images/sprite/ai_tank_left.png';
+import ai_tank_prize from './images/sprite/ai_tank_prize.png';
+import ai_tank_right from './images/sprite/ai_tank_right.png';
+import ai_tank_up from './images/sprite/ai_tank_up.png';
+import bang from './images/sprite/bang.png';
+import battle_wall from './images/sprite/battle_wall.png';
+import bullet from './images/sprite/bullet.png';
+import ice from './images/sprite/ice.png';
+import none from './images/sprite/none.png';
+import other_tank_down from './images/sprite/other_tank_down.png';
+import other_tank_left from './images/sprite/other_tank_left.png';
+import other_tank_right from './images/sprite/other_tank_right.png';
+import other_tank_up from './images/sprite/other_tank_up.png';
+import prize from './images/sprite/prize.png';
+import prize_breaking_walls from './images/sprite/prize_breaking_walls.png';
+import prize_immortality from './images/sprite/prize_immortality.png';
+import prize_walking_on_water from './images/sprite/prize_walking_on_water.png';
+import river from './images/sprite/river.png';
+import tank_down from './images/sprite/tank_down.png';
+import tank_left from './images/sprite/tank_left.png';
+import tank_right from './images/sprite/tank_right.png';
+import tank_up from './images/sprite/tank_up.png';
+import tree from './images/sprite/tree.png';
+import wall from './images/sprite/wall.png';
+import wall_destroyed from './images/sprite/wall_destroyed.png';
+import wall_destroyed_down from './images/sprite/wall_destroyed_down.png';
+import wall_destroyed_down_left from './images/sprite/wall_destroyed_down_left.png';
+import wall_destroyed_down_right from './images/sprite/wall_destroyed_down_right.png';
+import wall_destroyed_down_twice from './images/sprite/wall_destroyed_down_twice.png';
+import wall_destroyed_left from './images/sprite/wall_destroyed_left.png';
+import wall_destroyed_left_right from './images/sprite/wall_destroyed_left_right.png';
+import wall_destroyed_left_twice from './images/sprite/wall_destroyed_left_twice.png';
+import wall_destroyed_right from './images/sprite/wall_destroyed_right.png';
+import wall_destroyed_right_twice from './images/sprite/wall_destroyed_right_twice.png';
+import wall_destroyed_right_up from './images/sprite/wall_destroyed_right_up.png';
+import wall_destroyed_up from './images/sprite/wall_destroyed_up.png';
+import wall_destroyed_up_down from './images/sprite/wall_destroyed_up_down.png';
+import wall_destroyed_up_left from './images/sprite/wall_destroyed_up_left.png';
+import wall_destroyed_up_twice from './images/sprite/wall_destroyed_up_twice.png';
+
 
 //own
 
 export default [
 	{
-		image:  start,
-		title: `START('S')`,
-		description: `Стартова точка`,
+		image: none,
+		title: `NONE(' ')`,
+		description: ``,
 	},
 	{
-		image:  exit,
-		title: `EXIT('E')`,
-		description: `Вихід. Саме до цієї точки герой має донести золото`,
+		image: battle_wall,
+		title: `BATTLE_WALL('☼')`,
+		description: ``,
 	},
 	{
-		image:  floor,
-		title: `FLOOR('.')`,
-		description: `Підлога. На неї можна ставати.`,
+		image: bang,
+		title: `BANG('Ѡ')`,
+		description: ``,
 	},
 	{
-		image:  empty,
-		title: `EMPTY('-')`,
-		description: `Пуста клітинка. На неї можна ставати`,
+		image: ice,
+		title: `ICE('#')`,
+		description: ``,
 	},
 	{
-		image:  zombie_start,
-		title: `ZOMBIE_START('Z')`,
-		description: `Респаун зомбі. На неї можна ставати`,
+		image: tree,
+		title: `TREE('%')`,
+		description: ``,
 	},
 	{
-		image:  hole,
-		title: `HOLE('O')`,
-		description: `Провалля. Сюди краще не ставати`,
+		image: river,
+		title: `RIVER('~')`,
+		description: ``,
 	},
 	{
-		image:  box,
-		title: `BOX('B')`,
-		description: `Коробка. Її можно переміщати або перестрибнути`,
+		image: wall,
+		title: `WALL('╬')`,
+		description: ``,
 	},
 	{
-		image:  gold,
-		title: `GOLD('$')`,
-		description: `Мішечок золота. Дуже корисна річ. Хапай його та донеси до виходу.`,
-	},
-    {
-		image:  unstoppable_laser_perk,
-		title: `UNSTOPPABLE_LASER_PERK('l')`,
-		description: `Перк. Неспинний лазер`,
+		image: wall_destroyed_down,
+		title: `WALL_DESTROYED_DOWN('╩')`,
+		description: ``,
 	},
 	{
-    	image:  death_ray_perk,
-    	title: `DEATH_RAY_PERK('r')`,
-    	description: `Перк. Промінь смерті`,
-    },
-    {
-        image:  unlimited_fire_perk,
-        title: `UNLIMITED_FIRE_PERK('f')`,
-        description: `Перк. Бесперервна стрільба`,
-    },
-    {
-        image:  jump_perk,
-        title: `JUMP_PERK('f')`,
-        description: `Перк. Можливість стрибати`,
-    },
-    {
-        image:  move_boxes_perk,
-        title: `MOVE_BOXES_PERK('f')`,
-        description: `Перк. Можливість штовхати коробки`,
-    },
-    {
-        image:  fire_perk,
-        title: `FIRE_PERK('f')`,
-        description: `Перк. Можливість стріляти`,
-    },
-    {
-		image:  robo,
-		title: `ROBO('☺')`,
-		description: `Герой`,
+		image: wall_destroyed_up,
+		title: `WALL_DESTROYED_UP('╦')`,
+		description: ``,
 	},
 	{
-		image:  robo_falling,
-		title: `ROBO_FALLING('o')`,
-		description: `Герой падає`,
+		image: wall_destroyed_left,
+		title: `WALL_DESTROYED_LEFT('╠')`,
+		description: ``,
 	},
 	{
-		image:  robo_flying,
-		title: `ROBO_FLYING('*')`,
-		description: `Герой стрибає`,
+		image: wall_destroyed_right,
+		title: `WALL_DESTROYED_RIGHT('╣')`,
+		description: ``,
 	},
 	{
-		image:  robo_laser,
-		title: `ROBO_LASER('☻')`,
-		description: `Герой помер`,
-	},
-
-	{
-		image:  female_zombie,
-		title: `FEMALE_ZOMBIE('♀')`,
-		description: `Зомбі-дівчинка`,
+		image: wall_destroyed_down_twice,
+		title: `WALL_DESTROYED_DOWN_TWICE('╨')`,
+		description: ``,
 	},
 	{
-		image:  male_zombie,
-		title: `MALE_ZOMBIE('♂')`,
-		description: `Зомбі-хлопчик`,
+		image: wall_destroyed_up_twice,
+		title: `WALL_DESTROYED_UP_TWICE('╥')`,
+		description: ``,
 	},
 	{
-		image:  zombie_die,
-		title: `ZOMBIE_DIE('✝')`,
-		description: `Мертвий зомбі`,
+		image: wall_destroyed_left_twice,
+		title: `WALL_DESTROYED_LEFT_TWICE('╞')`,
+		description: ``,
 	},
 	{
-    	image:  robo_other,
-    	title: `ROBO_OTHER('X')`,
-    	description: `Ворожий герой`,
-    },
-    {
-    	image:  robo_other_falling,
-    	title: `ROBO_OTHER_FALLING('x')`,
-    	description: `Ворожий герой падає`,
-    },
-    {
-    	image:  robo_other_flying,
-    	title: `ROBO_OTHER_FLYING('^')`,
-    	description: `Ворожий герой стрибає`,
-    },
-    {
-    	image:  robo_other_laser,
-    	title: `ROBO_OTHER_LASER('&')`,
-    	description: `Ворожий герой помер`,
-    },
-
-	{
-		image:  laser_machine_charging_left,
-		title: `LASER_MACHINE_CHARGING_LEFT('˂')`,
-		description: `Лазерна машина заряджається`,
+		image: wall_destroyed_right_twice,
+		title: `WALL_DESTROYED_RIGHT_TWICE('╡')`,
+		description: ``,
 	},
 	{
-		image:  laser_machine_charging_right,
-		title: `LASER_MACHINE_CHARGING_RIGHT('˃')`,
-		description: `Лазерна машина заряджається`,
+		image: wall_destroyed_left_right,
+		title: `WALL_DESTROYED_LEFT_RIGHT('│')`,
+		description: ``,
 	},
 	{
-		image:  laser_machine_charging_up,
-		title: `LASER_MACHINE_CHARGING_UP('˄')`,
-		description: `Лазерна машина заряджається`,
+		image: wall_destroyed_up_down,
+		title: `WALL_DESTROYED_UP_DOWN('─')`,
+		description: ``,
 	},
 	{
-		image:  laser_machine_charging_down,
-		title: `LASER_MACHINE_CHARGING_DOWN('˅')`,
-		description: `Лазерна машина заряджається`,
+		image: wall_destroyed_up_left,
+		title: `WALL_DESTROYED_UP_LEFT('┌')`,
+		description: ``,
 	},
 	{
-		image:  laser_machine_ready_left,
-		title: `LASER_MACHINE_READY_LEFT('◄')`,
-		description: ` Лазерна машина готова стріляти`,
+		image: wall_destroyed_right_up,
+		title: `WALL_DESTROYED_RIGHT_UP('┐')`,
+		description: ``,
 	},
 	{
-		image:  laser_machine_ready_right,
-		title: `LASER_MACHINE_READY_RIGHT('►')`,
-		description: ` Лазерна машина готова стріляти`,
+		image: wall_destroyed_down_left,
+		title: `WALL_DESTROYED_DOWN_LEFT('└')`,
+		description: ``,
 	},
 	{
-		image:  laser_machine_ready_up,
-		title: `LASER_MACHINE_READY_UP('▲')`,
-		description: ` Лазерна машина готова стріляти`,
+		image: wall_destroyed_down_right,
+		title: `WALL_DESTROYED_DOWN_RIGHT('┘')`,
+		description: ``,
 	},
 	{
-		image:  laser_machine_ready_down,
-		title: `LASER_MACHINE_READY_DOWN('▼')`,
-		description: ` Лазерна машина готова стріляти`,
+		image: wall_destroyed,
+		title: `WALL_DESTROYED(' ')`,
+		description: ``,
 	},
 	{
-		image:  laser_left,
-		title: `LASER_LEFT('←')`,
-		description: `Лазер, що рухається вліво`,
+		image: bullet,
+		title: `BULLET('•')`,
+		description: ``,
 	},
 	{
-		image:  laser_right,
-		title: `LASER_RIGHT('→')`,
-		description: `Лазер, що рухається вправо`,
+		image: tank_up,
+		title: `TANK_UP('▲')`,
+		description: ``,
 	},
 	{
-		image:  laser_up,
-		title: `LASER_UP('↑')`,
-		description: ` Лазер, що рухається вгору`,
+		image: tank_right,
+		title: `TANK_RIGHT('►')`,
+		description: ``,
 	},
 	{
-		image:  laser_down,
-		title: `LASER_DOWN('↓')`,
-		description: ` Лазер, що рухається вниз`,
+		image: tank_down,
+		title: `TANK_DOWN('▼')`,
+		description: ``,
 	},
 	{
-		image:  angle_in_left,
-		title: `ANGLE_IN_LEFT('╔')`,
-		description: ` Стінка. Її треба обходити`,
+		image: tank_left,
+		title: `TANK_LEFT('◄')`,
+		description: ``,
 	},
 	{
-		image:  wall_front,
-		title: `WALL_FRONT('═')`,
-		description: ` Стінка. Її треба обходити`,
+		image: other_tank_up,
+		title: `OTHER_TANK_UP('˄')`,
+		description: ``,
 	},
 	{
-		image:  angle_in_right,
-		title: `ANGLE_IN_RIGHT('┐')`,
-		description: ` Стінка. Її треба обходити`,
+		image: other_tank_right,
+		title: `OTHER_TANK_RIGHT('˃')`,
+		description: ``,
 	},
 	{
-		image:  wall_right,
-		title: `WALL_RIGHT('│')`,
-		description: ` Стінка. Її треба обходити`,
+		image: other_tank_down,
+		title: `OTHER_TANK_DOWN('˅')`,
+		description: ``,
 	},
 	{
-		image:  angle_back_right,
-		title: `ANGLE_BACK_RIGHT('┘')`,
-		description: ` Стінка. Її треба обходити`,
+		image: other_tank_left,
+		title: `OTHER_TANK_LEFT('˂')`,
+		description: ``,
 	},
 	{
-		image:  wall_back,
-		title: `WALL_BACK('─')`,
-		description: ` Стінка. Її треба обходити`,
+		image: ai_tank_up,
+		title: `AI_TANK_UP('?')`,
+		description: ``,
 	},
 	{
-		image:  angle_back_left,
-		title: `ANGLE_BACK_LEFT('└')`,
-		description: ` Стінка. Її треба обходити`,
+		image: ai_tank_right,
+		title: `AI_TANK_RIGHT('»')`,
+		description: ``,
 	},
 	{
-		image:  wall_left,
-		title: `WALL_LEFT('║')`,
-		description: ` Стінка. Її треба обходити`,
+		image: ai_tank_down,
+		title: `AI_TANK_DOWN('¿')`,
+		description: ``,
 	},
 	{
-		image:  wall_back_angle_left,
-		title: `WALL_BACK_ANGLE_LEFT('┌')`,
-		description: ` Стінка. Її треба обходити`,
+		image: ai_tank_left,
+		title: `AI_TANK_LEFT('«')`,
+		description: ``,
 	},
 	{
-		image:  wall_back_angle_right,
-		title: `WALL_BACK_ANGLE_RIGHT('╗')`,
-		description: ` Стінка. Її треба обходити`,
+		image: ai_tank_prize,
+		title: `AI_TANK_PRIZE('◘')`,
+		description: ``,
 	},
 	{
-		image:  angle_out_right,
-		title: `ANGLE_OUT_RIGHT('╝')`,
-		description: ` Стінка. Її треба обходити`,
+		image: prize,
+		title: `PRIZE('!')`,
+		description: ``,
 	},
 	{
-		image:  angle_out_left,
-		title: `ANGLE_OUT_LEFT('╚')`,
-		description: ` Стінка. Її треба обходити`,
+		image: prize_immortality,
+		title: `PRIZE_IMMORTALITY('1')`,
+		description: ``,
 	},
 	{
-		image:  space,
-		title: `SPACE(' ')`,
-		description: `Елемент стіни`,
+		image: prize_breaking_walls,
+		title: `PRIZE_BREAKING_WALLS('2')`,
+		description: ``,
+	},
+	{
+		image: prize_walking_on_water,
+		title: `PRIZE_WALKING_ON_WATER('3')`,
+		description: ``,
 	},
 ];
