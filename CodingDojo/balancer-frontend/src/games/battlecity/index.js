@@ -1,5 +1,5 @@
 import Elements from "./elements";
-import RulesContainer from './../../containers/RulesContainer/icancode';
+import RulesContainer from './../../containers/RulesContainer/battlecity';
 import battleComplete from './images/battle-complete.jpg';
 import logo from './images/game-logo.png';
 import boardSample from './images/field-sample.png';
