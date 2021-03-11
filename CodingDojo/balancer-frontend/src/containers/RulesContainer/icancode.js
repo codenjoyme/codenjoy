@@ -64,10 +64,11 @@ class RulesContainer extends Component {
     render() {
         const {  server, code, id, settings  } = this.props;
         const loggedIn = [ server, code, id ].every(Boolean);
+        const localhostConnectionUrl = getGameConnectionString('127.0.0.1:8080', '12345678901234567890', 'anyidyouwant');
         const connectionUrl = loggedIn
             ? getGameConnectionString(server, code, id)
-            : void 0;
-        const localhostConnectionUrl = getGameConnectionString('127.0.0.1:8080', '12345678901234567890', 'anyidyouwant');
+            : localhostConnectionUrl;
+
         const privacyRulesUrl = process.env.REACT_APP_EVENT_LINK + '/privacyRules';
         const settingsLink = process.env.REACT_APP_API_SERVER + '/codenjoy-balancer/rest/game/settings/get';
         const privacyRulesDetailsUrl = privacyRulesUrl + '#details3';
