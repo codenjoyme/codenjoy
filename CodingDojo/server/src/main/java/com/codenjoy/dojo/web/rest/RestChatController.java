@@ -71,7 +71,7 @@ public class RestChatController {
         return ResponseEntity.ok(chat.postMessage(null, message.getText(), room, user.getId()));
     }
 
-    @PostMapping("/{room}/messages/{id}/topic")
+    @PostMapping("/{room}/messages/{id}/replies")
     public ResponseEntity<?> postMessageForTopic(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
@@ -94,7 +94,7 @@ public class RestChatController {
         return ResponseEntity.ok(chat.getMessage(id, room, user.getId()));
     }
 
-    @GetMapping("/{room}/messages/{id}/topic")
+    @GetMapping("/{room}/messages/{id}/replies")
     public ResponseEntity<?> getMessagesForTopic(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,

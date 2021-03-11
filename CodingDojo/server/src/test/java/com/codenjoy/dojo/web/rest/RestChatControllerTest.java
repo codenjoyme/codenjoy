@@ -436,7 +436,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // message for topic1
         // id = 3
         nowIs(12347L);
-        post(200, "/rest/chat/validRoom/messages/1/topic",
+        post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message3'}"));
 
         // just another one message in room
@@ -448,13 +448,13 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // message for topic2
         // id = 5
         nowIs(12349L);
-        post(200, "/rest/chat/validRoom/messages/2/topic",
+        post(200, "/rest/chat/validRoom/messages/2/replies",
                 unquote("{text:'message5'}"));
 
         // message for topic1
         // id = 6
         nowIs(12350L);
-        post(200, "/rest/chat/validRoom/messages/1/topic",
+        post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message6'}"));
 
         // just another one message in room
@@ -466,7 +466,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // message for topic1
         // id = 8
         nowIs(12352L);
-        post(200, "/rest/chat/validRoom/messages/1/topic",
+        post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message8'}"));
 
         // when then
@@ -488,22 +488,22 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals("[{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12347,'topicId':1}," +
                         "{'id':6,'playerId':'player','roomId':'validRoom','text':'message6','time':12350,'topicId':1}," +
                         "{'id':8,'playerId':'player','roomId':'validRoom','text':'message8','time':12352,'topicId':1}]",
-                quote(get("/rest/chat/validRoom/messages/1/topic")));
+                quote(get("/rest/chat/validRoom/messages/1/replies")));
 
         // when then
         // all for topic 2 message in room
         assertEquals("[{'id':5,'playerId':'player','roomId':'validRoom','text':'message5','time':12349,'topicId':2}]",
-                quote(get("/rest/chat/validRoom/messages/2/topic")));
+                quote(get("/rest/chat/validRoom/messages/2/replies")));
 
         // when then
         // get topic message like room message
         assertEquals("[]",
-                quote(get("/rest/chat/validRoom/messages/3/topic")));
+                quote(get("/rest/chat/validRoom/messages/3/replies")));
 
         // when then
         // all for non topic message in room
         assertEquals("[]",
-                quote(get("/rest/chat/validRoom/messages/4/topic")));
+                quote(get("/rest/chat/validRoom/messages/4/replies")));
 
         // when then
         // between messages in topic -> room messages between 3 ... 8
@@ -520,13 +520,13 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // topic message for topic1 message :)
         // id = 9
         nowIs(12353L);
-        post(200, "/rest/chat/validRoom/messages/8/topic",
+        post(200, "/rest/chat/validRoom/messages/8/replies",
                 unquote("{text:'message9'}"));
 
         // when then
         // all for topic 8 message in room
         assertEquals("[{'id':9,'playerId':'player','roomId':'validRoom','text':'message9','time':12353,'topicId':8}]",
-                quote(get("/rest/chat/validRoom/messages/8/topic")));
+                quote(get("/rest/chat/validRoom/messages/8/replies")));
 
         // when then
         // another the same
@@ -545,7 +545,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // then
         // all for topic 2 message in room
         assertEquals("[]",
-                quote(get("/rest/chat/validRoom/messages/2/topic")));
+                quote(get("/rest/chat/validRoom/messages/2/replies")));
 
         // when
         // delete topic message
@@ -555,7 +555,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // all for topic 1 message in room
         assertEquals("[{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12347,'topicId':1}," +
                         "{'id':8,'playerId':'player','roomId':'validRoom','text':'message8','time':12352,'topicId':1}]",
-                quote(get("/rest/chat/validRoom/messages/1/topic")));
+                quote(get("/rest/chat/validRoom/messages/1/replies")));
 
         // when
         // delete empty topic
@@ -564,7 +564,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // then
         // all for topic 2 message in room
         assertError("java.lang.IllegalArgumentException: There is no message with id: 2 in room with id: validRoom",
-                "/rest/chat/validRoom/messages/2/topic");
+                "/rest/chat/validRoom/messages/2/replies");
 
         // when
         // delete not empty topic
@@ -573,7 +573,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // then
         // all for topic 1 message in room
         assertError("java.lang.IllegalArgumentException: There is no message with id: 1 in room with id: validRoom",
-                "/rest/chat/validRoom/messages/1/topic");
+                "/rest/chat/validRoom/messages/1/replies");
 
         // when then
         // all for room
