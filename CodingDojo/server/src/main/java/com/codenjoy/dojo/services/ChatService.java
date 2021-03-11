@@ -41,20 +41,21 @@ public class ChatService {
 
     public List<PMessage> getMessages(String room, int count,
                                       Integer afterId, Integer beforeId,
+                                      boolean inclusive,
                                       String playerId)
     {
         validator.checkPlayerInRoom(playerId, room);
 
         if (afterId != null && beforeId != null) {
-            return wrap(chat.getMessagesBetween(room, afterId, beforeId));
+            return wrap(chat.getMessagesBetween(room, afterId, beforeId, inclusive));
         }
 
         if (afterId != null) {
-            return wrap(chat.getMessagesAfter(room, count, afterId));
+            return wrap(chat.getMessagesAfter(room, count, afterId, inclusive));
         }
 
         if (beforeId != null) {
-            return wrap(chat.getMessagesBefore(room, count, beforeId));
+            return wrap(chat.getMessagesBefore(room, count, beforeId, inclusive));
         }
 
         return wrap(chat.getMessages(room, count));

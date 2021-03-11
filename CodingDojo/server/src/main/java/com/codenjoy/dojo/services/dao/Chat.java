@@ -89,16 +89,21 @@ public class Chat {
      * @return все сообщения в диапазоне ({@param afterId}...{@param beforeId})
      *        для текущего чата {@param room},
      *        посортированных в порядке возрастания времени.
+     *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
+     *        message {@param afterId} и message {@param beforeId} помимо выбранных.
      */
-    public List<Message> getMessagesBetween(String room, int afterId, int beforeId) {
+    public List<Message> getMessagesBetween(String room,
+                                            int afterId, int beforeId,
+                                            boolean inclusive)
+    {
         if (afterId > beforeId) {
             throw new IllegalArgumentException("afterId in interval should be smaller than beforeId");
         }
         return pool.select("SELECT * FROM messages " +
                         "WHERE room = ? " +
                         "AND topic_id IS NULL " +
-                        "AND id > ? " +
-                        "AND id < ?" +
+                        "AND id >" + (inclusive?"=":"") + " ? " +
+                        "AND id <" + (inclusive?"=":"") + " ? " +
                         "ORDER BY time ASC;",
                 new Object[]{room, afterId, beforeId},
                 Chat::parseMessages
@@ -106,15 +111,19 @@ public class Chat {
     }
 
     /**
-     * @return {@param count} первых сообщений начиная с {@param afterId} (но не включая его)
+     * @return {@param count} первых сообщений начиная с {@param afterId}
      *        для текущего чата {@param room},
      *        посортированных в порядке возрастания времени.
+     *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
+     *        message {@param afterId}.
      */
-    public List<Message> getMessagesAfter(String room, int count, int afterId) {
+    public List<Message> getMessagesAfter(String room, int count,
+                                          int afterId, boolean inclusive)
+    {
         return pool.select("SELECT * FROM messages " +
                         "WHERE room = ? " +
                         "AND topic_id IS NULL " +
-                        "AND id > ?" +
+                        "AND id >" + (inclusive?"=":"") + " ? " +
                         "ORDER BY time ASC " +
                         "LIMIT ?;",
                 new Object[]{room, afterId, count},
@@ -123,16 +132,20 @@ public class Chat {
     }
 
     /**
-     * @return {@param count} последних сообщений перед {@param beforeId} (но не включая его)
+     * @return {@param count} последних сообщений перед {@param beforeId}
      *        для текущего чата {@param room},
      *        посортированных в порядке возрастания времени.
+     *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
+     *        message {@param beforeId}.
      */
-    public List<Message> getMessagesBefore(String room, int count, int beforeId) {
+    public List<Message> getMessagesBefore(String room, int count,
+                                           int beforeId, boolean inclusive)
+    {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
                         "WHERE room = ? " +
                         "AND topic_id IS NULL " +
-                        "AND id < ?" +
+                        "AND id <" + (inclusive?"=":"") + " ? " +
                         "ORDER BY time DESC " +
                         "LIMIT ?) " +
                         "ORDER BY time ASC;",

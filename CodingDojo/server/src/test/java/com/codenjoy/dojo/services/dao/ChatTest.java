@@ -331,27 +331,54 @@ public class ChatTest {
         assertEquals("[Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesAfter("room", MAX, 1).toString());
+                chat.getMessagesAfter("room", MAX, 1, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesAfter("room", MAX, 1, true).toString());
 
         // берутся только два сверху, хотя доступные 3
         assertEquals("[Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesAfter("room", 2, 1).toString());
+                chat.getMessagesAfter("room", 2, 1, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3)]",
+                chat.getMessagesAfter("room", 2, 1, true).toString());
 
         // можно указывать даже айдишку из другого чата - они порядковые
         assertEquals("[Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesAfter("room", MAX, 2).toString());
+                chat.getMessagesAfter("room", MAX, 2, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesAfter("room", MAX, 2, true).toString());
 
         // минус одно сообщение с id = afterId
         assertEquals("[Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesAfter("room", MAX, 4).toString());
+                chat.getMessagesAfter("room", MAX, 4, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesAfter("room", MAX, 4, true).toString());
 
         // минус одно сообщение с id = afterId
         assertEquals("[]",
-                chat.getMessagesAfter("room", MAX, 7).toString());
+                chat.getMessagesAfter("room", MAX, 7, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesAfter("room", MAX, 7, true).toString());
     }
 
     @Test
@@ -407,27 +434,56 @@ public class ChatTest {
                         "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesBefore("room", MAX, 8).toString());
+                chat.getMessagesBefore("room", MAX, 8, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesBefore("room", MAX, 8, true).toString());
 
         // первое сообщение c id = beforeId не включается
         assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1), " +
                         "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBefore("room", MAX, 7).toString());
+                chat.getMessagesBefore("room", MAX, 7, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesBefore("room", MAX, 7, true).toString());
 
         // берутся только два но с конца, хотя доступные 3
         assertEquals("[Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBefore("room", 2, 7).toString());
+                chat.getMessagesBefore("room", 2, 7, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesBefore("room", 2, 7, true).toString());
 
         // минус одно сообщение с id = beforeId
         assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1), " +
                         "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3)]",
-                chat.getMessagesBefore("room", MAX, 5).toString());
+                chat.getMessagesBefore("room", MAX, 5, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5)]",
+                chat.getMessagesBefore("room", MAX, 5, true).toString());
 
         // минус одно сообщение с id = beforeId
         assertEquals("[]",
-                chat.getMessagesBefore("room", MAX, 1).toString());
+                chat.getMessagesBefore("room", MAX, 1, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1)]",
+                chat.getMessagesBefore("room", MAX, 1, true).toString());
     }
 
     @Test
@@ -483,21 +539,46 @@ public class ChatTest {
         assertEquals("[Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesBetween("room", 1, 8).toString());
+                chat.getMessagesBetween("room", 1, 8, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesBetween("room", 1, 8, true).toString());
 
         // первое сообщение c id = beforeId не включается
         // так же как и последнее сообщение c id = afterId тоже не включается
         assertEquals("[Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetween("room", 1, 7).toString());
+                chat.getMessagesBetween("room", 1, 7, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player1, time=1615231423345, text=message1), " +
+                        "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesBetween("room", 1, 7, true).toString());
 
         // минус одно сообщение с id = beforeId
         // минус одно сообщение с id = afterId
         assertEquals("[Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetween("room", 3, 7).toString());
+                chat.getMessagesBetween("room", 3, 7, false).toString());
 
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615235514756, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615240404792, text=message7)]",
+                chat.getMessagesBetween("room", 3, 7, true).toString());
+
+        // когда встретились на границе
         assertEquals("[]",
-                chat.getMessagesBetween("room", 5, 5).toString());
+                chat.getMessagesBetween("room", 5, 5, false).toString());
+
+        // то же только c inclusive = true
+        assertEquals("[Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615240404792, text=message5)]",
+                chat.getMessagesBetween("room", 5, 5, true).toString());
     }
 
     @Test
@@ -569,6 +650,6 @@ public class ChatTest {
         // between messages in topic -> room messages between 3 ... 8
         assertEquals("[Chat.Message(id=4, topicId=null, room=room, playerId=player, time=123468, text=message4), " +
                         "Chat.Message(id=7, topicId=null, room=room, playerId=player, time=123471, text=message7)]",
-                chat.getMessagesBetween("room", 3, 8).toString());
+                chat.getMessagesBetween("room", 3, 8, false).toString());
     }
 }
