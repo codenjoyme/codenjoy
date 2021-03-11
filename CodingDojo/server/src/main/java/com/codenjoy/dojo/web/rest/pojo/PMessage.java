@@ -31,6 +31,7 @@ public class PMessage {
     private final int id;
     private final String text;
     private final String roomId;
+    private final Integer topicId;
     private final String playerId;
     private final long time;
 
@@ -38,7 +39,8 @@ public class PMessage {
         return new PMessage(
                 message.getId(),
                 message.getText(),
-                message.getChatId(),
+                message.getRoom(),
+                message.getTopicId(),
                 message.getPlayerId(),
                 message.getTime()
         );

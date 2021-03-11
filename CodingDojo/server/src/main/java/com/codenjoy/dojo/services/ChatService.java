@@ -77,7 +77,7 @@ public class ChatService {
 
         Chat.Message message = chat.getMessageById(messageId);
 
-        if (message == null || !message.getChatId().equals(room)) {
+        if (message == null || !message.getRoom().equals(room)) {
             throw new IllegalArgumentException(
                     "There is no message with id: " + messageId +
                             " in room with id: " + room);
@@ -88,9 +88,9 @@ public class ChatService {
     public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
         validator.checkPlayerInRoom(playerId, room);
 
-        String chatId = (topicMessageId == null) ? room : String.valueOf(topicMessageId);
         Chat.Message message = Chat.Message.builder()
-                .chatId(chatId)
+                .room(room)
+                .topicId(topicMessageId)
                 .playerId(playerId)
                 .time(time.now())
                 .text(text)
