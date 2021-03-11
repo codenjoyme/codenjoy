@@ -44,6 +44,7 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
+@RequestMapping(BoardController.URI)
 @RequiredArgsConstructor
 public class BoardController {
 
@@ -55,7 +56,7 @@ public class BoardController {
     private final ConfigProperties properties;
     private final RegistrationService registrationService;
 
-    @GetMapping(URI + "/player/{player}")
+    @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
                               @PathVariable("player") String id,
                               @RequestParam(name = "only", required = false) Boolean justBoard)
@@ -65,7 +66,7 @@ public class BoardController {
         return boardPlayer(model, id, null, justBoard, (String) model.get("game"));
     }
 
-    @GetMapping(value = URI + "/player/{player}", params = {"code", "remove"})
+    @GetMapping(value = "/player/{player}", params = {"code", "remove"})
     public String removePlayer(@PathVariable("player") String id, @RequestParam("code") String code) {
         validator.checkPlayerCode(id, code);
 
@@ -78,7 +79,7 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @GetMapping(value = URI + "/player/{player}", params = "code")
+    @GetMapping(value = "/player/{player}", params = "code")
     public String boardPlayer(ModelMap model,
                               @PathVariable("player") String id,
                               @RequestParam("code") String code,
@@ -101,7 +102,7 @@ public class BoardController {
         return justBoard ? "board-only" : "board";
     }
 
-    @GetMapping(URI + "/rejoining/{game}")
+    @GetMapping("/rejoining/{game}")
     public String rejoinGame(ModelMap model, @PathVariable("game") String game,
                              HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user)
@@ -118,7 +119,7 @@ public class BoardController {
         return rejoinGame(model, game, room, request, user);
     }
 
-    @GetMapping(URI + "/rejoining/{game}/room/{room}")
+    @GetMapping("/rejoining/{game}/room/{room}")
     public String rejoinGame(ModelMap model, @PathVariable("game") String game,
                              @PathVariable("room") String room,
                              HttpServletRequest request,
@@ -146,7 +147,7 @@ public class BoardController {
         model.addAttribute("allPlayersScreen", false);
     }
 
-    @GetMapping(value = URI + "/log/player/{player}", params = {"game", "room"})
+    @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
     public String boardPlayerLog(ModelMap model, @PathVariable("player") String id,
                                  @RequestParam("game") String game,
                                  @RequestParam("room") String room)
@@ -169,7 +170,7 @@ public class BoardController {
         return "board-log";
     }
 
-    @GetMapping(URI)
+    @GetMapping("/")
     public String boardAll() {
         GameType gameType = playerService.getAnyGameWithPlayers();
         if (gameType == NullGameType.INSTANCE) {
@@ -178,7 +179,7 @@ public class BoardController {
         return "redirect:/board/game/" + gameType.name();
     }
 
-    @GetMapping(URI + "/game/{game}")
+    @GetMapping("/game/{game}")
     public String boardAllGames(ModelMap model,
                                 @PathVariable("game") String game,
                                 @RequestParam(value = "code", required = false) String code,
@@ -216,7 +217,7 @@ public class BoardController {
         return "board";
     }
 
-    @GetMapping(value = URI, params = "code")
+    @GetMapping(value = "/", params = "code")
     public String boardAll(ModelMap model, @RequestParam("code") String code) {
         validator.checkCode(code, CAN_BE_NULL);
 
@@ -247,15 +248,4 @@ public class BoardController {
         return (code != null)?"?code=" + code:"";
     }
 
-    @GetMapping("/donate")
-    public String donate(ModelMap model) {
-        model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        model.addAttribute("donateCode", properties.getDonateCode());
-        return "donate-form";
-    }
-
-    @RequestMapping("/help")
-    public String help() {
-        return "help";
-    }
 }

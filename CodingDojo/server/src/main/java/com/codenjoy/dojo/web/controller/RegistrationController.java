@@ -48,7 +48,6 @@ public class RegistrationController {
 
     private PlayerService playerService;
     private RoomsAliaser rooms;
-    private ConfigProperties properties;
     private RegistrationValidator registrationValidator;
     private RegistrationService registrationService;
 
