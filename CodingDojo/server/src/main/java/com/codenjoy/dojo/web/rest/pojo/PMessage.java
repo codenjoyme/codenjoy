@@ -30,7 +30,7 @@ public class PMessage {
 
     private final int id;
     private final String text;
-    private final String roomId;
+    private final String room;
     private final Integer topicId;
     private final String playerId;
     private final long time;

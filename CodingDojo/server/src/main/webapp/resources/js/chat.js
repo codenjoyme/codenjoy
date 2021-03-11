@@ -36,7 +36,7 @@ function initChat(contextPath) {
         messages.forEach(function (message) {
             var id = message.id;
             var text = message.text.split('\n').join('<br>');
-            var room = message.roomId;
+            var room = message.room;
             var player = message.playerId;
             var author = setup.playerName(player);
             var dateTime = getTickDateTime(message.time, true);
