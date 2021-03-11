@@ -23,6 +23,7 @@ License along with this program.  If not, see
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html lang="en">
 <c:set var="page" scope="request" value="register"/>
@@ -38,7 +39,7 @@ License along with this program.  If not, see
     <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" waitApprove="${wait_approve}"></div>
 
     <div class="header-container">
         <div class="container-fluid">
@@ -76,68 +77,75 @@ License along with this program.  If not, see
         <form:form class="form-registr" id="form" modelAttribute="player" action="register" method="POST">
             <h2 class="form-title">Sign up</h2>
             <div class="inputs">
-                <div id="readableName" class="field not-valid" not-empty>
-                    <form:errors path="readableName" cssClass="error-message" />
-                    <form:input type="text" placeholder="FirstName LastName" path="readableName"/>
-                    <span class="icon fa"></span>
-                </div>
-                <div id="email" class="field not-valid">
-                    <form:errors path="email" cssClass="error-message" />
-                    <form:input type="email" placeholder="Email address (valid)" path="email"/>
-                    <span class="icon fa"></span>
-                </div>
-                <div id="password" class="field not-valid">
-                    <form:errors path="password" cssClass="error-message" />
-                    <input type="password" placeholder="Password"/>
-                    <span class="icon fa"></span>
-                </div>
-                <div id="passwordConfirmation" class="field not-valid">
-                    <form:errors path="passwordConfirmation" cssClass="error-message" />
-                    <input type="password" placeholder="Confirm password"/>
-                    <span class="icon fa"></span>
-                </div>
-                <div id="data" hidden>
-                    <form:input type="text" path="data"/>
-                </div>
-                <div id="password-md5" hidden>
-                    <form:input type="hidden" path="password"/>
-                </div>
-                <div id="passwordConfirmation-md5" hidden>
-                    <form:input type="hidden" path="passwordConfirmation"/>
-                </div>
-                <!-- add attribute 'not-empty' to the div if you want to enable validation -->
-                <div id="data1" class="field not-valid" not-empty hidden>
-                    <input type="text" placeholder="Country / City"/>
-                    <span class="icon fa"></span>
-                </div>
-                <div id="data2" class="field not-valid" not-empty hidden>
-                    <!-- also you can change input placeholder="..." -->
-                    <input type="text" placeholder="Primary skill / Tech level"/>
-                    <span class="icon fa"></span>
-                </div>
-                <div id="data3" class="field not-valid" not-empty hidden>
-                    <input type="text" placeholder="Company / Position"/>
-                    <span class="icon fa"></span>
-                </div>
-                <div id="data4" class="field not-valid" not-empty hidden>
-                    <input type="text" placeholder="Experience"/>
-                    <span class="icon fa"></span>
-                </div>
-                <c:if test="${not adminLogin}">
-                    <div id="gameName" class="field valid" hidden>
-                        <form:select id="gameNameSelect" items="${gameNames}" path="gameName"/>
-                        <form:errors path="gameName" cssClass="error" />
-                    </div>
-
-                    <div id="gameType" class="field valid" hidden>
-                        <select placeholder="Select your game" name="game">
-                            <!--option value="Type1">Type1</option-->
-                            <!--option value="Type2">Type2</option-->
-                            <!--option value="Type3">Type3</option-->
-                        </select>
+                <c:if test="${!opened}">
+                    <div id="error-message" class="error-message">
+                        <spring:message key="registration.closed" />
                     </div>
                 </c:if>
-                <button class="btn-submit" id="submit-button" type="button">Sign up</button>
+                <c:if test="${opened}">
+                    <div id="readableName" class="field not-valid" not-empty>
+                        <form:errors path="readableName" cssClass="error-message" />
+                        <form:input type="text" placeholder="FirstName LastName" path="readableName"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="email" class="field not-valid">
+                        <form:errors path="email" cssClass="error-message" />
+                        <form:input type="email" placeholder="Email address (valid)" path="email"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="password" class="field not-valid">
+                        <form:errors path="password" cssClass="error-message" />
+                        <input type="password" placeholder="Password"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="passwordConfirmation" class="field not-valid">
+                        <form:errors path="passwordConfirmation" cssClass="error-message" />
+                        <input type="password" placeholder="Confirm password"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="data" hidden>
+                        <form:input type="text" path="data"/>
+                    </div>
+                    <div id="password-md5" hidden>
+                        <form:input type="hidden" path="password"/>
+                    </div>
+                    <div id="passwordConfirmation-md5" hidden>
+                        <form:input type="hidden" path="passwordConfirmation"/>
+                    </div>
+                    <!-- add attribute 'not-empty' to the div if you want to enable validation -->
+                    <div id="data1" class="field not-valid" not-empty hidden>
+                        <input type="text" placeholder="Country / City"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="data2" class="field not-valid" not-empty hidden>
+                        <!-- also you can change input placeholder="..." -->
+                        <input type="text" placeholder="Primary skill / Tech level"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="data3" class="field not-valid" not-empty hidden>
+                        <input type="text" placeholder="Company / Position"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="data4" class="field not-valid" not-empty hidden>
+                        <input type="text" placeholder="Experience"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <c:if test="${not adminLogin}">
+                        <div id="game" class="field valid" hidden>
+                            <form:select id="gameSelect" items="${games}" path="game"/>
+                            <form:errors path="game" cssClass="error" />
+                        </div>
+
+                        <div id="gameType" class="field valid" hidden>
+                            <select placeholder="Select your game" name="game">
+                                <!--option value="Type1">Type1</option-->
+                                <!--option value="Type2">Type2</option-->
+                                <!--option value="Type3">Type3</option-->
+                            </select>
+                        </div>
+                    </c:if>
+                    <button class="btn-submit" id="submit-button" type="button">Sign up</button>
+                </c:if>
             </div>
         </form:form>
     </div>

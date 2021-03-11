@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.client.ai.AISolver;
 import com.codenjoy.dojo.minesweeper.services.GameRunner;
+import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -35,6 +36,8 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.BOARD_SIZE;
+import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.MINES_ON_BOARD;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -62,11 +65,10 @@ public class SmokeTest {
             }
 
             @Override
-            public GameField createGame(int levelNumber) {
-                settings.addEditBox("Board size").type(Integer.class).update(7);
-                settings.addEditBox("Mines on board").type(Integer.class).update(2);
-
-                return super.createGame(levelNumber);
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .integer(BOARD_SIZE, 7)
+                        .integer(MINES_ON_BOARD, 2);
             }
         };
 

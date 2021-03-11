@@ -27,7 +27,6 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -42,35 +41,34 @@ import com.codenjoy.dojo.snake.model.Snake;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
 
-public class GameRunner extends AbstractGameType implements GameType {
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.BOARD_SIZE;
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.MAX_SCORE_MODE;
 
-    private SnakeSettings setup;
-
-    public GameRunner() {
-        setup = new SnakeSettings(settings);
-    }
+public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         // TODO этa настройка работает только, если удалить всех игроков и снова загрузить а надо сделать, чтобы reset all boards кнопка триггерила это тоже
-        if (setup.maxScoreMode().getValue()) {
-            return new MaxScores((Integer) score, setup);
+        if (settings.bool(MAX_SCORE_MODE)) {
+            return new MaxScores((Integer) score, settings);
         } else {
-            return new Scores((Integer) score, setup);
+            return new Scores((Integer) score, settings);
         }
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        int size = settings.integer(BOARD_SIZE);
+
         return new Snake(new RandomArtifactGenerator(getDice()),
-                new BasicWalls(setup.boardSize().getValue()),
-                setup.boardSize().getValue(),
-                setup.startSnakeLength().getValue());
+                new BasicWalls(size),
+                size,
+                settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return setup.boardSize();
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return settings.integerValue(BOARD_SIZE);
     }
 
     @Override
@@ -84,6 +82,11 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
+    }
+
+    @Override
     public Class<? extends Solver> getAI() {
         return AISolver.class;
     }
@@ -94,12 +97,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.SINGLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 }

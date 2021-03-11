@@ -43,7 +43,7 @@ public class ForcesStateTest {
 
     @Test
     public void shouldCountNotMoreThan() {
-        Assert.assertEquals("-=#", new ForcesState(new Start(Elements.BASE1)).state(null, null));
+        assertEquals("-=#", new ForcesState(new Start(Elements.BASE1)).state(null, null));
         assertEquals("000", new ForcesState(forces(0)).state(null, null));
         assertEquals("001", new ForcesState(forces(1)).state(null, null));
         assertEquals("ZZZ", new ForcesState(forces(46655)).state(null, null));

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -51,8 +52,8 @@ public class AITest {
                 "☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,3]=[DOWN], " +
-                        "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], " +
-                        "[3,2]=[LEFT], [3,3]=[DOWN]}");
+                "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], " +
+                "[3,2]=[LEFT], [3,3]=[DOWN]}");
     }
 
     @Test
@@ -64,8 +65,8 @@ public class AITest {
                 "☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,3]=[DOWN], " +
-                        "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], " +
-                        "[3,2]=[LEFT, UP], [3,3]=[LEFT, DOWN]}");
+                "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], " +
+                "[3,2]=[LEFT, UP], [3,3]=[LEFT, DOWN]}");
     }
 
     @Test
@@ -77,8 +78,8 @@ public class AITest {
                 "☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,3]=[DOWN], " +
-                        "[2,1]=[RIGHT], [2,2]=[LEFT, RIGHT, DOWN], [2,3]=[DOWN], " +
-                        "[3,1]=[LEFT], [3,2]=[LEFT, DOWN], [3,3]=[DOWN]}");
+                "[2,1]=[RIGHT], [2,2]=[LEFT, RIGHT, DOWN], [2,3]=[DOWN], " +
+                "[3,1]=[LEFT], [3,2]=[LEFT, DOWN], [3,3]=[DOWN]}");
     }
 
     @Test
@@ -90,8 +91,8 @@ public class AITest {
                 "☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,3]=[DOWN], " +
-                        "[2,1]=[RIGHT], [2,2]=[LEFT, RIGHT, UP, DOWN], [2,3]=[LEFT, RIGHT, DOWN], " +
-                        "[3,1]=[LEFT], [3,2]=[LEFT, UP, DOWN], [3,3]=[LEFT, DOWN]}");
+                "[2,1]=[RIGHT], [2,2]=[LEFT, RIGHT, UP, DOWN], [2,3]=[LEFT, RIGHT, DOWN], " +
+                "[3,1]=[LEFT], [3,2]=[LEFT, UP, DOWN], [3,3]=[LEFT, DOWN]}");
     }
 
     @Test
@@ -116,8 +117,8 @@ public class AITest {
                 "☼☼☼☼☼",
 
                 "{[1,1]=[RIGHT], [1,2]=[RIGHT, DOWN], [1,3]=[DOWN], " +
-                        "[2,1]=[LEFT, RIGHT], [2,2]=[LEFT, RIGHT, DOWN], [2,3]=[DOWN], " +
-                        "[3,1]=[LEFT, UP], [3,2]=[LEFT, UP, DOWN], [3,3]=[LEFT, DOWN]}");
+                "[2,1]=[LEFT, RIGHT], [2,2]=[LEFT, RIGHT, DOWN], [2,3]=[DOWN], " +
+                "[3,1]=[LEFT, UP], [3,2]=[LEFT, UP, DOWN], [3,3]=[LEFT, DOWN]}");
 
     }
 
@@ -132,10 +133,10 @@ public class AITest {
                 "☼☼☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,4]=[RIGHT], [1,5]=[DOWN], " +
-                        "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], [2,4]=[LEFT, RIGHT, DOWN], [2,5]=[DOWN], " +
-                        "[3,2]=[LEFT, RIGHT], [3,3]=[DOWN], [3,4]=[LEFT, RIGHT, DOWN], [3,5]=[DOWN], " +
-                        "[4,2]=[LEFT, RIGHT], [4,4]=[LEFT, RIGHT], [4,5]=[DOWN], " +
-                        "[5,2]=[LEFT, UP], [5,3]=[UP, DOWN], [5,4]=[LEFT, DOWN], [5,5]=[DOWN]}");
+                "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], [2,4]=[LEFT, RIGHT, DOWN], [2,5]=[DOWN], " +
+                "[3,2]=[LEFT, RIGHT], [3,3]=[DOWN], [3,4]=[LEFT, RIGHT, DOWN], [3,5]=[DOWN], " +
+                "[4,2]=[LEFT, RIGHT], [4,4]=[LEFT, RIGHT], [4,5]=[DOWN], " +
+                "[5,2]=[LEFT, UP], [5,3]=[UP, DOWN], [5,4]=[LEFT, DOWN], [5,5]=[DOWN]}");
 
     }
 
@@ -150,10 +151,10 @@ public class AITest {
                 "☼☼☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,4]=[RIGHT], [1,5]=[DOWN], " +
-                        "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], [2,4]=[LEFT, RIGHT, DOWN], [2,5]=[DOWN], " +
-                        "[3,2]=[LEFT, RIGHT], [3,3]=[DOWN], [3,4]=[LEFT, RIGHT, DOWN], [3,5]=[DOWN], " +
-                        "[4,2]=[LEFT, RIGHT], [4,3]=[DOWN], [4,4]=[LEFT, RIGHT, DOWN], [4,5]=[DOWN], " +
-                        "[5,2]=[LEFT, UP], [5,3]=[LEFT, UP, DOWN], [5,4]=[LEFT, UP, DOWN], [5,5]=[LEFT, DOWN]}");
+                "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], [2,4]=[LEFT, RIGHT, DOWN], [2,5]=[DOWN], " +
+                "[3,2]=[LEFT, RIGHT], [3,3]=[DOWN], [3,4]=[LEFT, RIGHT, DOWN], [3,5]=[DOWN], " +
+                "[4,2]=[LEFT, RIGHT], [4,3]=[DOWN], [4,4]=[LEFT, RIGHT, DOWN], [4,5]=[DOWN], " +
+                "[5,2]=[LEFT, UP], [5,3]=[LEFT, UP, DOWN], [5,4]=[LEFT, UP, DOWN], [5,5]=[LEFT, DOWN]}");
 
     }
 
@@ -173,10 +174,11 @@ public class AITest {
 
     private void setupAI(String map) {
         level = new LevelImpl(map);
-        loderunner = new Loderunner(level, mock(Dice.class));
+        GameSettings settings = new GameSettings();
+        loderunner = new Loderunner(level, mock(Dice.class), settings);
 
         for (Hero hero : level.getHeroes()) {
-            Player player = new Player(mock(EventListener.class));
+            Player player = new Player(mock(EventListener.class), settings);
             loderunner.newGame(player);
             player.hero = hero;
             hero.init(loderunner);
@@ -391,7 +393,4 @@ public class AITest {
         assertEquals("[5,6]", hero2.toString());
         assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner.size(), enemy1, hero2).toString());
     }
-
-
-
 }

@@ -24,13 +24,17 @@ package com.codenjoy.dojo.expansion.model.attack;
 
 
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 
 import java.util.List;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-12.
- */
 public class OneByOneAttack implements Attack {
+
+    private GameSettings settings;
+
+    public OneByOneAttack(GameSettings settings) {
+        this.settings = settings;
+    }
 
     @Override
     public boolean calculate(List<HeroForces> forces) {

@@ -49,7 +49,7 @@ public class SqliteConnectionThreadPoolFactory implements ConnectionThreadPoolFa
     }
 
     @Override
-    public CrudConnectionThreadPool create(String... createTableSqls) {
-        return new SqliteConnectionThreadPool(database, createTableSqls);
+    public CrudConnectionThreadPool create(String... createTableQueries) {
+        return new SqliteConnectionThreadPool(database, createTableQueries);
     }
 }

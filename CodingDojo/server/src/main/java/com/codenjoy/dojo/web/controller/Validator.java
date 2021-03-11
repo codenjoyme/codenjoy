@@ -23,9 +23,11 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.PlayerCommand;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -46,8 +48,8 @@ public class Validator {
 
     private static final String EMAIL = "^(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6})$";
     private static final String ID = "^[A-Za-z0-9-]{1," + MAX_PLAYER_ID_LENGTH + "}$";
-    private static final String GAME_NAME = "^[A-Za-z][A-Za-z0-9+_.-]{0,48}[A-Za-z0-9]$";
-    private static final String ROOM_NAME = GAME_NAME;
+    private static final String GAME = "^[A-Za-z][A-Za-z0-9+_.-]{0,48}[A-Za-z0-9]$";
+    private static final String ROOM = GAME;
     private static final String CODE = "^[0-9]{1," + MAX_PLAYER_CODE_LENGTH + "}$";
     private static final String MD5 = "^[A-Za-f0-9]{32}$";
     private static final String READABLE_NAME_LAT = "^[A-Za-z]{1,50}$";
@@ -64,8 +66,8 @@ public class Validator {
     private Pattern readableNameLat;
     private Pattern readableNameCyr;
     private Pattern nickName;
-    private Pattern gameName;
-    private Pattern roomName;
+    private Pattern game;
+    private Pattern room;
     private Pattern code;
     private Pattern md5;
 
@@ -75,8 +77,8 @@ public class Validator {
         readableNameLat = Pattern.compile(READABLE_NAME_LAT);
         readableNameCyr = Pattern.compile(READABLE_NAME_CYR);
         nickName = Pattern.compile(NICK_NAME);
-        gameName = Pattern.compile(GAME_NAME);
-        roomName = Pattern.compile(ROOM_NAME);
+        game = Pattern.compile(GAME);
+        room = Pattern.compile(ROOM);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
     }
@@ -157,16 +159,16 @@ public class Validator {
         }
     }
 
-    public boolean isEmpty(String input) {
+    public static boolean isEmpty(String input) {
         return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
     }
 
     public boolean isGameName(String input, boolean canBeNull) {
-        return is(input, canBeNull, gameName);
+        return is(input, canBeNull, game);
     }
 
     public boolean isRoomName(String input, boolean canBeNull) {
-        return is(input, canBeNull, roomName);
+        return is(input, canBeNull, room);
     }
 
     public boolean is(String input, boolean canBeNull, Pattern pattern) {
@@ -177,13 +179,13 @@ public class Validator {
         return true;
     }
 
-    public void checkRoomName(String input, boolean canBeNull) {
+    public void checkRoom(String input, boolean canBeNull) {
         if (!isRoomName(input, canBeNull)) {
             throw new IllegalArgumentException(String.format("Room name is invalid: '%s'", input));
         }
     }
 
-    public void checkGameName(String input, boolean canBeNull) {
+    public void checkGame(String input, boolean canBeNull) {
         if (!isGameName(input, canBeNull)) {
             throw new IllegalArgumentException(String.format("Game name is invalid: '%s'", input));
         }
@@ -196,14 +198,12 @@ public class Validator {
     }
 
     // TODO возможно хорошая идея использовать его всегда вместо checkGameName везде по коду
-    public GameType checkGameType(String input) {
-        checkGameName(input, Validator.CANT_BE_NULL);
+    public void checkGameType(String input) {
+        checkGame(input, CANT_BE_NULL);
 
-        GameType type = gameService.getGame(input);
-        if (type == NullGameType.INSTANCE) {
+        if (!gameService.exists(input)) {
             throw new IllegalArgumentException("Game not found: " + input);
         }
-        return type;
     }
 
     public void checkMD5(String input) {
@@ -232,16 +232,21 @@ public class Validator {
         }
     }
 
-    public void checkPlayerInRoom(String id, String roomName) {
-        checkRoomName(roomName, CANT_BE_NULL);
+    public void checkPlayerInRoom(String id, String room) {
+        checkRoom(room, CANT_BE_NULL);
         checkPlayerId(id, CANT_BE_NULL);
 
-        if (!isPlayerInRoom(id, roomName)) {
-            throw new IllegalArgumentException(String.format("Player '%s' is not in room '%s'", id, roomName));
+        if (!isPlayerInRoom(id, room)) {
+            throw new IllegalArgumentException(String.format("Player '%s' is not in room '%s'", id, room));
         }
     }
 
-    public boolean isPlayerInRoom(String id, String roomName) {
-        return playerService.get(id).getRoomName().equals(roomName);
+    public boolean isPlayerInRoom(String id, String room) {
+        return playerService.get(id).getRoom().equals(room);
+    }
+
+    // TODO test me
+    public void checkUser(Registration.User user) {
+        checkPlayerCode(user.getId(), user.getCode());
     }
 }

@@ -24,36 +24,44 @@ pages = pages || {};
 var adminKey = false;
 
 function initHotkeys() {
-    var gameName = getSettings('gameName') || game.gameName;
-    var contextPath = getSettings('contextPath') || game.contextPath;
+    var game = getSettings('game') || setup.game;
+    var room = getSettings('room') || setup.room;
+    var contextPath = getSettings('contextPath') || setup.contextPath;
 
-    var gameNameParam = ((!gameName)?'':'gameName=' + gameName);
+    var gameParam = function(ch) {
+        return !game ? '' : (ch + 'game=' + game);
+    }
+    var roomParam = function(ch) {
+        return !room ? '' : (ch + 'room=' + room);
+    }
     $('body').keydown(function(ev) {
-        if (!game.enableHotkeys) {
+        if (!setup.enableHotkeys) {
             return;
         }
 
         if (ev.ctrlKey && ev.altKey && ev.keyCode == 65) { // Ctrl-Alt-A + ...
             adminKey = true;
         } else if (adminKey && ev.keyCode == 68) { // ... + D (aDmin)
-            window.open(contextPath + '/admin' + (gameNameParam == ''?'':'?select&') + gameNameParam);
+            window.open(contextPath + '/admin' + roomParam('?'));
         } else if (adminKey && ev.keyCode == 82) { // ... + R (Register)
-            window.open(contextPath + '/register' + (gameNameParam == ''?'':'?') + gameNameParam);
+            window.open(contextPath + '/register' + gameParam('?'));
         } else if (adminKey && ev.keyCode == 77) { // ... + M (Main)
             window.open(contextPath);
         } else if (adminKey && ev.keyCode == 74) { // ... + J (Joystick)
-            game.enableJoystick = !game.enableJoystick;
+            setup.enableJoystick = !setup.enableJoystick;
         } else if (adminKey && ev.keyCode == 76) { // ... + l (Log)
-            window.open(contextPath + '/board/log/player/' + game.playerId + '?code=' + game.code + '&gameName=' + gameName);
+            window.open(contextPath + '/board/log/player/'
+                + setup.playerId + '?code='
+                + setup.code + gameParam('&') + roomParam('&'));
         } else if (adminKey && ev.keyCode == 66) { // ... + B (Board)
-            window.open(contextPath + '/board/game/' + gameName);
+            window.open(contextPath + '/board/game/' + game);
         } else if (adminKey && ev.keyCode == 72) { // ... + H (Help)
             window.open(contextPath + '/help');
         } else if (adminKey && ev.keyCode == 85) { // ... + U (rUles)
-            if (gameName == '') {
+            if (game == '') {
                 window.open(contextPath + '/help');
             } else {
-                window.open(contextPath + '/resources/help/' + gameName + '.html');
+                window.open(contextPath + '/resources/help/' + game + '.html');
             }
         } else {
             adminKey = false;

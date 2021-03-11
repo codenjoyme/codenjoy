@@ -20,7 +20,7 @@
  * #L%
  */
 
-game.enableJoystick = false;
+setup.enableJoystick = false;
 
 var description = null;
 var setDescription = function(text) {
@@ -28,10 +28,10 @@ var setDescription = function(text) {
 }
 
 var showDescriptionOnClick = function() {
-    if (!game.registered) {
+    if (!setup.registered) {
         return;
     }
-    var container = "#div_" + game.playerId;
+    var container = "#div_" + setup.playerId;
     $(container + " #player_name").click(function(){
         if (!!description) {
             alert(description.replace(/\\n/g, "\n"));
@@ -39,11 +39,11 @@ var showDescriptionOnClick = function() {
     });
 }
 
-game.onBoardPageLoad = function() {
+setup.onBoardPageLoad = function() {
     showDescriptionOnClick();
 }
 
-game.onBoardAllPageLoad = function() {
+setup.onBoardAllPageLoad = function() {
     showDescriptionOnClick();
 }
 

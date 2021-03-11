@@ -22,7 +22,9 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
+import com.codenjoy.dojo.bomberman.TestGameSettings;
 import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,20 +45,21 @@ public class PerksSettingsWrapperTest {
     @Mock Dice dice;
 
     private static final Elements NO_PERK = Elements.DESTROYED_WALL;
+    private PerksSettingsWrapper settings;
 
     @Before
     public void setup() {
-        PerksSettingsWrapper.clear();
+        settings = new PerksSettingsWrapper(new TestGameSettings());
     }
 
     @Test
     public void dropPerk_allTogether_dropRatio20() {
-        PerksSettingsWrapper.setDropRatio(20);
+        settings.dropRatio(20);
 
-        PerksSettingsWrapper.setPerkSettings(BOMB_BLAST_RADIUS_INCREASE, 0, 0); // range 0..4
-        PerksSettingsWrapper.setPerkSettings(BOMB_COUNT_INCREASE, 0, 0);        // range 5..9
-        PerksSettingsWrapper.setPerkSettings(BOMB_REMOTE_CONTROL, 0, 0);        // range 10..14
-        PerksSettingsWrapper.setPerkSettings(BOMB_IMMUNE, 0, 0);                // range 15..19
+        settings.put(BOMB_BLAST_RADIUS_INCREASE, 0, 0); // range 0..4
+        settings.put(BOMB_COUNT_INCREASE, 0, 0);        // range 5..9
+        settings.put(BOMB_REMOTE_CONTROL, 0, 0);        // range 10..14
+        settings.put(BOMB_IMMUNE, 0, 0);                // range 15..19
 
         assertPerk(0, BOMB_BLAST_RADIUS_INCREASE);
         assertPerk(1, BOMB_BLAST_RADIUS_INCREASE);
@@ -100,10 +103,10 @@ public class PerksSettingsWrapperTest {
 
     @Test
     public void dropPerk_twoPerks_dropRatio20() {
-        PerksSettingsWrapper.setDropRatio(20);
+        settings.dropRatio(20);
 
-        PerksSettingsWrapper.setPerkSettings(BOMB_BLAST_RADIUS_INCREASE, 0, 0); // range 0..9
-        PerksSettingsWrapper.setPerkSettings(BOMB_REMOTE_CONTROL, 0, 0);        // range 10..19
+        settings.put(BOMB_BLAST_RADIUS_INCREASE, 0, 0); // range 0..9
+        settings.put(BOMB_REMOTE_CONTROL, 0, 0);        // range 10..19
 
         assertPerk(0, BOMB_BLAST_RADIUS_INCREASE);
         assertPerk(1, BOMB_BLAST_RADIUS_INCREASE);
@@ -145,9 +148,9 @@ public class PerksSettingsWrapperTest {
 
     @Test
     public void dropPerk_onePerks_dropRatio5() {
-        PerksSettingsWrapper.setDropRatio(5);
+        settings.dropRatio(5);
 
-        PerksSettingsWrapper.setPerkSettings(BOMB_BLAST_RADIUS_INCREASE, 0, 0); // range 0..4
+        settings.put(BOMB_BLAST_RADIUS_INCREASE, 0, 0); // range 0..4
 
         assertPerk(0, BOMB_BLAST_RADIUS_INCREASE);
         assertPerk(1, BOMB_BLAST_RADIUS_INCREASE);
@@ -180,11 +183,11 @@ public class PerksSettingsWrapperTest {
 
     @Test
     public void dropPerk_threePerks_dropRatio35() {
-        PerksSettingsWrapper.setDropRatio(30);
+        settings.dropRatio(30);
 
-        PerksSettingsWrapper.setPerkSettings(BOMB_COUNT_INCREASE, 0, 0);        // range 0..9
-        PerksSettingsWrapper.setPerkSettings(BOMB_REMOTE_CONTROL, 0, 0);        // range 10..19
-        PerksSettingsWrapper.setPerkSettings(BOMB_IMMUNE, 0, 0);                // range 20..29
+        settings.put(BOMB_COUNT_INCREASE, 0, 0);        // range 0..9
+        settings.put(BOMB_REMOTE_CONTROL, 0, 0);        // range 10..19
+        settings.put(BOMB_IMMUNE, 0, 0);                // range 20..29
 
         assertPerk(0, BOMB_COUNT_INCREASE);
         assertPerk(1, BOMB_COUNT_INCREASE);
@@ -236,7 +239,7 @@ public class PerksSettingsWrapperTest {
 
     @Test
     public void dropPerk_noPerks_dropRatio50() {
-        PerksSettingsWrapper.setDropRatio(50);
+        settings.dropRatio(50);
 
         assertPerk(0, NO_PERK);
         assertPerk(1, NO_PERK);
@@ -272,6 +275,6 @@ public class PerksSettingsWrapperTest {
 
     private Elements dice(int value) {
         Mockito.when(dice.next(percentage)).thenReturn(value);
-        return PerksSettingsWrapper.nextPerkDrop(dice);
+        return settings.nextPerkDrop(dice);
     }
 }

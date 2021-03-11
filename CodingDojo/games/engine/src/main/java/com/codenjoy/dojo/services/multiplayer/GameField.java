@@ -25,6 +25,8 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.json.JSONObject;
 
 /**
@@ -60,4 +62,6 @@ public interface GameField<P extends GamePlayer> extends Tickable {
      * Никогда не переопределяй этот метод
      */
     int hashCode();
+
+    SettingsReader settings();
 }

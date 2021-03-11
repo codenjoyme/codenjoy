@@ -23,9 +23,10 @@ package com.codenjoy.dojo.expansion.model.replay;
  */
 
 
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -37,9 +38,6 @@ import java.util.*;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-21.
- */
 public class LoggerReaderTest {
 
     private static final String REPLAY =
@@ -65,11 +63,18 @@ public class LoggerReaderTest {
             "                    ";
 
     private static final String SEP = FileSystems.getDefault().getSeparator();
+    
+    private GameSettings settings;
+
+    @Before
+    public void setUp() throws Exception {
+        settings = new GameSettings();
+    }
 
     @Test
     public void testParseFile() throws IOException {
         // given
-        SettingsWrapper.setup().roundTicks(50);
+        settings.roundTicks(50);
 
         String data = "Game started\n" +
                 "New player P@53ff5eb9 registered with hero H@14fa45c2 with base at '{\"x\":5,\"y\":12}' and color '0' for user 'demo1@codenjoy.com'\n" +
@@ -112,7 +117,7 @@ public class LoggerReaderTest {
         String replayName = saveToFile(data);
 
         String playerName = "P@53ff5eb9";
-        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName);
+        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName, settings);
 
         assertEquals(4, loggerReader.size());
 
@@ -204,12 +209,12 @@ public class LoggerReaderTest {
     @Test
     public void testParseFileWhenHeroIsNotAlive_forDiedUser() throws IOException {
         // given
-        SettingsWrapper.setup().roundTicks(50);
+        settings.roundTicks(50);
 
         String replayName = saveToFile(data);
 
         String playerName = "P@314c508a";
-        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName);
+        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName, settings);
 
         assertEquals(5, loggerReader.size());
 
@@ -257,12 +262,12 @@ public class LoggerReaderTest {
     @Test
     public void testParseFileWhenHeroIsNotAlive_forAttackerUser() throws IOException {
         // given
-        SettingsWrapper.setup().roundTicks(50);
+        settings.roundTicks(50);
 
         String replayName = saveToFile(data);
 
         String playerName = "P@6c3f5566";
-        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName);
+        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName, settings);
 
         assertEquals(5, loggerReader.size());
 
@@ -310,12 +315,12 @@ public class LoggerReaderTest {
     @Test
     public void testParseFileWhenHeroIsNotAlive_forNeutralUser() throws IOException {
         // given
-        SettingsWrapper.setup().roundTicks(50);
+        settings.roundTicks(50);
 
         String replayName = saveToFile(data);
 
         String playerName = "P@6b67034";
-        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName);
+        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName, settings);
 
         assertEquals(5, loggerReader.size());
 

@@ -27,10 +27,8 @@ import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.client.ai.AIPerksHunterSolver;
 import com.codenjoy.dojo.bomberman.client.ai.AISolver;
 import com.codenjoy.dojo.bomberman.model.Elements;
-import com.codenjoy.dojo.bomberman.model.GameSettings;
-import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
-import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
+import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -45,9 +43,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
+
     @Test
     public void test() throws IOException {
         // given
@@ -68,18 +68,6 @@ public class SmokeTest {
         soul = "435874345435874365843564398";
         Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, 100, 200));
 
-        DefaultGameSettings.BOARD_SIZE = 11;
-        DefaultGameSettings.BOMB_POWER = 3;
-        DefaultGameSettings.BOMBS_COUNT = 1;
-        DefaultGameSettings.DESTROY_WALL_COUNT = 14;
-        DefaultGameSettings.MEAT_CHOPPERS_COUNT = 3;
-        PerksSettingsWrapper.setDropRatio(20);
-        PerksSettingsWrapper.setPickTimeout(5);
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 10);
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_REMOTE_CONTROL, 5, 10);
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_IMMUNE, 5, 10);
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_COUNT_INCREASE, 5, 3);
-
         GameRunner gameType = new GameRunner() {
             @Override
             public Dice getDice() {
@@ -87,8 +75,21 @@ public class SmokeTest {
             }
 
             @Override
-            protected GameSettings getGameSettings() {
-                return new DefaultGameSettings(dice);
+            public GameSettings getSettings() {
+                GameSettings settings = new TestGameSettings()
+                        .integer(BOARD_SIZE, 11)
+                        .integer(DESTROY_WALL_COUNT, 14)
+                        .integer(MEAT_CHOPPERS_COUNT, 3);
+
+                settings.perksSettings()
+                        .dropRatio(20)
+                        .pickTimeout(5)
+                        .put(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 10)
+                        .put(Elements.BOMB_COUNT_INCREASE, 5, 3)
+                        .put(Elements.BOMB_REMOTE_CONTROL, 5, 10)
+                        .put(Elements.BOMB_IMMUNE, 5, 10);
+
+                return settings;
             }
         };
 
@@ -101,7 +102,7 @@ public class SmokeTest {
         String expectedAll = load("src/test/resources/SmokeTest.data");
         String actualAll = String.join("\n", messages);
 
-        TestUtils.assertSmoke(false,
+        TestUtils.assertSmoke(true,
                 (o1, o2) -> assertEquals(o1, o2),
                 expectedAll, actualAll);
     }

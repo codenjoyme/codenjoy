@@ -3,9 +3,9 @@ package com.codenjoy.dojo.icancode.model.perks;
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.icancode.model.items.perks.MoveBoxesPerk;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.DEFAULT_PERKS;
 import static org.junit.Assert.assertEquals;
 
 public class MoveBoxesPerkTest extends AbstractGameTest {
@@ -43,7 +43,7 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     public void shouldPushBoxes_onlyWhenPickedUpSuchPerk_whenContest() {
         // given
         mode = ICanCode.CONTEST;
-        SettingsWrapper.data.defaultPerks(",m");
+        settings.string(DEFAULT_PERKS, ",m");
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -77,7 +77,7 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     public void shouldPushBoxes_onlyWhenPickedUpSuchPerk_whenTraining() {
         // given
         mode = ICanCode.TRAINING;
-        SettingsWrapper.data.defaultPerks("");
+        settings.string(DEFAULT_PERKS, "");
 
         givenFl("╔════┐" +
                 "║Sm..│" +
@@ -138,7 +138,7 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     public void shouldPullBoxes_onlyWhenPickedUpSuchPerk_whenContest() {
         // given
         mode = ICanCode.CONTEST;
-        SettingsWrapper.data.defaultPerks(",m");
+        settings.string(DEFAULT_PERKS, ",m");
 
         givenFl("╔════┐" +
                 "║....│" +
@@ -172,7 +172,7 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     public void shouldPullBoxes_onlyWhenPickedUpSuchPerk_whenTraining() {
         // given
         mode = ICanCode.TRAINING;
-        SettingsWrapper.data.defaultPerks("");
+        settings.string(DEFAULT_PERKS, "");
 
         givenFl("╔════┐" +
                 "║....│" +
@@ -232,7 +232,7 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     @Test
     public void shouldNotPickMoveBoxesPerk_whenJumpOverIt() {
         // given
-        SettingsWrapper.data.defaultPerks("j,j");
+        settings.string(DEFAULT_PERKS, "j,j");
 
         givenFl("╔════┐" +
                 "║Sm..│" +

@@ -39,51 +39,39 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_TICKS_PER_SHOOT;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private GameSettings gameSettings;
-
-    public GameRunner() {
-        gameSettings = getGameSettings();
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer) score, gameSettings);
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
+        return new Scores((Integer) score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        Level level = getLevel();
-        Battlecity game = new Battlecity(level.size(), getDice(),
-                gameSettings.spawnAiPrize(),
-                gameSettings.hitKillsAiPrize(),
-                gameSettings.prizeOnField(),
-                gameSettings.prizeWorking(),
-                gameSettings.aiTicksPerShoot(),
-                gameSettings.slipperiness(),
-                gameSettings.aiPrizeLimit());
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        Level level = settings.level(getDice());
+        Battlecity game = new Battlecity(level.size(), getDice(), settings);
 
         game.addBorder(level.getBorders());
         game.addWall(level.getWalls());
-        game.addAiTanks(level.getAiTanks(
-                gameSettings.aiTicksPerShoot().getValue()));
+        game.addAiTanks(level.getAiTanks());
         game.addRiver(level.getRivers());
         game.addTree(level.getTrees());
         game.addIce(level.getIce());
         return game;
     }
 
-    public Level getLevel() {
-        return new LevelImpl(getMap(), getDice());
-    }
-
     @Override
-    public Parameter<Integer> getBoardSize() {
-        // TODO взять size из другого места
-        return v(getLevel().size());
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.level(getDice()).size());
     }
 
     @Override
@@ -107,56 +95,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.MULTIPLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener,
-                getDice(),
-                gameSettings.tankTicksPerShoot());
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, getDice(), settings);
     }
 
-    public String getMap() {
-        return
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼ ¿    ¿    ¿        ¿    ¿    ¿ ☼" +
-                "☼                                ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                "☼ #╬╬╬# ╬╬╬ #╬╬╬☼☼╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                "☼ #╬╬╬# ╬╬╬ #╬╬╬☼☼╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                "☼ #╬╬╬# ╬╬╬ #╬╬╬  ╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                "☼ #╬╬╬# ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬ #╬╬╬# ☼" +
-                "☼ #╬╬╬# ╬╬╬            ╬╬╬ #╬╬╬# ☼" +
-                "☼  ╬╬╬  ╬╬╬   ~    ~   ╬╬╬  ╬╬╬  ☼" +
-                "☼  ~~~       ╬╬╬  ╬╬╬       ~~~  ☼" +
-                "☼  ~~        ╬╬╬  ╬╬╬        ~~  ☼" +
-                "☼     ╬╬╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬╬╬     ☼" +
-                "☼☼☼   ╬╬╬╬╬            ╬╬╬╬╬   ☼☼☼" +
-                "☼ ~~          %%%%%%          ~~ ☼" +
-                "☼           ~╬╬╬%%╬╬╬~           ☼" +
-                "☼  ╬╬╬  ╬╬╬ ~╬╬╬%%╬╬╬~ ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬~ ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬ ~╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼ %╬╬╬  ╬╬╬  ╬╬╬%%╬╬╬  ╬╬╬  ╬╬╬% ☼" +
-                "☼ %╬╬╬  ╬╬╬~ ╬╬╬%%╬╬╬ ~╬╬╬  ╬╬╬% ☼" +
-                "☼ %╬╬╬  ╬╬╬~ ╬╬╬%%╬╬╬ ~╬╬╬  ╬╬╬% ☼" +
-                "☼ %╬╬╬ ~╬╬╬  ╬╬╬%%╬╬╬  ╬╬╬~ ╬╬╬% ☼" +
-                "☼ %╬╬╬  %%%            %%%  ╬╬╬% ☼" +
-                "☼  ╬╬╬  %%%    ~~~~    %%%  ╬╬╬  ☼" +
-                "☼  ╬╬╬  %%%  ╬╬╬╬╬╬╬╬  %%%  ╬╬╬  ☼" +
-                "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
-                "☼            ╬╬    ╬╬            ☼" +
-                "☼  %%%%%%    ╬╬    ╬╬    %%%%%%  ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
-    }
-
-    protected GameSettings getGameSettings() {
-        return new OptionGameSettings(settings, getDice());
-    }
 }

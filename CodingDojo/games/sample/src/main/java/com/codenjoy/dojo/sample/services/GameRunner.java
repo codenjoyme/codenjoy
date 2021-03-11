@@ -42,30 +42,26 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 /**
  * Генератор игор - реализация {@see GameType}
  */
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    public GameRunner() {
-        setupSettings();
-    }
-
-    private void setupSettings() {
-        SettingsWrapper.setup(settings);
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, SettingsWrapper.data);
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
+        return new Scores((Integer)score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        Level level = new LevelImpl(SettingsWrapper.data.levelMap());
-        return new Sample(level, getDice());
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new Sample(settings.level(), getDice(), settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(SettingsWrapper.data.getSize());
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.level().size());
     }
 
     @Override
@@ -89,12 +85,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.MULTIPLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 }

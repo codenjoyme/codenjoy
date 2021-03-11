@@ -24,12 +24,10 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.validation.constraints.AssertTrue;
 import java.util.concurrent.Callable;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
@@ -281,153 +279,153 @@ public class ValidatorTest {
     @Test
     public void validateCheckGameName() {
         shouldError("Game name is invalid: 'null'",
-                () -> validator.checkGameName(null, CANT_BE_NULL));
+                () -> validator.checkGame(null, CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName(null, CAN_BE_NULL));
+        shouldOk(() -> validator.checkGame(null, CAN_BE_NULL));
 
         shouldError("Game name is invalid: ''",
-                () -> validator.checkGameName("", CANT_BE_NULL));
+                () -> validator.checkGame("", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("", CAN_BE_NULL));
+        shouldOk(() -> validator.checkGame("", CAN_BE_NULL));
 
         shouldError("Game name is invalid: 'NuLL'",
-                () -> validator.checkGameName("NuLL", CANT_BE_NULL));
+                () -> validator.checkGame("NuLL", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("NuLL", CAN_BE_NULL));
+        shouldOk(() -> validator.checkGame("NuLL", CAN_BE_NULL));
 
         shouldError("Game name is invalid: 'null'",
-                () -> validator.checkGameName("null", CANT_BE_NULL));
+                () -> validator.checkGame("null", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("null", CAN_BE_NULL));
+        shouldOk(() -> validator.checkGame("null", CAN_BE_NULL));
 
         shouldError("Game name is invalid: 'NULL'",
-                () -> validator.checkGameName("NULL", CANT_BE_NULL));
+                () -> validator.checkGame("NULL", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("NULL", CAN_BE_NULL));
+        shouldOk(() -> validator.checkGame("NULL", CAN_BE_NULL));
 
         shouldError("Game name is invalid: '*F(@DF^@(&@DF(@^'",
-                () -> validator.checkGameName("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
+                () -> validator.checkGame("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
 
         shouldError("Game name is invalid: 'too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
-                () -> validator.checkGameName("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
+                () -> validator.checkGame("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
 
         shouldError("Game name is invalid: '-game'",
-                () -> validator.checkGameName("-game", CANT_BE_NULL));
+                () -> validator.checkGame("-game", CANT_BE_NULL));
 
         shouldError("Game name is invalid: 'game-'",
-                () -> validator.checkGameName("game-", CANT_BE_NULL));
+                () -> validator.checkGame("game-", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a-game", CANT_BE_NULL));
+        shouldOk(() -> validator.checkGame("a-game", CANT_BE_NULL));
 
         shouldError("Game name is invalid: '_game'",
-                () -> validator.checkGameName("_game", CANT_BE_NULL));
+                () -> validator.checkGame("_game", CANT_BE_NULL));
 
         shouldError("Game name is invalid: 'game_'",
-                () -> validator.checkGameName("game_", CANT_BE_NULL));
+                () -> validator.checkGame("game_", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a_game", CANT_BE_NULL));
+        shouldOk(() -> validator.checkGame("a_game", CANT_BE_NULL));
 
         shouldError("Game name is invalid: '.game'",
-                () -> validator.checkGameName(".game", CANT_BE_NULL));
+                () -> validator.checkGame(".game", CANT_BE_NULL));
 
         shouldError("Game name is invalid: 'game.'",
-                () -> validator.checkGameName("game.", CANT_BE_NULL));
+                () -> validator.checkGame("game.", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a.game", CANT_BE_NULL));
+        shouldOk(() -> validator.checkGame("a.game", CANT_BE_NULL));
 
         shouldError("Game name is invalid: '1'",
-                () -> validator.checkGameName("1", CANT_BE_NULL));
+                () -> validator.checkGame("1", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a1", CANT_BE_NULL));
+        shouldOk(() -> validator.checkGame("a1", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a1", CANT_BE_NULL));
+        shouldOk(() -> validator.checkGame("a1", CANT_BE_NULL));
 
         shouldError("Game name is invalid: '0'",
-                () -> validator.checkGameName("0", CAN_BE_NULL));
+                () -> validator.checkGame("0", CAN_BE_NULL));
 
         shouldError("Game name is invalid: '434589345613405760956134056340596345903465'",
-                () -> validator.checkGameName("434589345613405760956134056340596345903465", CANT_BE_NULL));
+                () -> validator.checkGame("434589345613405760956134056340596345903465", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("someGame", CANT_BE_NULL));
+        shouldOk(() -> validator.checkGame("someGame", CANT_BE_NULL));
 
         shouldError("Game name is invalid: 'some@email.com'",
-                () -> validator.checkGameName("some@email.com", CANT_BE_NULL));
+                () -> validator.checkGame("some@email.com", CANT_BE_NULL));
     }
 
     @Test
     public void validateCheckRoomName() {
         shouldError("Room name is invalid: 'null'",
-                () -> validator.checkRoomName(null, CANT_BE_NULL));
+                () -> validator.checkRoom(null, CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName(null, CAN_BE_NULL));
+        shouldOk(() -> validator.checkRoom(null, CAN_BE_NULL));
 
         shouldError("Room name is invalid: ''",
-                () -> validator.checkRoomName("", CANT_BE_NULL));
+                () -> validator.checkRoom("", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("", CAN_BE_NULL));
+        shouldOk(() -> validator.checkRoom("", CAN_BE_NULL));
 
         shouldError("Room name is invalid: 'NuLL'",
-                () -> validator.checkRoomName("NuLL", CANT_BE_NULL));
+                () -> validator.checkRoom("NuLL", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("NuLL", CAN_BE_NULL));
+        shouldOk(() -> validator.checkRoom("NuLL", CAN_BE_NULL));
 
         shouldError("Room name is invalid: 'null'",
-                () -> validator.checkRoomName("null", CANT_BE_NULL));
+                () -> validator.checkRoom("null", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("null", CAN_BE_NULL));
+        shouldOk(() -> validator.checkRoom("null", CAN_BE_NULL));
 
         shouldError("Room name is invalid: 'NULL'",
-                () -> validator.checkRoomName("NULL", CANT_BE_NULL));
+                () -> validator.checkRoom("NULL", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("NULL", CAN_BE_NULL));
+        shouldOk(() -> validator.checkRoom("NULL", CAN_BE_NULL));
 
         shouldError("Room name is invalid: '*F(@DF^@(&@DF(@^'",
-                () -> validator.checkRoomName("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
+                () -> validator.checkRoom("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
 
         shouldError("Room name is invalid: 'too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
-                () -> validator.checkRoomName("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
+                () -> validator.checkRoom("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
 
         shouldError("Room name is invalid: '-game'",
-                () -> validator.checkRoomName("-game", CANT_BE_NULL));
+                () -> validator.checkRoom("-game", CANT_BE_NULL));
 
         shouldError("Room name is invalid: 'game-'",
-                () -> validator.checkRoomName("game-", CANT_BE_NULL));
+                () -> validator.checkRoom("game-", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("a-game", CANT_BE_NULL));
+        shouldOk(() -> validator.checkRoom("a-game", CANT_BE_NULL));
 
         shouldError("Room name is invalid: '_game'",
-                () -> validator.checkRoomName("_game", CANT_BE_NULL));
+                () -> validator.checkRoom("_game", CANT_BE_NULL));
 
         shouldError("Room name is invalid: 'game_'",
-                () -> validator.checkRoomName("game_", CANT_BE_NULL));
+                () -> validator.checkRoom("game_", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("a_game", CANT_BE_NULL));
+        shouldOk(() -> validator.checkRoom("a_game", CANT_BE_NULL));
 
         shouldError("Room name is invalid: '.game'",
-                () -> validator.checkRoomName(".game", CANT_BE_NULL));
+                () -> validator.checkRoom(".game", CANT_BE_NULL));
 
         shouldError("Room name is invalid: 'game.'",
-                () -> validator.checkRoomName("game.", CANT_BE_NULL));
+                () -> validator.checkRoom("game.", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("a.game", CANT_BE_NULL));
+        shouldOk(() -> validator.checkRoom("a.game", CANT_BE_NULL));
 
         shouldError("Room name is invalid: '1'",
-                () -> validator.checkRoomName("1", CANT_BE_NULL));
+                () -> validator.checkRoom("1", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("a1", CANT_BE_NULL));
+        shouldOk(() -> validator.checkRoom("a1", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("a1", CANT_BE_NULL));
+        shouldOk(() -> validator.checkRoom("a1", CANT_BE_NULL));
 
         shouldError("Room name is invalid: '0'",
-                () -> validator.checkRoomName("0", CAN_BE_NULL));
+                () -> validator.checkRoom("0", CAN_BE_NULL));
 
         shouldError("Room name is invalid: '434589345613405760956134056340596345903465'",
-                () -> validator.checkRoomName("434589345613405760956134056340596345903465", CANT_BE_NULL));
+                () -> validator.checkRoom("434589345613405760956134056340596345903465", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkRoomName("someGame", CANT_BE_NULL));
+        shouldOk(() -> validator.checkRoom("someGame", CANT_BE_NULL));
 
         shouldError("Room name is invalid: 'some@email.com'",
-                () -> validator.checkRoomName("some@email.com", CANT_BE_NULL));
+                () -> validator.checkRoom("some@email.com", CANT_BE_NULL));
     }
 
     @Test
@@ -808,6 +806,8 @@ public class ValidatorTest {
 
     @Test
     public void validateCheckGameType() {
+        when(gameService.exists(anyString())).thenReturn(false);
+
         // empty string
         shouldError("Game name is invalid: 'Null'",
                 () -> validator.checkGameType("Null"));
@@ -824,11 +824,12 @@ public class ValidatorTest {
         shouldError("Game name is invalid: ''",
                 () -> validator.checkGameType(""));
 
-        shouldOk(() -> validator.checkGameType("not-empty"));
+        shouldError("Game not found: not-empty",
+                () -> validator.checkGameType("not-empty"));
 
         // other cases
-        when(gameService.getGame("valid-game")).thenReturn(mock(GameType.class));
-        when(gameService.getGame("bad-game")).thenReturn(NullGameType.INSTANCE);
+        when(gameService.exists("valid-game")).thenReturn(true);
+        when(gameService.exists("bad-game")).thenReturn(false);
 
         shouldOk(() -> validator.checkGameType("valid-game"));
 
@@ -853,10 +854,10 @@ public class ValidatorTest {
                 () -> validator.checkPlayerInRoom("otherPlayer", "validRoomName"));
     }
 
-    private void givenPlayer(String id, String roomName) {
+    private void givenPlayer(String id, String room) {
         when(playerService.get(id))
                 .thenReturn(new Player(id){{
-                    setRoomName(roomName);
+                    setRoom(room);
                 }});
     }
 }

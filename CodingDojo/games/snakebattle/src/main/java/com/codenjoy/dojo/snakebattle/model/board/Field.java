@@ -25,7 +25,6 @@ package com.codenjoy.dojo.snakebattle.model.board;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.round.RoundGameField;
-import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 
@@ -58,10 +57,4 @@ public interface Field extends RoundGameField<Player> {
     void setGold(Point p);
 
     Hero enemyEatenWith(Hero h);
-
-    Parameter<Integer> flyingCount();
-
-    Parameter<Integer> furyCount();
-
-    Parameter<Integer> stoneReduced();
 }

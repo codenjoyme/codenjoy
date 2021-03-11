@@ -30,6 +30,7 @@ import com.codenjoy.dojo.pong.client.Board;
 import com.codenjoy.dojo.pong.client.YourSolver;
 import com.codenjoy.dojo.pong.client.ai.AISolver;
 import com.codenjoy.dojo.pong.services.GameRunner;
+import com.codenjoy.dojo.pong.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.pong.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -72,18 +74,20 @@ public class SmokeTest {
             }
 
             @Override
-            protected String getMap() {
-                return  "           " +
-                        "-----------" +
-                        "           " +
-                        "           " +
-                        "           " +
-                        "     o     " +
-                        "           " +
-                        "           " +
-                        "           " +
-                        "-----------" +
-                        "           ";
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .string(LEVEL_MAP,
+                                "           " +
+                                "-----------" +
+                                "           " +
+                                "           " +
+                                "           " +
+                                "     o     " +
+                                "           " +
+                                "           " +
+                                "           " +
+                                "-----------" +
+                                "           ");
             }
         };
 
@@ -93,7 +97,7 @@ public class SmokeTest {
                     add(new AISolver(dice));
                     add(new YourSolver(dice));
                 }},
-                new ArrayList<ClientBoard>() {{
+                new ArrayList<>() {{
                     add(new Board());
                     add(new Board());
                 }});

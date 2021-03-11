@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -39,12 +38,12 @@ import static org.junit.Assert.assertTrue;
 
 public class PaymentTest {
 
-    private static Payment service;
+    private Payment payment;
 
     @Before
     public void setup() {
         String dbFile = "target/payment.db" + new Random().nextInt();
-        service = new Payment(
+        payment = new Payment(
                 new SqliteConnectionThreadPoolFactory(false, dbFile,
                         new ContextPathGetter() {
                             @Override
@@ -56,30 +55,30 @@ public class PaymentTest {
 
     @After
     public void tearDown() {
-        service.removeDatabase();
+        payment.removeDatabase();
     }
 
     @Test
     public void shouldCanPlay_whenBuy() throws InterruptedException {
-        assertFalse(service.canPlay("user", "game"));
+        assertFalse(payment.canPlay("user", "game"));
 
-        service.buy("user", "game2", 100);
+        payment.buy("user", "game2", 100);
 
-        assertFalse(service.canPlay("user", "game"));
+        assertFalse(payment.canPlay("user", "game"));
 
-        service.buy("user", "game", 100);
+        payment.buy("user", "game", 100);
 
-        assertTrue(service.canPlay("user", "game"));
+        assertTrue(payment.canPlay("user", "game"));
     }
 
     @Test
     public void shouldTill_whenBuy() throws InterruptedException {
         long now = Calendar.getInstance().getTime().getTime();
-        assertEquals(0, service.till("user", "game"));
+        assertEquals(0, payment.till("user", "game"));
 
-        service.buy("user", "game", 365);
+        payment.buy("user", "game", 365);
 
-        assertEquals(365, delta(now, service.till("user", "game")));
+        assertEquals(365, delta(now, payment.till("user", "game")));
     }
 
     private long delta(long now, long till) {
@@ -93,14 +92,14 @@ public class PaymentTest {
     public void shouldBuyTwice() throws InterruptedException {
         long now = Calendar.getInstance().getTime().getTime();
 
-        assertEquals(0, delta(now, service.till("user", "game")));
+        assertEquals(0, delta(now, payment.till("user", "game")));
 
-        service.buy("user", "game", 100);
+        payment.buy("user", "game", 100);
 
-        assertEquals(100, delta(now, service.till("user", "game")));
+        assertEquals(100, delta(now, payment.till("user", "game")));
 
-        service.buy("user", "game", 170);
+        payment.buy("user", "game", 170);
 
-        assertEquals(270, delta(now, service.till("user", "game")));
+        assertEquals(270, delta(now, payment.till("user", "game")));
     }
 }

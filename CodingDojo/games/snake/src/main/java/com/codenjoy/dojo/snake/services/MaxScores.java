@@ -22,14 +22,17 @@ package com.codenjoy.dojo.snake.services;
  * #L%
  */
 
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.EAT_STONE_DECREASE;
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.START_SNAKE_LENGTH;
+
 // Запоминается только максимальное количество очков во всех раундах,
 // рассчитываемое из текущей длинны змеи. Поедание камней и суицид не уменьшает количество очков.
 // Полезно в онлайн турнире, когда сложно собрать всех воедино для финала.
 // Включается опция на админке путем установки настройки игры "Max score mode" в true
 public class MaxScores extends Scores {
 
-    public MaxScores(int startScore, SnakeSettings setup) {
-        super(startScore, setup);
+    public MaxScores(int startScore, GameSettings settings) {
+        super(startScore, settings);
     }
 
     @Override
@@ -42,7 +45,7 @@ public class MaxScores extends Scores {
         length++;
 
         int current = 0;
-        for (int i = setup.startSnakeLength().getValue() + 1; i <= length; i++) {
+        for (int i = settings.integer(START_SNAKE_LENGTH) + 1; i <= length; i++) {
             current += i;
         }
 
@@ -51,7 +54,7 @@ public class MaxScores extends Scores {
 
     @Override
     protected void snakeEatStone() {
-        length -= setup.eatStoneDecrease().getValue();
+        length -= settings.integer(EAT_STONE_DECREASE);
     }
 
 }

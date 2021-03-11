@@ -33,6 +33,7 @@ public class ConsumerSupplierParameter<T> implements Parameter<T> {
 
     private Consumer<T> set;
     private Supplier<T> get;
+    private Consumer<T> consumer;
 
     public ConsumerSupplierParameter(Consumer<T> set, Supplier<T> get) {
         this.set = set;
@@ -73,6 +74,9 @@ public class ConsumerSupplierParameter<T> implements Parameter<T> {
     @Override
     public Parameter<T> update(Object value) {
         this.set.accept((T)value);
+        if (consumer != null) {
+            consumer.accept((T)value);
+        }
         return this;
     }
 
@@ -89,6 +93,12 @@ public class ConsumerSupplierParameter<T> implements Parameter<T> {
     @Override
     public void select(int index) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Parameter<T> onChange(Consumer<T> consumer) {
+        this.consumer = consumer;
+        return this;
     }
 
     @Override

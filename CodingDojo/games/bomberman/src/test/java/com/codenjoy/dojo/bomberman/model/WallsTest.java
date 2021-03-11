@@ -38,11 +38,6 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/7/13
- * Time: 8:29 PM
- */
 public class WallsTest {
 
     private final static int SIZE = 9;

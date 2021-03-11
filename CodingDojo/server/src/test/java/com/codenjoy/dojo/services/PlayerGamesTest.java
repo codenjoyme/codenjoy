@@ -185,6 +185,29 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     @Test
+    public void testGetAllPlayersByRoom() {
+        // given
+        Player player = createPlayer("room1", "game");
+        Player secondPlayer = createPlayer("room1", "game");
+        Player thirdPlayer = createPlayer("room2", "game2");
+
+        // when
+        List<Player> result = playerGames.getPlayersByRoom("room1");
+
+        // then
+        assertEquals(2, result.size());
+        assertEquals(player, result.get(0));
+        assertEquals(secondPlayer, result.get(1));
+
+        // when
+        List<Player> result2 = playerGames.getPlayersByRoom("room2");
+
+        // then
+        assertEquals(1, result2.size());
+        assertEquals(thirdPlayer, result2.get(0));
+    }
+
+    @Test
     public void testClear() {
         // given
         Player player = createPlayer();
@@ -957,7 +980,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player1", MultiplayerType.SINGLE, save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test
@@ -969,7 +992,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test
@@ -981,7 +1004,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test
@@ -993,7 +1016,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test
@@ -1005,7 +1028,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test

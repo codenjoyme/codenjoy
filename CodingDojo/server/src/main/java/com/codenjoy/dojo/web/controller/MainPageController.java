@@ -63,17 +63,17 @@ public class MainPageController {
 
     @GetMapping(HELP_URI)
     public String help(Model model) {
-        model.addAttribute("gameNames", gameService.getOnlyGameNames());
+        model.addAttribute("games", gameService.getOnlyGames());
         return "help";
     }
 
-    @GetMapping(value = HELP_URI, params = "gameName")
-    public String helpForGame(@RequestParam("gameName") String gameName) {
-        validator.checkGameName(gameName, CANT_BE_NULL);
+    @GetMapping(value = HELP_URI, params = "game")
+    public String helpForGame(@RequestParam("game") String game) {
+        validator.checkGame(game, CANT_BE_NULL);
 
         String language = properties.getHelpLanguage();
         String suffix = (StringUtils.isEmpty(language)) ? "" : ("-" + language);
-        return "redirect:resources/help/" + gameName + suffix + ".html";
+        return "redirect:resources/help/" + game + suffix + ".html";
     }
 
     @GetMapping("/")
@@ -91,7 +91,7 @@ public class MainPageController {
             return "redirect:login";
         }
 
-        List<String> games = gameService.getGameNames();
+        List<String> games = gameService.getGames();
         // игра одна
         if (games.size() == 1) {
             if (user == null) {
@@ -120,9 +120,8 @@ public class MainPageController {
         boolean registered = player != NullPlayer.INSTANCE;
         request.setAttribute("registered", registered);
         request.setAttribute("code", code);
-        model.addAttribute("gameName",
-                registered ? player.getGameName() : StringUtils.EMPTY);
-        model.addAttribute("gameNames", rooms.all());
+        model.addAttribute("game", registered ? player.getGame() : StringUtils.EMPTY);
+        model.addAttribute("games", rooms.all());
         return "main";
     }
 

@@ -49,75 +49,58 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType  {
+public class GameRunner extends AbstractGameType<GameSettings>  {
 
     private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
 
-    private Dice dice;
-    private int size;
-    private LevelsFactory singleLevels;
-    private LevelsFactory multipleLevels;
+    private GameSettings settings; // TODO make stateless
 
-    public GameRunner() {
-        SettingsWrapper.setup(settings);
-
-        dice = getDice();
-    }
-
-    private void initGameFactory() {
-        if (singleLevels == null || settings.changed()) {
-            settings.changesReacted();
-
-            size = SettingsWrapper.data.boardSize();
-
-            singleLevels = Levels.collectLevels(SettingsWrapper.data.boardSize(),
-                    SettingsWrapper.data.singleLevels());
-
-            multipleLevels = Levels.collectLevels(SettingsWrapper.data.boardSize(),
-                    SettingsWrapper.data.multipleLevels());
-        }
+    @Override
+    public GameSettings getSettings() {
+        return settings = ((settings != null) ? settings : new GameSettings());
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
-        initGameFactory();
-        if (SettingsWrapper.data.singleTrainingMode()) {
-            return MultiplayerType.TRAINING.apply(singleLevels.get().size());
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
+        if (settings.singleTrainingMode()) {
+            return MultiplayerType.TRAINING.apply(settings.singleLevels().size());
         } else {
             return MultiplayerType.QUADRO;
         }
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores(score);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
+    public GameField createGame(int levelNumber, GameSettings settings) {
         if (logger.isDebugEnabled()) {
             logger.debug("Creating GameField for {}", levelNumber);
         }
 
-        initGameFactory();
-
-        if (SettingsWrapper.data.singleTrainingMode()) {
-            boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
+        if (settings.singleTrainingMode()) {
+            boolean isSingle = levelNumber < getMultiplayerType(settings).getLevelsCount();
             if (isSingle) {
-                Level level = singleLevels.get().get(levelNumber);
-                return new Expansion(level, new Ticker(), dice,
-                        new GameLoggerImpl(), Expansion.SINGLE);
+                LevelsFactory factory = Levels.collectLevels(settings.boardSize(),
+                        settings.singleLevels());
+                Level level = factory.get().get(levelNumber);
+                return new Expansion(level, new Ticker(), getDice(),
+                        new GameLoggerImpl(), Expansion.SINGLE, settings);
             }
         }
 
-        List<Level> levels = multipleLevels.get();
-        Level level = levels.get(dice.next(levels.size()));
-        return new Expansion(level, new Ticker(), dice,
-                new GameLoggerImpl(), Expansion.MULTIPLE);
+        LevelsFactory factory = Levels.collectLevels(settings.boardSize(),
+                settings.multipleLevels());
+        List<Level> levels = factory.get();
+        Level level = levels.get(getDice().next(levels.size()));
+        return new Expansion(level, new Ticker(), getDice(),
+                new GameLoggerImpl(), Expansion.MULTIPLE, settings);
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
         if (logger.isDebugEnabled()) {
             logger.debug("Creating GamePlayer for {}", playerId);
         }
@@ -130,18 +113,18 @@ public class GameRunner extends AbstractGameType implements GameType  {
 //        String save = null;
 //        boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
 //        if (!isTrainingMode) {
-//            int total = SettingsWrapper.data.singleLevels().size();
+//            int total = settings.singleLevels().size();
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
 //        }
 
-        Player player = new Player(listener, playerId);
+        Player player = new Player(listener, playerId, settings);
 
         return player;
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(size);
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.boardSize());
     }
 
     @Override
@@ -164,18 +147,14 @@ public class GameRunner extends AbstractGameType implements GameType  {
         return Board.class;
     }
 
-    public void setDice(Dice dice) {
-        this.dice = dice;
-    }
-
     @Override
     public void tick() {
         processAdminCommands();
-        initGameFactory();
     }
 
     private void processAdminCommands() {
-        new CommandParser(this).parse(settings);
+        // TODO попробовать решить это другим способом
+        new CommandParser(this).parse(getSettings());
     }
 
     @Override
@@ -192,7 +171,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
             result.put("myColor", player.getForcesColor());
             result.put("tick", player.getField().ticker());
             result.put("round", player.getRoundTicks());
-            result.put("rounds", SettingsWrapper.data.roundTicks());
+            result.put("rounds", player.settings().roundTicks());
             result.put("available", player.getForcesPerTick());
             result.put("offset", new JSONObject(data.getOffset()));
 

@@ -27,9 +27,10 @@ import com.codenjoy.dojo.icancode.model.items.Laser;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.model.items.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.model.items.perks.UnstoppableLaserPerk;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.DEATH_RAY_PERK_RANGE;
 
 public class Shooter {
 
@@ -70,7 +71,7 @@ public class Shooter {
         laser.deathRay(true);
         Point to = laser.getDirection().change(from);
         field.getCell(to).add(laser);
-        for (int range = 0; range < SettingsWrapper.data.getDeathRayRange() - 1; range++) {
+        for (int range = 0; range < field.settings().integer(DEATH_RAY_PERK_RANGE) - 1; range++) {
             Cell cell = nextAvailable(laser, perk);
             if (cell == null) {
                 break;

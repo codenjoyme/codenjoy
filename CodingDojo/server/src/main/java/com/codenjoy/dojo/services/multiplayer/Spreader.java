@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,47 +32,47 @@ import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 
-@Log
+@Slf4j
 public class Spreader {
 
-    private Multimap<String, Room> rooms = LinkedHashMultimap.create();
+    private Multimap<String, GameRoom> rooms = LinkedHashMultimap.create();
 
-    public GameField fieldFor(GamePlayer player, String roomName,
+    public GameField fieldFor(GamePlayer player, String room,
                               MultiplayerType type,
-                              int roomSize, int levelNumber,
+                              int roomSize, int level,
                               Supplier<GameField> field)
     {
-        roomName = type.getRoomName(roomName, levelNumber);
-        Room room = null;
-        if (type.shouldTryFindUnfilled(levelNumber)) {
-            room = findUnfilled(roomName);
+        room = type.getRoom(room, level);
+        GameRoom gameRoom = null;
+        if (type.shouldTryFindUnfilled(level)) {
+            gameRoom = findUnfilled(room);
         }
 
-        if (room == null) {
-            room = new Room(field.get(), roomSize, type.isDisposable());
-            add(roomName, room);
+        if (gameRoom == null) {
+            gameRoom = new GameRoom(field.get(), roomSize, type.isDisposable());
+            add(room, gameRoom);
         }
 
-        return room.join(player);
+        return gameRoom.join(player);
     }
 
-    private void add(String roomName, Room room) {
-        rooms.get(roomName).add(room);
+    private void add(String room, GameRoom gameRoom) {
+        rooms.get(room).add(gameRoom);
     }
 
-    private Room findUnfilled(String roomName) {
-        Collection<Room> rooms = rooms(roomName);
+    private GameRoom findUnfilled(String room) {
+        Collection<GameRoom> rooms = rooms(room);
         if (rooms.isEmpty()) {
             return null;
         }
         return rooms.stream()
-                .filter(Room::isFree)
+                .filter(GameRoom::isFree)
                 .findFirst()
                 .orElse(null);
     }
 
-    private Collection<Room> rooms(String roomName) {
-        return rooms.get(roomName);
+    private Collection<GameRoom> rooms(String room) {
+        return rooms.get(room);
     }
 
     /**
@@ -81,7 +81,7 @@ public class Spreader {
      * оставаться на борде не имеет смысла
      */
     public List<GamePlayer> remove(GamePlayer player) {
-        List<Room> rooms = roomsFor(player);
+        List<GameRoom> rooms = roomsFor(player);
 
         List<GamePlayer> removed = rooms.stream()
                 .flatMap(room -> room.remove(player).stream())
@@ -92,7 +92,7 @@ public class Spreader {
         return removed;
     }
 
-    private void removeIfEmpty(Room room) {
+    private void removeIfEmpty(GameRoom room) {
         if (!room.isEmpty()) return;
 
         rooms.entries().stream()
@@ -102,13 +102,13 @@ public class Spreader {
                 .forEach(key -> rooms.remove(key, room));
     }
 
-    private List<Room> roomsFor(GamePlayer player) {
+    private List<GameRoom> roomsFor(GamePlayer player) {
         return rooms.values().stream()
                     .filter(room -> room.contains(player))
                     .collect(toList());
     }
 
-    private List<Room> roomsFor(GameField field) {
+    private List<GameRoom> roomsFor(GameField field) {
         return rooms.values().stream()
                 .filter(room -> room.isFor(field))
                 .collect(toList());
@@ -120,18 +120,18 @@ public class Spreader {
 
     public boolean isRoomStaffed(GameField field) {
         if (field == null) {
-            log.warning("Почему-то комната для поля == null");
+            log.warn("Почему-то комната для поля == null");
         }
 
-        List<Room> rooms = roomsFor(field);
+        List<GameRoom> rooms = roomsFor(field);
         if (rooms.size() != 1) {
-            log.warning("Почему-то комната для поля не одна: " + rooms.size());
+            log.warn("Почему-то комната для поля не одна: " + rooms.size());
             return true;
         }
         return rooms.get(0).isStuffed();
     }
 
-    public Multimap<String, Room> rooms() {
+    public Multimap<String, GameRoom> rooms() {
         return rooms;
     }
 

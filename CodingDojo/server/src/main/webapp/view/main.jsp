@@ -34,7 +34,7 @@
     <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}"></div>
 
     <%@include file="forkMe.jsp"%>
 
@@ -51,9 +51,9 @@
         <div>Check game board</div>
         <div>
             <ul>
-            <c:forEach items="${gameNames}" var="gameName">
+            <c:forEach items="${games}" var="game">
                 <li>
-                    <div>${gameName.value}: <a class="gameView" gameName="${gameName.key}" href="${ctx}/board/game/${gameName.key}?viewOnly=true">View</a> | <a id="rejoin-${gameName.key}" href="${ctx}/board/rejoining/${gameName.key}">Join</a></div>
+                    <div>${game.value}: <a class="gameView" game="${game.key}" href="${ctx}/board/game/${game.key}?viewOnly=true">View</a> | <a id="rejoin-${game.key}" href="${ctx}/board/rejoining/${game.key}">Join</a></div>
                 </li>
             </c:forEach>
             </ul>

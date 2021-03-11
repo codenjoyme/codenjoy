@@ -24,6 +24,7 @@ package com.codenjoy.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.expansion.model.levels.Levels;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -50,8 +51,8 @@ public class Player extends GamePlayer<Hero, IField> {
     private Printer<PrinterData> printer;
     private boolean isWin;
 
-    public Player(EventListener listener, String name) {
-        super(listener);
+    public Player(EventListener listener, String name, GameSettings settings) {
+        super(listener, settings);
         this.name = name;
         isWin = false;
         setupPrinter();
@@ -117,6 +118,10 @@ public class Player extends GamePlayer<Hero, IField> {
 
     public int getRoundTicks() {
         return field.getRoundTicks();
+    }
+
+    public GameSettings settings() {
+        return (GameSettings) settings;
     }
 
     public class GameHeroData implements HeroData {

@@ -27,12 +27,14 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.hex.client.Board;
 import com.codenjoy.dojo.hex.client.ai.AISolver;
 import com.codenjoy.dojo.hex.services.GameRunner;
+import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.hex.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -93,13 +95,15 @@ public class SmokeTest {
             }
 
             @Override
-            protected String getMap() {
-                return  "☼☼☼☼☼☼" +
-                        "☼    ☼" +
-                        "☼    ☼" +
-                        "☼    ☼" +
-                        "☼    ☼" +
-                        "☼☼☼☼☼☼";
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .string(LEVEL_MAP,
+                                "☼☼☼☼☼☼" +
+                                "☼    ☼" +
+                                "☼    ☼" +
+                                "☼    ☼" +
+                                "☼    ☼" +
+                                "☼☼☼☼☼☼");
             }
         };
 

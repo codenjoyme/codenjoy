@@ -30,7 +30,7 @@ import com.codenjoy.dojo.expansion.model.Ticker;
 import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.LevelImpl;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -38,14 +38,13 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-21.
- */
 public class ExpansionGameLoggerTest {
+
+    private GameSettings settings;
 
     @Before
     public void setup() {
-        SettingsWrapper.setup().waitingOthers(false);
+        settings = new GameSettings().waitingOthers(false);
     }
 
     @Test
@@ -53,7 +52,7 @@ public class ExpansionGameLoggerTest {
         // given
         GameLogger logger = mock(GameLogger.class);
         Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
-                null, logger, Expansion.MULTIPLE);
+                null, logger, Expansion.MULTIPLE, settings);
 
         // when
         Player player = createPlayer();
@@ -68,7 +67,7 @@ public class ExpansionGameLoggerTest {
         // given
         GameLogger logger = mock(GameLogger.class);
         Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
-                null, logger, Expansion.SINGLE);
+                null, logger, Expansion.SINGLE, settings);
 
         // when
         Player player = createPlayer();
@@ -90,7 +89,7 @@ public class ExpansionGameLoggerTest {
 
         // when
         Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
-                null, logger, Expansion.MULTIPLE);
+                null, logger, Expansion.MULTIPLE, settings);
 
         // then
         verify(logger).start(expansion);
@@ -103,7 +102,7 @@ public class ExpansionGameLoggerTest {
 
         // when
         Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
-                null, logger, Expansion.SINGLE);
+                null, logger, Expansion.SINGLE, settings);
 
         // then
         verifyNoMoreInteractions(logger);
@@ -114,7 +113,7 @@ public class ExpansionGameLoggerTest {
         // given
         GameLogger logger = mock(GameLogger.class);
         Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
-                null, logger, Expansion.MULTIPLE);
+                null, logger, Expansion.MULTIPLE, settings);
         Player player = createPlayer();
         expansion.newGame(player);
         reset(logger);
@@ -131,7 +130,7 @@ public class ExpansionGameLoggerTest {
         // given
         GameLogger logger = mock(GameLogger.class);
         Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
-                null, logger, Expansion.SINGLE);
+                null, logger, Expansion.SINGLE, settings);
         Player player = createPlayer();
         expansion.newGame(player);
         reset(logger);
@@ -145,7 +144,7 @@ public class ExpansionGameLoggerTest {
 
     @NotNull
     private Player createPlayer() {
-        return new Player(mock(EventListener.class), null) {
+        return new Player(mock(EventListener.class), null, settings) {
             @Override
             public void newHero(IField field) {
                 Hero hero = new Hero() {

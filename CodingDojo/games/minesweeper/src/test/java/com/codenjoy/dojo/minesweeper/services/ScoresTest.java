@@ -24,32 +24,34 @@ package com.codenjoy.dojo.minesweeper.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
-    private PlayerScores scores;
-    private SettingsImpl parameters = new SettingsImpl();
 
-    public void minesweeperDestroyMine() {
+    private PlayerScores scores;
+    private GameSettings settings;
+
+    public void destroyMine() {
         scores.event(Events.DESTROY_MINE);
     }
 
-    public void minesweeperForgetCharge() {
+    public void forgetCharge() {
         scores.event(Events.FORGET_CHARGE);
     }
 
-    public void minesweeperKillOnMine() {
+    public void killOnMine() {
         scores.event(Events.KILL_ON_MINE);
     }
 
-    public void minesweeperNoMoreCharge() {
+    public void noMoreCharge() {
         scores.event(Events.NO_MORE_CHARGE);
     }
 
-    public void minesweeperClearBoard() {
+    public void clearBoard() {
         scores.event(Events.CLEAN_BOARD);
     }
 
@@ -57,120 +59,144 @@ public class ScoresTest {
         scores.event(Events.WIN);
     }
 
+    @Before
+    public void setup() {
+        settings = new GameSettings();
+    }
+
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, parameters);
+        scores = new Scores(140, settings);
 
-        minesweeperDestroyMine();  //+1
-        minesweeperDestroyMine();  //+2
-        minesweeperDestroyMine();  //+3
-        minesweeperDestroyMine();  //+4
+        destroyMine();
+        destroyMine();
+        destroyMine();
+        destroyMine();
 
-        minesweeperForgetCharge();  //-5
+        forgetCharge();
 
-        minesweeperNoMoreCharge();  //-15
+        noMoreCharge();
 
-        minesweeperKillOnMine();    //-15
+        killOnMine();
 
-        Integer gameover = parameters.getParameter("Game over penalty").type(Integer.class).getValue();
-        Integer forgot = parameters.getParameter("Forgot penalty").type(Integer.class).getValue();
-        assertEquals(140 + 1 + 2 + 3 + 4 - forgot - 2* gameover,
+        clearBoard();
+        clearBoard();
+
+        minesweeperWin();
+
+        assertEquals(140
+                        + 1 + 2 + 3 + 4
+                        - settings.integer(DESTROYED_FORGOT_PENALTY)
+                        - 2 * settings.integer(GAME_OVER_PENALTY)
+                        + 2 * settings.integer(CLEAR_BOARD_SCORE)
+                        + settings.integer(WIN_SCORE),
                 scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        scores = new Scores(0, parameters);
+        scores = new Scores(0, settings);
 
-        minesweeperKillOnMine();    //-15
+        killOnMine();
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterForgotCharge() {
-        scores = new Scores(0, parameters);
+        scores = new Scores(0, settings);
 
-        minesweeperForgetCharge();    //-5
+        forgetCharge();
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterNoMoreCharge() {
-        scores = new Scores(0, parameters);
+        scores = new Scores(0, settings);
 
-        minesweeperNoMoreCharge();    //-15
+        noMoreCharge();
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldDestroyMinesCountStartsFromZeroAfterDead() {
-        scores = new Scores(0, parameters);
+        scores = new Scores(0, settings);
 
-        minesweeperDestroyMine();   // +1
-        minesweeperKillOnMine();    //-15
+        destroyMine();
+        killOnMine();
 
-        minesweeperDestroyMine();   // +1
+        destroyMine();
 
         assertEquals(1, scores.getScore());
     }
 
     @Test
     public void shouldDecreaseMinesCountAfterForgotCharge() {
-        scores = new Scores(0, parameters);
+        settings.integer(DESTROYED_PENALTY, 2);
 
-        minesweeperDestroyMine();   // +1
-        minesweeperDestroyMine();   // +2
-        minesweeperForgetCharge();    //-5
+        scores = new Scores(0, settings);
 
-        minesweeperDestroyMine();   // +1
+        destroyMine();
+        destroyMine();
+        destroyMine();
+        destroyMine();
+        destroyMine();
 
-        assertEquals(1, scores.getScore());
+        forgetCharge();
+
+        destroyMine();
+        destroyMine();
+        destroyMine();
+
+        assertEquals(1 + 2 + 3 + 4 + 5
+                - settings.integer(DESTROYED_FORGOT_PENALTY)
+                + 4 + 5 + 6, scores.getScore());
     }
 
     @Test
     public void shouldMinesCountIsZeroAfterManyTimesForgotCharge() {
-        scores = new Scores(0, parameters);
+        scores = new Scores(0, settings);
 
-        minesweeperDestroyMine();   // +1
-        minesweeperDestroyMine();   // +2
-        minesweeperForgetCharge();    //-5
-        minesweeperForgetCharge();    //-5
-        minesweeperForgetCharge();    //-5
+        destroyMine();
+        destroyMine();
 
-        minesweeperDestroyMine();   // +1
+        forgetCharge();
+        forgetCharge();
+        forgetCharge();
+
+        destroyMine();
 
         assertEquals(1, scores.getScore());
     }
 
     @Test
     public void shouldScore_whenWin() {
-        scores = new Scores(0, parameters);
+        scores = new Scores(0, settings);
 
-        minesweeperWin();    // +300
+        minesweeperWin();
 
-        Integer score = parameters.getParameter("Win score").type(Integer.class).getValue();
-        assertEquals(score, scores.getScore());
+        assertEquals(settings.integer(WIN_SCORE),
+                scores.getScore());
     }
 
     @Test
     public void shouldScore_whenClearBoard() {
-        scores = new Scores(0, parameters);
+        scores = new Scores(0, settings);
 
-        minesweeperClearBoard();    // +1
+        clearBoard();
 
-        Integer score = parameters.getParameter("Clear board score").type(Integer.class).getValue();
-        assertEquals(score, scores.getScore());
+        assertEquals(settings.integer(CLEAR_BOARD_SCORE),
+                scores.getScore());
 
     }
 
     @Test
     public void shouldClearScore() {
-        scores = new Scores(0, parameters);
+        scores = new Scores(0, settings);
 
-        minesweeperClearBoard();    // +1
+        clearBoard();
 
         scores.clear();
 

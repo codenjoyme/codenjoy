@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class NullParameter<T> implements Parameter<T> {
@@ -81,6 +82,11 @@ public final class NullParameter<T> implements Parameter<T> {
     @Override
     public void select(int index) {
         // do nothing
+    }
+
+    @Override
+    public Parameter<T> onChange(Consumer<T> consumer) {
+        return INSTANCE;
     }
 
     @Override

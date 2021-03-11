@@ -30,14 +30,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
+
     private PlayerScores scores;
 
-    private Settings settings;
-    private Integer loosePenalty;
-    private Integer winScore;
+    private GameSettings settings;
 
     public void loose() {
         scores.event(new EventArgs(EventType.LOOSE, 1, 0.3));
@@ -49,38 +49,39 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        loosePenalty = settings.getParameter("Bankrupt penalty").type(Integer.class).getValue();
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
+        settings.integer(LIMIT_DAYS, 0); // sets SUM_OF_PROFITS scores counting mode
+
         scores = new Scores(140, settings);
-        settings.getParameter("Limit days").update(0); // sets SUM_OF_PROFITS scores counting mode
 
-        win();  //+30
-        win();  //+30
-        win();  //+30
-        win();  //+30
+        win();
+        win();
+        win();
+        win();
 
-        loose(); //-100
+        loose();
 
-        Assert.assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+        Assert.assertEquals(140
+                + 4 * settings.integer(WIN_SCORE)
+                - settings.integer(LOOSE_PENALTY),
+                scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();    //-100
+        loose();
 
         Assert.assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        win();    // +30
+        win();
 
         scores.clear();
 

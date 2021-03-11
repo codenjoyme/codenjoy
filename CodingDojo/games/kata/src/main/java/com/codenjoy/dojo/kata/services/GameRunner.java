@@ -48,27 +48,25 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private List<Level> levels;
-
-    public GameRunner() {
-        new Scores(0, settings);
-        levels = LevelsLoader.getAlgorithms();
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer) score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        return new Kata(getDice());
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new Kata(getDice(), settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
         return v(0);
     }
 
@@ -82,6 +80,7 @@ public class GameRunner extends AbstractGameType implements GameType {
         return new CharElements[0];
     }
 
+
     @Override
     public Class<? extends Solver> getAI() {
         return AISolver.class;
@@ -93,14 +92,14 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.SINGLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        LevelsPool pool = new LevelsPoolImpl(levels);
-        return new Player(listener, pool);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        LevelsPool pool = new LevelsPoolImpl(settings.levels());
+        return new Player(listener, pool, settings);
     }
 
     @Override

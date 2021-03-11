@@ -33,6 +33,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * Имплементит возможные направления движения чего либо
  */
 public enum Direction {
+
     LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, 1), DOWN(3, 0, -1),
     ACT(4, 0, 0), STOP(5, 0, 0);
 
@@ -50,13 +51,13 @@ public enum Direction {
         return Arrays.asList(LEFT, RIGHT, UP, DOWN);
     }
 
-    public static Direction valueOf(int i) {
+    public static Direction valueOf(int index) {
         for (Direction d : Direction.values()) {
-            if (d.value == i) {
+            if (d.value == index) {
                 return d;
             }
         }
-        throw new IllegalArgumentException("No such Direction for " + i);
+        throw new IllegalArgumentException("No such Direction for: " + index);
     }
 
     /**
@@ -119,7 +120,7 @@ public enum Direction {
             case LEFT : return RIGHT;
             case RIGHT : return LEFT;
         }
-        throw new IllegalArgumentException("Unsupported direction");
+        throw new IllegalArgumentException("Cant invert for: " + this);
     }
 
     /**
@@ -151,6 +152,19 @@ public enum Direction {
     }
 
     /**
+     * @return Next counter clockwise direction. LEFT -> DOWN -> RIGHT -> UP -> LEFT.
+     */
+    public Direction counterClockwise() {
+        switch (this) {
+            case LEFT: return DOWN;
+            case DOWN: return RIGHT;
+            case RIGHT: return UP;
+            case UP: return LEFT;
+        }
+        throw new IllegalArgumentException("Cant counter clockwise for: " + this);
+    }
+
+    /**
      * @param parameters Given parameters.
      * @return ACT with parameters
      */
@@ -169,9 +183,5 @@ public enum Direction {
         } else {
             return toString() + ",ACT";
         }
-    }
-
-    public static List<Direction> onlyDirections() {
-        return Arrays.asList(LEFT, RIGHT, UP, DOWN);
     }
 }

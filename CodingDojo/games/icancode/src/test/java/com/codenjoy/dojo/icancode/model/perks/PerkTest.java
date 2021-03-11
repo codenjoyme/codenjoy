@@ -39,6 +39,7 @@ import java.util.Optional;
 import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.icancode.model.ICanCode.CONTEST;
 import static com.codenjoy.dojo.icancode.model.ICanCode.TRAINING;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.Direction.UP;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -139,7 +140,7 @@ public class PerkTest extends AbstractGameTest {
     @Test
     public void shouldPerkDisappear_whenAvailableTimeIsUp() {
         // given
-        settings.perkAvailability(3);
+        settings.integer(PERK_AVAILABILITY, 3);
 
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -185,7 +186,7 @@ public class PerkTest extends AbstractGameTest {
     @Test
     public void shouldPerkEffectIsOver_whenTimeIsUp() {
         // given
-        settings.perkActivity(3);
+        settings.integer(PERK_ACTIVITY, 3);
 
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -232,8 +233,8 @@ public class PerkTest extends AbstractGameTest {
     @Test
     public void doNotDropNextPerk() {
         // given
-        game = new ICanCode(mock(Level.class), dice, TRAINING);
-        settings.perkDropRatio(0);
+        game = new ICanCode(mock(Level.class), dice, TRAINING, settings);
+        settings.integer(PERK_DROP_RATIO, 0);
         dice(100);
 
         // when
@@ -247,7 +248,7 @@ public class PerkTest extends AbstractGameTest {
     @Test
     public void doDropNextPerk() {
         // given
-        game = new ICanCode(mock(Level.class), dice, TRAINING);
+        game = new ICanCode(mock(Level.class), dice, TRAINING, settings);
         dice(0, 1);
 
         // when

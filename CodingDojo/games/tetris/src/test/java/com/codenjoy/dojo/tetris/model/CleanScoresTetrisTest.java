@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
+import com.codenjoy.dojo.tetris.services.GameSettings;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -49,6 +50,7 @@ public class CleanScoresTetrisTest {
     private Figures queue;
     private PrinterFactoryImpl printerFactory;
     private Levels levels;
+    private GameSettings settings;
 
     static class TestLevels extends Levels {
 
@@ -91,9 +93,10 @@ public class CleanScoresTetrisTest {
             return null;
         }).when(onChangeLevel).levelCompleted(anyInt(), any());
 
-        game = new Tetris(levels, queue, level.size());
+        settings = new GameSettings();
+        game = new Tetris(levels, queue, level.size(), settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         Glass glass = game.getPlayer().getHero().glass();
         game.setPlots(glass, plots);

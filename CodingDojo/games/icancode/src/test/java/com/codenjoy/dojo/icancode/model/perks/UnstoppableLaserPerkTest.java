@@ -26,10 +26,10 @@ import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.model.items.perks.UnlimitedFirePerk;
 import com.codenjoy.dojo.icancode.model.items.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Events;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.GUN_RECHARGE;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_ACTIVITY;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static org.mockito.Mockito.verify;
 
@@ -296,8 +296,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
     @Test
     public void shouldHeroKillsZombieAndOtherHero_withUnstoppableLaser() {
         // given
-        SettingsWrapper.data
-                .perkActivity(11);
+        settings.integer(PERK_ACTIVITY, 11);
 
         givenFl("╔═══════┐" +
                 "║.......│" +

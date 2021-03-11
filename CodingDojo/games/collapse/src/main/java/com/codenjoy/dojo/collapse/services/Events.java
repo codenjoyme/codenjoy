@@ -24,6 +24,7 @@ package com.codenjoy.dojo.collapse.services;
 
 
 public enum Events {
+
     SUCCESS;
 
     private int count;

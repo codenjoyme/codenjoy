@@ -26,6 +26,7 @@ package com.codenjoy.dojo.a2048;
 import com.codenjoy.dojo.a2048.client.Board;
 import com.codenjoy.dojo.a2048.client.ai.AISolver;
 import com.codenjoy.dojo.a2048.services.GameRunner;
+import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
@@ -33,6 +34,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.SIZE;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -44,6 +46,7 @@ public class SmokeTest {
         LocalGameRunner.timeout = 0;
         LocalGameRunner.out = (e) -> messages.add(e);
         LocalGameRunner.countIterations = 15;
+        LocalGameRunner.printDice = false;
 
         Dice dice = LocalGameRunner.getDice(0);
 
@@ -52,6 +55,12 @@ public class SmokeTest {
             @Override
             public Dice getDice() {
                 return dice;
+            }
+
+            @Override
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .integer(SIZE, 5);
             }
         };
         LocalGameRunner.run(gameType,

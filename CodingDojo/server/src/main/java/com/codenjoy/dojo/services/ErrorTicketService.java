@@ -24,9 +24,9 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,14 +41,15 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class ErrorTicketService {
 
     private static final String ERROR_MESSAGE = "Something wrong with your request. " +
             "Please save you ticker number and ask site administrator.";
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-    @Autowired
-    private DebugService debug;
+    private final DebugService debug;
+    private final TimeService time;
 
     private boolean printStackTrace = true;
 
@@ -110,7 +111,7 @@ public class ErrorTicketService {
     }
 
     public Map<String, Object> getDetails(String ticket, String url, Exception exception) {
-        return new HashMap<String, Object>(){{
+        return new HashMap<>(){{
             put("ticketNumber", ticket);
             put("time", now());
             put("message", exception.getClass().getName() + ": " + exception.getMessage());
@@ -166,7 +167,7 @@ public class ErrorTicketService {
 
     private String ticket() {
         return Hash.md5("anotherSoul" + Hash.md5("someSoul" +
-                Calendar.getInstance().getTimeInMillis()));
+                time.now()));
     }
 
     public void setPrintStackTrace(boolean printStackTrace) {
@@ -175,6 +176,11 @@ public class ErrorTicketService {
 
     public Map<String, Map<String, Object>> getErrors() {
         return tickets;
+    }
+
+    public void clear() {
+        tickets.clear();
+        info.clear();
     }
 
     public void logInfo(String message) {

@@ -27,9 +27,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-/**
- * Артефакт робот
- */
 public class Robot extends PointImpl implements Tickable, State<Elements, Player> {
 
     private Field field;

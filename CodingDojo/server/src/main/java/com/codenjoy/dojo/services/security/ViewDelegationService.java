@@ -41,12 +41,12 @@ public class ViewDelegationService {
     @Autowired
     private Environment env;
 
-    public String adminUri(String gameName) {
-        return resolveProperty(gameName, ADMIN_PAGE_PROP, AdminController.URI);
+    public String adminUri(String game) {
+        return resolveProperty(game, ADMIN_PAGE_PROP, AdminController.URI);
     }
 
-    public String adminView(String gameName) {
-        return extractView(adminUri(gameName));
+    public String adminView(String game) {
+        return extractView(adminUri(game));
     }
 
     private String extractView(String uri) {
@@ -61,9 +61,9 @@ public class ViewDelegationService {
         return StringUtils.hasText(property) ? property : defaultValue;
     }
 
-    public String buildBoardParam(String gameName) {
-        return StringUtils.hasText(gameName)
-                ? "&gameName=" + gameName
+    public String buildBoardParam(String game) {
+        return StringUtils.hasText(game)
+                ? "&game=" + game
                 : "";
     }
 }

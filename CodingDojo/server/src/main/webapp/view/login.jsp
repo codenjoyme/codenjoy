@@ -39,7 +39,7 @@ License along with this program.  If not, see
     <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" waitApprove="${wait_approve}"></div>
 
     <div class="header-container">
         <div class="container-fluid">
@@ -82,40 +82,47 @@ License along with this program.  If not, see
                         <spring:message key="login.credentials.invalid" />
                     </div>
                 </c:if>
-                <div id="email" class="field not-valid">
-                    <input type="email" placeholder="Email address (valid)" name="email"/>
-                    <span class="icon fa"></span>
-                </div>
-                <div id="password" class="field not-valid">
-                    <input type="password" placeholder="Password"/>
-                    <span class="icon fa"></span>
-                </div>
-                <div id="data" hidden>
-                    <input type="text" name="data"/>
-                </div>
-                <div id="password-md5" hidden>
-                    <input type="hidden" name="password"/>
-                </div>
-                <c:if test="${not adminLogin}">
-                    <div id="gameName" class="field valid" hidden>
-                        <select name="gameName">
-                            <c:forEach items="${gameNames}" var="game" >
-                                <option value="${game}">${game}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div id="gameType" class="field valid" hidden>
-                        <select placeholder="Select your game" name="game">
-                            <!--option value="Type1">Type1</option-->
-                            <!--option value="Type2">Type2</option-->
-                            <!--option value="Type3">Type3</option-->
-                        </select>
+                <c:if test="${!opened}">
+                    <div id="error-message" class="error-message">
+                        <spring:message key="registration.closed" />
                     </div>
                 </c:if>
-                <button class="btn-submit" id="submit-button" type="button">Sign in</button>
-                <a href="${ctx}/register">
-                    <button class="btn-submit" id="register-button" type="button">Sign Up</button>
-                </a>
+                <c:if test="${opened || adminLogin}">
+                    <div id="email" class="field not-valid">
+                        <input type="email" placeholder="Email address (valid)" name="email"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="password" class="field not-valid">
+                        <input type="password" placeholder="Password"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="data" hidden>
+                        <input type="text" name="data"/>
+                    </div>
+                    <div id="password-md5" hidden>
+                        <input type="hidden" name="password"/>
+                    </div>
+                    <c:if test="${!adminLogin}">
+                        <div id="game" class="field valid" hidden>
+                            <select name="game">
+                                <c:forEach items="${games}" var="item" >
+                                    <option value="${item}">${item}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div id="gameType" class="field valid" hidden>
+                            <select placeholder="Select your game" name="game">
+                                <!--option value="Type1">Type1</option-->
+                                <!--option value="Type2">Type2</option-->
+                                <!--option value="Type3">Type3</option-->
+                            </select>
+                        </div>
+                    </c:if>
+                    <button class="btn-submit" id="submit-button" type="button">Sign in</button>
+                    <a href="${ctx}/register">
+                        <button class="btn-submit" id="register-button" type="button">Sign Up</button>
+                    </a>
+                </c:if>
             </div>
         </form:form>
     </div>

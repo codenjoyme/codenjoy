@@ -24,7 +24,6 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.items.perks.*;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
@@ -34,9 +33,6 @@ public class ItemsTest {
 
     @Test
     public void testLayers() {
-        // given
-        SettingsWrapper.setup();
-
         // when then
         assertEquals(LAYER2, new Air().layer());
         assertEquals(LAYER2, new Box().layer());

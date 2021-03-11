@@ -34,31 +34,29 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private Level level;
-
-    public GameRunner() {
-        level = new LevelImpl();
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer) score);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        return new A2048(level, getDice());
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new A2048(settings.level(), getDice(), settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(level.size());
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.level().size());
     }
 
     @Override
@@ -72,18 +70,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Settings getSettings() {
-        return level.getSettings();
-    }
-
-    @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.SINGLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 
     @Override

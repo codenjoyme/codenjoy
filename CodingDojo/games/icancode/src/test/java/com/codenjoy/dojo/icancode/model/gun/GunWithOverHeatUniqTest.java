@@ -22,26 +22,30 @@ package com.codenjoy.dojo.icancode.model.gun;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class GunWithOverHeatUniqTest {
 
     public static final String SYMBOL_FIRE = "f";
     public static final String SYMBOL_PAUSE = "-";
+
     private Gun gun;
+    private GameSettings settings;
 
     @Before
     public void setup() {
-        SettingsWrapper.setup()
-                .gunRecharge(1)
-                .gunRestTime(10)
-                .gunShotQueue(10);
-        gun = new GunWithOverHeat();
+        settings = new GameSettings()
+                .integer(GUN_RECHARGE, 1)
+                .integer(GUN_REST_TIME, 10)
+                .integer(GUN_SHOT_QUEUE, 10);
+        gun = new GunWithOverHeat(){{
+            this.settings = GunWithOverHeatUniqTest.this.settings;
+        }};
     }
 
     @Test

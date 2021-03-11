@@ -23,106 +23,32 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
-import com.codenjoy.dojo.a2048.model.generator.Factory;
 import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.services.Events;
+import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class A2048 implements Field {
 
-    private Generator generator;
     private Numbers numbers;
     private final int size;
     private Dice dice;
     private Player player;
     private Level level;
 
-    public A2048(Level level, Dice dice) {
+    private GameSettings settings;
+
+    public A2048(Level level, Dice dice, GameSettings settings) {
         this.level = level;
         this.dice = dice;
         size = level.size();
-        numbers = new Numbers(level.getNumbers(), level.size(), getBreak(level.getMode()));
-        generator = Factory.get(level.getNewAdd(), dice);
-    }
-
-    private List<Number> getBreak(Mode mode) {
-        LinkedList<Number> result = new LinkedList<Number>();
-        if (mode == Mode.CLASSIC) return result;
-
-        if (size < 5) return result;
-
-        if (size == 5) {
-            result.add(new Number(Numbers.BREAK, pt(0, 2)));
-            result.add(new Number(Numbers.BREAK, pt(2, 0)));
-            result.add(new Number(Numbers.BREAK, pt(4, 2)));
-            result.add(new Number(Numbers.BREAK, pt(2, 4)));
-        }
-
-        if (size == 6) {
-            result.add(new Number(Numbers.BREAK, pt(0, 2)));
-            result.add(new Number(Numbers.BREAK, pt(0, 3)));
-            result.add(new Number(Numbers.BREAK, pt(2, 0)));
-            result.add(new Number(Numbers.BREAK, pt(3, 0)));
-            result.add(new Number(Numbers.BREAK, pt(5, 2)));
-            result.add(new Number(Numbers.BREAK, pt(5, 3)));
-            result.add(new Number(Numbers.BREAK, pt(2, 5)));
-            result.add(new Number(Numbers.BREAK, pt(3, 5)));
-        }
-
-        if (size == 7) {
-            result.add(new Number(Numbers.BREAK, pt(0, 2)));
-            result.add(new Number(Numbers.BREAK, pt(0, 3)));
-            result.add(new Number(Numbers.BREAK, pt(1, 3)));
-            result.add(new Number(Numbers.BREAK, pt(0, 4)));
-
-            result.add(new Number(Numbers.BREAK, pt(2, 0)));
-            result.add(new Number(Numbers.BREAK, pt(3, 0)));
-            result.add(new Number(Numbers.BREAK, pt(3, 1)));
-            result.add(new Number(Numbers.BREAK, pt(4, 0)));
-
-            result.add(new Number(Numbers.BREAK, pt(6, 2)));
-            result.add(new Number(Numbers.BREAK, pt(6, 3)));
-            result.add(new Number(Numbers.BREAK, pt(5, 3)));
-            result.add(new Number(Numbers.BREAK, pt(6, 4)));
-
-            result.add(new Number(Numbers.BREAK, pt(2, 6)));
-            result.add(new Number(Numbers.BREAK, pt(3, 6)));
-            result.add(new Number(Numbers.BREAK, pt(3, 5)));
-            result.add(new Number(Numbers.BREAK, pt(4, 6)));
-        }
-
-        if (size == 8) {
-            result.add(new Number(Numbers.BREAK, pt(0, 3)));
-            result.add(new Number(Numbers.BREAK, pt(0, 4)));
-            result.add(new Number(Numbers.BREAK, pt(1, 3)));
-            result.add(new Number(Numbers.BREAK, pt(1, 4)));
-
-            result.add(new Number(Numbers.BREAK, pt(3, 0)));
-            result.add(new Number(Numbers.BREAK, pt(4, 0)));
-            result.add(new Number(Numbers.BREAK, pt(3, 1)));
-            result.add(new Number(Numbers.BREAK, pt(4, 1)));
-
-            result.add(new Number(Numbers.BREAK, pt(7, 3)));
-            result.add(new Number(Numbers.BREAK, pt(7, 4)));
-            result.add(new Number(Numbers.BREAK, pt(6, 3)));
-            result.add(new Number(Numbers.BREAK, pt(6, 4)));
-
-            result.add(new Number(Numbers.BREAK, pt(3, 7)));
-            result.add(new Number(Numbers.BREAK, pt(4, 7)));
-            result.add(new Number(Numbers.BREAK, pt(3, 6)));
-            result.add(new Number(Numbers.BREAK, pt(4, 6)));
-        }
-
-        return result;
+        numbers = new Numbers(level.numbers(), size, level.breaks());
+        this.settings = settings;
     }
 
     @Override
@@ -177,7 +103,7 @@ public class A2048 implements Field {
     }
 
     private void generateNewNumber() {
-        generator.generate(numbers);
+        settings.generator(dice).generate(numbers);
     }
 
     public int size() {
@@ -239,5 +165,10 @@ public class A2048 implements Field {
                 };
             }
         };
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 }

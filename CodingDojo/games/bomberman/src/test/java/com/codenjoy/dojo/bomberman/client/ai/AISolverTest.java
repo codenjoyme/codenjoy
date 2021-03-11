@@ -37,11 +37,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 17.08.13
- * Time: 16:44
- */
 public class AISolverTest {
 
     private AISolver solver;

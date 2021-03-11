@@ -27,22 +27,16 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
+import static com.codenjoy.dojo.quadro.services.GameSettings.Keys.*;
+
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> looseScore;
-    private final Parameter<Integer> drawScore;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        // вот тут мы на админке увидим два поля с подписями
-        // и возожностью редактировать значение по умолчанию
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(10);
-        looseScore = settings.addEditBox("Loose score").type(Integer.class).def(1);
-        drawScore = settings.addEditBox("Draw score").type(Integer.class).def(3);
+        this.settings = settings;
     }
 
     @Override
@@ -58,11 +52,11 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.WIN))
-            score += winScore.getValue();
+            score += settings.integer(WIN_SCORE);
         else if (event.equals(Events.LOOSE))
-            score += looseScore.getValue();
+            score -= settings.integer(LOOSE_PENALTY);
         else if (event.equals(Events.DRAW))
-            score+= drawScore.getValue();
+            score += settings.integer(DRAW_SCORE);
         score = Math.max(0, score);
     }
 

@@ -29,12 +29,14 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.quadro.client.Board;
 import com.codenjoy.dojo.quadro.client.ai.AISolver;
 import com.codenjoy.dojo.quadro.services.GameRunner;
+import com.codenjoy.dojo.quadro.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.quadro.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -72,16 +74,18 @@ public class SmokeTest {
             }
 
             @Override
-            protected String getMap() {
-                return "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "   o     " +
-                        "   ox    " +
-                        " xxoox   ";
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .string(LEVEL_MAP,
+                                "         " +
+                                "         " +
+                                "         " +
+                                "         " +
+                                "         " +
+                                "         " +
+                                "   o     " +
+                                "   ox    " +
+                                " xxoox   ");
             }
         };
 
@@ -91,7 +95,7 @@ public class SmokeTest {
                     add(new AISolver(dice));
                     add(new AISolver(dice));
                 }},
-                new LinkedList<ClientBoard>() {{
+                new LinkedList<>() {{
                     add(new Board());
                     add(new Board());
                 }});

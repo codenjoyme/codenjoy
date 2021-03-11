@@ -37,10 +37,11 @@ public class AdminSettings {
     private List<PlayerInfo> players;
     private List<Object> games;
     private List<Object> parameters;
-    private String gameName;
+    private String game;
+    private String room;
     private String generateNameMask;
     private String generateCount;
-    private String generateRoomName;
+    private String generateRoom;
     private String timerPeriod;
     private String progress;
     private SemifinalSettings semifinal;

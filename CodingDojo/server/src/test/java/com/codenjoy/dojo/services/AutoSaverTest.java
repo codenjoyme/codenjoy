@@ -36,11 +36,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 21:14
- */
 @SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
 @ActiveProfiles(SQLiteProfile.NAME)

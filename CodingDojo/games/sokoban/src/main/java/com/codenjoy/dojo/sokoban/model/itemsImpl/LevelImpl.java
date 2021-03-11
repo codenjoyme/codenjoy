@@ -23,8 +23,8 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
  */
 
 
-import com.codenjoy.dojo.sokoban.model.items.Level;
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.sokoban.model.items.Level;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
@@ -33,8 +33,8 @@ import static com.codenjoy.dojo.sokoban.model.itemsImpl.Elements.*;
 
 public class LevelImpl implements Level {
 
-    private final LengthToXY xy;
-    private final int marksToWin;
+    private LengthToXY xy;
+    private int marksToWin;
     private String map;
 
     public LevelImpl(String map) {

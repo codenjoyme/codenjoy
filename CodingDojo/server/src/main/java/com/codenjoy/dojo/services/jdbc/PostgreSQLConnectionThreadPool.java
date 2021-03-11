@@ -27,17 +27,16 @@ import lombok.SneakyThrows;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
-public class PostgreSQLConnectionThreadPool extends CrudConnectionThreadPool {
+public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThreadPool {
 
     private static final int CONNECTIONS_COUNT = 10;
 
-    public PostgreSQLConnectionThreadPool(String database, String... createTableSqls) {
+    public PostgreSQLConnectionThreadPool(String database, String... createTableQueries) {
         super(CONNECTIONS_COUNT, () -> getConnection(database));
 
-        for (String sql : createTableSqls) {
-            createDB(sql);
+        for (String query : createTableQueries) {
+            createDB(query);
         }
     }
 
@@ -47,11 +46,22 @@ public class PostgreSQLConnectionThreadPool extends CrudConnectionThreadPool {
         return DriverManager.getConnection("jdbc:postgresql://" + database);
     }
 
-    private void createDB(String sql) {
-        update(sql);
-    }
-
     public void removeDatabase() {
         close();
+    }
+
+    @Override
+    String getLastInsertedIdQuery(String table, String column) {
+        return "SELECT last_value FROM " + table + "_id_seq";
+    }
+
+    @Override
+    String getPkDirective() {
+        return "SERIAL PRIMARY KEY";
+    }
+
+    @Override
+    String clearLastInsertedIdQuery(String table, String column) {
+        return "ALTER SEQUENCE " + table + "_id_seq RESTART";
     }
 }

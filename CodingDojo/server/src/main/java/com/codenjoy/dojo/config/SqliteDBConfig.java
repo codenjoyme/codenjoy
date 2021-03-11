@@ -77,6 +77,20 @@ public class SqliteDBConfig {
     }
 
     @Bean
+    public Chat chat() {
+        return new Chat(chatPoolFactory());
+    }
+
+    @Bean
+    public ConnectionThreadPoolFactory chatPoolFactory() {
+        return new SqliteConnectionThreadPoolFactory(
+                database.isMemory(),
+                database.getFiles().getMessages(),
+                contextPathGetter
+        );
+    }
+
+    @Bean
     public ConnectionThreadPoolFactory registrationPoolFactory() {
         return new SqliteConnectionThreadPoolFactory(
                 database.isMemory(),

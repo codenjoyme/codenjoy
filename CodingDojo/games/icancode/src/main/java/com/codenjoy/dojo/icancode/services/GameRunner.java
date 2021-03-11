@@ -40,35 +40,33 @@ import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.Level;
 import org.json.JSONObject;
 
-import static com.codenjoy.dojo.icancode.services.SettingsWrapper.*;
+import static com.codenjoy.dojo.icancode.services.GameSettings.*;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType  {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    public GameRunner() {
-        setupSettings();
-    }
-
-    private void setupSettings() {
-        SettingsWrapper.setup(settings);
-    }
-    
     @Override
-    public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, SettingsWrapper.data);
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        Level level = loadLevel(levelNumber);
-        boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
-        return new ICanCode(level, getDice(),
-                isSingle ? ICanCode.TRAINING : ICanCode.CONTEST);
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
+        return new Scores((Integer)score, settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        Level level = loadLevel(levelNumber, settings);
+        boolean isSingle = levelNumber < getMultiplayerType(settings).getLevelsCount();
+        boolean contest = isSingle ? ICanCode.TRAINING : ICanCode.CONTEST;
+        return new ICanCode(level, getDice(), contest, settings);
+    }
+
+    @Override
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
         return v(Levels.size());
     }
 
@@ -78,13 +76,13 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         int count = Levels.all().size();
-        int roomSize = SettingsWrapper.data.roomSize();
+        int roomSize = settings.roomSize();
 
-        switch (SettingsWrapper.data.gameMode()) {
+        switch (settings.string(GAME_MODE)) {
             default:
-            case CLASSSIC_TRAINING:
+            case CLASSIC_TRAINING:
                 return TRAINING.apply(count);
 
             case ALL_SINGLE:
@@ -98,8 +96,8 @@ public class GameRunner extends AbstractGameType implements GameType  {
         }
     }
 
-    public Level loadLevel(int level) {
-        return Levels.loadLevel(level);
+    public Level loadLevel(int level, GameSettings settings) {
+        return Levels.loadLevel(level, settings);
     }
 
     @Override
@@ -119,12 +117,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        if (SettingsWrapper.data.isTrainingMode()) { // TODO найти как это загрузить
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        if (settings.bool(IS_TRAINING_MODE)) { // TODO найти как это загрузить
 //            int total = Levels.collectSingle().size();
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
-        return new Player(listener);
+        return new Player(listener, settings);
     }
 
     @Override

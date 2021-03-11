@@ -20,12 +20,12 @@
  * #L%
  */
 
-game.enableDonate = false;
-game.enableJoystick = true;
-game.enableAlways = true;
-game.enablePlayerInfo = true;
-game.enableLeadersTable = true;
-game.enableChat = false;
-game.enableHotkeys = true;
-game.enableAdvertisement = false;
-game.showBody = true;
+setup.enableDonate = false;
+setup.enableJoystick = true;
+setup.enableAlways = true;
+setup.enablePlayerInfo = true;
+setup.enableLeadersTable = true;
+setup.enableChat = false;
+setup.enableHotkeys = true;
+setup.enableAdvertisement = false;
+setup.showBody = true;

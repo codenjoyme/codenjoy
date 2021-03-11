@@ -27,12 +27,14 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.football.client.Board;
 import com.codenjoy.dojo.football.client.ai.AISolver;
 import com.codenjoy.dojo.football.services.GameRunner;
+import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.football.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -59,16 +61,18 @@ public class SmokeTest {
             }
 
             @Override
-            protected String getMap() {
-                return  "☼☼☼☼☼☼☼☼☼" +
-                        "☼☼☼┴┴┴☼☼☼" +
-                        "☼       ☼" +
-                        "☼       ☼" +
-                        "☼   ∙   ☼" +
-                        "☼       ☼" +
-                        "☼       ☼" +
-                        "☼☼☼┬┬┬☼☼☼" +
-                        "☼☼☼☼☼☼☼☼☼";
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .string(LEVEL_MAP,
+                                "☼☼☼☼☼☼☼☼☼" +
+                                "☼☼☼┴┴┴☼☼☼" +
+                                "☼       ☼" +
+                                "☼       ☼" +
+                                "☼   ∙   ☼" +
+                                "☼       ☼" +
+                                "☼       ☼" +
+                                "☼☼☼┬┬┬☼☼☼" +
+                                "☼☼☼☼☼☼☼☼☼");
             }
         };
 

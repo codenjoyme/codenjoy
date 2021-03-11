@@ -32,14 +32,12 @@ import org.junit.Test;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class PlayerGameSaverTest {
 
-    private static final long TIME = 1382702580000L;
     private PlayerGameSaver saver;
 
     @Before
@@ -67,7 +65,7 @@ public class PlayerGameSaverTest {
         Information info = getInfo("Some info");
         GameService gameService = getGameService(scores);
         Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info);
-        player.setRoomName("room");
+        player.setRoom("room");
 
         // when
         long now = System.currentTimeMillis();
@@ -88,14 +86,16 @@ public class PlayerGameSaverTest {
 
     private GameType getGameType(PlayerScores scores) {
         GameType gameType = mock(GameType.class);
-        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
+        when(gameType.getPlayerScores(anyInt(), any())).thenReturn(scores);
         return gameType;
     }
 
     private GameService getGameService(PlayerScores scores) {
         GameService gameService = mock(GameService.class);
         GameType gameType = getGameType(scores);
-        when(gameService.getGame(anyString())).thenReturn(gameType);
+        when(gameService.getGameType(anyString())).thenReturn(gameType);
+        when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
+        when(gameService.exists(anyString())).thenReturn(true);
         return gameService;
     }
 
@@ -115,7 +115,7 @@ public class PlayerGameSaverTest {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getCallbackUrl(), actual.getCallbackUrl());
         assertEquals(expected.getScore(), actual.getScore());
-        assertEquals(expected.getRoomName(), actual.getRoomName());
+        assertEquals(expected.getRoom(), actual.getRoom());
     }
 
     @Test
@@ -123,8 +123,8 @@ public class PlayerGameSaverTest {
         // given
         Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
         Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
-        player1.setRoomName("room");
-        player2.setRoomName("room");
+        player1.setRoom("room");
+        player2.setRoom("room");
 
         // when
         long now = System.currentTimeMillis();

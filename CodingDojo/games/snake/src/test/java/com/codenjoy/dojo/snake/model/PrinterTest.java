@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
+import com.codenjoy.dojo.snake.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -193,7 +194,7 @@ public class PrinterTest {
 
         when(board.createSnake()).thenReturn(snake);
         listener = mock(EventListener.class);
-        Player player = new Player(listener);
+        Player player = new Player(listener, mock(GameSettings.class));
         player.newHero(board);
 
         snake.right();

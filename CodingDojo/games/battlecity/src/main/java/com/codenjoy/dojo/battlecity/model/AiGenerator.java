@@ -24,6 +24,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.model.items.AITank;
 import com.codenjoy.dojo.battlecity.model.items.AITankPrize;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -31,6 +32,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AiGenerator {
@@ -38,30 +40,19 @@ public class AiGenerator {
     private final Field field;
     private final Dice dice;
 
-    private Parameter<Integer> whichSpawnWithPrize;
-    private Parameter<Integer> damagesBeforeAiDeath;
-    private Parameter<Integer> aiTicksPerShoot;
-    private Parameter<Integer> aiPrizeLimit;
-
     private int capacity;
     private int spawn;
     private int haveWithPrize;
     private int aiPrize;
 
-    public AiGenerator(Field field, Dice dice,
-                       Parameter<Integer> whichSpawnWithPrize,
-                       Parameter<Integer> damagesBeforeAiDeath,
-                       Parameter<Integer> aiTicksPerShoot,
-                       Parameter<Integer> aiPrizeLimit)
-    {
+    private GameSettings settings;
+
+    public AiGenerator(Field field, Dice dice, GameSettings settings) {
         this.field = field;
         this.dice = dice;
+        this.settings = settings;
         this.spawn = 0;
         this.aiPrize = 0;
-        this.whichSpawnWithPrize = whichSpawnWithPrize;
-        this.damagesBeforeAiDeath = damagesBeforeAiDeath;
-        this.aiTicksPerShoot = aiTicksPerShoot;
-        this.aiPrizeLimit = aiPrizeLimit;
     }
 
     void newSpawn(){
@@ -100,24 +91,17 @@ public class AiGenerator {
 
     private Tank tank(Point pt) {
         if (isPrizeTankTurn() && canDrop()) {
-            return new AITankPrize(pt,
-                    Direction.DOWN,
-                    damagesBeforeAiDeath.getValue(),
-                    aiTicksPerShoot.getValue(),
-                    dice);
+            return new AITankPrize(pt, Direction.DOWN, dice);
         } else {
-            return new AITank(pt,
-                    Direction.DOWN,
-                    aiTicksPerShoot.getValue(),
-                    dice);
+            return new AITank(pt, Direction.DOWN, dice);
         }
     }
 
     private boolean isPrizeTankTurn() {
-        if (whichSpawnWithPrize.getValue() == 0) {
+        if (settings.integer(SPAWN_AI_PRIZE) == 0) {
             return false;
         }
-        return spawn % whichSpawnWithPrize.getValue() == 0;
+        return spawn % settings.integer(SPAWN_AI_PRIZE) == 0;
     }
 
     public Tank drop(Point pt) {
@@ -150,10 +134,10 @@ public class AiGenerator {
     }
 
     private int neededWithPrize() {
-        if (aiPrizeLimit.getValue() == 0) {
+        if (settings.integer(AI_PRIZE_LIMIT) == 0) {
             aiPrize = 0;
         }
-        int neededWithPrize = aiPrizeLimit.getValue() - haveWithPrize;
+        int neededWithPrize = settings.integer(AI_PRIZE_LIMIT) - haveWithPrize;
 
         if (aiPrize < neededWithPrize) {
             aiPrize++;

@@ -26,7 +26,7 @@ import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
-import com.codenjoy.dojo.web.controller.AdminController;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.web.controller.RoomsAliaser;
 import com.codenjoy.dojo.web.controller.Validator;
 import lombok.AllArgsConstructor;
@@ -66,9 +66,8 @@ public class RegistrationService {
     private AuthenticationManager authenticationManager;
     private UserDetailsService userDetailsService;
     private ViewDelegationService viewDelegationService;
-    private GameService gameService;
 
-    public String register(Player player, String roomName, BindingResult result, HttpServletRequest request, Model model) {
+    public String register(Player player, String room, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             return openRegistrationForm(request, model, null, null, null);
         }
@@ -76,10 +75,10 @@ public class RegistrationService {
         String id = player.getId();
         String email = player.getEmail();
         String name = player.getReadableName();
-        String gameName = player.getGameName();
+        String game = player.getGame();
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkEmail(email, CANT_BE_NULL);
-        validator.checkGameName(gameName, CANT_BE_NULL);
+        validator.checkGame(game, CANT_BE_NULL);
 
         String code;
         boolean registered = registration.registered(id);
@@ -109,7 +108,7 @@ public class RegistrationService {
                     Map<String, Object> map = storage.getMap();
                     map.put("name", id);
                     map.put("code", code);
-                    map.put("gameName", gameName);
+                    map.put("game", game);
                     map.put("ip", getIp(request));
 
                     String hostIp = properties.getServerIp(); // TODO to use server domain here
@@ -143,7 +142,7 @@ public class RegistrationService {
                 model.addAttribute("bad_pass", true);
                 return openRegistrationForm(request, model, id, email, name);
             }
-            return connectRegisteredPlayer(player.getCode(), request, id, roomName, gameName);
+            return connectRegisteredPlayer(player.getCode(), request, id, room, game);
         } else {
             model.addAttribute("wait_approve", true);
             return openRegistrationForm(request, model, id, email, name);
@@ -155,8 +154,8 @@ public class RegistrationService {
         mailService.sendEmail(id, title, body);
     }
 
-    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String roomName, String gameName) {
-        return "redirect:/" + register(id, code, roomName, gameName, request.getRemoteAddr());
+    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String room, String game) {
+        return "redirect:/" + register(id, code, game, room, request.getRemoteAddr());
     }
 
     public String openRegistrationForm(HttpServletRequest request, Model model,
@@ -181,16 +180,16 @@ public class RegistrationService {
             }
         }
 
-        String gameName = request.getParameter(AdminController.GAME_NAME_KEY);
+        String game = request.getParameter("game");
         if (!model.containsAttribute("bad_game")) {
-            validator.checkGameName(gameName, CAN_BE_NULL);
+            validator.checkGame(game, CAN_BE_NULL);
         }
 
         Player player = new Player();
         player.setEmail(email);
         player.setId(id);
         player.setReadableName(name);
-        player.setGameName(rooms.getAlias(gameName));
+        player.setGame(rooms.getAlias(game));
         if (!model.containsAttribute("player")) {
             model.addAttribute("player", player);
         }
@@ -202,16 +201,19 @@ public class RegistrationService {
         return getRegister(model);
     }
 
-    public String register(String id, String code, String roomName, String gameName, String ip) {
-        Player player = playerService.register(id, ip, roomName, gameName);
-        return getBoardUrl(code, player.getId(), gameName);
+    public String register(String id, String code, String game, String room, String ip) {
+        Player player = playerService.register(id, game, room, ip);
+        if (player == NullPlayer.INSTANCE) {
+            return "login";
+        }
+        return getBoardUrl(code, player.getId(), game);
     }
 
-    public String getBoardUrl(String code, String id, String gameName) {
+    public String getBoardUrl(String code, String id, String game) {
         validator.checkPlayerId(id, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
-        return "board/player/" + id + "?code=" + code + viewDelegationService.buildBoardParam(gameName);
+        return "board/player/" + id + "?code=" + code + viewDelegationService.buildBoardParam(game);
     }
 
     private String getIp(HttpServletRequest request) {
@@ -227,7 +229,7 @@ public class RegistrationService {
 
     private String getRegister(Model model) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("gameNames", rooms.alises());
+        model.addAttribute("games", rooms.alises());
         return "register";
     }
 }

@@ -47,7 +47,7 @@ var getShortestWayTest = function() {
         loggerActions.length = 0;
     }
 
-    game = {};
+    setup = {};
     var loggerActions = [];
     var controllerActions = [];
 

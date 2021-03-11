@@ -24,6 +24,7 @@ package com.codenjoy.dojo.lunolet.model;
 
 
 import com.codenjoy.dojo.lunolet.services.Events;
+import com.codenjoy.dojo.lunolet.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
@@ -37,8 +38,8 @@ public class Player extends GamePlayer<Hero, Field> {
     private Hero hero;
     private List<Point2D.Double> crashes;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
         crashes = new LinkedList<>();
     }
 

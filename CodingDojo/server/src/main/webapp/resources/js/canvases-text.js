@@ -24,7 +24,7 @@ var currentBoardSize = null;
 var onlyBoard = window.location.href.includes("only=true");
 
 function initCanvasesText(contextPath, players, allPlayersScreen,
-                multiplayerType, boardSize, gameName,
+                multiplayerType, boardSize, game,
                 enablePlayerInfo, enablePlayerInfoLevel, drawBoard)
 {
     var canvases = {};
@@ -103,8 +103,8 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
             });
         });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
-        if (!!game.canvasCursor) {
-            $('#players_container canvas').css('cursor', game.canvasCursor);
+        if (!!setup.canvasCursor) {
+            $('#players_container canvas').css('cursor', setup.canvasCursor);
         }
     }
 

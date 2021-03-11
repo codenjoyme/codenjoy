@@ -24,10 +24,12 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.services.Events;
+import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -46,9 +48,11 @@ public class Loderunner implements Field {
 
     private final int size;
     private Dice dice;
+    private GameSettings settings;
 
-    public Loderunner(Level level, Dice dice) {
+    public Loderunner(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
+        this.settings = settings;
         size = level.getSize();
         field = new Point[size][size];
 
@@ -375,6 +379,11 @@ public class Loderunner implements Field {
 
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 
     public List<Enemy> getEnemies() {

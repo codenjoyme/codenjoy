@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initLayout(gameName, pageName, contextPath, transformations, scriptSources, onPageLoad) {
+function initLayout(game, pageName, contextPath, transformations, scriptSources, onPageLoad) {
 
     var appendUrl = function(string, search, substring) {
         $.each(search, function(index, found) {
@@ -29,7 +29,7 @@ function initLayout(gameName, pageName, contextPath, transformations, scriptSour
     }
 
     var loadLayout = function(onLoad) {
-        var resource = "/resources/" + gameName + "/";
+        var resource = "/resources/" + game + "/";
         $.ajax({ url:contextPath + resource + pageName,
             success:function (data) {
                 var found = ['<link href="', '<img src="', '<script src="'];
@@ -65,7 +65,7 @@ function initLayout(gameName, pageName, contextPath, transformations, scriptSour
             }
             $.each(scriptSources, function(index, script) {
                 $("head").append('<script type="text/javascript" src="' +
-                        game.contextPath + '/resources/' + gameName + '/' + script +
+                        setup.contextPath + '/resources/' + game + '/' + script +
                         '"></script>');
             });
             if (!!onPageLoad) {

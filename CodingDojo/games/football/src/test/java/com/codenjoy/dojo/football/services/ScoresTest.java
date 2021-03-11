@@ -22,26 +22,20 @@ package com.codenjoy.dojo.football.services;
  * #L%
  */
 
-import com.codenjoy.dojo.football.services.Events;
-import com.codenjoy.dojo.football.services.Scores;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-
-import org.junit.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.football.services.GameSettings.Keys.WIN_SCORE;
+import static org.junit.Assert.assertEquals;
 
-/**
- */
+
 public class ScoresTest {
-    private PlayerScores scores;
 
-    private Settings settings;
-    //private Integer loosePenalty;
-    private Integer winScore;
+    private PlayerScores scores;
+    private GameSettings settings;
 
     public void loose() {
         scores.event(Events.BOTTOM_GOAL);
@@ -53,42 +47,39 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        //loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(1, settings);
 
-        win();  //+1
-        win();  //+1
-        win();  //+1
-        win();  //+1
+        win();
+        win();
+        win();
+        win();
 
-        loose(); //-1
+        loose();
 
-        Assert.assertEquals(1 + 4 * winScore, scores.getScore());
+        assertEquals(1
+                + 4 * settings.integer(WIN_SCORE),
+                scores.getScore());
     }
 
     @Test
     public void cantBeLessThanZero() {
-        loose();    //-100
+        loose();
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        win();    // +1
+        win();
 
         scores.clear();
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
-
-
 }

@@ -34,16 +34,20 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static org.junit.Assert.assertEquals;
+// TODO сделать удобным вовыд и расскомментить
+// import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
 @ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestGameControllerTest.ContextConfiguration.class)
+@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
 public class RestGameControllerTest extends AbstractRestControllerTest {
 
@@ -73,7 +77,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldInfo() {
         String expected1 = "{\n" +
-                "  'boardSize':23,\n" +
+                "  'boardSize':6,\n" +
                 "  'clientUrl':'/codenjoy-contest/resources/user/first-servers.zip',\n" +
                 "  'helpUrl':'/codenjoy-contest/resources/help/first.html',\n" +
                 "  'info':'GameType[first]',\n" +
@@ -118,6 +122,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'room':'room1',\n" +
                 "  'sprites':{\n" +
                 "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',\n" +
                 "    'names':[\n" +
@@ -136,11 +141,11 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "  'wsUrl':'ws[s]://SERVER:PORT/codenjoy-contest/ws?user=PLAYER_ID&code=CODE'\n" +
                 "}";
 
-        assertEquals(expected1, JsonUtils.prettyPrint(service.type("first")));
-        assertEquals(expected1, JsonUtils.prettyPrint(get("/rest/game/first/info")));
+        assertEquals(expected1, JsonUtils.prettyPrint(service.type("first", "room1")));
+        assertEquals(expected1, JsonUtils.prettyPrint(get("/rest/game/first/room1/info")));
 
         String expected2 = "{\n" +
-                "  'boardSize':56,\n" +
+                "  'boardSize':5,\n" +
                 "  'clientUrl':'/codenjoy-contest/resources/user/second-servers.zip',\n" +
                 "  'helpUrl':'/codenjoy-contest/resources/help/second.html',\n" +
                 "  'info':'GameType[second]',\n" +
@@ -185,6 +190,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'room':'room2',\n" +
                 "  'sprites':{\n" +
                 "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',\n" +
                 "    'names':[\n" +
@@ -205,11 +211,11 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "  'wsUrl':'ws[s]://SERVER:PORT/codenjoy-contest/ws?user=PLAYER_ID&code=CODE'\n" +
                 "}";
 
-        assertEquals(expected2, JsonUtils.prettyPrint(service.type("second")));
-        assertEquals(expected2, JsonUtils.prettyPrint(get("/rest/game/second/info")));
+        assertEquals(expected2, JsonUtils.prettyPrint(service.type("second", "room2")));
+        assertEquals(expected2, JsonUtils.prettyPrint(get("/rest/game/second/room2/info")));
         
-        assertEquals(null, service.type("non-exists"));
-        assertEquals("", get("/rest/game/non-exists/info"));
+        assertEquals(null, service.type("non-exists", "room3"));
+        assertEquals("", get("/rest/game/non-exists/room3/info"));
     }
 
     @Test

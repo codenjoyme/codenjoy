@@ -21,8 +21,8 @@
  */
 function initRobot(logger, controller) {
     
-    if (game.debug) {
-        game.debugger();
+    if (setup.debug) {
+        setup.debugger();
     }
     
     var memory = null;

@@ -26,6 +26,9 @@ import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.model.items.perks.UnlimitedFirePerk;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.GUN_RECHARGE;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_ACTIVITY;
+
 public class UnlimitedFirePerkTest extends AbstractGameTest {
 
     @Test
@@ -70,7 +73,7 @@ public class UnlimitedFirePerkTest extends AbstractGameTest {
     @Test
     public void shouldFire_withoutPerk() {
         // given
-        settings.gunRecharge(2);
+        settings.integer(GUN_RECHARGE, 2);
 
         givenFl("╔═════┐" +
                 "║.S...│" +
@@ -158,8 +161,8 @@ public class UnlimitedFirePerkTest extends AbstractGameTest {
     @Test
     public void shouldFire_withPerk() {
         // given
-        settings.perkActivity(2)
-                .gunRecharge(3);
+        settings.integer(PERK_ACTIVITY, 2)
+                .integer(GUN_RECHARGE, 3);
 
         givenFl("╔═════┐" +
                 "║.S...│" +

@@ -33,6 +33,10 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -68,6 +72,7 @@ public class LocalGameRunnerTest {
         id = 0;
 
         gameType = mock(GameType.class);
+        SettingsReader settings = new TestGameSettings();
         GameField field = new GameField() {
             public GamePlayer player;
 
@@ -110,12 +115,18 @@ public class LocalGameRunnerTest {
             }
 
             @Override
+            public SettingsReader settings() {
+                return settings;
+            }
+
+            @Override
             public void tick() {
                 messages.add("TICK_GAME" + id());
                 player.getHero().tick();
             }
         };
-        when(gameType.createGame(anyInt())).thenReturn(field);
+        when(gameType.getSettings()).thenReturn((Settings) settings);
+        when(gameType.createGame(anyInt(), any(Settings.class))).thenReturn(field);
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(
                 (BoardReader reader, GamePlayer player)
                         -> "PRINTER_PRINTS_BOARD" + id() + "{reader=" + reader + ",player=" + player + "}")
@@ -124,10 +135,10 @@ public class LocalGameRunnerTest {
         listener = event -> messages.add("GOT_EVENT" + id() + "{" + event + "}");
 
         PlayerScores scores = mock(PlayerScores.class);
-        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
+        when(gameType.getPlayerScores(anyInt(), any(Settings.class))).thenReturn(scores);
         when(scores.getScore()).thenAnswer(inv -> "SCORE" + id());
 
-        gamePlayer = new GamePlayer(listener) {
+        gamePlayer = new GamePlayer(listener, settings) {
             PlayerHero hero;
 
             @Override
@@ -181,7 +192,7 @@ public class LocalGameRunnerTest {
                 return "PLAYER" + id();
             }
         };
-        when(gameType.createPlayer(any(EventListener.class), any(String.class)))
+        when(gameType.createPlayer(any(EventListener.class), any(String.class), any(Settings.class)))
                 .thenReturn(gamePlayer);
 
         solver = board -> {

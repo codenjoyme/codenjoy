@@ -2,9 +2,9 @@ package com.codenjoy.dojo.icancode.model.perks;
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.model.ICanCode;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.DEFAULT_PERKS;
 import static org.junit.Assert.*;
 
 public class FirePerkTest extends AbstractGameTest {
@@ -42,7 +42,7 @@ public class FirePerkTest extends AbstractGameTest {
     public void shouldBeAbleToFire_withoutFirePerk_whenContest() {
         // given
         mode = ICanCode.CONTEST;
-        SettingsWrapper.data.defaultPerks(",a");
+        settings.string(DEFAULT_PERKS, ",a");
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -76,7 +76,7 @@ public class FirePerkTest extends AbstractGameTest {
     public void shouldBeAbleToFire_whenHeroPicksUpFirePerk_whenTraining() {
         // given
         mode = ICanCode.TRAINING;
-        SettingsWrapper.data.defaultPerks("");
+        settings.string(DEFAULT_PERKS, "");
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -152,7 +152,7 @@ public class FirePerkTest extends AbstractGameTest {
     @Test
     public void shouldNotPickUpFirePerk_whenJumpOverIt() {
         // given
-        SettingsWrapper.data.defaultPerks("j,j");
+        settings.string(DEFAULT_PERKS, "j,j");
 
         givenFl("╔════┐" +
                 "║Sa..│" +

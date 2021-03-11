@@ -41,24 +41,25 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    public GameRunner() {
-        new Scores(0, settings);
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer) score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        return new Lunolet(new LevelManager());
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new Lunolet(new LevelManager(), settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
         return v(20);
     }
 
@@ -83,12 +84,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.SINGLE;
     }
 

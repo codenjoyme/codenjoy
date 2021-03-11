@@ -25,63 +25,43 @@ package com.codenjoy.dojo.startandjump.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.printer.CharElements;
-import com.codenjoy.dojo.startandjump.client.Board;
-import com.codenjoy.dojo.startandjump.client.ai.AISolver;
-import com.codenjoy.dojo.startandjump.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.startandjump.client.Board;
+import com.codenjoy.dojo.startandjump.client.ai.AISolver;
+import com.codenjoy.dojo.startandjump.model.Elements;
+import com.codenjoy.dojo.startandjump.model.Player;
+import com.codenjoy.dojo.startandjump.model.StartAndJump;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> implements GameType<GameSettings> {
 
-    private final Level level;
-
-    public GameRunner() {
-        new Scores(0, settings);
-        level = new LevelImpl(getMap());
-    }
-
-    protected String getMap() {
-        return "####################" +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                " =                  " +
-                "                    " +
-                "☺            ==  ===" +
-                " =        =         " +
-                " =  ==== = ==       " +
-                "####################";
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer) score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        return new StartAndJump(getDice(), level);
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new StartAndJump(getDice(), settings.level(), settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.level().getSize());
     }
 
     @Override
@@ -105,12 +85,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.SINGLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 }

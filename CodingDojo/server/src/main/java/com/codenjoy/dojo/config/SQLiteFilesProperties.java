@@ -45,5 +45,6 @@ public class SQLiteFilesProperties {
         private String users;
         private String payment;
         private String settings;
+        private String messages;
     }
 }

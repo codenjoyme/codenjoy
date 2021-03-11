@@ -27,6 +27,7 @@ import com.codenjoy.dojo.icancode.model.items.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.model.items.perks.UnstoppableLaserPerk;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.DEATH_RAY_PERK_RANGE;
 import static com.codenjoy.dojo.services.Direction.STOP;
 
 public class DeathRayPerkTest extends AbstractGameTest {
@@ -34,7 +35,7 @@ public class DeathRayPerkTest extends AbstractGameTest {
     @Test
     public void shouldDrawPickAndFire_withDeathRayPerk() {
         // given
-        settings.deathRayRange(10);
+        settings.integer(DEATH_RAY_PERK_RANGE, 10);
 
         givenFl("╔══════┐" +
                 "║..S...│" +
@@ -124,7 +125,7 @@ public class DeathRayPerkTest extends AbstractGameTest {
     @Test
     public void shouldUseTogetherDeathRay_andUnstoppableLaser() {
         // given
-        settings.deathRayRange(10);
+        settings.integer(DEATH_RAY_PERK_RANGE, 10);
 
         givenFl("╔══════════┐" +
                 "║..S.......│" +

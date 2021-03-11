@@ -41,7 +41,7 @@
 </head>
 
 <!-- TODO to remove games from here -->
-<c:if test="${!justBoard && page != 'register' && gameNameOnly != 'icancode' && gameNameOnly != 'expansion'}" >
+<c:if test="${!justBoard && page != 'register' && gameOnly != 'icancode' && gameOnly != 'expansion'}" >
     <sec:authorize access="isAuthenticated()">
         <body>
             <a href="${ctx}/process_logout" class="logout-link">Logout</a>
@@ -49,7 +49,7 @@
     </sec:authorize>
     <sec:authorize access="!isAuthenticated()">
         <body>
-            <a href="${ctx}/login?gameName=${gameNameOnly}" class="logout-link">Login</a>
+            <a href="${ctx}/login?game=${gameOnly}" class="logout-link">Login</a>
         </body>
     </sec:authorize>
 </c:if>

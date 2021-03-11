@@ -22,11 +22,10 @@ package com.codenjoy.dojo.sokoban.services;
  * #L%
  */
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class Storage {
+    static final int MAX_VALUE = 5;
+
     static Hashtable<String, Integer> levels = new Hashtable<>();
-    static ArrayList<String> names = new ArrayList<>();
-    final static int MAX_VALUE = 5;
 }

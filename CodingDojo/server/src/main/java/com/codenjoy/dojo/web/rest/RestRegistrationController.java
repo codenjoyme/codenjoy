@@ -30,14 +30,14 @@ import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static java.util.stream.Collectors.toList;
 
-@Controller
+@RestController
 @RequestMapping("/rest")
 @AllArgsConstructor
 public class RestRegistrationController {
@@ -45,35 +45,31 @@ public class RestRegistrationController {
     private Registration registration;
     private PlayerService playerService;
     private PlayerGames playerGames;
-    private GameService gameService;
     private SaveService saveService;
     private Validator validator;
 
     @GetMapping("/player/{player}/check/{code}")
-    @ResponseBody
     public boolean checkUserLogin(@PathVariable("player") String id,
                                   @PathVariable("code") String code)
     {
-        validator.checkPlayerId(id, Validator.CANT_BE_NULL);
-        validator.checkCode(code, Validator.CANT_BE_NULL);
+        validator.checkPlayerId(id, CANT_BE_NULL);
+        validator.checkCode(code, CANT_BE_NULL);
 
         return registration.checkUser(id, code) != null;
     }
 
     // TODO test me
-    @GetMapping("/game/{gameName}/players")
-    @ResponseBody
-    public List<PlayerInfo> getGamePlayers(@PathVariable("gameName") String gameName) {
-        validator.checkGameName(gameName, Validator.CANT_BE_NULL);
+    @GetMapping("/game/{game}/players")
+    public List<PlayerInfo> getGamePlayers(@PathVariable("game") String game) {
+        validator.checkGame(game, CANT_BE_NULL);
 
-        return playerService.getAll(gameName).stream()
+        return playerService.getAll(game).stream()
                 .map(PlayerInfo::new)
                 .collect(toList());
     }
 
     // TODO test me
     @PostMapping("/player/create")
-    @ResponseBody
     public synchronized String createPlayer(@RequestBody PlayerDetailInfo player) {
         Registration.User user = player.getRegistration().build();
         registration.replace(user);
@@ -103,9 +99,8 @@ public class RestRegistrationController {
 
     // TODO test me
     @GetMapping("/player/{player}/exists")
-    @ResponseBody
     public boolean isPlayerExists(@PathVariable("player") String id) {
-        validator.checkPlayerId(id, Validator.CANT_BE_NULL);
+        validator.checkPlayerId(id, CANT_BE_NULL);
 
         return registration.checkUser(id) != null
                 && playerService.contains(id);

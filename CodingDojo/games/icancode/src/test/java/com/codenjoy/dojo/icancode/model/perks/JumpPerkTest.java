@@ -2,9 +2,9 @@ package com.codenjoy.dojo.icancode.model.perks;
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.model.ICanCode;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.DEFAULT_PERKS;
 import static org.junit.Assert.assertEquals;
 
 public class JumpPerkTest extends AbstractGameTest {
@@ -42,7 +42,7 @@ public class JumpPerkTest extends AbstractGameTest {
     public void shouldBeAbleToJump_withoutJumpPerk_whenContest() {
         // given
         mode = ICanCode.CONTEST;
-        SettingsWrapper.data.defaultPerks(",j");
+        settings.string(DEFAULT_PERKS, ",j");
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -83,7 +83,7 @@ public class JumpPerkTest extends AbstractGameTest {
     public void shouldBeAbleToJump_whenHeroPicksUpJumpPerk_whenTraining() {
         // given
         mode = ICanCode.TRAINING;
-        SettingsWrapper.data.defaultPerks("");
+        settings.string(DEFAULT_PERKS, "");
 
         givenFl("╔════┐" +
                 "║S...│" +

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.hex.model;
 
 
 import com.codenjoy.dojo.hex.services.Event;
+import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
@@ -49,8 +50,8 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
     private int loose;
     private int win;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
         alive = false;
         heroes = new Heroes();
     }

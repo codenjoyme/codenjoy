@@ -43,7 +43,7 @@ public class PlayerDataTest {
         assertEquals("+100", data.getInfo());
         assertEquals("{\"user@mail.com\":12}", JsonUtils.toStringSorted(data.getScores().toString()).toString());
         assertEquals("{\"user@gmail.com\":{\"x\":5,\"y\":10}}", JsonUtils.toStringSorted(data.getHeroesData().toString()).toString());
-        assertEquals("game", data.getGameName());
+        assertEquals("game", data.getGame());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class PlayerDataTest {
         assertEquals("PlayerData[" +
                 "BoardSize:15, " +
                 "Board:'board', " +
-                "GameName:'game', " +
+                "Game:'game', " +
                 "Score:10, " +
                 "Info:'info', " +
                 "Scores:'{\"user@mail.com\":12}', " +

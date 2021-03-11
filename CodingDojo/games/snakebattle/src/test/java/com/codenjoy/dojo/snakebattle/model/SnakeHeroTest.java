@@ -24,17 +24,17 @@ package com.codenjoy.dojo.snakebattle.model;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.hero.Tail;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,16 +48,18 @@ public class SnakeHeroTest {
 
     private SnakeBoard game;
     private Hero hero;
-    private Parameter<Integer> stoneReduced;
+    private GameSettings settings;
 
     @Before
     public void setup() {
+        settings = new GameSettings()
+                .integer(FLYING_COUNT, 10)
+                .integer(FURY_COUNT, 10)
+                .integer(STONE_REDUCED, 3);
+
         hero = new Hero(pt(0, 0));
         game = mock(SnakeBoard.class);
-        when(game.flyingCount()).thenReturn(new SimpleParameter<>(10));
-        when(game.furyCount()).thenReturn(new SimpleParameter<>(10));
-        stoneReduced = new SimpleParameter<>(3);
-        when(game.stoneReduced()).thenReturn(stoneReduced);
+        when(game.settings()).thenReturn(settings);
         hero.init(game);
         hero.setActive(true);
         hero.setPlayer(mock(Player.class));
@@ -132,7 +134,7 @@ public class SnakeHeroTest {
     // тест что короткая змейка погибает от камня
     @Test
     public void diedByStone() {
-        snakeIncreasing(stoneReduced.getValue() - 1);
+        snakeIncreasing(stoneReduced() - 1);
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         hero.eat();
@@ -143,16 +145,21 @@ public class SnakeHeroTest {
     // тест что большая змейка уменьшается от камня, но не погибает
     @Test
     public void reduceByStone() {
-        snakeIncreasing(stoneReduced.getValue());
+        snakeIncreasing(stoneReduced());
         int before = hero.size();
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         hero.eat();
         stonesAtAllPoints(false);
         assertTrue("Большая змейка погибла от камня!", hero.isAlive());
-        assertEquals("Змейка не укоротилась на предполагаемую длину!", before - stoneReduced.getValue(), hero.size());
+        assertEquals("Змейка не укоротилась на предполагаемую длину!",
+                before - stoneReduced(), hero.size());
         hero.tick();
         hero.eat();
+    }
+
+    private Integer stoneReduced() {
+        return settings.integer(STONE_REDUCED);
     }
 
     // змейка может откусить себе хвост

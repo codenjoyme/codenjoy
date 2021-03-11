@@ -24,29 +24,17 @@ package com.codenjoy.dojo.snakebattle.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> appleScore;
-    private final Parameter<Integer> goldScore;
-    private final Parameter<Integer> diePenalty;
-    private final Parameter<Integer> stoneScore;
-    private final Parameter<Integer> eatScore;
-
+    private GameSettings settings;
     private volatile int score;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
-        appleScore = settings.addEditBox("Apple score").type(Integer.class).def(1);
-        goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
-        diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(0);
-        stoneScore = settings.addEditBox("Stone score").type(Integer.class).def(5);
-        eatScore = settings.addEditBox("Eat enemy score").type(Integer.class).def(10);
+        this.settings = settings;
     }
 
     @Override
@@ -65,17 +53,17 @@ public class Scores implements PlayerScores {
             return;
         Events event = (Events)object;
         if (event.isWin()) {
-            score += winScore.getValue();
+            score += settings.integer(WIN_SCORE);
         } else if (event.isApple()) {
-            score += appleScore.getValue();
+            score += settings.integer(APPLE_SCORE);
         } else if (event.isGold()) {
-            score += goldScore.getValue();
+            score += settings.integer(GOLD_SCORE);
         } else if (event.isDie()) {
-            score -= diePenalty.getValue();
+            score -= settings.integer(DIE_PENALTY);
         } else if (event.isStone()) {
-            score += stoneScore.getValue();
+            score += settings.integer(STONE_SCORE);
         } else if (event.isEat()) {
-            score += eatScore.getValue() * event.getAmount();
+            score += settings.integer(EAT_SCORE) * event.getAmount();
         }
         score = Math.max(0, score);
     }

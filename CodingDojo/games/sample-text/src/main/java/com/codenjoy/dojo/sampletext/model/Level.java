@@ -27,9 +27,9 @@ import java.util.List;
 
 public interface Level {
 
-    List<String> getQuestions();
+    List<String> questions();
 
-    List<String> getAnswers();
+    List<String> answers();
 
     int size();
 }

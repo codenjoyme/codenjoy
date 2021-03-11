@@ -41,9 +41,6 @@ import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 
-/**
- * Created by oleksandr.baglai on 18.06.2016.
- */
 public class Levels {
 
     private static Logger logger = DLoggerFactory.getLogger(Levels.class);

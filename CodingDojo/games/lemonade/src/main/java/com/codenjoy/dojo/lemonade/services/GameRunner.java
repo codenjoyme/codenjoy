@@ -39,31 +39,25 @@ import org.json.JSONObject;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- */
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private Lemonade game;
-    private GameSettings gameSettings;
-
-    public GameRunner() {
-        new Scores(0, settings);
-        gameSettings = new GameSettings(settings);
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public Lemonade createGame(int levelNumber) {
-        return new Lemonade(gameSettings);
+    public Lemonade createGame(int levelNumber, GameSettings settings) {
+        return new Lemonade(settings);
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer) score, settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
         return v(25);
     }
 
@@ -88,13 +82,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.SINGLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener, getDice().next(Integer.MAX_VALUE), gameSettings);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, getDice().next(Integer.MAX_VALUE), settings);
     }
 
     @Override
@@ -102,7 +96,6 @@ public class GameRunner extends AbstractGameType implements GameType {
         return PrinterFactory.get((BoardReader reader, Player player) -> {
             JSONObject result = player.getNextQuestion();
             result.put("history", player.getHistoryJson());
-            //System.out.println(result.toString());
             return result;
         });
     }

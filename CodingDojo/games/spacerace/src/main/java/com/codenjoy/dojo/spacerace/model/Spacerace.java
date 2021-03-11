@@ -26,7 +26,9 @@ import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.spacerace.services.Events;
+import com.codenjoy.dojo.spacerace.services.GameSettings;
 
 import java.util.*;
 
@@ -37,6 +39,7 @@ public class Spacerace implements Field {
     private static final int NEW_APPEAR_PERIOD = 3;
     private static final int MAX_COUNT_BULLET_PACKS = 1;
     private final int size;
+    private GameSettings settings;
     private List<Wall> walls;
     private List<BulletPack> bulletPacks;
     private List<Gold> gold;
@@ -50,17 +53,14 @@ public class Spacerace implements Field {
     private int countStone = 0;
     private boolean isNewBomb = true;
     private int countBomb = 0;
-    private int ticksToRecharge;
-    private int bulletsCount;
     private int currentBulletPacks = 0;
 
-    public Spacerace(Level level, Dice dice, int ticksToRecharge, int bulletsCount) {
+    public Spacerace(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        this.ticksToRecharge = ticksToRecharge;
-        this.bulletsCount = bulletsCount;
         walls = level.getWalls();
         gold = level.getGold();
         size = level.getSize();
+        this.settings = settings;
         players = new LinkedList<>();
         bulletPacks = new LinkedList<>();
         bombs = new LinkedList<>();
@@ -143,18 +143,19 @@ public class Spacerace implements Field {
             stones.remove(point);
         } else if(point instanceof Bullet) {
             bullets.remove(point);
-            getPlayerFor(((Bullet)point).getOwner()).event(Events.DESTROY_ENEMY);
+            getPlayerFor(((Bullet)point).getOwner())
+                    .ifPresent(p -> p.event(Events.DESTROY_ENEMY));
         }
         player.getHero().die();
     }
 
-    private Player getPlayerFor(Hero hero) {
+    private Optional<Player> getPlayerFor(Hero hero) {
         for (Player player : players) {
             if (player.getHero() == hero) {
-                return player;
+                return Optional.of(player);
             }
         }
-        return Player.NULL;
+        return Optional.empty();
     }
 
     private void bombExplosion(Point pt) {
@@ -303,7 +304,8 @@ public class Spacerace implements Field {
 
     private void fireWinScoresFor(Bullet bullet, Events event) {
         Hero hero = bullet.getOwner();
-        getPlayerFor(hero).event(event);
+        getPlayerFor(hero).
+                ifPresent(p -> p.event(event));
     }
 
     private void removeBombDestroyedByBullet() {
@@ -354,7 +356,7 @@ public class Spacerace implements Field {
 
     @Override
     public BulletCharger getCharger() {
-        return new BulletCharger(ticksToRecharge, bulletsCount);
+        return new BulletCharger(settings);
     }
 
     public List<Gold> getGold() {
@@ -380,6 +382,11 @@ public class Spacerace implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 
     public List<Wall> getWalls() {

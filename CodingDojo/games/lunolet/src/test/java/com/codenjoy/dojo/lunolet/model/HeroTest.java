@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import com.codenjoy.dojo.lunolet.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,7 +35,8 @@ public class HeroTest {
     @Test
     public void initAndThenUp() {
         EventListener listener = mock(EventListener.class);
-        Player player = new Player(listener);
+        GameSettings settings = new GameSettings();
+        Player player = new Player(listener, settings);
 
         Hero hero = new Hero(player);
         hero.init(new LevelManager().getLevel(0));

@@ -25,9 +25,9 @@ package com.codenjoy.dojo.startandjump.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.startandjump.services.Events;
+import com.codenjoy.dojo.startandjump.services.GameSettings;
 import com.codenjoy.dojo.startandjump.services.HeroStatus;
 
 import java.util.LinkedList;
@@ -47,9 +47,12 @@ public class StartAndJump implements Field {
     private final int size;
     private List<Wall> walls;
 
-    public StartAndJump(Dice dice, Level level) {
+    private GameSettings settings;
+
+    public StartAndJump(Dice dice, Level level, GameSettings settings) {
         this.level = level;
         size = level.getSize();
+        this.settings = settings;
         players = new LinkedList<>();
         platformGenerator = new PlatformGenerator(dice, size, MAX_PLATFORM_LENGTH);
     }
@@ -182,5 +185,10 @@ public class StartAndJump implements Field {
 
     public int getTickCounter() {
         return tickCounter;
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 }

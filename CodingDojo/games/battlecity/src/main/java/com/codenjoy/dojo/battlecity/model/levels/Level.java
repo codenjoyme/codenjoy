@@ -33,11 +33,11 @@ public interface Level {
 
     int size();
 
-    List<Tank> getTanks(int ticksPerBullets);
+    List<Tank> getTanks();
 
     List<Border> getBorders();
 
-    List<Tank> getAiTanks(int aiTicksPerShoot);
+    List<Tank> getAiTanks();
 
     List<Wall> getWalls();
 

@@ -100,17 +100,17 @@ public final class Levels {
                 new LevelZ());
     }
 
-    public static void setup() {
+    public static void setup(GameSettings settings) {
         AtomicInteger index = new AtomicInteger();
-        all().forEach(level -> SettingsWrapper.data.addLevel(index.incrementAndGet(), level));
+        all().forEach(level -> settings.addLevel(index.incrementAndGet(), level));
     }
 
-    public static Level loadLevel(int level) {
-        return load(SettingsWrapper.data.levelMap(level));
+    public static Level loadLevel(int level, GameSettings settings) {
+        return load(settings.levelMap(level), settings);
     }
 
-    public static Level load(String levelMap) {
-        return new LevelImpl(resize(decorate(Encoding.removeN(levelMap)), size()));
+    public static Level load(String levelMap, GameSettings settings) {
+        return new LevelImpl(resize(decorate(Encoding.removeN(levelMap)), size()), settings);
     }
 
     // TODO я думаю этот метод не нужен тут, так как он дублирует Layered view

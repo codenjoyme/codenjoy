@@ -40,7 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
-import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_KEY;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
@@ -63,12 +62,11 @@ public class BoardController {
     {
         validator.checkPlayerId(id, CANT_BE_NULL);
 
-        return boardPlayer(model, id, null, justBoard, (String) model.get("gameName"));
+        return boardPlayer(model, id, null, justBoard, (String) model.get("game"));
     }
 
     @GetMapping(value = URI + "/player/{player}", params = {"code", "remove"})
     public String removePlayer(@PathVariable("player") String id, @RequestParam("code") String code) {
-        validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkPlayerCode(id, code);
 
         Player player = playerService.get(id);
@@ -85,11 +83,11 @@ public class BoardController {
                               @PathVariable("player") String id,
                               @RequestParam("code") String code,
                               @RequestParam(name = "only", required = false) Boolean justBoard,
-                              @RequestParam(name = "gameName", required = false, defaultValue = "") String gameName)
+                              @RequestParam(name = "game", required = false, defaultValue = "") String game)
     {
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
-        validator.checkGameName(gameName, CAN_BE_NULL); // TODO а зачем тут вообще gameName?
+        validator.checkGame(game, CAN_BE_NULL); // TODO а зачем тут вообще game?
 
         Player player = playerService.get(id);
         if (player == NullPlayer.INSTANCE) {
@@ -103,35 +101,35 @@ public class BoardController {
         return justBoard ? "board-only" : "board";
     }
 
-    @GetMapping(URI + "/rejoining/{gameName}")
-    public String rejoinGame(ModelMap model, @PathVariable("gameName") String gameName,
+    @GetMapping(URI + "/rejoining/{game}")
+    public String rejoinGame(ModelMap model, @PathVariable("game") String game,
                              HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user)
     {
-        validator.checkGameName(gameName, CANT_BE_NULL);
+        validator.checkGame(game, CANT_BE_NULL);
 
         if (user == null) {
-            return "redirect:/login?" + GAME_NAME_KEY + "=" + gameName;
+            return "redirect:/login?" + "game" + "=" + game;
         }
 
         // TODO ROOM а надо ли тут этот метод вообще, ниже есть более универсальный? 
         // TODO ROOM так как есть rest методы то может вообще убрать отсюда этих двоих?
-        String roomName = gameName; 
-        return rejoinGame(model, gameName, roomName, request, user);
+        String room = game;
+        return rejoinGame(model, game, room, request, user);
     }
 
-    @GetMapping(URI + "/rejoining/{gameName}/room/{roomName}")
-    public String rejoinGame(ModelMap model, @PathVariable("gameName") String gameName,
-                             @PathVariable("roomName") String roomName,
+    @GetMapping(URI + "/rejoining/{game}/room/{room}")
+    public String rejoinGame(ModelMap model, @PathVariable("game") String game,
+                             @PathVariable("room") String room,
                              HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user)
     {
-        validator.checkGameName(gameName, CANT_BE_NULL);
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+        validator.checkGame(game, CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
 
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {
-            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), roomName, gameName);
+            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game);
         }
 
         populateJoiningGameModel(model, player.getCode(), player);
@@ -140,27 +138,31 @@ public class BoardController {
 
     private void populateJoiningGameModel(ModelMap model, String code, Player player) {
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_KEY, player.getGameName());
-        model.addAttribute("gameNameOnly", player.getGameNameOnly());
+        model.addAttribute("game", player.getGame());
+        model.addAttribute("room", player.getRoom());
+        model.addAttribute("gameOnly", player.getGameOnly());
         model.addAttribute("playerId", player.getId());
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", false);
     }
 
-    @GetMapping(value = URI + "/log/player/{player}", params = "gameName")
+    @GetMapping(value = URI + "/log/player/{player}", params = {"game", "room"})
     public String boardPlayerLog(ModelMap model, @PathVariable("player") String id,
-                                 @RequestParam("gameName") String gameName)
+                                 @RequestParam("game") String game,
+                                 @RequestParam("room") String room)
     {
         validator.checkPlayerId(id, CANT_BE_NULL);
-        validator.checkGameName(gameName, CANT_BE_NULL);
+        validator.checkGame(game, CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
 
         Optional<Registration.User> user = registration.getUserById(id);
         if (!user.isPresent()) {
             return "redirect:/register?id=" + id;
         }
 
-        model.addAttribute(GAME_NAME_KEY, gameName);
-        model.addAttribute("gameNameOnly", GameServiceImpl.removeNumbers(gameName));
+        model.addAttribute("game", game);
+        model.addAttribute("room", room);
+        model.addAttribute("gameOnly", GameServiceImpl.removeNumbers(game));
         model.addAttribute("playerId", user.get().getId());
         model.addAttribute("readableName", user.get().getReadableName());
 
@@ -176,27 +178,27 @@ public class BoardController {
         return "redirect:/board/game/" + gameType.name();
     }
 
-    @GetMapping(URI + "/game/{gameName}")
+    @GetMapping(URI + "/game/{game}")
     public String boardAllGames(ModelMap model,
-                                @PathVariable("gameName") String gameName,
+                                @PathVariable("game") String game,
                                 @RequestParam(value = "code", required = false) String code,
                                 @AuthenticationPrincipal Registration.User user)
     {
-        // TODO возможно тут CAN_BE_NULL, иначе проверка (gameName == null) никогда не true
-        validator.checkGameName(gameName, CANT_BE_NULL);
+        // TODO возможно тут CAN_BE_NULL, иначе проверка (game == null) никогда не true
+        validator.checkGame(game, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
-        if (gameName == null) {
+        if (game == null) {
             return "redirect:/board" + code(code);
         }
 
-        Player player = playerService.getRandom(gameName);
+        Player player = playerService.getRandom(game);
         if (player == NullPlayer.INSTANCE) {
             // TODO а это тут вообще надо?
-            return "redirect:/register?" + GAME_NAME_KEY + "=" + gameName;
+            return "redirect:/register?" + "game" + "=" + game;
         }
         GameType gameType = player.getGameType();
-        if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
+        if (gameType.getMultiplayerType(gameType.getSettings()) == MultiplayerType.MULTIPLE) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
@@ -205,8 +207,9 @@ public class BoardController {
         }
 
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_KEY, gameName);
-        model.addAttribute("gameNameOnly", player.getGameNameOnly());
+        model.addAttribute("game", game);
+        model.addAttribute("room", player.getRoom());
+        model.addAttribute("gameOnly", player.getGameOnly());
         model.addAttribute("playerId", null);
         model.addAttribute("readableName", null);
         model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
@@ -225,14 +228,15 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register";
         }
-        if (player.getGameType().getMultiplayerType() != MultiplayerType.SINGLE) {
+        GameType gameType = player.getGameType();
+        if (gameType.getMultiplayerType(gameType.getSettings()) != MultiplayerType.SINGLE) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
-        String gameName = player.getGameName();
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_KEY, gameName);
-        model.addAttribute("gameNameOnly", player.getGameNameOnly());
+        model.addAttribute("game", player.getGame());
+        model.addAttribute("room", player.getRoom());
+        model.addAttribute("gameOnly", player.getGameOnly());
         model.addAttribute("playerId", player.getId());
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", true);

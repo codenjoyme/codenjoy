@@ -32,10 +32,10 @@
     <link href="${ctx}/resources/css/all-board-only.min.css" rel="stylesheet">
     <jsp:include page="common-inclusion.jsp" />
 
-    <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <div id="board_page">
         <%@include file="canvases.jsp"%>

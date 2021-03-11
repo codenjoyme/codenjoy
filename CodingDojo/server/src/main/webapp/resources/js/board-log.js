@@ -23,46 +23,47 @@
 pages = pages || {};
 
 pages.boardLog = function() {
-    game.enableDonate = false;
-    game.enableJoystick = false;
-    game.enableAlways = false;
-    game.enablePlayerInfo = true;
-    game.enablePlayerInfoLevel = false;
-    game.enableLeadersTable = false;
-    game.enableForkMe = false;
-    game.enableInfo = false;
-    game.enableHotkeys = true;
-    game.enableAdvertisement = false;
-    game.showBody = true;
-    game.sprites = null;
-    game.heroInfo = null;
+    setup.enableDonate = false;
+    setup.enableJoystick = false;
+    setup.enableAlways = false;
+    setup.enablePlayerInfo = true;
+    setup.enablePlayerInfoLevel = false;
+    setup.enableLeadersTable = false;
+    setup.enableForkMe = false;
+    setup.enableInfo = false;
+    setup.enableHotkeys = true;
+    setup.enableAdvertisement = false;
+    setup.showBody = true;
+    setup.sprites = null;
+    setup.heroInfo = null;
 
-    game.gameName = getSettings('gameName');
-    game.playerId = getSettings('playerId');
-    game.readableName = getSettings('readableName');
-    game.contextPath = getSettings('contextPath');
-    game.code = null;
-    game.allPlayersScreen = false;
+    setup.game = getSettings('game');
+    setup.room = getSettings('room');
+    setup.playerId = getSettings('playerId');
+    setup.readableName = getSettings('readableName');
+    setup.contextPath = getSettings('contextPath');
+    setup.code = null;
+    setup.allPlayersScreen = false;
 
-    initBoardPage(game, initBoardLogComponents);
+    initBoardPage(setup, initBoardLogComponents);
     initHotkeys();
 }
 
-function initBoardLogComponents(game) {
-    if (!game.isGraphicOrTextGame) {
+function initBoardLogComponents(setup) {
+    if (!setup.isGraphicOrTextGame) {
         return;
     }
 
-    initCanvases(game.contextPath, game.players, game.allPlayersScreen,
-        game.multiplayerType, game.boardSize,
-        game.gameName, game.enablePlayerInfo,
-        game.enablePlayerInfoLevel,
-        game.sprites, game.alphabet, game.spriteElements,
-        game.drawBoard,
+    initCanvases(setup.contextPath, setup.players, setup.allPlayersScreen,
+        setup.multiplayerType, setup.boardSize,
+        setup.game, setup.enablePlayerInfo,
+        setup.enablePlayerInfoLevel,
+        setup.sprites, setup.alphabet, setup.spriteElements,
+        setup.drawBoard,
         function() {
-            initLogs(game.gameName, game.boardSize, game.alphabet, game.playerId);
+            initLogs(setup.game, setup.boardSize, setup.alphabet, setup.playerId);
 
-            if (game.showBody) {
+            if (setup.showBody) {
                 $(document.body).show();
             }
         });
@@ -87,7 +88,7 @@ var currentTick = 0;
 var firstTick = null;
 var lastTick = null;
 
-function initLogs(gameName, boardSize, alphabet, playerId) {
+function initLogs(game, boardSize, alphabet, playerId) {
 
     function getTickFromUrl(){
         let url = new URL(window.location.href);
@@ -112,12 +113,12 @@ function initLogs(gameName, boardSize, alphabet, playerId) {
 
         var data = {};
         var info = data[playerId] = {};
-        info.readableName = game.readableName;
+        info.readableName = setup.readableName;
         info.score = tick.score;
         info.tickTime = time;
         info.command = tick.command;
         info.message = tick.message;
-        info.gameName = tick.gameType;
+        info.game = tick.gameType;
         info.scores = {};
         info.scores[playerId] = tick.score;
         info.boardSize = boardSize;
