@@ -66,6 +66,12 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
+    public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
+        PMessage message = getMessage(topicMessageId, room, playerId);
+
+        return wrap(chat.getTopicMessages(message.getId()));
+    }
+
     public PMessage getMessage(int messageId, String room, String playerId) {
         validator.checkPlayerInRoom(playerId, room);
 
@@ -79,11 +85,12 @@ public class ChatService {
         return PMessage.from(message);
     }
 
-    public PMessage postMessage(String text, String room, String playerId) {
+    public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
         validator.checkPlayerInRoom(playerId, room);
 
+        String chatId = (topicMessageId == null) ? room : String.valueOf(topicMessageId);
         Chat.Message message = Chat.Message.builder()
-                .chatId(room)
+                .chatId(chatId)
                 .playerId(playerId)
                 .time(time.now())
                 .text(text)

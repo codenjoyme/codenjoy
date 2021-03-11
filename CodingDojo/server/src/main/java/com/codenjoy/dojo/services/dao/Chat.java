@@ -70,6 +70,19 @@ public class Chat {
     }
 
     /**
+     * @return Все соообщения текущего топика (родительского сообщения) {@param messageId},
+     *        посортированных в порядке возрастания времени
+     */
+    public List<Message> getTopicMessages(int messageId) {
+        return pool.select("SELECT * FROM messages " +
+                        "WHERE chat_id = ? " +
+                        "ORDER BY time ASC;",
+                new Object[]{messageId},
+                Chat::parseMessages
+        );
+    }
+
+    /**
      * @return все сообщения в диапазоне ({@param afterId}...{@param beforeId})
      *        для текущего чата {@param chatId},
      *        посортированных в порядке возрастания времени.

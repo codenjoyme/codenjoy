@@ -68,7 +68,19 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.postMessage(message.getText(), room, user.getId()));
+        return ResponseEntity.ok(chat.postMessage(null, message.getText(), room, user.getId()));
+    }
+
+    @PostMapping("/{room}/messages/{id}/topic")
+    public ResponseEntity<?> postMessageForTopic(
+            @PathVariable(name = "room") String room,
+            @PathVariable(name = "id") int id,
+            @NotNull @RequestBody PMessageShort message,
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validator.checkUser(user);
+
+        return ResponseEntity.ok(chat.postMessage(id, message.getText(), room, user.getId()));
     }
 
     @GetMapping("/{room}/messages/{id}")
@@ -80,6 +92,17 @@ public class RestChatController {
         validator.checkUser(user);
 
         return ResponseEntity.ok(chat.getMessage(id, room, user.getId()));
+    }
+
+    @GetMapping("/{room}/messages/{id}/topic")
+    public ResponseEntity<?> getMessagesForTopic(
+            @PathVariable(name = "room") String room,
+            @PathVariable(name = "id") int id,
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validator.checkUser(user);
+
+        return ResponseEntity.ok(chat.getTopicMessages(id, room, user.getId()));
     }
 
     @DeleteMapping("/{room}/messages/{id}")
