@@ -19,6 +19,7 @@ import Styles from './styles.module.css';
 const endDate = process.env.REACT_APP_EVENT_END_DATE;
 const dayTimeStart = process.env.REACT_APP_EVENT_START_TIME;
 const dayTimeEnd = process.env.REACT_APP_EVENT_FINAL_TIME;
+const eventName = process.env.REACT_APP_EVENT_NAME;
 const BOARD_EXAMPLE =
 `Board:
   01234567890123456789\t01234567890123456789\t   01234567890123456789
@@ -81,7 +82,7 @@ class RulesContainer extends Component {
             <div className='container'>
                 <div className={ mask }
                      style={{ backgroundImage: `url("${Game.dark}")` }}>
-                    Bot Challenge - як грати?
+                    { eventName } - як грати?
                 </div>
                 <div className='content'>
                     <h2 className='title'>Регламент проведення фіналу:</h2>

@@ -16,6 +16,7 @@ import Game from '../../games';
 // own
 import Styles from './styles.module.css';
 
+const eventName = process.env.REACT_APP_EVENT_NAME;
 const BOARD_EXAMPLE =
 `board=☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼     &        #  #   ☼☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼
 ☼ ☼ ☼☼    # # #      ####  ☼☼ ☼ ☼ ☼ ☼ ☼#☼ ☼ ☼ ☼ ☼ ☼☼☺            #
@@ -88,7 +89,7 @@ class RulesContainer extends Component {
             <div className='container'>
                 <div className={ mask }
                      style={{ backgroundImage: `url("${Game.dark}")` }}>
-                    Bot Challenge - як грати?
+                    { eventName } - як грати?
                 </div>
                 <div className='content'>
                     <h2 className='title'>У чому суть гри?</h2>

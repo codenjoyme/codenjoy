@@ -22,14 +22,17 @@ const downloadClientUrl = appUrl + '/rules#client';
 const gameRulesUrl = appUrl + '/rules';
 const boardUrl = appUrl + '/board';
 const joinSlackUrl = process.env.REACT_APP_JOIN_CHAT_LINK;
+const orgName = process.env.REACT_APP_EVENT_ORG_NAME;
+const orgAddress = process.env.REACT_APP_EVENT_ORG_ADDRESS;
+const eventName = process.env.REACT_APP_EVENT_NAME;
 
 const PrivacyPolicyContainer = () => (
     <div className='container'>
         <div className='content'>
             <div className='title'>
-                ПРАВИЛА КОНКУРСУ “BOT CHALLENGE”,
+                ПРАВИЛА КОНКУРСУ “{ eventName }”,
                 <br />
-                організованого ТОВ «____»
+                організованого ТОВ "{ orgName }"
                 <br />
                 <div className='notation'>(тут і далі – Правила)</div>
             </div>
@@ -39,11 +42,11 @@ const PrivacyPolicyContainer = () => (
                     <ol>
                         <li>
                             Ці правила конкурсу включають у себе правила та умови
-                            участі в конкурсі BOT CHALLENGE (тут і далі - Конкурс).
+                            участі в конкурсі { eventName } (тут і далі - Конкурс).
                         </li>
                         <li>
-                            Організатором Конкурсу є компанія ТОВ «____»,
-                            розташована за адресою: м. Київ, вул. ____________ __, ______
+                            Організатором Конкурсу є компанія ТОВ "{ orgName }",
+                            розташована за адресою: { orgAddress }
                             (тут і далі - Організатор).
                         </li>
                         <li>
@@ -68,7 +71,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                         <li>
                             Конкурс проводиться з метою привернення уваги осіб
-                            зацікавлених в IT-галузі до діяльності  ТОВ «____»,
+                            зацікавлених в IT-галузі до діяльності  ТОВ "{ orgName }",
                             сприяння розвитку інновацій та впровадження сучасних
                             технологій.
                         </li>
