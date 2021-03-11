@@ -78,9 +78,8 @@ public class ChatService {
         Chat.Message message = chat.getMessageById(messageId);
 
         if (message == null || !message.getRoom().equals(room)) {
-            throw new IllegalArgumentException(
-                    "There is no message with id: " + messageId +
-                            " in room with id: " + room);
+            throw exception("There is no message with id '%s' in room '%s'",
+                    messageId, room);
         }
         return PMessage.from(message);
     }
@@ -107,12 +106,14 @@ public class ChatService {
         boolean deleted = chat.deleteMessage(messageId, playerId);
 
         if (!deleted) {
-            throw new IllegalArgumentException(
-                    "Player: " + playerId +
-                    " cant delete message with id: " + messageId +
-                    " in room with id: " + room);
+            throw exception("Player '%s' cant delete message with id '%s' in room '%s'",
+                    playerId, messageId, room);
         }
 
-        return true;
+        return deleted;
+    }
+
+    public IllegalArgumentException exception(String message, Object... parameters) {
+        return new IllegalArgumentException(String.format(message, parameters));
     }
 }

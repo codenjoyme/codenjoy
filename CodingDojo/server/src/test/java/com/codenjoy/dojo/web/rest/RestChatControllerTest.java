@@ -176,8 +176,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         asUser("player2", "player2");
 
         assertDeleteError("java.lang.IllegalArgumentException: " +
-                        "Player: player2 cant delete message " +
-                        "with id: 1 in room with id: validRoom",
+                        "Player 'player2' cant delete message with id " +
+                        "'1' in room 'validRoom'",
                 "/rest/chat/validRoom/messages/1");
     }
 
@@ -185,8 +185,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldDeleteMessages_cantDeleteWhenNotExistsMessage() {
         // when then
         assertDeleteError("java.lang.IllegalArgumentException: " +
-                        "Player: player cant delete message " +
-                        "with id: 100500 in room with id: validRoom",
+                        "Player 'player' cant delete message with id " +
+                        "'100500' in room 'validRoom'",
                 "/rest/chat/validRoom/messages/100500");
     }
 
@@ -197,8 +197,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetMessage_whenPostIt() {
         // given
-        assertError("java.lang.IllegalArgumentException: There is no message " +
-                        "with id: 1 in room with id: validRoom",
+        assertError("java.lang.IllegalArgumentException: " +
+                        "There is no message with id " +
+                        "'1' in room 'validRoom'",
             "/rest/chat/validRoom/messages/1");
 
         // when
@@ -224,8 +225,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetMessage_whenNotExists() {
         // when then
         // вообще нет сообщения
-        assertError("java.lang.IllegalArgumentException: There is no message " +
-                        "with id: 100500 in room with id: validRoom",
+        assertError("java.lang.IllegalArgumentException: " +
+                        "There is no message with id " +
+                        "'100500' in room 'validRoom'",
                 "/rest/chat/validRoom/messages/100500");
     }
 
@@ -241,7 +243,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         asUser("otherPlayer", "otherPlayer");
 
         assertError("java.lang.IllegalArgumentException: " +
-                        "There is no message with id: 1 in room with id: otherRoom",
+                        "There is no message with id '1' in room 'otherRoom'",
                 "/rest/chat/otherRoom/messages/1");
     }
 
@@ -593,7 +595,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // then
         // all for topic 2 message in room
-        assertError("java.lang.IllegalArgumentException: There is no message with id: 2 in room with id: validRoom",
+        assertError("java.lang.IllegalArgumentException: " +
+                        "There is no message with id '2' in room 'validRoom'",
                 "/rest/chat/validRoom/messages/2/replies");
 
         // when
@@ -602,7 +605,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // then
         // all for topic 1 message in room
-        assertError("java.lang.IllegalArgumentException: There is no message with id: 1 in room with id: validRoom",
+        assertError("java.lang.IllegalArgumentException: " +
+                        "There is no message with id '1' in room 'validRoom'",
                 "/rest/chat/validRoom/messages/1/replies");
 
         // when then
