@@ -166,8 +166,11 @@ public class Chat {
         return message;
     }
 
-    public void deleteMessage(int id) {
-        pool.update("DELETE FROM messages WHERE id = ?", new Object[]{id});
+    public boolean deleteMessage(int id, String playerId) {
+        return 1 == pool.update("DELETE FROM messages " +
+                "WHERE id = ? " +
+                "AND player_id = ?",
+                new Object[]{id, playerId});
     }
 
     private static List<Message> parseMessages(ResultSet rs) throws SQLException {

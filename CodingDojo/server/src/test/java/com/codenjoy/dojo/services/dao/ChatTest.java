@@ -235,7 +235,7 @@ public class ChatTest {
                 chat.getMessages("room", 10).toString());
 
         // when
-        chat.deleteMessage(1);
+        assertEquals(true, chat.deleteMessage(1, "player1"));
 
         // then
         assertEquals("[Chat.Message(id=2, topicId=null, room=room, playerId=player1, time=1615235514756, text=message2), " +
@@ -244,7 +244,7 @@ public class ChatTest {
                 chat.getMessages("room", 10).toString());
 
         // when
-        chat.deleteMessage(3);
+        assertEquals(true, chat.deleteMessage(3, "player2"));
 
         // then
         assertEquals("[Chat.Message(id=2, topicId=null, room=room, playerId=player1, time=1615235514756, text=message2), " +
@@ -252,7 +252,7 @@ public class ChatTest {
                 chat.getMessages("room", 10).toString());
 
         // when
-        chat.deleteMessage(4);
+        assertEquals(true, chat.deleteMessage(4, "player3"));
 
         // then
         assertEquals("[Chat.Message(id=2, topicId=null, room=room, playerId=player1, time=1615235514756, text=message2)]",
@@ -262,7 +262,21 @@ public class ChatTest {
     @Test
     public void shouldDeleteMessageById_whenNotExists() {
         // when then
-        chat.deleteMessage(100500);
+        assertEquals(false, chat.deleteMessage(100500, "player"));
+    }
+
+    @Test
+    public void shouldDeleteMessageById_whenOtherPlayer() {
+        // given
+        chat.saveMessage(new Chat.Message("room", null, "player",
+                JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200"),
+                "message1"));
+
+        assertEquals("[Chat.Message(id=1, topicId=null, room=room, playerId=player, time=1615231423345, text=message1)]",
+                chat.getMessages("room", 10).toString());
+
+        // when then
+        assertEquals(false, chat.deleteMessage(1, "otherPlayer"));
     }
 
     @Test

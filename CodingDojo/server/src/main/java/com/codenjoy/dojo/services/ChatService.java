@@ -104,7 +104,14 @@ public class ChatService {
     public boolean deleteMessage(int messageId, String room, String playerId) {
         validator.checkPlayerInRoom(playerId, room);
 
-        chat.deleteMessage(messageId);
+        boolean deleted = chat.deleteMessage(messageId, playerId);
+
+        if (!deleted) {
+            throw new IllegalArgumentException(
+                    "Player: " + playerId +
+                    " cant delete message with id: " + messageId +
+                    " in room with id: " + room);
+        }
 
         return true;
     }
