@@ -51,7 +51,7 @@ public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThre
     }
 
     @Override
-    String getLastInsertedIdQuery(String table, String column) {
+    public String getLastInsertedIdQuery(String table, String column) {
         return "SELECT last_value FROM " + table + "_id_seq";
     }
 

@@ -33,14 +33,14 @@ public abstract class CrudPrimaryKeyConnectionThreadPool extends CrudConnectionT
 
     public Integer lastInsertId(String table, String column) {
         return select(getLastInsertedIdQuery(table, column),
-                rs -> rs.next() ? rs.getInt(1) : null);
+                rs -> rs.next() ? rs.getInt(1) + 1 : null);
     }
 
     /**
      * @return запрос который выдает для конкретной колонки {@param column}
      *         конкретной таблицы {@param table} последнюю сгенеренную айдишку
      */
-    abstract String getLastInsertedIdQuery(String table, String column);
+    public abstract String getLastInsertedIdQuery(String table, String column);
 
     void createDB(String query) {
         query = query.replaceAll("integer_primary_key", getPkDirective());

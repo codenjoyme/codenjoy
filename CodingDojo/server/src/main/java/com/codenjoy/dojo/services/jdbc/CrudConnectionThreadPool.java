@@ -23,10 +23,8 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -83,6 +81,44 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
             } catch (SQLException e) {
                 throw new RuntimeException(String.format("Error when update '%s': %s", query, e));
             }
+        });
+    }
+
+    public List<Object> batch(List<String> queries, List<Object[]> parameters, List<ObjectMapper<?>> mapper) {
+        return run(connection -> {
+            List<Object> result = new LinkedList<>();
+            try {
+                connection.setAutoCommit(false);
+                for (int index = 0; index < queries.size(); index++) {
+                    String query = queries.get(index);
+                    Object[] objects = parameters.get(index);
+                    ObjectMapper<?> objectMapper = (index < mapper.size()) ? mapper.get(index) : null;
+                    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                        for (int jndex = 0; jndex < objects.length; jndex++) {
+                            stmt.setObject(jndex + 1, objects[jndex]);
+                        }
+                        if (query.toUpperCase().startsWith("SELECT")) {
+                            stmt.addBatch();
+                            ResultSet resultSet = stmt.executeQuery();
+                            result.add((objectMapper == null) ? null : objectMapper.mapFor(resultSet));
+                        } else {
+                            int count = stmt.executeUpdate();
+                            result.add(count);
+                        }
+                    }
+                }
+                connection.commit();
+            } catch (SQLException e) {
+                throw new RuntimeException(String.format("Error when update '%s': %s", queries, e));
+            } finally {
+                try {
+                    // т.к. конекшены шерятся между потоками, то надо возвращать как было в любом случае
+                    connection.setAutoCommit(true);
+                } catch (SQLException e2) {
+                    throw new RuntimeException(String.format("Error when update '%s': %s", queries, e2));
+                }
+            }
+            return result;
         });
     }
 }

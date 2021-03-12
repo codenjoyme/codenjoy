@@ -68,7 +68,7 @@ public class SqliteConnectionThreadPool extends CrudPrimaryKeyConnectionThreadPo
     }
 
     @Override
-    String getLastInsertedIdQuery(String table, String column) {
+    public String getLastInsertedIdQuery(String table, String column) {
         return "select last_insert_rowid()";
     }
 
