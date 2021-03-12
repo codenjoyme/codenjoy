@@ -52,7 +52,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
         if (settings.bool(MAX_SCORE_MODE)) {
             return new MaxScores((Integer) score, settings);
         } else {
-            return new Scores((Integer) score, settings);
+            return new Scores(Integer.valueOf(score.toString()), settings);
         }
     }
 
