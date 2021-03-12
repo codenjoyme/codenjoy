@@ -55,6 +55,14 @@ function initChat(contextPath) {
                 messageId = beforeId;
                 after = false;
             }
+
+            // когда мы грузим в диапазоне значений, это мы догружаем новые сообщения
+            // нам нужно подгрузить в чат (afterId, beforeId] но пришло [afterId, beforeId]
+            // потому и удаляем afterId который у нас уже есть в чате
+            if (inclusive && !!afterId && !!beforeId) {
+                messages.shift();
+            }
+
             if (messages.length == 0) {
                 // если ничего не пришло и грузим мы начало чата
                 // значит это самое первое сообщение в чате - больше его загружать не будем
@@ -133,18 +141,23 @@ function initChat(contextPath) {
         });
     }
 
+
+    function getFirstMessageId() {
+        return messages.children("div [message]").first().attr("message");
+    }
+
+    function getLastMessageId() {
+        return messages.children("div [message]").last().attr("message");
+    }
+
     function loadBefore(){
-        let beforeId = messages.children("div [message]").first().attr("message");
-        loadChatMessages(function() {
-            console.log('loaded');
-        }, null, beforeId, false);
+        let beforeId = getFirstMessageId();
+        loadChatMessages(null, null, beforeId, false);
     }
 
     function loadAfter(){
-        let afterId = messages.children("div [message]").last().attr("message");
-        loadChatMessages(function () {
-            console.log('loaded');
-        }, afterId, null, false);
+        let afterId = getLastMessageId();
+        loadChatMessages(null, afterId, null, false);
     }
 
     function initScrolling() {
@@ -157,6 +170,20 @@ function initChat(contextPath) {
                 loadBefore();
             } else if ((scrollHeight - scrollTop) == outerHeight) {
                 loadAfter();
+            }
+        });
+    }
+
+    function listenNewMessages() {
+        $('body').bind("board-updated", function(event, data) {
+            if (setup.playerId == '' || !data[setup.playerId]) {
+                return;
+            }
+
+            var real = data[setup.playerId].lastChatMessage;
+            var current = getLastMessageId();
+            if (real > current) {
+                loadChatMessages(null, current, real, true);
             }
         });
     }
@@ -174,6 +201,7 @@ function initChat(contextPath) {
     loadChatMessages();
     initPost();
     initScrolling();
+    listenNewMessages();
 
     chat.show();
     chatTab.show();

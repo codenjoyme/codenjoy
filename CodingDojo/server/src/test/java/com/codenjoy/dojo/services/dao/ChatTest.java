@@ -80,6 +80,36 @@ public class ChatTest {
     }
 
     @Test
+    public void shouldGetLastMessageId() {
+        // when then
+        assertEquals(null, chat.getLastMessageId("room1"));
+
+        // when then
+        addMessage("room1", "player1"); // id = 1
+        assertEquals(Integer.valueOf(1), chat.getLastMessageId("room1"));
+
+        // when then
+        addMessage("room1", "player1"); // id = 2
+        assertEquals(Integer.valueOf(2), chat.getLastMessageId("room1"));
+
+        // when then
+        addMessage("room1", "player2"); // id = 3
+        assertEquals(Integer.valueOf(3), chat.getLastMessageId("room1"));
+        assertEquals(null, chat.getLastMessageId("room2"));
+
+        // when then
+        addMessage("room2", "player2"); // id = 4 // не включен - другая комната
+        assertEquals(Integer.valueOf(3), chat.getLastMessageId("room1"));
+        assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
+
+        // when then
+        addMessage("room1", "player2"); // id = 5
+        assertEquals(Integer.valueOf(5), chat.getLastMessageId("room1"));
+        assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
+        assertEquals(null, chat.getLastMessageId("room3"));
+    }
+
+    @Test
     public void shouldGetAllMessages_onlyForThisRoom_whenRequestedMoreThanPresent() {
         // given
         addMessage("room1", "player1"); // id = 1

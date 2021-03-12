@@ -50,7 +50,7 @@ public class ScreenResponseHandlerTest {
     private PlayerSocket socket;
 
     @Before
-    public void setup() throws Exception {
+    public void setup() {
         transport = mock(PlayerTransport.class);
         player = new Player();
         handler = new ScreenResponseHandler(transport, player);
@@ -87,6 +87,7 @@ public class ScreenResponseHandlerTest {
                 "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info2',\n" +
+                "    'lastChatMessage':2,\n" +
                 "    'score':546,\n" +
                 "    'scores':{\n" +
                 "      'player1':100,\n" +
@@ -104,6 +105,7 @@ public class ScreenResponseHandlerTest {
                 "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info4',\n" +
+                "    'lastChatMessage':4,\n" +
                 "    'score':765,\n" +
                 "    'scores':{\n" +
                 "      'player4':400\n" +
@@ -147,6 +149,7 @@ public class ScreenResponseHandlerTest {
                 "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info1',\n" +
+                "    'lastChatMessage':1,\n" +
                 "    'score':134,\n" +
                 "    'scores':{\n" +
                 "      'player1':100\n" +
@@ -163,6 +166,7 @@ public class ScreenResponseHandlerTest {
                 "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info2',\n" +
+                "    'lastChatMessage':2,\n" +
                 "    'score':546,\n" +
                 "    'scores':{\n" +
                 "      'player2':200\n" +
@@ -179,6 +183,7 @@ public class ScreenResponseHandlerTest {
                 "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info4',\n" +
+                "    'lastChatMessage':4,\n" +
                 "    'score':765,\n" +
                 "    'scores':{\n" +
                 "      'player4':400\n" +
@@ -217,6 +222,7 @@ public class ScreenResponseHandlerTest {
                 "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info3',\n" +
+                "    'lastChatMessage':3,\n" +
                 "    'score':235,\n" +
                 "    'scores':{\n" +
                 "      'player3':300\n" +
@@ -256,6 +262,7 @@ public class ScreenResponseHandlerTest {
                 "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info2',\n" +
+                "    'lastChatMessage':2,\n" +
                 "    'score':546,\n" +
                 "    'scores':{\n" +
                 "      'player1':100,\n" +
@@ -272,25 +279,25 @@ public class ScreenResponseHandlerTest {
         player1.setGame("game");
         map.put(player1, new PlayerData(10, "some_board1", "game",
                 134, "some_info1", new JSONObject("{'player1':100,'player2':200}"),
-                new JSONObject("{'coordinates':'coordinates1','group':['player1','player2']}")));
+                new JSONObject("{'coordinates':'coordinates1','group':['player1','player2']}"), 1));
 
         Player player2 = new Player("player2");
         player2.setGame("game");
         map.put(player2, new PlayerData(12, "some_board2", "game",
                 546, "some_info2", new JSONObject("{'player1':100,'player2':200}"),
-                new JSONObject("{'coordinates':'coordinates1','group':['player1','player2']}")));
+                new JSONObject("{'coordinates':'coordinates1','group':['player1','player2']}"), 2));
 
         Player player4 = new Player("player4");
         player4.setGame("game");
         map.put(player4, new PlayerData(45, "some_board4", "game",
                 765, "some_info4", new JSONObject("{'player4':400}"),
-                new JSONObject("{'coordinates':'coordinates4','group':['player4']}")));
+                new JSONObject("{'coordinates':'coordinates4','group':['player4']}"), 4));
 
         Player player3 = new Player("player3");
         player3.setGame("other_game");
         map.put(player3, new PlayerData(14, "some_board3", "other_game",
                 235, "some_info3", new JSONObject("{'player3':300}"),
-                new JSONObject("{'coordinates':'coordinates1','group':['player3']}")));
+                new JSONObject("{'coordinates':'coordinates1','group':['player3']}"), 3));
 
         return map;
     }

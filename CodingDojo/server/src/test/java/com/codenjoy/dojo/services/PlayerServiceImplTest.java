@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.PlayerController;
 import com.codenjoy.dojo.services.controller.ScreenController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
@@ -117,6 +118,9 @@ public class PlayerServiceImplTest {
     private GameService gameService;
 
     @MockBean
+    private Chat chat;
+
+    @MockBean
     private Semifinal semifinal;
 
     @MockBean
@@ -165,6 +169,8 @@ public class PlayerServiceImplTest {
         when(gameService.getGameType(anyString())).thenReturn(gameType);
         when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
         when(gameService.exists(anyString())).thenReturn(true);
+
+        when(chat.getLastMessageId(anyString())).thenReturn(123);
 
         when(gameType.getBoardSize(any())).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt(), any())).thenAnswer(inv -> {
@@ -423,7 +429,8 @@ public class PlayerServiceImplTest {
                         "'coordinates':{'petya':{'coordinate':{'x':3,'y':4},'level':0,'multiplayer':false}}," +
                         "'group':['petya']," +
                         "'readableNames':{'petya':'readable_petya'}" +
-                        "}'], " +
+                        "}', " +
+                    "LastChatMessage:123], " +
                 "vasya=PlayerData[" +
                     "BoardSize:15, Board:'ABCD', Game:'game', " +
                     "Score:123, Info:'', " +
@@ -432,7 +439,8 @@ public class PlayerServiceImplTest {
                         "'coordinates':{'vasya':{'coordinate':{'x':1,'y':2},'level':0,'multiplayer':false}}," +
                         "'group':['vasya']," +
                         "'readableNames':{'vasya':'readable_vasya'}" +
-                        "}']}",
+                        "}', " +
+                    "LastChatMessage:123]}",
                 data.toString().replaceAll("\"", "'"));
     }
 

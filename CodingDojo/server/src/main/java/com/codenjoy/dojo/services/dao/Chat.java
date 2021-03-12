@@ -73,6 +73,16 @@ public class Chat {
         );
     }
 
+    public Integer getLastMessageId(String room) {
+        return pool.select("SELECT id FROM messages " +
+                        "WHERE room = ? " +
+                        "ORDER BY time DESC " +
+                        "LIMIT 1;",
+                new Object[]{room},
+                rs -> rs.next() ? rs.getInt(1) : null
+        );
+    }
+
     /**
      * @return Все соообщения текущего топика (родительского сообщения) {@param messageId},
      *        посортированных в порядке возрастания времени

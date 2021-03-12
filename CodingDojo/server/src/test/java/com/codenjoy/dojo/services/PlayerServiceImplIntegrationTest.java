@@ -26,6 +26,7 @@ import com.codenjoy.dojo.client.*;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
@@ -54,6 +55,7 @@ public class PlayerServiceImplIntegrationTest {
     private ConfigProperties config;
     private ActionLogger actionLogger;
     private AutoSaver autoSaver;
+    private Chat chat;
     private GameSaver saver;
     private GameService gameService;
     private Controller screenController;
@@ -84,6 +86,9 @@ public class PlayerServiceImplIntegrationTest {
 
                 PlayerServiceImplIntegrationTest.this.saver
                         = this.saver = mock(GameSaver.class);
+
+                PlayerServiceImplIntegrationTest.this.chat
+                        = this.chat = mock(Chat.class);
 
                 PlayerServiceImplIntegrationTest.this.actionLogger
                         = this.actionLogger = mock(ActionLogger.class);
@@ -126,6 +131,8 @@ public class PlayerServiceImplIntegrationTest {
                 inv -> getOrCreateGameType(inv.getArgument(0))
         );
         when(gameService.exists(anyString())).thenReturn(true);
+
+        when(chat.getLastMessageId(anyString())).thenReturn(123);
 
         // первый плеер зарегался (у него сейвов нет)
         when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);
