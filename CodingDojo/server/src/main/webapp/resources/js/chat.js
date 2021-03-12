@@ -21,9 +21,36 @@
  */
 function initChat(contextPath) {
 
-    function loadChatMessages(onLoad) {
-        loadData('/rest/chat/' + setup.room + '/messages', function (messages) {
-            appendMessages(messages);
+    function loadChatMessages(onLoad, afterId, beforeId, inclusive) {
+        var params = '';
+
+        var ch = function() {
+            return (!!params) ? '&' : '?';
+        }
+
+        if (!!afterId) {
+            params += ch() + "afterId=" + afterId;
+        }
+        if (!!beforeId) {
+            params += ch() + "beforeId=" + beforeId;
+        }
+        if (!!inclusive) {
+            params += ch() + "inclusive=" + inclusive;
+        }
+        loadData('/rest/chat/' + setup.room + '/messages' + params, function (messages) {
+            if (messages.length == 0) {
+                return;
+            }
+            var messageId = null;
+            var after = true;
+            if (!!afterId) {
+                messageId = afterId;
+                after = true;
+            } else if (!!beforeId) {
+                messageId = beforeId;
+                after = false;
+            }
+            appendMessages(messages, messageId, after);
 
             if (!!onLoad) {
                 onLoad(messages);
@@ -31,7 +58,7 @@ function initChat(contextPath) {
         });
     }
 
-    function appendMessages(messages) {
+    function appendMessages(messages, messageId, isAfterOrBefore) {
         var templateData = [];
         messages.forEach(function (message) {
             var id = message.id;
@@ -52,9 +79,15 @@ function initChat(contextPath) {
                 dateTime: dateTime
             });
         });
-        $('#chat-container script')
-            .tmpl(templateData)
-            .appendTo('#chat-container');
+        var html = $('#chat script').tmpl(templateData);
+
+        if (!messageId) {
+            html.appendTo('#chat-container');
+        } else if (isAfterOrBefore) {
+            html.insertAfter('div[message=' + messageId + ']');
+        } else {
+            html.insertBefore('div[message=' + messageId + ']');
+        }
     }
 
     function escapeHtml(data) {
@@ -86,6 +119,34 @@ function initChat(contextPath) {
         });
     }
 
+    function loadBefore(){
+        let beforeId = messages.children("div [message]").first().attr("message");
+        loadChatMessages(function() {
+            console.log('loaded');
+        }, null, beforeId, false);
+    }
+
+    function loadAfter(){
+        let afterId = messages.children("div [message]").last().attr("message");
+        loadChatMessages(function () {
+            console.log('loaded');
+        }, afterId, null, false);
+    }
+
+    function initScrolling() {
+        messages.scroll(function() {
+            var el = $(this);
+            var scrollTop = el.scrollTop();
+            var scrollHeight = el[0].scrollHeight;
+            var outerHeight = el.outerHeight();
+            if (scrollTop == 0) {
+                loadBefore();
+            } else if ((scrollHeight - scrollTop) == outerHeight) {
+                loadAfter();
+            }
+        });
+    }
+
     if (!setup.enableChat || !setup.authenticated) {
         return;
     }
@@ -98,6 +159,7 @@ function initChat(contextPath) {
 
     loadChatMessages();
     initPost();
+    initScrolling();
 
     chat.show();
     chatTab.show();
