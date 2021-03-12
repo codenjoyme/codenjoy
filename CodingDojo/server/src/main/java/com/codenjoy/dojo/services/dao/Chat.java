@@ -32,6 +32,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Chat {
@@ -161,21 +162,26 @@ public class Chat {
         );
     }
 
-    public synchronized Message saveMessage(Message message) {
-        // synchronized тут потому что создание записи и получение новой id
-        // созданной записи должны быть одной атомарной операцией
-        pool.update("INSERT INTO messages " +
+    public Message saveMessage(Message message) {
+        List<Object> objects = pool.batch(Arrays.asList("INSERT INTO messages " +
                         "(room, topic_id, player_id, time, text) " +
                         "VALUES (?, ?, ?, ?, ?);",
-                new Object[]{
-                        message.getRoom(),
-                        message.getTopicId(),
-                        message.getPlayerId(),
-                        JDBCTimeUtils.toString(new Date(message.getTime())),
-                        message.getText()
-                }
-        );
-        message.setId(pool.lastInsertId("messages", "id"));
+                pool.getLastInsertedIdQuery("messages", "id")),
+
+                Arrays.asList(new Object[]{
+                                message.getRoom(),
+                                message.getTopicId(),
+                                message.getPlayerId(),
+                                JDBCTimeUtils.toString(new Date(message.getTime())),
+                                message.getText()
+                        },
+                        new Object[]{}),
+
+                Arrays.asList(null,
+                        rs -> rs.next() ? rs.getInt(1) : null));
+
+
+        message.setId((Integer) objects.get(1));
         return message;
     }
 
