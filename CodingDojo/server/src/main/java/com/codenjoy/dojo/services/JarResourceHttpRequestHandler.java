@@ -99,8 +99,10 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
             Map<String, File> jars = jarsCache.get(jarFolder);
             File directory = new File(jarFolder);
             File[] files = directory.listFiles((dir, name) -> name.endsWith("." + JAR));
-            Arrays.stream(files)
-                    .forEach(file -> jars.put(file.getName().split("[\\.\\-_]")[0], file));
+            if (files != null) {
+                Arrays.stream(files)
+                        .forEach(file -> jars.put(file.getName().split("[\\.\\-_]")[0], file));
+            }
         }
 
         Map<String, File> jars = jarsCache.get(jarFolder);
