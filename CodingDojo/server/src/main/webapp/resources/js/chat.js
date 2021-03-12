@@ -21,8 +21,16 @@
  */
 function initChat(contextPath) {
 
+    var firstMessageInChat = null;
+
     function loadChatMessages(onLoad, afterId, beforeId, inclusive) {
         var params = '';
+
+        // если грузили уже с таким beforeId и сообщений больше не приходило
+        // значит это самое первое сообщение в чате, нефиг больше грузить
+        if (!!firstMessageInChat && firstMessageInChat == beforeId) {
+            return;
+        }
 
         var ch = function() {
             return (!!params) ? '&' : '?';
@@ -38,9 +46,6 @@ function initChat(contextPath) {
             params += ch() + "inclusive=" + inclusive;
         }
         loadData('/rest/chat/' + setup.room + '/messages' + params, function (messages) {
-            if (messages.length == 0) {
-                return;
-            }
             var messageId = null;
             var after = true;
             if (!!afterId) {
@@ -50,6 +55,15 @@ function initChat(contextPath) {
                 messageId = beforeId;
                 after = false;
             }
+            if (messages.length == 0) {
+                // если ничего не пришло и грузим мы начало чата
+                // значит это самое первое сообщение в чате - больше его загружать не будем
+                if (!after && !firstMessageInChat) {
+                    firstMessageInChat = messageId;
+                }
+                return;
+            }
+
             appendMessages(messages, messageId, after);
 
             if (!!onLoad) {
