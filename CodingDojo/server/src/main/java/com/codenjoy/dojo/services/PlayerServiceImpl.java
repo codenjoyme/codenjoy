@@ -346,11 +346,12 @@ public class PlayerServiceImpl implements PlayerService {
         cacheBoards.clear();
 
         Map<String, GameData> gameDataMap = playerGamesView.getGamesDataMap();
+        Map<String, Integer> lastChatIds = chat.getLastMessageIds();
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
             try {
-                Integer lastChatMessage = chat.getLastMessageId(player.getRoom());
+                Integer lastChatMessage = lastChatIds.get(player.getRoom());
 
                 String gameType = playerGame.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());

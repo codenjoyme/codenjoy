@@ -83,30 +83,98 @@ public class ChatTest {
     public void shouldGetLastMessageId() {
         // when then
         assertEquals(null, chat.getLastMessageId("room1"));
+        assertEquals("{}",
+                chat.getLastMessageIds().toString());
 
         // when then
         addMessage("room1", "player1"); // id = 1
         assertEquals(Integer.valueOf(1), chat.getLastMessageId("room1"));
+        assertEquals("{room1=1}",
+                chat.getLastMessageIds().toString());
 
         // when then
         addMessage("room1", "player1"); // id = 2
         assertEquals(Integer.valueOf(2), chat.getLastMessageId("room1"));
+        assertEquals("{room1=2}",
+                chat.getLastMessageIds().toString());
 
         // when then
         addMessage("room1", "player2"); // id = 3
         assertEquals(Integer.valueOf(3), chat.getLastMessageId("room1"));
         assertEquals(null, chat.getLastMessageId("room2"));
+        assertEquals("{room1=3}",
+                chat.getLastMessageIds().toString());
 
         // when then
         addMessage("room2", "player2"); // id = 4 // не включен - другая комната
         assertEquals(Integer.valueOf(3), chat.getLastMessageId("room1"));
         assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
+        assertEquals("{room1=3, room2=4}",
+                chat.getLastMessageIds().toString());
 
         // when then
         addMessage("room1", "player2"); // id = 5
         assertEquals(Integer.valueOf(5), chat.getLastMessageId("room1"));
         assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
         assertEquals(null, chat.getLastMessageId("room3"));
+        assertEquals("{room1=5, room2=4}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        addMessage("room3", "player1"); // id = 6
+        assertEquals(Integer.valueOf(5), chat.getLastMessageId("room1"));
+        assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
+        assertEquals(Integer.valueOf(6), chat.getLastMessageId("room3"));
+        assertEquals("{room1=5, room2=4, room3=6}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        chat.deleteMessage(6, "player1");
+        assertEquals(Integer.valueOf(5), chat.getLastMessageId("room1"));
+        assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
+        assertEquals(null, chat.getLastMessageId("room3"));
+        assertEquals("{room1=5, room2=4}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        chat.deleteMessage(5, "player2");
+        assertEquals(Integer.valueOf(3), chat.getLastMessageId("room1"));
+        assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
+        assertEquals(null, chat.getLastMessageId("room3"));
+        assertEquals("{room1=3, room2=4}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        chat.deleteMessage(4, "player2");
+        assertEquals(Integer.valueOf(3), chat.getLastMessageId("room1"));
+        assertEquals(null, chat.getLastMessageId("room2"));
+        assertEquals(null, chat.getLastMessageId("room3"));
+        assertEquals("{room1=3}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        chat.deleteMessage(3, "player2");
+        assertEquals(Integer.valueOf(2), chat.getLastMessageId("room1"));
+        assertEquals(null, chat.getLastMessageId("room2"));
+        assertEquals(null, chat.getLastMessageId("room3"));
+        assertEquals("{room1=2}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        chat.deleteMessage(2, "player1");
+        assertEquals(Integer.valueOf(1), chat.getLastMessageId("room1"));
+        assertEquals(null, chat.getLastMessageId("room2"));
+        assertEquals(null, chat.getLastMessageId("room3"));
+        assertEquals("{room1=1}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        chat.deleteMessage(1, "player1");
+        assertEquals(null, chat.getLastMessageId("room1"));
+        assertEquals(null, chat.getLastMessageId("room2"));
+        assertEquals(null, chat.getLastMessageId("room3"));
+        assertEquals("{}",
+                chat.getLastMessageIds().toString());
     }
 
     @Test

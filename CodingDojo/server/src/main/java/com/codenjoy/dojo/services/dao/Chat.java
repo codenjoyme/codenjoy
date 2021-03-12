@@ -27,13 +27,12 @@ import com.codenjoy.dojo.services.jdbc.CrudPrimaryKeyConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import lombok.Builder;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Chat {
     private final CrudPrimaryKeyConnectionThreadPool pool;
@@ -74,13 +73,31 @@ public class Chat {
     }
 
     public Integer getLastMessageId(String room) {
-        return pool.select("SELECT id FROM messages " +
+        return pool.select("SELECT id " +
+                        "FROM messages " +
                         "WHERE room = ? " +
                         "ORDER BY time DESC " +
                         "LIMIT 1;",
                 new Object[]{room},
-                rs -> rs.next() ? rs.getInt(1) : null
-        );
+                rs -> rs.next() ? rs.getInt(1) : null);
+    }
+
+    public Map<String, Integer> getLastMessageIds() {
+        return pool.select("SELECT room, id, MAX(time) as max_time " +
+                        "FROM messages " +
+                        "GROUP BY room " +
+                        "ORDER BY room ASC;",
+                new Object[]{},
+                rs -> toMap(rs));
+    }
+
+    @SneakyThrows
+    public Map<String, Integer> toMap(ResultSet rs) {
+        return new LinkedHashMap<>(){{
+           while (rs.next()) {
+                put(rs.getString("room"), rs.getInt("id"));
+           }
+        }};
     }
 
     /**
