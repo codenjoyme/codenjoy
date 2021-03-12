@@ -34,8 +34,8 @@ pages.rules = function() {
     });
 
 
-    game.gameName = parts[parts.length - 1].split('.')[0].split('-')[0];
-    game.contextPath = '/' + contextPath;
+    setup.game = parts[parts.length - 1].split('.')[0].split('-')[0];
+    setup.contextPath = '/' + contextPath;
 
     initHotkeys();
 }

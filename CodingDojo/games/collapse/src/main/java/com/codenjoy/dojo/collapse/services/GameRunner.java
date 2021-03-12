@@ -35,31 +35,31 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 
-public class GameRunner extends AbstractGameType implements GameType {
+import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.FIELD_SIZE;
 
-    private final Parameter<Integer> size;
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    public GameRunner() {
-        new Scores(0, settings);
-        size = settings.addEditBox("Field size").type(Integer.class).def(30);
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer) score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        Integer size = settings.getParameter("Field size").type(Integer.class).getValue();
-        LevelBuilder builder = new LevelBuilder(getDice(), size);
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        LevelBuilder builder = new LevelBuilder(getDice(),
+                getBoardSize(settings).getValue());
         Level level = new LevelImpl(builder.getBoard());
-        return new Collapse(level, getDice());
+        return new Collapse(level, getDice(), settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return size;
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return settings.integerValue(FIELD_SIZE);
     }
 
     @Override
@@ -83,12 +83,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.SINGLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 }

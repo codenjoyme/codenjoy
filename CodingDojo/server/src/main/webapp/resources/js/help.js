@@ -22,12 +22,12 @@
 pages = pages || {};
 
 pages.help = function() {
-    game.contextPath = getSettings('contextPath');
+    setup.contextPath = getSettings('contextPath');
 
     $("#games").change(function () {
         var val = $("#games").val();
         if (val == '') return;
-        window.location.href = game.contextPath + "/resources/user/" + val + "-servers.zip";
+        window.location.href = setup.contextPath + "/resources/user/" + val + "-servers.zip";
     });
 
     initHotkeys();

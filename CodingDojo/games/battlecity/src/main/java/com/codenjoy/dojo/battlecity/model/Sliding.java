@@ -22,37 +22,49 @@ package com.codenjoy.dojo.battlecity.model;
  * #L%
  */
 
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.settings.SettingsReader;
+
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PRIZE_WORKING;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.SLIPPERINESS;
 
 public class Sliding {
 
-    public final int slipperiness;
-    private final int prizeWorking;
-    private final Field field;
-
+    private Field field;
     private int tick;
     private int tickTankOnIceWithPrize;
     private Direction before;
 
-    public Sliding(Field field, Direction before) {
+    private GameSettings settings;
+
+    public Sliding(Field field, Direction before, GameSettings settings) {
         this.field = field;
         this.before = before;
-        this.slipperiness = field.slipperiness();
-        this.prizeWorking = field.prizeWorking();
+        this.settings = settings;
+    }
+
+    private int slipperiness() {
+        return settings.integer(SLIPPERINESS);
+    }
+
+    private int prizeWorking() {
+        return settings.integer(PRIZE_WORKING);
     }
 
     public Direction act(Tank tank) {
-        if (!field.isIce(tank) || slipperiness == 0) {
+
+        if (!field.isIce(tank) || slipperiness() == 0) {
             tick = 0;
             return before = tank.getDirection();
         }
 
-        if (tickTankOnIceWithPrize == prizeWorking) {
+        if (tickTankOnIceWithPrize == prizeWorking()) {
             tickTankOnIceWithPrize = 0;
             return before;
         }
 
-        if (tick == slipperiness) {
+        if (tick == slipperiness()) {
             tick = 0;
             before = tank.getDirection();
         } else {
@@ -66,6 +78,6 @@ public class Sliding {
     }
 
     public void stop() {
-        tick = slipperiness;
+        tick = slipperiness();
     }
 }

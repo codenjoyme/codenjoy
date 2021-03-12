@@ -19,6 +19,9 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+var setup = setup || {};
+
 var onlyBoard = window.location.href.includes("only=true");
 
 var getQuestionCoordinate = function(x, y) {
@@ -45,7 +48,7 @@ function unescapeUnicode(unicode) {
     return decodeURIComponent(temp).split("\\\"").join("\"");
 }
 
-game.drawBoard = function(drawer) {
+setup.drawBoard = function(drawer) {
     drawer.clear();
     var centerX = (drawer.canvas.width() / drawer.canvas.plotSize())/2;
 

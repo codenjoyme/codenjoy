@@ -19,10 +19,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initRunnerJs(game, libs, getLevelInfo, storage) {
+function initRunnerJs(setup, libs, getLevelInfo, storage) {
     
-    if (game.debug) {
-        game.debugger();
+    if (setup.debug) {
+        setup.debugger();
     }
     
     var starting = true;
@@ -41,19 +41,19 @@ function initRunnerJs(game, libs, getLevelInfo, storage) {
     var editor = initEditor(libs, 'ide-block', autocomplete);
 
     editor.on('focus', function() {
-        game.savedEnableJoystick = game.enableJoystick;
-        game.enableJoystick = false;
+        setup.savedEnableJoystick = setup.enableJoystick;
+        setup.enableJoystick = false;
     });
 
     editor.on('blur', function() {
-        game.enableJoystick = !!game.savedEnableJoystick;
-        game.savedEnableJoystick = null;
+        setup.enableJoystick = !!setup.savedEnableJoystick;
+        setup.savedEnableJoystick = null;
     });
 
     var typeCounter = 0;
     var clean = null;
     editor.on('change', function() {
-        if (!game.code) {
+        if (!setup.code) {
             return;
         }
 
@@ -67,7 +67,7 @@ function initRunnerJs(game, libs, getLevelInfo, storage) {
     });
 
     $('body').bind("tick", function() {
-        if (!game.code) {
+        if (!setup.code) {
             return;
         }
 
@@ -142,7 +142,7 @@ function initRunnerJs(game, libs, getLevelInfo, storage) {
         },
         setStubValue : function() {
             editor.setValue('function program(robot) {\n' +
-                    '    // PLEASE REGISTER\n' +
+                    '    // PLEASE LOGIN\n' +
                     '}');
         },
         compileProgram : function(robot) {

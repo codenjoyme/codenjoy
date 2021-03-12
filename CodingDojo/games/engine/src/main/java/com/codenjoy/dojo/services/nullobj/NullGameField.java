@@ -25,6 +25,8 @@ package com.codenjoy.dojo.services.nullobj;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 public final class NullGameField implements GameField {
 
@@ -47,6 +49,11 @@ public final class NullGameField implements GameField {
     @Override
     public void remove(GamePlayer player) {
         // do nothing
+    }
+
+    @Override
+    public SettingsReader settings() {
+        return null;
     }
 
     @Override

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.collapse.model;
 
 
 import com.codenjoy.dojo.collapse.services.Events;
+import com.codenjoy.dojo.collapse.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -44,9 +45,11 @@ public class Collapse implements Field {
     private Container<Point, Wall> walls;
 
     private boolean gameOver;
+    private GameSettings settings;
 
-    public Collapse(Level level, Dice dice) {
+    public Collapse(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
+        this.settings = settings;
         cells = new Container(level.getCells());
         walls = new Container(level.getWalls());
         size = level.getSize();
@@ -206,5 +209,10 @@ public class Collapse implements Field {
                 }};
             }
         };
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 }

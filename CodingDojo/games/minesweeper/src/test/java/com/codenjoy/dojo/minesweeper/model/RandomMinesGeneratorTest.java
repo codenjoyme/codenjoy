@@ -23,9 +23,11 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -37,6 +39,16 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 public class RandomMinesGeneratorTest {
+
+    private GameSettings settings;
+
+    @Before
+    public void setup() {
+        settings = new GameSettings()
+                .integer(GameSettings.Keys.BOARD_SIZE, 16)
+                .integer(GameSettings.Keys.MINES_ON_BOARD, 0)
+                .integer(GameSettings.Keys.DETECTOR_CHARGE, 1);
+    }
 
     @Test
     public void shouldMinesRandomPlacedOnBoard() {
@@ -92,12 +104,8 @@ public class RandomMinesGeneratorTest {
 
     private class MockBoard extends Minesweeper {
         public MockBoard() {
-            super(v(16), v(0), v(1), new MinesGenerator() {
-                public List<Mine> get(int count, Field board) {
-                    return Arrays.asList();
-                }
-            });
-            newGame(new Player(mock(EventListener.class)));
+            super((count, board) -> Arrays.asList(), settings);
+            newGame(new Player(mock(EventListener.class), settings));
         }
     }
 }

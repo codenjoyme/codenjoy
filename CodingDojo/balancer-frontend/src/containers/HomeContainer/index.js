@@ -8,9 +8,7 @@ import First from '../../styles/images/prizes/first.png';
 import Second from '../../styles/images/prizes/second.png';
 import Third from '../../styles/images/prizes/third.png';
 import Icon from '../../styles/images/icons/rules.svg';
-import StepWinHeader from '../../styles/images/layout/presents.png';
-import stepBattleHeader from '../../styles/images/layout/battle.png';
-import stepCreateHeader from '../../styles/images/layout/create.png';
+import Game from '../../games'
 
 // own
 import Styles from './styles.module.css';
@@ -24,17 +22,17 @@ const registerEndDate = process.env.REACT_APP_EVENT_REGISTER_END_DATE;
 
 const HomeContainer = () => (
     <div className='container'>
-        <div className={ Styles.homeTitle }>
+        <div className={ Styles.homeTitle } style={{ backgroundImage: `url("${Game.dark}")` }}>
             <div className={ Styles.mainText }>Створи розумного бота</div>
             <div className={ Styles.subText }>Змагайся з іншими учасниками</div>
             <div className={ Styles.subText }>Вигравай один із трьох призів</div>
             <div className={ Styles.prizeList }>
-                <img className={ Styles.prizeImage } src={ First } alt='PS4'
-                     title='Iгрова консоль PlayStation 4 Pro 1TB'/>
-                <img className={ Styles.prizeImage } src={ Second } alt='SegaMegaDriveMini'
-                     title='Iгрова консоль Sega Mega Drive Mini'/>
+                <img className={ Styles.prizeImage } src={ First } alt='PS5'
+                     title='Iгрова консоль PlayStation 5 Pro 1TB'/>
+                <img className={ Styles.prizeImage } src={ Second } alt='NintendoSwitchLite'
+                     title='Ігрова консоль Nintendo Switch Lite (Yellow)'/>
                 <img className={ Styles.prizeImage } src={ Third } alt='HobbyWorldFallout'
-                     title='Настільна гра Hobby World Fallout'/>
+                     title='Настільна гра Hobby World Fallout'/>
             </div>
             <Link to={ book.rules } className={ Styles.acceptButton }>
                 Виклик прийнято
@@ -45,22 +43,22 @@ const HomeContainer = () => (
             <div className={ Styles.guideContainer }>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.steps }>
-                        <img src={ stepCreateHeader } alt='Створи' />
+                        <img src={ Game.stepCreateHeader } alt='Створи' />
                     </div>
                     <div className={ Styles.stepTitle }>СТВОРИ</div>
                     <div className={ Styles.stepDescription }>
                         <div>
-                            Завантаж проект гри
+                            Завантаж проєкт гри
                         </div>
                         <br />
                         <div>
-                            Cтвори логіку для переміщення свого Бота
+                            Cтвори логіку для переміщення свого бота
                         </div>
                     </div>
                 </div>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.steps }>
-                        <img src={ stepBattleHeader } alt='Змагайся' />
+                        <img src={ Game.stepBattleHeader } alt='Змагайся' />
                     </div>
                     <div className={ Styles.stepTitle }>ЗМАГАЙСЯ</div>
                     <div className={ Styles.stepDescription }>
@@ -69,7 +67,7 @@ const HomeContainer = () => (
                         </div>
                         <br />
                         <div>
-                            Вдосконалюй свого Бота кожен день
+                            Вдосконалюй свого бота кожен день
                         </div>
                         <br />
                         <div>
@@ -79,7 +77,7 @@ const HomeContainer = () => (
                 </div>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.steps }>
-                        <img src={ StepWinHeader } alt='Вигравай' />
+                        <img src={ Game.stepWinHeader } alt='Вигравай' />
                     </div>
                     <div className={ Styles.stepTitle }>ВИГРАВАЙ</div>
                     <div className={ Styles.stepDescription }>
@@ -88,31 +86,30 @@ const HomeContainer = () => (
                         </div>
                         <br/>
                         <ol>
-                            <li>місце - ігрова консоль PlayStation 4 Pro 1TB</li>
-                            <li>місце - ігрова консоль Sega Mega Drive Mini</li>
-                            <li>місце - настільна гра Hobby World Fallout</li>
+                            <li>Ігрова консоль PlayStation 5 Pro 1TB</li>
+                            <li>Ігрова консоль Nintendo Switch Lite (Yellow)</li>
+                            <li>Настільна гра Hobby World Fallout</li>
                         </ol>
                     </div>
                 </div>
             </div>
             <div className='title'>Правила гри</div>
             <p>
-                Завантажуйте проект гри. Створіть логіку для переміщення свого Бота.
-                Отримуйте найбільшу кількість балів, щоб увійти до числа
-                Фіналістів.
+                Завантаж проєкт гри та створи логіку для переміщення свого бота,
+                отримай найбільшу кількість балів, щоб увійти до числа Фіналістів.
             </p>
             <p>
-                Конкурс триватиме кожного дня з { startDate } до { registerEndDate }&nbsp;
-                за виключенням вихідних, починаться з { dayTimeStart } години
-                i закінчується { dayTimeEnd } годиною.
-                Кожного дня визначаються { finalistsCount } Фіналістів.
+                Гра триває два тижні - з { startDate } до { registerEndDate },
+                заліковий час гри з { dayTimeStart } ранку до { dayTimeEnd } години вечора
+                з понеділка по п'ятницу, в інший час можна тренуватись та вдосконалювати свого бота.
+                Кожного дня ми будемо визначати { finalistsCount } Фіналістів серед гравців.
             </p>
             <p>
-                Беріть участь у Фіналі { endDate }. Займайте одне з трьох призових
-                місць і отримайте драйвовий подарунок!
+                І вже { endDate } грудня відбудеться Фінал, де будуть змагатися Фіналісти попередніх ігрових днів.
+                Три кращіх гравця посядуть перше, друге та третє місце та отримують головні подарунки!
             </p>
             <p>
-                Детальні правила і проект гри для створення Бота шукайте
+                Детальні правила і проєкт гри для створення бота шукайте
                 &nbsp;
                 <Link to={ book.rules }>
                     за посиланням <img src={ Icon } alt='Правила Конкурсу' />

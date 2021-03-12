@@ -64,6 +64,14 @@
         MALE_ZOMBIE = (short)'♂',
         ZOMBIE_DIE = (short)'✝',
 
+        // perks
+        UNSTOPPABLE_LASER_PERK = (short)'l',
+        DEATH_RAY_PERK = (short)'r',
+        UNLIMITED_FIRE_PERK = (short)'f',
+        FIRE_PERK = (short)'a',
+        JUMP_PERK = (short)'j',
+        MOVE_BOXES_PERK = (short)'m',
+
         // system elements, don't touch it
         FOG = (short)'F',
         BACKGROUND = (short)'G'

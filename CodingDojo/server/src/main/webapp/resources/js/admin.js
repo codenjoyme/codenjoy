@@ -43,7 +43,9 @@ function defaultRegistrationSettings() {
 }
 
 pages.admin = function() {
-    var contextPath = game.contextPath = getSettings('contextPath');
+    var contextPath = setup.contextPath = getSettings('contextPath');
+    setup.game = getSettings('game');
+    setup.room = getSettings('room');
 
     // ------------------------ registration settings -----------------------
     var settings = new AdminSettings(contextPath, 'general', 'registration');
@@ -99,8 +101,8 @@ pages.admin = function() {
         select.children().remove();
 
         var allTypes = defaultRegistrationSettings().gameTypes;
-        for (var gameName in allTypes) {
-            var gameTypes = allTypes[gameName];
+        for (var game in allTypes) {
+            var gameTypes = allTypes[game];
             for (var index in gameTypes) {
                 var name = gameTypes[index].name;
                 var title = gameTypes[index].title;
@@ -135,6 +137,7 @@ pages.admin = function() {
                     var test = $('<button type="button">Save</button>').click(function () {
                         var data = {};
                         data[PLAYER_ID] = playerId;
+                        data['game'] = setup.game;
                         data[field] = input.val();
                         ajax.save(data,
                             function() {
@@ -152,7 +155,7 @@ pages.admin = function() {
 
             setup('readableName');
             setup(PLAYER_ID);
-            setup('roomName');
+            setup('room');
             setup('score');
             setup('callbackUrl');
             setup('data');

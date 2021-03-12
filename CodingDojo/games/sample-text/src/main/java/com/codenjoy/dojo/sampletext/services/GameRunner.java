@@ -27,8 +27,11 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.sampletext.client.Board;
 import com.codenjoy.dojo.sampletext.client.ai.AISolver;
-import com.codenjoy.dojo.sampletext.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.sampletext.model.Player;
+import com.codenjoy.dojo.sampletext.model.SampleText;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -42,49 +45,25 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 /**
  * Генератор игор - реализация {@see GameType}
  */
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings>{
 
-    private final Level level;
-    private SampleText game;
-
-    public GameRunner() {
-        new Scores(0, settings);
-        level = new LevelImpl(
-                "question1=answer1",
-                "question2=answer2",
-                "question3=answer3",
-                "question4=answer4",
-                "question5=answer5",
-                "question6=answer6",
-                "question7=answer7",
-                "question8=answer8",
-                "question9=answer9",
-                "question10=answer10",
-                "question11=answer11",
-                "question12=answer12",
-                "question13=answer13",
-                "question14=answer14",
-                "question15=answer15",
-                "question16=answer16",
-                "question17=answer17",
-                "question18=answer18",
-                "question19=answer19",
-                "question20=answer20"
-        );
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public SampleText createGame(int levelNumber) {
-        return new SampleText(level, getDice());
+    public SampleText createGame(int levelNumber, GameSettings settings) {
+        return new SampleText(settings.level(), getDice(), settings);
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer)score, settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
         return v(0);
     }
 
@@ -109,13 +88,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.SINGLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 
     @Override
@@ -124,7 +103,7 @@ public class GameRunner extends AbstractGameType implements GameType {
             JSONObject result = new JSONObject();
 
             result.put("nextQuestion", player.getNextQuestion());
-            result.put("history", player.getHistory());
+            result.put("history", player.history());
 
             return result;
         });

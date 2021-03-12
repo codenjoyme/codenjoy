@@ -91,7 +91,7 @@ public class LocalWSGameRunner {
                 status.setSolver(board -> getAnswer(status, board));
 
                 try {
-                    runner.add(status.getSolver(), gameType.getBoard().newInstance());
+                    runner.add(status.getSolver(), (ClientBoard) gameType.getBoard().newInstance());
                 } catch (InstantiationException | IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }

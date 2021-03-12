@@ -23,117 +23,123 @@
 pages = pages || {};
 
 pages.board = function() {
-    game.gameName = getSettings('gameName');
-    game.playerId = getSettings('playerId');
-    game.readableName = getSettings('readableName');
-    game.code = getSettings('code');
-    game.allPlayersScreen = getSettings('allPlayersScreen');
-    game.contextPath = getSettings('contextPath');
+    setup.authenticated = getSettings('authenticated');
+    setup.game = getSettings('game');
+    setup.room = getSettings('room');
+    setup.playerId = getSettings('playerId');
+    setup.readableName = getSettings('readableName');
+    setup.code = getSettings('code');
+    setup.allPlayersScreen = getSettings('allPlayersScreen');
+    setup.contextPath = getSettings('contextPath');
 
-    initBoardPage(game, initBoardComponents);
+    initBoardPage(setup, initBoardComponents);
     initHotkeys();
 }
 
-function initBoardPage(game, onLoad) {
-    loadData('/rest/player/' + game.playerId + '/' + game.code + '/wantsToPlay/' + game.gameName, function(gameData) {
-        game.contextPath = gameData.context;
-        game.multiplayerType = gameData.gameType.multiplayerType;
-        game.boardSize = gameData.gameType.boardSize;
-        game.registered = gameData.registered;
+function initBoardPage(setup, onLoad) {
+    loadData('/rest/player/' + setup.playerId + '/' + setup.code + '/wantsToPlay/' + setup.game + '/' + setup.room, function(gameData) {
+        setup.contextPath = gameData.context;
+        setup.multiplayerType = gameData.gameType.multiplayerType;
+        setup.boardSize = gameData.gameType.boardSize;
+        setup.registered = gameData.registered;
 
-        game.isGraphicOrTextGame = gameData.sprites.length > 0;
-        game.spriteElements = gameData.sprites;
-        game.alphabet = gameData.alphabet;
+        setup.isGraphicOrTextGame = gameData.sprites.length > 0;
+        setup.spriteElements = gameData.sprites;
+        setup.alphabet = gameData.alphabet;
 
         // TODO надо как-то иначе решить переключение спрайтов, а то если не грузить icancode c ее кастомной html странички, то спрайты не прорисуются
-        if (!game.sprites && game.gameName == 'icancode') {
-            game.sprites = 'robot';
+        if (!setup.sprites && setup.game == 'icancode') {
+            setup.sprites = 'robot';
         }
 
         var players = gameData.players;
-        if (game.allPlayersScreen) {
-            game.players = players;
+        if (setup.allPlayersScreen) {
+            setup.players = players;
         } else {
             for (var index in players) {
-                if (players[index].id == game.playerId) {
-                    game.players = [players[index]];
+                if (players[index].id == setup.playerId) {
+                    setup.players = [players[index]];
                 }
             }
         }
 
         if (!!onLoad) {
-            onLoad(game);
+            onLoad(setup);
         }
     });
 }
 
-function initBoardComponents(game) {
-    if (game.loadBoardData) {
-        initBoards(game.players, game.allPlayersScreen,
-            game.gameName, game.playerId, game.contextPath);
+function initBoardComponents(setup) {
+    if (setup.loadBoardData) {
+        initBoards(setup.players, setup.allPlayersScreen,
+            setup.game, setup.playerId, setup.contextPath);
     }
 
-    if (game.drawCanvases) {
+    if (setup.drawCanvases) {
         if (typeof initCanvasesGame == 'function') {
-            initCanvasesGame(game.contextPath, game.players, game.allPlayersScreen,
-                game.multiplayerType, game.boardSize,
-                game.gameName, game.enablePlayerInfo,
-                game.enablePlayerInfoLevel,
-                game.sprites, game.alphabet, game.spriteElements,
-                game.drawBoard);
-        } else if (game.isGraphicOrTextGame) {
-            initCanvases(game.contextPath, game.players, game.allPlayersScreen,
-                game.multiplayerType, game.boardSize,
-                game.gameName, game.enablePlayerInfo,
-                game.enablePlayerInfoLevel,
-                game.sprites, game.alphabet, game.spriteElements,
-                game.drawBoard);
+            initCanvasesGame(setup.contextPath, setup.players, setup.allPlayersScreen,
+                setup.multiplayerType, setup.boardSize,
+                setup.game, setup.enablePlayerInfo,
+                setup.enablePlayerInfoLevel,
+                setup.sprites, setup.alphabet, setup.spriteElements,
+                setup.drawBoard);
+        } else if (setup.isGraphicOrTextGame) {
+            initCanvases(setup.contextPath, setup.players, setup.allPlayersScreen,
+                setup.multiplayerType, setup.boardSize,
+                setup.game, setup.enablePlayerInfo,
+                setup.enablePlayerInfoLevel,
+                setup.sprites, setup.alphabet, setup.spriteElements,
+                setup.drawBoard);
         } else {
-            initCanvasesText(game.contextPath, game.players, game.allPlayersScreen,
-                game.multiplayerType, game.boardSize,
-                game.gameName, game.enablePlayerInfo,
-                game.enablePlayerInfoLevel, game.drawBoard);
+            initCanvasesText(setup.contextPath, setup.players, setup.allPlayersScreen,
+                setup.multiplayerType, setup.boardSize,
+                setup.game, setup.enablePlayerInfo,
+                setup.enablePlayerInfoLevel, setup.drawBoard);
         }
     }
 
-    if (game.enableDonate) {
-        initDonate(game.contextPath);
+    if (setup.enableChat) {
+        initChat(setup.contextPath);
+    }
+
+    if (setup.enableDonate) {
+        initDonate(setup.contextPath);
     }
 
     if (typeof initJoystick == 'function') {
-        if (!!game.playerId) {
-            initJoystick(game.playerId, game.registered,
-                game.code, game.contextPath);
+        if (!!setup.playerId) {
+            initJoystick(setup.playerId, setup.registered,
+                setup.code, setup.contextPath);
         }
     }
 
-    if (game.enableLeadersTable) {
-        initLeadersTable(game.contextPath, game.playerId, game.code);
+    if (setup.enableLeadersTable) {
+        initLeadersTable(setup.contextPath, setup.playerId, setup.code);
     }
 
-    if (!game.enableForkMe) {
+    if (!setup.enableForkMe) {
         $("#fork-me").hide();
     }
 
-    if (!game.enableInfo) {
+    if (!setup.enableInfo) {
         $("#how-to-play").hide();
     }
 
-    if (game.enableAdvertisement) {
-        initAdvertisement(game.contextPath);
+    if (setup.enableAdvertisement) {
+        initAdvertisement(setup.contextPath);
     }
 
-    if (game.showBody) {
+    if (setup.showBody) {
         $(document.body).show();
     }
 
-    if (game.allPlayersScreen) {
-        if (!!game.onBoardAllPageLoad) {
-            game.onBoardAllPageLoad();
+    if (setup.allPlayersScreen) {
+        if (!!setup.onBoardAllPageLoad) {
+            setup.onBoardAllPageLoad();
         }
     } else {
-        if (!!game.onBoardPageLoad) {
-            game.onBoardPageLoad();
+        if (!!setup.onBoardPageLoad) {
+            setup.onBoardPageLoad();
         }
     }
 

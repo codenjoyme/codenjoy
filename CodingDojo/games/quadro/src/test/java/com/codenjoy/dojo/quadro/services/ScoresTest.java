@@ -29,15 +29,13 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.quadro.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
-    private PlayerScores scores;
 
-    private Settings settings;
-    private Integer winScore;
-    private Integer looseScore;
-    private Integer drawScore;
+    private PlayerScores scores;
+    private GameSettings settings;
 
     private void win() {
         scores.event(Events.WIN);
@@ -53,30 +51,39 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
-        looseScore = settings.getParameter("Loose score").type(Integer.class).getValue();
-        drawScore = settings.getParameter("Draw score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        win();  //+10
-        win();  //+10
-        win();  //+10
-        draw(); //+3
-        loose(); //+1
+        win();
+        win();
+        win();
 
-        assertEquals(140 + 3 * winScore + drawScore + looseScore, scores.getScore());
+        draw();
+
+        loose();
+
+        assertEquals(140
+                + 3 * settings.integer(WIN_SCORE)
+                + settings.integer(DRAW_SCORE)
+                - settings.integer(LOOSE_PENALTY),
+                scores.getScore());
+    }
+
+    @Test
+    public void shouldStillZero_ifLessThan0() {
+        loose();
+
+        assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        win();    // +10
+        win();
 
         scores.clear();
 

@@ -334,6 +334,42 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   height: 22px;
 }
 
+.value-unstoppable-laser-perk::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1566px -10px;
+  width: 23px;
+  height: 24px;
+}
+
+.value-death-ray-perk::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1598px -12px;
+  width: 22px;
+  height: 22px;
+}
+
+.value-unlimited-fire-perk::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1628px -11px;
+  width: 22px;
+  height: 22px;
+}
+
+.value-fire-perk::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1657px -8px;
+  width: 25px;
+  height: 25px;
+}
+
+.value-jump-perk::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1695px -10px;
+  width: 24px;
+  height: 25px;
+}
+
+.value-move-boxes-perk::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1725px -9px;
+  width: 25px;
+  height: 25px;
+}
+
 .shortest-way::after {
   background: url(../img/befunge_sprite.png) no-repeat -1404px -10px;
   width: 22px;

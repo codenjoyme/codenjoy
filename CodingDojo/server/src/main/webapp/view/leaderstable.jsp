@@ -22,29 +22,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
-    <table id="table-logs" class="table table-striped leaderboard-table">
-        <thead>
-            <th width="5%">
-                <c:choose>
-                    <c:when test="${code != null}">
-                        <a href="${ctx}/board/game/${gameName}?code=${code}">#</a>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="${ctx}/board/game/${gameName}">#</a>
-                    </c:otherwise>
-                </c:choose>
-            </th>
-            <th width="55%">Player</th>
-            <th width="25%" class="center">Score</th>
-        </thead>
-        <tbody id="table-logs-body">
-            <!--
-                <td>1</td>
-                <td><a href="${ctx}/board/player/email?code=code">name</a></td>
-                <td class="center">score</td>
-            -->
-        </tbody>
-    </table>
-    <%@include file="info.jsp"%>
-</div>
+<table id="table-logs" class="table table-striped leaderboard-table">
+    <thead>
+    <th width="5%">
+        <c:choose>
+            <c:when test="${code != null}">
+                <a href="${ctx}/board/game/${game}?code=${code}">#</a>
+            </c:when>
+            <c:otherwise>
+                <a href="${ctx}/board/game/${game}">#</a>
+            </c:otherwise>
+        </c:choose>
+    </th>
+    <th width="55%">Player</th>
+    <th width="25%" class="center">Score</th>
+    </thead>
+    <tbody id="table-logs-body">
+    <!--
+        <td>1</td>
+        <td><a href="${ctx}/board/player/email?code=code">name</a></td>
+        <td class="center">score</td>
+    -->
+    </tbody>
+</table>

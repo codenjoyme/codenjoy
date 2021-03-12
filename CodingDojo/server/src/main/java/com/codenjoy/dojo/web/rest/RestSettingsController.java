@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.client.Encoding;
+import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.dao.GameData;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -31,10 +32,14 @@ import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
+
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @RestController
 @RequestMapping(RestSettingsController.URI)
@@ -45,50 +50,78 @@ public class RestSettingsController {
     public static final String SETTINGS = "_settings_";
     public static final String GENERAL = "general";
 
+    private GameService gameService;
     private GameData gameData;
     private Validator validator;
 
-    @GetMapping("/{gameType}/{key}")
-    public String get(@PathVariable("gameType") String game, @PathVariable("key") String key) {
+    @GetMapping("/{game}/{room}/{key}")
+    public String get(@PathVariable("game") String game,
+                      @PathVariable("room") String room,
+                      @PathVariable("key") String key)
+    {
         validator.checkNotEmpty("key", key);
-        validator.checkGameName(game, Validator.CANT_BE_NULL);
+        validator.checkGame(game, CANT_BE_NULL);
+        validator.checkRoom(room, CAN_BE_NULL);
 
-        if (!GENERAL.equals(game)) {
-            GameType type = validator.checkGameType(game);
+        if (GENERAL.equals(game)) {
+            return gameData.get(game, key);
+        }
 
-            Settings settings = type.getSettings();
-            if (key.equals(SETTINGS)) {
-                PParameters parameters = new PParameters(settings.getParameters());
-                return new JSONObject(parameters).toString();
-            }
+        validator.checkGameType(game);
 
-            if (settings.hasParameter(key)) {
-                return settings.getParameter(key).getValue().toString();
-            }
+        // если не указывают им комнаты, используем комнату по умолчанию для всех игр
+        if (Validator.isEmpty(room)) {
+            room = game;
+        }
+
+        GameType type = gameService.getGameType(game, room);
+
+        Settings settings = type.getSettings();
+        if (key.equals(SETTINGS)) {
+            PParameters parameters = new PParameters(settings.getParameters());
+            return new JSONObject(parameters).toString();
+        }
+
+        if (settings.hasParameter(key)) {
+            return settings.getParameter(key).getValue().toString();
         }
 
         return gameData.get(game, key);
     }
 
-    @PostMapping("/{gameType}/{key}")
-    public String set(@PathVariable("gameType") String game, @PathVariable("key") String key, @RequestBody String value) {
+    @PostMapping("/{game}/{room}/{key}")
+    public String set(@PathVariable("game") String game,
+                      @PathVariable("room") String room,
+                      @PathVariable("key") String key,
+                      @RequestBody String value)
+    {
         validator.checkNotEmpty("key", key);
-        validator.checkGameName(game, Validator.CANT_BE_NULL);
+        validator.checkGame(game, CANT_BE_NULL);
+        validator.checkRoom(room, CAN_BE_NULL);
 
         value = encode(value);
 
-        if (!GENERAL.equals(game)) {
-            GameType type = validator.checkGameType(game);
+        if (GENERAL.equals(game)) {
+            gameData.set(game, key, value);
+            return "{}";
+        }
 
-            Settings settings = type.getSettings();
-            if (settings.hasParameter(key)) {
-                settings.getParameter(key).update(value);
-                return "{}";
-            }
+        validator.checkGameType(game);
+
+        // если не указывают им комнаты, используем комнату по умолчанию для всех игр
+        if (Validator.isEmpty(room)) {
+            room = game;
+        }
+
+        GameType type = gameService.getGameType(game, room);
+
+        Settings settings = type.getSettings();
+        if (settings.hasParameter(key)) {
+            settings.getParameter(key).update(value);
+            return "{}";
         }
 
         gameData.set(game, key, value);
-
         return "{}";
     }
 

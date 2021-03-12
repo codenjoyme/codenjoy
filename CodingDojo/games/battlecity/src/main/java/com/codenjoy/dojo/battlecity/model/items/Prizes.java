@@ -85,4 +85,8 @@ public class Prizes implements Tickable {
     public int size() {
         return prizes.size();
     }
+
+    public void clear() {
+        prizes.clear();
+    }
 }

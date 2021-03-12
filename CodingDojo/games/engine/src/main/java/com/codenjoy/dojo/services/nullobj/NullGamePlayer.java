@@ -31,7 +31,7 @@ public final class NullGamePlayer extends GamePlayer {
     public static final GamePlayer INSTANCE = new NullGamePlayer();
 
     private NullGamePlayer(){
-        super(event -> {});
+        super(event -> {}, null);
     }
 
     @Override

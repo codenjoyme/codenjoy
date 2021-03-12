@@ -31,11 +31,13 @@ import com.codenjoy.dojo.spacerace.client.Board;
 import com.codenjoy.dojo.spacerace.client.YourSolver;
 import com.codenjoy.dojo.spacerace.client.ai.AISolver;
 import com.codenjoy.dojo.spacerace.services.GameRunner;
+import com.codenjoy.dojo.spacerace.services.GameSettings;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -80,16 +82,18 @@ public class SmokeTest {
             }
 
             @Override
-            protected String getMap() {
-                return  "☼       ☼" +
-                        "☼       ☼" +
-                        "☼       ☼" +
-                        "☼       ☼" +
-                        "☼       ☼" +
-                        "☼       ☼" +
-                        "☼       ☼" +
-                        "☼       ☼" +
-                        "☼   ☺   ☼";
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .string(LEVEL_MAP,
+                                "☼       ☼" +
+                                "☼       ☼" +
+                                "☼       ☼" +
+                                "☼       ☼" +
+                                "☼       ☼" +
+                                "☼       ☼" +
+                                "☼       ☼" +
+                                "☼       ☼" +
+                                "☼   ☺   ☼");
             }
         };
 

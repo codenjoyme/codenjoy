@@ -25,6 +25,9 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.mocks.FirstGameType;
+import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -37,6 +40,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -48,6 +52,7 @@ import static org.mockito.Mockito.*;
 @RunWith(SpringRunner.class)
 @ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestAdminControllerTest.ContextConfiguration.class)
+@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
 public class RestAdminControllerTest extends AbstractRestControllerTest {
 
@@ -70,6 +75,9 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Autowired
     private SaveService saveService;
 
+    @Autowired
+    private RoomService roomService;
+
     @Before
     public void setUp() {
         super.setUp();
@@ -78,14 +86,12 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         playerService.removeAll();
         saveService.removeAllSaves();
+        roomService.removeAll();
 
         resetAllSettings();
     }
 
     private void resetAllSettings() {
-        games.getGameNames().stream()
-                .forEach(name -> games.getGame(name).getSettings().reset());
-
         if (saved == null) {
             saved = semifinal.clone();
         } else {
@@ -96,6 +102,11 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldStartStopGame_oneRoom() {
         // given
+        assertEquals(false, service.getEnabled("name"));
+        assertEquals("false", get("/rest/admin/room/name/pause"));
+
+        roomService.create("name", new FirstGameType());
+
         // TODO я думаю что сервис напрямую дергать не надо, т.к. его никто так вызывать не будет, только через rest
         assertEquals(true, service.getEnabled("name"));
         assertEquals("true", get("/rest/admin/room/name/pause"));
@@ -118,6 +129,12 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldStartStopGame_severalRooms() {
         // given
+        assertEquals(false, service.getEnabled("name1"));
+        assertEquals("false", get("/rest/admin/room/name2/pause"));
+
+        roomService.create("name1", new FirstGameType());
+        roomService.create("name2", new SecondGameType());
+
         assertEquals(true, service.getEnabled("name1"));
         assertEquals("true", get("/rest/admin/room/name2/pause"));
 
@@ -413,7 +430,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetSetSettings() {
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[900]], " +
@@ -424,16 +441,16 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                 settings1.build().toString());
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{\"parameters\":[" +
-                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\"],\"type\":\"editbox\",\"value\":\"50\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
-                settings2.toString());
+        assertEquals("{'parameters':[" +
+                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
+                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'Semifinal enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
+                        "{'def':'900','multiline':false,'name':'Semifinal timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                quote(settings2.toString()));
 
         // when
         settings1.getParameters().get(0).setValue("30");
@@ -459,16 +476,16 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                 settings1.build().toString());
 
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{\"parameters\":[" +
-                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\",\"55\"],\"type\":\"editbox\",\"value\":\"55\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\"],\"type\":\"editbox\",\"value\":\"50\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
-                settings2.toString());
+        assertEquals("{'parameters':[" +
+                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43','55'],'type':'editbox','value':'55','valueType':'Integer'}," +
+                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'Semifinal enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
+                        "{'def':'900','multiline':false,'name':'Semifinal timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                quote(settings2.toString()));
     }
 
     // тест такой же как и прошлый, только мы апдейтим не весь сеттинг каким он пришел,
@@ -476,7 +493,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldSetSettings_onlyKeyValue() {
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[900]], " +
@@ -487,28 +504,28 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                 settings1.build().toString());
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{\"parameters\":[" +
-                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\"],\"type\":\"editbox\",\"value\":\"50\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
-                settings2.toString());
+        assertEquals("{'parameters':[" +
+                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
+                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'Semifinal enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
+                        "{'def':'900','multiline':false,'name':'Semifinal timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                quote(settings2.toString()));
 
         // when
         // обновляем сеттинги передавая только ключик и значение
         assertEquals("", post(200, "/rest/admin/room/name1/settings/first",
-                "{\"parameters\":[" +
-                        "{\"name\":\"Parameter 1\",\"value\":30}," +
-                        "{\"name\":\"Parameter 2\",\"value\":false}]}"));
+                unquote("{'parameters':[" +
+                        "{'name':'Parameter 1','value':30}," +
+                        "{'name':'Parameter 2','value':false}]}")));
 
         assertEquals("", post(200, "/rest/admin/room/name2/settings/second",
-                "{\"parameters\":[" +
-                        "{\"name\":\"Parameter 3\",\"value\":55}," +
-                        "{\"name\":\"Parameter 4\",\"value\":true}]}"));
+                unquote("{'parameters':[" +
+                        "{'name':'Parameter 3','value':55}," +
+                        "{'name':'Parameter 4','value':true}]}")));
 
         // then
         settings1 = service.getSettings("name1", "first");
@@ -523,23 +540,23 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                 settings1.build().toString());
 
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{\"parameters\":[" +
-                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\",\"55\"],\"type\":\"editbox\",\"value\":\"55\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\"],\"type\":\"editbox\",\"value\":\"50\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
-                settings2.toString());
+        assertEquals("{'parameters':[" +
+                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43','55'],'type':'editbox','value':'55','valueType':'Integer'}," +
+                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'Semifinal enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
+                        "{'def':'900','multiline':false,'name':'Semifinal timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                quote(settings2.toString()));
     }
 
     // тест такой же как и прошлый, только мы проверяем группу настроек semifinal
     @Test
     public void shouldSetSettings_onlyKeyValue_semifinal() {
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[900]], " +
@@ -550,32 +567,32 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                 settings1.build().toString());
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{\"parameters\":[" +
-                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\"],\"type\":\"editbox\",\"value\":\"50\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
-                settings2.toString());
+        assertEquals("{'parameters':[" +
+                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
+                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'Semifinal enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
+                        "{'def':'900','multiline':false,'name':'Semifinal timeout','options':['900'],'type':'editbox','value':'900','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                quote(settings2.toString()));
 
         // when
         // обновляем сеттинги передавая только ключик и значение
         assertEquals("", post(200, "/rest/admin/room/name1/settings/first",
-                "{\"parameters\":[" +
-                        "{\"name\":\"Semifinal enabled\",\"value\":true}," +
-                        "{\"name\":\"Semifinal timeout\",\"value\":500}," +
-                        "{\"name\":\"Semifinal percentage\",\"value\":false}," +
-                        "{\"name\":\"Semifinal limit\",\"value\":70}," +
-                        "{\"name\":\"Semifinal reset board\",\"value\":false}," +
-                        "{\"name\":\"Semifinal shuffle board\",\"value\":false}" +
-                        "]}"));
+                unquote("{'parameters':[" +
+                        "{'name':'Semifinal enabled','value':true}," +
+                        "{'name':'Semifinal timeout','value':500}," +
+                        "{'name':'Semifinal percentage','value':false}," +
+                        "{'name':'Semifinal limit','value':70}," +
+                        "{'name':'Semifinal reset board','value':false}," +
+                        "{'name':'Semifinal shuffle board','value':false}" +
+                        "]}")));
 
         // then
         settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[true]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[500]], " +
@@ -587,33 +604,33 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         // TODO semifinal settings один для всех, хотя хотелось бы чтобы был для каждой румы отдельный
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{\"parameters\":[" +
-                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\",\"500\"],\"type\":\"editbox\",\"value\":\"500\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\",\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\",\"70\"],\"type\":\"editbox\",\"value\":\"70\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\",\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\",\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}]}",
-                settings2.toString());
+        assertEquals("{'parameters':[" +
+                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
+                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'Semifinal enabled','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'900','multiline':false,'name':'Semifinal timeout','options':['900','500'],'type':'editbox','value':'500','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal percentage','options':['true','false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
+                        "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50','70'],'type':'editbox','value':'70','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true','false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true','false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
+                quote(settings2.toString()));
 
         // when
         // тут пробуем передавать строковые представления
         assertEquals("", post(200, "/rest/admin/room/name2/settings/second",
-                "{\"parameters\":[" +
-                        "{\"name\":\"Semifinal enabled\",\"value\":\"false\"}," +
-                        "{\"name\":\"Semifinal timeout\",\"value\":\"300\"}," +
-                        "{\"name\":\"Semifinal percentage\",\"value\":\"true\"}," +
-                        "{\"name\":\"Semifinal limit\",\"value\":\"60\"}," +
-                        "{\"name\":\"Semifinal reset board\",\"value\":\"true\"}," +
-                        "{\"name\":\"Semifinal shuffle board\",\"value\":\"true\"}" +
-                        "]}"));
+                unquote("{'parameters':[" +
+                        "{'name':'Semifinal enabled','value':'false'}," +
+                        "{'name':'Semifinal timeout','value':'300'}," +
+                        "{'name':'Semifinal percentage','value':'true'}," +
+                        "{'name':'Semifinal limit','value':'60'}," +
+                        "{'name':'Semifinal reset board','value':'true'}," +
+                        "{'name':'Semifinal shuffle board','value':'true'}" +
+                        "]}")));
 
         // then
         // TODO semifinal settings один для всех, хотя хотелось бы чтобы был для каждой румы отдельный
         settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[300]], " +
@@ -624,15 +641,15 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                 settings1.build().toString());
 
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
-        assertEquals("{\"parameters\":[" +
-                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\",\"300\"],\"type\":\"editbox\",\"value\":\"300\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\",\"60\"],\"type\":\"editbox\",\"value\":\"60\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
-                settings2.toString());
+        assertEquals("{'parameters':[" +
+                        "{'def':'43','multiline':false,'name':'Parameter 3','options':['43'],'type':'editbox','value':'43','valueType':'Integer'}," +
+                        "{'def':'false','multiline':false,'name':'Parameter 4','options':['false','true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'Semifinal enabled','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}," +
+                        "{'def':'900','multiline':false,'name':'Semifinal timeout','options':['900','300'],'type':'editbox','value':'300','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'50','multiline':false,'name':'Semifinal limit','options':['50','60'],'type':'editbox','value':'60','valueType':'Integer'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                quote(settings2.toString()));
     }
 }

@@ -23,89 +23,143 @@ package com.codenjoy.dojo.bomberman.model.perks;
  */
 
 import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
-/**
- * Holds the settings for all available perks.
- */
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
+import static java.util.stream.Collectors.toList;
 
 public class PerksSettingsWrapper {
 
-    private static final Map<Elements, PerkSettings> settings = new EnumMap<>(Elements.class);
+    public static final int MAX_PERCENTS = 100;
 
-    private static int percentage;
-    private static int dropRatio;
-    private static int pickTimeout;
+    private GameSettings settings;
 
-    public static void reset() {
-        percentage = 100;
-        dropRatio = 10;
-        pickTimeout = 5;
+    public PerksSettingsWrapper(GameSettings settings) {
+        this.settings = settings;
     }
 
-    static {
-        reset();
-    }
+    public PerksSettingsWrapper put(Elements perk, int value, int timeout) {
+        enable(perk);
+        switch (perk) {
+            case BOMB_BLAST_RADIUS_INCREASE : {
+                settings.integer(PERK_BOMB_BLAST_RADIUS_INC, value);
+                settings.integer(TIMEOUT_BOMB_BLAST_RADIUS_INC, timeout);
+            } break;
 
-    private PerksSettingsWrapper() {
-    }
+            case BOMB_COUNT_INCREASE : {
+                settings.integer(PERK_BOMB_COUNT_INC, value);
+                settings.integer(TIMEOUT_BOMB_COUNT_INC, timeout);
+            } break;
 
-    public static void setPerkSettings(Elements perk, int value, int timeout) {
-        settings.put(perk, new PerkSettings(value, timeout));
-    }
+            case BOMB_IMMUNE : {
+                // value is always 0
+                settings.integer(TIMEOUT_BOMB_IMMUNE, timeout);
+            } break;
 
-    public static PerkSettings getPerkSettings(Elements perk) {
-        if (settings.containsKey(perk)) {
-            return settings.get(perk);
-        } else {
-            return new PerkSettings(0, 0);
+            case BOMB_REMOTE_CONTROL : {
+                settings.integer(REMOTE_CONTROL_COUNT, value);
+                // timeout is always 1
+            } break;
         }
+
+        return this;
     }
 
-    public static void clear() {
-        settings.clear();
+    private void enable(Elements perk) {
+        Set<Elements> perks = new LinkedHashSet(enabled());
+        perks.add(perk);
+        enabled(perks);
     }
 
-    public static int getDropRatio() {
-        return dropRatio;
+    private void enabled(Set<Elements> perks) {
+        String chars = perks.stream()
+                .map(element -> String.valueOf(element.ch()))
+                .reduce("", String::concat);
+        settings.string(DEFAULT_PERKS, chars);
     }
 
-    public static void setDropRatio(int dropRatio) {
-        PerksSettingsWrapper.dropRatio = dropRatio;
+    private List<Elements> enabled() {
+        return settings.string(DEFAULT_PERKS)
+                .chars()
+                .mapToObj(ch -> Elements.valueOf((char)ch))
+                .collect(toList());
     }
 
-    public static int getPickTimeout() {
-        return pickTimeout;
+    public PerkSettings get(Elements perk) {
+        int value;
+        int timeout;
+        switch (perk) {
+            case BOMB_BLAST_RADIUS_INCREASE : {
+                value = settings.integer(PERK_BOMB_BLAST_RADIUS_INC);
+                timeout = settings.integer(TIMEOUT_BOMB_BLAST_RADIUS_INC);
+            } break;
+
+            case BOMB_COUNT_INCREASE : {
+                value = settings.integer(PERK_BOMB_COUNT_INC);
+                timeout = settings.integer(TIMEOUT_BOMB_COUNT_INC);
+            } break;
+
+            case BOMB_IMMUNE : {
+                value = 0;
+                timeout = settings.integer(TIMEOUT_BOMB_IMMUNE);
+            } break;
+
+            case BOMB_REMOTE_CONTROL : {
+                value = settings.integer(REMOTE_CONTROL_COUNT);
+                timeout = 1;
+            } break;
+
+            default: {
+                value = 0;
+                timeout = 0;
+            } break;
+        }
+
+        return new PerkSettings(value, timeout);
     }
 
-    public static void setPickTimeout(int pickTimeout) {
-        PerksSettingsWrapper.pickTimeout = pickTimeout;
+    public int dropRatio() {
+        return settings.integer(PERK_DROP_RATIO);
+    }
+
+    public PerksSettingsWrapper dropRatio(int dropRatio) {
+        settings.integer(PERK_DROP_RATIO, dropRatio);
+        return this;
+    }
+
+    public int pickTimeout() {
+        return settings.integer(PERK_PICK_TIMEOUT);
+    }
+
+    public PerksSettingsWrapper pickTimeout(int pickTimeout) {
+        settings.integer(PERK_PICK_TIMEOUT, pickTimeout);
+        return this;
     }
 
     /**
      * Всего у нас 100 шансов. Кидаем кубик, если он выпадает больше заявленнго dropRatio=20%
      * то рисуется стена. Иначе мы определяем какой индекс перка выпал
      */
-    public static Elements nextPerkDrop(Dice dice) {
+    public Elements nextPerkDrop(Dice dice) {
         // нет перков - стенка
-        int total = settings.size();
+        int total = enabled().size();
         if (total == 0) {
             return Elements.DESTROYED_WALL;
         }
 
         // dropRatio - вероятность выпадения любого перка
-        int random = dice.next(percentage);
-        if (random >= dropRatio) {
+        int random = dice.next(MAX_PERCENTS);
+        if (random >= dropRatio()) {
             return Elements.DESTROYED_WALL;
         }
 
         // считаем какой перк победил
-        int index = (int)Math.floor(1D * total * random / dropRatio);
-        return new ArrayList<>(settings.keySet()).get(index);
+        int index = (int)Math.floor(1D * total * random / dropRatio());
+        return enabled().get(index);
     }
 }

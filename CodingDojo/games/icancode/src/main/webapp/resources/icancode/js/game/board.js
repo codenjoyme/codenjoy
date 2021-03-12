@@ -213,6 +213,18 @@ var Board = function (boardString) {
         return get(elements, LAYER1);
     };
 
+    var getPerks = function () {
+        var elements = [
+            Element.UNSTOPPABLE_LASER_PERK,
+            Element.DEATH_RAY_PERK,
+            Element.UNLIMITED_FIRE_PERK,
+            Element.FIRE_PERK,
+            Element.JUMP_PERK,
+            Element.MOVE_BOXES_PERK
+        ];
+        return get(elements, LAYER1);
+    };
+
     var getBoxes = function () {
         return findAll(Element.BOX, LAYER2);
     };
@@ -497,6 +509,7 @@ var Board = function (boardString) {
         getWalls: getWalls,
         getBoxes: getBoxes,
         getGold: getGold,
+        getPerks: getPerks,
         getStart: getStart,
         getZombieStart: getZombieStart,
         getExit: getExit,

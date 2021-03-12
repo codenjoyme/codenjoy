@@ -19,14 +19,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-/**
- * Created by Mikhail_Udalyi on 09.08.2016.
- */
 
 var boardAllPageLoad = function(showProgress) {
 
-    if (game.debug) {
-        game.debugger();
+    if (setup.debug) {
+        setup.debugger();
     }
 
     // ----------------------- init progressbar -------------------
@@ -35,11 +32,11 @@ var boardAllPageLoad = function(showProgress) {
         var onChangeLevel = function(level, multiple, lastPassed, levelIncreased, win) {
             // do nothing
         }
-        var levelProgress = initLevelProgress(game, onChangeLevel);
+        var levelProgress = initLevelProgress(setup, onChangeLevel);
     }
     // ----------------------- init leaders table -------------------
 
-    initLeadersTable(game.contextPath, game.playerId, game.code,
+    initLeadersTable(setup.contextPath, setup.playerId, setup.code,
         function(count, you, link, name, score, maxLength, level) {
             var star = '';
             if (count == 1) {
@@ -124,5 +121,6 @@ var boardAllPageLoad = function(showProgress) {
 
     $('#table-logs').removeClass('table');
     $('#table-logs').removeClass('table-striped');
+
     $(document.body).show();
 }

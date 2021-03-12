@@ -115,7 +115,10 @@ public class LevelZ implements Level {
 
     @Override
     public List<String> befungeCommands() {
-        return Level.extendBefunge(new LevelG1());
+        return Level.extendBefunge(new LevelG1(),
+                "value-unstoppable-laser-perk",
+                "value-death-ray-perk",
+                "value-unlimited-fire-perk");
     }
     
 }

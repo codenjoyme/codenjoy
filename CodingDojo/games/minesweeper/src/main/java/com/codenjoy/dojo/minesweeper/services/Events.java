@@ -24,5 +24,9 @@ package com.codenjoy.dojo.minesweeper.services;
 
 
 public enum Events {
-    KILL_ON_MINE, DESTROY_MINE, FORGET_CHARGE, NO_MORE_CHARGE, CLEAN_BOARD, WIN;
+    KILL_ON_MINE,
+    DESTROY_MINE,
+    FORGET_CHARGE,
+    NO_MORE_CHARGE,
+    CLEAN_BOARD, WIN;
 }

@@ -23,11 +23,14 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -50,12 +53,12 @@ public class PlayerGamesView {
                 .collect(toMap(
                         pg -> pg.getPlayer().getId(),
                         pg -> {
-                            GameType gameType = pg.getGameType();
+                            GameType<Settings> gameType = pg.getGameType();
                             String player = pg.getPlayer().getId();
                             List<String> group = groupsMap.get(player);
 
                             return new GameData(
-                                    gameType.getBoardSize().getValue(),
+                                    gameType.getBoardSize(gameType.getSettings()).getValue(),
                                     decoders.get(gameType.name()),
                                     filterByGroup(scores, group),
                                     group,
@@ -97,7 +100,7 @@ public class PlayerGamesView {
     }
 
     public List<List<String>> getGroupsByRooms() {
-        return getGroupBy(PlayerGame::getRoomName);
+        return getGroupBy(PlayerGame::getRoom);
     }
 
     public List<List<String>> getGroupsByField() {
@@ -120,8 +123,8 @@ public class PlayerGamesView {
                         pg -> pg.getPlayer().getScore()));
     }
 
-    public List<PScoresOf> getScoresForGame(String gameName) {
-        return scoresFor(pg -> pg.getPlayer().getGameName().equals(gameName));
+    public List<PScoresOf> getScoresForGame(String game) {
+        return scoresFor(pg -> pg.getPlayer().getGame().equals(game));
     }
 
     private List<PScoresOf> scoresFor(Predicate<PlayerGame> predicate) {
@@ -131,8 +134,8 @@ public class PlayerGamesView {
                 .collect(toList());
     }
 
-    public List<PScoresOf> getScoresForRoom(String roomName) {
-        return scoresFor(pg -> pg.getRoomName().equals(roomName));
+    public List<PScoresOf> getScoresForRoom(String room) {
+        return scoresFor(pg -> pg.getRoom().equals(room));
     }
 
     public Map<String, String> getReadableNames() {

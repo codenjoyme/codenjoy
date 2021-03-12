@@ -25,16 +25,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="boardOnly"/>
 <head>
     <meta charset="utf-8">
     <title>Game board</title>
     <link href="${ctx}/resources/css/all-board-only.min.css" rel="stylesheet">
     <jsp:include page="common-inclusion.jsp" />
 
-    <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="boardOnly" contextPath="${ctx}" gameName="${gameName}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <div id="board_page">
         <%@include file="canvases.jsp"%>

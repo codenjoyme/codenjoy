@@ -26,6 +26,7 @@ import com.codenjoy.dojo.config.meta.DefaultAuth;
 import com.codenjoy.dojo.config.meta.OAuth2Profile;
 import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.web.controller.*;
 import com.codenjoy.dojo.web.rest.RestSettingsController;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,8 @@ import org.springframework.web.filter.CorsFilter;
 import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -88,7 +91,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "^\\/board\\/player\\/[\\w]+\\?only=true$"
     };
 
-    public static final String[] UNAUTHORIZED_URIS = {
+    public static final List<String> MAIN_PAGE_URIS = Arrays.asList(
+            "/",
+            MainPageController.HELP_URI,
+            MainPageController.HELP_URI + "**",
+            "/rest/*/status",
+            BoardController.URI + "/rejoining/*"
+    );
+
+    public static final List<String> UNAUTHORIZED_URIS = new LinkedList<>(Arrays.asList(
+            LoginController.URI + "**",
             LoginController.ADMIN_URI,
             RegistrationController.URI + "*",
             LOGIN_PROCESSING_URI,
@@ -99,19 +111,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             // all players board
             BoardController.URI + "/game/**",
+            BoardController.URI + "/player/*",
             "/rest/player/*/*/wantsToPlay/**",
-            "/screen-ws/**",
-    };
+            "/screen-ws/**"
+    ));
 
     @Value("${server.xFrameAllowedHosts}")
-    private List<String> xFrameAllowedHosts = new ArrayList<>();
+    private List<String> hosts = new ArrayList<>();
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        securityHeaders(http, xFrameAllowedHosts);
+        securityHeaders(http, hosts);
     }
 
-    private static HttpSecurity securityHeaders(HttpSecurity http, List<String> allowedHosts) throws Exception {
+    private static HttpSecurity securityHeaders(HttpSecurity http, List<String> hosts) throws Exception {
         // @formatter:off
         http.cors()
                 .and()
@@ -128,23 +141,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 "font-src 'self';" +
                                 "style-src 'self' 'unsafe-inline';")
                     .and()
-                        .addHeaderWriter(new XFrameOptionsHeaderWriter(allowFromHostsStrategy(allowedHosts)))
+                        .addHeaderWriter(new XFrameOptionsHeaderWriter(allowFrom(hosts)))
                 .and()
                     .csrf().disable();
         // @formatter:on
         return http;
     }
 
-    private static AllowFromStrategy allowFromHostsStrategy(List<String> allowedHosts) {
+    private static AllowFromStrategy allowFrom(List<String> hosts) {
         return request -> {
             String referer = request.getHeader("Referer");
 
-            if (referer == null || CollectionUtils.isEmpty(allowedHosts)) {
+            if (referer == null || CollectionUtils.isEmpty(hosts)) {
                 return "DENY";
             }
             try {
                 String refererHost = URI.create(referer).getAuthority();
-                return allowedHosts.contains(refererHost) ? refererHost : "DENY";
+                return hosts.contains(refererHost) ? refererHost : "DENY";
             } catch (Exception e) {
                 return "DENY";
             }
@@ -174,7 +187,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
 
         @Value("${server.xFrameAllowedHosts}")
-        private List<String> xFrameAllowedHosts = new ArrayList<>();
+        private List<String> hosts = new ArrayList<>();
 
         @Autowired
         private AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -182,13 +195,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         private LogoutSuccessHandler logoutSuccessHandler;
 
+        @Autowired
+        private ConfigProperties properties;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
-            securityHeaders(http, xFrameAllowedHosts)
+            if (properties.isAllowUnauthorizedMainPage()) {
+                UNAUTHORIZED_URIS.addAll(MAIN_PAGE_URIS);
+            }
+
+            securityHeaders(http, hosts)
                         .authorizeRequests()
-                            .antMatchers(UNAUTHORIZED_URIS)
+                            .antMatchers(UNAUTHORIZED_URIS.toArray(new String[0]))
                                 .permitAll()
                             .regexMatchers(UNAUTHORIZED_URIS_PATTERNS)
                                 .permitAll()
@@ -223,13 +242,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static class OAuth2UserSecurityConf extends WebSecurityConfigurerAdapter {
 
         @Value("${server.xFrameAllowedHosts}")
-        private List<String> xFrameAllowedHosts = new ArrayList<>();
+        private List<String> hosts = new ArrayList<>();
 
         @Autowired
         private OAuth2MappingUserService oAuth2MappingUserService;
 
         @Autowired
         private LogoutSuccessHandler logoutSuccessHandler;
+
+        @Autowired
+        private ConfigProperties properties;
 
         @PostConstruct
         void info() {
@@ -239,9 +261,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
-            securityHeaders(http, xFrameAllowedHosts)
+            if (properties.isAllowUnauthorizedMainPage()) {
+                UNAUTHORIZED_URIS.addAll(MAIN_PAGE_URIS);
+            }
+
+            securityHeaders(http, hosts)
                         .authorizeRequests()
-                            .antMatchers(UNAUTHORIZED_URIS)
+                            .antMatchers(UNAUTHORIZED_URIS.toArray(new String[0]))
                                 .permitAll()
                             .anyRequest()
                                 .hasRole("USER")
@@ -270,7 +296,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static class ResourceServerSSOConf extends ResourceServerConfigurerAdapter {
 
         @Value("${server.xFrameAllowedHosts}")
-        private List<String> xFrameAllowedHosts = new ArrayList<>();
+        private List<String> hosts = new ArrayList<>();
 
         @Autowired
         private UserAuthenticationConverter oAuth2UserAuthenticationConverter;
@@ -299,7 +325,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             // @formatter:off
-            securityHeaders(http, xFrameAllowedHosts)
+            securityHeaders(http, hosts)
                         .sessionManagement()
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()

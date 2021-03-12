@@ -33,7 +33,7 @@ function initJoystick(playerId, registered, code, contextPath) {
     }
 
     function sendCommand(command) {
-        if (!game.enableJoystick) return;
+        if (!setup.enableJoystick) return;
 
         $.ajax({ url:contextPath + "/joystick",
                 data:'command=' + command + '&player=' + playerId + "&code=" + code,
@@ -84,7 +84,7 @@ function initJoystick(playerId, registered, code, contextPath) {
 
     function registerKeys() {
         $("body").keydown(function(event) {
-            if (!game.enableJoystick) {
+            if (!setup.enableJoystick) {
                 return;
             }
             var command = parseCommand(event);
@@ -104,7 +104,7 @@ function initJoystick(playerId, registered, code, contextPath) {
             event.preventDefault();
         });
         $("body").keyup(function(event) {
-            if (!game.enableJoystick) {
+            if (!setup.enableJoystick) {
                 return;
             }
 

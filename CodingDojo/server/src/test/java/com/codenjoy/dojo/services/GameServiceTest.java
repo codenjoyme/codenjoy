@@ -26,29 +26,36 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.room.RoomService;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.*;
 
+import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
+import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER3;
+import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER4;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class GameServiceTest {
-    
-    private GameServiceImpl gameService;
+
+    private RoomService roomService;
+    private GameServiceImpl service;
 
     @Before
     public void setup() {
         forGames(FirstGameType.class, SecondGameType.class);
-        gameService.init();
+        service.init();
     }
 
     private void forGames(Class... classes) {
-        gameService = new GameServiceImpl() {
+        service = new GameServiceImpl() {
 
             {
                 excludeGames = new String[0];
+                roomService = GameServiceTest.this.roomService = new RoomService();
             }
 
             @Override
@@ -61,49 +68,82 @@ public class GameServiceTest {
     @Test
     public void shouldGetGameNames() {
         assertEquals("[first, second]", 
-                gameService.getGameNames().toString());
+                service.getGames().toString());
+    }
+
+    @Test
+    public void shouldGetNullGame_whenEmptyGameName_caseGameNameOnly() {
+        assertEquals(NullGameType.INSTANCE, service.getGameType(null));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("null"));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("not-exists"));
+    }
+
+    @Test
+    public void shouldGetNullGame_whenEmptyGameName_caseGameAndRoomNames() {
+        assertEquals(NullGameType.INSTANCE, service.getGameType(null, "valid-room"));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("null", "valid-room"));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("not-exists", "valid-room"));
+
+        assertEquals(NullGameType.INSTANCE, service.getGameType("first", null));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("first", "null"));
+        assertNotEquals(NullGameType.INSTANCE, service.getGameType("first", "non-exists")); // valid room and game
+    }
+
+    @Test
+    public void shouldGetNullGame_whenEmptyGameName() {
+        roomService.create("room1", service.getGameType("first"));
+        roomService.create("room2", service.getGameType("second"));
+        roomService.create("room3", service.getGameType("second"));
+
+        assertEquals("[first, room1, room2, room3, second]",
+                service.getRooms().toString());
     }
 
     @Test
     public void shouldGetSpritesNames() {
         assertEquals("{first=[none, wall, hero], second=[none, red, green, blue]}", 
-                gameService.getSpritesNames().toString());
+                service.getSpritesNames().toString());
     }
     
     @Test
     public void shouldGetOnlyGameNames() {
         assertEquals("[first, second]", 
-                gameService.getOnlyGameNames().toString());
+                service.getOnlyGames().toString());
     }
     
     @Test
     public void shouldGetSpritesValues() {
         assertEquals("{first=[ , ☼, ☺], second=[ , R, G, B]}", 
-                gameService.getSpritesValues().toString());
+                service.getSpritesValues().toString());
     }
     
     @Test
     public void shouldGetSprites() {
         assertEquals("{first=[none= , wall=☼, hero=☺], second=[none= , red=R, green=G, blue=B]}", 
-                gameService.getSprites().toString());
+                service.getSprites().toString());
     }
     
     @Test
     public void shouldGetDefaultGame() {
-        assertEquals("first", 
-                gameService.getDefaultGame());
+        // по умолчанию так же создаются комнаты first & second
+        roomService.create("room1", service.getGameType("first"));
+        roomService.create("room2", service.getGameType("second"));
+        roomService.create("room3", service.getGameType("second"));
+
+        assertEquals("first",
+                service.getDefaultRoom());
     }
 
     @Test
     public void shouldGetGame() {
         assertEquals(FirstGameType.class,
-                gameService.getGame("first").getClass());
+                service.getGameType("first").getClass());
 
         assertEquals(SecondGameType.class,
-                gameService.getGame("second").getClass());
+                service.getGameType("second").getClass());
 
         assertEquals(NullGameType.class,
-                gameService.getGame("not-exists").getClass());
+                service.getGameType("not-exists").getClass());
     }
 
     // TODO этот тест надо запускать с парамером mvn test -DallGames иначе не тянутся дипенденси игр а хотелось бы их чекнуть так же 
@@ -113,7 +153,7 @@ public class GameServiceTest {
         forGames(new GameServiceImpl().findInPackage("com.codenjoy.dojo").toArray(new Class[0]));
         
         // when
-        Map<String, List<String>> sprites = gameService.getSpritesNames();
+        Map<String, List<String>> sprites = service.getSpritesNames();
         System.out.println(sprites.toString());
         
         // then
@@ -130,6 +170,186 @@ public class GameServiceTest {
 
         assertEquals(errors.toString().replace(',', '\n'), 
                 true, errors.isEmpty());
+    }
+
+    @Test
+    public void shouldSameSettings_whenGetGameByRoomName() {
+        // given
+        List<GameType> list = new LinkedList<>(){{
+            add(service.getGameType("first", "room1"));
+            add(service.getGameType("first", "room1"));
+
+            add(service.getGameType("first", "room2"));
+
+            add(service.getGameType("second", "room3"));
+            add(service.getGameType("second", "room3"));
+
+            add(service.getGameType("second", "room4"));
+            add(service.getGameType("second", "room4"));
+
+            add(service.getGameType("first"));
+
+            add(service.getGameType("second"));
+        }};
+
+        // then
+        assertEquals("First[Parameter 1=15, Parameter 2=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+        // when
+        list.get(0).getSettings().getParameter(PARAMETER1.key()).update(123);
+
+        // then
+        assertEquals("First[Parameter 1=123, Parameter 2=true]\n" +
+                        "First[Parameter 1=123, Parameter 2=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+        // when
+        list.get(1).getSettings().getParameter(PARAMETER1.key()).update(234);
+
+        // then
+        assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+        // when
+        list.get(2).getSettings().getParameter(PARAMETER1.key()).update(345);
+
+        // then
+        assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=345, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+        // when
+        list.get(3).getSettings().getParameter(PARAMETER4.key()).update(false);
+
+        // then
+        assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=345, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=false]\n" +
+                        "Second[Parameter 3=43, Parameter 4=false]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+        // when
+        list.get(4).getSettings().getParameter(PARAMETER3.key()).update(456);
+
+        // then
+        assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=345, Parameter 2=true]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+        // when
+        list.get(5).getSettings().getParameter(PARAMETER3.key()).update(567);
+
+        // then
+        assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=345, Parameter 2=true]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=567, Parameter 4=true]\n" +
+                        "Second[Parameter 3=567, Parameter 4=true]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+        // when
+        list.get(6).getSettings().getParameter(PARAMETER4.key()).update(false);
+
+        // then
+        assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=345, Parameter 2=true]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=567, Parameter 4=false]\n" +
+                        "Second[Parameter 3=567, Parameter 4=false]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+        // when
+        list.get(7).getSettings().getParameter(PARAMETER1.key()).update(678);
+
+        // then
+        assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=345, Parameter 2=true]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=567, Parameter 4=false]\n" +
+                        "Second[Parameter 3=567, Parameter 4=false]\n" +
+                        // TODO сделать так, чтобы изменение базовых настроек
+                        //  влияло на будущие созданные настройки комнат
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+        // when
+        list.get(8).getSettings().getParameter(PARAMETER3.key()).update(789);
+
+        // then
+        assertEquals("First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=234, Parameter 2=true]\n" +
+                        "First[Parameter 1=345, Parameter 2=true]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=456, Parameter 4=false]\n" +
+                        "Second[Parameter 3=567, Parameter 4=false]\n" +
+                        "Second[Parameter 3=567, Parameter 4=false]\n" +
+                        "First[Parameter 1=15, Parameter 2=true]\n" +
+                        // TODO сделать так, чтобы изменение базовых настроек
+                        //  влияло на будущие созданные настройки комнат
+                        "Second[Parameter 3=43, Parameter 4=true]\n",
+                toString(list));
+
+    }
+
+    private String toString(List<GameType> list) {
+        return list.stream()
+                .map(GameType::getSettings)
+                .map(settings -> settings.toString())
+                .reduce("", (out, string) -> out.concat(string + "\n"));
     }
 
 }

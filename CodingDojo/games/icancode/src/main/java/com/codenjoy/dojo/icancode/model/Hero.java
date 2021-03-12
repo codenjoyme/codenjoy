@@ -23,17 +23,23 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.items.Box;
-import com.codenjoy.dojo.icancode.model.items.Gold;
-import com.codenjoy.dojo.icancode.model.items.HeroItem;
-import com.codenjoy.dojo.icancode.model.items.LaserMachine;
+import com.codenjoy.dojo.icancode.model.gun.Gun;
+import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
+import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.items.perks.*;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
@@ -42,17 +48,22 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private Direction direction;
     private boolean jump;
     private boolean pull;
-    private boolean flying;
+    protected boolean flying;
     private boolean reset;
     private boolean laser;
     private boolean fire;
-    private Direction fireDirection;
     private boolean hole;
     private boolean landOn;
-    private int goldCount;
+    private List<Gold> gold;
     private int killZombieCount;
     private int killHeroCount;
     private HeroItem item;
+    private Gun gun;
+    private List<Perk> perks;
+
+    public boolean isLandOn() {
+        return landOn;
+    }
 
     public void removeFromCell() {
         item.removeFromCell();
@@ -62,14 +73,18 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return item;
     }
 
-    public Hero(Elements el) {
-        item = new HeroItem(el);
+    public Hero() {
+        item = new HeroItem(Elements.ROBO);
         item.init(this);
-
-        resetFlags();
+        resetState();
     }
 
-    private void resetFlags() {
+    @Override
+    public GameSettings settings() {
+        return (GameSettings) field.settings();
+    }
+
+    private void resetState() {
         direction = null;
         win = false;
         jump = false;
@@ -80,9 +95,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         flying = false;
         laser = false;
         alive = true;
-        goldCount = 0;
+        gold = new LinkedList<>();
         resetZombieKillCount();
         resetHeroKillCount();
+        perks = new ArrayList<>();
     }
 
     public void resetZombieKillCount() {
@@ -97,13 +113,17 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void init(Field field) {
         super.init(field);
         item.setField(field);
-        reset(field);
+        resetField();
+        gun = new GunWithOverHeat();
+        gun.init(settings());
+        gun.reset();
     }
 
-    private void reset(Field field) {
-        resetFlags();
+    private void resetField() {
         field.getStartPosition().add(this.item);
         field.reset();
+        resetState();
+        perks.addAll(PerkUtils.defaultFor(field.isContest(), settings()));
     }
 
     @Override
@@ -136,83 +156,98 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void down() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.DOWN;
-        }
+        direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.UP;
-        }
+        direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.LEFT;
-        }
+        direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.RIGHT;
-        }
+        direction = Direction.RIGHT;
     }
 
     public void reset() {
-        act(0);
+        reset = true;
     }
 
     public void jump() {
-        act(1);
+        if (!canJump() || flying) {
+            return;
+        }
+
+        jump = true;
     }
 
     public void pull() {
-        act(2);
+        if (!canMoveBoxes() || flying) {
+            return;
+        }
+
+        pull = true;
+    }
+
+    public boolean canFire() {
+        return has(FirePerk.class);
+    }
+
+    public boolean canJump() {
+        return has(JumpPerk.class);
+    }
+
+    public boolean canMoveBoxes() {
+        return has(MoveBoxesPerk.class);
     }
 
     public void fire() {
-        act(3);
+        if (!canFire() || flying) {
+            return;
+        }
+
+        fire = true;
+    }
+
+    public void nextLevel() {
+        Cell to = field.getEndPosition();
+        field.move(item, to);
     }
 
     @Override
     public void act(int... p) {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
 
-        if (p.length == 0 || p[0] == 1) {
-            if (!flying) {
-                jump = true;
-            }
-        } else if (p.length == 1 && p[0] == 2) {
-            pull = true;
-        } else if (p.length == 1 && p[0] == 3) { // TODO test me
-            fire = true;
-        } else if (p[0] == 0) {
-            reset = true;
-        } else if (p[0] == -1) { // TODO test me
-            Cell end = field.getEndPosition();
-            field.move(item, end.getX(), end.getY());
+        var is = new Act(p);
+        if (is.act() || is.act(1)) {
+            jump();
+        } else if (is.act(2)) {
+            pull();
+        } else if (is.act(3)) { // TODO test me
+            fire();
+        } else if (is.act(0)) {
+            reset();
+        } else if (is.act(-1)) { // TODO test me
+            nextLevel();
         }
     }
 
@@ -236,16 +271,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
-
-    @Override
     public void tick() {
         laser = false;
         hole = false;
@@ -255,7 +280,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
         if (reset) {
             reset = false;
-            reset(field);
+            resetField();
             return;
         }
 
@@ -269,44 +294,60 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             jump = false;
         }
 
-        if (fire) {
-            fireDirection = direction;
+        if (fire && direction != null) {
+            if (has(UnlimitedFirePerk.class)) {
+                field.fire(direction, item.getCell(), item);
+                gun.unlimitedShoot();
+            } else if (gun.canShoot()) {
+                field.fire(direction, item.getCell(), item);
+                gun.shoot();
+            }
             fire = false;
             direction = null;
-            fireLaser();
         }
 
+        perks = perks.stream()
+                .peek(Perk::tick)
+                .filter(Perk::isActive)
+                .collect(toList());
+
         if (direction != null) {
-            int x = item.getCell().getX();
-            int y = item.getCell().getY();
+            Cell from = item.getCell();
+            Point to = direction.change(from);
 
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-
-            if (flying && (field.isAt(newX, newY, Box.class) || field.isAt(newX, newY, LaserMachine.class))) {
-                int nextX = direction.changeX(newX);
-                int nextY = direction.changeY(newY);
-                if (!field.isBarrier(nextX, nextY)) {
-                    field.move(item, newX, newY);
+            if (flying && (field.isAt(to, Box.class)
+                    || field.isAt(to, LaserMachine.class)))
+            {
+                Point next = direction.change(to);
+                if (!field.isBarrier(next)) {
+                    field.move(item, to);
                 }
             } else {
-                if (pull && !landOn) {
-                    if (tryPushBox(newX, newY)) {
+                if (pull && !landOn) { // TODO test part && !landOn
+                    if (tryPushBox(to)) {
                         pull = false;
                     }
                 }
 
-                if (field.isBarrier(newX, newY)) {
-                    if (landOn) {
+                if (field.isBarrier(to)) {
+                    if (landOn) { // TODO test landOn
                         item.getCell().comeIn(item);
                     }
                 } else {
                     if (pull) {
-                        if (tryPullBox(x, y)) {
+                        if (tryPullBox(from)) {
                             pull = false;
                         }
                     }
-                    field.move(item, newX, newY);
+
+                    field.move(item, to);
+
+                    if (!flying) {
+                        field.perkAt(to).ifPresent(perk -> {
+                            perk.removeFromCell();
+                            perks.add(perk);
+                        });
+                    }
                 }
             }
         }
@@ -315,6 +356,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
         landOn = false;
         pull = false;
+        gun.tick();
     }
 
     public void fixLayer() {
@@ -325,43 +367,53 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    private boolean tryPullBox(int x, int y) {
-        int boxX = direction.inverted().changeX(x);
-        int boxY = direction.inverted().changeY(y);
+    private boolean tryPullBox(Point hero) {
+        Point from = direction.inverted().change(hero);
 
-        Item item = field.getIfPresent(Box.class, boxX, boxY);
-        if (item == null) {
+        Box box = field.getIf(Box.class, from);
+        if (box == null) {
             return false;
         }
 
-        field.move(item, x, y);
+        if (field.isAt(hero, Start.class)) {
+            return false;
+        }
+
+        field.move(box, hero);
         return true;
     }
 
-    private boolean tryPushBox(int x, int y) {
-        Item item = field.getIfPresent(Box.class, x, y);
+    private boolean tryPushBox(Point hero) {
+        Box box = field.getIf(Box.class, hero);
 
-        if (item == null) {
+        if (box == null) {
             return false;
         }
 
-        int newX = direction.changeX(x);
-        int newY = direction.changeY(y);
+        Point to = direction.change(hero);
 
-        if (field.isBarrier(newX, newY)) {
+        if (field.isBarrier(to)) {
             return false;
         }
 
-        if (field.isAt(newX, newY, HeroItem.class)) {
+        if (field.isAt(to, HeroItem.class)) {
             return false;
         }
 
-        Gold gold = (Gold) field.getIfPresent(Gold.class, newX, newY);
-        if (gold != null && !gold.getHidden()) {
+        if (field.isAt(to, Zombie.class)) {
             return false;
         }
 
-        field.move(item, newX, newY);
+        if (field.isAt(to, Start.class)) {
+            return false;
+        }
+
+        Gold gold = field.getIf(Gold.class, to);
+        if (gold != null) {
+            return false;
+        }
+
+        field.move(box, to);
         return true;
     }
 
@@ -371,6 +423,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public boolean isDead() {
+        return !alive;
     }
 
     public void setWin() {
@@ -385,8 +441,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return win;
     }
 
-    public void pickUpGold() {
-        goldCount++;
+    public void pickUp(Gold item) {
+        gold.add(item);
     }
 
     public void addZombieKill() {
@@ -398,7 +454,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public int getGoldCount() {
-        return goldCount;
+        return gold.size();
     }
 
     public int getKillZombieCount() {
@@ -411,6 +467,22 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public boolean isFlying() {
         return flying;
+    }
+
+    public boolean isJump() {
+        return jump;
+    }
+
+    public boolean isPull() {
+        return pull;
+    }
+
+    public boolean isReset() {
+        return reset;
+    }
+
+    public boolean isFire() {
+        return fire;
     }
 
     public void dieOnHole() {
@@ -428,10 +500,16 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         die();
     }
 
-    private void fireLaser() {
-        if (fireDirection != null) {
-            field.fire(this, fireDirection, item.getCell());
-            fireDirection = null;
-        }
+    public boolean has(Class<? extends Perk> perkClass) {
+        return perks.stream()
+                .anyMatch(perk -> perk.getClass().equals(perkClass));
+    }
+
+    public List<Gold> gold() {
+        return gold;
+    }
+
+    public void add(Perk perk) {
+        perks.add(perk);
     }
 }

@@ -24,30 +24,37 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.items.perks.Perk;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Field extends GameField<Player> {
 
-    boolean isBarrier(int x, int y);
+    boolean isBarrier(Point pt);
 
     Cell getStartPosition();
 
     Cell getEndPosition();
 
-    void move(Item item, int x, int y);
+    void move(Item item, Point pt);
 
-    Cell getCell(int x, int y);
+    Optional<Perk> perkAt(Point pt);
 
-    Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
+    Optional<Perk> dropNextPerk();
 
-    boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
+    void dropPickedGold(Hero hero);
+
+    Cell getCell(Point pt);
+
+    <T extends BaseItem> T getIf(Class<T> clazz, Point pt);
+
+    boolean isAt(Point pt, Class<? extends BaseItem>... clazz);
 
     void reset();
 
@@ -59,7 +66,7 @@ public interface Field extends GameField<Player> {
 
     Level getLevel();
 
-    void fire(State owner, Direction direction, Point from);
+    void fire(Direction direction, Point from, FieldItem owner);
 
     int size();
 
@@ -67,11 +74,13 @@ public interface Field extends GameField<Player> {
 
     List<Laser> lasers();
 
-    List<Gold> golds();
+    List<Gold> pickedGold();
 
     List<LaserMachine> laserMachines();
 
     List<ZombiePot> zombiePots();
 
-    List<Floor> floors();
+    List<Floor> floor();
+
+    List<Perk> availablePerks();
 }

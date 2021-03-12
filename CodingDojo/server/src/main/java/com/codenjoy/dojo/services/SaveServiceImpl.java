@@ -29,8 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Stream;
 
- import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+import static com.codenjoy.dojo.services.PlayerGames.withRoom;
 
 @Component("saveService")
 public class SaveServiceImpl implements SaveService {
@@ -57,8 +58,8 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Override
-    public long saveAll(String roomName) {
-        return saveAll(playerGames.getAll(withRoom(roomName)));
+    public long saveAll(String room) {
+        return saveAll(playerGames.getAll(withRoom(room)));
     }
 
     @Override
@@ -66,6 +67,12 @@ public class SaveServiceImpl implements SaveService {
         for (String id : saver.getSavedList()) {
             load(id);
         }
+    }
+
+    @Override
+    public void loadAll(String room) {
+        getSavedStream(room)
+                .forEach(this::load);
     }
 
     @Override
@@ -104,15 +111,15 @@ public class SaveServiceImpl implements SaveService {
     }
 
     /**
-     * Метод для ручной загрузки player из save для заданной gameType / roomName.
+     * Метод для ручной загрузки player из save для заданной gameType / room.
      * Из save если он существует, грузится только callbackUrl пользователя,
      * все остальное передается с параметрами.
      * TODO я не уверен, что оно тут надо, т.к. есть вероятно другие версии этого метода
      */
     @Override
-    public void load(String id, String roomName, String gameName, String save) {
+    public void load(String id, String game, String room, String save) {
         String ip = tryGetIpFromSave(id);
-        resetPlayer(id, new PlayerSave(id, ip, roomName, gameName, 0, save));
+        resetPlayer(id, new PlayerSave(id, ip, game, room, 0, save));
     }
 
     private String tryGetIpFromSave(String id) {
@@ -179,6 +186,20 @@ public class SaveServiceImpl implements SaveService {
         for (String id : saver.getSavedList()) {
             saver.delete(id);
         }
+    }
+
+    @Override
+    public void removeAllSaves(String room) {
+        getSavedStream(room)
+                .forEach(this::removeSave);
+    }
+
+    private Stream<String> getSavedStream(String room) {
+        List<String> saved = saver.getSavedList();
+
+        return playerGames.getAll(withRoom(room)).stream()
+                .map(PlayerGame::getPlayerId)
+                .filter(saved::contains);
     }
 
 }

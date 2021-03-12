@@ -24,16 +24,19 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.bomberman.services.Events;
+import com.codenjoy.dojo.bomberman.services.GameSettings;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.round.RoundGamePlayer;
-import com.codenjoy.dojo.services.settings.Parameter;
 
 public class Player extends RoundGamePlayer<Hero, Field> {
 
-    protected GameSettings settings;
+    private Dice dice;
 
-    public Player(EventListener listener, Parameter<Boolean> roundsEnabled) {
-        super(listener, roundsEnabled);
+    public Player(EventListener listener, Dice dice, GameSettings settings) {
+        super(listener, settings);
+        this.dice = dice;
     }
 
     @Override
@@ -42,11 +45,10 @@ public class Player extends RoundGamePlayer<Hero, Field> {
     }
 
     public void newHero(Field board) {
-        settings = board.settings();
         if (hero != null) {
             hero.setPlayer(null);
         }
-        hero = settings.getHero(settings.getLevel());
+        hero = settings().getHero(settings().getLevel(), dice);
         hero.setPlayer(this);
         hero.init(board);
 
@@ -63,25 +65,25 @@ public class Player extends RoundGamePlayer<Hero, Field> {
 
     private int getScoreFor(Object event) {
         if (event == Events.KILL_DESTROY_WALL) {
-            return settings.killWallScore().getValue();
+            return settings().killWallScore().getValue();
         }
 
         if (event == Events.KILL_MEAT_CHOPPER) {
-            return settings.killMeatChopperScore().getValue();
+            return settings().killMeatChopperScore().getValue();
         }
 
         if (event == Events.KILL_OTHER_HERO) {
-            return settings.killOtherHeroScore().getValue();
+            return settings().killOtherHeroScore().getValue();
         }
 
         if (event == Events.CATCH_PERK) {
-            return settings.catchPerkScore().getValue();
+            return settings().catchPerkScore().getValue();
         }
 
         return 0;
     }
 
-    public GameSettings getSettings() {
-        return settings;
+    private GameSettings settings() {
+        return (GameSettings) settings;
     }
 }

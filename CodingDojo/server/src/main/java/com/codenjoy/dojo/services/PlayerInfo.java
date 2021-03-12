@@ -36,13 +36,13 @@ public class PlayerInfo extends Player {
     private boolean hidden;
     private boolean aiPlayer;
 
-    private PlayerInfo(String id, String readableName, String code, String url, String roomName, String gameName, Object scoreValue, boolean saved) {
+    private PlayerInfo(String id, String readableName, String code, String url, String room, String game, Object scoreValue, boolean saved) {
         setId(id);
         setReadableName(readableName);
         setCode(code);
         setCallbackUrl(url);
-        setGameName(gameName);
-        setRoomName(roomName);
+        setGame(game);
+        setRoom(room);
         setScore(scoreValue);
         this.saved = saved;
         active = false;
@@ -50,26 +50,26 @@ public class PlayerInfo extends Player {
     }
 
     public PlayerInfo(Player player) {
-        this(player.getId(), player.getCode(), player.getCallbackUrl(), player.getGameName());
+        this(player.getId(), player.getCode(), player.getCallbackUrl(), player.getGame());
         aiPlayer = player.hasAi();
         setScore(player.getScore());
-        setRoomName(player.getRoomName());
+        setRoom(player.getRoom());
         setReadableName(player.getReadableName());
     }
 
-    public PlayerInfo(String id, String code, String url, String gameName) {
+    public PlayerInfo(String id, String code, String url, String game) {
         setId(id);
         setCode(code);
         setCallbackUrl(url);
-        setGameName(gameName);
+        setGame(game);
         saved = false;
         active = true;
     }
 
     public PlayerInfo(PlayerSave save, String readableName, String code) {
         this(save.getId(), readableName, code,
-                save.getCallbackUrl(), save.getRoomName(),
-                save.getGameName(), save.getScore(), true);
+                save.getCallbackUrl(), save.getRoom(),
+                save.getGame(), save.getScore(), true);
     }
 
 }

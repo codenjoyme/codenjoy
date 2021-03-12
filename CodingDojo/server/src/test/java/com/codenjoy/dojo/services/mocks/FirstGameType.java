@@ -23,48 +23,26 @@ package com.codenjoy.dojo.services.mocks;
  */
 
 
-import com.codenjoy.dojo.client.ClientBoard;
-import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class FirstGameType extends AbstractGameType {
+public class FirstGameType extends FakeGameType {
 
-    private final SettingsImpl result;
-
-    public FirstGameType() {
-        result = new SettingsImpl();
-        result.addEditBox("Parameter 1").type(Integer.class).def(12).update(15);
-        result.addCheckBox("Parameter 2").type(Boolean.class).def(true);
+    @Override
+    public Parameter<Integer> getBoardSize(Settings settings) {
+        return new SimpleParameter<>(6);
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
-        return new FakePlayerScores(score);
-    }
-
-    @Override
-    public GameField createGame(int levelNumber) {
-        GameField field = mock(GameField.class);
-        BoardReader reader = mock(BoardReader.class);
-        when(field.reader()).thenReturn(reader);
-        return field;
-    }
-
-    @Override
-    public Parameter<Integer> getBoardSize() {
-        return new SimpleParameter<>(23);
+    public SettingsImpl getSettings() {
+        return new FirstGameSettings();
     }
 
     @Override
@@ -97,33 +75,23 @@ public class FirstGameType extends AbstractGameType {
     }
 
     @Override
-    public CharElements[] getPlots() {
+    public Elements[] getPlots() {
         return Elements.values();
     }
 
     @Override
-    public Settings getSettings() {
-        return result;
-    }
-
-    @Override
-    public Class<? extends Solver> getAI() {
-        return null;
-    }
-
-    @Override
-    public Class<? extends ClientBoard> getBoard() {
-        return null;
-    }
-
-    @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(Settings settings) {
         return MultiplayerType.SINGLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return mock(GamePlayer.class);
+    public Point heroAt() {
+        return pt(1, 1);
+    }
+
+    @Override
+    public CharElements getHeroElement() {
+        return Elements.HERO;
     }
 
     @Override

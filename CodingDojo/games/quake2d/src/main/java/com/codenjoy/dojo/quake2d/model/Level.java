@@ -26,9 +26,6 @@ import java.util.List;
 
 public interface Level {
 
-    /**
-     * @return Размер поля (обязательно квадратное)
-     */
     int getSize();
 
     List<Wall> getWalls();

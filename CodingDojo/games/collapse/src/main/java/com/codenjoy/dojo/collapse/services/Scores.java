@@ -27,16 +27,16 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
+import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.SUCCESS_SCORE;
+
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> successScore;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        successScore = settings.addEditBox("Success score").type(Integer.class).def(1);
+        this.settings = settings;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Scores implements PlayerScores {
             int count = ((Events) event).getCount();
             int inc = 0;
             for (int i = 1; i <= count; i++) {
-                inc += i*successScore.getValue();
+                inc += i * settings.integer(SUCCESS_SCORE);
             }
             score += inc;
         }

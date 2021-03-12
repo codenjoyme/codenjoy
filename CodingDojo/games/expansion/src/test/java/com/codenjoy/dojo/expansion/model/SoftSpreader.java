@@ -2,6 +2,7 @@ package com.codenjoy.dojo.expansion.model;
 
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameRunner;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -13,13 +14,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by Oleksandr_Baglai on 2019-09-14.
- */
 public class SoftSpreader {
 
     private List<EventListener> listeners;
@@ -31,8 +28,11 @@ public class SoftSpreader {
     private List<Integer> levelNumbers;
     private Map<String, Integer> fullness;
 
+    private final GameSettings settings;
+
     public SoftSpreader(GameRunner gameRunner) {
         this.gameRunner = gameRunner;
+        settings = gameRunner.getSettings();
 
         levelNumbers = new LinkedList<>();
         fullness = new HashMap<>();
@@ -69,7 +69,7 @@ public class SoftSpreader {
         listeners.add(listener);
 
         String id = String.format("demo%s", playerIndex + 1);
-        Player player = (Player) gameRunner.createPlayer(listener, id);
+        Player player = (Player) gameRunner.createPlayer(listener, id, settings);
         Single game = new Single(player, gameRunner.getPrinterFactory());
         game.on(currents.get(playerIndex));
         game.newGame();
@@ -168,7 +168,7 @@ public class SoftSpreader {
                 }
 
                 // создаем комнату с этим уровнем
-                Expansion current = (Expansion) gameRunner.createGame(levelNumbers.get(player));
+                Expansion current = (Expansion) gameRunner.createGame(levelNumbers.get(player), settings);
 
                 if (newPlayer) {
                     // для нового игрока добавляем его комнату
@@ -184,7 +184,7 @@ public class SoftSpreader {
     }
 
     private int multipleIndex() {
-        MultiplayerType type = gameRunner.getMultiplayerType();
+        MultiplayerType type = gameRunner.getMultiplayerType(settings);
         if (type.isTraining()) {
             return type.getLevelsCount();
         } else {
@@ -249,7 +249,7 @@ public class SoftSpreader {
 
     // если игрок походил то в его комнате считаем, что уже все заполнено
     public void roomIsBusy(int index) {
-        if (!data.waitingOthers()) {
+        if (!settings.waitingOthers()) {
             Expansion current = currents.get(index);
             fullness.put(current.id(), current.allBases());
         }

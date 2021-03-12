@@ -53,15 +53,15 @@ QUnit.test('Chars test', function(assert) {
 });
 
 QUnit.test('flags of game test', function(assert) {
-    assert.equal(game.hasOwnProperty('enableDonate'), true);
-    assert.equal(game.hasOwnProperty('enableJoystick'), true);
-    assert.equal(game.hasOwnProperty('enableAlways'), true);
-    assert.equal(game.hasOwnProperty('enablePlayerInfo'), true);
-    assert.equal(game.hasOwnProperty('enableLeadersTable'), true);
-    assert.equal(game.hasOwnProperty('enableChat'), true);
-    assert.equal(game.hasOwnProperty('enableHotkeys'), true);
-    assert.equal(game.hasOwnProperty('enableAdvertisement'), true);
-    assert.equal(game.hasOwnProperty('showBody'), true);
+    assert.equal(setup.hasOwnProperty('enableDonate'), true);
+    assert.equal(setup.hasOwnProperty('enableJoystick'), true);
+    assert.equal(setup.hasOwnProperty('enableAlways'), true);
+    assert.equal(setup.hasOwnProperty('enablePlayerInfo'), true);
+    assert.equal(setup.hasOwnProperty('enableLeadersTable'), true);
+    assert.equal(setup.hasOwnProperty('enableChat'), true);
+    assert.equal(setup.hasOwnProperty('enableHotkeys'), true);
+    assert.equal(setup.hasOwnProperty('enableAdvertisement'), true);
+    assert.equal(setup.hasOwnProperty('showBody'), true);
 });
 
 QUnit.test('Direction test', function(assert) {

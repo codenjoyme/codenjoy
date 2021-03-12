@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -39,8 +40,8 @@ public class Player extends GamePlayer<Hero, Field> {
     private Field field;
     private Printer<PrinterData> printer;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
         setupPrinter();
     }
 
@@ -58,7 +59,7 @@ public class Player extends GamePlayer<Hero, Field> {
     public void newHero(Field field) {
         this.field = field;
         if (hero == null) {
-            hero = new Hero(Elements.ROBO);
+            hero = new Hero();
         }
 
         hero.init(field);

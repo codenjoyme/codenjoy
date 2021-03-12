@@ -54,7 +54,8 @@ public class PassTestEventTest {
     }
 
     private void assertScores(int expected, int complexity, int testCount) {
-        assertEquals(expected, new PassTestEvent(complexity, testCount).getScore(A, D));
+        assertEquals(expected, new PassTestEvent(complexity, testCount)
+                .getScore(A.getValue(), D.getValue()));
     }
 
 }

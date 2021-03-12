@@ -19,29 +19,26 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-/**
- * Created by Mikhail_Udalyi on 08.08.2016.
- */
 
 var boardPageLoad = function() {
 
-    if (game.debug) {
-        game.debugger();
+    if (setup.debug) {
+        setup.debugger();
     }
 
-    var libs = game.contextPath + '/resources/' + game.gameName + '/js';
-    if (game.demo) {
+    var libs = setup.contextPath + '/resources/' + setup.game + '/js';
+    if (setup.demo) {
         libs = 'js';
     }
 
     // ------------------------ headers/footers/board --------------------
-    if (!game.enableHeader) {
+    if (!setup.enableHeader) {
         $('.header-container').hide();
     }
-    if (!game.enableFooter) {
+    if (!setup.enableFooter) {
         $('footer.footer').hide();
     }
-    if (!game.drawCanvases) {
+    if (!setup.drawCanvases) {
         $('#main').addClass('editor-fullscreen');
         $('#editor-panel').hide();
     }
@@ -62,11 +59,11 @@ var boardPageLoad = function() {
     // ----------------------- init logger -------------------
     var logger = initLogger();
     logger.printCongrats = function() {
-        logger.print('Congrats ' + game.readableName + '! You have passed the puzzle!!!');
+        logger.print('Congrats ' + setup.readableName + '! You have passed the puzzle!!!');
     }
 
     logger.printHello = function() {
-        logger.print('Hello ' + game.readableName + ', I am Hero! Waiting for your command...');
+        logger.print('Hello ' + setup.readableName + ', I am Hero! Waiting for your command...');
     }
 
     // ----------------------- init slider -------------------
@@ -137,7 +134,7 @@ var boardPageLoad = function() {
         };
     };
     var win = initWin();
-    if (game.enableBefunge) {
+    if (setup.enableBefunge) {
         win.hidePrevious();
     }
 
@@ -170,7 +167,7 @@ var boardPageLoad = function() {
             $('#ide-help-window').html(help);
             $("#modal").removeClass("close");
         } else {
-            window.open('/codenjoy-contest/resources/icancode/landing-training.html', '_blank');
+            window.open(setup.contextPath + '/resources/icancode/landing-training.html', '_blank');
             window.focus();
         }
     };
@@ -179,7 +176,7 @@ var boardPageLoad = function() {
     // ----------------------- init storage -------------------
     var storage = {
         getKey : function(property) {
-            return property + '[' + game.playerId + ']';
+            return property + '[' + setup.playerId + ']';
         },
         load : function(property) {
             return JSON.parse(localStorage.getItem(this.getKey(property)));
@@ -189,7 +186,7 @@ var boardPageLoad = function() {
         }
     };
     // ----------------------- init level info -----------------------------
-    var levelInfo = initLevelInfo(game.contextPath);
+    var levelInfo = initLevelInfo(setup.contextPath);
     levelInfo.load(
         function() {
             nextStep();
@@ -209,10 +206,10 @@ var boardPageLoad = function() {
 
     var nextStep = function() {
         // ----------------------- init runner -------------------
-        if (game.enableBefunge) {
+        if (setup.enableBefunge) {
             runner = initRunnerBefunge(logger, getCurrentLevelInfo, storage);
         } else {
-            runner = initRunnerJs(game, libs, getCurrentLevelInfo, storage);
+            runner = initRunnerJs(setup, libs, getCurrentLevelInfo, storage);
         }
         // ------------------------ init socket ----------------------
         var onSocketMessage = function(data) {
@@ -221,7 +218,7 @@ var boardPageLoad = function() {
         var onSocketClose = function() {
             controller.reconnect();
         }
-        var socket = initSocket(game, buttons, logger, onSocketMessage, onSocketClose);
+        var socket = initSocket(setup, buttons, logger, onSocketMessage, onSocketClose);
 
         // ----------------------- init progressbar -------------------
         var onChangeLevel = function(level, multiple, lastPassed, isLevelIncreased, isWin) {
@@ -233,7 +230,7 @@ var boardPageLoad = function() {
             }
             initAutocomplete(level, levelInfo);
         }
-        levelProgress = initLevelProgress(game, onChangeLevel);
+        levelProgress = initLevelProgress(setup, onChangeLevel);
 
         // ------------------------ init controller ----------------------
         controller = initController(socket, runner, logger, buttons, levelProgress, function() {
@@ -247,14 +244,14 @@ var boardPageLoad = function() {
         resetRobot();
 
         // ----------------------- starting UI -------------------
-        if (game.demo) {
-            var data = '{"' + game.playerId + '":{"board":"{"levelProgress":{"total":18,"current":3,"lastPassed":15,"multiple":false},"layers":["OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJXBBYFOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]}","gameName":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{"' + game.playerId + '":150}","coordinates":"{"' + game.playerId + '":{"y":8,"x":9}}"}}';
+        if (setup.demo) {
+            var data = '{"' + setup.playerId + '":{"board":"{"levelProgress":{"total":18,"current":3,"lastPassed":15,"multiple":false},"layers":["OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJXBBYFOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]}","game":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{"' + setup.playerId + '":150}","coordinates":"{"' + setup.playerId + '":{"y":8,"x":9}}"}}';
             $('body').trigger('board-updated', JSON.parse(data));
         }
         buttons.disableAll();
         $(document.body).show();
 
-        if (!!game.code) {
+        if (!!setup.code) {
             runner.loadSettings();
 
             socket.connect(function() {
@@ -263,8 +260,8 @@ var boardPageLoad = function() {
         } else {
             buttons.disableHelp();
 
-            var link = $('#register-link').attr('href');
-            logger.print('<a href="' + link + '">Please register</a>');
+            var link = $('#login-logout-link').attr('href');
+            logger.print('<a href="' + link + '">Please login</a>');
 
             runner.setStubValue();
         }

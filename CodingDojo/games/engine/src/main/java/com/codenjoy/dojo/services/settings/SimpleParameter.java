@@ -25,12 +25,14 @@ package com.codenjoy.dojo.services.settings;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SimpleParameter<T> implements Parameter<T> {
 
     private String name;
     private T value;
+    private Consumer<T> consumer;
 
     public SimpleParameter(T value) {
         this.value = value;
@@ -84,6 +86,12 @@ public class SimpleParameter<T> implements Parameter<T> {
     @Override
     public void select(int index) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Parameter<T> onChange(Consumer<T> consumer) {
+        this.consumer = consumer;
+        return this;
     }
 
     @Override

@@ -23,7 +23,6 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
 
 public class Scores implements PlayerScores {

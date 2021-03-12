@@ -30,11 +30,13 @@ import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.client.ai.AISolver;
 import com.codenjoy.dojo.snakebattle.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -121,16 +123,18 @@ public class SmokeTest {
             }
 
             @Override
-            protected String getMap() {
-                return  "☼☼☼☼☼☼☼☼☼" +
-                        "☼☼      ☼" +
-                        "☼#      ☼" +
-                        "☼☼ ☼# ○ ☼" +
-                        "☼☼○    $☼" +
-                        "☼☼   ●  ☼" +
-                        "☼#      ☼" +
-                        "☼☼  ●   ☼" +
-                        "☼☼☼☼☼☼☼☼☼";
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .string(LEVEL_MAP,
+                                "☼☼☼☼☼☼☼☼☼" +
+                                "☼☼      ☼" +
+                                "☼#      ☼" +
+                                "☼☼ ☼# ○ ☼" +
+                                "☼☼○    $☼" +
+                                "☼☼   ●  ☼" +
+                                "☼#      ☼" +
+                                "☼☼  ●   ☼" +
+                                "☼☼☼☼☼☼☼☼☼");
             }
         };
 

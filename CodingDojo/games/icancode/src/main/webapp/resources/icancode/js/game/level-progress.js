@@ -28,10 +28,10 @@
 // можно посмортреть в git e26ec4f6
 var levelsStartsFrom1 = 1
 
-function initLevelProgress(game, onChangeLevel) {
+function initLevelProgress(setup, onChangeLevel) {
 
-    if (game.debug) {
-        game.debugger();
+    if (setup.debug) {
+        setup.debugger();
     }
 
     var currentLevel = -1;
@@ -49,7 +49,7 @@ function initLevelProgress(game, onChangeLevel) {
         this.active(current);
     }
     progressBar.click(function (event) {
-        if (!game.code) {
+        if (!setup.code) {
             return;
         }
 
@@ -68,7 +68,7 @@ function initLevelProgress(game, onChangeLevel) {
     });
 
     var changeLevel = function(level) {
-        var url = '/rest/player/' + game.playerId + '/' + game.code + '/level/' + level;
+        var url = '/rest/player/' + setup.playerId + '/' + setup.code + '/level/' + level;
         loadData(url, function(status) {
              // do nothing
         });
@@ -79,13 +79,13 @@ function initLevelProgress(game, onChangeLevel) {
     }
 
     $('body').bind("board-updated", function (events, data) {
-        if (game.playerId == '' || !data[game.playerId]) {
+        if (setup.playerId == '' || !data[setup.playerId]) {
             return;
         }
 
         $('body').trigger("tick");
 
-        var board = data[game.playerId].board;
+        var board = data[setup.playerId].board;
 
         var level = board.levelProgress.current;
         var countLevels = board.levelProgress.total;

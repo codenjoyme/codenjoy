@@ -24,10 +24,12 @@ package com.codenjoy.dojo.puzzlebox.model;
 
 
 import com.codenjoy.dojo.puzzlebox.services.Events;
+import com.codenjoy.dojo.puzzlebox.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,14 +45,15 @@ public class PuzzleBox implements Field {
     private List<Wall> walls;
     private List<Target> targets;
 
-    private int clicks;
+    private GameSettings settings;
 
-    public PuzzleBox(Level level, Dice dice) {
+    public PuzzleBox(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         walls = level.getWalls();
         targets = level.getTargets();
         this.level = level;
         size = level.getSize();
+        this.settings = settings;
         players = new LinkedList<>();
     }
 
@@ -124,20 +127,9 @@ public class PuzzleBox implements Field {
         }
         return boxes;
     }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

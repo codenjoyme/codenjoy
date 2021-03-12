@@ -34,6 +34,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -44,6 +45,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 @RunWith(SpringRunner.class)
 @ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestRoomControllerTest.ContextConfiguration.class)
+@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
 public class RestRoomControllerTest extends AbstractRestControllerTest {
 
@@ -86,7 +88,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
 
         // when
         assertEquals("{'code':'4020021687627278468','id':'validPlayer'}",
-                fix(get("/rest/room/validRoom/game/first/join")));
+                quote(get("/rest/room/validRoom/game/first/join")));
 
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
@@ -143,7 +145,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
         // when
         // все же зашли, комната может быть любой
         assertEquals("{'code':'4020021687627278468','id':'validPlayer'}",
-                fix(get("/rest/room/badRoom/game/first/join")));
+                quote(get("/rest/room/badRoom/game/first/join")));
 
         // then
         assertEquals("true", get("/rest/room/badRoom/player/validPlayer/joined"));

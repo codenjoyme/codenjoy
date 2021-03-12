@@ -25,9 +25,11 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.GameRoom;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.multiplayer.Room;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
@@ -43,9 +45,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by Oleksandr_Baglai on 2019-10-12.
- */
 public class AbstractPlayerGamesTest {
 
     protected PlayerGames playerGames;
@@ -70,13 +69,13 @@ public class AbstractPlayerGamesTest {
         return createPlayer("game");
     }
 
-    protected Player createPlayer(String gameName) {
-        return createPlayer("room", gameName);
+    protected Player createPlayer(String game) {
+        return createPlayer("room", game);
     }
 
-    protected Player createPlayer(String roomName, String gameName) {
+    protected Player createPlayer(String room, String game) {
         return createPlayer("player" + Calendar.getInstance().getTimeInMillis(),
-                roomName, gameName,
+                room, game,
                 MultiplayerType.SINGLE);
     }
 
@@ -88,17 +87,17 @@ public class AbstractPlayerGamesTest {
         return createPlayer(name, "room", "game", type);
     }
 
-    protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type) {
-        return createPlayer(name, roomName, gameName, type, null);
+    protected Player createPlayer(String name, String room, String game, MultiplayerType type) {
+        return createPlayer(name, room, game, type, null);
     }
 
     protected Player createPlayer(String name, MultiplayerType type, PlayerSave save) {
         return createPlayer(name, "room", "game", type, save);
     }
 
-    protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type, PlayerSave save) {
-        // TODO распутать клубок, тут для одинаковых roomName должны быть и gameName тоже одинаковые, иначе идея может быть нарушена тестами
-        return createPlayer(name, gameName, roomName, type, save, "board");
+    protected Player createPlayer(String name, String room, String game, MultiplayerType type, PlayerSave save) {
+        // TODO распутать клубок, тут для одинаковых room должны быть и game тоже одинаковые, иначе идея может быть нарушена тестами
+        return createPlayer(name, game, room, type, save, "board");
     }
 
     protected void verifyRemove(PlayerGame playerGame, GameField field) {
@@ -110,8 +109,8 @@ public class AbstractPlayerGamesTest {
         return createPlayerWithScore(score, playerName, "room", type);
     }
 
-    protected Player createPlayerWithScore(int score, String playerName, String roomName, MultiplayerType type) {
-        Player player = createPlayer(playerName, roomName, "game " + roomName, type);
+    protected Player createPlayerWithScore(int score, String playerName, String room, MultiplayerType type) {
+        Player player = createPlayer(playerName, room, "game " + room, type);
         setScore(score, player);
         return player;
     }
@@ -130,8 +129,8 @@ public class AbstractPlayerGamesTest {
         when(roomService.isActive(room)).thenReturn(active);
     }
 
-    protected Player createPlayerWithScore(int score, String roomName) {
-        Player player = createPlayer(roomName, "game");
+    protected Player createPlayerWithScore(int score, String room) {
+        Player player = createPlayer(room, "game");
         setScore(score, player);
         return player;
     }
@@ -142,19 +141,22 @@ public class AbstractPlayerGamesTest {
         when(gamePlayers.get(index).shouldLeave()).thenReturn(!stillPlay);
     }
 
-    protected Player createPlayer(String name, String gameName,
-                                  String roomName, MultiplayerType type,
+    protected Player createPlayer(String name, String game,
+                                  String room, MultiplayerType type,
                                   PlayerSave save, Object board)
     {
         GameService gameService = mock(GameService.class);
         GameType gameType = mock(GameType.class);
         gameTypes.add(gameType);
         PlayerScores scores = mock(PlayerScores.class);
-        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
-        when(gameType.name()).thenReturn(gameName);
-        when(gameService.getGame(anyString())).thenReturn(gameType);
+        when(gameType.getPlayerScores(anyInt(), any())).thenReturn(scores);
+        when(gameType.getSettings()).thenReturn(mock(Settings.class));
+        when(gameType.name()).thenReturn(game);
+        when(gameService.getGameType(anyString())).thenReturn(gameType);
+        when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
+        when(gameService.exists(anyString())).thenReturn(true);
 
-        Player player = new Player(name, "url", gameType, scores, mock(Information.class));
+        Player player = new Player(name, "url", new RoomGameType(gameType), scores, mock(Information.class));
         player.setEventListener(mock(InformationCollector.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
@@ -166,7 +168,7 @@ public class AbstractPlayerGamesTest {
                 TestUtils.getPlayerGame(
                         playerGames,
                         player,
-                        roomName,
+                        room,
                         inv -> {
                             GameField field = mock(GameField.class);
                             when(field.reader()).thenReturn(mock(BoardReader.class));
@@ -226,7 +228,7 @@ public class AbstractPlayerGamesTest {
         return result.asMap();
     }
 
-    private List<String> players(Room room) {
+    private List<String> players(GameRoom room) {
         return room.players().stream()
                 .map(this::name)
                 .collect(toList());

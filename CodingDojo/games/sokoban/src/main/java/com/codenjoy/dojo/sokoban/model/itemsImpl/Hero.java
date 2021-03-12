@@ -23,7 +23,9 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.sokoban.model.items.Field;
 import com.codenjoy.dojo.sokoban.services.Player;
@@ -97,9 +99,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                     field.moveBox(dest, newDest);
                 }
                 if (field.isBoxOnTheMark(dest)) {
-                        field.removeBoxOnTheMark(dest);
-                        field.setBox(newDest);
-                        field.setMark(dest);
+                    field.removeBoxOnTheMark(dest);
+                    field.setBox(newDest);
+                    field.setMark(dest);
                 }
             }
             if (!field.isBarrier(newDest) && field.isMark(newDest)) {
@@ -107,7 +109,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                 field.setBoxOnTheMark(newDest);
             }
 
-                if (!field.isBarrier(dest)) {
+            if (!field.isBarrier(dest)) {
                 move(dest);
             }
         }

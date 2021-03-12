@@ -24,65 +24,39 @@ package com.codenjoy.dojo.a2048.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.LevelUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 public class LevelImpl implements Level {
 
-    private final Settings settings;
     private LengthToXY xy;
-    private Parameter<Integer> size;
-    private Parameter<Integer> newAdd;
-    private Parameter<Integer> mode;
-
     private String map;
-
-    public LevelImpl() {
-        settings = new SettingsImpl();
-        size = settings.addEditBox("Size").type(Integer.class).def(5);
-        newAdd = settings.addEditBox("New numbers").type(Integer.class).def(-1);
-        mode = settings.addEditBox("Mode").type(Integer.class).def(0);
-        map = StringUtils.leftPad("", size(), ' ');
-        xy = new LengthToXY(size());
-    }
+    private int size;
 
     public LevelImpl(String board) {
-        this();
         map = board;
-        size.update((int)Math.sqrt(board.length()));
+        size = (int)Math.sqrt(board.length());
         xy = new LengthToXY(size());
     }
 
     @Override
     public int size() {
-        return size.getValue();
+        return size;
     }
 
     @Override
-    public List<Number> getNumbers() {
+    public List<Number> numbers() {
         return LevelUtils.getObjects(xy, map,
                 (pt, el) -> new Number(el.number(), pt),
                 Elements.valuesExcept(Elements.NONE));
     }
 
     @Override
-    public int getNewAdd() {
-        return newAdd.getValue();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
-    }
-
-    @Override
-    public Mode getMode() {
-        return Mode.values()[mode.getValue()];
+    public List<Number> breaks() {
+        return LevelUtils.getObjects(xy, map,
+                (pt, el) -> new Number(el.number(), pt),
+                Elements._x);
     }
 
 }

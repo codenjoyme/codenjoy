@@ -105,6 +105,13 @@ var Element = {
     MALE_ZOMBIE: el('♂', 'ZOMBIE'),
     ZOMBIE_DIE: el('✝', 'ZOMBIE_DIE'),
 
+    UNSTOPPABLE_LASER_PERK: el('l', 'UNSTOPPABLE_LASER_PERK'),
+    DEATH_RAY_PERK: el('r', 'DEATH_RAY_PERK'),
+    UNLIMITED_FIRE_PERK: el('f', 'UNLIMITED_FIRE_PERK'),
+    FIRE_PERK: el('a', 'FIRE_PERK'),
+    JUMP_PERK: el('j', 'JUMP_PERK'),
+    MOVE_BOXES_PERK: el('m', 'MOVE_BOXES_PERK'),
+
     getElements: function () {
         return elements.slice(0);
     },

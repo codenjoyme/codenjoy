@@ -19,3 +19,6 @@
 [submodule "CodingDojo/client-runner"]
 	path = CodingDojo/client-runner
 	url = https://github.com/codenjoyme/codenjoy-client-runner.git
+[submodule "CodingDojo/games/vacuum"]
+	path = CodingDojo/games/vacuum
+	url = https://github.com/codenjoyme/codenjoy-vacuum.git

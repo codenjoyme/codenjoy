@@ -23,42 +23,31 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.TestGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
+import com.codenjoy.dojo.bomberman.services.GameSettings;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 20.04.13
- * Time: 13:32
- */
 public class PlayerTest {
 
     private EventListener listener;
     private Field field;
     private GameSettings settings;
+    private Dice dice;
 
     @Before
     public void setup() {
-        settings = mock(GameSettings.class);
-        when(settings.killWallScore()).thenReturn(v(10));
-        when(settings.catchPerkScore()).thenReturn(v(5));
+        settings = spy(new TestGameSettings());
+        dice = mock(Dice.class);
+
         when(settings.getLevel()).thenReturn(mock(Level.class));
-        when(settings.getHero(any(Level.class))).thenReturn(mock(Hero.class));
-        when(settings.getRoundSettings()).thenReturn(new RoundSettingsWrapper() {
-            @Override
-            public Parameter<Boolean> roundsEnabled() {
-                return new SimpleParameter<>(false);
-            }
-        });
+        when(settings.getHero(any(Level.class), any(Dice.class)))
+                .thenReturn(mock(Hero.class));
 
         field = mock(Field.class);
         when(field.settings()).thenReturn(settings);
@@ -68,8 +57,7 @@ public class PlayerTest {
 
     @Test
     public void shouldProcessEventWhenListenerIsNotNull() {
-        Parameter<Boolean> roundsEnabled = new SimpleParameter<>(false);
-        Player player = new Player(listener, roundsEnabled);
+        Player player = new Player(listener, dice, settings);
         player.newHero(field);
 
         player.event(Events.KILL_DESTROY_WALL);
@@ -79,8 +67,7 @@ public class PlayerTest {
 
     @Test
     public void shouldNotProcessEventWhenListenerNotNull() {
-        Parameter<Boolean> roundsEnabled = new SimpleParameter<>(false);
-        Player player = new Player(null, roundsEnabled);
+        Player player = new Player(null, dice, settings);
         player.newHero(field);
 
         player.event(Events.KILL_DESTROY_WALL);

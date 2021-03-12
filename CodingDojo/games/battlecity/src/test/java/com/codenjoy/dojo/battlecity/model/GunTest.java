@@ -23,93 +23,123 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.services.GameSettings;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
+import static org.junit.Assert.*;
 
 public class GunTest {
 
+    private GameSettings settings;
+
+    @Before
+    public void setup() {
+        settings = new GameSettings();
+    }
+    
     @Test
-     public void test5ticks() {
-        Gun gun = new Gun(5);
+    public void test5ticks() {
+        // given
+        settings.integer(TANK_TICKS_PER_SHOOT, 5);
+        
+        Gun gun = new Gun(settings);
 
-        assertTrue(gun.tryToFire());
-        assertFalse(gun.tryToFire());
+        // when then
+        assertEquals(true, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
 
+        // when then
         gun.tick();
         gun.tick();
         gun.tick();
         gun.tick();
-        assertFalse(gun.tryToFire());
-        gun.tick();
+        assertEquals(false, gun.tryToFire());
 
-        assertTrue(gun.tryToFire());
-        assertFalse(gun.tryToFire());
+        // when then
+        gun.tick();
+        assertEquals(true, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
     }
 
     @Test
     public void test2Ticks() {
-        Gun gun = new Gun(2);
+        // given
+        settings.integer(TANK_TICKS_PER_SHOOT, 2);
+        
+        Gun gun = new Gun(settings);
 
-        assertTrue(gun.tryToFire());
-        assertFalse(gun.tryToFire());
+        // when then
+        assertEquals(true, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
 
+        // when then
         gun.tick();
-        assertFalse(gun.tryToFire());
-        gun.tick();
+        assertEquals(false, gun.tryToFire());
 
-        assertTrue(gun.tryToFire());
-        assertFalse(gun.tryToFire());
+        // when then
+        gun.tick();
+        assertEquals(true, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
     }
 
     @Test
     public void test1Ticks() {
-        Gun gun = new Gun(1);
+        // given
+        settings.integer(TANK_TICKS_PER_SHOOT, 1);
 
-        assertTrue(gun.tryToFire());
-        assertFalse(gun.tryToFire());
+        Gun gun = new Gun(settings);
 
+        // when then
+        assertEquals(true, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
+
+        // when then
         gun.tick();
-
-        assertTrue(gun.tryToFire());
-        assertFalse(gun.tryToFire());
+        assertEquals(true, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
     }
 
     @Test
     public void test0Ticks() {
-        Gun gun = new Gun(0);
+        // given
+        settings.integer(TANK_TICKS_PER_SHOOT, 0);
+        
+        Gun gun = new Gun(settings);
 
-        assertTrue(gun.tryToFire());
+        // when then
+        assertEquals(true, gun.tryToFire());
 
+        // when then
         gun.tick();
-
-        assertTrue(gun.tryToFire());
+        assertEquals(true, gun.tryToFire());
     }
 
     @Test
     public void testReset() {
         // given
-        Gun gun = new Gun(5);
+        settings.integer(TANK_TICKS_PER_SHOOT, 5);
 
-        assertTrue(gun.tryToFire());
-        assertFalse(gun.tryToFire());
+        Gun gun = new Gun(settings);
 
+        // when then
+        assertEquals(true, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
+
+        // when then
         gun.tick();
+        assertEquals(false, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
 
-        assertFalse(gun.tryToFire());
-        assertFalse(gun.tryToFire());
-
+        // when then
         gun.tick();
+        assertEquals(false, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
 
-        assertFalse(gun.tryToFire());
-        assertFalse(gun.tryToFire());
-
-        // when
+        // when then
         gun.reset();
-
-        // then
-        assertTrue(gun.tryToFire());
-        assertFalse(gun.tryToFire());
+        assertEquals(true, gun.tryToFire());
+        assertEquals(false, gun.tryToFire());
     }
 }

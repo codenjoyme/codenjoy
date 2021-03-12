@@ -25,6 +25,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="boardLog"/>
 <head>
     <meta charset="utf-8">
     <title>Game board</title>
@@ -51,11 +52,11 @@
         }
     </style>
 
-    <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
     <script src="${ctx}/resources/js/all.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="boardLog" contextPath="${ctx}" gameName="${gameName}" playerId="${playerId}" readableName="${readableName}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}"></div>
 
     <div id="board_page">
         <%@include file="canvases.jsp"%>

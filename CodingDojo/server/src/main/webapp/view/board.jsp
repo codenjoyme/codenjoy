@@ -21,10 +21,12 @@
   --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="en">
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="board"/>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -34,11 +36,14 @@
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
     <jsp:include page="common-inclusion.jsp" />
 
-    <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
-    <script src="${ctx}/resources/js/${gameNameOnly}.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
+    <script src="${ctx}/resources/js/${gameOnly}.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="board" contextPath="${ctx}" gameName="${gameName}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <sec:authorize access="isAuthenticated()">
+        <c:set var="authenticated" scope="request" value="true"/>
+    </sec:authorize>
+    <div id="settings" page="${page}" authenticated="${authenticated}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <%@include file="forkMe.jsp"%>
 
@@ -47,7 +52,7 @@
             <input type="button" id="want-donate" value="Помочь проекту..."/>
         </div>
         <%@include file="canvases.jsp"%>
-        <%@include file="leaderstable.jsp"%>
+        <%@include file="leaderboard.jsp"%>
         <%@include file="advertisement.jsp"%>
         <%@include file="donate.jsp"%>
         <%@include file="widgets.jsp"%>

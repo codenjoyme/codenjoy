@@ -30,26 +30,26 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
-import static java.util.logging.Level.*;
+import static java.util.logging.Level.ALL;
 
 
 public class TextIOHelper {
     protected static Logger log = Logger.getLogger(TextIOHelper.class.getName());
 
-   public static String getStringFromResourcesTxt(int level) {
+    public static String getStringFromResourcesTxt(int level) {
         String result = "EMPTY";
         ClassLoader classLoader = TextIOHelper.class.getClassLoader();
-       try {
-           URI uri = classLoader.getResource("sokoban/level" + level + ".txt").toURI();
+        try {
+            URI uri = classLoader.getResource("sokoban/level" + level + ".txt").toURI();
 //           alternate way
 //           String pathHandledStr = System.getProperty( "os.name" ).contains( "indow" ) ? uri.toString().substring(6) : uri.toString();
 //           Path pathHandled = Paths.get(pathHandledStr);
-           Path path = Paths.get(uri);
-          result = String.join("", Files.readAllLines(path));
+            Path path = Paths.get(uri);
+            result = String.join("", Files.readAllLines(path));
 
-       } catch (IOException|URISyntaxException e) {
-           log.log(ALL, e.getMessage());
-       }
+        } catch (IOException | URISyntaxException e) {
+            log.log(ALL, e.getMessage());
+        }
         return result;
     }
 
@@ -64,7 +64,7 @@ public class TextIOHelper {
             Path path = Paths.get(uri);
             result = String.join("", Files.readAllLines(path));
 
-        } catch (IOException|URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
             log.log(ALL, e.getMessage());
         }
         return result;
@@ -78,16 +78,15 @@ public class TextIOHelper {
         try {
             if (!nameOfTextResource.isEmpty()) {
                 path = Paths.get(classLoader.getResource(nameOfTextResource).toURI());
-            }
-            else {
+            } else {
                 path = Paths.get(classLoader.getResource("sokoban/level0.rtf").toURI());
             }
             result = String.join("", Files.readAllLines(path));
 
-        } catch (IOException|URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
             log.log(ALL, e.toString());
         }
         return result;
-     }
+    }
 
 }

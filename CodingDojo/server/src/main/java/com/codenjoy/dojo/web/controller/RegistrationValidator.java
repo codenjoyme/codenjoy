@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,10 +34,6 @@ import org.springframework.validation.Validator;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 
-/**
- * @author Igor Petrov
- * Created at 3/27/2019
- */
 @Component
 @RequiredArgsConstructor
 public class RegistrationValidator implements Validator {
@@ -50,6 +47,7 @@ public class RegistrationValidator implements Validator {
     private final com.codenjoy.dojo.web.controller.Validator validator;
     private final RoomsAliaser rooms;
     private final Registration registration;
+    private final PlayerService playerService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -60,6 +58,10 @@ public class RegistrationValidator implements Validator {
     public void validate(Object target, Errors errors) {
         if (target == null) {
             return;
+        }
+
+        if (!playerService.isRegistrationOpened()) {
+            errors.rejectValue("readableName", "registration.closed");
         }
 
         Player player = (Player) target;
@@ -97,9 +99,9 @@ public class RegistrationValidator implements Validator {
             errors.rejectValue("passwordConfirmation", "registration.password.invalidConfirmation");
         }
 
-        String gameName = rooms.getGameName(player.getGameName());
-        if (!validator.isGameName(gameName, CANT_BE_NULL)) {
-            errors.rejectValue("gameName", "registration.game.invalid", new Object[]{ gameName }, null);
+        String game = rooms.getGameName(player.getGame());
+        if (!validator.isGameName(game, CANT_BE_NULL)) {
+            errors.rejectValue("game", "registration.game.invalid", new Object[]{ game }, null);
         }
     }
 

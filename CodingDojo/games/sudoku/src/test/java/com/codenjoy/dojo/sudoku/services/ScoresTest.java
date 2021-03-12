@@ -24,23 +24,16 @@ package com.codenjoy.dojo.sudoku.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.sudoku.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
+
     private PlayerScores scores;
-
-    private Settings settings;
-    private SettingsWrapper wrapper;
-
-    private Integer failPenalty;
-    private Integer winScore;
-    private Integer successScore;
-    private Integer loosePenalty;
+    private GameSettings settings;
 
     public void fail() {
         scores.event(Events.FAIL);
@@ -60,32 +53,31 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
-        wrapper = SettingsWrapper.setup(settings);
-        scores = new Scores(0, wrapper);
-
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
-        failPenalty = settings.getParameter("Fail penalty").type(Integer.class).getValue();
-        successScore = settings.getParameter("Success score").type(Integer.class).getValue();
-        loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
+        settings = new GameSettings();
+        scores = new Scores(0, settings);
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, wrapper);
+        scores = new Scores(140, settings);
 
-        success();  //+10
-        success();  //+10
-        success();  //+10
-        success();  //+10
+        success();  // +10
+        success();  // +10
+        success();  // +10
+        success();  // +10
 
-        fail(); //-10
+        fail(); // -10
 
         win(); // +1000
 
         loose(); // -500
 
-        assertEquals(140 + 4* successScore - failPenalty + winScore - loosePenalty, scores.getScore());
+        assertEquals(140
+                + 4 * settings.integer(SUCCESS_SCORE)
+                - settings.integer(FAIL_PENALTY)
+                + settings.integer(WIN_SCORE)
+                - settings.integer(LOOSE_PENALTY),
+                scores.getScore());
     }
 
     @Test

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.quake2d.model;
  */
 
 import com.codenjoy.dojo.quake2d.services.Events;
+import com.codenjoy.dojo.quake2d.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
@@ -32,12 +33,8 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
- */
 public class Quake2D implements Field {
+
     public static final int IS_DEAD = 1;
     public static final int IS_ALIVE = 0;
     public static final int ABILITY_TIME_EXIST = 5;
@@ -54,22 +51,21 @@ public class Quake2D implements Field {
     private List<Robot> robots;
     private List<Robot> robotsNew;
 
+    private GameSettings settings;
 
-    public Quake2D(Level level, Dice dice) {
+    public Quake2D(Level level, Dice dice, GameSettings settings) {
+        this.settings = settings;
         counterOfAbility = ABILITY_TIME_EXIST;
         this.dice = dice;
         walls = level.getWalls();
         size = level.getSize();
-        abilities = new LinkedList<Ability>();
-        players = new LinkedList<Player>();
-        bullets = new LinkedList<Bullet>();
-        robotsNew = new LinkedList<Robot>();
+        abilities = new LinkedList<>();
+        players = new LinkedList<>();
+        bullets = new LinkedList<>();
+        robotsNew = new LinkedList<>();
         robots = level.getRobots(this);
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
 //        robots.addAll(robotsNew);
@@ -245,7 +241,7 @@ public class Quake2D implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<Point>(){{
+                return new LinkedList<>(){{
                     addAll(Quake2D.this.getWalls());
                     addAll(Quake2D.this.getHeroes());
                     addAll(Quake2D.this.getAbilities());
@@ -262,5 +258,10 @@ public class Quake2D implements Field {
     @Override
     public boolean catchAbility(int x, int y) {
         return getAbilities().contains(pt(x, y));
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 }

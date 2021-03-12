@@ -66,7 +66,7 @@ public class Sapper extends PlayerHero<Field> implements State<Elements, Object>
         }
     }
 
-    public void iWantToHaveMineDetectorWithChargeNumber(int charge) {
+    public void charge(int charge) {
         this.mineDetector = new MineDetector(charge);
     }
 

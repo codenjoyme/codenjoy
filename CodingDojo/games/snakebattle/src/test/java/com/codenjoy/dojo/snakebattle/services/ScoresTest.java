@@ -31,6 +31,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -39,18 +40,19 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class ScoresTest {
 
+    private GameSettings settings;
     Scores scores;
     Events event;
     int changeValue;
 
     public ScoresTest(int startScore, Events event, int changeValue) {
-        SettingsImpl settings = new SettingsImpl();
+        settings = new GameSettings()
+                .integer(WIN_SCORE, 30)
+                .integer(APPLE_SCORE, 1)
+                .integer(GOLD_SCORE, 5)
+                .integer(DIE_PENALTY, 10)
+                .integer(STONE_SCORE, -1);
         scores = new Scores(startScore, settings);
-        settings.getParameter("Win score").type(Integer.class).update(30);
-        settings.getParameter("Apple score").type(Integer.class).update(1);
-        settings.getParameter("Gold score").type(Integer.class).update(5);
-        settings.getParameter("Die penalty").type(Integer.class).update(10);
-        settings.getParameter("Stone score").type(Integer.class).update(-1);
         this.event = event;
         this.changeValue = changeValue;
     }

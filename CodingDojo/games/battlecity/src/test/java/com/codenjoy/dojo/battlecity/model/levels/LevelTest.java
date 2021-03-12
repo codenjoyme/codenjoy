@@ -40,7 +40,8 @@ public class LevelTest {
 
     @Test
     public void test() {
-        LevelImpl level = new LevelImpl(new GameRunner().getMap(), mock(Dice.class));
+        GameRunner runner = new GameRunner();
+        Level level = runner.getSettings().level(runner.getDice());
 
         assertEquals(34, level.size());
 
@@ -50,7 +51,7 @@ public class LevelTest {
 
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼ ¿    ¿    ¿        ¿    ¿    ¿ ☼\n" +
+                "☼ Ѡ    Ѡ    Ѡ        Ѡ    Ѡ    Ѡ ☼\n" +
                 "☼                                ☼\n" +
                 "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼\n" +
                 "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼\n" +

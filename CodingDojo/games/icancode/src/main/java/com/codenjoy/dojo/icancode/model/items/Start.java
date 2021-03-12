@@ -28,7 +28,7 @@ import com.codenjoy.dojo.icancode.model.Elements;
 
 public class Start extends BaseItem {
 
-    public Start(Elements el) {
-        super(el);
+    public Start() {
+        super(Elements.START);
     }
 }

@@ -27,6 +27,7 @@ import com.codenjoy.dojo.battlecity.client.Board;
 import com.codenjoy.dojo.battlecity.client.YourSolver;
 import com.codenjoy.dojo.battlecity.client.ai.AISolver;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -80,22 +82,24 @@ public class SmokeTest {
             }
 
             @Override
-            public String getMap() {
-                return  "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                        "☼¿ ¿ ¿   ¿ ¿ ¿☼" +
-                        "☼ ╬ ╬%╬ ╬%╬ ╬ ☼" +
-                        "☼ ╬ ╬%╬☼╬%╬ ╬ ☼" +
-                        "☼#╬~╬%╬ ╬%╬~╬#☼" +
-                        "☼#╬ ╬%   %╬ ╬#☼" +
-                        "☼#   %╬ ╬%   #☼" +
-                        "☼   ╬%   %╬   ☼" +
-                        "☼  # %╬ ╬% #  ☼" +
-                        "☼ ╬#╬%╬╬╬%╬#╬ ☼" +
-                        "☼ ╬#╬%╬ ╬%╬#╬ ☼" +
-                        "☼ ╬         ╬ ☼" +
-                        "☼ ╬   ╬╬╬   ╬ ☼" +
-                        "☼     ╬ ╬     ☼" +
-                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .string(LEVEL_MAP,
+                                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                                "☼¿ ¿ ¿   ¿ ¿ ¿☼" +
+                                "☼ ╬ ╬%╬ ╬%╬ ╬ ☼" +
+                                "☼ ╬ ╬%╬☼╬%╬ ╬ ☼" +
+                                "☼#╬~╬%╬ ╬%╬~╬#☼" +
+                                "☼#╬ ╬%   %╬ ╬#☼" +
+                                "☼#   %╬ ╬%   #☼" +
+                                "☼   ╬%   %╬   ☼" +
+                                "☼  # %╬ ╬% #  ☼" +
+                                "☼ ╬#╬%╬╬╬%╬#╬ ☼" +
+                                "☼ ╬#╬%╬ ╬%╬#╬ ☼" +
+                                "☼ ╬         ╬ ☼" +
+                                "☼ ╬   ╬╬╬   ╬ ☼" +
+                                "☼     ╬ ╬     ☼" +
+                                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
             }
         };
 

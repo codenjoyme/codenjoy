@@ -23,46 +23,80 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
+import com.codenjoy.dojo.icancode.model.items.Zombie;
+import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
+import com.codenjoy.dojo.icancode.model.items.ZombiePot;
+import com.codenjoy.dojo.icancode.model.items.perks.Perk;
+import com.codenjoy.dojo.icancode.services.GameSettings;
+import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.icancode.services.Levels;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.Direction.STOP;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AbstractGameTest {
+public abstract class AbstractGameTest {
 
     public static final int FIRE_TICKS = 6;
     private static final int COUNT_LAYERS = 3;
-    ICanCode game;
+
+    public boolean mode;
+    protected ICanCode game;
     private Printer<PrinterData> printer;
 
-    Hero hero;
-    Dice dice;
-    EventListener listener;
-    Player player;
+    protected Hero hero;
+    protected Dice dice;
+    protected EventListener listener;
+    protected Player player;
     private Player otherPlayer;
+    protected GameSettings settings;
 
     @Before
     public void setup() {
+        Levels.init();
+        Zombie.init();
+        ZombiePot.init();
+
+        mode = ICanCode.TRAINING;
+
+        settings = new GameSettings()
+                .integer(PERK_ACTIVITY, 10)
+                .integer(PERK_AVAILABILITY, 10)
+                .integer(PERK_DROP_RATIO, 100)
+                .integer(DEATH_RAY_PERK_RANGE, 10)
+                .integer(GUN_RECHARGE, 0)
+                .integer(GUN_REST_TIME, 0)
+                .integer(GUN_SHOT_QUEUE, 0)
+                .string(DEFAULT_PERKS, "ajm,ajm");
+
         dice = mock(Dice.class);
     }
 
-    OngoingStubbing<Integer> dice(int... ints) {
+    protected void ticks(int count) {
+        for (int i = 0; i < count; i++) {
+            game.tick();
+        }
+    }
+
+    protected OngoingStubbing<Integer> dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -70,16 +104,16 @@ public class AbstractGameTest {
         return when;
     }
 
-    void givenFl(String board) {
+    protected void givenFl(String board) {
         givenFl(viewSize(board), board);
     }
 
-    void givenFl(int viewSize, String board) {
+    protected void givenFl(int viewSize, String board) {
         Levels.VIEW_SIZE = viewSize;
         Level level = createLevels(new String[]{board}).get(0);
-        game = new ICanCode(level, dice, ICanCode.TRAINING);
+        game = new ICanCode(level, dice, mode, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
 
@@ -88,7 +122,7 @@ public class AbstractGameTest {
                 .forEach(item -> {
                     HeroItem heroItem = (HeroItem) item;
                     if (heroItem.getHero() == null) {
-                        Player player = new Player(mock(EventListener.class));
+                        Player player = new Player(mock(EventListener.class), settings);
                         game.newGame(player);
                         Hero hero = player.getHero();
                         heroItem.init(hero);
@@ -102,20 +136,33 @@ public class AbstractGameTest {
                 COUNT_LAYERS);
     }
 
-    int viewSize(String board) {
+    protected int viewSize(String board) {
         return (int)Math.sqrt(board.length());
     }
 
-    List<Level> createLevels(String[] boards) {
+    protected List<Level> createLevels(String[] boards) {
         List<Level> levels = new LinkedList<>();
         for (String board : boards) {
-            Level level = new LevelImpl(board);
+            Level level = new LevelImpl(board, settings);
             levels.add(level);
         }
         return levels;
     }
 
-    void assertL(String expected) {
+    protected OngoingStubbing<Integer> generateFemale() {
+        return dice(1);
+    }
+
+    protected OngoingStubbing<Integer> generateMale() {
+        return dice(0);
+    }
+
+    protected OngoingStubbing<Direction> givenZombie() {
+        Zombie.BRAIN = mock(ZombieBrain.class);
+        return when(Zombie.BRAIN.whereToGo(any(Point.class), any(Field.class)));
+    }
+
+    protected void assertL(String expected) {
         assertA(expected, LAYER1);
     }
 
@@ -124,11 +171,26 @@ public class AbstractGameTest {
                 TestUtils.injectN(printer.print().getLayers().get(index)));
     }
 
-    void assertE(String expected) {
+    protected void assertE(String expected) {
         assertA(expected, LAYER2);
     }
 
-    void assertF(String expected) {
+    protected void assertF(String expected) {
         assertA(expected, LAYER3);
+    }
+
+    protected void has(Class<? extends Perk> perkClass) {
+        assertEquals(true, hero.has(perkClass));
+    }
+
+    protected void hasNot(Class<? extends Perk> perkClass) {
+        assertEquals(false, hero.has(perkClass));
+    }
+
+    protected void zombieAt(int x, int y) {
+        givenZombie().thenReturn(STOP);
+        Zombie zombie = new Zombie(true);
+        zombie.setField(mock(Field.class));
+        game.move(zombie, pt(x, y));
     }
 }

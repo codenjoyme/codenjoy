@@ -13,6 +13,8 @@ public class LevelC1 implements Level {
                 "    // some statement here\n" +
                 "}</pre>\n" +
 
+                "Before you can jump take the \"JUMP_PERK\" near you.<br><br>\n" +
+
                 "And these new methods for jumping through it:<br>\n" +
                 "<pre>robot.jumpLeft();\n" +
                 "robot.jumpRight();\n" +
@@ -63,7 +65,11 @@ public class LevelC1 implements Level {
                 "}\n" +
                 "\n" +
                 "function destination(scanner) {\n" +
-                "    var result = scanner.getGold();\n" +
+                "    var result = scanner.getPerks();\n" +
+                "    if (result.length > 0) {\n" +
+                "        return result;\n" +
+                "    }\n" +
+                "    result = scanner.getGold();\n" +
                 "    if (result.length > 0) {\n" +
                 "        return result;\n" +
                 "    }\n" +
@@ -76,7 +82,7 @@ public class LevelC1 implements Level {
         return  "          \n" +
                 " ######## \n" +
                 " #S.O..$# \n" +
-                " #......# \n" +
+                " #j.....# \n" +
                 " ####...# \n" +
                 "    #..O# \n" +
                 " ####...# \n" +
@@ -92,6 +98,10 @@ public class LevelC1 implements Level {
                 "		'synonyms':[]," +
                 "		'values':['goOverHole()', 'jump()', 'jumpLeft()', 'jumpRight()', 'jumpUp()', 'jumpDown()']" +
                 "	}," +
+                "	'scanner.':{" +
+                "		'synonyms':['robot.getScanner().']," +
+                "		'values':['getPerks()']" +
+                "	}" +
                 "	'.jump(':{" +
                 "		'synonyms':[]," +
                 "		'values':['\\\'RIGHT\\'', '\\'DOWN\\'', '\\'LEFT\\'', '\\'UP\\'']" +
@@ -107,7 +117,9 @@ public class LevelC1 implements Level {
     public List<String> befungeCommands() {
         return Level.extendBefunge(new LevelB3(),
                 "value-hole",
-                "robot-jump-left", "robot-jump-right", "robot-jump-up", "robot-jump-down",
+                "value-jump-perk",
+                "robot-jump-left", "robot-jump-right",
+                "robot-jump-up", "robot-jump-down",
                 "robot-jump");
     }
 }

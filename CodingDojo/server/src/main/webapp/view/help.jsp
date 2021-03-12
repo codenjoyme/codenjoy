@@ -25,6 +25,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="help"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Codenjoy help</title>
@@ -34,27 +35,39 @@
     <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
-    <div id="settings" page="help" contextPath="${ctx}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}"></div>
+
     <%@include file="forkMe.jsp"%>
+
     <div class="page-header">
         <h1>Help</h1>
     </div>
     <h3>Environment setup and registration</h3>
-    <ol>
-        <li>Download client templates for your game
-            <select id="games">
-            <option value="">(select your game)</option>
-            <c:forEach items="${gameNames}" var="gameName">
-                <option value="${gameName}">${gameName}</option>
-            </c:forEach>
-            </select>
-        <li>Setup project according to instruction in README.txt for your developing language</li>
-        <ul>
-            <li>For Java, please <a href="${ctx}/resources/user/engine-libs.zip">download zip</a> and install Engine library before (run setup.bat inside)</li>
-        </ul>
-        <li>Read game instructions: <c:forEach items="${gameNames}" var="gameName"><a href="${ctx}/help?gameName=${gameName}">${gameName}</a>&nbsp;&nbsp;</c:forEach></li>
-        <li>Open <a href="${ctx}/register">registration page</a></li>
-        <li>Enter your name/password and codenjoy!</li>
-    </ol>
+    <div class="main-page">
+        <ol>
+            <li>Download client templates for your game
+                <select id="games">
+                <option value="">(select your game)</option>
+                <c:forEach items="${games}" var="item">
+                    <option value="${item}">${item}</option>
+                </c:forEach>
+                </select>
+            <li>Setup project according to instruction in README.txt for your developing language</li>
+            <ul>
+                <li>For Java, please <a href="${ctx}/resources/user/engine-libs.zip">download zip</a> and install Engine library before (run setup.bat inside)</li>
+            </ul>
+            <li>Read game instructions:
+                <ul>
+                    <c:forEach items="${games}" var="item">
+                        <li>
+                            <a href="${ctx}/help?game=${item}">${item}</a>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </li>
+            <li>Open <a href="${ctx}/register">registration page</a></li>
+            <li>Enter your name/password and codenjoy!</li>
+        </ol>
+    </div>
 </body>
 </html>

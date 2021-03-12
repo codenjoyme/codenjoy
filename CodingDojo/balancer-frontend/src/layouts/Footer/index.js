@@ -11,6 +11,7 @@ import Styles from './styles.module.css';
 
 const orgEmail = process.env.REACT_APP_EVENT_ORG_EMAIL;
 const joinSlackUrl = process.env.REACT_APP_JOIN_CHAT_LINK;
+const joinTelegramUrl = process.env.REACT_APP_JOIN_TELEGRAM_LINK;
 
 export class Footer extends PureComponent {
     render() {
@@ -56,11 +57,21 @@ export class Footer extends PureComponent {
                     </li>
                     <li>
                         <a href={ joinSlackUrl } rel='noopener noreferrer' target='_blank'>
-                            Долучайся до чату
+                            Долучайтесь до чату в Slack
                             <FontAwesomeIcon
                                 className={ Styles.navigationIcon }
-                                icon={ [ 'far', 'comments' ] }
-                                style={ { color: '#fff' } }
+                                icon={ [ 'fab', 'slack' ] }
+                                style={ { color: '#ffffff' } }
+                            />
+                        </a>
+                    </li>
+                    <li>
+                        <a href={ joinTelegramUrl } rel='noopener noreferrer' target='_blank'>
+                            або в Telegram
+                            <FontAwesomeIcon
+                                className={ Styles.navigationIcon }
+                                icon={ [ 'fab', 'telegram-plane' ] }
+                                style={ { color: '#fff'  } }
                             />
                         </a>
                     </li>

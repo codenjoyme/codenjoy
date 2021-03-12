@@ -24,29 +24,19 @@ package com.codenjoy.dojo.minesweeper.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+
+import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.*;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> gameOverPenalty;
-    private final Parameter<Integer> destroyedPenalty;
-    private final Parameter<Integer> destroyedForgotPenalty;
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> clearBoardScore;
-
     private volatile int score;
+    private GameSettings settings;
     private volatile int destroyed;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
+        this.settings = settings;
         destroyed = 0;
-
-        gameOverPenalty = settings.addEditBox("Game over penalty").type(Integer.class).def(15);
-        destroyedPenalty = settings.addEditBox("Forgot penalty").type(Integer.class).def(5);
-        destroyedForgotPenalty = settings.addEditBox("Destoyed forgot penalty").type(Integer.class).def(2);
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(300);
-        clearBoardScore = settings.addEditBox("Clear board score").type(Integer.class).def(1);
     }
 
     @Override
@@ -78,11 +68,11 @@ public class Scores implements PlayerScores {
     }
 
     private void onClearBoard() {
-        score += clearBoardScore.getValue();
+        score += settings.integer(CLEAR_BOARD_SCORE);
     }
 
     private void onWin() {
-        score += winScore.getValue();
+        score += settings.integer(WIN_SCORE);
     }
 
     private void onNoMoreCharge() {
@@ -95,13 +85,13 @@ public class Scores implements PlayerScores {
     }
 
     private void onForgotCharge() {
-        score -= destroyedPenalty.getValue();
-        destroyed -= destroyedForgotPenalty.getValue();
+        score -= settings.integer(DESTROYED_FORGOT_PENALTY);
+        destroyed -= settings.integer(DESTROYED_PENALTY);
         destroyed = Math.max(0, destroyed);
     }
 
     private void onKillOnMine() {
-        score -= gameOverPenalty.getValue();
+        score -= settings.integer(GAME_OVER_PENALTY);
         destroyed = 0;
     }
 

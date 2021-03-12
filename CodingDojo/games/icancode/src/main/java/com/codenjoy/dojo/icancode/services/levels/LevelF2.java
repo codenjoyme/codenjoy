@@ -13,6 +13,8 @@ public class LevelF2 implements Level {
                 "robot.jumpLeft();\n" +
                 "robot.jump(\"RIGHT\");</pre>\n" +
 
+                "Don't forget the \"JUMP_PERK\" to jump.<br><br>\n" +
+
                 "Remember ! Your program should work for all previous levels too.";
     }
 
@@ -31,7 +33,7 @@ public class LevelF2 implements Level {
         return  "              \n" +
                 "              \n" +
                 " ############ \n" +
-                " #S.........# \n" +
+                " #S.j.......# \n" +
                 " ##########.# \n" +
                 "          #.# \n" +
                 " ##########.# \n" +

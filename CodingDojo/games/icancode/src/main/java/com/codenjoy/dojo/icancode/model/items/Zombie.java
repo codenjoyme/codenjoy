@@ -24,14 +24,31 @@ package com.codenjoy.dojo.icancode.model.items;
 
 import com.codenjoy.dojo.icancode.model.*;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
 public class Zombie extends FieldItem implements Tickable {
 
-    public static int WALK_EACH_TICKS = 2;
-    public static ZombieBrain BRAIN = new ZombieBrain();
+    // TODO to use another way to change this data
+    public static int WALK_EACH_TICKS;
+    public static ZombieBrain BRAIN;
+
+    static {
+        init();
+    }
+
+    public static void init() {
+        WALK_EACH_TICKS = 2;
+        BRAIN = new ZombieBrain();
+    }
+
     private int ticks = 0;
     private boolean die;
+
+    public Zombie(Elements gender) {
+        super(gender);
+        die = false;
+    }
 
     public Zombie(boolean gender) {
         super(getElement(gender));
@@ -54,22 +71,22 @@ public class Zombie extends FieldItem implements Tickable {
     public void action(Item item) {
         if (die) return;
 
-        HeroItem heroItem = getIf(item, HeroItem.class);
-        if (heroItem == null) {
-            return;
-        }
-
-        Hero hero = heroItem.getHero();
-        if (!hero.isFlying()) {
-            removeFromCell();
-            hero.dieOnZombie();
-        }
+        check(item, HeroItem.class)
+                .ifPresent(heroItem -> {
+                    Hero hero = heroItem.getHero();
+                    if (!hero.isFlying()) {
+                        removeFromCell();
+                        hero.dieOnZombie();
+                    }
+                });
     }
 
     @Override
     public void tick() {
         if (die) {
+            Cell cell = getCell();
             removeFromCell();
+            field.dropNextPerk().ifPresent(cell::add);
         }
 
         if (ticks++ % WALK_EACH_TICKS == 0) {
@@ -80,11 +97,10 @@ public class Zombie extends FieldItem implements Tickable {
         if (direction == null) {
             return;
         }
-        int newX = direction.changeX(getCell().getX());
-        int newY = direction.changeY(getCell().getY());
+        Point to = direction.change(getCell());
 
-        if (!field.isBarrier(newX, newY) && !field.isAt(newX, newY, Zombie.class)) {
-            field.move(this, newX, newY);
+        if (!field.isBarrier(to) && !field.isAt(to, Zombie.class)) {
+            field.move(this, to);
         }
     }
 

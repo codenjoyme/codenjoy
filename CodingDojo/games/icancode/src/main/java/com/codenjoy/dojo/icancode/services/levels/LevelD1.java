@@ -9,6 +9,9 @@ public class LevelD1 implements Level {
         return "On this Maze you can see a lot of boxes. \n" +
                 "You can jump over box and pull/push any box.<br><br>\n" +
 
+                "Before you can push/pull take the \"MOVE_BOXES_PERK\" near you.<br>\n" +
+                "Don't forget the \"JUMP_PERK\" to jump.<br><br>\n" +
+
                 "It is possible to move the box only forward or backward, \"side pulling\" is not allowed.<br><br>\n" +
 
                 "There are 4 corresponding functions for each direction: \n" +
@@ -28,7 +31,7 @@ public class LevelD1 implements Level {
     }
 
     @Override
-    public String winCode() {
+    public String winCode() { // TODO исправить чтобы можно было двигать коробки
         return "function program(robot) {\n" +
                 "    var scanner = robot.getScanner();\n" +
                 "    var dest = destination(scanner);\n" +
@@ -59,7 +62,11 @@ public class LevelD1 implements Level {
                 "}\n" +
                 "\n" +
                 "function destination(scanner) {\n" +
-                "    var result = scanner.getGold();\n" +
+                "    var result = scanner.getPerks();\n" +
+                "    if (result.length > 0) {\n" +
+                "        return result;\n" +
+                "    }\n" +
+                "    result = scanner.getGold();\n" +
                 "    if (result.length > 0) {\n" +
                 "        return result;\n" +
                 "    }\n" +
@@ -71,11 +78,11 @@ public class LevelD1 implements Level {
     public String map() {
         return  "              \n" +
                 "   ########   \n" +
-                "   #S...B.#   \n" +
+                "   #SmjBB.#   \n" +
                 "   ###B...#   \n" +
                 "     #B...#   \n" +
                 "   ###$B..####\n" +
-                "   #$....B..B#\n" +
+                "   #$...BB..B#\n" +
                 "   #.#####...#\n" +
                 "   #.#   #...#\n" +
                 "   #.#####.B.#\n" +
@@ -103,6 +110,7 @@ public class LevelD1 implements Level {
     public List<String> befungeCommands() {
         return Level.extendBefunge(new LevelC2(),
                 "value-box",
+                "value-move-boxes-perk",
                 "robot-pull");
     }
 }

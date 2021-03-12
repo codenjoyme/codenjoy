@@ -49,8 +49,4 @@ public interface Field extends GameField<Player> {
     int size();
 
     boolean isBarrierFor(Tank tank, Point pt);
-
-    int slipperiness();
-
-    int prizeWorking();
 }

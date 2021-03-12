@@ -87,6 +87,7 @@
         <module>excitebike</module>
         <module>selfdefense</module>
         <module>japanese</module>
+        <module>vacuum</module>
     </modules>
 
     <profiles>
@@ -380,6 +381,7 @@
                                          update="true"/>
 
                                     <!-- используется для отключения DEBUG информации в STDOUT java клиентов -->
+                                    <!-- TODO ??? если logback.xml уже есть в игре, то не добавлять пустой (пример expansion) -->
                                     <echo file="./target/stuff/logback.xml" append="false">
                                         <![CDATA[
                                             <configuration></configuration>

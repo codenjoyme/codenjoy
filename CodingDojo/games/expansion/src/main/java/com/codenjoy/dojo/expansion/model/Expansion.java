@@ -28,7 +28,7 @@ import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
 import com.codenjoy.dojo.expansion.services.Events;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
@@ -45,12 +45,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
-
 public class Expansion implements Tickable, IField {
 
-    public static final Events WIN_MULTIPLE = Events.WIN(data.winScore());
-    public static final Events DRAW_MULTIPLE = Events.WIN(data.drawScore());
+    public static Events WIN_MULTIPLE;
+    public static Events DRAW_MULTIPLE;
     public static final Events WIN_SINGLE = Events.WIN(0);
     public static final Events LOOSE = Events.LOOSE();
 
@@ -63,6 +61,7 @@ public class Expansion implements Tickable, IField {
     private Level level;
     private final Ticker ticker;
     private final Dice dice;
+    private GameSettings settings;
 
     private boolean isMultiplayer;
     private boolean nothingChanged;
@@ -71,10 +70,13 @@ public class Expansion implements Tickable, IField {
     private List<Player> losers;
     private int roundTicks;
 
-    public Expansion(Level level, Ticker ticker, Dice dice, GameLogger gameLogger, boolean multiple) {
+    public Expansion(Level level, Ticker ticker, Dice dice, GameLogger gameLogger, boolean multiple, GameSettings settings) {
         this.level = level;
         this.ticker = ticker;
         this.dice = dice;
+        this.settings = settings;
+        WIN_MULTIPLE = Events.WIN(settings.winScore());
+        DRAW_MULTIPLE = Events.WIN(settings.drawScore());
         level.setField(this);
         isMultiplayer = multiple;
         players = new LinkedList();
@@ -133,8 +135,8 @@ public class Expansion implements Tickable, IField {
             }
         }
 
-        if (data.roundLimitedInTime()) {
-            if (roundTicks >= data.roundTicks()) {
+        if (settings.roundLimitedInTime()) {
+            if (roundTicks >= settings.roundTicks()) {
                 for (Player player : players) {
                     if (losers.contains(player)) continue;
                     player.event(DRAW_MULTIPLE);
@@ -207,7 +209,7 @@ public class Expansion implements Tickable, IField {
             List<HeroForces> forces = cell.getItems(HeroForces.class);
             if (forces.size() <= 1) continue;
 
-            nothingChanged &= !data.attack().calculate(forces);
+            nothingChanged &= !settings.attack().calculate(forces);
         }
 
         if (logger.isDebugEnabled()) {
@@ -343,7 +345,7 @@ public class Expansion implements Tickable, IField {
     }
 
     private boolean isWaitingOthers() {
-        return isMultiplayer && data.waitingOthers() && gameNotStarted() && players.size() != 4;
+        return isMultiplayer && settings.waitingOthers() && gameNotStarted() && players.size() != 4;
     }
 
     private boolean gameNotStarted() {
@@ -433,7 +435,7 @@ public class Expansion implements Tickable, IField {
             return 0;
         }
 
-        return force.leave(count, data.leaveForceCount());
+        return force.leave(count, settings.leaveForceCount());
     }
 
     private int countForces(Hero hero, int x, int y) {
@@ -548,8 +550,8 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public int getRoundTicks() {
-        if (!data.roundLimitedInTime()) {
-            return SettingsWrapper.UNLIMITED;
+        if (!settings.roundLimitedInTime()) {
+            return GameSettings.UNLIMITED;
         }
         return roundTicks;
     }
@@ -663,4 +665,8 @@ public class Expansion implements Tickable, IField {
         return JsonUtils.toStringSorted(lg.json());
     }
 
+    @Override
+    public GameSettings settings() {
+        return settings;
+    }
 }

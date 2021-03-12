@@ -23,8 +23,9 @@ package com.codenjoy.dojo.snakebattle.model.hero;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.snakebattle.model.DirectionUtils.getPointAt;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static java.util.stream.Collectors.toList;
 
 public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tail>, Player> {
@@ -76,7 +78,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     }
 
     public List<Tail> reversedBody() {
-        return new LinkedList<Tail>(elements){{
+        return new LinkedList<>(elements){{
             Collections.reverse(this);
         }};
     }
@@ -228,7 +230,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
         if (field.isStone(head) && !isFlying()) {
             stonesCount++;
             if (!isFury()) {
-                reduce(field.stoneReduced().getValue(), NOW);
+                reduce(settings().integer(STONE_REDUCED), NOW);
             }
         }
         if (field.isFlyingPill(head)) {
@@ -243,11 +245,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     }
 
     public void eatFlying() {
-        flyingCount += field.flyingCount().getValue();
+        flyingCount += settings().integer(FLYING_COUNT);
     }
 
     public void eatFury() {
-        furyCount += field.furyCount().getValue();
+        furyCount += settings().integer(FURY_COUNT);
     }
 
     public void count() {

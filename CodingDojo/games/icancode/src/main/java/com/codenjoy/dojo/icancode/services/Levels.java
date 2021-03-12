@@ -38,9 +38,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class Levels {
 
-    public static int VIEW_SIZE = 20;
+    // TODO to use another way to change this data
+    public static int VIEW_SIZE;
+
     public static final int VIEW_SIZE_TESTING = 16;
     public static final int COUNT_LAYERS = 3;
+
+    static {
+        init();
+    }
+
+    public static void init() {
+        VIEW_SIZE = 20;
+    }
 
     private Levels() {
         throw new IllegalAccessError("Utility class");
@@ -90,17 +100,17 @@ public final class Levels {
                 new LevelZ());
     }
 
-    public static void setup() {
+    public static void setup(GameSettings settings) {
         AtomicInteger index = new AtomicInteger();
-        all().forEach(level -> SettingsWrapper.data.addLevel(index.incrementAndGet(), level));
+        all().forEach(level -> settings.addLevel(index.incrementAndGet(), level));
     }
 
-    public static Level loadLevel(int level) {
-        return load(SettingsWrapper.data.levelMap(level));
+    public static Level loadLevel(int level, GameSettings settings) {
+        return load(settings.levelMap(level), settings);
     }
 
-    public static Level load(String levelMap) {
-        return new LevelImpl(resize(decorate(Encoding.removeN(levelMap)), size()));
+    public static Level load(String levelMap, GameSettings settings) {
+        return new LevelImpl(resize(decorate(Encoding.removeN(levelMap)), size()), settings);
     }
 
     // TODO я думаю этот метод не нужен тут, так как он дублирует Layered view

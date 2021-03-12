@@ -312,6 +312,13 @@ var Element = {
     MALE_ZOMBIE: el('♂', 'ZOMBIE'),
     ZOMBIE_DIE: el('✝', 'ZOMBIE_DIE'),
 
+    UNSTOPPABLE_LASER_PERK: el('l', 'UNSTOPPABLE_LASER_PERK'),
+    DEATH_RAY_PERK: el('r', 'DEATH_RAY_PERK'),
+    UNLIMITED_FIRE_PERK: el('f', 'UNLIMITED_FIRE_PERK'),
+    FIRE_PERK: el('a', 'FIRE_PERK'),
+    JUMP_PERK: el('j', 'JUMP_PERK'),
+    MOVE_BOXES_PERK: el('m', 'MOVE_BOXES_PERK'),
+
     getElements: function () {
         return elements.slice(0);
     },
@@ -610,6 +617,18 @@ var Board = function (boardString) {
                     Element.ZOMBIE_DIE];
         return get(LAYER2, elements);
     };
+
+    var getPerks = function () {
+        var elements = [
+            Element.UNSTOPPABLE_LASER_PERK,
+            Element.DEATH_RAY_PERK,
+            Element.UNLIMITED_FIRE_PERK,
+            Element.FIRE_PERK,
+            Element.JUMP_PERK,
+            Element.MOVE_BOXES_PERK
+        ];
+        return get(LAYER1, elements);
+    }
 
     var getHoles = function () {
         return get(LAYER1, Element.HOLE);
@@ -913,6 +932,9 @@ var Board = function (boardString) {
                 case 8:
                     result += ' Zombies: ' + printArray(getZombies());
                     break;
+                case 9:
+                    result += ' Perks: ' + printArray(getPerks());
+                    break;
             }
 
             if (i != layer1.length - 1) {
@@ -940,6 +962,7 @@ var Board = function (boardString) {
         getStarts: getStarts,
         getZombies: getZombies,
         getZombieStart: getZombieStart,
+        getPerks: getPerks,
         getExits: getExits,
         getHoles: getHoles,
         isMeAlive: isMeAlive,

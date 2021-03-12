@@ -34,8 +34,6 @@ public interface Field extends RoundGameField<Player> {  // TODO примени�
 
     boolean FOR_HERO = true;
 
-    Dice dice();
-
     int size();
 
     List<Hero> heroes(boolean activeAliveOnly);
@@ -57,8 +55,6 @@ public interface Field extends RoundGameField<Player> {  // TODO примени�
     void remove(Bomb bomb);
 
     void remove(Wall wall);
-
-    GameSettings settings();
 
     List<PerkOnBoard> perks();
 

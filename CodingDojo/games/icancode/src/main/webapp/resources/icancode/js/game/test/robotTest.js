@@ -111,7 +111,7 @@ var robotTest = function() {
         controllerActions.length = 0;
     }
 
-    game = {};
+    setup = {};
     var loggerActions = [];
     var controllerActions = [];
 

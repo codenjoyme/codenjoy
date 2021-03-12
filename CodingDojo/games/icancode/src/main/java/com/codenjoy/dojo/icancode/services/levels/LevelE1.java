@@ -19,6 +19,8 @@ public class LevelE1 implements Level {
                 "robot.jumpLeft();\n" +
                 "robot.pullLeft();</pre>\n" +
 
+                "Don't forget the \"JUMP_PERK\" to jump and the \"MOVE_BOXES_PERK\" to push/pull boxes.<br><br>\n" +
+
                 "Remember ! Your program should work for all previous levels too.";
     }
 
@@ -36,9 +38,9 @@ public class LevelE1 implements Level {
     public String map() {
         return  "                \n" +
                 "  #####         \n" +
-                "  #S..#         \n" +
+                "  #S.j#         \n" +
                 "  #..B#######   \n" +
-                "  #B..B˃...$#   \n" +
+                "  #m..B˃...$#   \n" +
                 "  ###....BBB#   \n" +
                 "    #.B....$#   \n" +
                 "    #...˄B..### \n" +

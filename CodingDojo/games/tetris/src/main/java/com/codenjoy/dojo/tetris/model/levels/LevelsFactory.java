@@ -49,7 +49,7 @@ public class LevelsFactory {
     }
 
     private Set<Class<? extends Levels>> allLevelsClasses() {
-        return new HashSet<Class<? extends Levels>>(){{
+        return new HashSet<>(){{
             add(EasyLevels.class);
             add(HardLevels.class);
             add(ProbabilityWithoutOverflownLevels.class);
@@ -58,8 +58,8 @@ public class LevelsFactory {
         }};
     }
 
-    public Levels createLevels(String level, Dice dice, FigureQueue playerQueue) {
-        String className = LevelsFactory.class.getPackage().getName() + ".level." + level;
+    public Levels createLevels(String levelsType, Dice dice, FigureQueue playerQueue) {
+        String className = LevelsFactory.class.getPackage().getName() + ".level." + levelsType;
         try {
             Class<?> aClass = this.getClass().getClassLoader().loadClass(className);
             Constructor<?> constructor = aClass.getConstructor(Dice.class, FigureQueue.class);

@@ -25,21 +25,49 @@ package com.codenjoy.dojo.a2048.model.generator;
 
 import com.codenjoy.dojo.a2048.model.*;
 import com.codenjoy.dojo.a2048.model.Number;
+import com.codenjoy.dojo.services.Dice;
+import com.google.common.base.Supplier;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class CornerGenerator implements Generator {
+
+    private Dice dice;
+    private int count;
+
+    public CornerGenerator(Dice dice, int count) {
+        this.dice = dice;
+        this.count = count;
+    }
 
     @Override
     public void generate(Numbers numbers) {
         int last = numbers.size() - 1;
-        checkAndSet(numbers, 0, 0);
-        checkAndSet(numbers, 0, last);
-        checkAndSet(numbers, last, 0);
-        checkAndSet(numbers, last, last);
+
+        List<Supplier<Boolean>> corners = new LinkedList<>();
+        corners.add(() -> checkAndSet(numbers, 0, 0));
+        corners.add(() -> checkAndSet(numbers, 0, last));
+        corners.add(() -> checkAndSet(numbers, last, 0));
+        corners.add(() -> checkAndSet(numbers, last, last));
+
+        // TODO щось таке насерив, але працює
+        IntStream.range(0, count)
+                .forEach(i -> {
+                    while (!corners.isEmpty()){
+                        int index = dice.next(corners.size());
+                        if (corners.remove(index).get()) break;
+                    }
+                });
+
     }
 
-    private void checkAndSet(Numbers numbers, int x, int y) {
-        if (!numbers.isBusy(x, y)) {
+    private boolean checkAndSet(Numbers numbers, int x, int y) {
+        boolean added = !numbers.isBusy(x, y);
+        if (added) {
             numbers.add(new Number(2, x, y));
         }
+        return added;
     }
 }

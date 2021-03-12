@@ -22,12 +22,12 @@
 
 /*
  * Based on work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
- * From http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
+ * From http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-setup.html
  **/
 function initRunnerBefunge(logger, getLevelInfo, storage) {
 
-    if (game.debug) {
-        game.debugger();
+    if (setup.debug) {
+        setup.debugger();
     }
 
     var defaultSize = 11;
@@ -367,8 +367,32 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         stack.push('LASER');
     }
 
+    var valueUnstoppableLaserPerkCommand = function (x, y) {
+        stack.push('UNSTOPPABLE_LASER_PERK')
+    }
+
+    var valueDeathRayPerkCommand = function (x, y) {
+        stack.push('DEATH_RAY_PERK')
+    }
+
+    var valueUnlimitedFirePerkCommand = function (x, y) {
+        stack.push('UNLIMITED_FIRE_PERK')
+    }
+
+    var valueFirePerkCommand = function (x, y) {
+        stack.push('FIRE_PERK')
+    }
+
+    var valueJumpPerkCommand = function (x, y) {
+        stack.push('JUMP_PERK')
+    }
+
+    var valueMoveBoxesPerkCommand = function (x, y) {
+        stack.push('MOVE_BOXES_PERK')
+    }
+
     // ------------------------------------- commands -----------------------------------
-    var gameName = game.sprites;
+    var sprites = setup.sprites;
     var commands = [
         {
             id: 'start',
@@ -482,8 +506,8 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             description: 'Сканер позволяет определить, что находится на поле вокруг героя. Сторону необходимо указать предварительно.',
             img1: 'scanner-at-left.png',
             img2: 'scanner-at-right.png',
-            img3: gameName + '/value-left.png',
-            img4: gameName + '/value-right.png'
+            img3: sprites + '/value-left.png',
+            img4: sprites + '/value-right.png'
         },
 
         {
@@ -511,7 +535,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: robotGoLeftCommand,
             description: 'Команда герою двигаться влево.',
             img1: 'robot-left-1.png',
-            img2: gameName + '/robot-left.png'
+            img2: sprites + '/robot-left.png'
         },
 
         {
@@ -521,7 +545,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: robotGoRightCommand,
             description: 'Команда герою двигаться вправо.',
             img1: 'robot-right-1.png',
-            img2: gameName + '/robot-right.png'
+            img2: sprites + '/robot-right.png'
         },
 
         {
@@ -531,7 +555,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: robotGoUpCommand,
             description: 'Команда герою двигаться вверх.',
             img1: 'robot-up-1.png',
-            img2: gameName + '/robot-up.png'
+            img2: sprites + '/robot-up.png'
         },
 
         {
@@ -541,7 +565,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: robotGoDownCommand,
             description: 'Команда герою двигаться вниз.',
             img1: 'robot-down-1.png',
-            img2: gameName + '/robot-down.png'
+            img2: sprites + '/robot-down.png'
         },
 
         {
@@ -552,8 +576,8 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             description: 'Команда герою двигаться в заданном направлении. Сторону необходимо указать предварительно.',
             img1: 'robot-go-left.png',
             img2: 'robot-go-right.png',
-            img3: gameName + '/robot-left.png',
-            img4: gameName + '/robot-right.png'
+            img3: sprites + '/robot-left.png',
+            img4: sprites + '/robot-right.png'
         },
 
         {
@@ -563,7 +587,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: robotJumpLeftCommand,
             description: 'Команда герою прыгнуть влево.',
             img1: 'robot-jump-left-1.png',
-            img2: gameName + '/robot-jump-left.png'
+            img2: sprites + '/robot-jump-left.png'
         },
 
         {
@@ -573,7 +597,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: robotJumpRightCommand,
             description: 'Команда герою прыгнуть направо.',
             img1: 'robot-jump-right-1.png',
-            img2: gameName + '/robot-jump-right.png'
+            img2: sprites + '/robot-jump-right.png'
         },
 
         {
@@ -583,7 +607,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: robotJumpUpCommand,
             description: 'Команда герою прыгнуть вверх.',
             img1: 'robot-jump-up-1.png',
-            img2: gameName + '/robot-jump-up.png'
+            img2: sprites + '/robot-jump-up.png'
         },
 
         {
@@ -593,7 +617,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: robotJumpDownCommand,
             description: 'Команда герою прыгнуть вниз.',
             img1: 'robot-jump-down-1.png',
-            img2: gameName + '/robot-jump-down.png'
+            img2: sprites + '/robot-jump-down.png'
         },
 
         {
@@ -604,8 +628,8 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             description: 'Команда герою прыгнуть в заданном направлении. Cторону необходимо указать предварительно.',
             img1: 'jump-left.png',
             img2: 'jump-right.png',
-            img3: gameName + '/robot-jump-left.png',
-            img4: gameName + '/robot-jump-right.png'
+            img3: sprites + '/robot-jump-left.png',
+            img4: sprites + '/robot-jump-right.png'
         },
 
         {
@@ -616,8 +640,8 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             description: 'Команда герою тянуть/толкать в заданном направлении. Cторону необходимо указать предварительно.',
             img1: 'pull-left.png',
             img2: 'pull-right.png',
-            img3: gameName + '/robot-pull-left.png',
-            img4: gameName + '/robot-pull-right.png'
+            img3: sprites + '/robot-pull-left.png',
+            img4: sprites + '/robot-pull-right.png'
         },
 
         {
@@ -628,8 +652,8 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             description: 'Команда герою стрелять в заданном направлении. Cторону необходимо указать предварительно.',
             img1: 'fire-left.png',
             img2: 'fire-right.png',
-            img3: gameName + '/robot-fire-left.png',
-            img4: gameName + '/robot-fire-right.png'
+            img3: sprites + '/robot-fire-left.png',
+            img4: sprites + '/robot-fire-right.png'
         },
 
         {
@@ -640,7 +664,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             description: 'Указание направления "влево". Используется совместно с другими командами.',
             img1: 'value-left-2.png',
             img2: 'value-left-1.png',
-            img3: gameName +'/value-left.png'
+            img3: sprites +'/value-left.png'
         },
 
         {
@@ -651,7 +675,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             description: 'Указание направления "направо". Используется совместно с другими командами.',
             img1: 'value-right-2.png',
             img2: 'value-right-1.png',
-            img3: gameName + '/value-right.png'
+            img3: sprites + '/value-right.png'
         },
 
         {
@@ -662,7 +686,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             description: 'Указание направления "вверх". Используется совместно с другими командами.',
             img1: 'value-up-2.png',
             img2: 'value-up-1.png',
-            img3: gameName + '/value-up.png'
+            img3: sprites + '/value-up.png'
         },
 
         {
@@ -673,7 +697,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             description: 'Указание направления "вниз". Используется совместно с другими командами.',
             img1: 'value-down-2.png',
             img2: 'value-down-1.png',
-            img3: gameName + '/value-down.png'
+            img3: sprites + '/value-down.png'
         },
 
         {
@@ -690,7 +714,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-wall',
             process: valueWallCommand,
             description: 'Значние "Недосягаемо". Испольузется совместно с другими командами.',
-            img1: gameName + '/cloud.png'
+            img1: sprites + '/cloud.png'
         },
 
         {
@@ -699,7 +723,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-ground',
             process: valueGroundCommand,
             description: 'Значние "Земля". Испольузется совместно с другими командами.',
-            img1: '../' + gameName + '/floor.png'
+            img1: '../' + sprites + '/floor.png'
         },
 
         {
@@ -708,7 +732,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-start',
             process: valueStartCommand,
             description: 'Значние "Точка старта". Испольузется совместно с другими командами.',
-            img1: '../' + gameName + '/start.png'
+            img1: '../' + sprites + '/start.png'
         },
 
         {
@@ -717,7 +741,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-end',
             process: valueEndCommand,
             description: 'Значние "Точка финиша". Испольузется совместно с другими командами.',
-            img1: '../' + gameName + '/exit.png'
+            img1: '../' + sprites + '/exit.png'
         },
 
         {
@@ -726,7 +750,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-gold',
             process: valueGoldCommand,
             description: 'Значние - "Золото". Испольузется совместно с другими командами.',
-            img1: '../' + gameName + '/gold.png'
+            img1: '../' + sprites + '/gold.png'
         },
 
         {
@@ -735,7 +759,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-box',
             process: valueBoxCommand,
             description: 'Значние - "Препятствие". Испольузется совместно с другими командами.',
-            img1: '../' + gameName + '/box.png'
+            img1: '../' + sprites + '/box.png'
         },
 
         {
@@ -744,7 +768,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-hole',
             process: valueHoleCommand,
             description: 'Значние - "Яма". Испольузется совместно с другими командами.',
-            img1: '../' + gameName + '/hole.png'
+            img1: '../' + sprites + '/hole.png'
         },
 
         {
@@ -753,7 +777,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-laser-machine',
             process: valueLaserMachineCommand,
             description: 'Значние - "Лазерная машина". Испольузется совместно с другими командами.',
-            img1: '../' + gameName + '/laser_machine_charging_down.png'
+            img1: '../' + sprites + '/laser_machine_charging_down.png'
         },
 
         {
@@ -762,7 +786,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-laser',
             process: valueLaserCommand,
             description: 'Значние - "Лазер". Испольузется совместно с другими командами.',
-            img1: '../' + gameName + '/laser_down.png'
+            img1: '../' + sprites + '/laser_down.png'
         },
 
         {
@@ -772,7 +796,62 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: valueZombieCommand,
             description: 'Значние - "Зомби". Испольузется совместно с другими командами.',
             img1: 'zombies.png'
+        },
+
+        {
+            id: 'value-unstoppable-laser-perk',
+            type: 3,
+            title: 'value-unstoppable-laser-perk',
+            process: valueUnstoppableLaserPerkCommand,
+            description: 'Значение - "Неостанавливаемый лазер". Испольузется совместно с другими командами.',
+            img1: '../' + sprites + '/unstoppable_laser_perk.png'
+        },
+
+        {
+            id: 'value-death-ray-perk',
+            type: 3,
+            title: 'value-death-ray-perk',
+            process: valueDeathRayPerkCommand,
+            description: 'Значение - "Луч смерти". Испольузется совместно с другими командами.',
+            img1: '../' + sprites + '/death_ray_perk.png'
+        },
+
+        {
+            id: 'value-unlimited-fire-perk',
+            type: 3,
+            title: 'value-unlimited-fire-perk',
+            process: valueUnlimitedFirePerkCommand,
+            description: 'Значение - "Безлимитный выстрел". Испольузется совместно с другими командами.',
+            img1: '../' + sprites + '/unlimited_fire_perk.png'
+        },
+
+        {
+            id: 'value-fire-perk',
+            type: 3,
+            title: 'value-fire-perk',
+            process: valueFirePerkCommand,
+            description: 'Значение - "Возможность стрелять". Испольузется совместно с другими командами.',
+            img1: '../' + sprites + '/fire_perk.png'
+        },
+
+        {
+            id: 'value-jump-perk',
+            type: 3,
+            title: 'value-jump-perk',
+            process: valueJumpPerkCommand,
+            description: 'Значение - "Возможность прыгать". Испольузется совместно с другими командами.',
+            img1: '../' + sprites + '/jump_perk.png'
+        },
+
+        {
+            id: 'value-move-boxes-perk',
+            type: 3,
+            title: 'value-move-boxes-perk',
+            process: valueMoveBoxesPerkCommand,
+            description: 'Значение - "Возможность двигать коробки". Испольузется совместно с другими командами.',
+            img1: '../' + sprites + '/move_boxes_perk.png'
         }
+
     ];
 
     // ------------------------------------- save state -----------------------------------

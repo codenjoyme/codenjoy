@@ -21,6 +21,7 @@
 
 .elementImage {
     align-self: flex-start;
+    max-height: 70px;
 }
 
 .elementTitle {

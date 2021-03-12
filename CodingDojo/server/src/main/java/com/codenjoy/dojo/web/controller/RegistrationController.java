@@ -48,7 +48,6 @@ public class RegistrationController {
 
     private PlayerService playerService;
     private RoomsAliaser rooms;
-    private ConfigProperties properties;
     private RegistrationValidator registrationValidator;
     private RegistrationService registrationService;
 
@@ -76,7 +75,7 @@ public class RegistrationController {
     private void populateCommonRegistrationModel(Model model, boolean isAdminLogin) {
         model.addAttribute("adminLogin", isAdminLogin);
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("gameNames", rooms.alises());
+        model.addAttribute("games", rooms.alises());
     }
 
     @PostMapping()
@@ -86,14 +85,14 @@ public class RegistrationController {
             return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());
         }
 
-        String gameName = rooms.getGameName(player.getGameName());
-        String roomName = gameName; // TODO ROOM взять roomName с формы регистрации, либо если не установлено взять как тут
+        String game = rooms.getGameName(player.getGame());
+        String room = game; // TODO ROOM взять room с формы регистрации, либо если не установлено взять как тут
         
-        player.setGameName(gameName);
+        player.setGame(game);
 
         if (player.getId() == null) {
             player.setId(Hash.getRandomId());
         }
-        return registrationService.register(player, roomName, result, request, model);
+        return registrationService.register(player, room, result, request, model);
     }
 }

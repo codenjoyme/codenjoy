@@ -32,9 +32,10 @@ import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,12 +43,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
 @AllArgsConstructor
 public class MainPageController {
+
+    public static final String HELP_URI = "/help";
 
     private PlayerService playerService;
     private Registration registration;
@@ -57,40 +64,49 @@ public class MainPageController {
     private RoomsAliaser rooms;
     private RegistrationService registrationService;
 
-    @GetMapping("/help")
+    @GetMapping(HELP_URI)
     public String help(Model model) {
-        model.addAttribute("gameNames", gameService.getOnlyGameNames());
+        model.addAttribute("games", gameService.getOnlyGames());
         return "help";
     }
 
-    @GetMapping(value = "/help", params = "gameName")
-    public String helpForGame(@RequestParam("gameName") String gameName) {
-        validator.checkGameName(gameName, CANT_BE_NULL);
+    @GetMapping(value = HELP_URI, params = "game")
+    public String helpForGame(@RequestParam("game") String game) {
+        validator.checkGame(game, CANT_BE_NULL);
 
         String language = properties.getHelpLanguage();
         String suffix = (StringUtils.isEmpty(language)) ? "" : ("-" + language);
-        return "redirect:resources/help/" + gameName + suffix + ".html";
+        return "redirect:resources/help/" + game + suffix + ".html";
     }
 
     @GetMapping("/")
-    public String getMainPage(HttpServletRequest request, Model model, Authentication authentication) {
+    public String getMainPage(HttpServletRequest request, Model model,
+                              @AuthenticationPrincipal Registration.User user)
+    {
+        // если указана кастомная домашняя страничка - редиректим туда
         String mainPage = properties.getMainPage();
         if (StringUtils.isNotEmpty(mainPage)) {
             model.addAttribute("url", mainPage);
             return "redirect";
         }
 
-        if (gameService.getGameNames().size() > 1) {
-            return getMainPage(request, null, model);
+        if (user == null && !properties.isAllowUnauthorizedMainPage()) {
+            return "redirect:login";
         }
 
-        Registration.User principal = (Registration.User) authentication.getPrincipal();
-        // TODO если юзер не авторизирован, то надо вызвать борду со всеми пользователями
-        if (true) {
-            return "redirect:" + registrationService.getBoardUrl(principal.getCode(), principal.getId(), null);
-        } else {
-            return "redirect:board";
+        List<String> games = gameService.getGames();
+        // игра одна
+        if (games.size() == 1) {
+            if (user == null) {
+                // юзер неавторизирован - показываем все борды в этой игре
+                return "redirect:board/game/" + games.get(0);
+            }
+            // юзер авторизирован - показываем борду юзера
+            return "redirect:" + registrationService.getBoardUrl(user.getCode(), user.getId(), null);
         }
+
+        // игр несколько - грузим страничку с возможносью подглядеть за любой игрой
+        return getMainPage(request, null, model);
     }
 
     @GetMapping(value = "/", params = "code")
@@ -107,9 +123,8 @@ public class MainPageController {
         boolean registered = player != NullPlayer.INSTANCE;
         request.setAttribute("registered", registered);
         request.setAttribute("code", code);
-        model.addAttribute("gameName",
-                registered ? player.getGameName() : StringUtils.EMPTY);
-        model.addAttribute("gameNames", rooms.all());
+        model.addAttribute("game", registered ? player.getGame() : StringUtils.EMPTY);
+        model.addAttribute("games", rooms.all());
         return "main";
     }
 
@@ -119,6 +134,18 @@ public class MainPageController {
             addObject("message", "Invalid Username or Password");
             setViewName("errorPage");
         }};
+    }
+
+    @GetMapping("/donate")
+    public String donate(ModelMap model) {
+        model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        model.addAttribute("donateCode", properties.getDonateCode());
+        return "donate-form";
+    }
+
+    @RequestMapping("/help")
+    public String help() {
+        return "help";
     }
 
 }

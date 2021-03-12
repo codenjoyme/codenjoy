@@ -21,8 +21,8 @@
  */
 function initController(socket, runner, logger, buttons, levelProgress, getRobot) {
     
-    if (game.debug) {
-        game.debugger();
+    if (setup.debug) {
+        setup.debugger();
     }
     
     var controlling = false;
@@ -165,7 +165,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
     var preparePart = function(date, part, index, count) {
         var SEP = "|$%&|";
         return "message('" +
-                    game.playerId + SEP +
+                    setup.playerId + SEP +
                     date.getTime() + SEP +
                     index + SEP +
                     count + SEP +
@@ -253,7 +253,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
         var command = popLastCommand();
         if (!!command && command != 'WAIT') {
             logger.print('Hero do "' + command + '"');
-            if (game.demo) {
+            if (setup.demo) {
                 if (command == 'RESET') {
                     runner.cleanProgram();
                 }

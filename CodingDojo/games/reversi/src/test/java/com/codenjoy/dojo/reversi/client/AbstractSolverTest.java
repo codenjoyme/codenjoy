@@ -37,6 +37,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public abstract class AbstractSolverTest {
+
     protected Dice dice;
     protected Solver ai;
 

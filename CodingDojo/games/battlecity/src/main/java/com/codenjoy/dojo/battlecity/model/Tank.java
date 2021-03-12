@@ -27,6 +27,7 @@ import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.battlecity.model.items.Prizes;
 import com.codenjoy.dojo.battlecity.model.items.Tree;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
@@ -34,7 +35,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.battlecity.model.Elements.*;
+import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_BREAKING_WALLS;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
@@ -54,12 +56,17 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private List<Bullet> bullets;
     private Prizes prizes;
 
-    public Tank(Point pt, Direction direction, Dice dice, int ticksPerShoot) {
+    public Tank(Point pt, Direction direction, Dice dice) {
         super(pt);
         this.direction = direction;
         this.dice = dice;
-        gun = new Gun(ticksPerShoot);
-        reset();
+        bullets = new LinkedList<>();
+        prizes = new Prizes();
+    }
+
+    @Override
+    public GameSettings settings() {
+        return (GameSettings) field.settings();
     }
 
     @Override
@@ -100,7 +107,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     // TODO подумать как устранить дублирование с MovingObject
     public void move() {
-        if (this.prizes().contains(PRIZE_NO_SLIDING)) {
+
+        if (this.prizes().contains(Elements.PRIZE_NO_SLIDING)) {
             sliding.stop();
         }
 
@@ -135,7 +143,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     public void init(Field field) {
         super.init(field);
 
-        sliding = new Sliding(field, direction);
+        gun = new Gun(settings());
+        sliding = new Sliding(field, direction, settings());
+
+        reset();
 
         int c = 0;
         Point pt = this;
@@ -148,6 +159,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         }
         move(pt);
         alive = true;
+    }
+
+    protected int ticksPerShoot() {
+        return settings().integer(TANK_TICKS_PER_SHOOT);
     }
 
     public void kill(Bullet bullet) {
@@ -205,8 +220,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         fire = false;
         alive = true;
         gun.reset();
-        bullets = new LinkedList<>();
-        prizes = new Prizes();
+        bullets.clear();
+        prizes.clear();
     }
 
     public void tryFire() {

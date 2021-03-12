@@ -85,7 +85,7 @@ export function* resetPasswordValidateSaga({payload}) {
         yield call(toast.success, 'Новий пароль успішно надісланий на Ваш телефон!', {
             position: toast.POSITION.TOP_RIGHT,
         });
-        yield delay(2000);
+        yield delay(5000);
         yield put(resetPasswordValidateSuccess());
         yield call(history.replace, book.login);
     } catch (err) {

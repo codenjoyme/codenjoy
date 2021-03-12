@@ -30,17 +30,17 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.BONUS_SCORE;
+import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.WIN_SCORE;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
+
     private static final int MOVE_COUNT = 2;
     private static final int NUMBER = 5;
 
     private PlayerScores scores;
-
-    private Settings settings;
-    private Integer winScore;
-    private Integer bonusScore;
+    private GameSettings settings;
 
     public void win() {
         scores.event(Events.WIN);
@@ -52,29 +52,29 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
-        bonusScore = settings.getParameter("Bonus score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(250, settings);
 
-        bonus(); // + 100
-        bonus(); // + 100
+        bonus();
+        bonus();
 
-        Assert.assertEquals(250 + 2 * bonusScore * NUMBER / MOVE_COUNT, scores.getScore());
+        assertEquals(250
+                + 2 * settings.integer(BONUS_SCORE) * NUMBER / MOVE_COUNT,
+                scores.getScore());
     }
 
     @Test
     public void shouldCollectScores_whenWin() {
         scores = new Scores(250, settings);
 
-        win(); // + 1000
+        win();
 
-        Assert.assertEquals(250 + winScore, scores.getScore());
+        assertEquals(250 + settings.integer(WIN_SCORE),
+                scores.getScore());
     }
 }

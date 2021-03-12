@@ -29,6 +29,7 @@ import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
@@ -116,6 +117,11 @@ public class PParameter {
             @Override
             public void select(int index) {
                 // do nothing
+            }
+
+            @Override
+            public Parameter onChange(Consumer consumer) {
+                return this; // do nothing
             }
 
             @Override

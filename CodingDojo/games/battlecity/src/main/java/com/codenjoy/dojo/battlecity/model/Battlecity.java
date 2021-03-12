@@ -25,23 +25,19 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.model.items.*;
 import com.codenjoy.dojo.battlecity.services.Events;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
 public class Battlecity implements Field {
-
-    private final Parameter<Integer> slipperiness;
-    private final Parameter<Integer> prizeWorking;
 
     private int size;
 
@@ -58,16 +54,11 @@ public class Battlecity implements Field {
     private Prizes prizes;
     private List<Tank> ais;
 
-    public Battlecity(int size, Dice dice,
-                      Parameter<Integer> whichSpawnWithPrize,
-                      Parameter<Integer> damagesBeforeAiDeath,
-                      Parameter<Integer> prizeOnField,
-                      Parameter<Integer> prizeWorking,
-                      Parameter<Integer> aiTicksPerShoot,
-                      Parameter<Integer> slipperiness,
-                      Parameter<Integer> aiPrizeLimit)
-    {
+    private GameSettings settings;
+
+    public Battlecity(int size, Dice dice, GameSettings settings) {
         this.size = size;
+        this.settings = settings;
         ais = new LinkedList<>();
         prizes = new Prizes();
         walls = new LinkedList<>();
@@ -77,18 +68,8 @@ public class Battlecity implements Field {
         rivers = new LinkedList<>();
         players = new LinkedList<>();
 
-        prizeGen = new PrizeGenerator(this, dice,
-                prizeOnField,
-                prizeWorking);
-
-        aiGen = new AiGenerator(this, dice,
-                whichSpawnWithPrize,
-                damagesBeforeAiDeath,
-                aiTicksPerShoot,
-                aiPrizeLimit);
-
-        this.slipperiness = slipperiness;
-        this.prizeWorking = prizeWorking;
+        prizeGen = new PrizeGenerator(this, dice, settings);
+        aiGen = new AiGenerator(this, dice, settings);
     }
 
     public void addAiTanks(List<? extends Point> tanks) {
@@ -308,17 +289,6 @@ public class Battlecity implements Field {
         return false;
     }
 
-    @Override
-    public int slipperiness() {
-        return slipperiness.getValue();
-    }
-
-    @Override
-    public int prizeWorking() {
-        return prizeWorking.getValue();
-    }
-
-    @Override
     public boolean isBarrier(Point pt) {
         for (Wall wall : this.walls) {
             if (wall.itsMe(pt) && !wall.destroyed()) {
@@ -484,5 +454,10 @@ public class Battlecity implements Field {
 
     public void addIce(List<Ice> ice) {
         this.ice.addAll(ice);
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 }

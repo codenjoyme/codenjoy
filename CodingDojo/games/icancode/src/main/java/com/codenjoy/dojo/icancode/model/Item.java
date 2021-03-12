@@ -27,9 +27,6 @@ import com.codenjoy.dojo.services.State;
 
 import java.util.List;
 
-/**
- * Created by Mikhail_Udalyi on 01.07.2016.
- */
 public interface Item extends State<Elements, Player> {
 
     void action(Item item);

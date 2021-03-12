@@ -22,51 +22,62 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.items.perks.*;
 import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
+
+import static com.codenjoy.dojo.icancode.model.Elements.*;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_DROP_RATIO;
+import static java.util.stream.Collectors.toList;
 
 public class ICanCode implements Tickable, Field {
 
     public static final boolean TRAINING = false;
     public static final boolean CONTEST = true;
 
+    public static final int MAX_PERCENTS = 100;
+
     private Dice dice;
     private Level level;
 
     private List<Player> players;
     private boolean contest;
+    private Shooter shooter;
 
-    public ICanCode(Level level, Dice dice, boolean contest) {
+    private List<Perk> perks;
+    private GameSettings settings;
+
+    public ICanCode(Level level, Dice dice, boolean contest, GameSettings settings) {
         this.level = level;
+        this.settings = settings;
         level.setField(this);
         this.dice = dice;
         this.contest = contest;
         players = new LinkedList();
+        perks = availablePerks();
+        shooter = new Shooter(this);
     }
 
     @Override
-    public void fire(State owner, Direction direction, Point from) {
-        Point to = direction.change(from);
-        move(newLaser(owner, direction), to.getX(), to.getY());
-    }
-
-    private Laser newLaser(State owner, Direction direction) {
-        Laser laser = new Laser(owner, direction);
-        laser.setField(this);
-        return laser;
+    public void fire(Direction direction, Point from, FieldItem owner) {
+        shooter.fire(direction, from, owner);
     }
 
     int priority(Object o) {
-        if (o instanceof HeroItem) return 12;
+        if (o instanceof HeroItem) return 20;
+        if (o instanceof DeathRayPerk) return 13;
+        if (o instanceof UnstoppableLaserPerk) return 12;
+        if (o instanceof UnlimitedFirePerk) return 11;
         if (o instanceof ZombiePot) return 10;
         if (o instanceof Zombie) return 8;
         if (o instanceof LaserMachine) return 6;
@@ -83,12 +94,16 @@ public class ICanCode implements Tickable, Field {
 
         level.getItems(Tickable.class).stream()
                 .filter(it -> !(it instanceof HeroItem))
-                .filter(it -> !(it instanceof Laser && ((Laser)it).skipFirstTick()) ) // TODO это хак, надо разобраться!
                 .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
                 .map(it -> (Tickable)it)
                 .forEach(Tickable::tick);
 
-        // после всех перемещений, если герой в полете его надо на 3й леер, иначе приземлить
+        availablePerks().stream()
+                .filter(perk -> !perk.isAvailable())
+                .forEach(BaseItem::removeFromCell);
+
+        // после всех перемещений, если герой в полете его надо
+        // на 3й леер, иначе приземлить
         level.getItems(HeroItem.class).stream()
                 .map(it -> (HeroItem)it)
                 .forEach(HeroItem::fixLayer);
@@ -128,8 +143,10 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public List<Gold> golds() {
-        return level.getItems(Gold.class);
+    public List<Gold> pickedGold() {
+        return getHeroes().stream()
+                    .flatMap(hero -> hero.gold().stream())
+                    .collect(toList());
     }
 
     @Override
@@ -143,13 +160,18 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public List<Floor> floors() {
+    public List<Floor> floor() {
         return level.getItems(Floor.class);
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        return level.isBarrier(x, y);
+    public List<Perk> availablePerks() {
+        return level.getItems(Perk.class);
+    }
+
+    @Override
+    public boolean isBarrier(Point pt) {
+        return level.isBarrier(pt);
     }
 
     @Override
@@ -165,31 +187,38 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public void move(Item item, int x, int y) {
-        Cell cell = level.getCell(x, y);
+    public void move(Item item, Point pt) {
+        Cell cell = level.getCell(pt);
         cell.add(item);
         cell.comeIn(item);
     }
 
-    @Override
-    public Cell getCell(int x, int y) {
-        return level.getCell(x, y);
+    public Optional<Perk> perkAt(Point pt) {
+        Cell cell = level.getCell(pt);
+        return availablePerks().stream()
+                .filter(perk -> perk.getCell().equals(cell))
+                .findAny();
     }
 
     @Override
-    public Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
-        for (Item item : getCell(x, y).items()) {
+    public Cell getCell(Point pt) {
+        return level.getCell(pt);
+    }
+
+    @Override
+    public <T extends BaseItem> T getIf(Class<T> clazz, Point pt) {
+        for (Item item : getCell(pt).items()) {
             if (item.getClass().equals(clazz)) {
-                return item;
+                return (T)item;
             }
         }
         return null;
     }
 
     @Override
-    public boolean isAt(int x, int y, Class<? extends BaseItem>... classes) {
+    public boolean isAt(Point pt, Class<? extends BaseItem>... classes) {
         for (Class clazz : classes) {
-            if (getIfPresent(clazz, x, y) != null) {
+            if (getIf(clazz, pt) != null) {
                 return true;
             }
         }
@@ -198,20 +227,18 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public void reset() {
-        List<Gold> golds = golds();
+        // TODO что если плеер на contest
+        //      ... отнес золото на финишный спот, оно пропадет из борды?
+        //      ... с золотом покинул игру, оно пропадет из борды?
+        List<Gold> gold = pickedGold();
 
         if (contest) {
-            setRandomGold(golds); // TODO test me
-        }
-
-        golds.forEach(it -> it.reset());
-
-        if (!contest) {
-            // TODO test me
-            zombiePots().forEach(it -> it.reset());
-
-            // TODO test me
-            laserMachines().forEach(it -> it.reset());
+            setRandomGold(gold);
+        } else {
+            gold.forEach(Gold::reset);
+            zombiePots().forEach(ZombiePot::reset);
+            laserMachines().forEach(LaserMachine::reset);
+            perks.forEach(Perk::reset);
         }
     }
 
@@ -220,26 +247,23 @@ public class ICanCode implements Tickable, Field {
         return contest;
     }
 
-    private void setRandomGold(List<Gold> golds) {
-        List<Floor> floors = floors();
+    private void setRandomGold(List<Gold> gold) {
+        List<Floor> floor = floor().stream()
+                .filter(item -> item.getCell().items().size() == 1)
+                .collect(toList());
 
-        for (int i = floors.size() - 1; i > -1; --i) {
-            if (floors.get(i).getCell().items().size() > 1) {
-                floors.remove(i);
-            }
+        if (floor.isEmpty() && !gold.isEmpty()) {
+            System.out.println("Try solve this");
+            return;
         }
 
-        for (Gold gold : golds) {
-            if (gold.getHidden() && !floors.isEmpty()) {
-                int random = dice.next(floors.size());
+        for (Gold item : gold) {
+            int random = dice.next(floor.size());
 
-                Floor floor = floors.get(random);
-                floors.remove(random);
+            Floor place = floor.get(random);
+            floor.remove(random);
 
-                Cell cell = gold.getCell();
-                floor.getCell().add(gold);
-                cell.add(floor);
-            }
+            place.getCell().add(item);
         }
     }
 
@@ -249,6 +273,74 @@ public class ICanCode implements Tickable, Field {
             result.add(player.getHero());
         }
         return result;
+    }
+
+    @Override
+    public Optional<Perk> dropNextPerk() {
+        if (dice.next(MAX_PERCENTS) > settings.integer(PERK_DROP_RATIO)) {
+            return Optional.empty();
+        }
+        return PerkUtils.random(dice, isContest(), settings);
+    }
+
+    @Override
+    public void dropPickedGold(Hero hero) {
+        Cell heroCell = hero.getItem().getCell();
+        List<Cell> cells = neighbors(heroCell);
+        List<Gold> gold = hero.gold();
+        while (!gold.isEmpty() && !cells.isEmpty()) {
+            int random = dice.next(cells.size());
+            Cell place = cells.remove(random);
+
+            if (place.isOutOf(size()) || !isAvailable(place)) {
+                continue;
+            }
+
+            place.add(gold.remove(0));
+        }
+
+        if (!gold.isEmpty()) {
+            setRandomGold(gold);
+            gold.clear();
+        }
+    }
+
+    private List<Cell> neighbors(Cell cell) {
+        return new LinkedList<>(){{
+            add(cell);
+            add(getCell(QDirection.LEFT.change(cell)));
+            add(getCell(QDirection.RIGHT.change(cell)));
+
+            add(getCell(QDirection.UP.change(cell)));
+            add(getCell(QDirection.LEFT_UP.change(cell)));
+            add(getCell(QDirection.RIGHT_UP.change(cell)));
+
+            add(getCell(QDirection.DOWN.change(cell)));
+            add(getCell(QDirection.LEFT_DOWN.change(cell)));
+            add(getCell(QDirection.RIGHT_DOWN.change(cell)));
+        }};
+    }
+
+    private boolean isAvailable(Cell cell) {
+        return cell.only(0, FLOOR())
+                && cell.only(1, AIR().or(DEAD_HERO()))
+                && cell.only(2, AIR());
+    }
+
+    @NotNull
+    private Predicate<Item> AIR() {
+        return item -> item instanceof Air;
+    }
+
+    @NotNull
+    private Predicate<Item> FLOOR() {
+        return item -> item instanceof Floor;
+    }
+
+    @NotNull
+    private Predicate<Item> DEAD_HERO() {
+        return item -> item instanceof HeroItem
+                && ((HeroItem)item).getHero().isDead();
     }
 
     public void newGame(Player player) {
@@ -266,6 +358,10 @@ public class ICanCode implements Tickable, Field {
         }
     }
 
+    @Override
+    public GameSettings settings() {
+        return settings;
+    }
 
     @Override
     public BoardReader reader() {

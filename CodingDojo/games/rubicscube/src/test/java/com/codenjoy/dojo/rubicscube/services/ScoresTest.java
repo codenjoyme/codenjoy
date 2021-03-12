@@ -29,20 +29,14 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.rubicscube.services.GameSettings.Keys.FAIL_PENALTY;
+import static com.codenjoy.dojo.rubicscube.services.GameSettings.Keys.SUCCESS_SCORE;
 import static org.junit.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 05.06.13
- * Time: 20:35
- */
 public class ScoresTest {
+
     private PlayerScores scores;
-
-    private Settings settings;
-
-    private Integer failPenalty;
-    private Integer successScore;
+    private GameSettings settings;
 
     public void fail() {
         scores.event(Events.FAIL);
@@ -54,42 +48,41 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).getValue();
-        successScore = settings.addEditBox("Success score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        success();  //+1000
-        success();  //+1000
-        success();  //+1000
-        success();  //+1000
+        success();
+        success();
+        success();
+        success();
 
-        fail(); //-500
+        fail();
 
-        assertEquals(140 + 4* successScore - failPenalty, scores.getScore());
+        assertEquals(140
+                + 4 * settings.integer(SUCCESS_SCORE)
+                - settings.integer(FAIL_PENALTY),
+                scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterFail() {
-        fail();    //-500
+        fail();
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        success();    // +1000
+        success();
 
         scores.clear();
 
         assertEquals(0, scores.getScore());
     }
-
 
 }

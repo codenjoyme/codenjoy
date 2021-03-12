@@ -24,22 +24,18 @@ package com.codenjoy.dojo.fifteen.services;
 
 import com.codenjoy.dojo.fifteen.model.Bonus;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+
+
+import static com.codenjoy.dojo.fifteen.services.GameSettings.Keys.*;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> bonusScore;
-    private final Parameter<Integer> winScore;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        bonusScore = settings.addEditBox("Bonus score").type(Integer.class).def(100);
+        this.settings = settings;
     }
 
     @Override
@@ -56,9 +52,10 @@ public class Scores implements PlayerScores {
     public void event(Object event) {
         if (event instanceof Bonus) {
             Bonus bonus = (Bonus) event;
-            score += bonusScore.getValue() * bonus.getNumber() / bonus.getMoveCount();
+            score += settings.integer(BONUS_SCORE)
+                    * bonus.getNumber() / bonus.getMoveCount();
         } else if (event.equals(Events.WIN)) {
-            score += winScore.getValue();
+            score += settings.integer(WIN_SCORE);
         }
 
         score = Math.max(0, score);

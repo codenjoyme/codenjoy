@@ -1,3 +1,5 @@
+import Game from '../games';
+
 const protocol = process.env.REACT_APP_IS_SECURE
     ? process.env.REACT_APP_IS_SECURE
     : 'http';
@@ -9,7 +11,7 @@ export const getIFrameLink = (server, id) =>
     `${protocol}://${server}/codenjoy-contest/board/player/${id}?only=true`;
 
 export const getJsClient = server =>
-    `${protocol}://${server}/codenjoy-contest/resources/user/bomberman-servers.zip`;
+    `${protocol}://${server}/codenjoy-contest/resources/user/${Game.name}-servers.zip`;
 
 export const getJavaClient = server =>
-    `${protocol}://${server}/codenjoy-contest/resources/user/bomberman-servers.zip`;
+    `${protocol}://${server}/codenjoy-contest/resources/user/${Game.name}-servers.zip`;

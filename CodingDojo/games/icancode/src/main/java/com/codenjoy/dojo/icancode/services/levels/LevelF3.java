@@ -10,7 +10,8 @@ public class LevelF3 implements Level {
 
                 "Рay attention - the laser kills zombie. If it happens you will see \"ZOMBIE_DIE\" on board. <br><br>\n" +
 
-                "Another way to get lasershow on board - fire. Yes you can do it ! Sorry, we forgot to tell you about that...<br><br>\n" +
+                "Another way to get lasershow on board - fire. Yes you can do it ! " +
+                "Before you can fire take the \"FIRE_PERK\" near you.<br><br>\n" +
 
                 "There are several method for the Robot:\n" +
                 "<pre>robot.fireLeft();\n" +
@@ -53,7 +54,7 @@ public class LevelF3 implements Level {
                 " ####..$..#  ###### \n" +
                 "    #...O.#         \n" +
                 " ####....B########  \n" +
-                " #S...O$........S#  \n" +
+                " #S.a.O$........S#  \n" +
                 " #################  \n";
     }
 
@@ -74,6 +75,7 @@ public class LevelF3 implements Level {
     @Override
     public List<String> befungeCommands() {
         return Level.extendBefunge(new LevelF2(),
+                "value-fire-perk",
                 "robot-fire");
     }
 }

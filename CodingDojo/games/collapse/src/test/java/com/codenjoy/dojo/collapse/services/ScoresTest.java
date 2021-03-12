@@ -29,14 +29,13 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.SUCCESS_SCORE;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
+
     private PlayerScores scores;
-
-    private Settings settings;
-
-    private Integer successScore;
+    private GameSettings settings;
 
     public void success(int count) {
         Events success = Events.SUCCESS;
@@ -46,11 +45,8 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        successScore = 2;
-        settings.addEditBox("Success score").type(Integer.class).update(successScore);
     }
 
     @Test
@@ -62,7 +58,9 @@ public class ScoresTest {
         success(1);
         success(1);
 
-        assertEquals(1000 + 4*successScore, scores.getScore());
+        assertEquals(1000
+                        + 4 * settings.integer(SUCCESS_SCORE),
+                scores.getScore());
     }
 
     @Test
@@ -71,7 +69,9 @@ public class ScoresTest {
 
         success(5);
 
-        assertEquals(1000 + (1+2+3+4+5)*successScore, scores.getScore());
+        assertEquals(1000
+                + (1 + 2 + 3 + 4 + 5) * settings.integer(SUCCESS_SCORE),
+                scores.getScore());
     }
 
     @Test
@@ -80,7 +80,10 @@ public class ScoresTest {
 
         success(15);
 
-        assertEquals(1000 + (1+2+3+4+5+6+7+8+9+10+11+12+13+14+15)*successScore, scores.getScore());
+        assertEquals(1000
+                        + (1 + 2  + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15)
+                            * settings.integer(SUCCESS_SCORE),
+                scores.getScore());
     }
 
 }

@@ -44,7 +44,7 @@ public class TrainingType extends LevelsType {
     }
 
     @Override
-    public boolean shouldTryFindUnfilled(int levelNumber) {
-        return isLastLevel(levelNumber);
+    public boolean shouldTryFindUnfilled(int level) {
+        return isLastLevel(level);
     }
 }

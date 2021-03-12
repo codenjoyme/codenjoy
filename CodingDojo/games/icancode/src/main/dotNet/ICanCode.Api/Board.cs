@@ -96,7 +96,7 @@ namespace ICanCode.Api
         /**
          * @return Returns list of coordinates for all Zombies (even die).
          */
-        public List<Point> getZombies()
+        public List<Point> GetZombies()
         {
             return Get(Layers.LAYER2,
                     Element.FEMALE_ZOMBIE,
@@ -153,6 +153,20 @@ namespace ICanCode.Api
                     Element.LASER_DOWN);
         }
 
+        /**
+         * @return Returns list of coordinates for all perks.
+         */
+        public List<Point> GetPerks()
+        {
+            return Get(Layers.LAYER1,
+                    Element.UNSTOPPABLE_LASER_PERK,
+                    Element.DEATH_RAY_PERK,
+                    Element.UNLIMITED_FIRE_PERK,
+                    Element.FIRE_PERK,
+                    Element.JUMP_PERK,
+                    Element.MOVE_BOXES_PERK);
+        }
+
         public override string ToString()
         {
             string temp = "0123456789012345678901234567890";
@@ -203,6 +217,9 @@ namespace ICanCode.Api
                         break;
                     case 8:
                         builder.Append(" Zombies: " + ListToString(GetZombies()));
+                        break;
+                    case 9:
+                        builder.Append(" Perks: " + ListToString(GetPerks()));
                         break;
                 }
 

@@ -24,16 +24,17 @@ package com.codenjoy.dojo.snake;
 
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.snake.client.Board;
 import com.codenjoy.dojo.snake.client.ai.AISolver;
 import com.codenjoy.dojo.snake.services.GameRunner;
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.snake.services.GameSettings;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.BOARD_SIZE;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -65,10 +66,9 @@ public class SmokeTest {
             }
 
             @Override
-            protected SettingsImpl createSettings() {
-                SettingsImpl settings = super.createSettings();
-                settings.addEditBox("Board size").type(Integer.class).update(7);
-                return settings;
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .integer(BOARD_SIZE, 7);
             }
         };
 

@@ -36,61 +36,26 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private final Level level;
-
-    public GameRunner() {
-        new Scores(0, settings);
-        level = new LevelImpl(getMap());
-    }
-
-    protected String getMap() {
-        return "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-            "☼                            ☼" +
-            "☼                            ☼" +
-            "☼                            ☼" +
-            "☼                  ☼☼☼☼      ☼" +
-            "☼                  ☼☼☼☼      ☼" +
-            "☼    ☼☼☼☼          ☼☼☼☼      ☼" +
-            "☼    ☼☼☼☼          ☼☼☼☼      ☼" +
-            "☼    ☼☼☼☼                    ☼" +
-            "☼    ☼☼☼☼                    ☼" +
-            "☼                            ☼" +
-            "☼                            ☼" +
-            "☼           ☼☼☼☼             ☼" +
-            "☼           ☼☼☼☼             ☼" +
-            "☼           ☼☼☼☼             ☼" +
-            "☼           ☼☼☼☼             ☼" +
-            "☼                            ☼" +
-            "☼                            ☼" +
-            "☼                   ☼☼☼☼     ☼" +
-            "☼                   ☼☼☼☼     ☼" +
-            "☼    ☼☼☼☼                    ☼" +
-            "☼    ☼☼☼☼                    ☼" +
-            "☼    ☼☼☼☼                    ☼" +
-            "☼    ☼☼☼☼                    ☼" +
-            "☼                ☼☼☼☼        ☼" +
-            "☼                ☼☼☼☼        ☼" +
-            "☼                ☼☼☼☼        ☼" +
-            "☼       ☺        ☼☼☼☼        ☼" +
-            "☼                            ☼" +
-            "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        return new Quake2D(level, getDice());
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new Quake2D(settings.level(), getDice(), settings);
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer)score, settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.level().getSize());
     }
 
     @Override
@@ -114,12 +79,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.MULTIPLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 }

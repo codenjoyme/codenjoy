@@ -27,10 +27,12 @@ import com.codenjoy.dojo.football.model.elements.Goal;
 import com.codenjoy.dojo.football.model.elements.Hero;
 import com.codenjoy.dojo.football.model.elements.Wall;
 import com.codenjoy.dojo.football.services.Events;
+import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -45,16 +47,18 @@ public class Football implements Field {
     private List<Goal> topGoals;
     private List<Goal> bottomGoals;
     private List<Player> players;
+    private List<Ball> balls;
 
     private final int size;
     private Dice dice;
 
-    private List<Ball> balls;
+    private GameSettings settings;
 
-    public Football(Level level, Dice dice) {
+    public Football(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         walls = level.getWalls();
         size = level.getSize();
+        this.settings = settings;
         players = new LinkedList<>();
         balls = level.getBalls();
         topGoals = level.getTopGoals();
@@ -269,5 +273,10 @@ public class Football implements Field {
     public boolean isWall(int x, int y) {
         Point pt = pt(x, y);
         return x > size - 1 || x < 0 || y < 0 || y > size - 1 || getWalls().contains(pt);
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 }

@@ -43,7 +43,7 @@ public class LevelC2 implements Level {
     public String map() {
         return  "             \n" +
                 "   #######   \n" +
-                "   #S.O..#   \n" +
+                "   #SjO..#   \n" +
                 "   ####..#   \n" +
                 "      #..#   \n" +
                 "   ####..### \n" +

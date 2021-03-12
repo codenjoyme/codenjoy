@@ -23,48 +23,45 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.PlayerService;
-import com.codenjoy.dojo.services.security.RegistrationService;
-import com.codenjoy.dojo.services.security.ViewDelegationService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * @author Igor Petrov
- * Created at 3/25/2019
- */
 @Controller
 @RequestMapping(LoginController.URI)
 @AllArgsConstructor
 public class LoginController {
-    private static final String ADMIN = "/admin";
+
     public static final String URI = "/login";
+    private static final String ADMIN = "/admin";
+    private static final String OAUTH = "/oauth";
     public static final String ADMIN_URI =  URI + ADMIN;
 
     private PlayerService playerService;
     private RoomsAliaser rooms;
-    private RegistrationService registrationService;
-    private ViewDelegationService viewDelegationService;
 
     @GetMapping
-    public String register(Model model) {
+    public String login(Model model) {
         populateModel(model, false);
         return "login";
     }
 
     @GetMapping(ADMIN)
-    public String registerAdmin(Model model) {
+    public String loginAdmin(Model model) {
         populateModel(model, true);
         return "login";
     }
 
     private void populateModel(Model model, boolean isAdmin) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("gameNames", rooms.alises());
+        model.addAttribute("games", rooms.alises());
         model.addAttribute("adminLogin", isAdmin);
-//        model.addAttribute("registrationUri", viewDelegationService.registrationUri());
+    }
+
+    @GetMapping(OAUTH)
+    public String loginOauth(){
+        return "ok";
     }
 }

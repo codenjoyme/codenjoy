@@ -28,9 +28,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-/**
- * Артефакт Бомба на поле
- */
 public class Bullet extends PointImpl implements Tickable, State<Elements, Player> {
     public static final int START_DAMAGE = 10;
     public static final int WEAPON_MULTIPLICATOR = 2;

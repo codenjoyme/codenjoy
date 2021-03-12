@@ -27,20 +27,18 @@ import com.codenjoy.dojo.icancode.model.*;
 
 public class Hole extends BaseItem {
 
-    public Hole(Elements el) {
-        super(el);
+    public Hole() {
+        super(Elements.HOLE);
     }
 
     @Override
     public void action(Item item) {
-        HeroItem heroItem = getIf(item, HeroItem.class);
-        if (heroItem == null) {
-            return;
-        }
-
-        Hero hero = heroItem.getHero();
-        if (!hero.isFlying()) {
-            hero.dieOnHole();
-        }
+        check(item, HeroItem.class)
+                .ifPresent(heroItem -> {
+                    Hero hero = heroItem.getHero();
+                    if (!hero.isFlying()) {
+                        hero.dieOnHole();
+                    }
+                });
     }
 }

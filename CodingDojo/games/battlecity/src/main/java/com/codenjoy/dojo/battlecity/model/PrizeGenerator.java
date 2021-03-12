@@ -23,12 +23,16 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 import com.codenjoy.dojo.battlecity.model.items.Prize;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PRIZE_ON_FIELD;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PRIZE_WORKING;
 
 
 public class PrizeGenerator {
@@ -41,25 +45,21 @@ public class PrizeGenerator {
 
     private Field field;
     private Dice dice;
-    private Parameter<Integer> prizeOnField;
-    private Parameter<Integer> prizeWorking;
 
-    public PrizeGenerator(Field field, Dice dice,
-                          Parameter<Integer> prizeOnField,
-                          Parameter<Integer> prizeWorking)
-    {
+    private GameSettings settings;
+
+    public PrizeGenerator(Field field, Dice dice, GameSettings settings) {
         this.field = field;
         this.dice = dice;
-        this.prizeOnField = prizeOnField;
-        this.prizeWorking = prizeWorking;
+        this.settings = settings;
     }
 
     public void drop(Point pt) {
         Elements type = PRIZES.get(dice.next(PRIZES.size()));
 
         field.add(new Prize(pt,
-                prizeOnField.getValue(),
-                prizeWorking.getValue(),
+                settings.integer(PRIZE_ON_FIELD),
+                settings.integer(PRIZE_WORKING),
                 type));
     }
 }

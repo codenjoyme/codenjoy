@@ -25,10 +25,8 @@ package com.codenjoy.dojo.icancode.model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-/**
- * Created by Mikhail_Udalyi on 08.06.2016.
- */
 public abstract class BaseItem implements Item {
 
     public static final boolean PASSABLE = true;
@@ -40,7 +38,7 @@ public abstract class BaseItem implements Item {
 
     public BaseItem(Elements element) {
         this.element = element;
-        this.passable = true;
+        this.passable = PASSABLE;
     }
 
     public BaseItem(Elements element, boolean passable) {
@@ -68,14 +66,14 @@ public abstract class BaseItem implements Item {
         return items;
     }
 
-    protected <T> T getIf(Object item, Class<T> clazz) {
+    protected <T> Optional<T> check(Object item, Class<T> clazz) {
         if (item == null) {
-            return null;
+            return Optional.empty();
         }
         if (item.getClass().equals(clazz)) {
-            return (T)item;
+            return Optional.of((T) item);
         }
-        return null;
+        return Optional.empty();
     }
 
     public Elements getState() {
@@ -123,6 +121,6 @@ public abstract class BaseItem implements Item {
 
     @Override
     public int layer() {
-        return ElementsMapper.levelFor(this.getClass());
+        return element.getLayer();
     }
 }

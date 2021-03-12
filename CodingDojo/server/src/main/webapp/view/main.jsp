@@ -24,6 +24,7 @@
 
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="main"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Codenjoy</title>
@@ -33,22 +34,30 @@
     <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
-    <div id="settings" page="main" contextPath="${ctx}" gameName="${gameName}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}"></div>
+
     <%@include file="forkMe.jsp"%>
 
     <div class="page-header">
-        <h1>Hi ${(user!=null)?user:ip}, please:</h1>
+        <h1>Hi ${(user!=null)?user:ip} !</h1>
     </div>
+    <div class="main-page">
+        <div>
+            <sec:authorize access="!isAuthenticated()">
+                <a href="${ctx}/login">Login</a>
+            </sec:authorize>
+        </div>
         <div><a href="${ctx}/help">How to start</a></div>
         <div>Check game board</div>
         <div>
             <ul>
-            <c:forEach items="${gameNames}" var="gameName">
+            <c:forEach items="${games}" var="game">
                 <li>
-                    <div>${gameName.value}: <a class="gameView" gameName="${gameName.key}" href="${ctx}/board/game/${gameName.key}?viewOnly=true">View</a> | <a id="rejoin-${gameName.key}" href="${ctx}/board/rejoining/${gameName.key}">Join</a></div>
+                    <div>${game.value}: <a class="gameView" game="${game.key}" href="${ctx}/board/game/${game.key}?viewOnly=true">View</a> | <a id="rejoin-${game.key}" href="${ctx}/board/rejoining/${game.key}">Join</a></div>
                 </li>
             </c:forEach>
             </ul>
         </div>
+    </div>
 </body>
 </html>

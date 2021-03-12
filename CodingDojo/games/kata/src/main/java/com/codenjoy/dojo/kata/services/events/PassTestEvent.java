@@ -23,11 +23,10 @@ package com.codenjoy.dojo.kata.services.events;
  */
 
 
-import com.codenjoy.dojo.services.settings.Parameter;
-
 import java.text.DecimalFormat;
 
 public class PassTestEvent {
+
     private double complexity;
     private double testCount;
 
@@ -36,9 +35,7 @@ public class PassTestEvent {
         this.testCount = testCount;
     }
 
-    public int getScore(Parameter<Integer> A, Parameter<Integer> D) {
-        double a = A.getValue();
-        double d = D.getValue();
+    public int getScore(double a, double d) {
         double perTest = complexity * a * d / (100 * testCount);
         if (perTest < 1) {
             return 1;

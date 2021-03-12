@@ -78,6 +78,11 @@ public class PostgresDBConfig {
     }
 
     @Bean
+    public Chat chat() {
+        return new Chat(connectionThreadPollFactory());
+    }
+
+    @Bean
     public GameData gameData() {
         return new GameData(connectionThreadPollFactory());
     }

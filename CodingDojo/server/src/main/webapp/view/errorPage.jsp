@@ -25,6 +25,7 @@
 <!DOCTYPE html>
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="error"/>
 <head>
     <title>Codenjoy</title>
 
@@ -33,14 +34,15 @@
     <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
-    <div id="settings" page="main" contextPath="${ctx}" gameName="${gameName}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}"></div>
+
     <%@include file="forkMe.jsp"%>
 
     <div class="page-header">
         <h1>WTF! Something wrong...</h1>
     </div>
-        <div>Your ticket number is: ${ticketNumber}</div></br>
-        <div>${message}</div></br>
+        <div id="ticket-number">Your ticket number is: ${ticketNumber}</div></br>
+        <div id="error-message">${message}</div></br>
         <div><a href="${ctx}">Go to main page</a><div></br>
         <div>${stacktrace}</div></br>
     </div>

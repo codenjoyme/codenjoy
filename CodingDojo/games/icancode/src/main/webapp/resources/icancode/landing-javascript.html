@@ -155,6 +155,12 @@ You can always stop the program by clicking the <button class="button reset">Res
             <li><span class="list-values text-uppercase">laser_right</span> - <span class="list-values"> Laser beam is moving right. </span></li>
             <li><span class="list-values text-uppercase">laser_up</span> - <span class="list-values"> Laser beam is moving up.</span></li>
             <li><span class="list-values text-uppercase">laser_down</span> - <span class="list-values"> Laser beam is moving down.</span></li>
+            <li><span class="list-values text-uppercase">unstoppable_laser_perk</span> - <span class="list-values"> This is a special perk that gives your laser the power to be unstoppable. An unstoppable laser doesn't stop after interaction with box, other_hero, zombie.</span></li>
+            <li><span class="list-values text-uppercase">death_ray_perk</span> - <span class="list-values"> This is a special perk that gives you the power to fire a one-tick-living bunch of lasers that assembled as a ray. This perk can work in conjunction with unstoppable_laser_perk.</span></li>
+            <li><span class="list-values text-uppercase">unlimited_fire_perk</span> - <span class="list-values"> This is a special perk that gives you the power to fire without recharging.</span></li>
+            <li><span class="list-values text-uppercase">fire_perk</span> - <span class="list-values"> This is a special perk that gives you the ability to fire.</span></li>
+            <li><span class="list-values text-uppercase">jump_perk</span> - <span class="list-values"> This is a special perk that gives you the ability to jump.</span></li>
+            <li><span class="list-values text-uppercase">move_boxes_perk</span> - <span class="list-values"> This is a special perk that gives you the ability to push/pull boxes.</span></li>
         </ul>
 
         <p>Robot can walk, jump over holes and lasers and pull boxes with the following code:</p>
@@ -301,7 +307,10 @@ assert scanner.countNear(12, 7, "BOX") == 3;</pre>
           <pre>assert scanner.getElements() == ['NONE', 'WALL', 'MY_ROBOT', 'OTHER_ROBOT',
 'LASER_MACHINE', 'LASER_MACHINE_READY',
 'LASER_LEFT', 'LASER_RIGHT', 'LASER_UP', 'LASER_DOWN',
-'START', 'EXIT', 'GOLD', 'HOLE', 'BOX']; </pre>
+'START', 'EXIT', 'GOLD', 'HOLE', 'BOX',
+'UNSTOPPABLE_LASER_PERK', 'DEATH_RAY_PERK',
+'UNLIMITED_FIRE_PERK','FIRE_PERK',
+'JUMP_PERK','MOVE_BOXES_PERK']; </pre>
 
           <p><span class="func">function getWholeBoard()</span> - Returns all elements on board. This is three-dimensional array [x][y][elements].</p>
             <pre>assert scanner.getWholeBoard() ==
@@ -310,7 +319,7 @@ assert scanner.countNear(12, 7, "BOX") == 3;</pre>
 [['WALL'],['MY_ROBOT'],['GOLD'],['WALL']],
 [['WALL'],['WALL'],['WALL'],['WALL']]];</pre>
           
-          <p><span class="func">function getOtherRobots()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStart,  getExit, getHoles</p>
+          <p><span class="func">function getOtherRobots()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStart,  getExit, getHoles, getPerks</p>
           
           <pre>var points = scanner.getOtherRobots();
 assert points == [new Point(5, 12), new Point(3, 7)];

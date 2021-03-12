@@ -298,6 +298,7 @@ footer {
     display: inline;
     position: relative;
     float: right;
-    margin-right: 150px; /* form-me.png width */
+    margin-right: 150px;
     z-index: 100;
+    font-size: 20px;
 }

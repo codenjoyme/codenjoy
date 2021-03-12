@@ -27,25 +27,16 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-/**
- * Класс, который умеет подсчитывать очки за те или иные действия.
- * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
- */
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.BANKRUPT_PENALTY;
+
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> bankruptPenalty;
-    private final Parameter<Integer> limitDays;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        bankruptPenalty = settings.addEditBox("Bankrupt penalty").type(Integer.class).def(100);
-        limitDays = settings.addEditBox("Limit days").type(Integer.class).def(30);
+        this.settings = settings;
     }
 
     @Override
@@ -61,7 +52,7 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         EventArgs eventArgs = (EventArgs) event;
-        ScoreMode mode = getScoreMode();
+        ScoreMode mode = settings.scoreMode();
         switch (eventArgs.type) {
             case WIN:
                 if (mode == ScoreMode.SUM_OF_PROFITS)
@@ -71,7 +62,7 @@ public class Scores implements PlayerScores {
                 break;
             case LOOSE:
                 if (mode == ScoreMode.SUM_OF_PROFITS)
-                    score -= bankruptPenalty.getValue();
+                    score -= settings.integer(BANKRUPT_PENALTY);
                 break;
         }
         score = Math.max(0, score);
@@ -79,12 +70,6 @@ public class Scores implements PlayerScores {
 
     private int toScore(double value) {
         return (int) (100 * value);
-    }
-
-    private ScoreMode getScoreMode() {
-        return limitDays.getValue() > 0
-                ? ScoreMode.LAST_DAY_ASSETS
-                : ScoreMode.SUM_OF_PROFITS;
     }
 
     @Override

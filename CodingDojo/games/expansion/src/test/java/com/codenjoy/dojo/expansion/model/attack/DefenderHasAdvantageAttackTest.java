@@ -26,7 +26,7 @@ package com.codenjoy.dojo.expansion.model.attack;
 import com.codenjoy.dojo.expansion.model.Elements;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,14 +34,12 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-12.
- */
 public class DefenderHasAdvantageAttackTest {
+
+    private GameSettings settings;
 
     public static class Forces extends HeroForces {
         private boolean removed;
@@ -87,12 +85,12 @@ public class DefenderHasAdvantageAttackTest {
 
     @Before
     public void setup() {
-        SettingsWrapper.setup();
+        settings = new GameSettings();
     }
 
     @Test
     public void testAdvantage1() {
-        data.defenderAdvantage(1);
+        settings.defenderAdvantage(1);
 
         assertAttack("[]");
         assertAttack("[-2♥=(2-0), -5♦=(5-0), -7♣=(7-0), +5♠=(12-7)]", "2♥", "5♦", "7♣", "12♠");
@@ -115,7 +113,7 @@ public class DefenderHasAdvantageAttackTest {
 
     @Test
     public void testAdvantage1_3() {
-        data.defenderAdvantage(1.3);
+        settings.defenderAdvantage(1.3);
 
         assertAttack("[-10♦=(10-0), +85♥=(98-13)]", "10♦", "98♥");
         assertAttack("[]");
@@ -145,7 +143,7 @@ public class DefenderHasAdvantageAttackTest {
 
     @Test
     public void testAdvantage2() {
-        data.defenderAdvantage(2.0);
+        settings.defenderAdvantage(2.0);
 
         assertAttack("[]");
 
@@ -210,7 +208,7 @@ public class DefenderHasAdvantageAttackTest {
     private void assertAttack(String expected, String... forcesCode) {
         List<HeroForces> forces = Arrays.stream(forcesCode).map(Forces::get).collect(toList());
         List<HeroForces> clone = new LinkedList<>(forces);
-        new DefenderHasAdvantageAttack().calculate(forces);
+        new DefenderHasAdvantageAttack(settings).calculate(forces);
         assertEquals(expected, clone.toString());
     }
 }

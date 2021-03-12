@@ -27,23 +27,21 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
+import static com.codenjoy.dojo.sampletext.services.GameSettings.Keys.LOOSE_PENALTY;
+import static com.codenjoy.dojo.sampletext.services.GameSettings.Keys.WIN_SCORE;
+
 /**
  * Класс, который умеет подсчитывать очки за те или иные действия.
  * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
  */
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);
+        this.settings = settings;
     }
 
     @Override
@@ -59,9 +57,9 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.WIN)) {
-            score += winScore.getValue();
+            score += settings.integer(WIN_SCORE);
         } else if (event.equals(Events.LOOSE)) {
-            score -= loosePenalty.getValue();
+            score -= settings.integer(LOOSE_PENALTY);
         }
         score = Math.max(0, score);
     }

@@ -24,56 +24,36 @@ package com.codenjoy.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.icancode.model.*;
+import com.codenjoy.dojo.icancode.model.items.perks.Perk;
 
-public class Gold extends BaseItem {
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-    private boolean hidden;
+public class Gold extends RenewableItem {
 
-    public Gold(Elements el) {
-        super(el);
-        hidden = false;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
+    public Gold() {
+        super(Elements.GOLD);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (hidden) {
-            return Elements.FLOOR;
-        } else {
-            return super.state(player, alsoAtPoint);
+        Perk perk = filterOne(alsoAtPoint, Perk.class);
+        if (perk != null) {
+            return perk.state(player, alsoAtPoint);
         }
+
+        return super.state(player, alsoAtPoint);
     }
 
     @Override
     public void action(Item item) {
-        if (hidden) return; // TODO test me
-
-        HeroItem heroItem = getIf(item, HeroItem.class);
-        if (heroItem == null) {
-            return;
-        }
-
-        Hero hero = heroItem.getHero();
-        if (!hero.isFlying()) {
-            hero.pickUpGold();
-            hidden = true;
-        }
+        check(item, HeroItem.class)
+                .ifPresent(heroItem -> {
+                    Hero hero = heroItem.getHero();
+                    if (!hero.isFlying()) {
+                        hero.pickUp(this);
+                        removeFromCell();
+                    }
+                });
     }
 
-    public void reset() {
-        hidden = false;
-    }
-
-    public boolean getHidden() {
-        return hidden;
-    }
 }

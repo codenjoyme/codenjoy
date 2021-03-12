@@ -10,12 +10,12 @@ package com.codenjoy.dojo.moebius.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,21 +24,18 @@ package com.codenjoy.dojo.moebius.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+
+import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.LOOSE_PENALTY;
+import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.WIN_SCORE;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(1);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
+        this.settings = settings;
     }
 
     @Override
@@ -56,10 +53,10 @@ public class Scores implements PlayerScores {
         Events events = (Events) o;
         switch (events.getType()) {
             case WIN:
-                score += winScore.getValue()*events.getLines();
+                score += settings.integer(WIN_SCORE) * events.getLines();
                 break;
             case GAME_OVER:
-                score -= loosePenalty.getValue();
+                score -= settings.integer(LOOSE_PENALTY);
                 break;
         }
         score = Math.max(0, score);

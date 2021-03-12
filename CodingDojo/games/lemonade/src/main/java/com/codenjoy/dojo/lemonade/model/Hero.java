@@ -31,17 +31,13 @@ import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
- * Эти интерфейсы объявлены в {@see PlayerHero}.
- */
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
+
 public class Hero extends PlayerHero<GameField<Player>> implements MessageJoystick {
 
     private static Pattern patternGo;
     private final ServerMessagesManager serverMessagesManager;
     private Simulator simulator;
-    private final GameSettings gameSettings;
     private final Queue<SalesResult> history;
     private SalesResult salesResult;
     private boolean alive;
@@ -51,9 +47,8 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
                 "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
     }
 
-    public Hero(long randomSeed, GameSettings gameSettings, Queue<SalesResult> history) {
+    public Hero(long randomSeed, Queue<SalesResult> history) {
         simulator = new Simulator(randomSeed);
-        this.gameSettings = gameSettings;
         alive = true;
         serverMessagesManager = new ServerMessagesManager();
         this.history = history;
@@ -61,9 +56,8 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
 
     @Override
     public void init(GameField<Player> field) {
-        simulator.reset();
-        if (this.history != null)
-            this.history.clear();
+        super.init(field);
+        clear();
     }
 
     @Override
@@ -131,7 +125,8 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
     }
 
     private boolean isGameOver() {
-        return gameSettings.getLimitDays() != 0 && gameSettings.getLimitDays() < simulator.getDay();
+        Integer limit = settings().integer(LIMIT_DAYS);
+        return limit != 0 && limit < simulator.getDay();
     }
 
     public Question getNextQuestion() {
@@ -168,5 +163,12 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
         SalesResult result = this.salesResult;
         this.salesResult = null;
         return result;
+    }
+
+    public void clear() {
+        simulator.reset();
+        if (history != null) {
+            history.clear();
+        }
     }
 }

@@ -26,19 +26,17 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
+import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.INJURE_SCORE;
+import static com.codenjoy.dojo.quake2d.services.GameSettings.Keys.KILL_SCORE;
+
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> killScore;
-    private final Parameter<Integer> injureScore;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        killScore = settings.addEditBox("Kill score").type(Integer.class).def(30);
-        injureScore = settings.addEditBox("Injure score").type(Integer.class).def(10);
+        this.settings = settings;
     }
 
     @Override
@@ -54,9 +52,9 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.KILL)) {
-            score += killScore.getValue();
+            score += settings.integer(KILL_SCORE);
         } else if (event.equals(Events.INJURE)) {
-            score += injureScore.getValue();
+            score += settings.integer(INJURE_SCORE);
         }
         score = Math.max(0, score);
     }

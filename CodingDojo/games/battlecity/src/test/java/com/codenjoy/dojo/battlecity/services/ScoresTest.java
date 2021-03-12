@@ -23,18 +23,16 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class ScoresTest {
-    private PlayerScores scores;
 
+    private PlayerScores scores;
     private GameSettings settings;
 
     public void killYourTank() {
@@ -51,7 +49,7 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new OptionGameSettings(new SettingsImpl(), mock(Dice.class));
+        settings = new GameSettings();
         scores = new Scores(0, settings);
     }
 
@@ -62,15 +60,16 @@ public class ScoresTest {
         killOtherHeroTank(1);
         killOtherHeroTank(2);
         killOtherHeroTank(3);
+
         killOtherAITank();
         killOtherAITank();
 
         killYourTank();
 
         assertEquals(140
-                + (1 + 2 + 3)*settings.killOtherHeroTankScore().getValue()
-                + 2*settings.killOtherAITankScore().getValue()
-                - settings.killYourTankPenalty().getValue(),
+                + (1 + 2 + 3) * settings.integer(KILL_OTHER_HERO_TANK_SCORE)
+                + 2 * settings.integer(KILL_OTHER_AI_TANK_SCORE)
+                - settings.integer(KILL_YOUR_TANK_PENALTY),
                 scores.getScore());
     }
 

@@ -31,10 +31,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-/**
- * @author Igor Petrov
- * Created at 3/6/2019
- */
 @SpringBootApplication
 @ServletComponentScan
 @EnableConfigurationProperties({AppProperties.class, SQLiteFilesProperties.class})

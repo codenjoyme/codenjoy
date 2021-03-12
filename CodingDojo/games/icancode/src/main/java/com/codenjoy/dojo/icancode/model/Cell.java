@@ -26,10 +26,8 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
+import java.util.function.Predicate;
 
-/**
- * Created by Mikhail_Udalyi on 08.06.2016.
- */
 public interface Cell extends Point {
 
     void add(Item item);
@@ -49,4 +47,6 @@ public interface Cell extends Point {
     void jump(Item item);
 
     void landOn(Item item);
+
+    boolean only(int layer, Predicate<Item> predicate);
 }

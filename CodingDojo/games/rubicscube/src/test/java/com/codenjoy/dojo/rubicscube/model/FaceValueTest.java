@@ -27,11 +27,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 08.10.13
- * Time: 5:58
- */
 public class FaceValueTest {
 
     @Test

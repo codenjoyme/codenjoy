@@ -31,13 +31,12 @@ import com.google.common.collect.ListMultimap;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
 
-/**
- * Created by Mikhail_Udalyi on 08.06.2016.
- */
 public class CellImpl extends PointImpl implements Cell {
 
     private ListMultimap<Integer, Item> items = LinkedListMultimap.create();
@@ -58,6 +57,8 @@ public class CellImpl extends PointImpl implements Cell {
     public void comeIn(Item input) {
         items().stream()
                 .filter(item -> !item.equals(input))
+                // TODO to use dice
+                .sorted((o1, o2) -> ThreadLocalRandom.current().nextInt(-1, 2))
                 .forEach(item -> {
                     item.action(input);
                     input.action(item);
@@ -117,7 +118,10 @@ public class CellImpl extends PointImpl implements Cell {
         items.get(LAYER2).add(removed);
     }
 
-    //================================ Overrides ================================
+    @Override
+    public boolean only(int layer, Predicate<Item> predicate) {
+        return items(layer).stream().allMatch(predicate);
+    }
 
     @Override
     public String toString() {

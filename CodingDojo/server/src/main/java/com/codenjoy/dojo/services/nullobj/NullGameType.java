@@ -37,7 +37,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-public final class NullGameType implements GameType {
+public final class NullGameType implements GameType<Settings> {
 
     public static final GameType INSTANCE = new NullGameType();
 
@@ -46,7 +46,7 @@ public final class NullGameType implements GameType {
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, Settings settings) {
         throw exception();
     }
 
@@ -55,12 +55,12 @@ public final class NullGameType implements GameType {
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
+    public GameField createGame(int levelNumber, Settings settings) {
         throw exception();
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
+    public Parameter<Integer> getBoardSize(Settings settings) {
         throw exception();
     }
 
@@ -90,12 +90,12 @@ public final class NullGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(Settings settings) {
         throw exception();
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
+    public GamePlayer createPlayer(EventListener listener, String playerId, Settings settings) {
         throw exception();
     }
 

@@ -27,20 +27,18 @@ import com.codenjoy.dojo.icancode.model.*;
 
 public class Exit extends BaseItem {
 
-    public Exit(Elements el) {
-        super(el);
+    public Exit() {
+        super(Elements.EXIT);
     }
 
     @Override
     public void action(Item item) {
-        HeroItem heroItem = getIf(item, HeroItem.class);
-        if (heroItem == null) {
-            return;
-        }
-
-        Hero hero = heroItem.getHero();
-        if (!hero.isFlying()) {
-            hero.setWin();
-        }
+        check(item, HeroItem.class)
+                .ifPresent(heroItem -> {
+                    Hero hero = heroItem.getHero();
+                    if (!hero.isFlying()) {
+                        hero.setWin();
+                    }
+                });
     }
 }

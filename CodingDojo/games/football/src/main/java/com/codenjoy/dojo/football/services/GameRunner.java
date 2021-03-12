@@ -26,10 +26,11 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.football.client.Board;
 import com.codenjoy.dojo.football.client.ai.AISolver;
-import com.codenjoy.dojo.football.model.*;
+import com.codenjoy.dojo.football.model.Elements;
+import com.codenjoy.dojo.football.model.Football;
+import com.codenjoy.dojo.football.model.Player;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -37,38 +38,29 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import static com.codenjoy.dojo.football.services.GameSettings.Keys.NUMBER_OF_PLAYERS;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType {
-    
-    private static final String NUMBER_OF_PLAYERS = "Number of players";
-    private static final String IS_NEED_AI = "Is need AI";
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private final Level level;
-
-    private final Parameter<Integer> needAI;
-    private final Parameter<Integer> numberOfPlayers;
-
-    public GameRunner() {
-        numberOfPlayers = settings.addEditBox(NUMBER_OF_PLAYERS).type(Integer.class).def(2);
-        needAI = settings.addEditBox(IS_NEED_AI).type(Integer.class).def(1);
-        new Scores(0, settings);
-        level = new LevelImpl(getMap());
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
     
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer) score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        return new Football(level, getDice());
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new Football(settings.level(), getDice(), settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.level().getSize());
     }
 
     @Override
@@ -83,11 +75,11 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Class<? extends Solver> getAI() {
-        if (needAI.getValue() == 1) {
+//        if (settings.needAI.getValue() == 1) { // TODO прокинуть и сюда settings
             return AISolver.class;
-        } else {
-            return null;
-        }
+//        } else {
+//            return null;
+//        }
     }
 
     @Override
@@ -96,47 +88,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TEAM.apply(numberOfPlayers.getValue(), !MultiplayerType.DISPOSABLE);
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
+        return MultiplayerType.TEAM.apply(settings.integer(NUMBER_OF_PLAYERS),
+                !MultiplayerType.DISPOSABLE);
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
-    }
-
-    protected String getMap() {
-        return  "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼┴┴┴┴┴┴┴☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼               ∙              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼                              ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼┬┬┬┬┬┬┬☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 }

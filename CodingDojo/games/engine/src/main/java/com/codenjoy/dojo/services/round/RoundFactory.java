@@ -24,14 +24,9 @@ package com.codenjoy.dojo.services.round;
 
 public class RoundFactory {
 
-    public static Round get(RoundSettingsWrapper settings) {
+    public static Round get(RoundSettings settings) {
         if (settings.roundsEnabled().getValue()) {
-            return new RoundImpl(
-                    settings.roundsPerMatch(),
-                    settings.minTicksForWin(),
-                    settings.timeBeforeStart(),
-                    settings.timePerRound(),
-                    settings.timeForWinner());
+            return new RoundImpl(settings);
         } else {
             return new NullRound();
         }

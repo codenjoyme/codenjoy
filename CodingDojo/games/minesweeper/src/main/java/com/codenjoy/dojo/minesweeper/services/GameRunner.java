@@ -41,33 +41,28 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 
-public class GameRunner extends AbstractGameType implements GameType {
+import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.BOARD_SIZE;
 
-    private Parameter<Integer> boardSize;
-    private Parameter<Integer> minesOnBoard;
-    private Parameter<Integer> charge;
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    public GameRunner() {
-        boardSize = settings.addEditBox("Board size").type(Integer.class).def(15);
-        minesOnBoard = settings.addEditBox("Mines on board").type(Integer.class).def(30);
-        charge = settings.addEditBox("Charge").type(Integer.class).def(100);
-
-        new Scores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer) score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        return new Minesweeper(boardSize, minesOnBoard, charge, new RandomMinesGenerator(getDice()));
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new Minesweeper(new RandomMinesGenerator(getDice()), settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return boardSize;
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return settings.integerValue(BOARD_SIZE);
     }
 
     @Override
@@ -92,12 +87,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.SINGLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings);
     }
 }

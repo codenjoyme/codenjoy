@@ -23,14 +23,13 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.items.perks.PerkUtils;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
-import static org.fest.reflect.core.Reflection.constructor;
 
 public class LevelImpl implements Level {
 
@@ -38,9 +37,12 @@ public class LevelImpl implements Level {
     private int size;
     private LengthToXY xy;
 
-    public LevelImpl(String map) {
+    private GameSettings settings;
+
+    public LevelImpl(String map, GameSettings settings) {
         cells = new Cell[map.length()];
         size = (int) Math.sqrt(map.length());
+        this.settings = settings;
         xy = new LengthToXY(size);
         if (size*size != map.length()) {
             throw new IllegalArgumentException("map must be square! " + size + "^2 != " + map.length());
@@ -57,11 +59,14 @@ public class LevelImpl implements Level {
 
                 CellImpl cell = new CellImpl(x, y);
                 Elements element = Elements.valueOf(map.charAt(indexChar));
-                BaseItem item = getBaseItem(element);
+                BaseItem item = create(element, settings);
 
-                if (element.getLayer() != Elements.Layers.LAYER1) {
+                if (element.getLayer() != Elements.Layers.LAYER1
+                    || element == Elements.GOLD
+                    || PerkUtils.isPerk(element))
+                {
                     Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
-                    cell.add(getBaseItem(atBottom));
+                    cell.add(create(atBottom, settings));
                 }
 
                 cell.add(item);
@@ -71,11 +76,12 @@ public class LevelImpl implements Level {
         }
     }
 
-    private BaseItem getBaseItem(Elements element) {
-        return constructor()
-                            .withParameterTypes(Elements.class)
-                            .in(ElementsMapper.getItsClass(element))
-                            .newInstance(element);
+    private BaseItem create(Elements element, GameSettings settings) {
+        BaseItem item = ElementsMapper.get(element);
+        if (Customizable.class.isAssignableFrom(item.getClass())) {
+            ((Customizable)item).init(settings);
+        }
+        return item;
     }
 
     @Override
@@ -89,8 +95,8 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Cell getCell(Point point) {
-        return getCell(point.getX(), point.getY());
+    public Cell getCell(Point pt) {
+        return getCell(pt.getX(), pt.getY());
     }
 
     @Override
@@ -99,9 +105,9 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        return pt(x, y).isOutOf(size)
-                || !getCell(x, y).passable();
+    public boolean isBarrier(Point pt) {
+        return pt.isOutOf(size)
+                || !getCell(pt).passable();
     }
 
     @Override

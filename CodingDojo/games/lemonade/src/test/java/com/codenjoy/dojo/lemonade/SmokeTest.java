@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.lemonade.client.Board;
 import com.codenjoy.dojo.lemonade.client.ai.AISolver;
 import com.codenjoy.dojo.lemonade.services.GameRunner;
+import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
@@ -35,11 +36,10 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
-
-    private Dice dice;
 
     @Test
     public void test() {
@@ -61,10 +61,9 @@ public class SmokeTest {
             }
 
             @Override
-            public SettingsImpl createSettings(){
-                SettingsImpl settings = new SettingsImpl();
-                settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
-                return settings;
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .integer(LIMIT_DAYS, 0);
             }
         };
 
