@@ -132,7 +132,7 @@ public class PlayerServiceImplIntegrationTest {
         );
         when(gameService.exists(anyString())).thenReturn(true);
 
-        when(chat.getLastMessageId(anyString())).thenReturn(123);
+        when(chat.getLastMessageIds()).thenReturn(new HashMap<>());
 
         // первый плеер зарегался (у него сейвов нет)
         when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);

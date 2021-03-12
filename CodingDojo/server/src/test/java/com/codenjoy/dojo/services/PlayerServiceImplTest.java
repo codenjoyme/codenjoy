@@ -151,6 +151,7 @@ public class PlayerServiceImplTest {
     private List<Player> players = new LinkedList<>();
     private List<PlayerHero> heroesData = new LinkedList<>();
     private List<PlayerScores> playerScores = new LinkedList<>();
+    private Map<String, Integer> chatIds = new HashMap<>();
 
     @Before
     public void setUp() {
@@ -170,7 +171,7 @@ public class PlayerServiceImplTest {
         when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
         when(gameService.exists(anyString())).thenReturn(true);
 
-        when(chat.getLastMessageId(anyString())).thenReturn(123);
+        when(chat.getLastMessageIds()).thenReturn(chatIds);
 
         when(gameType.getBoardSize(any())).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt(), any())).thenAnswer(inv -> {
@@ -388,7 +389,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldRequestControl_fromAllPlayers_withGlassState() throws IOException {
+    public void shouldRequestControl_fromAllPlayers_withGlassState() {
         // given
         createPlayer(VASYA);
         when(printer.print(any(), any())).thenReturn("1234");
@@ -402,7 +403,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldSendAdditionalInfoToAllPlayers() throws IOException {
+    public void shouldSendAdditionalInfoToAllPlayers() {
         // given
         createPlayer(VASYA);
         createPlayer(PETYA);
@@ -430,7 +431,7 @@ public class PlayerServiceImplTest {
                         "'group':['petya']," +
                         "'readableNames':{'petya':'readable_petya'}" +
                         "}', " +
-                    "LastChatMessage:123], " +
+                    "LastChatMessage:106558567], " +
                 "vasya=PlayerData[" +
                     "BoardSize:15, Board:'ABCD', Game:'game', " +
                     "Score:123, Info:'', " +
@@ -440,7 +441,7 @@ public class PlayerServiceImplTest {
                         "'group':['vasya']," +
                         "'readableNames':{'vasya':'readable_vasya'}" +
                         "}', " +
-                    "LastChatMessage:123]}",
+                    "LastChatMessage:111979568]}",
                 data.toString().replaceAll("\"", "'"));
     }
 
@@ -543,6 +544,7 @@ public class PlayerServiceImplTest {
         Player player = playerService.register(id, game, room,
                 getCallbackUrl(id));
         players.add(player);
+        chatIds.put(room, Math.abs(id.hashCode()));
 
         if (player != NullPlayer.INSTANCE) {
             verify(gameType, atLeastOnce()).createGame(anyInt(), any());
