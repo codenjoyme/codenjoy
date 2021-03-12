@@ -66,7 +66,7 @@ public class Chat {
                         "WHERE room = ? " +
                         "AND topic_id IS NULL " +
                         "ORDER BY time DESC " +
-                        "LIMIT ?)" +
+                        "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
                 new Object[]{room, count},
                 Chat::parseMessages
@@ -148,7 +148,7 @@ public class Chat {
                         "AND topic_id IS NULL " +
                         "AND id <" + (inclusive?"=":"") + " ? " +
                         "ORDER BY time DESC " +
-                        "LIMIT ?) " +
+                        "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
                 new Object[]{room, beforeId, count},
                 Chat::parseMessages

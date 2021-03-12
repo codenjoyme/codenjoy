@@ -50,13 +50,13 @@ public abstract class CrudPrimaryKeyConnectionThreadPool extends CrudConnectionT
     /**
      * @return Название типа айдишки чтобы был аутоинкремент
      */
-    abstract String getPkDirective();
+    protected abstract String getPkDirective();
 
     /**
      * @return запрос который очищает для конкретной колонки {@param column}
      *         конкретной таблицы {@param table} генератор айдишек
      */
-    abstract String clearLastInsertedIdQuery(String table, String column);
+    protected abstract String clearLastInsertedIdQuery(String table, String column);
 
     public void clearLastInsertedId(String table, String column) {
         update(clearLastInsertedIdQuery(table, column));

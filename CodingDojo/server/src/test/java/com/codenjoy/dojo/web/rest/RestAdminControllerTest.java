@@ -82,6 +82,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     public void setUp() {
         super.setUp();
 
+        registration.removeAll();
+
         asAdmin();
 
         playerService.removeAll();

@@ -52,16 +52,16 @@ public class PostgreSQLConnectionThreadPool extends CrudPrimaryKeyConnectionThre
 
     @Override
     public String getLastInsertedIdQuery(String table, String column) {
-        return "SELECT last_value FROM " + table + "_id_seq";
+        return String.format("SELECT last_value FROM %s_%s_seq", table, column);
     }
 
     @Override
-    String getPkDirective() {
+    protected String getPkDirective() {
         return "SERIAL PRIMARY KEY";
     }
 
     @Override
-    String clearLastInsertedIdQuery(String table, String column) {
-        return "ALTER SEQUENCE " + table + "_id_seq RESTART";
+    protected String clearLastInsertedIdQuery(String table, String column) {
+        return  String.format("ALTER SEQUENCE %s_%s_seq RESTART", table, column);
     }
 }
