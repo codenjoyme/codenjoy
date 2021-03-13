@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.entity.server.Disqualified;
 import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.web.rest.dto.settings.AbstractSettings;
-import com.codenjoy.dojo.web.rest.dto.settings.ICanCodeGameSettings;
+import com.codenjoy.dojo.web.rest.dto.settings.BattleCityGameSettings;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -343,7 +343,7 @@ public class Dispatcher {
     public List<AbstractSettings> getGameSettings() {
         // TODO move it to .env settings
         return gameServers.stream()
-                .map(server -> new ICanCodeGameSettings(game.getGameSettings(server)))
+                .map(server -> new BattleCityGameSettings(game.getGameSettings(server)))
                 .collect(toList());
     }
 
