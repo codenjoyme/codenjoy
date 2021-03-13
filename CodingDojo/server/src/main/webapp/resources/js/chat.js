@@ -19,6 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 function initChat(contextPath) {
 
     var firstMessageInChat = null;
@@ -210,6 +211,14 @@ function initChat(contextPath) {
                 return;
             }
 
+            if (chat.is(":hidden")) {
+                return;
+            }
+            if (!firstLoad) { // ###1
+                firstLoad = true;
+                scrollToEnd();
+            }
+
             var realLastId = data[setup.playerId].lastChatMessage;
             var lastLoadedId = getLastMessageId();
             if (!lastLoadedId) {
@@ -231,9 +240,10 @@ function initChat(contextPath) {
     var chatTab = $("#chat-tab");
 
     loadChatMessages(function() {
-        scrollToEnd(); // TODO это почему-то не работает, разобраться
-    }, null, null, null, 30);
+        scrollToEnd(); // почему-то оно не работает, когда чат неактивен, потому я делаю ###1
+    }, null, null, null, 30); // TODO загружать 30 сообщений сразу в чат, тоже костыль, чтобы отобразился вертикальный скролинг, иначе нельзя будет грузить в прошлое
 
+    var firstLoad = false; // ###1
     listenNewMessages();
     initPost();
     initScrolling();
