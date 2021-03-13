@@ -26,10 +26,12 @@ function initChat(contextPath) {
 
     function loadChatMessages(onLoad, afterId, beforeId, inclusive, count) {
         var params = '';
+        loading = true;
 
         // если грузили уже с таким beforeId и сообщений больше не приходило
         // значит это самое первое сообщение в чате, нефиг больше грузить
         if (!!firstMessageInChat && firstMessageInChat == beforeId) {
+            loading = false;
             return;
         }
 
@@ -73,11 +75,13 @@ function initChat(contextPath) {
                 if (!after && !firstMessageInChat) {
                     firstMessageInChat = messageId;
                 }
+                loading = false;
                 return;
             }
 
             appendMessages(messages, messageId, after);
 
+            loading = false;
             if (!!onLoad) {
                 onLoad(messages);
             }
@@ -218,6 +222,9 @@ function initChat(contextPath) {
                 firstLoad = true;
                 scrollToEnd();
             }
+            if (!!loading) {
+                return;
+            }
 
             var realLastId = data[setup.playerId].lastChatMessage;
             var lastLoadedId = getLastMessageId();
@@ -240,10 +247,11 @@ function initChat(contextPath) {
     var chatTab = $("#chat-tab");
 
     loadChatMessages(function() {
-        scrollToEnd(); // почему-то оно не работает, когда чат неактивен, потому я делаю ###1
+        scrollToEnd(); // TODO почему-то оно не работает, когда чат неактивен, потому я делаю ###1
     }, null, null, null, 30); // TODO загружать 30 сообщений сразу в чат, тоже костыль, чтобы отобразился вертикальный скролинг, иначе нельзя будет грузить в прошлое
 
     var firstLoad = false; // ###1
+    var loading = false;
     listenNewMessages();
     initPost();
     initScrolling();
