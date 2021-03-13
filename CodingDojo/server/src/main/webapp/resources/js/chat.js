@@ -40,16 +40,16 @@ function initChat(contextPath) {
         }
 
         if (!!afterId) {
-            params += ch() + "afterId=" + afterId;
+            params += ch() + 'afterId=' + afterId;
         }
         if (!!beforeId) {
-            params += ch() + "beforeId=" + beforeId;
+            params += ch() + 'beforeId=' + beforeId;
         }
         if (!!inclusive) {
-            params += ch() + "inclusive=" + inclusive;
+            params += ch() + 'inclusive=' + inclusive;
         }
         if (!!count) {
-            params += ch() + "count=" + count;
+            params += ch() + 'count=' + count;
         }
         loadData('/rest/chat/' + setup.room + '/messages' + params, function (messages) {
             var messageId = null;
@@ -112,6 +112,18 @@ function initChat(contextPath) {
         var html = $('#chat script').tmpl(templateData);
 
         var scrollHeight = getScrollHeight();
+        html.find('span.delete-message').click(function() {
+            var messageId = $(this).parent().attr('message');
+            var message = getMessage(messageId);
+            if (message.attr('player') != setup.playerId) {
+                return;
+            }
+            deleteData('/rest/chat/' + setup.room + '/messages/' + messageId, function (deleted) {
+                if (deleted) {
+                    message.remove();
+                }
+            });
+        });
 
         var anchor = 'div[message=' + messageId + ']';
         if (!messageId || !$(anchor)[0]) {
@@ -172,15 +184,18 @@ function initChat(contextPath) {
         });
     }
 
+    function getMessage(messageId) {
+        return chatContainer.children('div [message=' + messageId + ']');
+    }
 
     function getFirstMessageId() {
-        return chatContainer.children("div [message]")
-            .first().attr("message");
+        return chatContainer.children('div [message]')
+            .first().attr('message');
     }
 
     function getLastMessageId() {
-        return chatContainer.children("div [message]")
-            .last().attr("message");
+        return chatContainer.children('div [message]')
+            .last().attr('message');
     }
 
     function loadBefore(){
@@ -210,12 +225,12 @@ function initChat(contextPath) {
     }
 
     function listenNewMessages() {
-        $('body').bind("board-updated", function(event, data) {
+        $('body').bind('board-updated', function(event, data) {
             if (setup.playerId == '' || !data[setup.playerId]) {
                 return;
             }
 
-            if (chat.is(":hidden")) {
+            if (chat.is(':hidden')) {
                 return;
             }
             if (!firstLoad) { // ###1
@@ -242,9 +257,9 @@ function initChat(contextPath) {
 
     var postMessageButton = $('#post-message');
     var newMessage = $('#new-message');
-    var chatContainer = $("#chat-container");
-    var chat = $("#chat");
-    var chatTab = $("#chat-tab");
+    var chatContainer = $('#chat-container');
+    var chat = $('#chat');
+    var chatTab = $('#chat-tab');
 
     loadChatMessages(function() {
         scrollToEnd(); // TODO почему-то оно не работает, когда чат неактивен, потому я делаю ###1

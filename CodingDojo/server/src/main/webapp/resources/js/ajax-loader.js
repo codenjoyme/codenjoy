@@ -53,6 +53,20 @@ function sendData(url, jsonData, onSend, onError) {
     });
 }
 
+function deleteData(url, onSend, onError) {
+    $.ajax({
+        type: "DELETE",
+        url: getContext() + url,
+        success: onSend,
+        error: function (error) {
+            console.log(error.responseText);
+            if (!!onError) {
+                onError(error);
+            }
+        }
+    });
+}
+
 // TODO continue with this
 //function loadAllData(urls, onAllLoad) {
 //    var url = url.shift();

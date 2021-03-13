@@ -27,6 +27,7 @@
         <div id="chat-message-{%= id %}" message="{%= id %}" player="{%= player %}" class="chat-message">
             <span class="message-author">{%= author %}</span>
             <span class="message-time" title="{%= dateTime %}">{%= time %}</span>
+            <span class="delete-message"> X </span>
             <div class="message-text">{{html text}}</div>
         </div>
     </script>
