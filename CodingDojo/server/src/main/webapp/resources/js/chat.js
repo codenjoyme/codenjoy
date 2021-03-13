@@ -103,17 +103,29 @@ function initChat(contextPath) {
         });
         var html = $('#chat script').tmpl(templateData);
 
+        var scrollHeight = getScrollHeight();
+
         if (!messageId) {
             html.appendTo('#chat-container');
+            chatContainer.scrollTop(getScrollHeight() - scrollHeight);
         } else if (isAfterOrBefore) {
             html.insertAfter('div[message=' + messageId + ']');
         } else {
             html.insertBefore('div[message=' + messageId + ']');
+            chatContainer.scrollTop(getScrollHeight() - scrollHeight);
         }
     }
 
     function escapeHtml(data) {
         return $('<div />').text(data).html();
+    }
+
+    function scrollToEnd() {
+        chatContainer.scrollTop(getScrollHeight());
+    }
+
+    function getScrollHeight() {
+        return chatContainer[0].scrollHeight;
     }
 
     function initPost() {
@@ -136,18 +148,18 @@ function initChat(contextPath) {
                     appendMessages([message]);
                     newMessage.val('');
                     newMessage.focus();
-                    messages.scrollTop(messages[0].scrollHeight);
+                    scrollToEnd();
                 });
         });
     }
 
 
     function getFirstMessageId() {
-        return messages.children("div [message]").first().attr("message");
+        return chatContainer.children("div [message]").first().attr("message");
     }
 
     function getLastMessageId() {
-        return messages.children("div [message]").last().attr("message");
+        return chatContainer.children("div [message]").last().attr("message");
     }
 
     function loadBefore(){
@@ -161,14 +173,14 @@ function initChat(contextPath) {
     }
 
     function initScrolling() {
-        messages.scroll(function() {
+        chatContainer.scroll(function() {
             var el = $(this);
             var scrollTop = el.scrollTop();
             var scrollHeight = el[0].scrollHeight;
             var outerHeight = el.outerHeight();
             if (scrollTop == 0) {
                 loadBefore();
-            } else if ((scrollHeight - scrollTop) == outerHeight) {
+            } else if ((scrollHeight - scrollTop - outerHeight) < 1) {
                 loadAfter();
             }
         });
@@ -194,15 +206,16 @@ function initChat(contextPath) {
 
     var postMessageButton = $('#post-message');
     var newMessage = $('#new-message');
-    var messages = $("#chat-container");
+    var chatContainer = $("#chat-container");
     var chat = $("#chat");
     var chatTab = $("#chat-tab");
 
-    loadChatMessages();
-    initPost();
-    initScrolling();
-    listenNewMessages();
-
-    chat.show();
-    chatTab.show();
+    loadChatMessages(function() {
+        listenNewMessages();
+        initPost();
+        initScrolling();
+        chat.show();
+        chatTab.show();
+        scrollToEnd(); // TODO это почему-то не работает, разобраться
+    });
 }
