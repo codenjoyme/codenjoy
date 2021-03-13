@@ -45,12 +45,6 @@ setup['debugger'] = function() {
     debugger;
 }
 
-setup.playerName = function(id) {
-    if (!!setup.players) {
-        return setup.players[id].readableName;
-    }
-}
-
 var getSettings = function(name) {
     var value = $('#settings').attr(name);
 

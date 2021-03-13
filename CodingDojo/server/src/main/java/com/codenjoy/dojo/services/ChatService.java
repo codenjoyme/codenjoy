@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.dao.Chat;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,7 @@ public class ChatService {
     private Validator validator;
     private Chat chat;
     private TimeService time;
+    private Registration registration;
 
     public List<PMessage> getMessages(String room, int count,
                                       Integer afterId, Integer beforeId,
@@ -63,8 +65,16 @@ public class ChatService {
 
     private List<PMessage> wrap(List<Chat.Message> messages) {
         return messages.stream()
-                .map(PMessage::from)
+                .map(this::wrap)
                 .collect(Collectors.toList());
+    }
+
+    private PMessage wrap(Chat.Message message) {
+        return PMessage.from(message, playerName(message.getPlayerId()));
+    }
+
+    private String playerName(String playerId) {
+        return registration.getNameById(playerId); // TODO to use cache here
     }
 
     public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
@@ -82,7 +92,7 @@ public class ChatService {
             throw exception("There is no message with id '%s' in room '%s'",
                     messageId, room);
         }
-        return PMessage.from(message);
+        return wrap(message);
     }
 
     public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
@@ -98,7 +108,7 @@ public class ChatService {
 
         chat.saveMessage(message);
 
-        return PMessage.from(message);
+        return wrap(message);
     }
 
     public boolean deleteMessage(int messageId, String room, String playerId) {

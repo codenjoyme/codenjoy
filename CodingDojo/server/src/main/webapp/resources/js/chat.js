@@ -95,7 +95,7 @@ function initChat(contextPath) {
             var text = message.text.split('\n').join('<br>');
             var room = message.room;
             var player = message.playerId;
-            var author = setup.playerName(player);
+            var author = message.playerName;
             var dateTime = getTickDateTime(message.time, true);
             var time = getTickTime(message.time, true);
 

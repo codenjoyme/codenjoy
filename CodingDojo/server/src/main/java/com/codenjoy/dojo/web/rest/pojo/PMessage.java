@@ -33,15 +33,17 @@ public class PMessage {
     private final String room;
     private final Integer topicId;
     private final String playerId;
+    private final String playerName;
     private final long time;
 
-    public static PMessage from(Chat.Message message) {
+    public static PMessage from(Chat.Message message, String playerName) {
         return new PMessage(
                 message.getId(),
                 message.getText(),
                 message.getRoom(),
                 message.getTopicId(),
                 message.getPlayerId(),
+                playerName,
                 message.getTime()
         );
     }
