@@ -112,16 +112,20 @@ function initChat(contextPath) {
         var html = $('#chat script').tmpl(templateData);
 
         var scrollHeight = getScrollHeight();
-        html.find('span.delete-message').click(function() {
-            var messageId = $(this).parent().attr('message');
-            var message = getMessage(messageId);
+        html.find('span.delete-message').each(function( index ) {
+            var deleteButton = $(this);
+            var messageId = deleteButton.parent().attr('message');
+            var message = getMessage(html, messageId);
             if (message.attr('player') != setup.playerId) {
+                deleteButton.remove();
                 return;
             }
-            deleteData('/rest/chat/' + setup.room + '/messages/' + messageId, function (deleted) {
-                if (deleted) {
-                    message.remove();
-                }
+            deleteButton.click(function() {
+                deleteData('/rest/chat/' + setup.room + '/messages/' + messageId, function (deleted) {
+                    if (deleted) {
+                        message.remove();
+                    }
+                });
             });
         });
 
@@ -184,8 +188,14 @@ function initChat(contextPath) {
         });
     }
 
-    function getMessage(messageId) {
-        return chatContainer.children('div [message=' + messageId + ']');
+    function getMessage(messages, messageId) {
+        for (var index in messages) {
+            var message = $(messages[index]);
+            if (message.attr('message') == messageId) {
+                return message;
+            }
+        }
+        return null;
     }
 
     function getFirstMessageId() {
