@@ -30,6 +30,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +42,7 @@ public class ChatService {
     private Chat chat;
     private TimeService time;
     private Registration registration;
+    private Map<String, String> playerNames = new ConcurrentHashMap<>();
 
     public List<PMessage> getMessages(String room, int count,
                                       Integer afterId, Integer beforeId,
@@ -70,11 +73,15 @@ public class ChatService {
     }
 
     private PMessage wrap(Chat.Message message) {
-        return PMessage.from(message, playerName(message.getPlayerId()));
+        return PMessage.from
+                (message, playerName(message.getPlayerId()));
     }
 
     private String playerName(String playerId) {
-        return registration.getNameById(playerId); // TODO to use cache here
+        if (!playerNames.containsKey(playerId)) {
+            playerNames.put(playerId, registration.getNameById(playerId));
+        }
+        return playerNames.get(playerId);
     }
 
     public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
