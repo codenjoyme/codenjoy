@@ -157,6 +157,10 @@ label.error {
     height: 70vh;
 }
 
+.chat .delete-message {
+    cursor: pointer;
+}
+
 .chat .message-author {
     font-size: 14px;
     font-weight: bold;
