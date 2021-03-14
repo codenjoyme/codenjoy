@@ -29,6 +29,31 @@ import com.codenjoy.dojo.services.settings.Settings;
 
 public class Scores implements PlayerScores {
 
+    public static final String HERO_KILL_PENALTY = "Kill hero penalty";
+    public static final String ENEMY_KILL_SCORE = "Kill enemy score";
+
+    public static final String SUICIDE_PENALTY = "SuicidePenalty";
+
+    public static final String SHADOW_TICKS = "Shadow ticks";
+    public static final String SHADOW_PILLS = "Shadow pills";
+
+    public static final String PORTALS = "Portals";
+    public static final String PORTAL_TICKS = "Portal ticks";
+
+    public static final String GOLD_SERIES_INCREMENT_SCORE = "Get next gold increment score";
+
+    public static final String GOLD_COUNT_YELLOW = "Yellow gold count";
+    public static final String GOLD_COUNT_GREEN = "Green gold count";
+    public static final String GOLD_COUNT_RED = "Red gold count";
+
+    public static final String GOLD_SCORE_YELLOW = "Yellow gold score";
+    public static final String GOLD_SCORE_GREEN = "Green gold score";
+    public static final String GOLD_SCORE_RED = "Red gold score";
+
+    public static final String ENEMIES_COUNT = "Enemies count";
+
+    public static final String MAP_PATH = "Custom map path";
+
     private final Parameter<Integer> killHeroPenalty;
     private final Parameter<Integer> killEnemyScore;
     private final Parameter<Integer> forNextGoldIncScore;
@@ -52,24 +77,24 @@ public class Scores implements PlayerScores {
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        killHeroPenalty = settings.addEditBox("Kill hero penalty").type(Integer.class).def(0);
-        killEnemyScore = settings.addEditBox("Kill enemy score").type(Integer.class).def(10);
-        forNextGoldIncScore = settings.addEditBox("Get next gold increment score").type(Integer.class).def(1);
-        shadowPillActiveTicks = settings.addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
-        shadowPillsCount = settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
-        suicidePenalty = settings.addEditBox("SuicidePenalty").type(Integer.class).def(0);
-        portalsCount = settings.addEditBox("The portals count").type(Integer.class).def(0);
-        portalsActiveTicks = settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
+        killHeroPenalty = settings.addEditBox(HERO_KILL_PENALTY).type(Integer.class).def(1);
+        killEnemyScore = settings.addEditBox(ENEMY_KILL_SCORE).type(Integer.class).def(10);
+        forNextGoldIncScore = settings.addEditBox(GOLD_SERIES_INCREMENT_SCORE).type(Integer.class).def(1);
+        shadowPillsCount = settings.addEditBox(SHADOW_PILLS).type(Integer.class).def(0);
+        shadowPillActiveTicks = settings.addEditBox(SHADOW_TICKS).type(Integer.class).def(15);
+        suicidePenalty = settings.addEditBox(SUICIDE_PENALTY).type(Integer.class).def(10);
+        portalsCount = settings.addEditBox(PORTALS).type(Integer.class).def(0);
+        portalsActiveTicks = settings.addEditBox(PORTAL_TICKS).type(Integer.class).def(10);
 
-        yellowTypeGoldCount = settings.addEditBox("yellow type gold count").type(Integer.class).def(20);
-        greenTypeGoldCount = settings.addEditBox("green type gold count").type(Integer.class).def(20);
-        redTypeGoldCount = settings.addEditBox("red type gold count").type(Integer.class).def(20);
+        greenTypeGoldCount = settings.addEditBox(GOLD_COUNT_GREEN).type(Integer.class).def(0); // 25
+        yellowTypeGoldCount = settings.addEditBox(GOLD_COUNT_YELLOW).type(Integer.class).def(20);
+        redTypeGoldCount = settings.addEditBox(GOLD_COUNT_RED).type(Integer.class).def(0); // 15
 
-        yellowTypeGoldWeight = settings.addEditBox("yellow type gold weight").type(Integer.class).def(1);
-        greenTypeGoldWeight = settings.addEditBox("green type gold weight").type(Integer.class).def(5);
-        redTypeGoldWeight = settings.addEditBox("red type gold weight").type(Integer.class).def(10);
+        greenTypeGoldWeight = settings.addEditBox(GOLD_SCORE_GREEN).type(Integer.class).def(1);
+        yellowTypeGoldWeight = settings.addEditBox(GOLD_SCORE_YELLOW).type(Integer.class).def(2);
+        redTypeGoldWeight = settings.addEditBox(GOLD_SCORE_RED).type(Integer.class).def(5);
 
-        numberOfEnemies = settings.addEditBox("Number of enemies").type(Integer.class).def(5);
+        numberOfEnemies = settings.addEditBox(ENEMIES_COUNT).type(Integer.class).def(5);
 
         customMapPath = settings.addEditBox("Custom map path").type(String.class).def("");
     }

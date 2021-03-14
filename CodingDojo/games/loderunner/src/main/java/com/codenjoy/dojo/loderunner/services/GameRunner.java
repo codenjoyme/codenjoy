@@ -94,12 +94,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId) {
         return new Player(listener, () -> settings
-                .<Integer>getParameter("Number of ticks that the shadow pill will be active")
+                .<Integer>getParameter(Scores.SHADOW_TICKS)
                 .getValue());
     }
 
     protected String getMap() {
-        String customMapPath = settings.<String>getParameter("Custom map path").getValue();
+        String customMapPath = settings.<String>getParameter(Scores.MAP_PATH).getValue();
         if (StringUtils.isNotEmpty(customMapPath)) {
             return MapLoader.loadMapFromFile(customMapPath);
         } else {

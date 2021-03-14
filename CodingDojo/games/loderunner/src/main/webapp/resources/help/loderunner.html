@@ -27,6 +27,14 @@
     <link href="../css/custom.css" rel="stylesheet">
 
     <script src="../js/all.min.js"></script>
+
+    <style>
+        .score-value { text-align: right }
+        table { width: 100%; }
+        table, th, td { border: 1px }
+        thead { background: lightgray }
+
+    </style>
 </head>
 <body style="background-color: white;"
       class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
@@ -42,24 +50,19 @@
 
                 <div class="entry-content">
                     <div class="page-restrict-output">
-                        <p>Игровой demo-сервер доступен так же в интернете 24/7
-                            в целях ознакомления <a href="http://codenjoy.com/codenjoy-contest">
-                                http://codenjoy.com/codenjoy-contest</a></p>
-
                         <p>Игра с открытым исходным кодом. Для реализации своей игры, исправления
                             ошибок в текущей и внесения других правок необходимо для начала
                             <a href="https://github.com/codenjoyme/codenjoy">форкнуть проект</a>.
                             В корне репозитория есть описание в файле Readme.md - там описано, что делать дальше.</p>
 
-                        <p>По возникающим вопросам, пиши в <a href="https://join.skype.com/hQJUSO7ydQqf">skype:LodeRunner: бета-тестирование</a>
-                            или на почту <a href="mailto:Igor_Petrov@epam.com">Igor_Petrov@epam.com</a></p>
+                        <p>По возникающим вопросам, пиши в <a href="https://todo.todo">TODO: Discord link</a>
+
+                        <h2>В чем суть игры?</h2>
 
                         <p>Пример карты:</p>
                         <img src="../help/Loderunner-scrot.png" />
 
-                        <h2>В чем суть игры?</h2>
-
-                        <p>Надо написать своего бота для героя, который обыграет героев других
+                        <p>Тебе необходимо написать своего бота для героя, который обыграет героев других
                             игроков по очкам. Все играют на одном поле.
                             Герой может передвигаться по свободным ячейкам во все четыре стороны.</p>
                         <p>Герой может вскарабкаться по лестнице (ввер/вниз), а так же передвигаться
@@ -257,7 +260,7 @@ THE_SHADOW_PILL('S')
                             не имеет значения - будет просверлена дырка слева. Если игрок будет
                             использовать только одну команду ACT то дырка просверлится в направлении,
                             куда смотрит герой. </p>
-                        <p>Если вдруг герой попал в ловушкуц и выбраться оттуда он не может -
+                        <p>Если вдруг герой попал в ловушку и выбраться оттуда он не может -
                             вызови команду ACT(0) и герой совершит акт суицида, после чего он
                             появится в новом месте.</p>
                         <p>Первая задача – написать websocket клиента, который подключится к
@@ -265,6 +268,77 @@ THE_SHADOW_PILL('S')
                             игрок подготовится к основной игре. Основная задача – вести осмысленную
                             игру и победить.</p>
                     </div>
+                </div>
+                <div>
+                    <p>
+                        Параметры будут настраиваться по ходу игры. Значения по-умолчнию представлены в таблице ниже:
+                    </p>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Событие</th>
+                            <th>Очки</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Пенальти за смерть (+очки)</td>
+                            <td class="score-value">1</td>
+                        </tr>
+                        <tr>
+                            <td>Очки за убийство другого игрока</td>
+                            <td class="score-value">10</td>
+                        </tr>
+                        <tr>
+                            <td>Инкремент очков за последующие собранные горстки золота в серии без смертей</td>
+                            <td class="score-value">1</td>
+                        </tr>
+                        <tr>
+                            <td>Количество таблеток тени на карте</td>
+                            <td class="score-value">0</td>
+                        </tr>
+                        <tr>
+                            <td>Очки за убийство другого игрока (под таблеткой тени или при закапывании)</td>
+                            <td class="score-value">10</td>
+                        </tr>
+                        <tr>
+                            <td>Количество порталов на карте</td>
+                            <td class="score-value">0</td>
+                        </tr>
+                        <tr>
+                            <td>Количество тиков до изменения положения порталов</td>
+                            <td class="score-value">10</td>
+                        </tr>
+                        <tr>
+                            <td>Количество зелёных горсток золота на карте</td>
+                            <td class="score-value">0</td>
+                        </tr>
+                        <tr>
+                            <td>Количество жёлтых горсток золота на карте</td>
+                            <td class="score-value">20</td>
+                        </tr>
+                        <tr>
+                            <td>Количество красных горсток золота на карте</td>
+                            <td class="score-value">0</td>
+                        </tr>
+                        <tr>
+                            <td>Очки за зелёную горстку золота</td>
+                            <td class="score-value">1</td>
+                        </tr>
+                        <tr>
+                            <td>Очки за жёлтую горстку золота</td>
+                            <td class="score-value">2</td>
+                        </tr>
+                        <tr>
+                            <td>Очки за красную горстку золота</td>
+                            <td class="score-value">5</td>
+                        </tr>
+                        <tr>
+                            <td>Количество ботов-преследователей</td>
+                            <td class="score-value">5</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

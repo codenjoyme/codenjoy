@@ -33,6 +33,7 @@ import static org.mockito.Mockito.when;
 import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
+import com.codenjoy.dojo.loderunner.services.Scores;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -1020,7 +1021,7 @@ public class SingleTest {
     }
 
     private void setEnemiesNumber(int enemiesNumber) {
-        Parameter<Integer> p = settings.getParameter("Number of enemies").type(Integer.class);
+        Parameter<Integer> p = settings.getParameter(Scores.ENEMIES_COUNT).type(Integer.class);
         p.update(enemiesNumber);
     }
 }

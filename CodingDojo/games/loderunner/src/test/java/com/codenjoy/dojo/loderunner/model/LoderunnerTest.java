@@ -36,6 +36,7 @@ import static org.mockito.Mockito.when;
 
 import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.services.Events;
+import com.codenjoy.dojo.loderunner.services.Scores;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -3871,7 +3872,7 @@ public class LoderunnerTest {
 
     @Test
     public void iCanJumpThroughPortals() {
-        Parameter<Integer> p1 = settings.getParameter("The portals count").type(Integer.class);
+        Parameter<Integer> p1 = settings.getParameter(Scores.PORTALS).type(Integer.class);
         p1.update(2);
         dice(1, 2, 3, 3);
         givenFl("☼☼☼☼☼" +
@@ -3919,7 +3920,7 @@ public class LoderunnerTest {
     }
 
     private void setEnemiesNumber(int enemiesNumber) {
-        Parameter<Integer> p = settings.getParameter("Number of enemies").type(Integer.class);
+        Parameter<Integer> p = settings.getParameter(Scores.ENEMIES_COUNT).type(Integer.class);
         p.update(enemiesNumber);
     }
 

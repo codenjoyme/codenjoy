@@ -29,6 +29,7 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.client.ai.AISolver;
 import com.codenjoy.dojo.loderunner.services.GameRunner;
+import com.codenjoy.dojo.loderunner.services.Scores;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -74,7 +75,7 @@ public class SmokeTest {
             @Override
             protected SettingsImpl createSettings() {
                 SettingsImpl settings = new TestSettings();
-                Parameter<Integer> p = settings.getParameter("Number of enemies").type(Integer.class);
+                Parameter<Integer> p = settings.getParameter(Scores.ENEMIES_COUNT).type(Integer.class);
                 p.update(1);
                 return settings;
             }

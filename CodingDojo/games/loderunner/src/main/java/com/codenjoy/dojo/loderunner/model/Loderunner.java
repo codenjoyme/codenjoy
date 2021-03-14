@@ -28,6 +28,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
+import com.codenjoy.dojo.loderunner.services.Scores;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -138,7 +139,7 @@ public class Loderunner implements Field {
 
     private void generatePills() {
         Integer shadowPillsCount = settings
-                .<Integer>getParameter("The shadow pills count")
+                .<Integer>getParameter(Scores.SHADOW_PILLS)
                 .getValue();
 
         shadowPillsCount = shadowPillsCount < 0 ? 0 : shadowPillsCount;
@@ -156,7 +157,7 @@ public class Loderunner implements Field {
 
     private void generateEnemies() {
         Integer numberOfEnemies = settings
-                .<Integer>getParameter("Number of enemies")
+                .<Integer>getParameter(Scores.ENEMIES_COUNT)
                 .getValue();
 
         numberOfEnemies = numberOfEnemies < 0 ? 0 : numberOfEnemies;
@@ -176,7 +177,7 @@ public class Loderunner implements Field {
 
     private void generatePortals() {
         Integer portalsTicksLive = settings
-                .<Integer>getParameter("Number of ticks that the portals will be active")
+                .<Integer>getParameter(Scores.PORTAL_TICKS)
                 .getValue();
 
         portalsTicksLive = portalsTicksLive < 1 ? 1 : portalsTicksLive;
@@ -184,7 +185,7 @@ public class Loderunner implements Field {
         this.portalsTicksLive = portalsTicksLive;
 
         Integer portalsCount = settings
-                .<Integer>getParameter("The portals count")
+                .<Integer>getParameter(Scores.PORTALS)
                 .getValue();
 
         portals.clear();
@@ -591,9 +592,9 @@ public class Loderunner implements Field {
     }
 
     private void generateGold()  {
-        int yellowTypeGoldCount = (Integer) settings.getParameter("yellow type gold count").getValue();
-        int greenTypeGoldCount = (Integer) settings.getParameter("green type gold count").getValue();
-        int redTypeGoldCount = (Integer) settings.getParameter("red type gold count").getValue();
+        int yellowTypeGoldCount = (Integer) settings.getParameter(Scores.GOLD_COUNT_YELLOW).getValue();
+        int greenTypeGoldCount = (Integer) settings.getParameter(Scores.GOLD_COUNT_GREEN).getValue();
+        int redTypeGoldCount = (Integer) settings.getParameter(Scores.GOLD_COUNT_RED).getValue();
         greenTypeGoldCount = Math.max(greenTypeGoldCount, 0);
         redTypeGoldCount = Math.max(redTypeGoldCount, 0);
 

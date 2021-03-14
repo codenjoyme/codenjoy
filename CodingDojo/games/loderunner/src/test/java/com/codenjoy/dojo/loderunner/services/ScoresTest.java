@@ -58,17 +58,17 @@ public class ScoresTest {
         settings = new SettingsImpl();
         scores = new Scores(0, settings);
 
-        Parameter<Integer> p1 = settings.getParameter("Kill hero penalty").type(Integer.class);
+        Parameter<Integer> p1 = settings.getParameter(Scores.HERO_KILL_PENALTY).type(Integer.class);
         p1.update(30);
         killHeroPenalty = p1.getValue();
 
-        killEnemyScore = settings.getParameter("Kill enemy score").type(Integer.class).getValue();
+        killEnemyScore = settings.getParameter(Scores.ENEMY_KILL_SCORE).type(Integer.class).getValue();
 
-        Parameter<Integer> p3 = settings.getParameter("yellow type gold weight").type(Integer.class);
+        Parameter<Integer> p3 = settings.getParameter(Scores.GOLD_SCORE_YELLOW).type(Integer.class);
         p3.update(10);
         getGoldScore = p3.getValue();
 
-        Parameter<Integer> p2 = settings.getParameter("Get next gold increment score").type(Integer.class);
+        Parameter<Integer> p2 = settings.getParameter(Scores.GOLD_SERIES_INCREMENT_SCORE).type(Integer.class);
         p2.update(3);
         forNextGoldIncScore = p2.getValue();
     }
