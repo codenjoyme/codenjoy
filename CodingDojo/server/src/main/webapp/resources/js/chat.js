@@ -25,12 +25,36 @@ function initChat(contextPath) {
     var deletePromise = (messageId) => new Promise((resolve, reject) =>
         deleteData('/rest/chat/' + setup.room + '/messages/' + messageId,
                 deleted => resolve(deleted))
-    )
+    );
+
+    function buildParams(afterId, beforeId, inclusive, count) {
+        var ch = () => (!!result) ? '&' : '?';
+
+        var result = '';
+        if (!!afterId) {
+            result += ch() + 'afterId=' + afterId;
+        }
+        if (!!beforeId) {
+            result += ch() + 'beforeId=' + beforeId;
+        }
+        if (!!inclusive) {
+            result += ch() + 'inclusive=' + inclusive;
+        }
+        if (!!count) {
+            result += ch() + 'count=' + count;
+        }
+        return result;
+    }
+
+    var getMessages = (afterId, beforeId, inclusive, count) => new Promise((resolve, reject) => {
+        var params = buildParams(afterId, beforeId, inclusive, count);
+        loadData('/rest/chat/' + setup.room + '/messages' + params,
+                messages => resolve(messages));
+    });
 
     var firstMessageInChat = null;
 
     function loadChatMessages(onLoad, afterId, beforeId, inclusive, count) {
-        var params = '';
         loading = true;
 
         // если грузили уже с таким beforeId и сообщений больше не приходило
@@ -40,23 +64,7 @@ function initChat(contextPath) {
             return;
         }
 
-        var ch = function() {
-            return (!!params) ? '&' : '?';
-        }
-
-        if (!!afterId) {
-            params += ch() + 'afterId=' + afterId;
-        }
-        if (!!beforeId) {
-            params += ch() + 'beforeId=' + beforeId;
-        }
-        if (!!inclusive) {
-            params += ch() + 'inclusive=' + inclusive;
-        }
-        if (!!count) {
-            params += ch() + 'count=' + count;
-        }
-        loadData('/rest/chat/' + setup.room + '/messages' + params, function (messages) {
+        getMessages(afterId, beforeId, inclusive, count).then(messages => {
             var messageId = null;
             var after = true;
             if (!!afterId) {
