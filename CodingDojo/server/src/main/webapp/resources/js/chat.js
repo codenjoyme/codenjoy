@@ -22,9 +22,10 @@
 
 function initChat(contextPath) {
 
-    var deletePromise = (messageId) => new Promise((resolve, reject) =>
+    var deletePromise = async (messageId) => new Promise((resolve, reject) =>
         deleteData('/rest/chat/' + setup.room + '/messages/' + messageId,
-                deleted => resolve(deleted))
+                deleted => resolve(deleted),
+                error => reject(error))
     );
 
     function buildParams(afterId, beforeId, inclusive, count) {
@@ -46,10 +47,11 @@ function initChat(contextPath) {
         return result;
     }
 
-    var getMessages = (afterId, beforeId, inclusive, count) => new Promise((resolve, reject) => {
+    var getMessages = async (afterId, beforeId, inclusive, count) => new Promise((resolve, reject) => {
         var params = buildParams(afterId, beforeId, inclusive, count);
         loadData('/rest/chat/' + setup.room + '/messages' + params,
-                messages => resolve(messages));
+                messages => resolve(messages),
+                error => reject(error));
     });
 
     var firstMessageInChat = null;
