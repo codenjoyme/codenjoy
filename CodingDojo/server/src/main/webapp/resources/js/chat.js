@@ -56,7 +56,7 @@ function initChat(contextPath) {
 
     var firstMessageInChat = null;
 
-    function loadChatMessages(onLoad, afterId, beforeId, inclusive, count) {
+    async function loadChatMessages(onLoad, afterId, beforeId, inclusive, count) {
         loading = true;
 
         // если грузили уже с таким beforeId и сообщений больше не приходило
@@ -66,41 +66,40 @@ function initChat(contextPath) {
             return;
         }
 
-        getMessages(afterId, beforeId, inclusive, count).then(messages => {
-            var messageId = null;
-            var after = true;
-            if (!!afterId) {
-                messageId = afterId;
-                after = true;
-            } else if (!!beforeId) {
-                messageId = beforeId;
-                after = false;
+        var messages = await getMessages(afterId, beforeId, inclusive, count);
+        var messageId = null;
+        var after = true;
+        if (!!afterId) {
+            messageId = afterId;
+            after = true;
+        } else if (!!beforeId) {
+            messageId = beforeId;
+            after = false;
+        }
+
+        // когда мы грузим в диапазоне значений, это мы догружаем новые сообщения
+        // нам нужно подгрузить в чат (afterId, beforeId] но пришло [afterId, beforeId]
+        // потому и удаляем afterId который у нас уже есть в чате
+        if (inclusive && !!afterId && !!beforeId) {
+            messages.shift();
+        }
+
+        if (messages.length == 0) {
+            // если ничего не пришло и грузим мы начало чата
+            // значит это самое первое сообщение в чате - больше его загружать не будем
+            if (!after && !firstMessageInChat) {
+                firstMessageInChat = messageId;
             }
-
-            // когда мы грузим в диапазоне значений, это мы догружаем новые сообщения
-            // нам нужно подгрузить в чат (afterId, beforeId] но пришло [afterId, beforeId]
-            // потому и удаляем afterId который у нас уже есть в чате
-            if (inclusive && !!afterId && !!beforeId) {
-                messages.shift();
-            }
-
-            if (messages.length == 0) {
-                // если ничего не пришло и грузим мы начало чата
-                // значит это самое первое сообщение в чате - больше его загружать не будем
-                if (!after && !firstMessageInChat) {
-                    firstMessageInChat = messageId;
-                }
-                loading = false;
-                return;
-            }
-
-            appendMessages(messages, messageId, after);
-
             loading = false;
-            if (!!onLoad) {
-                onLoad(messages);
-            }
-        });
+            return;
+        }
+
+        appendMessages(messages, messageId, after);
+
+        loading = false;
+        if (!!onLoad) {
+            onLoad(messages);
+        }
     }
 
     function appendMessages(messages, messageId, isAfterOrBefore) {
@@ -135,12 +134,12 @@ function initChat(contextPath) {
                 deleteButton.remove();
                 return;
             }
-            deleteButton.click(() => deletePromise(messageId)
-                .then(deleted => {
-                    if (deleted) {
-                        message.remove();
-                    }
-                }));
+            deleteButton.click(async () => {
+                var deleted = await deletePromise(messageId)
+                if (deleted) {
+                    message.remove();
+                }
+            });
         });
 
         var anchor = 'div[message=' + messageId + ']';
