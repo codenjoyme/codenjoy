@@ -22,8 +22,15 @@
 
 function initChat(contextPath) {
 
-    var deletePromise = async (messageId) => new Promise((resolve, reject) =>
+    var deleteMessage = async (messageId) => new Promise((resolve, reject) =>
         deleteData('/rest/chat/' + setup.room + '/messages/' + messageId,
+                deleted => resolve(deleted),
+                error => reject(error))
+    );
+
+    var postMessage = async (message) => new Promise((resolve, reject) =>
+        sendData('/rest/chat/' + setup.room + '/messages',
+                { text : escapeHtml(message) },
                 deleted => resolve(deleted),
                 error => reject(error))
     );
@@ -135,7 +142,7 @@ function initChat(contextPath) {
                 return;
             }
             deleteButton.click(async () => {
-                var deleted = await deletePromise(messageId)
+                var deleted = await deleteMessage(messageId)
                 if (deleted) {
                     message.remove();
                 }
@@ -184,20 +191,17 @@ function initChat(contextPath) {
             }
         });
 
-        postMessageButton.click(function() {
+        postMessageButton.click(async function() {
             var message = newMessage.val();
             if (message == '') {
                 return;
             }
 
-            sendData('/rest/chat/' + setup.room + '/messages',
-                { text : escapeHtml(message) },
-                function (message) {
-                    appendMessages([message]);
-                    newMessage.val('');
-                    newMessage.focus();
-                    scrollToEnd();
-                });
+            var message = await postMessage(message);
+            appendMessages([message]);
+            newMessage.val('');
+            newMessage.focus();
+            scrollToEnd();
         });
     }
 
