@@ -22,6 +22,11 @@
 
 function initChat(contextPath) {
 
+    var deletePromise = (messageId) => new Promise((resolve, reject) =>
+        deleteData('/rest/chat/' + setup.room + '/messages/' + messageId,
+                deleted => resolve(deleted))
+    )
+
     var firstMessageInChat = null;
 
     function loadChatMessages(onLoad, afterId, beforeId, inclusive, count) {
@@ -120,13 +125,12 @@ function initChat(contextPath) {
                 deleteButton.remove();
                 return;
             }
-            deleteButton.click(function() {
-                deleteData('/rest/chat/' + setup.room + '/messages/' + messageId, function (deleted) {
+            deleteButton.click(() => deletePromise(messageId)
+                .then(deleted => {
                     if (deleted) {
                         message.remove();
                     }
-                });
-            });
+                }));
         });
 
         var anchor = 'div[message=' + messageId + ']';
