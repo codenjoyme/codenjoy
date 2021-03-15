@@ -262,6 +262,31 @@ class RulesContainer extends Component {
 //                    </p>
 
                     <div className='subTitle' id='perks'>
+                        Певні особливості гри
+                    </div>
+                    <ul>
+                        <li>
+                            <span className='command'>ICE</span> - крижане поле.
+                            При заїзді на це поле ваш танк перестає слухатися команд и певну кількість кроків
+                            виконує попередню передану команду. <br />
+                            <ul class="sub_ul">
+                                <li>Кількість тіків, які танк ковзає на кризі: { this._gets('slipperiness') }.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span className='command'>TREE</span> - Дерева/кущі.
+                            Приховують танки, які при цьому можуть продовжувати рух та стріляти.
+                            Постріли також не видно поза кущами. <br />
+                            Через кущі можна побачити лише тільки призи.
+                        </li>
+                        <li>
+                            <span className='command'>RIVER</span> - Річка/вода.
+                            Танк не може по ній їздити але може стріляти поверх неї.
+                            <br />
+                        </li>
+                    </ul>
+
+                    <div className='subTitle' id='perks'>
                         Модифікатори (Перки)
                     </div>
                     <ul>
@@ -285,10 +310,17 @@ class RulesContainer extends Component {
                         </li>
                       <li>
                             <span className='command'>PRIZE_WALKING_ON_WATER</span> - дає право гравцю рухатися по воді. <br />
+                            Якшо дія перку закінчилася а танк ще у воді - накладається штраф.
+                            У цьому разі ви зможете рухатися та стріляти лише один за на кілька
+                            тіків, доки танк не потрапить на вільну клітину.
                             <ul class="sub_ul">
                                 <li>
                                     Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
                                 </li>
+                                <li>
+                                    Кількість штрафних тіків { this._gets('prizeWorking') } тіків (секунд). //todo Решить, что с реализацией штрафа на воде.
+                                </li>
+
                             </ul>
                         </li>
                         <li>
