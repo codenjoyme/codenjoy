@@ -27,6 +27,8 @@ import com.codenjoy.dojo.a2048.model.Elements;
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Direction;
 
+import static com.codenjoy.dojo.a2048.model.Elements.NONE;
+
 public class Board extends AbstractBoard<Elements> {
 
     @Override
@@ -50,15 +52,15 @@ public class Board extends AbstractBoard<Elements> {
 
                 Elements at = getAt(fromX, y);
                 Elements at2 = getAt(toX, y);
-                if (at == Elements.NONE) {
+                if (at == NONE) {
                     fromX++;
                     continue;
                 }
-                if (at2 == Elements.NONE) {
+                if (at2 == NONE) {
                     continue;
                 }
 
-                if (at != Elements.NONE && at == at2) {
+                if (at != NONE && at == at2) {
                     result++;
                     fromX = toX + 1;
                     toX = fromX;

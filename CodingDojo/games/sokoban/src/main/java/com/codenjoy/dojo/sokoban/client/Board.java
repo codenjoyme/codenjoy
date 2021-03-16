@@ -27,6 +27,8 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Elements;
 
+import static com.codenjoy.dojo.sokoban.model.itemsImpl.Elements.*;
+
 /**
  * Класс, обрабатывающий строковое представление доски.
  * Содержит ряд унаследованных методов {@see AbstractBoard},
@@ -40,12 +42,11 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.WALL);
+        return isAt(x, y, WALL);
     }
 
     public Point getMe() {
-        return get(
-                Elements.HERO).get(0);
+        return get(HERO).get(0);
     }
 
     /**
@@ -56,6 +57,6 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBombAt(int x, int y) {
-        return isAt(x, y, Elements.BOMB);
+        return isAt(x, y, BOMB);
     }
 }

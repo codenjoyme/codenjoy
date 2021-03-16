@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.reversi.model.Elements.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
@@ -46,19 +47,21 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isWhite(int x, int y) {
-        return isAt(x, y, Elements.WHITE)
-                || isAt(x, y, Elements.WHITE_TURN)
-                || isAt(x, y, Elements.WHITE_STOP);
+        return isAt(x, y,
+                WHITE,
+                WHITE_TURN,
+                WHITE_STOP);
     }
 
     public boolean isBlack(int x, int y) {
-        return isAt(x, y, Elements.BLACK)
-                || isAt(x, y, Elements.BLACK_TURN)
-                || isAt(x, y, Elements.BLACK_STOP);
+        return isAt(x, y,
+                BLACK,
+                BLACK_TURN,
+                BLACK_STOP);
     }
 
     public boolean isMyTurn() {
-        return get(Elements.WHITE_STOP, Elements.BLACK_STOP).isEmpty();
+        return get(WHITE_STOP, Elements.BLACK_STOP).isEmpty();
     }
 
     @Override
@@ -68,9 +71,9 @@ public class Board extends AbstractBoard<Elements> {
 
     public boolean myColor() {
         if (isMyTurn()) {
-            return !get(Elements.WHITE_TURN).isEmpty();
+            return !get(WHITE_TURN).isEmpty();
         } else {
-            return get(Elements.WHITE_TURN).isEmpty();
+            return get(WHITE_TURN).isEmpty();
         }
     }
 }

@@ -26,6 +26,9 @@ package com.codenjoy.dojo.quadro.client;
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.quadro.model.Elements;
 
+import static com.codenjoy.dojo.quadro.model.Elements.RED;
+import static com.codenjoy.dojo.quadro.model.Elements.YELLOW;
+
 /**
  * Класс, обрабатывающий строковое представление доски.
  * Содержит ряд унаследованных методов {@see AbstractBoard}.
@@ -38,10 +41,10 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isYellow(int x, int y) {
-        return isAt(x, y, Elements.YELLOW);
+        return isAt(x, y, YELLOW);
     }
 
     public boolean isRed(int x, int y) {
-        return isAt(x, y, Elements.RED);
+        return isAt(x, y, RED);
     }
 }

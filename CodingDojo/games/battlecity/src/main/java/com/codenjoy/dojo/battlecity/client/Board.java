@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
@@ -52,29 +53,29 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> getBarriers() {
-        return get(Elements.BATTLE_WALL,
-                Elements.WALL,
-                Elements.WALL_DESTROYED_DOWN,
-                Elements.WALL_DESTROYED_UP,
-                Elements.WALL_DESTROYED_LEFT,
-                Elements.WALL_DESTROYED_RIGHT,
-                Elements.WALL_DESTROYED_DOWN_TWICE,
-                Elements.WALL_DESTROYED_UP_TWICE,
-                Elements.WALL_DESTROYED_LEFT_TWICE,
-                Elements.WALL_DESTROYED_RIGHT_TWICE,
-                Elements.WALL_DESTROYED_LEFT_RIGHT,
-                Elements.WALL_DESTROYED_UP_DOWN,
-                Elements.WALL_DESTROYED_UP_LEFT,
-                Elements.WALL_DESTROYED_RIGHT_UP,
-                Elements.WALL_DESTROYED_DOWN_LEFT,
-                Elements.WALL_DESTROYED_DOWN_RIGHT);
+        return get(BATTLE_WALL,
+                WALL,
+                WALL_DESTROYED_DOWN,
+                WALL_DESTROYED_UP,
+                WALL_DESTROYED_LEFT,
+                WALL_DESTROYED_RIGHT,
+                WALL_DESTROYED_DOWN_TWICE,
+                WALL_DESTROYED_UP_TWICE,
+                WALL_DESTROYED_LEFT_TWICE,
+                WALL_DESTROYED_RIGHT_TWICE,
+                WALL_DESTROYED_LEFT_RIGHT,
+                WALL_DESTROYED_UP_DOWN,
+                WALL_DESTROYED_UP_LEFT,
+                WALL_DESTROYED_RIGHT_UP,
+                WALL_DESTROYED_DOWN_LEFT,
+                WALL_DESTROYED_DOWN_RIGHT);
     }
 
     public Point getMe() {
-        List<Point> points = get(Elements.TANK_UP,
-                Elements.TANK_DOWN,
-                Elements.TANK_LEFT,
-                Elements.TANK_RIGHT);
+        List<Point> points = get(TANK_UP,
+                TANK_DOWN,
+                TANK_LEFT,
+                TANK_RIGHT);
         if (points.isEmpty()) {
             return null;
         }
@@ -82,37 +83,37 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> getEnemies() {
-        return get(Elements.AI_TANK_UP,
-                Elements.AI_TANK_DOWN,
-                Elements.AI_TANK_LEFT,
-                Elements.AI_TANK_RIGHT,
-                Elements.OTHER_TANK_UP,
-                Elements.OTHER_TANK_DOWN,
-                Elements.OTHER_TANK_LEFT,
-                Elements.OTHER_TANK_RIGHT,
-                Elements.AI_TANK_PRIZE);
+        return get(AI_TANK_UP,
+                AI_TANK_DOWN,
+                AI_TANK_LEFT,
+                AI_TANK_RIGHT,
+                OTHER_TANK_UP,
+                OTHER_TANK_DOWN,
+                OTHER_TANK_LEFT,
+                OTHER_TANK_RIGHT,
+                AI_TANK_PRIZE);
     }
 
     public List<Point> getBullets() {
-        return get(Elements.BULLET);
+        return get(BULLET);
     }
 
     public boolean isGameOver() {
-        return get(Elements.TANK_UP,
-                Elements.TANK_DOWN,
-                Elements.TANK_LEFT,
-                Elements.TANK_RIGHT).isEmpty();
+        return get(TANK_UP,
+                TANK_DOWN,
+                TANK_LEFT,
+                TANK_RIGHT).isEmpty();
     }
 
     public Elements getAt(int x, int y) {
         if (isOutOfField(x, y)) {
-            return Elements.BATTLE_WALL;
+            return BATTLE_WALL;
         }
         return super.getAt(x, y);
     }
 
     public boolean isBulletAt(int x, int y) {
-        return getAt(x, y).equals(Elements.BULLET);
+        return getAt(x, y).equals(BULLET);
     }
 
     @Override

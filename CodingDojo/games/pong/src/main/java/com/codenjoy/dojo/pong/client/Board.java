@@ -28,6 +28,9 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.pong.model.Elements.BALL;
+import static com.codenjoy.dojo.pong.model.Elements.HERO;
+
 public class Board extends AbstractBoard<Elements> {
 
     @Override
@@ -36,11 +39,11 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> getMe() {
-        return get(Elements.HERO);
+        return get(HERO);
     }
 
     public Point getBall() {
-        List<Point> balls = get(Elements.BALL);
+        List<Point> balls = get(BALL);
         if (!balls.isEmpty()) {
             return balls.get(0);
         } else {

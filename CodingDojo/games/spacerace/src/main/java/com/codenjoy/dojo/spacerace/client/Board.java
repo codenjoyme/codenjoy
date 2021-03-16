@@ -27,7 +27,10 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.spacerace.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.List;
+
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.spacerace.model.Elements.*;
 
 /**
  * Класс, обрабатывающий строковое представление доски.
@@ -42,32 +45,31 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.WALL);
+        return isAt(x, y, WALL);
     }
 
     public Point getMe() {
-
-        if(get(Elements.DEAD_HERO,Elements.HERO).get(0) == null){
+        List<Point> list = get(DEAD_HERO, HERO);
+        if (list.isEmpty()){
             return pt(1, 1);
-        }else {
-
-        return get(Elements.DEAD_HERO,
-                Elements.HERO).get(0);
-    }}
+        } else {
+            return list.get(0);
+        }
+    }
 
     public boolean isGameOver() {
-        return !get(Elements.DEAD_HERO).isEmpty();
+        return !get(DEAD_HERO).isEmpty();
     }
 
     public boolean isBombAt(int x, int y) {
-        return isAt(x, y, Elements.BOMB);
+        return isAt(x, y, BOMB);
     }
 
     public boolean isStoneAt(int x, int y) {
-        return isAt(x, y, Elements.STONE);
+        return isAt(x, y, STONE);
     }
 
     public boolean isBulletAt(int x, int y) {
-        return isAt(x, y, Elements.BULLET);
+        return isAt(x, y, BULLET);
     }
 }

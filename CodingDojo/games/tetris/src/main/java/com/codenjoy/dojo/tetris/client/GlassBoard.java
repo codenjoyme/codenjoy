@@ -28,6 +28,8 @@ import com.codenjoy.dojo.tetris.model.Elements;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.tetris.model.Elements.*;
+
 public class GlassBoard extends AbstractBoard<Elements> {
 
     @Override
@@ -41,22 +43,21 @@ public class GlassBoard extends AbstractBoard<Elements> {
     }
 
     public boolean isFree(int x, int y) {
-        return isAt(x, y, Elements.NONE);
+        return isAt(x, y, NONE);
     }
 
     public List<Point> getFigures() {
-        return get(
-                Elements.BLUE,
-                Elements.CYAN,
-                Elements.ORANGE,
-                Elements.YELLOW,
-                Elements.GREEN,
-                Elements.PURPLE,
-                Elements.RED
+        return get(BLUE,
+                CYAN,
+                ORANGE,
+                YELLOW,
+                GREEN,
+                PURPLE,
+                RED
         );
     }
 
     public List<Point> getFreeSpace() {
-        return get(Elements.NONE);
+        return get(NONE);
     }
 }

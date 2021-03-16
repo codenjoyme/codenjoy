@@ -26,6 +26,7 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.quake2d.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
+import static com.codenjoy.dojo.quake2d.model.Elements.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
@@ -36,19 +37,19 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.WALL);
+        return isAt(x, y, WALL);
     }
 
     public Point getMe() {
-        return get(Elements.DEAD_HERO,
-                Elements.HERO).get(0);
+        return get(DEAD_HERO,
+                HERO).get(0);
     }
 
     public boolean isGameOver() {
-        return !get(Elements.DEAD_HERO).isEmpty();
+        return !get(DEAD_HERO).isEmpty();
     }
 
     public boolean isBombAt(int x, int y) {
-        return isAt(x, y, Elements.BULLET);
+        return isAt(x, y, BULLET);
     }
 }

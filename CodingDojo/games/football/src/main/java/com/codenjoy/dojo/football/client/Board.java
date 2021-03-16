@@ -27,6 +27,8 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.football.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
+import static com.codenjoy.dojo.football.model.Elements.*;
+
 /**
  * Класс, обрабатывающий строковое представление доски.
  * Содержит ряд унаследованных методов {@see AbstractBoard},
@@ -45,33 +47,33 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.WALL);
+        return isAt(x, y, WALL);
     }
 
     public Point getMe() {
-        return get(Elements.HERO, Elements.HERO_W_BALL).get(0);
+        return get(HERO, HERO_W_BALL).get(0);
     }
     
     public Point getBall() {
-        return get(Elements.BALL, Elements.STOPPED_BALL, 
-                    Elements.HERO_W_BALL, Elements.ENEMY_W_BALL,
-                    Elements.HITED_GOAL, Elements.HITED_MY_GOAL).get(0);
+        return get(BALL, STOPPED_BALL, 
+                    HERO_W_BALL, ENEMY_W_BALL,
+                    HITED_GOAL, HITED_MY_GOAL).get(0);
     }
     
     public Point getMyGoal() {
-        return get(Elements.MY_GOAL).get(0);
+        return get(MY_GOAL).get(0);
     }
     
     public Point getEnemyGoal() {
-        return get(Elements.ENEMY_GOAL).get(0);
+        return get(ENEMY_GOAL).get(0);
     }
     
     public boolean isBallOnMyTeam() {
-        return get(Elements.TEAM_MEMBER_W_BALL).size() > 0;
+        return get(TEAM_MEMBER_W_BALL).size() > 0;
     }
     
     public boolean isGameOver() {
-        return !get(Elements.HITED_GOAL, Elements.HITED_MY_GOAL).isEmpty();
+        return !get(HITED_GOAL, HITED_MY_GOAL).isEmpty();
     }
 
 
