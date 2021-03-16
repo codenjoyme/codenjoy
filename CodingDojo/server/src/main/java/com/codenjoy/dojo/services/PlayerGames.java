@@ -350,6 +350,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             Collections.shuffle(games);
         }
 
+        games.forEach(pg -> spreader.remove(pg.getGame().getPlayer()));
         games.forEach(pg -> reloadCurrent(pg));
     }
 

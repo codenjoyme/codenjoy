@@ -836,9 +836,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.reloadAll(false);
 
         // then
-        assertRooms("{1=[player1], " +
-                "2=[player2, player3, player4], " +
-                "3=[player5]}");
+        assertRooms("{2=[player1, player2, player3], " +
+                "3=[player4, player5]}");
         assertEquals(4, fields.size());
     }
 
@@ -860,9 +859,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.reloadAll(false);
 
         // then
-        assertRooms("{1=[player1], " +
-                "2=[player2, player3, player4], " +
-                "3=[player5]}");
+        assertRooms("{2=[player1, player2, player3], " +
+                "3=[player4, player5]}");
         assertEquals(4, fields.size());
     }
 
@@ -886,10 +884,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.reloadAll(false, withRoom("room1"));
 
         // then
-        assertRooms("{1=[player1, player2], " +
-                "2=[player5, player6], " + // didn't touch because room2
-                "3=[player3, player4]}");
-        assertEquals(4, fields.size());
+        assertRooms("{2=[player5, player6], " + // didn't touch because room2
+                "3=[player1, player2, player3], " +
+                "4=[player4]}");
+        assertEquals(5, fields.size());
     }
 
     @Test
@@ -912,10 +910,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.reloadAll(false, withType("game1"));
 
         // then
-        assertRooms("{1=[player1, player2], " +
-                "2=[player5, player6], " + // didn't touch because game2
-                "3=[player3, player4]}");
-        assertEquals(4, fields.size());
+        assertRooms("{2=[player5, player6], " +  // didn't touch because game2
+                "3=[player1, player2, player3], " +
+                "4=[player4]}");
+        assertEquals(5, fields.size());
     }
 
     @Test
