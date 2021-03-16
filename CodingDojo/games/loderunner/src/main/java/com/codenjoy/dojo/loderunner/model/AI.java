@@ -29,54 +29,113 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.Direction.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
+// TODO почему-то эта реализация быстрее чем базовая DeikstraFindWay узнать почему и применить эту идею там, а тут заюзать повторно
 public class AI implements EnemyAI {
 
-    private DeikstraFindWay way = new DeikstraFindWay();
+    Map<Point, List<Direction>> possibleWays = new TreeMap<>();
 
     @Override
     public Direction getDirection(Field field, Point from, Point to) {
         if (to == null) return null;
 
-        List<Direction> path = getPath(field, from, to);
+        setupPossibleWays(field);
 
-        return path.isEmpty() ? null : path.get(0);
+        Direction direction = null;
+        List<Direction> path = getPath(field.size(), from, to);
+        if (!path.isEmpty()) {
+            direction = path.get(0);
+        }
+
+        return direction;
     }
 
-    public List<Direction> getPath(Field field, Point from, Point to) {
-        return way.getShortestWay(field.size(), from, Arrays.asList(to), possible(field));
+    List<Direction> getPath(int size, Point from, Point to) {
+        return getPath(size, from).get(to);
     }
 
-    public DeikstraFindWay.Possible possible(Field field) {
-        return new DeikstraFindWay.Possible() {
-            @Override
-            public boolean possible(Point from, Direction where) {
-                if (where == Direction.UP && !field.isLadder(from)) return false;
-                Point under = Direction.DOWN.change(from);
+    private Map<Point, List<Direction>> getPath(int size, Point from) {
+        Map<Point, List<Direction>> path = new HashMap<>();
+        for (Point point : possibleWays.keySet()) {
+            path.put(point, new LinkedList<>());
+        }
 
-                if (!under.isOutOf(field.size()) &&
-                        !field.isBrick(under) &&
-                        !field.isLadder(under) &&
-                        !field.isBorder(under) &&
-                        !field.isLadder(from) &&
-                        !field.isPipe(from) &&
-                        where != Direction.DOWN) return false;
+        boolean[][] processed = new boolean[size][size];
+        LinkedList<Point> toProcess = new LinkedList<>();
 
-                return true;
+        Point current = from;
+        do {
+            if (current == null) {
+                current = toProcess.remove();
             }
+            List<Direction> before = path.get(current);
+            for (Direction direction : possibleWays.get(current)) {
+                Point to = direction.change(current);
+//                if (field.isEnemyAt(to.getX(), to.getY())) continue;
+                if (processed[to.getX()][to.getY()]) continue;
 
-            @Override
-            public boolean possible(Point pt) {
-                if (pt.isOutOf(field.size())) return false;
+                List<Direction> directions = path.get(to);
+                if (directions.isEmpty() || directions.size() > before.size() + 1) {
+                    directions.addAll(before);
+                    directions.add(direction);
 
-                if (field.isBrick(pt) || field.isBorder(pt)) return false;
-
-                return true;
+                    if (!processed[to.getX()][to.getY()]) {
+                        toProcess.add(to);
+                    }
+                }
             }
-        };
+            processed[current.getX()][current.getY()] = true;
+            current = null;
+        } while (!toProcess.isEmpty());
+
+        return path;
     }
 
-    public Map<Point, List<Direction>> possibleWays(Field field) {
-        return way.getPossibleWays(field.size(), possible(field));
+    void setupPossibleWays(Field field) {
+        if (possibleWays.isEmpty()) {
+            for (int x = 0; x < field.size(); x++) {
+                for (int y = 0; y < field.size(); y++) {
+                    Point pt = pt(x, y);
+                    List<Direction> directions = new LinkedList<>();
+                    for (Direction direction : Arrays.asList(UP, DOWN, LEFT, RIGHT)) {
+                        if (isPossible(field, pt, direction)) {
+                            directions.add(direction);
+                        }
+                    }
+                    possibleWays.put(pt, directions);
+                }
+            }
+        }
     }
 
+    private boolean isPossible(Field field, Point pt, Direction direction) {
+        if (field.isBrick(pt) || field.isBorder(pt)) return false;
+
+        Point newPt = direction.change(pt);
+        int x = newPt.getX();
+        int y = newPt.getY();
+
+        if (isOutOfField(field.size(), x, y)) return false;
+
+        if (field.isBrick(newPt) || field.isBorder(newPt)) return false;
+
+        if (direction == Direction.UP && !field.isLadder(pt)) return false;
+
+        Point under = DOWN.change(pt);
+        if (!isOutOfField(field.size(), pt.getX(), pt.getY() - 1) &&
+                !field.isBrick(under) &&
+                !field.isLadder(under) &&
+                !field.isBorder(under) &&
+                !field.isLadder(pt) &&
+                !field.isPipe(pt) &&
+                direction != DOWN) return false;
+
+        return true;
+    }
+
+    private boolean isOutOfField(int size, int x, int y) {
+        return x < 0 || y < 0 || x > size - 1 || y > size - 1;
+    }
 }
