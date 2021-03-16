@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public abstract class AbstractBoard<E extends CharElements> extends AbstractLayeredBoard<E> {
 
     public abstract E valueOf(char ch);
@@ -53,26 +55,6 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         return result;
     }
 
-    /**
-     * Says if at given position (X, Y) at given layer has given element.
-     * @param x X coordinate.
-     * @param y Y coordinate.
-     * @param element Elements that we try to detect on this point.
-     * @return true is element was found.
-     */
-    public boolean isAt(int x, int y, E element) {
-        for (int layer = 0; layer < countLayers(); ++layer) {
-            if (isAt(layer, x, y, element)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean isAt(Point point, E element) {
-        return isAt(point.getX(), point.getY(), element);
-    }
-
     public E getAt(int x, int y) {
         List<E> at = getAllAt(x, y);
         if (at.isEmpty()) {
@@ -95,7 +77,7 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
     }
 
     protected List<Character> field(int x, int y) {
-        return new LinkedList<Character>(){{
+        return new LinkedList<>(){{
             for (int layer = 0; layer < countLayers(); ++layer) {
                 add(field(layer, x, y));                
             }             
@@ -125,16 +107,22 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
      * @return true is any of this elements was found.
      */
     public boolean isAt(int x, int y, E... elements) {
-        for (int layer = 0; layer < countLayers(); ++layer) {
-            if (isAt(layer, x, y, elements)) {
-                return true;
-            }
-        }
-        return false;
+        return isAt(pt(x, y), elements);
     }
 
     public boolean isAt(Point point, E... elements) {
-        return isAt(point.getX(), point.getY(), elements);
+        if (point.isOutOf(size)) {
+            return false;
+        }
+
+        for (E element : elements) {
+            for (int layer = 0; layer < countLayers(); ++layer) {
+                if (getAt(layer, point.getX(), point.getY()).equals(element)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
