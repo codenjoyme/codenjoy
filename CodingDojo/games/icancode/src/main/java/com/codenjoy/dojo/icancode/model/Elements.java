@@ -138,6 +138,21 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
+    public Elements other() {
+        switch (this) {
+            case ROBO : return ROBO_OTHER;
+            case ROBO_FALLING : return ROBO_OTHER_FALLING;
+            case ROBO_FLYING : return ROBO_OTHER_FLYING;
+            case ROBO_LASER : return ROBO_OTHER_LASER;
+
+            case ROBO_OTHER : return ROBO;
+            case ROBO_OTHER_FALLING : return ROBO_FALLING;
+            case ROBO_OTHER_FLYING : return ROBO_FLYING;
+            case ROBO_OTHER_LASER : return ROBO_LASER;
+        }
+        throw new IllegalArgumentException("Bad hero state: " + this);
+    }
+
     public static Elements valueOf(char ch) {
         if (elementsMap == null) {
             makeElementsMap();

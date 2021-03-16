@@ -32,10 +32,10 @@ import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.StateUtils;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -128,30 +128,25 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (player.getHero() == this || Arrays.asList(alsoAtPoint).contains(player.getHero().item)) {
-            if (flying) {
-                return Elements.ROBO_FLYING;
-            }
-            if (laser) {
-                return Elements.ROBO_LASER;
-            }
-            if (hole) {
-                return Elements.ROBO_FALLING;
-            }
-            return Elements.ROBO;
+        Elements state = state();
+        if (StateUtils.itsMe(player, this, alsoAtPoint, player.getHero().item)) {
+            return state;
         } else {
-            if (flying) {
-                return Elements.ROBO_OTHER_FLYING;
-            }
-            if (laser) {
-                return Elements.ROBO_OTHER_LASER;
-            }
-
-            if (hole) {
-                return Elements.ROBO_OTHER_FALLING;
-            }
-            return Elements.ROBO_OTHER;
+            return state.other();
         }
+    }
+
+    public Elements state() {
+        if (flying) {
+            return Elements.ROBO_FLYING;
+        }
+        if (laser) {
+            return Elements.ROBO_LASER;
+        }
+        if (hole) {
+            return Elements.ROBO_FALLING;
+        }
+        return Elements.ROBO;
     }
 
     @Override
