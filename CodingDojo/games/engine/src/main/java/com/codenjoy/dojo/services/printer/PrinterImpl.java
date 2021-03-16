@@ -129,7 +129,13 @@ class PrinterImpl implements Printer<String> {
                     existing = new Object[7];
                     field[x][y] = existing;
                 }
-                existing[len[x][y]] = el;
+                byte index = len[x][y];
+                if (index >= existing.length) {
+                    throw new IllegalStateException(
+                            "There are many items in one cell: " + index +
+                                    ", expected max: " + (existing.length - 1));
+                }
+                existing[index] = el;
                 len[x][y]++;
             }
         }
