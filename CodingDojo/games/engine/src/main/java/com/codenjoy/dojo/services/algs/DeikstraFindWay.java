@@ -39,7 +39,7 @@ public class DeikstraFindWay {
 
     public interface Possible {
 
-        default boolean possible(Point from, Direction direction) {
+        default boolean possible(Point from, Direction where) {
             return true;
         }
 
@@ -47,16 +47,16 @@ public class DeikstraFindWay {
             return true;
         }
 
-        default boolean check(int size, Point from, Direction direction) {
+        default boolean check(int size, Point from, Direction where) {
             if (from.isOutOf(size)) return false;
             if (!possible(from)) return false;
 
-            Point to = direction.change(from);
+            Point dest = where.change(from);
 
-            if (to.isOutOf(size)) return false;
-            if (!possible(to)) return false;
+            if (dest.isOutOf(size)) return false;
+            if (!possible(dest)) return false;
 
-            if (!possible(from, direction)) return false;
+            if (!possible(from, where)) return false;
 
             return true;
         }

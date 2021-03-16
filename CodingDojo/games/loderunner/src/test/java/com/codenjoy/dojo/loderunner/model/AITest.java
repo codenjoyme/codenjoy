@@ -223,7 +223,7 @@ public class AITest {
         setupAI(map);
 
         Map<Point, List<Direction>> result = new TreeMap<>();
-        for (Map.Entry<Point, List<Direction>> entry : ai.ways.entrySet()) {
+        for (Map.Entry<Point, List<Direction>> entry : ai.ways(loderunner).entrySet()) {
             List<Direction> value = entry.getValue();
             if (!value.isEmpty()) {
                 result.put(entry.getKey(), value);
@@ -246,7 +246,6 @@ public class AITest {
         }
 
         ai = new AI();
-        ai.setupPossibleWays(loderunner);
     }
 
     private void assertD(String expected) {
