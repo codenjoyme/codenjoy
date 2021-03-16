@@ -35,7 +35,7 @@ import java.util.stream.Collector;
 @AllArgsConstructor
 public class GuiPlotColorDecoder {
 
-    public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private CharElements[] values;
 
     private char getGuiChar(char ch) {
