@@ -82,6 +82,7 @@ public class RegistrationController {
     public String registerByName(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);
+            player.dropPassword();
             return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());
         }
 
