@@ -44,6 +44,7 @@ public interface PlayerService extends Tickable {
 
     void cleanAllScores();
     void cleanAllScores(String room);
+    void cleanScores(String id);
     void reloadAllRooms();
     void reloadAllRooms(String room);
     void loadSaveForAll(String room, String save);

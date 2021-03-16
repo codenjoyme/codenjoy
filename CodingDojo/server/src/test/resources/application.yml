@@ -26,6 +26,9 @@ game:
     auto: true
     load-on-start: true
   ai: true
+  player:
+    score:
+      cleanup: true
   semifinal:
     enabled: false
     timeout: 900

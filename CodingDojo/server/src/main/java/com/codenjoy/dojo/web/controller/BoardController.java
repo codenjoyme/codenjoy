@@ -33,11 +33,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Optional;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
@@ -95,7 +96,7 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
-        populateJoiningGameModel(model, code, player);
+        populateBoardAttributes(model, code, player, false);
 
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
@@ -133,18 +134,27 @@ public class BoardController {
             return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game);
         }
 
-        populateJoiningGameModel(model, player.getCode(), player);
+        populateBoardAttributes(model, player.getCode(), player, false);
         return "board";
     }
 
-    private void populateJoiningGameModel(ModelMap model, String code, Player player) {
+    private void populateBoardAttributes(ModelMap model, String code, Player player, boolean allPlayersScreen) {
+        populateBoardAttributes(model, code, player.getGame(), player.getRoom(), player.getGameOnly(), player.getId(),
+                player.getReadableName(), allPlayersScreen);
+    }
+
+    private void populateBoardAttributes(ModelMap model, String code, String game, String room, String gameOnly,
+                                         String playerId, String readableName, boolean allPlayersScreen) {
         model.addAttribute("code", code);
-        model.addAttribute("game", player.getGame());
-        model.addAttribute("room", player.getRoom());
-        model.addAttribute("gameOnly", player.getGameOnly());
-        model.addAttribute("playerId", player.getId());
-        model.addAttribute("readableName", player.getReadableName());
+        model.addAttribute("game", game);
+        model.addAttribute("room", room);
         model.addAttribute("allPlayersScreen", false);
+        model.addAttribute("game", game);
+        model.addAttribute("gameOnly", gameOnly);
+        model.addAttribute("playerId", playerId);
+        model.addAttribute("readableName", readableName);
+        model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
+        model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
@@ -193,12 +203,14 @@ public class BoardController {
             return "redirect:/board" + code(code);
         }
 
+        String room = game; // TODO закончить с room
+
         Player player = playerService.getRandom(game);
         if (player == NullPlayer.INSTANCE) {
             // TODO а это тут вообще надо?
             return "redirect:/register?" + "game" + "=" + game;
         }
-        GameType gameType = player.getGameType();
+        GameType gameType = player.getGameType(); // TODO а тут точно сеттинги румы а не игры?
         if (gameType.getMultiplayerType(gameType.getSettings()) == MultiplayerType.MULTIPLE) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
@@ -207,13 +219,7 @@ public class BoardController {
             code = user.getCode();
         }
 
-        model.addAttribute("code", code);
-        model.addAttribute("game", game);
-        model.addAttribute("room", player.getRoom());
-        model.addAttribute("gameOnly", player.getGameOnly());
-        model.addAttribute("playerId", null);
-        model.addAttribute("readableName", null);
-        model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
+        populateBoardAttributes(model, code, game, room, player.getGameOnly(), null, null, true);
         return "board";
     }
 
@@ -229,7 +235,7 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register";
         }
-        GameType gameType = player.getGameType();
+        GameType gameType = player.getGameType(); // TODO а тут точно сеттинги румы а не игры?
         if (gameType.getMultiplayerType(gameType.getSettings()) != MultiplayerType.SINGLE) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
