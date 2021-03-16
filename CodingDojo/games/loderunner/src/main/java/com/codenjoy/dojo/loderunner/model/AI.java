@@ -43,7 +43,7 @@ public class AI implements EnemyAI {
         setupPossibleWays(field);
 
         Direction direction = null;
-        List<Direction> path = getPath(field.size(), from, to);
+        List<Direction> path = getPath(field, from, to);
         if (!path.isEmpty()) {
             direction = path.get(0);
         }
@@ -51,11 +51,12 @@ public class AI implements EnemyAI {
         return direction;
     }
 
-    List<Direction> getPath(int size, Point from, Point to) {
-        return getPath(size, from).get(to);
+    List<Direction> getPath(Field field, Point from, Point to) {
+        return getPath(field, from).get(to);
     }
 
-    private Map<Point, List<Direction>> getPath(int size, Point from) {
+    private Map<Point, List<Direction>> getPath(Field field, Point from) {
+        int size = field.size();
         Map<Point, List<Direction>> path = new HashMap<>();
         for (Point point : ways.keySet()) {
             path.put(point, new LinkedList<>());
@@ -72,8 +73,8 @@ public class AI implements EnemyAI {
             List<Direction> before = path.get(current);
             for (Direction direction : ways.get(current)) {
                 Point to = direction.change(current);
-//                if (field.isEnemyAt(to.getX(), to.getY())) continue;
                 if (processed[to.getX()][to.getY()]) continue;
+                if (!possible(field, to)) continue;
 
                 List<Direction> directions = path.get(to);
                 if (directions.isEmpty() || directions.size() > before.size() + 1) {
@@ -96,39 +97,44 @@ public class AI implements EnemyAI {
         if (ways.isEmpty()) {
             for (int x = 0; x < field.size(); x++) {
                 for (int y = 0; y < field.size(); y++) {
-                    Point pt = pt(x, y);
+                    Point from = pt(x, y);
                     List<Direction> directions = new LinkedList<>();
-                    for (Direction direction : Arrays.asList(UP, DOWN, LEFT, RIGHT)) {
-                        if (isPossible(field, pt, direction)) {
-                            directions.add(direction);
-                        }
+                    for (Direction where : Arrays.asList(UP, DOWN, LEFT, RIGHT)) {
+                        if (from.isOutOf(field.size())) continue;
+                        if (!possible(field, from)) continue;
+
+                        Point dest = where.change(from);
+
+                        if (dest.isOutOf(field.size())) continue;
+                        if (!possible(field, dest)) continue;
+
+                        if (!isPossible(field, from, where)) continue;
+
+                        directions.add(where);
                     }
-                    ways.put(pt, directions);
+                    ways.put(from, directions);
                 }
             }
         }
     }
 
-    private boolean isPossible(Field field, Point pt, Direction direction) {
-        if (field.isBrick(pt) || field.isBorder(pt)) return false;
+    private boolean isPossible(Field field, Point from, Direction where) {
+        if (where == Direction.UP && !field.isLadder(from)) return false;
 
-        Point dest = direction.change(pt);
-
-        if (dest.isOutOf(field.size())) return false;
-
-        if (field.isBrick(dest) || field.isBorder(dest)) return false;
-
-        if (direction == Direction.UP && !field.isLadder(pt)) return false;
-
-        Point under = DOWN.change(pt);
+        Point under = DOWN.change(from);
         if (!under.isOutOf(field.size()) &&
                 !field.isBrick(under) &&
                 !field.isLadder(under) &&
                 !field.isBorder(under) &&
-                !field.isLadder(pt) &&
-                !field.isPipe(pt) &&
-                direction != DOWN) return false;
+                !field.isLadder(from) &&
+                !field.isPipe(from) &&
+                where != DOWN) return false;
 
+        return true;
+    }
+
+    private boolean possible(Field field, Point pt) {
+        if (field.isBrick(pt) || field.isBorder(pt)) return false;
         return true;
     }
 }

@@ -217,7 +217,6 @@ public class AITest {
                 "[5,3]=[UP, DOWN, LEFT],\n" +
                 "[5,4]=[UP, DOWN, LEFT],\n" +
                 "[5,5]=[DOWN, LEFT]}");
-
     }
 
     private void assertP(String map, String expected) {
@@ -251,7 +250,7 @@ public class AITest {
     }
 
     private void assertD(String expected) {
-        assertEquals(expected, ai.getPath(loderunner.size(), level.getEnemies().get(0), level.getHeroes().get(0)).toString());
+        assertEquals(expected, ai.getPath(loderunner, level.getEnemies().get(0), level.getHeroes().get(0)).toString());
     }
 
     @Test
@@ -389,10 +388,10 @@ public class AITest {
         assertEquals("[5,3]", hero2.toString());
 
         assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy1, hero2));
-        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN]", ai.getPath(loderunner.size(), enemy1, hero2).toString());
+        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN]", ai.getPath(loderunner, enemy1, hero2).toString());
 
         assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy2, hero1));
-        assertEquals("[LEFT, LEFT, LEFT, DOWN]", ai.getPath(loderunner.size(), enemy2, hero1).toString());
+        assertEquals("[LEFT, LEFT, LEFT, DOWN]", ai.getPath(loderunner, enemy2, hero1).toString());
     }
 
     @Test
@@ -414,7 +413,7 @@ public class AITest {
 
         // проверяем весь путь для первого чертика
         assertEquals("[2,6]", hero1.toString());
-        assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner.size(), enemy1, hero1).toString());
+        assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy1, hero1).toString());
 
         // проверяем следующую команду для второго чертика
         Enemy enemy2 = level.getEnemies().get(1);
@@ -424,7 +423,7 @@ public class AITest {
 
         // проверяем весь путь для второго чертика
         assertEquals("[5,6]", hero2.toString());
-        assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner.size(), enemy2, hero2).toString());
+        assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy2, hero2).toString());
     }
 
     // из за того, что чертики друг для друга препятствие - не каждый чертик может охотится за любым героем
@@ -446,13 +445,13 @@ public class AITest {
         assertEquals("[4,2]", enemy2.toString());
         Hero hero1 = loderunner.getHeroes().get(0);
         assertEquals("[2,6]", hero1.toString());
-        assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner.size(), enemy2, hero1).toString());
+        assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy2, hero1).toString());
 
         // пробуем чтобы второй чертик пошел за первым игроком
         Enemy enemy1 = level.getEnemies().get(0);
         assertEquals("[3,2]", enemy1.toString());
         Hero hero2 = loderunner.getHeroes().get(1);
         assertEquals("[5,6]", hero2.toString());
-        assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner.size(), enemy1, hero2).toString());
+        assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy1, hero2).toString());
     }
 }
