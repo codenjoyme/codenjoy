@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -28,7 +28,9 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.client.ai.AISolver;
 import com.codenjoy.dojo.loderunner.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -51,12 +53,12 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new Loderunner(settings.level(), getDice(), settings);
+        return new Loderunner(settings.level(getDice()), getDice(), settings);
     }
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
-        return v(settings.level().getSize());
+        return v(settings.level(getDice()).getSize());
     }
 
     @Override

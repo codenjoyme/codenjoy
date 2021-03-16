@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
@@ -34,6 +35,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.PORTALS_COUNT;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -59,9 +62,10 @@ public class GameTest {
         settings = new GameSettings();
         printer = new PrinterFactoryImpl();
         enemy = new EnemyJoystick();
+        settings = new TestSettings();
     }
 
-    private void dice(int...ints) {
+    private void dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -69,7 +73,7 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
+        LevelImpl level = new LevelImpl(board, dice);
         level.setAI(ai);
 
         Hero hero;
@@ -91,33 +95,6 @@ public class GameTest {
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
-    }
-
-    private class EnemyJoystick implements Joystick, DirectionActJoystick {
-        @Override
-        public void down() {
-            ai(Direction.DOWN);
-        }
-
-        @Override
-        public void up() {
-            ai(Direction.UP);
-        }
-
-        @Override
-        public void left() {
-            ai(Direction.LEFT);
-        }
-
-        @Override
-        public void right() {
-            ai(Direction.RIGHT);
-        }
-
-        @Override
-        public void act(int... p) {
-            ai(null);
-        }
     }
 
     // есть карта со мной
@@ -770,7 +747,7 @@ public class GameTest {
         dice(2, 3);
         hero.right();
         game.tick();
-        verify(listener).event(Events.GET_GOLD);
+        verify(listener).event(Events.GET_YELLOW_GOLD);
 
         assertE("☼☼☼☼☼" +
                 "☼ $ ☼" +
@@ -800,7 +777,7 @@ public class GameTest {
         dice(3, 3);
         hero.right();
         game.tick();
-        verify(listener).event(Events.GET_GOLD);
+        verify(listener).event(Events.GET_YELLOW_GOLD);
 
         assertE("☼☼☼☼☼" +
                 "☼  $☼" +
@@ -1344,7 +1321,7 @@ public class GameTest {
                 "☼ ◄   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener, times(4)).event(Events.GET_GOLD);
+        verify(listener, times(4)).event(Events.GET_YELLOW_GOLD);
     }
 
     // если я просверлил дырку и падаю в нее, а под ней ничего нет - то я падаю пока не найду препятствие
@@ -1557,7 +1534,7 @@ public class GameTest {
                 "☼  ◄  ☼" +
                 "☼☼☼☼☼☼☼");
     }
-    
+
     // бага: мне нельзя спускаться с лестницы в бетон, так же как и подниматься
     // плюс я должен иметь возможность спустится по лестнице
     @Test
@@ -1736,9 +1713,10 @@ public class GameTest {
                 "☼☼☼☼☼☼" +
                 "☼☼☼☼☼☼");
 
-        for (int x = 0; x < game.size(); x ++) {
-            for (int y = 0; y < game.size(); y ++) {
-                assertFalse(game.isFree(pt(x, y)));
+        for (int x = 0; x < game.size(); x++) {
+            for (int y = 0; y < game.size(); y++) {
+                Point pt = pt(x, y);
+                assertEquals("At:" + pt, false, game.isFree(pt));
             }
 
         }
@@ -1976,12 +1954,13 @@ public class GameTest {
     }
 
     private void ai(Direction value) {
-        when(ai.getDirection(any(Field.class), any(), any(Point.class))).thenReturn(value, null);
+        when(ai.getDirection(any(Field.class), any(), any())).thenReturn(value, null);
     }
 
     // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо
     @Test
     public void shouldEnemyMoveLeft() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
@@ -2000,6 +1979,7 @@ public class GameTest {
 
     @Test
     public void shouldEnemyMoveRight() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
@@ -2019,6 +1999,7 @@ public class GameTest {
     // если небыло команды чертик никуда не идет
     @Test
     public void shouldEnemyStopWhenNoMoreRightCommand() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  «☼" +
@@ -2046,6 +2027,7 @@ public class GameTest {
     // Чертик останавливается возле границы
     @Test
     public void shouldEnemyStopWhenWallRight() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  »☼" +
@@ -2064,6 +2046,7 @@ public class GameTest {
 
     @Test
     public void shouldEnemyStopWhenWallLeft() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼«  ☼" +
@@ -2083,6 +2066,7 @@ public class GameTest {
     // В просверленную яму чертик легко может упасть
     @Test
     public void shouldEnemyFallInPitLeft() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼« ◄☼" +
@@ -2112,6 +2096,7 @@ public class GameTest {
 
     @Test
     public void shouldEnemyFallInPitRight() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄ «☼" +
@@ -2149,6 +2134,7 @@ public class GameTest {
     // при падении чертик не может передвигаться влево и вправо - ему мешают стены
     @Test
     public void shouldEnemyCantGoLeftIfWall() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyFallInPitRight();
 
         enemy.left();
@@ -2163,6 +2149,7 @@ public class GameTest {
 
     @Test
     public void shouldEnemyCantGoRightIfWall() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyFallInPitLeft();
 
         enemy.right();
@@ -2178,6 +2165,7 @@ public class GameTest {
     // монстр сидит в ямке некоторое количество тиков, потом он вылазит
     @Test
     public void shouldMonsterGetUpFromPit() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyFallInPitLeft();
 
         game.tick();
@@ -2218,6 +2206,7 @@ public class GameTest {
     // если чертик попадает на героя - тот погибает
     @Test
     public void shouldHeroDieWhenMeetWithEnemy() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄ «☼" +
@@ -2237,7 +2226,8 @@ public class GameTest {
         verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
-        dice(1, 3);
+        dice(0, // охотимся за первым игроком
+            1, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
         game.newGame(player);
 
@@ -2251,6 +2241,7 @@ public class GameTest {
     // другой кейс, когда оба двигаются на встречу друг к другу
     @Test
     public void shouldHeroDieWhenMeetWithEnemy2() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄« ☼" +
@@ -2270,7 +2261,8 @@ public class GameTest {
         verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
-        dice(3, 3);
+        dice(0,  // охотимся за первым игроком
+            3, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
         game.newGame(player);
 
@@ -2284,6 +2276,7 @@ public class GameTest {
     // другой кейс, когда игрок идет на чертика
     @Test
     public void shouldHeroDieWhenMeetWithEnemy_whenHeroWalk() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄« ☼" +
@@ -2316,6 +2309,7 @@ public class GameTest {
     // другой кейс, когда чертик идет на игрока
     @Test
     public void shouldHeroDieWhenMeetWithEnemy_whenEnemyWalk() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄« ☼" +
@@ -2334,7 +2328,8 @@ public class GameTest {
         verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
-        dice(3, 3);
+        dice(0,  // охотимся за первым игроком
+            3, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
         game.newGame(player);
 
@@ -2348,6 +2343,7 @@ public class GameTest {
     // Чертик может зайти на лестницу и выйти обратно
     @Test
     public void shouldEnemyCanGoOnLadder() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2376,6 +2372,7 @@ public class GameTest {
     // Чертик может карабкаться по лестнице вверх
     @Test
     public void shouldEnemyCanGoOnLadderUp() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2413,6 +2410,7 @@ public class GameTest {
     // Чертик не может вылезти с лестницей за границы
     @Test
     public void shouldEnemyCantGoOnBarrierFromLadder() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyCanGoOnLadderUp();
 
         assertE("☼☼☼☼►" +
@@ -2443,6 +2441,7 @@ public class GameTest {
     // Чертик может спустится вниз, но не дальше границы экрана
     @Test
     public void shouldEnemyCanGoOnLadderDown() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyCanGoOnLadderUp();
 
         assertE("☼☼☼☼►" +
@@ -2482,6 +2481,7 @@ public class GameTest {
     // Чертик может в любой момент спрыгнуть с лестницы и будет падать до тех пор пока не наткнется на препятствие
     @Test
     public void shouldEnemyCanFly() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyCanGoOnLadderUp();
 
         assertE("☼☼☼☼►" +
@@ -2519,6 +2519,7 @@ public class GameTest {
     // Чертик может поднятся по лестнице и зайти на площадку
     @Test
     public void shouldEnemyCanGoFromLadderToArea() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼H  ☼" +
                 "☼H# ☼" +
@@ -2591,6 +2592,7 @@ public class GameTest {
     // пока чертик падает он не может двигаться влево и справо, даже если там есть площадки
     @Test
     public void shouldEnemyCantMoveWhenFall() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼  »  ☼" +
                 "☼     ☼" +
@@ -2647,6 +2649,7 @@ public class GameTest {
     // если чертик с площадки заходит на трубу то он ползет по ней
     @Test
     public void shouldEnemyPipe() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼»~~~ ☼" +
@@ -2692,6 +2695,7 @@ public class GameTest {
     // с трубы чертик может спрыгунть и тогда он будет падать до препятствия
     @Test
     public void shouldEnemyFallFromPipe() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyPipe();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2747,6 +2751,7 @@ public class GameTest {
     // чертик может похитить 1 золото в падении
     @Test
     public void shouldEnemyGetGoldWhenFallenFromPipe() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼  $~~«☼" +
@@ -2828,6 +2833,7 @@ public class GameTest {
 
     @Test
     public void shouldEnemyLeaveGoldWhenFallInPit() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyGetGoldWhenFallenFromPipe();
 
         enemy.right();
@@ -2870,6 +2876,7 @@ public class GameTest {
 
     @Test
     public void shouldIWalkOnEnemyInPitAndGetGold() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyLeaveGoldWhenFallInPit();
 
         hero.left();     //я могу пройти по нему сверху и забрать золото
@@ -2913,6 +2920,7 @@ public class GameTest {
 
     @Test
     public void shouldNoMoreGoldAEnemy() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldIWalkOnEnemyInPitAndGetGold();
 
         for (int c = 4; c < Brick.DRILL_TIMER; c++) { // враг вылазит
@@ -2960,6 +2968,7 @@ public class GameTest {
     // я могу ходить по монстру, который в ямке
     @Test
     public void shouldIWalkOnEnemy() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyLeaveGoldWhenFallInPit();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3032,6 +3041,7 @@ public class GameTest {
     // TODO сделать так, чтобы мог
     @Test
     public void shouldICantDrillUnderEnemy() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ►»☼" +
@@ -3051,6 +3061,7 @@ public class GameTest {
     // если я просверлил дырку монстр падает в нее, а под ней ничего нет - монстр не проваливается сквозь
     @Test
     public void shouldEnemyStayOnPitWhenUnderPitIsFree() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼" +
                 "☼» ◄  ☼" +
                 "☼#####☼" +
@@ -3124,6 +3135,7 @@ public class GameTest {
     // если в процессе падения чертик вдург наткнулся на трубу то он повисаю на ней
     @Test
     public void shouldEnemyPipeWhenFall() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼  »  ☼" +
                 "☼# ###☼" +
@@ -3187,6 +3199,7 @@ public class GameTest {
     // чертик может спрыгнуть с трубы
     @Test
     public void shouldEnemyCanJumpFromPipe() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼  «  ☼" +
                 "☼     ☼" +
@@ -3241,6 +3254,7 @@ public class GameTest {
     // плюс чертик должен иметь возможность спустится по лестнице
     @Test
     public void shouldEnemyCantWalkThroughWallDown() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼ « ☼" +
                 "☼ H ☼" +
@@ -3268,6 +3282,7 @@ public class GameTest {
 
     @Test
     public void shouldEnemyCantWalkThroughWallUp() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼ H ☼" +
@@ -3305,6 +3320,7 @@ public class GameTest {
     // Чертику нельзя проходить с лестницы через бетон направо или налево
     @Test
     public void shouldEnemyCantWalkThroughWallLeftRight() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼☼H☼☼" +
@@ -3351,6 +3367,7 @@ public class GameTest {
     // чертику нельзя проходить через бетон
     @Test
     public void shouldEnemyCantWalkThroughWallLeftRight2() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼   ☼" +
@@ -3379,6 +3396,7 @@ public class GameTest {
     // Чертику нельзя спрыгивать с трубы что сразу над бетоном, протелая сквозь него
     @Test
     public void shouldEnemyCantJumpThroughWall() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼►" +
                 "☼  » ☼" +
                 "☼  ~ ☼" +
@@ -3409,6 +3427,7 @@ public class GameTest {
     // если чертик спрыгивает с последней секции лестницы
     @Test
     public void shouldEnemyJumpFromLadderDown() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼►" +
                 "☼ »  ☼" +
                 "☼ H##☼" +
@@ -3461,6 +3480,7 @@ public class GameTest {
     // Чертик не может прыгять вверх :)
     @Test
     public void shouldEnemyCantJump() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼    ☼" +
@@ -3481,7 +3501,8 @@ public class GameTest {
 
     // я могу прыгнуть на голову монстру и мне ничего не будет
     @Test
-    public void shouldICanJumpAtEnemyHead () {
+    public void shouldICanJumpAtEnemyHead() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼ ◄ ☼" +
                 "☼   ☼" +
@@ -3526,6 +3547,7 @@ public class GameTest {
     // А когда снова упадет, то оставит
     @Test
     public void shouldGetGoldWheExitFromPit() {
+        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyLeaveGoldWhenFallInPit();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3583,6 +3605,7 @@ public class GameTest {
     // Если чертик упал на другого чертика который был на трубе, то они складываются в один :)
     @Test
     public void shouldEnemyStayOnOtherAtThePipe() {
+        settings.integer(ENEMIES_COUNT, 2);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼  «   ☼" +
                 "☼      ☼" +
@@ -3644,6 +3667,7 @@ public class GameTest {
 
     @Test
     public void shouldEnemyDontStopOnPipe() {
+        settings.integer(ENEMIES_COUNT, 2);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -3695,6 +3719,7 @@ public class GameTest {
     // Чертик должен сам проваливаться на героя, а не впрыгивать в него
     @Test
     public void shouldEnemyStayOnHeroAtThePipe() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼  «   ☼" +
                 "☼      ☼" +
@@ -3730,6 +3755,7 @@ public class GameTest {
         enemy.down();
         dice(2, 3);
         game.newGame(player);
+        dice(0);  // охотимся за первым игроком
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3745,6 +3771,7 @@ public class GameTest {
     // Чертик проваливается в яму за героем и там его находит
     @Test
     public void shouldEnemyFindHeroAtPit() {
+        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -3794,6 +3821,7 @@ public class GameTest {
 
         dice(2, 3);
         game.newGame(player);
+        dice(0);  // охотимся за первым игроком
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3818,6 +3846,75 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
+    }
+
+    @Test
+    public void iLooseScoresWhenDoHarakiri() {
+        settings.integer(ENEMIES_COUNT, 1);
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ◄ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.act(0);
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Ѡ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        verify(listener).event(Events.SUICIDE);
+    }
+
+    @Test
+    public void iCanJumpThroughPortals() {
+        settings.integer(PORTALS_COUNT, 2);
+
+        dice(1, 2, 3, 3);
+        givenFl("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛◄ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ]☼" +
+                "☼⊛  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
+    private class EnemyJoystick implements Joystick, DirectionActJoystick {
+        @Override
+        public void down() {
+            ai(Direction.DOWN);
+        }
+
+        @Override
+        public void up() {
+            ai(Direction.UP);
+        }
+
+        @Override
+        public void left() {
+            ai(Direction.LEFT);
+        }
+
+        @Override
+        public void right() {
+            ai(Direction.RIGHT);
+        }
+
+        @Override
+        public void act(int... p) {
+            ai(null);
+        }
     }
 
     // если монстр не успел вылезти из ямки и она заросла то монстр умирает?

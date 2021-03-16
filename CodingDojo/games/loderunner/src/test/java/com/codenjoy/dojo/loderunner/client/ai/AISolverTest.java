@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.client.ai;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,15 +23,17 @@ package com.codenjoy.dojo.loderunner.client.ai;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
@@ -355,11 +357,10 @@ public class AISolverTest {
      * @param expected ожидаемая карта возможных движений из каждой клетки
      */
     private void assertW(String boardString, String expected) {
-        DeikstraFindWay way = new DeikstraFindWay();
         Board board = (Board) new Board().forString(boardString);
         AISolver solver = new AISolver(dice);
         solver.getDirections(board);
-        Map<Point, List<Direction>> possibleWays = solver.getWay().getPossibleWays();
+        Map<Point, List<Direction>> possibleWays = solver.getWay().getPossibleWays(board.size(), null);
 
         char[][] chars = new char[board.size() * 3][board.size() * 3];
         for (int x = 0; x < chars.length; x++) {
@@ -368,11 +369,11 @@ public class AISolverTest {
 
         for (int x = 0; x < board.size(); x++) {
             for (int y = 0; y < board.size(); y++) {
-                int cx = x*3 + 1;
-                int cy = y*3 + 1;
+                int cx = x * 3 + 1;
+                int cy = y * 3 + 1;
 
                 char ch = board.getAt(x, y).getChar();
-                chars[cx][cy] = (ch == ' ')?'*':ch;
+                chars[cx][cy] = (ch == ' ') ? '*' : ch;
                 for (Direction direction : possibleWays.get(pt(x, y))) {
                     chars[direction.changeX(cx)][direction.changeY(cy)] = '+';
                 }

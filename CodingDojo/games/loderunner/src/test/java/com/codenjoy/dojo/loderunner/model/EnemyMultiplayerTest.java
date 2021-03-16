@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -33,7 +34,9 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -50,13 +53,15 @@ public class EnemyMultiplayerTest {
 
     @Before
     public void setUp() {
+        dice = mock(Dice.class);
         printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestSettings();
     }
 
     // чертик идет за тобой
     @Test
-    public void shoulEnemyGoToHero() {
+    public void shouldEnemyGoToHero() {
+        settings.integer(ENEMIES_COUNT, 1);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼     »☼" +
                 "☼H#####☼" +
@@ -66,6 +71,7 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
+        dice(0); // охотимся за первым игроком
         field.tick();
 
         atGame(
@@ -150,10 +156,10 @@ public class EnemyMultiplayerTest {
         verify(listener).event(Events.KILL_HERO);
         assertTrue(game.isGameOver());
 
-        when(dice.next(anyInt())).thenReturn(1, 4);
-
+        dice(1, 4);
         game.newGame();
 
+        dice(0); // охотимся за первым игроком
         field.tick();
 
         atGame(
@@ -170,6 +176,7 @@ public class EnemyMultiplayerTest {
     // чертик идет за тобой по более короткому маршруту
     @Test
     public void shouldEnemyGoToHeroShortestWay() {
+        settings.integer(ENEMIES_COUNT, 1);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼     »☼" +
                 "☼H####H☼" +
@@ -179,6 +186,7 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
+        dice(0); // охотимся за первым игроком
         field.tick();
 
         atGame(
@@ -195,6 +203,7 @@ public class EnemyMultiplayerTest {
 
     @Test
     public void shouldEnemyGoToHeroShortestWay2() {
+        settings.integer(ENEMIES_COUNT, 1);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼»     ☼" +
                 "☼H####H☼" +
@@ -204,6 +213,7 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
+        dice(0); // охотимся за первым игроком
         field.tick();
 
         atGame(
@@ -221,6 +231,7 @@ public class EnemyMultiplayerTest {
     // другой чертик чертику не помеха
     @Test
     public void shouldEnemyGoToHeroShortestWayGetRoundOther() {
+        settings.integer(ENEMIES_COUNT, 2);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼»    »☼" +
                 "☼H####H☼" +
@@ -230,6 +241,7 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
+        dice(0); // охотимся за первым игроком
         field.tick();
 
         atGame(
@@ -244,8 +256,16 @@ public class EnemyMultiplayerTest {
 
     }
 
+    private void dice(int... ints) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : ints) {
+            when = when.thenReturn(i);
+        }
+    }
+
     @Test
     public void shouldEnemyGoToHeroShortestWayGetRoundOther2() {
+        settings.integer(ENEMIES_COUNT, 2);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼» »   ☼" +
                 "☼H####H☼" +
@@ -255,6 +275,7 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
+        dice(0); // охотимся за первым игроком
         field.tick();
 
         atGame(
@@ -272,6 +293,7 @@ public class EnemyMultiplayerTest {
     // если чертику не достать одного он бежит за другим а не зависает
     @Test
     public void shouldEnemyGoToNewHeroIfOneIsHidden() {
+        settings.integer(ENEMIES_COUNT, 1);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼   ►  ☼" +
                 "☼######☼" +
@@ -281,6 +303,7 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
+        dice(0); // охотимся за первым игроком
         field.tick();
         field.tick();
         field.tick();
@@ -297,6 +320,7 @@ public class EnemyMultiplayerTest {
                 "☼☼☼☼☼☼☼☼\n");
 
         setupPlayer(1, 4);
+        dice(0); // охотимся за первым игроком
         field.tick();
         field.tick();
         field.tick();
@@ -327,13 +351,12 @@ public class EnemyMultiplayerTest {
         listener = mock(EventListener.class);
         game = new Single(new Player(listener, settings), printerFactory);
         game.on(field);
-        when(dice.next(anyInt())).thenReturn(x, y);
+        dice(x, y);
         game.newGame();
     }
 
     private void setupGm(String map) {
-        Level level = new LevelImpl(map);
-        dice = mock(Dice.class);
+        Level level = new LevelImpl(map, dice);
         field = new Loderunner(level, dice, settings);
 
         int px = level.getHeroes().get(0).getX();
