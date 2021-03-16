@@ -25,7 +25,6 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.*;
 
@@ -35,7 +34,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 // TODO почему-то эта реализация быстрее чем базовая DeikstraFindWay узнать почему и применить эту идею там, а тут заюзать повторно
 public class AI implements EnemyAI {
 
-    Map<Point, List<Direction>> possibleWays = new TreeMap<>();
+    Map<Point, List<Direction>> ways = new TreeMap<>();
 
     @Override
     public Direction getDirection(Field field, Point from, Point to) {
@@ -58,7 +57,7 @@ public class AI implements EnemyAI {
 
     private Map<Point, List<Direction>> getPath(int size, Point from) {
         Map<Point, List<Direction>> path = new HashMap<>();
-        for (Point point : possibleWays.keySet()) {
+        for (Point point : ways.keySet()) {
             path.put(point, new LinkedList<>());
         }
 
@@ -71,7 +70,7 @@ public class AI implements EnemyAI {
                 current = toProcess.remove();
             }
             List<Direction> before = path.get(current);
-            for (Direction direction : possibleWays.get(current)) {
+            for (Direction direction : ways.get(current)) {
                 Point to = direction.change(current);
 //                if (field.isEnemyAt(to.getX(), to.getY())) continue;
                 if (processed[to.getX()][to.getY()]) continue;
@@ -94,7 +93,7 @@ public class AI implements EnemyAI {
     }
 
     void setupPossibleWays(Field field) {
-        if (possibleWays.isEmpty()) {
+        if (ways.isEmpty()) {
             for (int x = 0; x < field.size(); x++) {
                 for (int y = 0; y < field.size(); y++) {
                     Point pt = pt(x, y);
@@ -104,7 +103,7 @@ public class AI implements EnemyAI {
                             directions.add(direction);
                         }
                     }
-                    possibleWays.put(pt, directions);
+                    ways.put(pt, directions);
                 }
             }
         }
@@ -113,18 +112,16 @@ public class AI implements EnemyAI {
     private boolean isPossible(Field field, Point pt, Direction direction) {
         if (field.isBrick(pt) || field.isBorder(pt)) return false;
 
-        Point newPt = direction.change(pt);
-        int x = newPt.getX();
-        int y = newPt.getY();
+        Point dest = direction.change(pt);
 
-        if (isOutOfField(field.size(), x, y)) return false;
+        if (dest.isOutOf(field.size())) return false;
 
-        if (field.isBrick(newPt) || field.isBorder(newPt)) return false;
+        if (field.isBrick(dest) || field.isBorder(dest)) return false;
 
         if (direction == Direction.UP && !field.isLadder(pt)) return false;
 
         Point under = DOWN.change(pt);
-        if (!isOutOfField(field.size(), pt.getX(), pt.getY() - 1) &&
+        if (!under.isOutOf(field.size()) &&
                 !field.isBrick(under) &&
                 !field.isLadder(under) &&
                 !field.isBorder(under) &&
@@ -133,9 +130,5 @@ public class AI implements EnemyAI {
                 direction != DOWN) return false;
 
         return true;
-    }
-
-    private boolean isOutOfField(int size, int x, int y) {
-        return x < 0 || y < 0 || x > size - 1 || y > size - 1;
     }
 }

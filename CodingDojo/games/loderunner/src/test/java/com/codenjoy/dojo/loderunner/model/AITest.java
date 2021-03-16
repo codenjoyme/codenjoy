@@ -224,7 +224,7 @@ public class AITest {
         setupAI(map);
 
         Map<Point, List<Direction>> result = new TreeMap<>();
-        for (Map.Entry<Point, List<Direction>> entry : ai.possibleWays.entrySet()) {
+        for (Map.Entry<Point, List<Direction>> entry : ai.ways.entrySet()) {
             List<Direction> value = entry.getValue();
             if (!value.isEmpty()) {
                 result.put(entry.getKey(), value);
