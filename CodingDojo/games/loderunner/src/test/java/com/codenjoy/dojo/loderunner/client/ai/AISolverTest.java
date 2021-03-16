@@ -351,6 +351,7 @@ public class AISolverTest {
                 "[RIGHT, RIGHT, UP, UP, RIGHT]");
     }
 
+    // TODO вот этот ассерт, вместе с ассертами Dei
     /**
      * Проверяет куда вообще можно походить из каждой клетки
      * @param boardString поле

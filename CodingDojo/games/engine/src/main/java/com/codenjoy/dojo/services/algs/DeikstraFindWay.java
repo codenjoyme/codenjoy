@@ -28,14 +28,29 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class DeikstraFindWay {
 
-    private static final List<Direction> DIRECTIONS = Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
+    private static final List<Direction> DIRECTIONS = Arrays.asList(UP, DOWN, LEFT, RIGHT);
     private Map<Point, List<Direction>> ways;
     private int size;
     private Possible checker;
+    private boolean possibleIsContsnt;
+
+    public DeikstraFindWay() {
+        this(false);
+    }
+
+    /**
+     * @param possibleIsConstant Бывают случаи, когда варианты куда двигаться на карте
+     * не меняется от тика к тику, а потому не надо пересчитывать варианты движений всякий раз.
+     * Вот в таких случаях мы и ставим тут true.
+     */
+    public DeikstraFindWay(boolean possibleIsConstant) {
+        this.possibleIsContsnt = possibleIsConstant;
+    }
 
     public interface Possible {
 
@@ -63,12 +78,10 @@ public class DeikstraFindWay {
     }
 
     public List<Direction> getShortestWay(int size, Point from, List<Point> goals, Possible possible) {
-        this.size = size;
-        this.checker = possible;
         if (possible == null) {
             throw new RuntimeException("Please setup Possible object before run getShortestWay");
         }
-        setupWays();
+        getPossibleWays(size, possible);
 
         List<List<Direction>> paths = new LinkedList<>();
         for (Point to : goals) {
@@ -153,7 +166,7 @@ public class DeikstraFindWay {
     public Map<Point, List<Direction>> getPossibleWays(int size, Possible possible) {
         this.size = size;
         this.checker = possible;
-        if (ways == null) {
+        if (possible != null && (!possibleIsContsnt || ways == null)) {
             setupWays();
         }
         return ways;

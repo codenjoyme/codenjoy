@@ -33,7 +33,7 @@ import static com.codenjoy.dojo.services.Direction.*;
 
 public class AI implements EnemyAI {
 
-    private DeikstraFindWay way = new DeikstraFindWay();
+    private DeikstraFindWay way = new DeikstraFindWay(true);
 
     @Override
     public Direction getDirection(Field field, Point from, Point to) {
