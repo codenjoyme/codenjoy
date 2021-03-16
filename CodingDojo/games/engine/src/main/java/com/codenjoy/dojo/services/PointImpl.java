@@ -131,18 +131,18 @@ public class PointImpl implements Point, Comparable<Point> {
     }
 
     @Override
-    public void change(Point delta) {
+    public void moveDelta(Point delta) {
         x += delta.getX();
         y += delta.getY();
     }
 
     @Override
-    public void change(QDirection direction) {
+    public void move(QDirection direction) {
         this.move(direction.change(this));
     }
 
     @Override
-    public void change(Direction direction) {
+    public void move(Direction direction) {
         this.move(direction.change(this));
     }
 

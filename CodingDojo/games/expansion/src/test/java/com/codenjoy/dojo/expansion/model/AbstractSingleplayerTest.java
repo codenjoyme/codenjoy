@@ -176,7 +176,7 @@ public class AbstractSingleplayerTest {
                     // increase and go to
                     h.increaseAndMove(new Forces(pt, 1), new ForcesMoves(pt, 1, d));
                     // change point so next turn from new place
-                    pt.change(d);
+                    pt.move(d);
                 };
 
         return new Joystick() {

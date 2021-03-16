@@ -121,7 +121,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         if (!alive) return;
 
         if (isFall()) {
-            change(DOWN);
+            move(DOWN);
         } else if (drill) {
             Point hole = DOWN.change(direction.change(this));
             drilled = field.tryToDrill(this, hole);

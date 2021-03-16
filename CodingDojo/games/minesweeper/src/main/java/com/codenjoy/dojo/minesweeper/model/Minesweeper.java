@@ -150,7 +150,7 @@ public class Minesweeper implements Field {
 
     private boolean moveSapperAndFillFreeCell(Direction direction) {
         walkAt.put(sapper().copy(), getMinesNearSapper());
-        sapper().change(direction);
+        sapper().move(direction);
 
         boolean wasHere = walkAt.containsKey(sapper());
         return !wasHere;

@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 public class Line extends PointImpl implements State<Elements, Player> {
     enum Type {
@@ -116,13 +115,13 @@ public class Line extends PointImpl implements State<Elements, Player> {
 
     public Point to() {
         Point result = copy();
-        result.change(state().to());
+        result.moveDelta(state().to());
         return result;
     }
 
     public Point from() {
         Point result = copy();
-        result.change(state().from());
+        result.moveDelta(state().from());
         return result;
     }
 
