@@ -150,7 +150,12 @@ public class DeikstraFindWay {
         }
     }
 
-    public Map<Point, List<Direction>> getPossibleWays() {
+    public Map<Point, List<Direction>> getPossibleWays(int size, Possible possible) {
+        this.size = size;
+        this.checker = possible;
+        if (ways == null) {
+            setupWays();
+        }
         return ways;
     }
 }
