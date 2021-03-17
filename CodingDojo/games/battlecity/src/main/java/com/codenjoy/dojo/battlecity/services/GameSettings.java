@@ -27,22 +27,15 @@ import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Chance;
-import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
-
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 
 public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    private Map<CharElements, Parameter> input;
+    private Chance chance;
 
     public enum Keys implements Key {
 
@@ -94,13 +87,11 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(WALKING_ON_WATER, 0);
         integer(VISIBILITY, -1);
 
-        input = new LinkedHashMap<>();
-        input.put(Elements.PRIZE_IMMORTALITY, integerValue(IMMORTALITY));
-        input.put(Elements.PRIZE_BREAKING_WALLS, integerValue(BREAKING_WALLS));
-        input.put(Elements.PRIZE_WALKING_ON_WATER, integerValue(WALKING_ON_WATER));
-        input.put(Elements.PRIZE_VISIBILITY, integerValue(VISIBILITY));
-
-        Chance chance = new Chance(input);
+        chance = chance();
+        chance.put(Elements.PRIZE_IMMORTALITY, integerValue(IMMORTALITY));
+        chance.put(Elements.PRIZE_BREAKING_WALLS, integerValue(BREAKING_WALLS));
+        chance.put(Elements.PRIZE_WALKING_ON_WATER, integerValue(WALKING_ON_WATER));
+        chance.put(Elements.PRIZE_VISIBILITY, integerValue(VISIBILITY));
         chance.run();
 
         multiline(LEVEL_MAP,
@@ -138,6 +129,14 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
                 "☼            ╬╬    ╬╬            ☼" +
                 "☼  %%%%%%    ╬╬    ╬╬    %%%%%%  ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+    }
+
+    public Chance chance() {
+        return new Chance();
+    }
+
+    public Chance getChance() {
+        return chance;
     }
 
     public Level level(Dice dice) {
