@@ -182,9 +182,9 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Tree tree = filterOne(alsoAtPoint, Tree.class);
-        if (tree != null) {
-            return Elements.TREE;
+        Elements elements = visibility(player, alsoAtPoint);
+        if (elements != null) {
+            return elements;
         }
 
         if (isAlive()) {
@@ -208,6 +208,18 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         } else {
             return Elements.BANG;
         }
+    }
+
+    protected Elements visibility(Player player, Object[] alsoAtPoint) {
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        if(player.getHero().prizes().contains(Elements.PRIZE_VISIBILITY)) {
+            tree = null;
+        }
+
+        if (tree != null) {
+            return Elements.TREE;
+        }
+        return null;
     }
 
     public void reset() {
