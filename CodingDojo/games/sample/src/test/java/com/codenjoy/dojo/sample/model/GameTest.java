@@ -42,49 +42,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-public class GameTest {
-
-    private Sample game;
-    private Hero hero;
-    private Dice dice;
-    private EventListener listener;
-    private Player player;
-    private PrinterFactory printer;
-    private GameSettings settings;
-
-    @Before
-    public void setup() {
-        dice = mock(Dice.class);
-        settings = new GameSettings();
-        printer = new PrinterFactoryImpl();
-    }
-
-    private void dice(int...ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
-    }
-
-    private void givenFl(String board) {
-        settings.string(LEVEL_MAP, board);
-
-        Level level = settings.level();
-        Hero hero = level.heroes().get(0);
-
-        game = new Sample(level, dice, settings);
-        listener = mock(EventListener.class);
-        player = new Player(listener, settings);
-        game.newGame(player);
-        player.hero = hero;
-        hero.init(game);
-        this.hero = game.getHeroes().get(0);
-    }
-
-    private void assertE(String expected) {
-        assertEquals(TestUtils.injectN(expected),
-                printer.getPrinter(game.reader(), player).print());
-    }
+public class GameTest extends AbstractGameTest {
 
     // есть карта со мной
     @Test
