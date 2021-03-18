@@ -20,11 +20,9 @@
   #L%
   --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<c:if test="${playerScoreCleanupEnabled}">
-    <a href="#" onclick="cleanPlayerScores()">Clear my scores</a>
-</c:if>
 <table id="table-logs" class="table table-striped leaderboard-table">
     <thead>
     <th width="5%">
@@ -38,7 +36,18 @@
         </c:choose>
     </th>
     <th width="55%">Player</th>
-    <th width="25%" class="center">Score</th>
+    <th width="25%" class="center">
+        <div class="score-header">
+            Score
+            <sec:authorize access="isAuthenticated()">
+                <c:if test="${playerScoreCleanupEnabled}">
+                    <span class="pow">
+                        <a href="#" onclick="cleanPlayerScores()">clear</a>
+                    </span>
+                </c:if>
+            </sec:authorize>
+        </div>
+    </th>
     </thead>
     <tbody id="table-logs-body">
     <!--

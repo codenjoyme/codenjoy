@@ -140,7 +140,7 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
 };
 
 function cleanPlayerScores() {
-    deleteData(setup.contextPath + '/rest/game/scores',
+    deleteData('/rest/game/scores',
         function () {
             // do nothing
         }, function () {
