@@ -23,86 +23,18 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
-import com.codenjoy.dojo.sample.model.level.Level;
-import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.sample.services.Events;
-import com.codenjoy.dojo.sample.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
-public class MultiplayerTest {
-
-    private List<EventListener> listeners = new LinkedList<>();
-    private List<Game> games = new LinkedList<>();
-    private Dice dice;
-    private Sample field;
-    private GameSettings settings;
-    private PrinterFactory printerFactory;
-
-    // появляется другие игроки, игра становится мультипользовательской
-    @Before
-    public void setup() {
-        dice = mock(Dice.class);
-        printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings();
-    }
-
-    public void givenFl(String map) {
-        Level level = new LevelImpl(map);
-        field = new Sample(level, dice, settings);
-    }
+public class MultiplayerTest extends AbstractMultiplayerTest {
 
     public void givenThreePlayers() {
         givenPlayer(1, 4);
         givenPlayer(2, 2);
         givenPlayer(3, 4);
-    }
-
-    private Game game(int index) {
-        return games.get(index);
-    }
-
-    public Player givenPlayer(int x, int y) {
-        EventListener listener = mock(EventListener.class);
-        listeners.add(listener);
-        Player player = new Player(listener, settings);
-        Game game = new Single(player, printerFactory);
-        games.add(game);
-        dice(x, y);
-        game.on(field);
-        game.newGame();
-        return player;
-    }
-
-    private void dice(int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y);
-    }
-
-    private void asrtFl1(String expected) {
-        assertEquals(expected, game(0).getBoardAsString());
-    }
-
-    private void asrtFl2(String expected) {
-        assertEquals(expected, game(1).getBoardAsString());
-    }
-
-    private void asrtFl3(String expected) {
-        assertEquals(expected, game(2).getBoardAsString());
     }
 
     // рисуем несколько игроков
@@ -119,28 +51,27 @@ public class MultiplayerTest {
         givenThreePlayers();
 
         // when then
-        asrtFl1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼☺ ☻$☼\n" +
                 "☼    ☼\n" +
                 "☼ ☻  ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", game(0));
 
-        asrtFl2(
-                "☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼☻ ☻$☼\n" +
                 "☼    ☼\n" +
                 "☼ ☺  ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", game(1));
 
-        asrtFl3(
+        assertF(
                 "☼☼☼☼☼☼\n" +
                 "☼☻ ☺$☼\n" +
                 "☼    ☼\n" +
                 "☼ ☻  ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", game(2));
     }
 
     // Каждый игрок может упраыляться за тик игры независимо
@@ -162,15 +93,15 @@ public class MultiplayerTest {
         game(1).getJoystick().right();
         game(2).getJoystick().down();
 
-        field.tick();
+        tick();
 
         // then
-        asrtFl1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼x   ☼\n" +
                 "☼☺ ☻ ☼\n" +
                 "☼  ☻ ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", game(0));
     }
 
     // игроков можно удалять из игры
@@ -189,15 +120,15 @@ public class MultiplayerTest {
         // when
         game(2).close();
 
-        field.tick();
+        tick();
 
         // then
-        asrtFl1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼☺   ☼\n" +
                 "☼    ☼\n" +
                 "☼ ☻  ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", game(0));
     }
 
     // игрок может взорваться на бомбе
@@ -217,26 +148,26 @@ public class MultiplayerTest {
         game(0).getJoystick().act();
         game(2).getJoystick().left();
 
-        field.tick();
+        tick();
 
-        asrtFl1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼x☻  ☼\n" +
                 "☼☺   ☼\n" +
                 "☼ ☻  ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
-
+                "☼☼☼☼☼☼\n", game(0));
+        
         // when
         game(2).getJoystick().left();
-        field.tick();
+        tick();
 
         // then
-        asrtFl1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼X   ☼\n" +
                 "☼☺   ☼\n" +
                 "☼ ☻  ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", game(0));
 
         verify(listener(2)).event(Events.LOOSE);
         assertTrue(game(2).isGameOver());
@@ -244,18 +175,14 @@ public class MultiplayerTest {
         dice(4, 1);
         game(2).newGame();
 
-        field.tick();
+        tick();
 
-        asrtFl1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼☺   ☼\n" +
                 "☼ ☻  ☼\n" +
                 "☼   ☻☼\n" +
-                "☼☼☼☼☼☼\n");
-    }
-
-    private EventListener listener(int index) {
-        return listeners.get(index);
+                "☼☼☼☼☼☼\n", game(0));
     }
 
     // игрок может подобрать золото
@@ -276,15 +203,15 @@ public class MultiplayerTest {
 
         dice(1, 2);
 
-        field.tick();
+        tick();
 
         // then
-        asrtFl1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼☺  ☻☼\n" +
                 "☼    ☼\n" +
                 "☼$☻  ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", game(0));
 
         verify(listener(2)).event(Events.WIN);
     }
@@ -306,14 +233,14 @@ public class MultiplayerTest {
         game(0).getJoystick().right();
         game(2).getJoystick().left();
 
-        field.tick();
+        tick();
 
         // then
-        asrtFl1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼ ☺☻ ☼\n" +
                 "☼    ☼\n" +
                 "☼ ☻  ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", game(0));
     }
 }
