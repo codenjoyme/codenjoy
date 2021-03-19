@@ -116,6 +116,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
                 direction = slide;
             }
 
+            moving = true;
+        }
+
+        if (moving) {
             moving(direction.change(this));
         }
     }
