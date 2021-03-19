@@ -274,11 +274,8 @@ public class Battlecity implements Field {
 
     @Override
     public boolean isBarrierFor(Tank tank, Point pt) {
-        if (isBarrier(pt)) {
-            return true;
-        }
-
-        return isRiver(pt) && !tank.prizes().contains(PRIZE_WALKING_ON_WATER);
+        return isBarrier(pt)
+                || (isRiver(pt) && !tank.prizes().contains(PRIZE_WALKING_ON_WATER));
     }
 
     public boolean isBarrier(Point pt) {
