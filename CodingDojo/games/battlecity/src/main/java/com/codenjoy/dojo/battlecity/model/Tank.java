@@ -111,7 +111,14 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             return;
         }
 
-        direction = sliding.act(this);
+        Direction slide = sliding.act(this, direction);
+
+        if (prizes().contains(Elements.PRIZE_NO_SLIDING)) {
+            sliding.stop();
+        } else {
+            direction = slide;
+        }
+
         moving(direction.change(this));
     }
 

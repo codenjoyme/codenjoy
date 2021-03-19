@@ -53,11 +53,13 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         TANK_TICKS_PER_SHOOT("Ticks until the next Tank shoot"),
         SLIPPERINESS("Value of tank sliding on ice"),
         AI_PRIZE_LIMIT("The total number of prize tanks and prizes on the board"),
+        PENALTY_WORKING("Penalty working time after the end of the prize"),
         LEVEL_MAP("Level map"),
         CHANCE_IMMORTALITY("[Chance] Prize immortality"),
         CHANCE_BREAKING_WALLS("[Chance] Prize breaking walls"),
         CHANCE_WALKING_ON_WATER("[Chance] Prize walking on water"),
-        CHANCE_VISIBILITY("[Chance] Prize visibility");
+        CHANCE_VISIBILITY("[Chance] Prize visibility"),
+        CHANCE_NO_SLIDING("[Chance] Prize no sliding");
 
         private String key;
 
@@ -86,10 +88,11 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(AI_PRIZE_LIMIT, 3);
 
         integer(CHANCE_RESERVED, 30);
-        integer(CHANCE_IMMORTALITY, 25);
-        integer(CHANCE_BREAKING_WALLS, 25);
-        integer(CHANCE_WALKING_ON_WATER, 25);
-        integer(CHANCE_VISIBILITY, 25);
+        integer(CHANCE_IMMORTALITY, 20);
+        integer(CHANCE_BREAKING_WALLS, 20);
+        integer(CHANCE_WALKING_ON_WATER, 20);
+        integer(CHANCE_VISIBILITY, 20);
+        integer(CHANCE_NO_SLIDING, 20);
 
         multiline(LEVEL_MAP,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -134,6 +137,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
             .put(CHANCE_BREAKING_WALLS, PRIZE_BREAKING_WALLS)
             .put(CHANCE_WALKING_ON_WATER, PRIZE_WALKING_ON_WATER)
             .put(CHANCE_VISIBILITY, PRIZE_VISIBILITY)
+            .put(CHANCE_NO_SLIDING, PRIZE_NO_SLIDING)
             .run();
     }
 
