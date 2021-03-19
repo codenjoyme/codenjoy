@@ -16,33 +16,33 @@ public class Chance<T extends CharElements> {
     private Map<T, Parameter> input;
     private List<T> axis;
 
-    public Chance(Dice dice, SettingsReader settings, Map<T, SettingsReader.Key> parameters) {
+    public Chance(Dice dice, SettingsReader settings, Map<T, SettingsReader.Key> params) {
         this.settings = settings;
         this.input = new LinkedHashMap<>();
         this.dice = dice;
         axis = new LinkedList<>();
-        fill(parameters);
+        fill(params);
     }
 
-    private void fill(Map<T, SettingsReader.Key> parameters) {
-        parameters.entrySet().forEach(entry -> {
-            Parameter parameter = settings.integerValue(entry.getValue());
-            Chance.this.put(entry.getKey(), parameter);
-            parameter.onChange(value -> Chance.this.run());
+    private void fill(Map<T, SettingsReader.Key> params) {
+        params.entrySet().forEach(entry -> {
+            Parameter param = settings.integerValue(entry.getValue());
+            Chance.this.put(entry.getKey(), param);
+            param.onChange(value -> Chance.this.run());
         });
     }
 
-    private int ofMinus() {
-        List<Parameter> parameters = new ArrayList<>(input.values());
-        return (int) parameters.stream()
-                .filter(parameter -> (int) parameter.getValue() == -1)
+    private int disabled() {
+        List<Parameter> params = new ArrayList<>(input.values());
+        return (int) params.stream()
+                .filter(param -> (int) param.getValue() == -1)
                 .count();
     }
 
     private int sum() {
-        List<Parameter> parameters = new ArrayList<>(input.values());
-        return parameters.stream()
-                .mapToInt(parameter -> (int) parameter.getValue())
+        List<Parameter> params = new ArrayList<>(input.values());
+        return params.stream()
+                .mapToInt(param -> (int) param.getValue())
                 .filter(parameter -> parameter > 0)
                 .sum();
     }
@@ -51,64 +51,60 @@ public class Chance<T extends CharElements> {
         int sum = sum();
 
         if (sum > MAX_PERCENT) {
-            changeParameters(sum, ofMinus());
+            changeParameters(sum, disabled());
         }
     }
 
-    private void changeParameters(int sum, int countOfMinus) {
-        if (countOfMinus == 0) {
-            input.forEach((elements, parameter) -> update(parameter, (int) parameter.getValue() * (MAX_PERCENT) / sum));
+    private void changeParameters(int sum, int disabled) {
+        if (disabled == 0) {
+            input.forEach((el, param) -> update(param, (int) param.getValue() * (MAX_PERCENT) / sum));
         }
 
-        if (countOfMinus > 0) {
-            input.forEach((elements, parameter) -> {
+        if (disabled > 0) {
+            input.forEach((el, param) -> {
                 int value = 0;
 
-                if ((int) parameter.getValue() > 0) {
-                    value = (int) parameter.getValue() * (MAX_PERCENT - RESERVE_FOR_MINUS) / sum;
+                if ((int) param.getValue() > 0) {
+                    value = (int) param.getValue() * (MAX_PERCENT - RESERVE_FOR_MINUS) / sum;
                 }
 
                 if (value > 0) {
-                    update(parameter, value);
+                    update(param, value);
                 }
             });
         }
         checkParameters();
     }
 
-    private void update(Parameter parameter, int value) {
+    private void update(Parameter param, int value) {
         // обновляет параметр без вызова лиснера, который перегенерит все axis
-        ((Updatable)parameter).justSet(value);
+        ((Updatable)param).justSet(value);
     }
 
     private void fillAxis(int toAxisMinus) {
-        input.forEach(((element, parameter) -> addAxis(element, parameter, toAxisMinus)));
+        input.forEach(((el, param) -> addAxis(el, param, toAxisMinus)));
     }
 
-    private void addAxis(T element, Parameter parameter, int toAxisMinus) {
-        if ((int) parameter.getValue() > 0) {
-            List<T> elements = new ArrayList<>(Collections.nCopies((int) parameter.getValue(), element));
-            axis.addAll(elements);
+    private void addAxis(T el, Parameter param, int toAxisMinus) {
+        if ((int) param.getValue() > 0) {
+            axis.addAll(Collections.nCopies((int) param.getValue(), el));
         }
 
-        if ((int) parameter.getValue() == -1) {
-            List<T> elements = new ArrayList<>(Collections.nCopies(toAxisMinus, element));
-            axis.addAll(elements);
+        if ((int) param.getValue() == -1) {
+            axis.addAll(Collections.nCopies(toAxisMinus, el));
         }
     }
 
     private int minusToAxis() {
-        int countOfMinus = ofMinus();
-        int toAxisMinus = (MAX_PERCENT - sum()) / 2;
-
-        if (countOfMinus > 1) {
-            toAxisMinus = (MAX_PERCENT - sum()) / countOfMinus;
+        int disabled = disabled();
+        if (disabled > 1) {
+            return  (MAX_PERCENT - sum()) / disabled;
         }
 
-        return toAxisMinus;
+        return (MAX_PERCENT - sum()) / 2;
     }
 
-    public T getAny() {
+    public T any() {
         if (!axis.isEmpty()) {
             return axis.get(dice.next(axis.size()));
         } else {
@@ -120,8 +116,8 @@ public class Chance<T extends CharElements> {
         return axis;
     }
 
-    private void put(T element, Parameter<Integer> parameter) {
-        input.put(element, parameter);
+    private void put(T el, Parameter<Integer> param) {
+        input.put(el, param);
     }
 
     public void run() {

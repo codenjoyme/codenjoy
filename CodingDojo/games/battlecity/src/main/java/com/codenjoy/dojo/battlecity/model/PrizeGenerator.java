@@ -46,7 +46,7 @@ public class PrizeGenerator {
     }
 
     public void drop(Point pt) {
-        Elements type = chance.getAny();
+        Elements type = chance.any();
 
         field.add(new Prize(pt,
                 settings.integer(PRIZE_ON_FIELD),
