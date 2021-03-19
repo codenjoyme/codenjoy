@@ -21,7 +21,7 @@ public class ChanceTest {
         return (int) chance.axis().stream().filter(x -> x.equals(elements)).count();
     }
 
-    private void givenChance() {
+    private void buildChance() {
         chance = new Chance();
         chance.put(Elements.ONE, settings.integerValue(Keys.ONE));
         chance.put(Elements.TWO, settings.integerValue(Keys.TWO));
@@ -38,16 +38,16 @@ public class ChanceTest {
     // axis.size() = 80
     @Test
     public void shouldFillAxisWithoutWalkingOnWater() {
-        //given
+        // given
         settings.integer(Keys.ONE, 50)
-                    .integer(Keys.TWO, 10)
-                    .integer(Keys.THREE, 0)
-                    .integer(Keys.FOUR, -1);
+                .integer(Keys.TWO, 10)
+                .integer(Keys.THREE, 0)
+                .integer(Keys.FOUR, -1);
 
-        //when
-        givenChance();
+        // when
+        buildChance();
 
-        //then
+        // then
         assertEquals(80, chance.axis().size());
         assertEquals(50, assertAxis(chance, Elements.ONE));
         assertEquals(10, assertAxis(chance, Elements.TWO));
@@ -58,16 +58,16 @@ public class ChanceTest {
     // порядок ввода не имеет значения
     @Test
     public void shouldFillAxisWithoutImmortality() {
-        //given
+        // given
         settings.integer(Keys.ONE, 0)
                 .integer(Keys.TWO, -1)
                 .integer(Keys.THREE, 50)
                 .integer(Keys.FOUR, 10);
 
-        //when
-        givenChance();
+        // when
+        buildChance();
 
-        //then
+        // then
         assertEquals(80, chance.axis().size());
         assertEquals(0, assertAxis(chance, Elements.ONE));
         assertEquals(20, assertAxis(chance, Elements.TWO));
@@ -77,16 +77,16 @@ public class ChanceTest {
 
     @Test
     public void shouldFillAxis_Two() {
-        //given
+        // given
         settings.integer(Keys.ONE, 0)
-                    .integer(Keys.TWO, 100)
-                    .integer(Keys.THREE, 0)
-                    .integer(Keys.FOUR, 0);
+                .integer(Keys.TWO, 100)
+                .integer(Keys.THREE, 0)
+                .integer(Keys.FOUR, 0);
 
-        //when
-        givenChance();
+        // when
+        buildChance();
 
-        //then
+        // then
         assertEquals(100, chance.axis().size());
         assertEquals(0, assertAxis(chance, Elements.ONE));
         assertEquals(100, assertAxis(chance, Elements.TWO));
@@ -96,16 +96,16 @@ public class ChanceTest {
 
     @Test
     public void shouldAxisIsEmpty() {
-        //given
+        // given
         settings.integer(Keys.ONE, 0)
                 .integer(Keys.TWO, 0)
                 .integer(Keys.THREE, 0)
                 .integer(Keys.FOUR, 0);
 
-        //when
-        givenChance();
+        // when
+        buildChance();
 
-        //then
+        // then
         assertEquals(0, chance.axis().size());
     }
 
@@ -114,16 +114,16 @@ public class ChanceTest {
     // axis.size() = 100
     @Test
     public void shouldFillAxisIfAllParametersMinus() {
-        //given
+        // given
         settings.integer(Keys.ONE, -1)
-                    .integer(Keys.TWO, -1)
-                    .integer(Keys.THREE, -1)
-                    .integer(Keys.FOUR, -1);
+                .integer(Keys.TWO, -1)
+                .integer(Keys.THREE, -1)
+                .integer(Keys.FOUR, -1);
 
-        //when
-        givenChance();
+        // when
+        buildChance();
 
-        //then
+        // then
         assertEquals(100, chance.axis().size());
         assertEquals(25, assertAxis(chance, Elements.ONE));
         assertEquals(25, assertAxis(chance, Elements.TWO));
@@ -140,16 +140,16 @@ public class ChanceTest {
     // axis.size() = 99
     @Test
     public void shouldFillAxisChangeParametersWithoutMinus() {
-        //given
+        // given
         settings.integer(Keys.ONE, 60)
                 .integer(Keys.TWO, 50)
                 .integer(Keys.THREE, 0)
                 .integer(Keys.FOUR, 40);
 
-        //when
-        givenChance();
+        // when
+        buildChance();
 
-        //then
+        // then
         assertEquals(99, chance.axis().size());
         assertEquals(40, assertAxis(chance, Elements.ONE));
         assertEquals(33, assertAxis(chance, Elements.TWO));
@@ -167,16 +167,16 @@ public class ChanceTest {
     // axis.size() = 84
     @Test
     public void shouldFillAxisChangeParametersWithMinus() {
-        //given
+        // given
         settings.integer(Keys.ONE, 60)
                 .integer(Keys.TWO, 50)
                 .integer(Keys.THREE, -1)
                 .integer(Keys.FOUR, 40);
 
-        //when
-        givenChance();
+        // when
+        buildChance();
 
-        //then
+        // then
         assertEquals(84, chance.axis().size());
         assertEquals(28, assertAxis(chance, Elements.ONE));
         assertEquals(23, assertAxis(chance, Elements.TWO));
