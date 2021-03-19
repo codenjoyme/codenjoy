@@ -85,8 +85,6 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(WALKING_ON_WATER, 0);
         integer(VISIBILITY, -1);
 
-        chance();
-
         multiline(LEVEL_MAP,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼ ¿    ¿    ¿        ¿    ¿    ¿ ☼" +
@@ -124,8 +122,8 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
-    public Chance<Elements> chance() {
-        Chance chance = new Chance<Elements>();
+    public Chance<Elements> chance(Dice dice) {
+        Chance chance = new Chance<Elements>(dice);
         chance.put(Elements.PRIZE_IMMORTALITY, integerValue(IMMORTALITY));
         chance.put(Elements.PRIZE_BREAKING_WALLS, integerValue(BREAKING_WALLS));
         chance.put(Elements.PRIZE_WALKING_ON_WATER, integerValue(WALKING_ON_WATER));

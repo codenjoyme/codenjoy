@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services.settings;
 
 import com.codenjoy.dojo.client.TestGameSettings;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.printer.CharElements;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,15 +9,18 @@ import org.junit.Test;
 import static com.codenjoy.dojo.services.settings.ChanceTest.Elements.*;
 import static com.codenjoy.dojo.services.settings.ChanceTest.Keys.*;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class ChanceTest {
 
     private TestGameSettings settings;
     private Chance chance;
+    private Dice dice;
 
     @Before
     public void setup() {
         settings = new TestGameSettings();
+        dice = mock(Dice.class);
     }
 
     private int axis(Elements elements) {
@@ -26,11 +30,23 @@ public class ChanceTest {
     }
 
     private void buildChance() {
-        chance = new Chance();
-        chance.put(FIRST, settings.integerValue(ONE));
-        chance.put(SECOND, settings.integerValue(TWO));
-        chance.put(THIRD, settings.integerValue(THREE));
-        chance.put(FOURTH, settings.integerValue(FOUR));
+        chance = new Chance(dice);
+
+        Parameter<Integer> parameter1 = settings.integerValue(ONE);
+        Parameter<Integer> parameter2 = settings.integerValue(TWO);
+        Parameter<Integer> parameter3 = settings.integerValue(THREE);
+        Parameter<Integer> parameter4 = settings.integerValue(FOUR);
+
+        chance.put(FIRST, parameter1);
+        chance.put(SECOND, parameter2);
+        chance.put(THIRD, parameter3);
+        chance.put(FOURTH, parameter4);
+
+        parameter1.onChange(value -> chance.run());
+        parameter2.onChange(value -> chance.run());
+        parameter3.onChange(value -> chance.run());
+        parameter4.onChange(value -> chance.run());
+
         chance.run();
     }
 
@@ -186,6 +202,54 @@ public class ChanceTest {
         assertEquals(23, axis(SECOND));
         assertEquals(15, axis(THIRD));
         assertEquals(18, axis(FOURTH));
+    }
+
+    @Test
+    public void shouldChangeSettings_willChangeAxisImmediately() {
+        // given
+        settings.integer(ONE, 25)
+                .integer(TWO, 25)
+                .integer(THREE, 25)
+                .integer(FOUR, 25);
+
+        buildChance();
+
+        assertEquals(100, chance.axis().size());
+        assertEquals(25, axis(FIRST));
+        assertEquals(25, axis(SECOND));
+        assertEquals(25, axis(THIRD));
+        assertEquals(25, axis(FOURTH));
+
+        // when
+        settings.integer(ONE, 0);
+
+        // then
+        assertEquals(75, chance.axis().size());
+        assertEquals(0, axis(FIRST));
+        assertEquals(25, axis(SECOND));
+        assertEquals(25, axis(THIRD));
+        assertEquals(25, axis(FOURTH));
+
+        // when
+        settings.integer(TWO, 1);
+        settings.integer(THREE, 1);
+
+        // then
+        assertEquals(27, chance.axis().size());
+        assertEquals(0, axis(FIRST));
+        assertEquals(1, axis(SECOND));
+        assertEquals(1, axis(THIRD));
+        assertEquals(25, axis(FOURTH));
+
+        // when
+        settings.integer(FOUR, -1);
+
+        // then
+        assertEquals(51, chance.axis().size());
+        assertEquals(0, axis(FIRST));
+        assertEquals(1, axis(SECOND));
+        assertEquals(1, axis(THIRD));
+        assertEquals(49, axis(FOURTH)); // TODO вот тут немного не очевидно
     }
 
     enum Elements implements CharElements {

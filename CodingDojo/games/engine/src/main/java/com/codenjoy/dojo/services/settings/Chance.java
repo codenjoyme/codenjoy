@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.services.settings;
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.printer.CharElements;
 
 import java.util.*;
@@ -16,9 +15,9 @@ public class Chance<T extends CharElements> {
     private Map<T, Parameter> input;
     private List<T> axis;
 
-    public Chance() {
+    public Chance(Dice dice) {
         this.input = new LinkedHashMap<>();
-        dice = new RandomDice();
+        this.dice = dice;
         axis = new LinkedList<>();
     }
 
@@ -110,6 +109,7 @@ public class Chance<T extends CharElements> {
     }
 
     public void run() {
+        axis.clear();
         checkParameters();
         fillAxis(minusToAxis());
     }
