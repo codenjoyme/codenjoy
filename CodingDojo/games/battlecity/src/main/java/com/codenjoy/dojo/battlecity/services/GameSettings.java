@@ -23,9 +23,11 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.settings.Chance;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -46,7 +48,11 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         TANK_TICKS_PER_SHOOT("Ticks until the next Tank shoot"),
         SLIPPERINESS("Value of tank sliding on ice"),
         AI_PRIZE_LIMIT("The total number of prize tanks and prizes on the board"),
-        LEVEL_MAP("Level map");
+        LEVEL_MAP("Level map"),
+        IMMORTALITY("probability of appearing on the field prize immortality"),
+        BREAKING_WALLS("probability of appearing on the field prize breaking walls"),
+        WALKING_ON_WATER("probability of appearing on the field prize walking on water"),
+        VISIBILITY("probability of appearing on the field prize visibility");
 
         private String key;
 
@@ -73,6 +79,18 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(TANK_TICKS_PER_SHOOT, 4);
         integer(SLIPPERINESS, 3);
         integer(AI_PRIZE_LIMIT, 3);
+
+        integer(IMMORTALITY, 50);
+        integer(BREAKING_WALLS, 10);
+        integer(WALKING_ON_WATER, 0);
+        integer(VISIBILITY, -1);
+
+        Chance chance = chance();
+        chance.put(Elements.PRIZE_IMMORTALITY, integerValue(IMMORTALITY));
+        chance.put(Elements.PRIZE_BREAKING_WALLS, integerValue(BREAKING_WALLS));
+        chance.put(Elements.PRIZE_WALKING_ON_WATER, integerValue(WALKING_ON_WATER));
+        chance.put(Elements.PRIZE_VISIBILITY, integerValue(VISIBILITY));
+        chance.run();
 
         multiline(LEVEL_MAP,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -109,6 +127,10 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
                 "☼            ╬╬    ╬╬            ☼" +
                 "☼  %%%%%%    ╬╬    ╬╬    %%%%%%  ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+    }
+
+    public Chance chance() {
+        return new Chance();
     }
 
     public Level level(Dice dice) {
