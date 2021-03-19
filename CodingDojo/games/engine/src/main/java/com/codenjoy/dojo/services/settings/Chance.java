@@ -94,11 +94,10 @@ public class Chance<T extends CharElements> {
 
     private int minusToAxis() {
         int auto = countAuto();
-        if (auto > 1) {
-            return  (MAX_PERCENT - sum()) / auto;
-        }
-
-        return (MAX_PERCENT - sum()) / 2;
+        int range = MAX_PERCENT - sum();
+        return (auto > 1)
+                ? range / auto
+                : range / 2;
     }
 
     public T any() {
