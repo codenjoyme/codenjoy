@@ -90,7 +90,7 @@ public class AITank extends Tank {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Elements tree = treeState(player, alsoAtPoint);
+        Elements tree = player.getHero().treeState(alsoAtPoint);
         if (tree != null) {
             return tree;
         }
