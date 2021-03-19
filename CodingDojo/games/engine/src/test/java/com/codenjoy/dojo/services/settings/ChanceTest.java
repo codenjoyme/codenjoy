@@ -1,10 +1,12 @@
 package com.codenjoy.dojo.services.settings;
 
 import com.codenjoy.dojo.client.TestGameSettings;
-import com.codenjoy.dojo.services.printer.*;
+import com.codenjoy.dojo.services.printer.CharElements;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.settings.ChanceTest.Elements.*;
+import static com.codenjoy.dojo.services.settings.ChanceTest.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class ChanceTest {
@@ -17,16 +19,18 @@ public class ChanceTest {
         settings = new TestGameSettings();
     }
 
-    private int assertAxis(Chance chance, Elements elements) {
-        return (int) chance.axis().stream().filter(x -> x.equals(elements)).count();
+    private int axis(Elements elements) {
+        return (int) chance.axis().stream()
+                .filter(x -> x.equals(elements))
+                .count();
     }
 
     private void buildChance() {
         chance = new Chance();
-        chance.put(Elements.ONE, settings.integerValue(Keys.ONE));
-        chance.put(Elements.TWO, settings.integerValue(Keys.TWO));
-        chance.put(Elements.THREE, settings.integerValue(Keys.THREE));
-        chance.put(Elements.FOUR, settings.integerValue(Keys.FOUR));
+        chance.put(FIRST, settings.integerValue(ONE));
+        chance.put(SECOND, settings.integerValue(TWO));
+        chance.put(THIRD, settings.integerValue(THREE));
+        chance.put(FOURTH, settings.integerValue(FOUR));
         chance.run();
     }
 
@@ -39,68 +43,68 @@ public class ChanceTest {
     @Test
     public void shouldFillAxisWithoutWalkingOnWater() {
         // given
-        settings.integer(Keys.ONE, 50)
-                .integer(Keys.TWO, 10)
-                .integer(Keys.THREE, 0)
-                .integer(Keys.FOUR, -1);
+        settings.integer(ONE, 50)
+                .integer(TWO, 10)
+                .integer(THREE, 0)
+                .integer(FOUR, -1);
 
         // when
         buildChance();
 
         // then
         assertEquals(80, chance.axis().size());
-        assertEquals(50, assertAxis(chance, Elements.ONE));
-        assertEquals(10, assertAxis(chance, Elements.TWO));
-        assertEquals(0, assertAxis(chance, Elements.THREE));
-        assertEquals(20, assertAxis(chance, Elements.FOUR));
+        assertEquals(50, axis(FIRST));
+        assertEquals(10, axis(SECOND));
+        assertEquals(0, axis(THIRD));
+        assertEquals(20, axis(FOURTH));
     }
 
     // порядок ввода не имеет значения
     @Test
     public void shouldFillAxisWithoutImmortality() {
         // given
-        settings.integer(Keys.ONE, 0)
-                .integer(Keys.TWO, -1)
-                .integer(Keys.THREE, 50)
-                .integer(Keys.FOUR, 10);
+        settings.integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, 50)
+                .integer(FOUR, 10);
 
         // when
         buildChance();
 
         // then
         assertEquals(80, chance.axis().size());
-        assertEquals(0, assertAxis(chance, Elements.ONE));
-        assertEquals(20, assertAxis(chance, Elements.TWO));
-        assertEquals(50, assertAxis(chance, Elements.THREE));
-        assertEquals(10, assertAxis(chance, Elements.FOUR));
+        assertEquals(0, axis(FIRST));
+        assertEquals(20, axis(SECOND));
+        assertEquals(50, axis(THIRD));
+        assertEquals(10, axis(FOURTH));
     }
 
     @Test
     public void shouldFillAxis_Two() {
         // given
-        settings.integer(Keys.ONE, 0)
-                .integer(Keys.TWO, 100)
-                .integer(Keys.THREE, 0)
-                .integer(Keys.FOUR, 0);
+        settings.integer(ONE, 0)
+                .integer(TWO, 100)
+                .integer(THREE, 0)
+                .integer(FOUR, 0);
 
         // when
         buildChance();
 
         // then
         assertEquals(100, chance.axis().size());
-        assertEquals(0, assertAxis(chance, Elements.ONE));
-        assertEquals(100, assertAxis(chance, Elements.TWO));
-        assertEquals(0, assertAxis(chance, Elements.THREE));
-        assertEquals(0, assertAxis(chance, Elements.FOUR));
+        assertEquals(0, axis(FIRST));
+        assertEquals(100, axis(SECOND));
+        assertEquals(0, axis(THIRD));
+        assertEquals(0, axis(FOURTH));
     }
 
     @Test
     public void shouldAxisIsEmpty() {
         // given
-        settings.integer(Keys.ONE, 0)
-                .integer(Keys.TWO, 0)
-                .integer(Keys.THREE, 0)
-                .integer(Keys.FOUR, 0);
+        settings.integer(ONE, 0)
+                .integer(TWO, 0)
+                .integer(THREE, 0)
+                .integer(FOUR, 0);
 
         // when
         buildChance();
@@ -115,20 +119,20 @@ public class ChanceTest {
     @Test
     public void shouldFillAxisIfAllParametersMinus() {
         // given
-        settings.integer(Keys.ONE, -1)
-                .integer(Keys.TWO, -1)
-                .integer(Keys.THREE, -1)
-                .integer(Keys.FOUR, -1);
+        settings.integer(ONE, -1)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, -1);
 
         // when
         buildChance();
 
         // then
         assertEquals(100, chance.axis().size());
-        assertEquals(25, assertAxis(chance, Elements.ONE));
-        assertEquals(25, assertAxis(chance, Elements.TWO));
-        assertEquals(25, assertAxis(chance, Elements.THREE));
-        assertEquals(25, assertAxis(chance, Elements.FOUR));
+        assertEquals(25, axis(FIRST));
+        assertEquals(25, axis(SECOND));
+        assertEquals(25, axis(THIRD));
+        assertEquals(25, axis(FOURTH));
     }
 
     // параметр "0" -> не участвует
@@ -141,20 +145,20 @@ public class ChanceTest {
     @Test
     public void shouldFillAxisChangeParametersWithoutMinus() {
         // given
-        settings.integer(Keys.ONE, 60)
-                .integer(Keys.TWO, 50)
-                .integer(Keys.THREE, 0)
-                .integer(Keys.FOUR, 40);
+        settings.integer(ONE, 60)
+                .integer(TWO, 50)
+                .integer(THREE, 0)
+                .integer(FOUR, 40);
 
         // when
         buildChance();
 
         // then
         assertEquals(99, chance.axis().size());
-        assertEquals(40, assertAxis(chance, Elements.ONE));
-        assertEquals(33, assertAxis(chance, Elements.TWO));
-        assertEquals(0, assertAxis(chance, Elements.THREE));
-        assertEquals(26, assertAxis(chance, Elements.FOUR));
+        assertEquals(40, axis(FIRST));
+        assertEquals(33, axis(SECOND));
+        assertEquals(0, axis(THIRD));
+        assertEquals(26, axis(FOURTH));
     }
 
     // параметра "0" нету
@@ -168,28 +172,28 @@ public class ChanceTest {
     @Test
     public void shouldFillAxisChangeParametersWithMinus() {
         // given
-        settings.integer(Keys.ONE, 60)
-                .integer(Keys.TWO, 50)
-                .integer(Keys.THREE, -1)
-                .integer(Keys.FOUR, 40);
+        settings.integer(ONE, 60)
+                .integer(TWO, 50)
+                .integer(THREE, -1)
+                .integer(FOUR, 40);
 
         // when
         buildChance();
 
         // then
         assertEquals(84, chance.axis().size());
-        assertEquals(28, assertAxis(chance, Elements.ONE));
-        assertEquals(23, assertAxis(chance, Elements.TWO));
-        assertEquals(15, assertAxis(chance, Elements.THREE));
-        assertEquals(18, assertAxis(chance, Elements.FOUR));
+        assertEquals(28, axis(FIRST));
+        assertEquals(23, axis(SECOND));
+        assertEquals(15, axis(THIRD));
+        assertEquals(18, axis(FOURTH));
     }
 
     enum Elements implements CharElements {
 
-        ONE('1'),
-        TWO('2'),
-        THREE('3'),
-        FOUR('4'),
+        FIRST('1'),
+        SECOND('2'),
+        THIRD('3'),
+        FOURTH('4'),
         NONE(' ');
 
         final char ch;
@@ -209,7 +213,7 @@ public class ChanceTest {
         }
 
         public static Elements valueOf(char ch) {
-            for (Elements el : Elements.values()) {
+            for (Elements el : values()) {
                 if (el.ch == ch) {
                     return el;
                 }
