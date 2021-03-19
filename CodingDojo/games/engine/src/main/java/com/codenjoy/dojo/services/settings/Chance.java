@@ -13,7 +13,7 @@ public class Chance<T extends CharElements> {
     private Dice dice;
     private SettingsReader settings;
 
-    private Map<T, Parameter> input;
+    private Map<T, Parameter<Integer>> input;
     private List<T> axis;
 
     public Chance(Dice dice, SettingsReader settings, Map<T, SettingsReader.Key> params) {
@@ -29,7 +29,7 @@ public class Chance<T extends CharElements> {
             SettingsReader.Key name = entry.getValue();
             T el = entry.getKey();
 
-            Parameter param = settings.integerValue(name);
+            Parameter<Integer> param = settings.integerValue(name);
             add(el, param);
             param.onChange(value -> run());
         });
@@ -43,31 +43,31 @@ public class Chance<T extends CharElements> {
     }
 
     private int sum() {
-        List<Parameter> params = new ArrayList<>(input.values());
+        List<Parameter<Integer>> params = new ArrayList<>(input.values());
         return params.stream()
-                .mapToInt(param -> (int) param.getValue())
-                .filter(parameter -> parameter > 0)
+                .mapToInt(param -> param.getValue())
+                .filter(param -> param > 0)
                 .sum();
     }
 
-    private void checkParameters() {
+    private void checkParams() {
         int sum = sum();
         if (sum > MAX_PERCENT) {
-            changeParameters(sum, countAuto());
+            changeParams(sum, countAuto());
         }
     }
 
-    private void changeParameters(int sum, int auto) {
+    private void changeParams(int sum, int auto) {
         if (auto == 0) {
-            input.forEach((el, param) -> update(param, (int) param.getValue() * (MAX_PERCENT) / sum));
+            input.forEach((el, param) -> update(param, param.getValue() * (MAX_PERCENT) / sum));
         }
 
         if (auto > 0) {
             input.forEach((el, param) -> {
                 int value = 0;
 
-                if ((int) param.getValue() > 0) {
-                    value = (int) param.getValue() * (MAX_PERCENT - RESERVE_FOR_MINUS) / sum;
+                if (param.getValue() > 0) {
+                    value = param.getValue() * (MAX_PERCENT - RESERVE_FOR_MINUS) / sum;
                 }
 
                 if (value > 0) {
@@ -75,7 +75,7 @@ public class Chance<T extends CharElements> {
                 }
             });
         }
-        checkParameters();
+        checkParams();
     }
 
     private void update(Parameter param, int value) {
@@ -124,7 +124,7 @@ public class Chance<T extends CharElements> {
 
     public void run() {
         axis.clear();
-        checkParameters();
+        checkParams();
         fillAxis(minusToAxis());
     }
 }
