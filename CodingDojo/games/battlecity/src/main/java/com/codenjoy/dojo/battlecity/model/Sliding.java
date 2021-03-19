@@ -46,7 +46,7 @@ public class Sliding {
         return settings.integer(SLIPPERINESS);
     }
 
-    public Direction act(Tank tank, Direction current) {
+    public Direction act(Direction current) {
         if (tick == slipperiness()) {
             tick = 0;
             before = current;
