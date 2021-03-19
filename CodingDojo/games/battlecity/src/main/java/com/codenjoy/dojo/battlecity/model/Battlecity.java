@@ -67,7 +67,7 @@ public class Battlecity implements Field {
         ice = new LinkedList<>();
         rivers = new LinkedList<>();
         players = new LinkedList<>();
-        prizeGen = new PrizeGenerator(this, dice, settings);
+        prizeGen = new PrizeGenerator(this, settings);
         aiGen = new AiGenerator(this, dice, settings);
     }
 

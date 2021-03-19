@@ -85,12 +85,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(WALKING_ON_WATER, 0);
         integer(VISIBILITY, -1);
 
-        Chance chance = chance();
-        chance.put(Elements.PRIZE_IMMORTALITY, integerValue(IMMORTALITY));
-        chance.put(Elements.PRIZE_BREAKING_WALLS, integerValue(BREAKING_WALLS));
-        chance.put(Elements.PRIZE_WALKING_ON_WATER, integerValue(WALKING_ON_WATER));
-        chance.put(Elements.PRIZE_VISIBILITY, integerValue(VISIBILITY));
-        chance.run();
+        chance();
 
         multiline(LEVEL_MAP,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -129,8 +124,14 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
-    public Chance chance() {
-        return new Chance();
+    public Chance<Elements> chance() {
+        Chance chance = new Chance<Elements>();
+        chance.put(Elements.PRIZE_IMMORTALITY, integerValue(IMMORTALITY));
+        chance.put(Elements.PRIZE_BREAKING_WALLS, integerValue(BREAKING_WALLS));
+        chance.put(Elements.PRIZE_WALKING_ON_WATER, integerValue(WALKING_ON_WATER));
+        chance.put(Elements.PRIZE_VISIBILITY, integerValue(VISIBILITY));
+        chance.run();
+        return chance;
     }
 
     public Level level(Dice dice) {

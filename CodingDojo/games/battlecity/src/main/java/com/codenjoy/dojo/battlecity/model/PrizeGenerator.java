@@ -24,12 +24,8 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.settings.Parameter;
-
-import java.util.Arrays;
-import java.util.List;
+import com.codenjoy.dojo.services.settings.Chance;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PRIZE_ON_FIELD;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PRIZE_WORKING;
@@ -37,25 +33,19 @@ import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PRIZE_WORK
 
 public class PrizeGenerator {
 
-    private static final List<Elements> PRIZES = Arrays.asList(
-            Elements.PRIZE_IMMORTALITY,
-            Elements.PRIZE_BREAKING_WALLS,
-            Elements.PRIZE_WALKING_ON_WATER,
-            Elements.PRIZE_VISIBILITY);
-
+    private Chance<Elements> chance;
     private Field field;
-    private Dice dice;
 
     private GameSettings settings;
 
-    public PrizeGenerator(Field field, Dice dice, GameSettings settings) {
+    public PrizeGenerator(Field field, GameSettings settings) {
         this.field = field;
-        this.dice = dice;
+        this.chance = settings.chance();
         this.settings = settings;
     }
 
     public void drop(Point pt) {
-        Elements type = PRIZES.get(dice.next(PRIZES.size()));
+        Elements type = chance.getAny();
 
         field.add(new Prize(pt,
                 settings.integer(PRIZE_ON_FIELD),

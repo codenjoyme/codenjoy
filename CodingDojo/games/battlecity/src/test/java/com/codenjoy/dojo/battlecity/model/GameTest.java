@@ -38,6 +38,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -64,17 +65,30 @@ public class GameTest {
     private List<EventListener> listeners = new LinkedList<>();
     private EventsListenersAssert events = new EventsListenersAssert(listeners);
 
+    private Dice dice(int... values) {
+        Dice dice = mock(Dice.class);
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int value : values) {
+            when = when.thenReturn(value);
+        }
+        return dice;
+    }
+    
     @Before
     public void setup() {
         settings = new GameSettings()
                 .integer(SPAWN_AI_PRIZE, 4)
                 .integer(KILL_HITS_AI_PRIZE, 3)
-                .integer(PRIZE_ON_FIELD, 3)
-                .integer(PRIZE_WORKING, 10)
                 .integer(AI_TICKS_PER_SHOOT, 10)
                 .integer(TANK_TICKS_PER_SHOOT, 1)
                 .integer(SLIPPERINESS, 3)
-                .integer(AI_PRIZE_LIMIT, 10);
+                .integer(PRIZE_ON_FIELD, 3)
+                .integer(PRIZE_WORKING, 10)
+                .integer(AI_PRIZE_LIMIT, 10)
+                .integer(IMMORTALITY, 25)
+                .integer(BREAKING_WALLS, 25)
+                .integer(WALKING_ON_WATER, 25)
+                .integer(VISIBILITY, 25);
 
         dice = mock(Dice.class);
     }
@@ -2196,7 +2210,7 @@ public class GameTest {
                 "☼    Ѡ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(3, 3);
+        dice(3, 3);
         game.tick();
 
         assertW("☼☼☼☼☼☼☼\n" + // TODO разобраться почему тут скачет ассерт
@@ -2629,7 +2643,7 @@ public class GameTest {
                 "☼   Ѡ ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(5, 5);
+        dice(5, 5);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5622,7 +5636,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         hero(0).up();
         game.tick();
 
@@ -5682,7 +5696,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         hero(1).up();
         game.tick();
 
@@ -5746,7 +5760,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         ai(0).kill(mock(Bullet.class));
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5808,7 +5822,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         ai(0).kill(mock(Bullet.class));
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5871,7 +5885,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         ai(0).kill(mock(Bullet.class));
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(28);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5933,7 +5947,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         ai(0).kill(mock(Bullet.class));
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5995,7 +6009,7 @@ public class GameTest {
                 "☼    ▲☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6054,7 +6068,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         hero(0).up();
         game.tick();
 
@@ -6109,7 +6123,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         hero(0).up();
         hero(1).act();
         game.tick();
@@ -6212,7 +6226,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         hero(0).act();
         game.tick();
 
@@ -6272,7 +6286,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6432,7 +6446,7 @@ public class GameTest {
                 "☼ ▲╬  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(1).thenReturn(0);
+        dice(1, 0);
         hero(0).up();
         game.tick();
 
@@ -6529,7 +6543,7 @@ public class GameTest {
                 "☼▲ ˄  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(1).thenReturn(0);
+        dice(1, 0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6600,7 +6614,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(1).thenReturn(0);
+        dice(1, 0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6691,7 +6705,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(1).thenReturn(0);
+        dice(1, 0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6771,7 +6785,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         hero(1).up();
         game.tick();
 
@@ -6847,7 +6861,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         hero(1).up();
         game.tick();
 
@@ -6961,7 +6975,7 @@ public class GameTest {
                 "☼¿    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7050,7 +7064,7 @@ public class GameTest {
                 "☼¿    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7530,7 +7544,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(2).thenReturn(0);
+        dice(2, 0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7610,7 +7624,7 @@ public class GameTest {
                 "☼▲ ˄  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(2, 0);
+        dice(2, 0);
         hero(0).up();
         hero(1).up();
         game.tick();
@@ -7687,7 +7701,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(2).thenReturn(0);
+        dice(2, 0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7782,7 +7796,7 @@ public class GameTest {
                 "☼  ▲  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(2).thenReturn(0);
+        dice(2, 0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7945,7 +7959,7 @@ public class GameTest {
                 "☼▲ ˄  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(1).thenReturn(0);
+        dice(1, 0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -8064,7 +8078,7 @@ public class GameTest {
                 "☼?    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(1);
+        dice(1);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -8168,7 +8182,7 @@ public class GameTest {
                 "☼    ▲☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(2);
+        dice(2);
         game.getAiGenerator().drop(pt(1, 5));
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -8283,7 +8297,7 @@ public class GameTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -8371,7 +8385,7 @@ public class GameTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
 
         hero(0).act();
         game.tick();
@@ -8452,7 +8466,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(3).thenReturn(0);
+        dice(3, 0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -8513,7 +8527,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(3).thenReturn(0);
+        dice(3, 0);
         hero(1).up();
         game.tick();
 
@@ -8588,7 +8602,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(3).thenReturn(0);
+        dice(3, 0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -8685,7 +8699,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(3).thenReturn(0);
+        dice(3, 0);
         hero(1).up();
         game.tick();
 

@@ -6,20 +6,18 @@ import com.codenjoy.dojo.services.printer.CharElements;
 
 import java.util.*;
 
-public class Chance {
+public class Chance<T extends CharElements> {
 
     public static final int MAX_PERCENT = 100;
     public static final int RESERVE_FOR_MINUS = 30;
 
     private Dice dice;
-    private CharElements element;
 
-    private Map<CharElements, Parameter> input;
-    private List<CharElements> axis;
+    private Map<T, Parameter> input;
+    private List<T> axis;
 
     public Chance() {
-        element = null;
-        input = new LinkedHashMap<>();
+        this.input = new LinkedHashMap<>();
         dice = new RandomDice();
         axis = new LinkedList<>();
     }
@@ -70,17 +68,16 @@ public class Chance {
 
     private void fillAxis(int toAxisMinus) {
         input.forEach(((element, parameter) -> addAxis(element, parameter, toAxisMinus)));
-        getAny();
     }
 
-    private void addAxis(CharElements element, Parameter parameter, int toAxisMinus) {
+    private void addAxis(T element, Parameter parameter, int toAxisMinus) {
         if ((int) parameter.getValue() > 0) {
-            List<CharElements> elements = new ArrayList<>(Collections.nCopies((int) parameter.getValue(), element));
+            List<T> elements = new ArrayList<>(Collections.nCopies((int) parameter.getValue(), element));
             axis.addAll(elements);
         }
 
         if ((int) parameter.getValue() == -1) {
-            List<CharElements> elements = new ArrayList<>(Collections.nCopies(toAxisMinus, element));
+            List<T> elements = new ArrayList<>(Collections.nCopies(toAxisMinus, element));
             axis.addAll(elements);
         }
     }
@@ -96,25 +93,19 @@ public class Chance {
         return toAxisMinus;
     }
 
-    private CharElements getAny() {
+    public T getAny() {
         if (!axis.isEmpty()) {
-            element = axis.get(dice.next(axis.size()));
+            return axis.get(dice.next(axis.size()));
         } else {
-            element = null;
+            return null;
         }
-
-        return element;
     }
 
-    public List<CharElements> axis() {
+    public List<T> axis() {
         return axis;
     }
 
-    public CharElements get() {
-        return element;
-    }
-
-    public void put(CharElements element, Parameter<Integer> parameter) {
+    public void put(T element, Parameter<Integer> parameter) {
         input.put(element, parameter);
     }
 
