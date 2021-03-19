@@ -105,7 +105,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         return direction;
     }
 
-    // TODO подумать как устранить дублирование с MovingObject
     public void move() {
         moving = moving || field.isIce(this);
         if (!moving) return;
