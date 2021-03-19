@@ -43,8 +43,7 @@ public class Chance<T extends CharElements> {
     }
 
     private int sum() {
-        List<Parameter<Integer>> params = new ArrayList<>(input.values());
-        return params.stream()
+        return input.values().stream()
                 .mapToInt(param -> param.getValue())
                 .filter(param -> param > 0)
                 .sum();
