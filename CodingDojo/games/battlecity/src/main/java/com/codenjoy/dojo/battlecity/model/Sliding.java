@@ -47,10 +47,7 @@ public class Sliding {
     }
 
     public Direction act(Tank tank, Direction current) {
-        if (!field.isIce(tank)
-                || slipperiness() == 0
-                || tank.prizes().contains(Elements.PRIZE_NO_SLIDING))
-        {
+        if (!active(tank)) {
             tick = 0;
             return before = current;
         }
@@ -65,6 +62,12 @@ public class Sliding {
         tick++;
 
         return before;
+    }
+
+    public boolean active(Tank tank) {
+        return field.isIce(tank)
+                && slipperiness() != 0
+                && !tank.prizes().contains(Elements.PRIZE_NO_SLIDING);
     }
 
     public void stop() {
