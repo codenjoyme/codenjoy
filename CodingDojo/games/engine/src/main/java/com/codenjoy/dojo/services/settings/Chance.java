@@ -59,7 +59,15 @@ public class Chance<T extends CharElements> {
 
     private void changeParams(int sum, int auto) {
         if (auto == 0) {
-            input.forEach((el, param) -> update(param, param.getValue() * (MAX_PERCENT) / sum));
+            input.forEach((el, param) -> {
+                int value = param.getValue();
+                if (value <= 0) return;
+
+                value = value * (MAX_PERCENT) / sum;
+                if (value <= 0) return;
+
+                update(param, value);
+            });
         }
 
         if (auto > 0) {
