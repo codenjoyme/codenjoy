@@ -46,6 +46,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         TANK_TICKS_PER_SHOOT("Ticks until the next Tank shoot"),
         SLIPPERINESS("Value of tank sliding on ice"),
         AI_PRIZE_LIMIT("The total number of prize tanks and prizes on the board"),
+        PENALTY_WORKING("Penalty working time after the end of the prize"),
         LEVEL_MAP("Level map");
 
         private String key;

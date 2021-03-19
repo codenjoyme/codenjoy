@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.*;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 

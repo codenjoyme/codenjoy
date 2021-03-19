@@ -82,6 +82,7 @@ public class MultiplayerTest {
                 .integer(AI_TICKS_PER_SHOOT, 3)
                 .integer(TANK_TICKS_PER_SHOOT, 4)
                 .integer(SLIPPERINESS, 3)
+                .integer(PENALTY_WORKING, 3)
                 .integer(AI_PRIZE_LIMIT, 3);
 
         printerFactory = new PrinterFactoryImpl();

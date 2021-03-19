@@ -8181,7 +8181,7 @@ public class GameTest {
     // пока танк не выйдет полностью из воды.
     @Test
     @Ignore // TODO продолжить тут
-    public void shouldTankCanGoIfRiverAtWay_whenPrizeIsOver_butTankOnWater() {
+    public void shouldTankCanGoIfRiverAtWay_whenPrizeIsOver_butTankOnWater_var1() {
         settings.integer(KILL_HITS_AI_PRIZE, 1)
                 .integer(PRIZE_ON_FIELD, 5)
                 .integer(PRIZE_WORKING, 3);
@@ -8324,6 +8324,170 @@ public class GameTest {
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼ ~~~ ☼\n" +
                 "☼ ~~► ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        // штраф 3 тика закончился. Возможно перемещени, покидаем воду
+        hero(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~►☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    @Ignore
+    public void shouldTankCanGoIfRiverAtWay_whenPrizeIsOver_butTankOnWater_var2() {
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PENALTY_WORKING, 3)
+                .integer(PRIZE_WORKING, 3);
+
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼  ?  ☼\n" +
+                "☼  ▲  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼  Ѡ  ☼\n" +
+                "☼  ▲  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(2).thenReturn(0);
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼  3  ☼\n" +
+                "☼  ▲  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼  ▲  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~▲~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~▲~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        // действие приза закончилось
+        // герой получает штраф 3 тика
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~▲~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~▼~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).left();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~◄~ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        // штраф 3 тика закончился. Возможно перемещени
+        hero(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~► ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        // штрай 3 тика, так как герой снова на воде
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~▲ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).left();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~◄ ☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ~~~ ☼\n" +
+                "☼ ~~▼ ☼\n" +
                 "☼ ~~~ ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
