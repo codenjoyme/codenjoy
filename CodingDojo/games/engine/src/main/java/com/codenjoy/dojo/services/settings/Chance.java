@@ -17,7 +17,9 @@ public class Chance<T extends CharElements> {
     private Map<T, Parameter<Integer>> input;
     private List<T> axis;
 
-    public Chance(Dice dice, SettingsReader settings, Map<T, SettingsReader.Key> params) {
+    public Chance(Dice dice, SettingsReader settings,
+                  Map<T, SettingsReader.Key> params)
+    {
         this.settings = settings;
         this.input = new LinkedHashMap<>();
         this.dice = dice;
