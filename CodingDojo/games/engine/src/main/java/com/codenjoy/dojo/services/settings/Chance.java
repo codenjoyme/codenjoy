@@ -35,7 +35,7 @@ public class Chance<T extends CharElements> {
         });
     }
 
-    private int disabled() {
+    private int countAuto() {
         List<Parameter> params = new ArrayList<>(input.values());
         return (int) params.stream()
                 .filter(param -> (int) param.getValue() == -1)
@@ -53,16 +53,16 @@ public class Chance<T extends CharElements> {
     private void checkParameters() {
         int sum = sum();
         if (sum > MAX_PERCENT) {
-            changeParameters(sum, disabled());
+            changeParameters(sum, countAuto());
         }
     }
 
-    private void changeParameters(int sum, int disabled) {
-        if (disabled == 0) {
+    private void changeParameters(int sum, int auto) {
+        if (auto == 0) {
             input.forEach((el, param) -> update(param, (int) param.getValue() * (MAX_PERCENT) / sum));
         }
 
-        if (disabled > 0) {
+        if (auto > 0) {
             input.forEach((el, param) -> {
                 int value = 0;
 
@@ -98,9 +98,9 @@ public class Chance<T extends CharElements> {
     }
 
     private int minusToAxis() {
-        int disabled = disabled();
-        if (disabled > 1) {
-            return  (MAX_PERCENT - sum()) / disabled;
+        int auto = countAuto();
+        if (auto > 1) {
+            return  (MAX_PERCENT - sum()) / auto;
         }
 
         return (MAX_PERCENT - sum()) / 2;
