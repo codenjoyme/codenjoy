@@ -6,6 +6,8 @@ import com.codenjoy.dojo.services.printer.CharElements;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+
 import static com.codenjoy.dojo.services.settings.ChanceTest.Elements.*;
 import static com.codenjoy.dojo.services.settings.ChanceTest.Keys.*;
 import static org.junit.Assert.assertEquals;
@@ -30,23 +32,12 @@ public class ChanceTest {
     }
 
     private void buildChance() {
-        chance = new Chance(dice);
-
-        Parameter<Integer> parameter1 = settings.integerValue(ONE);
-        Parameter<Integer> parameter2 = settings.integerValue(TWO);
-        Parameter<Integer> parameter3 = settings.integerValue(THREE);
-        Parameter<Integer> parameter4 = settings.integerValue(FOUR);
-
-        chance.put(FIRST, parameter1);
-        chance.put(SECOND, parameter2);
-        chance.put(THIRD, parameter3);
-        chance.put(FOURTH, parameter4);
-
-        parameter1.onChange(value -> chance.run());
-        parameter2.onChange(value -> chance.run());
-        parameter3.onChange(value -> chance.run());
-        parameter4.onChange(value -> chance.run());
-
+        chance = new Chance(dice, settings, new HashMap(){{
+            put(FIRST, ONE);
+            put(SECOND, TWO);
+            put(THIRD, THREE);
+            put(FOURTH, FOUR);
+        }});
         chance.run();
     }
 

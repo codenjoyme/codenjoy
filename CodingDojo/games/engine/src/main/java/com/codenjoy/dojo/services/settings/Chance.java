@@ -11,14 +11,25 @@ public class Chance<T extends CharElements> {
     public static final int RESERVE_FOR_MINUS = 30;
 
     private Dice dice;
+    private SettingsReader settings;
 
     private Map<T, Parameter> input;
     private List<T> axis;
 
-    public Chance(Dice dice) {
+    public Chance(Dice dice, SettingsReader settings, Map<T, SettingsReader.Key> parameters) {
+        this.settings = settings;
         this.input = new LinkedHashMap<>();
         this.dice = dice;
         axis = new LinkedList<>();
+        fill(parameters);
+    }
+
+    private void fill(Map<T, SettingsReader.Key> parameters) {
+        parameters.entrySet().forEach(entry -> {
+            Parameter parameter = settings.integerValue(entry.getValue());
+            Chance.this.put(entry.getKey(), parameter);
+            parameter.onChange(value -> Chance.this.run());
+        });
     }
 
     private int ofMinus() {
@@ -46,7 +57,7 @@ public class Chance<T extends CharElements> {
 
     private void changeParameters(int sum, int countOfMinus) {
         if (countOfMinus == 0) {
-            input.forEach((elements, parameter) -> parameter.update((int) parameter.getValue() * (MAX_PERCENT) / sum));
+            input.forEach((elements, parameter) -> update(parameter, (int) parameter.getValue() * (MAX_PERCENT) / sum));
         }
 
         if (countOfMinus > 0) {
@@ -58,11 +69,16 @@ public class Chance<T extends CharElements> {
                 }
 
                 if (value > 0) {
-                    parameter.update(value);
+                    update(parameter, value);
                 }
             });
         }
         checkParameters();
+    }
+
+    private void update(Parameter parameter, int value) {
+        // обновляет параметр без вызова лиснера, который перегенерит все axis
+        ((Updatable)parameter).justSet(value);
     }
 
     private void fillAxis(int toAxisMinus) {
@@ -104,7 +120,7 @@ public class Chance<T extends CharElements> {
         return axis;
     }
 
-    public void put(T element, Parameter<Integer> parameter) {
+    private void put(T element, Parameter<Integer> parameter) {
         input.put(element, parameter);
     }
 

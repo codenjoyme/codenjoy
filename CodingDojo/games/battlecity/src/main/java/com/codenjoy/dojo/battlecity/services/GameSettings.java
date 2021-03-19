@@ -31,6 +31,9 @@ import com.codenjoy.dojo.services.settings.Chance;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import java.util.HashMap;
+
+import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 
 public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
@@ -123,11 +126,12 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public Chance<Elements> chance(Dice dice) {
-        Chance chance = new Chance<Elements>(dice);
-        chance.put(Elements.PRIZE_IMMORTALITY, integerValue(IMMORTALITY));
-        chance.put(Elements.PRIZE_BREAKING_WALLS, integerValue(BREAKING_WALLS));
-        chance.put(Elements.PRIZE_WALKING_ON_WATER, integerValue(WALKING_ON_WATER));
-        chance.put(Elements.PRIZE_VISIBILITY, integerValue(VISIBILITY));
+        Chance chance = new Chance<Elements>(dice, this, new HashMap() {{
+            put(PRIZE_IMMORTALITY, IMMORTALITY);
+            put(PRIZE_BREAKING_WALLS, BREAKING_WALLS);
+            put(PRIZE_WALKING_ON_WATER, WALKING_ON_WATER);
+            put(PRIZE_VISIBILITY, VISIBILITY);
+        }});
         chance.run();
         return chance;
     }
