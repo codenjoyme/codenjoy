@@ -71,34 +71,34 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void up() {
-        if (alive) {
-            direction = Direction.UP;
-            moving = true;
-        }
+        if (!alive) return;
+
+        direction = Direction.UP;
+        moving = true;
     }
 
     @Override
     public void down() {
-        if (alive) {
-            direction = Direction.DOWN;
-            moving = true;
-        }
+        if (!alive) return;
+
+        direction = Direction.DOWN;
+        moving = true;
     }
 
     @Override
     public void right() {
-        if (alive) {
-            direction = Direction.RIGHT;
-            moving = true;
-        }
+        if (!alive) return;
+
+        direction = Direction.RIGHT;
+        moving = true;
     }
 
     @Override
     public void left() {
-        if (alive) {
-            direction = Direction.LEFT;
-            moving = true;
-        }
+        if (!alive) return;
+
+        direction = Direction.LEFT;
+        moving = true;
     }
 
     public Direction getDirection() {
@@ -133,9 +133,9 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void act(int... p) {
-        if (alive) {
-            fire = true;
-        }
+        if (!alive) return;
+
+        fire = true;
     }
 
     public Collection<Bullet> getBullets() {
