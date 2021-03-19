@@ -47,11 +47,6 @@ public class Sliding {
     }
 
     public Direction act(Tank tank, Direction current) {
-        if (!active(tank)) {
-            tick = 0;
-            return before = current;
-        }
-
         if (tick == slipperiness()) {
             tick = 0;
             before = current;
