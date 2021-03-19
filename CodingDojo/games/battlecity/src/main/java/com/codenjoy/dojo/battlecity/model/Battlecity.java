@@ -239,13 +239,13 @@ public class Battlecity implements Field {
         Player died = null;
         boolean aiDied = ais.contains(diedTank);
         if (!aiDied) {
-             died = getPlayer(diedTank);
+             died = player(diedTank);
         }
 
         Tank killerTank = killedBullet.getOwner();
         Player killer = null;
         if (!ais.contains(killerTank)) {
-            killer = getPlayer(killerTank);
+            killer = player(killerTank);
         }
 
         if (killer != null) {
@@ -262,14 +262,11 @@ public class Battlecity implements Field {
         }
     }
 
-    private Player getPlayer(Tank tank) {
-        for (Player player : players) {
-            if (player.getHero().equals(tank)) {
-                return player;
-            }
-        }
-
-        throw new RuntimeException("Танк игрока не найден!");
+    private Player player(Tank tank) {
+        return players.stream()
+                .filter(player -> player.getHero().equals(tank))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Танк игрока не найден!"));
     }
 
     @Override
