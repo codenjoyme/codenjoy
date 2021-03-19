@@ -37,9 +37,8 @@ public class Chance<T extends CharElements> {
     }
 
     private int countAuto() {
-        List<Parameter> params = new ArrayList<>(input.values());
-        return (int) params.stream()
-                .filter(param -> (int) param.getValue() == AUTO_VALUE)
+        return (int) input.values().stream()
+                .filter(param -> param.getValue() == AUTO_VALUE)
                 .count();
     }
 
@@ -83,12 +82,12 @@ public class Chance<T extends CharElements> {
         input.forEach(((el, param) -> addAxis(el, param, autoRange)));
     }
 
-    private void addAxis(T el, Parameter param, int autoRange) {
-        if ((int) param.getValue() > 0) {
-            axis.addAll(Collections.nCopies((int) param.getValue(), el));
+    private void addAxis(T el, Parameter<Integer> param, int autoRange) {
+        if (param.getValue() > 0) {
+            axis.addAll(Collections.nCopies(param.getValue(), el));
         }
 
-        if ((int) param.getValue() == AUTO_VALUE) {
+        if (param.getValue() == AUTO_VALUE) {
             axis.addAll(Collections.nCopies(autoRange, el));
         }
     }
