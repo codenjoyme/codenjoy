@@ -278,11 +278,7 @@ public class Battlecity implements Field {
             return true;
         }
 
-        if (isRiver(pt)) {
-            return !tank.prizes().contains(PRIZE_WALKING_ON_WATER);
-        }
-
-        return false;
+        return isRiver(pt) && !tank.prizes().contains(PRIZE_WALKING_ON_WATER);
     }
 
     public boolean isBarrier(Point pt) {
