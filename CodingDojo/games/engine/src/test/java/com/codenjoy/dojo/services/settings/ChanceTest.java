@@ -7,11 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.settings.ChanceTest.Elements.*;
 import static com.codenjoy.dojo.services.settings.ChanceTest.Keys.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 public class ChanceTest {
 
@@ -133,6 +134,31 @@ public class ChanceTest {
                 "SECOND: 10\n" +
                 "THIRD:  0\n" +
                 "FOURTH: 20\n");
+
+        assertThat(settings)
+                .integer(ONE, 50)
+                .integer(TWO, 10)
+                .integer(THREE, 0)
+                .integer(FOUR, -1)
+                .changed();
+
+    }
+
+    private SettingsReader<TestGameSettings> assertThat(TestGameSettings settings) {
+        TestGameSettings expected = spy(TestGameSettings.class);
+
+        when(expected.changed()).thenAnswer(inv -> {
+            assertEquals(toString(expected), toString(settings));
+            return true;
+        });
+
+        return expected;
+    }
+
+    private String toString(TestGameSettings settings) {
+        return settings.getParameters().stream()
+                .map(param -> String.format("%s: %s", param.getName(), param.getValue()))
+                .collect(Collectors.joining("\n"));
     }
 
     // порядок ввода не имеет значения
@@ -153,6 +179,13 @@ public class ChanceTest {
                 "SECOND: 20\n" +
                 "THIRD:  50\n" +
                 "FOURTH: 10\n");
+
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, 50)
+                .integer(FOUR, 10)
+                .changed();
     }
 
     @Test
@@ -172,6 +205,13 @@ public class ChanceTest {
                 "SECOND: 100\n" +
                 "THIRD:  0\n" +
                 "FOURTH: 0\n");
+
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, 100)
+                .integer(THREE, 0)
+                .integer(FOUR, 0)
+                .changed();
     }
 
     @Test
@@ -187,6 +227,13 @@ public class ChanceTest {
 
         // then
         assertEquals(0, chance.axis().size());
+
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, 0)
+                .integer(THREE, 0)
+                .integer(FOUR, 0)
+                .changed();
     }
 
     // параметр "-1" > 1
@@ -209,6 +256,13 @@ public class ChanceTest {
                 "SECOND: 25\n" +
                 "THIRD:  25\n" +
                 "FOURTH: 25\n");
+
+        assertThat(settings)
+                .integer(ONE, -1)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, -1)
+                .changed();
     }
 
     // параметр "0" -> не участвует
@@ -235,6 +289,13 @@ public class ChanceTest {
                 "SECOND: 33\n" +
                 "THIRD:  0\n" +
                 "FOURTH: 26\n");
+
+        assertThat(settings)
+                .integer(ONE, 40)  // changed
+                .integer(TWO, 33)  // changed
+                .integer(THREE, 0)
+                .integer(FOUR, 26) // changed
+                .changed();
     }
 
     // параметра "0" нету
@@ -262,6 +323,13 @@ public class ChanceTest {
                 "SECOND: 23\n" +
                 "THIRD:  15\n" +
                 "FOURTH: 18\n");
+
+        assertThat(settings)
+                .integer(ONE, 28)   // changed
+                .integer(TWO, 23)   // changed
+                .integer(THREE, -1)
+                .integer(FOUR, 18)  // changed
+                .changed();
     }
 
     @Test
@@ -290,9 +358,16 @@ public class ChanceTest {
                 "THIRD:  25\n" +
                 "FOURTH: 25\n");
 
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, 25)
+                .integer(THREE, 25)
+                .integer(FOUR, 25)
+                .changed();
+
         // when
-        settings.integer(TWO, 1);
-        settings.integer(THREE, 1);
+        settings.integer(TWO, 1)
+                .integer(THREE, 1);
 
         // then
         assertA("ALL:    27\n" +
@@ -300,6 +375,13 @@ public class ChanceTest {
                 "SECOND: 1\n" +
                 "THIRD:  1\n" +
                 "FOURTH: 25\n");
+
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, 1)
+                .integer(THREE, 1)
+                .integer(FOUR, 25)
+                .changed();
 
         // when
         settings.integer(FOUR, -1);
@@ -310,5 +392,38 @@ public class ChanceTest {
                 "SECOND: 1\n" +
                 "THIRD:  1\n" +
                 "FOURTH: 49\n");; // TODO вот тут немного не очевидно
+
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, 1)
+                .integer(THREE, 1)
+                .integer(FOUR, -1)
+                .changed();
+    }
+
+    @Test
+    public void shouldFixSettings() {
+        // given
+        settings.integer(ONE, 100)
+                .integer(TWO, 100)
+                .integer(THREE, 100)
+                .integer(FOUR, 100);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    100\n" +
+                "FIRST:  25\n" +
+                "SECOND: 25\n" +
+                "THIRD:  25\n" +
+                "FOURTH: 25\n");
+
+        assertThat(settings)
+                .integer(ONE, 25)   // changed
+                .integer(TWO, 25)   // changed
+                .integer(THREE, 25) // changed
+                .integer(FOUR, 25)  // changed
+                .changed();
     }
 }

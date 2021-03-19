@@ -20,15 +20,18 @@ public class Chance<T extends CharElements> {
         this.settings = settings;
         this.input = new LinkedHashMap<>();
         this.dice = dice;
-        axis = new LinkedList<>();
+        this.axis = new LinkedList<>();
         fill(params);
     }
 
     private void fill(Map<T, SettingsReader.Key> params) {
         params.entrySet().forEach(entry -> {
-            Parameter param = settings.integerValue(entry.getValue());
-            Chance.this.put(entry.getKey(), param);
-            param.onChange(value -> Chance.this.run());
+            SettingsReader.Key name = entry.getValue();
+            T el = entry.getKey();
+
+            Parameter param = settings.integerValue(name);
+            add(el, param);
+            param.onChange(value -> run());
         });
     }
 
@@ -49,7 +52,6 @@ public class Chance<T extends CharElements> {
 
     private void checkParameters() {
         int sum = sum();
-
         if (sum > MAX_PERCENT) {
             changeParameters(sum, disabled());
         }
@@ -105,18 +107,18 @@ public class Chance<T extends CharElements> {
     }
 
     public T any() {
-        if (!axis.isEmpty()) {
-            return axis.get(dice.next(axis.size()));
-        } else {
+        if (axis.isEmpty()) {
             return null;
         }
+
+        return axis.get(dice.next(axis.size()));
     }
 
     public List<T> axis() {
         return axis;
     }
 
-    private void put(T el, Parameter<Integer> param) {
+    private void add(T el, Parameter<Integer> param) {
         input.put(el, param);
     }
 
