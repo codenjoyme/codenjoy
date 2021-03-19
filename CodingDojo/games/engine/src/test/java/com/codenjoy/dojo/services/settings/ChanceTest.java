@@ -41,208 +41,6 @@ public class ChanceTest {
         chance.run();
     }
 
-    // параметр "0" -> не участвует
-    // 50 + 10 = 60, 60 < 100
-    // 50 -> 50
-    // 10 -> 10
-    // -1 (1 шт) -> (100 - (sum = 60)) / 2 = 20
-    // axis.size() = 80
-    @Test
-    public void shouldFillAxisWithoutWalkingOnWater() {
-        // given
-        settings.integer(ONE, 50)
-                .integer(TWO, 10)
-                .integer(THREE, 0)
-                .integer(FOUR, -1);
-
-        // when
-        buildChance();
-
-        // then
-        assertEquals(80, chance.axis().size());
-        assertEquals(50, axis(FIRST));
-        assertEquals(10, axis(SECOND));
-        assertEquals(0, axis(THIRD));
-        assertEquals(20, axis(FOURTH));
-    }
-
-    // порядок ввода не имеет значения
-    @Test
-    public void shouldFillAxisWithoutImmortality() {
-        // given
-        settings.integer(ONE, 0)
-                .integer(TWO, -1)
-                .integer(THREE, 50)
-                .integer(FOUR, 10);
-
-        // when
-        buildChance();
-
-        // then
-        assertEquals(80, chance.axis().size());
-        assertEquals(0, axis(FIRST));
-        assertEquals(20, axis(SECOND));
-        assertEquals(50, axis(THIRD));
-        assertEquals(10, axis(FOURTH));
-    }
-
-    @Test
-    public void shouldFillAxis_Two() {
-        // given
-        settings.integer(ONE, 0)
-                .integer(TWO, 100)
-                .integer(THREE, 0)
-                .integer(FOUR, 0);
-
-        // when
-        buildChance();
-
-        // then
-        assertEquals(100, chance.axis().size());
-        assertEquals(0, axis(FIRST));
-        assertEquals(100, axis(SECOND));
-        assertEquals(0, axis(THIRD));
-        assertEquals(0, axis(FOURTH));
-    }
-
-    @Test
-    public void shouldAxisIsEmpty() {
-        // given
-        settings.integer(ONE, 0)
-                .integer(TWO, 0)
-                .integer(THREE, 0)
-                .integer(FOUR, 0);
-
-        // when
-        buildChance();
-
-        // then
-        assertEquals(0, chance.axis().size());
-    }
-
-    // параметр "-1" > 1
-    // -1 (4 шт) -> (100 - (sum = 0)) / countOfMinus (4) = 25
-    // axis.size() = 100
-    @Test
-    public void shouldFillAxisIfAllParametersMinus() {
-        // given
-        settings.integer(ONE, -1)
-                .integer(TWO, -1)
-                .integer(THREE, -1)
-                .integer(FOUR, -1);
-
-        // when
-        buildChance();
-
-        // then
-        assertEquals(100, chance.axis().size());
-        assertEquals(25, axis(FIRST));
-        assertEquals(25, axis(SECOND));
-        assertEquals(25, axis(THIRD));
-        assertEquals(25, axis(FOURTH));
-    }
-
-    // параметр "0" -> не участвует
-    // параметра "-1" нету
-    // 60 + 50 + 40 = 150, 150 > 100
-    // 60 -> 60 * 100 / 150 = 40
-    // 50 -> 50 * 100 / 150 = 33
-    // 40 -> 40 * 100 / 150 = 26
-    // axis.size() = 99
-    @Test
-    public void shouldFillAxisChangeParametersWithoutMinus() {
-        // given
-        settings.integer(ONE, 60)
-                .integer(TWO, 50)
-                .integer(THREE, 0)
-                .integer(FOUR, 40);
-
-        // when
-        buildChance();
-
-        // then
-        assertEquals(99, chance.axis().size());
-        assertEquals(40, axis(FIRST));
-        assertEquals(33, axis(SECOND));
-        assertEquals(0, axis(THIRD));
-        assertEquals(26, axis(FOURTH));
-    }
-
-    // параметра "0" нету
-    // параметр "-1" (1 шт)
-    // 60 + 50 + 40 = 150, 150 > 100
-    // 60 -> 60 * (100 - 30) / 150 = 28
-    // 50 -> 50 * (100 - 30) / 150 = 23
-    // 40 -> 40 * (100 - 30) / 150 = 18
-    // -1 (1 шт) -> (100 - (sum = 69)) / 2 = 15
-    // axis.size() = 84
-    @Test
-    public void shouldFillAxisChangeParametersWithMinus() {
-        // given
-        settings.integer(ONE, 60)
-                .integer(TWO, 50)
-                .integer(THREE, -1)
-                .integer(FOUR, 40);
-
-        // when
-        buildChance();
-
-        // then
-        assertEquals(84, chance.axis().size());
-        assertEquals(28, axis(FIRST));
-        assertEquals(23, axis(SECOND));
-        assertEquals(15, axis(THIRD));
-        assertEquals(18, axis(FOURTH));
-    }
-
-    @Test
-    public void shouldChangeSettings_willChangeAxisImmediately() {
-        // given
-        settings.integer(ONE, 25)
-                .integer(TWO, 25)
-                .integer(THREE, 25)
-                .integer(FOUR, 25);
-
-        buildChance();
-
-        assertEquals(100, chance.axis().size());
-        assertEquals(25, axis(FIRST));
-        assertEquals(25, axis(SECOND));
-        assertEquals(25, axis(THIRD));
-        assertEquals(25, axis(FOURTH));
-
-        // when
-        settings.integer(ONE, 0);
-
-        // then
-        assertEquals(75, chance.axis().size());
-        assertEquals(0, axis(FIRST));
-        assertEquals(25, axis(SECOND));
-        assertEquals(25, axis(THIRD));
-        assertEquals(25, axis(FOURTH));
-
-        // when
-        settings.integer(TWO, 1);
-        settings.integer(THREE, 1);
-
-        // then
-        assertEquals(27, chance.axis().size());
-        assertEquals(0, axis(FIRST));
-        assertEquals(1, axis(SECOND));
-        assertEquals(1, axis(THIRD));
-        assertEquals(25, axis(FOURTH));
-
-        // when
-        settings.integer(FOUR, -1);
-
-        // then
-        assertEquals(51, chance.axis().size());
-        assertEquals(0, axis(FIRST));
-        assertEquals(1, axis(SECOND));
-        assertEquals(1, axis(THIRD));
-        assertEquals(49, axis(FOURTH)); // TODO вот тут немного не очевидно
-    }
-
     enum Elements implements CharElements {
 
         FIRST('1'),
@@ -295,5 +93,222 @@ public class ChanceTest {
         public String key() {
             return key;
         }
+    }
+
+    private void assertA(String expected) {
+        assertEquals(expected,
+                String.format(
+                        "ALL:    %s\n" +
+                        "FIRST:  %s\n" +
+                        "SECOND: %s\n" +
+                        "THIRD:  %s\n" +
+                        "FOURTH: %s\n",
+                        chance.axis().size(),
+                        axis(FIRST),
+                        axis(SECOND),
+                        axis(THIRD),
+                        axis(FOURTH)));
+    }
+
+    // параметр "0" -> не участвует
+    // 50 + 10 = 60, 60 < 100
+    // 50 -> 50
+    // 10 -> 10
+    // -1 (1 шт) -> (100 - (sum = 60)) / 2 = 20
+    // axis.size() = 80
+    @Test
+    public void shouldFillAxisWithoutWalkingOnWater() {
+        // given
+        settings.integer(ONE, 50)
+                .integer(TWO, 10)
+                .integer(THREE, 0)
+                .integer(FOUR, -1);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    80\n" +
+                "FIRST:  50\n" +
+                "SECOND: 10\n" +
+                "THIRD:  0\n" +
+                "FOURTH: 20\n");
+    }
+
+    // порядок ввода не имеет значения
+    @Test
+    public void shouldFillAxisWithoutImmortality() {
+        // given
+        settings.integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, 50)
+                .integer(FOUR, 10);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    80\n" +
+                "FIRST:  0\n" +
+                "SECOND: 20\n" +
+                "THIRD:  50\n" +
+                "FOURTH: 10\n");
+    }
+
+    @Test
+    public void shouldFillAxis_Two() {
+        // given
+        settings.integer(ONE, 0)
+                .integer(TWO, 100)
+                .integer(THREE, 0)
+                .integer(FOUR, 0);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    100\n" +
+                "FIRST:  0\n" +
+                "SECOND: 100\n" +
+                "THIRD:  0\n" +
+                "FOURTH: 0\n");
+    }
+
+    @Test
+    public void shouldAxisIsEmpty() {
+        // given
+        settings.integer(ONE, 0)
+                .integer(TWO, 0)
+                .integer(THREE, 0)
+                .integer(FOUR, 0);
+
+        // when
+        buildChance();
+
+        // then
+        assertEquals(0, chance.axis().size());
+    }
+
+    // параметр "-1" > 1
+    // -1 (4 шт) -> (100 - (sum = 0)) / countOfMinus (4) = 25
+    // axis.size() = 100
+    @Test
+    public void shouldFillAxisIfAllParametersMinus() {
+        // given
+        settings.integer(ONE, -1)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, -1);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    100\n" +
+                "FIRST:  25\n" +
+                "SECOND: 25\n" +
+                "THIRD:  25\n" +
+                "FOURTH: 25\n");
+    }
+
+    // параметр "0" -> не участвует
+    // параметра "-1" нету
+    // 60 + 50 + 40 = 150, 150 > 100
+    // 60 -> 60 * 100 / 150 = 40
+    // 50 -> 50 * 100 / 150 = 33
+    // 40 -> 40 * 100 / 150 = 26
+    // axis.size() = 99
+    @Test
+    public void shouldFillAxisChangeParametersWithoutMinus() {
+        // given
+        settings.integer(ONE, 60)
+                .integer(TWO, 50)
+                .integer(THREE, 0)
+                .integer(FOUR, 40);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    99\n" +
+                "FIRST:  40\n" +
+                "SECOND: 33\n" +
+                "THIRD:  0\n" +
+                "FOURTH: 26\n");
+    }
+
+    // параметра "0" нету
+    // параметр "-1" (1 шт)
+    // 60 + 50 + 40 = 150, 150 > 100
+    // 60 -> 60 * (100 - 30) / 150 = 28
+    // 50 -> 50 * (100 - 30) / 150 = 23
+    // 40 -> 40 * (100 - 30) / 150 = 18
+    // -1 (1 шт) -> (100 - (sum = 69)) / 2 = 15
+    // axis.size() = 84
+    @Test
+    public void shouldFillAxisChangeParametersWithMinus() {
+        // given
+        settings.integer(ONE, 60)
+                .integer(TWO, 50)
+                .integer(THREE, -1)
+                .integer(FOUR, 40);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    84\n" +
+                "FIRST:  28\n" +
+                "SECOND: 23\n" +
+                "THIRD:  15\n" +
+                "FOURTH: 18\n");
+    }
+
+    @Test
+    public void shouldChangeSettings_willChangeAxisImmediately() {
+        // given
+        settings.integer(ONE, 25)
+                .integer(TWO, 25)
+                .integer(THREE, 25)
+                .integer(FOUR, 25);
+
+        buildChance();
+
+        assertA("ALL:    100\n" +
+                "FIRST:  25\n" +
+                "SECOND: 25\n" +
+                "THIRD:  25\n" +
+                "FOURTH: 25\n");
+
+        // when
+        settings.integer(ONE, 0);
+
+        // then
+        assertA("ALL:    75\n" +
+                "FIRST:  0\n" +
+                "SECOND: 25\n" +
+                "THIRD:  25\n" +
+                "FOURTH: 25\n");
+
+        // when
+        settings.integer(TWO, 1);
+        settings.integer(THREE, 1);
+
+        // then
+        assertA("ALL:    27\n" +
+                "FIRST:  0\n" +
+                "SECOND: 1\n" +
+                "THIRD:  1\n" +
+                "FOURTH: 25\n");
+
+        // when
+        settings.integer(FOUR, -1);
+
+        // then
+        assertA("ALL:    51\n" +
+                "FIRST:  0\n" +
+                "SECOND: 1\n" +
+                "THIRD:  1\n" +
+                "FOURTH: 49\n");; // TODO вот тут немного не очевидно
     }
 }
