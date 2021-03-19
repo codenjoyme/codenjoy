@@ -46,8 +46,11 @@ public class Sliding {
         return settings.integer(SLIPPERINESS);
     }
 
-    public Direction act(Point position, Direction current) {
-        if (!field.isIce(position) || slipperiness() == 0) {
+    public Direction act(Tank tank, Direction current) {
+        if (!field.isIce(tank)
+                || slipperiness() == 0
+                || tank.prizes().contains(Elements.PRIZE_NO_SLIDING))
+        {
             tick = 0;
             return before = current;
         }
