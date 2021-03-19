@@ -36,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_BREAKING_WALLS;
+import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_WALKING_ON_WATER;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
@@ -263,5 +264,9 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (prizes.contains(PRIZE_BREAKING_WALLS)) {
             gun.machineGun();
         }
+    }
+
+    public boolean canWalkOnWater() {
+        return prizes().contains(PRIZE_WALKING_ON_WATER);
     }
 }
