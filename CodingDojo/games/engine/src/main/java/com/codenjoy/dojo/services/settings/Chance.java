@@ -118,9 +118,7 @@ public class Chance<T extends CharElements> {
             return null;
         }
 
-        int next = dice.next(axis.size());
-        System.out.println(">>>" + next);
-        return axis.get(next);
+        return axis.get(dice.next(axis.size()));
     }
 
     public List<T> axis() {
