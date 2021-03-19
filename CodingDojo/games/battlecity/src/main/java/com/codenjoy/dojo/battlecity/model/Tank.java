@@ -266,7 +266,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    public boolean cantWalkOnWater() {
-        return !prizes().contains(PRIZE_WALKING_ON_WATER);
+    public boolean canWalkOnWater() {
+        return prizes().contains(PRIZE_WALKING_ON_WATER);
     }
 }
