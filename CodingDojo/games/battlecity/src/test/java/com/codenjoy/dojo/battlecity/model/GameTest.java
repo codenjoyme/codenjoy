@@ -54,6 +54,12 @@ import static org.mockito.Mockito.when;
 
 public class GameTest {
 
+    private static final int CHANCE = 25;
+    private static final int DICE_IMMORTALITY = 0*CHANCE;
+    private static final int DICE_BREAKING_WALLS = 1*CHANCE;
+    private static final int DICE_WALKING_ON_WATER = 2*CHANCE;
+    private static final int DICE_VISIBILITY = 3*CHANCE;
+
     protected Dice dice;
     private Battlecity game;
     private List<Player> players = new LinkedList<>();
@@ -66,7 +72,6 @@ public class GameTest {
     private EventsListenersAssert events = new EventsListenersAssert(listeners);
 
     private Dice dice(int... values) {
-        Dice dice = mock(Dice.class);
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int value : values) {
             when = when.thenReturn(value);
@@ -85,10 +90,10 @@ public class GameTest {
                 .integer(PRIZE_ON_FIELD, 3)
                 .integer(PRIZE_WORKING, 10)
                 .integer(AI_PRIZE_LIMIT, 10)
-                .integer(IMMORTALITY, 25)
-                .integer(BREAKING_WALLS, 25)
-                .integer(WALKING_ON_WATER, 25)
-                .integer(VISIBILITY, 25);
+                .integer(CHANCE_IMMORTALITY, CHANCE)
+                .integer(CHANCE_BREAKING_WALLS, CHANCE)
+                .integer(CHANCE_WALKING_ON_WATER, CHANCE)
+                .integer(CHANCE_VISIBILITY, CHANCE);
 
         dice = mock(Dice.class);
     }
@@ -5636,7 +5641,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         hero(0).up();
         game.tick();
 
@@ -5696,7 +5701,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         hero(1).up();
         game.tick();
 
@@ -5760,7 +5765,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         ai(0).kill(mock(Bullet.class));
-        dice(0);
+        dice(DICE_IMMORTALITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5822,7 +5827,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         ai(0).kill(mock(Bullet.class));
-        dice(0);
+        dice(DICE_IMMORTALITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5885,7 +5890,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         ai(0).kill(mock(Bullet.class));
-        dice(28);
+        dice(DICE_IMMORTALITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5947,7 +5952,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         ai(0).kill(mock(Bullet.class));
-        dice(0);
+        dice(DICE_IMMORTALITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6009,7 +6014,7 @@ public class GameTest {
                 "☼    ▲☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6068,7 +6073,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         hero(0).up();
         game.tick();
 
@@ -6123,7 +6128,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         hero(0).up();
         hero(1).act();
         game.tick();
@@ -6226,7 +6231,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         hero(0).act();
         game.tick();
 
@@ -6286,7 +6291,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6446,7 +6451,7 @@ public class GameTest {
                 "☼ ▲╬  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(1, 0);
+        dice(DICE_BREAKING_WALLS);
         hero(0).up();
         game.tick();
 
@@ -6543,7 +6548,7 @@ public class GameTest {
                 "☼▲ ˄  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(1, 0);
+        dice(DICE_BREAKING_WALLS);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6614,7 +6619,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(1, 0);
+        dice(DICE_BREAKING_WALLS);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6705,7 +6710,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(1, 0);
+        dice(DICE_BREAKING_WALLS);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -6785,7 +6790,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         hero(1).up();
         game.tick();
 
@@ -6861,7 +6866,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         hero(1).up();
         game.tick();
 
@@ -6975,7 +6980,7 @@ public class GameTest {
                 "☼¿    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7064,7 +7069,7 @@ public class GameTest {
                 "☼¿    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7544,7 +7549,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(2, 0);
+        dice(DICE_WALKING_ON_WATER);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7624,7 +7629,7 @@ public class GameTest {
                 "☼▲ ˄  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(2, 0);
+        dice(DICE_WALKING_ON_WATER);
         hero(0).up();
         hero(1).up();
         game.tick();
@@ -7701,7 +7706,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(2, 0);
+        dice(DICE_WALKING_ON_WATER);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7796,7 +7801,7 @@ public class GameTest {
                 "☼  ▲  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(2, 0);
+        dice(DICE_WALKING_ON_WATER);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -7959,7 +7964,7 @@ public class GameTest {
                 "☼▲ ˄  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(1, 0);
+        dice(DICE_BREAKING_WALLS);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -8385,7 +8390,7 @@ public class GameTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        dice(0);
+        dice(DICE_IMMORTALITY);
 
         hero(0).act();
         game.tick();
@@ -8466,7 +8471,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(3, 0);
+        dice(DICE_VISIBILITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -8527,7 +8532,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(3, 0);
+        dice(DICE_VISIBILITY);
         hero(1).up();
         game.tick();
 
@@ -8602,7 +8607,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(3, 0);
+        dice(DICE_VISIBILITY);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -8699,7 +8704,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        dice(3, 0);
+        dice(DICE_VISIBILITY);
         hero(1).up();
         game.tick();
 

@@ -32,9 +32,11 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.settings.Chance.CHANCE_RESERVED;
 
 public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
@@ -52,10 +54,10 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         SLIPPERINESS("Value of tank sliding on ice"),
         AI_PRIZE_LIMIT("The total number of prize tanks and prizes on the board"),
         LEVEL_MAP("Level map"),
-        IMMORTALITY("probability of appearing on the field prize immortality"),
-        BREAKING_WALLS("probability of appearing on the field prize breaking walls"),
-        WALKING_ON_WATER("probability of appearing on the field prize walking on water"),
-        VISIBILITY("probability of appearing on the field prize visibility");
+        CHANCE_IMMORTALITY("[Chance] Prize immortality"),
+        CHANCE_BREAKING_WALLS("[Chance] Prize breaking walls"),
+        CHANCE_WALKING_ON_WATER("[Chance] Prize walking on water"),
+        CHANCE_VISIBILITY("[Chance] Prize visibility");
 
         private String key;
 
@@ -83,10 +85,11 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(SLIPPERINESS, 3);
         integer(AI_PRIZE_LIMIT, 3);
 
-        integer(IMMORTALITY, 50);
-        integer(BREAKING_WALLS, 10);
-        integer(WALKING_ON_WATER, 0);
-        integer(VISIBILITY, -1);
+        integer(CHANCE_RESERVED, 30);
+        integer(CHANCE_IMMORTALITY, 25);
+        integer(CHANCE_BREAKING_WALLS, 25);
+        integer(CHANCE_WALKING_ON_WATER, 25);
+        integer(CHANCE_VISIBILITY, 25);
 
         multiline(LEVEL_MAP,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -126,14 +129,12 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public Chance<Elements> chance(Dice dice) {
-        Chance chance = new Chance<Elements>(dice, this, new HashMap() {{
-            put(PRIZE_IMMORTALITY, IMMORTALITY);
-            put(PRIZE_BREAKING_WALLS, BREAKING_WALLS);
-            put(PRIZE_WALKING_ON_WATER, WALKING_ON_WATER);
-            put(PRIZE_VISIBILITY, VISIBILITY);
-        }});
-        chance.run();
-        return chance;
+        return new Chance<Elements>(dice, this)
+            .put(CHANCE_IMMORTALITY, PRIZE_IMMORTALITY)
+            .put(CHANCE_BREAKING_WALLS, PRIZE_BREAKING_WALLS)
+            .put(CHANCE_WALKING_ON_WATER, PRIZE_WALKING_ON_WATER)
+            .put(CHANCE_VISIBILITY, PRIZE_VISIBILITY)
+            .run();
     }
 
     public Level level(Dice dice) {

@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-import static com.codenjoy.dojo.services.settings.Chance.RESERVED;
+import static com.codenjoy.dojo.services.settings.Chance.CHANCE_RESERVED;
 import static com.codenjoy.dojo.services.settings.ChanceTest.Elements.*;
 import static com.codenjoy.dojo.services.settings.ChanceTest.Keys.*;
 import static org.junit.Assert.assertEquals;
@@ -34,13 +34,12 @@ public class ChanceTest {
     }
 
     private void buildChance() {
-        chance = new Chance(dice, settings, new HashMap(){{
-            put(FIRST, ONE);
-            put(SECOND, TWO);
-            put(THIRD, THREE);
-            put(FOURTH, FOUR);
-        }});
-        chance.run();
+        chance = new Chance(dice, settings)
+            .put(ONE, FIRST)
+            .put(TWO, SECOND)
+            .put(THREE, THIRD)
+            .put(FOUR, FOURTH)
+            .run();
     }
 
     enum Elements implements CharElements {
@@ -115,7 +114,7 @@ public class ChanceTest {
     @Test
     public void shouldFillAxis_withoutOne_withDefault_case1() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 50)
                 .integer(TWO, 10)
                 .integer(THREE, 0)
@@ -132,7 +131,7 @@ public class ChanceTest {
                 "FOURTH: 30\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 50)
                 .integer(TWO, 10)
                 .integer(THREE, 0)
@@ -162,7 +161,7 @@ public class ChanceTest {
     public void shouldFillAxis_withoutOne_withDefault_case2() {
         // given
         // порядок ввода не имеет значения
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, 50)
@@ -179,7 +178,7 @@ public class ChanceTest {
                 "FOURTH: 10\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, 50)
@@ -190,7 +189,7 @@ public class ChanceTest {
     @Test
     public void shouldFillAxis_onlyOneIsSet_withoutDefault() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, 100)
                 .integer(THREE, 0)
@@ -207,7 +206,7 @@ public class ChanceTest {
                 "FOURTH: 0\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, 100)
                 .integer(THREE, 0)
@@ -218,7 +217,7 @@ public class ChanceTest {
     @Test
     public void shouldFillAxis_noOneAreSet_withoutDefault() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, 0)
                 .integer(THREE, 0)
@@ -235,7 +234,7 @@ public class ChanceTest {
                 "FOURTH: 0\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, 0)
                 .integer(THREE, 0)
@@ -246,7 +245,7 @@ public class ChanceTest {
     @Test
     public void shouldFillAxis_withAllDefaults() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, -1)
                 .integer(TWO, -1)
                 .integer(THREE, -1)
@@ -263,7 +262,7 @@ public class ChanceTest {
                 "FOURTH: 7\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, -1)
                 .integer(TWO, -1)
                 .integer(THREE, -1)
@@ -274,7 +273,7 @@ public class ChanceTest {
     @Test
     public void shouldFillAxis_onlyOneDefaults() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, 0)
@@ -291,7 +290,7 @@ public class ChanceTest {
                 "FOURTH: 0\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, 0)
@@ -302,7 +301,7 @@ public class ChanceTest {
     @Test
     public void shouldFillAxis_onlyTwoDefaults() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, -1)
@@ -319,7 +318,7 @@ public class ChanceTest {
                 "FOURTH: 0\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, -1)
@@ -330,7 +329,7 @@ public class ChanceTest {
     @Test
     public void shouldFillAxis_onlyThreeDefaults() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, -1)
                 .integer(TWO, -1)
                 .integer(THREE, -1)
@@ -347,7 +346,7 @@ public class ChanceTest {
                 "FOURTH: 0\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, -1)
                 .integer(TWO, -1)
                 .integer(THREE, -1)
@@ -358,7 +357,7 @@ public class ChanceTest {
     @Test
     public void shouldFillAxis_withoutOne_withoutDefault() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 60)
                 .integer(TWO, 50)
                 .integer(THREE, 0)
@@ -375,7 +374,7 @@ public class ChanceTest {
                 "FOURTH: 26\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 40)  // changed
                 .integer(TWO, 33)  // changed
                 .integer(THREE, 0)
@@ -386,7 +385,7 @@ public class ChanceTest {
     @Test
     public void shouldFillAxis_allAreSet_withDefault() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 60)
                 .integer(TWO, 50)
                 .integer(THREE, -1)
@@ -403,7 +402,7 @@ public class ChanceTest {
                 "FOURTH: 18\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 28)   // changed
                 .integer(TWO, 23)   // changed
                 .integer(THREE, -1)
@@ -414,7 +413,7 @@ public class ChanceTest {
     @Test
     public void shouldChangeAxisImmediately_whenChangeAnySetting() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 25)
                 .integer(TWO, 25)
                 .integer(THREE, 25)
@@ -439,7 +438,7 @@ public class ChanceTest {
                 "FOURTH: 25\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, 25)
                 .integer(THREE, 25)
@@ -458,7 +457,7 @@ public class ChanceTest {
                 "FOURTH: 25\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, 1)
                 .integer(THREE, 1)
@@ -476,7 +475,7 @@ public class ChanceTest {
                 "FOURTH: 30\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, 1)
                 .integer(THREE, 1)
@@ -487,7 +486,7 @@ public class ChanceTest {
     @Test
     public void shouldFixSettings_ifSumIsMoreThan100() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 100)
                 .integer(TWO, 100)
                 .integer(THREE, 100)
@@ -504,7 +503,7 @@ public class ChanceTest {
                 "FOURTH: 25\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 25)   // changed
                 .integer(TWO, 25)   // changed
                 .integer(THREE, 25) // changed
@@ -515,7 +514,7 @@ public class ChanceTest {
     @Test
     public void shouldChangeAxisImmediately_whenChangedReserved() {
         // given
-        settings.integer(RESERVED, 30)
+        settings.integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, -1)
@@ -532,7 +531,7 @@ public class ChanceTest {
                 "FOURTH: 0\n");
 
         assertThat(settings)
-                .integer(RESERVED, 30)
+                .integer(CHANCE_RESERVED, 30)
                 .integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, -1)
@@ -540,7 +539,7 @@ public class ChanceTest {
                 .changed();
 
         // when
-        settings.integer(RESERVED, 50);
+        settings.integer(CHANCE_RESERVED, 50);
 
         // then
         assertA("ALL:    50\n" +
@@ -550,7 +549,7 @@ public class ChanceTest {
                 "FOURTH: 0\n");
 
         assertThat(settings)
-                .integer(RESERVED, 50)   // changed
+                .integer(CHANCE_RESERVED, 50)   // changed
                 .integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, -1)
@@ -581,11 +580,11 @@ public class ChanceTest {
                 .integer(TWO, -1)
                 .integer(THREE, -1)
                 .integer(FOUR, 0)
-                .integer(RESERVED, 30)  // added to end
+                .integer(CHANCE_RESERVED, 30)  // added to end
                 .changed();
 
         // when
-        settings.integer(RESERVED, 50);
+        settings.integer(CHANCE_RESERVED, 50);
 
         // then
         assertA("ALL:    50\n" +
@@ -599,7 +598,7 @@ public class ChanceTest {
                 .integer(TWO, -1)
                 .integer(THREE, -1)
                 .integer(FOUR, 0)
-                .integer(RESERVED, 50)  // changed
+                .integer(CHANCE_RESERVED, 50)  // changed
                 .changed();
     }
 }
