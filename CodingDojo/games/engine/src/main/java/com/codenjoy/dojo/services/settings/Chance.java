@@ -58,29 +58,18 @@ public class Chance<T extends CharElements> {
     }
 
     private void changeParams(int sum, int auto) {
-        if (auto == 0) {
-            input.forEach((el, param) -> {
-                int value = param.getValue();
-                if (value <= 0) return;
+        int reserved = (auto == 0) ? 0 : RESERVE_FOR_MINUS;
 
-                value = value * (MAX_PERCENT) / sum;
-                if (value <= 0) return;
+        input.forEach((el, param) -> {
+            int value = param.getValue();
+            if (value <= 0) return;
 
-                update(param, value);
-            });
-        }
+            value = value * (MAX_PERCENT - reserved) / sum;
+            if (value <= 0) return;
 
-        if (auto > 0) {
-            input.forEach((el, param) -> {
-                int value = param.getValue();
-                if (value <= 0) return;
+            update(param, value);
+        });
 
-                value = value * (MAX_PERCENT - RESERVE_FOR_MINUS) / sum;
-                if (value <= 0) return;
-
-                update(param, value);
-            });
-        }
         checkParams();
     }
 
