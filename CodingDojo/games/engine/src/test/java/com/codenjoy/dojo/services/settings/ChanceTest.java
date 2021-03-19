@@ -473,7 +473,7 @@ public class ChanceTest {
                 "FIRST:  0\n" +
                 "SECOND: 1\n" +
                 "THIRD:  1\n" +
-                "FOURTH: 30\n");; // TODO вот тут немного не очевидно
+                "FOURTH: 30\n");
 
         assertThat(settings)
                 .integer(RESERVED, 30)
@@ -509,6 +509,97 @@ public class ChanceTest {
                 .integer(TWO, 25)   // changed
                 .integer(THREE, 25) // changed
                 .integer(FOUR, 25)  // changed
+                .changed();
+    }
+
+    @Test
+    public void shouldChangeAxisImmediately_whenChangedReserved() {
+        // given
+        settings.integer(RESERVED, 30)
+                .integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    30\n" +
+                "FIRST:  0\n" +
+                "SECOND: 15\n" +
+                "THIRD:  15\n" +
+                "FOURTH: 0\n");
+
+        assertThat(settings)
+                .integer(RESERVED, 30)
+                .integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0)
+                .changed();
+
+        // when
+        settings.integer(RESERVED, 50);
+
+        // then
+        assertA("ALL:    50\n" +
+                "FIRST:  0\n" +
+                "SECOND: 25\n" +
+                "THIRD:  25\n" +
+                "FOURTH: 0\n");
+
+        assertThat(settings)
+                .integer(RESERVED, 50)   // changed
+                .integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0)
+                .changed();
+    }
+
+    @Test
+    public void shouldSetDefaultReserved_whenNotSet() {
+        // given
+        settings.integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    30\n" +
+                "FIRST:  0\n" +
+                "SECOND: 15\n" +
+                "THIRD:  15\n" +
+                "FOURTH: 0\n");
+
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0)
+                .integer(RESERVED, 30)  // added to end
+                .changed();
+
+        // when
+        settings.integer(RESERVED, 50);
+
+        // then
+        assertA("ALL:    50\n" +
+                "FIRST:  0\n" +
+                "SECOND: 25\n" +
+                "THIRD:  25\n" +
+                "FOURTH: 0\n");
+
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0)
+                .integer(RESERVED, 50)  // changed
                 .changed();
     }
 }

@@ -36,6 +36,8 @@ public class Chance<T extends CharElements> {
             // если его не установили, сделаем это сами
             settings.integer(RESERVED, 30);
         }
+
+        settings.integerValue(RESERVED).onChange(value -> run());
     }
 
     private void fill(Map<T, SettingsReader.Key> params) {
