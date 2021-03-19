@@ -8,7 +8,7 @@ import java.util.*;
 public class Chance<T extends CharElements> {
 
     public static final int MAX_PERCENT = 100;
-    public static final int RESERVE_FOR_MINUS = 30;
+    public static final int RESERVE_FOR_AUTO = 30;
 
     private Dice dice;
     private SettingsReader settings;
@@ -58,7 +58,7 @@ public class Chance<T extends CharElements> {
     }
 
     private void changeParams(int sum, int auto) {
-        int reserved = (auto == 0) ? 0 : RESERVE_FOR_MINUS;
+        int reserved = (auto == 0) ? 0 : RESERVE_FOR_AUTO;
 
         input.forEach((el, param) -> {
             int value = param.getValue();
