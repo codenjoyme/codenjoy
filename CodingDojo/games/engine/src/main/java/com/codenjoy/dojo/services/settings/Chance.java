@@ -9,6 +9,7 @@ public class Chance<T extends CharElements> {
 
     public static final int MAX_PERCENT = 100;
     public static final int RESERVE_FOR_AUTO = 30;
+    public static final int AUTO_VALUE = -1;
 
     private Dice dice;
     private SettingsReader settings;
@@ -38,7 +39,7 @@ public class Chance<T extends CharElements> {
     private int countAuto() {
         List<Parameter> params = new ArrayList<>(input.values());
         return (int) params.stream()
-                .filter(param -> (int) param.getValue() == -1)
+                .filter(param -> (int) param.getValue() == AUTO_VALUE)
                 .count();
     }
 
@@ -78,21 +79,21 @@ public class Chance<T extends CharElements> {
         ((Updatable)param).justSet(value);
     }
 
-    private void fillAxis(int toAxisMinus) {
-        input.forEach(((el, param) -> addAxis(el, param, toAxisMinus)));
+    private void fillAxis(int autoRange) {
+        input.forEach(((el, param) -> addAxis(el, param, autoRange)));
     }
 
-    private void addAxis(T el, Parameter param, int toAxisMinus) {
+    private void addAxis(T el, Parameter param, int autoRange) {
         if ((int) param.getValue() > 0) {
             axis.addAll(Collections.nCopies((int) param.getValue(), el));
         }
 
-        if ((int) param.getValue() == -1) {
-            axis.addAll(Collections.nCopies(toAxisMinus, el));
+        if ((int) param.getValue() == AUTO_VALUE) {
+            axis.addAll(Collections.nCopies(autoRange, el));
         }
     }
 
-    private int minusToAxis() {
+    private int autoRange() {
         int auto = countAuto();
         int range = MAX_PERCENT - sum();
         return (auto > 1)
@@ -119,6 +120,6 @@ public class Chance<T extends CharElements> {
     public void run() {
         axis.clear();
         checkParams();
-        fillAxis(minusToAxis());
+        fillAxis(autoRange());
     }
 }
