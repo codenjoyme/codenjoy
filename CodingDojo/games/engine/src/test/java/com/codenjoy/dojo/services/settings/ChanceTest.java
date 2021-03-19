@@ -111,14 +111,8 @@ public class ChanceTest {
                         axis(FOURTH)));
     }
 
-    // параметр "0" -> не участвует
-    // 50 + 10 = 60, 60 < 100
-    // 50 -> 50
-    // 10 -> 10
-    // -1 (1 шт) -> (100 - (sum = 60)) / 2 = 20
-    // axis.size() = 80
     @Test
-    public void shouldFillAxisWithoutWalkingOnWater() {
+    public void shouldFillAxis_withoutOne_withDefault_case1() {
         // given
         settings.integer(ONE, 50)
                 .integer(TWO, 10)
@@ -129,11 +123,11 @@ public class ChanceTest {
         buildChance();
 
         // then
-        assertA("ALL:    80\n" +
+        assertA("ALL:    90\n" +
                 "FIRST:  50\n" +
                 "SECOND: 10\n" +
                 "THIRD:  0\n" +
-                "FOURTH: 20\n");
+                "FOURTH: 30\n");
 
         assertThat(settings)
                 .integer(ONE, 50)
@@ -161,10 +155,10 @@ public class ChanceTest {
                 .collect(Collectors.joining("\n"));
     }
 
-    // порядок ввода не имеет значения
     @Test
-    public void shouldFillAxisWithoutImmortality() {
+    public void shouldFillAxis_withoutOne_withDefault_case2() {
         // given
+        // порядок ввода не имеет значения
         settings.integer(ONE, 0)
                 .integer(TWO, -1)
                 .integer(THREE, 50)
@@ -174,9 +168,9 @@ public class ChanceTest {
         buildChance();
 
         // then
-        assertA("ALL:    80\n" +
+        assertA("ALL:    90\n" +
                 "FIRST:  0\n" +
-                "SECOND: 20\n" +
+                "SECOND: 30\n" +
                 "THIRD:  50\n" +
                 "FOURTH: 10\n");
 
@@ -189,7 +183,7 @@ public class ChanceTest {
     }
 
     @Test
-    public void shouldFillAxis_Two() {
+    public void shouldFillAxis_onlyOneIsSet_withoutDefault() {
         // given
         settings.integer(ONE, 0)
                 .integer(TWO, 100)
@@ -215,7 +209,7 @@ public class ChanceTest {
     }
 
     @Test
-    public void shouldAxisIsEmpty() {
+    public void shouldFillAxis_noOneAreSet_withoutDefault() {
         // given
         settings.integer(ONE, 0)
                 .integer(TWO, 0)
@@ -226,7 +220,11 @@ public class ChanceTest {
         buildChance();
 
         // then
-        assertEquals(0, chance.axis().size());
+        assertA("ALL:    0\n" +
+                "FIRST:  0\n" +
+                "SECOND: 0\n" +
+                "THIRD:  0\n" +
+                "FOURTH: 0\n");
 
         assertThat(settings)
                 .integer(ONE, 0)
@@ -236,11 +234,8 @@ public class ChanceTest {
                 .changed();
     }
 
-    // параметр "-1" > 1
-    // -1 (4 шт) -> (100 - (sum = 0)) / countOfMinus (4) = 25
-    // axis.size() = 100
     @Test
-    public void shouldFillAxisIfAllParametersMinus() {
+    public void shouldFillAxis_withAllDefaults() {
         // given
         settings.integer(ONE, -1)
                 .integer(TWO, -1)
@@ -251,11 +246,11 @@ public class ChanceTest {
         buildChance();
 
         // then
-        assertA("ALL:    100\n" +
-                "FIRST:  25\n" +
-                "SECOND: 25\n" +
-                "THIRD:  25\n" +
-                "FOURTH: 25\n");
+        assertA("ALL:    28\n" +
+                "FIRST:  7\n" +
+                "SECOND: 7\n" +
+                "THIRD:  7\n" +
+                "FOURTH: 7\n");
 
         assertThat(settings)
                 .integer(ONE, -1)
@@ -265,15 +260,86 @@ public class ChanceTest {
                 .changed();
     }
 
-    // параметр "0" -> не участвует
-    // параметра "-1" нету
-    // 60 + 50 + 40 = 150, 150 > 100
-    // 60 -> 60 * 100 / 150 = 40
-    // 50 -> 50 * 100 / 150 = 33
-    // 40 -> 40 * 100 / 150 = 26
-    // axis.size() = 99
     @Test
-    public void shouldFillAxisChangeParametersWithoutMinus() {
+    public void shouldFillAxis_onlyOneDefaults() {
+        // given
+        settings.integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, 0)
+                .integer(FOUR, 0);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    30\n" +
+                "FIRST:  0\n" +
+                "SECOND: 30\n" +
+                "THIRD:  0\n" +
+                "FOURTH: 0\n");
+
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, 0)
+                .integer(FOUR, 0)
+                .changed();
+    }
+
+    @Test
+    public void shouldFillAxis_onlyTwoDefaults() {
+        // given
+        settings.integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    30\n" +
+                "FIRST:  0\n" +
+                "SECOND: 15\n" +
+                "THIRD:  15\n" +
+                "FOURTH: 0\n");
+
+        assertThat(settings)
+                .integer(ONE, 0)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0)
+                .changed();
+    }
+
+    @Test
+    public void shouldFillAxis_onlyThreeDefaults() {
+        // given
+        settings.integer(ONE, -1)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0);
+
+        // when
+        buildChance();
+
+        // then
+        assertA("ALL:    30\n" +
+                "FIRST:  10\n" +
+                "SECOND: 10\n" +
+                "THIRD:  10\n" +
+                "FOURTH: 0\n");
+
+        assertThat(settings)
+                .integer(ONE, -1)
+                .integer(TWO, -1)
+                .integer(THREE, -1)
+                .integer(FOUR, 0)
+                .changed();
+    }
+
+    @Test
+    public void shouldFillAxis_withoutOne_withoutDefault() {
         // given
         settings.integer(ONE, 60)
                 .integer(TWO, 50)
@@ -298,16 +364,8 @@ public class ChanceTest {
                 .changed();
     }
 
-    // параметра "0" нету
-    // параметр "-1" (1 шт)
-    // 60 + 50 + 40 = 150, 150 > 100
-    // 60 -> 60 * (100 - 30) / 150 = 28
-    // 50 -> 50 * (100 - 30) / 150 = 23
-    // 40 -> 40 * (100 - 30) / 150 = 18
-    // -1 (1 шт) -> (100 - (sum = 69)) / 2 = 15
-    // axis.size() = 84
     @Test
-    public void shouldFillAxisChangeParametersWithMinus() {
+    public void shouldFillAxis_allAreSet_withDefault() {
         // given
         settings.integer(ONE, 60)
                 .integer(TWO, 50)
@@ -318,10 +376,10 @@ public class ChanceTest {
         buildChance();
 
         // then
-        assertA("ALL:    84\n" +
+        assertA("ALL:    99\n" +
                 "FIRST:  28\n" +
                 "SECOND: 23\n" +
-                "THIRD:  15\n" +
+                "THIRD:  30\n" +
                 "FOURTH: 18\n");
 
         assertThat(settings)
@@ -333,7 +391,7 @@ public class ChanceTest {
     }
 
     @Test
-    public void shouldChangeSettings_willChangeAxisImmediately() {
+    public void shouldChangeAxisImmediately_whenChangeAnySetting() {
         // given
         settings.integer(ONE, 25)
                 .integer(TWO, 25)
@@ -387,11 +445,11 @@ public class ChanceTest {
         settings.integer(FOUR, -1);
 
         // then
-        assertA("ALL:    51\n" +
+        assertA("ALL:    32\n" +
                 "FIRST:  0\n" +
                 "SECOND: 1\n" +
                 "THIRD:  1\n" +
-                "FOURTH: 49\n");; // TODO вот тут немного не очевидно
+                "FOURTH: 30\n");; // TODO вот тут немного не очевидно
 
         assertThat(settings)
                 .integer(ONE, 0)
@@ -402,7 +460,7 @@ public class ChanceTest {
     }
 
     @Test
-    public void shouldFixSettings() {
+    public void shouldFixSettings_ifSumIsMoreThan100() {
         // given
         settings.integer(ONE, 100)
                 .integer(TWO, 100)

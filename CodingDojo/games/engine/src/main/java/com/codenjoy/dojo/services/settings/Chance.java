@@ -80,7 +80,7 @@ public class Chance<T extends CharElements> {
     }
 
     private void fillAxis(int autoRange) {
-        input.forEach(((el, param) -> addAxis(el, param, autoRange)));
+        input.forEach((el, param) -> addAxis(el, param, autoRange));
     }
 
     private void addAxis(T el, Parameter<Integer> param, int autoRange) {
@@ -95,10 +95,11 @@ public class Chance<T extends CharElements> {
 
     private int autoRange() {
         int auto = countAuto();
-        int range = MAX_PERCENT - sum();
-        return (auto > 1)
-                ? range / auto
-                : range / 2;
+        if (auto == 0) {
+            return 0;
+        }
+
+        return RESERVE_FOR_AUTO / auto;
     }
 
     public T any() {
