@@ -14,6 +14,10 @@ cd .\games\vacuum
 git push https://github.com/codenjoyme/codenjoy-vacuum.git master
 cd .\..\..
 
+cd .\games\xonix
+git push https://github.com/codenjoyme/codenjoy-xonix.git master
+cd .\..\..
+
 cd .\client-runner
 git push https://github.com/codenjoyme/codenjoy-client-runner.git master
 cd .\..

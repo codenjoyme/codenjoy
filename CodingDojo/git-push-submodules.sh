@@ -26,6 +26,10 @@ cd ./games/vacuum
 git push https://codenjoyme:$password@github.com/codenjoyme/codenjoy-vacuum.git master
 cd ./../..
 
+cd ./games/xonix
+git push https://codenjoyme:$password@github.com/codenjoyme/codenjoy-xonix.git master
+cd ./../..
+
 cd ./client-runner
 git push https://github.com:$password/codenjoyme/codenjoy-client-runner.git master
 cd ./..
