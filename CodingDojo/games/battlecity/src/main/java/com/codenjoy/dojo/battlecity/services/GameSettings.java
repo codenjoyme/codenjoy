@@ -53,7 +53,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         TANK_TICKS_PER_SHOOT("Ticks until the next Tank shoot"),
         SLIPPERINESS("Value of tank sliding on ice"),
         AI_PRIZE_LIMIT("The total number of prize tanks and prizes on the board"),
-        PENALTY_WORKING("Penalty working time after the end of the prize"),
+        PENALTY_WALKING_ON_WATER("Penalty time when walking on water"),
         LEVEL_MAP("Level map"),
         CHANCE_IMMORTALITY("[Chance] Prize immortality"),
         CHANCE_BREAKING_WALLS("[Chance] Prize breaking walls"),
@@ -86,6 +86,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(TANK_TICKS_PER_SHOOT, 4);
         integer(SLIPPERINESS, 3);
         integer(AI_PRIZE_LIMIT, 3);
+        integer(PENALTY_WALKING_ON_WATER, 2);
 
         integer(CHANCE_RESERVED, 30);
         integer(CHANCE_IMMORTALITY, 20);

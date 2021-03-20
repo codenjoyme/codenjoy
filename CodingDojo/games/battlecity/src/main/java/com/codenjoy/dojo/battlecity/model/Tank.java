@@ -30,6 +30,7 @@ import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.Timer;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_BREAKING_WALLS;
 import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_WALKING_ON_WATER;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PENALTY_WALKING_ON_WATER;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
@@ -56,6 +58,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     private List<Bullet> bullets;
     private Prizes prizes;
+
+    private Timer onWater;
 
     public Tank(Point pt, Direction direction, Dice dice) {
         super(pt);
@@ -180,6 +184,20 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
         gun.tick();
         prizes.tick();
+
+        checkOnWater();
+    }
+
+    public void checkOnWater() {
+        if (field.isRiver(this) && !prizes.contains(PRIZE_WALKING_ON_WATER)) {
+            if (onWater == null || onWater.done()) {
+                onWater = new Timer(settings().integerValue(PENALTY_WALKING_ON_WATER));
+                onWater.start();
+            }
+            onWater.tick(() -> {});
+        } else {
+            onWater = null;
+        }
     }
 
     @Override
@@ -267,6 +285,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public boolean canWalkOnWater() {
-        return prizes().contains(PRIZE_WALKING_ON_WATER);
+        return prizes.contains(PRIZE_WALKING_ON_WATER)
+                || (onWater != null && onWater.done());
     }
 }
