@@ -23,69 +23,129 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
+import lombok.Data;
+import lombok.SneakyThrows;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SqliteConnectionThreadPoolTest {
 
-    private SqliteConnectionThreadPool pool;
+    private CrudPrimaryKeyConnectionThreadPool pool;
 
-    @Test
-    public void testMultiThreading() throws InterruptedException {
-        try {
+    private Map<Integer, Object[]> inserted = new HashMap<>();
+
+    private static boolean sqlite = true; // false for testing in postgres
+    private static final String POSTGRES_URL = "localhost:5432/codenjoy?user=codenjoy&password=localpwd";
+
+    @Before
+    public void setup() {
+        String createQuery = "CREATE TABLE IF NOT EXISTS data (" +
+                "id integer_primary_key, " +
+                "username varchar(255), " +
+                "password varchar(255));";
+
+        if (sqlite) {
             String file = "target/pool.db" + new Random().nextInt();
-            pool = new SqliteConnectionThreadPool(file,
-                    "CREATE TABLE IF NOT EXISTS users (" +
-                            "user varchar(255), " +
-                            "password varchar(255));");
+            pool = new SqliteConnectionThreadPool(file, createQuery);
+        } else {
+            pool = new PostgreSQLConnectionThreadPool(
+                    POSTGRES_URL, createQuery);
+        }
 
-            doit(10, new Runnable() {
-                @Override
-                public void run() {
-                    createDummyRecord();
-                }
-            });
+        pool.clearLastInsertedId("data", "id");
+        pool.update("DELETE FROM data");
+    }
 
-            doit(10, new Runnable() {
-                @Override
-                public void run() {
-                    createDummyRecord();
-                }
-            });
+    @SneakyThrows
+    @Test
+    public void testMultiThreading_insertWithSelect() {
+        // when
+        int count = 20;
+        doit(count, () -> createDummyRecord_withGetInsertedId());
+        doit(count, () -> createDummyRecord());
+        doit(count, () -> createDummyRecord_withGetInsertedId());
+        doit(count, () -> readRecords());
 
-            doit(10, new Runnable() {
-                @Override
-                public void run() {
-                    readRecords();
-                }
-            });
+        Thread.sleep(5000);
 
-            Thread.sleep(5000);
-        } finally {
-//            pool.removeDatabase();
+        // then
+        List<User> list = getAllUsers();
+
+        assertAllRecordsWithDifferentIds(count * 3, list);
+        assertAllGeneratedIdsCorrespondsToDataInserted(count * 2, list);
+    }
+
+    public List<User> getAllUsers() {
+        return pool.select("SELECT * FROM data " +
+                        " ORDER BY id ASC;",
+                new Object[]{},
+                rs -> getUsers(rs));
+    }
+
+    private void assertAllGeneratedIdsCorrespondsToDataInserted(int count, List<User> list) {
+        assertEquals(count, inserted.size());
+
+        list.forEach(user -> {
+            if (!inserted.containsKey(user.getId())) {
+                return;
+            }
+
+            Object[] data = inserted.get(user.getId());
+            assertEquals(user.getUsername(), data[0]);
+            assertEquals(user.getPassword(), data[1]);
+        });
+    }
+
+    private void assertAllRecordsWithDifferentIds(int count, List<User> list) {
+        assertEquals(count, list.size());
+
+        assertEquals(IntStream.range(1, count + 1)
+                        .mapToObj(i -> i)
+                        .collect(toList())
+                        .toString(),
+
+                list.stream()
+                        .map(User::getId)
+                        .collect(toList())
+                        .toString());
+    }
+
+    @SneakyThrows
+    private List<User> getUsers(ResultSet rs) {
+        return new LinkedList<>() {{
+            while (rs.next()) {
+                add(new User(rs));
+            }
+        }};
+    }
+
+    @Data
+    public static class User {
+        private int id;
+        private String username;
+        private String password;
+
+        private User(ResultSet rs) throws SQLException {
+            id = rs.getInt("id");
+            username = rs.getString("username");
+            password = rs.getString("password");
         }
     }
 
     private void readRecords() {
-        Integer result = pool.select("SELECT count(*) AS total FROM users;",
-                new ObjectMapper<Integer>() {
-                    @Override
-                    public Integer mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return resultSet.getInt("total");
-                        } else {
-                            return 0;
-                        }
-                    }
-                });
-
+        Integer result = pool.select("SELECT count(*) AS total FROM data;",
+                rs -> rs.next() ? rs.getInt("total") : 0);
+        assertTrue(result > 0);
         sleep(10);
-        System.out.println(result);
     }
 
     private void sleep(int mills) {
@@ -97,21 +157,42 @@ public class SqliteConnectionThreadPoolTest {
     }
 
     private void createDummyRecord() {
-        pool.update("INSERT INTO users (user, password) VALUES (?,?);",
-                new Object[] {
-                        String.valueOf(new Random().nextInt()),
-                        String.valueOf(new Random().nextInt())
-                });
-        sleep(10);
+        pool.update("INSERT INTO data (username, password) VALUES (?,?);",
+                randomData());
+        sleep(5);
     }
 
-    private Thread doit(final int count, final Runnable runnable) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < count; i++) {
-                    runnable.run();
-                }
+    private void createDummyRecord_withGetInsertedId() {
+        Object[] data = randomData();
+
+        List<Object> objects = pool.batch(Arrays.asList(
+                "INSERT INTO data (username, password) VALUES (?,?);",
+                pool.getLastInsertedIdQuery("data", "id")),
+
+                Arrays.asList(data,
+                        new Object[]{}),
+
+                Arrays.asList(null,
+                        rs -> rs.next() ? rs.getInt(1) : null));
+
+        Integer id = (Integer) objects.get(1);
+
+        inserted.put(id, data);
+
+        sleep(5);
+    }
+
+    private Object[] randomData() {
+        return new Object[]{
+                String.valueOf(new Random().nextInt()),
+                String.valueOf(new Random().nextInt())
+        };
+    }
+
+    private Thread doit(int count, Runnable runnable) {
+        Thread thread = new Thread(() -> {
+            for (int index = 0; index < count; index++) {
+                runnable.run();
             }
         });
         thread.start();

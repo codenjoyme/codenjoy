@@ -26,6 +26,8 @@ package com.codenjoy.dojo.moebius.client;
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.moebius.model.Elements;
 
+import static com.codenjoy.dojo.moebius.model.Elements.EMPTY;
+
 public class Board extends AbstractBoard<Elements> {
 
     @Override
@@ -34,7 +36,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isGameOver() {
-        return get(Elements.EMPTY).isEmpty();
+        return get(EMPTY).isEmpty();
     }
 
 }

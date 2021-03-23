@@ -30,14 +30,12 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.settings.Parameter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_PRIZE_LIMIT;
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -82,6 +80,7 @@ public class MultiplayerTest {
                 .integer(AI_TICKS_PER_SHOOT, 3)
                 .integer(TANK_TICKS_PER_SHOOT, 4)
                 .integer(SLIPPERINESS, 3)
+                .integer(PENALTY_WALKING_ON_WATER, 3)
                 .integer(AI_PRIZE_LIMIT, 3);
 
         printerFactory = new PrinterFactoryImpl();
@@ -89,8 +88,8 @@ public class MultiplayerTest {
 
     @Test
     public void shouldRandomPositionWhenNewGame() {
-        dice1 = givenDice(1, 1);
-        dice2 = givenDice(1, 1, 2, 2);
+        dice1 = dice(1, 1);
+        dice2 = dice(1, 1, 2, 2);
 
         givenGame();
 
@@ -115,8 +114,8 @@ public class MultiplayerTest {
 
     @Test
     public void shouldRandomPositionWhenKillTank() {
-        dice1 = givenDice(1, 1);
-        dice2 = givenDice(1, 2, 2, 2);
+        dice1 = dice(1, 1);
+        dice2 = dice(1, 2, 2, 2);
 
         givenGame();
 
@@ -156,8 +155,8 @@ public class MultiplayerTest {
 
     @Test
     public void shouldRandomPositionButAtFreeSpaceWhenKillTank() {
-        dice1 = givenDice(1, 1);
-        dice2 = givenDice(1, 2, 0, 0, 2, 2);
+        dice1 = dice(1, 1);
+        dice2 = dice(1, 2, 0, 0, 2, 2);
 
         givenGame();
 
@@ -195,13 +194,13 @@ public class MultiplayerTest {
 
     }
 
-    private Dice givenDice(int... values) {
-        Dice dice1 = mock(Dice.class);
-        OngoingStubbing<Integer> when = when(dice1.next(anyInt()));
+    private Dice dice(int... values) {
+        Dice dice = mock(Dice.class);
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int value : values) {
             when = when.thenReturn(value);
         }
-        return dice1;
+        return dice;
     }
 
     private void assertD(String field, Player player) {

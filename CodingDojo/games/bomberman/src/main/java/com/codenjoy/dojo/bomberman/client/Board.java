@@ -91,11 +91,15 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Point getBomberman() {
-        return get(BOMBERMAN, BOMB_BOMBERMAN, DEAD_BOMBERMAN).get(0);
+        return get(BOMBERMAN,
+                BOMB_BOMBERMAN,
+                DEAD_BOMBERMAN).get(0);
     }
 
     public Collection<Point> getOtherBombermans() {
-        return get(OTHER_BOMBERMAN, OTHER_BOMB_BOMBERMAN, OTHER_DEAD_BOMBERMAN);
+        return get(OTHER_BOMBERMAN,
+                OTHER_BOMB_BOMBERMAN,
+                OTHER_DEAD_BOMBERMAN);
     }
 
     public boolean isMyBombermanDead() {
@@ -115,24 +119,20 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Collection<Point> getBombs() {
-        List<Point> result = new LinkedList<>();
-        result.addAll(get(BOMB_TIMER_1));
-        result.addAll(get(BOMB_TIMER_2));
-        result.addAll(get(BOMB_TIMER_3));
-        result.addAll(get(BOMB_TIMER_4));
-        result.addAll(get(BOMB_TIMER_5));
-        result.addAll(get(BOMB_BOMBERMAN));
-        result.addAll(get(OTHER_BOMB_BOMBERMAN));
-        return result;
+        return get(BOMB_TIMER_1,
+                BOMB_TIMER_2,
+                BOMB_TIMER_3,
+                BOMB_TIMER_4,
+                BOMB_TIMER_5,
+                BOMB_BOMBERMAN,
+                OTHER_BOMB_BOMBERMAN);
     }
 
     public Collection<Point> getPerks() {
-        List<Point> result = new LinkedList<>();
-        result.addAll(get(BOMB_COUNT_INCREASE));
-        result.addAll(get(BOMB_REMOTE_CONTROL));
-        result.addAll(get(BOMB_IMMUNE));
-        result.addAll(get(BOMB_BLAST_RADIUS_INCREASE));
-        return result;
+        return get(BOMB_COUNT_INCREASE,
+                BOMB_REMOTE_CONTROL,
+                BOMB_IMMUNE,
+                BOMB_BLAST_RADIUS_INCREASE);
     }
 
     public Collection<Point> getBlasts() {
@@ -150,7 +150,7 @@ public class Board extends AbstractBoard<Elements> {
             result.add(pt(bomb.getX(), bomb.getY() - 1));
             result.add(pt(bomb.getX(), bomb.getY() + 1));
         }
-        Collection<Point> result2 = new LinkedList<Point>();
+        Collection<Point> result2 = new LinkedList<>();
         for (Point blast : result) {
             if (blast.isOutOf(size) || getWalls().contains(blast)) {
                 continue;
@@ -160,7 +160,7 @@ public class Board extends AbstractBoard<Elements> {
         return removeDuplicates(result2);
     }
 
-    public boolean isBarrierAt(int x, int y) {
+    public boolean isBarrierAt(int x, int y) { // TODO remove this method
         return getBarriers().contains(pt(x, y));
     }
 

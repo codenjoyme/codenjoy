@@ -30,12 +30,15 @@ import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.Timer;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_BREAKING_WALLS;
+import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_WALKING_ON_WATER;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PENALTY_WALKING_ON_WATER;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
@@ -56,6 +59,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private List<Bullet> bullets;
     private Prizes prizes;
 
+    private Timer onWater;
+
     public Tank(Point pt, Direction direction, Dice dice) {
         super(pt);
         this.direction = direction;
@@ -71,47 +76,48 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void up() {
-        if (alive) {
-            direction = Direction.UP;
-            moving = true;
-        }
+        if (!alive) return;
+
+        direction = Direction.UP;
+        moving = true;
     }
 
     @Override
     public void down() {
-        if (alive) {
-            direction = Direction.DOWN;
-            moving = true;
-        }
+        if (!alive) return;
+
+        direction = Direction.DOWN;
+        moving = true;
     }
 
     @Override
     public void right() {
-        if (alive) {
-            direction = Direction.RIGHT;
-            moving = true;
-        }
+        if (!alive) return;
+
+        direction = Direction.RIGHT;
+        moving = true;
     }
 
     @Override
     public void left() {
-        if (alive) {
-            direction = Direction.LEFT;
-            moving = true;
-        }
+        if (!alive) return;
+
+        direction = Direction.LEFT;
+        moving = true;
     }
 
     public Direction getDirection() {
         return direction;
     }
 
-    // TODO подумать как устранить дублирование с MovingObject
     public void move() {
-        if (!moving && !field.isIce(this)) {
-            return;
+        moving = moving || field.isIce(this);
+        if (!moving) return;
+
+        if (sliding.active(this)) {
+            direction = sliding.affect(direction);
         }
 
-        direction = sliding.act(this);
         moving(direction.change(this));
     }
 
@@ -126,9 +132,9 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void act(int... p) {
-        if (alive) {
-            fire = true;
-        }
+        if (!alive) return;
+
+        fire = true;
     }
 
     public Collection<Bullet> getBullets() {
@@ -178,13 +184,27 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
         gun.tick();
         prizes.tick();
+
+        checkOnWater();
+    }
+
+    public void checkOnWater() {
+        if (field.isRiver(this) && !prizes.contains(PRIZE_WALKING_ON_WATER)) {
+            if (onWater == null || onWater.done()) {
+                onWater = new Timer(settings().integerValue(PENALTY_WALKING_ON_WATER));
+                onWater.start();
+            }
+            onWater.tick(() -> {});
+        } else {
+            onWater = null;
+        }
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        Elements tree = player.getHero().treeState(alsoAtPoint);
         if (tree != null) {
-            return Elements.TREE;
+            return tree;
         }
 
         if (isAlive()) {
@@ -208,6 +228,19 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         } else {
             return Elements.BANG;
         }
+    }
+
+    public Elements treeState(Object[] alsoAtPoint) {
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        if (tree == null) {
+            return null;
+        }
+
+        if (prizes.contains(Elements.PRIZE_VISIBILITY)) {
+            return null;
+        }
+
+        return Elements.TREE;
     }
 
     public void reset() {
@@ -249,5 +282,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (prizes.contains(PRIZE_BREAKING_WALLS)) {
             gun.machineGun();
         }
+    }
+
+    public boolean canWalkOnWater() {
+        return prizes.contains(PRIZE_WALKING_ON_WATER)
+                || (onWater != null && onWater.done());
     }
 }

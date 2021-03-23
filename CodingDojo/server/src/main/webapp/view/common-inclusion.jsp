@@ -33,6 +33,7 @@
     <c:choose>
         <c:when test="${debug}" >
             <script src="${ctx}/resources/js/all.js"></script>
+            <script src="${ctx}/resources/js/chat.js"></script>
         </c:when>
         <c:otherwise>
             <script src="${ctx}/resources/js/all.min.js"></script>

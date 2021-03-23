@@ -31,7 +31,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_TICKS_PER_SHOOT;
-import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class AITank extends Tank {
 
@@ -91,9 +90,9 @@ public class AITank extends Tank {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        Elements tree = player.getHero().treeState(alsoAtPoint);
         if (tree != null) {
-            return Elements.TREE;
+            return tree;
         }
 
         if (!isAlive()) {

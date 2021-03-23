@@ -134,7 +134,7 @@ public class AdminController {
     // ----------------
 
     @GetMapping("/player/{player}/ai/reload")
-    public String reloadAI(@RequestParam("player") String id,
+    public String reloadAI(@PathVariable("player") String id,
                            HttpServletRequest request) {
         playerService.reloadAI(id);
         return getAdmin(request);

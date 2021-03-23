@@ -29,9 +29,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.round.Round;
 import com.codenjoy.dojo.services.round.RoundField;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
@@ -285,7 +283,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
 
     public boolean isFreeForStone(Point pt) {
         Point leftSide = pt.copy();
-        leftSide.change(Direction.LEFT);
+        leftSide.move(Direction.LEFT);
         return isFree(pt) && !starts.contains(leftSide);
     }
 

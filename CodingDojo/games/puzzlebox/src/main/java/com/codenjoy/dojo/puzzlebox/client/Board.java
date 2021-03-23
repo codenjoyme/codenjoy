@@ -29,6 +29,9 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.puzzlebox.model.Elements.BOX;
+import static com.codenjoy.dojo.puzzlebox.model.Elements.WALL;
+
 public class Board extends AbstractBoard<Elements> {
 
     @Override
@@ -38,15 +41,15 @@ public class Board extends AbstractBoard<Elements> {
 
     // TODO
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.WALL);
+        return isAt(x, y, WALL);
     }
 
     public Point getMe() {
-        return get(Elements.BOX).get(0);
+        return get(BOX).get(0);
     }
 
     public List<Point> getAllMyBoxes() {
-        return get(Elements.BOX);
+        return get(BOX);
     }
 
 }

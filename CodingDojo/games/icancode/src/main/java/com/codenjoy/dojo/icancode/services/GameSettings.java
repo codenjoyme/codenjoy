@@ -107,7 +107,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public String levelMap(int index) {
         String prefix = levelPrefix(index);
-        return addEditBox(prefix + "map").type(String.class).getValue();
+        return string(() -> prefix + "map");
     }
 
     public GameSettings addLevel(int index, Level level) {

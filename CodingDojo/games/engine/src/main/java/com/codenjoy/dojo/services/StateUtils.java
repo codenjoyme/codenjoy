@@ -22,6 +22,9 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,5 +46,12 @@ public class StateUtils {
 				.filter(it -> clazz.isAssignableFrom(it.getClass()))
 				.findFirst()
 				.orElse(null);
+	}
+
+	public static boolean itsMe(GamePlayer player, PlayerHero hero,
+								Object[] alsoAtPoint, State item)
+	{
+		return player.getHero() == hero
+				|| Arrays.asList(alsoAtPoint).contains(item);
 	}
 }

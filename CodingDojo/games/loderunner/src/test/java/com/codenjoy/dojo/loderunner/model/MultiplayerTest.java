@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,17 +23,26 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.TestSettings;
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_PILLS_COUNT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -42,112 +51,103 @@ import static org.mockito.Mockito.*;
 public class MultiplayerTest {
 
     private Dice dice;
-    private EventListener listener1;
-    private Game game1;
-    private EventListener listener2;
-    private Game game2;
+    private List<EventListener> listeners = new LinkedList<>();
+    private List<Game> games = new LinkedList<>();
     private Loderunner field;
-    private EventListener listener3;
-    private Game game3;
     private PrinterFactory printerFactory;
     private GameSettings settings;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
+        dice = mock(Dice.class);
         printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings();
+        settings = new TestSettings();
     }
-
+    
     // появляется другие игроки, игра становится мультипользовательской
     @Test
     public void shouldMultipleGame() { // TODO разделить тест на части
-        setupGm("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼####☼" +
                 "☼   $☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        setupPlayer1(1, 4);
-        setupPlayer2(2, 2);
-        setupPlayer3(3, 4);
+        givenPlayer(1, 4);
+        givenPlayer(2, 2);
+        givenPlayer(3, 4);
 
-        atGame1(
-                "☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼► ( ☼\n" +
                 "☼####☼\n" +
                 "☼ ( $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame2(
-                "☼☼☼☼☼☼\n" +
+        assert2("☼☼☼☼☼☼\n" +
                 "☼( ( ☼\n" +
                 "☼####☼\n" +
                 "☼ ► $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame3(
-                "☼☼☼☼☼☼\n" +
+        assert3("☼☼☼☼☼☼\n" +
                 "☼( ► ☼\n" +
                 "☼####☼\n" +
                 "☼ ( $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().right();
-        game2.getJoystick().left();
-        game3.getJoystick().right();
+        hero(0).right();
+        hero(1).left();
+        hero(2).right();
 
-        field.tick(); 
+        field.tick();
 
-        atGame1(
-                "☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼ ► (☼\n" +
                 "☼####☼\n" +
                 "☼)  $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame2(
-                "☼☼☼☼☼☼\n" +
+        assert2("☼☼☼☼☼☼\n" +
                 "☼ ( (☼\n" +
                 "☼####☼\n" +
                 "☼◄  $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame3(
-                "☼☼☼☼☼☼\n" +
+        assert3("☼☼☼☼☼☼\n" +
                 "☼ ( ►☼\n" +
                 "☼####☼\n" +
                 "☼)  $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().act();
-        game3.close();
+        hero(0).act();
+        game(2).close();
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼ R  ☼\n" +
                 "☼##*#☼\n" +
                 "☼)  $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame2("☼☼☼☼☼☼\n" +
-                "☼ (  ☼\n" +
+        assert2("☼☼☼☼☼☼\n" +
+                "☼ ⌊  ☼\n" +
                 "☼##*#☼\n" +
                 "☼◄  $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
         try {
-            atGame3("☼☼☼☼☼☼\n" +
-                    "☼ (  ☼\n" +
+            assert3("☼☼☼☼☼☼\n" +
+                    "☼ ⌊  ☼\n" +
                     "☼##*#☼\n" +
                     "☼)  $☼\n" +
                     "☼####☼\n" +
@@ -156,43 +156,43 @@ public class MultiplayerTest {
             assertEquals("No board for this player", e.getMessage());
         }
 
-        game1.getJoystick().right();
+        hero(0).right();
 
         field.tick();
         field.tick();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
                 "☼) ►$☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame2("☼☼☼☼☼☼\n" +
+        assert2("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
                 "☼◄ ($☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().left();
-        game1.getJoystick().act();
-        game2.getJoystick().right();
+        hero(0).left();
+        hero(0).act();
+        hero(1).right();
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
-                "☼ (Я$☼\n" +
+                "☼ ⊏Я$☼\n" +
                 "☼#*##☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame2("☼☼☼☼☼☼\n" +
+        assert2("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
-                "☼ [)$☼\n" +
+                "☼ [⌋$☼\n" +
                 "☼#*##☼\n" +
                 "☼☼☼☼☼☼\n");
 
@@ -202,102 +202,428 @@ public class MultiplayerTest {
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼####☼\n" +
                 "☼  Я$☼\n" +
                 "☼#Z##☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame2("☼☼☼☼☼☼\n" +
+        assert2("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼####☼\n" +
-                "☼  )$☼\n" +
+                "☼  ⌋$☼\n" +
                 "☼#Ѡ##☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        verify(listener2).event(Events.KILL_HERO);
-        verify(listener1).event(Events.KILL_ENEMY);
-        assertTrue(game2.isGameOver());
+        verify(listener(1)).event(Events.KILL_HERO);
+        verify(listener(0)).event(Events.KILL_ENEMY);
+        assertTrue(game(1).isGameOver());
 
         when(dice.next(anyInt())).thenReturn(1, 4);
 
-        game2.newGame();
+        game(1).newGame();
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼(   ☼\n" +
                 "☼####☼\n" +
                 "☼  Я$☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame2("☼☼☼☼☼☼\n" +
+        assert2("☼☼☼☼☼☼\n" +
                 "☼►   ☼\n" +
                 "☼####☼\n" +
-                "☼  )$☼\n" +
+                "☼  ⌋$☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().right();
+        hero(0).right();
 
         when(dice.next(anyInt())).thenReturn(1, 2);
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼(   ☼\n" +
                 "☼####☼\n" +
                 "☼$  ►☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame2("☼☼☼☼☼☼\n" +
+        assert2("☼☼☼☼☼☼\n" +
                 "☼►   ☼\n" +
                 "☼####☼\n" +
                 "☼$  (☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        verify(listener1).event(Events.GET_GOLD);
+        verify(listener(0)).event(Events.GET_YELLOW_GOLD);
 
+    }
+
+    private Joystick hero(int index) {
+        return game(index).getPlayer().getHero();
+    }
+
+    private EventListener listener(int index) {
+        return listeners.get(index);
+    }
+
+    private Game game(int index) {
+        return games.get(index);
+    }
+
+    @Test
+    public void thatEnemiesDoNotHauntShadowPlayers() {
+        settings.integer(ENEMIES_COUNT, 1);
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  »   ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        settings.integer(SHADOW_PILLS_COUNT, 1);
+        givenPlayer(5, 2)
+                .getHero().pick(PillType.SHADOW_PILL);
+        givenPlayer(1, 2);
+
+        dice(0); // охотимся за первым игроком // TODO потестить когда поохотимся за вторым
+        field.tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼(«  ⊳ ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void thatTwoShadowsWalkThroughEachOther() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        settings.integer(SHADOW_PILLS_COUNT, 1);
+        givenPlayer(1, 2)
+                .getHero().pick(PillType.SHADOW_PILL);
+        givenPlayer(2, 2)
+                .getHero().pick(PillType.SHADOW_PILL);
+
+        hero(0).right();
+
+        field.tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ⊳    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ⊳    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener(0), never()).event(Events.KILL_ENEMY);
+        verify(listener(1), never()).event(Events.KILL_HERO);
+    }
+
+    @Test
+    public void thatShadowKillsNonShadowPlayer() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        settings.integer(SHADOW_PILLS_COUNT, 1);
+        givenPlayer(1, 2)
+                .getHero().pick(PillType.SHADOW_PILL);
+        givenPlayer(2, 2);
+
+        hero(0).right();
+
+        field.tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ⊳    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ Ѡ    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener(0)).event(Events.KILL_ENEMY);
+        verify(listener(1)).event(Events.KILL_HERO);
+
+        field.tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ⊳    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ Ѡ    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void thatShadowFallsAtTheRegularPlayerAndKillsHim() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        settings.integer(SHADOW_PILLS_COUNT, 1);
+        givenPlayer(1, 3)
+                .getHero().pick(PillType.SHADOW_PILL);
+        givenPlayer(1, 2);
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⊄     ☼\n" +
+                "☼(     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⋢     ☼\n" +
+                "☼►     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        dice(3, 3); // new pill
+        field.tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  S   ☼\n" +
+                "☼⊳     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  S   ☼\n" +
+                "☼Ѡ     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener(0)).event(Events.KILL_ENEMY);
+        verify(listener(1)).event(Events.KILL_HERO);
+
+        field.tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  S   ☼\n" +
+                "☼⊳     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  S   ☼\n" +
+                "☼Ѡ     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void thatShadowStairsUpTheLadderAtTheRegularPlayerAndKillsHim() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  H   ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        settings.integer(SHADOW_PILLS_COUNT, 1);
+        givenPlayer(2, 2)
+            .getHero().pick(PillType.SHADOW_PILL);
+        givenPlayer(3, 3);
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  (   ☼\n" +
+                "☼ ⊳H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ►   ☼\n" +
+                "☼ ⋉H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        hero(0).right();
+        field.tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  (   ☼\n" +
+                "☼  ⍬   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ►   ☼\n" +
+                "☼  ⋕   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        field.tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ⊳   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  Ѡ   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener(0)).event(Events.KILL_ENEMY);
+        verify(listener(1)).event(Events.KILL_HERO);
+
+        field.tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ⊳   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  Ѡ   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
     }
 
     // можно ли проходить героям друг через дурга? Нет
     @Test
     public void shouldICantGoViaAnotherPlayer_whenAtWay() {
-        setupGm("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        setupPlayer1(1, 2);
-        setupPlayer2(2, 2);
+        givenPlayer(1, 2);
+        givenPlayer(2, 2);
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►(  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().right();
+        hero(0).right();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►(  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game2.getJoystick().left();
+        hero(1).left();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►)  ☼\n" +
@@ -307,50 +633,50 @@ public class MultiplayerTest {
 
     @Test
     public void shouldICantGoViaAnotherPlayer_whenAtLadder() {
-        setupGm("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼ H  ☼" +
                 "☼ H  ☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        setupPlayer1(1, 2);
-        setupPlayer2(2, 4);
+        givenPlayer(1, 2);
+        givenPlayer(2, 4);
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼ (  ☼\n" +
                 "☼ H  ☼\n" +
                 "☼►H  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().right();
-        game2.getJoystick().down();
+        hero(0).right();
+        hero(1).down();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ U  ☼\n" +
                 "☼ Y  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().up();
-        game2.getJoystick().down();
+        hero(0).up();
+        hero(1).down();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ U  ☼\n" +
                 "☼ Y  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().up();
-        game2.getJoystick().down();
+        hero(0).up();
+        hero(1).down();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ U  ☼\n" +
                 "☼ Y  ☼\n" +
@@ -360,57 +686,57 @@ public class MultiplayerTest {
 
     @Test
     public void shouldICantGoViaAnotherPlayer_whenAtPipe() {
-        setupGm("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼ ~~ ☼" +
                 "☼#  #☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        setupPlayer1(1, 3);
-        setupPlayer2(4, 3);
+        givenPlayer(1, 3);
+        givenPlayer(4, 3);
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼►~~(☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().right();
-        game2.getJoystick().left();
+        hero(0).right();
+        hero(1).left();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ }Э ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame2("☼☼☼☼☼☼\n" +
+        assert2("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ Є{ ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().right();
-        game2.getJoystick().left();
+        hero(0).right();
+        hero(1).left();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ }Э ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().right();
-        game2.getJoystick().left();
+        hero(0).right();
+        hero(1).left();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ }Э ☼\n" +
                 "☼#  #☼\n" +
@@ -421,29 +747,29 @@ public class MultiplayerTest {
     // могу ли я сверлить под другим героем? Нет
     @Test
     public void shouldICantDrillUnderOtherHero() {
-        setupGm("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼►►  ☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        setupPlayer1(1, 2);
-        setupPlayer2(2, 2);
+        givenPlayer(1, 2);
+        givenPlayer(2, 2);
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►(  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().act();
-        game2.getJoystick().left();
-        game2.getJoystick().act();
+        hero(0).act();
+        hero(1).left();
+        hero(1).act();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►)  ☼\n" +
@@ -453,18 +779,18 @@ public class MultiplayerTest {
 
     // если я прыгаю сверху на героя, то я должен стоять у него на голове
     @Test
-    public void shouldICantStayAtOtherHeroHead() {
-        setupGm("☼☼☼☼☼☼" +
+    public void shouldICanStayAtOtherHeroHead() {
+        givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        setupPlayer1(2, 4);
-        setupPlayer2(2, 2);
+        givenPlayer(2, 4);
+        givenPlayer(2, 2);
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼ [  ☼\n" +
                 "☼    ☼\n" +
                 "☼ (  ☼\n" +
@@ -473,16 +799,16 @@ public class MultiplayerTest {
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().down();  //и даже если я сильно захочу я не смогу впрыгнуть в него
+        hero(0).down();  //и даже если я сильно захочу я не смогу впрыгнуть в него
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ (  ☼\n" +
@@ -493,18 +819,18 @@ public class MultiplayerTest {
     // если я прыгаю сверху на героя который на трубе, то я должен стоять у него на голове
     @Test
     public void shouldICantStayAtOtherHeroHeadWhenOnPipe() {
-        setupGm("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼ ~  ☼" +
                 "☼☼☼☼☼☼");
 
-        setupPlayer1(2, 4);
-        setupPlayer2(2, 2);
+        givenPlayer(2, 4);
+        givenPlayer(2, 2);
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ [  ☼\n" +
                 "☼    ☼\n" +
@@ -513,17 +839,17 @@ public class MultiplayerTest {
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ Є  ☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().down();
+        hero(0).down();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
@@ -535,10 +861,10 @@ public class MultiplayerTest {
     public void shouldCanMoveWhenAtOtherHero() {
         shouldICantStayAtOtherHeroHeadWhenOnPipe();
 
-        game2.getJoystick().left();
+        hero(1).left();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼ [  ☼\n" +
@@ -547,27 +873,27 @@ public class MultiplayerTest {
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼)}  ☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game2.getJoystick().right();  // нельзя входить в друг в друга :) даже на трубе
+        hero(1).right();  // нельзя входить в друг в друга :) даже на трубе
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼(}  ☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().left();  // нельзя входить в друг в друга :) даже на трубе
+        hero(0).left();  // нельзя входить в друг в друга :) даже на трубе
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
@@ -578,49 +904,49 @@ public class MultiplayerTest {
     // когда два героя на трубе, они не могут друг в друга войти
     @Test
     public void shouldStopOnPipe() {
-        setupGm("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼~~~~☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        setupPlayer1(2, 4);
-        setupPlayer2(3, 4);
+        givenPlayer(2, 4);
+        givenPlayer(3, 4);
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼~}Є~☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game2.getJoystick().left();
+        hero(1).left();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼~}Э~☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().right();
+        hero(0).right();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼~}Э~☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().right();
-        game2.getJoystick().left();
+        hero(0).right();
+        hero(1).left();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼~}Э~☼\n" +
                 "☼    ☼\n" +
@@ -628,63 +954,61 @@ public class MultiplayerTest {
                 "☼☼☼☼☼☼\n");
     }
 
-    private void atGame1(String expected) {
-        assertEquals(expected, game1.getBoardAsString());
+    private void assert1(String expected) {
+        assertBoard(expected, 0);
     }
 
-    private void atGame2(String expected) {
-        assertEquals(expected, game2.getBoardAsString());
+    private void assertBoard(String expected, int index) {
+        assertEquals(expected, game(index).getBoardAsString());
     }
 
-    private void atGame3(String expected) {
-        assertEquals(expected, game3.getBoardAsString());
+    private void assert2(String expected) {
+        assertBoard(expected, 1);
     }
 
-    private void setupPlayer2(int x, int y) {
-        listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2, settings), printerFactory);
-        game2.on(field);
-        when(dice.next(anyInt())).thenReturn(x, y);
-        game2.newGame();
+    private void assert3(String expected) {
+        assertBoard(expected, 2);
     }
 
-    private void setupPlayer3(int x, int y) {
-        listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3, settings), printerFactory);
-        game3.on(field);
-        when(dice.next(anyInt())).thenReturn(x, y);
-        game3.newGame();
+    private Player givenPlayer(int x, int y) {
+        EventListener listener = mock(EventListener.class);
+        listeners.add(listener);
+        Player player = new Player(listener, settings);
+        Single game = new Single(player, printerFactory);
+        games.add(game);
+        game.on(field);
+        dice(x, y);
+        game.newGame();
+        return player;
     }
 
-    private void setupPlayer1(int x, int y) {
-        listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1, settings), printerFactory);
-        game1.on(field);
-        when(dice.next(anyInt())).thenReturn(x, y);
-        game1.newGame();
+    private void dice(int... ints) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : ints) {
+            when = when.thenReturn(i);
+        }
     }
 
-    private void setupGm(String map) {
-        Level level = new LevelImpl(map);
-        dice = mock(Dice.class);
+    private void givenFl(String map) {
+        Level level = new LevelImpl(map, dice);
         field = new Loderunner(level, dice, settings);
     }
 
     @Test
     public void shouldICanGoWhenIAmAtOtherHero() {
-        shouldICantStayAtOtherHeroHead();
+        shouldICanStayAtOtherHeroHead();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.getJoystick().left();
+        hero(0).left();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼]   ☼\n" +
                 "☼ (  ☼\n" +
@@ -693,7 +1017,7 @@ public class MultiplayerTest {
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼◄(  ☼\n" +
@@ -703,19 +1027,19 @@ public class MultiplayerTest {
 
     @Test
     public void shouldICanGoWhenAtMeIsOtherHero() {
-        shouldICantStayAtOtherHeroHead();
+        shouldICanStayAtOtherHeroHead();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game2.getJoystick().right();
+        hero(1).right();
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ [  ☼\n" +
                 "☼  ( ☼\n" +
@@ -724,7 +1048,7 @@ public class MultiplayerTest {
 
         field.tick();
 
-        atGame1("☼☼☼☼☼☼\n" +
+        assert1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼ ►( ☼\n" +

@@ -163,6 +163,7 @@ public class PointImplTest {
     public void shouldEqualsAndHashCode() {
         Point pt = pt(10, 15);
 
+        assertTrue(pt.equals(pt));
         assertTrue(pt.equals(pt(10, 15)));
         assertFalse(pt.equals(pt(10 + 1, 15)));
         assertFalse(pt.equals(pt(10, 15 + 1)));
@@ -185,6 +186,64 @@ public class PointImplTest {
         pt.move(40, 43);
 
         assertEquals("[40,43]", pt.toString());
+    }
+
+    @Test
+    public void shouldMoveDirection() {
+        Point pt = pt(10, 15);
+
+        pt.move(Direction.UP);
+
+        assertEquals("[10,16]", pt.toString());
+
+        pt.move(Direction.DOWN);
+
+        assertEquals("[10,15]", pt.toString());
+
+        pt.move(Direction.LEFT);
+
+        assertEquals("[9,15]", pt.toString());
+
+        pt.move(Direction.RIGHT);
+
+        assertEquals("[10,15]", pt.toString());
+    }
+
+    @Test
+    public void shouldMoveQDirection() {
+        Point pt = pt(10, 15);
+
+        pt.move(QDirection.UP);
+
+        assertEquals("[10,16]", pt.toString());
+
+        pt.move(QDirection.DOWN);
+
+        assertEquals("[10,15]", pt.toString());
+
+        pt.move(QDirection.LEFT);
+
+        assertEquals("[9,15]", pt.toString());
+
+        pt.move(QDirection.RIGHT);
+
+        assertEquals("[10,15]", pt.toString());
+
+        pt.move(QDirection.RIGHT_UP);
+
+        assertEquals("[11,16]", pt.toString());
+
+        pt.move(QDirection.LEFT_DOWN);
+
+        assertEquals("[10,15]", pt.toString());
+
+        pt.move(QDirection.RIGHT_DOWN);
+
+        assertEquals("[11,14]", pt.toString());
+
+        pt.move(QDirection.LEFT_UP);
+
+        assertEquals("[10,15]", pt.toString());
     }
 
     @Test
@@ -221,10 +280,10 @@ public class PointImplTest {
     }
 
     @Test
-    public void shouldChange() {
+    public void shouldMoveDelta() {
         Point pt = pt(10, 15);
 
-        pt.change(pt(12, -23));
+        pt.moveDelta(pt(12, -23));
 
         assertEquals("[22,-8]", pt.toString());
     }

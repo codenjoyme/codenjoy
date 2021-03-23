@@ -580,9 +580,9 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         ticksTillTimeout();
 
         // then
-        assertRooms("{2=[player1], " +
-                "3=[player4, player5, player8]}");
-        assertEquals(4, fields.size());
+        assertRooms("{3=[player1, player4, player5], " +
+                "4=[player8]}");
+        assertEquals(5, fields.size());
     }
 
     @Test
@@ -621,11 +621,11 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         ticksTillTimeout();
 
         // then
-        assertRooms("{4=[player1-1], " +
-                "5=[player2-1], " +
-                "6=[player1-4, player1-5, player1-8], " +
-                "7=[player2-4, player2-5, player2-8]}");
-        assertEquals(8, fields.size());
+        assertRooms("{6=[player1-1, player1-4, player1-5], " +
+                "7=[player2-1, player2-4, player2-5], " +
+                "8=[player1-8], " +
+                "9=[player2-8]}");
+        assertEquals(10, fields.size());
     }
 
     @Test
@@ -669,9 +669,9 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1-1, player1-2, player1-3], " + // didn't touch this because not active
                 "2=[player1-4, player1-5, player1-6], " +      // -- " --
                 "4=[player1-7, player1-8], " +                 // -- " --
-                "5=[player2-1], " +
-                "6=[player2-4, player2-5, player2-8]}");
-        assertEquals(7, fields.size());
+                "6=[player2-1, player2-4, player2-5], " +
+                "7=[player2-8]}");
+        assertEquals(8, fields.size());
     }
 
     @Test
@@ -700,23 +700,32 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
 
         // then
         Map<Integer, Collection<String>> rooms = getRooms();
+        Collection<String> room1 = rooms.get(1);
         Collection<String> room2 = rooms.get(2);
         Collection<String> room3 = rooms.get(3);
+        Collection<String> room4 = rooms.get(4);
 
-//        assertR("{2=[playerX], " +
-//                "3=[playerY, playerZ, playerA]}");
-        assertEquals(4, fields.size());
+//        assertR("{3=[playerX, playerY, playerZ],
+//                4=[playerA]}");
+        assertEquals(5, fields.size());
         try {
-            assertEquals(1, room2.size()); // TODO порой падает с actual=2, разобраться
-            assertEquals(3, room3.size());
+            assertEquals(null, room1);
+            assertEquals(null, room2);
+            assertEquals(3, room3.size()); // TODO порой падает с actual=2, разобраться
+            assertEquals(1, room4.size());
         } catch (AssertionError e) {
             e.printStackTrace();
         }
-        assertEquals(false, room3.contains(room2.iterator().next()));
+        assertEquals(false, room3.contains(room4.iterator().next()));
         assertEquals(false, room3.contains("player2")); // losers
         assertEquals(false, room3.contains("player3"));
         assertEquals(false, room3.contains("player6"));
         assertEquals(false, room3.contains("player7"));
+
+        assertEquals(false, room4.contains("player2")); // losers
+        assertEquals(false, room4.contains("player3"));
+        assertEquals(false, room4.contains("player6"));
+        assertEquals(false, room4.contains("player7"));
     }
 
     @Test

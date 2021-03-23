@@ -30,6 +30,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
@@ -77,6 +78,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected GameService gameService;
     @Autowired protected AutoSaver autoSaver;
     @Autowired protected GameSaver saver;
+    @Autowired protected Chat chat;
     @Autowired protected ActionLogger actionLogger;
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties config;
@@ -344,10 +346,13 @@ public class PlayerServiceImpl implements PlayerService {
         cacheBoards.clear();
 
         Map<String, GameData> gameDataMap = playerGamesView.getGamesDataMap();
+        Map<String, Integer> lastChatIds = chat.getLastMessageIds();
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
             try {
+                Integer lastChatMessage = lastChatIds.get(player.getRoom());
+
                 String gameType = playerGame.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());
 
@@ -364,7 +369,9 @@ public class PlayerServiceImpl implements PlayerService {
                         player.getScore(),
                         player.getMessage(),
                         gameData.getScores(),
-                        gameData.getHeroesData()));
+                        gameData.getHeroesData(),
+                        lastChatMessage));
+
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +
                         " URL: " + player.getCallbackUrl(), e);
@@ -618,6 +625,17 @@ public class PlayerServiceImpl implements PlayerService {
 
             playerGames.getAll(withRoom(room))
                 .forEach(PlayerGame::clearScore);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void cleanScores(String id) {
+        lock.writeLock().lock();
+        try {
+            playerGames.get(id).clearScore();
+            playerGames.get(id).getGame().getProgress().reset();
         } finally {
             lock.writeLock().unlock();
         }

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 /**
- * Incapsulates coordinate of Element at the Board. All Board Elements must extends from PointImpl,
+ * Encapsulates coordinate of Element at the Board. All Board Elements must extends from PointImpl,
  * realized from of this interface.
  */
 public interface Point extends Comparable<Point> {
@@ -91,19 +91,19 @@ public interface Point extends Comparable<Point> {
      * Changes current point with given delta.
      * @param delta Increment.
      */
-    void change(Point delta);
+    void moveDelta(Point delta);
 
     /**
      * Changes current point in given direction
      * @param direction one of 8 directions
      */
-    void change(QDirection direction);
+    void move(QDirection direction);
 
     /**
      * Changes current point in given direction
      * @param direction one of 4 directions
      */
-    void change(Direction direction);
+    void move(Direction direction);
 
     /**
      * @param offset

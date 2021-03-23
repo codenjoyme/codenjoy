@@ -41,6 +41,7 @@ public class PlayerData implements ScreenData {
     private String info;
     private JSONObject scores;
     private JSONObject heroesData;
+    private Integer lastChatMessage;
 
     public String getInfo() {
         return (info == null) ? StringUtils.EMPTY : info;
@@ -55,14 +56,16 @@ public class PlayerData implements ScreenData {
                         "Score:%s, " +
                         "Info:'%s', " +
                         "Scores:'%s', " +
-                        "HeroesData:'%s']",
+                        "HeroesData:'%s', " +
+                        "LastChatMessage:%s]",
                 boardSize,
                 board,
                 game,
                 score,
                 getInfo(),
                 JsonUtils.toStringSorted(scores.toString()),
-                JsonUtils.toStringSorted(heroesData.toString()));
+                JsonUtils.toStringSorted(heroesData.toString()),
+                lastChatMessage);
     }
 
 }

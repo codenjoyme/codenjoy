@@ -28,18 +28,33 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class DeikstraFindWay {
 
-    private static final List<Direction> DIRECTIONS = Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
+    private static final List<Direction> DIRECTIONS = Arrays.asList(UP, DOWN, LEFT, RIGHT);
     private Map<Point, List<Direction>> ways;
     private int size;
     private Possible checker;
+    private boolean possibleIsContsnt;
+
+    public DeikstraFindWay() {
+        this(false);
+    }
+
+    /**
+     * @param possibleIsConstant Бывают случаи, когда варианты куда двигаться на карте
+     * не меняется от тика к тику, а потому не надо пересчитывать варианты движений всякий раз.
+     * Вот в таких случаях мы и ставим тут true.
+     */
+    public DeikstraFindWay(boolean possibleIsConstant) {
+        this.possibleIsContsnt = possibleIsConstant;
+    }
 
     public interface Possible {
 
-        default boolean possible(Point from, Direction direction) {
+        default boolean possible(Point from, Direction where) {
             return true;
         }
 
@@ -47,27 +62,26 @@ public class DeikstraFindWay {
             return true;
         }
 
-        default boolean check(int size, Point from, Direction direction) {
+        default boolean check(int size, Point from, Direction where) {
+            if (from.isOutOf(size)) return false;
             if (!possible(from)) return false;
 
-            Point to = direction.change(from);
-            if (to.isOutOf(size)) return false;
+            Point dest = where.change(from);
 
-            if (!possible(to)) return false;
+            if (dest.isOutOf(size)) return false;
+            if (!possible(dest)) return false;
 
-            if (!possible(from, direction)) return false;
+            if (!possible(from, where)) return false;
 
             return true;
         }
     }
 
     public List<Direction> getShortestWay(int size, Point from, List<Point> goals, Possible possible) {
-        this.size = size;
-        this.checker = possible;
         if (possible == null) {
             throw new RuntimeException("Please setup Possible object before run getShortestWay");
         }
-        setupWays();
+        getPossibleWays(size, possible);
 
         List<List<Direction>> paths = new LinkedList<>();
         for (Point to : goals) {
@@ -113,7 +127,6 @@ public class DeikstraFindWay {
             List<Direction> before = path.get(current);
             for (Direction direction : ways.get(current)) {
                 Point to = direction.change(current);
-                if (!checker.possible(to)) continue;
                 if (processed[to.getX()][to.getY()]) continue;
 
                 List<Direction> directions = path.get(to);
@@ -141,16 +154,21 @@ public class DeikstraFindWay {
                 Point from = pt(x, y);
                 List<Direction> directions = new LinkedList<>();
                 for (Direction direction : DIRECTIONS) {
-                    if (checker.check(size, from, direction)) {
-                        directions.add(direction);
-                    }
+                    if (!checker.check(size, from, direction)) continue;
+
+                    directions.add(direction);
                 }
                 ways.put(from, directions);
             }
         }
     }
 
-    public Map<Point, List<Direction>> getPossibleWays() {
+    public Map<Point, List<Direction>> getPossibleWays(int size, Possible possible) {
+        this.size = size;
+        this.checker = possible;
+        if (possible != null && (!possibleIsContsnt || ways == null)) {
+            setupWays();
+        }
         return ways;
     }
 }

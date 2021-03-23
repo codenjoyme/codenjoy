@@ -35,17 +35,14 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 class PrinterImpl implements Printer<String> {
     public static final String ERROR_SYMBOL = "Ъ";
     private char[][] field;
-    private final int size;
     private GamePrinter printer;
 
     public static <E extends CharElements, P> Printer getPrinter(BoardReader reader, P player) {
-        return new PrinterImpl(reader.size(),
-                new GamePrinterImpl<E, P>(reader, player));
+        return new PrinterImpl(new GamePrinterImpl<E, P>(reader, player));
     }
 
-    public PrinterImpl(int size, GamePrinter printer) {
+    public PrinterImpl(GamePrinter printer) {
         this.printer = printer;
-        this.size = size;
     }
 
     /**
@@ -74,6 +71,7 @@ class PrinterImpl implements Printer<String> {
     }
 
     private void fillField() {
+        int size = printer.size();
         field = new char[size][size];
         printer.init();
 
@@ -85,7 +83,7 @@ class PrinterImpl implements Printer<String> {
             return;
         }
 
-        field[size - 1 - y][x] = ch;
+        field[printer.size() - 1 - y][x] = ch;
     }
 
     static class GamePrinterImpl<E extends CharElements, P> implements GamePrinter {
@@ -113,6 +111,11 @@ class PrinterImpl implements Printer<String> {
             addAll(board.elements());
         }
 
+        @Override
+        public int size() {
+            return board.size();
+        }
+
         private void addAll(Iterable<? extends Point> elements) {
             for (Point el : elements) {
                 int x = el.getX();
@@ -126,7 +129,13 @@ class PrinterImpl implements Printer<String> {
                     existing = new Object[7];
                     field[x][y] = existing;
                 }
-                existing[len[x][y]] = el;
+                byte index = len[x][y];
+                if (index >= existing.length) {
+                    throw new IllegalStateException(
+                            "There are many items in one cell: " + index +
+                                    ", expected max: " + (existing.length - 1));
+                }
+                existing[index] = el;
                 len[x][y]++;
             }
         }

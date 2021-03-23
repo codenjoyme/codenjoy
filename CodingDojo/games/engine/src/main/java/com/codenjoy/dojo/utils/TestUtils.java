@@ -58,9 +58,9 @@ public class TestUtils {
     public static String inject(String string, int position, String substring) {
         StringBuilder result = new StringBuilder();
         for (int index = 1; index < string.length() / position + 1; index++) {
-            result.append(string.substring((index - 1)*position, index*position)).append(substring);
+            result.append(string, (index - 1)*position, index*position).append(substring);
         }
-        result.append(string.substring((string.length() / position) * position, string.length()));
+        result.append(string.substring((string.length() / position) * position));
         return result.toString();
     }
 

@@ -23,14 +23,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <div id="chat" class="chat" style="display:none;" zoom-on-wheel>
+    <script template type="text/x-jquery-tmpl">
+        <div id="chat-message-{%= id %}" message="{%= id %}" player="{%= player %}" class="chat-message">
+            <span class="message-author">{%= author %}</span>
+            <span class="message-time" title="{%= dateTime %}">{%= time %}</span>
+            <span class="delete-message"> x </span>
+            <div class="message-text">{{html text}}</div>
+        </div>
+    </script>
     <div id="chat-container" class="messages-container">
-        <script template type="text/x-jquery-tmpl">
-            <div id="chat-message-{%= id %}" message="{%= id %}" player="{%= player %}" class="chat-message">
-                <span class="message-author">{%= author %}</span>
-                <span class="message-time" title="{%= dateTime %}">{%= time %}</span>
-                <div class="message-text">{{html text}}</div>
-            </div>
-        </script>
     </div>
     <div class="message-area">
         <textarea id="new-message" placeholder="Enter - submit, Shift+Enter - new line"></textarea>

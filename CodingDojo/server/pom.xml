@@ -594,6 +594,21 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>xonix</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>xonix-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
 <!-- this is your new game
         <profile>
             <id>yourgame</id>
@@ -1042,7 +1057,7 @@
                                 <jsInclude>layout.js</jsInclude>
                                 <jsInclude>donate.js</jsInclude>
                                 <jsInclude>joystick.js</jsInclude>
-                                <jsInclude>chat.js</jsInclude>
+                                <!--jsInclude>chat.js</jsInclude-->
                                 <jsInclude>leaderstable.js</jsInclude>
                                 <jsInclude>hotkeys.js</jsInclude>
                                 <jsInclude>advertisement.js</jsInclude>

@@ -71,4 +71,7 @@ public class ConfigProperties {
 
     @Value("${registration.opened}")
     private boolean isRegistrationOpened;
+
+    @Value("${game.player.score.cleanup}")
+    private boolean playerScoreCleanupEnabled;
 }

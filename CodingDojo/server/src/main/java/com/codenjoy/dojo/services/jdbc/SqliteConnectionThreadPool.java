@@ -68,16 +68,16 @@ public class SqliteConnectionThreadPool extends CrudPrimaryKeyConnectionThreadPo
     }
 
     @Override
-    String getLastInsertedIdQuery(String table, String column) {
+    public String getLastInsertedIdQuery(String table, String column) {
         return "select last_insert_rowid()";
     }
 
-    String getPkDirective() {
+    protected String getPkDirective() {
         return "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL";
     }
 
     @Override
-    String clearLastInsertedIdQuery(String table, String column) {
-        return "UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + table + "'";
+    protected String clearLastInsertedIdQuery(String table, String column) {
+        return String.format("UPDATE sqlite_sequence SET seq = 0 WHERE name = '%s'", table);
     }
 }

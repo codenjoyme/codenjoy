@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.PlayerController;
 import com.codenjoy.dojo.services.controller.ScreenController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
@@ -117,6 +118,9 @@ public class PlayerServiceImplTest {
     private GameService gameService;
 
     @MockBean
+    private Chat chat;
+
+    @MockBean
     private Semifinal semifinal;
 
     @MockBean
@@ -147,6 +151,7 @@ public class PlayerServiceImplTest {
     private List<Player> players = new LinkedList<>();
     private List<PlayerHero> heroesData = new LinkedList<>();
     private List<PlayerScores> playerScores = new LinkedList<>();
+    private Map<String, Integer> chatIds = new HashMap<>();
 
     @Before
     public void setUp() {
@@ -165,6 +170,8 @@ public class PlayerServiceImplTest {
         when(gameService.getGameType(anyString())).thenReturn(gameType);
         when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
         when(gameService.exists(anyString())).thenReturn(true);
+
+        when(chat.getLastMessageIds()).thenReturn(chatIds);
 
         when(gameType.getBoardSize(any())).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt(), any())).thenAnswer(inv -> {
@@ -382,7 +389,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldRequestControl_fromAllPlayers_withGlassState() throws IOException {
+    public void shouldRequestControl_fromAllPlayers_withGlassState() {
         // given
         createPlayer(VASYA);
         when(printer.print(any(), any())).thenReturn("1234");
@@ -396,7 +403,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldSendAdditionalInfoToAllPlayers() throws IOException {
+    public void shouldSendAdditionalInfoToAllPlayers() {
         // given
         createPlayer(VASYA);
         createPlayer(PETYA);
@@ -423,7 +430,8 @@ public class PlayerServiceImplTest {
                         "'coordinates':{'petya':{'coordinate':{'x':3,'y':4},'level':0,'multiplayer':false}}," +
                         "'group':['petya']," +
                         "'readableNames':{'petya':'readable_petya'}" +
-                        "}'], " +
+                        "}', " +
+                    "LastChatMessage:106558567], " +
                 "vasya=PlayerData[" +
                     "BoardSize:15, Board:'ABCD', Game:'game', " +
                     "Score:123, Info:'', " +
@@ -432,7 +440,8 @@ public class PlayerServiceImplTest {
                         "'coordinates':{'vasya':{'coordinate':{'x':1,'y':2},'level':0,'multiplayer':false}}," +
                         "'group':['vasya']," +
                         "'readableNames':{'vasya':'readable_vasya'}" +
-                        "}']}",
+                        "}', " +
+                    "LastChatMessage:111979568]}",
                 data.toString().replaceAll("\"", "'"));
     }
 
@@ -535,6 +544,7 @@ public class PlayerServiceImplTest {
         Player player = playerService.register(id, game, room,
                 getCallbackUrl(id));
         players.add(player);
+        chatIds.put(room, Math.abs(id.hashCode()));
 
         if (player != NullPlayer.INSTANCE) {
             verify(gameType, atLeastOnce()).createGame(anyInt(), any());

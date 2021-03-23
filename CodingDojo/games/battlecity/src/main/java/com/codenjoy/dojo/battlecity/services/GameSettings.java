@@ -23,13 +23,20 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.settings.Chance;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.settings.Chance.CHANCE_RESERVED;
 
 public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
@@ -46,7 +53,13 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         TANK_TICKS_PER_SHOOT("Ticks until the next Tank shoot"),
         SLIPPERINESS("Value of tank sliding on ice"),
         AI_PRIZE_LIMIT("The total number of prize tanks and prizes on the board"),
-        LEVEL_MAP("Level map");
+        PENALTY_WALKING_ON_WATER("Penalty time when walking on water"),
+        LEVEL_MAP("Level map"),
+        CHANCE_IMMORTALITY("[Chance] Prize immortality"),
+        CHANCE_BREAKING_WALLS("[Chance] Prize breaking walls"),
+        CHANCE_WALKING_ON_WATER("[Chance] Prize walking on water"),
+        CHANCE_VISIBILITY("[Chance] Prize visibility"),
+        CHANCE_NO_SLIDING("[Chance] Prize no sliding");
 
         private String key;
 
@@ -73,6 +86,14 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(TANK_TICKS_PER_SHOOT, 4);
         integer(SLIPPERINESS, 3);
         integer(AI_PRIZE_LIMIT, 3);
+        integer(PENALTY_WALKING_ON_WATER, 2);
+
+        integer(CHANCE_RESERVED, 30);
+        integer(CHANCE_IMMORTALITY, 20);
+        integer(CHANCE_BREAKING_WALLS, 20);
+        integer(CHANCE_WALKING_ON_WATER, 20);
+        integer(CHANCE_VISIBILITY, 20);
+        integer(CHANCE_NO_SLIDING, 20);
 
         multiline(LEVEL_MAP,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -109,6 +130,16 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
                 "☼            ╬╬    ╬╬            ☼" +
                 "☼  %%%%%%    ╬╬    ╬╬    %%%%%%  ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+    }
+
+    public Chance<Elements> chance(Dice dice) {
+        return new Chance<Elements>(dice, this)
+            .put(CHANCE_IMMORTALITY, PRIZE_IMMORTALITY)
+            .put(CHANCE_BREAKING_WALLS, PRIZE_BREAKING_WALLS)
+            .put(CHANCE_WALKING_ON_WATER, PRIZE_WALKING_ON_WATER)
+            .put(CHANCE_VISIBILITY, PRIZE_VISIBILITY)
+            .put(CHANCE_NO_SLIDING, PRIZE_NO_SLIDING)
+            .run();
     }
 
     public Level level(Dice dice) {

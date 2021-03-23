@@ -33,17 +33,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Optional;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
+@RequestMapping(BoardController.URI)
 @RequiredArgsConstructor
 public class BoardController {
 
@@ -55,7 +57,7 @@ public class BoardController {
     private final ConfigProperties properties;
     private final RegistrationService registrationService;
 
-    @GetMapping(URI + "/player/{player}")
+    @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
                               @PathVariable("player") String id,
                               @RequestParam(name = "only", required = false) Boolean justBoard)
@@ -65,7 +67,7 @@ public class BoardController {
         return boardPlayer(model, id, null, justBoard, (String) model.get("game"));
     }
 
-    @GetMapping(value = URI + "/player/{player}", params = {"code", "remove"})
+    @GetMapping(value = "/player/{player}", params = {"code", "remove"})
     public String removePlayer(@PathVariable("player") String id, @RequestParam("code") String code) {
         validator.checkPlayerCode(id, code);
 
@@ -78,7 +80,7 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @GetMapping(value = URI + "/player/{player}", params = "code")
+    @GetMapping(value = "/player/{player}", params = "code")
     public String boardPlayer(ModelMap model,
                               @PathVariable("player") String id,
                               @RequestParam("code") String code,
@@ -94,14 +96,14 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
-        populateJoiningGameModel(model, code, player);
+        populateBoardAttributes(model, code, player, false);
 
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
         return justBoard ? "board-only" : "board";
     }
 
-    @GetMapping(URI + "/rejoining/{game}")
+    @GetMapping("/rejoining/{game}")
     public String rejoinGame(ModelMap model, @PathVariable("game") String game,
                              HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user)
@@ -118,7 +120,7 @@ public class BoardController {
         return rejoinGame(model, game, room, request, user);
     }
 
-    @GetMapping(URI + "/rejoining/{game}/room/{room}")
+    @GetMapping("/rejoining/{game}/room/{room}")
     public String rejoinGame(ModelMap model, @PathVariable("game") String game,
                              @PathVariable("room") String room,
                              HttpServletRequest request,
@@ -132,21 +134,30 @@ public class BoardController {
             return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game);
         }
 
-        populateJoiningGameModel(model, player.getCode(), player);
+        populateBoardAttributes(model, player.getCode(), player, false);
         return "board";
     }
 
-    private void populateJoiningGameModel(ModelMap model, String code, Player player) {
-        model.addAttribute("code", code);
-        model.addAttribute("game", player.getGame());
-        model.addAttribute("room", player.getRoom());
-        model.addAttribute("gameOnly", player.getGameOnly());
-        model.addAttribute("playerId", player.getId());
-        model.addAttribute("readableName", player.getReadableName());
-        model.addAttribute("allPlayersScreen", false);
+    private void populateBoardAttributes(ModelMap model, String code, Player player, boolean allPlayersScreen) {
+        populateBoardAttributes(model, code, player.getGame(), player.getRoom(), player.getGameOnly(), player.getId(),
+                player.getReadableName(), allPlayersScreen);
     }
 
-    @GetMapping(value = URI + "/log/player/{player}", params = {"game", "room"})
+    private void populateBoardAttributes(ModelMap model, String code, String game, String room, String gameOnly,
+                                         String playerId, String readableName, boolean allPlayersScreen) {
+        model.addAttribute("code", code);
+        model.addAttribute("game", game);
+        model.addAttribute("room", room);
+        model.addAttribute("allPlayersScreen", false);
+        model.addAttribute("game", game);
+        model.addAttribute("gameOnly", gameOnly);
+        model.addAttribute("playerId", playerId);
+        model.addAttribute("readableName", readableName);
+        model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
+        model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
+    }
+
+    @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
     public String boardPlayerLog(ModelMap model, @PathVariable("player") String id,
                                  @RequestParam("game") String game,
                                  @RequestParam("room") String room)
@@ -169,7 +180,7 @@ public class BoardController {
         return "board-log";
     }
 
-    @GetMapping(URI)
+    @GetMapping("/")
     public String boardAll() {
         GameType gameType = playerService.getAnyGameWithPlayers();
         if (gameType == NullGameType.INSTANCE) {
@@ -178,7 +189,7 @@ public class BoardController {
         return "redirect:/board/game/" + gameType.name();
     }
 
-    @GetMapping(URI + "/game/{game}")
+    @GetMapping("/game/{game}")
     public String boardAllGames(ModelMap model,
                                 @PathVariable("game") String game,
                                 @RequestParam(value = "code", required = false) String code,
@@ -192,12 +203,14 @@ public class BoardController {
             return "redirect:/board" + code(code);
         }
 
+        String room = game; // TODO закончить с room
+
         Player player = playerService.getRandom(game);
         if (player == NullPlayer.INSTANCE) {
             // TODO а это тут вообще надо?
             return "redirect:/register?" + "game" + "=" + game;
         }
-        GameType gameType = player.getGameType();
+        GameType gameType = player.getGameType(); // TODO а тут точно сеттинги румы а не игры?
         if (gameType.getMultiplayerType(gameType.getSettings()) == MultiplayerType.MULTIPLE) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
@@ -206,17 +219,11 @@ public class BoardController {
             code = user.getCode();
         }
 
-        model.addAttribute("code", code);
-        model.addAttribute("game", game);
-        model.addAttribute("room", player.getRoom());
-        model.addAttribute("gameOnly", player.getGameOnly());
-        model.addAttribute("playerId", null);
-        model.addAttribute("readableName", null);
-        model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
+        populateBoardAttributes(model, code, game, room, player.getGameOnly(), null, null, true);
         return "board";
     }
 
-    @GetMapping(value = URI, params = "code")
+    @GetMapping(value = "/", params = "code")
     public String boardAll(ModelMap model, @RequestParam("code") String code) {
         validator.checkCode(code, CAN_BE_NULL);
 
@@ -228,7 +235,7 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register";
         }
-        GameType gameType = player.getGameType();
+        GameType gameType = player.getGameType(); // TODO а тут точно сеттинги румы а не игры?
         if (gameType.getMultiplayerType(gameType.getSettings()) != MultiplayerType.SINGLE) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
@@ -247,15 +254,4 @@ public class BoardController {
         return (code != null)?"?code=" + code:"";
     }
 
-    @GetMapping("/donate")
-    public String donate(ModelMap model) {
-        model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        model.addAttribute("donateCode", properties.getDonateCode());
-        return "donate-form";
-    }
-
-    @RequestMapping("/help")
-    public String help() {
-        return "help";
-    }
 }

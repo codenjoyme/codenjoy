@@ -53,11 +53,13 @@ public class RestChatController {
             @RequestParam(name = "count", required = false, defaultValue = DEFAULT_COUNT) int count,
             @RequestParam(name = "afterId", required = false) Integer afterId,
             @RequestParam(name = "beforeId", required = false) Integer beforeId,
+            @RequestParam(name = "inclusive", required = false, defaultValue = "false") boolean inclusive,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getMessages(room, count, afterId, beforeId, user.getId()));
+        return ResponseEntity.ok(chat.getMessages(room, count,
+                afterId, beforeId, inclusive, user.getId()));
     }
 
     @PostMapping("/{room}/messages")
@@ -68,7 +70,8 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.postMessage(null, message.getText(), room, user.getId()));
+        return ResponseEntity.ok(chat.postMessage(null, message.getText(),
+                room, user.getId()));
     }
 
     @PostMapping("/{room}/messages/{id}/replies")
@@ -80,7 +83,8 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.postMessage(id, message.getText(), room, user.getId()));
+        return ResponseEntity.ok(chat.postMessage(id, message.getText(),
+                room, user.getId()));
     }
 
     @GetMapping("/{room}/messages/{id}")

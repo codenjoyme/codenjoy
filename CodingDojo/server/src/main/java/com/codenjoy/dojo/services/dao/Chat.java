@@ -27,12 +27,12 @@ import com.codenjoy.dojo.services.jdbc.CrudPrimaryKeyConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import lombok.Builder;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Chat {
     private final CrudPrimaryKeyConnectionThreadPool pool;
@@ -65,11 +65,39 @@ public class Chat {
                         "WHERE room = ? " +
                         "AND topic_id IS NULL " +
                         "ORDER BY time DESC " +
-                        "LIMIT ?)" +
+                        "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
                 new Object[]{room, count},
                 Chat::parseMessages
         );
+    }
+
+    public Integer getLastMessageId(String room) {
+        return pool.select("SELECT id " +
+                        "FROM messages " +
+                        "WHERE room = ? " +
+                        "ORDER BY time DESC " +
+                        "LIMIT 1;",
+                new Object[]{room},
+                rs -> rs.next() ? rs.getInt(1) : null);
+    }
+
+    public Map<String, Integer> getLastMessageIds() {
+        return pool.select("SELECT room, id, MAX(time) as max_time " +
+                        "FROM messages " +
+                        "GROUP BY room " +
+                        "ORDER BY room ASC;",
+                new Object[]{},
+                rs -> toMap(rs));
+    }
+
+    @SneakyThrows
+    public Map<String, Integer> toMap(ResultSet rs) {
+        return new LinkedHashMap<>(){{
+           while (rs.next()) {
+                put(rs.getString("room"), rs.getInt("id"));
+           }
+        }};
     }
 
     /**
@@ -89,16 +117,21 @@ public class Chat {
      * @return все сообщения в диапазоне ({@param afterId}...{@param beforeId})
      *        для текущего чата {@param room},
      *        посортированных в порядке возрастания времени.
+     *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
+     *        message {@param afterId} и message {@param beforeId} помимо выбранных.
      */
-    public List<Message> getMessagesBetween(String room, int afterId, int beforeId) {
+    public List<Message> getMessagesBetween(String room,
+                                            int afterId, int beforeId,
+                                            boolean inclusive)
+    {
         if (afterId > beforeId) {
             throw new IllegalArgumentException("afterId in interval should be smaller than beforeId");
         }
         return pool.select("SELECT * FROM messages " +
                         "WHERE room = ? " +
                         "AND topic_id IS NULL " +
-                        "AND id > ? " +
-                        "AND id < ?" +
+                        "AND id >" + (inclusive?"=":"") + " ? " +
+                        "AND id <" + (inclusive?"=":"") + " ? " +
                         "ORDER BY time ASC;",
                 new Object[]{room, afterId, beforeId},
                 Chat::parseMessages
@@ -106,15 +139,19 @@ public class Chat {
     }
 
     /**
-     * @return {@param count} первых сообщений начиная с {@param afterId} (но не включая его)
+     * @return {@param count} первых сообщений начиная с {@param afterId}
      *        для текущего чата {@param room},
      *        посортированных в порядке возрастания времени.
+     *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
+     *        message {@param afterId}.
      */
-    public List<Message> getMessagesAfter(String room, int count, int afterId) {
+    public List<Message> getMessagesAfter(String room, int count,
+                                          int afterId, boolean inclusive)
+    {
         return pool.select("SELECT * FROM messages " +
                         "WHERE room = ? " +
                         "AND topic_id IS NULL " +
-                        "AND id > ?" +
+                        "AND id >" + (inclusive?"=":"") + " ? " +
                         "ORDER BY time ASC " +
                         "LIMIT ?;",
                 new Object[]{room, afterId, count},
@@ -123,18 +160,22 @@ public class Chat {
     }
 
     /**
-     * @return {@param count} последних сообщений перед {@param beforeId} (но не включая его)
+     * @return {@param count} последних сообщений перед {@param beforeId}
      *        для текущего чата {@param room},
      *        посортированных в порядке возрастания времени.
+     *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
+     *        message {@param beforeId}.
      */
-    public List<Message> getMessagesBefore(String room, int count, int beforeId) {
+    public List<Message> getMessagesBefore(String room, int count,
+                                           int beforeId, boolean inclusive)
+    {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
                         "WHERE room = ? " +
                         "AND topic_id IS NULL " +
-                        "AND id < ?" +
+                        "AND id <" + (inclusive?"=":"") + " ? " +
                         "ORDER BY time DESC " +
-                        "LIMIT ?) " +
+                        "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
                 new Object[]{room, beforeId, count},
                 Chat::parseMessages
@@ -148,26 +189,34 @@ public class Chat {
         );
     }
 
-    public synchronized Message saveMessage(Message message) {
-        // synchronized тут потому что создание записи и получение новой id
-        // созданной записи должны быть одной атомарной операцией
-        pool.update("INSERT INTO messages " +
+    public Message saveMessage(Message message) {
+        List<Object> objects = pool.batch(Arrays.asList("INSERT INTO messages " +
                         "(room, topic_id, player_id, time, text) " +
                         "VALUES (?, ?, ?, ?, ?);",
-                new Object[]{
-                        message.getRoom(),
-                        message.getTopicId(),
-                        message.getPlayerId(),
-                        JDBCTimeUtils.toString(new Date(message.getTime())),
-                        message.getText()
-                }
-        );
-        message.setId(pool.lastInsertId("messages", "id"));
+                pool.getLastInsertedIdQuery("messages", "id")),
+
+                Arrays.asList(new Object[]{
+                                message.getRoom(),
+                                message.getTopicId(),
+                                message.getPlayerId(),
+                                JDBCTimeUtils.toString(new Date(message.getTime())),
+                                message.getText()
+                        },
+                        new Object[]{}),
+
+                Arrays.asList(null,
+                        rs -> rs.next() ? rs.getInt(1) : null));
+
+
+        message.setId((Integer) objects.get(1));
         return message;
     }
 
-    public void deleteMessage(int id) {
-        pool.update("DELETE FROM messages WHERE id = ?", new Object[]{id});
+    public boolean deleteMessage(int id, String playerId) {
+        return 1 == pool.update("DELETE FROM messages " +
+                "WHERE id = ? " +
+                "AND player_id = ?",
+                new Object[]{id, playerId});
     }
 
     private static List<Message> parseMessages(ResultSet rs) throws SQLException {

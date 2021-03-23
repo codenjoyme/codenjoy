@@ -22,3 +22,6 @@
 [submodule "CodingDojo/games/vacuum"]
 	path = CodingDojo/games/vacuum
 	url = https://github.com/codenjoyme/codenjoy-vacuum.git
+[submodule "CodingDojo/games/xonix"]
+	path = CodingDojo/games/xonix
+	url = https://github.com/codenjoyme/codenjoy-xonix.git

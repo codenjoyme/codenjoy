@@ -138,3 +138,12 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
         }
     });
 };
+
+function cleanPlayerScores() {
+    deleteData('/rest/game/scores',
+        function () {
+            // do nothing
+        }, function () {
+            console.error('Failed to cleanup score');
+        });
+}

@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,10 +23,13 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.LevelUtils;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,13 +37,14 @@ import static com.codenjoy.dojo.loderunner.model.Elements.*;
 
 public class LevelImpl implements Level {
 
+    private Dice dice;
+    private LengthToXY xy;
     private EnemyAI ai;
-
-    private final LengthToXY xy;
     private String map;
 
-    public LevelImpl(String map) {
+    public LevelImpl(String map, Dice dice) {
         this.map = map;
+        this.dice = dice;
         ai = new AI();
         xy = new LengthToXY(getSize());
     }
@@ -52,10 +56,22 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHeroes() {
+        EnumSet<Elements> left = EnumSet.of(
+                HERO_DRILL_LEFT, HERO_LEFT, HERO_FALL_LEFT, HERO_PIPE_LEFT,
+                HERO_SHADOW_DRILL_LEFT,
+                HERO_SHADOW_LEFT, HERO_SHADOW_FALL_LEFT, HERO_SHADOW_PIPE_LEFT);
+
+        EnumSet<Elements> right = EnumSet.of(
+                HERO_DRILL_RIGHT, HERO_RIGHT, HERO_FALL_RIGHT, HERO_PIPE_RIGHT,
+                HERO_SHADOW_DRILL_RIGHT,
+                HERO_SHADOW_RIGHT, HERO_SHADOW_FALL_RIGHT, HERO_SHADOW_PIPE_RIGHT);
+
         return LevelUtils.getObjects(xy, map,
                 new HashMap<>(){{
-                    put(HERO_LEFT, pt -> new Hero(pt, Direction.LEFT));
-                    put(HERO_RIGHT, pt -> new Hero(pt, Direction.RIGHT));
+                    left.forEach(element ->
+                            put(element, pt -> new Hero(pt, Direction.LEFT)));
+                    right.forEach(element ->
+                            put(element, pt -> new Hero(pt, Direction.RIGHT)));
                 }});
     }
 
@@ -74,10 +90,24 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Gold> getGold() {
+    public List<YellowGold> getYellowGold() {
         return LevelUtils.getObjects(xy, map,
-                Gold::new,
-                GOLD);
+                YellowGold::new,
+                YELLOW_GOLD);
+    }
+
+    @Override
+    public List<GreenGold> getGreenGold() {
+        return LevelUtils.getObjects(xy, map,
+                GreenGold::new,
+                GREEN_GOLD);
+    }
+
+    @Override
+    public List<RedGold> getRedGold() {
+        return  LevelUtils.getObjects(xy, map,
+                RedGold::new,
+                RED_GOLD);
     }
 
     @Override
@@ -98,12 +128,31 @@ public class LevelImpl implements Level {
     public List<Enemy> getEnemies() {
         return LevelUtils.getObjects(xy, map,
                 new HashMap<>(){{
-                    put(ENEMY_LEFT, pt -> new Enemy(pt, Direction.LEFT, ai));
-                    put(ENEMY_RIGHT, pt -> new Enemy(pt, Direction.RIGHT, ai));
+                    put(ENEMY_LEFT, pt -> new Enemy(pt, Direction.LEFT, ai, dice));
+                    put(ENEMY_RIGHT, pt -> new Enemy(pt, Direction.RIGHT, ai, dice));
                 }});
+    }
+
+    @Override
+    public List<Pill> getPills() {
+        return LevelUtils.getObjects(xy, map,
+                pt -> new Pill(pt, PillType.SHADOW_PILL),
+                SHADOW_PILL);
+    }
+
+    @Override
+    public List<Portal> getPortals() {
+        return LevelUtils.getObjects(xy, map,
+                Portal::new,
+                PORTAL);
     }
 
     public void setAI(EnemyAI ai) {
         this.ai = ai;
+    }
+
+    @Override
+    public EnemyAI getAi() {
+        return this.ai;
     }
 }

@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.Point;
 import java.util.Collection;
 import java.util.List;
 
+import static com.codenjoy.dojo.hex.model.Elements.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
@@ -40,24 +41,23 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Collection<Point> getBarriers() {
-        Collection<Point> all = getWalls();
-        all.addAll(get(Elements.MY_HERO));
-        all.addAll(get(Elements.HERO1));
-        all.addAll(get(Elements.HERO2));
-        all.addAll(get(Elements.HERO3));
-        all.addAll(get(Elements.HERO4));
-        all.addAll(get(Elements.HERO5));
-        all.addAll(get(Elements.HERO6));
-        all.addAll(get(Elements.HERO7));
-        all.addAll(get(Elements.HERO8));
-        all.addAll(get(Elements.HERO9));
-        all.addAll(get(Elements.HERO10));
-        all.addAll(get(Elements.HERO11));
-        return removeDuplicates(all);
+        return get(WALL,
+                MY_HERO,
+                HERO1,
+                HERO2,
+                HERO3,
+                HERO4,
+                HERO5,
+                HERO6,
+                HERO7,
+                HERO8,
+                HERO9,
+                HERO10,
+                HERO11);
     }
 
     public Collection<Point> getWalls() {
-        return get(Elements.WALL);
+        return get(WALL);
     }
 
     public boolean isBarrierAt(int x, int y) {
@@ -66,6 +66,6 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isGameOver() {
-        return get(Elements.MY_HERO).isEmpty() || get(Elements.NONE).isEmpty();
+        return get(MY_HERO).isEmpty() || get(NONE).isEmpty();
     }
 }

@@ -24,17 +24,18 @@ package com.codenjoy.dojo.services.algs;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
+import java.util.TreeMap;
 
-import static org.junit.Assert.*;
+import static com.codenjoy.dojo.services.algs.DeikstraFindWayTest.Elements.*;
+import static org.junit.Assert.assertEquals;
 
 public class DeikstraFindWayTest {
 
@@ -119,11 +120,129 @@ public class DeikstraFindWayTest {
                 "XXXXXXX\n");
     }
 
+    @Test
+    public void testFindShortestWayWhenOnlyOneDirectionAllowed() {
+        String board = "XXXXXXX\n" +
+                "XS˅F˂OX\n" +
+                "X˃˅O˄OX\n" +
+                "XO˅O˄OX\n" +
+                "XO˃˃˄OX\n" +
+                "XOOOOOX\n" +
+                "XXXXXXX\n";
+
+        assertP(board,
+                "{[1,4]=[RIGHT],\n" +
+                "[1,5]=[DOWN, RIGHT],\n" +
+                "[2,2]=[RIGHT],\n" +
+                "[2,3]=[DOWN],\n" +
+                "[2,4]=[DOWN],\n" +
+                "[2,5]=[DOWN],\n" +
+                "[3,2]=[RIGHT],\n" +
+                "[4,2]=[UP],\n" +
+                "[4,3]=[UP],\n" +
+                "[4,4]=[UP],\n" +
+                "[4,5]=[LEFT]}");
+
+        asrtWay(board,
+                "XXXXXXX\n" +
+                "XS˅F*OX\n" +
+                "X**O*OX\n" +
+                "XO*O*OX\n" +
+                "XO***OX\n" +
+                "XOOOOOX\n" +
+                "XXXXXXX\n");
+    }
+
+    @Test
+    public void testOnlyRight() {
+        String board =
+                "XXXXX\n" +
+                "XXXXX\n" +
+                "XS˃FX\n" +
+                "XXXXX\n" +
+                "XXXXX\n";
+
+        assertP(board,
+                "{[1,2]=[RIGHT],\n" +
+                "[2,2]=[RIGHT]}");
+
+        asrtWay(board,
+                "XXXXX\n" +
+                "XXXXX\n" +
+                "XS*FX\n" +
+                "XXXXX\n" +
+                "XXXXX\n");
+    }
+
+    @Test
+    public void testOnlyLeft() {
+        String board =
+                "XXXXX\n" +
+                "XXXXX\n" +
+                "XF˂SX\n" +
+                "XXXXX\n" +
+                "XXXXX\n";
+
+        assertP(board,
+                "{[2,2]=[LEFT],\n" +
+                "[3,2]=[LEFT]}");
+
+        asrtWay(board,
+                "XXXXX\n" +
+                "XXXXX\n" +
+                "XF*SX\n" +
+                "XXXXX\n" +
+                "XXXXX\n");
+    }
+
+    @Test
+    public void testOnlyUp() {
+        String board =
+                "XXXXX\n" +
+                "XXFXX\n" +
+                "XX˄XX\n" +
+                "XXSXX\n" +
+                "XXXXX\n";
+
+        assertP(board,
+                "{[2,1]=[UP],\n" +
+                "[2,2]=[UP]}");
+
+        asrtWay(board,
+                "XXXXX\n" +
+                "XXFXX\n" +
+                "XX*XX\n" +
+                "XXSXX\n" +
+                "XXXXX\n");
+    }
+
+    @Test
+    public void testOnlyDown() {
+        String board =
+                "XXXXX\n" +
+                "XXSXX\n" +
+                "XX˅XX\n" +
+                "XXFXX\n" +
+                "XXXXX\n";
+
+        assertP(board,
+                "{[2,2]=[DOWN],\n" +
+                "[2,3]=[DOWN]}");
+
+        asrtWay(board,
+                "XXXXX\n" +
+                "XXSXX\n" +
+                "XX*XX\n" +
+                "XXFXX\n" +
+                "XXXXX\n");
+    }
+
+
     enum Elements implements CharElements {
         ONLY_UP('˄'),
-        ONLY_DOWN('˃'),
-        ONLY_LEFT('˅'),
-        ONLY_RIGHT('˂'),
+        ONLY_DOWN('˅'),
+        ONLY_LEFT('˂'),
+        ONLY_RIGHT('˃'),
 
         WAY('*'),
 
@@ -156,50 +275,81 @@ public class DeikstraFindWayTest {
     }
 
     private void asrtWay(String expected) {
+        asrtWay(expected, expected);
+    }
+
+    private void asrtWay(String map, String expected) {
         AbstractBoard board = new AbstractBoard() {
             @Override
             public Elements valueOf(char ch) {
                 return Elements.valueOf(ch);
             }
+
+            @Override
+            protected int inversionY(int y) {
+                return size - 1 - y;
+            }
         };
 
         assertEquals(expected,
-                TestUtils.printWay(expected,
-                        Elements.START, Elements.FINISH,
-                        Elements.NONE, Elements.WAY,
+                TestUtils.printWay(map,
+                        START, FINISH,
+                        NONE, WAY,
                         board,
                         b -> getPossible(b)));
+    }
+
+    // TODO to use in AITest
+    private void assertP(String map, String expected) {
+        AbstractBoard board = new AbstractBoard() {
+            @Override
+            public Elements valueOf(char ch) {
+                return Elements.valueOf(ch);
+            }
+
+            @Override
+            protected int inversionY(int y) {
+                return size - 1 - y;
+            }
+        };
+
+        board = (AbstractBoard) board.forString(map);
+
+        Map<Point, List<Direction>> ways = new DeikstraFindWay().getPossibleWays(board.size(), getPossible(board));
+
+        Map<Point, List<Direction>> result = new TreeMap<>();
+        for (Map.Entry<Point, List<Direction>> entry : ways.entrySet()) {
+            List<Direction> value = entry.getValue();
+            if (!value.isEmpty()) {
+                result.put(entry.getKey(), value);
+            }
+        }
+
+        assertEquals(expected, result.toString().replace("], [", "],\n["));
     }
 
     private <T extends AbstractBoard> DeikstraFindWay.Possible getPossible(T board) {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (board.isAt(x, y, Elements.WALL, Elements.FINISH)) return false;
+                if (board.isAt(from, FINISH)) return false;
+                Point dest = where.change(from);
+                if (board.isAt(dest, START)) return false;
 
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (board.isOutOfField(nx, ny)) return false;
-
-                if (board.isAt(nx, ny, Elements.WALL, Elements.START)) return false;
-
-                // TODO test me
-                if (board.isAt(x, y, Elements.ONLY_UP, Elements.ONLY_DOWN, Elements.ONLY_LEFT, Elements.ONLY_RIGHT)) {
-                    if (where == Direction.UP && !board.isAt(x, y, Elements.ONLY_UP)) return false;
-                    if (where == Direction.DOWN && !board.isAt(x, y, Elements.ONLY_DOWN)) return false;
-                    if (where == Direction.LEFT && !board.isAt(x, y, Elements.ONLY_LEFT)) return false;
-                    if (where == Direction.RIGHT && !board.isAt(x, y, Elements.ONLY_RIGHT)) return false;
+                if (board.isAt(from, ONLY_UP, ONLY_DOWN, ONLY_LEFT, ONLY_RIGHT)) {
+                    if (where == Direction.UP && !board.isAt(from, ONLY_UP)) return false;
+                    if (where == Direction.DOWN && !board.isAt(from, ONLY_DOWN)) return false;
+                    if (where == Direction.LEFT && !board.isAt(from, ONLY_LEFT)) return false;
+                    if (where == Direction.RIGHT && !board.isAt(from, ONLY_RIGHT)) return false;
                 }
                 return true;
             }
 
             @Override
             public boolean possible(Point point) {
-                return !board.isAt(point.getX(), point.getY(), Elements.BRICK);
+                if (board.isAt(point, BRICK)) return false;
+                if (board.isAt(point, WALL)) return false;
+                return true;
             }
         };
     }

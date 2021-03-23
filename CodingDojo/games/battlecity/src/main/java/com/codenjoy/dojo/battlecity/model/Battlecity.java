@@ -239,13 +239,13 @@ public class Battlecity implements Field {
         Player died = null;
         boolean aiDied = ais.contains(diedTank);
         if (!aiDied) {
-             died = getPlayer(diedTank);
+             died = player(diedTank);
         }
 
         Tank killerTank = killedBullet.getOwner();
         Player killer = null;
         if (!ais.contains(killerTank)) {
-            killer = getPlayer(killerTank);
+            killer = player(killerTank);
         }
 
         if (killer != null) {
@@ -262,33 +262,19 @@ public class Battlecity implements Field {
         }
     }
 
-    private Player getPlayer(Tank tank) {
-        for (Player player : players) {
-            if (player.getHero().equals(tank)) {
-                return player;
-            }
-        }
-
-        throw new RuntimeException("Танк игрока не найден!");
+    private Player player(Tank tank) {
+        return players.stream()
+                .filter(player -> player.getHero().equals(tank))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Танк игрока не найден!"));
     }
 
     @Override
     public boolean isBarrierFor(Tank tank, Point pt) {
-        if (isBarrier(pt)) {
-            return true;
-        }
-
-        if (isRiver(pt)) {
-            if (tank.prizes().contains(PRIZE_WALKING_ON_WATER)) {
-                return false;
-            }
-            return true;
-        }
-
-        return false;
+        return isBarrier(pt)
+                || (isRiver(pt) && !tank.canWalkOnWater());
     }
 
-    @Override
     public boolean isBarrier(Point pt) {
         for (Wall wall : this.walls) {
             if (wall.itsMe(pt) && !wall.destroyed()) {

@@ -20,22 +20,34 @@
   #L%
   --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <table id="table-logs" class="table table-striped leaderboard-table">
     <thead>
-    <th width="5%">
-        <c:choose>
-            <c:when test="${code != null}">
-                <a href="${ctx}/board/game/${game}?code=${code}">#</a>
-            </c:when>
-            <c:otherwise>
-                <a href="${ctx}/board/game/${game}">#</a>
-            </c:otherwise>
-        </c:choose>
-    </th>
-    <th width="55%">Player</th>
-    <th width="25%" class="center">Score</th>
+        <th width="5%">
+            <c:choose>
+                <c:when test="${code != null}">
+                    <a href="${ctx}/board/game/${game}?code=${code}">#</a>
+                </c:when>
+                <c:otherwise>
+                    <a href="${ctx}/board/game/${game}">#</a>
+                </c:otherwise>
+            </c:choose>
+        </th>
+        <th width="55%">
+            <div class="score-header">
+                Player
+                <sec:authorize access="isAuthenticated()">
+                    <c:if test="${playerScoreCleanupEnabled}">
+                        <span class="pow">
+                            <a href="#" onclick="cleanPlayerScores()">clear score</a>
+                        </span>
+                    </c:if>
+                </sec:authorize>
+            </div>
+        </th>
+        <th width="25%" class="center">Score</th>
     </thead>
     <tbody id="table-logs-body">
     <!--

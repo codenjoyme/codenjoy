@@ -39,10 +39,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author Igor Petrov
- * Created at 5/23/2019
- */
 @Controller
 @RequestMapping(ErrorController.URI)
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {

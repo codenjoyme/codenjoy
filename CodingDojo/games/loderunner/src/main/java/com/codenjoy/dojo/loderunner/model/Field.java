@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,39 +23,49 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
-
 import java.util.List;
+import java.util.Optional;
 
 public interface Field extends GameField<Player> {
-    boolean isBarrier(int x, int y);
 
-    boolean tryToDrill(Hero hero, int x, int y);
+    boolean isBarrier(Point pt);
 
-    boolean isPit(int x, int y);
+    boolean tryToDrill(Hero hero, Point pt);
 
-    Point getFreeRandom();
+    boolean isPit(Point pt);
 
-    boolean isLadder(int x, int y);
+    Optional<Point> getFreeRandom();
 
-    boolean isPipe(int x, int y);
+    boolean isLadder(Point pt);
+
+    boolean isPipe(Point pt);
 
     boolean isFree(Point pt);
 
-    boolean isFullBrick(int x, int y);
+    boolean isFullBrick(Point pt);
 
-    boolean isHeroAt(int x, int y);
+    boolean isHeroAt(Point pt);
 
-    boolean isBrick(int x, int y);
+    boolean isBrick(Point pt);
 
-    boolean isEnemyAt(int x, int y);
+    boolean isEnemyAt(Point pt);
 
-    void leaveGold(int x, int y);
+    void leaveGold(Point pt, Class<? extends Point> clazz);
+
+    void leavePill(Point pt, PillType pill);
+
+    void leavePortal(Point pt);
+
+    boolean under(Point pt, PillType pill);
 
     int size();
 
-    boolean isBorder(int x, int y);
+    boolean isBorder(Point pt);
 
     List<Hero> getHeroes();
+
+    void suicide(Hero hero);
 }

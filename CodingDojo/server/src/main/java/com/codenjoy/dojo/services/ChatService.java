@@ -23,12 +23,15 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.dao.Chat;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,23 +41,26 @@ public class ChatService {
     private Validator validator;
     private Chat chat;
     private TimeService time;
+    private Registration registration;
+    private Map<String, String> playerNames = new ConcurrentHashMap<>();
 
     public List<PMessage> getMessages(String room, int count,
                                       Integer afterId, Integer beforeId,
+                                      boolean inclusive,
                                       String playerId)
     {
         validator.checkPlayerInRoom(playerId, room);
 
         if (afterId != null && beforeId != null) {
-            return wrap(chat.getMessagesBetween(room, afterId, beforeId));
+            return wrap(chat.getMessagesBetween(room, afterId, beforeId, inclusive));
         }
 
         if (afterId != null) {
-            return wrap(chat.getMessagesAfter(room, count, afterId));
+            return wrap(chat.getMessagesAfter(room, count, afterId, inclusive));
         }
 
         if (beforeId != null) {
-            return wrap(chat.getMessagesBefore(room, count, beforeId));
+            return wrap(chat.getMessagesBefore(room, count, beforeId, inclusive));
         }
 
         return wrap(chat.getMessages(room, count));
@@ -62,8 +68,20 @@ public class ChatService {
 
     private List<PMessage> wrap(List<Chat.Message> messages) {
         return messages.stream()
-                .map(PMessage::from)
+                .map(this::wrap)
                 .collect(Collectors.toList());
+    }
+
+    private PMessage wrap(Chat.Message message) {
+        return PMessage.from
+                (message, playerName(message.getPlayerId()));
+    }
+
+    private String playerName(String playerId) {
+        if (!playerNames.containsKey(playerId)) {
+            playerNames.put(playerId, registration.getNameById(playerId));
+        }
+        return playerNames.get(playerId);
     }
 
     public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
@@ -78,11 +96,10 @@ public class ChatService {
         Chat.Message message = chat.getMessageById(messageId);
 
         if (message == null || !message.getRoom().equals(room)) {
-            throw new IllegalArgumentException(
-                    "There is no message with id: " + messageId +
-                            " in room with id: " + room);
+            throw exception("There is no message with id '%s' in room '%s'",
+                    messageId, room);
         }
-        return PMessage.from(message);
+        return wrap(message);
     }
 
     public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
@@ -98,14 +115,23 @@ public class ChatService {
 
         chat.saveMessage(message);
 
-        return PMessage.from(message);
+        return wrap(message);
     }
 
     public boolean deleteMessage(int messageId, String room, String playerId) {
         validator.checkPlayerInRoom(playerId, room);
 
-        chat.deleteMessage(messageId);
+        boolean deleted = chat.deleteMessage(messageId, playerId);
 
-        return true;
+        if (!deleted) {
+            throw exception("Player '%s' cant delete message with id '%s' in room '%s'",
+                    playerId, messageId, room);
+        }
+
+        return deleted;
+    }
+
+    public IllegalArgumentException exception(String message, Object... parameters) {
+        return new IllegalArgumentException(String.format(message, parameters));
     }
 }

@@ -37,6 +37,9 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.expansion.model.Elements.*;
+import static com.codenjoy.dojo.expansion.model.Elements.Layers.LAYER1;
+import static com.codenjoy.dojo.expansion.model.Elements.Layers.LAYER2;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
@@ -59,8 +62,13 @@ public class Board extends AbstractBoard<Elements> {
      * @return Is it possible to go through the cell with {x,y} coordinates.
      */
     public boolean isBarrierAt(int x, int y) {
-        return !isAt(Elements.Layers.LAYER1, x, y, Elements.FLOOR, Elements.BASE1, Elements.BASE2, Elements.BASE3, Elements.BASE4, Elements.EXIT, Elements.GOLD, Elements.HOLE) ||
-                !isAt(Elements.Layers.LAYER2, x, y, Elements.EMPTY, Elements.GOLD, Elements.FORCE1, Elements.FORCE2, Elements.FORCE3, Elements.FORCE4);
+        return !isAt(LAYER1, x, y, 
+                        FLOOR, 
+                        BASE1, BASE2, BASE3, BASE4, 
+                        EXIT, GOLD, HOLE) 
+                || !isAt(LAYER2, x, y, 
+                        EMPTY, GOLD, 
+                        FORCE1, FORCE2, FORCE3, FORCE4);
     }
 
     /**
@@ -69,7 +77,7 @@ public class Board extends AbstractBoard<Elements> {
      * @return Is Hole on the way?
      */
     public boolean isHoleAt(int x, int y) {
-        return isAt(Elements.Layers.LAYER1, x, y, Elements.HOLE);
+        return isAt(LAYER1, x, y, HOLE);
     }
 
     /**
@@ -203,55 +211,55 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns list of coordinates for all visible Walls.
      */
     public List<Point> getWalls() {
-        return get(Elements.Layers.LAYER1,
-                Elements.ANGLE_IN_LEFT,
-                Elements.WALL_FRONT,
-                Elements.ANGLE_IN_RIGHT,
-                Elements.WALL_RIGHT,
-                Elements.ANGLE_BACK_RIGHT,
-                Elements.WALL_BACK,
-                Elements.ANGLE_BACK_LEFT,
-                Elements.WALL_LEFT,
-                Elements.WALL_BACK_ANGLE_LEFT,
-                Elements.WALL_BACK_ANGLE_RIGHT,
-                Elements.ANGLE_OUT_RIGHT,
-                Elements.ANGLE_OUT_LEFT,
-                Elements.SPACE);
+        return get(LAYER1,
+                ANGLE_IN_LEFT,
+                WALL_FRONT,
+                ANGLE_IN_RIGHT,
+                WALL_RIGHT,
+                ANGLE_BACK_RIGHT,
+                WALL_BACK,
+                ANGLE_BACK_LEFT,
+                WALL_LEFT,
+                WALL_BACK_ANGLE_LEFT,
+                WALL_BACK_ANGLE_RIGHT,
+                ANGLE_OUT_RIGHT,
+                ANGLE_OUT_LEFT,
+                SPACE);
     }
 
     /**
      * @return Returns list of coordinates for all visible Breaks.
      */
     public List<Point> getBreaks() {
-        return get(Elements.Layers.LAYER1, Elements.BREAK);
+        return get(LAYER1, BREAK);
     }
 
     /**
      * @return Returns list of coordinates for all visible Holes.
      */
     public List<Point> getHoles() {
-        return get(Elements.Layers.LAYER1, Elements.HOLE);
+        return get(LAYER1, HOLE);
     }
 
     /**
      * @return Returns list of coordinates for all visible Exit points.
      */
     public List<Point> getExits() {
-        return get(Elements.Layers.LAYER1, Elements.EXIT);
+        return get(LAYER1, EXIT);
     }
 
     /**
      * @return Returns list of coordinates for all visible Start points.
      */
     public List<Point> getBases() {
-        return get(Elements.Layers.LAYER1, Elements.BASE1, Elements.BASE2, Elements.BASE3, Elements.BASE4);
+        return get(LAYER1, BASE1, BASE2, BASE3, BASE4);
     }
 
     /**
      * @return Returns list of coordinates for all visible Gold.
      */
     public List<Point> getGold() {
-        return get(Elements.Layers.LAYER1, Elements.GOLD);
+        return get(LAYER1, GOLD);
     }
 
     /**
@@ -262,8 +270,8 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> getFreeSpaces() {
-        List<Point> empty = get(Elements.Layers.LAYER2, Elements.EMPTY);
-        List<Point> floor = get(Elements.Layers.LAYER1, Elements.FLOOR);
+        List<Point> empty = get(LAYER2, EMPTY);
+        List<Point> floor = get(LAYER1, FLOOR);
         List<Point> result = new LinkedList<>();
         for (Point pt : floor) {
             for (Point pt2 : empty) {
@@ -278,8 +286,8 @@ public class Board extends AbstractBoard<Elements> {
     public String maskOverlay(String source, String mask) {
         StringBuilder result = new StringBuilder(source);
         for (int i = 0; i < result.length(); ++i) {
-            Elements el = Elements.valueOf(mask.charAt(i));
-            if (Elements.isWall(el)) {
+            Elements el = valueOf(mask.charAt(i));
+            if (isWall(el)) {
                 result.setCharAt(i, el.ch());
             }
         }
@@ -295,8 +303,8 @@ public class Board extends AbstractBoard<Elements> {
                 "    0    1    2    3    4    5    6    7    8    9    0";
 
         StringBuilder builder = new StringBuilder();
-        String[] layer1 = boardAsString(Elements.Layers.LAYER1).split("\n");
-        String[] layer2 = boardAsString(Elements.Layers.LAYER2).split("\n");
+        String[] layer1 = boardAsString(LAYER1).split("\n");
+        String[] layer2 = boardAsString(LAYER2).split("\n");
         String[] layer3 = TestUtils.injectNN(getForcesString()).split("\n");
 
         int[][] array = getForcesArray(getForcesString());

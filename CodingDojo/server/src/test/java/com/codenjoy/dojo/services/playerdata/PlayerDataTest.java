@@ -35,7 +35,7 @@ public class PlayerDataTest {
     public void shouldSavePlayerData(){
         PlayerData data = new PlayerData(13, "board", "game", 55, "+100",
                 new JSONObject("{'user@mail.com':12}"),
-                new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"));
+                new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"), 1);
 
         assertSame("board", data.getBoard());
         assertEquals(55, data.getScore());
@@ -44,13 +44,23 @@ public class PlayerDataTest {
         assertEquals("{\"user@mail.com\":12}", JsonUtils.toStringSorted(data.getScores().toString()).toString());
         assertEquals("{\"user@gmail.com\":{\"x\":5,\"y\":10}}", JsonUtils.toStringSorted(data.getHeroesData().toString()).toString());
         assertEquals("game", data.getGame());
+        assertEquals(Integer.valueOf(1), data.getLastChatMessage());
+    }
+
+    @Test
+    public void shouldSavePlayerData_nullChatId(){
+        PlayerData data = new PlayerData(13, "board", "game", 55, "+100",
+                new JSONObject("{'user@mail.com':12}"),
+                new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"), null);
+
+        assertEquals(null, data.getLastChatMessage());
     }
 
     @Test
     public void shouldCollectData() {
         PlayerData data = new PlayerData(15, "board", "game", 10, "info",
                 new JSONObject("{'user@mail.com':12}"),
-                new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"));
+                new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"), 2);
 
         assertEquals("PlayerData[" +
                 "BoardSize:15, " +
@@ -59,14 +69,15 @@ public class PlayerDataTest {
                 "Score:10, " +
                 "Info:'info', " +
                 "Scores:'{\"user@mail.com\":12}', " +
-                "HeroesData:'{\"user@gmail.com\":{\"x\":5,\"y\":10}}']", data.toString());
+                "HeroesData:'{\"user@gmail.com\":{\"x\":5,\"y\":10}}', " +
+                "LastChatMessage:2]", data.toString());
     }
 
     @Test
     public void shouldEmptyInfoIfNull(){
         PlayerData data = new PlayerData(15, "board", "game", 10, null,
                 new JSONObject("{'user@mail.com':12}"),
-                new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"));
+                new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"), 1);
 
         assertEquals("", data.getInfo());
         assertTrue(data.toString(), data.toString().contains("Info:''"));

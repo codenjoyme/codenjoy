@@ -88,6 +88,7 @@
         <module>selfdefense</module>
         <module>japanese</module>
         <module>vacuum</module>
+        <module>xonix</module>
     </modules>
 
     <profiles>

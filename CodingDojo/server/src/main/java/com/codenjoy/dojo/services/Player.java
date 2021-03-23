@@ -149,4 +149,9 @@ public class Player implements ScreenRecipient, Closeable {
         return id;
     }
 
+    public void dropPassword() {
+        this.password = null;
+        this.passwordConfirmation = null;
+    }
+
 }

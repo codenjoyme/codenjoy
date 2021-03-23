@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.Point;
 import java.util.Collection;
 import java.util.List;
 
+import static com.codenjoy.dojo.minesweeper.model.Elements.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
@@ -40,18 +41,18 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.BORDER);
+        return isAt(x, y, BORDER);
     }
 
     public Point getMe() {
-        return get(Elements.DETECTOR).get(0);
+        return get(DETECTOR).get(0);
     }
 
     public boolean isGameOver() {
-    return !get(Elements.BANG).isEmpty();
+    return !get(BANG).isEmpty();
     }
 
     public List<Point> getWalls() {
-        return get(Elements.BORDER);
+        return get(BORDER);
     }
 }

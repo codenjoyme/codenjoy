@@ -44,7 +44,12 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, WALL, START_FLOOR, ENEMY_HEAD_SLEEP, ENEMY_TAIL_INACTIVE, TAIL_INACTIVE);
+        return isAt(x, y,
+                WALL,
+                START_FLOOR,
+                ENEMY_HEAD_SLEEP,
+                ENEMY_TAIL_INACTIVE,
+                TAIL_INACTIVE);
     }
 
     @Override
@@ -61,7 +66,13 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     private List<Point> getMyHead() {
-        return get(HEAD_DOWN, HEAD_LEFT, HEAD_RIGHT, HEAD_UP, HEAD_SLEEP, HEAD_EVIL, HEAD_FLY);
+        return get(HEAD_DOWN,
+                HEAD_LEFT,
+                HEAD_RIGHT,
+                HEAD_UP,
+                HEAD_SLEEP,
+                HEAD_EVIL,
+                HEAD_FLY);
     }
 
     public boolean isStoneAt(int x, int y) {

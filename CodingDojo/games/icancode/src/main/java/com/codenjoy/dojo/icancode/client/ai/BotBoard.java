@@ -33,9 +33,8 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Mikhail_Udalyi on 07.10.2016.
- */
+import static com.codenjoy.dojo.services.Direction.*;
+
 public class BotBoard extends Board {
 
     private PathFinder finder;
@@ -54,16 +53,16 @@ public class BotBoard extends Board {
         for (int i = 0; i < path.length; ++i) {
             switch (path[i]) {
                 case 0:
-                    result.add(Direction.UP);
+                    result.add(UP);
                     break;
                 case 1:
-                    result.add(Direction.RIGHT);
+                    result.add(RIGHT);
                     break;
                 case 2:
-                    result.add(Direction.DOWN);
+                    result.add(DOWN);
                     break;
                 case 3:
-                    result.add(Direction.LEFT);
+                    result.add(LEFT);
                     break;
             }
         }

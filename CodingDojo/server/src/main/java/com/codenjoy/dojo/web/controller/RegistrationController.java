@@ -48,7 +48,6 @@ public class RegistrationController {
 
     private PlayerService playerService;
     private RoomsAliaser rooms;
-    private ConfigProperties properties;
     private RegistrationValidator registrationValidator;
     private RegistrationService registrationService;
 
@@ -83,6 +82,7 @@ public class RegistrationController {
     public String registerByName(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);
+            player.dropPassword();
             return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());
         }
 

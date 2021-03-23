@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +43,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
@@ -131,6 +134,18 @@ public class MainPageController {
             addObject("message", "Invalid Username or Password");
             setViewName("errorPage");
         }};
+    }
+
+    @GetMapping("/donate")
+    public String donate(ModelMap model) {
+        model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        model.addAttribute("donateCode", properties.getDonateCode());
+        return "donate-form";
+    }
+
+    @RequestMapping("/help")
+    public String help() {
+        return "help";
     }
 
 }

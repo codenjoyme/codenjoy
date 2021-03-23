@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.client.ai;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -29,12 +29,9 @@ import com.codenjoy.dojo.loderunner.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AISolver implements Solver<Board> {
 
@@ -48,41 +45,25 @@ public class AISolver implements Solver<Board> {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
+                if (where == Direction.UP && !board.isLadder(from)) return false;
 
-                if (board.aWall(x, y)) return false;
-
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (board.isOutOfField(nx, ny)) return false;
-
-                if (board.aWall(nx, ny)) return false;
-
-                if (where == Direction.UP && !board.aLadder(x, y)) return false;
-
-                int yd = Direction.DOWN.changeY(y);
+                Point under = Direction.DOWN.change(from);
                 if (where != Direction.DOWN &&
-                        !pt(x, yd).isOutOf(board.size()) &&
-                        !board.aWall(x, yd) &&
-                        !board.aLadder(x, yd) &&
-                        !board.aLadder(x, y) &&
-                        !board.aPipe(x, y)) return false;
+                        !under.isOutOf(board.size()) &&
+                        !board.isWall(under) &&
+                        !board.isLadder(under) &&
+                        !board.isLadder(from) &&
+                        !board.isPipe(from)) return false;
 
                 return true;
             }
 
             @Override
-            public boolean possible(Point point) {
-                int x = point.getX();
-                int y = point.getY();
-
-                if (board.aWall(x, y)) return false;
-                if (board.isEnemyAt(x, y)) return false;
-                if (board.isOtherHeroAt(x, y)) return false;
-
+            public boolean possible(Point pt) {
+                if (pt.isOutOf(board.size())) return false;
+                if (board.isWall(pt)) return false;
+                if (board.isEnemyAt(pt)) return false;
+                if (board.isOtherHeroAt(pt)) return false;
                 return true;
             }
         };
@@ -99,7 +80,9 @@ public class AISolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.GOLD);
+        List<Point> to = board.get(Elements.YELLOW_GOLD,
+                Elements.GREEN_GOLD,
+                Elements.RED_GOLD);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }

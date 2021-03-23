@@ -32,9 +32,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Oleksandr_Baglai on 2018-06-26.
- */
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {

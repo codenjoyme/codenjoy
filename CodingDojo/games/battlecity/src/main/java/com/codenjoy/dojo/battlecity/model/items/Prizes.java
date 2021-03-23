@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.Tickable;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class Prizes implements Tickable {
 
     private List<Prize> prizes = new LinkedList<>();
@@ -88,5 +90,13 @@ public class Prizes implements Tickable {
 
     public void clear() {
         prizes.clear();
+    }
+
+    @Override
+    public String toString() {
+        return prizes.stream()
+                .map(prize -> prize.elements().name())
+                .collect(toList())
+                .toString();
     }
 }

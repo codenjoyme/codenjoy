@@ -91,9 +91,13 @@ label.error {
     padding-right: 20px;
 }
 
-.admin-table span.pow {
+span.pow {
     vertical-align: 7px;
     font-size: 10px;
+}
+
+.score-header {
+    white-space: nowrap;
 }
 
 .admin-table input[type="text"] {
@@ -155,6 +159,10 @@ label.error {
 .chat .messages-container {
     overflow-y: auto;
     height: 70vh;
+}
+
+.chat .delete-message {
+    cursor: pointer;
 }
 
 .chat .message-author {

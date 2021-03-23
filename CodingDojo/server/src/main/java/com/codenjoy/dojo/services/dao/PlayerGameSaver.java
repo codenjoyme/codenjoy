@@ -43,7 +43,7 @@ public class PlayerGameSaver implements GameSaver {
                         "callback_url varchar(255)," +
                         "room_name varchar(255)," +
                         "game_name varchar(255)," +
-                        "score int," +
+                        "score varchar(255)," +
                         "save varchar(255));");
     }
 
@@ -73,7 +73,7 @@ public class PlayerGameSaver implements GameSaver {
                 rs -> {
                     if (rs.next()) {
                         String callbackUrl = rs.getString("callback_url");
-                        int score = rs.getInt("score");
+                        String score = rs.getString("score");
                         String room = rs.getString("room_name");
                         String game = rs.getString("game_name");
                         String save = rs.getString("save");

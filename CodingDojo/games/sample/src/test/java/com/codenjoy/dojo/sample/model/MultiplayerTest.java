@@ -23,390 +23,224 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
-import com.codenjoy.dojo.sample.model.level.Level;
-import com.codenjoy.dojo.sample.services.GameSettings;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.sample.services.Events;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
-public class MultiplayerTest {
+public class MultiplayerTest extends AbstractMultiplayerTest {
 
-    private Sample game;
-    private Hero hero;
-    private Dice dice;
-    private EventListener listener;
-    private Player player;
-    private PrinterFactory printer;
-    private GameSettings settings;
-
-    @Before
-    public void setup() {
-        dice = mock(Dice.class);
-        settings = new GameSettings();
-        printer = new PrinterFactoryImpl();
+    public void givenThreePlayers() {
+        givenPlayer(1, 4);
+        givenPlayer(2, 2);
+        givenPlayer(3, 4);
     }
 
-    private void dice(int...ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
-    }
-
-    private void givenFl(String board) {
-        settings.string(LEVEL_MAP, board);
-
-        Level level = settings.level();
-        Hero hero = level.heroes().get(0);
-
-        game = new Sample(level, dice, settings);
-        listener = mock(EventListener.class);
-        player = new Player(listener, settings);
-        game.newGame(player);
-        player.hero = hero;
-        hero.init(game);
-        this.hero = game.getHeroes().get(0);
-    }
-
-    private void assertE(String expected) {
-        assertEquals(TestUtils.injectN(expected),
-                printer.getPrinter(game.reader(), player).print());
-    }
-
-    // есть карта со мной
+    // рисуем несколько игроков
     @Test
-    public void shouldFieldAtStart() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+    public void shouldPrint() {
+        // given
+        givenFl("☼☼☼☼☼☼" +
+                "☼   $☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        givenThreePlayers();
+
+        // when then
+        assertF("☼☼☼☼☼☼\n" +
+                "☼☺ ☻$☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", game(0));
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼☻ ☻$☼\n" +
+                "☼    ☼\n" +
+                "☼ ☺  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", game(1));
+
+        assertF(
+                "☼☼☼☼☼☼\n" +
+                "☼☻ ☺$☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", game(2));
     }
 
-    // я ходить
+    // Каждый игрок может упраыляться за тик игры независимо
     @Test
-    public void shouldWalk() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+    public void shouldJoystick() {
+        // given
+        givenFl("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
 
-        hero.left();
-        game.tick();
+        givenThreePlayers();
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        // when
+        game(0).getJoystick().act();
+        game(0).getJoystick().down();
+        game(1).getJoystick().right();
+        game(2).getJoystick().down();
 
-        hero.right();
-        game.tick();
+        tick();
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.up();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.down();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        // then
+        assertF("☼☼☼☼☼☼\n" +
+                "☼x   ☼\n" +
+                "☼☺ ☻ ☼\n" +
+                "☼  ☻ ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", game(0));
     }
 
-    // если небыло команды я никуда не иду
+    // игроков можно удалять из игры
     @Test
-    public void shouldStopWhenNoMoreRightCommand() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼  ☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+    public void shouldRemove() {
+        // given
+        givenFl("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
 
-        hero.left();
-        game.tick();
+        givenThreePlayers();
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        // when
+        game(2).close();
 
-        game.tick();
+        tick();
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        // then
+        assertF("☼☼☼☼☼☼\n" +
+                "☼☺   ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", game(0));
     }
 
-    // я останавливаюсь возле границы
+    // игрок может взорваться на бомбе
     @Test
-    public void shouldStopWhenWallRight() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼  ☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+    public void shouldKill() {
+        // given
+        givenFl("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
 
-        hero.right();
-        game.tick();
+        givenThreePlayers();
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼  ☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        game(0).getJoystick().down();
+        game(0).getJoystick().act();
+        game(2).getJoystick().left();
+
+        tick();
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼x☻  ☼\n" +
+                "☼☺   ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", game(0));
+        
+        // when
+        game(2).getJoystick().left();
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼☼\n" +
+                "☼X   ☼\n" +
+                "☼☺   ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", game(0));
+
+        verify(listener(2)).event(Events.LOOSE);
+        assertTrue(game(2).isGameOver());
+
+        dice(4, 1);
+        game(2).newGame();
+
+        tick();
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼☺   ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼   ☻☼\n" +
+                "☼☼☼☼☼☼\n", game(0));
     }
 
-    @Test
-    public void shouldStopWhenWallLeft() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.left();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-    }
-
-    @Test
-    public void shouldStopWhenWallUp() {
-        givenFl("☼☼☼☼☼" +
-                "☼ ☼ ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.up();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼ ☼ ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-    }
-
-    @Test
-    public void shouldStopWhenWallDown() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼ ☼ ☼" +
-                "☼☼☼☼☼");
-
-        hero.down();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼ ☼ ☼" +
-                "☼☼☼☼☼");
-    }
-
-    // я могу оставить бомбу
-    @Test
-    public void shouldMakeBomb() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.act();
-        hero.down();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ x ☼" +
-                "☼ ☺ ☼" +
-                "☼☼☼☼☼");
-    }
-
-    // на бомбе я взрываюсь
-    @Test
-    public void shouldDieOnBomb() {
-        shouldMakeBomb();
-
-        assertTrue(hero.isAlive());
-
-        hero.up();
-        game.tick();
-        verify(listener).event(Events.LOOSE);
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ X ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        assertFalse(hero.isAlive());
-    }
-
-    // я могу оставить бомб сколько хочу
-    @Test
-    public void shouldMakeBombTwice() {
-        shouldMakeBomb();
-
-        hero.act();
-        hero.right();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ x ☼" +
-                "☼ x☺☼" +
-                "☼☼☼☼☼");
-    }
-
-    // я могу собирать золото и получать очки
-    // новое золото появится в рендомном месте
+    // игрок может подобрать золото
     @Test
     public void shouldGetGold() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺$☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        // given
+        givenFl("☼☼☼☼☼☼" +
+                "☼   $☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
 
-        dice(1, 3);
-        hero.right();
-        game.tick();
-        verify(listener).event(Events.WIN);
+        givenThreePlayers();
 
-        assertE("☼☼☼☼☼" +
-                "☼$  ☼" +
-                "☼  ☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-    }
-
-    // выполнения команд left + act не зависят от порядка - если они сделаны в одном тике, то будет дырка слева без перемещения
-    @Test
-    public void shouldMakeBomb2() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.down();
-        hero.act();
-//        hero.down();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ x ☼" +
-                "☼ ☺ ☼" +
-                "☼☼☼☼☼");
-    }
-
-    // проверить, что если новому обекту не где появится то программа не зависает - там бесконечный цикл потенциальный есть
-    @Test(timeout = 1000)
-    public void shouldNoDeadLoopWhenNewObjectCreation() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺$☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        dice(2, 2);
-        hero.right();
-        game.tick();
-        verify(listener).event(Events.WIN);
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ $☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-    }
-
-    // я не могу ставить две бомбы на одной клетке
-    @Test
-    public void shouldMakeOnlyOneBomb() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.act();
-        game.tick();
-
-        hero.act();
-        hero.down();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ x ☼" +
-                "☼ ☺ ☼" +
-                "☼☼☼☼☼");
+        // when
+        game(2).getJoystick().right();
 
         dice(1, 2);
-        hero.up();
-        game.tick();
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ X ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        tick();
 
-        game.newGame(player);
-        game.tick();
+        // then
+        assertF("☼☼☼☼☼☼\n" +
+                "☼☺  ☻☼\n" +
+                "☼    ☼\n" +
+                "☼$☻  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", game(0));
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        verify(listener(2)).event(Events.WIN);
+    }
+
+    // игрок не может пойи на другого игрока
+    @Test
+    public void shouldCantGoOnHero() {
+        // given
+        givenFl("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        givenThreePlayers();
+
+        // when
+        game(0).getJoystick().right();
+        game(2).getJoystick().left();
+
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼☼\n" +
+                "☼ ☺☻ ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", game(0));
     }
 }
