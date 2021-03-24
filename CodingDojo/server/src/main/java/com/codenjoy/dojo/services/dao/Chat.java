@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.dao;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -83,7 +83,8 @@ public class Chat {
     }
 
     public Map<String, Integer> getLastMessageIds() {
-        return pool.select("SELECT room, id, MAX(time) as max_time " +
+        //removed ', id' from the query causing endless loop
+        return pool.select("SELECT room, MAX(time) as max_time " +
                         "FROM messages " +
                         "GROUP BY room " +
                         "ORDER BY room ASC;",
@@ -94,9 +95,9 @@ public class Chat {
     @SneakyThrows
     public Map<String, Integer> toMap(ResultSet rs) {
         return new LinkedHashMap<>(){{
-           while (rs.next()) {
+            while (rs.next()) {
                 put(rs.getString("room"), rs.getInt("id"));
-           }
+            }
         }};
     }
 
@@ -214,8 +215,8 @@ public class Chat {
 
     public boolean deleteMessage(int id, String playerId) {
         return 1 == pool.update("DELETE FROM messages " +
-                "WHERE id = ? " +
-                "AND player_id = ?",
+                        "WHERE id = ? " +
+                        "AND player_id = ?",
                 new Object[]{id, playerId});
     }
 
