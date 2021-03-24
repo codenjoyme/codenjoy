@@ -31,15 +31,16 @@ public class BattleCityGameSettings extends AbstractSettings {
 
     public static final String KILL_YOUR_TANK_PENALTY = "Kill your tank penalty";
     public static final String KILL_OTHER_HERO_TANK_SCORE = "Kill other hero tank score";
-    public static final String KILL_OTHER_AI_TANK_SCORE ="Kill other AI tank score";
+    public static final String KILL_OTHER_AI_TANK_SCORE = "Kill other AI tank score";
     public static final String SPAWN_AI_PRIZE = "Count spawn for AI Tank with prize";
     public static final String KILL_HITS_AI_PRIZE = "Hits to kill AI Tank with prize";
     public static final String PRIZE_ON_FIELD = "The period of prize validity on the field after the appearance";
     public static final String PRIZE_WORKING = "Working time of the prize after catch up";
     public static final String AI_TICKS_PER_SHOOT = "Ticks until the next AI Tank shoot";
-    public static final String TANK_TICKS_PER_SHOOT ="Ticks until the next Tank shoot";
-    public static final String SLIPPERINESS ="Value of tank sliding on ice";
+    public static final String TANK_TICKS_PER_SHOOT = "Ticks until the next Tank shoot";
+    public static final String SLIPPERINESS = "Value of tank sliding on ice";
     public static final String AI_PRIZE_LIMIT = "The total number of prize tanks and prizes on the board";
+    public static final String PENALTY_WALKING_ON_WATER = "Penalty time when walking on water";
 
     public Integer getKillYourTankPenalty() {
         return getInteger(KILL_YOUR_TANK_PENALTY);
@@ -83,6 +84,10 @@ public class BattleCityGameSettings extends AbstractSettings {
 
     public Integer getAiPrizeLimit() {
         return getInteger(AI_PRIZE_LIMIT);
+    }
+
+    public Integer getPenaltyWalkingOnWater() {
+        return getInteger(PENALTY_WALKING_ON_WATER);
     }
 
 
@@ -130,6 +135,10 @@ public class BattleCityGameSettings extends AbstractSettings {
         add(AI_PRIZE_LIMIT, input);
     }
 
+    public void setPenaltyWalkingOnWater(Integer input) {
+        add(PENALTY_WALKING_ON_WATER, input);
+    }
+
 
     public BattleCityGameSettings(PParameters parameters) {
         super(parameters);
@@ -148,5 +157,6 @@ public class BattleCityGameSettings extends AbstractSettings {
         update(parameters, TANK_TICKS_PER_SHOOT);
         update(parameters, SLIPPERINESS);
         update(parameters, AI_PRIZE_LIMIT);
+        update(parameters, PENALTY_WALKING_ON_WATER);
     }
 }

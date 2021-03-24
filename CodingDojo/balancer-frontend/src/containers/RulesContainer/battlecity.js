@@ -317,8 +317,7 @@ class RulesContainer extends Component {
                                 <li>
                                     Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
                                 </li>
-                                <li>
-                                    Кількість штрафних тіків { this._gets('prizeWorking') } тіків (секунд). //todo Решить, что с реализацией штрафа на воде.
+                                    Кількість штрафних тіків-затримки на воді: { this._gets('penaltyWalkingOnWater') }.
                                 </li>
 
                             </ul>
@@ -368,6 +367,7 @@ class RulesContainer extends Component {
                             <li>Затримка між пострілами для AI-танків: { this._gets('aiTicksPerShoot') }.</li>
                             <li>Затримка між пострілами звичайних танків: { this._gets('tankTicksPerShoot') }.</li>
                             <li>Кількість тіків, які танк ковзає на кризі: { this._gets('slipperiness') }.</li>
+                            <li>Кількість штрафних тіків-затримки на воді: { this._gets('penaltyWalkingOnWater') }.</li>
                         </ul>
                     </div>
                     <p>
