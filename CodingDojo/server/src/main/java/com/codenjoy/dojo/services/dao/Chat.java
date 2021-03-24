@@ -83,7 +83,8 @@ public class Chat {
     }
 
     public Map<String, Integer> getLastMessageIds() {
-        return pool.select("SELECT room, id, MAX(time) as max_time " +
+        //removed ', id' from the query causing endless loop
+        return pool.select("SELECT room, MAX(time) as max_time " +
                         "FROM messages " +
                         "GROUP BY room " +
                         "ORDER BY room ASC;",

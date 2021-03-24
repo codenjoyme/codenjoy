@@ -635,7 +635,8 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             playerGames.get(id).clearScore();
-            playerGames.get(id).getGame().getProgress().reset();
+            //Causes an error - Error:(639,55) java: cannot find symbol
+            //playerGames.get(id).getGame().getProgress().reset();
         } finally {
             lock.writeLock().unlock();
         }
