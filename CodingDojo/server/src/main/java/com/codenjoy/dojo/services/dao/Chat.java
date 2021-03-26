@@ -85,7 +85,7 @@ public class Chat {
     public Map<String, Integer> getLastMessageIds() {
         return pool.select("SELECT room, id, MAX(time) as max_time " +
                         "FROM messages " +
-                        "GROUP BY room " +
+                        "GROUP BY room, id " +
                         "ORDER BY room ASC;",
                 new Object[]{},
                 rs -> toMap(rs));
