@@ -32,10 +32,12 @@ import com.codenjoy.dojo.services.settings.Chance;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.MIN_TICKS_FOR_WIN;
 import static com.codenjoy.dojo.services.settings.Chance.CHANCE_RESERVED;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings>, RoundSettings {
@@ -75,6 +77,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         }
     }
 
+    @Override
+    public List<Key> allKeys() {
+        return Arrays.asList(Keys.values());
+    }
+
     public GameSettings() {
         integer(KILL_YOUR_TANK_PENALTY, 0);
         integer(KILL_OTHER_HERO_TANK_SCORE, 50);
@@ -91,7 +98,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(PENALTY_WALKING_ON_WATER, 2);
 
         bool(MULTIPLE, false);
-        integer(PLAYERS_PER_ROOM, 5);
+        integer(PLAYERS_PER_ROOM, 20);
         // включен ли режим раундов
         bool(ROUNDS_ENABLED, true);
         // сколько тиков на 1 раунд

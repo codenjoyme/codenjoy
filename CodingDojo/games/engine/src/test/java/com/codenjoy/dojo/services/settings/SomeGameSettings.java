@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.mocks;
+package com.codenjoy.dojo.services.settings;
 
 /*-
  * #%L
@@ -22,19 +22,17 @@ package com.codenjoy.dojo.services.mocks;
  * #L%
  */
 
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SettingsReader;
-
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER3;
-import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER4;
+import static com.codenjoy.dojo.services.settings.SomeGameSettings.Keys.*;
 
-public class SecondGameSettings extends SettingsImpl implements SettingsReader<FirstGameSettings> {
+public class SomeGameSettings extends SettingsImpl implements SettingsReader<SomeGameSettings> {
 
     public enum Keys implements Key {
 
+        PARAMETER1("Parameter 1"),
+        PARAMETER2("Parameter 2"),
         PARAMETER3("Parameter 3"),
         PARAMETER4("Parameter 4");
 
@@ -55,14 +53,16 @@ public class SecondGameSettings extends SettingsImpl implements SettingsReader<F
         return Arrays.asList(Keys.values());
     }
 
-    public SecondGameSettings() {
-        integer(PARAMETER3, 43);
-        bool(PARAMETER4, false);
-        boolValue(PARAMETER4).update(true);
+    public SomeGameSettings() {
+        integer(PARAMETER1, 12);
+        integerValue(PARAMETER1).update(15);
+        bool(PARAMETER2, true);
+        real(PARAMETER3, 0.5);
+        string(PARAMETER4, "string");
     }
 
     @Override
     public String toString() {
-        return "Second" + super.toStringShort();
+        return "Some" + super.toStringShort();
     }
 }

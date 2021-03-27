@@ -27,14 +27,12 @@ import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;
-import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
-import com.google.common.base.Supplier;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
@@ -77,6 +75,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         public String key() {
             return key;
         }
+    }
+
+    @Override
+    public List<Key> allKeys() {
+        return Arrays.asList(Keys.values());
     }
 
     public GameSettings() {
@@ -154,23 +157,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public PerksSettingsWrapper perksSettings() {
         return new PerksSettingsWrapper(this);
-    }
-
-    // TODO заинлайнить это все
-
-    public GameSettings update(JSONObject json) {
-        json.keySet().forEach(name -> {
-            String key = Key.nameToKey(Keys.values(), name);
-            getParameter(key).update(json.get(name));
-        });
-        return this;
-    }
-
-    public JSONObject asJson() {
-        return new JSONObject(){{
-            getParameters().forEach(parameter ->
-                    put(Key.keyToName(Keys.values(), parameter.getName()), parameter.getValue()));
-        }};
     }
 
 }

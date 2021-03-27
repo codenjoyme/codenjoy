@@ -31,13 +31,19 @@ import com.codenjoy.dojo.a2048.model.generator.RandomGenerator;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.*;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.server.RequestLog;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.*;
 import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
+import static java.util.stream.Collectors.toList;
 
 public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
@@ -93,6 +99,15 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         public String key() {
             return key;
         }
+    }
+
+    @Override
+    public List<Key> allKeys() {
+        return Stream.of(Arrays.stream(Keys.values()),
+                Arrays.stream(NumbersMode.values()),
+                Arrays.stream(BreaksMode.values()))
+                .flatMap(stream -> stream)
+                .collect(toList());
     }
 
     public GameSettings() {

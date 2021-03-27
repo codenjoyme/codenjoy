@@ -28,6 +28,9 @@ import com.codenjoy.dojo.sokoban.helper.TextIOHelper;
 import com.codenjoy.dojo.sokoban.model.items.Level;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.LevelImpl;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.codenjoy.dojo.sokoban.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
@@ -48,6 +51,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         public String key() {
             return key;
         }
+    }
+
+    @Override
+    public List<Key> allKeys() {
+        return Arrays.asList(Keys.values());
     }
 
     public GameSettings() {

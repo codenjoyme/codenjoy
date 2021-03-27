@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.mocks;
+package com.codenjoy.dojo.a2048.services;
 
 /*-
  * #%L
@@ -22,38 +22,18 @@ package com.codenjoy.dojo.services.mocks;
  * #L%
  */
 
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SettingsReader;
+import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
-import static com.codenjoy.dojo.services.mocks.GameSettings.Keys.LEVEL_MAP;
+public class GameSettingsTest {
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
-
-    public enum Keys implements Key {
-
-        LEVEL_MAP("Level map");
-
-        private String key;
-
-        Keys(String key) {
-            this.key = key;
-        }
-
-        @Override
-        public String key() {
-            return key;
-        }
+    @Test
+    public void shouldGetAllKeys() {
+        assertEquals("[SIZE, NEW_NUMBERS, NUMBERS_MODE, BREAKS_MODE, LEVEL_MAP, " +
+                        "NEW_NUMBERS_IN_CORNERS, NEW_NUMBERS_IN_RANDOM, " +
+                        "BREAKS_EXISTS, BREAKS_NOT_EXISTS]",
+                new GameSettings().allKeys().toString());
     }
 
-    @Override
-    public List<Key> allKeys() {
-        return Arrays.asList(Keys.values());
-    }
-
-    public GameSettings() {
-        multiline(LEVEL_MAP, "");
-    }
 }

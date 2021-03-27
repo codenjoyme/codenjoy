@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.mocks;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
@@ -48,6 +49,11 @@ public class FirstGameSettings extends SettingsImpl implements SettingsReader<Fi
         public String key() {
             return key;
         }
+    }
+
+    @Override
+    public List<Key> allKeys() {
+        return Arrays.asList(Keys.values());
     }
 
     public FirstGameSettings() {

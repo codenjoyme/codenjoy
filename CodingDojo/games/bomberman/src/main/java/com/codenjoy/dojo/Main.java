@@ -85,7 +85,7 @@ public class Main {
     }
 
     private static boolean contains(JSONObject settings, SettingsReader.Key key) {
-        return settings.has(SettingsReader.Key.keyToName(RoundSettings.Keys.values(), key.key()));
+        return settings.has(SettingsReader.Key.keyToName(RoundSettings.allRoundsKeys(), key.key()));
     }
 
     private static Dice getDice(String randomSeed) {

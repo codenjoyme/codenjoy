@@ -28,6 +28,9 @@ import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 
 public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
@@ -48,6 +51,11 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         public String key() {
             return key;
         }
+    }
+
+    @Override
+    public List<Key> allKeys() {
+        return Arrays.asList(Keys.values());
     }
 
     public GameSettings() {
