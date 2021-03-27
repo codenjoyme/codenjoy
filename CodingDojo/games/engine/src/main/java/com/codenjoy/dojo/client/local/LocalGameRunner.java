@@ -219,7 +219,7 @@ public class LocalGameRunner {
     }
 
     public static Dice getDice(String soul, long max, long count) {
-        return LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, max, count));
+        return LocalGameRunner.getDice(generateXorShift(soul, max, count));
     }
 
     public static Dice getDice(int... numbers) {
@@ -242,7 +242,7 @@ public class LocalGameRunner {
         };
     }
 
-    public static int[] generateXorShift(String seed, long max, long count) {
+    private static int[] generateXorShift(String seed, long max, long count) {
         long[] current = new long[] { seed.hashCode() };
         if (printSeed) {
             out.accept("Seed = " + seed + "\n");

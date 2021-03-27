@@ -53,9 +53,7 @@ public class SmokeTest {
         LocalGameRunner.printDice = false;
         LocalGameRunner.printTick = true;
 
-        String soul = RandomStringUtils.randomNumeric(30);
-        soul = "435874345435874365843564398";
-        Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, 100, 200));
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
         GameRunner gameType = new GameRunner() {
             @Override

@@ -94,7 +94,7 @@ public class Main {
         } else {
             LocalGameRunner.printDice = false;
             LocalGameRunner.printConversions = false;
-            return LocalGameRunner.getDice(LocalGameRunner.generateXorShift(randomSeed, 100, 10000));
+            return LocalGameRunner.getDice(randomSeed, 100, 10000);
         }
     }
 
