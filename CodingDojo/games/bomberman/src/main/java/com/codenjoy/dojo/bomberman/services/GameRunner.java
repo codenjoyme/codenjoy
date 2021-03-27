@@ -87,7 +87,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        if (settings.isMultiple().getValue()) {
+        if (settings.bool(MULTIPLE)) {
             return MultiplayerType.MULTIPLE;
         } else {
             return MultiplayerType.TEAM.apply(

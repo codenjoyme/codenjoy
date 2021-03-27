@@ -158,10 +158,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     // TODO заинлайнить это все
 
-    public Parameter<Boolean> isMultiple() {
-        return boolValue(MULTIPLE);
-    }
-
     public Parameter<Boolean> isBigBadaboom() {
         return boolValue(BIG_BADABOOM);
     }
