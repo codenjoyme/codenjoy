@@ -267,8 +267,8 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         return score;
     }
 
-    public void addScore(int score) {
-        this.score += score;
+    public void addScore(int added) {
+        score = Math.max(0, score + added);
     }
 }
 

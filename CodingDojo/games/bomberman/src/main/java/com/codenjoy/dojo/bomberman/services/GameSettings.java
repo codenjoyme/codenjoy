@@ -80,9 +80,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        bool(MULTIPLE, false);
-        integer(PLAYERS_PER_ROOM, 5);
-
         integer(KILL_WALL_SCORE, 1);
         integer(KILL_MEAT_CHOPPER_SCORE, 10);
         integer(KILL_OTHER_HERO_SCORE, 20);
@@ -98,6 +95,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(DESTROY_WALL_COUNT, (boardSize * boardSize) / 10);
         integer(MEAT_CHOPPERS_COUNT, 5);
 
+        bool(MULTIPLE, false);
+        integer(PLAYERS_PER_ROOM, 5);
         // включен ли режим раундов
         bool(ROUNDS_ENABLED, true);
         // сколько тиков на 1 раунд
@@ -157,6 +156,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return new PerksSettingsWrapper(this);
     }
 
+    // TODO заинлайнить это все
     public Parameter<Integer> getBoardSize() {
         return integerValue(BOARD_SIZE);
     }
