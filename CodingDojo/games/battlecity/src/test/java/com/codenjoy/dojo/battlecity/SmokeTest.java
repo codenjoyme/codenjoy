@@ -39,6 +39,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.LEVEL_MAP;
@@ -102,9 +103,17 @@ public class SmokeTest {
         String expectedAll = load("src/test/resources/SmokeTest.data");
         String actualAll = String.join("\n", messages);
 
+        saveToFile("target/ActualSmokeTest.data", actualAll);
+
         TestUtils.assertSmoke(true,
                 (o1, o2) -> assertEquals(o1, o2),
                 expectedAll, actualAll);
+    }
+
+    public void saveToFile(String path, String data) throws IOException {
+        File actualFile = new File(path + "_" + Math.abs(new Random().nextInt(Integer.MAX_VALUE)));
+        System.out.println("Actual data is here: " + actualFile.getAbsolutePath());
+        Files.writeString(actualFile.toPath(), data);
     }
 
     private String load(String file) throws IOException {
