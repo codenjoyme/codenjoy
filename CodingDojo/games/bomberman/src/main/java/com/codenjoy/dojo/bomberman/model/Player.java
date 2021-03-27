@@ -40,7 +40,7 @@ public class Player extends RoundGamePlayer<Hero, Field> {
 
     @Override
     public Hero getHero() {
-        return (Hero)hero;
+        return hero;
     }
 
     public void newHero(Field board) {

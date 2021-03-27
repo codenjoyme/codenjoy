@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 
 public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameField> extends GamePlayer<H, F> {
 
-    protected RoundPlayerHero hero;
+    protected H hero;
     private boolean shouldLeave;
     private Parameter<Boolean> roundsEnabled;
 
