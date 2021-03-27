@@ -218,6 +218,10 @@ public class LocalGameRunner {
         return games.get(index);
     }
 
+    public static Dice getDice(String soul, long max, long count) {
+        return LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, max, count));
+    }
+
     public static Dice getDice(int... numbers) {
         int[] index = {0};
         return (n) -> {

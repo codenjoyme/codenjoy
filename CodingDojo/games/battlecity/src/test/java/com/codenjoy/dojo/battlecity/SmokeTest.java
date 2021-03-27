@@ -29,18 +29,10 @@ import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.utils.TestUtils;
-import org.apache.commons.lang3.RandomStringUtils;
+import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
@@ -48,76 +40,39 @@ import static org.junit.Assert.assertEquals;
 public class SmokeTest {
 
     @Test
-    public void test() throws IOException {
-        // given
-        List<String> messages = new LinkedList<>();
+    public void test() {
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = message -> {
-            messages.add(message);
-        };
-        LocalGameRunner.countIterations = 1000;
-        LocalGameRunner.printConversions = false;
-        LocalGameRunner.printBoardOnly = true;
-        LocalGameRunner.printDice = false;
-        LocalGameRunner.printTick = true;
+        Smoke.play(1000,
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
 
-        String soul = RandomStringUtils.randomNumeric(30);
-        soul = "435874345435874365843564398";
-        Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, 100, 200));
-
-        GameRunner gameType = new GameRunner() {
-            @Override
-            public Dice getDice() {
-                return dice;
-            }
-
-            @Override
-            public GameSettings getSettings() {
-                return new TestGameSettings()
-                        .string(LEVEL_MAP,
-                                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                                "☼¿ ¿ ¿   ¿ ¿ ¿☼" +
-                                "☼ ╬ ╬%╬ ╬%╬ ╬ ☼" +
-                                "☼ ╬ ╬%╬☼╬%╬ ╬ ☼" +
-                                "☼#╬~╬%╬ ╬%╬~╬#☼" +
-                                "☼#╬ ╬%   %╬ ╬#☼" +
-                                "☼#   %╬ ╬%   #☼" +
-                                "☼   ╬%   %╬   ☼" +
-                                "☼  # %╬ ╬% #  ☼" +
-                                "☼ ╬#╬%╬╬╬%╬#╬ ☼" +
-                                "☼ ╬#╬%╬ ╬%╬#╬ ☼" +
-                                "☼ ╬         ╬ ☼" +
-                                "☼ ╬   ╬╬╬   ╬ ☼" +
-                                "☼     ╬ ╬     ☼" +
-                                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
-            }
-        };
-
-        // when
-        LocalGameRunner.run(gameType,
+                    @Override
+                    public GameSettings getSettings() {
+                        return new TestGameSettings()
+                                .string(LEVEL_MAP,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                                        "☼¿ ¿ ¿   ¿ ¿ ¿☼" +
+                                        "☼ ╬ ╬%╬ ╬%╬ ╬ ☼" +
+                                        "☼ ╬ ╬%╬☼╬%╬ ╬ ☼" +
+                                        "☼#╬~╬%╬ ╬%╬~╬#☼" +
+                                        "☼#╬ ╬%   %╬ ╬#☼" +
+                                        "☼#   %╬ ╬%   #☼" +
+                                        "☼   ╬%   %╬   ☼" +
+                                        "☼  # %╬ ╬% #  ☼" +
+                                        "☼ ╬#╬%╬╬╬%╬#╬ ☼" +
+                                        "☼ ╬#╬%╬ ╬%╬#╬ ☼" +
+                                        "☼ ╬         ╬ ☼" +
+                                        "☼ ╬   ╬╬╬   ╬ ☼" +
+                                        "☼     ╬ ╬     ☼" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+                    }
+                },
                 Arrays.asList(new AISolver(dice), new AISolver(dice)),
-                Arrays.asList(new Board(), new Board()));
-
-        // then
-        String expectedAll = load("src/test/resources/SmokeTest.data");
-        String actualAll = String.join("\n", messages);
-
-        saveToFile("target/ActualSmokeTest.data", actualAll);
-
-        TestUtils.assertSmoke(true,
-                (o1, o2) -> assertEquals(o1, o2),
-                expectedAll, actualAll);
-    }
-
-    public void saveToFile(String path, String data) throws IOException {
-        File actualFile = new File(path + "_" + Math.abs(new Random().nextInt(Integer.MAX_VALUE)));
-        System.out.println("Actual data is here: " + actualFile.getAbsolutePath());
-        Files.writeString(actualFile.toPath(), data);
-    }
-
-    private String load(String file) throws IOException {
-        return Files.lines(new File(file).toPath())
-                .collect(Collectors.joining("\n"));
+                Arrays.asList(new Board(), new Board()),
+                (o1, o2) -> assertEquals(o1, o2));
     }
 }
