@@ -40,6 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BIG_BADABOOM;
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BOARD_SIZE;
 import static java.util.stream.Collectors.toList;
 
@@ -178,7 +179,7 @@ public class Bomberman extends RoundField<Player> implements Field {
         do {
             makeBlastsFromDestoryedBombs();
 
-            if (settings.isBigBadaboom().getValue()) {
+            if (settings.bool(BIG_BADABOOM)) {
 
                 // если бомбу зацепила взрывная волна и ее тоже подрываем
                 for (Bomb bomb : bombs) {

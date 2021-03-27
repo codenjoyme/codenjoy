@@ -158,10 +158,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     // TODO заинлайнить это все
 
-    public Parameter<Boolean> isBigBadaboom() {
-        return boolValue(BIG_BADABOOM);
-    }
-
     public Parameter<Integer> getPlayersPerRoom() {
         return integerValue(PLAYERS_PER_ROOM);
     }
