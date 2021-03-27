@@ -157,11 +157,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     // TODO заинлайнить это все
-
-    public Parameter<Integer> getPlayersPerRoom() {
-        return integerValue(PLAYERS_PER_ROOM);
-    }
-
     public RoundSettings getRoundSettings() {
         return this;
     }

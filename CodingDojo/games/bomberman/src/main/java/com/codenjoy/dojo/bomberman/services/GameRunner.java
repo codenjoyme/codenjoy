@@ -91,7 +91,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
             return MultiplayerType.MULTIPLE;
         } else {
             return MultiplayerType.TEAM.apply(
-                    settings.getPlayersPerRoom().getValue(),
+                    settings.integer(PLAYERS_PER_ROOM),
                     MultiplayerType.DISPOSABLE
             );
         }
