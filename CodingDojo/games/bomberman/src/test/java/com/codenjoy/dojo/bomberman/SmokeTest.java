@@ -55,7 +55,6 @@ public class SmokeTest {
 
         LocalGameRunner.timeout = 0;
         LocalGameRunner.out = message -> {
-            // System.out.println(message);
             messages.add(message);
         };
         LocalGameRunner.countIterations = 1000;
