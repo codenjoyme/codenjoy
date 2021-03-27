@@ -274,7 +274,7 @@ public class Battlecity extends RoundField<Player> implements Field {
         }
 
         if (died != null) {
-            died.event(Events.KILL_YOUR_TANK);
+            died.getHero().die();
         }
     }
 

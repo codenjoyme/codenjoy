@@ -119,15 +119,16 @@ public class GameTest {
         Player player = new Player(listener, dice, settings){
             @Override
             public void newHero(Field field) {
-                // do nothing
+                hero = tank;
+                hero.setPlayer(this);
+                hero.setActive(true);
+                hero.setAlive(true);
             }
         };
-        player.hero = tank;
 
         players.add(player);
 
         tank.init(game);
-        game.newGame(player);
         return player;
     }
 
@@ -4799,6 +4800,14 @@ public class GameTest {
 
 		hero(0).up();
 		game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼~    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
 		hero(0).act();
 		game.tick();

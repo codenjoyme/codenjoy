@@ -35,7 +35,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Player extends RoundGamePlayer<Tank, Field> {
 
-    Tank hero;
     private Dice dice;
     private int killed;
 
@@ -53,22 +52,12 @@ public class Player extends RoundGamePlayer<Tank, Field> {
         return hero;
     }
 
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
-
     public boolean isDestroyed() {
         return !isAlive();
     }
 
     public void event(Events event) {
-        if (event.isKillYourTank()) {
-            hero.kill(null);
-        }
-
         getHero().addScore(Scores.scoreFor(settings(), event));
-
         super.event(event);
     }
 
@@ -78,9 +67,14 @@ public class Player extends RoundGamePlayer<Tank, Field> {
 
     public void newHero(Field field) {
         hero = new Tank(pt(0, 0), Direction.UP, dice);
+        hero.setPlayer(this);
         hero.removeBullets();
         hero.init(field);
         reset();
+
+        if (!roundsEnabled()) {
+            hero.setActive(true);
+        }
     }
 
     public int score() {

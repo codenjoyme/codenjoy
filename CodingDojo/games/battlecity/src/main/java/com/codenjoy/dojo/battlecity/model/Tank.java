@@ -48,7 +48,6 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     protected Dice dice;
 
-    private boolean alive;
     protected Direction direction;
     protected boolean moving;
     private boolean fire;
@@ -78,7 +77,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public void up() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.UP;
         moving = true;
@@ -86,7 +85,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public void down() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.DOWN;
         moving = true;
@@ -94,7 +93,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public void right() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.RIGHT;
         moving = true;
@@ -102,7 +101,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public void left() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.LEFT;
         moving = true;
@@ -134,7 +133,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         fire = true;
     }
@@ -157,11 +156,11 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
             pt = PointImpl.random(dice, field.size());
         }
         if (c >= MAX) {
-            alive = false;
+            setAlive(false);
             return;
         }
         move(pt);
-        alive = true;
+        setAlive(true);
     }
 
     protected int ticksPerShoot() {
@@ -169,11 +168,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     public void kill(Bullet bullet) {
-        alive = false;
-    }
-
-    public boolean isAlive() {
-        return alive;
+        setAlive(false);
     }
 
     public void removeBullets() {
@@ -248,7 +243,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
     public void reset() {
         moving = false;
         fire = false;
-        alive = true;
+        setAlive(true);
         gun.reset();
         bullets.clear();
         prizes.clear();
