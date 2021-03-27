@@ -124,7 +124,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "  ],\n" +
                 "  'room':'room1',\n" +
                 "  'sprites':{\n" +
-                "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',\n" +
+                "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',\n" +
                 "    'names':[\n" +
                 "      'none',\n" +
                 "      'wall',\n" +
@@ -192,7 +192,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "  ],\n" +
                 "  'room':'room2',\n" +
                 "  'sprites':{\n" +
-                "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',\n" +
+                "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',\n" +
                 "    'names':[\n" +
                 "      'none',\n" +
                 "      'red',\n" +
@@ -311,7 +311,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
 
     @Test
     public void shouldSpritesAlphabet() {
-        String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         assertEquals(expected, service.spritesAlphabet());
         assertEquals(expected, get("/rest/game/sprites/alphabet"));
     }
