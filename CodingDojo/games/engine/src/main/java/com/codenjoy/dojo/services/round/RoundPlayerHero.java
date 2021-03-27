@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.round;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 public abstract class RoundPlayerHero<F extends RoundGameField> extends PlayerHero<F> {
@@ -32,7 +33,11 @@ public abstract class RoundPlayerHero<F extends RoundGameField> extends PlayerHe
     private boolean active;
 
     public RoundPlayerHero() {
-        super(-1, -1);
+        this(pt(-1, -1));
+    }
+
+    public RoundPlayerHero(Point pt) {
+        super(pt);
 
         active = false;
         alive = true;
