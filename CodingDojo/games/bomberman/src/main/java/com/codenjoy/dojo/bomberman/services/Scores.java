@@ -26,6 +26,7 @@ package com.codenjoy.dojo.bomberman.services;
 import com.codenjoy.dojo.services.PlayerScores;
 
 import static com.codenjoy.dojo.bomberman.services.Events.*;
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 
 public class Scores implements PlayerScores {
 
@@ -55,27 +56,27 @@ public class Scores implements PlayerScores {
 
     public static int scoreFor(GameSettings settings, Object event) {
         if (DIED.equals(event)) {
-            return - settings.diePenalty().getValue();
+            return - settings.integer(DIE_PENALTY);
         }
 
         if (KILL_OTHER_HERO.equals(event)) {
-            return settings.killOtherHeroScore().getValue();
+            return settings.integer(KILL_OTHER_HERO_SCORE);
         }
 
         if (KILL_MEAT_CHOPPER.equals(event)) {
-            return settings.killMeatChopperScore().getValue();
+            return settings.integer(KILL_MEAT_CHOPPER_SCORE);
         }
 
         if (KILL_DESTROY_WALL.equals(event)) {
-            return settings.killWallScore().getValue();
+            return settings.integer(KILL_WALL_SCORE);
         }
 
         if (CATCH_PERK.equals(event)) {
-            return settings.catchPerkScore().getValue();
+            return settings.integer(CATCH_PERK_SCORE);
         }
 
         if (WIN_ROUND.equals(event)) {
-            return settings.winRoundScore().getValue();
+            return settings.integer(WIN_ROUND_SCORE);
         }
 
         return 0;

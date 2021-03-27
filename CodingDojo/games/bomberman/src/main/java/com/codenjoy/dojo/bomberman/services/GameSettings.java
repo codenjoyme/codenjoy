@@ -157,49 +157,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     // TODO заинлайнить это все
-    public RoundSettings getRoundSettings() {
-        return this;
-    }
-
-    public Parameter<Integer> diePenalty() {
-        return integerValue(DIE_PENALTY);
-    }
-
-    public Parameter<Integer> killOtherHeroScore() {
-        return integerValue(KILL_OTHER_HERO_SCORE);
-    }
-
-    public Parameter<Integer> killMeatChopperScore() {
-        return integerValue(KILL_MEAT_CHOPPER_SCORE);
-    }
-
-    public Parameter<Integer> killWallScore() {
-        return integerValue(KILL_WALL_SCORE);
-    }
-
-    public Parameter<Integer> catchPerkScore() {
-        return integerValue(CATCH_PERK_SCORE);
-    }
-
-    public Parameter<Integer> winRoundScore() {
-        return integerValue(WIN_ROUND_SCORE);
-    }
-
-    public Parameter<Integer> getDestroyWallCount() {
-        return integerValue(DESTROY_WALL_COUNT);
-    }
-
-    public Parameter<Integer> getBombPower() {
-        return integerValue(BOMB_POWER);
-    }
-
-    public Parameter<Integer> getBombsCount() {
-        return integerValue(BOMBS_COUNT);
-    }
-
-    public Parameter<Integer> getMeatChoppersCount() {
-        return integerValue(MEAT_CHOPPERS_COUNT);
-    }
 
     public GameSettings update(JSONObject json) {
         json.keySet().forEach(name -> {

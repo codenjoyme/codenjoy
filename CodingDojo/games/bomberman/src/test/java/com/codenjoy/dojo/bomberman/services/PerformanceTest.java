@@ -34,6 +34,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
@@ -50,17 +51,17 @@ public class PerformanceTest {
         Profiler p = new Profiler();
         p.start();
 
-        GameRunner bomberman = new GameRunner();
-        GameSettings settings = bomberman.getSettings();
-        settings.getBoardSize().update(boardSize);
-        settings.getDestroyWallCount().update(walls);
-        settings.getMeatChoppersCount().update(meatChoppers);
+        GameRunner runner = new GameRunner();
+        runner.getSettings()
+                .integer(BOARD_SIZE, boardSize)
+                .integer(DESTROY_WALL_COUNT, walls)
+                .integer(MEAT_CHOPPERS_COUNT, meatChoppers);
 
         PrinterFactory factory = new PrinterFactoryImpl();
 
         List<Game> games = new LinkedList<>();
         for (int i = 0; i < players; i++) {
-            games.add(TestUtils.buildGame(bomberman, mock(EventListener.class), factory));
+            games.add(TestUtils.buildGame(runner, mock(EventListener.class), factory));
         }
 
         p.done("creation");
