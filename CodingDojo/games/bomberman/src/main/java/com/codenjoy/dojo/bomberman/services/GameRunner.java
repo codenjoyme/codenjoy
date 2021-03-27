@@ -39,6 +39,8 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
+
 public class GameRunner extends AbstractGameType<GameSettings> {
 
     public static final String GAME_NAME = "bomberman";
@@ -60,7 +62,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
-        return settings.getBoardSize();
+        return settings.integerValue(BOARD_SIZE);
     }
 
     @Override

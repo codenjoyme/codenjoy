@@ -157,9 +157,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     // TODO заинлайнить это все
-    public Parameter<Integer> getBoardSize() {
-        return integerValue(BOARD_SIZE);
-    }
 
     public Parameter<Boolean> isMultiple() {
         return boolValue(MULTIPLE);
