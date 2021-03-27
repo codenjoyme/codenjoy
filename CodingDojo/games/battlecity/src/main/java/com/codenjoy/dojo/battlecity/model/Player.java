@@ -25,16 +25,15 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
+import com.codenjoy.dojo.battlecity.services.Scores;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.round.RoundGamePlayer;
 
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class Player extends GamePlayer<Tank, Field> {
+public class Player extends RoundGamePlayer<Tank, Field> {
 
     Tank hero;
     private Dice dice;
@@ -68,6 +67,8 @@ public class Player extends GamePlayer<Tank, Field> {
             hero.kill(null);
         }
 
+        getHero().addScore(Scores.scoreFor(settings(), event));
+
         super.event(event);
     }
 
@@ -88,5 +89,9 @@ public class Player extends GamePlayer<Tank, Field> {
 
     void setKilled(int killed) {
         this.killed = killed;
+    }
+
+    private GameSettings settings() {
+        return (GameSettings) settings;
     }
 }

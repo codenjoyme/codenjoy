@@ -26,11 +26,11 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.round.RoundGameField;
 
 import java.util.List;
 
-public interface Field extends GameField<Player> {
+public interface Field extends RoundGameField<Player> {
 
     boolean isBarrier(Point pt);
 

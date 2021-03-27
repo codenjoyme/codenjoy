@@ -31,6 +31,8 @@ public class Events {
     public static final Events KILL_YOUR_TANK = new Events("KILL_YOUR_TANK");
     public static final Function<Integer, Events> KILL_OTHER_HERO_TANK = amount -> new Events("KILL_OTHER_HERO_TANK", amount);
     public static final Events KILL_OTHER_AI_TANK = new Events("KILL_OTHER_AI_TANK");
+    public static final Events START_ROUND = new Events("START_ROUND");
+    public static final Events WIN_ROUND = new Events("WIN_ROUND");
 
     private String type;
     private int amount;

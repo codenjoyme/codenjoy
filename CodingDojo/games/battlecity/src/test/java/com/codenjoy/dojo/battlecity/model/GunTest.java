@@ -23,6 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.TestGameSettings;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +37,7 @@ public class GunTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings();
+        settings = new TestGameSettings();
     }
     
     @Test

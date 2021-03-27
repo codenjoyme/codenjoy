@@ -29,7 +29,7 @@ import com.codenjoy.dojo.battlecity.model.items.Prizes;
 import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.services.round.Timer;
 
 import java.util.Collection;
@@ -42,7 +42,7 @@ import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PENALTY_WA
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
+public class Tank extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
     public static final int MAX = 100;
 
@@ -52,6 +52,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     protected Direction direction;
     protected boolean moving;
     private boolean fire;
+    private int score;
 
     private Gun gun;
     private Sliding sliding;
@@ -63,6 +64,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public Tank(Point pt, Direction direction, Dice dice) {
         super(pt);
+        score = 0;
         this.direction = direction;
         this.dice = dice;
         bullets = new LinkedList<>();
@@ -287,5 +289,13 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     public boolean canWalkOnWater() {
         return prizes.contains(PRIZE_WALKING_ON_WATER)
                 || (onWater != null && onWater.done());
+    }
+
+    public int scores() {
+        return score;
+    }
+
+    public void addScore(int added) {
+        score = Math.max(0, score + added);
     }
 }

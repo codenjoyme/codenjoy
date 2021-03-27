@@ -29,6 +29,7 @@ import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +38,7 @@ import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
-public class Battlecity implements Field {
+public class Battlecity extends RoundField<Player> implements Field {
 
     private int size;
 
@@ -57,6 +58,7 @@ public class Battlecity implements Field {
     private GameSettings settings;
 
     public Battlecity(int size, Dice dice, GameSettings settings) {
+        super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_YOUR_TANK, settings);
         this.size = size;
         this.settings = settings;
         ais = new LinkedList<>();
@@ -71,6 +73,22 @@ public class Battlecity implements Field {
         aiGen = new AiGenerator(this, dice, settings);
     }
 
+    @Override
+    protected List<Player> players() {
+        return players;
+    }
+
+    @Override
+    protected void setNewObjects() {
+        // do nothing
+    }
+
+    @Override
+    public void cleanStuff() {
+        removeDeadItems();
+    }
+
+
     public void addAiTanks(List<? extends Point> tanks) {
         aiGen.dropAll(tanks);
     }
@@ -83,9 +101,7 @@ public class Battlecity implements Field {
     }
 
     @Override
-    public void tick() {
-        removeDeadItems();
-
+    public void tickField() {
         aiGen.allHave(withPrize());
         aiGen.dropAll();
 

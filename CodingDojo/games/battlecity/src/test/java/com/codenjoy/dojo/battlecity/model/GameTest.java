@@ -23,6 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.TestGameSettings;
 import com.codenjoy.dojo.battlecity.model.items.AITank;
 import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Wall;
@@ -43,6 +44,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.battlecity.TestGameSettings.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
@@ -52,13 +54,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class GameTest {
-
-    private static final int CHANCE = 20;
-    private static final int DICE_IMMORTALITY = 0*CHANCE;
-    private static final int DICE_BREAKING_WALLS = 1*CHANCE;
-    private static final int DICE_WALKING_ON_WATER = 2*CHANCE;
-    private static final int DICE_VISIBILITY = 3*CHANCE;
-    private static final int DICE_NO_SLIDING = 4*CHANCE;
 
     protected Dice dice;
     private Battlecity game;
@@ -81,21 +76,7 @@ public class GameTest {
     
     @Before
     public void setup() {
-        settings = new GameSettings()
-                .integer(SPAWN_AI_PRIZE, 4)
-                .integer(KILL_HITS_AI_PRIZE, 3)
-                .integer(AI_TICKS_PER_SHOOT, 10)
-                .integer(TANK_TICKS_PER_SHOOT, 1)
-                .integer(SLIPPERINESS, 3)
-                .integer(PRIZE_ON_FIELD, 3)
-                .integer(PRIZE_WORKING, 10)
-                .integer(AI_PRIZE_LIMIT, 10)
-                .integer(CHANCE_IMMORTALITY, CHANCE)
-                .integer(CHANCE_BREAKING_WALLS, CHANCE)
-                .integer(CHANCE_WALKING_ON_WATER, CHANCE)
-                .integer(CHANCE_VISIBILITY, CHANCE)
-                .integer(CHANCE_NO_SLIDING, CHANCE);
-
+        settings = new TestGameSettings();
         dice = mock(Dice.class);
     }
 
