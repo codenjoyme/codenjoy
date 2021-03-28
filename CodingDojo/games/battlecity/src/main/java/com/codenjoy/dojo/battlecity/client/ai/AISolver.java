@@ -100,7 +100,8 @@ public class AISolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.AI_TANK_DOWN,
+        List<Point> to = board.get(
+                Elements.AI_TANK_DOWN,
                 Elements.AI_TANK_LEFT,
                 Elements.AI_TANK_RIGHT,
                 Elements.AI_TANK_UP,

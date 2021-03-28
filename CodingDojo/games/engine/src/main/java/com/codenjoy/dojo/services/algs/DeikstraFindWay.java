@@ -97,8 +97,9 @@ public class DeikstraFindWay {
 
     public List<Direction> buildPath(Point from, List<Point> goals) {
         List<List<Direction>> paths = new LinkedList<>();
+        Map<Point, List<Direction>> pathMap = getPath(from, goals);
         for (Point to : goals) {
-            List<Direction> path = getPath(from, goals).get(to);
+            List<Direction> path = pathMap.get(to);
             if (path == null || path.isEmpty()) continue;
             paths.add(path);
         }

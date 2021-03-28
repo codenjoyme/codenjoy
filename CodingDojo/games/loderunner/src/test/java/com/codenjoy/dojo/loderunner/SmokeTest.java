@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner;
  */
 
 
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.client.ai.AISolver;
@@ -50,7 +51,7 @@ public class SmokeTest {
 
         int ticks = 1000;
         int players = 2;
-        Supplier<AISolver> solver = () -> new AISolver(dice);
+        Supplier<Solver> solver = () -> new AISolver(dice);
 
         Smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
@@ -103,7 +104,7 @@ public class SmokeTest {
         int ticks = 100;
         int players = 10;
         int enemies = 5;
-        Supplier<AISolver> solver = () -> new AISolver(dice);
+        Supplier<Solver> solver = () -> new AISolver(dice);
 
         Smoke.play(ticks, "SmokeTestHard.data",
                 new GameRunner() {
