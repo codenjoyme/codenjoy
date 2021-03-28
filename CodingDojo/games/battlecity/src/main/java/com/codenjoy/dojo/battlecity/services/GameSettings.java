@@ -171,7 +171,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public String map() {
-        return string(LEVEL_MAP).replace("\n", "");
+        return string(LEVEL_MAP).replace("\n", "").replace("\r", "");
     }
 
 }
