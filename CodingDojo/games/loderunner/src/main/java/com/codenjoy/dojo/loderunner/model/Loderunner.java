@@ -35,12 +35,13 @@ import java.util.function.Function;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.BoardUtils.NO_SPACE;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class Loderunner implements Field {
 
     private int size;
     private Level level;
-    private List<Player> players;
+    private Players players;
     private List<Enemy> enemies;
     private List<YellowGold> yellowGold;
     private List<GreenGold> greenGold;
@@ -55,13 +56,12 @@ public class Loderunner implements Field {
     private Dice dice;
     private GameSettings settings;
     private List<Function<Point, Point>> finder;
-    private List<Hero> heroes;
 
     public Loderunner(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         this.level = level;
         this.settings = settings;
-        players = new LinkedList<>();
+        players = new Players(this);
         enemies = new LinkedList<>();
 
         finder = new ArrayList<>(){{
@@ -98,21 +98,12 @@ public class Loderunner implements Field {
             enemy.init(this);
         }
 
-        for (Player player : players) {
-            player.newHero(this);
-        }
-        resetHeroes();
+        players.resetAll();
 
         generatePills();
         generateGold();
         generatePortals();
         generateEnemies();
-    }
-
-    public void resetHeroes() {
-        heroes = players.stream()
-                .map(Player::getHero)
-                .collect(toList());
     }
 
     @Override
@@ -218,17 +209,9 @@ public class Loderunner implements Field {
     }
 
     private Set<Player> getDied() {
-        Set<Player> die = new HashSet<>();
-
-        for (Player player : players) {
-            Hero hero = player.getHero();
-
-            if (!hero.isAlive()) {
-                die.add(player);
-            }
-        }
-
-        return die;
+        return players.stream()
+                .filter(player -> !player.isAlive())
+                .collect(toSet());
     }
 
     public BoardReader reader() {
@@ -274,7 +257,7 @@ public class Loderunner implements Field {
                 die.add(player);
 
                 Hero killer = brick.get().getDrilledBy();
-                Player killerPlayer = getPlayer(killer);
+                Player killerPlayer = players.getPlayer(killer);
                 if (killerPlayer != null && killerPlayer != player) {
                     killerPlayer.event(Events.KILL_ENEMY);
                 }
@@ -376,15 +359,6 @@ public class Loderunner implements Field {
         }
     }
 
-    private Player getPlayer(Hero hero) {
-        for (Player player : players) {
-            if (player.getHero() == hero) {
-                return player;
-            }
-        }
-        return null;
-    }
-
     @Override
     public boolean isBarrier(Point pt) {
           return pt.getX() > size - 1 || pt.getX() < 0
@@ -396,7 +370,7 @@ public class Loderunner implements Field {
 
     @Override
     public void suicide(Hero hero) {
-        getPlayer(hero).event(Events.SUICIDE);
+        players.getPlayer(hero).event(Events.SUICIDE);
     }
 
     @Override
@@ -526,20 +500,15 @@ public class Loderunner implements Field {
 
     @Override
     public List<Hero> getHeroes() {
-        return heroes;
+        return players.heroes();
     }
 
     public void newGame(Player player) {
-        if (!players.contains(player)) {
-            players.add(player);
-        }
-        player.newHero(this);
-        resetHeroes();
+        players.add(player);
     }
 
     public void remove(Player player) {
         players.remove(player);
-        resetHeroes();
     }
 
     @Override
@@ -641,5 +610,10 @@ public class Loderunner implements Field {
 
     public List<Pipe> pipe() {
         return pipe;
+    }
+
+    // only for testing
+    void resetHeroes() {
+        players.resetHeroes();
     }
 }
