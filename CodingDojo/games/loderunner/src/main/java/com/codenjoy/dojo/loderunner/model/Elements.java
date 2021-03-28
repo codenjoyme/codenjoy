@@ -25,6 +25,9 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum Elements implements CharElements {
 
     NONE(' '),                    // Пустое место – по которому может двигаться герой
@@ -109,6 +112,96 @@ public enum Elements implements CharElements {
     SHADOW_PILL('S');         // Таблетка тени - наделяют героя дополнительными способностями
 
     final char ch;
+
+    public static List<Elements> gold() {
+        return Arrays.asList(
+                YELLOW_GOLD,
+                GREEN_GOLD,
+                RED_GOLD);
+    }
+
+    public static List<Elements> ladders() {
+        return Arrays.asList(LADDER,
+                HERO_LADDER,
+                HERO_SHADOW_LADDER,
+                OTHER_HERO_LADDER,
+                OTHER_HERO_SHADOW_LADDER,
+                ENEMY_LADDER);
+    }
+
+    public static List<Elements> walls() {
+        return Arrays.asList(BRICK,
+                UNDESTROYABLE_WALL);
+    }
+
+    public static List<Elements> heroes() {
+        return Arrays.asList(HERO_DIE,
+                HERO_DRILL_LEFT,
+                HERO_DRILL_RIGHT,
+                HERO_LADDER,
+                HERO_LEFT,
+                HERO_RIGHT,
+                HERO_FALL_LEFT,
+                HERO_FALL_RIGHT,
+                HERO_PIPE_LEFT,
+                HERO_PIPE_RIGHT,
+
+                HERO_SHADOW_DIE,
+                HERO_SHADOW_DRILL_LEFT,
+                HERO_SHADOW_DRILL_RIGHT,
+                HERO_SHADOW_LADDER,
+                HERO_SHADOW_LEFT,
+                HERO_SHADOW_RIGHT,
+                HERO_SHADOW_FALL_LEFT,
+                HERO_SHADOW_FALL_RIGHT,
+                HERO_SHADOW_PIPE_LEFT,
+                HERO_SHADOW_PIPE_RIGHT);
+    }
+
+    public static List<Elements> enemies() {
+        return Arrays.asList(ENEMY_LADDER,
+                ENEMY_LEFT,
+                ENEMY_PIPE_LEFT,
+                ENEMY_PIPE_RIGHT,
+                ENEMY_RIGHT,
+                ENEMY_PIT);
+    }
+
+    public static List<Elements> otherHeroes() {
+        return Arrays.asList(OTHER_HERO_DIE,
+                OTHER_HERO_DRILL_LEFT,
+                OTHER_HERO_DRILL_RIGHT,
+                OTHER_HERO_LADDER,
+                OTHER_HERO_LEFT,
+                OTHER_HERO_RIGHT,
+                OTHER_HERO_FALL_LEFT,
+                OTHER_HERO_FALL_RIGHT,
+                OTHER_HERO_PIPE_LEFT,
+                OTHER_HERO_PIPE_RIGHT,
+
+                OTHER_HERO_SHADOW_DIE,
+                OTHER_HERO_SHADOW_DRILL_LEFT,
+                OTHER_HERO_SHADOW_DRILL_RIGHT,
+                OTHER_HERO_SHADOW_LEFT,
+                OTHER_HERO_SHADOW_RIGHT,
+                OTHER_HERO_SHADOW_LADDER,
+                OTHER_HERO_SHADOW_FALL_LEFT,
+                OTHER_HERO_SHADOW_FALL_RIGHT,
+                OTHER_HERO_SHADOW_PIPE_LEFT,
+                OTHER_HERO_SHADOW_PIPE_RIGHT);
+    }
+
+    public static List<Elements> pipes() {
+        return Arrays.asList(PIPE,
+                HERO_PIPE_LEFT,
+                HERO_PIPE_RIGHT,
+                HERO_SHADOW_PIPE_LEFT,
+                HERO_SHADOW_PIPE_RIGHT,
+                OTHER_HERO_PIPE_LEFT,
+                OTHER_HERO_PIPE_RIGHT,
+                OTHER_HERO_SHADOW_PIPE_LEFT,
+                OTHER_HERO_SHADOW_PIPE_RIGHT);
+    }
 
     @Override
     public char ch() {

@@ -43,25 +43,18 @@ public class AISolver implements Solver<Board> {
     }
 
     public DeikstraFindWay.Possible possible(Board board) {
-        List<Point> ladder = board.ladder();
-        List<Point> wall = board.wall();
-        List<Point> pipe = board.pipe();
-        List<Point> enemy = board.enemy();
-        List<Point> otherHero = board.otherHero();
-
         return new DeikstraFindWay.Possible() {
-
             @Override
             public boolean possible(Point from, Direction where) {
-                if (where == Direction.UP && !ladder.contains(from)) return false;
+                if (where == Direction.UP && !board.isLadder(from)) return false;
 
                 Point under = Direction.DOWN.change(from);
                 if (where != Direction.DOWN &&
                         !under.isOutOf(board.size()) &&
-                        !wall.contains(under) &&
-                        !ladder.contains(under) &&
-                        !ladder.contains(from) &&
-                        !pipe.contains(from)) return false;
+                        !board.isWall(under) &&
+                        !board.isLadder(under) &&
+                        !board.isLadder(from) &&
+                        !board.isPipe(from)) return false;
 
                 return true;
             }
@@ -69,9 +62,9 @@ public class AISolver implements Solver<Board> {
             @Override
             public boolean possible(Point pt) {
                 if (pt.isOutOf(board.size())) return false;
-                if (wall.contains(pt)) return false;
-                if (enemy.contains(pt)) return false;
-                if (otherHero.contains(pt)) return false;
+                if (board.isWall(pt)) return false;
+                if (board.isEnemyAt(pt)) return false;
+                if (board.isOtherHeroAt(pt)) return false;
                 return true;
             }
         };

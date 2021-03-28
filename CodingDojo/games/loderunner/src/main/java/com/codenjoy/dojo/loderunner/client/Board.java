@@ -39,19 +39,19 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
-    public Collection<Point> getBarriers() {
-        Collection<Point> all = getWalls();
-        return removeDuplicates(all);
-    }
-
     @Override
     protected int inversionY(int y) {
         return size - 1 - y;
     }
 
+    public Collection<Point> getBarriers() {
+        Collection<Point> all = getWalls();
+        // add other barriers here
+        return removeDuplicates(all);
+    }
+
     public Collection<Point> getWalls() {
-        return get(BRICK,
-                UNDESTROYABLE_WALL);
+        return get(walls().toArray(new Elements[0]));
     }
 
     public boolean isBarrierAt(Point pt) {
@@ -59,27 +59,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Point getMe() {
-        List<Point> list = get(HERO_DIE,
-                HERO_DRILL_LEFT,
-                HERO_DRILL_RIGHT,
-                HERO_LADDER,
-                HERO_LEFT,
-                HERO_RIGHT,
-                HERO_FALL_LEFT,
-                HERO_FALL_RIGHT,
-                HERO_PIPE_LEFT,
-                HERO_PIPE_RIGHT,
-
-                HERO_SHADOW_DIE,
-                HERO_SHADOW_DRILL_LEFT,
-                HERO_SHADOW_DRILL_RIGHT,
-                HERO_SHADOW_LADDER,
-                HERO_SHADOW_LEFT,
-                HERO_SHADOW_RIGHT,
-                HERO_SHADOW_FALL_LEFT,
-                HERO_SHADOW_FALL_RIGHT,
-                HERO_SHADOW_PIPE_LEFT,
-                HERO_SHADOW_PIPE_RIGHT);
+        List<Point> list = get(heroes().toArray(new Elements[0]));
 
         return (list.isEmpty()) ? null : list.get(0);
     }
@@ -88,68 +68,32 @@ public class Board extends AbstractBoard<Elements> {
         return !get(HERO_DIE).isEmpty();
     }
 
-    public List<Point> enemy() {
-        return get(ENEMY_LADDER,
-                ENEMY_LEFT,
-                ENEMY_PIPE_LEFT,
-                ENEMY_PIPE_RIGHT,
-                ENEMY_RIGHT,
-                ENEMY_PIT);
+    public boolean isEnemyAt(Point pt) {
+        return is(pt, enemies());
     }
 
-    public List<Point> otherHero() {
-        return get(OTHER_HERO_DIE,
-                OTHER_HERO_DRILL_LEFT,
-                OTHER_HERO_DRILL_RIGHT,
-                OTHER_HERO_LADDER,
-                OTHER_HERO_LEFT,
-                OTHER_HERO_RIGHT,
-                OTHER_HERO_FALL_LEFT,
-                OTHER_HERO_FALL_RIGHT,
-                OTHER_HERO_PIPE_LEFT,
-                OTHER_HERO_PIPE_RIGHT,
-
-                OTHER_HERO_SHADOW_DIE,
-                OTHER_HERO_SHADOW_DRILL_LEFT,
-                OTHER_HERO_SHADOW_DRILL_RIGHT,
-                OTHER_HERO_SHADOW_LEFT,
-                OTHER_HERO_SHADOW_RIGHT,
-                OTHER_HERO_SHADOW_LADDER,
-                OTHER_HERO_SHADOW_FALL_LEFT,
-                OTHER_HERO_SHADOW_FALL_RIGHT,
-                OTHER_HERO_SHADOW_PIPE_LEFT,
-                OTHER_HERO_SHADOW_PIPE_RIGHT);
+    public boolean is(Point pt, List<Elements> enemies) {
+        return getAllAt(pt).stream()
+                .anyMatch(el -> enemies.contains(el));
     }
 
-    public List<Point> wall() {
-        return get(BRICK,
-                UNDESTROYABLE_WALL);
+    public boolean isOtherHeroAt(Point pt) {
+        return is(pt, otherHeroes());
     }
 
-    public List<Point> gold() {
-        return get(YELLOW_GOLD,
-                GREEN_GOLD,
-                RED_GOLD);
+    public boolean isWall(Point pt) {
+        return is(pt, walls());
     }
 
-    public List<Point> ladder() {
-        return get(LADDER,
-                HERO_LADDER,
-                HERO_SHADOW_LADDER,
-                OTHER_HERO_LADDER,
-                OTHER_HERO_SHADOW_LADDER,
-                ENEMY_LADDER);
+    public boolean isGold(Point pt) {
+        return is(pt, gold());
     }
 
-    public List<Point> pipe() {
-        return get(PIPE,
-                HERO_PIPE_LEFT,
-                HERO_PIPE_RIGHT,
-                HERO_SHADOW_PIPE_LEFT,
-                HERO_SHADOW_PIPE_RIGHT,
-                OTHER_HERO_PIPE_LEFT,
-                OTHER_HERO_PIPE_RIGHT,
-                OTHER_HERO_SHADOW_PIPE_LEFT,
-                OTHER_HERO_SHADOW_PIPE_RIGHT);
+    public boolean isLadder(Point pt) {
+        return is(pt, ladders());
+    }
+
+    public boolean isPipe(Point pt) {
+        return is(pt, pipes());
     }
 }
