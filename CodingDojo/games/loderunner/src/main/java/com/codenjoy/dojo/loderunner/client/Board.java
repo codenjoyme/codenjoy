@@ -88,9 +88,8 @@ public class Board extends AbstractBoard<Elements> {
         return !get(HERO_DIE).isEmpty();
     }
 
-    public boolean isEnemyAt(Point pt) {
-        return isAt(pt,
-                ENEMY_LADDER,
+    public List<Point> enemy() {
+        return get(ENEMY_LADDER,
                 ENEMY_LEFT,
                 ENEMY_PIPE_LEFT,
                 ENEMY_PIPE_RIGHT,
@@ -98,9 +97,8 @@ public class Board extends AbstractBoard<Elements> {
                 ENEMY_PIT);
     }
 
-    public boolean isOtherHeroAt(Point pt) {
-        return isAt(pt,
-                OTHER_HERO_DIE,
+    public List<Point> otherHero() {
+        return get(OTHER_HERO_DIE,
                 OTHER_HERO_DRILL_LEFT,
                 OTHER_HERO_DRILL_RIGHT,
                 OTHER_HERO_LADDER,
@@ -123,22 +121,19 @@ public class Board extends AbstractBoard<Elements> {
                 OTHER_HERO_SHADOW_PIPE_RIGHT);
     }
 
-    public boolean isWall(Point pt) {
-        return isAt(pt,
-                BRICK,
+    public List<Point> wall() {
+        return get(BRICK,
                 UNDESTROYABLE_WALL);
     }
 
-    public boolean isGold(Point pt) {
-        return isAt(pt,
-                YELLOW_GOLD,
+    public List<Point> gold() {
+        return get(YELLOW_GOLD,
                 GREEN_GOLD,
                 RED_GOLD);
     }
 
-    public boolean isLadder(Point pt) {
-        return isAt(pt,
-                LADDER,
+    public List<Point> ladder() {
+        return get(LADDER,
                 HERO_LADDER,
                 HERO_SHADOW_LADDER,
                 OTHER_HERO_LADDER,
@@ -146,9 +141,8 @@ public class Board extends AbstractBoard<Elements> {
                 ENEMY_LADDER);
     }
 
-    public boolean isPipe(Point pt) {
-        return isAt(pt,
-                PIPE,
+    public List<Point> pipe() {
+        return get(PIPE,
                 HERO_PIPE_LEFT,
                 HERO_PIPE_RIGHT,
                 HERO_SHADOW_PIPE_LEFT,
