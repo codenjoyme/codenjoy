@@ -178,7 +178,7 @@ public class LocalGameRunner {
             print(index, "Scores: " + scores.get(index).getScore());
         }
 
-        print(index, "Answer: " + answer);
+        print(index, "Answer:" + ((StringUtils.isEmpty(answer))?"":" ") + answer);
         return answer;
     }
 

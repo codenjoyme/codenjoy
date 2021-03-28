@@ -30,23 +30,25 @@ import com.codenjoy.dojo.loderunner.services.GameRunner;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
     @Test
-    public void test() {
+    public void testSoft() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
+        LocalGameRunner.showPlayers = null;
 
-        Smoke.play(1000,
+        int ticks = 1000;
+        int players = 2;
+        Smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {
@@ -82,8 +84,36 @@ public class SmokeTest {
                                 .integer(ENEMIES_COUNT, 2);
                     }
                 },
-                Arrays.asList(new AISolver(dice), new AISolver(dice)),
-                Arrays.asList(new Board(), new Board()),
+                Stream.generate(() -> new AISolver(dice))
+                        .limit(players).collect(toList()),
+                Stream.generate(() -> new Board())
+                        .limit(players).collect(toList()),
+                (o1, o2) -> assertEquals(o1, o2));
+    }
+
+    @Test
+    public void testHard() {
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 20000);
+        LocalGameRunner.showPlayers = "1";
+
+        int ticks = 100;
+        int players = 10;
+        Smoke.play(ticks, "SmokeTestHard.data",
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
+
+                    @Override
+                    public GameSettings getSettings() {
+                        return super.getSettings();
+                    }
+                },
+                Stream.generate(() -> new AISolver(dice))
+                        .limit(players).collect(toList()),
+                Stream.generate(() -> new Board())
+                        .limit(players).collect(toList()),
                 (o1, o2) -> assertEquals(o1, o2));
     }
 }

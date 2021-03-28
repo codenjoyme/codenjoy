@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 public class Smoke {
 
     public static void play(int iterations,
+                            String fileName,
                             GameType gameRunner,
                             List<Solver> solvers,
                             List<ClientBoard> boards,
@@ -64,10 +65,10 @@ public class Smoke {
         LocalGameRunner.run(gameRunner, solvers, boards);
 
         // then
-        String expectedAll = load("src/test/resources/SmokeTest.data");
+        String expectedAll = load("src/test/resources/" + fileName);
         String actualAll = String.join("\n", messages);
 
-        saveToFile("target/ActualSmokeTest.data", actualAll);
+        saveToFile("target/Actual" + fileName, actualAll);
 
         TestUtils.assertSmoke(true, assertor, expectedAll, actualAll);
     }
