@@ -98,7 +98,7 @@ public class DeikstraFindWay {
     public List<Direction> buildPath(Point from, List<Point> goals) {
         List<List<Direction>> paths = new LinkedList<>();
         for (Point to : goals) {
-            List<Direction> path = getPath(from).get(to);
+            List<Direction> path = getPath(from, goals).get(to);
             if (path == null || path.isEmpty()) continue;
             paths.add(path);
         }
@@ -120,7 +120,8 @@ public class DeikstraFindWay {
         return shortest;
     }
 
-    private Map<Point, List<Direction>> getPath(Point from) {
+    private Map<Point, List<Direction>> getPath(Point from, List<Point> inputGoals) {
+        Set<Point> goals = new HashSet<>(inputGoals);
         Map<Point, List<Direction>> path = new HashMap<>();
         for (Point point : ways().keySet()) {
             path.put(point, new ArrayList<>(100));
@@ -162,8 +163,9 @@ public class DeikstraFindWay {
                 }
             }
             processed[current.getX()][current.getY()] = true;
+            goals.remove(current);
             current = null;
-        } while (!toProcess.isEmpty());
+        } while (!(toProcess.isEmpty() || goals.isEmpty()));
 
         return path;
     }
