@@ -29,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGames.withRoom;
 
@@ -130,8 +129,23 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public List<PlayerInfo> getSaves() {
+        List<Player> active = players.getAll();
+        List<String> savedList = saver.getSavedList();
+
+        return getSaves(active, savedList);
+    }
+
+    @Override // TODO test me
+    public List<PlayerInfo> getSaves(String room) {
+        List<Player> active = players.getAllInRoom(room);
+        List<String> savedList = saver.getSavedList(room);
+
+        return getSaves(active, savedList);
+    }
+
+    private List<PlayerInfo> getSaves(List<Player> active, List<String> saved) {
         Map<String, PlayerInfo> map = new HashMap<>();
-        for (Player player : players.getAll()) {
+        for (Player player : active) {
             PlayerInfo info = new PlayerInfo(player);
             setDataFromRegistration(info, player.getId());
             setSaveFromField(info, playerGames.get(player.getId()));
@@ -139,8 +153,7 @@ public class SaveServiceImpl implements SaveService {
             map.put(player.getId(), info);
         }
 
-        List<String> savedList = saver.getSavedList();
-        for (String id : savedList) {
+        for (String id : saved) {
             if (id == null) continue;
 
             boolean found = map.containsKey(id);
