@@ -72,6 +72,10 @@ public abstract class RoundPlayerHero<F extends RoundGameField> extends PlayerHe
         this.player = player;
     }
 
+    public RoundGamePlayer getPlayer() {
+        return player;
+    }
+
     public void event(Object event) {
         if (!hasPlayer()) {
             return;

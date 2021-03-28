@@ -33,6 +33,7 @@ public class Events {
     public static final Events KILL_OTHER_AI_TANK = new Events("KILL_OTHER_AI_TANK");
     public static final Events START_ROUND = new Events("START_ROUND");
     public static final Events WIN_ROUND = new Events("WIN_ROUND");
+    public static final Function<Integer, Events> CATCH_PRIZE = type -> new Events("CATCH_PRIZE", type);
 
     private String type;
     private int amount;
@@ -68,6 +69,10 @@ public class Events {
         return type.equals(KILL_YOUR_TANK.type);
     }
 
+    public boolean isCatchPrize() {
+        return type.equals(CATCH_PRIZE.apply(1).type);
+    }
+
     public boolean isKillOtherHeroTank() {
         return type.equals(KILL_OTHER_HERO_TANK.apply(1).type);
     }
@@ -78,7 +83,7 @@ public class Events {
 
     @Override
     public String toString() {
-        if (isKillOtherHeroTank()) {
+        if (isKillOtherHeroTank() || isCatchPrize()) {
             return String.format("%s[%s]", type, amount);
         } else {
             return type;
