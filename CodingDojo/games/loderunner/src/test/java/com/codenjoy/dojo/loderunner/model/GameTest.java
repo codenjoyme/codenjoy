@@ -89,6 +89,7 @@ public class GameTest {
         game.newGame(player);
         player.hero = hero;
         hero.init(game);
+        game.resetHeroes();
         this.hero = game.getHeroes().get(0);
     }
 

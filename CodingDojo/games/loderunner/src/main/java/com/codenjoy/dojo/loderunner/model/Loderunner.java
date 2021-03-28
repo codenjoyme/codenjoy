@@ -55,6 +55,7 @@ public class Loderunner implements Field {
     private Dice dice;
     private GameSettings settings;
     private List<Function<Point, Point>> finder;
+    private List<Hero> heroes;
 
     public Loderunner(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
@@ -100,11 +101,18 @@ public class Loderunner implements Field {
         for (Player player : players) {
             player.newHero(this);
         }
+        resetHeroes();
 
         generatePills();
         generateGold();
         generatePortals();
         generateEnemies();
+    }
+
+    public void resetHeroes() {
+        heroes = players.stream()
+                .map(Player::getHero)
+                .collect(toList());
     }
 
     @Override
@@ -443,14 +451,6 @@ public class Loderunner implements Field {
         return result.equals(NO_SPACE) ? Optional.empty() : Optional.of(result);
     }
 
-    private boolean isGround(Point pt) {
-        Point under = Direction.DOWN.change(pt);
-
-        return isBorder(under)
-                && isBrick(under)
-                && isLadder(under);
-    }
-
     @Override
     public boolean isLadder(Point pt) {
         return ladder.contains(pt);
@@ -526,9 +526,7 @@ public class Loderunner implements Field {
 
     @Override
     public List<Hero> getHeroes() {
-        return players.stream()
-                .map(Player::getHero)
-                .collect(toList());
+        return heroes;
     }
 
     public void newGame(Player player) {
@@ -536,10 +534,12 @@ public class Loderunner implements Field {
             players.add(player);
         }
         player.newHero(this);
+        resetHeroes();
     }
 
     public void remove(Player player) {
         players.remove(player);
+        resetHeroes();
     }
 
     @Override
