@@ -26,12 +26,14 @@ package com.codenjoy.dojo.loderunner;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.client.ai.AISolver;
+import com.codenjoy.dojo.loderunner.client.ai.DummyAISolver;
 import com.codenjoy.dojo.loderunner.services.GameRunner;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
@@ -48,6 +50,8 @@ public class SmokeTest {
 
         int ticks = 1000;
         int players = 2;
+        Supplier<AISolver> solver = () -> new AISolver(dice);
+
         Smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
@@ -84,7 +88,7 @@ public class SmokeTest {
                                 .integer(ENEMIES_COUNT, 2);
                     }
                 },
-                Stream.generate(() -> new AISolver(dice))
+                Stream.generate(solver)
                         .limit(players).collect(toList()),
                 Stream.generate(() -> new Board())
                         .limit(players).collect(toList()),
@@ -98,6 +102,9 @@ public class SmokeTest {
 
         int ticks = 100;
         int players = 10;
+        int enemies = 5;
+        Supplier<AISolver> solver = () -> new AISolver(dice);
+
         Smoke.play(ticks, "SmokeTestHard.data",
                 new GameRunner() {
                     @Override
@@ -107,10 +114,11 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return super.getSettings();
+                        return super.getSettings()
+                                .integer(ENEMIES_COUNT, enemies);
                     }
                 },
-                Stream.generate(() -> new AISolver(dice))
+                Stream.generate(solver)
                         .limit(players).collect(toList()),
                 Stream.generate(() -> new Board())
                         .limit(players).collect(toList()),

@@ -42,7 +42,7 @@ public class AISolver implements Solver<Board> {
         this.way = new DeikstraFindWay();
     }
 
-    public DeikstraFindWay.Possible possible(final Board board) {
+    public DeikstraFindWay.Possible possible(Board board) {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point from, Direction where) {
@@ -71,7 +71,7 @@ public class AISolver implements Solver<Board> {
     }
 
     @Override
-    public String get(final Board board) {
+    public String get(Board board) {
         if (board.isGameOver()) return "";
         List<Direction> result = getDirections(board);
         if (result.isEmpty()) return "";
