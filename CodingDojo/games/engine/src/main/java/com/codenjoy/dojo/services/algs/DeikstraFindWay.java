@@ -38,7 +38,7 @@ public class DeikstraFindWay {
 
     private static final List<Direction> DIRECTIONS = Arrays.asList(UP, DOWN, LEFT, RIGHT);
 
-    // карта возможныъ передвижений, которые не будут менять на этом уровне: стены и прочие препятствия
+    // карта возможных передвижений, которые не будут менять на этом уровне: стены и прочие препятствия
     private Map<Point, List<Direction>> basic;
 
     // карта возможных передвижений дополненная движимыми объектами
@@ -123,7 +123,7 @@ public class DeikstraFindWay {
     private Map<Point, List<Direction>> getPath(Point from) {
         Map<Point, List<Direction>> path = new HashMap<>();
         for (Point point : ways().keySet()) {
-            path.put(point, new LinkedList<>());
+            path.put(point, new ArrayList<>(100));
         }
 
         boolean[][] processed = new boolean[size][size];
@@ -143,13 +143,22 @@ public class DeikstraFindWay {
                 if (processed[to.getX()][to.getY()]) continue;
 
                 List<Direction> directions = path.get(to);
-                if (directions.isEmpty() || directions.size() > before.size() + 1) {
-                    directions.addAll(before);
+                if (before.size() < directions.size() - 1) {
+                    // мы нашли более короткий путь,
+                    // но это никогда не случится )
+                    directions.clear();
+                }
+                if (directions.isEmpty()) {
+                    if (!before.isEmpty()) {
+                         directions.addAll(before);
+                    }
                     directions.add(direction);
 
                     if (!processed[to.getX()][to.getY()]) {
                         toProcess.add(to);
                     }
+                } else {
+                    // do nothing
                 }
             }
             processed[current.getX()][current.getY()] = true;
