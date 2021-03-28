@@ -112,7 +112,7 @@ public class Loderunner implements Field {
 //            init();
 //        } TODO сделать по другому автоперезагрузку уровней
 
-        Set<Player> die = new HashSet<>();
+        Set<Player> die = new LinkedHashSet<>();
 
         heroesGo();
         die.addAll(getDied());
