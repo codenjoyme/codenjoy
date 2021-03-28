@@ -90,7 +90,7 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        settings.string(LEVEL_MAP, board.replaceAll("\n", ""));
+        settings.string(LEVEL_MAP, board);
 
         GameRunner runner = new GameRunner() {
             @Override

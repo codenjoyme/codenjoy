@@ -58,9 +58,7 @@ public class MultiplayerTest {
     private GameSettings settings;
 
     public void givenGame() {
-
         game = new Battlecity(size, mock(Dice.class), settings);
-
 
         game.addBorder(new DefaultBorders(size).get());
 
