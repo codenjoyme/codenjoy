@@ -71,8 +71,9 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public void loadAll(String room) {
-        getSavedStream(room)
-                .forEach(this::load);
+        for (String id : saver.getSavedList(room)) {
+            load(id);
+        }
     }
 
     @Override
@@ -190,16 +191,9 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public void removeAllSaves(String room) {
-        getSavedStream(room)
-                .forEach(this::removeSave);
-    }
-
-    private Stream<String> getSavedStream(String room) {
-        List<String> saved = saver.getSavedList();
-
-        return playerGames.getAll(withRoom(room)).stream()
-                .map(PlayerGame::getPlayerId)
-                .filter(saved::contains);
+        for (String id : saver.getSavedList(room)) {
+            saver.delete(id);
+        }
     }
 
 }

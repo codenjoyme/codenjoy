@@ -74,11 +74,14 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldSavePlayerWhenExists() {
+        // given
         Player player = createPlayer("vasia");
         fieldSave(0, "{'key':'value'}");
 
+        // when
         long time = saveService.save("vasia");
 
+        // then
         verify(saver).saveGame(player, "{\"key\":\"value\"}", time);
     }
 
@@ -341,20 +344,24 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldSaveAll() {
+        // given
         createPlayer("first");
         createPlayer("second");
 
         fieldSave(0, "{'key':'value1'}");
         fieldSave(1, "{'key':'value2'}");
 
+        // when
         long time = saveService.saveAll();
 
+        // then
         verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
         verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
     }
 
     @Test
     public void shouldSaveAll_forRoomName() {
+        // given
         createPlayer("first", "room1");
         createPlayer("second", "room1");
         createPlayer("third", "room2");
@@ -363,8 +370,10 @@ public class SaveServiceImplTest {
         fieldSave(1, "{'key':'value2'}");
         fieldSave(2, "{'key':'value3'}");
 
+        // when
         long time = saveService.saveAll("room1");
 
+        // then
         verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
         verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
         verifyNoMoreInteractions(saver);
@@ -376,6 +385,7 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldLoadAll() {
+        // given
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
         allPlayersNotRegistered();
 
@@ -384,8 +394,10 @@ public class SaveServiceImplTest {
         when(saver.loadGame("first")).thenReturn(first);
         when(saver.loadGame("second")).thenReturn(second);
 
+        // when
         saveService.loadAll();
 
+        // then
         verify(playerService).contains("first");
         verify(playerService).register(first);
         verify(playerService).contains("second");
@@ -395,7 +407,9 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldLoadAll_byRoomName() {
-        when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second", "third"));
+        // given
+        when(saver.getSavedList("room1")).thenReturn(Arrays.asList("first", "third"));
+        when(saver.getSavedList("room2")).thenReturn(Arrays.asList("second"));
         createPlayer("first", "room1");
         createPlayer("second", "room2");
         createPlayer("third", "room1");
@@ -413,8 +427,10 @@ public class SaveServiceImplTest {
         when(saver.loadGame("second")).thenReturn(second);
         when(saver.loadGame("third")).thenReturn(third);
 
+        // when
         saveService.loadAll("room1");
 
+        // then
         verify(playerService).contains("first");
         verify(playerService).register(first);
 
@@ -424,12 +440,46 @@ public class SaveServiceImplTest {
         verifyNoMoreInteractions(playerService);
     }
 
+    @Test
+    public void shouldLoadAll_byRoomName_whenNoPlayersInGame() {
+        // given
+        when(saver.getSavedList("room1")).thenReturn(Arrays.asList("first", "third"));
+        when(saver.getSavedList("room2")).thenReturn(Arrays.asList("second"));
+
+        PlayerSave first = mock(PlayerSave.class);
+        when(first.getRoom()).thenReturn("room1");
+
+        PlayerSave second = mock(PlayerSave.class);
+        when(second.getRoom()).thenReturn("room2");
+
+        PlayerSave third = mock(PlayerSave.class);
+        when(third.getRoom()).thenReturn("room1");
+
+        when(saver.loadGame("first")).thenReturn(first);
+        when(saver.loadGame("second")).thenReturn(second);
+        when(saver.loadGame("third")).thenReturn(third);
+
+        // when
+        saveService.loadAll("room1");
+
+        // then
+        verify(playerService).contains("first");
+        verify(playerService).register(first);
+
+        verify(playerService).contains("third");
+        verify(playerService).register(third);
+
+        verifyNoMoreInteractions(playerService);
+    }
+
+
     private void allPlayersNotRegistered() {
         when(playerService.contains(anyString())).thenReturn(NOT_REGISTERED);
     }
 
     @Test
     public void shouldLoadAll_whenRegistered() {
+        // given
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
         allPlayersRegistered();
 
@@ -438,8 +488,10 @@ public class SaveServiceImplTest {
         when(saver.loadGame("first")).thenReturn(first);
         when(saver.loadGame("second")).thenReturn(second);
 
+        // when
         saveService.loadAll();
 
+        // then
         verify(playerService).contains("first");
         verify(playerService).remove("first");
         verify(playerService).register(first);
@@ -456,22 +508,64 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldRemoveSave() {
+        // when
         saveService.removeSave("player");
 
+        // then
         verify(saver).delete("player");
     }
 
     @Test
     public void shouldRemoveAllSaves() {
+        // given
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second", "third"));
         createPlayer("first", "room1");
         createPlayer("second", "room2");
         createPlayer("third", "room1");
 
+        // when
+        saveService.removeAllSaves();
+
+        // then
+        verify(saver).getSavedList();
+        verify(saver).delete("first");
+        verify(saver).delete("second");
+        verify(saver).delete("third");
+        verifyNoMoreInteractions(saver, playerService);
+    }
+
+    @Test
+    public void shouldRemoveAllSaves_byRoomName() {
+        // given
+        when(saver.getSavedList("room1")).thenReturn(Arrays.asList("first", "third"));
+        when(saver.getSavedList("room2")).thenReturn(Arrays.asList("second"));
+        createPlayer("first", "room1");
+        createPlayer("second", "room2");
+        createPlayer("third", "room1");
+
+        // when
         saveService.removeAllSaves("room1");
 
+        // then
+        verify(saver).getSavedList("room1");
         verify(saver).delete("first");
         verify(saver).delete("third");
-        verifyNoMoreInteractions(playerService);
+        verifyNoMoreInteractions(saver, playerService);
+    }
+
+    @Test
+    public void shouldRemoveAllSaves_byRoomName_whenNoPlayersInGame() {
+        // given
+        when(saver.getSavedList("room1")).thenReturn(Arrays.asList("first", "third"));
+        when(saver.getSavedList("room2")).thenReturn(Arrays.asList("second"));
+
+        // when
+        saveService.removeAllSaves("room1");
+
+        // then
+        verify(saver).getSavedList("room1");
+        verify(saver).delete("first");
+        verify(saver).delete("third");
+        verifyNoMoreInteractions(saver, playerService);
     }
 }

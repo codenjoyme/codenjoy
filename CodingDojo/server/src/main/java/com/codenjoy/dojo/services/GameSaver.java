@@ -33,6 +33,8 @@ public interface GameSaver {
     PlayerSave loadGame(String id);
     
     List<String> getSavedList();
-    
+
+    List<String> getSavedList(String room);
+
     void delete(String id);
 }
