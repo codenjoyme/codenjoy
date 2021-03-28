@@ -57,21 +57,29 @@ public class SmokeTest {
                     public GameSettings getSettings() {
                         return super.getSettings()
                                 .string(LEVEL_MAP,
-                                        "☼☼☼☼☼☼☼☼☼☼" +
-                                        "☼ $ ~~~» ☼" +
-                                        "☼H##   # ☼" +
-                                        "☼H~~~   $☼" +
-                                        "☼H   $   ☼" +
-                                        "☼H   ~~~~☼" +
-                                        "☼###H    ☼" +
-                                        "☼$  H   $☼" +
-                                        "☼########☼" +
-                                        "☼☼☼☼☼☼☼☼☼☼")
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                                        "☼~~~~~~~~H   ~~~☼" +
+                                        "☼        H###   ☼" +
+                                        "☼   ~~~~~H    ##☼" +
+                                        "☼H##     H##    ☼" +
+                                        "☼H       H~~~~~ ☼" +
+                                        "☼H       H      ☼" +
+                                        "☼H#####  H      ☼" +
+                                        "☼H         #####☼" +
+                                        "☼H  ~~~»        ☼" +
+                                        "☼H##   ######H H☼" +
+                                        "☼H~~~        H H☼" +
+                                        "☼H             H☼" +
+                                        "☼H   ~~~~~~~~~ H☼" +
+                                        "☼###H    H     H☼" +
+                                        "☼   H    H     H☼" +
+                                        "☼###############☼" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼")
                                 .integer(SHADOW_PILLS_COUNT, 1)
-                                .integer(GOLD_COUNT_GREEN, 1)
-                                .integer(GOLD_COUNT_RED, 2)
-                                .integer(GOLD_COUNT_YELLOW, 3)
-                                .integer(ENEMIES_COUNT, 1);
+                                .integer(GOLD_COUNT_GREEN, 5)
+                                .integer(GOLD_COUNT_RED, 6)
+                                .integer(GOLD_COUNT_YELLOW, 7)
+                                .integer(ENEMIES_COUNT, 2);
                     }
                 },
                 Arrays.asList(new AISolver(dice), new AISolver(dice)),
