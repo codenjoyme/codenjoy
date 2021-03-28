@@ -73,7 +73,9 @@ public class PointImpl implements Point, Comparable<Point> {
 
     @Override
     public double distance(Point other) {
-        return Math.sqrt((x - other.getX())*(x - other.getX()) + (y - other.getY())*(y - other.getY()));
+        int dx = x - other.getX();
+        int dy = y - other.getY();
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     @Override
@@ -100,17 +102,11 @@ public class PointImpl implements Point, Comparable<Point> {
             return true;
         }
 
-        if (o == null) {
+        try {
+            return ((PointImpl)o).itsMe(x, y);
+        } catch (Exception e) {
             return false;
         }
-
-        if (!(o instanceof PointImpl)) {
-            return false;
-        }
-
-        PointImpl p = (PointImpl)o;
-
-        return (p.x == x && p.y == y);
     }
 
     @Override

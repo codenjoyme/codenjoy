@@ -23,8 +23,13 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -329,5 +334,21 @@ public class PointImplTest {
 
         verify(dice, times(2)).next(size);
         assertEquals("[100,101]", pt.toString());
+    }
+
+    @Test
+    public void equalsPerformanceTest() {
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 20000);
+        LocalGameRunner.printConversions = false;
+        LocalGameRunner.printDice = false;
+
+        int size = 1000;
+        int count = 10000;
+        List<Point> points = Stream.generate(() -> random(dice, size))
+                .limit(count).collect(toList());
+
+        for (int i = 0; i < count; i++) {
+            points.contains(pt(size / 2, size / 2));
+        }
     }
 }
