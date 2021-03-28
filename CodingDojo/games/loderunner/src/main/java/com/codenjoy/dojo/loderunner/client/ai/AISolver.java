@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class AISolver implements Solver<Board> {
@@ -80,6 +81,9 @@ public class AISolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
         Point from = board.getMe();
+        if (from == null) {
+            return Arrays.asList();
+        }
         List<Point> to = board.get(Elements.YELLOW_GOLD,
                 Elements.GREEN_GOLD,
                 Elements.RED_GOLD);

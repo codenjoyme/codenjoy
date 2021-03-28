@@ -28,6 +28,7 @@ import com.codenjoy.dojo.loderunner.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.Collection;
+import java.util.List;
 
 import static com.codenjoy.dojo.loderunner.model.Elements.*;
 
@@ -58,7 +59,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Point getMe() {
-        return get(HERO_DIE,
+        List<Point> list = get(HERO_DIE,
                 HERO_DRILL_LEFT,
                 HERO_DRILL_RIGHT,
                 HERO_LADDER,
@@ -78,7 +79,9 @@ public class Board extends AbstractBoard<Elements> {
                 HERO_SHADOW_FALL_LEFT,
                 HERO_SHADOW_FALL_RIGHT,
                 HERO_SHADOW_PIPE_LEFT,
-                HERO_SHADOW_PIPE_RIGHT).get(0);
+                HERO_SHADOW_PIPE_RIGHT);
+
+        return (list.isEmpty()) ? null : list.get(0);
     }
 
     public boolean isGameOver() {
