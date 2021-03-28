@@ -223,16 +223,6 @@ public class Loderunner implements Field {
         return die;
     }
 
-    public <T extends Point> Optional<T> get(Point pt, Class<T> type) {
-        return (Optional<T>) get(pt).stream()
-                .filter(element -> element.getClass().equals(type))
-                .findFirst();
-    }
-
-    public boolean is(Point pt, Class<? extends Point> type) {
-        return get(pt, type).isPresent();
-    }
-
     public BoardReader reader() {
         return new BoardReader() {
 
@@ -269,7 +259,7 @@ public class Loderunner implements Field {
             Hero hero = player.getHero();
 
             if (!hero.isAlive()) {
-                Optional<Brick> brick = get(hero, Brick.class);
+                Optional<Brick> brick = getBrick(hero);
                 if (!brick.isPresent()) continue;
 
                 // Умер от того что кто-то просверлил стенку
@@ -284,6 +274,12 @@ public class Loderunner implements Field {
         }
 
         return die;
+    }
+
+    private Optional<Brick> getBrick(Point pt) {
+        return bricks.stream()
+                .filter(brick -> brick.equals(pt))
+                .findFirst();
     }
 
     public List<Point> get(Point at) {
@@ -386,7 +382,7 @@ public class Loderunner implements Field {
           return pt.getX() > size - 1 || pt.getX() < 0
                 || pt.getY() < 0 || pt.getY() > size - 1
                 || isFullBrick(pt)
-                || is(pt, Border.class)
+                || isBorder(pt)
                 || (isHeroAt(pt) && !under(pt, PillType.SHADOW_PILL));
     }
 
@@ -402,7 +398,7 @@ public class Loderunner implements Field {
         }
 
         Point over = Direction.UP.change(pt);
-        if (is(over, Ladder.class)
+        if (isLadder(over)
                 || yellowGold.contains(over)
                 || greenGold.contains(over)
                 || redGold.contains(over)
@@ -412,7 +408,7 @@ public class Loderunner implements Field {
             return false;
         }
 
-        Optional<Brick> brick = get(pt, Brick.class);
+        Optional<Brick> brick = getBrick(pt);
         if (brick.isPresent()) {
             brick.get().drill(byHero);
         }
@@ -425,17 +421,19 @@ public class Loderunner implements Field {
         Point under = Direction.DOWN.change(pt);
 
         return !(isFullBrick(under)
-                || is(under, Ladder.class)
-                || is(under, Border.class)
-                || getHeroes().contains(under)
+                || isLadder(under)
+                || isBorder(under)
+                || isHeroAt(under)
                 || enemies.contains(under));
     }
 
     @Override
     public boolean isFullBrick(Point pt) {
-        Optional<Brick> brick = get(pt, Brick.class);
-        return brick.isPresent()
-                && brick.get().state(null) == Elements.BRICK;
+        return bricks.stream()
+                .filter(brick -> brick.equals(pt))
+                .filter(brick -> brick.state(null) == Elements.BRICK)
+                .findFirst()
+                .isPresent();
     }
 
     @Override
@@ -447,19 +445,19 @@ public class Loderunner implements Field {
     private boolean isGround(Point pt) {
         Point under = Direction.DOWN.change(pt);
 
-        return is(under, Border.class)
-                && is(under, Brick.class)
-                && is(under, Ladder.class);
+        return isBorder(under)
+                && isBrick(under)
+                && isLadder(under);
     }
 
     @Override
     public boolean isLadder(Point pt) {
-        return is(pt, Ladder.class);
+        return ladder.contains(pt);
     }
 
     @Override
     public boolean isPipe(Point pt) {
-        return is(pt, Pipe.class);
+        return pipe.contains(pt);
     }
 
     @Override
@@ -474,7 +472,7 @@ public class Loderunner implements Field {
 
     @Override
     public boolean isBrick(Point pt) {
-        return is(pt, Brick.class);
+        return bricks.contains(pt);
     }
 
     @Override
@@ -522,7 +520,7 @@ public class Loderunner implements Field {
 
     @Override
     public boolean isBorder(Point pt) {
-        return is(pt, Border.class);
+        return borders.contains(pt);
     }
 
     @Override
