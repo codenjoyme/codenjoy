@@ -429,11 +429,12 @@ public class Loderunner implements Field {
 
     @Override
     public boolean isFullBrick(Point pt) {
-        return bricks.stream()
-                .filter(brick -> brick.equals(pt))
-                .filter(brick -> brick.state(null) == Elements.BRICK)
-                .findFirst()
-                .isPresent();
+        // do not use streams here, optimized for performance
+        int index = bricks.indexOf(pt);
+        if (index == -1) {
+            return false;
+        }
+        return bricks.get(index).state(null) == Elements.BRICK;
     }
 
     @Override
