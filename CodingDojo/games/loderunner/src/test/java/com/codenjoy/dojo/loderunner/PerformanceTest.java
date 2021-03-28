@@ -32,9 +32,9 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
@@ -75,6 +75,7 @@ public class PerformanceTest {
         games = Stream.generate(() -> createGame())
                 .limit(playersCount).collect(toList());
 
+        long start = now();
         for (int i = 0; i < ticks; i++) {
             heroes.forEach(hero -> act(move(hero)));
             field.tick();
@@ -86,6 +87,11 @@ public class PerformanceTest {
                     .collect(toList());
 //            System.out.println(boards.get(0));
         }
+        System.out.println((now() - start)/ticks);
+    }
+
+    private long now() {
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     private Joystick act(Joystick joystick) {
