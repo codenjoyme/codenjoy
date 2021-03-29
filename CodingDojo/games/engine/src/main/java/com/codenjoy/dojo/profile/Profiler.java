@@ -60,8 +60,6 @@ public class Profiler {
     }
 
     public synchronized void done(String phase) {
-        if (!log.isDebugEnabled()) return;
-
         long delta = now() - time;
 
         phases.put(phase, delta);
@@ -80,23 +78,21 @@ public class Profiler {
     }
 
     public void print() {
-        if (!log.isDebugEnabled()) return;
-
-        log.debug(this.toString());
-        log.debug("--------------------------------------------------");
+        if (log.isDebugEnabled()) {
+            log.debug(this.toString());
+            log.debug("--------------------------------------------------");
+        }
     }
 
     public void print(String phase) {
-        if (!log.isDebugEnabled()) return;
-
-        log.debug("--------------------------------------------------");
-        log.debug(phase + " = " + phases.get(phase));
-        log.debug("--------------------------------------------------");
+        if (log.isDebugEnabled()) {
+            log.debug("--------------------------------------------------");
+            log.debug(phase + " = " + phases.get(phase));
+            log.debug("--------------------------------------------------");
+        }
     }
 
     public String get(String phase) {
-        if (!log.isDebugEnabled()) return StringUtils.EMPTY;
-
         if (!phasesAll.containsKey(phase)) {
             return "phase not found: " + phase;
         }

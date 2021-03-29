@@ -48,6 +48,7 @@ public class GameData {
 
     public JSONObject getHeroesData(Profiler profiler) {
         JSONObject result = new JSONObject();
+profiler.start();
         result.put("coordinates", coordinates);
 profiler.done("coordinates");
         result.put("group", group);
