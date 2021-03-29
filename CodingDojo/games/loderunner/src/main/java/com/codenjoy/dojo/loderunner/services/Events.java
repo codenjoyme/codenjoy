@@ -27,5 +27,6 @@ public enum Events {
     KILL_HERO,
     GET_YELLOW_GOLD,
     GET_GREEN_GOLD,
-    GET_RED_GOLD, SUICIDE;
+    GET_RED_GOLD,
+    SUICIDE;
 }
