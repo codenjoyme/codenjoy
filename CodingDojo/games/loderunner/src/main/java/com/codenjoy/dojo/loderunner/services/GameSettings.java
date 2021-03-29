@@ -114,7 +114,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public Level level(Dice dice) {
-        return new LevelImpl(getMap(), dice);
+        return new LevelImpl(getMap().replace("\n", "").replace("\r", ""), dice);
     }
 
     public String getMap() {
