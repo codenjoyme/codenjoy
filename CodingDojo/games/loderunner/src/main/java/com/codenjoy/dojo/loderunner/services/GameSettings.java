@@ -36,7 +36,9 @@ import java.util.List;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
-    
+
+    public static final String MAP_PATH_NONE = "none";
+
     public enum Keys implements Key {
 
         KILL_HERO_PENALTY("Kill hero penalty"),
@@ -110,7 +112,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
         integer(ENEMIES_COUNT, 5);
 
-        string(MAP_PATH, "");
+        string(MAP_PATH, MAP_PATH_NONE);
     }
 
     public Level level(Dice dice) {
@@ -119,10 +121,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public String getMap() {
         String path = string(MAP_PATH);
-        if (StringUtils.isNotEmpty(path)) {
-            return MapLoader.loadMapFromFile(path);
-        } else {
+        if (MAP_PATH_NONE.equals(path)) {
             return string(LEVEL_MAP);
+        } else {
+            return MapLoader.loadMapFromFile(path);
         }
     }
 }
