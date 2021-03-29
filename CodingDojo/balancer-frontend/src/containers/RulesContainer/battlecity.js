@@ -311,9 +311,28 @@ class RulesContainer extends Component {
                                 <li>
                                     Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
                                 </li>
+                                <li>
                                     Кількість штрафних тіків-затримки на воді: { this._gets('penaltyWalkingOnWater') }.
                                 </li>
-
+                            </ul>
+                        </li>
+                      <li>
+                            <span className='command'>PRIZE_VISIBILITY</span> - дає можливість гравцю бачити танки супротивника,
+                            що ховаються поза деревами гравцю рухатися по воді. <br />
+                            <ul class="sub_ul">
+                                <li>
+                                    Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
+                                </li>
+                            </ul>
+                        </li>
+                      <li>
+                            <span className='command'>PRIZE_NO_SLIDING</span> - надає можливість танку рухатися на льду
+                             без еффекту ковзання. <br />
+                             Після закінчення дії перку фізика руху по льду буду така сама, ніби ви віїхали на нього вперше.
+                            <ul class="sub_ul">
+                                <li>
+                                    Дія перку зникає через { this._gets('prizeWorking') } тіків (секунд).
+                                </li>
                             </ul>
                         </li>
                         <li>

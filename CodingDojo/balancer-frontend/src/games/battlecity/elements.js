@@ -241,4 +241,14 @@ export default [
 		title: `PRIZE_WALKING_ON_WATER('3')`,
 		description: `Приз, який дозволяє рухатися по воді`,
 	},
+	{
+		image: prize_visibility,
+		title: `PRIZE_VISIBILITY('4')`,
+		description: `Надає можливість бачити техніку супротивника поза деревами`,
+	},
+	{
+		image: prize_no_sliding,
+		title: `PRIZE_NO_SLIDING('5')`,
+		description: `Запобігає ковзанню на льоду`,
+	},
 ];
