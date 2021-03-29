@@ -350,7 +350,6 @@ public class PlayerServiceImpl implements PlayerService {
         Map<String, Integer> lastChatIds = chat.getLastMessageIds();
 Profiler profiler = new Profiler();
         for (PlayerGame playerGame : playerGames) {
-profiler.start();
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
             try {
@@ -358,29 +357,45 @@ profiler.start();
 
                 String gameType = playerGame.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());
-profiler.done("preparation");
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
-
-profiler.done("getBoardAsString");
 
                 GuiPlotColorDecoder decoder = gameData.getDecoder();
                 cacheBoards.put(player, decoder.encodeForClient(board));
                 Object encoded = decoder.encodeForBrowser(board);
 
-profiler.done("GuiPlotColorDecoder");
+profiler.start();
+                int boardSize = gameData.getBoardSize();
 
-                map.put(player, new PlayerData(gameData.getBoardSize(),
+profiler.done("getBoardSize");
+
+                Object score = player.getScore();
+
+profiler.done("getScore");
+
+                String message = player.getMessage();
+
+profiler.done("getMessage");
+
+                JSONObject scores = gameData.getScores();
+
+profiler.done("getScores");
+
+                JSONObject heroesData = gameData.getHeroesData();
+
+profiler.done("getHeroesData");
+
+                map.put(player, new PlayerData(boardSize,
                         encoded,
                         gameType,
-                        player.getScore(),
-                        player.getMessage(),
-                        gameData.getScores(),
-                        gameData.getHeroesData(),
+                        score,
+                        message,
+                        scores,
+                        heroesData,
                         lastChatMessage));
 
-profiler.done("map.put(PlayerData");
+profiler.done("map.put");
 
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +
