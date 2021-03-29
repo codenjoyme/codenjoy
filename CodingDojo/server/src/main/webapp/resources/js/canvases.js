@@ -183,7 +183,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             return playerData.board;
         }
         var getHeroesData = function() {
-            return playerData.heroesData.coordinates;
+            return playerData.coordinates;
         }
 
         var drawAllLayers = function(layers, onDrawItem){
@@ -502,7 +502,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         var result = [];
         var keys = getPlayers(data);
         for (var player in keys) {
-            result = result.concat(data[keys[player]].heroesData.group);
+            result = result.concat(data[keys[player]].group);
         }
         return result;
     }
@@ -550,7 +550,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 var id = ids[index];
                 playersOnTop.push({
                     'id':id,
-                    'readableName':data[id].heroesData.readableNames[id]
+                    'readableName':data[id].readableNames[id]
                 });
             }
 
@@ -587,7 +587,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var canvas = canvases[playerId];
         canvas.boardSize = boardSize;
-        readableNames = data.heroesData.readableNames;
+        readableNames = data.readableNames;
 
         drawBoard(getBoardDrawer(canvas, playerId, data, allPlayersScreen));
 
@@ -607,7 +607,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         showScoreInformation(playerId, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + playerId).text(data.heroesData.coordinates[playerId].level + 1);
+            $("#level_" + playerId).text(data.coordinates[playerId].level + 1);
         }
     }
 

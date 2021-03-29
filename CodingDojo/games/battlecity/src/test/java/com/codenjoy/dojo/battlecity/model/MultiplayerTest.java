@@ -23,6 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.TestGameSettings;
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -36,6 +37,7 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_PRIZE_LIMIT;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -56,9 +58,7 @@ public class MultiplayerTest {
     private GameSettings settings;
 
     public void givenGame() {
-
         game = new Battlecity(size, mock(Dice.class), settings);
-
 
         game.addBorder(new DefaultBorders(size).get());
 
@@ -72,17 +72,7 @@ public class MultiplayerTest {
 
     @Before
     public void setUp() {
-        settings = new GameSettings()
-                .integer(SPAWN_AI_PRIZE, 4)
-                .integer(KILL_HITS_AI_PRIZE, 3)
-                .integer(PRIZE_ON_FIELD, 3)
-                .integer(PRIZE_WORKING, 3)
-                .integer(AI_TICKS_PER_SHOOT, 3)
-                .integer(TANK_TICKS_PER_SHOOT, 4)
-                .integer(SLIPPERINESS, 3)
-                .integer(PENALTY_WALKING_ON_WATER, 3)
-                .integer(AI_PRIZE_LIMIT, 3);
-
+        settings = new TestGameSettings();
         printerFactory = new PrinterFactoryImpl();
     }
 

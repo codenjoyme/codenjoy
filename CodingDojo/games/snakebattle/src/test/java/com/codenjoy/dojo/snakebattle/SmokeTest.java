@@ -636,7 +636,7 @@ public class SmokeTest {
                     "19: 1:☼☼☼☼☼☼☼☼☼\n" +
                     "19: 1:\n" +
                     "19: 1:Scores: 48\n" +
-                    "19: 1:Answer: \n" +
+                    "19: 1:Answer:\n" +
                     "19: 2:☼☼☼☼☼☼☼☼☼\n" +
                     "19: 2:☼☼ ○    ☼\n" +
                     "19: 2:☼#      ☼\n" +
@@ -648,7 +648,7 @@ public class SmokeTest {
                     "19: 2:☼☼☼☼☼☼☼☼☼\n" +
                     "19: 2:\n" +
                     "19: 2:Scores: 12\n" +
-                    "19: 2:Answer: \n" +
+                    "19: 2:Answer:\n" +
                     "19: 2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                     "19: 1:Fire Event: STONE\n" +
                     "------------------------------------------\n" +

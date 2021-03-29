@@ -124,16 +124,15 @@ function initLogs(game, boardSize, alphabet, playerId) {
         info.boardSize = boardSize;
         info.board = tick.board;
         info.info = "";
-        info.heroesData = {};
-        info.heroesData.readableNames = {};
-        info.heroesData.readableNames[playerId] = playerId;
-        info.heroesData.coordinates = {};
-        var coordinates = info.heroesData.coordinates[playerId] = {};
+        info.readableNames = {};
+        info.readableNames[playerId] = playerId;
+        info.coordinates = {};
+        var coordinates = info.coordinates[playerId] = {};
         coordinates.coordinate = {x:-1, y:-1};
         coordinates.level = 0;
         coordinates.multiplayer = false;
-        info.heroesData.group = [];
-        info.heroesData.group[0] = playerId;
+        info.group = [];
+        info.group[0] = playerId;
 
         $('body').trigger('board-updated', data);
     }

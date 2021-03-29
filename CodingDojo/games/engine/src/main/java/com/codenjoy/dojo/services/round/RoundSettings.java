@@ -25,6 +25,9 @@ package com.codenjoy.dojo.services.round;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import java.util.Arrays;
+import java.util.List;
+
 public interface RoundSettings {
 
     public enum Keys implements SettingsReader.Key {
@@ -46,6 +49,10 @@ public interface RoundSettings {
         public String key() {
             return key;
         }
+    }
+
+    static List<SettingsReader.Key> allRoundsKeys() {
+        return Arrays.asList(Keys.values());
     }
 
     Parameter<?> getParameter(String name);

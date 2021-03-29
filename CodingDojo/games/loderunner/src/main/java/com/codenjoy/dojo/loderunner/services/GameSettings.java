@@ -30,6 +30,9 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
@@ -76,6 +79,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         }
     }
 
+    @Override
+    public List<Key> allKeys() {
+        return Arrays.asList(Keys.values());
+    }
+
     public GameSettings() {
         multiline(LEVEL_MAP, Level1.get());
 
@@ -88,16 +96,16 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(PORTALS_COUNT, 0);
         integer(PORTAL_TICKS, 10);
 
-        integer(GOLD_COUNT_GREEN, 0);
-        integer(GOLD_COUNT_YELLOW, 20);
-        integer(GOLD_COUNT_RED, 0);
-
+        integer(GOLD_COUNT_GREEN, 40);
         integer(GOLD_SCORE_GREEN, 1);
-        integer(GOLD_SCORE_YELLOW, 2);
-        integer(GOLD_SCORE_RED, 5);
+        integer(GOLD_SCORE_GREEN_INCREMENT, 1);
 
-        integer(GOLD_SCORE_GREEN_INCREMENT, 5);
-        integer(GOLD_SCORE_YELLOW_INCREMENT, 2);
+        integer(GOLD_COUNT_YELLOW, 20);
+        integer(GOLD_SCORE_YELLOW, 2);
+        integer(GOLD_SCORE_YELLOW_INCREMENT, 1);
+
+        integer(GOLD_COUNT_RED, 10);
+        integer(GOLD_SCORE_RED, 5);
         integer(GOLD_SCORE_RED_INCREMENT, 1);
 
         integer(ENEMIES_COUNT, 5);
@@ -106,7 +114,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public Level level(Dice dice) {
-        return new LevelImpl(getMap(), dice);
+        return new LevelImpl(getMap().replace("\n", "").replace("\r", ""), dice);
     }
 
     public String getMap() {

@@ -67,7 +67,7 @@ public class ScreenResponseHandler implements ResponseHandler {
                 .filter(entry -> request.isMyGame(entry.getKey()))
                 .filter(entry -> request.isAllPlayers() || request.isFor(entry.getKey()));
         if (request.isAllPlayers()) {
-            stream = stream.filter(distinctByKey(entry -> entry.getValue().getHeroesData().get("group").toString()));
+            stream = stream.filter(distinctByKey(entry -> entry.getValue().getGroup().toString()));
         }
         return stream
                 .collect(toMap(entry -> entry.getKey(),

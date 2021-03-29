@@ -42,11 +42,6 @@ import java.util.LinkedList;
 public abstract class FakeGameType extends AbstractGameType<Settings> {
 
     @Override
-    public SettingsImpl getSettings() {
-        return new FirstGameSettings();
-    }
-
-    @Override
     public PlayerScores getPlayerScores(Object score, Settings settings) {
         return new FakePlayerScores(score);
     }

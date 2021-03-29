@@ -55,4 +55,12 @@ public class PerkSettings {
     public int hashCode() {
         return Objects.hash(value, timeout);
     }
+
+    @Override
+    public String toString() {
+        return "PerkSettings{" +
+                "value=" + value +
+                ", timeout=" + timeout +
+                '}';
+    }
 }

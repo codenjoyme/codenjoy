@@ -27,9 +27,10 @@ import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.battlecity.model.items.Prizes;
 import com.codenjoy.dojo.battlecity.model.items.Tree;
+import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.services.round.Timer;
 
 import java.util.Collection;
@@ -42,16 +43,16 @@ import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PENALTY_WA
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
+public class Tank extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
     public static final int MAX = 100;
 
     protected Dice dice;
 
-    private boolean alive;
     protected Direction direction;
     protected boolean moving;
     private boolean fire;
+    private int score;
 
     private Gun gun;
     private Sliding sliding;
@@ -63,6 +64,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public Tank(Point pt, Direction direction, Dice dice) {
         super(pt);
+        score = 0;
         this.direction = direction;
         this.dice = dice;
         bullets = new LinkedList<>();
@@ -76,7 +78,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void up() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.UP;
         moving = true;
@@ -84,7 +86,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void down() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.DOWN;
         moving = true;
@@ -92,7 +94,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void right() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.RIGHT;
         moving = true;
@@ -100,7 +102,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void left() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.LEFT;
         moving = true;
@@ -132,7 +134,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         fire = true;
     }
@@ -155,11 +157,11 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             pt = PointImpl.random(dice, field.size());
         }
         if (c >= MAX) {
-            alive = false;
+            setAlive(false);
             return;
         }
         move(pt);
-        alive = true;
+        setAlive(true);
     }
 
     protected int ticksPerShoot() {
@@ -167,11 +169,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void kill(Bullet bullet) {
-        alive = false;
-    }
-
-    public boolean isAlive() {
-        return alive;
+        setAlive(false);
     }
 
     public void removeBullets() {
@@ -246,7 +244,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     public void reset() {
         moving = false;
         fire = false;
-        alive = true;
+        setAlive(true);
         gun.reset();
         bullets.clear();
         prizes.clear();
@@ -275,6 +273,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void take(Prize prize) {
+        getPlayer().event(Events.CATCH_PRIZE.apply(Integer.valueOf("" + prize.elements().ch)));
         prizes.add(prize);
     }
 
@@ -287,5 +286,13 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     public boolean canWalkOnWater() {
         return prizes.contains(PRIZE_WALKING_ON_WATER)
                 || (onWater != null && onWater.done());
+    }
+
+    public int scores() {
+        return score;
+    }
+
+    public void addScore(int added) {
+        score = Math.max(0, score + added);
     }
 }

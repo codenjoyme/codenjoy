@@ -27,6 +27,7 @@ import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,7 +39,12 @@ public class Prizes implements Tickable {
 
     @Override
     public void tick() {
-        prizes.forEach(Prize::tick);
+        try {
+            prizes.forEach(Prize::tick);
+        } catch (ConcurrentModificationException exception) {
+            // TODO #643 try solve ConcurrentModification
+            System.out.println("Got ConcurrentModificationException");
+        }
     }
 
     public void takeBy(Tank hero) {
@@ -63,7 +69,7 @@ public class Prizes implements Tickable {
 
     public void add(Prize prize) {
         prizes.add(prize);
-        prize.taken(item -> prizes.remove(item));
+        prize.taken(item -> prizes.remove(item)); // TODO #643 try solve ConcurrentModification
     }
 
     public boolean affect(Bullet bullet) {

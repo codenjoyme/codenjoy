@@ -137,7 +137,7 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Scores: 0\n" +
-                        "1:Answer: \n" +
+                        "1:Answer:\n" +
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +

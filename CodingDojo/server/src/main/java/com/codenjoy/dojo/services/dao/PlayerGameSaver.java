@@ -68,7 +68,11 @@ public class PlayerGameSaver implements GameSaver {
 
     @Override
     public PlayerSave loadGame(String id) {
-        return pool.select("SELECT * FROM saves WHERE player_id = ? ORDER BY time DESC LIMIT 1;",
+        return pool.select("SELECT * " +
+                        "FROM saves " +
+                        "WHERE player_id = ? " +
+                        "ORDER BY time DESC " +
+                        "LIMIT 1;",
                 new Object[]{id},
                 rs -> {
                     if (rs.next()) {
@@ -87,21 +91,34 @@ public class PlayerGameSaver implements GameSaver {
 
     @Override
     public List<String> getSavedList() {
-        return pool.select("SELECT DISTINCT player_id FROM saves;", // TODO убедиться, что загружены самые последние
-                rs -> {
-                    List<String> result = new LinkedList<>();
+        // TODO убедиться, что загружены самые последние
+        return pool.select("SELECT DISTINCT player_id " +
+                        "FROM saves;",
+                rs -> new LinkedList<String>(){{
                     while (rs.next()) {
-                        String id = rs.getString("player_id");
-                        result.add(id);
+                        add(rs.getString("player_id"));
                     }
-                    return result;
-                }
-        );
+                }});
+    }
+
+    @Override
+    public List<String> getSavedList(String room) {
+        // TODO убедиться, что загружены самые последние
+        return pool.select("SELECT DISTINCT player_id " +
+                        "FROM saves " +
+                        "WHERE room_name = ?;",
+                new Object[]{room},
+                rs -> new LinkedList<String>(){{
+                    while (rs.next()) {
+                        add(rs.getString("player_id"));
+                    }
+                }});
     }
 
     @Override
     public void delete(String id) {
-        pool.update("DELETE FROM saves WHERE player_id = ?;",
+        pool.update("DELETE FROM saves " +
+                        "WHERE player_id = ?;",
                 new Object[]{id});
     }
 }

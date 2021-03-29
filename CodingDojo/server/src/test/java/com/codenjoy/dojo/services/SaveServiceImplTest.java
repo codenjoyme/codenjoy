@@ -74,11 +74,14 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldSavePlayerWhenExists() {
+        // given
         Player player = createPlayer("vasia");
         fieldSave(0, "{'key':'value'}");
 
+        // when
         long time = saveService.save("vasia");
 
+        // then
         verify(saver).saveGame(player, "{\"key\":\"value\"}", time);
     }
 
@@ -326,6 +329,142 @@ public class SaveServiceImplTest {
         assertTrue(saved.isSaved());
     }
 
+    @Test
+    public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName_byRoomName() {
+        // given
+        Player activeSavedPlayer = createPlayer("activeSaved", "room"); // check sorting order (activeSaved > active)
+        Player activePlayer = createPlayer("active", "room");
+        Player activeSavedPlayerInOtherRoom = createPlayer("activeSavedInOtherRoom", "otherRoom");
+        Player activePlayerInOtherRoom = createPlayer("activeInOtherRoom", "otherRoom");
+        scores(activeSavedPlayer, 10);
+        scores(activePlayer, 11);
+        scores(activeSavedPlayerInOtherRoom, 12);
+        scores(activePlayerInOtherRoom, 13);
+
+        when(playerService.getAllInRoom("room")).thenReturn(Arrays.asList(activeSavedPlayer, activePlayer));
+        when(playerService.getAllInRoom("otherRoom")).thenReturn(Arrays.asList(activePlayerInOtherRoom, activeSavedPlayerInOtherRoom));
+
+        PlayerSave save1 = new PlayerSave(activeSavedPlayer);
+        PlayerSave save2 = new PlayerSave(activePlayer);
+        PlayerSave save3 = new PlayerSave("saved", "http://saved:1234", "saved game room", "room", 15, "data for saved");
+        PlayerSave save4 = new PlayerSave(activeSavedPlayerInOtherRoom);
+        PlayerSave save5 = new PlayerSave(activePlayerInOtherRoom);
+        PlayerSave save6 = new PlayerSave("savedInOtherRoom", "http://savedInOtherRoom:2345", "saved game otherRoom", "otherRoom", 26, "data for savedInOtherRoom");
+
+        when(saver.getSavedList("room")).thenReturn(Arrays.asList("activeSaved", "saved"));
+        when(saver.getSavedList("otherRoom")).thenReturn(Arrays.asList("activeSavedInOtherRoom", "savedInOtherRoom"));
+        when(saver.loadGame("activeSaved")).thenReturn(save1);
+        when(saver.loadGame("active")).thenReturn(save2);
+        when(saver.loadGame("saved")).thenReturn(save3);
+        when(saver.loadGame("activeSavedInOtherRoom")).thenReturn(save4);
+        when(saver.loadGame("activeInOtherRoom")).thenReturn(save5);
+        when(saver.loadGame("savedInOtherRoom")).thenReturn(save6);
+
+        fieldSave(0, "{'data':1}");
+        fieldSave(1, "{'data':2}");
+        fieldSave(2, "{'data':3}");
+        fieldSave(3, "{'data':4}");
+
+        createUser("activeSaved");
+        createUser("active");
+        createUser("saved");
+        createUser("activeSavedInOtherRoom");
+        createUser("activeInOtherRoom");
+        createUser("savedInOtherRoom");
+
+        // when
+        List<PlayerInfo> games = saveService.getSaves("room");
+
+        // then
+        assertEquals(3, games.size());
+
+        PlayerInfo active = games.get(0);
+        PlayerInfo activeSaved = games.get(1);
+        PlayerInfo saved = games.get(2);
+
+        assertEquals("active", active.getId());
+        assertEquals("code_active", active.getCode());
+        assertEquals("readable_active", active.getReadableName());
+        assertEquals("http://active:1234", active.getCallbackUrl());
+        assertEquals("game room", active.getGame());
+        assertEquals("{\"data\":2}", active.getData());
+        assertEquals(11, active.getScore());
+        assertEquals("room", active.getRoom());
+        assertEquals(true, active.isAiPlayer());
+        assertTrue(active.isActive());
+        assertFalse(active.isSaved());
+
+        assertEquals("activeSaved", activeSaved.getId());
+        assertEquals("code_activeSaved", activeSaved.getCode());
+        assertEquals("readable_activeSaved", activeSaved.getReadableName());
+        assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
+        assertEquals("game room", activeSaved.getGame());
+        assertEquals("{\"data\":1}", activeSaved.getData());
+        assertEquals(10, activeSaved.getScore());
+        assertEquals("room", activeSaved.getRoom());
+        assertEquals(true, activeSaved.isAiPlayer());
+        assertTrue(activeSaved.isActive());
+        assertTrue(activeSaved.isSaved());
+
+        assertEquals("saved", saved.getId());
+        assertEquals("code_saved", saved.getCode());
+        assertEquals("readable_saved", saved.getReadableName());
+        assertEquals("http://saved:1234", saved.getCallbackUrl());
+        assertEquals("saved game room", saved.getGame());
+        assertNull(saved.getData());
+        assertEquals(15, saved.getScore());
+        assertEquals("room", saved.getRoom());
+        assertEquals(false, saved.isAiPlayer());
+        assertFalse(saved.isActive());
+        assertTrue(saved.isSaved());
+
+        // when
+        games = saveService.getSaves("otherRoom");
+
+        // then
+        assertEquals(3, games.size());
+
+        active = games.get(0);
+        activeSaved = games.get(1);
+        saved = games.get(2);
+
+        assertEquals("activeInOtherRoom", active.getId());
+        assertEquals("code_activeInOtherRoom", active.getCode());
+        assertEquals("readable_activeInOtherRoom", active.getReadableName());
+        assertEquals("http://activeInOtherRoom:1234", active.getCallbackUrl());
+        assertEquals("game otherRoom", active.getGame());
+        assertEquals("{\"data\":4}", active.getData());
+        assertEquals(13, active.getScore());
+        assertEquals("otherRoom", active.getRoom());
+        assertEquals(true, active.isAiPlayer());
+        assertTrue(active.isActive());
+        assertFalse(active.isSaved());
+
+        assertEquals("activeSavedInOtherRoom", activeSaved.getId());
+        assertEquals("code_activeSavedInOtherRoom", activeSaved.getCode());
+        assertEquals("readable_activeSavedInOtherRoom", activeSaved.getReadableName());
+        assertEquals("http://activeSavedInOtherRoom:1234", activeSaved.getCallbackUrl());
+        assertEquals("game otherRoom", activeSaved.getGame());
+        assertEquals("{\"data\":3}", activeSaved.getData());
+        assertEquals(12, activeSaved.getScore());
+        assertEquals("otherRoom", activeSaved.getRoom());
+        assertEquals(true, activeSaved.isAiPlayer());
+        assertTrue(activeSaved.isActive());
+        assertTrue(activeSaved.isSaved());
+
+        assertEquals("savedInOtherRoom", saved.getId());
+        assertEquals("code_savedInOtherRoom", saved.getCode());
+        assertEquals("readable_savedInOtherRoom", saved.getReadableName());
+        assertEquals("http://savedInOtherRoom:2345", saved.getCallbackUrl());
+        assertEquals("saved game otherRoom", saved.getGame());
+        assertNull(saved.getData());
+        assertEquals(26, saved.getScore());
+        assertEquals("otherRoom", saved.getRoom());
+        assertEquals(false, saved.isAiPlayer());
+        assertFalse(saved.isActive());
+        assertTrue(saved.isSaved());
+    }
+
     private void createUser(String id) {
         Optional<Registration.User> user = Optional.of(new Registration.User() {{
             setCode("code_" + id);
@@ -341,20 +480,24 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldSaveAll() {
+        // given
         createPlayer("first");
         createPlayer("second");
 
         fieldSave(0, "{'key':'value1'}");
         fieldSave(1, "{'key':'value2'}");
 
+        // when
         long time = saveService.saveAll();
 
+        // then
         verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
         verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
     }
 
     @Test
     public void shouldSaveAll_forRoomName() {
+        // given
         createPlayer("first", "room1");
         createPlayer("second", "room1");
         createPlayer("third", "room2");
@@ -363,8 +506,10 @@ public class SaveServiceImplTest {
         fieldSave(1, "{'key':'value2'}");
         fieldSave(2, "{'key':'value3'}");
 
+        // when
         long time = saveService.saveAll("room1");
 
+        // then
         verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
         verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
         verifyNoMoreInteractions(saver);
@@ -376,6 +521,7 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldLoadAll() {
+        // given
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
         allPlayersNotRegistered();
 
@@ -384,8 +530,10 @@ public class SaveServiceImplTest {
         when(saver.loadGame("first")).thenReturn(first);
         when(saver.loadGame("second")).thenReturn(second);
 
+        // when
         saveService.loadAll();
 
+        // then
         verify(playerService).contains("first");
         verify(playerService).register(first);
         verify(playerService).contains("second");
@@ -395,7 +543,9 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldLoadAll_byRoomName() {
-        when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second", "third"));
+        // given
+        when(saver.getSavedList("room1")).thenReturn(Arrays.asList("first", "third"));
+        when(saver.getSavedList("room2")).thenReturn(Arrays.asList("second"));
         createPlayer("first", "room1");
         createPlayer("second", "room2");
         createPlayer("third", "room1");
@@ -413,8 +563,10 @@ public class SaveServiceImplTest {
         when(saver.loadGame("second")).thenReturn(second);
         when(saver.loadGame("third")).thenReturn(third);
 
+        // when
         saveService.loadAll("room1");
 
+        // then
         verify(playerService).contains("first");
         verify(playerService).register(first);
 
@@ -424,12 +576,46 @@ public class SaveServiceImplTest {
         verifyNoMoreInteractions(playerService);
     }
 
+    @Test
+    public void shouldLoadAll_byRoomName_whenNoPlayersInGame() {
+        // given
+        when(saver.getSavedList("room1")).thenReturn(Arrays.asList("first", "third"));
+        when(saver.getSavedList("room2")).thenReturn(Arrays.asList("second"));
+
+        PlayerSave first = mock(PlayerSave.class);
+        when(first.getRoom()).thenReturn("room1");
+
+        PlayerSave second = mock(PlayerSave.class);
+        when(second.getRoom()).thenReturn("room2");
+
+        PlayerSave third = mock(PlayerSave.class);
+        when(third.getRoom()).thenReturn("room1");
+
+        when(saver.loadGame("first")).thenReturn(first);
+        when(saver.loadGame("second")).thenReturn(second);
+        when(saver.loadGame("third")).thenReturn(third);
+
+        // when
+        saveService.loadAll("room1");
+
+        // then
+        verify(playerService).contains("first");
+        verify(playerService).register(first);
+
+        verify(playerService).contains("third");
+        verify(playerService).register(third);
+
+        verifyNoMoreInteractions(playerService);
+    }
+
+
     private void allPlayersNotRegistered() {
         when(playerService.contains(anyString())).thenReturn(NOT_REGISTERED);
     }
 
     @Test
     public void shouldLoadAll_whenRegistered() {
+        // given
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
         allPlayersRegistered();
 
@@ -438,8 +624,10 @@ public class SaveServiceImplTest {
         when(saver.loadGame("first")).thenReturn(first);
         when(saver.loadGame("second")).thenReturn(second);
 
+        // when
         saveService.loadAll();
 
+        // then
         verify(playerService).contains("first");
         verify(playerService).remove("first");
         verify(playerService).register(first);
@@ -456,22 +644,64 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldRemoveSave() {
+        // when
         saveService.removeSave("player");
 
+        // then
         verify(saver).delete("player");
     }
 
     @Test
     public void shouldRemoveAllSaves() {
+        // given
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second", "third"));
         createPlayer("first", "room1");
         createPlayer("second", "room2");
         createPlayer("third", "room1");
 
+        // when
+        saveService.removeAllSaves();
+
+        // then
+        verify(saver).getSavedList();
+        verify(saver).delete("first");
+        verify(saver).delete("second");
+        verify(saver).delete("third");
+        verifyNoMoreInteractions(saver, playerService);
+    }
+
+    @Test
+    public void shouldRemoveAllSaves_byRoomName() {
+        // given
+        when(saver.getSavedList("room1")).thenReturn(Arrays.asList("first", "third"));
+        when(saver.getSavedList("room2")).thenReturn(Arrays.asList("second"));
+        createPlayer("first", "room1");
+        createPlayer("second", "room2");
+        createPlayer("third", "room1");
+
+        // when
         saveService.removeAllSaves("room1");
 
+        // then
+        verify(saver).getSavedList("room1");
         verify(saver).delete("first");
         verify(saver).delete("third");
-        verifyNoMoreInteractions(playerService);
+        verifyNoMoreInteractions(saver, playerService);
+    }
+
+    @Test
+    public void shouldRemoveAllSaves_byRoomName_whenNoPlayersInGame() {
+        // given
+        when(saver.getSavedList("room1")).thenReturn(Arrays.asList("first", "third"));
+        when(saver.getSavedList("room2")).thenReturn(Arrays.asList("second"));
+
+        // when
+        saveService.removeAllSaves("room1");
+
+        // then
+        verify(saver).getSavedList("room1");
+        verify(saver).delete("first");
+        verify(saver).delete("third");
+        verifyNoMoreInteractions(saver, playerService);
     }
 }

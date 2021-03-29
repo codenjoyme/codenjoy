@@ -25,6 +25,9 @@ package com.codenjoy.dojo.services.mocks;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER3;
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER4;
 
@@ -45,6 +48,11 @@ public class SecondGameSettings extends SettingsImpl implements SettingsReader<F
         public String key() {
             return key;
         }
+    }
+
+    @Override
+    public List<Key> allKeys() {
+        return Arrays.asList(Keys.values());
     }
 
     public SecondGameSettings() {

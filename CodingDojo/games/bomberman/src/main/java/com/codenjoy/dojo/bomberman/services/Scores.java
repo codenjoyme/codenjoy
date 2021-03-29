@@ -25,6 +25,9 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 
+import static com.codenjoy.dojo.bomberman.services.Events.*;
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
+
 public class Scores implements PlayerScores {
 
     private volatile int score;
@@ -47,20 +50,36 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.DIED)) {
-            score -= settings.diePenalty().getValue();
-        } else if (event.equals(Events.KILL_OTHER_HERO)) {
-            score += settings.killOtherHeroScore().getValue();
-        } else if (event.equals(Events.KILL_MEAT_CHOPPER)) {
-            score += settings.killMeatChopperScore().getValue();
-        } else if (event.equals(Events.KILL_DESTROY_WALL)) {
-            score += settings.killWallScore().getValue();
-        } else if (event.equals(Events.CATCH_PERK)) {
-            score += settings.catchPerkScore().getValue();
-        } else if (event.equals(Events.WIN_ROUND)) {
-            score += settings.winRoundScore().getValue();
-        }
+        score += scoreFor(settings, event);
         score = Math.max(0, score);
+    }
+
+    public static int scoreFor(GameSettings settings, Object event) {
+        if (DIED.equals(event)) {
+            return - settings.integer(DIE_PENALTY);
+        }
+
+        if (KILL_OTHER_HERO.equals(event)) {
+            return settings.integer(KILL_OTHER_HERO_SCORE);
+        }
+
+        if (KILL_MEAT_CHOPPER.equals(event)) {
+            return settings.integer(KILL_MEAT_CHOPPER_SCORE);
+        }
+
+        if (KILL_DESTROY_WALL.equals(event)) {
+            return settings.integer(KILL_WALL_SCORE);
+        }
+
+        if (CATCH_PERK.equals(event)) {
+            return settings.integer(CATCH_PERK_SCORE);
+        }
+
+        if (WIN_ROUND.equals(event)) {
+            return settings.integer(WIN_ROUND_SCORE);
+        }
+
+        return 0;
     }
 
     @Override

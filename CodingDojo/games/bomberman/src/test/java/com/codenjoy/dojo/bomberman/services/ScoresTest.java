@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.PlayerScores;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
@@ -84,12 +85,12 @@ public class ScoresTest {
         winRound();
 
         assertEquals(140
-                + 4*settings.killWallScore().getValue()
-                - settings.diePenalty().getValue()
-                + settings.catchPerkScore().getValue()
-                + settings.killOtherHeroScore().getValue()
-                + settings.killMeatChopperScore().getValue()
-                + settings.winRoundScore().getValue(), scores.getScore());
+                + 4*settings.integer(KILL_WALL_SCORE)
+                - settings.integer(DIE_PENALTY)
+                + settings.integer(CATCH_PERK_SCORE)
+                + settings.integer(KILL_OTHER_HERO_SCORE)
+                + settings.integer(KILL_MEAT_CHOPPER_SCORE)
+                + settings.integer(WIN_ROUND_SCORE), scores.getScore());
     }
 
     @Test

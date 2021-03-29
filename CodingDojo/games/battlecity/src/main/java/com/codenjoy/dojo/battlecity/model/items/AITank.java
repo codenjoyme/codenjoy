@@ -43,6 +43,8 @@ public class AITank extends Tank {
     public AITank(Point pt, Direction direction, Dice dice) {
         super(pt, direction, dice);
         this.count = 0;
+        setActive(true);
+        setAlive(true);
     }
 
     @Override
@@ -76,6 +78,11 @@ public class AITank extends Tank {
         moving = true;
 
         super.move();
+    }
+
+    @Override
+    public void die() {
+        setAlive(false);
     }
 
     private void shootIfReady() {

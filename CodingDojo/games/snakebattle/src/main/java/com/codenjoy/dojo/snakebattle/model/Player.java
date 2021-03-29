@@ -36,7 +36,7 @@ public class Player extends RoundGamePlayer<Hero, Field> {
     }
 
     public Hero getHero() {
-        return (Hero)hero;
+        return hero;
     }
 
     public void setHero(Hero hero) {

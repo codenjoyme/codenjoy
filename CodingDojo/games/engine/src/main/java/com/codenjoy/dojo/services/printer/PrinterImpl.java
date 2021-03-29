@@ -131,9 +131,10 @@ class PrinterImpl implements Printer<String> {
                 }
                 byte index = len[x][y];
                 if (index >= existing.length) {
-                    throw new IllegalStateException(
-                            "There are many items in one cell: " + index +
-                                    ", expected max: " + (existing.length - 1));
+                    throw new IllegalStateException(String.format(
+                            "There are many items in one cell [%s,%s]: %s" +
+                                    ", expected max: %s",
+                            x, y, index, (existing.length - 1)));
                 }
                 existing[index] = el;
                 len[x][y]++;

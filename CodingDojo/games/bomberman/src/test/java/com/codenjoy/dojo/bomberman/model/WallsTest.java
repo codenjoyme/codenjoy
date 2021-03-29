@@ -44,7 +44,7 @@ public class WallsTest {
     private Field field;
     private Walls walls;
     private PrinterFactory factory = new PrinterFactoryImpl();
-    private Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift("kgyhfksdfksf", SIZE, 1000));
+    private Dice dice = LocalGameRunner.getDice("kgyhfksdfksf", SIZE, 1000);
 
     @Before
     public void setup() {

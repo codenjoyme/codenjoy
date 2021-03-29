@@ -33,34 +33,60 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
 
-// TODO этот алгоритм выполняется достаточно продолжительно, смотри SmokeTest на 40 итерациях с участием этого бота
 public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
 
     public AISolver(Dice dice) {
         this.way = new DeikstraFindWay();
+        // this.way = new DeikstraFindWay(true); // TODO #768 этот подход должен быть идентичным
     }
 
-    public DeikstraFindWay.Possible possible(final Board board) {
+    public DeikstraFindWay.Possible withBarriers(Board board) {
+        List<Point> barriers = board.getBarriers();
+
         return new DeikstraFindWay.Possible() {
-            @Override // TODO test me
+            @Override
+            public boolean possible(Point point) {
+                return !barriers.contains(point);
+            }
+        };
+    }
+
+    public DeikstraFindWay.Possible withBullets(Board board) {
+        return new DeikstraFindWay.Possible() {
+            @Override
             public boolean possible(Point from, Direction where) {
                 Point to = where.change(from);
                 if (board.isBulletAt(to.getX(), to.getY())) return false;
 
                 return true;
             }
+        };
+    }
 
+    public DeikstraFindWay.Possible withBarriersAndBullets(Board board) {
+        List<Point> barriers = board.getBarriers();
+        List<Point> bullets = board.getBullets();
+
+        return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) {
-                return !board.isBarrierAt(point.getX(), point.getY());
+                return !barriers.contains(point);
+            }
+
+            @Override
+            public boolean possible(Point from, Direction where) {
+                Point to = where.change(from);
+                if (bullets.contains(to)) return false;
+
+                return true;
             }
         };
     }
 
     @Override
-    public String get(final Board board) {
+    public String get(Board board) {
         if (board.isGameOver()) return act("");
         List<Direction> result = getDirections(board);
         if (result.isEmpty()) return act("");
@@ -74,7 +100,8 @@ public class AISolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.AI_TANK_DOWN,
+        List<Point> to = board.get(
+                Elements.AI_TANK_DOWN,
                 Elements.AI_TANK_LEFT,
                 Elements.AI_TANK_RIGHT,
                 Elements.AI_TANK_UP,
@@ -82,8 +109,13 @@ public class AISolver implements Solver<Board> {
                 Elements.OTHER_TANK_LEFT,
                 Elements.OTHER_TANK_RIGHT,
                 Elements.OTHER_TANK_UP);
-        DeikstraFindWay.Possible map = possible(board);
-        return way.getShortestWay(size, from, to, map);
+
+        // TODO #768 этот подход должен быть идентичным
+        // way.getPossibleWays(size, withBarriers(board));
+        // way.updateWays(withBullets(board));
+        way.getPossibleWays(size, withBarriersAndBullets(board));
+
+        return way.buildPath(from, to);
     }
 
 }

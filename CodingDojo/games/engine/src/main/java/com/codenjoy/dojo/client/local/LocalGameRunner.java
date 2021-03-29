@@ -178,7 +178,7 @@ public class LocalGameRunner {
             print(index, "Scores: " + scores.get(index).getScore());
         }
 
-        print(index, "Answer: " + answer);
+        print(index, "Answer:" + ((StringUtils.isEmpty(answer))?"":" ") + answer);
         return answer;
     }
 
@@ -218,6 +218,10 @@ public class LocalGameRunner {
         return games.get(index);
     }
 
+    public static Dice getDice(String soul, long max, long count) {
+        return LocalGameRunner.getDice(generateXorShift(soul, max, count));
+    }
+
     public static Dice getDice(int... numbers) {
         int[] index = {0};
         return (n) -> {
@@ -238,7 +242,7 @@ public class LocalGameRunner {
         };
     }
 
-    public static int[] generateXorShift(String seed, long max, long count) {
+    private static int[] generateXorShift(String seed, long max, long count) {
         long[] current = new long[] { seed.hashCode() };
         if (printSeed) {
             out.accept("Seed = " + seed + "\n");

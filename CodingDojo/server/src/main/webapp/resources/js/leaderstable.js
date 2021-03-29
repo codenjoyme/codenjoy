@@ -45,7 +45,7 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
         var players = Object.keys(data);
         for (var index in players) {
             var player = players[index];
-            var names = data[player].heroesData.readableNames;
+            var names = data[player].readableNames;
             var namesPlayers = Object.keys(names);
             for (var index2 in namesPlayers) {
                 var player2 = namesPlayers[index2];

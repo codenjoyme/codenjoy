@@ -40,7 +40,7 @@ public class Loderunner implements Field {
 
     private int size;
     private Level level;
-    private List<Player> players;
+    private Players players;
     private List<Enemy> enemies;
     private List<YellowGold> yellowGold;
     private List<GreenGold> greenGold;
@@ -60,7 +60,7 @@ public class Loderunner implements Field {
         this.dice = dice;
         this.level = level;
         this.settings = settings;
-        players = new LinkedList<>();
+        players = new Players(this);
         enemies = new LinkedList<>();
 
         finder = new ArrayList<>(){{
@@ -97,9 +97,7 @@ public class Loderunner implements Field {
             enemy.init(this);
         }
 
-        for (Player player : players) {
-            player.newHero(this);
-        }
+        players.resetAll();
 
         generatePills();
         generateGold();
@@ -113,7 +111,7 @@ public class Loderunner implements Field {
 //            init();
 //        } TODO сделать по другому автоперезагрузку уровней
 
-        Set<Player> die = new HashSet<>();
+        Set<Player> die = new LinkedHashSet<>();
 
         heroesGo();
         die.addAll(getDied());
@@ -209,28 +207,10 @@ public class Loderunner implements Field {
         return ticks < 1 ? 1 : ticks;
     }
 
-    private Set<Player> getDied() {
-        Set<Player> die = new HashSet<>();
-
-        for (Player player : players) {
-            Hero hero = player.getHero();
-
-            if (!hero.isAlive()) {
-                die.add(player);
-            }
-        }
-
-        return die;
-    }
-
-    public <T extends Point> Optional<T> get(Point pt, Class<T> type) {
-        return (Optional<T>) get(pt).stream()
-                .filter(element -> element.getClass().equals(type))
-                .findFirst();
-    }
-
-    public boolean is(Point pt, Class<? extends Point> type) {
-        return get(pt, type).isPresent();
+    private List<Player> getDied() {
+        return players.stream()
+                .filter(player -> !player.isAlive())
+                .collect(toList());
     }
 
     public BoardReader reader() {
@@ -269,14 +249,14 @@ public class Loderunner implements Field {
             Hero hero = player.getHero();
 
             if (!hero.isAlive()) {
-                Optional<Brick> brick = get(hero, Brick.class);
+                Optional<Brick> brick = getBrick(hero);
                 if (!brick.isPresent()) continue;
 
                 // Умер от того что кто-то просверлил стенку
                 die.add(player);
 
                 Hero killer = brick.get().getDrilledBy();
-                Player killerPlayer = getPlayer(killer);
+                Player killerPlayer = players.getPlayer(killer);
                 if (killerPlayer != null && killerPlayer != player) {
                     killerPlayer.event(Events.KILL_ENEMY);
                 }
@@ -284,6 +264,12 @@ public class Loderunner implements Field {
         }
 
         return die;
+    }
+
+    private Optional<Brick> getBrick(Point pt) {
+        return bricks.stream()
+                .filter(brick -> brick.equals(pt))
+                .findFirst();
     }
 
     public List<Point> get(Point at) {
@@ -372,27 +358,18 @@ public class Loderunner implements Field {
         }
     }
 
-    private Player getPlayer(Hero hero) {
-        for (Player player : players) {
-            if (player.getHero() == hero) {
-                return player;
-            }
-        }
-        return null;
-    }
-
     @Override
     public boolean isBarrier(Point pt) {
           return pt.getX() > size - 1 || pt.getX() < 0
                 || pt.getY() < 0 || pt.getY() > size - 1
                 || isFullBrick(pt)
-                || is(pt, Border.class)
+                || isBorder(pt)
                 || (isHeroAt(pt) && !under(pt, PillType.SHADOW_PILL));
     }
 
     @Override
     public void suicide(Hero hero) {
-        getPlayer(hero).event(Events.SUICIDE);
+        players.getPlayer(hero).event(Events.SUICIDE);
     }
 
     @Override
@@ -402,7 +379,7 @@ public class Loderunner implements Field {
         }
 
         Point over = Direction.UP.change(pt);
-        if (is(over, Ladder.class)
+        if (isLadder(over)
                 || yellowGold.contains(over)
                 || greenGold.contains(over)
                 || redGold.contains(over)
@@ -412,7 +389,7 @@ public class Loderunner implements Field {
             return false;
         }
 
-        Optional<Brick> brick = get(pt, Brick.class);
+        Optional<Brick> brick = getBrick(pt);
         if (brick.isPresent()) {
             brick.get().drill(byHero);
         }
@@ -425,17 +402,20 @@ public class Loderunner implements Field {
         Point under = Direction.DOWN.change(pt);
 
         return !(isFullBrick(under)
-                || is(under, Ladder.class)
-                || is(under, Border.class)
-                || getHeroes().contains(under)
+                || isLadder(under)
+                || isBorder(under)
+                || isHeroAt(under)
                 || enemies.contains(under));
     }
 
     @Override
     public boolean isFullBrick(Point pt) {
-        Optional<Brick> brick = get(pt, Brick.class);
-        return brick.isPresent()
-                && brick.get().state(null) == Elements.BRICK;
+        // do not use streams here, optimized for performance
+        int index = bricks.indexOf(pt);
+        if (index == -1) {
+            return false;
+        }
+        return bricks.get(index).state(null) == Elements.BRICK;
     }
 
     @Override
@@ -444,22 +424,14 @@ public class Loderunner implements Field {
         return result.equals(NO_SPACE) ? Optional.empty() : Optional.of(result);
     }
 
-    private boolean isGround(Point pt) {
-        Point under = Direction.DOWN.change(pt);
-
-        return is(under, Border.class)
-                && is(under, Brick.class)
-                && is(under, Ladder.class);
-    }
-
     @Override
     public boolean isLadder(Point pt) {
-        return is(pt, Ladder.class);
+        return ladder.contains(pt);
     }
 
     @Override
     public boolean isPipe(Point pt) {
-        return is(pt, Pipe.class);
+        return pipe.contains(pt);
     }
 
     @Override
@@ -474,7 +446,7 @@ public class Loderunner implements Field {
 
     @Override
     public boolean isBrick(Point pt) {
-        return is(pt, Brick.class);
+        return bricks.contains(pt);
     }
 
     @Override
@@ -522,21 +494,16 @@ public class Loderunner implements Field {
 
     @Override
     public boolean isBorder(Point pt) {
-        return is(pt, Border.class);
+        return borders.contains(pt);
     }
 
     @Override
     public List<Hero> getHeroes() {
-        return players.stream()
-                .map(Player::getHero)
-                .collect(toList());
+        return players.heroes();
     }
 
     public void newGame(Player player) {
-        if (!players.contains(player)) {
-            players.add(player);
-        }
-        player.newHero(this);
+        players.add(player);
     }
 
     public void remove(Player player) {
@@ -642,5 +609,10 @@ public class Loderunner implements Field {
 
     public List<Pipe> pipe() {
         return pipe;
+    }
+
+    // only for testing
+    void resetHeroes() {
+        players.resetHeroes();
     }
 }

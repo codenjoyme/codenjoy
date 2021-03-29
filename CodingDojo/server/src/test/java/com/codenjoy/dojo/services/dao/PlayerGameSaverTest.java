@@ -128,10 +128,35 @@ public class PlayerGameSaverTest {
 
         // when
         long now = System.currentTimeMillis();
+
         saver.saveGame(player1, "{'key':'value'}", now);
         saver.saveGame(player2, "{'key':'value'}", now);
 
         // then
         assertEquals("[vasia, katia]", saver.getSavedList().toString());
+    }
+
+    @Test
+    public void shouldGetSavedList_caseInRoom() {
+        // given
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player3 = new Player("maria", "http://127.0.0.5:9999", PlayerTest.mockGameType("game"), getScores(30), getInfo("Some another info"));
+        player1.setRoom("room");
+        player2.setRoom("room");
+        player3.setRoom("otherRoom");
+
+        // when
+        long now = System.currentTimeMillis();
+
+        saver.saveGame(player1, "{'key':'value'}", now);
+        saver.saveGame(player2, "{'key':'value'}", now);
+        saver.saveGame(player3, "{'key':'value'}", now);
+
+        // then
+        assertEquals("[vasia, katia]", saver.getSavedList("room").toString());
+
+        // then
+        assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
     }
 }

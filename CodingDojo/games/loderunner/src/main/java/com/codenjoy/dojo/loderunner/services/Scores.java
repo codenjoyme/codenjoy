@@ -31,7 +31,9 @@ public class Scores implements PlayerScores {
 
     private volatile int score;
     private GameSettings settings;
-    private volatile int count;
+    private volatile int countRed;
+    private volatile int countGreen;
+    private volatile int countYellow;
 
     public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
@@ -40,7 +42,9 @@ public class Scores implements PlayerScores {
 
     @Override
     public int clear() {
-        count = 0;
+        countRed = 0;
+        countGreen = 0;
+        countYellow = 0;
         return score = 0;
     }
 
@@ -52,18 +56,20 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.GET_YELLOW_GOLD)) {
-            score += settings.integer(GOLD_SCORE_YELLOW) + count;
-            count += settings.integer(GOLD_SCORE_YELLOW_INCREMENT);
+            score += settings.integer(GOLD_SCORE_YELLOW) + countYellow;
+            countYellow += settings.integer(GOLD_SCORE_YELLOW_INCREMENT);
         } else if (event.equals(Events.GET_GREEN_GOLD)) {
-            score += settings.integer(GOLD_SCORE_GREEN_INCREMENT) + count;
-            count += settings.integer(GOLD_COUNT_GREEN);
+            score += settings.integer(GOLD_SCORE_GREEN) + countGreen;
+            countGreen += settings.integer(GOLD_SCORE_GREEN_INCREMENT);
         } else if (event.equals(Events.GET_RED_GOLD)) {
-            score += settings.integer(GOLD_SCORE_RED_INCREMENT) + count;
-            count += settings.integer(GOLD_COUNT_RED);
+            score += settings.integer(GOLD_SCORE_RED) + countRed;
+            countRed += settings.integer(GOLD_SCORE_RED_INCREMENT);
         } else if (event.equals(Events.KILL_ENEMY)) {
             score += settings.integer(KILL_ENEMY_SCORE);
         } else if (event.equals(Events.KILL_HERO)) {
-            count = 0;
+            countRed = 0;
+            countGreen = 0;
+            countYellow = 0;
             score -= settings.integer(KILL_HERO_PENALTY);
         } else if (event.equals(Events.SUICIDE)) {
             score -= settings.integer(SUICIDE_PENALTY);
@@ -74,5 +80,15 @@ public class Scores implements PlayerScores {
     @Override
     public void update(Object score) {
         this.score = Integer.valueOf(score.toString());
+    }
+
+    @Override
+    public String toString() {
+        return "Scores{" +
+                "score=" + score +
+                ", red=" + countRed +
+                ", green=" + countGreen +
+                ", yellow=" + countYellow +
+                '}';
     }
 }

@@ -23,9 +23,13 @@ package com.codenjoy.dojo.profile;
  */
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class Profiler {
 
     static class AverageTime {
@@ -74,14 +78,18 @@ public class Profiler {
     }
 
     public void print() {
-        System.out.println(this);
-        System.out.println("--------------------------------------------------");
+        if (log.isDebugEnabled()) {
+            log.debug(this.toString());
+            log.debug("--------------------------------------------------");
+        }
     }
 
     public void print(String phase) {
-        System.out.println("--------------------------------------------------");
-        System.out.println(phase + " = " + phases.get(phase));
-        System.out.println("--------------------------------------------------");
+        if (log.isDebugEnabled()) {
+            log.debug("--------------------------------------------------");
+            log.debug(phase + " = " + phases.get(phase));
+            log.debug("--------------------------------------------------");
+        }
     }
 
     public String get(String phase) {

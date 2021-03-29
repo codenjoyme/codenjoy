@@ -43,9 +43,16 @@ public class ScoresTest {
         scores.event(Events.KILL_ENEMY);
     }
 
-    // TODO added test for RED and GREEN gold
-    public void getYellowGold() {
+    public void yellowGold() {
         scores.event(Events.GET_YELLOW_GOLD);
+    }
+
+    public void redGold() {
+        scores.event(Events.GET_RED_GOLD);
+    }
+
+    public void greenGold() {
+        scores.event(Events.GET_GREEN_GOLD);
     }
 
     @Before
@@ -53,9 +60,15 @@ public class ScoresTest {
         settings = new GameSettings()
                 .integer(KILL_HERO_PENALTY, 30)
                 .integer(KILL_ENEMY_SCORE, 10)
-                .integer(GOLD_SCORE_YELLOW, 10)
-                .integer(GOLD_SCORE_YELLOW_INCREMENT, 2)
-                .integer(GOLD_COUNT_YELLOW, 3);
+
+                .integer(GOLD_SCORE_GREEN, 2)
+                .integer(GOLD_SCORE_GREEN_INCREMENT, 1)
+
+                .integer(GOLD_SCORE_YELLOW, 20)
+                .integer(GOLD_SCORE_YELLOW_INCREMENT, 10)
+
+                .integer(GOLD_SCORE_RED, 200)
+                .integer(GOLD_SCORE_RED_INCREMENT, 100);
         
         scores = new Scores(0, settings);
     }
@@ -68,13 +81,31 @@ public class ScoresTest {
         killEnemy();  
         killEnemy();  
 
-        getYellowGold();
+        yellowGold();
+        redGold();
+        redGold();
+        redGold();
+        greenGold();
+        greenGold();
+        yellowGold();
+        yellowGold();
+        yellowGold();
+        yellowGold();
 
         killHero(); 
 
         assertEquals(140
                 + 3 * settings.integer(KILL_ENEMY_SCORE)
-                + settings.integer(GOLD_SCORE_YELLOW)
+
+                + 5 * settings.integer(GOLD_SCORE_YELLOW)
+                + (1 + 2 + 3 + 4) * settings.integer(GOLD_SCORE_YELLOW_INCREMENT)
+
+                + 3 * settings.integer(GOLD_SCORE_RED)
+                + (1 + 2) * settings.integer(GOLD_SCORE_RED_INCREMENT)
+
+                + 2 * settings.integer(GOLD_SCORE_GREEN)
+                + (1) * settings.integer(GOLD_SCORE_GREEN_INCREMENT)
+
                 - settings.integer(KILL_HERO_PENALTY),
                 scores.getScore());
     }
@@ -88,26 +119,38 @@ public class ScoresTest {
 
     @Test
     public void shouldClearScore() {
-        getYellowGold();
+        // given
+        yellowGold();
+        redGold();
+        redGold();
+        greenGold();
+        greenGold();
+        greenGold();
 
+        assertEquals(529, scores.getScore());
+        assertEquals("Scores{score=529, red=200, green=3, yellow=10}",
+                scores.toString());
+
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, scores.getScore());
+        assertEquals("Scores{score=0, red=0, green=0, yellow=0}",
+                scores.toString());
     }
 
     @Test
     public void shouldIncreaseForNextGold() {
         scores = new Scores(0, settings);
 
-        getYellowGold();
-        getYellowGold();
-        getYellowGold();
-        getYellowGold();
+        yellowGold();
+        yellowGold();
+        yellowGold();
+        yellowGold();
 
         assertEquals(4 * settings.integer(GOLD_SCORE_YELLOW)
-                + 1 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT)
-                + 2 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT)
-                + 3 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT),
+                + (1 + 2 + 3) * settings.integer(GOLD_SCORE_YELLOW_INCREMENT),
                 scores.getScore());
     }
 
@@ -116,9 +159,9 @@ public class ScoresTest {
         // given
         scores = new Scores(0, settings);
 
-        getYellowGold();
-        getYellowGold();
-        getYellowGold();
+        yellowGold();
+        yellowGold();
+        yellowGold();
 
         // when
         killHero(); 
@@ -126,14 +169,13 @@ public class ScoresTest {
         // then
         Integer score = (Integer) scores.getScore();
         assertEquals(3 * settings.integer(GOLD_SCORE_YELLOW)
-                        + 1 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT)
-                        + 2 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT)
-                        - settings.integer(KILL_HERO_PENALTY),
+                    + (1 + 2) * settings.integer(GOLD_SCORE_YELLOW_INCREMENT)
+                    - settings.integer(KILL_HERO_PENALTY),
                 (int)score);
 
         // when
-        getYellowGold();
-        getYellowGold();
+        yellowGold();
+        yellowGold();
 
         // then
         assertEquals(score
@@ -147,9 +189,9 @@ public class ScoresTest {
         // given
         scores = new Scores(0, settings);
 
-        getYellowGold();
-        getYellowGold();
-        getYellowGold();
+        yellowGold();
+        yellowGold();
+        yellowGold();
 
         // when
         scores.clear();
@@ -157,8 +199,8 @@ public class ScoresTest {
         assertEquals(0, scores.getScore());
 
         // then
-        getYellowGold();
-        getYellowGold();
+        yellowGold();
+        yellowGold();
 
         assertEquals(2 * settings.integer(GOLD_SCORE_YELLOW)
                         + 1 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT),

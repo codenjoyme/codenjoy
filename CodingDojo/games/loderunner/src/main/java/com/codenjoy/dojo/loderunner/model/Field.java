@@ -68,4 +68,6 @@ public interface Field extends GameField<Player> {
     List<Hero> getHeroes();
 
     void suicide(Hero hero);
+
+    List<Brick> bricks();
 }

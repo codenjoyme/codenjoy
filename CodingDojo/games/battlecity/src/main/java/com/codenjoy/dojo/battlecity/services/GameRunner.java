@@ -39,8 +39,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_TICKS_PER_SHOOT;
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
@@ -96,7 +95,14 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
-        return MultiplayerType.MULTIPLE;
+        if (settings.bool(MULTIPLE)) {
+            return MultiplayerType.MULTIPLE;
+        } else {
+            return MultiplayerType.TEAM.apply(
+                    settings.integer(PLAYERS_PER_ROOM),
+                    MultiplayerType.DISPOSABLE
+            );
+        }
     }
 
     @Override
