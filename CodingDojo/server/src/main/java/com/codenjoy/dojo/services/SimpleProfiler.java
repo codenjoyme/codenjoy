@@ -46,7 +46,7 @@ public class SimpleProfiler {
         phaseTime = now();
     }
 
-    public long now() {
+    private long now() {
         return System.currentTimeMillis();
     }
 

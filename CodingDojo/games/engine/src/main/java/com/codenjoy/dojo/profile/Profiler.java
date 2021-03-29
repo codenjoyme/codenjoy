@@ -23,9 +23,13 @@ package com.codenjoy.dojo.profile;
  */
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class Profiler {
 
     static class AverageTime {
@@ -56,6 +60,8 @@ public class Profiler {
     }
 
     public synchronized void done(String phase) {
+        if (!log.isDebugEnabled()) return;
+
         long delta = now() - time;
 
         phases.put(phase, delta);
@@ -74,17 +80,23 @@ public class Profiler {
     }
 
     public void print() {
-        System.out.println(this);
-        System.out.println("--------------------------------------------------");
+        if (!log.isDebugEnabled()) return;
+
+        log.debug(this.toString());
+        log.debug("--------------------------------------------------");
     }
 
     public void print(String phase) {
-        System.out.println("--------------------------------------------------");
-        System.out.println(phase + " = " + phases.get(phase));
-        System.out.println("--------------------------------------------------");
+        if (!log.isDebugEnabled()) return;
+
+        log.debug("--------------------------------------------------");
+        log.debug(phase + " = " + phases.get(phase));
+        log.debug("--------------------------------------------------");
     }
 
     public String get(String phase) {
+        if (!log.isDebugEnabled()) return StringUtils.EMPTY;
+
         if (!phasesAll.containsKey(phase)) {
             return "phase not found: " + phase;
         }

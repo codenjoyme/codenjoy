@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Chat;
@@ -297,6 +298,8 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
+            profiler.start("PSI.tick()");
+
             actionLogger.log(playerGames);
             autoSaver.tick();
 
@@ -305,6 +308,8 @@ public class PlayerServiceImpl implements PlayerService {
             requestControls();
 
             semifinal.tick();
+
+            profiler.end();
         } catch (Error e) {
             e.printStackTrace();
             log.error("PlayerService.tick() throws", e);
@@ -333,17 +338,8 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void sendScreenUpdates() {
-        profiler.start("sendScreenUpdates...");
-        
         Map<ScreenRecipient, ScreenData> map = buildScreenData();
-        
-        profiler.phase("...buildScreenData");
-        
         sendScreenForWebSockets(map);
-        
-        profiler.phase("...sendScreenForWebSockets");
-        
-        profiler.end();
     }
 
     private Map<ScreenRecipient, ScreenData> buildScreenData() {
@@ -352,7 +348,9 @@ public class PlayerServiceImpl implements PlayerService {
 
         Map<String, GameData> gameDataMap = playerGamesView.getGamesDataMap();
         Map<String, Integer> lastChatIds = chat.getLastMessageIds();
+Profiler profiler = new Profiler();
         for (PlayerGame playerGame : playerGames) {
+profiler.start();
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
             try {
@@ -360,13 +358,18 @@ public class PlayerServiceImpl implements PlayerService {
 
                 String gameType = playerGame.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());
+profiler.done("preparation");
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
 
+profiler.done("getBoardAsString");
+
                 GuiPlotColorDecoder decoder = gameData.getDecoder();
                 cacheBoards.put(player, decoder.encodeForClient(board));
                 Object encoded = decoder.encodeForBrowser(board);
+
+profiler.done("GuiPlotColorDecoder");
 
                 map.put(player, new PlayerData(gameData.getBoardSize(),
                         encoded,
@@ -377,12 +380,15 @@ public class PlayerServiceImpl implements PlayerService {
                         gameData.getHeroesData(),
                         lastChatMessage));
 
+profiler.done("map.put(PlayerData");
+
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +
                         " URL: " + player.getCallbackUrl(), e);
                 e.printStackTrace();
             }
         }
+profiler.print();
 
         return map;
     }
