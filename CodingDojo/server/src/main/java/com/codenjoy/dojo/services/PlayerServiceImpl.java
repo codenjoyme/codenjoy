@@ -300,13 +300,28 @@ public class PlayerServiceImpl implements PlayerService {
             profiler.start("PlayerService.tick()");
 
             actionLogger.log(playerGames);
+
+            profiler.phase("actionLogger");
+
             autoSaver.tick();
 
+            profiler.phase("autoSaver");
+
             playerGames.tick();
+
+            profiler.phase("tick");
+
             sendScreenUpdates();
+
+            profiler.phase("sendScreenUpdates");
+
             requestControls();
 
+            profiler.phase("requestControls");
+
             semifinal.tick();
+
+            profiler.phase("semifinal");
 
             profiler.end();
         } catch (Error e) {
