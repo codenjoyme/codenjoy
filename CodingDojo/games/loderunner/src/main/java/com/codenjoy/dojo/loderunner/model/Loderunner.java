@@ -112,7 +112,7 @@ public class Loderunner implements Field {
 //            init();
 //        } TODO сделать по другому автоперезагрузку уровней
 
-        Set<Player> die = new LinkedHashSet<>();
+        List<Player> die = new LinkedList<>();
 
         heroesGo();
         die.addAll(getDied());
@@ -124,6 +124,10 @@ public class Loderunner implements Field {
 
         generateGold();
         portalsGo();
+
+        die = die.stream()
+                .distinct()
+                .collect(toList());
 
         for (Player player : die) {
             player.event(Events.KILL_HERO);
