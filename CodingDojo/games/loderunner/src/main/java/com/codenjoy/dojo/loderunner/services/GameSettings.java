@@ -96,16 +96,16 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(PORTALS_COUNT, 0);
         integer(PORTAL_TICKS, 10);
 
-        integer(GOLD_COUNT_GREEN, 0);
-        integer(GOLD_COUNT_YELLOW, 20);
-        integer(GOLD_COUNT_RED, 0);
-
+        integer(GOLD_COUNT_GREEN, 40);
         integer(GOLD_SCORE_GREEN, 1);
-        integer(GOLD_SCORE_YELLOW, 2);
-        integer(GOLD_SCORE_RED, 5);
+        integer(GOLD_SCORE_GREEN_INCREMENT, 1);
 
-        integer(GOLD_SCORE_GREEN_INCREMENT, 5);
-        integer(GOLD_SCORE_YELLOW_INCREMENT, 2);
+        integer(GOLD_COUNT_YELLOW, 20);
+        integer(GOLD_SCORE_YELLOW, 2);
+        integer(GOLD_SCORE_YELLOW_INCREMENT, 1);
+
+        integer(GOLD_COUNT_RED, 10);
+        integer(GOLD_SCORE_RED, 5);
         integer(GOLD_SCORE_RED_INCREMENT, 1);
 
         integer(ENEMIES_COUNT, 5);
