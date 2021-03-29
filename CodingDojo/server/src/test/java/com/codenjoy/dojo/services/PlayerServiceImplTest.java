@@ -425,22 +425,18 @@ public class PlayerServiceImplTest {
                 "{petya=PlayerData[" +
                     "BoardSize:15, Board:'DCBA', Game:'game', " +
                     "Score:234, Info:'', " +
-                    "Scores:'{'petya':234}', " +
-                    "HeroesData:'{" +
-                        "'coordinates':{'petya':{'coordinate':{'x':3,'y':4},'level':0,'multiplayer':false}}," +
-                        "'group':['petya']," +
-                        "'readableNames':{'petya':'readable_petya'}" +
-                        "}', " +
+                    "Scores:'{petya=234}', " +
+                    "Coordinates:'{petya=HeroDataImpl(level=0, coordinate=[3,4], isMultiplayer=false, additionalData=null)}', " +
+                    "ReadableNames:'{petya=readable_petya}', " +
+                    "Group:[petya], " +
                     "LastChatMessage:106558567], " +
                 "vasya=PlayerData[" +
                     "BoardSize:15, Board:'ABCD', Game:'game', " +
                     "Score:123, Info:'', " +
-                    "Scores:'{'vasya':123}', " +
-                    "HeroesData:'{" +
-                        "'coordinates':{'vasya':{'coordinate':{'x':1,'y':2},'level':0,'multiplayer':false}}," +
-                        "'group':['vasya']," +
-                        "'readableNames':{'vasya':'readable_vasya'}" +
-                        "}', " +
+                    "Scores:'{vasya=123}', " +
+                    "Coordinates:'{vasya=HeroDataImpl(level=0, coordinate=[1,2], isMultiplayer=false, additionalData=null)}', " +
+                    "ReadableNames:'{vasya=readable_vasya}', " +
+                    "Group:[vasya], " +
                     "LastChatMessage:111979568]}",
                 data.toString().replaceAll("\"", "'"));
     }

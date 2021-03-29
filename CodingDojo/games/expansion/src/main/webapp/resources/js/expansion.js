@@ -179,7 +179,7 @@ setup.drawBoard = function(drawer) {
     }
 
     var canvas = drawer.canvas;
-    var heroesData = drawer.playerData.heroesData;
+    var heroesData = drawer.playerData;
     var forces = board.forces;
     var size = canvas.boardSize;
 

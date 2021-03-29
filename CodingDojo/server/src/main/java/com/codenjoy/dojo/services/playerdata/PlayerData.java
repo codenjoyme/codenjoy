@@ -23,13 +23,14 @@ package com.codenjoy.dojo.services.playerdata;
  */
 
 
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
-import com.codenjoy.dojo.utils.JsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @AllArgsConstructor
@@ -40,8 +41,9 @@ public class PlayerData implements ScreenData {
     private String game;
     private Object score;
     private String info;
-    private String scores;
-    private String heroesData;
+    private Map<String, Object> scores;
+    private Map<String, HeroData> coordinates;
+    private Map<String, String> readableNames;
     private List<String> group;
     private Integer lastChatMessage;
 
@@ -58,7 +60,8 @@ public class PlayerData implements ScreenData {
                         "Score:%s, " +
                         "Info:'%s', " +
                         "Scores:'%s', " +
-                        "HeroesData:'%s', " +
+                        "Coordinates:'%s', " +
+                        "ReadableNames:'%s', " +
                         "Group:%s, " +
                         "LastChatMessage:%s]",
                 boardSize,
@@ -66,8 +69,9 @@ public class PlayerData implements ScreenData {
                 game,
                 score,
                 getInfo(),
-                JsonUtils.toStringSorted(scores),
-                JsonUtils.toStringSorted(heroesData),
+                scores,
+                coordinates,
+                readableNames,
                 group,
                 lastChatMessage);
     }

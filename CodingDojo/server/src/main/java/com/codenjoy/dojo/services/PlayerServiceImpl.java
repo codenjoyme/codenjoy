@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
@@ -367,16 +368,18 @@ public class PlayerServiceImpl implements PlayerService {
                 int boardSize = gameData.getBoardSize();
                 Object score = player.getScore();
                 String message = player.getMessage();
-                String scores = gameData.getScores();
+                Map<String, Object> scores = gameData.getScores();
                 List<String> group = gameData.getGroup();
-                String heroesData = gameData.getHeroesData();
+                Map<String, HeroData> coordinates = gameData.getCoordinates();
+                Map<String, String> readableNames = gameData.getReadableNames();
                 map.put(player, new PlayerData(boardSize,
                         encoded,
                         gameType,
                         score,
                         message,
                         scores,
-                        heroesData,
+                        coordinates,
+                        readableNames,
                         group,
                         lastChatMessage));
 
@@ -582,7 +585,9 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             playerGames.getAll(withRoom(room))
-                    .forEach(playerGames.all()::remove);
+                    .stream()
+                    .map(pg -> pg.getPlayer())
+                    .forEach(playerGames::remove);
         } finally {
             lock.writeLock().unlock();
         }

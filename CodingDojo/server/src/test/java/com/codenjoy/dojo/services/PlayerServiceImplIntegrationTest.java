@@ -283,6 +283,18 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals("[]", service.getAll("game4").toString()); // нет такой игры
         assertEquals("[player1_updated]", service.getAllInRoom("room4").toString());
 
+        // удалили всех из комнаты 1
+        service.removeAll("room2");
+        expected = "[game1-super-ai_updated, player6_updated]";
+        assertEquals(expected, service.getAll("game1").toString());
+        assertEquals(expected, service.getAllInRoom("room1").toString());
+        assertEquals("[player1_updated]", service.getAll("game2").toString()); // тут отличие game2 != room2
+        assertEquals("[]", service.getAllInRoom("room2").toString()); // тут отличие game2 != room2
+        expected = "[game3-super-ai_updated, player7_updated]";
+        assertEquals(expected, service.getAll("game3").toString());
+        assertEquals(expected, service.getAllInRoom("room3").toString());
+        assertEquals("[]", service.getAll("game4").toString()); // нет такой игры
+        assertEquals("[player1_updated]", service.getAllInRoom("room4").toString());
 
         // удалили всех нафиг
         service.removeAll();
