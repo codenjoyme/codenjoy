@@ -13437,8 +13437,8 @@
 326: 2:
 326: 2:Scores: 217
 326: 2:Answer: RIGHT
-326: 2:Fire Event: KILL_HERO
 326: 1:Fire Event: KILL_HERO
+326: 2:Fire Event: KILL_HERO
 ------------------------------------------
 327: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 327: 1:☼~~~~~~~~H S ~~~☼
