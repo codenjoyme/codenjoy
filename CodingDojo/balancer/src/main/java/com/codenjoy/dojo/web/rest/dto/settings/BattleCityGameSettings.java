@@ -29,18 +29,18 @@ import java.util.List;
 
 public class BattleCityGameSettings extends AbstractSettings {
 
-    public static final String KILL_YOUR_TANK_PENALTY = "Kill your tank penalty";
-    public static final String KILL_OTHER_HERO_TANK_SCORE = "Kill other hero tank score";
-    public static final String KILL_OTHER_AI_TANK_SCORE = "Kill other AI tank score";
-    public static final String SPAWN_AI_PRIZE = "Count spawn for AI Tank with prize";
-    public static final String KILL_HITS_AI_PRIZE = "Hits to kill AI Tank with prize";
-    public static final String PRIZE_ON_FIELD = "The period of prize validity on the field after the appearance";
-    public static final String PRIZE_WORKING = "Working time of the prize after catch up";
-    public static final String AI_TICKS_PER_SHOOT = "Ticks until the next AI Tank shoot";
-    public static final String TANK_TICKS_PER_SHOOT = "Ticks until the next Tank shoot";
-    public static final String SLIPPERINESS = "Value of tank sliding on ice";
-    public static final String AI_PRIZE_LIMIT = "The total number of prize tanks and prizes on the board";
-    public static final String PENALTY_WALKING_ON_WATER = "Penalty time when walking on water";
+    public static final String KILL_YOUR_TANK_PENALTY = "[Score] Kill your tank penalty";
+    public static final String KILL_OTHER_HERO_TANK_SCORE = "[Score] Kill other hero tank score";
+    public static final String KILL_OTHER_AI_TANK_SCORE = "[Score] Kill other AI tank score";
+    public static final String SPAWN_AI_PRIZE = "[Prize] Count spawn for AI Tank with prize";
+    public static final String KILL_HITS_AI_PRIZE = "[Prize] Hits to kill AI Tank with prize";
+    public static final String PRIZE_ON_FIELD = "[Prize] The period of prize validity on the field after the appearance";
+    public static final String PRIZE_WORKING = "[Prize] Working time of the prize after catch up";
+    public static final String AI_TICKS_PER_SHOOT = "[Game] Ticks until the next AI Tank shoot";
+    public static final String TANK_TICKS_PER_SHOOT = "[Game] Ticks until the next Tank shoot";
+    public static final String SLIPPERINESS = "[Game] Value of tank sliding on ice";
+    public static final String AI_PRIZE_LIMIT = "[Prize] The total number of prize tanks and prizes on the board";
+    public static final String PENALTY_WALKING_ON_WATER = "[Game] Penalty time when walking on water";
 
     public Integer getKillYourTankPenalty() {
         return getInteger(KILL_YOUR_TANK_PENALTY);
