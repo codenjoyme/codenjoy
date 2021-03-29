@@ -41,6 +41,8 @@ import wall_destroyed_up from './images/sprite/wall_destroyed_up.png';
 import wall_destroyed_up_down from './images/sprite/wall_destroyed_up_down.png';
 import wall_destroyed_up_left from './images/sprite/wall_destroyed_up_left.png';
 import wall_destroyed_up_twice from './images/sprite/wall_destroyed_up_twice.png';
+import prize_visibility from './images/sprite/prize_visibility.png';
+import prize_no_sliding from './images/sprite/prize_no_sliding.png';
 
 
 //own
