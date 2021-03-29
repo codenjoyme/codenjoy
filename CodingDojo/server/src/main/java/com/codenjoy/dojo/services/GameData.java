@@ -23,38 +23,57 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.json.JSONObject;
 
+import java.lang.annotation.*;
 import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
 public class GameData {
 
+    @Target({ElementType.FIELD})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Hero {}
+
+    @Target({ElementType.FIELD})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Scores {}
+
     @Getter private int boardSize;
     @Getter private GuiPlotColorDecoder decoder;
-    private Map<String, Object> scores;
-    private List<String> group;
-    private Map<String, HeroData> coordinates;
-    private Map<String, String> readableNames;
+    @Scores private Map<String, Object> scores;
+    @Getter @Hero private List<String> group;
+    @Hero private Map<String, HeroData> coordinates;
+    @Hero private Map<String, String> readableNames;
 
-    public JSONObject getScores() {
-        return new JSONObject(scores);
+    public String getScores() {
+        return toJson(Scores.class);
     }
 
-    public JSONObject getHeroesData(Profiler profiler) {
-        JSONObject result = new JSONObject();
-profiler.start();
-        result.put("coordinates", coordinates);
-profiler.done("coordinates");
-        result.put("group", group);
-profiler.done("group");
-        result.put("readableNames", readableNames);
-profiler.done("readableNames");
-        return result;
+    public String getHeroesData() {
+        return toJson(Hero.class);
+    }
+
+    public String toJson(Class<? extends Annotation> annotation) {
+        return new GsonBuilder()
+                .addSerializationExclusionStrategy(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes field) {
+                        return field.getAnnotation(annotation) == null;
+                    }
+                })
+                .create()
+                .toJson(this);
     }
 }

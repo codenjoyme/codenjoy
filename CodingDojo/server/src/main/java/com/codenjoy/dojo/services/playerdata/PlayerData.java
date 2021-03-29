@@ -28,7 +28,8 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
+
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -39,8 +40,9 @@ public class PlayerData implements ScreenData {
     private String game;
     private Object score;
     private String info;
-    private JSONObject scores;
-    private JSONObject heroesData;
+    private String scores;
+    private String heroesData;
+    private List<String> group;
     private Integer lastChatMessage;
 
     public String getInfo() {
@@ -57,14 +59,16 @@ public class PlayerData implements ScreenData {
                         "Info:'%s', " +
                         "Scores:'%s', " +
                         "HeroesData:'%s', " +
+                        "Group:%s, " +
                         "LastChatMessage:%s]",
                 boardSize,
                 board,
                 game,
                 score,
                 getInfo(),
-                JsonUtils.toStringSorted(scores.toString()),
-                JsonUtils.toStringSorted(heroesData.toString()),
+                JsonUtils.toStringSorted(scores),
+                JsonUtils.toStringSorted(heroesData),
+                group,
                 lastChatMessage);
     }
 

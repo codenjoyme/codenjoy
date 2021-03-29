@@ -348,7 +348,6 @@ public class PlayerServiceImpl implements PlayerService {
 
         Map<String, GameData> gameDataMap = playerGamesView.getGamesDataMap();
         Map<String, Integer> lastChatIds = chat.getLastMessageIds();
-Profiler profiler = new Profiler();
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
@@ -368,8 +367,9 @@ Profiler profiler = new Profiler();
                 int boardSize = gameData.getBoardSize();
                 Object score = player.getScore();
                 String message = player.getMessage();
-                JSONObject scores = gameData.getScores();
-                JSONObject heroesData = gameData.getHeroesData(profiler);
+                String scores = gameData.getScores();
+                List<String> group = gameData.getGroup();
+                String heroesData = gameData.getHeroesData();
                 map.put(player, new PlayerData(boardSize,
                         encoded,
                         gameType,
@@ -377,6 +377,7 @@ Profiler profiler = new Profiler();
                         message,
                         scores,
                         heroesData,
+                        group,
                         lastChatMessage));
 
             } catch (Exception e) {
@@ -385,7 +386,6 @@ Profiler profiler = new Profiler();
                 e.printStackTrace();
             }
         }
-profiler.print();
 
         return map;
     }
