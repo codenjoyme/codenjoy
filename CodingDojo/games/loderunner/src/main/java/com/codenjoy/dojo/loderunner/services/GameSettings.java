@@ -67,7 +67,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
         ENEMIES_COUNT("Enemies count"),
 
-        MAP_PATH("Custom map path");
+        MAP_PATH("Custom map path (or 'none')");
 
         private String key;
 
