@@ -26,30 +26,18 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.hero.HeroData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
 
+@Getter
 @AllArgsConstructor
 public class GameData {
 
-    @Getter private int boardSize;
-    @Getter private GuiPlotColorDecoder decoder;
+    private int boardSize;
+    private GuiPlotColorDecoder decoder;
     private Map<String, Object> scores;
     private List<String> group;
     private Map<String, HeroData> coordinates;
     private Map<String, String> readableNames;
-
-    public JSONObject getScores() {
-        return new JSONObject(scores);
-    }
-
-    public JSONObject getHeroesData() {
-        JSONObject result = new JSONObject();
-        result.put("coordinates", coordinates);
-        result.put("group", group);
-        result.put("readableNames", readableNames);
-        return result;
-    }
 }

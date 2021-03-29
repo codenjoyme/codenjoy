@@ -23,8 +23,8 @@ package com.codenjoy.dojo.services.settings;
  */
 
 import com.codenjoy.dojo.services.round.RoundSettings;
+import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
@@ -36,29 +36,30 @@ public interface SettingsReader<T extends SettingsReader> {
         String key();
 
         // TODO вот это как-то по проще не получится сделать?
-        static String keyToName(Key[] values, String value) {
-            return Arrays.stream(values)
+        static String keyToName(List<Key> values, String value) {
+            return values.stream()
                     .filter(element -> element.key().equals(value))
                     .map(Key::toString)
                     .findFirst()
-                    .orElseGet(() -> (!isRounds(values)) ? keyToName(RoundSettings.Keys.values(), value) : null);
+                    .orElseGet(() -> (!isRounds(values)) ? keyToName(RoundSettings.allRoundsKeys(), value) : null);
         }
 
-        static String nameToKey(Key[] values, String value) {
-            return Arrays.stream(values)
+        static String nameToKey(List<Key> values, String value) {
+            return values.stream()
                     .filter(element -> element.toString().equals(value))
                     .map(Key::key)
                     .findFirst()
-                    .orElseGet(() -> (!isRounds(values)) ? nameToKey(RoundSettings.Keys.values(), value) : null);
+                    .orElseGet(() -> (!isRounds(values)) ? nameToKey(RoundSettings.allRoundsKeys(), value) : null);
         }
 
-        private static boolean isRounds(Key[] values) {
-            return Arrays.asList(values).contains(ROUNDS_ENABLED);
+        private static boolean isRounds(List<Key> values) {
+            return values.contains(ROUNDS_ENABLED);
         }
     }
 
-
     // methods from Settings
+
+    List<Parameter> getParameters();
 
     boolean hasParameter(String name);
 
@@ -164,5 +165,24 @@ public interface SettingsReader<T extends SettingsReader> {
         }
         getParameter(key.key()).update(data);
         return (T)this;
+    }
+
+    // json
+
+    default T update(JSONObject json) {
+        json.keySet().forEach(name -> {
+            String key = Key.nameToKey(allKeys(), name);
+            getParameter(key).update(json.get(name));
+        });
+        return (T)this;
+    }
+
+    List<Key> allKeys();
+
+    default JSONObject asJson() {
+        return new JSONObject(){{
+            getParameters().forEach(param ->
+                    put(Key.keyToName(allKeys(), param.getName()), param.getValue()));
+        }};
     }
 }

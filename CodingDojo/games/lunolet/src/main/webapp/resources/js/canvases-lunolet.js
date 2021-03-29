@@ -488,7 +488,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         showScoreInformation(playerId, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + playerId).text(data.heroesData.coordinates[playerId] .level + 1);
+            $("#level_" + playerId).text(data.coordinates[playerId] .level + 1);
         }
     }
 

@@ -243,6 +243,7 @@ public class AITest {
             loderunner.newGame(player);
             player.hero = hero;
             hero.init(loderunner);
+            loderunner.resetHeroes();
         }
 
         ai = new AI();

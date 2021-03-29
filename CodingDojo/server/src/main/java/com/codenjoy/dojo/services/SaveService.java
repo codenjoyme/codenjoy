@@ -37,5 +37,8 @@ public interface SaveService {
     void loadAll();
     void removeSave(String id);
     void removeAllSaves();
+
+    List<PlayerInfo> getSaves(String room);
+
     void removeAllSaves(String room);
 }

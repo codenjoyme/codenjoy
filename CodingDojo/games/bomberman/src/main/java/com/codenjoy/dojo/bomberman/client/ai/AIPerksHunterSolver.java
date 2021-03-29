@@ -49,6 +49,7 @@ public class AIPerksHunterSolver implements Solver<Board> {
     public static DeikstraFindWay.Possible possible(Board board) {
         Collection<Point> futureBlasts = board.getFutureBlasts();
         Collection<Point> meatChoppers = board.getMeatChoppers();
+        Collection<Point> barriers = board.getBarriers();
 
         return new DeikstraFindWay.Possible() {
             @Override
@@ -61,7 +62,7 @@ public class AIPerksHunterSolver implements Solver<Board> {
 
             @Override
             public boolean possible(Point point) {
-                return !board.isBarrierAt(point);
+                return !barriers.contains(point);
             }
         };
     }

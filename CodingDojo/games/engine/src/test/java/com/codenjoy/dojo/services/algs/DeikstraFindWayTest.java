@@ -51,6 +51,61 @@ public class DeikstraFindWayTest {
     }
 
     @Test
+    public void testFindShortestWay_ifThereAreTwoWays_equalsByDistance() {
+        asrtWay("XXXXXXX\n" +
+                "XS    X\n" +
+                "X*XXX X\n" +
+                "X*XXX X\n" +
+                "X*XXX X\n" +
+                "X****FX\n" +
+                "XXXXXXX\n");
+    }
+
+    @Test
+    public void testFindShortestWay_ifThereAreTwoWays_longAndShort_case1() {
+        asrtWay("XXXXXXX\n" +
+                "XS***FX\n" +
+                "X XXX X\n" +
+                "X  X  X\n" +
+                "XX X XX\n" +
+                "XX   XX\n" +
+                "XXXXXXX\n");
+    }
+
+    @Test
+    public void testFindShortestWay_ifThereAreTwoWays_longAndShort_case2() {
+        asrtWay("XXXXXXX\n" +
+                "XF***SX\n" +
+                "X XXX X\n" +
+                "X  X  X\n" +
+                "XX X XX\n" +
+                "XX   XX\n" +
+                "XXXXXXX\n");
+    }
+
+    @Test
+    public void testFindShortestWay_ifThereAreTwoWays_longAndShort_case3() {
+        asrtWay("XXXXXXX\n" +
+                "XX   XX\n" +
+                "XX X XX\n" +
+                "X  X  X\n" +
+                "X XXX X\n" +
+                "XS***FX\n" +
+                "XXXXXXX\n");
+    }
+
+    @Test
+    public void testFindShortestWay_ifThereAreTwoWays_longAndShort_case4() {
+        asrtWay("XXXXXXX\n" +
+                "XX   XX\n" +
+                "XX X XX\n" +
+                "X  X  X\n" +
+                "X XXX X\n" +
+                "XF***SX\n" +
+                "XXXXXXX\n");
+    }
+
+    @Test
     public void testFindShortestWayWhenBrickOnWay() {
         asrtWay("XXXXXXX\n" +
                 "XS    X\n" +

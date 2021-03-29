@@ -410,7 +410,7 @@ public class SmokeTest {
                         "1:☼   ☻   ☼\n" +
                         "1:\n" +
                         "1:Scores: 0\n" +
-                        "1:Answer: \n" +
+                        "1:Answer:\n" +
                         "2:Board:\n" +
                         "2:☼  7    ☼\n" +
                         "2:☼ ♣0    ☼\n" +

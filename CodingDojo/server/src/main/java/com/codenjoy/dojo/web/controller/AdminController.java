@@ -198,7 +198,7 @@ public class AdminController {
     @GetMapping("/player/registration/removeAll")
     public String removePlayerRegistration(HttpServletRequest request) {
         String room = getGameRoom(request);
-        playerService.getAllInRoom(room)
+        saveService.getSaves(room)
                 .forEach(player -> registration.remove(player.getId()));
         return getAdmin(room);
     }

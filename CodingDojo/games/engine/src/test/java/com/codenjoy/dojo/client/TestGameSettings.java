@@ -25,6 +25,13 @@ package com.codenjoy.dojo.client;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TestGameSettings extends SettingsImpl implements SettingsReader<TestGameSettings> {
 
+    @Override
+    public List<Key> allKeys() {
+        return Arrays.asList();
+    }
 }

@@ -27,17 +27,26 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.stream.Collectors.toList;
 
 public class DeikstraFindWay {
 
     private static final List<Direction> DIRECTIONS = Arrays.asList(UP, DOWN, LEFT, RIGHT);
-    private Map<Point, List<Direction>> ways;
+
+    // карта возможных передвижений, которые не будут менять на этом уровне: стены и прочие препятствия
+    private Map<Point, List<Direction>> basic;
+
+    // карта возможных передвижений дополненная движимыми объектами
+    private Map<Point, List<Direction>> dynamic;
+
     private int size;
     private Possible checker;
-    private boolean possibleIsContsnt;
+    private boolean possibleIsConstant;
 
     public DeikstraFindWay() {
         this(false);
@@ -49,7 +58,7 @@ public class DeikstraFindWay {
      * Вот в таких случаях мы и ставим тут true.
      */
     public DeikstraFindWay(boolean possibleIsConstant) {
-        this.possibleIsContsnt = possibleIsConstant;
+        this.possibleIsConstant = possibleIsConstant;
     }
 
     public interface Possible {
@@ -83,9 +92,14 @@ public class DeikstraFindWay {
         }
         getPossibleWays(size, possible);
 
+        return buildPath(from, goals);
+    }
+
+    public List<Direction> buildPath(Point from, List<Point> goals) {
         List<List<Direction>> paths = new LinkedList<>();
+        Map<Point, List<Direction>> pathMap = getPath(from, goals);
         for (Point to : goals) {
-            List<Direction> path = getPath(from).get(to);
+            List<Direction> path = pathMap.get(to);
             if (path == null || path.isEmpty()) continue;
             paths.add(path);
         }
@@ -107,10 +121,11 @@ public class DeikstraFindWay {
         return shortest;
     }
 
-    private Map<Point, List<Direction>> getPath(Point from) {
+    private Map<Point, List<Direction>> getPath(Point from, List<Point> inputGoals) {
+        Set<Point> goals = new HashSet<>(inputGoals);
         Map<Point, List<Direction>> path = new HashMap<>();
-        for (Point point : ways.keySet()) {
-            path.put(point, new LinkedList<>());
+        for (Point point : ways().keySet()) {
+            path.put(point, new ArrayList<>(100));
         }
 
         boolean[][] processed = new boolean[size][size];
@@ -125,29 +140,43 @@ public class DeikstraFindWay {
                 current = toProcess.remove();
             }
             List<Direction> before = path.get(current);
-            for (Direction direction : ways.get(current)) {
+            for (Direction direction : ways().get(current)) {
                 Point to = direction.change(current);
                 if (processed[to.getX()][to.getY()]) continue;
 
                 List<Direction> directions = path.get(to);
-                if (directions.isEmpty() || directions.size() > before.size() + 1) {
-                    directions.addAll(before);
+                if (before.size() < directions.size() - 1) {
+                    // мы нашли более короткий путь,
+                    // но это никогда не случится )
+                    directions.clear();
+                }
+                if (directions.isEmpty()) {
+                    if (!before.isEmpty()) {
+                         directions.addAll(before);
+                    }
                     directions.add(direction);
 
                     if (!processed[to.getX()][to.getY()]) {
                         toProcess.add(to);
                     }
+                } else {
+                    // do nothing
                 }
             }
             processed[current.getX()][current.getY()] = true;
+            goals.remove(current);
             current = null;
-        } while (!toProcess.isEmpty());
+        } while (!(toProcess.isEmpty() || goals.isEmpty()));
 
         return path;
     }
 
-    private void setupWays() {
-        ways = new TreeMap<>();
+    private Map<Point, List<Direction>> ways() {
+        return (dynamic != null) ? dynamic : basic;
+    }
+
+    private Map<Point, List<Direction>> setupWays() {
+        Map<Point, List<Direction>> result = new TreeMap<>();
 
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
@@ -158,17 +187,49 @@ public class DeikstraFindWay {
 
                     directions.add(direction);
                 }
-                ways.put(from, directions);
+                result.put(from, directions);
             }
         }
+        return result;
+    }
+
+    public void updateWays(Possible possible) {
+        dynamic = basic.entrySet().stream()
+                .map(entry -> update(possible, entry))
+                .collect(toMap());
+    }
+
+    public Collector<Map.Entry<Point, List<Direction>>, ?, Map<Point, List<Direction>>> toMap() {
+        return Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue);
+    }
+
+    private Map.Entry<Point, List<Direction>> update(Possible possible, Map.Entry<Point, List<Direction>> entry) {
+        List<Direction> directions = entry.getValue();
+        Point point = entry.getKey();
+
+        List<Direction> updated = directions.stream()
+                .filter(direction -> possible.check(size, point, direction))
+                .collect(toList());
+
+        return new AbstractMap.SimpleEntry(point, updated);
     }
 
     public Map<Point, List<Direction>> getPossibleWays(int size, Possible possible) {
         this.size = size;
         this.checker = possible;
-        if (possible != null && (!possibleIsContsnt || ways == null)) {
-            setupWays();
+
+        if (possibleIsConstant && basic != null) {
+            return basic;
         }
-        return ways;
+
+        return basic = setupWays();
+    }
+
+    public Map<Point, List<Direction>> getBasic() {
+        return basic;
+    }
+
+    public Map<Point, List<Direction>> getDynamic() {
+        return dynamic;
     }
 }

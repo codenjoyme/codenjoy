@@ -361,7 +361,7 @@ public class AISolverTest {
         Board board = (Board) new Board().forString(boardString);
         AISolver solver = new AISolver(dice);
         solver.getDirections(board);
-        Map<Point, List<Direction>> possibleWays = solver.getWay().getPossibleWays(board.size(), null);
+        Map<Point, List<Direction>> possibleWays = solver.getWay().getBasic();
 
         char[][] chars = new char[board.size() * 3][board.size() * 3];
         for (int x = 0; x < chars.length; x++) {

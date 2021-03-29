@@ -40,6 +40,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BIG_BADABOOM;
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BOARD_SIZE;
 import static java.util.stream.Collectors.toList;
 
 public class Bomberman extends RoundField<Player> implements Field {
@@ -50,7 +52,6 @@ public class Bomberman extends RoundField<Player> implements Field {
     private final List<Player> players = new LinkedList<>();
 
     private final Walls walls;
-    private final Parameter<Integer> size;
     private final List<Bomb> bombs = new LinkedList<>();
     private final List<Blast> blasts = new LinkedList<>();
     private final List<Wall> destroyedWalls = new LinkedList<>();
@@ -65,7 +66,6 @@ public class Bomberman extends RoundField<Player> implements Field {
         this.settings = settings;
 
         this.dice = dice;
-        size = settings.getBoardSize();
         walls = settings.getWalls(dice);
         walls.init(this);
     }
@@ -90,7 +90,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     @Override
     public int size() {
-        return size.getValue();
+        return settings.integer(BOARD_SIZE);
     }
 
     @Override
@@ -179,7 +179,7 @@ public class Bomberman extends RoundField<Player> implements Field {
         do {
             makeBlastsFromDestoryedBombs();
 
-            if (settings.isBigBadaboom().getValue()) {
+            if (settings.bool(BIG_BADABOOM)) {
 
                 // если бомбу зацепила взрывная волна и ее тоже подрываем
                 for (Bomb bomb : bombs) {
@@ -252,7 +252,9 @@ public class Bomberman extends RoundField<Player> implements Field {
         List barriers = walls.listSubtypes(Wall.class);
         barriers.addAll(heroes(ACTIVE_ALIVE));
 
-        return new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size.getValue(), bomb, bomb.getPower());   // TODO move bomb inside BoomEngine
+        // TODO move bomb inside BoomEngine
+        return new BoomEngineOriginal(bomb.getOwner())
+                .boom(barriers, size(), bomb, bomb.getPower());
     }
 
     private void killAllNear(List<Blast> blasts) {

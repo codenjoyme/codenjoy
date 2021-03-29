@@ -41,7 +41,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.client.local.LocalGameRunner.generateXorShift;
 import static com.codenjoy.dojo.client.local.LocalGameRunner.getDice;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
@@ -67,7 +66,7 @@ public class SmokeTest {
         LocalGameRunner.printScores = true;
         LocalGameRunner.levelNumber = 22;
 
-        Dice dice = getDice(generateXorShift("johernyibabai2", 10, 200));
+        Dice dice = getDice("johernyibabai2", 10, 200);
 
         GameRunner gameType = new GameRunner() {
             @Override

@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 public class SimpleProfiler {
 
     private long time;
+    private long phaseTime;
     private String message;
 
     private final PlayerGames playerGames;
@@ -41,15 +42,28 @@ public class SimpleProfiler {
 
         log.debug("==================================================================================");
         log.debug(message + " starts");
-        time = System.currentTimeMillis();
+        time = now();
+        phaseTime = now();
+    }
+
+    private long now() {
+        return System.currentTimeMillis();
+    }
+
+    public synchronized void phase(String phase) {
+        if (log.isDebugEnabled()) {
+            log.debug(phase + " for all {} games is {} ms",
+                    playerGames.size(), now() - phaseTime);
+            phaseTime = now();
+        }
     }
 
     public synchronized void end() {
         if (log.isDebugEnabled()) {
-            time = System.currentTimeMillis() - time;
             log.debug(message + " for all {} games is {} ms",
-                    playerGames.size(), time);
+                    playerGames.size(), now() - time);
+            time = now();
+            phaseTime = now();
         }
-
     }
 }
