@@ -587,6 +587,7 @@ public class PlayerServiceImpl implements PlayerService {
             playerGames.getAll(withRoom(room))
                     .stream()
                     .map(pg -> pg.getPlayer())
+            // TODO тут раньше сносились все комнаты напрямую, но spreader не трогали, и тесты не тестируют это
                     .forEach(playerGames::remove);
         } finally {
             lock.writeLock().unlock();
