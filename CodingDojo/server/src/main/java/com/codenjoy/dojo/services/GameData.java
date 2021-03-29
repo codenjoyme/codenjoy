@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.hero.HeroData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,11 +46,14 @@ public class GameData {
         return new JSONObject(scores);
     }
 
-    public JSONObject getHeroesData() {
+    public JSONObject getHeroesData(Profiler profiler) {
         JSONObject result = new JSONObject();
         result.put("coordinates", coordinates);
+profiler.done("coordinates");
         result.put("group", group);
+profiler.done("group");
         result.put("readableNames", readableNames);
+profiler.done("readableNames");
         return result;
     }
 }

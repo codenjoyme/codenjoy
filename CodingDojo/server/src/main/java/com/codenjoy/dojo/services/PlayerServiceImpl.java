@@ -365,27 +365,11 @@ Profiler profiler = new Profiler();
                 cacheBoards.put(player, decoder.encodeForClient(board));
                 Object encoded = decoder.encodeForBrowser(board);
 
-profiler.start();
                 int boardSize = gameData.getBoardSize();
-
-profiler.done("getBoardSize");
-
                 Object score = player.getScore();
-
-profiler.done("getScore");
-
                 String message = player.getMessage();
-
-profiler.done("getMessage");
-
                 JSONObject scores = gameData.getScores();
-
-profiler.done("getScores");
-
-                JSONObject heroesData = gameData.getHeroesData();
-
-profiler.done("getHeroesData");
-
+                JSONObject heroesData = gameData.getHeroesData(profiler);
                 map.put(player, new PlayerData(boardSize,
                         encoded,
                         gameType,
@@ -394,8 +378,6 @@ profiler.done("getHeroesData");
                         scores,
                         heroesData,
                         lastChatMessage));
-
-profiler.done("map.put");
 
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +
