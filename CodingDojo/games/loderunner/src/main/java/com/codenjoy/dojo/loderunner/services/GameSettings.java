@@ -49,13 +49,13 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
         ENEMIES_COUNT("[Game] Enemies count"),
 
-        GOLD_COUNT_YELLOW("[Game] Yellow gold count"),
-        GOLD_SCORE_YELLOW("[Score] Yellow gold score"),
-        GOLD_SCORE_YELLOW_INCREMENT("[Score] Yellow gold score increment"),
-
         GOLD_COUNT_GREEN("[Game] Green gold count"),
         GOLD_SCORE_GREEN("[Score] Green gold score"),
         GOLD_SCORE_GREEN_INCREMENT("[Score] Green gold score increment"),
+
+        GOLD_COUNT_YELLOW("[Game] Yellow gold count"),
+        GOLD_SCORE_YELLOW("[Score] Yellow gold score"),
+        GOLD_SCORE_YELLOW_INCREMENT("[Score] Yellow gold score increment"),
 
         GOLD_COUNT_RED("[Game] Red gold count"),
         GOLD_SCORE_RED("[Score] Red gold score"),
@@ -86,16 +86,14 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        multiline(LEVEL_MAP, Level1.get());
-
-        integer(KILL_HERO_PENALTY, 1);
-        integer(KILL_ENEMY_SCORE, 10);
 
         integer(SHADOW_PILLS_COUNT, 0);
         integer(SHADOW_TICKS, 15);
-        integer(SUICIDE_PENALTY, 10);
+
         integer(PORTALS_COUNT, 0);
         integer(PORTAL_TICKS, 10);
+
+        integer(ENEMIES_COUNT, 5);
 
         integer(GOLD_COUNT_GREEN, 40);
         integer(GOLD_SCORE_GREEN, 1);
@@ -109,8 +107,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(GOLD_SCORE_RED, 5);
         integer(GOLD_SCORE_RED_INCREMENT, 1);
 
-        integer(ENEMIES_COUNT, 5);
+        integer(KILL_HERO_PENALTY, 1);
+        integer(KILL_ENEMY_SCORE, 10);
+        integer(SUICIDE_PENALTY, 10);
 
+        multiline(LEVEL_MAP, Level1.get());
         string(MAP_PATH, MAP_PATH_NONE);
     }
 
