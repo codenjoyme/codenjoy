@@ -35,7 +35,6 @@ import java.util.function.Function;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.BoardUtils.NO_SPACE;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 public class Loderunner implements Field {
 
