@@ -36,36 +36,37 @@ import java.util.List;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
-    
+
+    public static final String MAP_PATH_NONE = "none";
+
     public enum Keys implements Key {
 
-        KILL_HERO_PENALTY("Kill hero penalty"),
-        KILL_ENEMY_SCORE("Kill enemy score"),
-        SUICIDE_PENALTY("Suicide penalty"),
+        SHADOW_PILLS_COUNT("[Game] Shadow pills count"),
+        SHADOW_TICKS("[Game] Shadow ticks"),
 
-        LEVEL_MAP("Level map"),
-        
-        SHADOW_TICKS("Shadow ticks"),
-        SHADOW_PILLS_COUNT("Shadow pills count"),
-        
-        PORTAL_TICKS("Portal ticks"),
-        PORTALS_COUNT("Portals count"),
+        PORTALS_COUNT("[Game] Portals count"),
+        PORTAL_TICKS("[Game] Portal ticks"),
 
-        GOLD_COUNT_YELLOW("Yellow gold count"),
-        GOLD_COUNT_GREEN("Green gold count"),
-        GOLD_COUNT_RED("Red gold count"),
+        ENEMIES_COUNT("[Game] Enemies count"),
 
-        GOLD_SCORE_YELLOW("Yellow gold score"),
-        GOLD_SCORE_GREEN("Green gold score"),
-        GOLD_SCORE_RED("Red gold score"),
+        GOLD_COUNT_GREEN("[Game] Green gold count"),
+        GOLD_SCORE_GREEN("[Score] Green gold score"),
+        GOLD_SCORE_GREEN_INCREMENT("[Score] Green gold score increment"),
 
-        GOLD_SCORE_YELLOW_INCREMENT("Yellow gold score increment"),
-        GOLD_SCORE_GREEN_INCREMENT("Green gold score increment"),
-        GOLD_SCORE_RED_INCREMENT("Red gold score increment"),
+        GOLD_COUNT_YELLOW("[Game] Yellow gold count"),
+        GOLD_SCORE_YELLOW("[Score] Yellow gold score"),
+        GOLD_SCORE_YELLOW_INCREMENT("[Score] Yellow gold score increment"),
 
-        ENEMIES_COUNT("Enemies count"),
+        GOLD_COUNT_RED("[Game] Red gold count"),
+        GOLD_SCORE_RED("[Score] Red gold score"),
+        GOLD_SCORE_RED_INCREMENT("[Score] Red gold score increment"),
 
-        MAP_PATH("Custom map path");
+        KILL_HERO_PENALTY("[Score] Kill hero penalty"),
+        KILL_ENEMY_SCORE("[Score] Kill enemy score"),
+        SUICIDE_PENALTY("[Score] Suicide penalty"),
+
+        LEVEL_MAP("[Level] Level map"),
+        MAP_PATH("[Level] Custom map path (or 'none')");
 
         private String key;
 
@@ -85,32 +86,33 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        multiline(LEVEL_MAP, Level1.get());
-
-        integer(KILL_HERO_PENALTY, 1);
-        integer(KILL_ENEMY_SCORE, 10);
 
         integer(SHADOW_PILLS_COUNT, 0);
         integer(SHADOW_TICKS, 15);
-        integer(SUICIDE_PENALTY, 10);
+
         integer(PORTALS_COUNT, 0);
         integer(PORTAL_TICKS, 10);
 
-        integer(GOLD_COUNT_GREEN, 0);
-        integer(GOLD_COUNT_YELLOW, 20);
-        integer(GOLD_COUNT_RED, 0);
-
-        integer(GOLD_SCORE_GREEN, 1);
-        integer(GOLD_SCORE_YELLOW, 2);
-        integer(GOLD_SCORE_RED, 5);
-
-        integer(GOLD_SCORE_GREEN_INCREMENT, 5);
-        integer(GOLD_SCORE_YELLOW_INCREMENT, 2);
-        integer(GOLD_SCORE_RED_INCREMENT, 1);
-
         integer(ENEMIES_COUNT, 5);
 
-        string(MAP_PATH, "");
+        integer(GOLD_COUNT_GREEN, 40);
+        integer(GOLD_SCORE_GREEN, 1);
+        integer(GOLD_SCORE_GREEN_INCREMENT, 1);
+
+        integer(GOLD_COUNT_YELLOW, 20);
+        integer(GOLD_SCORE_YELLOW, 2);
+        integer(GOLD_SCORE_YELLOW_INCREMENT, 1);
+
+        integer(GOLD_COUNT_RED, 10);
+        integer(GOLD_SCORE_RED, 5);
+        integer(GOLD_SCORE_RED_INCREMENT, 1);
+
+        integer(KILL_HERO_PENALTY, 1);
+        integer(KILL_ENEMY_SCORE, 10);
+        integer(SUICIDE_PENALTY, 10);
+
+        multiline(LEVEL_MAP, Level1.get());
+        string(MAP_PATH, MAP_PATH_NONE);
     }
 
     public Level level(Dice dice) {
@@ -119,10 +121,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public String getMap() {
         String path = string(MAP_PATH);
-        if (StringUtils.isNotEmpty(path)) {
-            return MapLoader.loadMapFromFile(path);
-        } else {
+        if (MAP_PATH_NONE.equals(path)) {
             return string(LEVEL_MAP);
+        } else {
+            return MapLoader.loadMapFromFile(path);
         }
     }
 }

@@ -252,7 +252,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         PlayerGame playerGame4 = register("player4", "ip4", "room3", "second");
 
         // when
-        assertEquals("", get("/rest/admin/room/room1/reload"));
+        assertEquals("", get("/rest/admin/room/room1/player/reload"));
 
         // then
         verifyNewGame(playerGame1, atLeastOnce());
@@ -264,10 +264,10 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldReloadAllPlayersInRoom_validation() {
         assertException("Room name is invalid: '$bad$'",
-                () -> service.reload("$bad$"));
+                () -> service.reloadPlayers("$bad$"));
 
         assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
-                "/rest/admin/room/$bad$/reload");
+                "/rest/admin/room/$bad$/player/reload");
     }
 
     @Test
