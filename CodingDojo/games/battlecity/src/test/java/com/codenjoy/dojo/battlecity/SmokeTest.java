@@ -30,6 +30,7 @@ import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
