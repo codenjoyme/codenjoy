@@ -201,9 +201,6 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         Elements tree = player.getHero().treeState(alsoAtPoint);
-        if (tree != null) {
-            return tree;
-        }
 
         if (isAlive()) {
             if (player.getHero() == this) {
@@ -214,6 +211,8 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
                     case DOWN:  return Elements.TANK_DOWN;
                     default:    throw new RuntimeException("Неправильное состояние танка!");
                 }
+            } else if (tree != null) {
+                return tree;
             } else {
                 switch (direction) {
                     case LEFT:  return Elements.OTHER_TANK_LEFT;
