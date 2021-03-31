@@ -44,6 +44,7 @@ public class TestGameSettings extends GameSettings {
          integer(AI_TICKS_PER_SHOOT, 10);
          integer(TANK_TICKS_PER_SHOOT, 1);
          integer(SLIPPERINESS, 3);
+         bool(SHOW_MY_TANK_UNDER_TREE, false);
          integer(PRIZE_ON_FIELD, 3);
          integer(PRIZE_WORKING, 10);
          integer(AI_PRIZE_LIMIT, 10);
