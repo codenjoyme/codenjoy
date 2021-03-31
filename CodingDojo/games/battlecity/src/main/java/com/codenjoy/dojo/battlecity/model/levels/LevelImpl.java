@@ -107,19 +107,19 @@ public class LevelImpl implements Level {
     public List<Tank> getTanks() {
         return new LinkedList<>(){{
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new Tank(pt, DOWN, dice),
+                    (pt, el) -> new Tank(pt, DOWN),
                     TANK_DOWN, OTHER_TANK_DOWN));
 
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new Tank(pt, UP, dice),
+                    (pt, el) -> new Tank(pt, UP),
                     TANK_UP, OTHER_TANK_UP));
 
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new Tank(pt, LEFT, dice),
+                    (pt, el) -> new Tank(pt, LEFT),
                     TANK_LEFT, OTHER_TANK_LEFT));
 
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new Tank(pt, RIGHT, dice),
+                    (pt, el) -> new Tank(pt, RIGHT),
                     TANK_RIGHT, OTHER_TANK_RIGHT));
         }};
     }

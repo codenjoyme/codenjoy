@@ -36,12 +36,15 @@ public class AITank extends Tank {
 
     public static final int MAX = 10;
     private final int ticksStandByRiver = 5;
+
+    private Dice dice;
     public boolean dontShoot = false;
     private int act;
     private int count;
 
     public AITank(Point pt, Direction direction, Dice dice) {
-        super(pt, direction, dice);
+        super(pt, direction);
+        this.dice = dice;
         this.count = 0;
         setActive(true);
         setAlive(true);

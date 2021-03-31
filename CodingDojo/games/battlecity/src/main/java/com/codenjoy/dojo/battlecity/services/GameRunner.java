@@ -107,7 +107,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener, getDice(), settings);
+        return new Player(listener, settings);
     }
 
 }

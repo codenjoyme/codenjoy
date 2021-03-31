@@ -48,38 +48,38 @@ public class MultiplayerTest {
 
     private int size = 5;
     private Battlecity game;
-    private Dice dice1;
-    private Dice dice2;
     private Game tanks1;
     private Game tanks2;
     private Player player1;
     private Player player2;
     private PrinterFactory printerFactory;
     private GameSettings settings;
+    private Dice dice;
+
+    @Before
+    public void setUp() {
+        dice = mock(Dice.class);
+        settings = new TestGameSettings();
+        printerFactory = new PrinterFactoryImpl();
+    }
 
     public void givenGame() {
-        game = new Battlecity(size, mock(Dice.class), settings);
+        game = new Battlecity(size, dice, settings);
 
         game.addBorder(new DefaultBorders(size).get());
 
-        player1 = new Player(null, dice1, settings);
-        player2 = new Player(null, dice2, settings);
+        player1 = new Player(null, settings);
+        player2 = new Player(null, settings);
         tanks1 = new Single(player1, printerFactory);
         tanks1.on(game);
         tanks2 = new Single(player2, printerFactory);
         tanks2.on(game);
     }
 
-    @Before
-    public void setUp() {
-        settings = new TestGameSettings();
-        printerFactory = new PrinterFactoryImpl();
-    }
-
     @Test
-    public void shouldRandomPositionWhenNewGame() {
-        dice1 = dice(1, 1);
-        dice2 = dice(1, 1, 2, 2);
+    public void shouldRandomPosition_whenNewGame() {
+        dice(1, 1,
+                2, 2);
 
         givenGame();
 
@@ -103,9 +103,10 @@ public class MultiplayerTest {
     }
 
     @Test
-    public void shouldRandomPositionWhenKillTank() {
-        dice1 = dice(1, 1);
-        dice2 = dice(1, 2, 2, 2);
+    public void shouldRandomPosition_whenKillTank() {
+        dice(1, 1,
+                1, 2,
+                2, 2);
 
         givenGame();
 
@@ -144,9 +145,11 @@ public class MultiplayerTest {
     }
 
     @Test
-    public void shouldRandomPositionButAtFreeSpaceWhenKillTank() {
-        dice1 = dice(1, 1);
-        dice2 = dice(1, 2, 0, 0, 2, 2);
+    public void shouldRandomPosition_atFreeSpace_whenKillTank() {
+        dice(1, 1,
+                1, 2,
+                0, 0, // skipped, not free
+                2, 2);
 
         givenGame();
 
@@ -184,13 +187,11 @@ public class MultiplayerTest {
 
     }
 
-    private Dice dice(int... values) {
-        Dice dice = mock(Dice.class);
+    private void dice(int... values) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int value : values) {
             when = when.thenReturn(value);
         }
-        return dice;
     }
 
     private void assertD(String field, Player player) {
