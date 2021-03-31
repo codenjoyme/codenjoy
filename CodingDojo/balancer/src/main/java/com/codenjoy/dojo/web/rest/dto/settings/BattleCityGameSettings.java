@@ -29,18 +29,25 @@ import java.util.List;
 
 public class BattleCityGameSettings extends AbstractSettings {
 
-    public static final String KILL_YOUR_TANK_PENALTY = "[Score] Kill your tank penalty";
-    public static final String KILL_OTHER_HERO_TANK_SCORE = "[Score] Kill other hero tank score";
-    public static final String KILL_OTHER_AI_TANK_SCORE = "[Score] Kill other AI tank score";
+    public static final String AI_TICKS_PER_SHOOT = "[Game] Ticks until the next AI Tank shoot";
+    public static final String TANK_TICKS_PER_SHOOT = "[Game] Ticks until the next Tank shoot";
+    public static final String SLIPPERINESS = "[Game] Value of tank sliding on ice";
+    public static final String PENALTY_WALKING_ON_WATER = "[Game] Penalty time when walking on water";
+    public static final String SHOW_MY_TANK_UNDER_TREE = "[Game] Show my tank under tree";
+
     public static final String SPAWN_AI_PRIZE = "[Prize] Count spawn for AI Tank with prize";
     public static final String KILL_HITS_AI_PRIZE = "[Prize] Hits to kill AI Tank with prize";
     public static final String PRIZE_ON_FIELD = "[Prize] The period of prize validity on the field after the appearance";
     public static final String PRIZE_WORKING = "[Prize] Working time of the prize after catch up";
-    public static final String AI_TICKS_PER_SHOOT = "[Game] Ticks until the next AI Tank shoot";
-    public static final String TANK_TICKS_PER_SHOOT = "[Game] Ticks until the next Tank shoot";
-    public static final String SLIPPERINESS = "[Game] Value of tank sliding on ice";
     public static final String AI_PRIZE_LIMIT = "[Prize] The total number of prize tanks and prizes on the board";
-    public static final String PENALTY_WALKING_ON_WATER = "[Game] Penalty time when walking on water";
+
+    public static final String KILL_YOUR_TANK_PENALTY = "[Score] Kill your tank penalty";
+    public static final String KILL_OTHER_HERO_TANK_SCORE = "[Score] Kill other hero tank score";
+    public static final String KILL_OTHER_AI_TANK_SCORE = "[Score] Kill other AI tank score";
+
+    public Boolean isShowMyTankUnderTree() {
+        return getBoolean(SHOW_MY_TANK_UNDER_TREE);
+    }
 
     public Integer getKillYourTankPenalty() {
         return getInteger(KILL_YOUR_TANK_PENALTY);
@@ -90,6 +97,9 @@ public class BattleCityGameSettings extends AbstractSettings {
         return getInteger(PENALTY_WALKING_ON_WATER);
     }
 
+    public void setShowMyTankUnderTree(Boolean input) {
+        add(SHOW_MY_TANK_UNDER_TREE, input);
+    }
 
     public void setKillYourTankPenalty(Integer input) {
         add(KILL_YOUR_TANK_PENALTY, input);
@@ -158,5 +168,6 @@ public class BattleCityGameSettings extends AbstractSettings {
         update(parameters, SLIPPERINESS);
         update(parameters, AI_PRIZE_LIMIT);
         update(parameters, PENALTY_WALKING_ON_WATER);
+        update(parameters, SHOW_MY_TANK_UNDER_TREE);
     }
 }
