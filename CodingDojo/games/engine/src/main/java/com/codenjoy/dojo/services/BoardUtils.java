@@ -24,40 +24,37 @@ package com.codenjoy.dojo.services;
 
 import lombok.experimental.UtilityClass;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 @UtilityClass
 public class BoardUtils {
 
-    public static final Point NO_SPACE = pt(0, 0);
-
-    public static Point getFreeRandom(int size, Dice dice, Predicate<Point> isFree) {
-        return getFreeRandom(
+    public static Optional<Point> freeRandom(int size, Dice dice, Predicate<Point> isFree) {
+        return freeRandom(
                 () -> dice.next(size),
                 () -> dice.next(size),
                 isFree);
     }
 
-    public static Point getFreeRandom(Supplier<Integer> getX,
-                                      Supplier<Integer> getY,
-                                      Predicate<Point> isFree)
+    public static Optional<Point> freeRandom(Supplier<Integer> getX,
+                                             Supplier<Integer> getY,
+                                             Predicate<Point> isFree)
     {
-        Point result = new PointImpl();
+        Point pt = new PointImpl();
         int count = 0;
         int max = 100;
         do {
-            result.setX(getX.get());
-            result.setY(getY.get());
-        } while (!isFree.test(result) && count++ < max);
+            pt.setX(getX.get());
+            pt.setY(getY.get());
+        } while (!isFree.test(pt) && count++ < max);
 
         if (count >= max) {
-            return NO_SPACE.copy();
+            return Optional.empty();
         }
 
-        return result;
+        return Optional.of(pt);
     }
 
 }
