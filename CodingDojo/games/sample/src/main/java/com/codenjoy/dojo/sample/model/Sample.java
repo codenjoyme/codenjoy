@@ -34,7 +34,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -83,7 +82,7 @@ public class Sample implements Field {
                 gold.remove(hero);
                 player.event(Events.WIN);
 
-                Point pos = getFreeRandom();
+                Point pos = freeRandom();
                 gold.add(new Gold(pos));
             }
         }
@@ -115,7 +114,7 @@ public class Sample implements Field {
     }
 
     @Override
-    public Point getFreeRandom() {
+    public Point freeRandom() {
         return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
     }
 
