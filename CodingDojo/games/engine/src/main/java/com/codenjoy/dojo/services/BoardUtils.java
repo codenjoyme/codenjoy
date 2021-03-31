@@ -32,7 +32,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 @UtilityClass
 public class BoardUtils {
 
-    public static final Point NO_SPACE = pt(-1, -1);
+    public static final Point NO_SPACE = pt(0, 0);
 
     public static Point getFreeRandom(int size, Dice dice, Predicate<Point> isFree) {
         return getFreeRandom(
