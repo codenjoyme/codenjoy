@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 
 /**
@@ -38,6 +39,7 @@ import org.json.JSONObject;
  * Дальше фреймворк пользуется связкой этих трех объектов
  * инкапсулируя их в понятие Игра {@see Game}.
  */
+@Slf4j
 public class Single implements Game {
 
     private PrinterFactory factory;
@@ -106,7 +108,13 @@ public class Single implements Game {
 
     @Override
     public void newGame() {
-        field.newGame(player);
+        try {
+            field.newGame(player);
+        } catch (Exception e) {
+            log.error("Cant add player {} on board {}", player, field);
+            e.printStackTrace();
+            log.error("Add player on board error", e);
+        }
     }
 
     @Override
