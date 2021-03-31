@@ -30,11 +30,13 @@ import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.LEVEL_MAP;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.SHOW_MY_TANK_UNDER_TREE;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -53,6 +55,7 @@ public class SmokeTest {
                     @Override
                     public GameSettings getSettings() {
                         return new TestGameSettings()
+                                .bool(SHOW_MY_TANK_UNDER_TREE, true)
                                 .string(LEVEL_MAP,
                                         "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                                         "☼¿ ¿ ¿   ¿ ¿ ¿☼\n" +

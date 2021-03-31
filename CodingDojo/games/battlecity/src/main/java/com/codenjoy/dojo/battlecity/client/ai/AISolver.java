@@ -33,6 +33,8 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.battlecity.model.Elements.RIVER;
+
 public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
@@ -68,11 +70,14 @@ public class AISolver implements Solver<Board> {
     public DeikstraFindWay.Possible withBarriersAndBullets(Board board) {
         List<Point> barriers = board.getBarriers();
         List<Point> bullets = board.getBullets();
+        List<Point> river = board.get(RIVER);
 
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) {
-                return !barriers.contains(point);
+                if (barriers.contains(point)) return false;
+                if (river.contains(point)) return false;
+                return true;
             }
 
             @Override
@@ -87,14 +92,14 @@ public class AISolver implements Solver<Board> {
 
     @Override
     public String get(Board board) {
-        if (board.isGameOver()) return act("");
+        if (board.isGameOver()) return act(Direction.random().toString());
         List<Direction> result = getDirections(board);
         if (result.isEmpty()) return act("");
         return act(result.get(0).toString());
     }
 
     private String act(String command) {
-        return ((command.equals("")?"":command + ", ") + "ACT");
+        return ((command.equals("") ? "" : command + ", ") + "ACT");
     }
 
     public List<Direction> getDirections(Board board) {

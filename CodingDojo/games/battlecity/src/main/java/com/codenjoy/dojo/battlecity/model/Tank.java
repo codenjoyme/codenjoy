@@ -39,8 +39,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_BREAKING_WALLS;
 import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_WALKING_ON_WATER;
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PENALTY_WALKING_ON_WATER;
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Tank extends RoundPlayerHero<Field> implements State<Elements, Player> {
@@ -200,35 +199,35 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Elements tree = player.getHero().treeState(alsoAtPoint);
-        if (tree != null) {
-            return tree;
+        Elements tree = player.getHero().treeState(this, alsoAtPoint);
+        if (!isAlive()) {
+            return Elements.BANG;
         }
 
-        if (isAlive()) {
-            if (player.getHero() == this) {
-                switch (direction) {
-                    case LEFT:  return Elements.TANK_LEFT;
-                    case RIGHT: return Elements.TANK_RIGHT;
-                    case UP:    return Elements.TANK_UP;
-                    case DOWN:  return Elements.TANK_DOWN;
-                    default:    throw new RuntimeException("Неправильное состояние танка!");
-                }
-            } else {
-                switch (direction) {
-                    case LEFT:  return Elements.OTHER_TANK_LEFT;
-                    case RIGHT: return Elements.OTHER_TANK_RIGHT;
-                    case UP:    return Elements.OTHER_TANK_UP;
-                    case DOWN:  return Elements.OTHER_TANK_DOWN;
-                    default:    throw new RuntimeException("Неправильное состояние танка!");
-                }
+        if (tree != null) {
+            return Elements.TREE;
+        }
+
+        if (player.getHero() != this) {
+            switch (direction) {
+                case LEFT:  return Elements.OTHER_TANK_LEFT;
+                case RIGHT: return Elements.OTHER_TANK_RIGHT;
+                case UP:    return Elements.OTHER_TANK_UP;
+                case DOWN:  return Elements.OTHER_TANK_DOWN;
+                default:    throw new RuntimeException("Неправильное состояние танка!");
             }
-        } else {
-            return Elements.BANG;
+        }
+
+        switch (direction) {
+            case LEFT:  return Elements.TANK_LEFT;
+            case RIGHT: return Elements.TANK_RIGHT;
+            case UP:    return Elements.TANK_UP;
+            case DOWN:  return Elements.TANK_DOWN;
+            default:    throw new RuntimeException("Неправильное состояние танка!");
         }
     }
 
-    public Elements treeState(Object[] alsoAtPoint) {
+    public Elements treeState(Tank tank, Object[] alsoAtPoint) {
         Tree tree = filterOne(alsoAtPoint, Tree.class);
         if (tree == null) {
             return null;
@@ -236,6 +235,12 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
         if (prizes.contains(Elements.PRIZE_VISIBILITY)) {
             return null;
+        }
+
+        if (tank == this && settings().bool(SHOW_MY_TANK_UNDER_TREE)) {
+            if (tree != null) {
+                return null;
+            }
         }
 
         return Elements.TREE;
