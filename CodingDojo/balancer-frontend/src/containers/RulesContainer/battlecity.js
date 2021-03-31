@@ -271,7 +271,12 @@ class RulesContainer extends Component {
                             <span className='command'>TREE</span> - Дерева/кущі.
                             Приховують танки, які при цьому можуть продовжувати рух та стріляти.
                             Постріли також не видно поза кущами. <br />
-                            Через кущі можна побачити лише тільки призи.
+                            Через кущі можна побачити лише тільки призи.<br />
+                            В залежності від параметрів гри ви або зможете бачити свій танк поверх дерев,
+                            або ні.
+                            <ul class="sub_ul">
+                                <li>Бачите ви свій танк поверх дерев, чи ні: { this._gets('showMyTankUnderTree') }.</li>
+                            </ul>
                         </li>
                         <li>
                             <span className='command'>RIVER</span> - Річка/вода.
@@ -371,16 +376,18 @@ class RulesContainer extends Component {
                         Параметри гри:
                     </p>
                         <ul>
+                            <li>Затримка між пострілами для AI-танків: { this._gets('aiTicksPerShoot') }.</li>
+                            <li>Затримка між пострілами звичайних танків: { this._gets('tankTicksPerShoot') }.</li>
+                            <li>Кількість тіків, які танк ковзає на кризі: { this._gets('slipperiness') }.</li>
+                            <li>Кількість штрафних тіків-затримки на воді: { this._gets('penaltyWalkingOnWater') }.</li>
+                            <li>Бачите ви свій танк поверх дерев, чи ні: { this._gets('showMyTankUnderTree') }.</li>
+
                             <li>Штрафні бали коли гине ваш танк: { this._gets('killYourTankPenalty') }.</li>
                             <li>Очки, які ви заробляєтете, знищуючи інших ботів: { this._gets('killOtherHeroTankScore') }.</li>
                             <li>Очки, за знищення AI-ботів: { this._gets('killOtherAiTankScore') }.</li>
                             <li>Кількість пострілів, які потрібно зробити по призовому танку: { this._gets('killHitsAiPrize') }.</li>
                             <li>Час існування приза на полі: { this._gets('prizeOnField') }.</li>
                             <li>Час впливу приза на танк: { this._gets('prizeWorking') }.</li>
-                            <li>Затримка між пострілами для AI-танків: { this._gets('aiTicksPerShoot') }.</li>
-                            <li>Затримка між пострілами звичайних танків: { this._gets('tankTicksPerShoot') }.</li>
-                            <li>Кількість тіків, які танк ковзає на кризі: { this._gets('slipperiness') }.</li>
-                            <li>Кількість штрафних тіків-затримки на воді: { this._gets('penaltyWalkingOnWater') }.</li>
                         </ul>
                     </div>
                     <p>
