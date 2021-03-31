@@ -48,8 +48,15 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        Optional<Point> pt = field.getFreeRandom();
-        hero = new Hero(pt.orElseGet(() -> pt(0, 0)), Direction.RIGHT);
+        if (hero != null) {
+            hero = null;
+        }
+        Optional<Point> pt = field.freeRandom();
+        if (pt.isEmpty()) {
+            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
+            throw new RuntimeException("Not enough space for Hero");
+        }
+        hero = new Hero(pt.get(), Direction.RIGHT);
         hero.init(field);
     }
 

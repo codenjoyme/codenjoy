@@ -150,7 +150,7 @@ public class Loderunner implements Field {
         }
         count = count - pills.size();
         for (int i = 0; i < Math.abs(count); i++) {
-            Optional<Point> pt = getFreeRandom();
+            Optional<Point> pt = freeRandom();
             if (pt.isPresent()) {
                 leavePill(pt.get(), PillType.SHADOW_PILL);
             }
@@ -171,7 +171,7 @@ public class Loderunner implements Field {
         }
         count = count - enemies.size();
         for (int i = 0; i < Math.abs(count); i++) {
-            Optional<Point> pt = getFreeRandom();
+            Optional<Point> pt = freeRandom();
             if (pt.isPresent()) {
                 Enemy enemy = new Enemy(pt.get(), Direction.LEFT, level.getAi(), dice);
                 enemies.add(enemy);
@@ -194,7 +194,7 @@ public class Loderunner implements Field {
         portals.clear();
         if (count > 0) {
             for (int i = 0; i < count; i++) {
-                Optional<Point> pt = getFreeRandom();
+                Optional<Point> pt = freeRandom();
                 if (pt.isPresent()) {
                     leavePortal(pt.get());
                 }
@@ -419,7 +419,8 @@ public class Loderunner implements Field {
     }
 
     @Override
-    public Optional<Point> getFreeRandom() {
+    public Optional<Point> freeRandom() {
+        // TODO запихунить Optional в BoardUtils.getFreeRandom
         Point result = BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
         return result.equals(NO_SPACE) ? Optional.empty() : Optional.of(result);
     }
@@ -517,7 +518,7 @@ public class Loderunner implements Field {
 
     private void getGoldEvent(Player player, Events event, Class type) {
         player.event(event);
-        Optional<Point> pt = getFreeRandom();
+        Optional<Point> pt = freeRandom();
         if (pt.isPresent()) {
             leaveGold(pt.get(), type);
         }
@@ -548,7 +549,7 @@ public class Loderunner implements Field {
 
         yellow = yellow - yellowGold.size();
         for (int i = 0; i < Math.max(0, yellow); i++) {
-            Optional<Point> pt = getFreeRandom();
+            Optional<Point> pt = freeRandom();
             if (pt.isPresent()) {
                 yellowGold.add(new YellowGold(pt.get()));
             }
@@ -556,7 +557,7 @@ public class Loderunner implements Field {
 
         green = green - greenGold.size();
         for (int i = 0; i < Math.max(0, green); i++) {
-            Optional<Point> pt = getFreeRandom();
+            Optional<Point> pt = freeRandom();
             if (pt.isPresent()) {
                 greenGold.add(new GreenGold(pt.get()));
             }
@@ -564,7 +565,7 @@ public class Loderunner implements Field {
 
         red = red - redGold.size();
         for (int i = 0; i < Math.max(0, red); i++) {
-            Optional<Point> pt = getFreeRandom();
+            Optional<Point> pt = freeRandom();
             if (pt.isPresent()) {
                 redGold.add(new RedGold(pt.get()));
             }

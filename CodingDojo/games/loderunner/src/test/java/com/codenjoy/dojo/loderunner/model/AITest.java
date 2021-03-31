@@ -23,26 +23,76 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.loderunner.TestSettings;
+import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AITest {
 
     private AI ai;
     private Loderunner loderunner;
     private LevelImpl level;
+    private Dice dice;
+
+    private void setupAI(String map) {
+        dice = mock(Dice.class);
+        level = new LevelImpl(map, dice);
+        GameSettings settings = new TestSettings();
+        loderunner = new Loderunner(level, dice, settings);
+
+        for (Hero hero : level.getHeroes()) {
+            Player player = new Player(mock(EventListener.class), settings);
+            dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
+            loderunner.newGame(player);
+            player.hero = hero;
+            hero.init(loderunner);
+            loderunner.resetHeroes();
+        }
+
+        ai = new AI();
+    }
+
+    private void assertP(String map, String expected) {
+        setupAI(map);
+
+        Map<Point, List<Direction>> result = new TreeMap<>();
+        for (Map.Entry<Point, List<Direction>> entry : ai.ways(loderunner).entrySet()) {
+            List<Direction> value = entry.getValue();
+            if (!value.isEmpty()) {
+                result.put(entry.getKey(), value);
+            }
+        }
+
+        assertEquals(expected, result.toString().replace("], [", "],\n["));
+    }
+
+    private void assertD(String expected) {
+        assertEquals(expected,
+                ai.getPath(loderunner,
+                        level.getEnemies().get(0),
+                        level.getHeroes().get(0)).toString());
+    }
+
+    private void dice(int... ints) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : ints) {
+            when = when.thenReturn(i);
+        }
+    }
 
     @Test
     public void shouldGeneratePossibleWays1() {
@@ -217,40 +267,6 @@ public class AITest {
                 "[5,3]=[UP, DOWN, LEFT],\n" +
                 "[5,4]=[UP, DOWN, LEFT],\n" +
                 "[5,5]=[DOWN, LEFT]}");
-    }
-
-    private void assertP(String map, String expected) {
-        setupAI(map);
-
-        Map<Point, List<Direction>> result = new TreeMap<>();
-        for (Map.Entry<Point, List<Direction>> entry : ai.ways(loderunner).entrySet()) {
-            List<Direction> value = entry.getValue();
-            if (!value.isEmpty()) {
-                result.put(entry.getKey(), value);
-            }
-        }
-
-        assertEquals(expected, result.toString().replace("], [", "],\n["));
-    }
-
-    private void setupAI(String map) {
-        level = new LevelImpl(map, mock(Dice.class));
-        GameSettings settings = new TestSettings();
-        loderunner = new Loderunner(level, mock(Dice.class), settings);
-
-        for (Hero hero : level.getHeroes()) {
-            Player player = new Player(mock(EventListener.class), settings);
-            loderunner.newGame(player);
-            player.hero = hero;
-            hero.init(loderunner);
-            loderunner.resetHeroes();
-        }
-
-        ai = new AI();
-    }
-
-    private void assertD(String expected) {
-        assertEquals(expected, ai.getPath(loderunner, level.getEnemies().get(0), level.getHeroes().get(0)).toString());
     }
 
     @Test

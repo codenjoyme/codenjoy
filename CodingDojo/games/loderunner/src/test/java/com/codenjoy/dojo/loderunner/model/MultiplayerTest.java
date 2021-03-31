@@ -63,7 +63,14 @@ public class MultiplayerTest {
         printerFactory = new PrinterFactoryImpl();
         settings = new TestSettings();
     }
-    
+
+    private void dice(int... ints) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : ints) {
+            when = when.thenReturn(i);
+        }
+    }
+
     // появляется другие игроки, игра становится мультипользовательской
     @Test
     public void shouldMultipleGame() { // TODO разделить тест на части
@@ -977,16 +984,9 @@ public class MultiplayerTest {
         Single game = new Single(player, printerFactory);
         games.add(game);
         game.on(field);
-        dice(x, y);
+        dice(x, y);  // позиция рассчитывается рендомно из dice
         game.newGame();
         return player;
-    }
-
-    private void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
     }
 
     private void givenFl(String map) {
