@@ -123,6 +123,8 @@ public class LocalGameRunner {
                 }
 
                 synchronized (this) {
+                    debugAt(tick);
+
                     List<String> answers = new LinkedList<>();
                     for (Game game : games) {
                         answers.add(askAnswer(games.indexOf(game)));
@@ -158,6 +160,10 @@ public class LocalGameRunner {
             }
         }
         return this;
+    }
+
+    private void debugAt(int tick) {
+        // breakpoint here
     }
 
     private String askAnswer(int index) {
