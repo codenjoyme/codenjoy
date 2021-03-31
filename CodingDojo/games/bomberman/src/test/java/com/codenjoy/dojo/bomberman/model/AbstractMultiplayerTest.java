@@ -39,8 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.EventsListenersAssert.assertAll;
-import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BOARD_SIZE;
-import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BOMB_POWER;
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;

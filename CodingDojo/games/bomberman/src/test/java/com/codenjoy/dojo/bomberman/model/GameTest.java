@@ -24,9 +24,8 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.bomberman.services.Events;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Assert;
 import org.junit.Test;
 

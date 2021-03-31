@@ -22,13 +22,10 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.TestGameSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.bomberman.TestGameSettings;
 import com.codenjoy.dojo.bomberman.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
