@@ -116,7 +116,7 @@ public class GameTest {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        Player player = new Player(listener, dice, settings){
+        Player player = new Player(listener, settings){
             @Override
             public void newHero(Field field) {
                 hero = tank;

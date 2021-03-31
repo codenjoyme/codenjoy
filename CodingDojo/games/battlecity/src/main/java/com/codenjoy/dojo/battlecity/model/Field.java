@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.round.RoundGameField;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Field extends RoundGameField<Player> {
 
@@ -37,6 +38,8 @@ public interface Field extends RoundGameField<Player> {
     void affect(Bullet bullet);
 
     boolean isRiver(Point pt);
+
+    boolean isTree(Point pt);
 
     boolean isIce(Point pt);
 
@@ -50,4 +53,7 @@ public interface Field extends RoundGameField<Player> {
 
     boolean isBarrierFor(Tank tank, Point pt);
 
+    boolean isFree(Point pt);
+
+    Optional<Point> freeRandom();
 }
