@@ -301,6 +301,18 @@ public class Battlecity extends RoundField<Player> implements Field {
                 || (isRiver(pt) && !tank.canWalkOnWater());
     }
 
+    @Override
+    public boolean isFree(Point pt) {
+        return !(isBarrier(pt) || isTree(pt) || isRiver(pt) || isIce(pt));
+    }
+
+    @Override
+    public Optional<Point> freeRandom() {
+        // TODO запихунить Optional в BoardUtils.getFreeRandom
+        Point result = BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
+        return result.equals(NO_SPACE) ? Optional.empty() : Optional.of(result);
+    }
+
     public boolean isBarrier(Point pt) {
         for (Wall wall : this.walls) {
             if (wall.itsMe(pt) && !wall.destroyed()) {

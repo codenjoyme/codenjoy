@@ -24,6 +24,9 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.TestGameSettings;
+import com.codenjoy.dojo.battlecity.model.items.Ice;
+import com.codenjoy.dojo.battlecity.model.items.River;
+import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -35,9 +38,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_PRIZE_LIMIT;
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -145,9 +146,11 @@ public class MultiplayerTest {
     }
 
     @Test
-    public void shouldRandomPositionButAtFreeSpaceWhenKillTank() {
-        dice1 = dice(1, 1);
-        dice2 = dice(1, 2, 0, 0, 2, 2);
+    public void shouldRandomPosition_atFreeSpace_whenKillTank() {
+        dice(1, 1,
+                1, 2,
+                0, 0, // skipped, not free, because hero
+                2, 2);
 
         givenGame();
 
@@ -180,6 +183,54 @@ public class MultiplayerTest {
                 "☼   ☼\n" +
                 "☼ ˄ ☼\n" +
                 "☼▲  ☼\n" +
+                "☼☼☼☼☼\n", player1
+        );
+
+    }
+
+    @Test
+    public void shouldRandomPosition_atFreeSpace_whenTrySpawnUnderTreeRiverOrIce() {
+        dice(1, 1,
+                1, 2,
+                3, 3, // skipped, not free, because tree
+                3, 2, // skipped, not free, because river
+                3, 1, // skipped, not free, because ice
+                2, 2);
+
+        givenGame();
+        game.addTree(new Tree(pt(3, 3)));
+        game.addRiver(new River(pt(3, 2)));
+        game.addIce(new Ice(pt(3, 1)));
+
+        tanks1.newGame();
+        tanks2.newGame();
+
+        assertD("☼☼☼☼☼\n" +
+                "☼  %☼\n" +
+                "☼˄ ~☼\n" +
+                "☼▲ #☼\n" +
+                "☼☼☼☼☼\n", player1
+        );
+
+        tanks1.getPlayer().getHero().act();
+        game.tick();
+
+        assertD("☼☼☼☼☼\n" +
+                "☼  %☼\n" +
+                "☼Ѡ ~☼\n" +
+                "☼▲ #☼\n" +
+                "☼☼☼☼☼\n", player1
+        );
+
+        assertTrue(tanks2.isGameOver());
+        tanks2.newGame();
+
+        game.tick();
+
+        assertD("☼☼☼☼☼\n" +
+                "☼  %☼\n" +
+                "☼ ˄~☼\n" +
+                "☼▲ #☼\n" +
                 "☼☼☼☼☼\n", player1
         );
 
