@@ -27,7 +27,9 @@ import com.codenjoy.dojo.bomberman.model.perks.HeroPerks;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
 import com.codenjoy.dojo.bomberman.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
@@ -42,38 +44,16 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     public static final int MAX = 1000;
 
     private Level level;
-    private Dice dice;
     private boolean bomb;
     private Direction direction;
     private int score;
 
     private HeroPerks perks = new HeroPerks();
 
-    public Hero(Level level, Dice dice) {
+    public Hero(Level level) {
         this.level = level;
-        this.dice = dice;
         score = 0;
         direction = null;
-    }
-
-    public void init(Field field) {
-        super.init(field);
-
-        int iteration = 0;
-        while (iteration++ < MAX) {
-            Point pt = PointImpl.random(dice, field.size());
-
-            if (field.isBarrier(pt, !FOR_HERO)) {
-                continue;
-            }
-
-            move(pt);
-            break;
-        }
-
-        if (iteration >= MAX) {
-            System.out.println("Dead loop at Hero.init(Board)!");
-        }
     }
 
     @Override
@@ -240,10 +220,6 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         }
 
         return OTHER_BOMBERMAN;
-    }
-
-    public Dice getDice() {
-        return dice;
     }
 
     @Override

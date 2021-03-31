@@ -30,7 +30,11 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Optional;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.mockito.Mockito.*;
 
 public class PlayerTest {
@@ -46,18 +50,27 @@ public class PlayerTest {
         dice = mock(Dice.class);
 
         when(settings.getLevel()).thenReturn(mock(Level.class));
-        when(settings.getHero(any(Level.class), any(Dice.class)))
+        when(settings.getHero(any(Level.class)))
                 .thenReturn(mock(Hero.class));
 
         field = mock(Field.class);
         when(field.settings()).thenReturn(settings);
+        when(field.freeRandom()).thenReturn(Optional.of(pt(0, 0)));
 
         listener = mock(EventListener.class);
     }
 
+    protected void dice(int... values) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int value : values) {
+            when = when.thenReturn(value);
+        }
+    }
+
     @Test
     public void shouldProcessEventWhenListenerIsNotNull() {
-        Player player = new Player(listener, dice, settings);
+        Player player = new Player(listener, settings);
+        dice(0, 0);
         player.newHero(field);
 
         player.event(Events.KILL_DESTROY_WALL);
@@ -67,7 +80,8 @@ public class PlayerTest {
 
     @Test
     public void shouldNotProcessEventWhenListenerNotNull() {
-        Player player = new Player(null, dice, settings);
+        Player player = new Player(null, settings);
+        dice(0, 0);
         player.newHero(field);
 
         player.event(Events.KILL_DESTROY_WALL);

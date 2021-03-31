@@ -29,10 +29,13 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.round.RoundGameField;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Field extends RoundGameField<Player> {  // TODO применить тут ISP (все ли методы должны быть паблик?)
 
     boolean FOR_HERO = true;
+
+    boolean isFree(Point pt);
 
     int size();
 
@@ -59,4 +62,8 @@ public interface Field extends RoundGameField<Player> {  // TODO примени�
     List<PerkOnBoard> perks();
 
     PerkOnBoard pickPerk(Point pt);
+
+    Dice dice();
+
+    Optional<Point> freeRandom();
 }

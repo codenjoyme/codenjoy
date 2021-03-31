@@ -23,7 +23,6 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 import com.codenjoy.dojo.bomberman.services.GameSettings;
-import org.junit.Before;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BOMB_POWER;
@@ -55,7 +54,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
         settings.integer(PLAYERS_PER_ROOM, DEFAULT_COUNT);
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0,
                 1, 1);
@@ -211,7 +210,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
 
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0,
                 1, 1);
@@ -284,7 +283,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
 
         tick();
 
-        dice(heroDice, 3, 4); // новые координаты для героя
+        dice(dice, 3, 4); // новые координаты для героя
         field.newGame(player(1)); // это сделоает сервер в ответ на isAlive = false
         resetHeroes();
 
@@ -309,7 +308,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 .integer(TIME_BEFORE_START, 1);
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 1, 1, // первый игрок
                 0, 1, // второй
                 1, 0); // третий
@@ -393,7 +392,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 .integer(TIME_BEFORE_START, 1);
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 1, 1, // первый игрок, кто побежит
                 0, 1, // второй, жертва
                 4, 4); // третий, тот кто покинет комнату
@@ -546,7 +545,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 .integer(TIME_BEFORE_START, 1);
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 1, 1, // первый игрок
                 0, 2, // второй - его не накроет волной
                 1, 0); // третий - его накроет волной
@@ -639,7 +638,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 "listener(2) => []\n");
 
         // вот он последний тик раунда, тут все и случится
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0,
                 1, 1);
@@ -668,7 +667,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 .integer(TIME_BEFORE_START, 1);
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 1, 1, // первый активный игрок - будет победителем
                 3, 3, // второй активный игрок - будет проигравшим
                 1, 0, // жертва первого
@@ -810,7 +809,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 "listener(4) => []\n");
 
         // вот он последний тик раунда, тут все и случится
-        dice(heroDice,
+        dice(dice,
                 0, 2,  // размещаем всех в свободные места
                 1, 2,
                 2, 2,
@@ -846,7 +845,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 .integer(TIME_BEFORE_START, 1);
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 1, 1, // первый активный игрок - будет проигравшим
                 3, 3, // второй активный игрок - будет победителем, потому как снесет еще корбку
                 1, 0, // жертва первого
@@ -1007,7 +1006,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 "listener(5) => []\n");
 
         // вот он последний тик раунда, тут все и случится
-        dice(heroDice,
+        dice(dice,
                 0, 1,  // на трупики нельзя!
                 1, 0,  // на трупики нельзя!
                 0, 2,  // теперь размещаем всех в свободные места
@@ -1081,7 +1080,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 .integer(TIME_PER_ROUND, 20);
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 0, 0, // первый игрок
                 1, 0, // второй
                 2, 0); // третий
@@ -1303,11 +1302,10 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 .integer(TIME_PER_ROUND, 60); // до конца раунда целая минута
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 4, 4, // первый игрок
                 4, 3, // второй
-                3, 4, // третий
-                0, 0);  // для последующих начнем с левого нижнего угла
+                3, 4); // третий
 
         givenBoard(count);
 
@@ -1364,6 +1362,10 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
         assertEquals(true, hero(2).isActiveAndAlive());
 
         // делаем очистку очков
+        dice(dice,
+                0, 0, // первый игрок
+                0, 1, // второй
+                1, 0); // третий
         field.clearScore();
         resetHeroes();
 
@@ -1374,6 +1376,24 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 "listener(0) => [START_ROUND, [Round 1]]\n" +
                 "listener(1) => [START_ROUND, [Round 1]]\n" +
                 "listener(2) => [START_ROUND, [Round 1]]\n");
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "♥    \n" +
+                "☺♥   \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n" +
+                "♥♥   \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "♥    \n" +
+                "♥☺   \n", game(2));
 
         // и очки обнулятся
         assertEquals(0, hero(0).scores());
@@ -1398,7 +1418,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
 
         MeatChopper chopper = meatChopperAt(1, 1);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0, // первый игрок
                 1, 0, // второй
                 2, 0); // третий
@@ -1488,7 +1508,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
 
         MeatChopper chopper = meatChopperAt(1, 1);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0, // первый игрок
                 1, 0, // второй
                 2, 0); // третий
@@ -1624,7 +1644,7 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 .integer(TIME_FOR_WINNER, 15); // после победы я хочу еще чуть повисеть на уровне
         setup();
 
-        dice(heroDice,
+        dice(dice,
                 0, 0, // первый игрок
                 1, 0, // второй
                 2, 0); // третий

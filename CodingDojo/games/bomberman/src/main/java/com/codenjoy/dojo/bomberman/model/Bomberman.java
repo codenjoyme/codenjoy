@@ -26,22 +26,19 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.bomberman.model.perks.*;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.bomberman.services.GameSettings;
+import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.round.RoundFactory;
 import com.codenjoy.dojo.services.round.RoundField;
-import com.codenjoy.dojo.services.settings.Parameter;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BIG_BADABOOM;
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BOARD_SIZE;
+import static com.codenjoy.dojo.services.BoardUtils.NO_SPACE;
 import static java.util.stream.Collectors.toList;
 
 public class Bomberman extends RoundField<Player> implements Field {
@@ -86,6 +83,23 @@ public class Bomberman extends RoundField<Player> implements Field {
             return null;
         }
         return perks.remove(index);
+    }
+
+    @Override
+    public Dice dice() {
+        return dice;
+    }
+
+    @Override
+    public Optional<Point> freeRandom() {
+        // TODO запихунить Optional в BoardUtils.getFreeRandom
+        Point result = BoardUtils.getFreeRandom(size(), dice, pt -> isFree(pt));
+        return result.equals(NO_SPACE) ? Optional.empty() : Optional.of(result);
+    }
+
+    @Override
+    public boolean isFree(Point pt) {
+        return !isBarrier(pt, !FOR_HERO);
     }
 
     @Override
@@ -339,7 +353,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
                 // TODO может это делать на этапе, когда balsts развиднеется в removeBlasts
                 blasts.remove(perk);
-                walls.add(new MeatChopperHunter(perk, hunter));
+                walls.add(new MeatChopperHunter(perk, this, hunter));
             });
         });
     }
@@ -441,6 +455,12 @@ public class Bomberman extends RoundField<Player> implements Field {
     @Override
     public boolean isBarrier(Point pt, boolean isForHero) {
         List<Player> players = isForHero ? aliveActive() : players();
+
+        // мы дергаем этот метод когда еще герой ищет себе место, потому тут надо скипнуть все недоинициализированные плеера
+        players = players.stream()
+                .filter(p -> p.getHero() != null)
+                .collect(toList());
+
         for (Player player : players) {
             if (player.getHero().itsMe(pt)) {
                 return true;

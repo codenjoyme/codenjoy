@@ -24,8 +24,9 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.bomberman.services.Events;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -1523,8 +1524,7 @@ public class GameTest extends AbstractGameTest {
     public void shouldFireEventWhenKillWall() {
         destroyWallAt(0, 0);
 
-        dice(dice, 1, 0);
-        givenBoard(SIZE);
+        givenBoard(SIZE, 1, 0);
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1555,9 +1555,7 @@ public class GameTest extends AbstractGameTest {
     public void shouldFireEventWhenKillMeatChopper() {
         meatChopperAt(0, 0);
 
-        dice(dice,
-                1, 0);
-        givenBoard(SIZE);
+        givenBoard(SIZE, 1, 0);
 
         hero.act();
         hero.right();
@@ -1585,8 +1583,7 @@ public class GameTest extends AbstractGameTest {
         meatChopperAt(0, 2);
         destroyWallAt(0, 3);
 
-        dice(dice, 1, 0);
-        givenBoard(SIZE);
+        givenBoard(SIZE, 1, 0);
 
         canDropBombs(4);
         bombsPower(1);
@@ -1687,9 +1684,8 @@ public class GameTest extends AbstractGameTest {
         verifyAllEvents("[DIED]");
         assertHeroDie();
 
-        initHero();
         field.tick();
-        dice(dice, 1, 0);
+        initHero(1, 0);
         game.newGame();
 
         asrtBrd("     \n" +
@@ -1725,8 +1721,7 @@ public class GameTest extends AbstractGameTest {
         meatChopperAt(0, 2);
         destroyWallAt(0, 3);
 
-        dice(dice, 1, 0);
-        givenBoard(SIZE);
+        givenBoard(SIZE, 1, 0);
 
         canDropBombs(4);
         bombsPower(1);
@@ -1851,7 +1846,7 @@ public class GameTest extends AbstractGameTest {
 
         destroyWallAt(3, 0);
 
-        givenBoard(7);
+        givenBoard(7, 0, 0); // hero position
         when(dice.next(anyInt())).thenReturn(101); // don't drop perk by accident
 
         hero.act();
@@ -1880,8 +1875,7 @@ public class GameTest extends AbstractGameTest {
 
         meatChopperAt(4, 0);
 
-        dice(dice, 0, 0);
-        givenBoard(7);
+        givenBoard(7, 0, 0);
 
         hero.act();
         hero.up();
@@ -1915,7 +1909,7 @@ public class GameTest extends AbstractGameTest {
         walls.init(field);
         withWalls(walls);
 
-        givenBoard(SIZE);
+        givenBoard(SIZE, 0, 0);
 
         hero.act();
         hero.up();
@@ -1954,7 +1948,7 @@ public class GameTest extends AbstractGameTest {
         walls.init(field);
         withWalls(walls);
 
-        givenBoard(SIZE);
+        givenBoard(SIZE, 0, 0);
 
         hero.act();
         hero.up();
@@ -2018,12 +2012,11 @@ public class GameTest extends AbstractGameTest {
         int size = 5;
         Dice wallDice = mock(Dice.class);
         dice(wallDice, 2, 1);
-        dice(dice, 1, 1);  // hero в левом нижнем углу
 
         EatSpaceWalls walls = new EatSpaceWalls(new OriginalWalls(v(size)), v(1), wallDice);
         withWalls(walls);
 
-        givenBoard(size);
+        givenBoard(size, 1, 1);  // hero в левом нижнем углу
 
         walls.init(field);
         walls.regenerate();

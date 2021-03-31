@@ -151,8 +151,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         return new EatSpaceWalls(meatChoppers, integerValue(DESTROY_WALL_COUNT), dice);
     }
 
-    public Hero getHero(Level level, Dice dice) {
-        return new Hero(level, dice);
+    public Hero getHero(Level level) {
+        return new Hero(level);
     }
 
     public PerksSettingsWrapper perksSettings() {

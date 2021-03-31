@@ -23,7 +23,6 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import org.junit.Before;
@@ -43,7 +42,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldGameReturnsRealJoystick() {
-        givenBoard();
+        dice(dice,
+                0, 0,
+                1, 0);
+        givenBoard(2);
 
         hero(0).act();
         hero(1).up();
@@ -63,6 +65,9 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         Joystick joystick2 = game(0).getJoystick();
 
         // when
+        dice(dice,
+                0, 0,
+                1, 0);
         game(0).newGame();
         game(1).newGame();
 
@@ -73,10 +78,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldGetTwoHeroesOnBoard() {
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         assertSame(hero(0), game(0).getJoystick());
         assertSame(hero(1), game(1).getJoystick());
@@ -96,10 +101,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldOnlyOneListenerWorksWhenOneHeroKillAnother() {
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -125,10 +130,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldPrintOtherBombHero() {
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -148,10 +153,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldHeroCantGoToAnotherHero() {
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).right();
         tick();
@@ -168,10 +173,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldKllOtherHeroWhenHeroGoToMeatChopper() {
         meatChopperAt(2, 0);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -206,10 +211,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldKllOtherHeroWhenMeatChopperGoToIt() {
         MeatChopper chopper = meatChopperAt(2, 0);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -244,10 +249,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldKllOtherHeroWhenMeatChopperAndHeroMoves() {
         MeatChopper chopper = meatChopperAt(2, 0);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -279,10 +284,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     //  бомбермены не могут ходить по бомбам ни по своим ни по чужим
     @Test
     public void shouldHeroCantGoToBombFromAnotherHero() {
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(1).act();
         hero(1).right();
@@ -311,10 +316,6 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "☺1♥  \n", game(0));
     }
 
-    private void givenBoard() {
-        super.givenBoard(2);
-    }
-
     @Test
     public void shouldBombKillAllHero() {
         shouldHeroCantGoToBombFromAnotherHero();
@@ -338,15 +339,27 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldNewGamesWhenKillAll() {
         shouldBombKillAllHero();
 
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "Ѡ҉♣  \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "♣҉Ѡ  \n", game(1));
+
         Level level1 = settings.getLevel();
         Level level2 = settings.getLevel();
-        when(settings.getHero(any(Level.class), any(Dice.class)))
+        when(settings.getHero(any(Level.class)))
                 .thenReturn(
-                        new Hero(level1, heroDice),
-                        new Hero(level2, heroDice)
+                        new Hero(level1),
+                        new Hero(level2)
                 );
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
         game(0).newGame();
@@ -372,10 +385,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldTwoBombsOnBoard() {
         settings.integer(BOMBS_COUNT, 1);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -411,10 +424,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldFourBombsOnBoard() {
         settings.integer(BOMBS_COUNT, 2);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -463,10 +476,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldFourBombsOnBoard_checkTwoBombsPerHero() {
         settings.integer(BOMBS_COUNT, 2);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -506,10 +519,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldFireEventWhenKillWallOnlyForOneHero() {
         destroyWallAt(0, 0);
 
-        dice(heroDice,
+        dice(dice,
                 1, 0,
                 1, 1);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).right();
@@ -547,10 +560,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldFireEventWhenKillMeatChopper() {
         meatChopperAt(0, 0);
 
-        dice(heroDice,
+        dice(dice,
                 1, 0,
                 1, 1);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).right();
@@ -590,10 +603,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         meatChopperAt(1, 0);
         meatChopperAt(2, 0);
 
-        dice(heroDice,
+        dice(dice,
                 1, 1,
                 2, 1);
-        givenBoard();
+        givenBoard(2);
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -638,10 +651,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldCrossBlasts_checkingScores_whenDestroyWall_caseDied() {
         destroyWallAt(1, 0);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 2, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -676,10 +689,16 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldCrossBlasts_checkingScores_whenDestroyWall_caseAlive() {
         destroyWallAt(1, 0);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 2, 0);
-        givenBoard();
+        givenBoard(2);
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺#♥  \n", game(0));
 
         hero(0).act();
         hero(0).up();
@@ -690,6 +709,12 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         hero(0).up();
         hero(1).up();
         tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺ ♥  \n" +
+                "     \n" +
+                "3#3  \n", game(0));
 
         tick();
         tick();
@@ -721,10 +746,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
         settings.integer(BOMB_POWER, 2);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 3, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -761,7 +786,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldCrossBlasts_checkingScores_whenFourDestroyWalls_caseDied() {
         destroyWallAt(2, 2);
 
-        dice(heroDice,
+        dice(dice,
                 1, 2,
                 2, 1,
                 3, 2,
@@ -806,7 +831,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         destroyWallAt(2, 2);
         destroyWallAt(0, 2);
 
-        dice(heroDice,
+        dice(dice,
                 1, 2,
                 2, 1,
                 3, 2,
@@ -852,10 +877,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
         settings.integer(BOMB_POWER, 2);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 3, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -898,10 +923,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldCrossBlasts_checkingScores_whenMeatChopper_caseDied() {
         meatChopperAt(1, 0);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 2, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -936,10 +961,10 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldCrossBlasts_checkingScores_whenMeatChopper_caseAlive() {
         meatChopperAt(1, 0);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 2, 0);
-        givenBoard();
+        givenBoard(2);
 
         hero(0).act();
         hero(0).up();
@@ -978,7 +1003,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldCrossBlasts_checkingScores_whenFourMeatChoppers_caseDied() {
         meatChopperAt(2, 2);
 
-        dice(heroDice,
+        dice(dice,
                 1, 2,
                 2, 1,
                 3, 2,
@@ -1021,7 +1046,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldPerkCantSpawnFromMeetChopper() {
         meatChopperAt(1, 0);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0);
         givenBoard(1);
 
@@ -1071,7 +1096,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         meatChopperAt(4, 1);
         meatChopperAt(4, 3);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0,
                 2, 0,
@@ -1175,7 +1200,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         meatChopperAt(4, 1);
         meatChopperAt(4, 3);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0,
                 2, 0,
@@ -1279,7 +1304,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         meatChopperAt(4, 1);
         meatChopperAt(4, 3);
 
-        dice(heroDice,
+        dice(dice,
                 0, 0,
                 1, 0,
                 2, 0,

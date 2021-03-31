@@ -40,8 +40,8 @@ public class MeatChopperHunter extends MeatChopper {
     private PerkOnBoard perk;
     private boolean alive = true;
 
-    public MeatChopperHunter(PerkOnBoard perk, Hero prey) {
-        super(perk.copy(), prey.field(), prey.getDice());
+    public MeatChopperHunter(PerkOnBoard perk, Field field, Hero prey) {
+        super(perk.copy(), field, field.dice());
         this.prey = prey;
         this.perk = perk;
         this.way = new DeikstraFindWay();
