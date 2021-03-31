@@ -303,7 +303,7 @@ public class Battlecity extends RoundField<Player> implements Field {
 
     @Override
     public boolean isFree(Point pt) {
-        return !(isBarrier(pt) /** || isRiver(pt) */);
+        return !(isBarrier(pt) || isTree(pt) || isRiver(pt) || isIce(pt));
     }
 
     @Override
