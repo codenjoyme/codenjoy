@@ -103,20 +103,29 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     public void setNewObjects() {
         int max = (players.size() / 2) + 1;
         int i = dice.next(50);
-        if (i == 42 && furyPills.size() < max)
-            setFuryPill(getFreeRandom());
-        if (i == 32 && flyingPills.size() < max)
-            setFlyingPill(getFreeRandom());
-        if (i == 21 && gold.size() < max*2)
-            setGold(getFreeRandom());
-        if ((i == 11 && stones.size() < size / 2) || stones.isEmpty())
-            setStone(getFreeRandom());
-        if ((i < 10 && apples.size() < max*10) || apples.size() < max*2)
-            setApple(getFreeRandom());
+        if (i == 42 && furyPills.size() < max) {
+            setFuryPill(freeRandom());
+        }
+
+        if (i == 32 && flyingPills.size() < max) {
+            setFlyingPill(freeRandom());
+        }
+
+        if (i == 21 && gold.size() < max*2) {
+            setGold(freeRandom());
+        }
+
+        if ((i == 11 && stones.size() < size / 2) || stones.isEmpty()) {
+            setStone(freeRandom());
+        }
+
+        if ((i < 10 && apples.size() < max*10) || apples.size() < max*2) {
+            setApple(freeRandom());
+        }
     }
 
     @Override
-    public Point getFreeRandom() {
+    public Point freeRandom() {
         return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
     }
 

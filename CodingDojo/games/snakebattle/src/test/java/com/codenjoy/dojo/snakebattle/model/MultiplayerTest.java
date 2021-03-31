@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
@@ -38,6 +37,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
+import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
@@ -69,6 +69,13 @@ public class MultiplayerTest {
 
         settings = new TestGameSettings()
                 .integer(MIN_TICKS_FOR_WIN, 1);
+    }
+
+    private void dice(int... values) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int value : values) {
+            when = when.thenReturn(value);
+        }
     }
 
     private void givenFl(String board) {
@@ -2399,7 +2406,7 @@ public class MultiplayerTest {
                 "☼▼     ☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        assertTrue(game.getStones().isEmpty());
+        assertEquals("[]", game.getStones().toString());
         verifyNoMoreInteractions(heroEvents);
         verifyNoMoreInteractions(enemyEvents);
     }
@@ -2459,7 +2466,7 @@ public class MultiplayerTest {
                 "☼˅     ☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        assertTrue(game.getStones().isEmpty());
+        assertEquals("[]", game.getStones().toString());
         verifyNoMoreInteractions(heroEvents);
         verifyNoMoreInteractions(enemyEvents);
     }

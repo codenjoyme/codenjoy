@@ -32,7 +32,7 @@ public interface Field extends RoundGameField<Player> {
 
     boolean isBarrier(Point p);
 
-    Point getFreeRandom();
+    Point freeRandom();
 
     Point getFreeStart();
 
