@@ -51,6 +51,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         TANK_TICKS_PER_SHOOT("[Game] Ticks until the next Tank shoot"),
         SLIPPERINESS("[Game] Value of tank sliding on ice"),
         PENALTY_WALKING_ON_WATER("[Game] Penalty time when walking on water"),
+        SHOW_MY_TANK_UNDER_TREE("[Game] Show my tank under tree"),
 
         SPAWN_AI_PRIZE("[Prize] Count spawn for AI Tank with prize"),
         KILL_HITS_AI_PRIZE("[Prize] Hits to kill AI Tank with prize"),
@@ -107,6 +108,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(TANK_TICKS_PER_SHOOT, 4);
         integer(SLIPPERINESS, 3);
         integer(PENALTY_WALKING_ON_WATER, 2);
+        bool(SHOW_MY_TANK_UNDER_TREE, false);
 
         integer(SPAWN_AI_PRIZE, 4);
         integer(KILL_HITS_AI_PRIZE, 3);

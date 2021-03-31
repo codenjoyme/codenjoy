@@ -167,6 +167,7 @@ public class GameTest {
                 game.reader(), players.get(0));
     }
 
+    // рисуем стенку
     @Test
     public void shouldBeWall_whenGameCreated() {
         givenFl("☼☼☼☼☼☼☼\n" +
@@ -188,6 +189,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
+    // рисуем мой танк
     @Test
     public void shouldBeTankOnFieldWhenGameCreated() {
         givenFl("☼☼☼☼☼☼☼\n" +
@@ -3664,7 +3666,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    // 1. Кусты
+    // дерево
     @Test
     public void shouldBeWallTree_whenGameCreated() {
         givenFl("☼☼☼☼☼☼☼\n" +
@@ -3707,7 +3709,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    // 1.1) При выстреле пуля должна пролетать сквозь кусты
+    // При выстреле пуля должна пролетать сквозь дерево
     @Test
     public void shouldBulletFlyUnderTree_right() {
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3916,7 +3918,19 @@ public class GameTest {
         return new LinkedList<>(Arrays.asList(walls));
     }
 
-    // Когда пуля и дерево находятся в одной координате когда отработывает метод tick()
+    // Когда пуля и дерево находятся в одной координате
+    // и я не вижу свой танк под деревом, то и пулю все равно не вижу
+    @Test
+    public void shouldBulletFlyUnderTwoTree_up_caseShowMyTankUnderTree() {
+        // given
+        settings.bool(SHOW_MY_TANK_UNDER_TREE, true);
+
+        // when then
+        shouldBulletFlyUnderTwoTree_up();
+    }
+
+    // Когда пуля и дерево находятся в одной координате
+    // я не вижу ее, дерево скрывает
     @Test
     public void shouldBulletFlyUnderTwoTree_up() {
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -4016,9 +4030,80 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    // 1.2) кусты - когда игрок заходит под них, там видно кусты и больше никакого движения
+    // дерево - когда игрок заходит под него, там видно дерево и больше никакого движения
     @Test
-    public void shouldTankMove_underTree() {
+    public void shouldTankMove_underTree_case2() {
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼%    ☼\n" +
+                "☼%    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼%    ☼\n" +
+                "☼%    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼%    ☼\n" +
+                "☼%    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼%    ☼\n" +
+                "☼%    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼%►   ☼\n" +
+                "☼%    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼% ►  ☼\n" +
+                "☼%    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // дерево - когда игрок заходит под него,
+    // и в настройках сказано, что свой танк виден под деревом
+    // я вижу свой танк
+    @Test
+    public void shouldTankMove_underTree_caseShowMyTankUnderTree_case2() {
+        settings.bool(SHOW_MY_TANK_UNDER_TREE, true);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼%    ☼\n" +
@@ -4085,6 +4170,8 @@ public class GameTest {
 
     @Test
     public void shouldBulletFlyUnderTree_jointly_shouldTankMoveUnderTree() {
+        settings.bool(SHOW_MY_TANK_UNDER_TREE, true);
+
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
@@ -4159,8 +4246,32 @@ public class GameTest {
         hero(0).up();
         game.tick();
 
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        •☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼        ▲☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
         hero(0).up();
         game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        ▲☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         hero(0).left();
         game.tick();
@@ -4196,9 +4307,147 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    // 1.3) так же не видно врагов под кустами
     @Test
-    public void shouldOtherTankMove_underTree() {
+    public void shouldBulletFlyUnderTree_jointly() {
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        ▲☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        ▲☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼        ▲☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        •☼\n" +
+                "☼        %☼\n" +
+                "☼        %☼\n" +
+                "☼        ▲☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        •☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).left();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼       ◄%☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).left();
+        game.tick();
+
+        hero(0).left();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼     ◄  %☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼        %☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    // так же не видно меня под деревом
+    @Test
+    public void shouldTankMove_underTree() {
 		givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
 				"☼▼        ☼\n" +
 				"☼         ☼\n" +
@@ -4229,6 +4478,18 @@ public class GameTest {
 		hero(0).down();
 		game.tick();
 
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
 		hero(0).down();
 		game.tick();
 
@@ -4236,7 +4497,7 @@ public class GameTest {
 				"☼         ☼\n" +
 				"☼         ☼\n" +
 				"☼%        ☼\n" +
-				"☼▼        ☼\n" +
+				"☼%        ☼\n" +
 				"☼         ☼\n" +
 				"☼         ☼\n" +
 				"☼         ☼\n" +
@@ -4260,7 +4521,240 @@ public class GameTest {
 				"☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    // 1.4) под кустами не видно так же и ботов белых
+    // но если в сеттингах сказано что меня видно под деревьями, я - вижу
+    @Test
+    public void shouldTankMove_underTree_caseShowMyTankUnderTree() {
+        settings.bool(SHOW_MY_TANK_UNDER_TREE, true);
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼▼        ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▼        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    // другого игрока не видно под деревом
+    @Test
+    public void shouldOtherTankMove_underTree() {
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼˄        ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    // даже если в сеттингах сказано что меня видно под деревьями,
+    // другого танка я не вижу все равно
+    @Test
+    public void shouldOtherTankMove_underTree_caseShowMyTankUnderTree() {
+        settings.bool(SHOW_MY_TANK_UNDER_TREE, true);
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼˄        ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼˄        ☼\n" +
+                "☼%        ☼\n" +
+                "☼%        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    // под деревом не видно так же и ботов белых
     @Test
     public void shouldAITankMove_underTree() {
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -4403,8 +4897,12 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
+    // два танка не могут проехать друг через друга под деревьями
+    // но мой танк видно - так сказано в настройках
     @Test
-    public void shouldTwoTankCanPassThroughEachOtherUnderTree() {
+    public void shouldTwoTankCanPassThroughEachOtherUnderTree_caseShowMyTankUnderTree() {
+        settings.bool(SHOW_MY_TANK_UNDER_TREE, true);
+        
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
@@ -4455,7 +4953,61 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-	// 2. Лёд
+    // два танка не могут проехать друг через друга под деревьями
+    // но мой танк видно - так сказано в настройках
+    @Test
+    public void shouldTwoTankCanPassThroughEachOtherUnderTree() {
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼%    ☼\n" +
+                "☼%    ☼\n" +
+                "☼˄    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).down();
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼%    ☼\n" +
+                "☼%    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).down();
+        hero(1).up();
+        game.tick();
+
+        hero(0).down();
+        game.tick();
+
+        hero(1).up();
+        // Два танка не могут проехать через друг друга
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼%    ☼\n" +
+                "☼%    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).right();
+        hero(1).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼%►   ☼\n" +
+                "☼%˃   ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+	// Лёд
     @Test
     public void shouldBeWallIce_whenGameCreated() {
         givenFl("☼☼☼☼☼☼☼\n" +
@@ -4477,7 +5029,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    // 2.1) когда герой двигается по льду, происходит скольжение
+    // когда герой двигается по льду, происходит скольжение
     // (он проскальзывает одну команду).
     // Если только заезжаем - то сразу же начинается занос,
     // то есть запоминается команда которой заезжали на лед
@@ -4666,7 +5218,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    //2.2) также когда на нем двигается враг он проскальзывает команду на два тика
+    // также когда на нем двигается враг он проскальзывает команду на два тика
     @Test
     public void shouldOtherTankMoveLeftThenUpThenDown_onIce() {
         settings.integer(SLIPPERINESS, 1);
@@ -4749,9 +5301,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    //2.3) также когда на нем двигается бот он проскальзывает команду на два тика
-
-    //3. Река
+    // Река
     @Test
     public void shouldBeWallWater_whenGameCreated() {
         givenFl("☼☼☼☼☼☼☼\n" +
@@ -4773,7 +5323,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-	// 3.1) река - через нее герою нельзя пройти. но можно стрелять
+	// река - через нее герою нельзя пройти. но можно стрелять
 	@Test
 	public void shouldTankCanGoIfRiverAtWay() {
         givenFl("☼☼☼☼☼☼☼\n" +
@@ -4909,7 +5459,7 @@ public class GameTest {
 				"☼☼☼☼☼☼☼\n");
     }
 
-    // 3.2) река - через нее врагу нельзя пройти. но можно стрелять
+    // река - через нее врагу нельзя пройти. но можно стрелять
     @Test
     public void shouldOtherTankBullet_canGoIfRiverAtWay() {
         givenFl("☼☼☼☼☼☼☼\n" +
@@ -5012,7 +5562,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    // 3.3) река - через нее боту нельзя пройти. но можно стрелять
+    // река - через нее боту нельзя пройти. но можно стрелять
     @Test
     public void shouldAITankBullet_canGoIfRiverAtWay() {
         givenFl("☼☼☼☼☼☼☼\n" +
@@ -5953,8 +6503,8 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    // приз над кустами должен исчезнуть через 2 тика, если его не подобрали
-    // после исчезновения приза видим кусты
+    // приз над деревом должен исчезнуть через 2 тика, если его не подобрали
+    // после исчезновения приза видим дерево
     @Test
     public void shouldExpirePrizeOnField_disappearOnTree() {
         settings.integer(KILL_HITS_AI_PRIZE, 1)
@@ -6234,6 +6784,74 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
+    // герой берет приз под деревом - когда его видно под деревьями 
+    @Test
+    public void shouldHeroTookPrize_underTree_caseShowMyTankUnderTree() {
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3)
+                .bool(SHOW_MY_TANK_UNDER_TREE, true);
+
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼%%   ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).down();
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼%%   ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+        dice(DICE_IMMORTALITY);
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼1%   ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        events.verifyNoEvents();
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲%   ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertPrize(hero(0), "[PRIZE_IMMORTALITY]");
+        events.verifyAllEvents("listener(0) => [CATCH_PRIZE[1]]\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼%%   ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // герой берет приз под деревом - когда его не видно под деревьями 
     @Test
     public void shouldHeroTookPrize_underTree() {
         settings.integer(KILL_HITS_AI_PRIZE, 1)
@@ -6279,7 +6897,7 @@ public class GameTest {
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼▲%   ☼\n" +
+                "☼%%   ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
