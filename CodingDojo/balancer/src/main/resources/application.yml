@@ -20,7 +20,7 @@ sender:
     pool.size: 100
 
 game:
-  type: battlecity
+  type: bomberman
   servers: localhost:8080
   schema: http
   basic-auth-user: admin@codenjoyme.com
