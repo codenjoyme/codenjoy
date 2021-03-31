@@ -26,7 +26,6 @@ import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.spacerace.services.Events;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
 
@@ -335,8 +334,8 @@ public class Spacerace implements Field {
     }
 
     @Override
-    public Point getFreeRandom() {
-        return BoardUtils.getFreeRandom(
+    public Optional<Point> freeRandom() {
+        return BoardUtils.freeRandom(
                 () -> dice.next(size),
                 () -> dice.next(4),
                 pt -> isFree(pt));

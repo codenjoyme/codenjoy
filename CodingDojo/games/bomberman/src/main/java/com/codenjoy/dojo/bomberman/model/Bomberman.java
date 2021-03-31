@@ -38,7 +38,6 @@ import java.util.*;
 
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BIG_BADABOOM;
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BOARD_SIZE;
-import static com.codenjoy.dojo.services.BoardUtils.NO_SPACE;
 import static java.util.stream.Collectors.toList;
 
 public class Bomberman extends RoundField<Player> implements Field {
@@ -92,9 +91,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     @Override
     public Optional<Point> freeRandom() {
-        // TODO запихунить Optional в BoardUtils.getFreeRandom
-        Point result = BoardUtils.getFreeRandom(size(), dice, pt -> isFree(pt));
-        return result.equals(NO_SPACE) ? Optional.empty() : Optional.of(result);
+        return BoardUtils.freeRandom(size(), dice, pt -> isFree(pt));
     }
 
     @Override

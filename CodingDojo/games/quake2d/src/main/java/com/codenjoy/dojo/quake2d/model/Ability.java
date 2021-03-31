@@ -31,37 +31,41 @@ public class Ability extends PointImpl implements State<Elements, Player> {
     public static final int HEALTH_BONUS = 30;
     enum Type {WEAPON, DEFENCE, HEALTH}
 
-    private Type abilityType;
+    private Type type;
 
-    public Ability(int x, int y, Dice dice) {
-        super(x, y);
+    public Ability(Point pt, Dice dice) {
+        super(pt);
         int randomChoice = dice.next(Type.values().length);
         for (Type elem : Type.values()){
             if (elem.ordinal() == randomChoice){
-                abilityType = elem;
+                type = elem;
             }
         }
     }
 
-    public Ability(Point point, Type abilityType) {
-        super(point);
-        this.abilityType = abilityType;
+    public Ability(Point pt, Type type) {
+        super(pt);
+        this.type = type;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (abilityType == Type.WEAPON){
-            return Elements.SUPER_ATTACK;
+        if (type == Type.WEAPON){
+            return Elements.SUPER_WEAPON;
         }
 
-        if (abilityType == Type.DEFENCE) {
+        if (type == Type.DEFENCE) {
             return Elements.SUPER_DEFENCE;
         }
 
-        return Elements.HEALTH_PACKAGE;
+        if (type == Type.HEALTH) {
+            return Elements.HEALTH_PACKAGE;
+        }
+
+        throw new RuntimeException("Unknown ability type: " + type);
     }
 
-    public Type getAbilityType() {
-        return abilityType;
+    public Type getType() {
+        return type;
     }
 }

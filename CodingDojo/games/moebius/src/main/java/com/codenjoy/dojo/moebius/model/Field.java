@@ -26,9 +26,11 @@ package com.codenjoy.dojo.moebius.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
+import java.util.Optional;
+
 public interface Field extends GameField<Player> {
 
-    Point getFreeRandom();
+    Optional<Point> freeRandom();
 
     boolean isFree(Point pt);
 

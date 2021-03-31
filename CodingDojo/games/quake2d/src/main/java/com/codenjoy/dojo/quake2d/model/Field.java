@@ -26,11 +26,13 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
+import java.util.Optional;
+
 public interface Field extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 
-    Point getFreeRandom();
+    Optional<Point> freeRandom();
 
     boolean isFree(Point pt);
 

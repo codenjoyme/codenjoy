@@ -43,7 +43,7 @@ public class Bullet extends PointImpl implements Tickable, State<Elements, Playe
     public Bullet(int x, int y, Direction direction, Field field, Hero hero) {
         super(x, y);
         this.direction = direction;
-        this.damage = ((hero.getAbility() != null && hero.getAbility().getAbilityType() == Ability.Type.WEAPON) ? START_DAMAGE*WEAPON_MULTIPLICATOR : START_DAMAGE);
+        this.damage = ((hero.getAbility() != null && hero.getAbility().getType() == Ability.Type.WEAPON) ? START_DAMAGE*WEAPON_MULTIPLICATOR : START_DAMAGE);
 
         this.field = field;
     }

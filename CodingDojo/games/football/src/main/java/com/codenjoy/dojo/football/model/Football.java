@@ -32,13 +32,12 @@ import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-import static com.codenjoy.dojo.services.BoardUtils.NO_SPACE;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Football implements Field {
@@ -132,16 +131,9 @@ public class Football implements Field {
     }
 
     @Override
-    public Point getFreeRandomOnMyHalf(Player player) {
-        Point result = BoardUtils.getFreeRandom(size, dice,
-                pt -> isFreeAndOnMyHalf(pt, player));
-
-        if (!result.equals(NO_SPACE)) {
-            return result;
-        }
-
-        return BoardUtils.getFreeRandom(size, dice,
-                pt -> isFree(pt));
+    public Optional<Point> freeRandom(Player player) {
+        return BoardUtils.freeRandom(size, dice, pt -> isFreeAndOnMyHalf(pt, player))
+                .or(() -> BoardUtils.freeRandom(size, dice, pt -> isFree(pt)));
     }
 
     private boolean isFreeAndOnMyHalf(Point pt, Player player) {

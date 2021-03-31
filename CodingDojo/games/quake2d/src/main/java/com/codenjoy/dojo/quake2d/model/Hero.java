@@ -165,7 +165,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void setAbility(Ability pAbility) {
-        if (pAbility.getAbilityType() == Ability.Type.HEALTH){
+        if (pAbility.getType() == Ability.Type.HEALTH){
             health = Math.min(START_HEALTH, health+Ability.HEALTH_BONUS);
         } else {
             ability = pAbility;
@@ -186,7 +186,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void setDamage(int pDamage) {
-        health -= ((ability != null && ability.getAbilityType() == Ability.Type.DEFENCE) ? pDamage/DEFFENCE_MULTIPLICATOR : pDamage);
+        health -= ((ability != null && ability.getType() == Ability.Type.DEFENCE) ? pDamage/DEFFENCE_MULTIPLICATOR : pDamage);
         health = Math.max(0, health);
     }
 }

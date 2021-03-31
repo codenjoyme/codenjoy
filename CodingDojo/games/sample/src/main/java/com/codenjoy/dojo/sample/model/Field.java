@@ -26,6 +26,8 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
+import java.util.Optional;
+
 /**
  * Так случилось что доска знает про героя, а герой про доску.
  * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
@@ -34,7 +36,7 @@ public interface Field extends GameField<Player> {
 
     boolean isBarrier(Point pt);
 
-    Point freeRandom();
+    Optional<Point> freeRandom();
 
     boolean isFree(Point pt);
 

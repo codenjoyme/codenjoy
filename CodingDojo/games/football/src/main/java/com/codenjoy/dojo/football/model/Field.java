@@ -26,6 +26,8 @@ import com.codenjoy.dojo.football.model.elements.Ball;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
+import java.util.Optional;
+
 public interface Field extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
@@ -34,7 +36,7 @@ public interface Field extends GameField<Player> {
     
     boolean isWall(int x, int y);
 
-    Point getFreeRandomOnMyHalf(Player player);
+    Optional<Point> freeRandom(Player player);
 
     boolean isFree(Point pt);
 

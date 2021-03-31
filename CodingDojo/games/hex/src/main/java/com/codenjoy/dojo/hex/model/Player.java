@@ -32,12 +32,7 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import java.util.Optional;
 
 public class Player extends GamePlayer<Hero, Field> implements Tickable {
 
@@ -68,8 +63,12 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
     @Override
     public void newHero(Field field) {
         this.field = field;
-        Point pt = field.getFreeRandom();
-        Hero hero = new Hero(pt, element);
+        Optional<Point> pt = field.freeRandom();
+        if (pt.isEmpty()) {
+            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
+            throw new RuntimeException("Not enough space for Hero");
+        }
+        Hero hero = new Hero(pt.get(), element);
         hero.init(field);
         heroes.clear();
         heroes.add(hero, this);

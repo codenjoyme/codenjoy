@@ -24,12 +24,16 @@ package com.codenjoy.dojo.quake2d.model;
 
 import com.codenjoy.dojo.quake2d.services.Events;
 import com.codenjoy.dojo.quake2d.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.BoardUtils;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -82,8 +86,10 @@ public class Quake2D implements Field {
             counterOfAbility--;
         }
         if (abilities.isEmpty() && counterOfAbility == 0){
-            Point pos = getFreeRandom();
-            abilities.add(new Ability(pos.getX(), pos.getY(), dice));
+            Optional<Point> pos = freeRandom();
+            if (pos.isPresent()) {
+                abilities.add(new Ability(pos.get(), dice));
+            }
         }
     }
 
@@ -154,8 +160,8 @@ public class Quake2D implements Field {
     }
 
     @Override
-    public Point getFreeRandom() {
-        return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
+    public Optional<Point> freeRandom() {
+        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
     }
 
     @Override

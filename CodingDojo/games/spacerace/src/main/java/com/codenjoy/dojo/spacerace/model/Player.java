@@ -23,8 +23,11 @@ package com.codenjoy.dojo.spacerace.model;
  */
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
+
+import java.util.Optional;
 
 public class Player extends GamePlayer<Hero, Field> {
 
@@ -49,7 +52,15 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        hero = new Hero(field.getFreeRandom(), field.getCharger());
+        if (hero != null) {
+            hero = null;
+        }
+        Optional<Point> pt = field.freeRandom();
+        if (pt.isEmpty()) {
+            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
+            throw new RuntimeException("Not enough space for Hero");
+        }
+        hero = new Hero(pt.get(), field.getCharger());
         hero.init(field);
     }
 

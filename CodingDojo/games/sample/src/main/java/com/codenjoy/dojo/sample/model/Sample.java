@@ -37,7 +37,10 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
+import static java.util.function.Predicate.*;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -82,8 +85,10 @@ public class Sample implements Field {
                 gold.remove(hero);
                 player.event(Events.WIN);
 
-                Point pos = freeRandom();
-                gold.add(new Gold(pos));
+                Optional<Point> pos = freeRandom();
+                if (pos.isPresent()) {
+                    gold.add(new Gold(pos.get()));
+                }
             }
         }
 
@@ -114,8 +119,8 @@ public class Sample implements Field {
     }
 
     @Override
-    public Point freeRandom() {
-        return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
+    public Optional<Point> freeRandom() {
+        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
     }
 
     @Override
@@ -150,6 +155,7 @@ public class Sample implements Field {
     public List<Hero> getHeroes() {
         return players.stream()
                 .map(Player::getHero)
+                .filter(not(Objects::isNull))
                 .collect(toList());
     }
 

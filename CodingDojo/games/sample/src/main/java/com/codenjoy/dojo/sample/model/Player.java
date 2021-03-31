@@ -25,7 +25,10 @@ package com.codenjoy.dojo.sample.model;
 
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+
+import java.util.Optional;
 
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки.
@@ -45,7 +48,15 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        hero = new Hero(field.freeRandom());
+        if (hero != null) {
+            hero = null;
+        }
+        Optional<Point> pt = field.freeRandom();
+        if (pt.isEmpty()) {
+            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
+            throw new RuntimeException("Not enough space for Hero");
+        }
+        hero = new Hero(pt.get());
         hero.init(field);
     }
 

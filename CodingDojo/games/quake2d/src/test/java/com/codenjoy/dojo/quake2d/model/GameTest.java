@@ -23,21 +23,20 @@ package com.codenjoy.dojo.quake2d.model;
  */
 
 import com.codenjoy.dojo.quake2d.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GameTest {
 
@@ -73,6 +72,7 @@ public class GameTest {
         game = new Quake2D(level, dice, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
+        dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
         game.newGame(player);
         player.hero = hero;
         hero.init(game);
@@ -476,9 +476,8 @@ public class GameTest {
                 "☼☼☼☼☼");
 
 
+        dice(3, 3, Ability.Type.WEAPON.ordinal());
         makeTicks(Quake2D.ABILITY_TIME_EXIST);
-        ability = game.getAbilities().get(0);
-        ability.move(3, 3);
 
         assertE("☼☼☼☼☼" +
                 "☼  ~☼" +
@@ -496,9 +495,8 @@ public class GameTest {
                 "☼☼☼☼☼");
 
 
+        dice(3, 3, Ability.Type.DEFENCE.ordinal());
         makeTicks(Quake2D.ABILITY_TIME_EXIST);
-        ability = game.getAbilities().get(0);
-        ability.move(3, 3);
         player.hero.up();
         game.tick();
         player.hero.right();
@@ -509,7 +507,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
-        Assert.assertNotNull(player.hero.getAbility());
+        assertNotNull(player.hero.getAbility());
     }
 
     private void makeTicks(int count){
@@ -526,8 +524,9 @@ public class GameTest {
                 "☼    ☼" +
                 "☼ ☺  ☼" +
                 "☼☼☼☼☼☼");
+
+        dice(2, 2, Ability.Type.WEAPON.ordinal());
         makeTicks(Quake2D.ABILITY_TIME_EXIST);
-        game.getAbilities().get(0).move(2, 2);
         hero.up();
         game.tick();
         assertE("☼☼☼☼☼☼" +
@@ -557,7 +556,7 @@ public class GameTest {
                 "☼ ☺  ☼" +
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
-        Assert.assertEquals(otherPlayer.hero.getHealth(), Hero.START_HEALTH - Bullet.START_DAMAGE*Bullet.WEAPON_MULTIPLICATOR);
+        assertEquals(otherPlayer.hero.getHealth(), Hero.START_HEALTH - Bullet.START_DAMAGE*Bullet.WEAPON_MULTIPLICATOR);
 //
 //        game.tick();
 //        otherHero.move(4, 3);
@@ -580,11 +579,8 @@ public class GameTest {
                 "☼☼☼☼☼");
 
 
+        dice(3, 3, Ability.Type.HEALTH.ordinal());
         makeTicks(Quake2D.ABILITY_TIME_EXIST);
-        ability = game.getAbilities().get(0);
-        game.getAbilities().add(0, new Ability(pt(3, 3), Ability.Type.HEALTH));
-
-        ability.move(3, 3);
         player.hero.up();
         game.tick();
         player.hero.setHealth(-(Bullet.START_DAMAGE + Ability.HEALTH_BONUS));
@@ -596,7 +592,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
-        Assert.assertEquals(Hero.START_HEALTH - Bullet.START_DAMAGE + (Ability.HEALTH_BONUS - Ability.HEALTH_BONUS), player.hero.getHealth());
+        assertEquals(Hero.START_HEALTH - Bullet.START_DAMAGE + (Ability.HEALTH_BONUS - Ability.HEALTH_BONUS), player.hero.getHealth());
     }
 
     @Test

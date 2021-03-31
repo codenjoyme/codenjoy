@@ -76,6 +76,7 @@ public class GameTest {
         game = new Football(level, dice, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
+        dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
         game.newGame(player);
         player.hero = hero;
         hero.init(game);

@@ -173,7 +173,7 @@ public class SmokeTest {
                     "10: 1:╔═══╝\n" +
                     "10: 1:\n" +
                     "10: 1:Scores: 0\n" +
-                    "10: 1:Answer: \n" +
+                    "10: 1:Answer:\n" +
                     "10: 1:Fire Event: GAME_OVER\n" +
                     "------------------------------------------\n" +
                     "11: 1:╔═══╗\n" +
@@ -183,7 +183,7 @@ public class SmokeTest {
                     "11: 1:╔═══╝\n" +
                     "11: 1:\n" +
                     "11: 1:Scores: 0\n" +
-                    "11: 1:Answer: \n" +
+                    "11: 1:Answer:\n" +
                     "11: 1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                     "------------------------------------------",
                 String.join("\n", messages));

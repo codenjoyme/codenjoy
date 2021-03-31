@@ -79,7 +79,7 @@ public class LevelImpl implements Level {
     public List<Ability> getAbility() {
         List<Ability> result = new LinkedList<Ability>();
 
-        for (Point pt : getPointsOf(Elements.SUPER_ATTACK)) {
+        for (Point pt : getPointsOf(Elements.SUPER_WEAPON)) {
             result.add(new Ability(pt, Ability.Type.WEAPON));
         }
         for (Point pt : getPointsOf(Elements.SUPER_DEFENCE)) {

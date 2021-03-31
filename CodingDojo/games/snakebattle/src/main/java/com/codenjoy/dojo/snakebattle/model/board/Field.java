@@ -28,11 +28,13 @@ import com.codenjoy.dojo.services.round.RoundGameField;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 
+import java.util.Optional;
+
 public interface Field extends RoundGameField<Player> {
 
     boolean isBarrier(Point p);
 
-    Point freeRandom();
+    Optional<Point> freeRandom();
 
     Point getFreeStart();
 

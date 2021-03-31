@@ -22,10 +22,8 @@ package com.codenjoy.dojo.quake2d.client.ai;
  * #L%
  */
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.quake2d.client.Board;
 import com.codenjoy.dojo.quake2d.model.Elements;
 import com.codenjoy.dojo.services.*;
@@ -91,7 +89,7 @@ public class AISolver implements Solver<Board> {
         Point from = board.getMe();
 
         List<Point> to_OtherHero = board.get(Elements.OTHER_HERO);
-        List<Point> to_Abilities = board.get(Elements.SUPER_ATTACK);
+        List<Point> to_Abilities = board.get(Elements.SUPER_WEAPON);
         to_Abilities.addAll(board.get(Elements.SUPER_DEFENCE));
         to_Abilities.addAll(board.get(Elements.HEALTH_PACKAGE));
         List<Point> to_Walls = board.get(Elements.WALL);
@@ -143,7 +141,7 @@ public class AISolver implements Solver<Board> {
 //    }
 
     private Map<Elements, Integer> getDestinationToObject(Board board, int pSize, Point pFrom) {
-        Elements[] analyzeElements = {Elements.OTHER_HERO, Elements.SUPER_ATTACK, Elements.SUPER_DEFENCE,
+        Elements[] analyzeElements = {Elements.OTHER_HERO, Elements.SUPER_WEAPON, Elements.SUPER_DEFENCE,
                                       Elements.HEALTH_PACKAGE, Elements.BULLET};
         Map<Elements, Integer> variantsWays = new HashMap<>(analyzeElements.length);
         DeikstraFindWay.Possible map = possible(board);
