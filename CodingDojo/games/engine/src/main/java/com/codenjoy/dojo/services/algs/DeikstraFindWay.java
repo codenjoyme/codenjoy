@@ -122,11 +122,10 @@ public class DeikstraFindWay {
     }
 
     private static class Vector implements Comparable<Vector> {
-
-        Point to;
-        Point from;
-        Direction where;
-        double distance;
+        private Point to;
+        private Point from;
+        private Direction where;
+        private double distance;
 
         public Vector(Point from, Direction where, Point goal, int pathLength) {
             this.from = from;
@@ -165,44 +164,81 @@ public class DeikstraFindWay {
     }
 
     private class Status {
-        boolean was = false;
-        boolean[] directions = new boolean[4];
+        boolean[] goes = new boolean[4];
 
         public void add(Direction direction) {
-            directions[direction.value()] = true;
+            goes[direction.value()] = true;
         }
 
         public boolean done(Direction direction) {
-            boolean result = directions[direction.value()];
-            directions[direction.value()] = false;
+            boolean result = goes[direction.value()];
+            goes[direction.value()] = false;
             return result;
         }
 
         public boolean empty() {
-            return directions[LEFT.value()]
-                    && directions[RIGHT.value()]
-                    && directions[UP.value()]
-                    && directions[DOWN.value()];
+            return goes[LEFT.value()]
+                    && goes[RIGHT.value()]
+                    && goes[UP.value()]
+                    && goes[DOWN.value()];
+        }
+    }
+
+    private class Points {
+        private Status[][] all;
+
+        public Points(int size) {
+            all = new Status[size][size];;
+        }
+
+        private Status set(Point pt, Status status) {
+            return all[pt.getX()][pt.getY()] = status;
+        }
+
+        private Status get(Point pt) {
+            return all[pt.getX()][pt.getY()];
+        }
+
+        public Status add(Point pt) {
+            return set(pt, new Status());
+        }
+
+        public boolean done(Vector next) {
+            return get(next.from).done(next.where);
+        }
+
+        public boolean isDone(Point pt) {
+            Status status = get(pt);
+            if (status == null) {
+                return false;
+            }
+
+            return status.empty();
+        }
+
+        public boolean isAdded(Point pt) {
+            return get(pt) != null;
         }
     }
 
     private class Vectors {
-        List<Vector> queue = new LinkedList<>();
-        Status[][] was;
+        private List<Vector> queue;
+        private Points points;
 
         public Vectors(int size) {
-             was = new Status[size][size];
+            queue = new LinkedList<>();
+            points = new Points(size);
         }
 
         public void add(List<Point> goals, Point from, int pathLength) {
             Point goal = goals.get(0); // TODO добавить все цели
             List<Direction> directions = ways().get(from);
-            Status status = new Status();
+            Status status = points.add(from);
             for (Direction direction : directions) {
                 status.add(direction);
                 queue.add(new Vector(from, direction, goal, pathLength));
             }
-            was[from.getX()][from.getY()] = status;
+
             Collections.sort(queue);
         }
 
@@ -214,7 +250,7 @@ public class DeikstraFindWay {
             Vector next = null;
             while (!queue.isEmpty()) {
                 next = queue.remove(0);
-                if (was[next.from.getX()][next.from.getY()].done(next.where)) {
+                if (points.done(next)) {
                     break;
                 }
             }
@@ -222,17 +258,11 @@ public class DeikstraFindWay {
         }
 
         public boolean processed(Point from) {
-            Status status = was[from.getX()][from.getY()];
-            if (status == null) {
-                return false;
-            }
-
-            return status.empty();
+            return points.isDone(from);
         }
 
         public boolean wasHere(Point from) {
-            Status status = was[from.getX()][from.getY()];
-            return status != null && status.was;
+            return points.isAdded(from);
         }
     }
 
