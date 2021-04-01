@@ -147,24 +147,10 @@ public class DeikstraFindWay {
         public int compareTo(Vector o) {
             return Integer.compare(rating, o.rating);
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Vector vector = (Vector) o;
-            return Objects.equals(from, vector.from) &&
-                    where == vector.where;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(from, where);
-        }
     }
 
     private class Status {
-        boolean[] goes = new boolean[4];
+        private boolean[] goes = new boolean[4];
 
         public void add(Direction direction) {
             goes[direction.value()] = true;
