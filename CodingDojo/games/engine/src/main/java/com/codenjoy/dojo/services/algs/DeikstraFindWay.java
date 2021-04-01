@@ -149,7 +149,7 @@ public class DeikstraFindWay {
         }
     }
 
-    private class Status {
+    private static class Status {
         private boolean[] goes = new boolean[4];
 
         public void add(Direction direction) {
@@ -170,7 +170,7 @@ public class DeikstraFindWay {
         }
     }
 
-    private class Points {
+    private static class Points {
         private Status[][] all;
 
         public Points(int size) {
@@ -207,12 +207,35 @@ public class DeikstraFindWay {
         }
     }
 
+    private static class SortedVectors extends LinkedList<Vector> {
+        @Override
+        public boolean add(Vector vector) {
+            if (isEmpty()) {
+                super.add(vector);
+                return true;
+            }
+            ListIterator<Vector> iterator = listIterator();
+            boolean added = false;
+            while (iterator.hasNext()) {
+                if (iterator.next().rating > vector.rating) {
+                    add(iterator.previousIndex(), vector);
+                    added = true;
+                    break;
+                }
+            }
+            if (!added) {
+                super.add(vector);
+            }
+            return true;
+        }
+    }
+
     private class Vectors {
         private List<Vector> queue;
         private Points points;
 
         public Vectors(int size) {
-            queue = new LinkedList<>();
+            queue = new SortedVectors();
             points = new Points(size);
         }
 
@@ -224,8 +247,6 @@ public class DeikstraFindWay {
                 status.add(direction);
                 queue.add(new Vector(from, direction, goal, pathLength));
             }
-
-            Collections.sort(queue);
         }
 
         public boolean isEmpty() {
@@ -235,12 +256,16 @@ public class DeikstraFindWay {
         public Vector next() {
             Vector next = null;
             while (!queue.isEmpty()) {
-                next = queue.remove(0);
+                next = get();
                 if (points.done(next)) {
                     break;
                 }
             }
             return next;
+        }
+
+        public Vector get() {
+            return queue.remove(0);
         }
 
         public boolean processed(Point from) {
@@ -260,7 +285,6 @@ public class DeikstraFindWay {
         }
 
         Vectors vectors = new Vectors(size);
-
         vectors.add(inputGoals, from, 0);
         Vector current;
         while (!goals.isEmpty() && (current = vectors.next()) != null) {
