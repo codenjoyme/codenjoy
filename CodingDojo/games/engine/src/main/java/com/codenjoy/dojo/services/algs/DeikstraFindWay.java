@@ -190,7 +190,7 @@ public class DeikstraFindWay {
             } else {
                 // do nothing
             }
-            goals.remove(current);
+            goals.remove(current.from);
             current = null;
         } while (!(queue.isEmpty() || goals.isEmpty()));
 
