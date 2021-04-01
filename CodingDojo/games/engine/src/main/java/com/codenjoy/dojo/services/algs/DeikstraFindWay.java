@@ -264,11 +264,8 @@ public class DeikstraFindWay {
         vectors.add(inputGoals, from, 0);
         Vector current;
         while (!goals.isEmpty() && (current = vectors.next()) != null) {
-
-            List<Direction> before = path.get(current.from);
-
             if (vectors.wasHere(current.to)) continue;
-
+            List<Direction> before = path.get(current.from);
             List<Direction> directions = path.get(current.to);
             if (before.size() < directions.size() - 1) {
                 // мы нашли более короткий путь,
