@@ -32,7 +32,7 @@ Java version: 1.x.x_x, vendor: Oracle Corporation
 Java home: C:\java\jdk1.x.x_xx\jre
 Default locale: xxxxx, platform encoding: xxxxxxx
 OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
-C:\Users\user>`
+C:\Users\user>
 ```
 - download and install [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
 - install [Lombok plugin](https://plugins.jetbrains.com/plugin/6317-lombok) for idea
