@@ -213,11 +213,8 @@ public class DeikstraFindWay {
 
         vectors.add(inputGoals, from);
         Vector current;
-        do {
-            current = vectors.next();
-            if (current == null) {
-                break;
-            }
+        while (!goals.isEmpty() && (current = vectors.next()) != null) {
+
             List<Direction> before = path.get(current.from);
 
             List<Direction> directions = path.get(current.to);
@@ -239,8 +236,7 @@ public class DeikstraFindWay {
                 // do nothing
             }
             goals.remove(current.from);
-            current = null;
-        } while (!(vectors.isEmpty() || goals.isEmpty()));
+        }
 
         return path;
     }
