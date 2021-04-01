@@ -27,10 +27,11 @@ import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.algs.DeikstraFindWay;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -351,7 +352,6 @@ public class AISolverTest {
                 "[RIGHT, RIGHT, UP, UP, RIGHT]");
     }
 
-    // TODO вот этот ассерт, вместе с ассертами Dei
     /**
      * Проверяет куда вообще можно походить из каждой клетки
      * @param boardString поле
@@ -363,33 +363,12 @@ public class AISolverTest {
         solver.getDirections(board);
         Map<Point, List<Direction>> possibleWays = solver.getWay().getBasic();
 
-        char[][] chars = new char[board.size() * 3][board.size() * 3];
-        for (int x = 0; x < chars.length; x++) {
-            Arrays.fill(chars[x], ' ');
-        }
+        String actual = TestUtils.drawPossibleWays(
+                possibleWays,
+                board.size(),
+                pt -> board.getAt(pt).getChar());
 
-        for (int x = 0; x < board.size(); x++) {
-            for (int y = 0; y < board.size(); y++) {
-                int cx = x * 3 + 1;
-                int cy = y * 3 + 1;
-
-                char ch = board.getAt(x, y).getChar();
-                chars[cx][cy] = (ch == ' ') ? '*' : ch;
-                for (Direction direction : possibleWays.get(pt(x, y))) {
-                    chars[direction.changeX(cx)][direction.changeY(cy)] = '+';
-                }
-            }
-        }
-
-        StringBuffer buffer = new StringBuffer();
-        for (int x = 0; x < chars.length; x++) {
-            for (int y = 0; y < chars.length; y++) {
-                buffer.append(chars[y][chars.length - 1 - x]);
-            }
-            buffer.append('\n');
-        }
-
-        assertEquals(expected, buffer.toString());
+        assertEquals(expected, actual);
     }
 
     /**
@@ -401,10 +380,11 @@ public class AISolverTest {
     private void assertB(String boardString, Point from, String expected) {
         Board board = (Board) new Board().forString(boardString);
         AISolver solver = new AISolver(dice);
+        DeikstraFindWay.Possible possible = solver.possible(board);
+
         List<Direction> actual = new LinkedList<>();
-        for (Direction direction : Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT)) {
-            boolean possible = solver.possible(board).check(board.size(), from, direction);
-            if (possible) {
+        for (Direction direction : Direction.getValues()) {
+            if (possible.check(board.size(), from, direction)) {
                 actual.add(direction);
             }
         }
@@ -419,6 +399,7 @@ public class AISolverTest {
     private void assertC(String boardString, String expected) {
         Board board = (Board) new Board().forString(boardString);
         List<Direction> command = new AISolver(dice).getDirections(board);
+
         assertEquals(expected, command.toString());
     }
 }

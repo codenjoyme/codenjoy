@@ -210,7 +210,6 @@ public class AITest {
                 "[3,1]=[UP, LEFT],\n" +
                 "[3,2]=[UP, DOWN, LEFT],\n" +
                 "[3,3]=[DOWN, LEFT]}");
-
     }
 
     @Test

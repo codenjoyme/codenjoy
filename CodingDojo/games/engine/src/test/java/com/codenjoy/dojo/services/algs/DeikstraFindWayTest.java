@@ -43,10 +43,10 @@ public class DeikstraFindWayTest {
     public void testFindShortestWay() {
         asrtWay("XXXXXXX\n" +
                 "XS    X\n" +
-                "X*    X\n" +
-                "X*    X\n" +
-                "X*    X\n" +
-                "X****FX\n" +
+                "X**   X\n" +
+                "X **  X\n" +
+                "X  ** X\n" +
+                "X   *FX\n" +
                 "XXXXXXX\n");
     }
 
@@ -110,17 +110,17 @@ public class DeikstraFindWayTest {
         asrtWay("XXXXXXX\n" +
                 "XS    X\n" +
                 "X**   X\n" +
-                "XO*   X\n" +
-                "X *   X\n" +
-                "X ***FX\n" +
+                "XO**  X\n" +
+                "X  ** X\n" +
+                "X   *FX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
                 "XS    X\n" +
                 "X**   X\n" +
                 "XO**  X\n" +
-                "X O*  X\n" +
-                "X  **FX\n" +
+                "X O** X\n" +
+                "X   *FX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
@@ -134,6 +134,30 @@ public class DeikstraFindWayTest {
         asrtWay("XXXXXXX\n" +
                 "XS    X\n" +
                 "X**** X\n" +
+                "XO O* X\n" +
+                "X O **X\n" +
+                "X   OFX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS**  X\n" +
+                "X O*  X\n" +
+                "XO *O X\n" +
+                "X O***X\n" +
+                "X   OFX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS    X\n" +
+                "X*O   X\n" +
+                "X***O X\n" +
+                "X O***X\n" +
+                "X   OFX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS*** X\n" +
+                "X  O* X\n" +
                 "XO O* X\n" +
                 "X O **X\n" +
                 "X   OFX\n" +
@@ -177,7 +201,8 @@ public class DeikstraFindWayTest {
 
     @Test
     public void testFindShortestWayWhenOnlyOneDirectionAllowed() {
-        String board = "XXXXXXX\n" +
+        String board =
+                "XXXXXXX\n" +
                 "XS˅F˂OX\n" +
                 "X˃˅O˄OX\n" +
                 "XO˅O˄OX\n" +
@@ -200,8 +225,8 @@ public class DeikstraFindWayTest {
 
         asrtWay(board,
                 "XXXXXXX\n" +
-                "XS˅F*OX\n" +
-                "X**O*OX\n" +
+                "XS*F*OX\n" +
+                "X˃*O*OX\n" +
                 "XO*O*OX\n" +
                 "XO***OX\n" +
                 "XOOOOOX\n" +
@@ -334,53 +359,19 @@ public class DeikstraFindWayTest {
     }
 
     private void asrtWay(String map, String expected) {
-        AbstractBoard board = new AbstractBoard() {
-            @Override
-            public Elements valueOf(char ch) {
-                return Elements.valueOf(ch);
-            }
-
-            @Override
-            protected int inversionY(int y) {
-                return size - 1 - y;
-            }
-        };
-
         assertEquals(expected,
                 TestUtils.printWay(map,
                         START, FINISH,
                         NONE, WAY,
-                        board,
-                        b -> getPossible(b)));
+                        Elements::valueOf,
+                        this::getPossible));
     }
 
-    // TODO to use in AITest
-    private void assertP(String map, String expected) {
-        AbstractBoard board = new AbstractBoard() {
-            @Override
-            public Elements valueOf(char ch) {
-                return Elements.valueOf(ch);
-            }
-
-            @Override
-            protected int inversionY(int y) {
-                return size - 1 - y;
-            }
-        };
-
-        board = (AbstractBoard) board.forString(map);
-
-        Map<Point, List<Direction>> ways = new DeikstraFindWay().getPossibleWays(board.size(), getPossible(board));
-
-        Map<Point, List<Direction>> result = new TreeMap<>();
-        for (Map.Entry<Point, List<Direction>> entry : ways.entrySet()) {
-            List<Direction> value = entry.getValue();
-            if (!value.isEmpty()) {
-                result.put(entry.getKey(), value);
-            }
-        }
-
-        assertEquals(expected, result.toString().replace("], [", "],\n["));
+    private void assertP(String inputBoard, String expected) {
+        assertEquals(expected,
+                TestUtils.getWay(inputBoard,
+                        Elements::valueOf,
+                        this::getPossible));
     }
 
     private <T extends AbstractBoard> DeikstraFindWay.Possible getPossible(T board) {

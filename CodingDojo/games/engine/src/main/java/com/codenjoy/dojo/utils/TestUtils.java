@@ -36,9 +36,14 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Settings;
 import lombok.experimental.UtilityClass;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 @UtilityClass
 public class TestUtils {
@@ -74,12 +79,77 @@ public class TestUtils {
         return game;
     }
 
+    public static String getWay(String inputBoard,
+                                Function<Character, CharElements> elements,
+                                Function<AbstractBoard, DeikstraFindWay.Possible> possible)
+    {
+        AbstractBoard board = getBoard(elements);
+        board = (AbstractBoard) board.forString(inputBoard);
+
+        Map<Point, List<Direction>> ways = new DeikstraFindWay().getPossibleWays(board.size(), possible.apply(board));
+
+        Map<Point, List<Direction>> map = new TreeMap<>();
+        for (Map.Entry<Point, List<Direction>> entry : ways.entrySet()) {
+            List<Direction> value = entry.getValue();
+            if (!value.isEmpty()) {
+                map.put(entry.getKey(), value);
+            }
+        }
+
+        return map.toString().replace("], [", "],\n[");
+    }
+
+    public static AbstractBoard getBoard(Function<Character, CharElements> elements) {
+        return new AbstractBoard() {
+                @Override
+                public CharElements valueOf(char ch) {
+                    return elements.apply(ch);
+                }
+
+                @Override
+                protected int inversionY(int y) {
+                    return size - 1 - y;
+                }
+            };
+    }
+
+    public static String drawPossibleWays(Map<Point, List<Direction>> possibleWays, int size, Function<Point, Character> getAt) {
+        char[][] chars = new char[size * 3][size * 3];
+        for (int x = 0; x < chars.length; x++) {
+            Arrays.fill(chars[x], ' ');
+        }
+
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                int cx = x * 3 + 1;
+                int cy = y * 3 + 1;
+
+                char ch = getAt.apply(pt(x, y));
+                chars[cx][cy] = (ch == ' ') ? '*' : ch;
+                for (Direction direction : possibleWays.get(pt(x, y))) {
+                    chars[direction.changeX(cx)][direction.changeY(cy)] = '+';
+                }
+            }
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        for (int x = 0; x < chars.length; x++) {
+            for (int y = 0; y < chars.length; y++) {
+                buffer.append(chars[y][chars.length - 1 - x]);
+            }
+            buffer.append('\n');
+        }
+
+        return buffer.toString();
+    }
+
     public static String printWay(String expected,
                                   CharElements from, CharElements to,
                                   CharElements none, CharElements wayChar,
-                                  AbstractBoard board,
+                                  Function<Character, CharElements> elements,
                                   Function<AbstractBoard, DeikstraFindWay.Possible> possible)
     {
+        AbstractBoard board = getBoard(elements);
         expected = expected.replace(wayChar.ch(), none.ch())
                     .replaceAll("\n", "");
         board = (AbstractBoard) board.forString(expected);
