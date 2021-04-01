@@ -40,3 +40,15 @@ canvas {
     margin-bottom:-5px;
 }
 
+#leaderboard label {
+    color: #ffffff;
+    background-color: #464547;
+    font-weight: normal;
+}
+
+#leaderboard label:hover {
+    text-decoration: none;
+    background-color: #464547;
+    font-weight: normal;
+}
+
