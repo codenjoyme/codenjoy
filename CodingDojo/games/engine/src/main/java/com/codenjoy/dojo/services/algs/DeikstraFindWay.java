@@ -155,6 +155,26 @@ public class DeikstraFindWay {
         }
     }
 
+    private class Vectors {
+        List<Vector> queue = new LinkedList<>();
+
+        public void add(List<Point> goals, Point from) {
+            Point goal = goals.get(0);
+            for (Direction direction : ways().get(from)) {
+                queue.add(new Vector(from, direction, goal));
+            }
+            Collections.sort(queue);
+        }
+
+        public boolean isEmpty() {
+            return queue.isEmpty();
+        }
+
+        public Vector next() {
+            return queue.remove(0);
+        }
+    }
+
     private Map<Point, List<Direction>> getPath(Point from, List<Point> inputGoals) {
         Set<Point> goals = new HashSet<>(inputGoals);
         Map<Point, List<Direction>> path = new HashMap<>();
@@ -162,16 +182,16 @@ public class DeikstraFindWay {
             path.put(point, new ArrayList<>(100));
         }
 
-        List<Vector> queue = new LinkedList<>();
+        Vectors vectors = new Vectors();
 
-        toProcess(inputGoals, from, queue);
+        vectors.add(inputGoals, from);
         Vector current = null;
         do {
             if (current == null) {
-                if (queue.isEmpty()) {
+                if (vectors.isEmpty()) {
                     break;
                 }
-                current = queue.remove(0);
+                current = vectors.next();
             }
             List<Direction> before = path.get(current.from);
 
@@ -187,23 +207,15 @@ public class DeikstraFindWay {
                 }
                 directions.add(current.where);
 
-                toProcess(inputGoals, current.to, queue);
+                vectors.add(inputGoals, current.to);
             } else {
                 // do nothing
             }
             goals.remove(current.from);
             current = null;
-        } while (!(queue.isEmpty() || goals.isEmpty()));
+        } while (!(vectors.isEmpty() || goals.isEmpty()));
 
         return path;
-    }
-
-    private void toProcess(List<Point> goals, Point from, List<Vector> queue) {
-        Point goal = goals.get(0);
-        for (Direction direction : ways().get(from)) {
-            queue.add(new Vector(from, direction, goal));
-        }
-        Collections.sort(queue);
     }
 
     private Map<Point, List<Direction>> ways() {
