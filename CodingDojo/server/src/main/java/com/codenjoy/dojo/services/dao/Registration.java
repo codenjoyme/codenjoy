@@ -68,12 +68,13 @@ public class Registration {
                 "password varchar(255)," +
                 "code varchar(255)," +
                 "data varchar(255)," +
-                "roles varchar(255));");
+                "roles varchar(255)," +
+                "github_username varchar(255));");
         if (initAdminUser) {
-            initialScripts.add(String.format("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
-                    " select '%s', '%s', '%s', %s,  '%s', '%s', '{}', '%s, %s'" +
+            initialScripts.add(String.format("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles, github_username)" +
+                    " select '%s', '%s', '%s', %s,  '%s', '%s', '{}', '%s, %s', '%s'" +
                     " where not exists (select 1 from users where id = '%s')",
-                    ADMIN_USER_ID, adminEmail, "admin", APPROVED, adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER,
+                    ADMIN_USER_ID, adminEmail, "admin", APPROVED, adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER,ADMIN_USER_ID,
                     ADMIN_USER_ID));
         }
         pool = factory.create(initialScripts.toArray(new String[initialScripts.size()]));
@@ -108,21 +109,21 @@ public class Registration {
         return count > 0;
     }
 
-    public User getOrRegister(String id, String email, String readableName) {
+    public User getOrRegister(String id, String email, String readableName,String gitHubUsername) {
         Registration.User result = getUserById(id)
                 .orElseGet(() -> getUserByEmail(email)
-                    .orElseGet(() -> registerApproved(id, email, readableName)));
+                    .orElseGet(() -> registerApproved(id, email, readableName,gitHubUsername)));
         return result;
     }
     
-    public User registerApproved(String id, String email, String readableName) {
+    public User registerApproved(String id, String email, String readableName,String gitHubUsername) {
         if (StringUtils.isEmpty(id)) {
             id = Hash.getRandomId();
         }
         String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
 
         User user = register(id, email, readableName,
-                password, "{}", GameAuthorities.USER.roles());
+                password, "{}", GameAuthorities.USER.roles(),gitHubUsername);
 
         if (!properties.isEmailVerificationNeeded()) {
             approve(user.getCode());
@@ -132,13 +133,13 @@ public class Registration {
         return user;
     }
 
-    public User register(String id, String email, String readableName, String password, String data, Collection<String> roles) {
+    public User register(String id, String email, String readableName, String password, String data, Collection<String> roles,String gitHubUsername) {
         roles = roles.isEmpty() ? GameAuthorities.USER.roles() : roles;
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
         
-        pool.update("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles) VALUES (?,?,?,?,?,?,?,?);",
-                new Object[]{id, email, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles)});
+        pool.update("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles, github_username) VALUES (?,?,?,?,?,?,?,?,?);",
+                new Object[]{id, email, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles), gitHubUsername});
         
         return getUserByCode(code);
     }
@@ -277,12 +278,13 @@ public class Registration {
         private int approved;
         private String code;
         private String data;
+        private String gitHubUsername;
 
         public User() {
             super("anonymous", "", Collections.emptyList());
         }
 
-        public User(String id, String email, String readableName, int approved, String password, String code, String data, Collection<String> roles) {
+        public User(String id, String email, String readableName, int approved, String password, String code, String data, Collection<String> roles,String gitHubUsername) {
             super(email, password, GameAuthorities.toGranted(roles));
             this.id = id;
             this.email = email;
@@ -290,6 +292,7 @@ public class Registration {
             this.approved = approved;
             this.code = code;
             this.data = data;
+            this.gitHubUsername = gitHubUsername;
         }
 
         public void setCode(String code) {
@@ -353,7 +356,8 @@ public class Registration {
                 rs.getString("password"),
                 rs.getString("code"),
                 rs.getString("data"),
-                GameAuthorities.splitRoles(rs.getString("roles")));
+                GameAuthorities.splitRoles(rs.getString("roles")),
+                rs.getString("github_username"));
     }
 
     public void replace(User user) {
@@ -379,14 +383,15 @@ public class Registration {
                 code,
                 user.getData(),
                 GameAuthorities.toRoles(user.getAuthorities()),
+                user.getGitHubUsername(),
                 user.getId()
         };
 
         if (getCodeById(user.getId()) == null) {
-            pool.update("INSERT INTO users (readable_name, email, email_approved, password, code, data, roles, id) VALUES (?,?,?,?,?,?,?,?);",
+            pool.update("INSERT INTO users (readable_name, email, email_approved, password, code, data, roles, github_username, id) VALUES (?,?,?,?,?,?,?,?,?);",
                     parameters);
         } else {
-            pool.update("UPDATE users SET readable_name = ?, email = ?, email_approved = ?, password = ?, code = ?, data = ?, roles = ? WHERE id = ?;",
+            pool.update("UPDATE users SET readable_name = ?, email = ?, email_approved = ?, password = ?, code = ?, data = ?, roles = ?, github_username = ? WHERE id = ?;",
                     parameters);
         }
     }

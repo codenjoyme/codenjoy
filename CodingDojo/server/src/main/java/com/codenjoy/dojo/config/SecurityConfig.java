@@ -207,12 +207,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             securityHeaders(http, hosts)
                         .authorizeRequests()
-                            .antMatchers(UNAUTHORIZED_URIS.toArray(new String[0]))
+                            .antMatchers("/**")
                                 .permitAll()
-                            .regexMatchers(UNAUTHORIZED_URIS_PATTERNS)
-                                .permitAll()
-                            .anyRequest()
-                                .hasRole("USER") 
+//                            .regexMatchers(UNAUTHORIZED_URIS_PATTERNS)
+//                                .permitAll()
+//                            .anyRequest()
+//                                .hasRole("USER")
                     .and()
                         .formLogin()
                             .loginPage(LoginController.URI)
@@ -267,10 +267,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             securityHeaders(http, hosts)
                         .authorizeRequests()
-                            .antMatchers(UNAUTHORIZED_URIS.toArray(new String[0]))
+                    .antMatchers("/**")
                                 .permitAll()
-                            .anyRequest()
-                                .hasRole("USER")
+//                            .anyRequest()
+//                                .hasRole("USER")
                     .and()
                         .oauth2Login()
                             .userInfoEndpoint()
@@ -330,15 +330,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                         .authorizeRequests()
-                            .antMatchers(LoginController.ADMIN_URI,
+                            .antMatchers("/**",LoginController.ADMIN_URI,
                                          RegistrationController.URI + "*",
                                          LOGIN_PROCESSING_URI,
                                          ADMIN_LOGIN_PROCESSING_URI,
                                          MVCConf.RESOURCES_URI,
                                          controlWsURI + "*")
                                 .permitAll()
-                            .anyRequest()
-                                .hasRole("USER")
+//                            .anyRequest()
+//                                .hasRole("USER")
                     .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)

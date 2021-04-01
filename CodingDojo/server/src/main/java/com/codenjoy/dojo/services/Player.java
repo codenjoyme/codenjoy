@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -59,17 +59,20 @@ public class Player implements ScreenRecipient, Closeable {
     private GameType gameType;
     private InformationCollector eventListener;
     private Closeable ai;
+    private String gitHubUsername;
+    private String repositoryUrl;
 
     public Player(String id) {
         this.id = id;
     }
 
-    public Player(String id, String callbackUrl, GameType gameType, PlayerScores scores, Information info) {
+    public Player(String id, String callbackUrl, GameType gameType, PlayerScores scores, Information info, String repositoryUrl) {
         this.id = id;
         this.callbackUrl = callbackUrl;
         this.gameType = gameType;
         this.scores = scores;
         this.info = info;
+        this.repositoryUrl = repositoryUrl;
     }
 
     @Override
@@ -78,7 +81,7 @@ public class Player implements ScreenRecipient, Closeable {
         if (this == NullPlayer.INSTANCE && (o != NullPlayer.INSTANCE && o != NullPlayerGame.INSTANCE)) return false;
 
         if (o instanceof Player) {
-            Player p = (Player)o;
+            Player p = (Player) o;
 
             if (p.id == null) {
                 return id == null;
@@ -88,7 +91,7 @@ public class Player implements ScreenRecipient, Closeable {
         }
 
         if (o instanceof PlayerGame) {
-            PlayerGame pg = (PlayerGame)o;
+            PlayerGame pg = (PlayerGame) o;
 
             return pg.getPlayer().equals(this);
         }
@@ -100,7 +103,7 @@ public class Player implements ScreenRecipient, Closeable {
     public int hashCode() {
         return (id + code).hashCode();
     }
-    
+
     public String getNotNullReadableName() {
         return StringUtils.isEmpty(readableName) ? id : readableName;
     }

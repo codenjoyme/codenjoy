@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest.pojo;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -51,16 +51,17 @@ public class PlayerDetailInfo {
     private PLevelProgress progress;
     private List<String> group;
     private PUser registration;
+    private String repositoryUrl;
 
     public PlayerDetailInfo(Player player, Registration.User registration,
-                            String room, Game game, List<String> group)
-    {
+                            String room, Game game, List<String> group) {
         GameType type = player.getGameType();
         this.game = type.name();
         this.room = room;
         multiplayer = new PMuptiplayerType(type.getMultiplayerType(type.getSettings()));
 
         callbackUrl = player.getCallbackUrl();
+        repositoryUrl = player.getRepositoryUrl();
         score = String.valueOf(player.getScore());
         id = player.getId();
 
@@ -76,6 +77,6 @@ public class PlayerDetailInfo {
         if (StringUtils.isEmpty(room)) { // TODO test me
             room = game;
         }
-        return new PlayerSave(id, callbackUrl, game, room, Integer.valueOf(score), save);
+        return new PlayerSave(id, callbackUrl, game, room, Integer.valueOf(score), save, repositoryUrl);
     }
 }

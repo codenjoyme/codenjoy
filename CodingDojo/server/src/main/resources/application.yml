@@ -23,8 +23,9 @@ mvc:
 
 game:
   save:
-    auto: true
-    load-on-start: true
+    auto: false
+    ticks: 30
+    load-on-start: false
   ai: true
   player:
     score:
@@ -90,3 +91,7 @@ logging:
       eclipse.jetty: info
       springframework.mvc: info
       reflections: error
+github:
+  host:
+    name: localhost
+    port: 8081

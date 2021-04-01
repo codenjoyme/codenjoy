@@ -4,7 +4,7 @@ package com.codenjoy.dojo.services;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,6 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-
-import java.util.List;
-
-public interface SaveService {
-
-    long updateAll();
-    long updateAll(String room);
-    long update(String id);
-    boolean load(String id);
-    void load(String id, String game, String room, String save, String repositoryUrl);
-    void loadAll(String room);
-    long save(String id);
-    List<PlayerInfo> getSaves();
-    long saveAll();
-    long saveAll(String room);
-    void loadAll();
-    void removeSave(String id);
-    void removeAllSaves();
-    void removeAllSaves(String room);
+public interface GameServerService {
+    String createOrGetRepository(String gitHubUsername);
 }

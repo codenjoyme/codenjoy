@@ -74,4 +74,10 @@ public class ConfigProperties {
 
     @Value("${game.player.score.cleanup}")
     private boolean playerScoreCleanupEnabled;
+
+    @Value("${github.host.name}")
+    private String gitHubHostName;
+
+    @Value("${github.host.port}")
+    private String gitHubPort;
 }

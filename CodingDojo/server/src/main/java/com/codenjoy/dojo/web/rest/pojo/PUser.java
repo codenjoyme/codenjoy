@@ -45,6 +45,8 @@ public class PUser {
     private String data;
     private String password;
     private Collection<String> roles;
+    private String gitHubUsername;
+    private String repositoryUrl;
 
     public PUser(Registration.User user) {
         email = user.getEmail();
@@ -55,6 +57,7 @@ public class PUser {
         data = user.getData();
         password = user.getPassword();
         roles = splitRoles(toRoles(user.getAuthorities()));
+        gitHubUsername = user.getGitHubUsername();
     }
 
     public Registration.User build() {
@@ -66,7 +69,8 @@ public class PUser {
                 password,
                 code,
                 data,
-                roles);
+                roles,
+                gitHubUsername);
     }
 
 }

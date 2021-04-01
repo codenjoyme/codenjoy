@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.security;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,7 +23,11 @@ package com.codenjoy.dojo.services.security;
  */
 
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameServerService;
+import com.codenjoy.dojo.services.LinkService;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
@@ -66,6 +70,7 @@ public class RegistrationService {
     private AuthenticationManager authenticationManager;
     private UserDetailsService userDetailsService;
     private ViewDelegationService viewDelegationService;
+    private GameServerService gameServerService;
 
     public String register(Player player, String room, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
@@ -76,6 +81,7 @@ public class RegistrationService {
         String email = player.getEmail();
         String name = player.getReadableName();
         String game = player.getGame();
+        String repositoryUrl = player.getRepositoryUrl();
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkEmail(email, CANT_BE_NULL);
         validator.checkGame(game, CANT_BE_NULL);
@@ -96,7 +102,7 @@ public class RegistrationService {
                 if (!playerService.isRegistrationOpened()) {
                     return openRegistrationForm(request, model, id, email, name);
                 }
-                Registration.User user = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles());
+                Registration.User user = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles(), player.getGitHubUsername());
                 code = user.getCode();
             } else {
                 code = registration.getCodeById(id);
@@ -142,7 +148,7 @@ public class RegistrationService {
                 model.addAttribute("bad_pass", true);
                 return openRegistrationForm(request, model, id, email, name);
             }
-            return connectRegisteredPlayer(player.getCode(), request, id, room, game);
+            return connectRegisteredPlayer(player.getCode(), request, id, room, game,repositoryUrl);
         } else {
             model.addAttribute("wait_approve", true);
             return openRegistrationForm(request, model, id, email, name);
@@ -154,8 +160,8 @@ public class RegistrationService {
         mailService.sendEmail(id, title, body);
     }
 
-    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String room, String game) {
-        return "redirect:/" + register(id, code, game, room, request.getRemoteAddr());
+    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String room, String game,String repositoryUrl) {
+        return "redirect:/" + register(id, code, game, room, request.getRemoteAddr(),repositoryUrl);
     }
 
     public String openRegistrationForm(HttpServletRequest request, Model model,
@@ -166,10 +172,10 @@ public class RegistrationService {
     }
 
     public String openRegistrationForm(HttpServletRequest request, Model model,
-                                                 String id,
-                                                 String email,
-                                                 String name,
-                                                 boolean isAdminLogin) {
+                                       String id,
+                                       String email,
+                                       String name,
+                                       boolean isAdminLogin) {
         String ip = getIp(request);
 
         if (!StringUtils.isEmpty(id)) {
@@ -201,8 +207,8 @@ public class RegistrationService {
         return getRegister(model);
     }
 
-    public String register(String id, String code, String game, String room, String ip) {
-        Player player = playerService.register(id, game, room, ip);
+    public String register(String id, String code, String game, String room, String ip,String repositoryUrl) {
+        Player player = playerService.register(id, game, room, ip,repositoryUrl);
         if (player == NullPlayer.INSTANCE) {
             return "login";
         }
@@ -231,5 +237,9 @@ public class RegistrationService {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         model.addAttribute("games", rooms.alises());
         return "register";
+    }
+
+    public String getRepository(String gitHubUsername){
+        return gameServerService.createOrGetRepository(gitHubUsername);
     }
 }

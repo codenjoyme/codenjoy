@@ -29,6 +29,8 @@ import java.util.List;
 public interface GameSaver {
     
     void saveGame(Player player, String save, long time);
+
+    void updateGame(Player player, String save, long time);
     
     PlayerSave loadGame(String id);
     
