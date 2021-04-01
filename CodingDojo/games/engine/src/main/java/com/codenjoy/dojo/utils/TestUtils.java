@@ -25,6 +25,7 @@ package com.codenjoy.dojo.utils;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -36,10 +37,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Settings;
 import lombok.experimental.UtilityClass;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -113,25 +111,64 @@ public class TestUtils {
             };
     }
 
-    public static String drawPossibleWays(Map<Point, List<Direction>> possibleWays, int size, Function<Point, Character> getAt) {
-        char[][] chars = new char[size * 3][size * 3];
+    public static String drawPossibleWays(int delta,
+                                          Map<Point, List<Direction>> possibleWays,
+                                          int size,
+                                          Function<Point, Character> getAt)
+    {
+        char[][] chars = new char[size * delta][size * delta];
         for (int x = 0; x < chars.length; x++) {
             Arrays.fill(chars[x], ' ');
         }
 
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                int cx = x * 3 + 1;
-                int cy = y * 3 + 1;
+                int cx = x * delta + 1;
+                int cy = y * delta + 1;
 
                 char ch = getAt.apply(pt(x, y));
-                chars[cx][cy] = (ch == ' ') ? '*' : ch;
-                for (Direction direction : possibleWays.get(pt(x, y))) {
-                    chars[direction.changeX(cx)][direction.changeY(cy)] = '+';
+                chars[cx][cy] = (ch == ' ') ? '.' : ch;
+                try {
+                    for (Direction direction : possibleWays.get(pt(x, y))) {
+                        chars[direction.changeX(cx)][direction.changeY(cy)] = directionChar(direction);
+                    }
+                } catch (NullPointerException e) {
+                    // do nothing
                 }
             }
         }
 
+        return toString(chars);
+    }
+
+    private static char directionChar(Direction direction) {
+        switch (direction) {
+            case UP: return '↑';
+            case LEFT: return '←';
+            case RIGHT: return '→';
+            case DOWN: return '↓';
+            default: throw new IllegalArgumentException();
+        }
+    }
+
+    public static String drawShortestWay(Point from,
+                                        List<Direction> shortestWay,
+                                        int size,
+                                        Function<Point, Character> getAt)
+    {
+        Map<Point, List<Direction>> map = new HashMap<>();
+
+        Point current = from;
+        while (!shortestWay.isEmpty()) {
+            Direction direction = shortestWay.remove(0);
+            map.put(current, Arrays.asList(direction));
+            current = direction.change(current);
+        }
+
+        return drawPossibleWays(2, map, size, getAt);
+    }
+
+    private static String toString(char[][] chars) {
         StringBuffer buffer = new StringBuffer();
         for (int x = 0; x < chars.length; x++) {
             for (int y = 0; y < chars.length; y++) {

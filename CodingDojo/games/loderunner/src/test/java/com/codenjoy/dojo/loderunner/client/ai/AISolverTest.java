@@ -96,16 +96,16 @@ public class AISolverTest {
                 " ☼  ☼  ☼  ☼  ☼  ☼ \n" +
                 "                  \n" +
                 "                  \n" +
-                " ☼  H++►++*++*  ☼ \n" +
-                "    +             \n" +
-                "    +             \n" +
+                " ☼  H→←►→←.→←.  ☼ \n" +
+                "    ↓             \n" +
+                "    ↑             \n" +
                 " ☼  H  #  #  #  ☼ \n" +
-                "    +             \n" +
-                "    +             \n" +
-                " ☼  H+ *  *  $  ☼ \n" +
-                "    +  +  +  +    \n" +
-                "    +             \n" +
-                " ☼  H++*++*++*  ☼ \n" +
+                "    ↓             \n" +
+                "    ↑             \n" +
+                " ☼  H→ .  .  $  ☼ \n" +
+                "    ↓  ↓  ↓  ↓    \n" +
+                "    ↑             \n" +
+                " ☼  H→←.→←.→←.  ☼ \n" +
                 "                  \n" +
                 "                  \n" +
                 " ☼  ☼  ☼  ☼  ☼  ☼ \n" +
@@ -140,16 +140,16 @@ public class AISolverTest {
                 " ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼ \n" +
                 "                              \n" +
                 "                              \n" +
-                " ☼  *  *  *  * +H+ *  *  *  ☼ \n" +
-                "    +  +  +  +  +  +  +  +    \n" +
-                "                +             \n" +
-                " ☼  * +*++*++*++H++~++~++~  ☼ \n" +
-                "    +  +              +  +    \n" +
-                "       +                      \n" +
-                " ☼  * +H  #  #  #  #  *  $  ☼ \n" +
-                "    +  +              +  +    \n" +
-                "       +                      \n" +
-                " ☼  *++Y++*++*++*++*++*++*  ☼ \n" +
+                " ☼  .  .  .  . ←H→ .  .  .  ☼ \n" +
+                "    ↓  ↓  ↓  ↓  ↓  ↓  ↓  ↓    \n" +
+                "                ↑             \n" +
+                " ☼  . ←.→←.→←.→←H→←~→←~→←~  ☼ \n" +
+                "    ↓  ↓              ↓  ↓    \n" +
+                "       ↑                      \n" +
+                " ☼  . ←H  #  #  #  #  .  $  ☼ \n" +
+                "    ↓  ↓              ↓  ↓    \n" +
+                "       ↑                      \n" +
+                " ☼  .→←Y→←.→←.→←.→←.→←.→←.  ☼ \n" +
                 "                              \n" +
                 "                              \n" +
                 " ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼ \n" +
@@ -363,7 +363,7 @@ public class AISolverTest {
         solver.getDirections(board);
         Map<Point, List<Direction>> possibleWays = solver.getWay().getBasic();
 
-        String actual = TestUtils.drawPossibleWays(
+        String actual = TestUtils.drawPossibleWays(3,
                 possibleWays,
                 board.size(),
                 pt -> board.getAt(pt).getChar());

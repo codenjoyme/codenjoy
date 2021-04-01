@@ -613,4 +613,8 @@ public class Loderunner implements Field {
     void resetHeroes() {
         players.resetHeroes();
     }
+
+    Players players() {
+        return players;
+    }
 }
