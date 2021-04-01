@@ -40,12 +40,15 @@ public class GameServerServiceImpl implements GameServerService {
 
     @Override
     public String createOrGetRepository(String gitHubUsername) {
-        String hostUrl = "http://" + config.getGitHubHostName()
-                + ":" + config.getGitHubPort() + "/repository?username=" + gitHubUsername;
         try {
-            return restTemplate.getForObject(hostUrl, String.class);
+            return restTemplate.getForObject(createHostUrl()+gitHubUsername, String.class);
         } catch (Exception e) {
             return "Repository not found!";
         }
+    }
+
+    private String createHostUrl(){
+        return "http://" + config.getGitHubHostName() + ":" +
+                config.getGitHubPort() + "/repository?username=";
     }
 }

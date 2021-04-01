@@ -207,7 +207,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             securityHeaders(http, hosts)
                         .authorizeRequests()
-                            .antMatchers("/**")
+                    //.antMatchers(UNAUTHORIZED_URIS.toArray(new String[0]))
+                    .antMatchers("/**")
                                 .permitAll()
 //                            .regexMatchers(UNAUTHORIZED_URIS_PATTERNS)
 //                                .permitAll()
@@ -266,7 +267,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             }
 
             securityHeaders(http, hosts)
-                        .authorizeRequests()
+                    .authorizeRequests()
+                    //.antMatchers(UNAUTHORIZED_URIS.toArray(new String[0]))
                     .antMatchers("/**")
                                 .permitAll()
 //                            .anyRequest()
