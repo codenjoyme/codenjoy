@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -74,8 +74,7 @@ public class EnemyMultiplayerTest {
         dice(0); // охотимся за первым игроком
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼    « ☼\n" +
                 "☼H#####☼\n" +
                 "☼H     ☼\n" +
@@ -89,8 +88,7 @@ public class EnemyMultiplayerTest {
         field.tick();
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼«     ☼\n" +
                 "☼H#####☼\n" +
                 "☼H     ☼\n" +
@@ -102,8 +100,7 @@ public class EnemyMultiplayerTest {
         field.tick();
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼Q     ☼\n" +
@@ -116,8 +113,7 @@ public class EnemyMultiplayerTest {
         field.tick();
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼H  »  ☼\n" +
@@ -130,8 +126,7 @@ public class EnemyMultiplayerTest {
         field.tick();
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼H     ☼\n" +
@@ -143,8 +138,7 @@ public class EnemyMultiplayerTest {
         field.tick();
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼H     ☼\n" +
@@ -162,13 +156,52 @@ public class EnemyMultiplayerTest {
         dice(0); // охотимся за первым игроком
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼H  ►  ☼\n" +
                 "☼###H  ☼\n" +
                 "☼ » H  ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+    }
+
+    // чертик стоит на месте, если ко мне нет пути
+    @Test
+    public void shouldEnemyStop_whenNoPathToHero() {
+        settings.integer(ENEMIES_COUNT, 1);
+        setupGm("☼☼☼☼☼☼☼☼" +
+                "☼     ►☼" +
+                "☼     #☼" +
+                "☼      ☼" +
+                "☼###H  ☼" +
+                "☼»  H  ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        dice(0); // охотимся за первым игроком
+        field.tick();
+
+        atBoard("☼☼☼☼☼☼☼☼\n" +
+                "☼     ►☼\n" +
+                "☼     #☼\n" +
+                "☼      ☼\n" +
+                "☼###H  ☼\n" +
+                "☼»  H  ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        atBoard("☼☼☼☼☼☼☼☼\n" +
+                "☼     ►☼\n" +
+                "☼     #☼\n" +
+                "☼      ☼\n" +
+                "☼###H  ☼\n" +
+                "☼»  H  ☼\n" +
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
     }
@@ -189,8 +222,7 @@ public class EnemyMultiplayerTest {
         dice(0); // охотимся за первым игроком
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H####Q☼\n" +
                 "☼H    H☼\n" +
@@ -216,8 +248,7 @@ public class EnemyMultiplayerTest {
         dice(0); // охотимся за первым игроком
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼Q####H☼\n" +
                 "☼H    H☼\n" +
@@ -244,8 +275,7 @@ public class EnemyMultiplayerTest {
         dice(0); // охотимся за первым игроком
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼Q####Q☼\n" +
                 "☼H    H☼\n" +
@@ -278,8 +308,7 @@ public class EnemyMultiplayerTest {
         dice(0); // охотимся за первым игроком
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼ «    ☼\n" +
                 "☼Q####H☼\n" +
                 "☼H    H☼\n" +
@@ -309,8 +338,7 @@ public class EnemyMultiplayerTest {
         field.tick();
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼   ►  ☼\n" +
                 "☼######☼\n" +
                 "☼      ☼\n" +
@@ -331,8 +359,7 @@ public class EnemyMultiplayerTest {
         field.tick();
         field.tick();
 
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
+        atBoard("☼☼☼☼☼☼☼☼\n" +
                 "☼   (  ☼\n" +
                 "☼######☼\n" +
                 "☼Ѡ     ☼\n" +
@@ -343,7 +370,7 @@ public class EnemyMultiplayerTest {
     }
 
 
-    private void atGame(String expected) {
+    private void atBoard(String expected) {
         assertEquals(expected, game.getBoardAsString());
     }
 
