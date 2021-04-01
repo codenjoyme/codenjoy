@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from './styles.module.css';
 
-const { input, inputError, inputValid, inputWrap, inputIcon } = styles;
+const { input, inputError, inputValid, inputWrap, inputIcon, inputNotValid } = styles;
 
 export const CustomInputComponent = ({
   field, // { name, value, onChange, onBlur }
@@ -25,6 +25,7 @@ export const CustomInputComponent = ({
         { ...props }
       />
       { isCurrentFieldNotValid && <FontAwesomeIcon className={ inputIcon } icon='times-circle' style={ { color: '#d35d47' } } /> }
+      { isCurrentFieldNotValid ? <div className={ inputNotValid }> { validationErrors[field.name] } </div> : null }
       { isCurrentFieldValid && <FontAwesomeIcon className={ inputIcon } icon='check-circle' style={ { color: '#cedb56' } } /> }
     </div>
   )

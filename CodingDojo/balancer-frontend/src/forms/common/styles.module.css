@@ -43,6 +43,15 @@
     color: var(--title-bg-color);
 }
 
+.inputNotValid {
+    font-size: 14px;
+    font-weight: 400;
+    color: #d35d47;
+    position: absolute;
+    top: 17px;
+    right: 42px;
+}
+
 .inputError {
     border: 1px solid #d35d47;
 }
