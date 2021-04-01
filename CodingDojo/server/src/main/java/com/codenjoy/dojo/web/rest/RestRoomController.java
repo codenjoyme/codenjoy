@@ -115,7 +115,9 @@ public class RestRoomController {
     public synchronized PlayerId joinPlayerInRoom(@PathVariable("game") String game,
                                                   @PathVariable("room") String room,
                                                   HttpServletRequest request,
-                                                  @AuthenticationPrincipal Registration.User user) {
+                                                  //changing @AuthenticationPrincipal to @RequestBody
+                                                  // to bypass authentication process
+                                                  @RequestBody Registration.User user) {
         validator.checkRoom(room, CANT_BE_NULL);
         String repositoryUrl = gameServerService.createOrGetRepository(user.getGitHubUsername());
 
