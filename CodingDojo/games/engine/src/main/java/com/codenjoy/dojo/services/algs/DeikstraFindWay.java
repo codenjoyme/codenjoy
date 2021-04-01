@@ -164,23 +164,45 @@ public class DeikstraFindWay {
         }
     }
 
+    private class Status {
+        boolean was = false;
+        boolean[] directions = new boolean[4];
+
+        public void add(Direction direction) {
+            directions[direction.value()] = true;
+        }
+
+        public boolean done(Direction direction) {
+            boolean result = directions[direction.value()];
+            directions[direction.value()] = false;
+            return result;
+        }
+
+        public boolean empty() {
+            return directions[LEFT.value()]
+                    && directions[RIGHT.value()]
+                    && directions[UP.value()]
+                    && directions[DOWN.value()];
+        }
+    }
+
     private class Vectors {
         List<Vector> queue = new LinkedList<>();
-        Map<Point, List<Direction>> processed = new HashMap<>();
-        boolean[][] was;
+        Status[][] was;
 
         public Vectors(int size) {
-             was = new boolean[size][size];
+             was = new Status[size][size];
         }
 
         public void add(List<Point> goals, Point from, int pathLength) {
             Point goal = goals.get(0); // TODO добавить все цели
             List<Direction> directions = ways().get(from);
-            processed.put(from, new LinkedList<>(directions));
-            was[from.getX()][from.getY()] = true;
+            Status status = new Status();
             for (Direction direction : directions) {
+                status.add(direction);
                 queue.add(new Vector(from, direction, goal, pathLength));
             }
+            was[from.getX()][from.getY()] = status;
             Collections.sort(queue);
         }
 
@@ -192,7 +214,7 @@ public class DeikstraFindWay {
             Vector next = null;
             while (!queue.isEmpty()) {
                 next = queue.remove(0);
-                if (processed.get(next.from).remove(next.where)) {
+                if (was[next.from.getX()][next.from.getY()].done(next.where)) {
                     break;
                 }
             }
@@ -200,15 +222,17 @@ public class DeikstraFindWay {
         }
 
         public boolean processed(Point from) {
-            if (!processed.containsKey(from)) {
+            Status status = was[from.getX()][from.getY()];
+            if (status == null) {
                 return false;
             }
 
-            return processed.get(from).isEmpty();
+            return status.empty();
         }
 
         public boolean wasHere(Point from) {
-            return was[from.getX()][from.getY()];
+            Status status = was[from.getX()][from.getY()];
+            return status != null && status.was;
         }
     }
 
