@@ -132,7 +132,16 @@ public class DeikstraFindWay {
             this.from = from;
             this.where = where;
             this.to = where.change(from);
-            this.distance = 0.0;// to.distance(goal);
+            this.distance = 0.0; // to.distance(goal);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Vector{%s->%s, %s, %s}",
+                    from,
+                    to,
+                    where.name().charAt(0),
+                    distance);
         }
 
         @Override
@@ -174,12 +183,13 @@ public class DeikstraFindWay {
         }
 
         public Vector next() {
-            Vector next;
-            boolean done;
-            do {
+            Vector next = null;
+            while (!queue.isEmpty()) {
                 next = queue.remove(0);
-                done = !processed.get(next.from).remove(next.where);
-            } while (done && !queue.isEmpty());
+                if (processed.get(next.from).remove(next.where)) {
+                    break;
+                }
+            }
             return next;
         }
 
@@ -202,13 +212,11 @@ public class DeikstraFindWay {
         Vectors vectors = new Vectors();
 
         vectors.add(inputGoals, from);
-        Vector current = null;
+        Vector current;
         do {
+            current = vectors.next();
             if (current == null) {
-                if (vectors.isEmpty()) {
-                    break;
-                }
-                current = vectors.next();
+                break;
             }
             List<Direction> before = path.get(current.from);
 
