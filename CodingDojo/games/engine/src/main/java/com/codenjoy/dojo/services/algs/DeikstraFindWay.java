@@ -125,13 +125,13 @@ public class DeikstraFindWay {
         private Point to;
         private Point from;
         private Direction where;
-        private double distance;
+        private int rating;
 
         public Vector(Point from, Direction where, Point goal, int pathLength) {
             this.from = from;
             this.where = where;
             this.to = where.change(from);
-            this.distance = to.distance(goal) + pathLength;
+            this.rating = (int)(1000*(to.distance(goal) + pathLength));
         }
 
         @Override
@@ -140,12 +140,12 @@ public class DeikstraFindWay {
                     from,
                     to,
                     where.name().charAt(0),
-                    distance);
+                    rating);
         }
 
         @Override
         public int compareTo(Vector o) {
-            return Double.compare(distance, o.distance);
+            return Integer.compare(rating, o.rating);
         }
 
         @Override
