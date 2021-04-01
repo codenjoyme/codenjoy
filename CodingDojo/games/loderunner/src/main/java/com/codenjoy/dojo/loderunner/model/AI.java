@@ -33,7 +33,9 @@ import static com.codenjoy.dojo.services.Direction.*;
 
 public class AI implements EnemyAI {
 
-    private DeikstraFindWay way = new DeikstraFindWay(true);
+    public static boolean POSSIBLE_IS_CONSTANT = true;
+
+    private DeikstraFindWay way = new DeikstraFindWay(POSSIBLE_IS_CONSTANT);
 
     @Override
     public Direction getDirection(Field field, Point from, Point to) {
@@ -52,23 +54,25 @@ public class AI implements EnemyAI {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point from, Direction where) {
-                if (where == Direction.UP && !field.isLadder(from)) return false;
+                if (where == Direction.UP
+                        && !field.isLadder(from)) return false;
 
                 Point under = DOWN.change(from);
-                if (!under.isOutOf(field.size()) &&
-                        !field.isBrick(under) &&
-                        !field.isLadder(under) &&
-                        !field.isBorder(under) &&
-                        !field.isLadder(from) &&
-                        !field.isPipe(from) &&
-                        where != DOWN) return false;
+                if (where != DOWN
+                        && !under.isOutOf(field.size())
+                        && !field.isBrick(under)
+                        && !field.isLadder(under)
+                        && !field.isBorder(under)
+                        && !field.isLadder(from)
+                        && !field.isPipe(from)) return false;
 
                 return true;
             }
 
             @Override
             public boolean possible(Point point) {
-                if (field.isBrick(point) || field.isBorder(point)) return false;
+                if (field.isBrick(point)
+                        || field.isBorder(point)) return false;
                 return true;
             }
         };

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -47,6 +48,11 @@ public class AITest {
     private Loderunner loderunner;
     private LevelImpl level;
     private Dice dice;
+
+    @Before
+    public void setup() {
+        AI.POSSIBLE_IS_CONSTANT = true;
+    }
 
     private void setupAI(String map) {
         dice = mock(Dice.class);
@@ -469,5 +475,91 @@ public class AITest {
         Hero hero2 = loderunner.getHeroes().get(1);
         assertEquals("[5,6]", hero2.toString());
         assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy1, hero2).toString());
+    }
+
+    @Test
+    public void performanceTest() {
+        AI.POSSIBLE_IS_CONSTANT = true;
+
+        setupAI("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼                             ~~~~~~~~~      ◄    ~~~~~~~☼" +
+                "☼##H########################H#H       H##########H       ☼" +
+                "☼  H                        H######H  H          H#☼☼☼☼☼#☼" +
+                "☼H☼☼#☼☼H    H#########H     H#     H#####H#####H##  ~~~~~☼" +
+                "☼H     H    H         H#####H#     H ~   H     H  ~~     ☼" +
+                "☼H#☼#☼#H    H         H  ~~~ #####H#     H     H    ~~   ☼" +
+                "☼H  ~  H~~~~H~~~~~~   H           H   H######H##      ~~ ☼" +
+                "☼H     H    H     H###☼☼☼☼☼☼H☼    H~~~H      H          #☼" +
+                "☼H     H    H#####H         H     H      H#########H     ☼" +
+                "☼☼###☼##☼##☼H         H###H##    H##     H#       ##     ☼" +
+                "☼☼###☼~~~~  H         H   H######H######### H###H #####H#☼" +
+                "☼☼   ☼      H   ~~~~~~H   H      H          H# #H      H ☼" +
+                "☼########H###☼☼☼☼     H  ############   ###### ##########☼" +
+                "☼        H            H                                  ☼" +
+                "☼H##########################H########~~~####H############☼" +
+                "☼H                 ~~~      H               H            ☼" +
+                "☼#######H#######            H###~~~~      ############H  ☼" +
+                "☼       H~~~~~~~~~~         H                         H  ☼" +
+                "☼       H    ##H   #######H##########~~~~~~~H######## H  ☼" +
+                "☼       H    ##H          H                 H         H  ☼" +
+                "☼##H#####    ########H#######~~~~  ~~~#########~~~~~  H  ☼" +
+                "☼  H                 H                            ~~~~H  ☼" +
+                "☼#########H##########H        #☼☼☼☼☼☼#   ☼☼☼☼☼☼☼      H  ☼" +
+                "☼         H          H        ~      ~                H  ☼" +
+                "☼☼☼       H~~~~~~~~~~H         ######   ###########   H  ☼" +
+                "☼    H######         #######H           ~~~~~~~~~~~~~~H  ☼" +
+                "☼H☼  H  ◄                   H  H####H                 H  ☼" +
+                "☼H☼☼#☼☼☼☼☼☼☼☼☼☼☼☼###☼☼☼☼☼☼☼☼H☼☼☼☼☼☼☼☼#☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼#☼" +
+                "☼H            ~~H~~~~☼☼☼☼☼☼☼H☼☼☼☼☼☼☼       H   ~~~~~~~~~H☼" +
+                "☼H~~~~  ######  H         H☼H☼H        ####H  ☼         H☼" +
+                "☼H              ##H#######H☼H☼H######H     ###☼☼☼☼☼☼☼☼ ~H☼" +
+                "☼H#########       H    ~~~H☼H☼H~~~   H~~~~~ ##        ~ H☼" +
+                "☼H        ###H####H##H     ☼H☼       H     ###☼☼☼☼☼☼ ~  H☼" +
+                "☼H           H      #######☼H☼#####  H#####   ~~~~~~~ ~ H☼" +
+                "☼~~~~~~~~~~~~H       H~~~~~☼H☼~~~~~  H             ~ ~  H☼" +
+                "☼     H              H     ☼H☼     ##########H          H☼" +
+                "☼ ### #############H H#####☼H☼               H ######## H☼" +
+                "☼H                 H       ☼H☼#######        H          H☼" +
+                "☼H#####         H##H####                ###H#########   H☼" +
+                "☼H      H######### H   ############        H            H☼" +
+                "☼H##    H          H~~~~~~                 H #######H## H☼" +
+                "☼~~~~#####H#   ~~~~H         ########H     H        H   H☼" +
+                "☼         H        H      ~~~~~~~~   H     H        H   H☼" +
+                "☼   ########H    ######H##        ##############    H   H☼" +
+                "☼           H          H        ~~~~~           ##H#####H☼" +
+                "☼H    ###########H     H#####H         H##H       H     H☼" +
+                "☼H###            H     H     ###########  ##H###  H     H☼" +
+                "☼H  ######  ##H######  H                    H   ##H###  H☼" +
+                "☼H            H ~~~~~##H###H     #########H##           H☼" +
+                "☼    H########H#       H   ######         H             H☼" +
+                "☼ ###H        H         ~~~~~H      ##H###H####H###     H☼" +
+                "☼    H########H#########     H        H        H        H☼" +
+                "☼H   H                       H        H        H        H☼" +
+                "☼H  ####H######         #####H########H##      H#####   H☼" +
+                "☼H«     H      H#######H                       H        H☼" +
+                "☼##############H       H#################################☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+
+        for (int i = 0; i < 1000; i++) {
+            assertD("[RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, LEFT, " +
+                    "LEFT, LEFT, UP, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, " +
+                    "RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, RIGHT, RIGHT, " +
+                    "RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, RIGHT, RIGHT, UP, " +
+                    "UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, UP, UP, UP, UP, UP, " +
+                    "UP, UP, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, " +
+                    "LEFT, LEFT, LEFT, LEFT, LEFT, UP, RIGHT, RIGHT, RIGHT, RIGHT, " +
+                    "RIGHT, RIGHT, RIGHT, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, " +
+                    "RIGHT, UP, UP, LEFT, LEFT, UP, LEFT, LEFT, LEFT, LEFT, LEFT, " +
+                    "LEFT, LEFT, LEFT, LEFT, DOWN, DOWN, LEFT, LEFT, LEFT, LEFT, " +
+                    "LEFT, LEFT, UP, UP, UP, UP, UP, RIGHT, RIGHT, DOWN, RIGHT, " +
+                    "RIGHT, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, UP, " +
+                    "RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, " +
+                    "RIGHT, RIGHT, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, " +
+                    "UP, RIGHT, RIGHT, UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, LEFT, " +
+                    "LEFT, UP, UP, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, " +
+                    "RIGHT, RIGHT, DOWN, RIGHT, RIGHT, RIGHT, RIGHT, UP, RIGHT, UP, " +
+                    "UP, UP, UP, RIGHT, UP, UP, RIGHT, RIGHT, RIGHT, UP, UP, RIGHT, " +
+                    "RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT]");
+        }
     }
 }

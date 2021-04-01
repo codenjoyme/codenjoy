@@ -49,12 +49,12 @@ public class AISolver implements Solver<Board> {
                 if (where == Direction.UP && !board.isLadder(from)) return false;
 
                 Point under = Direction.DOWN.change(from);
-                if (where != Direction.DOWN &&
-                        !under.isOutOf(board.size()) &&
-                        !board.isWall(under) &&
-                        !board.isLadder(under) &&
-                        !board.isLadder(from) &&
-                        !board.isPipe(from)) return false;
+                if (where != Direction.DOWN
+                        && !under.isOutOf(board.size())
+                        && !board.isWall(under)
+                        && !board.isLadder(under)
+                        && !board.isLadder(from)
+                        && !board.isPipe(from)) return false;
 
                 return true;
             }
@@ -84,7 +84,8 @@ public class AISolver implements Solver<Board> {
         if (from == null) {
             return Arrays.asList();
         }
-        List<Point> to = board.get(Elements.YELLOW_GOLD,
+        List<Point> to = board.get(
+                Elements.YELLOW_GOLD,
                 Elements.GREEN_GOLD,
                 Elements.RED_GOLD);
         DeikstraFindWay.Possible map = possible(board);

@@ -59,10 +59,10 @@ public class PerformanceTest {
         LocalGameRunner.printConversions = false;
         LocalGameRunner.printDice = false;
 
-        // about 14 sec
-        int ticks = 100;
+        // about 32 sec
+        int ticks = 200;
         int playersCount = 100;
-        int enemies = 20;
+        int enemies = 100;
 
         runner = new GameRunner();
         settings = runner.getSettings()
