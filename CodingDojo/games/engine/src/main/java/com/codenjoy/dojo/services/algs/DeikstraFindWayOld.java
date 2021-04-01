@@ -34,7 +34,7 @@ import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
-public class DeikstraFindWay {
+public class DeikstraFindWayOld {
 
     private static final List<Direction> DIRECTIONS = Arrays.asList(UP, DOWN, LEFT, RIGHT);
 
@@ -48,7 +48,7 @@ public class DeikstraFindWay {
     private Possible checker;
     private boolean possibleIsConstant;
 
-    public DeikstraFindWay() {
+    public DeikstraFindWayOld() {
         this(false);
     }
 
@@ -57,7 +57,7 @@ public class DeikstraFindWay {
      * не меняется от тика к тику, а потому не надо пересчитывать варианты движений всякий раз.
      * Вот в таких случаях мы и ставим тут true.
      */
-    public DeikstraFindWay(boolean possibleIsConstant) {
+    public DeikstraFindWayOld(boolean possibleIsConstant) {
         this.possibleIsConstant = possibleIsConstant;
     }
 
@@ -121,93 +121,6 @@ public class DeikstraFindWay {
         return shortest;
     }
 
-    private static class Vector implements Comparable<Vector> {
-
-        Point to;
-        Point from;
-        Direction where;
-        double distance;
-
-        public Vector(Point from, Direction where, Point goal, int pathLength) {
-            this.from = from;
-            this.where = where;
-            this.to = where.change(from);
-            this.distance = to.distance(goal) + pathLength;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Vector{%s->%s, %s, %s}",
-                    from,
-                    to,
-                    where.name().charAt(0),
-                    distance);
-        }
-
-        @Override
-        public int compareTo(Vector o) {
-            return Double.compare(distance, o.distance);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Vector vector = (Vector) o;
-            return Objects.equals(from, vector.from) &&
-                    where == vector.where;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(from, where);
-        }
-    }
-
-    private class Vectors {
-        List<Vector> queue = new LinkedList<>();
-        Map<Point, List<Direction>> processed = new HashMap<>();
-        Set<Point> was = new HashSet<>();
-
-        public void add(List<Point> goals, Point from, int pathLength) {
-            Point goal = goals.get(0); // TODO добавить все цели
-            List<Direction> directions = ways().get(from);
-            processed.put(from, new LinkedList<>(directions));
-            was.add(from);
-            for (Direction direction : directions) {
-                queue.add(new Vector(from, direction, goal, pathLength));
-            }
-            Collections.sort(queue);
-        }
-
-        public boolean isEmpty() {
-            return queue.isEmpty();
-        }
-
-        public Vector next() {
-            Vector next = null;
-            while (!queue.isEmpty()) {
-                next = queue.remove(0);
-                if (processed.get(next.from).remove(next.where)) {
-                    break;
-                }
-            }
-            return next;
-        }
-
-        public boolean processed(Point from) {
-            if (!processed.containsKey(from)) {
-                return false;
-            }
-
-            return processed.get(from).isEmpty();
-        }
-
-        public boolean wasHere(Point from) {
-            return was.contains(from);
-        }
-    }
-
     private Map<Point, List<Direction>> getPath(Point from, List<Point> inputGoals) {
         Set<Point> goals = new HashSet<>(inputGoals);
         Map<Point, List<Direction>> path = new HashMap<>();
@@ -215,36 +128,45 @@ public class DeikstraFindWay {
             path.put(point, new ArrayList<>(100));
         }
 
-        Vectors vectors = new Vectors();
+        boolean[][] processed = new boolean[size][size];
+        LinkedList<Point> toProcess = new LinkedList<>();
 
-        vectors.add(inputGoals, from, 0);
-        Vector current;
-        while (/*!goals.isEmpty() && */(current = vectors.next()) != null) {
-
-            List<Direction> before = path.get(current.from);
-
-            if (vectors.wasHere(current.to)) continue;
-
-            List<Direction> directions = path.get(current.to);
-            if (before.size() < directions.size() - 1) {
-                // мы нашли более короткий путь,
-                // но это никогда не случится )
-                directions.clear();
-            }
-            if (directions.isEmpty()) {
-                if (!before.isEmpty()) {
-                    directions.addAll(before);
+        Point current = from;
+        do {
+            if (current == null) {
+                if (toProcess.isEmpty()) { // TODO test me
+                    break;
                 }
-                directions.add(current.where);
-
-                if (!vectors.processed(current.to)) {
-                    vectors.add(inputGoals, current.to, directions.size());
-                }
-            } else {
-                // do nothing
+                current = toProcess.remove();
             }
-            goals.remove(current.from);
-        }
+            List<Direction> before = path.get(current);
+            for (Direction direction : ways().get(current)) {
+                Point to = direction.change(current);
+                if (processed[to.getX()][to.getY()]) continue;
+
+                List<Direction> directions = path.get(to);
+                if (before.size() < directions.size() - 1) {
+                    // мы нашли более короткий путь,
+                    // но это никогда не случится )
+                    directions.clear();
+                }
+                if (directions.isEmpty()) {
+                    if (!before.isEmpty()) {
+                        directions.addAll(before);
+                    }
+                    directions.add(direction);
+
+                    if (!processed[to.getX()][to.getY()]) {
+                        toProcess.add(to);
+                    }
+                } else {
+                    // do nothing
+                }
+            }
+            processed[current.getX()][current.getY()] = true;
+            goals.remove(current);
+            current = null;
+        } while (!(toProcess.isEmpty() || goals.isEmpty()));
 
         return path;
     }
