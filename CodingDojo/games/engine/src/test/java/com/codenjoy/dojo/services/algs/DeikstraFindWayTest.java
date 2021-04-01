@@ -363,7 +363,7 @@ public class DeikstraFindWayTest {
                 TestUtils.printWay(map,
                         START, FINISH,
                         NONE, WAY,
-                        Elements::valueOf,
+                        TestUtils.getBoard(Elements::valueOf),
                         this::getPossible));
     }
 

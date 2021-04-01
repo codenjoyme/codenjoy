@@ -146,10 +146,9 @@ public class TestUtils {
     public static String printWay(String expected,
                                   CharElements from, CharElements to,
                                   CharElements none, CharElements wayChar,
-                                  Function<Character, CharElements> elements,
+                                  AbstractBoard board,
                                   Function<AbstractBoard, DeikstraFindWay.Possible> possible)
     {
-        AbstractBoard board = getBoard(elements);
         expected = expected.replace(wayChar.ch(), none.ch())
                     .replaceAll("\n", "");
         board = (AbstractBoard) board.forString(expected);
