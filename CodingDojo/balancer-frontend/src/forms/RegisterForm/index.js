@@ -187,10 +187,6 @@ class LoginForm extends Component {
                                 <Field
                                     type='email'
                                     name='email'
-                                    errors={ _.get(
-                                        registerErrors,
-                                        'errorMsg',
-                                    ) }
                                     placeholder='Електронна пошта*'
                                     component={ CustomInputComponent }
                                 />
@@ -199,10 +195,6 @@ class LoginForm extends Component {
                                       name='phone'
                                       placeholder='Номер телефону*'
                                       component={ PhoneInput }
-                                      errors={ _.get(
-                                          registerErrors,
-                                          'errorMsg',
-                                      ) }
                                   />
                                 <Field
                                     type='password'
