@@ -121,13 +121,34 @@ public class DeikstraFindWay {
         return shortest;
     }
 
-    private static class Vector {
+    private static class Vector implements Comparable<Vector> {
         Point from;
         Direction where;
+        double distance;
 
-        public Vector(Point from, Direction where) {
+        public Vector(Point from, Direction where, double distance) {
             this.from = from;
             this.where = where;
+            this.distance = distance;
+        }
+
+        @Override
+        public int compareTo(Vector o) {
+            return Double.compare(distance, o.distance);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Vector vector = (Vector) o;
+            return Objects.equals(from, vector.from) &&
+                    where == vector.where;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(from, where);
         }
     }
 
@@ -139,16 +160,16 @@ public class DeikstraFindWay {
         }
 
         // boolean[][] processed = new boolean[size][size];
-        LinkedList<Vector> queue = new LinkedList<>();
+        List<Vector> queue = new LinkedList<>();
 
-        toProcess(from, queue);
+        toProcess(inputGoals, from, queue);
         Vector current = null;
         do {
             if (current == null) {
                 if (queue.isEmpty()) {
                     break;
                 }
-                current = queue.remove();
+                current = queue.remove(0);
             }
             List<Direction> before = path.get(current.from);
 
@@ -168,7 +189,7 @@ public class DeikstraFindWay {
                 directions.add(current.where);
 
                 // if (!processed[to.getX()][to.getY()]) {
-                    toProcess(to, queue);
+                    toProcess(inputGoals, to, queue);
                 // }
             } else {
                 // do nothing
@@ -181,10 +202,12 @@ public class DeikstraFindWay {
         return path;
     }
 
-    private void toProcess(Point from, LinkedList<Vector> toProcess) {
+    private void toProcess(List<Point> goals, Point from, List<Vector> queue) {
         for (Direction direction : ways().get(from)) {
-            toProcess.add(new Vector(from, direction));
+            double distance = 0.0;
+            queue.add(new Vector(from, direction, distance));
         }
+        Collections.sort(queue);
     }
 
     private Map<Point, List<Direction>> ways() {
