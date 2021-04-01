@@ -26,7 +26,7 @@ game:
     auto: false
     ticks: 30
     load-on-start: false
-  ai: true
+  ai: false
   player:
     score:
       cleanup: false

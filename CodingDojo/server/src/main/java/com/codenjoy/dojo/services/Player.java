@@ -66,13 +66,12 @@ public class Player implements ScreenRecipient, Closeable {
         this.id = id;
     }
 
-    public Player(String id, String callbackUrl, GameType gameType, PlayerScores scores, Information info, String repositoryUrl) {
+    public Player(String id, String callbackUrl, GameType gameType, PlayerScores scores, Information info) {
         this.id = id;
         this.callbackUrl = callbackUrl;
         this.gameType = gameType;
         this.scores = scores;
         this.info = info;
-        this.repositoryUrl = repositoryUrl;
     }
 
     @Override

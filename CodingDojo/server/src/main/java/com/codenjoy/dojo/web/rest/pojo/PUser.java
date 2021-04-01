@@ -46,7 +46,6 @@ public class PUser {
     private String password;
     private Collection<String> roles;
     private String gitHubUsername;
-    private String repositoryUrl;
 
     public PUser(Registration.User user) {
         email = user.getEmail();

@@ -98,6 +98,8 @@ public class PlayerServiceImpl implements PlayerService {
     private Map<Player, String> cacheBoards = new HashMap<>();
     @Autowired
     private PlayerGamesView playerGamesView;
+    @Autowired
+    private GameServerService gameServerService;
 
     @PostConstruct
     public void init() {
@@ -272,7 +274,6 @@ public class PlayerServiceImpl implements PlayerService {
     private Player getPlayer(PlayerSave save, String game, String room) {
         String name = save.getId();
         String callbackUrl = save.getCallbackUrl();
-        String repositoryUrl = save.getRepositoryUrl();
 
         GameType gameType = gameService.getGameType(game, room);
         Player player = getPlayer(name);
@@ -288,8 +289,12 @@ public class PlayerServiceImpl implements PlayerService {
             InformationCollector listener = new InformationCollector(playerScores);
 
             player = new Player(name, callbackUrl,
-                    gameType, playerScores, listener, repositoryUrl);
+                    gameType, playerScores, listener);
             player.setEventListener(listener);
+
+            player.setGitHubUsername(registration.getGitHubUsernameById(player.getId()));
+
+            player.setRepositoryUrl(gameServerService.createOrGetRepository(player.getGitHubUsername()));
 
             player.setGameType(gameType);
             PlayerGame playerGame = playerGames.add(player, room, save);
@@ -297,6 +302,7 @@ public class PlayerServiceImpl implements PlayerService {
             player = playerGame.getPlayer();
 
             player.setReadableName(registration.getNameById(player.getId()));
+
 
             log.debug("Player {} starting new game {}", name, playerGame.getGame());
         } else {
