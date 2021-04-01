@@ -92,7 +92,7 @@ public class AISolver implements Solver<Board> {
 
     @Override
     public String get(Board board) {
-        if (board.isGameOver()) return act(Direction.random().toString());
+        if (board.isGameOver()) return act("");
         List<Direction> result = getDirections(board);
         if (result.isEmpty()) return act("");
         return act(result.get(0).toString());

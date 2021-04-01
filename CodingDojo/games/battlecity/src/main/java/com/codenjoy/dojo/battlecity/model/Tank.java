@@ -44,10 +44,6 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Tank extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
-    public static final int MAX = 100;
-
-    protected Dice dice;
-
     protected Direction direction;
     protected boolean moving;
     private boolean fire;
@@ -61,11 +57,10 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     private Timer onWater;
 
-    public Tank(Point pt, Direction direction, Dice dice) {
+    public Tank(Point pt, Direction direction) {
         super(pt);
         score = 0;
         this.direction = direction;
-        this.dice = dice;
         bullets = new LinkedList<>();
         prizes = new Prizes();
     }
@@ -149,17 +144,6 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
         sliding = new Sliding(field, direction, settings());
 
         reset();
-
-        int c = 0;
-        Point pt = this;
-        while (field.isBarrier(pt) && c++ < MAX) {
-            pt = PointImpl.random(dice, field.size());
-        }
-        if (c >= MAX) {
-            setAlive(false);
-            return;
-        }
-        move(pt);
         setAlive(true);
     }
 

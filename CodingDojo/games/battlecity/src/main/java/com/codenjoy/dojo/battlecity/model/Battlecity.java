@@ -26,6 +26,7 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.battlecity.model.items.*;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
+import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -33,6 +34,7 @@ import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static java.util.function.Predicate.not;
@@ -40,6 +42,7 @@ import static java.util.stream.Collectors.toList;
 
 public class Battlecity extends RoundField<Player> implements Field {
 
+    private Dice dice;
     private int size;
 
     private PrizeGenerator prizeGen;
@@ -60,6 +63,7 @@ public class Battlecity extends RoundField<Player> implements Field {
     public Battlecity(int size, Dice dice, GameSettings settings) {
         super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_YOUR_TANK, settings);
         this.size = size;
+        this.dice = dice;
         this.settings = settings;
         ais = new LinkedList<>();
         prizes = new Prizes();
@@ -232,6 +236,11 @@ public class Battlecity extends RoundField<Player> implements Field {
     }
 
     @Override
+    public boolean isTree(Point pt) {
+        return trees.stream().anyMatch(tree -> tree.itsMe(pt));
+    }
+
+    @Override
     public boolean isIce(Point pt) {
         return ice.stream().anyMatch(ice -> ice.itsMe(pt));
     }
@@ -291,6 +300,16 @@ public class Battlecity extends RoundField<Player> implements Field {
                 || (isRiver(pt) && !tank.canWalkOnWater());
     }
 
+    @Override
+    public boolean isFree(Point pt) {
+        return !(isBarrier(pt) || isTree(pt) || isRiver(pt) || isIce(pt));
+    }
+
+    @Override
+    public Optional<Point> freeRandom() {
+        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
+    }
+
     public boolean isBarrier(Point pt) {
         for (Wall wall : this.walls) {
             if (wall.itsMe(pt) && !wall.destroyed()) {
@@ -327,9 +346,9 @@ public class Battlecity extends RoundField<Player> implements Field {
     public List<Tank> allTanks() {
         List<Tank> result = new LinkedList<>(ais);
         for (Player player : players) {
-//            if (player.getTank().isAlive()) { // TODO разремарить с тестом
+            if (player.getHero() != null) {
                 result.add(player.getHero());
-//            }
+            }
         }
         return result;
     }

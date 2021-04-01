@@ -29,18 +29,17 @@ import com.codenjoy.dojo.battlecity.services.Scores;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.round.RoundGamePlayer;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import java.util.Optional;
 
 public class Player extends RoundGamePlayer<Tank, Field> {
 
-    private Dice dice;
     private int killed;
 
-    public Player(EventListener listener, Dice dice, GameSettings settings){
+    public Player(EventListener listener, GameSettings settings){
         super(listener, settings);
-        this.dice = dice;
         reset();
     }
 
@@ -66,7 +65,16 @@ public class Player extends RoundGamePlayer<Tank, Field> {
     }
 
     public void newHero(Field field) {
-        hero = new Tank(pt(0, 0), Direction.UP, dice);
+        if (hero != null) {
+            hero.setPlayer(null);
+            hero = null;
+        }
+        Optional<Point> pt = field.freeRandom();
+        if (pt.isEmpty()) {
+            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
+            throw new RuntimeException("Not enough space for Hero");
+        }
+        hero = new Tank(pt.get(), Direction.UP);
         hero.setPlayer(this);
         hero.removeBullets();
         hero.init(field);
