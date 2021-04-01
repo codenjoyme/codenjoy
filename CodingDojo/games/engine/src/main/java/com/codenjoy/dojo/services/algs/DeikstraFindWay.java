@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.algs;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -121,6 +121,16 @@ public class DeikstraFindWay {
         return shortest;
     }
 
+    private static class Vector {
+        Point from;
+        Direction where;
+
+        public Vector(Point from, Direction where) {
+            this.from = from;
+            this.where = where;
+        }
+    }
+
     private Map<Point, List<Direction>> getPath(Point from, List<Point> inputGoals) {
         Set<Point> goals = new HashSet<>(inputGoals);
         Map<Point, List<Direction>> path = new HashMap<>();
@@ -128,47 +138,53 @@ public class DeikstraFindWay {
             path.put(point, new ArrayList<>(100));
         }
 
-        boolean[][] processed = new boolean[size][size];
-        LinkedList<Point> toProcess = new LinkedList<>();
+        // boolean[][] processed = new boolean[size][size];
+        LinkedList<Vector> queue = new LinkedList<>();
 
-        Point current = from;
+        toProcess(from, queue);
+        Vector current = null;
         do {
             if (current == null) {
-                if (toProcess.isEmpty()) { // TODO test me
+                if (queue.isEmpty()) {
                     break;
                 }
-                current = toProcess.remove();
+                current = queue.remove();
             }
-            List<Direction> before = path.get(current);
-            for (Direction direction : ways().get(current)) {
-                Point to = direction.change(current);
-                if (processed[to.getX()][to.getY()]) continue;
+            List<Direction> before = path.get(current.from);
 
-                List<Direction> directions = path.get(to);
-                if (before.size() < directions.size() - 1) {
-                    // мы нашли более короткий путь,
-                    // но это никогда не случится )
-                    directions.clear();
-                }
-                if (directions.isEmpty()) {
-                    if (!before.isEmpty()) {
-                         directions.addAll(before);
-                    }
-                    directions.add(direction);
+            Point to = current.where.change(current.from);
+            // if (processed[to.getX()][to.getY()]) continue;
 
-                    if (!processed[to.getX()][to.getY()]) {
-                        toProcess.add(to);
-                    }
-                } else {
-                    // do nothing
-                }
+            List<Direction> directions = path.get(to);
+            if (before.size() < directions.size() - 1) {
+                // мы нашли более короткий путь,
+                // но это никогда не случится )
+                directions.clear();
             }
-            processed[current.getX()][current.getY()] = true;
+            if (directions.isEmpty()) {
+                if (!before.isEmpty()) {
+                    directions.addAll(before);
+                }
+                directions.add(current.where);
+
+                // if (!processed[to.getX()][to.getY()]) {
+                    toProcess(to, queue);
+                // }
+            } else {
+                // do nothing
+            }
+            // processed[current.getX()][current.getY()] = true;
             goals.remove(current);
             current = null;
-        } while (!(toProcess.isEmpty() || goals.isEmpty()));
+        } while (!(queue.isEmpty() || goals.isEmpty()));
 
         return path;
+    }
+
+    private void toProcess(Point from, LinkedList<Vector> toProcess) {
+        for (Direction direction : ways().get(from)) {
+            toProcess.add(new Vector(from, direction));
+        }
     }
 
     private Map<Point, List<Direction>> ways() {
