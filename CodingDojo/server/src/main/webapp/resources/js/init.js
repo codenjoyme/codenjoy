@@ -39,6 +39,9 @@ setup.canvasCursor = 'auto';
 setup.loadBoardData = true;
 setup.drawCanvases = true;
 setup.enableChat = true;
+setup.setupSprites = function() {
+    // override this method if you want to customize srites before draw
+}
 
 setup.debug = false;
 setup['debugger'] = function() {
