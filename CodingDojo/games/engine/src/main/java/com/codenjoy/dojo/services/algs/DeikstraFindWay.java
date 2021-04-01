@@ -122,14 +122,17 @@ public class DeikstraFindWay {
     }
 
     private static class Vector implements Comparable<Vector> {
+
+        Point to;
         Point from;
         Direction where;
         double distance;
 
-        public Vector(Point from, Direction where, double distance) {
+        public Vector(Point from, Direction where, Point goal) {
             this.from = from;
             this.where = where;
-            this.distance = distance;
+            this.to = where.change(from);
+            this.distance = 0.0;// to.distance(goal);
         }
 
         @Override
@@ -172,9 +175,7 @@ public class DeikstraFindWay {
             }
             List<Direction> before = path.get(current.from);
 
-            Point to = current.where.change(current.from);
-
-            List<Direction> directions = path.get(to);
+            List<Direction> directions = path.get(current.to);
             if (before.size() < directions.size() - 1) {
                 // мы нашли более короткий путь,
                 // но это никогда не случится )
@@ -186,7 +187,7 @@ public class DeikstraFindWay {
                 }
                 directions.add(current.where);
 
-                toProcess(inputGoals, to, queue);
+                toProcess(inputGoals, current.to, queue);
             } else {
                 // do nothing
             }
@@ -198,9 +199,9 @@ public class DeikstraFindWay {
     }
 
     private void toProcess(List<Point> goals, Point from, List<Vector> queue) {
+        Point goal = goals.get(0);
         for (Direction direction : ways().get(from)) {
-            double distance = 0.0;
-            queue.add(new Vector(from, direction, distance));
+            queue.add(new Vector(from, direction, goal));
         }
         Collections.sort(queue);
     }
