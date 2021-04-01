@@ -51,36 +51,8 @@ if (typeof setup == 'undefined') {
     }
 }
 
-var gameName = localStorage.getItem('gameType'); // check KEYS constants in register.js
+setup.setupSprites();
 
-var onlyControls = window.location.href.includes("controlsOnly=true");
-if (onlyControls) {
-    setup.drawCanvases = false;
-    setup.enableHeader = false;
-    setup.enableFooter = false;
-    gameName = 'JavaScript';
-} else {
-    setup.enableHeader = true;
-    setup.enableFooter = true;
-}
-
-if (gameName == 'JavaScript') {
-    setup.enableBefunge = false;
-    setup.sprites = 'robot';
-} else if (gameName == 'eKids') {
-    setup.enableBefunge = true;
-    setup.sprites = 'ekids';
-} else if (gameName == 'Befunge') {
-    setup.enableBefunge = true;
-    setup.sprites = 'robot';
-} else {
-    gameName = 'Contest';
-    setup.enableBefunge = false;
-    setup.sprites = 'robot';
-    setup.onlyLeaderBoard = true;
-}
-
-setup.isDrawByOrder = (setup.sprites == 'ekids');
 setup.enableDonate = false;
 setup.enableJoystick = false;
 setup.enablePlayerInfo = false;
@@ -97,11 +69,11 @@ setup.debug = false;
 // ========================== leaderboard page ==========================
 
 var initHelpLink = function() {
-    if (gameName == 'eKids') {
+    if (setup.gameMode == MODE_EKIDS) {
         $('#help-link').hide();
         return; // TODO написать нормально мануал и убрать это
     }
-    var pageName = gameName.split(' ').join('-').toLowerCase();
+    var pageName = setup.gameMode.split(' ').join('-').toLowerCase();
     $('#help-link').attr('href', setup.contextPath + '/resources/icancode/landing-' + pageName + '.html')
 }
 var initAdditionalLink = function() {

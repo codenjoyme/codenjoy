@@ -20,4 +20,60 @@
  * #L%
  */
 
- var doNothing = true;
+var setup = setup || {};
+
+const PARAM_GAME_MODE = 'gameMode';
+const STORAGE_GAME_TYPE = 'gameType';
+
+const SPRITES_EKIDS = 'ekids';
+const SPRITES_ROBOT = 'robot';
+
+const MODE_JS = 'JavaScript';
+const MODE_EKIDS = 'eKids';
+const MODE_BEFUNGE = 'Befunge';
+const MODE_CONTEST = 'Contest';
+
+setup.setupSprites = function() {
+    var url = new URL(window.location.href);
+
+    if (url.searchParams.has(PARAM_GAME_MODE)) {
+        setup.gameMode = url.searchParams.get(PARAM_GAME_MODE);
+    }
+
+    var onlyControls = url.searchParams.has('controlsOnly')
+        && (url.searchParams.get('controlsOnly') == 'true');
+    if (onlyControls) {
+        setup.drawCanvases = false;
+        setup.enableHeader = false;
+        setup.enableFooter = false;
+        if (!setup.gameMode) { // TODO удалить if после изменения линков на dojorena
+            setup.gameMode = MODE_JS;
+        }
+    } else {
+        setup.enableHeader = true;
+        setup.enableFooter = true;
+    }
+
+    if (!setup.gameMode) {
+        // check KEYS constants in register.js
+        setup.gameMode = localStorage.getItem(STORAGE_GAME_TYPE);
+    }
+
+    if (setup.gameMode == MODE_JS) {
+        setup.enableBefunge = false;
+        setup.sprites = SPRITES_ROBOT;
+    } else if (setup.gameMode == MODE_EKIDS) {
+        setup.enableBefunge = true;
+        setup.sprites = SPRITES_EKIDS;
+    } else if (setup.gameMode == MODE_BEFUNGE) {
+        setup.enableBefunge = true;
+        setup.sprites = SPRITES_ROBOT;
+    } else if (setup.gameMode == MODE_CONTEST) {
+        setup.enableBefunge = false;
+        setup.sprites = SPRITES_ROBOT;
+        setup.onlyLeaderBoard = true;
+    } else {
+        throw new Error("Unknown iCanCode mode: " + gameMode);
+    }
+    setup.isDrawByOrder = (setup.sprites == SPRITES_EKIDS);
+}
