@@ -157,10 +157,13 @@ public class DeikstraFindWay {
 
     private class Vectors {
         List<Vector> queue = new LinkedList<>();
+        Map<Point, List<Direction>> processed = new HashMap<>();
 
         public void add(List<Point> goals, Point from) {
-            Point goal = goals.get(0);
-            for (Direction direction : ways().get(from)) {
+            Point goal = goals.get(0); // TODO добавить все цели
+            List<Direction> directions = ways().get(from);
+            processed.put(from, new LinkedList<>(directions));
+            for (Direction direction : directions) {
                 queue.add(new Vector(from, direction, goal));
             }
             Collections.sort(queue);
@@ -171,7 +174,21 @@ public class DeikstraFindWay {
         }
 
         public Vector next() {
-            return queue.remove(0);
+            Vector next;
+            boolean done;
+            do {
+                next = queue.remove(0);
+                done = !processed.get(next.from).remove(next.where);
+            } while (done && !queue.isEmpty());
+            return next;
+        }
+
+        public boolean processed(Point from) {
+            if (!processed.containsKey(from)) {
+                return false;
+            }
+
+            return processed.get(from).isEmpty();
         }
     }
 
@@ -207,7 +224,9 @@ public class DeikstraFindWay {
                 }
                 directions.add(current.where);
 
-                vectors.add(inputGoals, current.to);
+                if (!vectors.processed(current.to)) {
+                    vectors.add(inputGoals, current.to);
+                }
             } else {
                 // do nothing
             }
