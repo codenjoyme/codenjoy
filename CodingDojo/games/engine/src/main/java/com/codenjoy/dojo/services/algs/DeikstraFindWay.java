@@ -159,7 +159,6 @@ public class DeikstraFindWay {
             path.put(point, new ArrayList<>(100));
         }
 
-        // boolean[][] processed = new boolean[size][size];
         List<Vector> queue = new LinkedList<>();
 
         toProcess(inputGoals, from, queue);
@@ -174,7 +173,6 @@ public class DeikstraFindWay {
             List<Direction> before = path.get(current.from);
 
             Point to = current.where.change(current.from);
-            // if (processed[to.getX()][to.getY()]) continue;
 
             List<Direction> directions = path.get(to);
             if (before.size() < directions.size() - 1) {
@@ -188,13 +186,10 @@ public class DeikstraFindWay {
                 }
                 directions.add(current.where);
 
-                // if (!processed[to.getX()][to.getY()]) {
-                    toProcess(inputGoals, to, queue);
-                // }
+                toProcess(inputGoals, to, queue);
             } else {
                 // do nothing
             }
-            // processed[current.getX()][current.getY()] = true;
             goals.remove(current);
             current = null;
         } while (!(queue.isEmpty() || goals.isEmpty()));
