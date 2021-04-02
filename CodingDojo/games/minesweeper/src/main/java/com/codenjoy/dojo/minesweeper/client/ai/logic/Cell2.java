@@ -74,10 +74,6 @@ public class Cell2 {
         return neighbour;
     }
 
-    public int getWave() {
-        return this.wave;
-    }
-
     public void setWave(int wave) {
         this.wave = wave;
     }

@@ -4,62 +4,62 @@ import java.util.*;
 
 public class Island {
 
-    private final List<Group> list = new ArrayList();
-    private final List<Cell> toOpen = new ArrayList();
-    private final List<Cell> toMark = new ArrayList();
-    private final List<Group> indefinite = new ArrayList();
+    private List<Group> list = new ArrayList();
+    private List<Cell> toOpen = new ArrayList();
+    private List<Cell> toMark = new ArrayList();
+    private List<Group> indefinite = new ArrayList();
     private int amountCells;
-    private final Deque<StringBuilder> stack = new LinkedList();
+    private Deque<StringBuilder> stack = new LinkedList();
     private List<Cell> indefiniteCells;
     private Integer[] countOfMines;
     private MinesAndCombinationAmountsOfIsland mx0;
     private IslandMinesCombs islandMinesCombs;
 
     public Island(Group group) {
-        this.add(group);
+        add(group);
     }
 
     public void add(Group group) {
-        this.list.add(group);
+        list.add(group);
     }
 
     public void add(Island island) {
-        this.list.addAll(island.list);
+        list.addAll(island.list);
     }
 
     public boolean isCross(Group group) {
-        Iterator i$ = this.list.iterator();
+        Iterator iterator = list.iterator();
 
         Group group1;
         do {
-            if (!i$.hasNext()) {
+            if (!iterator.hasNext()) {
                 return false;
             }
 
-            group1 = (Group) i$.next();
+            group1 = (Group) iterator.next();
         } while (!group.isCross(group1));
 
         return true;
     }
 
     public void optimize() {
-        this.doFractionZeroGroupsInList();
+        doFractionZeroGroupsInList();
 
         boolean repeat;
         do {
             repeat = false;
 
-            for (int i = 0; i < this.list.size() - 1; ++i) {
-                Group first = this.list.get(i);
+            for (int i = 0; i < list.size() - 1; ++i) {
+                Group first = list.get(i);
                 if (first.getValue() < 0) {
-                    this.list.remove(i--);
+                    list.remove(i--);
                 }
 
-                for (int j = i + 1; j < this.list.size(); ++j) {
-                    Group second = this.list.get(j);
+                for (int j = i + 1; j < list.size(); ++j) {
+                    Group second = list.get(j);
                     if (first != second && first.isCross(second)) {
                         if (first.equals(second)) {
-                            this.list.remove(j--);
+                            list.remove(j--);
                         } else if (first.contains(second)) {
                             first.subtraction(second);
                             repeat = true;
@@ -73,12 +73,12 @@ public class Island {
                                 if (overlap != null) {
                                     second.subtraction(first);
                                     repeat = true;
-                                    this.add(overlap);
+                                    add(overlap);
                                 }
                             } else {
                                 first.subtraction(second);
                                 repeat = true;
-                                this.add(overlap);
+                                add(overlap);
                             }
                         }
                     }
@@ -86,13 +86,13 @@ public class Island {
             }
         } while (repeat);
 
-        this.determine();
-        this.amountCells = this.size();
+        determine();
+        amountCells = size();
     }
 
     private void doFractionZeroGroupsInList() {
-        for (int i = 0; i < this.list.size() - 1; ++i) {
-            Group first = this.list.get(i);
+        for (int i = 0; i < list.size() - 1; ++i) {
+            Group first = list.get(i);
             if (first.size() > 1 && first.getValue() == 0) {
                 Iterator i$ = first.getList().iterator();
 
@@ -100,85 +100,83 @@ public class Island {
                     Cell cell = (Cell) i$.next();
                     List<Cell> cells = new ArrayList(1);
                     cells.add(cell);
-                    this.list.add(new Group(cells, 0));
+                    list.add(new Group(cells, 0));
                 }
 
-                this.list.remove(i--);
+                list.remove(i--);
             }
         }
-
     }
 
     private void setIndefiniteCells() {
-        this.indefiniteCells = new ArrayList();
-        Iterator i$ = this.indefinite.iterator();
+        indefiniteCells = new ArrayList();
+        Iterator iterator = indefinite.iterator();
 
-        while (i$.hasNext()) {
-            Group group = (Group) i$.next();
-            Iterator i$$ = group.getList().iterator();
+        while (iterator.hasNext()) {
+            Group group = (Group) iterator.next();
+            Iterator iterator1 = group.getList().iterator();
 
-            while (i$$.hasNext()) {
-                Cell cell = (Cell) i$$.next();
-                if (!this.indefiniteCells.contains(cell)) {
-                    this.indefiniteCells.add(cell);
+            while (iterator1.hasNext()) {
+                Cell cell = (Cell) iterator1.next();
+                if (!indefiniteCells.contains(cell)) {
+                    indefiniteCells.add(cell);
                 }
             }
         }
 
-        this.amountCells = this.indefiniteCells.size() + this.toOpen.size() + this.toMark.size();
+        amountCells = indefiniteCells.size() + toOpen.size() + toMark.size();
     }
 
     public int size() {
-        return this.amountCells;
+        return amountCells;
     }
 
     private void determine() {
-        Iterator i$ = this.list.iterator();
+        Iterator iterator = list.iterator();
 
         while (true) {
-            while (i$.hasNext()) {
-                Group group = (Group) i$.next();
+            while (iterator.hasNext()) {
+                Group group = (Group) iterator.next();
                 Cell cell;
                 if (group.getValue() == 0) {
-                    Iterator i$$ = group.getList().iterator();
+                    Iterator iterator1 = group.getList().iterator();
 
-                    while (i$$.hasNext()) {
-                        cell = (Cell) i$$.next();
-                        this.toOpen.add(cell);
+                    while (iterator1.hasNext()) {
+                        cell = (Cell) iterator1.next();
+                        toOpen.add(cell);
                     }
                 } else if (group.size() == group.getValue()) {
-                    Iterator i$$ = group.getList().iterator();
+                    Iterator iterator1 = group.getList().iterator();
 
-                    while (i$$.hasNext()) {
-                        cell = (Cell) i$$.next();
-                        this.toMark.add(cell);
+                    while (iterator1.hasNext()) {
+                        cell = (Cell) iterator1.next();
+                        toMark.add(cell);
                     }
                 } else {
-                    this.indefinite.add(group);
+                    indefinite.add(group);
                 }
             }
 
-            this.setIndefiniteCells();
+            setIndefiniteCells();
             return;
         }
     }
 
     public void resolve() {
-        Iterator i$ = this.indefinite.iterator();
+        Iterator iterator = indefinite.iterator();
 
-        while (i$.hasNext()) {
-            Group group = (Group) i$.next();
+        while (iterator.hasNext()) {
+            Group group = (Group) iterator.next();
             group.setComb();
         }
 
-        ListIterator<Group> iterator = this.indefinite.listIterator();
-        this.makeTree(iterator);
-        this.computePossibilities();
+        makeTree(indefinite.listIterator());
+        computePossibilities();
     }
 
     private void setPossibilities(int amountCombs) {
-        for (int i = 0; i < this.countOfMines.length; ++i) {
-            this.indefiniteCells.get(i).setPossibility(100.0D * (double) this.countOfMines[i] / (double) amountCombs);
+        for (int i = 0; i < countOfMines.length; ++i) {
+            indefiniteCells.get(i).setPossibility(100.0D * (double) countOfMines[i] / (double) amountCombs);
         }
 
     }
@@ -192,8 +190,8 @@ public class Island {
                 if (group.checkCombination(i)) {
                     group.storeCells();
                     group.setCellsComb(i);
-                    if (this.checkIslandComb()) {
-                        this.makeTree(iterator);
+                    if (checkIslandComb()) {
+                        makeTree(iterator);
                     }
 
                     group.restoreCells();
@@ -203,29 +201,29 @@ public class Island {
                 }
             }
         } else {
-            this.storeComb();
+            storeComb();
         }
 
     }
 
     private boolean checkIslandComb() {
-        Iterator i$ = this.list.iterator();
+        Iterator iterator = list.iterator();
 
         Group group;
         do {
-            if (!i$.hasNext()) {
+            if (!iterator.hasNext()) {
                 return true;
             }
 
-            group = (Group) i$.next();
+            group = (Group) iterator.next();
         } while (group.checkCells());
 
         return false;
     }
 
     private void storeComb() {
-        StringBuilder combSB = new StringBuilder(this.list.size());
-        Iterator i$ = this.indefiniteCells.iterator();
+        StringBuilder combSB = new StringBuilder(list.size());
+        Iterator i$ = indefiniteCells.iterator();
 
         while (i$.hasNext()) {
             Cell cell = (Cell) i$.next();
@@ -242,63 +240,52 @@ public class Island {
             }
         }
 
-        this.stack.push(combSB);
+        stack.push(combSB);
     }
 
     private void computePossibilities() {
-        int amountOfComb = this.stack.size();
-        this.countOfMines = new Integer[this.indefiniteCells.size()];
-        this.mx0 = new MinesAndCombinationAmountsOfIsland();
-        this.islandMinesCombs = new IslandMinesCombs(this.indefiniteCells);
+        int amountOfComb = stack.size();
+        countOfMines = new Integer[indefiniteCells.size()];
+        mx0 = new MinesAndCombinationAmountsOfIsland();
+        islandMinesCombs = new IslandMinesCombs(indefiniteCells);
 
         int i;
-        for (i = 0; i < this.countOfMines.length; ++i) {
-            this.countOfMines[i] = 0;
+        for (i = 0; i < countOfMines.length; ++i) {
+            countOfMines[i] = 0;
         }
 
         for (i = 0; i < amountOfComb; ++i) {
-            StringBuilder combSB = this.stack.pop();
-            int[] mxCountOfMines = new int[this.indefiniteCells.size()];
+            StringBuilder combSB = stack.pop();
+            int[] mxCountOfMines = new int[indefiniteCells.size()];
             int mines = 0;
 
-            for (int j = 0; j < this.indefiniteCells.size(); ++j) {
+            for (int j = 0; j < indefiniteCells.size(); ++j) {
                 if (combSB.charAt(j) == '1') {
-                    Integer[] var7 = this.countOfMines;
+                    Integer[] var7 = countOfMines;
                     var7[j] = var7[j] + 1;
                     mxCountOfMines[j]++;
                     ++mines;
                 }
             }
 
-            this.mx0.addMxCountOfMines(mines, mxCountOfMines);
-            this.islandMinesCombs.incCombsByMines(mines);
-            this.islandMinesCombs.addArrayCombs(mines, mxCountOfMines);
+            mx0.addMxCountOfMines(mines, mxCountOfMines);
+            islandMinesCombs.incCombsByMines(mines);
+            islandMinesCombs.addArrayCombs(mines, mxCountOfMines);
         }
 
-        this.setPossibilities(amountOfComb);
+        setPossibilities(amountOfComb);
     }
 
     public List<Cell> getIndefiniteCells() {
-        return this.indefiniteCells;
-    }
-
-    public MinesAndCombinationAmountsOfIsland getMx0() {
-        return this.mx0;
-    }
-
-    public IslandMinesCombs getIslandMinesCombs() {
-        return this.islandMinesCombs;
+        return indefiniteCells;
     }
 
     public List<Cell> getToOpen() {
-        return this.toOpen;
+        return toOpen;
     }
 
     public List<Cell> getToMark() {
-        return this.toMark;
+        return toMark;
     }
 
-    public String toString() {
-        return "size=" + this.list.size();
-    }
 }

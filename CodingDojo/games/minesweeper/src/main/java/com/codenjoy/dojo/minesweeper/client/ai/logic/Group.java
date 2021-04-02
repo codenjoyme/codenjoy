@@ -4,11 +4,11 @@ import java.util.*;
 
 public class Group {
 
-    private final List<Cell> list;
+    private List<Cell> list;
     private int value;
     private Integer[] comb;
     private StringBuilder[] combinations;
-    private final Deque<StringBuilder> stack;
+    private Deque<StringBuilder> stack;
 
     public Group(List<Cell> cells, int value) {
         list = new ArrayList(cells);
@@ -147,7 +147,6 @@ public class Group {
                 list.get(i).setUnknown();
             }
         }
-
     }
 
     public void setCellsComb(int index) {
@@ -160,7 +159,6 @@ public class Group {
                 list.get(i).setValued();
             }
         }
-
     }
 
     public void subtraction(Group group) {
@@ -172,9 +170,6 @@ public class Group {
         }
 
         value -= group.value;
-        if (value < 0) {
-        }
-
     }
 
     public boolean contains(Group group) {

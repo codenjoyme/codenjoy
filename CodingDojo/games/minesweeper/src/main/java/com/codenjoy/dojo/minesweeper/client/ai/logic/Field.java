@@ -11,28 +11,27 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Field {
-    public final int amount;
-    public final int width;
-    public final int height;
-    private final Cell[][] field;
-    private final List<Cell> cells;
+
+    public int amount;
+    public int width;
+    public int height;
+    private Cell[][] field;
+    private List<Cell> cells;
     double minPossibility;
     private Point myCoord;
     private PlayField playField;
-    private final List<Group> groups;
-    private final List<Island> islands;
-    private final List<Cell> toOpen;
-    private final List<Cell> toMark;
-    private final Dice dice;
+    private List<Group> groups;
+    private List<Island> islands;
+    private List<Cell> toOpen;
+    private List<Cell> toMark;
 
-    public Field(PlayField playField, Dice dice) {
-        this(playField.width, playField.height, playField.amount, dice);
+    public Field(PlayField playField) {
+        this(playField.width, playField.height, playField.amount);
         this.playField = playField;
         scanPlayField();
     }
 
-    public Field(int width, int height, int amount1, Dice dice) {
-        this.dice = dice;
+    public Field(int width, int height, int amount1) {
         groups = new ArrayList();
         toOpen = new ArrayList();
         toMark = new ArrayList();
@@ -50,7 +49,6 @@ public class Field {
         this.myCoord = myCoord;
     }
 
-
     private void createCells() {
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
@@ -58,7 +56,6 @@ public class Field {
                 cells.add(field[x][y]);
             }
         }
-
     }
 
     private void setCellsNeighbours() {
@@ -97,11 +94,9 @@ public class Field {
                 }
             }
         }
-
     }
 
     private void scanPlayField() {
-
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 int value = playField.get(x, y);
@@ -116,7 +111,6 @@ public class Field {
                 }
             }
         }
-
     }
 
     private void setGroups() {
@@ -129,7 +123,6 @@ public class Field {
                 groups.add(new Group(cell.getUnknownCells(), cell.getValue()));
             }
         }
-
     }
 
     private void optimizeIslands() {
@@ -139,7 +132,6 @@ public class Field {
             Island island = (Island) i$.next();
             island.optimize();
         }
-
     }
 
     private void divideGroupsToIslands(List<Group> groups) {
@@ -169,7 +161,6 @@ public class Field {
                 islands.add(new Island(group));
             }
         }
-
     }
 
     public void play() {
@@ -193,11 +184,7 @@ public class Field {
             List<Cell> minPosCells = getMinPosCells();
             minPossibility = minPosCells.size() == 0 ? 100.0D : minPosCells.get(0).getPossibility();
             toOpen.addAll(minPosCells);
-
-//            toOpen = getUnknownCells();
-//            filterReachableCells(toOpen);
         }
-
     }
 
     private void filterReachableCells(List<Cell> cells) {
@@ -206,7 +193,6 @@ public class Field {
                 cells.remove(i--);
             }
         }
-
     }
 
     private boolean isReachableCell(Cell cell) {

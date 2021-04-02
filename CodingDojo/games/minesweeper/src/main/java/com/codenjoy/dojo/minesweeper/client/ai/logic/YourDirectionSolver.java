@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.Direction.STOP;
+import static com.codenjoy.dojo.services.Direction.UP;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class YourDirectionSolver {
@@ -50,11 +52,11 @@ public class YourDirectionSolver {
         String result;
         if (board.isGameOver()) {
             field = null;
-            result = Direction.STOP.toString();
+            result = STOP.toString();
         } else {
             this.board = board;
             if (isFirstTurn()) {
-                result = Direction.UP.toString();
+                result = UP.toString();
             } else {
                 if (field == null) {
                     createField();
@@ -62,7 +64,7 @@ public class YourDirectionSolver {
 
                 field = fillFieldWithBoard();
                 PlayField playField1 = new PlayField(field, 0);
-                Field field = new Field(playField1, dice);
+                Field field = new Field(playField1);
                 field.setMyCoord(myCoord);
 
                 try {
@@ -143,7 +145,7 @@ public class YourDirectionSolver {
     private String getEscapeTo() {
         int width = field.length;
         int height = field[0].length;
-        return myCoord.getX() > 0 && field[myCoord.getX() - 1][myCoord.getY()] != 9 ? Direction.LEFT.toString() : (myCoord.getX() < width - 1 && field[myCoord.getX() + 1][myCoord.getY()] != 9 ? Direction.RIGHT.toString() : (myCoord.getY() > 0 && field[myCoord.getX()][myCoord.getY() - 1] != 9 ? Direction.UP.toString() : (myCoord.getY() < height - 1 && field[myCoord.getX()][myCoord.getY() + 1] != 9 ? Direction.DOWN.toString() : null)));
+        return myCoord.getX() > 0 && field[myCoord.getX() - 1][myCoord.getY()] != 9 ? Direction.LEFT.toString() : (myCoord.getX() < width - 1 && field[myCoord.getX() + 1][myCoord.getY()] != 9 ? Direction.RIGHT.toString() : (myCoord.getY() > 0 && field[myCoord.getX()][myCoord.getY() - 1] != 9 ? UP.toString() : (myCoord.getY() < height - 1 && field[myCoord.getX()][myCoord.getY() + 1] != 9 ? Direction.DOWN.toString() : null)));
     }
 
     private void createField() {
@@ -220,7 +222,7 @@ public class YourDirectionSolver {
     private String getDirectionBydY(int dy) {
         String result;
         if (dy < 0) {
-            result = Direction.UP.toString();
+            result = UP.toString();
         } else if (dy > 0) {
             result = Direction.DOWN.toString();
         } else {

@@ -6,11 +6,11 @@ import java.util.List;
 
 public class Indefinite {
 
-    private final BigInteger one = new BigInteger("1");
-    private final BigInteger zero = new BigInteger("0");
-    private final List<Cell> cells;
-    private final int[] mines;
-    private final BigInteger[] combs;
+    private BigInteger one = new BigInteger("1");
+    private BigInteger zero = new BigInteger("0");
+    private List<Cell> cells;
+    private int[] mines;
+    private BigInteger[] combs;
     private BigInteger summaryCombs;
 
     public Indefinite(List<Cell> cells) {
@@ -41,5 +41,4 @@ public class Indefinite {
     public int[] getMines() {
         return mines;
     }
-
 }
