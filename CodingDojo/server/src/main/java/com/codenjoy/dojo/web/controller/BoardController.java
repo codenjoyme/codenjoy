@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,7 +23,12 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameServerService;
+import com.codenjoy.dojo.services.GameServiceImpl;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
@@ -56,12 +61,12 @@ public class BoardController {
     private final Validator validator;
     private final ConfigProperties properties;
     private final RegistrationService registrationService;
+    private final GameServerService gameServerService;
 
     @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
                               @PathVariable("player") String id,
-                              @RequestParam(name = "only", required = false) Boolean justBoard)
-    {
+                              @RequestParam(name = "only", required = false) Boolean justBoard) {
         validator.checkPlayerId(id, CANT_BE_NULL);
 
         return boardPlayer(model, id, null, justBoard, (String) model.get("game"));
@@ -85,8 +90,7 @@ public class BoardController {
                               @PathVariable("player") String id,
                               @RequestParam("code") String code,
                               @RequestParam(name = "only", required = false) Boolean justBoard,
-                              @RequestParam(name = "game", required = false, defaultValue = "") String game)
-    {
+                              @RequestParam(name = "game", required = false, defaultValue = "") String game) {
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
         validator.checkGame(game, CAN_BE_NULL); // TODO а зачем тут вообще game?
@@ -106,8 +110,7 @@ public class BoardController {
     @GetMapping("/rejoining/{game}")
     public String rejoinGame(ModelMap model, @PathVariable("game") String game,
                              HttpServletRequest request,
-                             @AuthenticationPrincipal Registration.User user)
-    {
+                             @AuthenticationPrincipal Registration.User user) {
         validator.checkGame(game, CANT_BE_NULL);
 
         if (user == null) {
@@ -124,14 +127,14 @@ public class BoardController {
     public String rejoinGame(ModelMap model, @PathVariable("game") String game,
                              @PathVariable("room") String room,
                              HttpServletRequest request,
-                             @AuthenticationPrincipal Registration.User user)
-    {
+                             @AuthenticationPrincipal Registration.User user) {
         validator.checkGame(game, CANT_BE_NULL);
         validator.checkRoom(room, CANT_BE_NULL);
+        String repositoryUrl = gameServerService.createOrGetRepository(user.getGitHubUsername());
 
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {
-            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game);
+            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game, repositoryUrl);
         }
 
         populateBoardAttributes(model, player.getCode(), player, false);
@@ -160,8 +163,7 @@ public class BoardController {
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
     public String boardPlayerLog(ModelMap model, @PathVariable("player") String id,
                                  @RequestParam("game") String game,
-                                 @RequestParam("room") String room)
-    {
+                                 @RequestParam("room") String room) {
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkGame(game, CANT_BE_NULL);
         validator.checkRoom(room, CANT_BE_NULL);
@@ -193,8 +195,7 @@ public class BoardController {
     public String boardAllGames(ModelMap model,
                                 @PathVariable("game") String game,
                                 @RequestParam(value = "code", required = false) String code,
-                                @AuthenticationPrincipal Registration.User user)
-    {
+                                @AuthenticationPrincipal Registration.User user) {
         // TODO возможно тут CAN_BE_NULL, иначе проверка (game == null) никогда не true
         validator.checkGame(game, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
@@ -251,7 +252,7 @@ public class BoardController {
     }
 
     private String code(@RequestParam("code") String code) {
-        return (code != null)?"?code=" + code:"";
+        return (code != null) ? "?code=" + code : "";
     }
 
 }

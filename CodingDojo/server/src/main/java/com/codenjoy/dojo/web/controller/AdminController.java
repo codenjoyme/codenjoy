@@ -62,6 +62,7 @@ public class AdminController {
     public static final String URI = "/admin";
 
     public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
+    public static final String REPOSITORY_URL = "repository-url";
 
     private final TimerService timerService;
     private final PlayerService playerService;
@@ -83,7 +84,7 @@ public class AdminController {
                                          @RequestParam("data") String save,
                                          HttpServletRequest request)
     {
-        saveService.load(id, getGameName(request), getGameRoom(request), save);
+        saveService.load(id, getGameName(request), getGameRoom(request), save,REPOSITORY_URL);
         return "redirect:/board/player/" + id;
     }
     // используется как rest для апдейта полей конкретного player на admin page
@@ -103,7 +104,7 @@ public class AdminController {
     public String savePlayerGame(@PathVariable("player") String id,
                                  HttpServletRequest request)
     {
-        saveService.save(id);
+        saveService.update(id);
         return getAdmin(request);
     }
 
@@ -408,7 +409,7 @@ public class AdminController {
 
             created++;
             String code = register(id);
-            playerService.register(id, game, room, "127.0.0.1");
+            playerService.register(id, game, room, "127.0.0.1","repository");
         }
     }
 
@@ -416,7 +417,7 @@ public class AdminController {
         if (registration.registered(id)) {
             return registration.login(id, id);
         } else {
-            return registration.register(id, id, id, id, "", GameAuthorities.USER.roles()).getCode();
+            return registration.register(id, id, id, id, "", GameAuthorities.USER.roles(),id).getCode();
         }
     }
 

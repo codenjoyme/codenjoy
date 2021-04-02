@@ -1,4 +1,3 @@
-
 package com.codenjoy.dojo.services;
 
 /*-
@@ -11,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -50,7 +49,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
@@ -60,33 +63,43 @@ import static com.codenjoy.dojo.services.PlayerGames.withRoom;
 @Component("playerService")
 @Slf4j
 public class PlayerServiceImpl implements PlayerService {
-    
-    private ReadWriteLock lock = new ReentrantReadWriteLock(true);
-    private Map<Player, String> cacheBoards = new HashMap<>();
 
-    @Autowired protected PlayerGames playerGames;
-    @Autowired private PlayerGamesView playerGamesView;
+    public static final String AI_USER_REPOSITORY = "ai-repository-url";
 
+    @Autowired
+    protected PlayerGames playerGames;
     @Autowired
     @Qualifier("playerController")
     protected Controller playerController;
-
     @Autowired
     @Qualifier("screenController")
     protected Controller screenController;
-
-    @Autowired protected GameService gameService;
-    @Autowired protected AutoSaver autoSaver;
-    @Autowired protected GameSaver saver;
-    @Autowired protected Chat chat;
-    @Autowired protected ActionLogger actionLogger;
-    @Autowired protected Registration registration;
-    @Autowired protected ConfigProperties config;
-    @Autowired protected Semifinal semifinal;
-    @Autowired protected SimpleProfiler profiler;
-
+    @Autowired
+    protected GameService gameService;
+    @Autowired
+    protected AutoSaver autoSaver;
+    @Autowired
+    protected GameSaver saver;
+    @Autowired
+    protected Chat chat;
+    @Autowired
+    protected ActionLogger actionLogger;
+    @Autowired
+    protected Registration registration;
+    @Autowired
+    protected ConfigProperties config;
+    @Autowired
+    protected Semifinal semifinal;
+    @Autowired
+    protected SimpleProfiler profiler;
     @Value("${game.ai}")
     protected boolean isAiNeeded;
+    private ReadWriteLock lock = new ReentrantReadWriteLock(true);
+    private Map<Player, String> cacheBoards = new HashMap<>();
+    @Autowired
+    private PlayerGamesView playerGamesView;
+    @Autowired
+    private GameServerService gameServerService;
 
     @PostConstruct
     public void init() {
@@ -105,7 +118,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(String id, String game, String room, String ip) {
+    public Player register(String id, String game, String room, String ip, String repositoryUrl) {
         lock.writeLock().lock();
         try {
             log.debug("Registered user {} in game {}", id, game);
@@ -118,15 +131,16 @@ public class PlayerServiceImpl implements PlayerService {
 
             // TODO test me
             PlayerSave save = saver.loadGame(id);
-            if (save != PlayerSave.NULL 
+            if (save != PlayerSave.NULL
                     && game.equals(save.getGame())
                     && room.equals(save.getRoom())) // TODO ROOM test me
             {
                 save.setCallbackUrl(ip);
             } else {
-                save = new PlayerSave(id, ip, game, room, 0, null);
+                save = new PlayerSave(id, ip, game, room, 0, null, repositoryUrl);
             }
-            Player player = register(new PlayerSave(id, ip, game, room, save.getScore(), save.getSave()));
+
+            Player player = register(new PlayerSave(id, ip, game, room, save.getScore(), save.getSave(), repositoryUrl));
 
             return player;
         } finally {
@@ -175,8 +189,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private Supplier<Player> getPlayerSupplier(String id, String game, String room) {
         return () -> getPlayer(new PlayerSave(id,
-                            "127.0.0.1", game, room,
-                0, null), game, room);
+                "127.0.0.1", game, room, 0, null, AI_USER_REPOSITORY), game, room);
     }
 
     private void setupPlayerAI(Supplier<Player> getPlayer, String id, String code, String game, String room) {
@@ -266,7 +279,7 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = getPlayer(name);
         PlayerGame oldPlayerGame = playerGames.get(name);
 
-        boolean newPlayer = (player instanceof NullPlayer) 
+        boolean newPlayer = (player instanceof NullPlayer)
                 || !game.equals(player.getGame())
                 || !room.equals(oldPlayerGame.getRoom()); // TODO ROOM test me
         if (newPlayer) {
@@ -279,6 +292,10 @@ public class PlayerServiceImpl implements PlayerService {
                     gameType, playerScores, listener);
             player.setEventListener(listener);
 
+            player.setGitHubUsername(registration.getGitHubUsernameById(player.getId()));
+
+            player.setRepositoryUrl(gameServerService.createOrGetRepository(player.getGitHubUsername()));
+
             player.setGameType(gameType);
             PlayerGame playerGame = playerGames.add(player, room, save);
 
@@ -286,9 +303,10 @@ public class PlayerServiceImpl implements PlayerService {
 
             player.setReadableName(registration.getNameById(player.getId()));
 
+
             log.debug("Player {} starting new game {}", name, playerGame.getGame());
         } else {
-          // do nothing
+            // do nothing
         }
         return player;
     }
@@ -455,7 +473,7 @@ public class PlayerServiceImpl implements PlayerService {
                 throw new IllegalArgumentException("Diff players count");
             }
 
-            for (int index = 0; index < playerGames.size(); index ++) {
+            for (int index = 0; index < playerGames.size(); index++) {
                 updatePlayer(playerGames.get(index), players.get(index));
             }
         } finally {
@@ -509,7 +527,7 @@ public class PlayerServiceImpl implements PlayerService {
             GameType game = gameService.getGameType(input.getGame(), input.getRoom());
             playerGames.changeRoom(input.getId(), input.getRoom());
         }
-        
+
         Game game = playerGame.getGame();
         if (game != null && (game.getSave() != null || updateRoomName)) {
             String oldSave = game.getSave().toString();
@@ -624,7 +642,7 @@ public class PlayerServiceImpl implements PlayerService {
             semifinal.clean(); // TODO semifinal должен научиться работать для определенных комнат
 
             playerGames.getAll(withRoom(room))
-                .forEach(PlayerGame::clearScore);
+                    .forEach(PlayerGame::clearScore);
         } finally {
             lock.writeLock().unlock();
         }
@@ -635,7 +653,8 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             playerGames.get(id).clearScore();
-            playerGames.get(id).getGame().getProgress().reset();
+            //Causes an error - Error:(639,55) java: cannot find symbol
+            //playerGames.get(id).getGame().getProgress().reset();
         } finally {
             lock.writeLock().unlock();
         }

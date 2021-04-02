@@ -53,7 +53,7 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
             Registration.User principal = (Registration.User) authentication.getPrincipal();
             String id = principal.getId();
             if (playerService.contains(id)) {
-                saveService.save(id);
+                saveService.update(id);
                 playerService.remove(id);
             }
         }

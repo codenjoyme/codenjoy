@@ -50,6 +50,7 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthen
         Registration.User principal = (Registration.User) authentication.getPrincipal();
         String game = request.getParameter("game");
         String room = game; // TODO ROOM тут надо получить room как-то
+        String repositoryUrl = registrationService.getRepository(principal.getGitHubUsername());
 
         if (game == null) {
             getRedirectStrategy().sendRedirect(request, response, AdminController.URI);
@@ -57,7 +58,7 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthen
         }
 
         String targetUrl = "/" + registrationService.register(principal.getId(),
-                principal.getCode(), game, room, request.getRemoteAddr());
+                principal.getCode(), game, room, request.getRemoteAddr(),repositoryUrl);
 
         log.debug("Redirecting to  URL: " + targetUrl);
 

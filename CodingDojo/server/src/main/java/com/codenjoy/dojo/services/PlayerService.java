@@ -27,7 +27,7 @@ import java.util.List;
 
 public interface PlayerService extends Tickable {
 
-    Player register(String id, String game, String room, String ip);
+    Player register(String id, String game, String room, String ip,String repositoryUrl);
     Player register(PlayerSave save);
     List<Player> getAll();
     List<Player> getAll(String game);

@@ -70,7 +70,7 @@ public class RegistrationPage {
         String data = String.join("%s|%s|%s|%s", country, techSkills, company, experience);
         String id = Hash.getRandomId();
         registration.register(id, email, name, Hash.md5(password), data,
-                Arrays.asList(GameAuthoritiesConstants.ROLE_USER));
+                Arrays.asList(GameAuthoritiesConstants.ROLE_USER),name);
 
     }
 

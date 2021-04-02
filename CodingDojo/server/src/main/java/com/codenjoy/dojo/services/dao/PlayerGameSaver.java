@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.dao;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,10 +26,13 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerSave;
-import com.codenjoy.dojo.services.jdbc.*;
+import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
+import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
+import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PlayerGameSaver implements GameSaver {
 
@@ -44,7 +47,8 @@ public class PlayerGameSaver implements GameSaver {
                         "room_name varchar(255)," +
                         "game_name varchar(255)," +
                         "score varchar(255)," +
-                        "save varchar(255));");
+                        "save varchar(255)," +
+                        "repository_url varchar(255));");
     }
 
     void removeDatabase() {
@@ -54,15 +58,31 @@ public class PlayerGameSaver implements GameSaver {
     @Override
     public void saveGame(Player player, String save, long time) {
         pool.update("INSERT INTO saves " +
-                        "(time, player_id, callback_url, room_name, game_name, score, save) " +
-                        "VALUES (?,?,?,?,?,?,?);",
+                        "(time, player_id, callback_url, room_name, game_name, score, save, repository_url) " +
+                        "VALUES (?,?,?,?,?,?,?,?);",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
                         player.getId(),
                         player.getCallbackUrl(),
                         player.getRoom(),
                         player.getGame(),
                         player.getScore(),
-                        save
+                        save,
+                        player.getRepositoryUrl()
+                });
+    }
+
+    public void updateGame(Player player, String save, long time) {
+        pool.update("UPDATE saves " +
+                        "SET time = ?, player_id = ?, callback_url = ?, room_name = ?, game_name = ?, score = ?, save = ?, repository_url = ?" +
+                        "WHERE player_id = '"+player.getId()+"';",
+                new Object[]{JDBCTimeUtils.toString(new Date(time)),
+                        player.getId(),
+                        player.getCallbackUrl(),
+                        player.getRoom(),
+                        player.getGame(),
+                        player.getScore(),
+                        save,
+                        player.getRepositoryUrl()
                 });
     }
 
@@ -77,7 +97,8 @@ public class PlayerGameSaver implements GameSaver {
                         String room = rs.getString("room_name");
                         String game = rs.getString("game_name");
                         String save = rs.getString("save");
-                        return new PlayerSave(id, callbackUrl, game, room, score, save);
+                        String repositoryUrl = rs.getString("repository_url");
+                        return new PlayerSave(id, callbackUrl, game, room, score, save, repositoryUrl);
                     } else {
                         return PlayerSave.NULL;
                     }

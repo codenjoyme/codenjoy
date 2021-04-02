@@ -4,7 +4,7 @@ package com.codenjoy.dojo.services;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,31 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-public interface SaveService {
+@RunWith(SpringRunner.class)
+public class GameServerServiceTest {
 
-    long updateAll();
-    long updateAll(String room);
-    long update(String id);
-    boolean load(String id);
-    void load(String id, String game, String room, String save, String repositoryUrl);
-    void loadAll(String room);
-    long save(String id);
-    List<PlayerInfo> getSaves();
-    long saveAll();
-    long saveAll(String room);
-    void loadAll();
-    void removeSave(String id);
-    void removeAllSaves();
-    void removeAllSaves(String room);
+    @InjectMocks
+    private GameServerService gameServerService;
+
+    @Mock
+    private ConfigProperties config;
+
+
+    @Test
+    public void createOrGetRepositoryRepositoryTest() {
+        String username = "dummy-user";
+        gameServerService.createOrGetRepository(username);
+        verify(config, times(1)).getGitHubHostName();
+        verify(config, times(1)).getGitHubPort();
+    }
+
 }

@@ -104,7 +104,7 @@ public class RestBoardController {
             return false;
         }
 
-        saveService.save(id);
+        saveService.update(id);
         Player player = playerService.get(id);
 
         boolean loaded = saveService.load(id);

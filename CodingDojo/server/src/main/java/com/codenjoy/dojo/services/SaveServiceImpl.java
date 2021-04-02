@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -28,7 +28,12 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGames.withRoom;
@@ -38,11 +43,16 @@ public class SaveServiceImpl implements SaveService {
 
     public static final String DEFAULT_CALLBACK_URL = "127.0.0.1";
 
-    @Autowired protected GameSaver saver;
-    @Autowired protected PlayerService players;
-    @Autowired protected Registration registration;
-    @Autowired protected PlayerGames playerGames;
-    @Autowired protected ConfigProperties config;
+    @Autowired
+    protected GameSaver saver;
+    @Autowired
+    protected PlayerService players;
+    @Autowired
+    protected Registration registration;
+    @Autowired
+    protected PlayerGames playerGames;
+    @Autowired
+    protected ConfigProperties config;
 
     @Override
     public long saveAll() {
@@ -61,6 +71,7 @@ public class SaveServiceImpl implements SaveService {
     public long saveAll(String room) {
         return saveAll(playerGames.getAll(withRoom(room)));
     }
+
 
     @Override
     public void loadAll() {
@@ -93,6 +104,42 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Override
+    public long updateAll() {
+        return updateAll(playerGames.all());
+    }
+
+    private long updateAll(List<PlayerGame> playerGames) {
+        long now = System.currentTimeMillis();
+        for (PlayerGame playerGame : playerGames) {
+            updateGame(playerGame, now);
+        }
+        return now;
+    }
+
+    @Override
+    public long updateAll(String room) {
+        return updateAll(playerGames.getAll(withRoom(room)));
+    }
+
+
+    @Override
+    public long update(String id) {
+        PlayerGame playerGame = playerGames.get(id);
+        if (playerGame != NullPlayerGame.INSTANCE) {
+            long now = System.currentTimeMillis();
+            updateGame(playerGame, now);
+            return now;
+        }
+        return -1;
+    }
+
+    private void updateGame(PlayerGame playerGame, long time) {
+        saver.updateGame(playerGame.getPlayer(),
+                playerGame.getGame().getSave().toString(),
+                time);
+    }
+
+    @Override
     public boolean load(String id) {
         PlayerSave save = saver.loadGame(id);
         if (save == PlayerSave.NULL) {
@@ -117,9 +164,9 @@ public class SaveServiceImpl implements SaveService {
      * TODO я не уверен, что оно тут надо, т.к. есть вероятно другие версии этого метода
      */
     @Override
-    public void load(String id, String game, String room, String save) {
+    public void load(String id, String game, String room, String save, String repositoryUrl) {
         String ip = tryGetIpFromSave(id);
-        resetPlayer(id, new PlayerSave(id, ip, game, room, 0, save));
+        resetPlayer(id, new PlayerSave(id, ip, game, room, 0, save, repositoryUrl));
     }
 
     private String tryGetIpFromSave(String id) {
