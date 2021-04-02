@@ -170,7 +170,7 @@ public class AISolverTest {
                 "☼   ║☼"+
                 "☼   ▼☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(LEFT, UP, UP, LEFT));
+                "☼☼☼☼☼☼", path(LEFT, UP, LEFT, UP));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -178,7 +178,7 @@ public class AISolverTest {
                 "☼║   ☼"+
                 "☼▼   ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(RIGHT, UP, UP, RIGHT));
+                "☼☼☼☼☼☼", path(RIGHT, UP, RIGHT, UP));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -186,7 +186,7 @@ public class AISolverTest {
                 "☼ ║  ☼"+
                 "☼ ▼  ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(LEFT, UP, UP, RIGHT));
+                "☼☼☼☼☼☼", path(LEFT, UP, RIGHT, UP));
         //----------------
 
         assertWay(
@@ -195,7 +195,7 @@ public class AISolverTest {
                 "☼   ▲☼"+
                 "☼   ║☼"+
                 "☼ ☺  ☼"+
-                "☼☼☼☼☼☼", path(LEFT, DOWN, DOWN, LEFT));
+                "☼☼☼☼☼☼", path(LEFT, DOWN, LEFT, DOWN));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -203,7 +203,7 @@ public class AISolverTest {
                 "☼▲   ☼"+
                 "☼║   ☼"+
                 "☼  ☺ ☼"+
-                "☼☼☼☼☼☼", path(RIGHT, DOWN, DOWN, RIGHT));
+                "☼☼☼☼☼☼", path(RIGHT, DOWN, RIGHT, DOWN));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -211,7 +211,7 @@ public class AISolverTest {
                 "☼ ▲  ☼"+
                 "☼ ║  ☼"+
                 "☼ ☺  ☼"+
-                "☼☼☼☼☼☼", path(LEFT, DOWN, DOWN, RIGHT));
+                "☼☼☼☼☼☼", path(LEFT, DOWN, RIGHT, DOWN));
         // ----------------------
 
         assertWay(
@@ -220,7 +220,7 @@ public class AISolverTest {
                 "☼☺═► ☼"+
                 "☼    ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(UP, LEFT, DOWN, LEFT));
+                "☼☼☼☼☼☼", path(UP, LEFT, LEFT, DOWN));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -228,7 +228,7 @@ public class AISolverTest {
                 "☼☺   ☼"+
                 "☼    ☼"+
                 "☼ ═► ☼"+
-                "☼☼☼☼☼☼", path(UP, UP, LEFT, LEFT));
+                "☼☼☼☼☼☼", path(UP, LEFT, LEFT, UP));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -236,7 +236,7 @@ public class AISolverTest {
                 "☼    ☼"+
                 "☼☺   ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(DOWN, DOWN, LEFT, LEFT));
+                "☼☼☼☼☼☼", path(DOWN, LEFT, LEFT, DOWN));
         // ----------------------
 
         assertWay(
@@ -245,7 +245,7 @@ public class AISolverTest {
                 "☼ ◄═☺☼"+
                 "☼    ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(UP, RIGHT, DOWN, RIGHT));
+                "☼☼☼☼☼☼", path(UP, RIGHT, RIGHT, DOWN));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -253,7 +253,7 @@ public class AISolverTest {
                 "☼   ☺☼"+
                 "☼    ☼"+
                 "☼ ◄═ ☼"+
-                "☼☼☼☼☼☼", path(UP, UP, RIGHT, RIGHT));
+                "☼☼☼☼☼☼", path(UP, RIGHT, RIGHT, UP));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -261,7 +261,7 @@ public class AISolverTest {
                 "☼    ☼"+
                 "☼   ☺☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(DOWN, DOWN, RIGHT, RIGHT));
+                "☼☼☼☼☼☼", path(DOWN, RIGHT, RIGHT, DOWN));
         // ----------------------
     }
 
@@ -359,7 +359,7 @@ public class AISolverTest {
                 "☼ ◄═☺☼"+
                 "☼    ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(DOWN, RIGHT, UP, RIGHT));
+                "☼☼☼☼☼☼", path(DOWN, RIGHT, RIGHT, UP));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -367,7 +367,7 @@ public class AISolverTest {
                 "☼ ☻ ☺☼"+
                 "☼    ☼"+
                 "☼ ◄═ ☼"+
-                "☼☼☼☼☼☼", path(UP, RIGHT, UP, RIGHT));
+                "☼☼☼☼☼☼", path(UP, RIGHT, RIGHT, UP));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -375,7 +375,7 @@ public class AISolverTest {
                 "☼ ☻  ☼"+
                 "☼ ◄═ ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(DOWN, RIGHT, UP, UP, UP, RIGHT));
+                "☼☼☼☼☼☼", path(LEFT, UP, UP, RIGHT, RIGHT, RIGHT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -383,7 +383,7 @@ public class AISolverTest {
                 "☼    ☼"+
                 "☼ ☻ ☺☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(DOWN, RIGHT, DOWN, RIGHT));
+                "☼☼☼☼☼☼", path(DOWN, RIGHT, RIGHT, DOWN));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -404,7 +404,7 @@ public class AISolverTest {
                 "☼    ☼" +
                 "☼║   ☼" +
                 "☼▼ ☻ ☼" +
-                "☼☼☼☼☼☼", path(RIGHT, UP, UP, UP, RIGHT));
+                "☼☼☼☼☼☼", path(RIGHT, UP, UP, RIGHT, UP));
     }
 
 //    @Test
