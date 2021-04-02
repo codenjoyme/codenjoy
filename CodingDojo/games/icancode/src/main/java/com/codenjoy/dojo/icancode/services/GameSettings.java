@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.services;
  */
 
 
+import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.services.levels.Level;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -32,7 +33,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public static final String CLASSIC_TRAINING = "Single training & all in one final";
     public static final String ALL_SINGLE = "All levels are single";
@@ -58,6 +59,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         DEFAULT_PERKS("Default hero perks on training and contest"),
         TICKS_PER_NEW_ZOMBIE("Ticks per new zombie"),
         COUNT_ZOMBIES_ON_MAP("Count zombies"),
+        WALK_EACH_TICKS("Zombie walks tick timeout"),
         GAME_MODE("Game mode"),
         ROOM_SIZE("Room size"),
         LEVELS_COUNT("Levels count");
@@ -100,6 +102,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
         integer(TICKS_PER_NEW_ZOMBIE, 20);
         integer(COUNT_ZOMBIES_ON_MAP, 4);
+        integer(WALK_EACH_TICKS, 2);
 
         options(GAME_MODE, Arrays.asList(
                 CLASSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP),
@@ -119,6 +122,10 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     public String levelMap(int index) {
         String prefix = levelPrefix(index);
         return string(() -> prefix + "map");
+    }
+
+    public ZombieBrain zombieBrain() {
+        return new ZombieBrain();
     }
 
     public GameSettings addLevel(int index, Level level) {

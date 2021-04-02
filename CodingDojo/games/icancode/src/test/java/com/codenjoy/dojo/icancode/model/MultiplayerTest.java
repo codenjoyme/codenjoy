@@ -84,7 +84,6 @@ public class MultiplayerTest {
                 .string(DEFAULT_PERKS, "ajm,ajm");
 
         Levels.init();
-        Zombie.init();
 
         dice = mock(Dice.class);
     }

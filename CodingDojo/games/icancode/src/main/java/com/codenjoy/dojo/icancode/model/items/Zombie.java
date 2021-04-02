@@ -23,25 +23,17 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 import com.codenjoy.dojo.icancode.model.*;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
+import static com.codenjoy.dojo.icancode.model.Elements.*;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.WALK_EACH_TICKS;
+
 public class Zombie extends FieldItem implements Tickable {
 
-    // TODO to use another way to change this data
-    public static int WALK_EACH_TICKS;
-    public static ZombieBrain BRAIN;
-
-    static {
-        init();
-    }
-
-    public static void init() {
-        WALK_EACH_TICKS = 2;
-        BRAIN = new ZombieBrain();
-    }
-
+    private ZombieBrain brain;
     private int ticks = 0;
     private boolean die;
 
@@ -56,13 +48,13 @@ public class Zombie extends FieldItem implements Tickable {
     }
 
     private static Elements getElement(boolean gender) {
-        return (gender) ? Elements.MALE_ZOMBIE : Elements.FEMALE_ZOMBIE;
+        return (gender) ? MALE_ZOMBIE : FEMALE_ZOMBIE;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (die) {
-            return Elements.ZOMBIE_DIE;
+            return ZOMBIE_DIE;
         }
         return super.state(player, alsoAtPoint);
     }
@@ -90,11 +82,11 @@ public class Zombie extends FieldItem implements Tickable {
             return;
         }
 
-        if (ticks++ % WALK_EACH_TICKS == 0) {
+        if (ticks++ % field.settings().integer(WALK_EACH_TICKS) == 0) {
             return;
         }
 
-        Direction direction = BRAIN.whereToGo(getCell(), field);
+        Direction direction = brain().whereToGo(getCell(), field);
         if (direction == null) {
             return;
         }
@@ -103,6 +95,12 @@ public class Zombie extends FieldItem implements Tickable {
         if (!field.isBarrier(to) && !field.isAt(to, Zombie.class)) {
             field.move(this, to);
         }
+    }
+
+    private ZombieBrain brain() {
+        return (brain == null)
+                ? brain = ((GameSettings)field.settings()).zombieBrain()
+                : brain;
     }
 
     public void die() {

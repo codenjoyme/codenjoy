@@ -50,7 +50,6 @@ public class SmokeTest {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
         // about 9s
-        Zombie.init();
         Levels.init();
 
         Solver dummy = getDummySolver(dice);
