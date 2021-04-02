@@ -28,26 +28,17 @@ public class IslandMinesCombs {
     }
 
     public void incCombsByMines(int mines) {
-        MinesCombs minesCombs = getByMines(mines);
-        if (minesCombs == null) {
-            minesCombs = new MinesCombs(mines);
-            add(minesCombs);
+        MinesCombs combs = getByMines(mines);
+        if (combs == null) {
+            add(new MinesCombs(mines));
         }
     }
 
     private MinesCombs getByMines(int mines) {
-        Iterator iterator = combses.iterator();
-
-        MinesCombs minesCombs;
-        do {
-            if (!iterator.hasNext()) {
-                return null;
-            }
-
-            minesCombs = (MinesCombs) iterator.next();
-        } while (minesCombs.getMines() != mines);
-
-        return minesCombs;
+        return combses.stream()
+                .filter(it -> it.getMines() == mines)
+                .findFirst()
+                .orElse(null);
     }
 
     public void addArrayCombs(int mines, int[] array) {
