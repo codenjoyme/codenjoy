@@ -50,7 +50,7 @@ public class SmokeTest {
         int players = 2;
         Supplier<Solver> solver = () -> new AISolver(dice);
         LocalGameRunner.showPlayers = "1";
-        Smoke.play(1000, "SmokeTest.data", false,
+        Smoke.play(1000, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {

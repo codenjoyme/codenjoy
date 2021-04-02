@@ -54,7 +54,7 @@ public class SmokeTest {
         int players = 2;
         Supplier<Solver> solver = () -> new AISolver(dice);
 
-        Smoke.play(ticks, "SmokeTest.data", false,
+        Smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {
@@ -108,7 +108,7 @@ public class SmokeTest {
         int enemies = 5;
         Supplier<Solver> solver = () -> new AISolver(dice);
 
-        Smoke.play(ticks, "SmokeTestHard.data", false,
+        Smoke.play(ticks, "SmokeTestHard.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {

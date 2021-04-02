@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -46,19 +47,17 @@ public class Smoke {
 
     public static void play(int iterations,
                             String fileName,
-                            boolean rewriteSource,
                             GameType gameRunner,
                             List<Solver> solvers,
                             List<ClientBoard> boards,
                             BiConsumer<Object, Object> assertor)
     {
-        play(iterations, fileName, rewriteSource, true,
+        play(iterations, fileName, true,
                 gameRunner, solvers, boards, assertor);
     }
 
     public static void play(int iterations,
                             String fileName,
-                            boolean rewriteSource,
                             boolean printBoardOnly,
                             GameType gameRunner,
                             List<Solver> solvers,
@@ -80,16 +79,17 @@ public class Smoke {
         LocalGameRunner.run(gameRunner, solvers, boards);
 
         // then
-        String actualAll = String.join("\n", messages);
-        String expectedAll;
-        if (rewriteSource) {
-            expectedAll = StringUtils.EMPTY;
-            saveToFile(SOURCE_FOLDER + fileName, actualAll);
+        String actual = String.join("\n", messages);
+        String expected;
+        String expectedFile = SOURCE_FOLDER + fileName;
+        if (new File(expectedFile).exists()) {
+            expected = load(expectedFile);
+            saveToFile(TARGET_FOLDER + fileName, actual);
         } else {
-            expectedAll = load(SOURCE_FOLDER + fileName);
-            saveToFile(TARGET_FOLDER + fileName, actualAll);
+            expected = StringUtils.EMPTY;
+            saveToFile(expectedFile, actual);
         }
-        TestUtils.assertSmoke(true, assertor, expectedAll, actualAll);
+        TestUtils.assertSmoke(true, assertor, expected, actual);
     }
 
     public void saveToFile(String path, String data) {
