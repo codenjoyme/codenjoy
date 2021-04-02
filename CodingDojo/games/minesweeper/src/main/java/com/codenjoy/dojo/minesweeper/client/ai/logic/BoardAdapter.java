@@ -24,14 +24,14 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 
 import com.codenjoy.dojo.minesweeper.client.Board;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.BoardImpl;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
 public class BoardAdapter extends BoardImpl {
-    private final Board board;
+
+    private Board board;
 
     public BoardAdapter(Board board) {
         super("");
@@ -64,11 +64,6 @@ public class BoardAdapter extends BoardImpl {
     @Override
     public String toString() {
         return board.toString();
-    }
-
-    @Override
-    public List<Point> getWalls() {
-        return board.get(Elements.BORDER);
     }
 
     @Override

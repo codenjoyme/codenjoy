@@ -69,8 +69,6 @@ public class RandomMinesGeneratorTest {
                 for (int j = i + 1; j < mines.size(); j++) {
                     Mine second = mines.get(j);
                     if (first.getX() == second.getX() && first.getY() == second.getY()) {
-                        System.out.println(Arrays.toString(mines.toArray()));
-                        System.out.println("[" + first.getX() + "," + first.getY() + "] repeats");
                         fail();
                     }
                 }
@@ -84,9 +82,6 @@ public class RandomMinesGeneratorTest {
             List<Mine> mines = generate();
             for (int i = 0; i < mines.size(); i++) {
                 if (isInSafeArea(mines.get(i))) {
-                    System.out.println(Arrays.toString(mines.toArray()));
-                    System.out.println("[" + mines.get(i).getX() + "," + mines.get(i).getY() + "] is in safe area");
-
                     fail();
                 }
             }

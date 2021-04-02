@@ -20,7 +20,6 @@ public class WaveField {
         this.createCell2s();
         this.setCellsNeighbours();
         this.initData();
-        this.print();
     }
 
     public List<Direction> findWay(Point to) {
@@ -28,7 +27,6 @@ public class WaveField {
         Cell2 cell = this.getCell2(from);
         cell.setWave(0);
         cell.makeWave();
-        this.printWaves();
         List<Cell2> way = this.getCell2sWay(to);
         List<Direction> result = this.getDirectionsWay(from, way);
         return result;
@@ -129,44 +127,5 @@ public class WaveField {
             }
         }
 
-    }
-
-    public void print() {
-        System.out.println(this.toString());
-    }
-
-    public void printWaves() {
-        System.out.println(this.toStringWaves());
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder("0 1 2 3 4 5 6 7 8 9 0 1 2 3\n\n");
-
-        for (int i = 0; i < this.size; ++i) {
-            for (int j = 0; j < this.size; ++j) {
-                sb.append(this.field[i][j]).append(' ');
-            }
-
-            sb.append(' ').append(i).append('\n');
-        }
-
-        sb.append("\n0 1 2 3 4 5 6 7 8 9 0 1 2 3");
-        return sb.toString();
-    }
-
-    public String toStringWaves() {
-        StringBuilder sb = new StringBuilder(" 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15\n\n");
-
-        for (int i = 0; i < this.size; ++i) {
-            for (int j = 0; j < this.size; ++j) {
-                int wave = this.field[i][j].getWave();
-                sb.append(wave < 10 ? ' ' : "").append(wave == 2147483646 ? "  " : wave).append(' ');
-            }
-
-            sb.append(' ').append(i).append('\n');
-        }
-
-        sb.append("\n 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15");
-        return sb.toString();
     }
 }

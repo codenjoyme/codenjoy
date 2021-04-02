@@ -24,10 +24,6 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 
 import com.DirectionSolver;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.PlayField;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.BoardImpl;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.WaveField;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -36,8 +32,8 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class YourDirectionSolver implements DirectionSolver {
-    static List<Direction> path = new LinkedList();
+public class YourDirectionSolver {
+
     private final Dice dice;
     private BoardImpl board;
     private Point myCoord;
@@ -51,16 +47,8 @@ public class YourDirectionSolver implements DirectionSolver {
     }
 
     public String get(BoardImpl board) {
-        System.out.println(board.toString());
         String result;
         if (board.isGameOver()) {
-            StringBuilder playField = new StringBuilder();
-            buildMethodCaption(board, playField);
-            playField.append(turns);
-            playField.append("        String production=\"\"\n").append(board.toString()).append("        ;\n");
-            playField.append("        System.out.println(\"Production is:\\n\"+production);\n");
-            playField.append("        System.out.println(\"Test is:\");\n").append("        System.out.println(printerFactory.getPrinter(game.reader(), null).print());\n");
-            playField.append("        assertBoard(production);\n    }\n");
             field = null;
             result = Direction.STOP.toString();
         } else {
@@ -132,7 +120,6 @@ public class YourDirectionSolver implements DirectionSolver {
             }
         }
 
-        System.out.println(Calendar.getInstance().getTime() + ":   " + result);
         return result;
     }
 
@@ -153,39 +140,6 @@ public class YourDirectionSolver implements DirectionSolver {
         return pt(direction.changeX(point.getX()), direction.changeY(point.getY()));
     }
 
-    private void buildMethodCaption(BoardImpl board, StringBuilder test) {
-        test.append("    @Test\n").append("    public void findBug() {\n").append("        size=").append(board.size()).append(";\n").append("        detectorCharge=").append(countDetectorCharge(board)).append(";\n").append("        shouldBoardWith(\n                new Sapper(1, 1)\n");
-        buildMines(board, test);
-        test.append("        );\n");
-    }
-
-    private void buildMines(BoardImpl board, StringBuilder caption) {
-        for (int i = 0; i < board.size(); ++i) {
-            for (int j = 0; j < board.size(); ++j) {
-                char c = board.getAt(i, j).ch();
-                if (c == 9787 || c == 120 || c == 1120) {
-                    caption.append("                ,new Mine(").append(i).append(',').append(board.size() - 1 - j).append(")\n");
-                }
-            }
-        }
-
-    }
-
-    private int countDetectorCharge(BoardImpl board) {
-        int detectorCharge = 0;
-
-        for (int i = 0; i < board.size(); ++i) {
-            for (int j = 0; j < board.size(); ++j) {
-                char c = board.getAt(i, j).ch();
-                if (c == 9787 || c == 120 || c == 1120) {
-                    ++detectorCharge;
-                }
-            }
-        }
-
-        return detectorCharge;
-    }
-
     private String getEscapeTo() {
         int width = field.length;
         int height = field[0].length;
@@ -200,7 +154,6 @@ public class YourDirectionSolver implements DirectionSolver {
                 field[i][j] = 9;
             }
         }
-
     }
 
     private boolean isOnJustMarked(Point[] toMark) {
@@ -345,9 +298,5 @@ public class YourDirectionSolver implements DirectionSolver {
         return result;
     }
 
-    @Override
-    public String get(com.utils.BoardImpl board) {
-        return null;
-    }
 }
 

@@ -47,35 +47,6 @@ public class BoardImpl {
         return (int) Math.sqrt(this.board.length());
     }
 
-    private String boardAsString() {
-        StringBuffer result = new StringBuffer();
-
-        for (int i = 0; i <= this.size - 1; ++i) {
-            result.append(this.board, i * this.size, (i + 1) * this.size);
-            result.append("\n");
-        }
-
-        return result.toString();
-    }
-
-    private List<Point> removeDuplicates(List<Point> all) {
-        List<Point> result = new LinkedList();
-        Iterator i$ = all.iterator();
-
-        while (i$.hasNext()) {
-            Point point = (Point) i$.next();
-            if (!result.contains(point)) {
-                result.add(point);
-            }
-        }
-
-        return result;
-    }
-
-    public String toString() {
-        return String.format("Board:\n%s\n", this.boardAsString());
-    }
-
     private List<Point> findAll(Elements element) {
         List<Point> result = new LinkedList();
 
@@ -87,10 +58,6 @@ public class BoardImpl {
         }
 
         return result;
-    }
-
-    public List<Point> getWalls() {
-        return this.findAll(Elements.BORDER);
     }
 
     public boolean isAt(int x, int y, Elements... elements) {

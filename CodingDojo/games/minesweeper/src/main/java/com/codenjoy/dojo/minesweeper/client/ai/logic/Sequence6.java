@@ -4,21 +4,6 @@ import java.util.ArrayList;
 
 public class Sequence6 {
 
-    public static long getAmount(int setted, int whole) {
-        long result = 1L;
-
-        for (int i = whole; i > Math.max(setted, whole - setted); --i) {
-            result *= i;
-        }
-
-        result /= factorial(Math.min(setted, whole - setted));
-        if (result < 0L) {
-            result = 9223372036854775807L;
-        }
-
-        return result;
-    }
-
     public static Integer[] getSequensed(int setted, int whole) {
         checkArguments(setted, whole);
         ArrayList arrayList = new ArrayList();
@@ -42,39 +27,5 @@ public class Sequence6 {
         }
     }
 
-    private static long factorial(int n) {
-        long result = 1L;
 
-        for (int i = 1; i <= n; ++i) {
-            result *= i;
-        }
-
-        return result;
-    }
-
-    public static void main(String[] args) {
-        int setted = 30;
-        int whole = 30;
-        Sequence6 sequence6 = new Sequence6();
-        System.out.println(getAmount(setted, whole));
-        Integer[] res = getSequensed(setted, whole);
-        sequence6.printMas(res);
-    }
-
-    public void printMas(Integer[] a) {
-        int bits = Integer.toBinaryString(a[a.length - 1]).length();
-
-        for (int i = 0; i < a.length; ++i) {
-            StringBuilder prefix = new StringBuilder();
-            String string = Integer.toBinaryString(a[i]);
-
-            for (int j = string.length(); j < bits; ++j) {
-                prefix.append('0');
-            }
-
-            System.out.println(prefix + string);
-        }
-
-        System.out.println("Всего " + a.length + " комбинаций");
-    }
 }

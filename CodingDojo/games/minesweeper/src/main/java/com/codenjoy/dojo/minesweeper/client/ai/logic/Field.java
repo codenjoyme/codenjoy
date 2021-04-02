@@ -279,7 +279,6 @@ public class Field {
             Cell cell = (Cell) i$.next();
             cell.setPossibility(possibility);
         }
-
     }
 
     private List<Cell> getUnknownCells() {
@@ -316,38 +315,10 @@ public class Field {
             toOpen.addAll(island.getToOpen());
             toMark.addAll(island.getToMark());
         }
-
     }
 
     private boolean hasDecision() {
         return toMark.size() > 0 || toOpen.size() > 0;
-    }
-
-    public void print() {
-        System.out.println(fieldToString());
-    }
-
-    public String fieldToString() {
-        StringBuilder result = new StringBuilder("0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9\n");
-
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
-                Cell cell = field[x][y];
-                if (cell.isMine()) {
-                    result.append("* ");
-                } else if (cell.isUnknown()) {
-                    result.append("  ");
-                } else {
-                    result.append(cell.getValue()).append(" ");
-                }
-            }
-
-            result.append(y).append('\n');
-        }
-
-        result.append("0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9\n");
-        result.append('\n');
-        return result.toString();
     }
 
     public double getMinPossibility() {

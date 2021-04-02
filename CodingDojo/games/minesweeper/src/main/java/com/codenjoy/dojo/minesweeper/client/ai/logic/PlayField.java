@@ -45,21 +45,4 @@ public class PlayField {
         return this.field[x][y];
     }
 
-    public void print() {
-        for (int y = 0; y < this.height; ++y) {
-            for (int x = 0; x < this.width; ++x) {
-                if (this.field[x][y] == 10) {
-                    System.out.print("* ");
-                } else if (this.field[x][y] == 0) {
-                    System.out.print("  ");
-                } else {
-                    System.out.print(this.field[x][y] + " ");
-                }
-            }
-
-            System.out.println();
-        }
-
-        System.out.println();
-    }
 }

@@ -32,8 +32,6 @@ public class IslandMinesCombs {
             minesCombs = new MinesCombs(mines);
             add(minesCombs);
         }
-
-        minesCombs.addComb(1);
     }
 
     private MinesCombs getByMines(int mines) {

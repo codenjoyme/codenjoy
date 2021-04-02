@@ -233,17 +233,4 @@ public class Group {
         result = 31 * result + value;
         return result;
     }
-
-    public String toString() {
-        StringBuilder res = (new StringBuilder("mines=")).append(value).append(' ');
-        Iterator iterator = list.iterator();
-
-        while (iterator.hasNext()) {
-            Cell cell = (Cell) iterator.next();
-            res.append(" (").append(cell.getX()).append(',').append(cell.getY()).append(")");
-        }
-
-        return res.toString();
-    }
-
 }
