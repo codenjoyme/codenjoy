@@ -13,6 +13,7 @@ import java.util.List;
 import static com.utils.Point.pt;
 
 public class BoardImpl {
+
     private String board;
     private LengthToXY xyl;
     private int size;
@@ -57,11 +58,6 @@ public class BoardImpl {
         }
 
         return result.toString();
-    }
-
-    public List<Point> getBarriers() {
-        List<Point> all = this.getWalls();
-        return this.removeDuplicates(all);
     }
 
     private List<Point> removeDuplicates(List<Point> all) {
@@ -111,43 +107,6 @@ public class BoardImpl {
         }
 
         return false;
-    }
-
-    public boolean isNear(int x, int y, Elements element) {
-        if (pt(x, y).isBad(this.size)) {
-            return false;
-        } else {
-            return this.isAt(x + 1, y, element) || this.isAt(x - 1, y, element) || this.isAt(x, y + 1, element) || this.isAt(x, y - 1, element);
-        }
-    }
-
-    public boolean isBarrierAt(int x, int y) {
-        return this.getBarriers().contains(pt(x, y));
-    }
-
-    public int countNear(int x, int y, Elements element) {
-        if (pt(x, y).isBad(this.size)) {
-            return 0;
-        } else {
-            int count = 0;
-            if (this.isAt(x - 1, y, element)) {
-                ++count;
-            }
-
-            if (this.isAt(x + 1, y, element)) {
-                ++count;
-            }
-
-            if (this.isAt(x, y - 1, element)) {
-                ++count;
-            }
-
-            if (this.isAt(x, y + 1, element)) {
-                ++count;
-            }
-
-            return count;
-        }
     }
 
     public Point getMe() {

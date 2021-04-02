@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Cell {
+
     private boolean walkable;
     private Point point;
     private int wave;

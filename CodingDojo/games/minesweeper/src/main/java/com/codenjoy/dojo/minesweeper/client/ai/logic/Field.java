@@ -26,9 +26,6 @@ public class Field {
     private List<Cell> toOpen;
     private List<Cell> toMark;
     double minPossibility;
-    private boolean exploded;
-    private int minesSetted;
-    private int valued;
     private Dice dice;
 
     public Field(PlayField playField, Dice dice) {
@@ -154,8 +151,6 @@ public class Field {
     }
 
     private void scanPlayField() {
-        this.minesSetted = 0;
-        this.valued = 0;
 
         for(int x = 0; x < this.width; ++x) {
             for(int y = 0; y < this.height; ++y) {
@@ -165,13 +160,9 @@ public class Field {
                         this.field[x][y].setUnknown();
                     } else if (value == 11) {
                         this.field[x][y].setMine();
-                        ++this.minesSetted;
                     } else {
                         this.field[x][y].setValue(value);
-                        ++this.valued;
                     }
-                } else {
-                    this.exploded = true;
                 }
             }
         }
@@ -321,7 +312,7 @@ public class Field {
                         cell = (Cell)i$.next();
                     } while(!cell.isUnknown());
                 } while(!this.isReachableCell(cell));
-            } while((Integer)cell.getCoords().getKey() == this.myCoord.getX() && (Integer)cell.getCoords().getValue() == this.myCoord.getY());
+            } while(cell.getCoords().getKey() == this.myCoord.getX() && cell.getCoords().getValue() == this.myCoord.getY());
 
             if (cell.getPossibility() == min) {
                 result.add(cell);

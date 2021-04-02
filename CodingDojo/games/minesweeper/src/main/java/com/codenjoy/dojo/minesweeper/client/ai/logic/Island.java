@@ -19,12 +19,9 @@ public class Island {
     private int amountCells;
     private Deque<StringBuilder> stack = new LinkedList();
     private List<Cell> indefiniteCells;
-    private double[] possibilities;
     private Integer[] countOfMines;
-    private List<Cell> minPossibilities;
     private MinesAndCombinationAmountsOfIsland mx0;
     private IslandMinesCombs islandMinesCombs;
-    private double minPossibility;
 
     public Island(Group group) {
         this.add(group);
@@ -259,7 +256,6 @@ public class Island {
     private void computePossibilities() {
         int amountOfComb = this.stack.size();
         this.countOfMines = new Integer[this.indefiniteCells.size()];
-        this.possibilities = new double[this.indefiniteCells.size()];
         this.mx0 = new MinesAndCombinationAmountsOfIsland();
         this.mx0.setIndefiniteCells(this.indefiniteCells);
         this.islandMinesCombs = new IslandMinesCombs(this.indefiniteCells);

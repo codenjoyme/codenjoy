@@ -9,9 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Group {
-    public static final char MINE = '1';
-    public static final char VALUED = '0';
-    public static final char UNKNOWN = '2';
+
     private List<Cell> list;
     private int value;
     private Integer[] comb;
@@ -254,13 +252,4 @@ public class Group {
         return res.toString();
     }
 
-    public void setUnknown() {
-        Iterator i$ = this.list.iterator();
-
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
-            cell.setUnknown();
-        }
-
-    }
 }

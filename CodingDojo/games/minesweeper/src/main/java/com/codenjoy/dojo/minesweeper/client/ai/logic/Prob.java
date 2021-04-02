@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Prob {
-    public Prob() {
-    }
 
     public static double not(double a) {
         if (a <= 1.0D && a >= 0.0D) {
@@ -30,24 +28,6 @@ public class Prob {
         }
     }
 
-    public static double sum(List<Double> doubles) {
-        double res = 1.0D;
-
-        Double d;
-        for(Iterator i$ = doubles.iterator(); i$.hasNext(); res *= not(d)) {
-            d = (Double)i$.next();
-            if (d > 1.0D || d < 0.0D) {
-                throw new IllegalArgumentException("Argument must be 0...1, not " + d);
-            }
-        }
-
-        return 1.0D - res;
-    }
-
-    public static double mul(double a, double b) {
-        return a * b;
-    }
-
     public static void correct(List<Double> list, double multiply) {
         double sum = 0.0D;
 
@@ -61,30 +41,6 @@ public class Prob {
             list.set(i, res > 1.0D ? res : res);
         }
 
-    }
-
-    public static long combinationNK(int n, int k) {
-        double res = 1.0D;
-        int n_k = n - k;
-
-        for(int i = n; i > k; --i) {
-            if (n_k > 1) {
-                res = res * (double)i / (double)(n_k--);
-            } else {
-                res *= i;
-            }
-        }
-
-        return (long)res;
-    }
-
-    public static long factorial(int n) {
-        long res;
-        for(res = n; n > 1; res *= n) {
-            --n;
-        }
-
-        return res;
     }
 
     public static void main(String[] args) {

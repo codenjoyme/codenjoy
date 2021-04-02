@@ -62,11 +62,6 @@ public class BoardAdapter extends BoardImpl {
     }
 
     @Override
-    public List<Point> getBarriers() {
-        return board.get(Elements.BORDER);
-    }
-
-    @Override
     public String toString() {
         return board.toString();
     }
@@ -79,21 +74,6 @@ public class BoardAdapter extends BoardImpl {
     @Override
     public boolean isAt(int x, int y, Elements... elements) {
         return board.isAt(x, y, elements);
-    }
-
-    @Override
-    public boolean isNear(int x, int y, Elements element) {
-        return board.isNear(x, y, element);
-    }
-
-    @Override
-    public boolean isBarrierAt(int x, int y) {
-        return board.isBarrierAt(x, y);
-    }
-
-    @Override
-    public int countNear(int x, int y, Elements element) {
-        return board.countNear(x, y, element);
     }
 
     @Override

@@ -6,8 +6,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class Sequence6 {
-    public Sequence6() {
-    }
 
     public static long getAmount(int setted, int whole) {
         long result = 1L;
@@ -21,20 +19,6 @@ public class Sequence6 {
             result = 9223372036854775807L;
         }
 
-        return result;
-    }
-
-    public static BigInteger getBigIntegerAmount(int setted, int whole) {
-        BigInteger result = new BigInteger("1");
-        BigInteger multiplier = new BigInteger(Integer.toString(whole));
-        BigInteger minusOne = new BigInteger("-1");
-
-        for(int i = whole; i > Math.max(setted, whole - setted); --i) {
-            result = result.multiply(multiplier);
-            multiplier = multiplier.add(minusOne);
-        }
-
-        result = result.divide(factorialBigInteger(Math.min(setted, whole - setted)));
         return result;
     }
 
@@ -66,16 +50,6 @@ public class Sequence6 {
 
         for(int i = 1; i <= n; ++i) {
             result *= (long)i;
-        }
-
-        return result;
-    }
-
-    private static BigInteger factorialBigInteger(int n) {
-        BigInteger result = new BigInteger("1");
-
-        for(int i = 1; i <= n; ++i) {
-            result = result.multiply(new BigInteger(Integer.toString(i)));
         }
 
         return result;

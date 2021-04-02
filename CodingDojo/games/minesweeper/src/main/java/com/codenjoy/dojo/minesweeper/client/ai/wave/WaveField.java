@@ -8,12 +8,10 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class WaveField {
+
     private int size;
     private Cell[][] field;
     private List<Cell> cells = new ArrayList();
@@ -43,7 +41,7 @@ public class WaveField {
         List<Direction> result = new ArrayList();
 
         for(int i = way.size() - 2; i >= 0; --i) {
-            Point coord = ((Cell)way.get(i)).getPoint();
+            Point coord = (way.get(i)).getPoint();
             result.add(this.getDirection(from, coord));
             from = coord;
         }
@@ -100,22 +98,6 @@ public class WaveField {
 
     }
 
-    private int getMaxValue(Map<Integer, Integer> map) {
-        int maxKey = -1;
-        int maxValue = -1;
-        Iterator i$ = map.entrySet().iterator();
-
-        while(i$.hasNext()) {
-            Entry<Integer, Integer> entry = (Entry)i$.next();
-            if ((Integer)entry.getValue() > maxValue) {
-                maxValue = (Integer)entry.getValue();
-                maxKey = (Integer)entry.getKey();
-            }
-        }
-
-        return maxKey;
-    }
-
     private void createCells() {
         this.field = new Cell[this.size][this.size];
 
@@ -127,7 +109,6 @@ public class WaveField {
                 this.cells.add(cell);
             }
         }
-
     }
 
     private void setCellsNeighbours() {
