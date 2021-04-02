@@ -30,397 +30,63 @@ import com.codenjoy.dojo.sample.client.ai.AISolver;
 import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LEVEL_MAP;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
-    private Dice dice;
-
     @Test
     public void test() {
-        // given
-        List<String> messages = new LinkedList<>();
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 10;
+        // about 3s
+        int players = 2;
+        Supplier<Solver> solver = () -> new AISolver(dice);
+        LocalGameRunner.showPlayers = "1";
+        Smoke.play(1000, "SmokeTest.data", false,
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
 
-        Dice dice = LocalGameRunner.getDice(
-                0, 1, 2, 3, 4, // random numbers
-                0, 2, 2, 3, 1,
-                0, 1, 4, 1, 2,
-                1, 3, 2, 4, 1,
-                1, 3, 0, 0, 1,
-                0, 0, 1, 0, 2,
-                1, 3, 2, 4, 1,
-                0, 1, 1, 3, 3,
-                0, 2, 0, 0, 2,
-                0, 1, 2, 2, 1,
-                1, 3, 4, 3, 4,
-                1, 3, 2, 4, 1,
-                0, 1, 3, 1, 1);
-
-        GameRunner gameType = new GameRunner() {
-            @Override
-            public Dice getDice() {
-                return dice;
-            }
-
-            @Override
-            public GameSettings getSettings() {
-                return super.getSettings()
-                        .string(LEVEL_MAP,
-                            "☼☼☼☼☼☼☼☼☼☼☼" +
-                            "☼ $       ☼" +
-                            "☼     $  $☼" +
-                            "☼         ☼" +
-                            "☼   $  $  ☼" +
-                            "☼         ☼" +
-                            "☼     $   ☼" +
-                            "☼         ☼" +
-                            "☼ ☺    $  ☼" +
-                            "☼  $      ☼" +
-                            "☼☼☼☼☼☼☼☼☼☼☼");
-            }
-        };
-
-        // when
-        LocalGameRunner.run(gameType,
-                new LinkedList<Solver>(){{
-                    add(new AISolver(dice));
-                    add(new AISolver(dice));
-                }},
-                new LinkedList<>(){{
-                    add(new Board());
-                    add(new Board());
-                }});
-
-        // then
-        assertEquals("DICE:0\n" +
-                    "DICE:1\n" +
-                    "DICE:2\n" +
-                    "DICE:3\n" +
-                    "DICE:4\n" +
-                    "DICE:0\n" +
-                    "DICE:2\n" +
-                    "DICE:2\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼     $   ☼\n" +
-                    "1:☼ ☺       ☼\n" +
-                    "1:☼ ☻    $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: RIGHT\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼     $   ☼\n" +
-                    "2:☼ ☻       ☼\n" +
-                    "2:☼ ☺    $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: RIGHT, ACT\n" +
-                    "------------------------------------------\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼     $   ☼\n" +
-                    "1:☼  ☺      ☼\n" +
-                    "1:☼ x☻   $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: RIGHT\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼     $   ☼\n" +
-                    "2:☼  ☻      ☼\n" +
-                    "2:☼ x☺   $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: UP\n" +
-                    "------------------------------------------\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼     $   ☼\n" +
-                    "1:☼  ☻☺     ☼\n" +
-                    "1:☼ x    $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: UP\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼     $   ☼\n" +
-                    "2:☼  ☺☻     ☼\n" +
-                    "2:☼ x    $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: UP\n" +
-                    "------------------------------------------\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼  ☻☺ $   ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼ x    $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: DOWN, ACT\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼  ☺☻ $   ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼ x    $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: UP\n" +
-                    "------------------------------------------\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼  ☻      ☼\n" +
-                    "1:☼   x $   ☼\n" +
-                    "1:☼   ☺     ☼\n" +
-                    "1:☼ x    $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: LEFT\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼  ☺      ☼\n" +
-                    "2:☼   x $   ☼\n" +
-                    "2:☼   ☻     ☼\n" +
-                    "2:☼ x    $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: DOWN\n" +
-                    "------------------------------------------\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼  ☻x $   ☼\n" +
-                    "1:☼  ☺      ☼\n" +
-                    "1:☼ x    $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: UP\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼  ☺x $   ☼\n" +
-                    "2:☼  ☻      ☼\n" +
-                    "2:☼ x    $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: DOWN\n" +
-                    "------------------------------------------\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼  ☻x $   ☼\n" +
-                    "1:☼  ☺      ☼\n" +
-                    "1:☼ x    $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: UP\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼  ☺x $   ☼\n" +
-                    "2:☼  ☻      ☼\n" +
-                    "2:☼ x    $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: DOWN\n" +
-                    "------------------------------------------\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼  ☻x $   ☼\n" +
-                    "1:☼  ☺      ☼\n" +
-                    "1:☼ x    $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: UP\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼  ☺x $   ☼\n" +
-                    "2:☼  ☻      ☼\n" +
-                    "2:☼ x    $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: DOWN\n" +
-                    "------------------------------------------\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼  ☻x $   ☼\n" +
-                    "1:☼  ☺      ☼\n" +
-                    "1:☼ x    $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: UP\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼  ☺x $   ☼\n" +
-                    "2:☼  ☻      ☼\n" +
-                    "2:☼ x    $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: DOWN\n" +
-                    "------------------------------------------\n" +
-                    "1:Board:\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:☼ $       ☼\n" +
-                    "1:☼     $  $☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼   $  $  ☼\n" +
-                    "1:☼         ☼\n" +
-                    "1:☼  ☻x $   ☼\n" +
-                    "1:☼  ☺      ☼\n" +
-                    "1:☼ x    $  ☼\n" +
-                    "1:☼  $      ☼\n" +
-                    "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "1:\n" +
-                    "1:Scores: 0\n" +
-                    "1:Answer: UP\n" +
-                    "2:Board:\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:☼ $       ☼\n" +
-                    "2:☼     $  $☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼   $  $  ☼\n" +
-                    "2:☼         ☼\n" +
-                    "2:☼  ☺x $   ☼\n" +
-                    "2:☼  ☻      ☼\n" +
-                    "2:☼ x    $  ☼\n" +
-                    "2:☼  $      ☼\n" +
-                    "2:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "2:\n" +
-                    "2:Scores: 0\n" +
-                    "2:Answer: DOWN\n" +
-                    "------------------------------------------",
-                String.join("\n", messages));
-
+                    @Override
+                    public GameSettings getSettings() {
+                        return super.getSettings()
+                                .string(LEVEL_MAP,
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                                        "☼            $     ☼" +
+                                        "☼        $         ☼" +
+                                        "☼ $           $   $☼" +
+                                        "☼     $            ☼" +
+                                        "☼                  ☼" +
+                                        "☼ $                ☼" +
+                                        "☼           $  $   ☼" +
+                                        "☼     $            ☼" +
+                                        "☼          $  $    ☼" +
+                                        "☼     $            ☼" +
+                                        "☼ $          $     ☼" +
+                                        "☼        $         ☼" +
+                                        "☼             $    ☼" +
+                                        "☼                  ☼" +
+                                        "☼     $    $       ☼" +
+                                        "☼  $               ☼" +
+                                        "☼              $   ☼" +
+                                        "☼   $      $       ☼" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+                    }
+                },
+                Stream.generate(solver)
+                        .limit(players).collect(toList()),
+                Stream.generate(() -> new Board())
+                        .limit(players).collect(toList()),
+                (o1, o2) -> assertEquals(o1, o2));
     }
 }
