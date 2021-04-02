@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_DROP_RATIO;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.TICKS_PER_NEW_ZOMBIE;
 import static com.codenjoy.dojo.services.Direction.LEFT;
 import static com.codenjoy.dojo.services.Direction.UP;
 import static org.junit.Assert.assertEquals;
@@ -40,7 +41,7 @@ public class ZombieTest extends AbstractGameTest {
     @Test
     public void shouldZombieFemale_start() {
         // given
-        ZombiePot.TICKS_PER_NEW_ZOMBIE = 3;
+        settings.integer(TICKS_PER_NEW_ZOMBIE, 3);
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -75,7 +76,7 @@ public class ZombieTest extends AbstractGameTest {
     @Test
     public void shouldZombie_canWalk() {
         // given
-        ZombiePot.TICKS_PER_NEW_ZOMBIE = 10;
+        settings.integer(TICKS_PER_NEW_ZOMBIE, 10);
         Zombie.WALK_EACH_TICKS = 2;
         givenZombie().thenReturn(UP);
 
@@ -134,7 +135,7 @@ public class ZombieTest extends AbstractGameTest {
     @Test
     public void shouldZombiePot_generatesAnotherOne() {
         // given
-        ZombiePot.TICKS_PER_NEW_ZOMBIE = 4;
+        settings.integer(TICKS_PER_NEW_ZOMBIE, 4);
         Zombie.WALK_EACH_TICKS = 2;
         givenZombie().thenReturn(UP);
 
@@ -301,7 +302,7 @@ public class ZombieTest extends AbstractGameTest {
     @Test
     public void shouldZombie_killHero() {
         // given
-        ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
+        settings.integer(TICKS_PER_NEW_ZOMBIE, 6);
         Zombie.WALK_EACH_TICKS = 2;
         givenZombie().thenReturn(UP, LEFT);
 
@@ -391,9 +392,8 @@ public class ZombieTest extends AbstractGameTest {
     @Test
     public void shouldHero_killZombie() {
         // given
-        settings.integer(PERK_DROP_RATIO, 0);
-
-        ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
+        settings.integer(PERK_DROP_RATIO, 0)
+                .integer(TICKS_PER_NEW_ZOMBIE, 6);
         Zombie.WALK_EACH_TICKS = 2;
         givenZombie().thenReturn(UP);
 
@@ -486,7 +486,7 @@ public class ZombieTest extends AbstractGameTest {
     @Test
     public void shouldPlayer_jumpOverZombie() {
         // given
-        ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
+        settings.integer(TICKS_PER_NEW_ZOMBIE, 6);
         Zombie.WALK_EACH_TICKS = 2;
         givenZombie().thenReturn(UP);
 

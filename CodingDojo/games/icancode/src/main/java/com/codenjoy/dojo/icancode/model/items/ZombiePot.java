@@ -25,21 +25,12 @@ package com.codenjoy.dojo.icancode.model.items;
 import com.codenjoy.dojo.icancode.model.FieldItem;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.services.settings.SettingsReader;
+
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.COUNT_ZOMBIES_ON_MAP;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.TICKS_PER_NEW_ZOMBIE;
 
 public class ZombiePot extends FieldItem implements Tickable {
-
-    // TODO to use another way to change this data
-    public static int TICKS_PER_NEW_ZOMBIE;
-    public static int COUNT_ZOMBIES_ON_MAP;
-
-    static {
-        init();
-    }
-
-    public static void init() {
-        TICKS_PER_NEW_ZOMBIE = 20;
-        COUNT_ZOMBIES_ON_MAP = 4;
-    }
 
     private int time = 0;
 
@@ -49,8 +40,8 @@ public class ZombiePot extends FieldItem implements Tickable {
 
     @Override
     public void tick() {
-        if (++time % TICKS_PER_NEW_ZOMBIE == 0) {
-            if (field.zombies().size() < COUNT_ZOMBIES_ON_MAP) {
+        if (++time % field.settings().integer(TICKS_PER_NEW_ZOMBIE) == 0) {
+            if (field.zombies().size() < field.settings().integer(COUNT_ZOMBIES_ON_MAP)) {
                 field.move(newZombie(), this.getCell());
             }
         }

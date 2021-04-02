@@ -51,8 +51,6 @@ public class SmokeTest {
 
         // about 9s
         Zombie.init();
-        ZombiePot.init();
-        ZombiePot.TICKS_PER_NEW_ZOMBIE = 5;
         Levels.init();
 
         Solver dummy = getDummySolver(dice);
@@ -77,6 +75,7 @@ public class SmokeTest {
                                 .integer(GUN_RECHARGE, 2)
                                 .integer(GUN_REST_TIME, 4)
                                 .integer(GUN_SHOT_QUEUE, 2)
+                                .integer(TICKS_PER_NEW_ZOMBIE, 5)
                                 .string(DEFAULT_PERKS, "ajm,ajm");
                     }
 

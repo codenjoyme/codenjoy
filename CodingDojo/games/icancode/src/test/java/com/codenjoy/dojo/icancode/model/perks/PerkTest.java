@@ -49,7 +49,7 @@ public class PerkTest extends AbstractGameTest {
     @Test
     public void shouldPerkAppear_afterZombieDie() {
         // given
-        ZombiePot.TICKS_PER_NEW_ZOMBIE = 4;
+        settings.integer(TICKS_PER_NEW_ZOMBIE, 4);
         givenZombie().thenReturn(UP);
 
         givenFl("╔════┐" +

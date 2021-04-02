@@ -85,7 +85,6 @@ public class MultiplayerTest {
 
         Levels.init();
         Zombie.init();
-        ZombiePot.init();
 
         dice = mock(Dice.class);
     }

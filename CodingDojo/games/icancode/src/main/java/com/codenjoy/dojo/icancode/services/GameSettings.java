@@ -56,6 +56,8 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         GUN_SHOT_QUEUE("Heroes gun need to relax after a series of shots"),
         GUN_REST_TIME("Heroes gun rest time(ticks)"),
         DEFAULT_PERKS("Default hero perks on training and contest"),
+        TICKS_PER_NEW_ZOMBIE("Ticks per new zombie"),
+        COUNT_ZOMBIES_ON_MAP("Count zombies"),
         GAME_MODE("Game mode"),
         ROOM_SIZE("Room size"),
         LEVELS_COUNT("Levels count");
@@ -95,6 +97,9 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(GUN_REST_TIME, 10);
 
         string(DEFAULT_PERKS, ",ajm");
+
+        integer(TICKS_PER_NEW_ZOMBIE, 20);
+        integer(COUNT_ZOMBIES_ON_MAP, 4);
 
         options(GAME_MODE, Arrays.asList(
                 CLASSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP),

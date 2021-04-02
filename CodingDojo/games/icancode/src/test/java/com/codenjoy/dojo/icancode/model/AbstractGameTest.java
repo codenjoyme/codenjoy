@@ -73,7 +73,6 @@ public abstract class AbstractGameTest {
     public void setup() {
         Levels.init();
         Zombie.init();
-        ZombiePot.init();
 
         mode = ICanCode.TRAINING;
 
