@@ -30,13 +30,9 @@ import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static java.util.stream.Collectors.toList;
 
 public class DeikstraFindWay {
-
-    private static final List<Direction> DIRECTIONS = Arrays.asList(UP, DOWN, LEFT, RIGHT);
 
     // карта возможных передвижений, которые не будут менять на этом уровне: стены и прочие препятствия
     private Points basic;
@@ -121,230 +117,16 @@ public class DeikstraFindWay {
         return shortest;
     }
 
-    private static class Vector implements Comparable<Vector> {
-        private Point to;
-        private Point from;
-        private Direction where;
-        private int rating;
-
-        public Vector(Point from, Direction where, Point goal, int pathLength) {
-            this.from = from;
-            this.where = where;
-            this.to = where.change(from);
-            this.rating = (int)(1000*(to.distance(goal) + pathLength));
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Vector{%s->%s, %s, %s}",
-                    from,
-                    to,
-                    where.name().charAt(0),
-                    rating);
-        }
-
-        @Override
-        public int compareTo(Vector o) {
-            return Integer.compare(rating, o.rating);
-        }
-    }
-
-    private static class Status {
-        private boolean[] goes = new boolean[4];
-
-        public void add(Direction direction) {
-            goes[direction.value()] = true;
-        }
-
-        public boolean done(Direction direction) {
-            boolean result = goes[direction.value()];
-            goes[direction.value()] = false;
-            return result;
-        }
-
-        public boolean empty() {
-            return goes[LEFT.value()]
-                    && goes[RIGHT.value()]
-                    && goes[UP.value()]
-                    && goes[DOWN.value()];
-        }
-
-        public boolean[] goes() {
-            return goes;
-        }
-
-        // not optimized
-        public List<Direction> directions() {
-            List<Direction> result = new ArrayList<>(4);
-            for (int index = 0; index < goes.length; index++) {
-                if (goes[index]) {
-                    Direction direction = Direction.valueOf(index);
-                    result.add(direction);
-                }
-            }
-            return result;
-        }
-    }
-
-    public static class Points {
-        private Status[][] all;
-
-        public Points(int size) {
-            all = new Status[size][size];;
-        }
-
-        private Status set(Point pt, Status status) {
-            return all[pt.getX()][pt.getY()] = status;
-        }
-
-        private Status get(Point pt) {
-            return all[pt.getX()][pt.getY()];
-        }
-
-        public Status add(Point pt) {
-            return set(pt, new Status());
-        }
-
-        public boolean done(Vector next) {
-            return get(next.from).done(next.where);
-        }
-
-        public boolean isDone(Point pt) {
-            Status status = get(pt);
-            if (status == null) {
-                return false;
-            }
-
-            return status.empty();
-        }
-
-        public boolean isAdded(Point pt) {
-            return get(pt) != null;
-        }
-
-        // not optimized
-        public Map<Point, List<Direction>> toMap() {
-            Map<Point, List<Direction>> map = new HashMap<>();
-            for (int x = 0; x < all.length; x++) {
-                for (int y = 0; y < all[0].length; y++) {
-                    Point pt = pt(x, y);
-                    Status status = get(pt);
-                    map.put(pt, status.directions());
-                }
-            }
-            return map;
-        }
-    }
-
-    private static class SortedVectors extends LinkedList<Vector> {
-        @Override
-        public boolean add(Vector vector) {
-            if (isEmpty()) {
-                super.add(vector);
-                return true;
-            }
-            ListIterator<Vector> iterator = listIterator();
-            boolean added = false;
-            while (iterator.hasNext()) {
-                if (iterator.next().rating > vector.rating) {
-                    add(iterator.previousIndex(), vector);
-                    added = true;
-                    break;
-                }
-            }
-            if (!added) {
-                super.add(vector);
-            }
-            return true;
-        }
-    }
-
-    private class Vectors {
-        private List<Vector> queue;
-        private Points points;
-
-        public Vectors(int size) {
-            queue = new SortedVectors();
-            points = new Points(size);
-        }
-
-        public void add(List<Point> goals, Point from, int pathLength) {
-            Point goal = goals.get(0); // TODO добавить все цели
-            boolean[] goes = ways().get(from).goes;
-            Status status = points.add(from);
-            for (int index = 0; index < goes.length; index++) {
-                if (goes[index]) {
-                    Direction direction = Direction.valueOf(index);
-                    status.add(direction);
-                    queue.add(new Vector(from, direction, goal, pathLength));
-                }
-            }
-        }
-
-        public boolean isEmpty() {
-            return queue.isEmpty();
-        }
-
-        public Vector next() {
-            Vector next = null;
-            while (!queue.isEmpty()) {
-                next = get();
-                if (points.done(next)) {
-                    break;
-                }
-            }
-            return next;
-        }
-
-        public Vector get() {
-            return queue.remove(0);
-        }
-
-        public boolean processed(Point from) {
-            return points.isDone(from);
-        }
-
-        public boolean wasHere(Point from) {
-            return points.isAdded(from);
-        }
-    }
-
-    public static class Path {
-        private List<Direction>[][] all;
-
-        public Path(int size) {
-            all = new ArrayList[size][size];
-        }
-
-        private List<Direction> setList(Point pt, List<Direction> list) {
-            return all[pt.getX()][pt.getY()] = list;
-        }
-
-        private List<Direction> getList(Point pt) {
-            return all[pt.getX()][pt.getY()];
-        }
-
-        public List<Direction> get(Point pt) {
-            List<Direction> list = getList(pt);
-            if (list != null) {
-                return list;
-            }
-            list = new ArrayList(100);
-            setList(pt, list);
-            return list;
-        }
-    }
-
     private Path getPath(Point from, List<Point> inputGoals) {
         Set<Point> goals = new HashSet<>(inputGoals);
         Path path = new Path(size);
-        Vectors vectors = new Vectors(size);
+        Vectors vectors = new Vectors(size, ways());
         vectors.add(inputGoals, from, 0);
         Vector current;
         while (!goals.isEmpty() && (current = vectors.next()) != null) {
-            if (vectors.wasHere(current.to)) continue;
-            List<Direction> before = path.get(current.from);
-            List<Direction> directions = path.get(current.to);
+            if (vectors.wasHere(current.to())) continue;
+            List<Direction> before = path.get(current.from());
+            List<Direction> directions = path.get(current.to());
             if (before.size() < directions.size() - 1) {
                 // мы нашли более короткий путь,
                 // но это никогда не случится )
@@ -354,15 +136,15 @@ public class DeikstraFindWay {
                 if (!before.isEmpty()) {
                     directions.addAll(before);
                 }
-                directions.add(current.where);
+                directions.add(current.where());
 
-                if (!vectors.processed(current.to)) {
-                    vectors.add(inputGoals, current.to, directions.size());
+                if (!vectors.processed(current.to())) {
+                    vectors.add(inputGoals, current.to(), directions.size());
                 }
             } else {
                 // do nothing
             }
-            goals.remove(current.from);
+            goals.remove(current.from());
         }
 
         return path;
@@ -379,7 +161,7 @@ public class DeikstraFindWay {
             for (int y = 0; y < size; y++) {
                 Point from = pt(x, y);
                 Status status = points.add(from);
-                for (Direction direction : DIRECTIONS) {
+                for (Direction direction : Direction.getValues()) {
                     if (!checker.check(size, from, direction)) continue;
                     status.add(direction);
                 }
