@@ -6,24 +6,25 @@ import java.util.List;
 
 public class IslandMinesCombs {
 
-    private final List<MinesCombs> minesCombses = new ArrayList();
-    private final List<Cell> indefinite;
+    private List<MinesCombs> combses;
+    private List<Cell> indefinite;
 
     public IslandMinesCombs(List<Cell> indefinite) {
         this.indefinite = indefinite;
+        combses = new ArrayList();
     }
 
-    private void add(MinesCombs minesCombs) {
-        minesCombs.setIndefinite(new Indefinite(indefinite));
-        minesCombses.add(minesCombs);
+    private void add(MinesCombs input) {
+        input.setIndefinite(new Indefinite(indefinite));
+        combses.add(input);
     }
 
     public int size() {
-        return minesCombses.size();
+        return combses.size();
     }
 
     public MinesCombs get(int i) {
-        return minesCombses.get(i);
+        return combses.get(i);
     }
 
     public void incCombsByMines(int mines) {
@@ -35,15 +36,15 @@ public class IslandMinesCombs {
     }
 
     private MinesCombs getByMines(int mines) {
-        Iterator i$ = minesCombses.iterator();
+        Iterator iterator = combses.iterator();
 
         MinesCombs minesCombs;
         do {
-            if (!i$.hasNext()) {
+            if (!iterator.hasNext()) {
                 return null;
             }
 
-            minesCombs = (MinesCombs) i$.next();
+            minesCombs = (MinesCombs) iterator.next();
         } while (minesCombs.getMines() != mines);
 
         return minesCombs;

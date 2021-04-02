@@ -2,7 +2,7 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 public class MinesCombs {
 
-    private final int mines;
+    private int mines;
     private Indefinite indefinite;
 
     public MinesCombs(int mines) {

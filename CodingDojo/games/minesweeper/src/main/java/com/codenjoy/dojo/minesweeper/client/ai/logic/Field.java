@@ -26,7 +26,7 @@ public class Field {
     private List<Cell> toMark;
 
     public Field(PlayField playField) {
-        this(playField.width, playField.height, playField.amount);
+        this(playField.width(), playField.height(), playField.amount());
         this.playField = playField;
         scanPlayField();
     }

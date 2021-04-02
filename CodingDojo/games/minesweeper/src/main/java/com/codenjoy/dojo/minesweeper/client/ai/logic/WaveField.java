@@ -9,26 +9,26 @@ import java.util.List;
 
 public class WaveField {
 
-    private final int size;
+    private int size;
     private Cell2[][] field;
-    private final List<Cell2> cells = new ArrayList();
-    private final BoardImpl board;
+    private List<Cell2> cells = new ArrayList();
+    private BoardImpl board;
 
     public WaveField(BoardImpl board) {
         this.board = board;
-        this.size = board.size();
-        this.createCell2s();
-        this.setCellsNeighbours();
-        this.initData();
+        size = board.size();
+        createCell2s();
+        setCellsNeighbours();
+        initData();
     }
 
     public List<Direction> findWay(Point to) {
-        Point from = this.board.getMe();
-        Cell2 cell = this.getCell2(from);
+        Point from = board.getMe();
+        Cell2 cell = getCell2(from);
         cell.setWave(0);
         cell.makeWave();
-        List<Cell2> way = this.getCell2sWay(to);
-        List<Direction> result = this.getDirectionsWay(from, way);
+        List<Cell2> way = getCell2sWay(to);
+        List<Direction> result = getDirectionsWay(from, way);
         return result;
     }
 
@@ -37,7 +37,7 @@ public class WaveField {
 
         for (int i = way.size() - 2; i >= 0; --i) {
             Point coord = (way.get(i)).getPoint();
-            result.add(this.getDirection(from, coord));
+            result.add(getDirection(from, coord));
             from = coord;
         }
 
@@ -46,7 +46,7 @@ public class WaveField {
 
     private List<Cell2> getCell2sWay(Point to) {
         List<Cell2> way = new ArrayList();
-        Cell2 target = this.getCell2(to);
+        Cell2 target = getCell2(to);
 
         do {
             way.add(target);
@@ -81,51 +81,49 @@ public class WaveField {
     }
 
     private Cell2 getCell2(Point point) {
-        return this.field[point.getX()][point.getY()];
+        return field[point.getX()][point.getY()];
     }
 
     private void initData() {
-        for (int i = 0; i < this.size; ++i) {
-            for (int j = 0; j < this.size; ++j) {
-                this.field[i][j].setWalkable(!this.board.isAt(i, j, Elements.HIDDEN, Elements.BORDER));
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < size; ++j) {
+                field[i][j].setWalkable(!board.isAt(i, j, Elements.HIDDEN, Elements.BORDER));
             }
         }
-
     }
 
     private void createCell2s() {
-        this.field = new Cell2[this.size][this.size];
+        field = new Cell2[size][size];
 
-        for (int x = 0; x < this.size; ++x) {
-            for (int y = 0; y < this.size; ++y) {
+        for (int x = 0; x < size; ++x) {
+            for (int y = 0; y < size; ++y) {
                 Cell2 cell = new Cell2(x, y);
                 cell.initWave();
-                this.field[x][y] = cell;
-                this.cells.add(cell);
+                field[x][y] = cell;
+                cells.add(cell);
             }
         }
     }
 
     private void setCellsNeighbours() {
-        for (int x = 0; x < this.size; ++x) {
-            for (int y = 0; y < this.size; ++y) {
+        for (int x = 0; x < size; ++x) {
+            for (int y = 0; y < size; ++y) {
                 if (x > 0) {
-                    this.field[x][y].addNeighbour(this.field[x - 1][y]);
+                    field[x][y].addNeighbour(field[x - 1][y]);
                 }
 
                 if (y > 0) {
-                    this.field[x][y].addNeighbour(this.field[x][y - 1]);
+                    field[x][y].addNeighbour(field[x][y - 1]);
                 }
 
-                if (x < this.size - 1) {
-                    this.field[x][y].addNeighbour(this.field[x + 1][y]);
+                if (x < size - 1) {
+                    field[x][y].addNeighbour(field[x + 1][y]);
                 }
 
-                if (y < this.size - 1) {
-                    this.field[x][y].addNeighbour(this.field[x][y + 1]);
+                if (y < size - 1) {
+                    field[x][y].addNeighbour(field[x][y + 1]);
                 }
             }
         }
-
     }
 }

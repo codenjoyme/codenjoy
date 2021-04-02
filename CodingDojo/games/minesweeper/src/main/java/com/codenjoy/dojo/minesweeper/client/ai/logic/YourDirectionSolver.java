@@ -30,8 +30,7 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.services.Direction.STOP;
-import static com.codenjoy.dojo.services.Direction.UP;
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class YourDirectionSolver {
@@ -126,7 +125,7 @@ public class YourDirectionSolver {
     }
 
     private String whereToGo() {
-        Collections.sort(safePath); // TODO FIXED добавлена эта строчка, потому что если несколько направлений куда можно пойти то они рендомно приходят что приводит к гейзенбаге
+        Collections.sort(safePath);
         return safePath.remove(0).toString();
     }
 
@@ -145,7 +144,7 @@ public class YourDirectionSolver {
     private String getEscapeTo() {
         int width = field.length;
         int height = field[0].length;
-        return myCoord.getX() > 0 && field[myCoord.getX() - 1][myCoord.getY()] != 9 ? Direction.LEFT.toString() : (myCoord.getX() < width - 1 && field[myCoord.getX() + 1][myCoord.getY()] != 9 ? Direction.RIGHT.toString() : (myCoord.getY() > 0 && field[myCoord.getX()][myCoord.getY() - 1] != 9 ? UP.toString() : (myCoord.getY() < height - 1 && field[myCoord.getX()][myCoord.getY() + 1] != 9 ? Direction.DOWN.toString() : null)));
+        return myCoord.getX() > 0 && field[myCoord.getX() - 1][myCoord.getY()] != 9 ? Direction.LEFT.toString() : (myCoord.getX() < width - 1 && field[myCoord.getX() + 1][myCoord.getY()] != 9 ? Direction.RIGHT.toString() : (myCoord.getY() > 0 && field[myCoord.getX()][myCoord.getY() - 1] != 9 ? UP.toString() : (myCoord.getY() < height - 1 && field[myCoord.getX()][myCoord.getY() + 1] != 9 ? DOWN.toString() : null)));
     }
 
     private void createField() {
@@ -224,7 +223,7 @@ public class YourDirectionSolver {
         if (dy < 0) {
             result = UP.toString();
         } else if (dy > 0) {
-            result = Direction.DOWN.toString();
+            result = DOWN.toString();
         } else {
             result = Direction.valueOf(dice.next(2) + 2).toString();
         }
@@ -262,12 +261,12 @@ public class YourDirectionSolver {
 
         while (i$.hasNext()) {
             Map.Entry entry = (Map.Entry) i$.next();
-            if (!(entry.getKey()).equals(myCoord)) {
-                double distance = myCoord.distance((Point) entry.getKey());
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    result = entry;
-                }
+            if (entry.getKey().equals(myCoord)) continue;
+
+            double distance = myCoord.distance((Point) entry.getKey());
+            if (distance < minDistance) {
+                minDistance = distance;
+                result = entry;
             }
         }
 
@@ -299,6 +298,4 @@ public class YourDirectionSolver {
 
         return result;
     }
-
 }
-

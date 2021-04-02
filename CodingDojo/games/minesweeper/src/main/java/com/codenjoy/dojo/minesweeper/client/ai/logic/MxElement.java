@@ -2,7 +2,7 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 public class MxElement {
 
-    private final int mines;
+    private int mines;
     private int[] mxCountOfMines;
 
     public MxElement(int mines) {
