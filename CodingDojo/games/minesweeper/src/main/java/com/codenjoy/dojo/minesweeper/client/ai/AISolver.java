@@ -41,7 +41,7 @@ public class AISolver implements Solver<Board> {
 
     private Dice dice;
     private Board board;
-    private Point myCoord;
+    private Point me;
     private int[][] field;
     private char movedTo;
     private List<Direction> safePath = new ArrayList();
@@ -67,24 +67,22 @@ public class AISolver implements Solver<Board> {
         }
 
         field = fillFieldWithBoard();
-        PlayField playField1 = new PlayField(field, 0);
-        Field field = new Field(playField1);
-        field.setMyCoord(myCoord);
+        Field field = new Field(new PlayField(this.field, 0));
+        field.setMyCoord(me);
 
         try {
             field.play();
-            Point[] e = field.getToMark();
+            Point[] pts = field.getToMark();
             Point[] toOpen = field.getToOpen();
-            if (isOnJustMarked(e) || movedTo == 42 && e.length == 0 && field.getMinPossibility() > 0.0D) {
+            if (isOnJustMarked(pts) || movedTo == 42 && pts.length == 0 && field.getMinPossibility() > 0.0D) {
                 result = getEscapeTo();
             } else {
-                Map newPoint = toMap(e, toOpen);
-                Map.Entry closest = getClosest(newPoint);
+                Map.Entry<Point, Boolean> closest = getClosest(toMap(pts, toOpen));
                 if (closest != null) {
-                    if (isNeighbours((Point) closest.getKey(), myCoord)) {
+                    if (isNeighbours(closest.getKey(), me)) {
                         result = getAction(closest);
                     } else {
-                        setSafePathTo((Point) closest.getKey());
+                        setSafePathTo(closest.getKey());
                         result = whereToGo();
                     }
                 } else {
@@ -114,8 +112,8 @@ public class AISolver implements Solver<Board> {
         return safePath.remove(0).toString();
     }
 
-    private boolean isNeighbours(Point point1, Point point2) {
-        return point1.distance(point2) <= 1.0D;
+    private boolean isNeighbours(Point pt1, Point pt2) {
+        return pt1.distance(pt2) <= 1.0D;
     }
 
     private boolean isFirstTurn() {
@@ -126,26 +124,26 @@ public class AISolver implements Solver<Board> {
     private String getEscapeTo() {
         int width = field.length;
         int height = field[0].length;
-        if (myCoord.getX() > 0
-                && field[myCoord.getX() - 1][myCoord.getY()] != 9)
+        if (me.getX() > 0
+                && field[me.getX() - 1][me.getY()] != 9)
         {
             return LEFT.toString();
         }
 
-        if (myCoord.getX() < width - 1
-                && field[myCoord.getX() + 1][myCoord.getY()] != 9)
+        if (me.getX() < width - 1
+                && field[me.getX() + 1][me.getY()] != 9)
         {
             return RIGHT.toString();
         }
 
-        if (myCoord.getY() > 0
-                && field[myCoord.getX()][myCoord.getY() - 1] != 9)
+        if (me.getY() > 0
+                && field[me.getX()][me.getY() - 1] != 9)
         {
             return UP.toString();
         }
 
-        if (myCoord.getY() < height - 1
-                && field[myCoord.getX()][myCoord.getY() + 1] != 9)
+        if (me.getY() < height - 1
+                && field[me.getX()][me.getY() + 1] != 9)
         {
             return DOWN.toString();
         }
@@ -165,39 +163,45 @@ public class AISolver implements Solver<Board> {
     private boolean isOnJustMarked(Point[] toMark) {
         for (int i = 0; i < toMark.length; ++i) {
             Point point = toMark[i];
-            if (point.equals(myCoord)) {
+            if (point.equals(me)) {
                 return true;
             }
         }
         return false;
     }
 
-    private String getAction(Map.Entry<Point, Boolean> destination) {
-        int dx = (destination.getKey()).getX() - myCoord.getX();
-        int dy = (destination.getKey()).getY() - myCoord.getY();
+    private String getAction(Map.Entry<Point, Boolean> dest) {
+        int dx = (dest.getKey()).getX() - me.getX();
+        int dy = (dest.getKey()).getY() - me.getY();
         String result;
         Point neighbour;
         if (Math.abs(dx) > Math.abs(dy)) {
-            neighbour = pt(myCoord.getX() + (int) Math.signum((float) dx), myCoord.getY());
-            if (field[neighbour.getX()][neighbour.getY()] == 9 && !neighbour.equals(destination.getKey())) {
+            int signumX = (int) Math.signum(dx);
+            neighbour = pt(me.getX() + signumX, me.getY());
+            if (isFree(neighbour) && !neighbour.equals(dest.getKey())) {
                 result = getDirectionBydY(dy);
             } else {
                 result = getDirectionBydX(dx);
             }
         } else {
-            neighbour = pt(myCoord.getX(), myCoord.getY() + (int) Math.signum((float) dy));
-            if (field[neighbour.getX()][neighbour.getY()] == 9 && !neighbour.equals(destination.getKey())) {
+            int signumY = (int) Math.signum(dy);
+            neighbour = pt(me.getX(), me.getY() + signumY);
+            if (isFree(neighbour) && !neighbour.equals(dest.getKey())) {
                 result = getDirectionBydX(dx);
             } else {
                 result = getDirectionBydY(dy);
             }
         }
 
-        if (neighbour.equals(destination.getKey()) && !(destination.getValue()).booleanValue()) {
+        if (neighbour.equals(dest.getKey()) && !dest.getValue()) {
             result = ACT.toString() + ',' + result;
         }
 
         return result;
+    }
+
+    private boolean isFree(Point pt) {
+        return field[pt.getX()][pt.getY()] == 9;
     }
 
     private void setSafePathTo(Point target) {
@@ -243,13 +247,10 @@ public class AISolver implements Solver<Board> {
     private Map.Entry<Point, Boolean> getClosest(Map<Point, Boolean> points) {
         double min = 1.7976931348623157E308D;
         Map.Entry result = null;
-        Iterator iterator = points.entrySet().iterator();
 
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            if (entry.getKey().equals(myCoord)) continue;
-
-            double distance = myCoord.distance((Point) entry.getKey());
+        for (Map.Entry<Point, Boolean> entry : points.entrySet()) {
+            if (entry.getKey().equals(me)) continue;
+            double distance = me.distance(entry.getKey());
             if (distance < min) {
                 min = distance;
                 result = entry;
@@ -276,7 +277,7 @@ public class AISolver implements Solver<Board> {
                 } else if (element == 1120) {
                     result[i][j] = 12;
                 } else if (element == 9786) {
-                    myCoord = pt(i, j);
+                    me = pt(i, j);
                     result[i][j] = field[i][j];
                 }
             }
