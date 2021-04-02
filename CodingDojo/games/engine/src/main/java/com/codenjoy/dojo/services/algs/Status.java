@@ -41,10 +41,10 @@ public class Status {
     public List<Direction> directions() {
         List<Direction> result = new ArrayList<>(4);
         for (int index = 0; index < goes.length; index++) {
-            if (goes[index]) {
-                Direction direction = Direction.valueOf(index);
-                result.add(direction);
-            }
+            if (!goes[index]) continue;
+
+            Direction direction = Direction.valueOf(index);
+            result.add(direction);
         }
         return result;
     }

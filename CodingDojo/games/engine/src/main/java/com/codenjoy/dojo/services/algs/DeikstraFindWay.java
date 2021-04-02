@@ -170,26 +170,29 @@ public class DeikstraFindWay {
         return points;
     }
 
-//    public void updateWays(Possible possible) { // TODO закончить с этим
-//        dynamic = basic.entrySet().stream()
-//                .map(entry -> update(possible, entry))
-//                .collect(toMap());
-//    }
+    public void updateWays(Possible possible) { // TODO закончить с этим
+        dynamic = new Points(size);
+
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Point pt = pt(x, y);
+                if (basic.isAdded(pt)) {
+                    Status status = basic.get(pt);
+                    boolean[] goes = status.goes();
+                    for (int index = 0; index < goes.length; index++) {
+                        if (!goes[index]) continue;
+
+                        Direction direction = Direction.valueOf(index);
+                        goes[index] = possible.check(size, pt, direction);
+                    }
+                }
+            }
+        }
+    }
 
     public Collector<Map.Entry<Point, List<Direction>>, ?, Map<Point, List<Direction>>> toMap() {
         return Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue);
     }
-
-//    private Map.Entry<Point, List<Direction>> update(Possible possible, Map.Entry<Point, List<Direction>> entry) {
-//        List<Direction> directions = entry.getValue();
-//        Point point = entry.getKey();
-//
-//        List<Direction> updated = directions.stream()
-//                .filter(direction -> possible.check(size, point, direction))
-//                .collect(toList());
-//
-//        return new AbstractMap.SimpleEntry(point, updated);
-//    }
 
     public Points getPossibleWays(int size, Possible possible) {
         this.size = size;
@@ -206,7 +209,7 @@ public class DeikstraFindWay {
         return basic;
     }
 
-//    public Points getDynamic() {
-//        return dynamic;
-//    }
+    public Points getDynamic() {
+        return dynamic;
+    }
 }

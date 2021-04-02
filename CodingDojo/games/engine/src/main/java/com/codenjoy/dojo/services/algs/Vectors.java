@@ -27,11 +27,11 @@ public class Vectors {
         boolean[] goes = ways.get(from).goes();
         Status status = points.add(from);
         for (int index = 0; index < goes.length; index++) {
-            if (goes[index]) {
-                Direction direction = Direction.valueOf(index);
-                status.add(direction);
-                queue.add(new Vector(from, direction, goal, pathLength));
-            }
+            if (!goes[index]) continue;
+
+            Direction direction = Direction.valueOf(index);
+            status.add(direction);
+            queue.add(new Vector(from, direction, goal, pathLength));
         }
     }
 
