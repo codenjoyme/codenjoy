@@ -26,18 +26,19 @@ import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.items.perks.*;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.GameSettings;
-import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
-import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_DROP_RATIO;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.VIEW_SIZE;
 import static java.util.stream.Collectors.toList;
 
 public class ICanCode implements Tickable, Field {
@@ -388,7 +389,7 @@ public class ICanCode implements Tickable, Field {
 
             @Override
             public int viewSize() {
-                return Levels.size();
+                return settings.integer(VIEW_SIZE);
             }
 
             @Override

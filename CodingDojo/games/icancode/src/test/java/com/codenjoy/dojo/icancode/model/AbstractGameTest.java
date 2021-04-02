@@ -70,8 +70,6 @@ public abstract class AbstractGameTest {
 
     @Before
     public void setup() {
-        Levels.init();
-
         mode = ICanCode.TRAINING;
 
         settings = spy(new GameSettings())
@@ -106,7 +104,7 @@ public abstract class AbstractGameTest {
     }
 
     protected void givenFl(int viewSize, String board) {
-        Levels.VIEW_SIZE = viewSize;
+        settings.integer(VIEW_SIZE, viewSize);
         Level level = createLevels(new String[]{board}).get(0);
         game = new ICanCode(level, dice, mode, settings);
         listener = mock(EventListener.class);

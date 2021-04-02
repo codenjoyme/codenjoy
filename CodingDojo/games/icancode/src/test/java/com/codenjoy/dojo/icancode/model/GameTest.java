@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.icancode.services.LevelsTest.VIEW_SIZE_TESTING;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -2126,7 +2127,7 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void shouldScrollingView() {
         // given
-        givenFl(Levels.VIEW_SIZE_TESTING,
+        givenFl(VIEW_SIZE_TESTING,
                 "╔══════════════════┐" +
                 "║S.................│" +
                 "║..................│" +
@@ -2341,7 +2342,7 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void shouldStartOnCenter() {
         // given
-        givenFl(Levels.VIEW_SIZE_TESTING,
+        givenFl(VIEW_SIZE_TESTING,
                 "╔════════════════════════════════════┐" +
                 "║....................................│" +
                 "║....................................│" +

@@ -53,6 +53,7 @@ import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.DEFAULT_PERKS;
+import static com.codenjoy.dojo.icancode.services.LevelsTest.VIEW_SIZE_TESTING;
 import static com.codenjoy.dojo.utils.TestUtils.injectN;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
@@ -83,8 +84,6 @@ public class MultiplayerTest {
                 .integer(GUN_SHOT_QUEUE, 0)
                 .string(DEFAULT_PERKS, "ajm,ajm");
 
-        Levels.init();
-
         dice = mock(Dice.class);
     }
 
@@ -104,7 +103,7 @@ public class MultiplayerTest {
     }
 
     void givenFl(int viewSize, String... boards) {
-        Levels.VIEW_SIZE = viewSize;
+        settings.integer(VIEW_SIZE, viewSize);
         Deque<String> strings = new LinkedList<>(Arrays.asList(boards));
         String multiple = strings.removeLast();
         singles1 = createLevels(strings);
@@ -2165,8 +2164,7 @@ public class MultiplayerTest {
                 "║..................│" +
                 "║.................E│" +
                 "└──────────────────┘";
-        givenFl(Levels.VIEW_SIZE_TESTING,
-                field, field);
+        givenFl(VIEW_SIZE_TESTING, field, field);
 
         // when then
         assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +

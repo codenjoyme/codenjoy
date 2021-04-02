@@ -62,6 +62,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         WALK_EACH_TICKS("Zombie walks tick timeout"),
         GAME_MODE("Game mode"),
         ROOM_SIZE("Room size"),
+        VIEW_SIZE("Map view size"),
         LEVELS_COUNT("Levels count");
 
         private String key;
@@ -108,6 +109,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
                 CLASSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP),
                 CLASSIC_TRAINING);
         integer(ROOM_SIZE, 5);
+
+        integer(VIEW_SIZE, 20);
 
         integer(LEVELS_COUNT, 0);
         Levels.setup(this);

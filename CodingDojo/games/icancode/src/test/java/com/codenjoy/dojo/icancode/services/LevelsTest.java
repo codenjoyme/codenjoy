@@ -30,10 +30,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by oleksandr.baglai on 24.06.2016.
- */
 public class LevelsTest {
+
+    public static int VIEW_SIZE_TESTING = 16;
+
     @Test
     public void testLevel1() {
         String map = getMap(new Level1().map());
@@ -76,7 +76,7 @@ public class LevelsTest {
     }
 
     private String getMap(String level) {
-        return Levels.resize(Encoding.removeN(level), Levels.VIEW_SIZE_TESTING);
+        return Levels.resize(Encoding.removeN(level), VIEW_SIZE_TESTING);
     }
 
     @Test

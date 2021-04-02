@@ -67,7 +67,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
-        return v(Levels.size());
+        return settings.integerValue(VIEW_SIZE);
     }
 
     @Override
