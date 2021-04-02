@@ -257,7 +257,6 @@ public class Island {
         int amountOfComb = this.stack.size();
         this.countOfMines = new Integer[this.indefiniteCells.size()];
         this.mx0 = new MinesAndCombinationAmountsOfIsland();
-        this.mx0.setIndefiniteCells(this.indefiniteCells);
         this.islandMinesCombs = new IslandMinesCombs(this.indefiniteCells);
 
         int i;
@@ -266,21 +265,19 @@ public class Island {
         }
 
         for(i = 0; i < amountOfComb; ++i) {
-            StringBuilder combSB = (StringBuilder)this.stack.pop();
+            StringBuilder combSB = this.stack.pop();
             int[] mxCountOfMines = new int[this.indefiniteCells.size()];
             int mines = 0;
 
             for(int j = 0; j < this.indefiniteCells.size(); ++j) {
                 if (combSB.charAt(j) == '1') {
                     Integer[] var7 = this.countOfMines;
-                    Integer var9 = var7[j];
-                    Integer var10 = var7[j] = var7[j] + 1;
-                    int var10002 = mxCountOfMines[j]++;
+                    var7[j] = var7[j] + 1;
+                    mxCountOfMines[j]++;
                     ++mines;
                 }
             }
 
-            this.mx0.inc(mines);
             this.mx0.addMxCountOfMines(mines, mxCountOfMines);
             this.islandMinesCombs.incCombsByMines(mines);
             this.islandMinesCombs.addArrayCombs(mines, mxCountOfMines);

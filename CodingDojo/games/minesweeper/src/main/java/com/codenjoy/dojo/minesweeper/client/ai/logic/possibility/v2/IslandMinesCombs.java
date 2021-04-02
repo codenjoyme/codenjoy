@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class IslandMinesCombs {
+
     private List<MinesCombs> minesCombses = new ArrayList();
     private List<Cell> indefinite;
 
@@ -18,30 +19,30 @@ public class IslandMinesCombs {
     }
 
     private void add(MinesCombs minesCombs) {
-        minesCombs.setIndefinite(new Indefinite(this.indefinite));
-        this.minesCombses.add(minesCombs);
+        minesCombs.setIndefinite(new Indefinite(indefinite));
+        minesCombses.add(minesCombs);
     }
 
     public int size() {
-        return this.minesCombses.size();
+        return minesCombses.size();
     }
 
     public MinesCombs get(int i) {
-        return this.minesCombses.get(i);
+        return minesCombses.get(i);
     }
 
     public void incCombsByMines(int mines) {
-        MinesCombs minesCombs = this.getByMines(mines);
+        MinesCombs minesCombs = getByMines(mines);
         if (minesCombs == null) {
             minesCombs = new MinesCombs(mines);
-            this.add(minesCombs);
+            add(minesCombs);
         }
 
         minesCombs.addComb(1);
     }
 
     private MinesCombs getByMines(int mines) {
-        Iterator i$ = this.minesCombses.iterator();
+        Iterator i$ = minesCombses.iterator();
 
         MinesCombs minesCombs;
         do {
@@ -55,19 +56,7 @@ public class IslandMinesCombs {
         return minesCombs;
     }
 
-    public void divideDeepCombSum(BigInteger deepCombSum) {
-        BigInteger handred = new BigInteger("100000");
-
-        for(int i = 0; i < this.indefinite.size(); ++i) {
-            BigInteger was = (this.indefinite.get(i)).getBigInteger();
-            BigInteger b1 = handred.multiply(was);
-            BigInteger b3 = b1.divide(deepCombSum);
-            this.indefinite.get(i).setPossibility(b3.doubleValue() / 1000.0D);
-        }
-
-    }
-
     public void addArrayCombs(int mines, int[] array) {
-        this.getByMines(mines).addArrayComb(array);
+        getByMines(mines).addArrayComb(array);
     }
 }

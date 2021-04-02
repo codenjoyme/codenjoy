@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Cell {
+
     private BigInteger bigInteger = new BigInteger("0");
     private int x;
     private int y;
@@ -19,7 +20,7 @@ public class Cell {
     private List<Cell> neighbours = new ArrayList();
 
     public BigInteger getBigInteger() {
-        return this.bigInteger;
+        return bigInteger;
     }
 
     public void setBigInteger(BigInteger bigInteger) {
@@ -32,11 +33,11 @@ public class Cell {
     }
 
     public void addNeighbour(Cell cell) {
-        this.neighbours.add(cell);
+        neighbours.add(cell);
     }
 
     public double getPossibility() {
-        return this.possibility;
+        return possibility;
     }
 
     public void setPossibility(double possibility) {
@@ -44,57 +45,57 @@ public class Cell {
     }
 
     public boolean isValued() {
-        return this.valued;
+        return valued;
     }
 
     public int getValue() {
-        return this.value;
+        return value;
     }
 
     public void setValue(int value) {
         this.value = value;
-        this.valued = true;
-        this.unknown = false;
-        this.mine = false;
+        valued = true;
+        unknown = false;
+        mine = false;
     }
 
     public int getX() {
-        return this.x;
+        return x;
     }
 
     public int getY() {
-        return this.y;
+        return y;
     }
 
     public boolean isMine() {
-        return this.mine;
+        return mine;
     }
 
     public void setMine() {
-        this.mine = true;
-        this.unknown = false;
-        this.valued = false;
+        mine = true;
+        unknown = false;
+        valued = false;
     }
 
     public boolean isUnknown() {
-        return this.unknown;
+        return unknown;
     }
 
     public void setValued() {
-        this.unknown = false;
-        this.mine = false;
-        this.valued = true;
+        unknown = false;
+        mine = false;
+        valued = true;
     }
 
     public void setUnknown() {
-        this.unknown = true;
-        this.mine = false;
-        this.valued = false;
+        unknown = true;
+        mine = false;
+        valued = false;
     }
 
     public ArrayList<Cell> getUnknownCells() {
         ArrayList<Cell> cells = new ArrayList();
-        Iterator i$ = this.neighbours.iterator();
+        Iterator i$ = neighbours.iterator();
 
         while(i$.hasNext()) {
             Cell neighbour = (Cell)i$.next();
@@ -106,46 +107,17 @@ public class Cell {
         return cells;
     }
 
-    public int countMinesAround() {
-        int result = 0;
-        Iterator i$ = this.neighbours.iterator();
-
-        while(i$.hasNext()) {
-            Cell neighbour = (Cell)i$.next();
-            if (neighbour.isMine()) {
-                ++result;
-            }
-        }
-
-        return result;
-    }
-
     public String toString() {
-        String string = "(" + this.x + "," + this.y + ")=" + (this.mine ? "mine" : (this.unknown ? "unknown, " + this.getPossibility() + "%" : this.value));
-        return string;
-    }
-
-    public String toStringShort() {
-        String string;
-        if (this.isMine()) {
-            string = "*";
-        } else if (this.isUnknown()) {
-            string = "`";
-        } else if (this.value == 0) {
-            string = " ";
-        } else {
-            string = Integer.toString(this.value);
-        }
-
+        String string = "(" + x + "," + y + ")=" + (mine ? "mine" : (unknown ? "unknown, " + getPossibility() + "%" : value));
         return string;
     }
 
     public Pair<Integer, Integer> getCoords() {
-        return new Pair(this.x, this.y);
+        return new Pair(x, y);
     }
 
     public boolean hasUnknownAround() {
-        Iterator i$ = this.neighbours.iterator();
+        Iterator i$ = neighbours.iterator();
 
         Cell neighbour;
         do {

@@ -53,53 +53,6 @@ public class Field {
         this.myCoord = myCoord;
     }
 
-    private static void printStatistic(Map<Integer, Integer> whole, Map<Integer, Integer> real) {
-        System.out.print("Theory  ");
-
-        int i;
-        for(i = 0; i < 101; ++i) {
-            if (whole.containsKey(i)) {
-                System.out.print(getNumber(i));
-            }
-        }
-
-        System.out.println();
-        System.out.print("Reality ");
-
-        for(i = 0; i < 101; ++i) {
-            if (whole.containsKey(i)) {
-                int value = 0;
-                if (real.containsKey(i)) {
-                    value = (int)(100.0D * (double)(Integer)real.get(i) / (double)(Integer)whole.get(i));
-                }
-
-                System.out.print(getNumber(value));
-            }
-        }
-
-        System.out.println();
-        System.out.print("Clicked ");
-
-        for(i = 0; i < 101; ++i) {
-            if (whole.containsKey(i)) {
-                System.out.print(getNumber((Integer)whole.get(i)));
-            }
-        }
-
-        System.out.println();
-    }
-
-    private static String getNumber(int number) {
-        if (number >= 1000) {
-            return " " + number;
-        } else if (number >= 100) {
-            return "  " + number;
-        } else if (number >= 10) {
-            return "   " + number;
-        } else {
-            return number >= 0 ? "    " + number : null;
-        }
-    }
 
     private void createCells() {
         for(int x = 0; x < this.width; ++x) {
@@ -242,7 +195,7 @@ public class Field {
                 List<Cell> deepCells = this.getDeepCells();
                 this.setPossibility(deepCells, 100.0D);
                 List<Cell> minPosCells = this.getMinPosCells();
-                this.minPossibility = minPosCells.size() == 0 ? 100.0D : ((Cell)minPosCells.get(0)).getPossibility();
+                this.minPossibility = minPosCells.size() == 0 ? 100.0D : minPosCells.get(0).getPossibility();
                 this.toOpen.addAll(minPosCells);
             } else {
                 this.toOpen = this.getUnknownCells();
@@ -254,7 +207,7 @@ public class Field {
 
     private void filterReachableCells(List<Cell> cells) {
         for(int i = 0; i < cells.size(); ++i) {
-            if (!this.isReachableCell((Cell)cells.get(i))) {
+            if (!this.isReachableCell(cells.get(i))) {
                 cells.remove(i--);
             }
         }
@@ -278,8 +231,8 @@ public class Field {
     public Point[] getToOpen() {
         Point[] result = new Point[this.toOpen.size()];
 
-        for(int i = 0; i < this.toOpen.size(); ++i) {
-            result[i] = pt(((Cell)this.toOpen.get(i)).getX(), ((Cell)this.toOpen.get(i)).getY());
+        for(int i = 0; i < toOpen.size(); ++i) {
+            result[i] = pt(toOpen.get(i).getX(), toOpen.get(i).getY());
         }
 
         return result;
@@ -288,8 +241,8 @@ public class Field {
     public Point[] getToMark() {
         Point[] result = new Point[this.toMark.size()];
 
-        for(int i = 0; i < this.toMark.size(); ++i) {
-            result[i] = pt(((Cell)this.toMark.get(i)).getX(), ((Cell)this.toMark.get(i)).getY());
+        for(int i = 0; i < toMark.size(); ++i) {
+            result[i] = pt(toMark.get(i).getX(), toMark.get(i).getY());
         }
 
         return result;
@@ -298,7 +251,7 @@ public class Field {
     private List<Cell> getMinPosCells() {
         List<Cell> result = new ArrayList();
         double min = 100.0D;
-        Iterator i$ = this.cells.iterator();
+        Iterator i$ = cells.iterator();
 
         while(true) {
             Cell cell;

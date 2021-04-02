@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 public class MinesCombs {
+
     private int mines;
     private int combs;
     private Indefinite indefinite;
@@ -19,40 +20,28 @@ public class MinesCombs {
     }
 
     public void addComb(int value) {
-        this.combs += value;
+        combs += value;
     }
 
     public int getMines() {
-        return this.mines;
+        return mines;
     }
 
     public void addArrayComb(int[] array) {
-        this.indefinite.addArrayComb(array);
-    }
-
-    public int getCombs() {
-        return this.combs;
-    }
-
-    public void refreshCellCombs(int combs, BigInteger deepComb) {
-        this.indefinite.refreshCellCombs(combs / this.combs, deepComb);
-    }
-
-    public void multiplyCombs(BigInteger value) {
-        this.indefinite.multiplyCombs(value);
+        indefinite.addArrayComb(array);
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder(this.toShortString());
+        StringBuilder sb = new StringBuilder(toShortString());
         sb.append(" (");
-        sb.append(Arrays.toString(this.indefinite.getMines()));
+        sb.append(Arrays.toString(indefinite.getMines()));
         sb.append(')');
         return sb.toString();
     }
 
     public String toShortString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.mines).append("->").append(this.combs);
+        sb.append(mines).append("->").append(combs);
         return sb.toString();
     }
 }
