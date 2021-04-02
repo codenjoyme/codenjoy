@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai.wave;
+package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -7,18 +7,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Cell {
+public class Cell2 {
 
     private boolean walkable;
     private final Point point;
     private int wave;
-    private final List<Cell> neighbours = new ArrayList();
+    private final List<Cell2> neighbours = new ArrayList();
 
-    public Cell(int x, int y) {
+    public Cell2(int x, int y) {
         this.point = new PointImpl(x, y);
     }
 
-    public void addNeighbour(Cell cell) {
+    public void addNeighbour(Cell2 cell) {
         this.neighbours.add(cell);
     }
 
@@ -38,7 +38,7 @@ public class Cell {
         Iterator i$ = this.neighbours.iterator();
 
         while (i$.hasNext()) {
-            Cell neighbour = (Cell) i$.next();
+            Cell2 neighbour = (Cell2) i$.next();
             if (neighbour.isWalkable() && neighbour.wave + 1 > this.wave) {
                 neighbour.wave = this.wave + 1;
             }
@@ -51,7 +51,7 @@ public class Cell {
         Iterator i$ = this.neighbours.iterator();
 
         while (i$.hasNext()) {
-            Cell neighbour = (Cell) i$.next();
+            Cell2 neighbour = (Cell2) i$.next();
             if (neighbour.isWalkable() && neighbour.wave == this.wave + 1) {
                 neighbour.makeWave();
             }
@@ -59,16 +59,16 @@ public class Cell {
 
     }
 
-    public Cell getPrevWaveCell() {
+    public Cell2 getPrevWaveCell() {
         Iterator i$ = this.neighbours.iterator();
 
-        Cell neighbour;
+        Cell2 neighbour;
         do {
             if (!i$.hasNext()) {
                 return null;
             }
 
-            neighbour = (Cell) i$.next();
+            neighbour = (Cell2) i$.next();
         } while (!neighbour.isWalkable() || neighbour.wave >= this.wave);
 
         return neighbour;
