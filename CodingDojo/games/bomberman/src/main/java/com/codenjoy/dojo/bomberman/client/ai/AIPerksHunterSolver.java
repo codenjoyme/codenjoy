@@ -30,6 +30,8 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,6 +77,9 @@ public class AIPerksHunterSolver implements Solver<Board> {
                 Elements.BOMB_COUNT_INCREASE,
                 Elements.BOMB_IMMUNE,
                 Elements.BOMB_REMOTE_CONTROL);
+        if (to.isEmpty()) {
+            return Arrays.asList();
+        }
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }

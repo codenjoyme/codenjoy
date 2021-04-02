@@ -394,8 +394,8 @@ public class PerksTest extends AbstractGameTest {
 
         asrtBrd("#+####\n" +
                 "#☼#☺##\n" +
-                "#H   #\n" +
-                "# # ##\n" +
+                "##   #\n" +
+                "# H ##\n" +
                 "     +\n" +
                 "# ####\n");
 
@@ -403,26 +403,26 @@ public class PerksTest extends AbstractGameTest {
 
         asrtBrd("#+####\n" +
                 "#☼#☺##\n" +
-                "# x  #\n" +
-                "# # ##\n" +
+                "##x  #\n" +
+                "#   ##\n" +
                 "     +\n" +
                 "# ####\n");
 
         field.tick();
 
         asrtBrd("#+####\n" +
-                "#☼H☺##\n" +
-                "#    #\n" +
-                "# # ##\n" +
+                "#☼#☺##\n" +
+                "## x #\n" +
+                "#   ##\n" +
                 "     +\n" +
                 "# ####\n");
 
         field.tick();
 
         asrtBrd("#+####\n" +
-                "#☼ Ѡ##\n" +
-                "#    #\n" +
-                "# # ##\n" +
+                "#☼#Ѡ##\n" +
+                "##   #\n" +
+                "#   ##\n" +
                 "     +\n" +
                 "# ####\n");
 
@@ -431,9 +431,9 @@ public class PerksTest extends AbstractGameTest {
         field.tick();
 
         asrtBrd("#+####\n" +
-                "#☼ Ѡ##\n" +
-                "#    #\n" +
-                "# # ##\n" +
+                "#☼#Ѡ##\n" +
+                "##   #\n" +
+                "#   ##\n" +
                 "     +\n" +
                 "# ####\n");
 
@@ -445,9 +445,9 @@ public class PerksTest extends AbstractGameTest {
         field.tick();
 
         asrtBrd("#+####\n" +
-                "#☼ +##\n" +  // антимитчопер превратился обратно в перк
-                "#    #\n" +
-                "# # ##\n" +
+                "#☼#+##\n" +
+                "##   #\n" +
+                "#   ##\n" +
                 " ☺   +\n" +
                 "# ####\n");
     }
@@ -606,8 +606,8 @@ public class PerksTest extends AbstractGameTest {
 
         asrtBrd("#+##☼☺\n" +
                 "# # ☼ \n" +
-                "Hxx  #\n" +
-                "    ##\n" +
+                "#    #\n" +
+                " xxx##\n" +
                 "     +\n" +
                 "# ####\n");
 
@@ -615,8 +615,8 @@ public class PerksTest extends AbstractGameTest {
 
         asrtBrd("#+##☼☺\n" +
                 "# # ☼ \n" +
-                " xxx #\n" +
-                "    ##\n" +
+                "#  x #\n" +
+                "  xx##\n" +
                 "     +\n" +
                 "# ####\n");
 
@@ -624,8 +624,8 @@ public class PerksTest extends AbstractGameTest {
 
         asrtBrd("#+##☼☺\n" +
                 "# # ☼ \n" +
-                "  xxx#\n" +
-                "    ##\n" +
+                "#  xx#\n" +
+                "   x##\n" +
                 "     +\n" +
                 "# ####\n");
 
@@ -645,8 +645,8 @@ public class PerksTest extends AbstractGameTest {
         // как митчоперы нормальнеют
         asrtBrd("#+##☼☺\n" +
                 "# # ☼☼\n" +
-                "  &&&#\n" +
-                "    ##\n" +
+                "#  &&#\n" +
+                "   &##\n" +
                 "     +\n" +
                 "# ####\n");
 
@@ -655,8 +655,8 @@ public class PerksTest extends AbstractGameTest {
 
         asrtBrd("#+##☼☺\n" +
                 "# # ☼☼\n" +
-                "  +++#\n" +  // антимитчоперы превратились обратно в перки
-                "    ##\n" +
+                "#  ++#\n" +
+                "   +##\n" +
                 "     +\n" +
                 "# ####\n");
 
@@ -725,9 +725,9 @@ public class PerksTest extends AbstractGameTest {
         asrtBrd("#+####\n" +
                 "# # ##\n" +
                 "#    #\n" +
-                "#x#☺##\n" +
-                "     +\n" +
-                "# ####\n");
+                "# #☺##\n" +
+                "  x  +\n" +
+                "#  ###\n");
 
         // мувнули героя и кикнули его
         hero.die();
@@ -736,9 +736,9 @@ public class PerksTest extends AbstractGameTest {
         asrtBrd("#+####\n" +
                 "# # ##\n" +
                 "#    #\n" +
-                "#&#Ѡ##\n" +
-                "     +\n" +
-                "# ####\n");
+                "# #Ѡ##\n" +
+                "  &  +\n" +
+                "#  ###\n");
 
         verifyAllEvents("[DIED]");
 
