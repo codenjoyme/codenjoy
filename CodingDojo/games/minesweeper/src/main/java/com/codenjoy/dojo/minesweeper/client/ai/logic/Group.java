@@ -29,18 +29,8 @@ public class Group {
     }
 
     public boolean isCross(Group group) {
-        Iterator<Cell> iterator = group.list.iterator();
-
-        Cell cell;
-        do {
-            if (!iterator.hasNext()) {
-                return false;
-            }
-
-            cell = iterator.next();
-        } while (!list.contains(cell));
-
-        return true;
+        return group.list.stream()
+                .anyMatch(list::contains);
     }
 
     public int getCombSize() {
