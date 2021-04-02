@@ -28,5 +28,6 @@ public enum Events {
     DESTROY_MINE,
     FORGET_CHARGE,
     NO_MORE_CHARGE,
-    CLEAN_BOARD, WIN;
+    CLEAN_BOARD,
+    WIN;
 }

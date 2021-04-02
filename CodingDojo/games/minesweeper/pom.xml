@@ -29,11 +29,6 @@
             <artifactId>engine</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.vaa25</groupId>
-            <artifactId>minesweeper-ai</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
         </dependency>
