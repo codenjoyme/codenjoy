@@ -126,12 +126,35 @@ public class AISolver implements Solver<Board> {
     private String getEscapeTo() {
         int width = field.length;
         int height = field[0].length;
-        return myCoord.getX() > 0 && field[myCoord.getX() - 1][myCoord.getY()] != 9 ? Direction.LEFT.toString() : (myCoord.getX() < width - 1 && field[myCoord.getX() + 1][myCoord.getY()] != 9 ? Direction.RIGHT.toString() : (myCoord.getY() > 0 && field[myCoord.getX()][myCoord.getY() - 1] != 9 ? UP.toString() : (myCoord.getY() < height - 1 && field[myCoord.getX()][myCoord.getY() + 1] != 9 ? DOWN.toString() : null)));
+        if (myCoord.getX() > 0
+                && field[myCoord.getX() - 1][myCoord.getY()] != 9)
+        {
+            return LEFT.toString();
+        }
+
+        if (myCoord.getX() < width - 1
+                && field[myCoord.getX() + 1][myCoord.getY()] != 9)
+        {
+            return RIGHT.toString();
+        }
+
+        if (myCoord.getY() > 0
+                && field[myCoord.getX()][myCoord.getY() - 1] != 9)
+        {
+            return UP.toString();
+        }
+
+        if (myCoord.getY() < height - 1
+                && field[myCoord.getX()][myCoord.getY() + 1] != 9)
+        {
+            return DOWN.toString();
+        }
+
+        return null;
     }
 
     private void createField() {
         field = new int[board.size() - 2][board.size() - 2];
-
         for (int i = 0; i < field.length; ++i) {
             for (int j = 0; j < field[i].length; ++j) {
                 field[i][j] = 9;
@@ -140,16 +163,12 @@ public class AISolver implements Solver<Board> {
     }
 
     private boolean isOnJustMarked(Point[] toMark) {
-        Point[] arr$ = toMark;
-        int len$ = toMark.length;
-
-        for (int i$ = 0; i$ < len$; ++i$) {
-            Point point = arr$[i$];
+        for (int i = 0; i < toMark.length; ++i) {
+            Point point = toMark[i];
             if (point.equals(myCoord)) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -175,7 +194,7 @@ public class AISolver implements Solver<Board> {
         }
 
         if (neighbour.equals(destination.getKey()) && !(destination.getValue()).booleanValue()) {
-            result = Direction.ACT.toString() + ',' + result;
+            result = ACT.toString() + ',' + result;
         }
 
         return result;
@@ -188,66 +207,51 @@ public class AISolver implements Solver<Board> {
     }
 
     private String getDirectionBydX(int dx) {
-        String result;
         if (dx > 0) {
-            result = Direction.RIGHT.toString();
+            return RIGHT.toString();
         } else if (dx < 0) {
-            result = Direction.LEFT.toString();
+            return LEFT.toString();
         } else {
-            result = Direction.valueOf(dice.next(2)).toString();
+            return Direction.valueOf(dice.next(2)).toString();
         }
-
-        return result;
     }
 
     private String getDirectionBydY(int dy) {
-        String result;
         if (dy < 0) {
-            result = UP.toString();
+            return UP.toString();
         } else if (dy > 0) {
-            result = DOWN.toString();
+            return DOWN.toString();
         } else {
-            result = Direction.valueOf(dice.next(2) + 2).toString();
+            return Direction.valueOf(dice.next(2) + 2).toString();
         }
-
-        return result;
     }
 
     private Map<Point, Boolean> toMap(Point[] toMark, Point[] toOpen) {
         HashMap result = new HashMap();
-        Point[] arr$ = toMark;
-        int len$ = toMark.length;
 
-        int i$;
-        Point point;
-        for (i$ = 0; i$ < len$; ++i$) {
-            point = arr$[i$];
-            result.put(point, Boolean.valueOf(false));
+        for (int i = 0; i < toMark.length; ++i) {
+            result.put(toMark[i], false);
         }
 
-        arr$ = toOpen;
-        len$ = toOpen.length;
-
-        for (i$ = 0; i$ < len$; ++i$) {
-            point = arr$[i$];
-            result.put(point, Boolean.valueOf(true));
+        for (int i = 0; i < toOpen.length; ++i) {
+            result.put(toOpen[i], true);
         }
 
         return result;
     }
 
     private Map.Entry<Point, Boolean> getClosest(Map<Point, Boolean> points) {
-        double minDistance = 1.7976931348623157E308D;
+        double min = 1.7976931348623157E308D;
         Map.Entry result = null;
-        Iterator i$ = points.entrySet().iterator();
+        Iterator iterator = points.entrySet().iterator();
 
-        while (i$.hasNext()) {
-            Map.Entry entry = (Map.Entry) i$.next();
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry) iterator.next();
             if (entry.getKey().equals(myCoord)) continue;
 
             double distance = myCoord.distance((Point) entry.getKey());
-            if (distance < minDistance) {
-                minDistance = distance;
+            if (distance < min) {
+                min = distance;
                 result = entry;
             }
         }
