@@ -23,371 +23,50 @@ package com.codenjoy.dojo.hex;
  */
 
 
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.hex.client.Board;
+import com.codenjoy.dojo.hex.client.YourSolver;
 import com.codenjoy.dojo.hex.client.ai.AISolver;
 import com.codenjoy.dojo.hex.services.GameRunner;
 import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-import static com.codenjoy.dojo.hex.services.GameSettings.Keys.LEVEL_MAP;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class SmokeTest {
-    private int index;
 
     @Test
     public void test() {
-        // given
-        List<String> messages = new LinkedList<>();
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 15;
+        // about 14s
+        int players = 5;
+        Supplier<Solver> solver = () -> new AISolver(dice);
 
-        Dice dice = LocalGameRunner.getDice(
-                2, 2, // hero pos
-                0, // where to go, direction
-                0, // index of hero to move
-                1, // jump 0 or clone 1
-                0, 1, 1,
-                1, 1, 1,
-                2, 1, 1,
-                3, 1, 1,
-                0, 2, 1,
-                1, 2, 1,
-                2, 2, 0,
-                3, 2, 1,
-                0, 3, 0,
-                1, 3, 0,
-                2, 3, 0,
-                3, 3, 1,
-                0, 4, 1,
-                1, 4, 1,
-                2, 4, 0,
-                3, 4, 1,
-                0, 5, 0,
-                1, 5, 0,
-                2, 5, 1,
-                3, 5, 0,
-                0, 6, 0,
-                1, 6, 0,
-                2, 6, 1,
-                3, 6, 0,
-                0, 7, 1,
-                1, 7, 1,
-                2, 7, 1,
-                3, 7, 0,
-                0, 8, 1,
-                1, 8, 0,
-                2, 8, 1,
-                3, 8, 0);
+        Smoke.play(1000, "SmokeTest.data", false,
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
 
-        GameRunner gameType = new GameRunner() {
-            @Override
-            public Dice getDice() {
-                return dice;
-            }
-
-            @Override
-            public GameSettings getSettings() {
-                return super.getSettings()
-                        .string(LEVEL_MAP,
-                                "☼☼☼☼☼☼" +
-                                "☼    ☼" +
-                                "☼    ☼" +
-                                "☼    ☼" +
-                                "☼    ☼" +
-                                "☼☼☼☼☼☼");
-            }
-        };
-
-        // when
-        LocalGameRunner.run(gameType,
-                new AISolver(dice),
-                new Board());
-
-        // then
-        assertEquals("DICE:2\n" +
-                        "DICE:2\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺  ☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(2,3),LEFT\n" +
-                        "1:Fire Event: WIN(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼☺☺  ☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 30\n" +
-                        "1:Answer: ACT(2,3),RIGHT\n" +
-                        "1:Fire Event: WIN(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼☺☺☺ ☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 60\n" +
-                        "1:Answer: ACT(2,3),UP\n" +
-                        "1:Fire Event: WIN(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺  ☼\n" +
-                        "1:☼☺☺☺ ☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 90\n" +
-                        "1:Answer: ACT(2,2),DOWN\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺  ☼\n" +
-                        "1:☼☺☺☺ ☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "DICE:2\n" +
-                        "DICE:2\n" +
-                        "DICE:0\n" +
-                        "DICE:3\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "DICE:0\n" +
-                        "DICE:3\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "DICE:3\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "DICE:3\n" +
-                        "DICE:0\n" +
-                        "DICE:3\n" +
-                        "DICE:3\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 90\n" +
-                        "1:Answer: ACT(3,3),DOWN\n" +
-                        "1:Fire Event: WIN(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺  ☼\n" +
-                        "1:☼☺☺☺ ☼\n" +
-                        "1:☼  ☺ ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "DICE:4\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 120\n" +
-                        "1:Answer: ACT(3,4),LEFT\n" +
-                        "1:Fire Event: WIN(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺  ☼\n" +
-                        "1:☼☺☺☺ ☼\n" +
-                        "1:☼ ☺☺ ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:1\n" +
-                        "DICE:4\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 150\n" +
-                        "1:Answer: ACT(3,3),RIGHT\n" +
-                        "1:Fire Event: WIN(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺  ☼\n" +
-                        "1:☼☺☺☺☺☼\n" +
-                        "1:☼ ☺☺ ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "DICE:4\n" +
-                        "DICE:0\n" +
-                        "DICE:3\n" +
-                        "DICE:4\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 180\n" +
-                        "1:Answer: ACT(3,3),DOWN\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺  ☼\n" +
-                        "1:☼☺☺☺☺☼\n" +
-                        "1:☼ ☺☺ ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "DICE:5\n" +
-                        "DICE:0\n" +
-                        "1:Scores: 180\n" +
-                        "1:Answer: ACT(3,4,1),LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺  ☼\n" +
-                        "1:☼☺☺☺☺☼\n" +
-                        "1:☼☺☺  ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:1\n" +
-                        "DICE:5\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "DICE:5\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 180\n" +
-                        "1:Answer: ACT(3,3),UP\n" +
-                        "1:Fire Event: WIN(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺☺ ☼\n" +
-                        "1:☼☺☺☺☺☼\n" +
-                        "1:☼☺☺  ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "DICE:5\n" +
-                        "DICE:0\n" +
-                        "DICE:0\n" +
-                        "DICE:6\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "DICE:6\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "DICE:6\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 210\n" +
-                        "1:Answer: ACT(3,3),UP\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺☺ ☼\n" +
-                        "1:☼☺☺☺☺☼\n" +
-                        "1:☼☺☺  ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "DICE:6\n" +
-                        "DICE:0\n" +
-                        "1:Scores: 210\n" +
-                        "1:Answer: ACT(3,3,1),DOWN\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺☺ ☼\n" +
-                        "1:☼☺☺☺☺☼\n" +
-                        "1:☼☺☺  ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "DICE:7\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:7\n" +
-                        "DICE:1\n" +
-                        "DICE:2\n" +
-                        "DICE:7\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 210\n" +
-                        "1:Answer: ACT(4,3),UP\n" +
-                        "1:Fire Event: WIN(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺☺☺☼\n" +
-                        "1:☼☺☺☺☺☼\n" +
-                        "1:☼☺☺  ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "DICE:7\n" +
-                        "DICE:0\n" +
-                        "DICE:0\n" +
-                        "DICE:8\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:8\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "DICE:8\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 240\n" +
-                        "1:Answer: ACT(4,3),UP\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:☼    ☼\n" +
-                        "1:☼ ☺☺☺☼\n" +
-                        "1:☼☺☺☺☺☼\n" +
-                        "1:☼☺☺  ☼\n" +
-                        "1:☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "DICE:8\n" +
-                        "DICE:0\n" +
-                        "1:Scores: 240\n" +
-                        "1:Answer: ACT(4,3,1),DOWN\n" +
-                        "------------------------------------------",
-                String.join("\n", messages));
-
+                    @Override
+                    public GameSettings getSettings() {
+                        return new GameSettings();
+                    }
+                },
+                Stream.generate(solver)
+                        .limit(players).collect(toList()),
+                Stream.generate(() -> new Board())
+                        .limit(players).collect(toList()),
+                (o1, o2) -> assertEquals(o1, o2));
     }
 }

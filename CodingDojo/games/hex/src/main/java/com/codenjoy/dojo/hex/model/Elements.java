@@ -25,9 +25,7 @@ package com.codenjoy.dojo.hex.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public enum Elements implements CharElements {
 
@@ -63,18 +61,25 @@ public enum Elements implements CharElements {
     }
 
     public static List<Elements> heroesElements() {
-        return new LinkedList<Elements>(Arrays.asList(Elements.values())) {{
+        return new LinkedList<>(Arrays.asList(Elements.values())) {{
             remove(Elements.NONE);
             remove(Elements.WALL);
             remove(Elements.MY_HERO);
         }};
     }
 
+    private static Map<Character, Elements> elements = new HashMap<>(){{
+        Arrays.stream(Elements.values())
+                .forEach(el -> put(el.ch, el));
+    }};
+
+    // optimized for performance
     public static Elements valueOf(char ch) {
-        return Arrays.stream(Elements.values())
-                .filter(el -> el.ch == ch)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such element for " + ch));
+        Elements elements = Elements.elements.get(ch);
+        if (elements == null) {
+            throw new IllegalArgumentException("No such element for " + ch);
+        }
+        return elements;
     }
 
 }
