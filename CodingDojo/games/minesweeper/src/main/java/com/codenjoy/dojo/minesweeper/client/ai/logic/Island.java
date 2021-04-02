@@ -28,18 +28,8 @@ public class Island {
     }
 
     public boolean isCross(Group group) {
-        Iterator iterator = list.iterator();
-
-        Group group1;
-        do {
-            if (!iterator.hasNext()) {
-                return false;
-            }
-
-            group1 = (Group) iterator.next();
-        } while (!group.isCross(group1));
-
-        return true;
+        return list.stream()
+                .anyMatch(group::isCross);
     }
 
     public void optimize() {
@@ -110,14 +100,8 @@ public class Island {
 
     private void setIndefiniteCells() {
         indefiniteCells = new ArrayList();
-        Iterator iterator = indefinite.iterator();
-
-        while (iterator.hasNext()) {
-            Group group = (Group) iterator.next();
-            Iterator iterator1 = group.getList().iterator();
-
-            while (iterator1.hasNext()) {
-                Cell cell = (Cell) iterator1.next();
+        for (Group group : indefinite) {
+            for (Cell cell : group.getList()) {
                 if (!indefiniteCells.contains(cell)) {
                     indefiniteCells.add(cell);
                 }
@@ -132,41 +116,26 @@ public class Island {
     }
 
     private void determine() {
-        Iterator iterator = list.iterator();
-
-        while (true) {
-            while (iterator.hasNext()) {
-                Group group = (Group) iterator.next();
-                Cell cell;
-                if (group.getValue() == 0) {
-                    Iterator iterator1 = group.getList().iterator();
-
-                    while (iterator1.hasNext()) {
-                        cell = (Cell) iterator1.next();
-                        toOpen.add(cell);
-                    }
-                } else if (group.size() == group.getValue()) {
-                    Iterator iterator1 = group.getList().iterator();
-
-                    while (iterator1.hasNext()) {
-                        cell = (Cell) iterator1.next();
-                        toMark.add(cell);
-                    }
-                } else {
-                    indefinite.add(group);
+        for (Group group : list) {
+            if (group.getValue() == 0) {
+                for (Cell cell : group.getList()) {
+                    toOpen.add(cell);
                 }
+            } else if (group.size() == group.getValue()) {
+                for (Cell cell : group.getList()) {
+                    toMark.add(cell);
+                }
+            } else {
+                indefinite.add(group);
             }
-
-            setIndefiniteCells();
-            return;
         }
+
+        setIndefiniteCells();
+        return;
     }
 
     public void resolve() {
-        Iterator iterator = indefinite.iterator();
-
-        while (iterator.hasNext()) {
-            Group group = (Group) iterator.next();
+        for (Group group : indefinite) {
             group.setComb();
         }
 
@@ -178,7 +147,6 @@ public class Island {
         for (int i = 0; i < countOfMines.length; ++i) {
             indefiniteCells.get(i).setPossibility(100.0D * (double) countOfMines[i] / (double) amountCombs);
         }
-
     }
 
     private void makeTree(ListIterator<Group> iterator) {
@@ -207,26 +175,13 @@ public class Island {
     }
 
     private boolean checkIslandComb() {
-        Iterator iterator = list.iterator();
-
-        Group group;
-        do {
-            if (!iterator.hasNext()) {
-                return true;
-            }
-
-            group = (Group) iterator.next();
-        } while (group.checkCells());
-
-        return false;
+        return list.stream()
+                .allMatch(Group::checkCells);
     }
 
     private void storeComb() {
         StringBuilder combSB = new StringBuilder(list.size());
-        Iterator i$ = indefiniteCells.iterator();
-
-        while (i$.hasNext()) {
-            Cell cell = (Cell) i$.next();
+        for (Cell cell : indefiniteCells) {
             if (cell.isMine()) {
                 combSB.append('1');
             }
@@ -249,12 +204,11 @@ public class Island {
         mx0 = new MinesAndCombinationAmountsOfIsland();
         islandMinesCombs = new IslandMinesCombs(indefiniteCells);
 
-        int i;
-        for (i = 0; i < countOfMines.length; ++i) {
+        for (int i = 0; i < countOfMines.length; ++i) {
             countOfMines[i] = 0;
         }
 
-        for (i = 0; i < amountOfComb; ++i) {
+        for (int i = 0; i < amountOfComb; ++i) {
             StringBuilder combSB = stack.pop();
             int[] mxCountOfMines = new int[indefiniteCells.size()];
             int mines = 0;

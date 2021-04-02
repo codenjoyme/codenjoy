@@ -9,12 +9,12 @@ public class Indefinite {
     private BigInteger zero = new BigInteger("0");
     private int[] mines;
     private BigInteger[] combs;
-    private BigInteger summaryCombs;
+    private BigInteger summary;
 
     public Indefinite(List<Cell> cells) {
         mines = new int[cells.size()];
         combs = new BigInteger[cells.size()];
-        summaryCombs = zero;
+        summary = zero;
         init();
     }
 
@@ -25,11 +25,9 @@ public class Indefinite {
     }
 
     public void addArrayComb(int[] array) {
-        summaryCombs = summaryCombs.add(one);
-
+        summary = summary.add(one);
         for (int i = 0; i < mines.length; ++i) {
-            int[] var10000 = mines;
-            var10000[i] += array[i];
+            mines[i] += array[i];
         }
     }
 

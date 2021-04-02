@@ -40,11 +40,8 @@ public class Group {
     public void setComb() {
         comb = Sequence.get(value, size());
         List<StringBuilder> combStrings = new ArrayList(comb.length);
-        Integer[] arr$ = comb;
-        int len$ = arr$.length;
-
-        for (int i$ = 0; i$ < len$; ++i$) {
-            Integer integer = arr$[i$];
+        for (int i = 0; i < comb.length; ++i) {
+            Integer integer = comb[i];
             StringBuilder combSB = new StringBuilder(comb.length);
             String binary = Integer.toBinaryString(integer);
             int lastChar = list.size() - 1;
@@ -83,10 +80,8 @@ public class Group {
         int mayBeMined = value;
         int valued = 0;
         int mined = 0;
-        Iterator i$ = list.iterator();
 
-        while (i$.hasNext()) {
-            Cell cell = (Cell) i$.next();
+        for (Cell cell : list) {
             if (cell.isValued()) {
                 ++valued;
                 if (valued > mayBeValued) {
@@ -104,45 +99,41 @@ public class Group {
     }
 
     public void storeCells() {
-        StringBuilder combSB = new StringBuilder(list.size());
-        Iterator i$ = list.iterator();
-
-        while (i$.hasNext()) {
-            Cell cell = (Cell) i$.next();
+        StringBuilder string = new StringBuilder(list.size());
+        for (Cell cell : list) {
             if (cell.isMine()) {
-                combSB.append('1');
+                string.append('1');
             } else if (cell.isValued()) {
-                combSB.append('0');
+                string.append('0');
             } else if (cell.isUnknown()) {
-                combSB.append('2');
+                string.append('2');
             }
         }
-
-        stack.push(combSB);
+        stack.push(string);
     }
 
     public void restoreCells() {
-        StringBuilder combSB = stack.pop();
+        StringBuilder string = stack.pop();
 
-        for (int i = 0; i < combSB.length(); ++i) {
-            if (combSB.charAt(i) == '1') {
+        for (int i = 0; i < string.length(); ++i) {
+            if (string.charAt(i) == '1') {
                 list.get(i).setMine();
             }
 
-            if (combSB.charAt(i) == '0') {
+            if (string.charAt(i) == '0') {
                 list.get(i).setValued();
             }
 
-            if (combSB.charAt(i) == '2') {
+            if (string.charAt(i) == '2') {
                 list.get(i).setUnknown();
             }
         }
     }
 
     public void setCellsComb(int index) {
-        StringBuilder combSB = combinations[index];
+        StringBuilder string = combinations[index];
 
-        for (int i = 0; i < combSB.length(); ++i) {
+        for (int i = 0; i < string.length(); ++i) {
             if (combinations[index].charAt(i) == '1') {
                 list.get(i).setMine();
             } else {
@@ -152,37 +143,20 @@ public class Group {
     }
 
     public void subtraction(Group group) {
-        Iterator i$ = group.list.iterator();
-
-        while (i$.hasNext()) {
-            Cell cell = (Cell) i$.next();
-            list.remove(cell);
-        }
-
+        list.removeAll(group.list);
         value -= group.value;
     }
 
     public boolean contains(Group group) {
-        Iterator i$ = group.list.iterator();
-
-        Cell cell;
-        do {
-            if (!i$.hasNext()) {
-                return true;
-            }
-
-            cell = (Cell) i$.next();
-        } while (list.contains(cell));
-
-        return false;
+        return list.containsAll(group.list);
     }
 
     public Group getOverlap(Group group) {
         List<Cell> overlap = new ArrayList();
-        Iterator i$ = group.list.iterator();
+        Iterator iterator = group.list.iterator();
 
-        while (i$.hasNext()) {
-            Cell cell = (Cell) i$.next();
+        while (iterator.hasNext()) {
+            Cell cell = (Cell) iterator.next();
             if (list.contains(cell)) {
                 overlap.add(cell);
             }
@@ -214,8 +188,6 @@ public class Group {
     }
 
     public int hashCode() {
-        int result = list.hashCode();
-        result = 31 * result + value;
-        return result;
+        return 31 * list.hashCode() + value;
     }
 }
