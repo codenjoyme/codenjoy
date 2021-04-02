@@ -24,6 +24,7 @@ package com.codenjoy.dojo.client.local;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
+import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
@@ -172,10 +173,10 @@ public class LocalGameRunner {
         Object data = game(index).getBoardAsString();
         board.forString(data.toString());
 
-        if (printBoardOnly) {
-            print(index, ((AbstractBoard) board).boardAsString());
-        } else {
+        if (!printBoardOnly || board instanceof AbstractTextBoard) {
             print(index, board.toString());
+        } else {
+            print(index, ((AbstractBoard) board).boardAsString());
         }
 
         String answer = solver(index).get(board);
