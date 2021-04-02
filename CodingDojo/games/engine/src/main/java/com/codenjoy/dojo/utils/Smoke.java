@@ -68,7 +68,7 @@ public class Smoke {
         String expectedAll = load("src/test/resources/" + fileName);
         String actualAll = String.join("\n", messages);
 
-        saveToFile("target/Actual" + fileName, actualAll);
+        saveToFile("target/" + fileName, actualAll);
 
         TestUtils.assertSmoke(true, assertor, expectedAll, actualAll);
     }
