@@ -23,26 +23,26 @@ package com.codenjoy.dojo.expansion.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.expansion.client.AbstractSolver;
 import com.codenjoy.dojo.expansion.client.Board;
 import com.codenjoy.dojo.expansion.client.Command;
-import com.codenjoy.dojo.expansion.client.YourSolver;
 import com.codenjoy.dojo.expansion.model.Forces;
 import com.codenjoy.dojo.expansion.model.ForcesMoves;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
-/**
- * Your AI
- */
-public class ApofigBotSolver extends AbstractSolver {
+public class AISolver extends AbstractSolver {
 
     private int increase;
     private Dice dice;
 
-    public ApofigBotSolver(Dice dice) {
+    public AISolver(Dice dice) {
         this.dice = dice;
         this.increase = 10;
     }

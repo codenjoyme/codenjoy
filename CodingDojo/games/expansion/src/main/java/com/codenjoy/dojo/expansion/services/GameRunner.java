@@ -26,7 +26,7 @@ package com.codenjoy.dojo.expansion.services;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.expansion.client.Board;
-import com.codenjoy.dojo.expansion.client.ai.ApofigBotSolver;
+import com.codenjoy.dojo.expansion.client.ai.AISolver;
 import com.codenjoy.dojo.expansion.model.*;
 import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
@@ -139,7 +139,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
 
     @Override
     public Class<? extends Solver> getAI() {
-        return ApofigBotSolver.class;
+        return AISolver.class;
     }
 
     @Override
