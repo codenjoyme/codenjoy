@@ -47,7 +47,7 @@ public class SmokeTest {
     public void test() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        // about 10s
+        // about 2s
         Smoke.play(1000, "SmokeTest.data", false,
                 new GameRunner() {
                     @Override

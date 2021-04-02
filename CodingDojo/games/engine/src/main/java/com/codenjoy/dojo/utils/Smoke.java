@@ -70,13 +70,15 @@ public class Smoke {
 
         // then
         String actualAll = String.join("\n", messages);
+        String expectedAll;
         if (rewriteSource) {
+            expectedAll = StringUtils.EMPTY;
             saveToFile(SOURCE_FOLDER + fileName, actualAll);
         } else {
-            String expectedAll = load(SOURCE_FOLDER + fileName);
+            expectedAll = load(SOURCE_FOLDER + fileName);
             saveToFile(TARGET_FOLDER + fileName, actualAll);
-            TestUtils.assertSmoke(true, assertor, expectedAll, actualAll);
         }
+        TestUtils.assertSmoke(true, assertor, expectedAll, actualAll);
     }
 
     public void saveToFile(String path, String data) {
