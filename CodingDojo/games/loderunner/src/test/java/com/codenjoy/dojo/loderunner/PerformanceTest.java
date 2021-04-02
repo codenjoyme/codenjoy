@@ -59,7 +59,7 @@ public class PerformanceTest {
         LocalGameRunner.printConversions = false;
         LocalGameRunner.printDice = false;
 
-        // about 32 sec
+        // about 26 sec
         int ticks = 200;
         int playersCount = 100;
         int enemies = 100;
