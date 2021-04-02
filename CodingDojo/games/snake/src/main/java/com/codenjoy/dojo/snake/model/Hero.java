@@ -62,7 +62,7 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
     }
 
     public static Hero createHero(int size, int startLength) {
-        int x = (size - 1)/2;
+        int x = (size - 1)/2 + ((size == 4)?1:0);
         int y = (size - 1)/2;
         Hero hero = new Hero(x, y);
         hero.growBy = Math.max(0, startLength - 2);

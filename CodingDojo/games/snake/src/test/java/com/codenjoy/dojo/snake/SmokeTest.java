@@ -29,8 +29,10 @@ import com.codenjoy.dojo.snake.client.Board;
 import com.codenjoy.dojo.snake.client.ai.AISolver;
 import com.codenjoy.dojo.snake.services.GameRunner;
 import com.codenjoy.dojo.snake.services.GameSettings;
+import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,218 +43,23 @@ public class SmokeTest {
 
     @Test
     public void test() {
-        // given
-        List<String> messages = new LinkedList<>();
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 10;
-        LocalGameRunner.printDice = false;
-        LocalGameRunner.printConversions = false;
+        Smoke.play(1000, "SmokeTest.data",
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
 
-        Dice dice = LocalGameRunner.getDice(
-                0, 2, 4, 1, 2, // random numbers
-                0, 3, 5, 6, 6,
-                0, 4, 6, 1, 3,
-                0, 4, 7, 6, 6,
-                0, 4, 5, 6, 3,
-                2, 1, 4, 0, 2,
-                3, 5, 4, 6, 1,
-                2, 1, 5, 3, 2,
-                0, 1, 3, 2, 1);
-
-        GameRunner gameType = new GameRunner() {
-            @Override
-            public Dice getDice() {
-                return dice;
-            }
-
-            @Override
-            public GameSettings getSettings() {
-                return super.getSettings()
-                        .integer(BOARD_SIZE, 7);
-            }
-        };
-
-        // when
-        LocalGameRunner.run(gameType,
-                new AISolver(dice),
-                new Board());
-
-        // then
-        assertEquals("1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼     ☼\n" +
-                        "1:☼ ╘►  ☼\n" +
-                        "1:☼     ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[3,5]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [3,3]\n" +
-                        "1:Snake at: [[3,3], [2,3]]\n" +
-                        "1:Current direction: RIGHT\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: UP\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼  ▲  ☼\n" +
-                        "1:☼  ╙  ☼\n" +
-                        "1:☼     ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[3,5]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [3,4]\n" +
-                        "1:Snake at: [[3,4], [3,3]]\n" +
-                        "1:Current direction: UP\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: UP\n" +
-                        "1:Fire Event: EAT_APPLE\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼  ▲  ☼\n" +
-                        "1:☼  ║  ☼\n" +
-                        "1:☼  ╙  ☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [3,5]\n" +
-                        "1:Snake at: [[3,5], [3,3], [3,4]]\n" +
-                        "1:Current direction: UP\n" +
-                        "1:Scores: 3\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼ ◄╗  ☼\n" +
-                        "1:☼  ╙  ☼\n" +
-                        "1:☼     ☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [2,5]\n" +
-                        "1:Snake at: [[2,5], [3,4], [3,5]]\n" +
-                        "1:Current direction: LEFT\n" +
-                        "1:Scores: 3\n" +
-                        "1:Answer: DOWN\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼ ╔╕  ☼\n" +
-                        "1:☼ ▼   ☼\n" +
-                        "1:☼     ☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [2,4]\n" +
-                        "1:Snake at: [[2,4], [2,5], [3,5]]\n" +
-                        "1:Current direction: DOWN\n" +
-                        "1:Scores: 3\n" +
-                        "1:Answer: DOWN\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼ ╓   ☼\n" +
-                        "1:☼ ║   ☼\n" +
-                        "1:☼ ▼   ☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [2,3]\n" +
-                        "1:Snake at: [[2,3], [2,4], [2,5]]\n" +
-                        "1:Current direction: DOWN\n" +
-                        "1:Scores: 3\n" +
-                        "1:Answer: RIGHT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼     ☼\n" +
-                        "1:☼ ╓   ☼\n" +
-                        "1:☼ ╚►  ☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [3,3]\n" +
-                        "1:Snake at: [[3,3], [2,3], [2,4]]\n" +
-                        "1:Current direction: RIGHT\n" +
-                        "1:Scores: 3\n" +
-                        "1:Answer: DOWN\n" +
-                        "1:Fire Event: EAT_APPLE\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼     ☼\n" +
-                        "1:☼☺╓   ☼\n" +
-                        "1:☼ ╚╗  ☼\n" +
-                        "1:☼  ▼  ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[1,4]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [3,2]\n" +
-                        "1:Snake at: [[3,2], [2,3], [2,4], [3,3]]\n" +
-                        "1:Current direction: DOWN\n" +
-                        "1:Scores: 7\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼     ☼\n" +
-                        "1:☼☺    ☼\n" +
-                        "1:☼ ╘╗  ☼\n" +
-                        "1:☼ ◄╝  ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[1,4]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [2,2]\n" +
-                        "1:Snake at: [[2,2], [2,3], [3,2], [3,3]]\n" +
-                        "1:Current direction: LEFT\n" +
-                        "1:Scores: 7\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼     ☼\n" +
-                        "1:☼☺    ☼\n" +
-                        "1:☼  ╓  ☼\n" +
-                        "1:☼◄═╝  ☼\n" +
-                        "1:☼   ☻ ☼\n" +
-                        "1:☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Apple at: [[1,4]]\n" +
-                        "1:Stones at: [[4,1]]\n" +
-                        "1:Head at: [1,2]\n" +
-                        "1:Snake at: [[1,2], [2,2], [3,2], [3,3]]\n" +
-                        "1:Current direction: LEFT\n" +
-                        "1:Scores: 7\n" +
-                        "1:Answer: UP\n" +
-                        "------------------------------------------",
-                String.join("\n", messages));
-
+                    @Override
+                    public GameSettings getSettings() {
+                        return new GameSettings()
+                                .integer(BOARD_SIZE, 10);
+                    }
+                },
+                Arrays.asList(new AISolver(dice)),
+                Arrays.asList(new Board()),
+                (o1, o2) -> assertEquals(o1, o2));
     }
 }

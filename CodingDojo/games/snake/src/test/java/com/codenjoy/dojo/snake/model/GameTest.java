@@ -103,18 +103,14 @@ public class GameTest {
                 "☼☼☼\n");
     }
 
-    // Поле имеет квадрутную форму, кратную двум + 1.
-    // Тут просто, если мы зададим размер поля какой-то другой, то он увеличится на 1
     @Test
     public void shouldSnakeAtCenter_sizeIsOdd() {
         givenBoardSize(4);
 
-        // TODO сам понимаешь что-то тут не то :)
-        asrtBrd("     \n" +
-                "☼☼☼☼ \n" +
-                "☼╘►☼ \n" +
-                "☼  ☼ \n" +
-                "☼☼☼☼ \n");
+        asrtBrd("☼☼☼☼\n" +
+                "☼  ☼\n" +
+                "☼╘►☼\n" +
+                "☼☼☼☼\n");
     }
 
     void givenBoardSize(int size) {
@@ -138,6 +134,60 @@ public class GameTest {
                 "☼╘► ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSnakeAtCenter_sizeIs6() {
+        givenBoardSize(6);
+
+        asrtBrd("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼╘►  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSnakeAtCenter_sizeIs7() {
+        givenBoardSize(7);
+
+        asrtBrd("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼ ╘►  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSnakeAtCenter_sizeIs8() {
+        givenBoardSize(8);
+
+        asrtBrd("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ╘►   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSnakeAtCenter_sizeIs9() {
+        givenBoardSize(9);
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
     
     // Змейка размером в две клеточки. 

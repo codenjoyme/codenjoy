@@ -104,13 +104,15 @@ public class AISolver implements Solver<Board> {
                     if (isBarrierAt(x, y)) continue;
                     Point pt = pt(x, y);
                     way = this.way.getShortestWay(board.size(), from, Arrays.asList(pt), possible);
-                    if (distance < way.size()) {
+                    if (distance <= way.size()) {
                         distance = way.size();
                         longest = pt;
                     }
                 }
             }
-            way = getWay(from, Arrays.asList(longest));
+            if (longest != null) {
+                way = getWay(from, Arrays.asList(longest));
+            }
         }
 
         return way;

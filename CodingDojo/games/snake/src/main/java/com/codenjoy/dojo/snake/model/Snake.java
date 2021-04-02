@@ -47,9 +47,6 @@ public class Snake implements Field {
         this.generator = generator;
         this.startLength = settings.integer(START_SNAKE_LENGTH);
         this.settings = settings;
-        if (size%2 == 0) {
-            size++;
-        }
         this.size = size;
         this.walls = walls;
     }

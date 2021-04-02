@@ -38,7 +38,10 @@ public class Walls implements Iterable<Wall>{
     private List<Wall> walls = new LinkedList<>();
 
     public void add(int x, int y) {
-        this.walls.add(new Wall(x, y));
+        Wall wall = new Wall(x, y);
+        if (!walls.contains(wall)) {
+            walls.add(wall);
+        }
     }
 
     @Override

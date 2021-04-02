@@ -26,20 +26,14 @@ package com.codenjoy.dojo.snake.model.artifacts;
 import com.codenjoy.dojo.snake.model.Walls;
 
 public class BasicWalls extends Walls implements Iterable<Wall> {
-    public BasicWalls(int boardSize) {
-        super();
 
-        for (int x = 0; x < boardSize; x++) {
-            add(x, 0);
-            add(x, boardSize - 1);
-        }
+    public BasicWalls(int size) {
+        for (int i = 0; i < size; i++) {
+            add(i, 0);
+            add(i, size - 1);
 
-        final int D = 1; // учитывать уже существующие вертикальные стены
-        for (int y = D; y < boardSize - D; y++) {
-            add(0, y);
-            add(boardSize - 1, y);
+            add(0, i);
+            add(size - 1, i);
         }
     }
-
-
 }
