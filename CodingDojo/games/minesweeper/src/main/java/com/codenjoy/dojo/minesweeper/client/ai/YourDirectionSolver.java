@@ -45,11 +45,9 @@ public class YourDirectionSolver implements DirectionSolver {
     private StringBuilder turns = new StringBuilder();
     private char movedTo;
     private List<Direction> safePath = new ArrayList();
-    private final String user;
 
-    public YourDirectionSolver(Dice dice, String user) {
+    public YourDirectionSolver(Dice dice) {
         this.dice = dice;
-        this.user = user;
     }
 
     public String get(BoardImpl board) {
@@ -80,7 +78,7 @@ public class YourDirectionSolver implements DirectionSolver {
                 field.setMyCoord(myCoord);
 
                 try {
-                    field.play(user);
+                    field.play();
                     Point[] e = field.getToMark();
                     Point[] toOpen = field.getToOpen();
                     if(isOnJustMarked(e) || movedTo == 42 && e.length == 0 && field.getMinPossibility() > 0.0D) {

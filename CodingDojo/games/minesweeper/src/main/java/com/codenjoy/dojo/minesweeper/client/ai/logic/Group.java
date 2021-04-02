@@ -17,21 +17,21 @@ public class Group {
     private Deque<StringBuilder> stack;
 
     public Group(List<Cell> cells, int value) {
-        this.list = new ArrayList(cells);
+        list = new ArrayList(cells);
         this.value = value;
-        this.stack = new LinkedList();
+        stack = new LinkedList();
     }
 
     public List<Cell> getList() {
-        return this.list;
+        return list;
     }
 
     public int size() {
-        return this.list.size();
+        return list.size();
     }
 
     public int getValue() {
-        return this.value;
+        return value;
     }
 
     public boolean isCross(Group group) {
@@ -44,29 +44,29 @@ public class Group {
             }
 
             cell = (Cell)i$.next();
-        } while(!this.list.contains(cell));
+        } while(!list.contains(cell));
 
         return true;
     }
 
     public int getCombSize() {
-        return this.comb.length;
+        return comb.length;
     }
 
     public void setComb() {
-        this.comb = Sequence6.getSequensed(this.value, this.size());
-        List<StringBuilder> combStrings = new ArrayList(this.comb.length);
-        Integer[] arr$ = this.comb;
+        comb = Sequence6.getSequensed(value, size());
+        List<StringBuilder> combStrings = new ArrayList(comb.length);
+        Integer[] arr$ = comb;
         int len$ = arr$.length;
 
         for(int i$ = 0; i$ < len$; ++i$) {
             Integer integer = arr$[i$];
-            StringBuilder combSB = new StringBuilder(this.comb.length);
+            StringBuilder combSB = new StringBuilder(comb.length);
             String binary = Integer.toBinaryString(integer);
-            int lastChar = this.list.size() - 1;
+            int lastChar = list.size() - 1;
             int binaryLength = binary.length();
 
-            for(int k = 0; k < this.list.size(); ++k) {
+            for(int k = 0; k < list.size(); ++k) {
                 if (lastChar - k >= binaryLength) {
                     combSB.append('0');
                 } else {
@@ -77,16 +77,16 @@ public class Group {
             combStrings.add(combSB);
         }
 
-        this.combinations = new StringBuilder[combStrings.size()];
-        combStrings.toArray(this.combinations);
+        combinations = new StringBuilder[combStrings.size()];
+        combStrings.toArray(combinations);
     }
 
     public boolean checkCombination(int index) {
-        StringBuilder comb = this.combinations[index];
+        StringBuilder comb = combinations[index];
 
         for(int i = 0; i < comb.length(); ++i) {
             char ch = comb.charAt(i);
-            if (ch == '1' && ((Cell)this.list.get(i)).isValued() || ch == '0' && ((Cell)this.list.get(i)).isMine()) {
+            if (ch == '1' && list.get(i).isValued() || ch == '0' && list.get(i).isMine()) {
                 return false;
             }
         }
@@ -95,11 +95,11 @@ public class Group {
     }
 
     public boolean checkCells() {
-        int mayBeValued = this.list.size() - this.value;
-        int mayBeMined = this.value;
+        int mayBeValued = list.size() - value;
+        int mayBeMined = value;
         int valued = 0;
         int mined = 0;
-        Iterator i$ = this.list.iterator();
+        Iterator i$ = list.iterator();
 
         while(i$.hasNext()) {
             Cell cell = (Cell)i$.next();
@@ -120,8 +120,8 @@ public class Group {
     }
 
     public void storeCells() {
-        StringBuilder combSB = new StringBuilder(this.list.size());
-        Iterator i$ = this.list.iterator();
+        StringBuilder combSB = new StringBuilder(list.size());
+        Iterator i$ = list.iterator();
 
         while(i$.hasNext()) {
             Cell cell = (Cell)i$.next();
@@ -134,36 +134,36 @@ public class Group {
             }
         }
 
-        this.stack.push(combSB);
+        stack.push(combSB);
     }
 
     public void restoreCells() {
-        StringBuilder combSB = this.stack.pop();
+        StringBuilder combSB = stack.pop();
 
         for(int i = 0; i < combSB.length(); ++i) {
             if (combSB.charAt(i) == '1') {
-                this.list.get(i).setMine();
+                list.get(i).setMine();
             }
 
             if (combSB.charAt(i) == '0') {
-                this.list.get(i).setValued();
+                list.get(i).setValued();
             }
 
             if (combSB.charAt(i) == '2') {
-                this.list.get(i).setUnknown();
+                list.get(i).setUnknown();
             }
         }
 
     }
 
     public void setCellsComb(int index) {
-        StringBuilder combSB = this.combinations[index];
+        StringBuilder combSB = combinations[index];
 
         for(int i = 0; i < combSB.length(); ++i) {
-            if (this.combinations[index].charAt(i) == '1') {
-                this.list.get(i).setMine();
+            if (combinations[index].charAt(i) == '1') {
+                list.get(i).setMine();
             } else {
-                this.list.get(i).setValued();
+                list.get(i).setValued();
             }
         }
 
@@ -174,11 +174,11 @@ public class Group {
 
         while(i$.hasNext()) {
             Cell cell = (Cell)i$.next();
-            this.list.remove(cell);
+            list.remove(cell);
         }
 
-        this.value -= group.value;
-        if (this.value < 0) {
+        value -= group.value;
+        if (value < 0) {
         }
 
     }
@@ -193,7 +193,7 @@ public class Group {
             }
 
             cell = (Cell)i$.next();
-        } while(this.list.contains(cell));
+        } while(list.contains(cell));
 
         return false;
     }
@@ -204,12 +204,12 @@ public class Group {
 
         while(i$.hasNext()) {
             Cell cell = (Cell)i$.next();
-            if (this.list.contains(cell)) {
+            if (list.contains(cell)) {
                 overlap.add(cell);
             }
         }
 
-        int mine = this.value - (this.list.size() - overlap.size());
+        int mine = value - (list.size() - overlap.size());
         if (mine != group.value) {
             return null;
         } else {
@@ -220,14 +220,14 @@ public class Group {
     public boolean equals(Object o) {
         if (this == o) {
             return true;
-        } else if (o != null && this.getClass() == o.getClass()) {
+        } else if (o != null && getClass() == o.getClass()) {
             Group group = (Group)o;
-            if (this.value != group.value) {
+            if (value != group.value) {
                 return false;
-            } else if (this.list.size() != group.list.size()) {
+            } else if (list.size() != group.list.size()) {
                 return false;
             } else {
-                return group.list.containsAll(this.list);
+                return group.list.containsAll(list);
             }
         } else {
             return false;
@@ -235,14 +235,14 @@ public class Group {
     }
 
     public int hashCode() {
-        int result = this.list.hashCode();
-        result = 31 * result + this.value;
+        int result = list.hashCode();
+        result = 31 * result + value;
         return result;
     }
 
     public String toString() {
-        StringBuilder res = (new StringBuilder("mines=")).append(this.value).append(' ');
-        Iterator iterator = this.list.iterator();
+        StringBuilder res = (new StringBuilder("mines=")).append(value).append(' ');
+        Iterator iterator = list.iterator();
 
         while(iterator.hasNext()) {
             Cell cell = (Cell)iterator.next();

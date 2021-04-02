@@ -31,22 +31,22 @@ public class Field {
     public Field(PlayField playField, Dice dice) {
         this(playField.width, playField.height, playField.amount, dice);
         this.playField = playField;
-        this.scanPlayField();
+        scanPlayField();
     }
 
     public Field(int width, int height, int amount1, Dice dice) {
         this.dice = dice;
-        this.groups = new ArrayList();
-        this.toOpen = new ArrayList();
-        this.toMark = new ArrayList();
-        this.amount = amount1;
+        groups = new ArrayList();
+        toOpen = new ArrayList();
+        toMark = new ArrayList();
+        amount = amount1;
         this.width = width;
         this.height = height;
-        this.cells = new LinkedList();
-        this.islands = new ArrayList();
-        this.field = new Cell[width][height];
-        this.createCells();
-        this.setCellsNeighbours();
+        cells = new LinkedList();
+        islands = new ArrayList();
+        field = new Cell[width][height];
+        createCells();
+        setCellsNeighbours();
     }
 
     public void setMyCoord(Point myCoord) {
@@ -55,48 +55,48 @@ public class Field {
 
 
     private void createCells() {
-        for(int x = 0; x < this.width; ++x) {
-            for(int y = 0; y < this.height; ++y) {
-                this.field[x][y] = new Cell(x, y);
-                this.cells.add(this.field[x][y]);
+        for(int x = 0; x < width; ++x) {
+            for(int y = 0; y < height; ++y) {
+                field[x][y] = new Cell(x, y);
+                cells.add(field[x][y]);
             }
         }
 
     }
 
     private void setCellsNeighbours() {
-        for(int x = 0; x < this.width; ++x) {
-            for(int y = 0; y < this.height; ++y) {
+        for(int x = 0; x < width; ++x) {
+            for(int y = 0; y < height; ++y) {
                 if (x > 0) {
-                    this.field[x][y].addNeighbour(this.field[x - 1][y]);
+                    field[x][y].addNeighbour(field[x - 1][y]);
                 }
 
                 if (y > 0) {
-                    this.field[x][y].addNeighbour(this.field[x][y - 1]);
+                    field[x][y].addNeighbour(field[x][y - 1]);
                 }
 
                 if (x > 0 && y > 0) {
-                    this.field[x][y].addNeighbour(this.field[x - 1][y - 1]);
+                    field[x][y].addNeighbour(field[x - 1][y - 1]);
                 }
 
-                if (x < this.width - 1) {
-                    this.field[x][y].addNeighbour(this.field[x + 1][y]);
+                if (x < width - 1) {
+                    field[x][y].addNeighbour(field[x + 1][y]);
                 }
 
-                if (y < this.height - 1) {
-                    this.field[x][y].addNeighbour(this.field[x][y + 1]);
+                if (y < height - 1) {
+                    field[x][y].addNeighbour(field[x][y + 1]);
                 }
 
-                if (x < this.width - 1 && y < this.height - 1) {
-                    this.field[x][y].addNeighbour(this.field[x + 1][y + 1]);
+                if (x < width - 1 && y < height - 1) {
+                    field[x][y].addNeighbour(field[x + 1][y + 1]);
                 }
 
-                if (x > 0 && y < this.height - 1) {
-                    this.field[x][y].addNeighbour(this.field[x - 1][y + 1]);
+                if (x > 0 && y < height - 1) {
+                    field[x][y].addNeighbour(field[x - 1][y + 1]);
                 }
 
-                if (x < this.width - 1 && y > 0) {
-                    this.field[x][y].addNeighbour(this.field[x + 1][y - 1]);
+                if (x < width - 1 && y > 0) {
+                    field[x][y].addNeighbour(field[x + 1][y - 1]);
                 }
             }
         }
@@ -105,16 +105,16 @@ public class Field {
 
     private void scanPlayField() {
 
-        for(int x = 0; x < this.width; ++x) {
-            for(int y = 0; y < this.height; ++y) {
-                int value = this.playField.get(x, y);
+        for(int x = 0; x < width; ++x) {
+            for(int y = 0; y < height; ++y) {
+                int value = playField.get(x, y);
                 if (value != 10 && value != 12) {
                     if (value == 9) {
-                        this.field[x][y].setUnknown();
+                        field[x][y].setUnknown();
                     } else if (value == 11) {
-                        this.field[x][y].setMine();
+                        field[x][y].setMine();
                     } else {
-                        this.field[x][y].setValue(value);
+                        field[x][y].setValue(value);
                     }
                 }
             }
@@ -123,20 +123,20 @@ public class Field {
     }
 
     private void setGroups() {
-        this.groups.clear();
-        Iterator i$ = this.cells.iterator();
+        groups.clear();
+        Iterator i$ = cells.iterator();
 
         while(i$.hasNext()) {
             Cell cell = (Cell)i$.next();
             if (cell.isValued() && cell.hasUnknownAround()) {
-                this.groups.add(new Group(cell.getUnknownCells(), cell.getValue()));
+                groups.add(new Group(cell.getUnknownCells(), cell.getValue()));
             }
         }
 
     }
 
     private void optimizeIslands() {
-        Iterator i$ = this.islands.iterator();
+        Iterator i$ = islands.iterator();
 
         while(i$.hasNext()) {
             Island island = (Island)i$.next();
@@ -146,7 +146,7 @@ public class Field {
     }
 
     private void divideGroupsToIslands(List<Group> groups) {
-        this.islands.clear();
+        islands.clear();
         Iterator i$ = groups.iterator();
 
         while(i$.hasNext()) {
@@ -154,8 +154,8 @@ public class Field {
             boolean added = false;
             Island addedTo = null;
 
-            for(int i = 0; i < this.islands.size(); ++i) {
-                Island currentIsland = (Island)this.islands.get(i);
+            for(int i = 0; i < islands.size(); ++i) {
+                Island currentIsland = (Island)islands.get(i);
                 if (currentIsland.isCross(group)) {
                     if (!added) {
                         currentIsland.add(group);
@@ -163,51 +163,49 @@ public class Field {
                         addedTo = currentIsland;
                     } else {
                         addedTo.add(currentIsland);
-                        this.islands.remove(i);
+                        islands.remove(i);
                     }
                 }
             }
 
             if (!added) {
-                this.islands.add(new Island(group));
+                islands.add(new Island(group));
             }
         }
 
     }
 
-    public void play(String user) {
-        this.islands.clear();
-        this.setGroups();
-        this.divideGroupsToIslands(this.groups);
-        this.optimizeIslands();
-        this.determineMarkOpenIndefinite();
-        this.filterReachableCells(this.toMark);
-        this.filterReachableCells(this.toOpen);
-        if (!this.hasDecision()) {
-            if ("vaa25@yandex.ru".equals(user)) {
-                Iterator i$ = this.islands.iterator();
+    public void play() {
+        islands.clear();
+        setGroups();
+        divideGroupsToIslands(groups);
+        optimizeIslands();
+        determineMarkOpenIndefinite();
+        filterReachableCells(toMark);
+        filterReachableCells(toOpen);
+        if (!hasDecision()) {
+            Iterator i$ = islands.iterator();
 
-                while(i$.hasNext()) {
-                    Island island = (Island)i$.next();
-                    island.resolve();
-                }
-
-                List<Cell> deepCells = this.getDeepCells();
-                this.setPossibility(deepCells, 100.0D);
-                List<Cell> minPosCells = this.getMinPosCells();
-                this.minPossibility = minPosCells.size() == 0 ? 100.0D : minPosCells.get(0).getPossibility();
-                this.toOpen.addAll(minPosCells);
-            } else {
-                this.toOpen = this.getUnknownCells();
-                this.filterReachableCells(this.toOpen);
+            while(i$.hasNext()) {
+                Island island = (Island)i$.next();
+                island.resolve();
             }
+
+            List<Cell> deepCells = getDeepCells();
+            setPossibility(deepCells, 100.0D);
+            List<Cell> minPosCells = getMinPosCells();
+            minPossibility = minPosCells.size() == 0 ? 100.0D : minPosCells.get(0).getPossibility();
+            toOpen.addAll(minPosCells);
+
+//            toOpen = getUnknownCells();
+//            filterReachableCells(toOpen);
         }
 
     }
 
     private void filterReachableCells(List<Cell> cells) {
         for(int i = 0; i < cells.size(); ++i) {
-            if (!this.isReachableCell(cells.get(i))) {
+            if (!isReachableCell(cells.get(i))) {
                 cells.remove(i--);
             }
         }
@@ -217,19 +215,19 @@ public class Field {
     private boolean isReachableCell(Cell cell) {
         int x = cell.getX();
         int y = cell.getY();
-        if (x > 0 && !this.field[x - 1][y].isUnknown()) {
+        if (x > 0 && !field[x - 1][y].isUnknown()) {
             return true;
-        } else if (y > 0 && !this.field[x][y - 1].isUnknown()) {
+        } else if (y > 0 && !field[x][y - 1].isUnknown()) {
             return true;
-        } else if (x < this.width - 1 && !this.field[x + 1][y].isUnknown()) {
+        } else if (x < width - 1 && !field[x + 1][y].isUnknown()) {
             return true;
         } else {
-            return y < this.height - 1 && !this.field[x][y + 1].isUnknown();
+            return y < height - 1 && !field[x][y + 1].isUnknown();
         }
     }
 
     public Point[] getToOpen() {
-        Point[] result = new Point[this.toOpen.size()];
+        Point[] result = new Point[toOpen.size()];
 
         for(int i = 0; i < toOpen.size(); ++i) {
             result[i] = pt(toOpen.get(i).getX(), toOpen.get(i).getY());
@@ -239,7 +237,7 @@ public class Field {
     }
 
     public Point[] getToMark() {
-        Point[] result = new Point[this.toMark.size()];
+        Point[] result = new Point[toMark.size()];
 
         for(int i = 0; i < toMark.size(); ++i) {
             result[i] = pt(toMark.get(i).getX(), toMark.get(i).getY());
@@ -264,8 +262,8 @@ public class Field {
 
                         cell = (Cell)i$.next();
                     } while(!cell.isUnknown());
-                } while(!this.isReachableCell(cell));
-            } while(cell.getCoords().getKey() == this.myCoord.getX() && cell.getCoords().getValue() == this.myCoord.getY());
+                } while(!isReachableCell(cell));
+            } while(cell.getCoords().getKey() == myCoord.getX() && cell.getCoords().getValue() == myCoord.getY());
 
             if (cell.getPossibility() == min) {
                 result.add(cell);
@@ -287,33 +285,9 @@ public class Field {
 
     }
 
-    private Cell getOneOf(List<Cell> list) {
-        return (Cell)list.get(dice.next(list.size()));
-    }
-
-    private Cell getOneOf(List<Cell> list1, List<Cell> list2) {
-        List<Cell> list = new ArrayList(list1);
-        list.addAll(list2);
-        return this.getOneOf(list);
-    }
-
-    private int countUnknownCells() {
-        int res = 0;
-        Iterator i$ = this.cells.iterator();
-
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
-            if (cell.isUnknown()) {
-                ++res;
-            }
-        }
-
-        return res;
-    }
-
     private List<Cell> getUnknownCells() {
         List<Cell> res = new ArrayList();
-        Iterator i$ = this.cells.iterator();
+        Iterator i$ = cells.iterator();
 
         while(i$.hasNext()) {
             Cell cell = (Cell)i$.next();
@@ -325,20 +299,9 @@ public class Field {
         return res;
     }
 
-    private int getDeepCellsAmount() {
-        int u = this.countUnknownCells();
-
-        Island island;
-        for(Iterator i$ = this.islands.iterator(); i$.hasNext(); u -= island.size()) {
-            island = (Island)i$.next();
-        }
-
-        return u;
-    }
-
     private List<Cell> getDeepCells() {
-        List<Cell> unknown = this.getUnknownCells();
-        Iterator i$ = this.islands.iterator();
+        List<Cell> unknown = getUnknownCells();
+        Iterator i$ = islands.iterator();
 
         while(i$.hasNext()) {
             Island island = (Island)i$.next();
@@ -349,30 +312,30 @@ public class Field {
     }
 
     private void determineMarkOpenIndefinite() {
-        Iterator i$ = this.islands.iterator();
+        Iterator i$ = islands.iterator();
 
         while(i$.hasNext()) {
             Island island = (Island)i$.next();
-            this.toOpen.addAll(island.getToOpen());
-            this.toMark.addAll(island.getToMark());
+            toOpen.addAll(island.getToOpen());
+            toMark.addAll(island.getToMark());
         }
 
     }
 
     private boolean hasDecision() {
-        return this.toMark.size() > 0 || this.toOpen.size() > 0;
+        return toMark.size() > 0 || toOpen.size() > 0;
     }
 
     public void print() {
-        System.out.println(this.fieldToString());
+        System.out.println(fieldToString());
     }
 
     public String fieldToString() {
         StringBuilder result = new StringBuilder("0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9\n");
 
-        for(int y = 0; y < this.height; ++y) {
-            for(int x = 0; x < this.width; ++x) {
-                Cell cell = this.field[x][y];
+        for(int y = 0; y < height; ++y) {
+            for(int x = 0; x < width; ++x) {
+                Cell cell = field[x][y];
                 if (cell.isMine()) {
                     result.append("* ");
                 } else if (cell.isUnknown()) {
@@ -390,80 +353,7 @@ public class Field {
         return result.toString();
     }
 
-    public String posToString() {
-        StringBuilder result = new StringBuilder("0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29\n");
-
-        for(int y = 0; y < this.height; ++y) {
-            for(int x = 0; x < this.width; ++x) {
-                Cell cell = this.field[x][y];
-                if (cell.isMine()) {
-                    result.append("*  ");
-                } else if (cell.isUnknown()) {
-                    long pos = Math.round(cell.getPossibility());
-                    result.append(pos).append(pos > 9L ? " " : "  ");
-                } else {
-                    result.append(cell.getValue()).append(") ");
-                }
-            }
-
-            result.append(y).append('\n');
-        }
-
-        result.append('\n');
-        result.append("0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29\n");
-        return result.toString();
-    }
-
-    public void printPossibilities() {
-        System.out.println(this.posToString());
-    }
-
-    public void clear() {
-        Iterator i$ = this.cells.iterator();
-
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
-            cell.setUnknown();
-        }
-
-    }
-
-    public void clear(int x, int y) {
-        this.field[x][y].setUnknown();
-    }
-
-    public void set(int x, int y, int value) {
-        if (value == 9) {
-            this.field[x][y].setMine();
-        }
-
-        if (value < 9 && value >= 0) {
-            this.field[x][y].setValue(value);
-        }
-
-    }
-
-    public Point[] getMarked() {
-        Point[] points = new Point[this.toMark.size()];
-
-        for(int i = 0; i < this.toMark.size(); ++i) {
-            points[i] = pt((this.toMark.get(i)).getX(), (this.toMark.get(i)).getY());
-        }
-
-        return points;
-    }
-
-    public Point[] getOpen() {
-        Point[] points = new Point[this.toOpen.size()];
-
-        for(int i = 0; i < this.toOpen.size(); ++i) {
-            points[i] = pt((this.toOpen.get(i)).getX(), (this.toOpen.get(i)).getY());
-        }
-
-        return points;
-    }
-
     public double getMinPossibility() {
-        return this.minPossibility;
+        return minPossibility;
     }
 }

@@ -29,8 +29,8 @@ import com.codenjoy.dojo.services.Dice;
 
 public class AISolver extends YourDirectionSolver implements Solver<Board> {
 
-    public AISolver(String name, Dice dice) {
-        super(dice, name);
+    public AISolver(Dice dice) {
+        super(dice);
     }
 
     @Override

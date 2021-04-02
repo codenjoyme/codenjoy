@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class Island {
+
     private List<Group> list = new ArrayList();
     private List<Cell> toOpen = new ArrayList();
     private List<Cell> toMark = new ArrayList();

@@ -59,7 +59,7 @@ public class SmokeTest {
                                 .integer(MINES_ON_BOARD, 10);
                     }
                 },
-                Arrays.asList(new AISolver("test", dice)),
+                Arrays.asList(new AISolver(dice)),
                 Arrays.asList(new Board()),
                 (o1, o2) -> assertEquals(o1, o2));
     }
