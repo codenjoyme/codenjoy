@@ -25,265 +25,39 @@ package com.codenjoy.dojo.football;
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.football.client.Board;
+import com.codenjoy.dojo.football.client.YourSolver;
 import com.codenjoy.dojo.football.client.ai.AISolver;
 import com.codenjoy.dojo.football.services.GameRunner;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 
-import static com.codenjoy.dojo.football.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
+
     @Test
     public void test() {
-        // given
-        List<String> messages = new LinkedList<>();
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 15;
-        LocalGameRunner.printConversions = false;
-        LocalGameRunner.printBoardOnly = true;
-        LocalGameRunner.printDice = false;
-        LocalGameRunner.printTick = true;
+        // about 4s
+        Smoke.play(1000, "SmokeTest.data", false,
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
 
-        Dice dice = LocalGameRunner.getDice(
-                1, 2, 3, 0, 3, 2);
-
-        GameRunner gameType = new GameRunner() {
-            @Override
-            public Dice getDice() {
-                return dice;
-            }
-
-            @Override
-            public GameSettings getSettings() {
-                return super.getSettings()
-                        .string(LEVEL_MAP,
-                                "☼☼☼☼☼☼☼☼☼" +
-                                "☼☼☼┴┴┴☼☼☼" +
-                                "☼       ☼" +
-                                "☼       ☼" +
-                                "☼   ∙   ☼" +
-                                "☼       ☼" +
-                                "☼       ☼" +
-                                "☼☼☼┬┬┬☼☼☼" +
-                                "☼☼☼☼☼☼☼☼☼");
-            }
-        };
-
-        // when
-        LocalGameRunner.run(gameType,
-                new AISolver(dice),
-                new Board());
-
-        // then
-        assertEquals("1: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "1: 1:☼       ☼\n" +
-                        "1: 1:☼       ☼\n" +
-                        "1: 1:☼   ∙   ☼\n" +
-                        "1: 1:☼       ☼\n" +
-                        "1: 1:☼☺      ☼\n" +
-                        "1: 1:☼☼☼===☼☼☼\n" +
-                        "1: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1: 1:\n" +
-                        "1: 1:Scores: 0\n" +
-                        "1: 1:Answer: RIGHT, act(2, 3)\n" +
-                        "------------------------------------------\n" +
-                        "2: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "2: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "2: 1:☼       ☼\n" +
-                        "2: 1:☼       ☼\n" +
-                        "2: 1:☼   ∙   ☼\n" +
-                        "2: 1:☼       ☼\n" +
-                        "2: 1:☼ ☺     ☼\n" +
-                        "2: 1:☼☼☼===☼☼☼\n" +
-                        "2: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "2: 1:\n" +
-                        "2: 1:Scores: 0\n" +
-                        "2: 1:Answer: RIGHT, act(2, 3)\n" +
-                        "------------------------------------------\n" +
-                        "3: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "3: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "3: 1:☼       ☼\n" +
-                        "3: 1:☼       ☼\n" +
-                        "3: 1:☼   ∙   ☼\n" +
-                        "3: 1:☼       ☼\n" +
-                        "3: 1:☼  ☺    ☼\n" +
-                        "3: 1:☼☼☼===☼☼☼\n" +
-                        "3: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "3: 1:\n" +
-                        "3: 1:Scores: 0\n" +
-                        "3: 1:Answer: UP, act(1, 3)\n" +
-                        "------------------------------------------\n" +
-                        "4: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "4: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "4: 1:☼       ☼\n" +
-                        "4: 1:☼       ☼\n" +
-                        "4: 1:☼   ∙   ☼\n" +
-                        "4: 1:☼  ☺    ☼\n" +
-                        "4: 1:☼       ☼\n" +
-                        "4: 1:☼☼☼===☼☼☼\n" +
-                        "4: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "4: 1:\n" +
-                        "4: 1:Scores: 0\n" +
-                        "4: 1:Answer: RIGHT, act(2, 3)\n" +
-                        "------------------------------------------\n" +
-                        "5: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "5: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "5: 1:☼       ☼\n" +
-                        "5: 1:☼       ☼\n" +
-                        "5: 1:☼   ∙   ☼\n" +
-                        "5: 1:☼   ☺   ☼\n" +
-                        "5: 1:☼       ☼\n" +
-                        "5: 1:☼☼☼===☼☼☼\n" +
-                        "5: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "5: 1:\n" +
-                        "5: 1:Scores: 0\n" +
-                        "5: 1:Answer: UP, act(1, 3)\n" +
-                        "------------------------------------------\n" +
-                        "6: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "6: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "6: 1:☼       ☼\n" +
-                        "6: 1:☼       ☼\n" +
-                        "6: 1:☼   ☻   ☼\n" +
-                        "6: 1:☼       ☼\n" +
-                        "6: 1:☼       ☼\n" +
-                        "6: 1:☼☼☼===☼☼☼\n" +
-                        "6: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "6: 1:\n" +
-                        "6: 1:Scores: 0\n" +
-                        "6: 1:Answer: UP, act(1, 3)\n" +
-                        "------------------------------------------\n" +
-                        "7: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "7: 1:☼☼☼⌂x⌂☼☼☼\n" +
-                        "7: 1:☼       ☼\n" +
-                        "7: 1:☼   ☺   ☼\n" +
-                        "7: 1:☼       ☼\n" +
-                        "7: 1:☼       ☼\n" +
-                        "7: 1:☼       ☼\n" +
-                        "7: 1:☼☼☼===☼☼☼\n" +
-                        "7: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "7: 1:\n" +
-                        "7: 1:Scores: 0\n" +
-                        "7: 1:Answer:\n" +
-                        "7: 1:Fire Event: WIN\n" +
-                        "7: 1:Fire Event: TOP_GOAL\n" +
-                        "------------------------------------------\n" +
-                        "8: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "8: 1:☼☼☼⌂x⌂☼☼☼\n" +
-                        "8: 1:☼       ☼\n" +
-                        "8: 1:☼   ☺   ☼\n" +
-                        "8: 1:☼       ☼\n" +
-                        "8: 1:☼       ☼\n" +
-                        "8: 1:☼       ☼\n" +
-                        "8: 1:☼☼☼===☼☼☼\n" +
-                        "8: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "8: 1:\n" +
-                        "8: 1:Scores: 1\n" +
-                        "8: 1:Answer:\n" +
-                        "8: 1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "------------------------------------------\n" +
-                        "9: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "9: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "9: 1:☼       ☼\n" +
-                        "9: 1:☼       ☼\n" +
-                        "9: 1:☼   ∙   ☼\n" +
-                        "9: 1:☼       ☼\n" +
-                        "9: 1:☼  ☺    ☼\n" +
-                        "9: 1:☼☼☼===☼☼☼\n" +
-                        "9: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "9: 1:\n" +
-                        "9: 1:Scores: 1\n" +
-                        "9: 1:Answer: UP, act(1, 3)\n" +
-                        "------------------------------------------\n" +
-                        "10: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "10: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "10: 1:☼       ☼\n" +
-                        "10: 1:☼       ☼\n" +
-                        "10: 1:☼   ∙   ☼\n" +
-                        "10: 1:☼  ☺    ☼\n" +
-                        "10: 1:☼       ☼\n" +
-                        "10: 1:☼☼☼===☼☼☼\n" +
-                        "10: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "10: 1:\n" +
-                        "10: 1:Scores: 1\n" +
-                        "10: 1:Answer: RIGHT, act(2, 3)\n" +
-                        "------------------------------------------\n" +
-                        "11: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "11: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "11: 1:☼       ☼\n" +
-                        "11: 1:☼       ☼\n" +
-                        "11: 1:☼   ∙   ☼\n" +
-                        "11: 1:☼   ☺   ☼\n" +
-                        "11: 1:☼       ☼\n" +
-                        "11: 1:☼☼☼===☼☼☼\n" +
-                        "11: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "11: 1:\n" +
-                        "11: 1:Scores: 1\n" +
-                        "11: 1:Answer: UP, act(1, 3)\n" +
-                        "------------------------------------------\n" +
-                        "12: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "12: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "12: 1:☼       ☼\n" +
-                        "12: 1:☼       ☼\n" +
-                        "12: 1:☼   ☻   ☼\n" +
-                        "12: 1:☼       ☼\n" +
-                        "12: 1:☼       ☼\n" +
-                        "12: 1:☼☼☼===☼☼☼\n" +
-                        "12: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "12: 1:\n" +
-                        "12: 1:Scores: 1\n" +
-                        "12: 1:Answer: UP, act(1, 3)\n" +
-                        "------------------------------------------\n" +
-                        "13: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "13: 1:☼☼☼⌂x⌂☼☼☼\n" +
-                        "13: 1:☼       ☼\n" +
-                        "13: 1:☼   ☺   ☼\n" +
-                        "13: 1:☼       ☼\n" +
-                        "13: 1:☼       ☼\n" +
-                        "13: 1:☼       ☼\n" +
-                        "13: 1:☼☼☼===☼☼☼\n" +
-                        "13: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "13: 1:\n" +
-                        "13: 1:Scores: 1\n" +
-                        "13: 1:Answer:\n" +
-                        "13: 1:Fire Event: WIN\n" +
-                        "13: 1:Fire Event: TOP_GOAL\n" +
-                        "------------------------------------------\n" +
-                        "14: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "14: 1:☼☼☼⌂x⌂☼☼☼\n" +
-                        "14: 1:☼       ☼\n" +
-                        "14: 1:☼   ☺   ☼\n" +
-                        "14: 1:☼       ☼\n" +
-                        "14: 1:☼       ☼\n" +
-                        "14: 1:☼       ☼\n" +
-                        "14: 1:☼☼☼===☼☼☼\n" +
-                        "14: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "14: 1:\n" +
-                        "14: 1:Scores: 2\n" +
-                        "14: 1:Answer:\n" +
-                        "14: 1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "------------------------------------------\n" +
-                        "15: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "15: 1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "15: 1:☼       ☼\n" +
-                        "15: 1:☼       ☼\n" +
-                        "15: 1:☼   ∙   ☼\n" +
-                        "15: 1:☼       ☼\n" +
-                        "15: 1:☼☺      ☼\n" +
-                        "15: 1:☼☼☼===☼☼☼\n" +
-                        "15: 1:☼☼☼☼☼☼☼☼☼\n" +
-                        "15: 1:\n" +
-                        "15: 1:Scores: 2\n" +
-                        "15: 1:Answer: RIGHT, act(2, 3)\n" +
-                        "------------------------------------------",
-                String.join("\n", messages));
-
+                    @Override
+                    public GameSettings getSettings() {
+                        return new GameSettings();
+                    }
+                },
+                Arrays.asList(new AISolver(dice), new YourSolver(dice)),
+                Arrays.asList(new Board(), new Board()),
+                (o1, o2) -> assertEquals(o1, o2));
     }
 }
