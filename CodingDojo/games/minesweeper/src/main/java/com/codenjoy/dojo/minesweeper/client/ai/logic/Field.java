@@ -1,5 +1,3 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import com.codenjoy.dojo.services.Dice;
@@ -9,24 +7,23 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Field {
-    private Point myCoord;
     public final int amount;
     public final int width;
     public final int height;
     private final Cell[][] field;
     private final List<Cell> cells;
-    private PlayField playField;
-    private List<Group> groups;
-    private List<Island> islands;
-    private List<Cell> toOpen;
-    private List<Cell> toMark;
     double minPossibility;
-    private Dice dice;
+    private Point myCoord;
+    private PlayField playField;
+    private final List<Group> groups;
+    private final List<Island> islands;
+    private final List<Cell> toOpen;
+    private final List<Cell> toMark;
+    private final Dice dice;
 
     public Field(PlayField playField, Dice dice) {
         this(playField.width, playField.height, playField.amount, dice);
@@ -55,8 +52,8 @@ public class Field {
 
 
     private void createCells() {
-        for(int x = 0; x < width; ++x) {
-            for(int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
                 field[x][y] = new Cell(x, y);
                 cells.add(field[x][y]);
             }
@@ -65,8 +62,8 @@ public class Field {
     }
 
     private void setCellsNeighbours() {
-        for(int x = 0; x < width; ++x) {
-            for(int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
                 if (x > 0) {
                     field[x][y].addNeighbour(field[x - 1][y]);
                 }
@@ -105,8 +102,8 @@ public class Field {
 
     private void scanPlayField() {
 
-        for(int x = 0; x < width; ++x) {
-            for(int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
                 int value = playField.get(x, y);
                 if (value != 10 && value != 12) {
                     if (value == 9) {
@@ -126,8 +123,8 @@ public class Field {
         groups.clear();
         Iterator i$ = cells.iterator();
 
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell cell = (Cell) i$.next();
             if (cell.isValued() && cell.hasUnknownAround()) {
                 groups.add(new Group(cell.getUnknownCells(), cell.getValue()));
             }
@@ -138,8 +135,8 @@ public class Field {
     private void optimizeIslands() {
         Iterator i$ = islands.iterator();
 
-        while(i$.hasNext()) {
-            Island island = (Island)i$.next();
+        while (i$.hasNext()) {
+            Island island = (Island) i$.next();
             island.optimize();
         }
 
@@ -149,13 +146,13 @@ public class Field {
         islands.clear();
         Iterator i$ = groups.iterator();
 
-        while(i$.hasNext()) {
-            Group group = (Group)i$.next();
+        while (i$.hasNext()) {
+            Group group = (Group) i$.next();
             boolean added = false;
             Island addedTo = null;
 
-            for(int i = 0; i < islands.size(); ++i) {
-                Island currentIsland = (Island)islands.get(i);
+            for (int i = 0; i < islands.size(); ++i) {
+                Island currentIsland = islands.get(i);
                 if (currentIsland.isCross(group)) {
                     if (!added) {
                         currentIsland.add(group);
@@ -186,8 +183,8 @@ public class Field {
         if (!hasDecision()) {
             Iterator i$ = islands.iterator();
 
-            while(i$.hasNext()) {
-                Island island = (Island)i$.next();
+            while (i$.hasNext()) {
+                Island island = (Island) i$.next();
                 island.resolve();
             }
 
@@ -204,7 +201,7 @@ public class Field {
     }
 
     private void filterReachableCells(List<Cell> cells) {
-        for(int i = 0; i < cells.size(); ++i) {
+        for (int i = 0; i < cells.size(); ++i) {
             if (!isReachableCell(cells.get(i))) {
                 cells.remove(i--);
             }
@@ -229,7 +226,7 @@ public class Field {
     public Point[] getToOpen() {
         Point[] result = new Point[toOpen.size()];
 
-        for(int i = 0; i < toOpen.size(); ++i) {
+        for (int i = 0; i < toOpen.size(); ++i) {
             result[i] = pt(toOpen.get(i).getX(), toOpen.get(i).getY());
         }
 
@@ -239,7 +236,7 @@ public class Field {
     public Point[] getToMark() {
         Point[] result = new Point[toMark.size()];
 
-        for(int i = 0; i < toMark.size(); ++i) {
+        for (int i = 0; i < toMark.size(); ++i) {
             result[i] = pt(toMark.get(i).getX(), toMark.get(i).getY());
         }
 
@@ -251,7 +248,7 @@ public class Field {
         double min = 100.0D;
         Iterator i$ = cells.iterator();
 
-        while(true) {
+        while (true) {
             Cell cell;
             do {
                 do {
@@ -260,10 +257,10 @@ public class Field {
                             return result;
                         }
 
-                        cell = (Cell)i$.next();
-                    } while(!cell.isUnknown());
-                } while(!isReachableCell(cell));
-            } while(cell.getCoords().getKey() == myCoord.getX() && cell.getCoords().getValue() == myCoord.getY());
+                        cell = (Cell) i$.next();
+                    } while (!cell.isUnknown());
+                } while (!isReachableCell(cell));
+            } while (cell.getCoords().getKey() == myCoord.getX() && cell.getCoords().getValue() == myCoord.getY());
 
             if (cell.getPossibility() == min) {
                 result.add(cell);
@@ -278,8 +275,8 @@ public class Field {
     private void setPossibility(List<Cell> list, double possibility) {
         Iterator i$ = list.iterator();
 
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell cell = (Cell) i$.next();
             cell.setPossibility(possibility);
         }
 
@@ -289,8 +286,8 @@ public class Field {
         List<Cell> res = new ArrayList();
         Iterator i$ = cells.iterator();
 
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell cell = (Cell) i$.next();
             if (cell.isUnknown()) {
                 res.add(cell);
             }
@@ -303,8 +300,8 @@ public class Field {
         List<Cell> unknown = getUnknownCells();
         Iterator i$ = islands.iterator();
 
-        while(i$.hasNext()) {
-            Island island = (Island)i$.next();
+        while (i$.hasNext()) {
+            Island island = (Island) i$.next();
             unknown.removeAll(island.getIndefiniteCells());
         }
 
@@ -314,8 +311,8 @@ public class Field {
     private void determineMarkOpenIndefinite() {
         Iterator i$ = islands.iterator();
 
-        while(i$.hasNext()) {
-            Island island = (Island)i$.next();
+        while (i$.hasNext()) {
+            Island island = (Island) i$.next();
             toOpen.addAll(island.getToOpen());
             toMark.addAll(island.getToMark());
         }
@@ -333,8 +330,8 @@ public class Field {
     public String fieldToString() {
         StringBuilder result = new StringBuilder("0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9\n");
 
-        for(int y = 0; y < height; ++y) {
-            for(int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
                 Cell cell = field[x][y];
                 if (cell.isMine()) {
                     result.append("* ");

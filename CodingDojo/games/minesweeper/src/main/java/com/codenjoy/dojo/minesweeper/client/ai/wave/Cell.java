@@ -1,5 +1,3 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.wave;
 
 import com.codenjoy.dojo.services.Point;
@@ -12,9 +10,9 @@ import java.util.List;
 public class Cell {
 
     private boolean walkable;
-    private Point point;
+    private final Point point;
     private int wave;
-    private List<Cell> neighbours = new ArrayList();
+    private final List<Cell> neighbours = new ArrayList();
 
     public Cell(int x, int y) {
         this.point = new PointImpl(x, y);
@@ -22,10 +20,6 @@ public class Cell {
 
     public void addNeighbour(Cell cell) {
         this.neighbours.add(cell);
-    }
-
-    public void setWave(int wave) {
-        this.wave = wave;
     }
 
     public boolean isWalkable() {
@@ -43,8 +37,8 @@ public class Cell {
     public void makeWave() {
         Iterator i$ = this.neighbours.iterator();
 
-        while(i$.hasNext()) {
-            Cell neighbour = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell neighbour = (Cell) i$.next();
             if (neighbour.isWalkable() && neighbour.wave + 1 > this.wave) {
                 neighbour.wave = this.wave + 1;
             }
@@ -56,8 +50,8 @@ public class Cell {
     private void makeNeighboursWaves() {
         Iterator i$ = this.neighbours.iterator();
 
-        while(i$.hasNext()) {
-            Cell neighbour = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell neighbour = (Cell) i$.next();
             if (neighbour.isWalkable() && neighbour.wave == this.wave + 1) {
                 neighbour.makeWave();
             }
@@ -74,14 +68,18 @@ public class Cell {
                 return null;
             }
 
-            neighbour = (Cell)i$.next();
-        } while(!neighbour.isWalkable() || neighbour.wave >= this.wave);
+            neighbour = (Cell) i$.next();
+        } while (!neighbour.isWalkable() || neighbour.wave >= this.wave);
 
         return neighbour;
     }
 
     public int getWave() {
         return this.wave;
+    }
+
+    public void setWave(int wave) {
+        this.wave = wave;
     }
 
     public Point getPoint() {

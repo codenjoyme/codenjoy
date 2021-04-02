@@ -1,18 +1,15 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2;
 
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Cell;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class IslandMinesCombs {
 
-    private List<MinesCombs> minesCombses = new ArrayList();
-    private List<Cell> indefinite;
+    private final List<MinesCombs> minesCombses = new ArrayList();
+    private final List<Cell> indefinite;
 
     public IslandMinesCombs(List<Cell> indefinite) {
         this.indefinite = indefinite;
@@ -50,8 +47,8 @@ public class IslandMinesCombs {
                 return null;
             }
 
-            minesCombs = (MinesCombs)i$.next();
-        } while(minesCombs.getMines() != mines);
+            minesCombs = (MinesCombs) i$.next();
+        } while (minesCombs.getMines() != mines);
 
         return minesCombs;
     }

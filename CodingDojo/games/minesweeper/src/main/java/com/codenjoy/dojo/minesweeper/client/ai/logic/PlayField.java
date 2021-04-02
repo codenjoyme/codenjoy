@@ -1,8 +1,4 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
-
-import com.codenjoy.dojo.services.Dice;
 
 public class PlayField {
 
@@ -29,12 +25,12 @@ public class PlayField {
         int[][] arr$ = customField;
         int len$ = customField.length;
 
-        for(int i$ = 0; i$ < len$; ++i$) {
+        for (int i$ = 0; i$ < len$; ++i$) {
             int[] ints = arr$[i$];
             int[] arr$$ = ints;
             int len$$ = ints.length;
 
-            for(int i$$ = 0; i$$ < len$$; ++i$$) {
+            for (int i$$ = 0; i$$ < len$$; ++i$$) {
                 int anInt = arr$$[i$$];
                 if (anInt == 11) {
                     ++amount2;
@@ -50,8 +46,8 @@ public class PlayField {
     }
 
     public void print() {
-        for(int y = 0; y < this.height; ++y) {
-            for(int x = 0; x < this.width; ++x) {
+        for (int y = 0; y < this.height; ++y) {
+            for (int x = 0; x < this.width; ++x) {
                 if (this.field[x][y] == 10) {
                     System.out.print("* ");
                 } else if (this.field[x][y] == 0) {

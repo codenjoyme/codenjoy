@@ -1,20 +1,14 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Group {
 
-    private List<Cell> list;
+    private final List<Cell> list;
     private int value;
     private Integer[] comb;
     private StringBuilder[] combinations;
-    private Deque<StringBuilder> stack;
+    private final Deque<StringBuilder> stack;
 
     public Group(List<Cell> cells, int value) {
         list = new ArrayList(cells);
@@ -43,8 +37,8 @@ public class Group {
                 return false;
             }
 
-            cell = (Cell)i$.next();
-        } while(!list.contains(cell));
+            cell = (Cell) i$.next();
+        } while (!list.contains(cell));
 
         return true;
     }
@@ -59,14 +53,14 @@ public class Group {
         Integer[] arr$ = comb;
         int len$ = arr$.length;
 
-        for(int i$ = 0; i$ < len$; ++i$) {
+        for (int i$ = 0; i$ < len$; ++i$) {
             Integer integer = arr$[i$];
             StringBuilder combSB = new StringBuilder(comb.length);
             String binary = Integer.toBinaryString(integer);
             int lastChar = list.size() - 1;
             int binaryLength = binary.length();
 
-            for(int k = 0; k < list.size(); ++k) {
+            for (int k = 0; k < list.size(); ++k) {
                 if (lastChar - k >= binaryLength) {
                     combSB.append('0');
                 } else {
@@ -84,7 +78,7 @@ public class Group {
     public boolean checkCombination(int index) {
         StringBuilder comb = combinations[index];
 
-        for(int i = 0; i < comb.length(); ++i) {
+        for (int i = 0; i < comb.length(); ++i) {
             char ch = comb.charAt(i);
             if (ch == '1' && list.get(i).isValued() || ch == '0' && list.get(i).isMine()) {
                 return false;
@@ -101,8 +95,8 @@ public class Group {
         int mined = 0;
         Iterator i$ = list.iterator();
 
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell cell = (Cell) i$.next();
             if (cell.isValued()) {
                 ++valued;
                 if (valued > mayBeValued) {
@@ -123,8 +117,8 @@ public class Group {
         StringBuilder combSB = new StringBuilder(list.size());
         Iterator i$ = list.iterator();
 
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell cell = (Cell) i$.next();
             if (cell.isMine()) {
                 combSB.append('1');
             } else if (cell.isValued()) {
@@ -140,7 +134,7 @@ public class Group {
     public void restoreCells() {
         StringBuilder combSB = stack.pop();
 
-        for(int i = 0; i < combSB.length(); ++i) {
+        for (int i = 0; i < combSB.length(); ++i) {
             if (combSB.charAt(i) == '1') {
                 list.get(i).setMine();
             }
@@ -159,7 +153,7 @@ public class Group {
     public void setCellsComb(int index) {
         StringBuilder combSB = combinations[index];
 
-        for(int i = 0; i < combSB.length(); ++i) {
+        for (int i = 0; i < combSB.length(); ++i) {
             if (combinations[index].charAt(i) == '1') {
                 list.get(i).setMine();
             } else {
@@ -172,8 +166,8 @@ public class Group {
     public void subtraction(Group group) {
         Iterator i$ = group.list.iterator();
 
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell cell = (Cell) i$.next();
             list.remove(cell);
         }
 
@@ -192,8 +186,8 @@ public class Group {
                 return true;
             }
 
-            cell = (Cell)i$.next();
-        } while(list.contains(cell));
+            cell = (Cell) i$.next();
+        } while (list.contains(cell));
 
         return false;
     }
@@ -202,8 +196,8 @@ public class Group {
         List<Cell> overlap = new ArrayList();
         Iterator i$ = group.list.iterator();
 
-        while(i$.hasNext()) {
-            Cell cell = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell cell = (Cell) i$.next();
             if (list.contains(cell)) {
                 overlap.add(cell);
             }
@@ -221,7 +215,7 @@ public class Group {
         if (this == o) {
             return true;
         } else if (o != null && getClass() == o.getClass()) {
-            Group group = (Group)o;
+            Group group = (Group) o;
             if (value != group.value) {
                 return false;
             } else if (list.size() != group.list.size()) {
@@ -244,8 +238,8 @@ public class Group {
         StringBuilder res = (new StringBuilder("mines=")).append(value).append(' ');
         Iterator iterator = list.iterator();
 
-        while(iterator.hasNext()) {
-            Cell cell = (Cell)iterator.next();
+        while (iterator.hasNext()) {
+            Cell cell = (Cell) iterator.next();
             res.append(" (").append(cell.getX()).append(',').append(cell.getY()).append(")");
         }
 

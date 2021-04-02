@@ -1,10 +1,8 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility;
 
 public class MxElement {
 
-    private int mines;
+    private final int mines;
     private int[] mxCountOfMines;
 
     public MxElement(int mines) {
@@ -15,7 +13,7 @@ public class MxElement {
         if (mxCountOfMines == null) {
             mxCountOfMines = count;
         } else {
-            for(int i = 0; i < count.length; ++i) {
+            for (int i = 0; i < count.length; ++i) {
                 int[] var10000 = mxCountOfMines;
                 var10000[i] += count[i];
             }
@@ -28,7 +26,7 @@ public class MxElement {
         } else if (!(o instanceof MxElement)) {
             return false;
         } else {
-            MxElement mxElement = (MxElement)o;
+            MxElement mxElement = (MxElement) o;
             return mines == mxElement.mines;
         }
     }

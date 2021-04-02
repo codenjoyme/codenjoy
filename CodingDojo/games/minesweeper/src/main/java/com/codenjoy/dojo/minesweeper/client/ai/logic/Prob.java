@@ -1,5 +1,3 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import java.util.ArrayList;
@@ -32,11 +30,11 @@ public class Prob {
         double sum = 0.0D;
 
         Double elem;
-        for(Iterator i$ = list.iterator(); i$.hasNext(); sum += elem) {
-            elem = (Double)i$.next();
+        for (Iterator i$ = list.iterator(); i$.hasNext(); sum += elem) {
+            elem = (Double) i$.next();
         }
 
-        for(int i = 0; i < list.size(); ++i) {
+        for (int i = 0; i < list.size(); ++i) {
             double res = list.get(i) * multiply / sum;
             list.set(i, res > 1.0D ? res : res);
         }
@@ -88,7 +86,7 @@ public class Prob {
         System.out.println(d11 + " " + d41 + " " + d81);
         System.out.println(d12 + " " + d42 + " " + d82);
 
-        for(int i = 0; i < 200; ++i) {
+        for (int i = 0; i < 200; ++i) {
             correct(list4, A);
             list2.set(3, list4.get(3));
             list2.set(4, list4.get(4));
@@ -104,16 +102,16 @@ public class Prob {
 
             Iterator i$;
             Double d;
-            for(i$ = list4.iterator(); i$.hasNext(); res += d) {
-                d = (Double)i$.next();
+            for (i$ = list4.iterator(); i$.hasNext(); res += d) {
+                d = (Double) i$.next();
             }
 
             System.out.println(res);
             System.out.print(B + ":" + list2);
             res = 0.0D;
 
-            for(i$ = list2.iterator(); i$.hasNext(); res += d) {
-                d = (Double)i$.next();
+            for (i$ = list2.iterator(); i$.hasNext(); res += d) {
+                d = (Double) i$.next();
             }
 
             System.out.println(res);

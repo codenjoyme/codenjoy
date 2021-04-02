@@ -10,12 +10,12 @@ package com.codenjoy.dojo.minesweeper.client.ai;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,11 +24,11 @@ package com.codenjoy.dojo.minesweeper.client.ai;
 
 
 import com.DirectionSolver;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.PlayField;
 import com.codenjoy.dojo.minesweeper.client.ai.utils.BoardImpl;
 import com.codenjoy.dojo.minesweeper.client.ai.wave.WaveField;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
@@ -38,11 +38,11 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class YourDirectionSolver implements DirectionSolver {
     static List<Direction> path = new LinkedList();
-    private Dice dice;
+    private final Dice dice;
     private BoardImpl board;
     private Point myCoord;
     private int[][] field;
-    private StringBuilder turns = new StringBuilder();
+    private final StringBuilder turns = new StringBuilder();
     private char movedTo;
     private List<Direction> safePath = new ArrayList();
 
@@ -53,7 +53,7 @@ public class YourDirectionSolver implements DirectionSolver {
     public String get(BoardImpl board) {
         System.out.println(board.toString());
         String result;
-        if(board.isGameOver()) {
+        if (board.isGameOver()) {
             StringBuilder playField = new StringBuilder();
             buildMethodCaption(board, playField);
             playField.append(turns);
@@ -65,10 +65,10 @@ public class YourDirectionSolver implements DirectionSolver {
             result = Direction.STOP.toString();
         } else {
             this.board = board;
-            if(isFirstTurn()) {
+            if (isFirstTurn()) {
                 result = Direction.UP.toString();
             } else {
-                if(field == null) {
+                if (field == null) {
                     createField();
                 }
 
@@ -81,16 +81,16 @@ public class YourDirectionSolver implements DirectionSolver {
                     field.play();
                     Point[] e = field.getToMark();
                     Point[] toOpen = field.getToOpen();
-                    if(isOnJustMarked(e) || movedTo == 42 && e.length == 0 && field.getMinPossibility() > 0.0D) {
+                    if (isOnJustMarked(e) || movedTo == 42 && e.length == 0 && field.getMinPossibility() > 0.0D) {
                         result = getEscapeTo();
                     } else {
                         Map newPoint = toMap(e, toOpen);
                         Map.Entry closest = getClosest(newPoint);
-                        if(closest != null) {
-                            if(isNeighbours((Point)closest.getKey(), myCoord)) {
+                        if (closest != null) {
+                            if (isNeighbours((Point) closest.getKey(), myCoord)) {
                                 result = getAction(closest);
                             } else {
-                                setSafePathTo((Point)closest.getKey());
+                                setSafePathTo((Point) closest.getKey());
                                 result = whereToGo();
                             }
                         } else {
@@ -98,11 +98,11 @@ public class YourDirectionSolver implements DirectionSolver {
                         }
                     }
 
-                    if(result.startsWith("ACT,") && movedTo == 45) {
+                    if (result.startsWith("ACT,") && movedTo == 45) {
                         result = getEscapeTo();
                     }
 
-                    if(result.startsWith("ACT,")) {
+                    if (result.startsWith("ACT,")) {
                         turns.append("        unbomb");
                         movedTo = 45;
                     } else {
@@ -111,19 +111,19 @@ public class YourDirectionSolver implements DirectionSolver {
                         movedTo = board.getAt(newPoint2.getX(), newPoint2.getY()).ch();
                     }
 
-                    if(result.endsWith("RIGHT")) {
+                    if (result.endsWith("RIGHT")) {
                         turns.append("Right();\n");
                     }
 
-                    if(result.endsWith("LEFT")) {
+                    if (result.endsWith("LEFT")) {
                         turns.append("Left();\n");
                     }
 
-                    if(result.endsWith("UP")) {
+                    if (result.endsWith("UP")) {
                         turns.append("Up();\n");
                     }
 
-                    if(result.endsWith("DOWN")) {
+                    if (result.endsWith("DOWN")) {
                         turns.append("Down();\n");
                     }
                 } catch (Exception var9) {
@@ -160,10 +160,10 @@ public class YourDirectionSolver implements DirectionSolver {
     }
 
     private void buildMines(BoardImpl board, StringBuilder caption) {
-        for(int i = 0; i < board.size(); ++i) {
-            for(int j = 0; j < board.size(); ++j) {
+        for (int i = 0; i < board.size(); ++i) {
+            for (int j = 0; j < board.size(); ++j) {
                 char c = board.getAt(i, j).ch();
-                if(c == 9787 || c == 120 || c == 1120) {
+                if (c == 9787 || c == 120 || c == 1120) {
                     caption.append("                ,new Mine(").append(i).append(',').append(board.size() - 1 - j).append(")\n");
                 }
             }
@@ -174,10 +174,10 @@ public class YourDirectionSolver implements DirectionSolver {
     private int countDetectorCharge(BoardImpl board) {
         int detectorCharge = 0;
 
-        for(int i = 0; i < board.size(); ++i) {
-            for(int j = 0; j < board.size(); ++j) {
+        for (int i = 0; i < board.size(); ++i) {
+            for (int j = 0; j < board.size(); ++j) {
                 char c = board.getAt(i, j).ch();
-                if(c == 9787 || c == 120 || c == 1120) {
+                if (c == 9787 || c == 120 || c == 1120) {
                     ++detectorCharge;
                 }
             }
@@ -189,14 +189,14 @@ public class YourDirectionSolver implements DirectionSolver {
     private String getEscapeTo() {
         int width = field.length;
         int height = field[0].length;
-        return myCoord.getX() > 0 && field[myCoord.getX() - 1][myCoord.getY()] != 9?Direction.LEFT.toString():(myCoord.getX() < width - 1 && field[myCoord.getX() + 1][myCoord.getY()] != 9?Direction.RIGHT.toString():(myCoord.getY() > 0 && field[myCoord.getX()][myCoord.getY() - 1] != 9?Direction.UP.toString():(myCoord.getY() < height - 1 && field[myCoord.getX()][myCoord.getY() + 1] != 9?Direction.DOWN.toString():null)));
+        return myCoord.getX() > 0 && field[myCoord.getX() - 1][myCoord.getY()] != 9 ? Direction.LEFT.toString() : (myCoord.getX() < width - 1 && field[myCoord.getX() + 1][myCoord.getY()] != 9 ? Direction.RIGHT.toString() : (myCoord.getY() > 0 && field[myCoord.getX()][myCoord.getY() - 1] != 9 ? Direction.UP.toString() : (myCoord.getY() < height - 1 && field[myCoord.getX()][myCoord.getY() + 1] != 9 ? Direction.DOWN.toString() : null)));
     }
 
     private void createField() {
         field = new int[board.size() - 2][board.size() - 2];
 
-        for(int i = 0; i < field.length; ++i) {
-            for(int j = 0; j < field[i].length; ++j) {
+        for (int i = 0; i < field.length; ++i) {
+            for (int j = 0; j < field[i].length; ++j) {
                 field[i][j] = 9;
             }
         }
@@ -207,9 +207,9 @@ public class YourDirectionSolver implements DirectionSolver {
         Point[] arr$ = toMark;
         int len$ = toMark.length;
 
-        for(int i$ = 0; i$ < len$; ++i$) {
+        for (int i$ = 0; i$ < len$; ++i$) {
             Point point = arr$[i$];
-            if(point.equals(myCoord)) {
+            if (point.equals(myCoord)) {
                 return true;
             }
         }
@@ -222,23 +222,23 @@ public class YourDirectionSolver implements DirectionSolver {
         int dy = (destination.getKey()).getY() - myCoord.getY();
         String result;
         Point neighbour;
-        if(Math.abs(dx) > Math.abs(dy)) {
-            neighbour = pt(myCoord.getX() + (int)Math.signum((float)dx), myCoord.getY());
-            if(field[neighbour.getX()][neighbour.getY()] == 9 && !neighbour.equals(destination.getKey())) {
+        if (Math.abs(dx) > Math.abs(dy)) {
+            neighbour = pt(myCoord.getX() + (int) Math.signum((float) dx), myCoord.getY());
+            if (field[neighbour.getX()][neighbour.getY()] == 9 && !neighbour.equals(destination.getKey())) {
                 result = getDirectionBydY(dy);
             } else {
                 result = getDirectionBydX(dx);
             }
         } else {
-            neighbour = pt(myCoord.getX(), myCoord.getY() + (int)Math.signum((float)dy));
-            if(field[neighbour.getX()][neighbour.getY()] == 9 && !neighbour.equals(destination.getKey())) {
+            neighbour = pt(myCoord.getX(), myCoord.getY() + (int) Math.signum((float) dy));
+            if (field[neighbour.getX()][neighbour.getY()] == 9 && !neighbour.equals(destination.getKey())) {
                 result = getDirectionBydX(dx);
             } else {
                 result = getDirectionBydY(dy);
             }
         }
 
-        if(neighbour.equals(destination.getKey()) && !(destination.getValue()).booleanValue()) {
+        if (neighbour.equals(destination.getKey()) && !(destination.getValue()).booleanValue()) {
             result = Direction.ACT.toString() + ',' + result;
         }
 
@@ -253,9 +253,9 @@ public class YourDirectionSolver implements DirectionSolver {
 
     private String getDirectionBydX(int dx) {
         String result;
-        if(dx > 0) {
+        if (dx > 0) {
             result = Direction.RIGHT.toString();
-        } else if(dx < 0) {
+        } else if (dx < 0) {
             result = Direction.LEFT.toString();
         } else {
             result = Direction.valueOf(dice.next(2)).toString();
@@ -266,9 +266,9 @@ public class YourDirectionSolver implements DirectionSolver {
 
     private String getDirectionBydY(int dy) {
         String result;
-        if(dy < 0) {
+        if (dy < 0) {
             result = Direction.UP.toString();
-        } else if(dy > 0) {
+        } else if (dy > 0) {
             result = Direction.DOWN.toString();
         } else {
             result = Direction.valueOf(dice.next(2) + 2).toString();
@@ -284,7 +284,7 @@ public class YourDirectionSolver implements DirectionSolver {
 
         int i$;
         Point point;
-        for(i$ = 0; i$ < len$; ++i$) {
+        for (i$ = 0; i$ < len$; ++i$) {
             point = arr$[i$];
             result.put(point, Boolean.valueOf(false));
         }
@@ -292,7 +292,7 @@ public class YourDirectionSolver implements DirectionSolver {
         arr$ = toOpen;
         len$ = toOpen.length;
 
-        for(i$ = 0; i$ < len$; ++i$) {
+        for (i$ = 0; i$ < len$; ++i$) {
             point = arr$[i$];
             result.put(point, Boolean.valueOf(true));
         }
@@ -305,11 +305,11 @@ public class YourDirectionSolver implements DirectionSolver {
         Map.Entry result = null;
         Iterator i$ = points.entrySet().iterator();
 
-        while(i$.hasNext()) {
-            Map.Entry entry = (Map.Entry)i$.next();
-            if(!(entry.getKey()).equals(myCoord)) {
-                double distance = myCoord.distance((Point)entry.getKey());
-                if(distance < minDistance) {
+        while (i$.hasNext()) {
+            Map.Entry entry = (Map.Entry) i$.next();
+            if (!(entry.getKey()).equals(myCoord)) {
+                double distance = myCoord.distance((Point) entry.getKey());
+                if (distance < minDistance) {
                     minDistance = distance;
                     result = entry;
                 }
@@ -322,20 +322,20 @@ public class YourDirectionSolver implements DirectionSolver {
     private int[][] fillFieldWithBoard() {
         int[][] result = new int[board.size() - 2][board.size() - 2];
 
-        for(int i = 0; i < result.length; ++i) {
-            for(int j = 0; j < result[i].length; ++j) {
+        for (int i = 0; i < result.length; ++i) {
+            for (int j = 0; j < result[i].length; ++j) {
                 char element = board.getAt(i + 1, j + 1).ch();
-                if(element > 48 && element < 57) {
+                if (element > 48 && element < 57) {
                     result[i][j] = Character.getNumericValue(element);
-                } else if(element == 42) {
+                } else if (element == 42) {
                     result[i][j] = 9;
-                } else if(element == 8252) {
+                } else if (element == 8252) {
                     result[i][j] = 11;
-                } else if(element == 32) {
+                } else if (element == 32) {
                     result[i][j] = 0;
-                } else if(element == 1120) {
+                } else if (element == 1120) {
                     result[i][j] = 12;
-                } else if(element == 9786) {
+                } else if (element == 9786) {
                     myCoord = pt(i, j);
                     result[i][j] = field[i][j];
                 }

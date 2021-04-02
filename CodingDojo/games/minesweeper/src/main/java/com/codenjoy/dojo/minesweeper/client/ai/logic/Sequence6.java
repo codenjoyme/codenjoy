@@ -1,8 +1,5 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class Sequence6 {
@@ -10,8 +7,8 @@ public class Sequence6 {
     public static long getAmount(int setted, int whole) {
         long result = 1L;
 
-        for(int i = whole; i > Math.max(setted, whole - setted); --i) {
-            result *= (long)i;
+        for (int i = whole; i > Math.max(setted, whole - setted); --i) {
+            result *= i;
         }
 
         result /= factorial(Math.min(setted, whole - setted));
@@ -25,9 +22,9 @@ public class Sequence6 {
     public static Integer[] getSequensed(int setted, int whole) {
         checkArguments(setted, whole);
         ArrayList arrayList = new ArrayList();
-        int length = (int)Math.pow(2.0D, (double)whole);
+        int length = (int) Math.pow(2.0D, whole);
 
-        for(int i = 0; i < length; ++i) {
+        for (int i = 0; i < length; ++i) {
             if (Integer.bitCount(i) == setted) {
                 arrayList.add(i);
             }
@@ -48,8 +45,8 @@ public class Sequence6 {
     private static long factorial(int n) {
         long result = 1L;
 
-        for(int i = 1; i <= n; ++i) {
-            result *= (long)i;
+        for (int i = 1; i <= n; ++i) {
+            result *= i;
         }
 
         return result;
@@ -67,11 +64,11 @@ public class Sequence6 {
     public void printMas(Integer[] a) {
         int bits = Integer.toBinaryString(a[a.length - 1]).length();
 
-        for(int i = 0; i < a.length; ++i) {
+        for (int i = 0; i < a.length; ++i) {
             StringBuilder prefix = new StringBuilder();
             String string = Integer.toBinaryString(a[i]);
 
-            for(int j = string.length(); j < bits; ++j) {
+            for (int j = string.length(); j < bits; ++j) {
                 prefix.append('0');
             }
 

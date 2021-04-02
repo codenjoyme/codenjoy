@@ -1,13 +1,10 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 
 public class MinesCombs {
 
-    private int mines;
+    private final int mines;
     private int combs;
     private Indefinite indefinite;
 

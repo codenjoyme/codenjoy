@@ -1,5 +1,3 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.utils;
 
 import com.codenjoy.dojo.minesweeper.model.Elements;
@@ -14,9 +12,9 @@ import static com.utils.Point.pt;
 
 public class BoardImpl {
 
-    private String board;
-    private LengthToXY xyl;
-    private int size;
+    private final String board;
+    private final LengthToXY xyl;
+    private final int size;
 
     public BoardImpl(String boardString) {
         this.board = boardString.replaceAll("\n", "");
@@ -29,7 +27,7 @@ public class BoardImpl {
         Elements[] arr$ = elements;
         int len$ = elements.length;
 
-        for(int i$ = 0; i$ < len$; ++i$) {
+        for (int i$ = 0; i$ < len$; ++i$) {
             Elements e = arr$[i$];
             result.addAll(this.findAll(e));
         }
@@ -38,7 +36,7 @@ public class BoardImpl {
     }
 
     public boolean isAt(int x, int y, Elements element) {
-        return pt(x, y).isBad(this.size) ? false : this.getAt(x, y).equals(element);
+        return !pt(x, y).isBad(this.size) && this.getAt(x, y).equals(element);
     }
 
     public Elements getAt(int x, int y) {
@@ -46,14 +44,14 @@ public class BoardImpl {
     }
 
     public int size() {
-        return (int)Math.sqrt((double)this.board.length());
+        return (int) Math.sqrt(this.board.length());
     }
 
     private String boardAsString() {
         StringBuffer result = new StringBuffer();
 
-        for(int i = 0; i <= this.size - 1; ++i) {
-            result.append(this.board.substring(i * this.size, (i + 1) * this.size));
+        for (int i = 0; i <= this.size - 1; ++i) {
+            result.append(this.board, i * this.size, (i + 1) * this.size);
             result.append("\n");
         }
 
@@ -64,8 +62,8 @@ public class BoardImpl {
         List<Point> result = new LinkedList();
         Iterator i$ = all.iterator();
 
-        while(i$.hasNext()) {
-            Point point = (Point)i$.next();
+        while (i$.hasNext()) {
+            Point point = (Point) i$.next();
             if (!result.contains(point)) {
                 result.add(point);
             }
@@ -81,7 +79,7 @@ public class BoardImpl {
     private List<Point> findAll(Elements element) {
         List<Point> result = new LinkedList();
 
-        for(int i = 0; i < this.size * this.size; ++i) {
+        for (int i = 0; i < this.size * this.size; ++i) {
             Point pt = this.xyl.getXY(i);
             if (this.isAt(pt.getX(), pt.getY(), element)) {
                 result.add(pt);
@@ -99,7 +97,7 @@ public class BoardImpl {
         Elements[] arr$ = elements;
         int len$ = elements.length;
 
-        for(int i$ = 0; i$ < len$; ++i$) {
+        for (int i$ = 0; i$ < len$; ++i$) {
             Elements c = arr$[i$];
             if (this.isAt(x, y, c)) {
                 return true;

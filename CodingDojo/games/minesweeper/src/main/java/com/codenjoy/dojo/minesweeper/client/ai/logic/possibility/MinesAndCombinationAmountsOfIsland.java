@@ -1,5 +1,3 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility;
 
 import java.util.ArrayList;
@@ -7,7 +5,7 @@ import java.util.List;
 
 public class MinesAndCombinationAmountsOfIsland {
 
-    private List<MxElement> elements = new ArrayList();
+    private final List<MxElement> elements = new ArrayList();
 
     public void addMxCountOfMines(int mines, int[] mxCountOfMines) {
         MxElement element = getMxElementByMines(mines);

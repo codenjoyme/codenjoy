@@ -1,5 +1,3 @@
-
-
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import java.math.BigInteger;
@@ -10,14 +8,19 @@ import java.util.List;
 public class Cell {
 
     private BigInteger bigInteger = new BigInteger("0");
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     private int value;
     private boolean valued = false;
     private boolean mine = false;
     private boolean unknown = true;
     private double possibility = -1.0D;
-    private List<Cell> neighbours = new ArrayList();
+    private final List<Cell> neighbours = new ArrayList();
+
+    public Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public BigInteger getBigInteger() {
         return bigInteger;
@@ -25,11 +28,6 @@ public class Cell {
 
     public void setBigInteger(BigInteger bigInteger) {
         this.bigInteger = bigInteger;
-    }
-
-    public Cell(int x, int y) {
-        this.x = x;
-        this.y = y;
     }
 
     public void addNeighbour(Cell cell) {
@@ -97,8 +95,8 @@ public class Cell {
         ArrayList<Cell> cells = new ArrayList();
         Iterator i$ = neighbours.iterator();
 
-        while(i$.hasNext()) {
-            Cell neighbour = (Cell)i$.next();
+        while (i$.hasNext()) {
+            Cell neighbour = (Cell) i$.next();
             if (neighbour.isUnknown()) {
                 cells.add(neighbour);
             }
@@ -125,8 +123,8 @@ public class Cell {
                 return false;
             }
 
-            neighbour = (Cell)i$.next();
-        } while(!neighbour.isUnknown());
+            neighbour = (Cell) i$.next();
+        } while (!neighbour.isUnknown());
 
         return true;
     }
