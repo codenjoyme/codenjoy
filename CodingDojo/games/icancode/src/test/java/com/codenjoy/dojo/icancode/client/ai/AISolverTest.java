@@ -117,7 +117,7 @@ public class AISolverTest {
         List<Direction> way = solver.getShortestWay(board, board.getGold());
 
         // then
-        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, RIGHT, DOWN]", way.toString());
     }
 
     @Test
@@ -149,7 +149,7 @@ public class AISolverTest {
         List<Direction> way = solver.getShortestWay(board, board.getGold());
 
         // then
-        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, DOWN, RIGHT]", way.toString());
+        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, RIGHT, DOWN]", way.toString());
     }
 
     @Test
@@ -181,7 +181,7 @@ public class AISolverTest {
         List<Direction> way = solver.getShortestWay(board, board.getGold());
 
         // then
-        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, RIGHT, DOWN]", way.toString());
     }
 
     @Test
@@ -213,7 +213,7 @@ public class AISolverTest {
         List<Direction> way = solver.getShortestWay(board, board.getGold());
 
         // then
-        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, RIGHT, DOWN]", way.toString());
     }
 
     @Ignore // TODO разобраться
@@ -311,7 +311,7 @@ public class AISolverTest {
         List<Direction> way = solver.getShortestWay(board, board.getGold());
 
         // then
-        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, DOWN, RIGHT]", way.toString());
+        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, RIGHT, DOWN]", way.toString());
     }
 
     @Test
@@ -343,7 +343,7 @@ public class AISolverTest {
         List<Direction> way = solver.getShortestWay(board, board.getGold());
 
         // then
-        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, RIGHT, DOWN]", way.toString());
     }
 
     @Test
@@ -439,6 +439,6 @@ public class AISolverTest {
         List<Direction> way = solver.getShortestWay(board, board.getGold());
 
         // then
-        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, RIGHT, DOWN]", way.toString());
     }
 }
