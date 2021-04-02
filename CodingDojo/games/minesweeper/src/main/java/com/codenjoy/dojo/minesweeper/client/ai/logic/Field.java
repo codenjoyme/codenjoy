@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
@@ -25,9 +24,9 @@ public class Field {
     private List<Cell> toOpen;
     private List<Cell> toMark;
 
-    public Field(PlayField playField) {
-        this(playField.width(), playField.height(), playField.amount());
-        this.playField = playField;
+    public Field(PlayField field) {
+        this(field.width(), field.height(), field.amount());
+        this.playField = field;
         scanPlayField();
     }
 
@@ -232,21 +231,16 @@ public class Field {
     private List<Cell> getMinPosCells() {
         List<Cell> result = new ArrayList();
         double min = 100.0D;
-        Iterator i$ = cells.iterator();
+        Iterator iterator = cells.iterator();
 
         while (true) {
             Cell cell;
             do {
-                do {
-                    do {
-                        if (!i$.hasNext()) {
-                            return result;
-                        }
-
-                        cell = (Cell) i$.next();
-                    } while (!cell.isUnknown());
-                } while (!isReachableCell(cell));
-            } while (cell.getCoords().getKey() == myCoord.getX() && cell.getCoords().getValue() == myCoord.getY());
+                if (!iterator.hasNext()) {
+                    return result;
+                }
+                cell = (Cell) iterator.next();
+            } while (!cell.isUnknown() || !isReachableCell(cell) || cell.equals(myCoord));
 
             if (cell.getPossibility() == min) {
                 result.add(cell);

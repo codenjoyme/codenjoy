@@ -1,15 +1,13 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
-import java.math.BigInteger;
+import com.codenjoy.dojo.services.PointImpl;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Cell {
+public class Cell extends PointImpl {
 
-    private BigInteger bigInteger = new BigInteger("0");
-    private final int x;
-    private final int y;
     private int value;
     private boolean valued = false;
     private boolean mine = false;
@@ -18,16 +16,7 @@ public class Cell {
     private final List<Cell> neighbours = new ArrayList();
 
     public Cell(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public BigInteger getBigInteger() {
-        return bigInteger;
-    }
-
-    public void setBigInteger(BigInteger bigInteger) {
-        this.bigInteger = bigInteger;
+        super(x, y);
     }
 
     public void addNeighbour(Cell cell) {
@@ -55,14 +44,6 @@ public class Cell {
         valued = true;
         unknown = false;
         mine = false;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
     public boolean isMine() {
@@ -106,25 +87,21 @@ public class Cell {
     }
 
     public String toString() {
-        String string = "(" + x + "," + y + ")=" + (mine ? "mine" : (unknown ? "unknown, " + getPossibility() + "%" : value));
+        String string = super.toString() + "="
+                + (mine ? "mine" : (unknown ? "unknown, " + getPossibility() + "%" : value));
         return string;
     }
 
-    public Pair<Integer, Integer> getCoords() {
-        return new Pair(x, y);
-    }
-
     public boolean hasUnknownAround() {
-        Iterator i$ = neighbours.iterator();
+        Iterator iterator = neighbours.iterator();
 
-        Cell neighbour;
+        Cell cell;
         do {
-            if (!i$.hasNext()) {
+            if (!iterator.hasNext()) {
                 return false;
             }
-
-            neighbour = (Cell) i$.next();
-        } while (!neighbour.isUnknown());
+            cell = (Cell) iterator.next();
+        } while (!cell.isUnknown());
 
         return true;
     }
