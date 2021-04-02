@@ -41,8 +41,12 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class Smoke {
 
+    public static final String SOURCE_FOLDER = "src/test/resources/";
+    public static final String TARGET_FOLDER = "target/";
+
     public static void play(int iterations,
                             String fileName,
+                            boolean rewriteSource,
                             GameType gameRunner,
                             List<Solver> solvers,
                             List<ClientBoard> boards,
@@ -65,18 +69,24 @@ public class Smoke {
         LocalGameRunner.run(gameRunner, solvers, boards);
 
         // then
-        String expectedAll = load("src/test/resources/" + fileName);
         String actualAll = String.join("\n", messages);
-
-        saveToFile("target/" + fileName, actualAll);
-
-        TestUtils.assertSmoke(true, assertor, expectedAll, actualAll);
+        if (rewriteSource) {
+            saveToFile(SOURCE_FOLDER + fileName, actualAll);
+        } else {
+            String expectedAll = load(SOURCE_FOLDER + fileName);
+            saveToFile(TARGET_FOLDER + fileName, actualAll);
+            TestUtils.assertSmoke(true, assertor, expectedAll, actualAll);
+        }
     }
 
     public void saveToFile(String path, String data) {
         try {
-            File actualFile = new File(path + "_" + Math.abs(new Random().nextInt(Integer.MAX_VALUE)));
+            File actualFile = new File(path);
             System.out.println("Actual data is here: " + actualFile.getAbsolutePath());
+            File folder = actualFile.getParentFile();
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
             Files.writeString(actualFile.toPath(), data);
         } catch (IOException e) {
             e.printStackTrace();

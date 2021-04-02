@@ -47,7 +47,7 @@ public class SmokeTest {
 
         // about 10s
         int maxDeep = 5;
-        Smoke.play(1000, "SmokeTest.data",
+        Smoke.play(1000, "SmokeTest.data", false,
                 new GameRunner() {
                     @Override
                     public Dice getDice() {
