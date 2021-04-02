@@ -36,11 +36,6 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-// \com\vaa25\minesweeper-ai\1.0\minesweeper-ai-1.0.jar!\com\YourDirectionSolver.class
-// because of Random in code - I want to test this logic
-// please check TODO FIXED
 public class YourDirectionSolver implements DirectionSolver {
     static List<Direction> path = new LinkedList();
     private Dice dice;
@@ -85,8 +80,8 @@ public class YourDirectionSolver implements DirectionSolver {
                 }
 
                 this.field = this.fillFieldWithBoard();
-                PlayField playField1 = new PlayField(this.field, 0);
-                Field field = new Field(playField1);
+                PlayField playField1 = new PlayField(this.field, 0, dice);
+                Field field = new Field(playField1, dice);
                 field.setMyCoord(this.myCoord);
 
                 try {
@@ -232,8 +227,8 @@ public class YourDirectionSolver implements DirectionSolver {
     }
 
     private String getAction(Map.Entry<Point, Boolean> destination) {
-        int dx = ((Point)destination.getKey()).getX() - this.myCoord.getX();
-        int dy = ((Point)destination.getKey()).getY() - this.myCoord.getY();
+        int dx = (destination.getKey()).getX() - this.myCoord.getX();
+        int dy = (destination.getKey()).getY() - this.myCoord.getY();
         String result;
         Point neighbour;
         if(Math.abs(dx) > Math.abs(dy)) {
@@ -272,7 +267,6 @@ public class YourDirectionSolver implements DirectionSolver {
         } else if(dx < 0) {
             result = Direction.LEFT.toString();
         } else {
-            // TODO FIXED тут убран Random
             result = Direction.valueOf(dice.next(2)).toString();
         }
 
@@ -286,7 +280,6 @@ public class YourDirectionSolver implements DirectionSolver {
         } else if(dy > 0) {
             result = Direction.DOWN.toString();
         } else {
-            // TODO FIXED тут убран Random
             result = Direction.valueOf(dice.next(2) + 2).toString();
         }
 

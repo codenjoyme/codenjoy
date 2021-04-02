@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
@@ -60,7 +57,7 @@ public class Prob {
         }
 
         for(int i = 0; i < list.size(); ++i) {
-            double res = (Double)list.get(i) * multiply / sum;
+            double res = list.get(i) * multiply / sum;
             list.set(i, res > 1.0D ? res : res);
         }
 
@@ -74,7 +71,7 @@ public class Prob {
             if (n_k > 1) {
                 res = res * (double)i / (double)(n_k--);
             } else {
-                res *= (double)i;
+                res *= i;
             }
         }
 
@@ -83,7 +80,7 @@ public class Prob {
 
     public static long factorial(int n) {
         long res;
-        for(res = (long)n; n > 1; res *= (long)n) {
+        for(res = n; n > 1; res *= n) {
             --n;
         }
 

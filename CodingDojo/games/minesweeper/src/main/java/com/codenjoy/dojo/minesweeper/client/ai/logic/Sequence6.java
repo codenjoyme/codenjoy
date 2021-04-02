@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
@@ -53,7 +50,7 @@ public class Sequence6 {
         }
 
         Integer[] result = new Integer[arrayList.size()];
-        return (Integer[])((Integer[])arrayList.toArray(result));
+        return (Integer[]) arrayList.toArray(result);
     }
 
     private static void checkArguments(int setted, int whole) {

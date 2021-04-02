@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.utils;
 
@@ -154,7 +151,7 @@ public class BoardImpl {
     }
 
     public Point getMe() {
-        return (Point)this.get(Elements.DETECTOR).get(0);
+        return this.get(Elements.DETECTOR).get(0);
     }
 
     public boolean isGameOver() {

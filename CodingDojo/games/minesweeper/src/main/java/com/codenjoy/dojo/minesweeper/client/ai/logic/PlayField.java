@@ -1,11 +1,8 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
-import java.util.Random;
+import com.codenjoy.dojo.services.Dice;
 
 public class PlayField {
     public static final int UNOPENED = 9;
@@ -19,18 +16,20 @@ public class PlayField {
     private boolean[][] opened;
     private boolean[][] flags;
     private int minesLeft;
+    private Dice dice;
 
-    public PlayField(int width, int height, int amount) {
+    public PlayField(int width, int height, int amount, Dice dice) {
         this.width = width;
         this.height = height;
         this.amount = amount;
+        this.dice = dice;
         this.field = new int[width][height];
         this.opened = new boolean[width][height];
         this.flags = new boolean[width][height];
     }
 
-    public PlayField(int[][] customField, int minesLeft) {
-        this(customField.length, customField[0].length, 0);
+    public PlayField(int[][] customField, int minesLeft, Dice dice) {
+        this(customField.length, customField[0].length, 0, dice);
         this.field = customField;
         this.amount = this.getAmount(customField) + minesLeft;
         this.minesLeft = minesLeft;
@@ -119,9 +118,8 @@ public class PlayField {
         int left = this.amount;
 
         while(left > 0) {
-            Random random = new Random();
-            int x = random.nextInt(this.width);
-            int y = random.nextInt(this.height);
+            int x = dice.next(this.width);
+            int y = dice.next(this.height);
             if (this.field[x][y] != 10) {
                 this.field[x][y] = 10;
                 --left;
@@ -187,7 +185,7 @@ public class PlayField {
     }
 
     public void click(com.codenjoy.dojo.minesweeper.client.ai.logic.Pair<Integer, Integer> coord) {
-        this.click((Integer)coord.getKey(), (Integer)coord.getValue());
+        this.click(coord.getKey(), coord.getValue());
     }
 
     public void click(int x, int y) {
@@ -235,7 +233,7 @@ public class PlayField {
     }
 
     public void click2(Pair<Integer, Integer> coord) {
-        this.click2((Integer)coord.getKey(), (Integer)coord.getValue());
+        this.click2(coord.getKey(), coord.getValue());
     }
 
     public void click2(int x, int y) {

@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2;
 
@@ -16,8 +13,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class Table {
-    private Map<Integer, com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCellGroup> groups;
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell> tableCells = new ArrayList();
+    private Map<Integer, TableCellGroup> groups;
+    private List<TableCell> tableCells = new ArrayList();
     private Map<Integer, DeepIsland> deepMap;
     private int minesLeft;
     private int deepAmount;
@@ -33,21 +30,21 @@ public class Table {
         this.deepAmount = deepAmount;
     }
 
-    public void add(com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell tableCell) {
+    public void add(TableCell tableCell) {
         this.tableCells.add(tableCell);
     }
 
     public void createGroups() {
         this.groups = new HashMap();
 
-        com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell tableCell;
-        com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCellGroup group;
+        TableCell tableCell;
+        TableCellGroup group;
         for(Iterator i$ = this.tableCells.iterator(); i$.hasNext(); group.add(tableCell)) {
-            tableCell = (com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell)i$.next();
+            tableCell = (TableCell)i$.next();
             int mines = tableCell.getMines();
-            group = (com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCellGroup)this.groups.get(mines);
+            group = this.groups.get(mines);
             if (group == null) {
-                group = new com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCellGroup(mines);
+                group = new TableCellGroup(mines);
                 this.groups.put(mines, group);
             }
         }
@@ -59,8 +56,8 @@ public class Table {
         Iterator i$ = this.groups.entrySet().iterator();
 
         while(i$.hasNext()) {
-            Entry<Integer, com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCellGroup> entry = (Entry)i$.next();
-            int groupMines = (Integer)entry.getKey();
+            Entry<Integer, TableCellGroup> entry = (Entry)i$.next();
+            int groupMines = entry.getKey();
             int deepMines = this.minesLeft - groupMines;
             BigInteger deepCombs = Sequence6.getBigIntegerAmount(deepMines, this.deepAmount);
             DeepIsland deepIsland = new DeepIsland(deepMines, deepCombs);
@@ -73,9 +70,9 @@ public class Table {
         Iterator i$ = this.tableCells.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell tableCell = (com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell)i$.next();
+            TableCell tableCell = (TableCell)i$.next();
             int mines = tableCell.getMines();
-            DeepIsland deepIsland = (DeepIsland)this.deepMap.get(mines);
+            DeepIsland deepIsland = this.deepMap.get(mines);
             BigInteger deepCombs = deepIsland.getDeepCombs();
             tableCell.multiplyCombs(deepCombs);
         }
@@ -89,10 +86,10 @@ public class Table {
         BigInteger groupCombs;
         for(Iterator i$ = this.deepMap.entrySet().iterator(); i$.hasNext(); deepCombSum = deepCombSum.add(deepCombs.multiply(groupCombs))) {
             Entry<Integer, DeepIsland> entry = (Entry)i$.next();
-            int mines = (Integer)entry.getKey();
-            DeepIsland deepIsland = (DeepIsland)entry.getValue();
+            int mines = entry.getKey();
+            DeepIsland deepIsland = entry.getValue();
             deepCombs = deepIsland.getDeepCombs();
-            groupCombs = new BigInteger(String.valueOf(((TableCellGroup)this.groups.get(mines)).getCombs()));
+            groupCombs = new BigInteger(String.valueOf((this.groups.get(mines)).getCombs()));
         }
 
         return deepCombSum;
@@ -102,9 +99,9 @@ public class Table {
         Iterator i$ = this.tableCells.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell tableCell = (com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell)i$.next();
+            TableCell tableCell = (TableCell)i$.next();
             int mines = tableCell.getMines();
-            BigInteger deepComb = ((DeepIsland)this.deepMap.get(mines)).getDeepCombs();
+            BigInteger deepComb = this.deepMap.get(mines).getDeepCombs();
             tableCell.refreshCellCombs(deepComb);
         }
 
@@ -115,7 +112,7 @@ public class Table {
         Iterator i$ = this.tableCells.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell tableCell = (TableCell)i$.next();
+            TableCell tableCell = (TableCell)i$.next();
             sb.append(tableCell.toShortString()).append(", ");
         }
 

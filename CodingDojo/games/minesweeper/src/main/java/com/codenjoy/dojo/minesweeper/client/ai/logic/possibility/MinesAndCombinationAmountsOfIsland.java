@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility;
 
@@ -12,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class MinesAndCombinationAmountsOfIsland {
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement> elements = new ArrayList();
+    private List<MxElement> elements = new ArrayList();
     private List<Cell> indefiniteCells;
 
     public MinesAndCombinationAmountsOfIsland() {
@@ -24,7 +21,7 @@ public class MinesAndCombinationAmountsOfIsland {
 
         for(int i = 0; i < wholeMxCountOfMines.length; ++i) {
             int mxCountOfMinesSum = this.getMxCountOfMinesSum(i);
-            ((Cell)this.indefiniteCells.get(i)).setPossibility(100.0D * (double)wholeMxCountOfMines[i] / (double)mxCountOfMinesSum / (double)wholeCombAmountSum);
+            (this.indefiniteCells.get(i)).setPossibility(100.0D * (double)wholeMxCountOfMines[i] / (double)mxCountOfMinesSum / (double)wholeCombAmountSum);
         }
 
     }
@@ -48,16 +45,16 @@ public class MinesAndCombinationAmountsOfIsland {
     private int getMxCountOfMinesSum(int index) {
         int result = 0;
 
-        com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement element;
+        MxElement element;
         for(Iterator i$ = this.elements.iterator(); i$.hasNext(); result += element.getMxCountOfMines()[index]) {
-            element = (com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement)i$.next();
+            element = (MxElement)i$.next();
         }
 
         return result;
     }
 
     public void addMxCountOfMines(int mines, int[] mxCountOfMines) {
-        com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement element = this.getMxElementByMines(mines);
+        MxElement element = this.getMxElementByMines(mines);
         element.addMxCountOfMines(mxCountOfMines);
     }
 
@@ -66,12 +63,12 @@ public class MinesAndCombinationAmountsOfIsland {
     }
 
     public void add(int mines, int combinations) {
-        com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement element = this.getMxElementByMines(mines);
+        MxElement element = this.getMxElementByMines(mines);
         element.addCombAmount(combinations);
     }
 
-    private com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement getMxElementByMines(int mines) {
-        com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement element = new com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement(mines);
+    private MxElement getMxElementByMines(int mines) {
+        MxElement element = new MxElement(mines);
         int index = this.elements.indexOf(element);
         if (index == -1) {
             this.elements.add(element);
@@ -102,14 +99,14 @@ public class MinesAndCombinationAmountsOfIsland {
         return this.getMxElement(i).getMinesAmount();
     }
 
-    private com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement getMxElement(int i) {
-        return (com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement)this.elements.get(i);
+    private MxElement getMxElement(int i) {
+        return (MxElement)this.elements.get(i);
     }
 
     public int getWholeCombAmountSum() {
         int result = 0;
 
-        com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MxElement element;
+        MxElement element;
         for(Iterator i$ = this.elements.iterator(); i$.hasNext(); result += element.getWholeCombAmount()) {
             element = (MxElement)i$.next();
         }

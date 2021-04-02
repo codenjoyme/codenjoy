@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility;
 
@@ -38,7 +35,7 @@ public class SummaryMinesAndCombinations {
     }
 
     public Map<Integer, Integer> calculateSummary() {
-        com.codenjoy.dojo.minesweeper.client.ai.logic.Sequence7 sequence7 = new Sequence7(this.getDigits());
+        Sequence7 sequence7 = new Sequence7(this.getDigits());
         this.summary = new HashMap();
 
         while(sequence7.hasNext()) {
@@ -64,18 +61,18 @@ public class SummaryMinesAndCombinations {
 
         while(i$.hasNext()) {
             Entry<Integer, Integer> entry = (Entry)i$.next();
-            deepSummary.put(this.minesLeft - (Integer)entry.getKey(), (int) Sequence6.getAmount(this.minesLeft - (Integer)entry.getKey(), this.deepCellsAmount));
+            deepSummary.put(this.minesLeft - entry.getKey(), (int) Sequence6.getAmount(this.minesLeft - (Integer)entry.getKey(), this.deepCellsAmount));
         }
 
         for(int i = 0; i < this.mx0s.size(); ++i) {
-            ((MinesAndCombinationAmountsOfIsland)this.mx0s.get(i)).calculatePossibilities();
+            (this.mx0s.get(i)).calculatePossibilities();
         }
 
     }
 
     private void addWholeCombAmount(int[] current, int combsAmount) {
         for(int i = 0; i < this.mx0s.size(); ++i) {
-            ((MinesAndCombinationAmountsOfIsland)this.mx0s.get(i)).addWholeCombAmount(current[i], combsAmount);
+            (this.mx0s.get(i)).addWholeCombAmount(current[i], combsAmount);
         }
 
     }
@@ -84,7 +81,7 @@ public class SummaryMinesAndCombinations {
         int result = 1;
 
         for(int i = 0; i < this.mx0s.size(); ++i) {
-            result *= ((MinesAndCombinationAmountsOfIsland)this.mx0s.get(i)).getCombAmount(current[i]);
+            result *= (this.mx0s.get(i)).getCombAmount(current[i]);
         }
 
         return result;
@@ -94,7 +91,7 @@ public class SummaryMinesAndCombinations {
         int result = 0;
 
         for(int i = 0; i < this.mx0s.size(); ++i) {
-            result += ((MinesAndCombinationAmountsOfIsland)this.mx0s.get(i)).getMinesAmount(current[i]);
+            result += (this.mx0s.get(i)).getMinesAmount(current[i]);
         }
 
         return result;
@@ -104,7 +101,7 @@ public class SummaryMinesAndCombinations {
         int[] result = new int[this.mx0s.size()];
 
         for(int i = 0; i < result.length; ++i) {
-            result[i] = ((MinesAndCombinationAmountsOfIsland)this.mx0s.get(i)).size();
+            result[i] = (this.mx0s.get(i)).size();
         }
 
         return result;
@@ -116,7 +113,7 @@ public class SummaryMinesAndCombinations {
         int result;
         Entry entry;
         for(result = 0; iterator.hasNext(); result += (Integer)entry.getKey() * (Integer)entry.getValue()) {
-            entry = (Entry)iterator.next();
+            entry = iterator.next();
         }
 
         return result;

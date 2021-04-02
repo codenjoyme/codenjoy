@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
@@ -143,19 +140,19 @@ public class Group {
     }
 
     public void restoreCells() {
-        StringBuilder combSB = (StringBuilder)this.stack.pop();
+        StringBuilder combSB = this.stack.pop();
 
         for(int i = 0; i < combSB.length(); ++i) {
             if (combSB.charAt(i) == '1') {
-                ((Cell)this.list.get(i)).setMine();
+                this.list.get(i).setMine();
             }
 
             if (combSB.charAt(i) == '0') {
-                ((Cell)this.list.get(i)).setValued();
+                this.list.get(i).setValued();
             }
 
             if (combSB.charAt(i) == '2') {
-                ((Cell)this.list.get(i)).setUnknown();
+                this.list.get(i).setUnknown();
             }
         }
 
@@ -166,9 +163,9 @@ public class Group {
 
         for(int i = 0; i < combSB.length(); ++i) {
             if (this.combinations[index].charAt(i) == '1') {
-                ((Cell)this.list.get(i)).setMine();
+                this.list.get(i).setMine();
             } else {
-                ((Cell)this.list.get(i)).setValued();
+                this.list.get(i).setValued();
             }
         }
 

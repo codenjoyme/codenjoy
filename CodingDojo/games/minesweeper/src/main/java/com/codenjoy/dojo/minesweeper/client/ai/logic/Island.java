@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
@@ -15,25 +12,25 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class Island {
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Group> list = new ArrayList();
+    private List<Group> list = new ArrayList();
     private List<Cell> toOpen = new ArrayList();
     private List<Cell> toMark = new ArrayList();
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Group> indefinite = new ArrayList();
+    private List<Group> indefinite = new ArrayList();
     private int amountCells;
     private Deque<StringBuilder> stack = new LinkedList();
     private List<Cell> indefiniteCells;
     private double[] possibilities;
     private Integer[] countOfMines;
     private List<Cell> minPossibilities;
-    private com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MinesAndCombinationAmountsOfIsland mx0;
+    private MinesAndCombinationAmountsOfIsland mx0;
     private IslandMinesCombs islandMinesCombs;
     private double minPossibility;
 
-    public Island(com.codenjoy.dojo.minesweeper.client.ai.logic.Group group) {
+    public Island(Group group) {
         this.add(group);
     }
 
-    public void add(com.codenjoy.dojo.minesweeper.client.ai.logic.Group group) {
+    public void add(Group group) {
         this.list.add(group);
     }
 
@@ -41,16 +38,16 @@ public class Island {
         this.list.addAll(island.list);
     }
 
-    public boolean isCross(com.codenjoy.dojo.minesweeper.client.ai.logic.Group group) {
+    public boolean isCross(Group group) {
         Iterator i$ = this.list.iterator();
 
-        com.codenjoy.dojo.minesweeper.client.ai.logic.Group group1;
+        Group group1;
         do {
             if (!i$.hasNext()) {
                 return false;
             }
 
-            group1 = (com.codenjoy.dojo.minesweeper.client.ai.logic.Group)i$.next();
+            group1 = (Group)i$.next();
         } while(!group.isCross(group1));
 
         return true;
@@ -64,13 +61,13 @@ public class Island {
             repeat = false;
 
             for(int i = 0; i < this.list.size() - 1; ++i) {
-                com.codenjoy.dojo.minesweeper.client.ai.logic.Group first = (com.codenjoy.dojo.minesweeper.client.ai.logic.Group)this.list.get(i);
+                Group first = (Group)this.list.get(i);
                 if (first.getValue() < 0) {
                     this.list.remove(i--);
                 }
 
                 for(int j = i + 1; j < this.list.size(); ++j) {
-                    com.codenjoy.dojo.minesweeper.client.ai.logic.Group second = (com.codenjoy.dojo.minesweeper.client.ai.logic.Group)this.list.get(j);
+                    Group second = (Group)this.list.get(j);
                     if (first != second && first.isCross(second)) {
                         if (first.equals(second)) {
                             this.list.remove(j--);
@@ -81,7 +78,7 @@ public class Island {
                             second.subtraction(first);
                             repeat = true;
                         } else {
-                            com.codenjoy.dojo.minesweeper.client.ai.logic.Group overlap = first.getOverlap(second);
+                            Group overlap = first.getOverlap(second);
                             if (overlap == null) {
                                 overlap = second.getOverlap(first);
                                 if (overlap != null) {
@@ -106,7 +103,7 @@ public class Island {
 
     private void doFractionZeroGroupsInList() {
         for(int i = 0; i < this.list.size() - 1; ++i) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Group first = (com.codenjoy.dojo.minesweeper.client.ai.logic.Group)this.list.get(i);
+            Group first = (Group)this.list.get(i);
             if (first.size() > 1 && first.getValue() == 0) {
                 Iterator i$ = first.getList().iterator();
 
@@ -114,7 +111,7 @@ public class Island {
                     Cell cell = (Cell)i$.next();
                     List<Cell> cells = new ArrayList(1);
                     cells.add(cell);
-                    this.list.add(new com.codenjoy.dojo.minesweeper.client.ai.logic.Group(cells, 0));
+                    this.list.add(new Group(cells, 0));
                 }
 
                 this.list.remove(i--);
@@ -128,7 +125,7 @@ public class Island {
         Iterator i$ = this.indefinite.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Group group = (com.codenjoy.dojo.minesweeper.client.ai.logic.Group)i$.next();
+            Group group = (Group)i$.next();
             Iterator i$$ = group.getList().iterator();
 
             while(i$$.hasNext()) {
@@ -151,7 +148,7 @@ public class Island {
 
         while(true) {
             while(i$.hasNext()) {
-                com.codenjoy.dojo.minesweeper.client.ai.logic.Group group = (com.codenjoy.dojo.minesweeper.client.ai.logic.Group)i$.next();
+                Group group = (Group)i$.next();
                 Cell cell;
                 if (group.getValue() == 0) {
                     Iterator i$$ = group.getList().iterator();
@@ -181,11 +178,11 @@ public class Island {
         Iterator i$ = this.indefinite.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Group group = (com.codenjoy.dojo.minesweeper.client.ai.logic.Group)i$.next();
+            Group group = (Group)i$.next();
             group.setComb();
         }
 
-        ListIterator<com.codenjoy.dojo.minesweeper.client.ai.logic.Group> iterator = this.indefinite.listIterator();
+        ListIterator<Group> iterator = this.indefinite.listIterator();
         this.makeTree(iterator);
         this.computePossibilities();
     }
@@ -197,9 +194,9 @@ public class Island {
 
     }
 
-    private void makeTree(ListIterator<com.codenjoy.dojo.minesweeper.client.ai.logic.Group> iterator) {
+    private void makeTree(ListIterator<Group> iterator) {
         if (iterator.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Group group = (com.codenjoy.dojo.minesweeper.client.ai.logic.Group)iterator.next();
+            Group group = (Group)iterator.next();
             int combAmount = group.getCombSize();
 
             for(int i = 0; i < combAmount; ++i) {
@@ -225,7 +222,7 @@ public class Island {
     private boolean checkIslandComb() {
         Iterator i$ = this.list.iterator();
 
-        com.codenjoy.dojo.minesweeper.client.ai.logic.Group group;
+        Group group;
         do {
             if (!i$.hasNext()) {
                 return true;
@@ -263,7 +260,7 @@ public class Island {
         int amountOfComb = this.stack.size();
         this.countOfMines = new Integer[this.indefiniteCells.size()];
         this.possibilities = new double[this.indefiniteCells.size()];
-        this.mx0 = new com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MinesAndCombinationAmountsOfIsland();
+        this.mx0 = new MinesAndCombinationAmountsOfIsland();
         this.mx0.setIndefiniteCells(this.indefiniteCells);
         this.islandMinesCombs = new IslandMinesCombs(this.indefiniteCells);
 

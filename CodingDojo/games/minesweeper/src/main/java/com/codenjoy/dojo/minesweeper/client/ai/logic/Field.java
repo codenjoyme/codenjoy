@@ -1,10 +1,8 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
@@ -12,7 +10,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -32,14 +29,16 @@ public class Field {
     private boolean exploded;
     private int minesSetted;
     private int valued;
+    private Dice dice;
 
-    public Field(PlayField playField) {
-        this(playField.width, playField.height, playField.amount);
+    public Field(PlayField playField, Dice dice) {
+        this(playField.width, playField.height, playField.amount, dice);
         this.playField = playField;
         this.scanPlayField();
     }
 
-    public Field(int width, int height, int amount1) {
+    public Field(int width, int height, int amount1, Dice dice) {
+        this.dice = dice;
         this.groups = new ArrayList();
         this.toOpen = new ArrayList();
         this.toMark = new ArrayList();
@@ -345,8 +344,7 @@ public class Field {
     }
 
     private Cell getOneOf(List<Cell> list) {
-        Random random = new Random();
-        return (Cell)list.get(random.nextInt(list.size()));
+        return (Cell)list.get(dice.next(list.size()));
     }
 
     private Cell getOneOf(List<Cell> list1, List<Cell> list2) {

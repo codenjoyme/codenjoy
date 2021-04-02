@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility;
 
@@ -11,7 +8,7 @@ import java.util.List;
 
 public class DeepPossibilityResolver {
     private boolean noIslands;
-    private com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.SummaryMinesAndCombinations summaryMinesAndCombinations = new SummaryMinesAndCombinations();
+    private SummaryMinesAndCombinations summaryMinesAndCombinations = new SummaryMinesAndCombinations();
 
     public DeepPossibilityResolver(int islandAmount) {
         if (islandAmount <= 0) {

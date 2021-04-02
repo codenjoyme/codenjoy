@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2;
 
@@ -11,7 +8,7 @@ import java.util.List;
 public class TableCellGroup {
     private int mines;
     private int combs;
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.TableCell> tableCells = new ArrayList();
+    private List<TableCell> tableCells = new ArrayList();
 
     public TableCellGroup(int mines) {
         this.mines = mines;

@@ -1,7 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2;
 
@@ -13,14 +10,14 @@ import java.util.Iterator;
 import java.util.List;
 
 public class IslandMinesCombs {
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.MinesCombs> minesCombses = new ArrayList();
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> indefinite;
+    private List<MinesCombs> minesCombses = new ArrayList();
+    private List<Cell> indefinite;
 
-    public IslandMinesCombs(List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> indefinite) {
+    public IslandMinesCombs(List<Cell> indefinite) {
         this.indefinite = indefinite;
     }
 
-    private void add(com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.MinesCombs minesCombs) {
+    private void add(MinesCombs minesCombs) {
         minesCombs.setIndefinite(new Indefinite(this.indefinite));
         this.minesCombses.add(minesCombs);
     }
@@ -29,24 +26,24 @@ public class IslandMinesCombs {
         return this.minesCombses.size();
     }
 
-    public com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.MinesCombs get(int i) {
-        return (com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.MinesCombs)this.minesCombses.get(i);
+    public MinesCombs get(int i) {
+        return this.minesCombses.get(i);
     }
 
     public void incCombsByMines(int mines) {
-        com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.MinesCombs minesCombs = this.getByMines(mines);
+        MinesCombs minesCombs = this.getByMines(mines);
         if (minesCombs == null) {
-            minesCombs = new com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.MinesCombs(mines);
+            minesCombs = new MinesCombs(mines);
             this.add(minesCombs);
         }
 
         minesCombs.addComb(1);
     }
 
-    private com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.MinesCombs getByMines(int mines) {
+    private MinesCombs getByMines(int mines) {
         Iterator i$ = this.minesCombses.iterator();
 
-        com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.MinesCombs minesCombs;
+        MinesCombs minesCombs;
         do {
             if (!i$.hasNext()) {
                 return null;
@@ -62,10 +59,10 @@ public class IslandMinesCombs {
         BigInteger handred = new BigInteger("100000");
 
         for(int i = 0; i < this.indefinite.size(); ++i) {
-            BigInteger was = ((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)this.indefinite.get(i)).getBigInteger();
+            BigInteger was = (this.indefinite.get(i)).getBigInteger();
             BigInteger b1 = handred.multiply(was);
             BigInteger b3 = b1.divide(deepCombSum);
-            ((Cell)this.indefinite.get(i)).setPossibility(b3.doubleValue() / 1000.0D);
+            this.indefinite.get(i).setPossibility(b3.doubleValue() / 1000.0D);
         }
 
     }
