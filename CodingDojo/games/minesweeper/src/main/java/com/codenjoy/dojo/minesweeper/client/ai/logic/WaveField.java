@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
+import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -12,9 +13,9 @@ public class WaveField {
     private int size;
     private Cell2[][] field;
     private List<Cell2> cells = new ArrayList();
-    private BoardImpl board;
+    private Board board;
 
-    public WaveField(BoardImpl board) {
+    public WaveField(Board board) {
         this.board = board;
         size = board.size();
         createCell2s();
