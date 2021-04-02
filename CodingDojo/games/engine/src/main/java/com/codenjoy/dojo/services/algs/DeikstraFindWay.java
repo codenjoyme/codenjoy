@@ -92,7 +92,7 @@ public class DeikstraFindWay {
     }
 
     public List<Direction> buildPath(Point from, List<Point> goals) {
-        if (goals.isEmpty()) {
+        if (from == null || goals.isEmpty()) {
             return Arrays.asList();
         }
 
