@@ -42,22 +42,22 @@ public class DeikstraFindWayTest {
     @Test
     public void testFindShortestWay() {
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X**   X\n" +
+                "XS*   X\n" +
                 "X **  X\n" +
                 "X  ** X\n" +
-                "X   *FX\n" +
+                "X   **X\n" +
+                "X    FX\n" +
                 "XXXXXXX\n");
     }
 
     @Test
     public void testFindShortestWay_ifThereAreTwoWays_equalsByDistance() {
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X*XXX X\n" +
-                "X*XXX X\n" +
-                "X*XXX X\n" +
-                "X****FX\n" +
+                "XS****X\n" +
+                "X XXX*X\n" +
+                "X XXX*X\n" +
+                "X XXX*X\n" +
+                "X    FX\n" +
                 "XXXXXXX\n");
     }
 
@@ -108,32 +108,32 @@ public class DeikstraFindWayTest {
     @Test
     public void testFindShortestWayWhenBrickOnWay() {
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X**   X\n" +
-                "XO**  X\n" +
-                "X  ** X\n" +
-                "X   *FX\n" +
+                "XS*   X\n" +
+                "X **  X\n" +
+                "XO ** X\n" +
+                "X   **X\n" +
+                "X    FX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X**   X\n" +
-                "XO**  X\n" +
-                "X O** X\n" +
-                "X   *FX\n" +
+                "XS*   X\n" +
+                "X **  X\n" +
+                "XO ** X\n" +
+                "X O **X\n" +
+                "X    FX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X**   X\n" +
-                "XO**  X\n" +
-                "X O***X\n" +
+                "XS*   X\n" +
+                "X **  X\n" +
+                "XO ** X\n" +
+                "X O **X\n" +
                 "X   OFX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X**** X\n" +
+                "XS*   X\n" +
+                "X *** X\n" +
                 "XO O* X\n" +
                 "X O **X\n" +
                 "X   OFX\n" +
@@ -148,11 +148,43 @@ public class DeikstraFindWayTest {
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
+                "XS**  X\n" +
+                "X O*  X\n" +
+                "X  *O X\n" +
+                "X O***X\n" +
+                "X   OFX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
                 "XS    X\n" +
-                "X*O   X\n" +
+                "X*OO  X\n" +
                 "X***O X\n" +
                 "X O***X\n" +
                 "X   OFX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS*** X\n" +
+                "X OO**X\n" +
+                "X O O*X\n" +
+                "X O  *X\n" +
+                "X   OFX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS****X\n" +
+                "X OOO*X\n" +
+                "X O O*X\n" +
+                "X O  *X\n" +
+                "X   OFX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS   OX\n" +
+                "X*OOO X\n" +
+                "X*O O X\n" +
+                "X*O***X\n" +
+                "X***OFX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
@@ -212,7 +244,7 @@ public class DeikstraFindWayTest {
 
         assertP(board,
                 "{[1,4]=[RIGHT],\n" +
-                "[1,5]=[DOWN, RIGHT],\n" +
+                "[1,5]=[RIGHT, DOWN],\n" +
                 "[2,2]=[RIGHT],\n" +
                 "[2,3]=[DOWN],\n" +
                 "[2,4]=[DOWN],\n" +
