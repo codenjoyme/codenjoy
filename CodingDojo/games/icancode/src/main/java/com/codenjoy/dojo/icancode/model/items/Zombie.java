@@ -87,6 +87,7 @@ public class Zombie extends FieldItem implements Tickable {
             Cell cell = getCell();
             removeFromCell();
             field.dropNextPerk().ifPresent(cell::add);
+            return;
         }
 
         if (ticks++ % WALK_EACH_TICKS == 0) {

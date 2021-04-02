@@ -28,14 +28,19 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
+import java.util.Objects;
 
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
 public class ZombieBrain {
 
     public Direction whereToGo(Point zombie, Field field) {
-        List<Point> heroes = field.getLevel().getItems(HeroItem.class).stream()
-                .map(item -> item.getCell()).collect(toList());
+        List<Point> heroes =
+                field.getLevel().getItems(HeroItem.class).stream()
+                        .map(item -> item.getCell())
+                        .filter(not(Objects::isNull))
+                        .collect(toList());
         if (heroes.isEmpty()) {
             return null;
         }

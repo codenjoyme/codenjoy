@@ -23,14 +23,10 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.google.common.collect.ImmutableList;
 
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 
@@ -118,7 +114,11 @@ public enum Elements implements CharElements {
         public final static int LAYER3 = 2;
     }
 
-    private static volatile Dictionary<String, Elements> elementsMap;
+    // optimized for performance
+    private final static Map<Character, Elements> elements = new HashMap<>(){{
+        Arrays.stream(Elements.values())
+                .forEach(el -> put(el.ch, el));
+    }};
 
     private final char ch;
     private final int layer;
@@ -154,25 +154,13 @@ public enum Elements implements CharElements {
     }
 
     public static Elements valueOf(char ch) {
-        if (elementsMap == null) {
-            makeElementsMap();
-        }
-
-        Elements result = elementsMap.get(String.valueOf(ch));
+        Elements result = elements.get(ch);
 
         if (result == null) {
             throw new IllegalArgumentException("No such element for '" + ch + "'");
         }
 
         return result;
-    }
-
-    private static void makeElementsMap() {
-        elementsMap = new Hashtable<>();
-
-        for (Elements el : Elements.values()) {
-            elementsMap.put(el.toString(), el);
-        }
     }
 
     public static List<Elements> perks() {
