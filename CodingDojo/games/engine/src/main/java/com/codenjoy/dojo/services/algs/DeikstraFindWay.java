@@ -223,16 +223,16 @@ public class DeikstraFindWay {
         }
 
         // not optimized
-        public Path toPath() {
-            Path path = new Path();
+        public Map<Point, List<Direction>> toMap() {
+            Map<Point, List<Direction>> map = new HashMap<>();
             for (int x = 0; x < all.length; x++) {
                 for (int y = 0; y < all[0].length; y++) {
                     Point pt = pt(x, y);
                     Status status = get(pt);
-                    path.get(pt).addAll(status.directions());
+                    map.put(pt, status.directions());
                 }
             }
-            return path;
+            return map;
         }
     }
 
@@ -310,23 +310,34 @@ public class DeikstraFindWay {
     }
 
     public static class Path {
-        Map<Point, List<Direction>> path = new HashMap<>();
+        private List<Direction>[][] all;
 
-        public List<Direction> get(Point pt) {
-            if (!path.containsKey(pt)) {
-                path.put(pt, new ArrayList<>(100));
-            }
-            return path.get(pt);
+        public Path(int size) {
+            all = new ArrayList[size][size];
         }
 
-        public Map<Point, List<Direction>> path() {
-            return path;
+        private List<Direction> setList(Point pt, List<Direction> list) {
+            return all[pt.getX()][pt.getY()] = list;
+        }
+
+        private List<Direction> getList(Point pt) {
+            return all[pt.getX()][pt.getY()];
+        }
+
+        public List<Direction> get(Point pt) {
+            List<Direction> list = getList(pt);
+            if (list != null) {
+                return list;
+            }
+            list = new ArrayList(100);
+            setList(pt, list);
+            return list;
         }
     }
 
     private Path getPath(Point from, List<Point> inputGoals) {
         Set<Point> goals = new HashSet<>(inputGoals);
-        Path path = new Path();
+        Path path = new Path(size);
         Vectors vectors = new Vectors(size);
         vectors.add(inputGoals, from, 0);
         Vector current;
@@ -377,7 +388,7 @@ public class DeikstraFindWay {
         return points;
     }
 
-//    public void updateWays(Possible possible) {
+//    public void updateWays(Possible possible) { // TODO закончить с этим
 //        dynamic = basic.entrySet().stream()
 //                .map(entry -> update(possible, entry))
 //                .collect(toMap());

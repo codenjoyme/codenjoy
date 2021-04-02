@@ -79,7 +79,7 @@ public class AI implements EnemyAI {
     }
 
     public Map<Point, List<Direction>> ways(Field field) {
-        return way.getPossibleWays(field.size(), possible(field)).toPath().path();
+        return way.getPossibleWays(field.size(), possible(field)).toMap();
     }
 
     public List<Direction> getPath(Field field, Point from, Point to) {
