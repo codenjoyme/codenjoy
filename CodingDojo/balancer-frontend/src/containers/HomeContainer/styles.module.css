@@ -4,6 +4,7 @@
     background: rgb( 45, 45, 45 , 0.3);
     background-repeat: no-repeat;
     background-blend-mode: overlay;
+    background-size: cover;
     display: flex;
     flex-direction: column;
     align-items: center;

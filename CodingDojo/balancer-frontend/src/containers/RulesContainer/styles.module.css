@@ -12,6 +12,7 @@
     background-position: 0px -160px;
     background-repeat: no-repeat;
     background-blend-mode: overlay;
+    background-size: cover;
 }
 
 b {
