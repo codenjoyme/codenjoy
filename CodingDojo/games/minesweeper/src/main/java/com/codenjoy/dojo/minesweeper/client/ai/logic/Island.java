@@ -222,7 +222,7 @@ public class Island {
                 }
             }
 
-            mx0.addMxCountOfMines(mines, mxCountOfMines);
+            mx0.add(mines, mxCountOfMines);
             islandMinesCombs.incCombsByMines(mines);
             islandMinesCombs.addArrayCombs(mines, mxCountOfMines);
         }

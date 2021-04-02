@@ -42,20 +42,20 @@ public class Group {
         List<StringBuilder> combStrings = new ArrayList(comb.length);
         for (int i = 0; i < comb.length; ++i) {
             Integer integer = comb[i];
-            StringBuilder combSB = new StringBuilder(comb.length);
+            StringBuilder comb = new StringBuilder(this.comb.length);
             String binary = Integer.toBinaryString(integer);
             int lastChar = list.size() - 1;
             int binaryLength = binary.length();
 
             for (int k = 0; k < list.size(); ++k) {
                 if (lastChar - k >= binaryLength) {
-                    combSB.append('0');
+                    comb.append('0');
                 } else {
-                    combSB.append(binary.charAt(binaryLength - lastChar - 1 + k));
+                    comb.append(binary.charAt(binaryLength - lastChar - 1 + k));
                 }
             }
 
-            combStrings.add(combSB);
+            combStrings.add(comb);
         }
 
         combinations = new StringBuilder[combStrings.size()];
@@ -64,10 +64,11 @@ public class Group {
 
     public boolean checkCombination(int index) {
         StringBuilder comb = combinations[index];
-
         for (int i = 0; i < comb.length(); ++i) {
             char ch = comb.charAt(i);
-            if (ch == '1' && list.get(i).isValued() || ch == '0' && list.get(i).isMine()) {
+            if (ch == '1' && list.get(i).isValued()
+                    || ch == '0' && list.get(i).isMine())
+            {
                 return false;
             }
         }
@@ -99,42 +100,40 @@ public class Group {
     }
 
     public void storeCells() {
-        StringBuilder string = new StringBuilder(list.size());
+        StringBuilder comb = new StringBuilder(list.size());
         for (Cell cell : list) {
             if (cell.isMine()) {
-                string.append('1');
+                comb.append('1');
             } else if (cell.isValued()) {
-                string.append('0');
+                comb.append('0');
             } else if (cell.isUnknown()) {
-                string.append('2');
+                comb.append('2');
             }
         }
-        stack.push(string);
+        stack.push(comb);
     }
 
     public void restoreCells() {
-        StringBuilder string = stack.pop();
-
-        for (int i = 0; i < string.length(); ++i) {
-            if (string.charAt(i) == '1') {
+        StringBuilder comb = stack.pop();
+        for (int i = 0; i < comb.length(); ++i) {
+            if (comb.charAt(i) == '1') {
                 list.get(i).setMine();
             }
 
-            if (string.charAt(i) == '0') {
+            if (comb.charAt(i) == '0') {
                 list.get(i).setValued();
             }
 
-            if (string.charAt(i) == '2') {
+            if (comb.charAt(i) == '2') {
                 list.get(i).setUnknown();
             }
         }
     }
 
     public void setCellsComb(int index) {
-        StringBuilder string = combinations[index];
-
-        for (int i = 0; i < string.length(); ++i) {
-            if (combinations[index].charAt(i) == '1') {
+        StringBuilder comb = combinations[index];
+        for (int i = 0; i < comb.length(); ++i) {
+            if (comb.charAt(i) == '1') {
                 list.get(i).setMine();
             } else {
                 list.get(i).setValued();
@@ -153,10 +152,8 @@ public class Group {
 
     public Group getOverlap(Group group) {
         List<Cell> overlap = new ArrayList();
-        Iterator iterator = group.list.iterator();
 
-        while (iterator.hasNext()) {
-            Cell cell = (Cell) iterator.next();
+        for (Cell cell : group.list) {
             if (list.contains(cell)) {
                 overlap.add(cell);
             }
@@ -173,18 +170,22 @@ public class Group {
     public boolean equals(Object o) {
         if (this == o) {
             return true;
-        } else if (o != null && getClass() == o.getClass()) {
+        }
+
+        if (o != null && getClass() == o.getClass()) {
             Group group = (Group) o;
             if (value != group.value) {
                 return false;
-            } else if (list.size() != group.list.size()) {
-                return false;
-            } else {
-                return group.list.containsAll(list);
             }
-        } else {
-            return false;
+
+            if (list.size() != group.list.size()) {
+                return false;
+            }
+
+            return group.list.containsAll(list);
         }
+
+        return false;
     }
 
     public int hashCode() {

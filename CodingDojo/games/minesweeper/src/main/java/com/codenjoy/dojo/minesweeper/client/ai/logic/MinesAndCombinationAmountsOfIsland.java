@@ -7,18 +7,17 @@ public class MinesAndCombinationAmountsOfIsland {
 
     private List<MxElement> elements = new ArrayList();
 
-    public void addMxCountOfMines(int mines, int[] mxCountOfMines) {
-        MxElement element = getMxElementByMines(mines);
-        element.addMxCountOfMines(mxCountOfMines);
+    public void add(int mines, int[] count) {
+        getBy(mines).add(count);
     }
 
-    private MxElement getMxElementByMines(int mines) {
+    private MxElement getBy(int mines) {
         MxElement element = new MxElement(mines);
         int index = elements.indexOf(element);
         if (index == -1) {
             elements.add(element);
         } else {
-            element = getMxElement(index);
+            element = get(index);
         }
 
         return element;
@@ -28,7 +27,7 @@ public class MinesAndCombinationAmountsOfIsland {
         return elements.size();
     }
 
-    private MxElement getMxElement(int i) {
+    private MxElement get(int i) {
         return elements.get(i);
     }
 

@@ -3,19 +3,18 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
 public class MxElement {
 
     private int mines;
-    private int[] mxCountOfMines;
+    private int[] count;
 
     public MxElement(int mines) {
         this.mines = mines;
     }
 
-    public void addMxCountOfMines(int[] count) {
-        if (mxCountOfMines == null) {
-            mxCountOfMines = count;
+    public void add(int[] count) {
+        if (this.count == null) {
+            this.count = count;
         } else {
             for (int i = 0; i < count.length; ++i) {
-                int[] var10000 = mxCountOfMines;
-                var10000[i] += count[i];
+                this.count[i] += count[i];
             }
         }
     }
@@ -23,12 +22,13 @@ public class MxElement {
     public boolean equals(Object o) {
         if (this == o) {
             return true;
-        } else if (!(o instanceof MxElement)) {
-            return false;
-        } else {
-            MxElement mxElement = (MxElement) o;
-            return mines == mxElement.mines;
         }
+
+        if (!(o instanceof MxElement)) {
+            return false;
+        }
+
+        return mines == ((MxElement) o).mines;
     }
 
     public int hashCode() {
