@@ -1,8 +1,5 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
-import com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.MinesAndCombinationAmountsOfIsland;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2.IslandMinesCombs;
-
 import java.util.*;
 
 public class Island {

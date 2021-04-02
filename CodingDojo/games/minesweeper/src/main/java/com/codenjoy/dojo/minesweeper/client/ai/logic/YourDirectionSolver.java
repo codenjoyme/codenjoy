@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai;
+package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 /*-
  * #%L
@@ -26,8 +26,8 @@ package com.codenjoy.dojo.minesweeper.client.ai;
 import com.DirectionSolver;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.PlayField;
-import com.codenjoy.dojo.minesweeper.client.ai.utils.BoardImpl;
-import com.codenjoy.dojo.minesweeper.client.ai.wave.WaveField;
+import com.codenjoy.dojo.minesweeper.client.ai.logic.BoardImpl;
+import com.codenjoy.dojo.minesweeper.client.ai.logic.WaveField;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;

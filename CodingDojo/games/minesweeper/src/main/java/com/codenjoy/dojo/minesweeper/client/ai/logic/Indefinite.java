@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2;
+package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Cell;
 

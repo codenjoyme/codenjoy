@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai;
+package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 /*-
  * #%L
@@ -24,7 +24,7 @@ package com.codenjoy.dojo.minesweeper.client.ai;
 
 
 import com.codenjoy.dojo.minesweeper.client.Board;
-import com.codenjoy.dojo.minesweeper.client.ai.utils.BoardImpl;
+import com.codenjoy.dojo.minesweeper.client.ai.logic.BoardImpl;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Point;
 

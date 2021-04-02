@@ -1,6 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility.v2;
-
-import com.codenjoy.dojo.minesweeper.client.ai.logic.Cell;
+package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import java.util.ArrayList;
 import java.util.Iterator;

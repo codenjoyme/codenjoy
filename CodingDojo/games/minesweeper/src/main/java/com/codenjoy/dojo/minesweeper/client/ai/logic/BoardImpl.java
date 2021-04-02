@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai.utils;
+package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.LengthToXY;

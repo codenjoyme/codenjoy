@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai.logic.possibility;
+package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -25,6 +25,8 @@ package com.codenjoy.dojo.minesweeper.client.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.minesweeper.client.Board;
+import com.codenjoy.dojo.minesweeper.client.ai.logic.BoardAdapter;
+import com.codenjoy.dojo.minesweeper.client.ai.logic.YourDirectionSolver;
 import com.codenjoy.dojo.services.Dice;
 
 public class AISolver extends YourDirectionSolver implements Solver<Board> {
