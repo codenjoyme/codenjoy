@@ -5,7 +5,8 @@
 
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
-import com.codenjoy.dojo.minesweeper.client.ai.utils.Point;
+import com.codenjoy.dojo.services.Point;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,18 +14,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class Field {
     private Point myCoord;
     public final int amount;
     public final int width;
     public final int height;
-    private final com.codenjoy.dojo.minesweeper.client.ai.logic.Cell[][] field;
-    private final List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> cells;
+    private final Cell[][] field;
+    private final List<Cell> cells;
     private PlayField playField;
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Group> groups;
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Island> islands;
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> toOpen;
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> toMark;
+    private List<Group> groups;
+    private List<Island> islands;
+    private List<Cell> toOpen;
+    private List<Cell> toMark;
     double minPossibility;
     private boolean exploded;
     private int minesSetted;
@@ -45,7 +48,7 @@ public class Field {
         this.height = height;
         this.cells = new LinkedList();
         this.islands = new ArrayList();
-        this.field = new com.codenjoy.dojo.minesweeper.client.ai.logic.Cell[width][height];
+        this.field = new Cell[width][height];
         this.createCells();
         this.setCellsNeighbours();
     }
@@ -105,7 +108,7 @@ public class Field {
     private void createCells() {
         for(int x = 0; x < this.width; ++x) {
             for(int y = 0; y < this.height; ++y) {
-                this.field[x][y] = new com.codenjoy.dojo.minesweeper.client.ai.logic.Cell(x, y);
+                this.field[x][y] = new Cell(x, y);
                 this.cells.add(this.field[x][y]);
             }
         }
@@ -181,9 +184,9 @@ public class Field {
         Iterator i$ = this.cells.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Cell cell = (com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)i$.next();
+            Cell cell = (Cell)i$.next();
             if (cell.isValued() && cell.hasUnknownAround()) {
-                this.groups.add(new com.codenjoy.dojo.minesweeper.client.ai.logic.Group(cell.getUnknownCells(), cell.getValue()));
+                this.groups.add(new Group(cell.getUnknownCells(), cell.getValue()));
             }
         }
 
@@ -193,23 +196,23 @@ public class Field {
         Iterator i$ = this.islands.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Island island = (com.codenjoy.dojo.minesweeper.client.ai.logic.Island)i$.next();
+            Island island = (Island)i$.next();
             island.optimize();
         }
 
     }
 
-    private void divideGroupsToIslands(List<com.codenjoy.dojo.minesweeper.client.ai.logic.Group> groups) {
+    private void divideGroupsToIslands(List<Group> groups) {
         this.islands.clear();
         Iterator i$ = groups.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Group group = (Group)i$.next();
+            Group group = (Group)i$.next();
             boolean added = false;
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Island addedTo = null;
+            Island addedTo = null;
 
             for(int i = 0; i < this.islands.size(); ++i) {
-                com.codenjoy.dojo.minesweeper.client.ai.logic.Island currentIsland = (com.codenjoy.dojo.minesweeper.client.ai.logic.Island)this.islands.get(i);
+                Island currentIsland = (Island)this.islands.get(i);
                 if (currentIsland.isCross(group)) {
                     if (!added) {
                         currentIsland.add(group);
@@ -223,7 +226,7 @@ public class Field {
             }
 
             if (!added) {
-                this.islands.add(new com.codenjoy.dojo.minesweeper.client.ai.logic.Island(group));
+                this.islands.add(new Island(group));
             }
         }
 
@@ -242,14 +245,14 @@ public class Field {
                 Iterator i$ = this.islands.iterator();
 
                 while(i$.hasNext()) {
-                    com.codenjoy.dojo.minesweeper.client.ai.logic.Island island = (com.codenjoy.dojo.minesweeper.client.ai.logic.Island)i$.next();
+                    Island island = (Island)i$.next();
                     island.resolve();
                 }
 
-                List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> deepCells = this.getDeepCells();
+                List<Cell> deepCells = this.getDeepCells();
                 this.setPossibility(deepCells, 100.0D);
-                List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> minPosCells = this.getMinPosCells();
-                this.minPossibility = minPosCells.size() == 0 ? 100.0D : ((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)minPosCells.get(0)).getPossibility();
+                List<Cell> minPosCells = this.getMinPosCells();
+                this.minPossibility = minPosCells.size() == 0 ? 100.0D : ((Cell)minPosCells.get(0)).getPossibility();
                 this.toOpen.addAll(minPosCells);
             } else {
                 this.toOpen = this.getUnknownCells();
@@ -259,16 +262,16 @@ public class Field {
 
     }
 
-    private void filterReachableCells(List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> cells) {
+    private void filterReachableCells(List<Cell> cells) {
         for(int i = 0; i < cells.size(); ++i) {
-            if (!this.isReachableCell((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)cells.get(i))) {
+            if (!this.isReachableCell((Cell)cells.get(i))) {
                 cells.remove(i--);
             }
         }
 
     }
 
-    private boolean isReachableCell(com.codenjoy.dojo.minesweeper.client.ai.logic.Cell cell) {
+    private boolean isReachableCell(Cell cell) {
         int x = cell.getX();
         int y = cell.getY();
         if (x > 0 && !this.field[x - 1][y].isUnknown()) {
@@ -286,7 +289,7 @@ public class Field {
         Point[] result = new Point[this.toOpen.size()];
 
         for(int i = 0; i < this.toOpen.size(); ++i) {
-            result[i] = new Point(((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)this.toOpen.get(i)).getX(), ((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)this.toOpen.get(i)).getY());
+            result[i] = pt(((Cell)this.toOpen.get(i)).getX(), ((Cell)this.toOpen.get(i)).getY());
         }
 
         return result;
@@ -296,19 +299,19 @@ public class Field {
         Point[] result = new Point[this.toMark.size()];
 
         for(int i = 0; i < this.toMark.size(); ++i) {
-            result[i] = new Point(((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)this.toMark.get(i)).getX(), ((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)this.toMark.get(i)).getY());
+            result[i] = pt(((Cell)this.toMark.get(i)).getX(), ((Cell)this.toMark.get(i)).getY());
         }
 
         return result;
     }
 
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> getMinPosCells() {
-        List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> result = new ArrayList();
+    private List<Cell> getMinPosCells() {
+        List<Cell> result = new ArrayList();
         double min = 100.0D;
         Iterator i$ = this.cells.iterator();
 
         while(true) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Cell cell;
+            Cell cell;
             do {
                 do {
                     do {
@@ -316,7 +319,7 @@ public class Field {
                             return result;
                         }
 
-                        cell = (com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)i$.next();
+                        cell = (Cell)i$.next();
                     } while(!cell.isUnknown());
                 } while(!this.isReachableCell(cell));
             } while((Integer)cell.getCoords().getKey() == this.myCoord.getX() && (Integer)cell.getCoords().getValue() == this.myCoord.getY());
@@ -331,23 +334,23 @@ public class Field {
         }
     }
 
-    private void setPossibility(List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> list, double possibility) {
+    private void setPossibility(List<Cell> list, double possibility) {
         Iterator i$ = list.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Cell cell = (com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)i$.next();
+            Cell cell = (Cell)i$.next();
             cell.setPossibility(possibility);
         }
 
     }
 
-    private com.codenjoy.dojo.minesweeper.client.ai.logic.Cell getOneOf(List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> list) {
+    private Cell getOneOf(List<Cell> list) {
         Random random = new Random();
-        return (com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)list.get(random.nextInt(list.size()));
+        return (Cell)list.get(random.nextInt(list.size()));
     }
 
-    private com.codenjoy.dojo.minesweeper.client.ai.logic.Cell getOneOf(List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> list1, List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> list2) {
-        List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> list = new ArrayList(list1);
+    private Cell getOneOf(List<Cell> list1, List<Cell> list2) {
+        List<Cell> list = new ArrayList(list1);
         list.addAll(list2);
         return this.getOneOf(list);
     }
@@ -357,7 +360,7 @@ public class Field {
         Iterator i$ = this.cells.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Cell cell = (com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)i$.next();
+            Cell cell = (Cell)i$.next();
             if (cell.isUnknown()) {
                 ++res;
             }
@@ -366,12 +369,12 @@ public class Field {
         return res;
     }
 
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> getUnknownCells() {
-        List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> res = new ArrayList();
+    private List<Cell> getUnknownCells() {
+        List<Cell> res = new ArrayList();
         Iterator i$ = this.cells.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Cell cell = (com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)i$.next();
+            Cell cell = (Cell)i$.next();
             if (cell.isUnknown()) {
                 res.add(cell);
             }
@@ -383,20 +386,20 @@ public class Field {
     private int getDeepCellsAmount() {
         int u = this.countUnknownCells();
 
-        com.codenjoy.dojo.minesweeper.client.ai.logic.Island island;
+        Island island;
         for(Iterator i$ = this.islands.iterator(); i$.hasNext(); u -= island.size()) {
-            island = (com.codenjoy.dojo.minesweeper.client.ai.logic.Island)i$.next();
+            island = (Island)i$.next();
         }
 
         return u;
     }
 
-    private List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> getDeepCells() {
-        List<com.codenjoy.dojo.minesweeper.client.ai.logic.Cell> unknown = this.getUnknownCells();
+    private List<Cell> getDeepCells() {
+        List<Cell> unknown = this.getUnknownCells();
         Iterator i$ = this.islands.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Island island = (com.codenjoy.dojo.minesweeper.client.ai.logic.Island)i$.next();
+            Island island = (Island)i$.next();
             unknown.removeAll(island.getIndefiniteCells());
         }
 
@@ -407,7 +410,7 @@ public class Field {
         Iterator i$ = this.islands.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Island island = (Island)i$.next();
+            Island island = (Island)i$.next();
             this.toOpen.addAll(island.getToOpen());
             this.toMark.addAll(island.getToMark());
         }
@@ -427,7 +430,7 @@ public class Field {
 
         for(int y = 0; y < this.height; ++y) {
             for(int x = 0; x < this.width; ++x) {
-                com.codenjoy.dojo.minesweeper.client.ai.logic.Cell cell = this.field[x][y];
+                Cell cell = this.field[x][y];
                 if (cell.isMine()) {
                     result.append("* ");
                 } else if (cell.isUnknown()) {
@@ -450,7 +453,7 @@ public class Field {
 
         for(int y = 0; y < this.height; ++y) {
             for(int x = 0; x < this.width; ++x) {
-                com.codenjoy.dojo.minesweeper.client.ai.logic.Cell cell = this.field[x][y];
+                Cell cell = this.field[x][y];
                 if (cell.isMine()) {
                     result.append("*  ");
                 } else if (cell.isUnknown()) {
@@ -477,7 +480,7 @@ public class Field {
         Iterator i$ = this.cells.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.logic.Cell cell = (com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)i$.next();
+            Cell cell = (Cell)i$.next();
             cell.setUnknown();
         }
 
@@ -502,7 +505,7 @@ public class Field {
         Point[] points = new Point[this.toMark.size()];
 
         for(int i = 0; i < this.toMark.size(); ++i) {
-            points[i] = new Point(((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)this.toMark.get(i)).getX(), ((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)this.toMark.get(i)).getY());
+            points[i] = pt((this.toMark.get(i)).getX(), (this.toMark.get(i)).getY());
         }
 
         return points;
@@ -512,7 +515,7 @@ public class Field {
         Point[] points = new Point[this.toOpen.size()];
 
         for(int i = 0; i < this.toOpen.size(); ++i) {
-            points[i] = new Point(((com.codenjoy.dojo.minesweeper.client.ai.logic.Cell)this.toOpen.get(i)).getX(), ((Cell)this.toOpen.get(i)).getY());
+            points[i] = pt((this.toOpen.get(i)).getX(), (this.toOpen.get(i)).getY());
         }
 
         return points;

@@ -5,10 +5,10 @@
 
 package com.codenjoy.dojo.minesweeper.client.ai.wave;
 
-import com.codenjoy.dojo.minesweeper.client.ai.Direction;
-import com.codenjoy.dojo.minesweeper.client.ai.Element;
 import com.codenjoy.dojo.minesweeper.client.ai.utils.BoardImpl;
-import com.codenjoy.dojo.minesweeper.client.ai.utils.Point;
+import com.codenjoy.dojo.minesweeper.model.Elements;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,8 +18,8 @@ import java.util.Map.Entry;
 
 public class WaveField {
     private int size;
-    private com.codenjoy.dojo.minesweeper.client.ai.wave.Cell[][] field;
-    private List<com.codenjoy.dojo.minesweeper.client.ai.wave.Cell> cells = new ArrayList();
+    private Cell[][] field;
+    private List<Cell> cells = new ArrayList();
     private BoardImpl board;
 
     public WaveField(BoardImpl board) {
@@ -33,20 +33,20 @@ public class WaveField {
 
     public List<Direction> findWay(Point to) {
         Point from = this.board.getMe();
-        com.codenjoy.dojo.minesweeper.client.ai.wave.Cell cell = this.getCell(from);
+        Cell cell = this.getCell(from);
         cell.setWave(0);
         cell.makeWave();
         this.printWaves();
-        List<com.codenjoy.dojo.minesweeper.client.ai.wave.Cell> way = this.getCellsWay(to);
+        List<Cell> way = this.getCellsWay(to);
         List<Direction> result = this.getDirectionsWay(from, way);
         return result;
     }
 
-    private List<Direction> getDirectionsWay(Point from, List<com.codenjoy.dojo.minesweeper.client.ai.wave.Cell> way) {
+    private List<Direction> getDirectionsWay(Point from, List<Cell> way) {
         List<Direction> result = new ArrayList();
 
         for(int i = way.size() - 2; i >= 0; --i) {
-            Point coord = ((com.codenjoy.dojo.minesweeper.client.ai.wave.Cell)way.get(i)).getPoint();
+            Point coord = ((Cell)way.get(i)).getPoint();
             result.add(this.getDirection(from, coord));
             from = coord;
         }
@@ -54,9 +54,9 @@ public class WaveField {
         return result;
     }
 
-    private List<com.codenjoy.dojo.minesweeper.client.ai.wave.Cell> getCellsWay(Point to) {
-        List<com.codenjoy.dojo.minesweeper.client.ai.wave.Cell> way = new ArrayList();
-        com.codenjoy.dojo.minesweeper.client.ai.wave.Cell target = this.getCell(to);
+    private List<Cell> getCellsWay(Point to) {
+        List<Cell> way = new ArrayList();
+        Cell target = this.getCell(to);
 
         do {
             way.add(target);
@@ -90,14 +90,14 @@ public class WaveField {
         return null;
     }
 
-    private com.codenjoy.dojo.minesweeper.client.ai.wave.Cell getCell(Point point) {
+    private Cell getCell(Point point) {
         return this.field[point.getX()][point.getY()];
     }
 
     private void initData() {
         for(int i = 0; i < this.size; ++i) {
             for(int j = 0; j < this.size; ++j) {
-                this.field[i][j].setWalkable(!this.board.isAt(i, j, new Element[]{Element.HIDDEN, Element.BORDER}));
+                this.field[i][j].setWalkable(!this.board.isAt(i, j, new Elements[]{Elements.HIDDEN, Elements.BORDER}));
             }
         }
 
@@ -120,11 +120,11 @@ public class WaveField {
     }
 
     private void createCells() {
-        this.field = new com.codenjoy.dojo.minesweeper.client.ai.wave.Cell[this.size][this.size];
+        this.field = new Cell[this.size][this.size];
 
         for(int x = 0; x < this.size; ++x) {
             for(int y = 0; y < this.size; ++y) {
-                com.codenjoy.dojo.minesweeper.client.ai.wave.Cell cell = new Cell(x, y);
+                Cell cell = new Cell(x, y);
                 cell.initWave();
                 this.field[x][y] = cell;
                 this.cells.add(cell);

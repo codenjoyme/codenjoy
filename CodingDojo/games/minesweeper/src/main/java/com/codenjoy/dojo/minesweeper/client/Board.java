@@ -27,11 +27,9 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
-import java.util.Collection;
 import java.util.List;
 
 import static com.codenjoy.dojo.minesweeper.model.Elements.*;
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
 

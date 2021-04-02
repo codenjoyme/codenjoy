@@ -5,7 +5,9 @@
 
 package com.codenjoy.dojo.minesweeper.client.ai.wave;
 
-import com.codenjoy.dojo.minesweeper.client.ai.utils.Point;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +19,7 @@ public class Cell {
     private List<Cell> neighbours = new ArrayList();
 
     public Cell(int x, int y) {
-        this.point = new Point(x, y);
+        this.point = new PointImpl(x, y);
     }
 
     public void addNeighbour(Cell cell) {

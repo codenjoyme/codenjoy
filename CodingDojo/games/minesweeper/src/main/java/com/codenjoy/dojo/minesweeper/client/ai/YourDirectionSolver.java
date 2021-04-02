@@ -23,14 +23,18 @@ package com.codenjoy.dojo.minesweeper.client.ai;
  */
 
 
+import com.DirectionSolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.PlayField;
 import com.codenjoy.dojo.minesweeper.client.ai.utils.BoardImpl;
-import com.codenjoy.dojo.minesweeper.client.ai.utils.Point;
 import com.codenjoy.dojo.minesweeper.client.ai.wave.WaveField;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 // Source code recreated from a .class file by IntelliJ IDEA
 // (powered by Fernflower decompiler)
@@ -117,7 +121,7 @@ public class YourDirectionSolver implements DirectionSolver {
                     } else {
                         this.turns.append("        move");
                         Point newPoint2 = this.getChangedPoint(board.getMe(), Direction.valueOf(result));
-                        this.movedTo = board.getAt(newPoint2.getX(), newPoint2.getY()).getChar();
+                        this.movedTo = board.getAt(newPoint2.getX(), newPoint2.getY()).ch();
                     }
 
                     if(result.endsWith("RIGHT")) {
@@ -156,11 +160,11 @@ public class YourDirectionSolver implements DirectionSolver {
     }
 
     private boolean isFirstTurn() {
-        return this.board.getAt(1, this.board.size() - 3).getChar() == 42 && this.board.getAt(2, this.board.size() - 2).getChar() == 42;
+        return this.board.getAt(1, this.board.size() - 3).ch() == 42 && this.board.getAt(2, this.board.size() - 2).ch() == 42;
     }
 
     private Point getChangedPoint(Point point, Direction direction) {
-        return new Point(direction.changeX(point.getX()), direction.changeY(point.getY()));
+        return pt(direction.changeX(point.getX()), direction.changeY(point.getY()));
     }
 
     private void buildMethodCaption(BoardImpl board, StringBuilder test) {
@@ -172,7 +176,7 @@ public class YourDirectionSolver implements DirectionSolver {
     private void buildMines(BoardImpl board, StringBuilder caption) {
         for(int i = 0; i < board.size(); ++i) {
             for(int j = 0; j < board.size(); ++j) {
-                char c = board.getAt(i, j).getChar();
+                char c = board.getAt(i, j).ch();
                 if(c == 9787 || c == 120 || c == 1120) {
                     caption.append("                ,new Mine(").append(i).append(',').append(board.size() - 1 - j).append(")\n");
                 }
@@ -186,7 +190,7 @@ public class YourDirectionSolver implements DirectionSolver {
 
         for(int i = 0; i < board.size(); ++i) {
             for(int j = 0; j < board.size(); ++j) {
-                char c = board.getAt(i, j).getChar();
+                char c = board.getAt(i, j).ch();
                 if(c == 9787 || c == 120 || c == 1120) {
                     ++detectorCharge;
                 }
@@ -233,14 +237,14 @@ public class YourDirectionSolver implements DirectionSolver {
         String result;
         Point neighbour;
         if(Math.abs(dx) > Math.abs(dy)) {
-            neighbour = new Point(this.myCoord.getX() + (int)Math.signum((float)dx), this.myCoord.getY());
+            neighbour = pt(this.myCoord.getX() + (int)Math.signum((float)dx), this.myCoord.getY());
             if(this.field[neighbour.getX()][neighbour.getY()] == 9 && !neighbour.equals(destination.getKey())) {
                 result = this.getDirectionBydY(dy);
             } else {
                 result = this.getDirectionBydX(dx);
             }
         } else {
-            neighbour = new Point(this.myCoord.getX(), this.myCoord.getY() + (int)Math.signum((float)dy));
+            neighbour = pt(this.myCoord.getX(), this.myCoord.getY() + (int)Math.signum((float)dy));
             if(this.field[neighbour.getX()][neighbour.getY()] == 9 && !neighbour.equals(destination.getKey())) {
                 result = this.getDirectionBydX(dx);
             } else {
@@ -257,7 +261,7 @@ public class YourDirectionSolver implements DirectionSolver {
 
     private void setSafePathTo(Point target) {
         WaveField waveField = new WaveField(this.board);
-        target = new Point(target.getX() + 1, target.getY() + 1);
+        target = pt(target.getX() + 1, target.getY() + 1);
         this.safePath = waveField.findWay(target);
     }
 
@@ -336,7 +340,7 @@ public class YourDirectionSolver implements DirectionSolver {
 
         for(int i = 0; i < result.length; ++i) {
             for(int j = 0; j < result[i].length; ++j) {
-                char element = this.board.getAt(i + 1, j + 1).getChar();
+                char element = this.board.getAt(i + 1, j + 1).ch();
                 if(element > 48 && element < 57) {
                     result[i][j] = Character.getNumericValue(element);
                 } else if(element == 42) {
@@ -348,13 +352,18 @@ public class YourDirectionSolver implements DirectionSolver {
                 } else if(element == 1120) {
                     result[i][j] = 12;
                 } else if(element == 9786) {
-                    this.myCoord = new Point(i, j);
+                    this.myCoord = pt(i, j);
                     result[i][j] = this.field[i][j];
                 }
             }
         }
 
         return result;
+    }
+
+    @Override
+    public String get(com.utils.BoardImpl board) {
+        return null;
     }
 }
 

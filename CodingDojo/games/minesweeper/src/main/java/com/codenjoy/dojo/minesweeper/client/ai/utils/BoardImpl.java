@@ -5,15 +5,19 @@
 
 package com.codenjoy.dojo.minesweeper.client.ai.utils;
 
-import com.codenjoy.dojo.minesweeper.client.ai.Element;
+import com.codenjoy.dojo.minesweeper.model.Elements;
+import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.utils.Point.pt;
+
 public class BoardImpl {
     private String board;
-    private com.codenjoy.dojo.minesweeper.client.ai.utils.LengthToXY xyl;
+    private LengthToXY xyl;
     private int size;
 
     public BoardImpl(String boardString) {
@@ -22,25 +26,25 @@ public class BoardImpl {
         this.xyl = new LengthToXY(this.size);
     }
 
-    public List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> get(Element... elements) {
-        List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> result = new LinkedList();
-        Element[] arr$ = elements;
+    public List<Point> get(Elements... elements) {
+        List<Point> result = new LinkedList();
+        Elements[] arr$ = elements;
         int len$ = elements.length;
 
         for(int i$ = 0; i$ < len$; ++i$) {
-            Element e = arr$[i$];
+            Elements e = arr$[i$];
             result.addAll(this.findAll(e));
         }
 
         return result;
     }
 
-    public boolean isAt(int x, int y, Element element) {
-        return com.codenjoy.dojo.minesweeper.client.ai.utils.Point.pt(x, y).isBad(this.size) ? false : this.getAt(x, y).equals(element);
+    public boolean isAt(int x, int y, Elements element) {
+        return pt(x, y).isBad(this.size) ? false : this.getAt(x, y).equals(element);
     }
 
-    public Element getAt(int x, int y) {
-        return Element.valueOf(this.board.charAt(this.xyl.getLength(x, y)));
+    public Elements getAt(int x, int y) {
+        return Elements.valueOf(this.board.charAt(this.xyl.getLength(x, y)));
     }
 
     public int size() {
@@ -58,17 +62,17 @@ public class BoardImpl {
         return result.toString();
     }
 
-    public List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> getBarriers() {
-        List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> all = this.getWalls();
+    public List<Point> getBarriers() {
+        List<Point> all = this.getWalls();
         return this.removeDuplicates(all);
     }
 
-    private List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> removeDuplicates(List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> all) {
-        List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> result = new LinkedList();
+    private List<Point> removeDuplicates(List<Point> all) {
+        List<Point> result = new LinkedList();
         Iterator i$ = all.iterator();
 
         while(i$.hasNext()) {
-            com.codenjoy.dojo.minesweeper.client.ai.utils.Point point = (com.codenjoy.dojo.minesweeper.client.ai.utils.Point)i$.next();
+            Point point = (Point)i$.next();
             if (!result.contains(point)) {
                 result.add(point);
             }
@@ -81,11 +85,11 @@ public class BoardImpl {
         return String.format("Board:\n%s\n", this.boardAsString());
     }
 
-    private List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> findAll(Element element) {
-        List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> result = new LinkedList();
+    private List<Point> findAll(Elements element) {
+        List<Point> result = new LinkedList();
 
         for(int i = 0; i < this.size * this.size; ++i) {
-            com.codenjoy.dojo.minesweeper.client.ai.utils.Point pt = this.xyl.getXY(i);
+            Point pt = this.xyl.getXY(i);
             if (this.isAt(pt.getX(), pt.getY(), element)) {
                 result.add(pt);
             }
@@ -94,16 +98,16 @@ public class BoardImpl {
         return result;
     }
 
-    public List<com.codenjoy.dojo.minesweeper.client.ai.utils.Point> getWalls() {
-        return this.findAll(Element.BORDER);
+    public List<Point> getWalls() {
+        return this.findAll(Elements.BORDER);
     }
 
-    public boolean isAt(int x, int y, Element... elements) {
-        Element[] arr$ = elements;
+    public boolean isAt(int x, int y, Elements... elements) {
+        Elements[] arr$ = elements;
         int len$ = elements.length;
 
         for(int i$ = 0; i$ < len$; ++i$) {
-            Element c = arr$[i$];
+            Elements c = arr$[i$];
             if (this.isAt(x, y, c)) {
                 return true;
             }
@@ -112,8 +116,8 @@ public class BoardImpl {
         return false;
     }
 
-    public boolean isNear(int x, int y, Element element) {
-        if (com.codenjoy.dojo.minesweeper.client.ai.utils.Point.pt(x, y).isBad(this.size)) {
+    public boolean isNear(int x, int y, Elements element) {
+        if (pt(x, y).isBad(this.size)) {
             return false;
         } else {
             return this.isAt(x + 1, y, element) || this.isAt(x - 1, y, element) || this.isAt(x, y + 1, element) || this.isAt(x, y - 1, element);
@@ -121,11 +125,11 @@ public class BoardImpl {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return this.getBarriers().contains(com.codenjoy.dojo.minesweeper.client.ai.utils.Point.pt(x, y));
+        return this.getBarriers().contains(pt(x, y));
     }
 
-    public int countNear(int x, int y, Element element) {
-        if (com.codenjoy.dojo.minesweeper.client.ai.utils.Point.pt(x, y).isBad(this.size)) {
+    public int countNear(int x, int y, Elements element) {
+        if (pt(x, y).isBad(this.size)) {
             return 0;
         } else {
             int count = 0;
@@ -149,11 +153,11 @@ public class BoardImpl {
         }
     }
 
-    public com.codenjoy.dojo.minesweeper.client.ai.utils.Point getMe() {
-        return (Point)this.get(Element.DETECTOR).get(0);
+    public Point getMe() {
+        return (Point)this.get(Elements.DETECTOR).get(0);
     }
 
     public boolean isGameOver() {
-        return !this.get(Element.BANG).isEmpty();
+        return !this.get(Elements.BANG).isEmpty();
     }
 }
