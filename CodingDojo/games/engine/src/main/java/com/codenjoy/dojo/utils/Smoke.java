@@ -52,16 +52,27 @@ public class Smoke {
                             List<ClientBoard> boards,
                             BiConsumer<Object, Object> assertor)
     {
+        play(iterations, fileName, rewriteSource, true,
+                gameRunner, solvers, boards, assertor);
+    }
+
+    public static void play(int iterations,
+                            String fileName,
+                            boolean rewriteSource,
+                            boolean printBoardOnly,
+                            GameType gameRunner,
+                            List<Solver> solvers,
+                            List<ClientBoard> boards,
+                            BiConsumer<Object, Object> assertor)
+    {
         // given
         List<String> messages = new LinkedList<>();
 
         LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = message -> {
-            messages.add(message);
-        };
+        LocalGameRunner.out = messages::add;
         LocalGameRunner.countIterations = iterations;
         LocalGameRunner.printConversions = false;
-        LocalGameRunner.printBoardOnly = true;
+        LocalGameRunner.printBoardOnly = printBoardOnly;
         LocalGameRunner.printDice = false;
         LocalGameRunner.printTick = true;
 
