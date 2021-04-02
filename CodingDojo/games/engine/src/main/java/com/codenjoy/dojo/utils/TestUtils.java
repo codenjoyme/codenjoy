@@ -84,7 +84,7 @@ public class TestUtils {
         AbstractBoard board = getBoard(elements);
         board = (AbstractBoard) board.forString(inputBoard);
 
-        Map<Point, List<Direction>> ways = new DeikstraFindWay().getPossibleWays(board.size(), possible.apply(board));
+        Map<Point, List<Direction>> ways = new DeikstraFindWay().getPossibleWays(board.size(), possible.apply(board)).toPath().path();
 
         Map<Point, List<Direction>> map = new TreeMap<>();
         for (Map.Entry<Point, List<Direction>> entry : ways.entrySet()) {

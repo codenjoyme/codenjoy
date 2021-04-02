@@ -39,10 +39,10 @@ public class DeikstraFindWay {
     private static final List<Direction> DIRECTIONS = Arrays.asList(UP, DOWN, LEFT, RIGHT);
 
     // карта возможных передвижений, которые не будут менять на этом уровне: стены и прочие препятствия
-    private Map<Point, List<Direction>> basic;
+    private Points basic;
 
     // карта возможных передвижений дополненная движимыми объектами
-    private Map<Point, List<Direction>> dynamic;
+    private Points dynamic;
 
     private int size;
     private Possible checker;
@@ -97,7 +97,7 @@ public class DeikstraFindWay {
 
     public List<Direction> buildPath(Point from, List<Point> goals) {
         List<List<Direction>> paths = new LinkedList<>();
-        Map<Point, List<Direction>> pathMap = getPath(from, goals);
+        Path pathMap = getPath(from, goals);
         for (Point to : goals) {
             List<Direction> path = pathMap.get(to);
             if (path == null || path.isEmpty()) continue;
@@ -168,9 +168,25 @@ public class DeikstraFindWay {
                     && goes[UP.value()]
                     && goes[DOWN.value()];
         }
+
+        public boolean[] goes() {
+            return goes;
+        }
+
+        // not optimized
+        public List<Direction> directions() {
+            List<Direction> result = new ArrayList<>(4);
+            for (int index = 0; index < goes.length; index++) {
+                if (goes[index]) {
+                    Direction direction = Direction.valueOf(index);
+                    result.add(direction);
+                }
+            }
+            return result;
+        }
     }
 
-    private static class Points {
+    public static class Points {
         private Status[][] all;
 
         public Points(int size) {
@@ -204,6 +220,19 @@ public class DeikstraFindWay {
 
         public boolean isAdded(Point pt) {
             return get(pt) != null;
+        }
+
+        // not optimized
+        public Path toPath() {
+            Path path = new Path();
+            for (int x = 0; x < all.length; x++) {
+                for (int y = 0; y < all[0].length; y++) {
+                    Point pt = pt(x, y);
+                    Status status = get(pt);
+                    path.get(pt).addAll(status.directions());
+                }
+            }
+            return path;
         }
     }
 
@@ -241,11 +270,14 @@ public class DeikstraFindWay {
 
         public void add(List<Point> goals, Point from, int pathLength) {
             Point goal = goals.get(0); // TODO добавить все цели
-            List<Direction> directions = ways().get(from);
+            boolean[] goes = ways().get(from).goes;
             Status status = points.add(from);
-            for (Direction direction : directions) {
-                status.add(direction);
-                queue.add(new Vector(from, direction, goal, pathLength));
+            for (int index = 0; index < goes.length; index++) {
+                if (goes[index]) {
+                    Direction direction = Direction.valueOf(index);
+                    status.add(direction);
+                    queue.add(new Vector(from, direction, goal, pathLength));
+                }
             }
         }
 
@@ -277,13 +309,24 @@ public class DeikstraFindWay {
         }
     }
 
-    private Map<Point, List<Direction>> getPath(Point from, List<Point> inputGoals) {
-        Set<Point> goals = new HashSet<>(inputGoals);
+    public static class Path {
         Map<Point, List<Direction>> path = new HashMap<>();
-        for (Point point : ways().keySet()) {
-            path.put(point, new ArrayList<>(100));
+
+        public List<Direction> get(Point pt) {
+            if (!path.containsKey(pt)) {
+                path.put(pt, new ArrayList<>(100));
+            }
+            return path.get(pt);
         }
 
+        public Map<Point, List<Direction>> path() {
+            return path;
+        }
+    }
+
+    private Path getPath(Point from, List<Point> inputGoals) {
+        Set<Point> goals = new HashSet<>(inputGoals);
+        Path path = new Path();
         Vectors vectors = new Vectors(size);
         vectors.add(inputGoals, from, 0);
         Vector current;
@@ -314,50 +357,48 @@ public class DeikstraFindWay {
         return path;
     }
 
-    private Map<Point, List<Direction>> ways() {
+    private Points ways() {
         return (dynamic != null) ? dynamic : basic;
     }
 
-    private Map<Point, List<Direction>> setupWays() {
-        Map<Point, List<Direction>> result = new TreeMap<>();
+    private Points setupWays() {
+        Points points = new Points(size);
 
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 Point from = pt(x, y);
-                List<Direction> directions = new LinkedList<>();
+                Status status = points.add(from);
                 for (Direction direction : DIRECTIONS) {
                     if (!checker.check(size, from, direction)) continue;
-
-                    directions.add(direction);
+                    status.add(direction);
                 }
-                result.put(from, directions);
             }
         }
-        return result;
+        return points;
     }
 
-    public void updateWays(Possible possible) {
-        dynamic = basic.entrySet().stream()
-                .map(entry -> update(possible, entry))
-                .collect(toMap());
-    }
+//    public void updateWays(Possible possible) {
+//        dynamic = basic.entrySet().stream()
+//                .map(entry -> update(possible, entry))
+//                .collect(toMap());
+//    }
 
     public Collector<Map.Entry<Point, List<Direction>>, ?, Map<Point, List<Direction>>> toMap() {
         return Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue);
     }
 
-    private Map.Entry<Point, List<Direction>> update(Possible possible, Map.Entry<Point, List<Direction>> entry) {
-        List<Direction> directions = entry.getValue();
-        Point point = entry.getKey();
+//    private Map.Entry<Point, List<Direction>> update(Possible possible, Map.Entry<Point, List<Direction>> entry) {
+//        List<Direction> directions = entry.getValue();
+//        Point point = entry.getKey();
+//
+//        List<Direction> updated = directions.stream()
+//                .filter(direction -> possible.check(size, point, direction))
+//                .collect(toList());
+//
+//        return new AbstractMap.SimpleEntry(point, updated);
+//    }
 
-        List<Direction> updated = directions.stream()
-                .filter(direction -> possible.check(size, point, direction))
-                .collect(toList());
-
-        return new AbstractMap.SimpleEntry(point, updated);
-    }
-
-    public Map<Point, List<Direction>> getPossibleWays(int size, Possible possible) {
+    public Points getPossibleWays(int size, Possible possible) {
         this.size = size;
         this.checker = possible;
 
@@ -368,11 +409,11 @@ public class DeikstraFindWay {
         return basic = setupWays();
     }
 
-    public Map<Point, List<Direction>> getBasic() {
+    public Points getBasic() {
         return basic;
     }
 
-    public Map<Point, List<Direction>> getDynamic() {
-        return dynamic;
-    }
+//    public Points getDynamic() {
+//        return dynamic;
+//    }
 }
