@@ -43,7 +43,6 @@ public class AISolver implements Solver<Board> {
     private Board board;
     private Point myCoord;
     private int[][] field;
-    private StringBuilder turns = new StringBuilder();
     private char movedTo;
     private List<Direction> safePath = new ArrayList();
 
@@ -55,74 +54,56 @@ public class AISolver implements Solver<Board> {
         String result;
         if (board.isGameOver()) {
             field = null;
-            result = STOP.toString();
-        } else {
-            this.board = board;
-            if (isFirstTurn()) {
-                result = UP.toString();
+            return STOP.toString();
+        }
+        this.board = board;
+
+        if (isFirstTurn()) {
+            return UP.toString();
+        }
+
+        if (field == null) {
+            createField();
+        }
+
+        field = fillFieldWithBoard();
+        PlayField playField1 = new PlayField(field, 0);
+        Field field = new Field(playField1);
+        field.setMyCoord(myCoord);
+
+        try {
+            field.play();
+            Point[] e = field.getToMark();
+            Point[] toOpen = field.getToOpen();
+            if (isOnJustMarked(e) || movedTo == 42 && e.length == 0 && field.getMinPossibility() > 0.0D) {
+                result = getEscapeTo();
             } else {
-                if (field == null) {
-                    createField();
-                }
-
-                field = fillFieldWithBoard();
-                PlayField playField1 = new PlayField(field, 0);
-                Field field = new Field(playField1);
-                field.setMyCoord(myCoord);
-
-                try {
-                    field.play();
-                    Point[] e = field.getToMark();
-                    Point[] toOpen = field.getToOpen();
-                    if (isOnJustMarked(e) || movedTo == 42 && e.length == 0 && field.getMinPossibility() > 0.0D) {
-                        result = getEscapeTo();
+                Map newPoint = toMap(e, toOpen);
+                Map.Entry closest = getClosest(newPoint);
+                if (closest != null) {
+                    if (isNeighbours((Point) closest.getKey(), myCoord)) {
+                        result = getAction(closest);
                     } else {
-                        Map newPoint = toMap(e, toOpen);
-                        Map.Entry closest = getClosest(newPoint);
-                        if (closest != null) {
-                            if (isNeighbours((Point) closest.getKey(), myCoord)) {
-                                result = getAction(closest);
-                            } else {
-                                setSafePathTo((Point) closest.getKey());
-                                result = whereToGo();
-                            }
-                        } else {
-                            result = getEscapeTo();
-                        }
+                        setSafePathTo((Point) closest.getKey());
+                        result = whereToGo();
                     }
-
-                    if (result.startsWith("ACT,") && movedTo == 45) {
-                        result = getEscapeTo();
-                    }
-
-                    if (result.startsWith("ACT,")) {
-                        turns.append("        unbomb");
-                        movedTo = 45;
-                    } else {
-                        turns.append("        move");
-                        Point newPoint2 = getChangedPoint(board.getMe(), Direction.valueOf(result));
-                        movedTo = board.getAt(newPoint2.getX(), newPoint2.getY()).ch();
-                    }
-
-                    if (result.endsWith("RIGHT")) {
-                        turns.append("Right();\n");
-                    }
-
-                    if (result.endsWith("LEFT")) {
-                        turns.append("Left();\n");
-                    }
-
-                    if (result.endsWith("UP")) {
-                        turns.append("Up();\n");
-                    }
-
-                    if (result.endsWith("DOWN")) {
-                        turns.append("Down();\n");
-                    }
-                } catch (Exception var9) {
+                } else {
                     result = getEscapeTo();
                 }
             }
+
+            if (result.startsWith("ACT,") && movedTo == 45) {
+                result = getEscapeTo();
+            }
+
+            if (result.startsWith("ACT,")) {
+                movedTo = 45;
+            } else {
+                Point pt2 = Direction.valueOf(result).change(board.getMe());
+                movedTo = board.getAt(pt2).ch();
+            }
+        } catch (Exception e) {
+            result = getEscapeTo();
         }
 
         return result;
@@ -138,11 +119,8 @@ public class AISolver implements Solver<Board> {
     }
 
     private boolean isFirstTurn() {
-        return board.getAt(1, board.size() - 3).ch() == 42 && board.getAt(2, board.size() - 2).ch() == 42;
-    }
-
-    private Point getChangedPoint(Point point, Direction direction) {
-        return pt(direction.changeX(point.getX()), direction.changeY(point.getY()));
+        return board.getAt(1, board.size() - 3).ch() == 42
+                && board.getAt(2, board.size() - 2).ch() == 42;
     }
 
     private String getEscapeTo() {
