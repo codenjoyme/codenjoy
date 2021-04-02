@@ -26,11 +26,10 @@ package com.codenjoy.dojo.lunolet.services;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.lunolet.client.Board;
-import com.codenjoy.dojo.lunolet.client.ai.DumbSolver;
+import com.codenjoy.dojo.lunolet.client.ai.AISolver;
 import com.codenjoy.dojo.lunolet.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -75,7 +74,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public Class<? extends Solver> getAI() {
-        return DumbSolver.class;
+        return AISolver.class;
     }
 
     @Override

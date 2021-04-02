@@ -30,7 +30,7 @@ import com.codenjoy.dojo.lunolet.utility.PrintLevels;
 
 import java.awt.geom.Point2D;
 
-public class DumbSolver implements Solver<Board> {
+public class AISolver implements Solver<Board> {
 
     private boolean shouldBrake = false;
     private double mass;

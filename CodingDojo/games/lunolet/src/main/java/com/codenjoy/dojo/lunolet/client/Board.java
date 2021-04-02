@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lunolet.client;
  */
 
 
+import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.lunolet.model.VesselState;
 import org.json.JSONArray;
@@ -30,8 +31,10 @@ import org.json.JSONObject;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Board implements ClientBoard {
+public class Board extends AbstractTextBoard {
+
     protected JSONObject source;
 
     int Level;
@@ -44,12 +47,14 @@ public class Board implements ClientBoard {
     String State;
     double Angle;
     Point2D.Double Target;
-    ArrayList<Point2D.Double> Relief;
-    ArrayList<Point2D.Double> History;
+    List<Point2D.Double> Relief;
+    List<Point2D.Double> History;
 
     @Override
     public ClientBoard forString(String boardString) {
-        source = new JSONObject(boardString);
+        super.forString(boardString);
+
+        source = new JSONObject(data);
 
         Level = source.getInt("level");
         Time = source.getDouble("time");
@@ -97,11 +102,11 @@ public class Board implements ClientBoard {
         return FuelMass;
     }
 
-    public ArrayList<Point2D.Double> getRelief() {
+    public List<Point2D.Double> getRelief() {
         return Relief;
     }
 
-    public ArrayList<Point2D.Double> getHistory() {
+    public List<Point2D.Double> getHistory() {
         return History;
     }
 
@@ -112,9 +117,9 @@ public class Board implements ClientBoard {
         );
     }
 
-    private static ArrayList<Point2D.Double> getPointList(JSONObject source, String key) {
+    private static List<Point2D.Double> getPointList(JSONObject source, String key) {
         JSONArray arr = source.getJSONArray(key);
-        ArrayList<Point2D.Double> result = new ArrayList<Point2D.Double>(arr.length());
+        List<Point2D.Double> result = new ArrayList<Point2D.Double>(arr.length());
         for (int i = 0; i < arr.length(); i++) {
             JSONObject obj = arr.getJSONObject(i);
             result.add(new Point2D.Double(
