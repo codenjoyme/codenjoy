@@ -1,12 +1,15 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import com.codenjoy.dojo.minesweeper.client.Board;
-import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.codenjoy.dojo.minesweeper.model.Elements.BORDER;
+import static com.codenjoy.dojo.minesweeper.model.Elements.HIDDEN;
+import static com.codenjoy.dojo.services.Direction.*;
 
 public class WaveField {
 
@@ -18,17 +21,17 @@ public class WaveField {
     public WaveField(Board board) {
         this.board = board;
         size = board.size();
-        createCell2s();
+        createCells();
         setCellsNeighbours();
         initData();
     }
 
     public List<Direction> findWay(Point to) {
         Point from = board.getMe();
-        Cell2 cell = getCell2(from);
+        Cell2 cell = getCell(from);
         cell.setWave(0);
         cell.makeWave();
-        List<Cell2> way = getCell2sWay(to);
+        List<Cell2> way = getCellsWay(to);
         List<Direction> result = getDirectionsWay(from, way);
         return result;
     }
@@ -45,9 +48,9 @@ public class WaveField {
         return result;
     }
 
-    private List<Cell2> getCell2sWay(Point to) {
+    private List<Cell2> getCellsWay(Point to) {
         List<Cell2> way = new ArrayList();
-        Cell2 target = getCell2(to);
+        Cell2 target = getCell(to);
 
         do {
             way.add(target);
@@ -60,40 +63,40 @@ public class WaveField {
     private Direction getDirection(Point from, Point to) {
         if (from.getX() == to.getX()) {
             if (to.getY() < from.getY()) {
-                return Direction.UP;
+                return UP;
             }
 
             if (to.getY() > from.getY()) {
-                return Direction.DOWN;
+                return DOWN;
             }
         }
 
         if (from.getY() == to.getY()) {
             if (to.getX() < from.getX()) {
-                return Direction.LEFT;
+                return LEFT;
             }
 
             if (to.getX() > from.getX()) {
-                return Direction.RIGHT;
+                return RIGHT;
             }
         }
 
         return null;
     }
 
-    private Cell2 getCell2(Point point) {
+    private Cell2 getCell(Point point) {
         return field[point.getX()][point.getY()];
     }
 
     private void initData() {
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
-                field[i][j].setWalkable(!board.isAt(i, j, Elements.HIDDEN, Elements.BORDER));
+                field[i][j].setWalkable(!board.isAt(i, j, HIDDEN, BORDER));
             }
         }
     }
 
-    private void createCell2s() {
+    private void createCells() {
         field = new Cell2[size][size];
 
         for (int x = 0; x < size; ++x) {

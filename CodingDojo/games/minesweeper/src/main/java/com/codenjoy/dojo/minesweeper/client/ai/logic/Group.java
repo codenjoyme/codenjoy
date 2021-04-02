@@ -29,15 +29,15 @@ public class Group {
     }
 
     public boolean isCross(Group group) {
-        Iterator i$ = group.list.iterator();
+        Iterator<Cell> iterator = group.list.iterator();
 
         Cell cell;
         do {
-            if (!i$.hasNext()) {
+            if (!iterator.hasNext()) {
                 return false;
             }
 
-            cell = (Cell) i$.next();
+            cell = iterator.next();
         } while (!list.contains(cell));
 
         return true;
@@ -48,7 +48,7 @@ public class Group {
     }
 
     public void setComb() {
-        comb = Sequence6.getSequensed(value, size());
+        comb = Sequence.get(value, size());
         List<StringBuilder> combStrings = new ArrayList(comb.length);
         Integer[] arr$ = comb;
         int len$ = arr$.length;

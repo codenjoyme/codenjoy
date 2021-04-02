@@ -14,25 +14,24 @@ public class PlayField {
         field = new int[width][height];
     }
 
-    public PlayField(int[][] customField, int minesLeft) {
-        this(customField.length, customField[0].length, 0);
-        field = customField;
-        amount = this.getAmount(customField) + minesLeft;
+    public PlayField(int[][] field, int minesLeft) {
+        this(field.length, field[0].length, 0);
+        this.field = field;
+        amount = getAmount(field) + minesLeft;
     }
 
-    private int getAmount(int[][] customField) {
-        int amount2 = 0;
-        for (int i = 0; i < customField.length; ++i) {
-            int[] ints = customField[i];
-            for (int j = 0; j < ints.length; ++j) {
-                int anInt = ints[j];
-                if (anInt == 11) {
-                    ++amount2;
+    private int getAmount(int[][] field) {
+        int result = 0;
+        for (int i = 0; i < field.length; ++i) {
+            int[] arr = field[i];
+            for (int j = 0; j < arr.length; ++j) {
+                if (arr[j] == 11) {
+                    ++result;
                 }
             }
         }
 
-        return amount2;
+        return result;
     }
 
     public int get(int x, int y) {
