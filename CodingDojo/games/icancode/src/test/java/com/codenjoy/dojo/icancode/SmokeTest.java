@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.icancode.client.Board;
 import com.codenjoy.dojo.icancode.client.ai.AISolver;
 import com.codenjoy.dojo.icancode.model.Level;
+import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.icancode.services.GameSettings;
@@ -49,7 +50,10 @@ public class SmokeTest {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
         // about 9s
+        Zombie.init();
+        ZombiePot.init();
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 5;
+        Levels.init();
 
         Solver dummy = getDummySolver(dice);
 
