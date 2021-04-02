@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -71,8 +72,11 @@ public class AISolver extends AbstractSolver {
     @Override
     public Command whatToDo(Board board) {
 //        calc();
-
         if (!board.isMeAlive()) return Command.doNothing();
+
+        DeikstraFindWay.Possible map = board.possible();
+        DeikstraFindWay findWay = new DeikstraFindWay(true);
+
         Point point = null;
         QDirection direction = null;
         List<Forces> forces = board.getEnemyForces();
@@ -85,7 +89,7 @@ public class AISolver extends AbstractSolver {
             List<Direction> shortestWay = null;
             for (Forces force : board.getMyForces()) {
                 Point from = force.getRegion();
-                List<Direction> way = board.getShortestWay(from, destination);
+                List<Direction> way = findWay.getShortestWay(board.size(), from, destination, map);
                 if (way.size() < length) {
                     length = way.size();
                     shortestWay = way;

@@ -45,7 +45,7 @@ public class SmokeTest {
     public void test() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        // about 25s
+        // about 22s
         int players = 4;
         Supplier<Solver> solver = () -> new AISolver(dice);
 

@@ -62,13 +62,20 @@ public class Board extends AbstractBoard<Elements> {
      * @return Is it possible to go through the cell with {x,y} coordinates.
      */
     public boolean isBarrierAt(int x, int y) {
-        return !isAt(LAYER1, x, y, 
-                        FLOOR, 
-                        BASE1, BASE2, BASE3, BASE4, 
-                        EXIT, GOLD, HOLE) 
-                || !isAt(LAYER2, x, y, 
-                        EMPTY, GOLD, 
-                        FORCE1, FORCE2, FORCE3, FORCE4);
+        return barriers().contains(pt(x, y));
+    }
+
+    /**
+     * @return All barriers on the map.
+     */
+    public List<Point> barriers() {
+        return get(LAYER1,
+                SPACE, BREAK,
+                ANGLE_IN_LEFT, WALL_FRONT,
+                ANGLE_IN_RIGHT, WALL_RIGHT, ANGLE_BACK_RIGHT,
+                WALL_BACK, ANGLE_BACK_LEFT, WALL_LEFT,
+                WALL_BACK_ANGLE_LEFT, WALL_BACK_ANGLE_RIGHT,
+                ANGLE_OUT_RIGHT, ANGLE_OUT_LEFT);
     }
 
     /**
@@ -368,11 +375,13 @@ public class Board extends AbstractBoard<Elements> {
         return result.substring(1, result.length() - 1);
     }
 
-    private DeikstraFindWay.Possible possible() {
+    public DeikstraFindWay.Possible possible() {
+        List<Point> barriers = barriers();
+
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) {
-                return !isBarrierAt(point.getX(), point.getY());
+                return !barriers.contains(point);
             }
         };
     }
