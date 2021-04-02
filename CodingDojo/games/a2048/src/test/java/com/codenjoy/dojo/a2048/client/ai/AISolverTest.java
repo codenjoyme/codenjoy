@@ -43,7 +43,7 @@ public class AISolverTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        ai = new AISolver(dice);
+        ai = new AISolver(dice, 7);
     }
 
     private Board givenBd(String board) {

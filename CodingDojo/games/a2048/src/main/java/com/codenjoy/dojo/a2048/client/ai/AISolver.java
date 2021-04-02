@@ -32,12 +32,18 @@ import java.util.Arrays;
 
 public class AISolver implements Solver<Board> {
 
-    private static Step[] path = new Step[102400];
-    private static int length = 0;
-    private static int deepIndex = 0;
+    private Step[] path = new Step[102400];
+    private int length = 0;
+    private int deepIndex = 0;
+    private char[][] fieldPrevPrev;
+    private char[][] fieldPrev;
 
-    public AISolver(Dice dice) {
-        // do nothing
+    private Dice dice;
+    private int maxDeep = 6;
+
+    public AISolver(Dice dice, int maxDeep) {
+        this.dice = dice;
+        this.maxDeep = maxDeep;
     }
 
     class Step {
@@ -46,9 +52,6 @@ public class AISolver implements Solver<Board> {
         int free;
         int sum;
     }
-
-    static char[][] fieldPrevPrev;
-    static char[][] fieldPrev;
 
     private boolean fixLiveLock(char[][] field) {
         boolean lock = Arrays.deepEquals(fieldPrevPrev, field);
@@ -114,7 +117,7 @@ public class AISolver implements Solver<Board> {
 
     private void calculateFor(char[][] field, String directions) {
         deepIndex++;
-        if (deepIndex <= 7) {
+        if (deepIndex <= maxDeep) {
             for (Direction direction : new Direction[] {Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP}) {
                 Step step = new Step();
                 step.directions = addComma(directions) + direction.name();
