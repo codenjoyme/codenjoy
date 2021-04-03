@@ -28,29 +28,4 @@ public class Group {
         return group.list.stream()
                 .anyMatch(list::contains);
     }
-
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o != null && getClass() == o.getClass()) {
-            Group group = (Group) o;
-            if (value != group.value) {
-                return false;
-            }
-
-            if (list.size() != group.list.size()) {
-                return false;
-            }
-
-            return group.list.containsAll(list);
-        }
-
-        return false;
-    }
-
-    public int hashCode() {
-        return 31 * list.hashCode() + value;
-    }
 }
