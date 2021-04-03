@@ -3,11 +3,12 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.stream.Collectors.toList;
 
 public class Field {
 
@@ -114,10 +115,7 @@ public class Field {
 
     private void setGroups() {
         groups.clear();
-        Iterator i$ = cells.iterator();
-
-        while (i$.hasNext()) {
-            Cell cell = (Cell) i$.next();
+        for (Cell cell : cells) {
             if (cell.isValued() && cell.hasUnknownAround()) {
                 groups.add(new Group(cell.getUnknownCells(), cell.getValue()));
             }
@@ -125,20 +123,12 @@ public class Field {
     }
 
     private void optimizeIslands() {
-        Iterator i$ = islands.iterator();
-
-        while (i$.hasNext()) {
-            Island island = (Island) i$.next();
-            island.optimize();
-        }
+        islands.forEach(island -> island.optimize());
     }
 
     private void divideGroupsToIslands(List<Group> groups) {
         islands.clear();
-        Iterator i$ = groups.iterator();
-
-        while (i$.hasNext()) {
-            Group group = (Group) i$.next();
+        for (Group group : groups) {
             boolean added = false;
             Island addedTo = null;
 
@@ -171,13 +161,7 @@ public class Field {
         filterReachableCells(toMark);
         filterReachableCells(toOpen);
         if (!hasDecision()) {
-            Iterator i$ = islands.iterator();
-
-            while (i$.hasNext()) {
-                Island island = (Island) i$.next();
-                island.resolve();
-            }
-
+            islands.forEach(Island::resolve);
             List<Cell> deepCells = getDeepCells();
             setPossibility(deepCells, 100.0D);
             List<Cell> minPosCells = getMinPosCells();
@@ -231,16 +215,15 @@ public class Field {
     private List<Cell> getMinPosCells() {
         List<Cell> result = new ArrayList();
         double min = 100.0D;
-        Iterator iterator = cells.iterator();
 
         while (true) {
-            Cell cell;
-            do {
-                if (!iterator.hasNext()) {
-                    return result;
-                }
-                cell = (Cell) iterator.next();
-            } while (!cell.isUnknown() || !isReachableCell(cell) || cell.equals(myCoord));
+            Cell cell = cells.stream()
+                    .filter(it -> it.isUnknown() && isReachableCell(it) && !it.equals(myCoord))
+                    .findFirst()
+                    .orElse(null);
+            if (cell == null) {
+                return Arrays.asList();
+            }
 
             if (cell.getPossibility() == min) {
                 result.add(cell);
@@ -253,48 +236,26 @@ public class Field {
     }
 
     private void setPossibility(List<Cell> list, double possibility) {
-        Iterator i$ = list.iterator();
-
-        while (i$.hasNext()) {
-            Cell cell = (Cell) i$.next();
-            cell.setPossibility(possibility);
-        }
+        list.forEach(cell -> cell.setPossibility(possibility));
     }
 
     private List<Cell> getUnknownCells() {
-        List<Cell> res = new ArrayList();
-        Iterator i$ = cells.iterator();
-
-        while (i$.hasNext()) {
-            Cell cell = (Cell) i$.next();
-            if (cell.isUnknown()) {
-                res.add(cell);
-            }
-        }
-
-        return res;
+        return cells.stream()
+                .filter(Cell::isUnknown)
+                .collect(toList());
     }
 
     private List<Cell> getDeepCells() {
         List<Cell> unknown = getUnknownCells();
-        Iterator i$ = islands.iterator();
-
-        while (i$.hasNext()) {
-            Island island = (Island) i$.next();
-            unknown.removeAll(island.getIndefiniteCells());
-        }
-
+        islands.forEach(island -> unknown.removeAll(island.getIndefiniteCells()));
         return unknown;
     }
 
     private void determineMarkOpenIndefinite() {
-        Iterator i$ = islands.iterator();
-
-        while (i$.hasNext()) {
-            Island island = (Island) i$.next();
+        islands.forEach(island -> {
             toOpen.addAll(island.getToOpen());
             toMark.addAll(island.getToMark());
-        }
+        });
     }
 
     private boolean hasDecision() {
