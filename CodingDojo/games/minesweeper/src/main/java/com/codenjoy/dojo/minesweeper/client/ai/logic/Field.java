@@ -16,11 +16,10 @@ public class Field {
     private List<Group> groups;
 
     public Field(int size) {
-        groups = new ArrayList();
         this.size = size;
+        groups = new ArrayList();
         cells = new LinkedList();
         createCells();
-        setCellsNeighbours();
     }
 
     private void createCells() {
@@ -32,14 +31,13 @@ public class Field {
     }
 
     private void setCellsNeighbours() {
-        for (int x = 0; x < size; ++x) {
-            for (int y = 0; y < size; ++y) {
-                Point point = pt(x, y);
-                QDirection.getValues().stream()
-                        .map(direction -> direction.change(point))
-                        .filter(pt -> !pt.isOutOf(1, 1, size))
-                        .forEach(pt -> cell(point).addNeighbour(cell(pt)));
-            }
+        for (Cell cell : cells) {
+            QDirection.getValues().stream()
+                    .map(direction -> direction.change(cell))
+                    .filter(pt -> !pt.isOutOf(size))
+                    .map(pt -> cell(pt))
+                    .filter(neighbour -> neighbour.value() != Value.BORDER)
+                    .forEach(neighbour -> cell.addNeighbour(neighbour));
         }
     }
 
@@ -48,17 +46,10 @@ public class Field {
     }
 
     public void scan(Function<Point, Value> get) {
-        for (int x = 0; x < size; ++x) {
-            for (int y = 0; y < size; ++y) {
-                Point pt = pt(x, y);
-                Value value = get.apply(pt);
-                if (value == Value.BORDER || value == Value.BANG) {
-                    continue;
-                }
-
-                cell(pt).set(value);
-            }
+        for (Cell cell : cells) {
+            cell.set(get.apply(cell));
         }
+        setCellsNeighbours();
         setGroups();
     }
 
@@ -71,10 +62,6 @@ public class Field {
     }
 
     private boolean isReachableCell(Cell cell) {
-        if (cell.isOutOf(1, 1, size)) { // TODO с учетом границ
-            return false;
-        }
-
         return cell.neighbours().stream()
                 .anyMatch(it -> !it.isUnknown()
                         && (it.value() == Value.NONE));

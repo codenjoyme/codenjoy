@@ -89,7 +89,7 @@ public class Cell extends PointImpl {
     public String toString() {
         return String.format("%s:value=%s,unknown=%s,valued=%s,action=%s",
                 super.toString(),
-                value.name(),
+                value,
                 unknown,
                 valued,
                 action);
