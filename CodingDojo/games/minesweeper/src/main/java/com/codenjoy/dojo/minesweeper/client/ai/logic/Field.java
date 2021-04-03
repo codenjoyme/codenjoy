@@ -6,12 +6,11 @@ import com.codenjoy.dojo.services.QDirection;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toCollection;
 
 public class Field {
 
-    public int size;
+    private int size;
     private List<Cell> cells;
     private List<Group> groups;
 
@@ -37,7 +36,7 @@ public class Field {
                     .filter(pt -> !pt.isOutOf(size))
                     .map(pt -> cell(pt))
                     .filter(neighbour -> neighbour.value() != Value.BORDER)
-                    .forEach(neighbour -> cell.addNeighbour(neighbour));
+                    .forEach(neighbour -> cell.add(neighbour));
         }
     }
 

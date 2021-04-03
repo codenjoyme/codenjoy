@@ -19,49 +19,16 @@ public class Cell extends PointImpl {
         super(x, y);
     }
 
-    public void addNeighbour(Cell cell) {
+    public void add(Cell cell) {
         neighbours.add(cell);
     }
 
-    public boolean isValued() {
-        return valued;
-    }
-
-    public Value value() {
-        return value;
-    }
-
-    public List<Cell> neighbours() {
-        return neighbours;
-    }
-
-    public void action(Action action) {
-        this.action = action;
-    }
-
-    public Action action() {
-        return action;
-    }
-
-    public void value(Value value) {
-        this.value = value;
-        valued = true;
-        unknown = false;
-    }
-
-    public void setMine() {
-        value = Value.FLAG;
-        unknown = false;
-        valued = true;
-    }
-
-    public boolean isUnknown() {
-        return unknown;
-    }
-
-    public void setUnknown() {
-        unknown = true;
-        valued = false;
+    public void set(Value value) {
+        valued = (value != Value.HIDDEN);
+        if (valued) {
+            this.value = value;
+        }
+        unknown = !valued;
     }
 
     public List<Cell> unknownCells() {
@@ -95,15 +62,27 @@ public class Cell extends PointImpl {
                 action);
     }
 
-    public void set(Value value) {
-        if (value == Value.HIDDEN) {
-            setUnknown();
-        } else if (value == Value.FLAG) {
-            setMine();
-        } else if (value == Value.DETECTOR) {
-            value(Value.DETECTOR);
-        } else {
-            value(value);
-        }
+    public boolean isValued() {
+        return valued;
+    }
+
+    public Value value() {
+        return value;
+    }
+
+    public List<Cell> neighbours() {
+        return neighbours;
+    }
+
+    public void action(Action action) {
+        this.action = action;
+    }
+
+    public Action action() {
+        return action;
+    }
+
+    public boolean isUnknown() {
+        return unknown;
     }
 }

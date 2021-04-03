@@ -54,8 +54,6 @@ public class AISolver implements Solver<Board> {
     }
 
     public String get(Board board) {
-        // System.out.println(board.toString());
-
         if (board.isGameOver() || board.isWin()) {
             return STOP.toString();
         }
@@ -109,10 +107,11 @@ public class AISolver implements Solver<Board> {
         DeikstraFindWay way = new DeikstraFindWay();
         way.getPossibleWays(board.size(), possible(board, to));
 
-//        System.out.println(TestUtils.drawPossibleWays(3,
-//                way.getBasic().toMap(),
-//                board.size(),
-//                pt -> board.getAt(pt).ch()));
+        // для отладки возможных путей
+        // System.out.println(TestUtils.drawPossibleWays(3,
+        //        way.getBasic().toMap(),
+        //        board.size(),
+        //        pt -> board.getAt(pt).ch()));
 
         List<Direction> path = way.buildPath(from, Arrays.asList(to));
         if (path.isEmpty()) {
