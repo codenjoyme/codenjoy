@@ -95,4 +95,15 @@ public class Cell extends PointImpl {
                 action);
     }
 
+    public void set(Value value) {
+        if (value == Value.HIDDEN) {
+            setUnknown();
+        } else if (value == Value.FLAG) {
+            setMine();
+        } else if (value == Value.DETECTOR) {
+            value(Value.DETECTOR);
+        } else {
+            value(value);
+        }
+    }
 }

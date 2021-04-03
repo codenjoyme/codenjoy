@@ -12,7 +12,6 @@ import static java.util.stream.Collectors.toCollection;
 public class Field {
 
     public int size;
-    private Cell[][] field;
     private List<Cell> cells;
     private List<Group> groups;
 
@@ -20,7 +19,6 @@ public class Field {
         groups = new ArrayList();
         this.size = size;
         cells = new LinkedList();
-        this.field = new Cell[size][size];
         createCells();
         setCellsNeighbours();
     }
@@ -28,8 +26,7 @@ public class Field {
     private void createCells() {
         for (int x = 0; x < size; ++x) {
             for (int y = 0; y < size; ++y) {
-                field[x][y] = new Cell(x, y);
-                cells.add(field[x][y]);
+                cells.add(new Cell(x, y));
             }
         }
     }
@@ -41,29 +38,25 @@ public class Field {
                 QDirection.getValues().stream()
                         .map(direction -> direction.change(point))
                         .filter(pt -> !pt.isOutOf(1, 1, size))
-                        .forEach(pt -> field[point.getX()][point.getY()]
-                                        .addNeighbour(field[pt.getX()][pt.getY()]));
+                        .forEach(pt -> cell(point).addNeighbour(cell(pt)));
             }
         }
+    }
+
+    private Cell cell(Point point) {
+        return cells.get(cells.indexOf(point));
     }
 
     public void scan(Function<Point, Value> get) {
         for (int x = 0; x < size; ++x) {
             for (int y = 0; y < size; ++y) {
-                Value value = get.apply(pt(x, y));
+                Point pt = pt(x, y);
+                Value value = get.apply(pt);
                 if (value == Value.BORDER || value == Value.BANG) {
                     continue;
                 }
 
-                if (value == Value.HIDDEN) {
-                    field[x][y].setUnknown();
-                } else if (value == Value.FLAG) {
-                    field[x][y].setMine();
-                } else if (value == Value.DETECTOR) {
-                    field[x][y].value(Value.DETECTOR);
-                } else {
-                    field[x][y].value(value);
-                }
+                cell(pt).set(value);
             }
         }
         setGroups();
