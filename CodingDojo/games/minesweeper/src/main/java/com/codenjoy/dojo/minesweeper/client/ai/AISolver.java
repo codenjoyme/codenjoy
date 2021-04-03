@@ -71,7 +71,6 @@ public class AISolver implements Solver<Board> {
 
         Field field = new Field(board.size());
         field.scan(pt -> convert(board.getAt(pt).ch()));
-        field.play();
         List<Action> actions = field.actions();
         if (actions.isEmpty()) {
             // не знаем куда походить и надо рисковать

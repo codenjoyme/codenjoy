@@ -65,9 +65,9 @@ public class SmokeTest {
                 Arrays.asList(new Board()),
                 (o1, o2) -> {
                     if (o2.toString().contains("Fire Event:")) {
-                        assertFalse(((String) o2).contains(Events.KILL_ON_MINE.name()));
+                        assertFalse(((String)o2).contains(Events.KILL_ON_MINE.name()));
+                        assertFalse(((String)o2).contains(Events.FORGET_CHARGE.name()));
                     }
-//                    assertFalse(((String)o2).contains(Events.FORGET_CHARGE.name()));
                     assertEquals(o1, o2);
                 });
     }

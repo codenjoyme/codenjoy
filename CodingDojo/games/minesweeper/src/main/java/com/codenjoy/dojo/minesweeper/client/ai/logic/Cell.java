@@ -47,10 +47,6 @@ public class Cell extends PointImpl {
         valued = true;
     }
 
-    public boolean isMine() {
-        return value == FLAG_VALUE;
-    }
-
     public boolean isUnknown() {
         return unknown;
     }
