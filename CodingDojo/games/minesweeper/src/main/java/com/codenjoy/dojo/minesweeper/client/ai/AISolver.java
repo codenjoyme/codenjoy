@@ -33,7 +33,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
-import com.codenjoy.dojo.utils.TestUtils;
 
 import java.util.*;
 
@@ -51,15 +50,15 @@ public class AISolver implements Solver<Board> {
     public static final int BORDER_VALUE = -1;
 
     private Point me;
-    private int[][] field;
     private Elements underMe;
 
     public AISolver(Dice dice) {
     }
 
     public String get(Board board) {
-        if (board.isGameOver()) {
-            field = null;
+        System.out.println(board.toString());
+
+        if (board.isGameOver() || board.isWin()) {
             return STOP.toString();
         }
 
@@ -69,10 +68,7 @@ public class AISolver implements Solver<Board> {
             return UP.toString();
         }
 
-        System.out.println(board.toString());
-
-        field = fillField(board);
-        Field field = new Field(new PlayField(this.field));
+        Field field = new Field(new PlayField(fillField(board)));
 
         field.play();
         Point[] mark = field.getToMark();
@@ -83,14 +79,14 @@ public class AISolver implements Solver<Board> {
             throw new RuntimeException(); // TODO решить это
         }
         Direction where;
-        if (isNeighbours(closest.pt, me)) {
+        boolean oneStep = isNeighbours(closest.pt, me);
+        if (oneStep) {
             where = gitDirection(closest);
-
         } else {
-            where = safePathTo(board, me, closest.pt);
+            where = safePathTo(board, me, closest);
         }
         underMe = board.getAt(where.change(me));
-        if (!closest.action) {
+        if (oneStep && closest.act) {
             return ACT.toString() + ',' + where.toString();
         }
         return where.toString();
@@ -113,16 +109,16 @@ public class AISolver implements Solver<Board> {
                 .orElseThrow(() -> new IllegalStateException());
     }
 
-    private Direction safePathTo(Board board, Point from, Point to) {
+    private Direction safePathTo(Board board, Point from, PointAction to) {
         DeikstraFindWay way = new DeikstraFindWay();
-        way.getPossibleWays(board.size(), possible(board));
+        way.getPossibleWays(board.size(), possible(board, to));
 
-        System.out.println(TestUtils.drawPossibleWays(3,
-                way.getBasic().toMap(),
-                board.size(),
-                pt -> board.getAt(pt).ch()));
+//        System.out.println(TestUtils.drawPossibleWays(3,
+//                way.getBasic().toMap(),
+//                board.size(),
+//                pt -> board.getAt(pt).ch()));
 
-        List<Direction> path = way.buildPath(from, Arrays.asList(to));
+        List<Direction> path = way.buildPath(from, Arrays.asList(to.pt));
         if (path.isEmpty()) {
             throw new RuntimeException(); // TODO решить это
         }
@@ -130,7 +126,7 @@ public class AISolver implements Solver<Board> {
         return path.get(0);
     }
 
-    private DeikstraFindWay.Possible possible(Board board) {
+    private DeikstraFindWay.Possible possible(Board board, PointAction to) {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) {
@@ -143,6 +139,8 @@ public class AISolver implements Solver<Board> {
                             .map(direction -> direction.change(point))
                             .filter(pt -> !pt.isOutOf(board.size()))
                             .noneMatch(pt -> board.isAt(pt, NONE)
+                                    // а тут мы не собираемся идти, а просто там флажок поставим
+                                    || (point.equals(to.pt) && to.act)
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
                                         && pt.equals(board.getMe())
@@ -156,11 +154,11 @@ public class AISolver implements Solver<Board> {
 
     public static class PointAction {
         public Point pt;
-        public boolean action;
+        public boolean act;
 
-        public PointAction(Point pt, boolean action) {
+        public PointAction(Point pt, boolean act) {
             this.pt = pt;
-            this.action = action;
+            this.act = act;
         }
     }
 
@@ -168,11 +166,11 @@ public class AISolver implements Solver<Board> {
         List<PointAction> result = new LinkedList<>();
 
         for (int i = 0; i < toMark.length; ++i) {
-            result.add(new PointAction(toMark[i], false));
+            result.add(new PointAction(toMark[i], true));
         }
 
         for (int i = 0; i < toOpen.length; ++i) {
-            result.add(new PointAction(toOpen[i], true));
+            result.add(new PointAction(toOpen[i], false));
         }
 
         return result;

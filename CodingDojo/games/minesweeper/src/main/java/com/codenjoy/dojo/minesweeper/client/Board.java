@@ -46,7 +46,11 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isGameOver() {
-    return !get(BANG).isEmpty();
+        return !get(BANG).isEmpty();
+    }
+
+    public boolean isWin() {
+        return !(isGameOver() || get(DESTROYED_BOMB).isEmpty());
     }
 
 }

@@ -131,7 +131,6 @@ public class Field {
         divideGroupsToIslands(groups);
         optimizeIslands();
         determineMarkOpenIndefinite();
-        filterReachableCells(toMark);
         filterReachableCells(toOpen);
     }
 
