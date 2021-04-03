@@ -73,25 +73,16 @@ public class AISolver implements Solver<Board> {
         field = fillFieldWithBoard();
         Field field = new Field(new PlayField(this.field, 0));
 
-        try {
-            field.play();
-            Point[] pts = field.getToMark();
-            Point[] toOpen = field.getToOpen();
+        field.play();
+        Point[] pts = field.getToMark();
+        Point[] toOpen = field.getToOpen();
 
-            Map.Entry<Point, Boolean> closest = getClosest(toMap(pts, toOpen));
-            if (closest != null) {
-                if (isNeighbours(closest.getKey(), me)) {
-                    result = getAction(closest);
-                } else {
-                    setSafePathTo(closest.getKey());
-                    result = whereToGo();
-                }
-            } else {
-                result = getEscapeTo();
-            }
-
-        } catch (Exception e) {
-            result = getEscapeTo();
+        Map.Entry<Point, Boolean> closest = getClosest(toMap(pts, toOpen));
+        if (isNeighbours(closest.getKey(), me)) {
+            result = getAction(closest);
+        } else {
+            setSafePathTo(closest.getKey());
+            result = whereToGo();
         }
 
         return result;
@@ -109,36 +100,6 @@ public class AISolver implements Solver<Board> {
     private boolean isFirstTurn() {
         return board.getAt(1, board.size() - 3).ch() == HIDDEN.ch()
                 && board.getAt(2, board.size() - 2).ch() == HIDDEN.ch();
-    }
-
-    private String getEscapeTo() {
-        int width = field.length;
-        int height = field[0].length;
-        if (me.getX() > 0
-                && field[me.getX() - 1][me.getY()] != HIDDEN_VALUE)
-        {
-            return LEFT.toString();
-        }
-
-        if (me.getX() < width - 1
-                && field[me.getX() + 1][me.getY()] != HIDDEN_VALUE)
-        {
-            return RIGHT.toString();
-        }
-
-        if (me.getY() > 0
-                && field[me.getX()][me.getY() - 1] != HIDDEN_VALUE)
-        {
-            return UP.toString();
-        }
-
-        if (me.getY() < height - 1
-                && field[me.getX()][me.getY() + 1] != HIDDEN_VALUE)
-        {
-            return DOWN.toString();
-        }
-
-        return null;
     }
 
     private void createField() {
