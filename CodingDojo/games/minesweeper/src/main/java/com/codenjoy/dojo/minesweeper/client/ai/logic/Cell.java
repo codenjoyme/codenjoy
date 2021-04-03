@@ -3,8 +3,9 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
 import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class Cell extends PointImpl {
 
@@ -72,18 +73,10 @@ public class Cell extends PointImpl {
         valued = false;
     }
 
-    public ArrayList<Cell> getUnknownCells() {
-        ArrayList<Cell> cells = new ArrayList();
-        Iterator i$ = neighbours.iterator();
-
-        while (i$.hasNext()) {
-            Cell neighbour = (Cell) i$.next();
-            if (neighbour.isUnknown()) {
-                cells.add(neighbour);
-            }
-        }
-
-        return cells;
+    public List<Cell> getUnknownCells() {
+        return neighbours.stream()
+                .filter(Cell::isUnknown)
+                .collect(toList());
     }
 
     public String toString() {
@@ -93,16 +86,7 @@ public class Cell extends PointImpl {
     }
 
     public boolean hasUnknownAround() {
-        Iterator iterator = neighbours.iterator();
-
-        Cell cell;
-        do {
-            if (!iterator.hasNext()) {
-                return false;
-            }
-            cell = (Cell) iterator.next();
-        } while (!cell.isUnknown());
-
-        return true;
+        return neighbours.stream()
+                .anyMatch(Cell::isUnknown);
     }
 }
