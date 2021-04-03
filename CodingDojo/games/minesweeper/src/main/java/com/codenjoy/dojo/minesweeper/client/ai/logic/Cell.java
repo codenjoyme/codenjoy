@@ -43,6 +43,10 @@ public class Cell extends PointImpl {
         valued = true;
     }
 
+    public boolean isMine() {
+        return value == FLAG_VALUE;
+    }
+
     public boolean isUnknown() {
         return unknown;
     }
@@ -75,4 +79,5 @@ public class Cell extends PointImpl {
     public List<Cell> neighbours() {
         return neighbours;
     }
+
 }

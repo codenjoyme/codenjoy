@@ -25,9 +25,8 @@ package com.codenjoy.dojo.minesweeper.client.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.minesweeper.client.Board;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.PlayField;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Action;
+import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -35,7 +34,8 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.codenjoy.dojo.minesweeper.model.Elements.*;
 import static com.codenjoy.dojo.services.Direction.*;
@@ -69,8 +69,8 @@ public class AISolver implements Solver<Board> {
             return UP.toString();
         }
 
-        Field field = new Field(new PlayField(fillField(board)));
-
+        Field field = new Field(board.size());
+        field.scan(pt -> convert(board.getAt(pt).ch()));
         field.play();
         List<Action> actions = field.actions();
 
@@ -163,19 +163,6 @@ public class AISolver implements Solver<Board> {
             if (distance < min) {
                 min = distance;
                 result = action;
-            }
-        }
-
-        return result;
-    }
-
-    private int[][] fillField(Board board) {
-        int[][] result = new int[board.size()][board.size()];
-
-        for (int i = 0; i < result.length; ++i) {
-            for (int j = 0; j < result[i].length; ++j) {
-                char element = board.getAt(i, j).ch();
-                result[i][j] = convert(element);
             }
         }
 
