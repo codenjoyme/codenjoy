@@ -76,7 +76,8 @@ public class AISolver implements Solver<Board> {
                 where = where.inverted();
             } else {
                 // а тут уже надо рисковать )
-                throw new RuntimeException(); // TODO решить это
+                // TODO решить это
+                return STOP.toString();
             }
         } else {
             Cell to = getClosest(actions);
@@ -85,6 +86,9 @@ public class AISolver implements Solver<Board> {
                 where = me.direction(to);
             } else {
                 where = safePathTo(board, me, to);
+                if (where == null) {
+                    return STOP.toString();
+                }
             }
             if (oneStep && to.action() == MARK) {
                 return ACT.toString() + ',' + where.toString();
@@ -116,7 +120,8 @@ public class AISolver implements Solver<Board> {
 
         List<Direction> path = way.buildPath(from, Arrays.asList(to));
         if (path.isEmpty()) {
-            throw new RuntimeException(); // TODO решить это
+            // TODO решить это
+            return null;
         }
 
         return path.get(0);
