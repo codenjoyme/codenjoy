@@ -143,33 +143,13 @@ public class Field {
     }
 
     private boolean isReachableCell(Cell cell) {
-        if (cell.isOutOf(1, 1, width)) { // с учетом границ
+        if (cell.isOutOf(1, 1, width)) { // TODO с учетом границ
             return false;
         }
 
         return cell.neighbours().stream()
                 .anyMatch(it -> !it.isUnknown()
                         && (it.getValue() == NONE_VALUE));
-    }
-
-    public Point[] getToOpen() {
-        Point[] result = new Point[toOpen.size()];
-
-        for (int i = 0; i < toOpen.size(); ++i) {
-            result[i] = toOpen.get(i).copy();
-        }
-
-        return result;
-    }
-
-    public Point[] getToMark() {
-        Point[] result = new Point[toMark.size()];
-
-        for (int i = 0; i < toMark.size(); ++i) {
-            result[i] = toMark.get(i).copy();
-        }
-
-        return result;
     }
 
     private void determineMarkOpenIndefinite() {
@@ -179,4 +159,14 @@ public class Field {
         });
     }
 
+    public List<Action> actions() {
+        List<Action> result = new LinkedList<>();
+        for (Cell cell : toMark) {
+            result.add(new Action(cell, true));
+        }
+        for (Cell cell : toOpen) {
+            result.add(new Action(cell, false));
+        }
+        return result;
+    }
 }

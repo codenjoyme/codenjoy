@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.PlayField;
+import com.codenjoy.dojo.minesweeper.client.ai.logic.Action;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -71,15 +72,14 @@ public class AISolver implements Solver<Board> {
         Field field = new Field(new PlayField(fillField(board)));
 
         field.play();
-        Point[] mark = field.getToMark();
-        Point[] open = field.getToOpen();
+        List<Action> actions = field.actions();
 
-        PointAction closest = getClosest(actions(mark, open));
+        Action closest = getClosest(actions);
         if (closest == null) {
             throw new RuntimeException(); // TODO решить это
         }
         Direction where;
-        boolean oneStep = isNeighbours(closest.pt, me);
+        boolean oneStep = isNeighbours(closest, me);
         if (oneStep) {
             where = gitDirection(closest);
         } else {
@@ -102,14 +102,14 @@ public class AISolver implements Solver<Board> {
                 && board.getAt(UP.change(me)) == HIDDEN;
     }
 
-    private Direction gitDirection(PointAction action) {
+    private Direction gitDirection(Action to) {
         return getValues().stream()
-                .filter(direction -> direction.change(me).itsMe(action.pt))
+                .filter(direction -> direction.change(me).itsMe(to))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException());
     }
 
-    private Direction safePathTo(Board board, Point from, PointAction to) {
+    private Direction safePathTo(Board board, Point from, Action to) {
         DeikstraFindWay way = new DeikstraFindWay();
         way.getPossibleWays(board.size(), possible(board, to));
 
@@ -118,7 +118,7 @@ public class AISolver implements Solver<Board> {
 //                board.size(),
 //                pt -> board.getAt(pt).ch()));
 
-        List<Direction> path = way.buildPath(from, Arrays.asList(to.pt));
+        List<Direction> path = way.buildPath(from, Arrays.asList(to));
         if (path.isEmpty()) {
             throw new RuntimeException(); // TODO решить это
         }
@@ -126,7 +126,7 @@ public class AISolver implements Solver<Board> {
         return path.get(0);
     }
 
-    private DeikstraFindWay.Possible possible(Board board, PointAction to) {
+    private DeikstraFindWay.Possible possible(Board board, Action to) {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) {
@@ -140,7 +140,7 @@ public class AISolver implements Solver<Board> {
                             .filter(pt -> !pt.isOutOf(board.size()))
                             .noneMatch(pt -> board.isAt(pt, NONE)
                                     // а тут мы не собираемся идти, а просто там флажок поставим
-                                    || (point.equals(to.pt) && to.act)
+                                    || (point.equals(to) && to.act)
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
                                         && pt.equals(board.getMe())
@@ -152,38 +152,14 @@ public class AISolver implements Solver<Board> {
         };
     }
 
-    public static class PointAction {
-        public Point pt;
-        public boolean act;
-
-        public PointAction(Point pt, boolean act) {
-            this.pt = pt;
-            this.act = act;
-        }
-    }
-
-    private List<PointAction> actions(Point[] toMark, Point[] toOpen) {
-        List<PointAction> result = new LinkedList<>();
-
-        for (int i = 0; i < toMark.length; ++i) {
-            result.add(new PointAction(toMark[i], true));
-        }
-
-        for (int i = 0; i < toOpen.length; ++i) {
-            result.add(new PointAction(toOpen[i], false));
-        }
-
-        return result;
-    }
-
-    private PointAction getClosest(List<PointAction> actions) {
+    private Action getClosest(List<Action> actions) {
         double min = 1.7976931348623157E308D; // TODO magic was here )
-        PointAction result = null;
+        Action result = null;
 
-        for (PointAction action : actions) {
-            if (action.pt.equals(me)) continue;
+        for (Action action : actions) {
+            if (action.equals(me)) continue;
 
-            double distance = me.distance(action.pt);
+            double distance = me.distance(action);
             if (distance < min) {
                 min = distance;
                 result = action;
