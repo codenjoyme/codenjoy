@@ -110,4 +110,11 @@ public interface Point extends Comparable<Point> {
      * @return this.x - offset.x, this.y - offset.y
      */
     Point relative(Point offset);
+
+    /**
+     * @param to destination point
+     * @return Direction from current position to given point.
+     * Returns Null if points are not neighbours.
+     */
+    Direction direction(Point to);
 }

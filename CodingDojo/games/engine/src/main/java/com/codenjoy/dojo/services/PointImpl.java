@@ -159,6 +159,14 @@ public class PointImpl implements Point, Comparable<Point> {
         return pt(x - offset.getX(), y - offset.getY());
     }
 
+    @Override
+    public Direction direction(Point to) {
+        return Direction.getValues().stream()
+                .filter(direction -> direction.change(this).itsMe(to))
+                .findFirst()
+                .orElse(null);
+    }
+
     public static Point random(Dice dice, int size) {
         return pt(dice.next(size), dice.next(size));
     }

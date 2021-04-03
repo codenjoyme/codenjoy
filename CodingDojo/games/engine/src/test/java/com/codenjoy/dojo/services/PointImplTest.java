@@ -29,6 +29,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.codenjoy.dojo.services.Direction.*;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
@@ -197,11 +198,11 @@ public class PointImplTest {
     public void shouldMoveDirection() {
         Point pt = pt(10, 15);
 
-        pt.move(Direction.UP);
+        pt.move(UP);
 
         assertEquals("[10,16]", pt.toString());
 
-        pt.move(Direction.DOWN);
+        pt.move(DOWN);
 
         assertEquals("[10,15]", pt.toString());
 
@@ -209,7 +210,7 @@ public class PointImplTest {
 
         assertEquals("[9,15]", pt.toString());
 
-        pt.move(Direction.RIGHT);
+        pt.move(RIGHT);
 
         assertEquals("[10,15]", pt.toString());
     }
@@ -351,4 +352,14 @@ public class PointImplTest {
             points.contains(pt(size / 2, size / 2));
         }
     }
+
+    @Test
+    public void shouldDirectionTo() {
+        assertEquals(RIGHT, pt(1, 1).direction(pt(2, 1)));
+        assertEquals(LEFT, pt(1, 1).direction(pt(0, 1)));
+        assertEquals(UP, pt(1, 1).direction(pt(1, 2)));
+        assertEquals(DOWN, pt(1, 1).direction(pt(1, 0)));
+        assertEquals(null, pt(1, 1).direction(pt(0, 0)));
+    }
+
 }
