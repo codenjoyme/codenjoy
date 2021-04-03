@@ -15,8 +15,6 @@ public class Field {
     public int height;
     private Cell[][] field;
     private List<Cell> cells;
-    double minPossibility;
-    private Point myCoord;
     private PlayField playField;
     private List<Group> groups;
     private List<Island> islands;
@@ -41,10 +39,6 @@ public class Field {
         field = new Cell[width][height];
         createCells();
         setCellsNeighbours();
-    }
-
-    public void setMyCoord(Point myCoord) {
-        this.myCoord = myCoord;
     }
 
     private void createCells() {
@@ -209,7 +203,4 @@ public class Field {
         });
     }
 
-    public double getMinPossibility() {
-        return minPossibility;
-    }
 }

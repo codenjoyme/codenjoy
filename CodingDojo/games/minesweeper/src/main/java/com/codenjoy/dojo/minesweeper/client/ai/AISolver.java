@@ -34,16 +34,20 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.minesweeper.model.Elements.*;
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AISolver implements Solver<Board> {
 
+    public static final int HIDDEN_VALUE = 9;
+    public static final int FLAG_VALUE = 11;
+    public static final int NONE_VALUE = 0;
+    public static final int BANG_VALUE = 12;
     private Dice dice;
     private Board board;
     private Point me;
     private int[][] field;
-    private char movedTo;
     private List<Direction> safePath = new ArrayList();
 
     public AISolver(Dice dice) {
@@ -68,7 +72,6 @@ public class AISolver implements Solver<Board> {
 
         field = fillFieldWithBoard();
         Field field = new Field(new PlayField(this.field, 0));
-        field.setMyCoord(me);
 
         try {
             field.play();
@@ -87,12 +90,6 @@ public class AISolver implements Solver<Board> {
                 result = getEscapeTo();
             }
 
-            if (result.startsWith("ACT,")) {
-                movedTo = 45;
-            } else {
-                Point pt2 = Direction.valueOf(result).change(board.getMe());
-                movedTo = board.getAt(pt2).ch();
-            }
         } catch (Exception e) {
             result = getEscapeTo();
         }
@@ -110,33 +107,33 @@ public class AISolver implements Solver<Board> {
     }
 
     private boolean isFirstTurn() {
-        return board.getAt(1, board.size() - 3).ch() == 42
-                && board.getAt(2, board.size() - 2).ch() == 42;
+        return board.getAt(1, board.size() - 3).ch() == HIDDEN.ch()
+                && board.getAt(2, board.size() - 2).ch() == HIDDEN.ch();
     }
 
     private String getEscapeTo() {
         int width = field.length;
         int height = field[0].length;
         if (me.getX() > 0
-                && field[me.getX() - 1][me.getY()] != 9)
+                && field[me.getX() - 1][me.getY()] != HIDDEN_VALUE)
         {
             return LEFT.toString();
         }
 
         if (me.getX() < width - 1
-                && field[me.getX() + 1][me.getY()] != 9)
+                && field[me.getX() + 1][me.getY()] != HIDDEN_VALUE)
         {
             return RIGHT.toString();
         }
 
         if (me.getY() > 0
-                && field[me.getX()][me.getY() - 1] != 9)
+                && field[me.getX()][me.getY() - 1] != HIDDEN_VALUE)
         {
             return UP.toString();
         }
 
         if (me.getY() < height - 1
-                && field[me.getX()][me.getY() + 1] != 9)
+                && field[me.getX()][me.getY() + 1] != HIDDEN_VALUE)
         {
             return DOWN.toString();
         }
@@ -148,7 +145,7 @@ public class AISolver implements Solver<Board> {
         field = new int[board.size() - 2][board.size() - 2];
         for (int i = 0; i < field.length; ++i) {
             for (int j = 0; j < field[i].length; ++j) {
-                field[i][j] = 9;
+                field[i][j] = HIDDEN_VALUE;
             }
         }
     }
@@ -249,17 +246,17 @@ public class AISolver implements Solver<Board> {
         for (int i = 0; i < result.length; ++i) {
             for (int j = 0; j < result[i].length; ++j) {
                 char element = board.getAt(i + 1, j + 1).ch();
-                if (element > 48 && element < 57) {
+                if (ONE_MINE.ch() <= element && element <= EIGHT_MINES.ch()) {
                     result[i][j] = Character.getNumericValue(element);
-                } else if (element == 42) {
-                    result[i][j] = 9;
-                } else if (element == 8252) {
-                    result[i][j] = 11;
-                } else if (element == 32) {
-                    result[i][j] = 0;
-                } else if (element == 1120) {
-                    result[i][j] = 12;
-                } else if (element == 9786) {
+                } else if (element == HIDDEN.ch()) {
+                    result[i][j] = HIDDEN_VALUE;
+                } else if (element == FLAG.ch()) {
+                    result[i][j] = FLAG_VALUE;
+                } else if (element == NONE.ch()) {
+                    result[i][j] = NONE_VALUE;
+                } else if (element == BANG.ch()) {
+                    result[i][j] = BANG_VALUE;
+                } else if (element == DETECTOR.ch()) {
                     me = pt(i, j);
                     result[i][j] = field[i][j];
                 }

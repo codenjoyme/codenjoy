@@ -80,10 +80,7 @@ public class Island {
         for (int i = 0; i < list.size() - 1; ++i) {
             Group first = list.get(i);
             if (first.size() > 1 && first.getValue() == 0) {
-                Iterator i$ = first.getList().iterator();
-
-                while (i$.hasNext()) {
-                    Cell cell = (Cell) i$.next();
+                for (Cell cell : first.getList()) {
                     List<Cell> cells = new ArrayList(1);
                     cells.add(cell);
                     list.add(new Group(cells, 0));
@@ -104,7 +101,9 @@ public class Island {
             }
         }
 
-        amountCells = indefiniteCells.size() + toOpen.size() + toMark.size();
+        amountCells = indefiniteCells.size()
+                + toOpen.size()
+                + toMark.size();
     }
 
     public int size() {

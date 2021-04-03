@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
+import static com.codenjoy.dojo.minesweeper.client.ai.AISolver.FLAG_VALUE;
+
 public class PlayField {
 
     private int width;
@@ -25,7 +27,7 @@ public class PlayField {
         for (int i = 0; i < field.length; ++i) {
             int[] arr = field[i];
             for (int j = 0; j < arr.length; ++j) {
-                if (arr[j] == 11) {
+                if (arr[j] == FLAG_VALUE) {
                     ++result;
                 }
             }
