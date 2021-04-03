@@ -12,7 +12,7 @@ public class Group {
         this.value = value;
     }
 
-    public List<Cell> getList() {
+    public List<Cell> list() {
         return list;
     }
 
@@ -20,7 +20,7 @@ public class Group {
         return list.size();
     }
 
-    public int getValue() {
+    public int value() {
         return value;
     }
 
@@ -38,7 +38,7 @@ public class Group {
         return list.containsAll(group.list);
     }
 
-    public Group getOverlap(Group group) {
+    public Group overlap(Group group) {
         List<Cell> overlap = new ArrayList();
 
         for (Cell cell : group.list) {

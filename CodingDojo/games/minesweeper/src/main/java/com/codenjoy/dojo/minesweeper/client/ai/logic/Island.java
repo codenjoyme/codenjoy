@@ -9,8 +9,8 @@ import static com.codenjoy.dojo.minesweeper.client.ai.AISolver.NONE_VALUE;
 public class Island {
 
     private List<Group> list = new ArrayList();
-    private List<Cell> toOpen = new ArrayList();
-    private List<Cell> toMark = new ArrayList();
+    private List<Cell> open = new ArrayList();
+    private List<Cell> mark = new ArrayList();
     private List<Group> indefinite = new ArrayList();
     private int amountCells;
     private List<Cell> indefiniteCells;
@@ -41,7 +41,7 @@ public class Island {
 
             for (int i = 0; i < list.size() - 1; ++i) {
                 Group first = list.get(i);
-                if (first.getValue() < 0) {
+                if (first.value() < 0) {
                     list.remove(i--);
                 }
 
@@ -57,9 +57,9 @@ public class Island {
                             second.subtraction(first);
                             repeat = true;
                         } else {
-                            Group overlap = first.getOverlap(second);
+                            Group overlap = first.overlap(second);
                             if (overlap == null) {
-                                overlap = second.getOverlap(first);
+                                overlap = second.overlap(first);
                                 if (overlap != null) {
                                     second.subtraction(first);
                                     repeat = true;
@@ -83,8 +83,8 @@ public class Island {
     private void doFractionZeroGroupsInList() {
         for (int i = 0; i < list.size() - 1; ++i) {
             Group first = list.get(i);
-            if (first.size() > 1 && first.getValue() == 0) {
-                for (Cell cell : first.getList()) {
+            if (first.size() > 1 && first.value() == 0) {
+                for (Cell cell : first.list()) {
                     List<Cell> cells = new ArrayList(1);
                     cells.add(cell);
                     list.add(new Group(cells, 0));
@@ -98,7 +98,7 @@ public class Island {
     private void setIndefiniteCells() {
         indefiniteCells = new ArrayList();
         for (Group group : indefinite) {
-            for (Cell cell : group.getList()) {
+            for (Cell cell : group.list()) {
                 if (!indefiniteCells.contains(cell)) {
                     indefiniteCells.add(cell);
                 }
@@ -106,8 +106,8 @@ public class Island {
         }
 
         amountCells = indefiniteCells.size()
-                + toOpen.size()
-                + toMark.size();
+                + open.size()
+                + mark.size();
     }
 
     public int size() {
@@ -116,13 +116,13 @@ public class Island {
 
     private void determine() {
         for (Group group : list) {
-            if (group.getValue() == NONE_VALUE || group.getValue() == DETECTOR_VALUE) {
-                for (Cell cell : group.getList()) {
-                    toOpen.add(cell);
+            if (group.value() == NONE_VALUE || group.value() == DETECTOR_VALUE) {
+                for (Cell cell : group.list()) {
+                    open.add(cell);
                 }
-            } else if (group.size() == group.getValue()) {
-                for (Cell cell : group.getList()) {
-                    toMark.add(cell);
+            } else if (group.size() == group.value()) {
+                for (Cell cell : group.list()) {
+                    mark.add(cell);
                 }
             } else {
                 indefinite.add(group);
@@ -133,12 +133,12 @@ public class Island {
         return;
     }
 
-    public List<Cell> getToOpen() {
-        return toOpen;
+    public List<Cell> open() {
+        return open;
     }
 
-    public List<Cell> getToMark() {
-        return toMark;
+    public List<Cell> mark() {
+        return mark;
     }
 
 }

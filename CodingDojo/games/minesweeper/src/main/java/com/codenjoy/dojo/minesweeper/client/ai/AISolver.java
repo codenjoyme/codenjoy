@@ -74,19 +74,19 @@ public class AISolver implements Solver<Board> {
         field.play();
         List<Action> actions = field.actions();
 
-        Action closest = getClosest(actions);
-        if (closest == null) {
+        Action to = getClosest(actions);
+        if (to == null) {
             throw new RuntimeException(); // TODO решить это
         }
         Direction where;
-        boolean oneStep = isNeighbours(closest, me);
+        boolean oneStep = isNeighbours(to, me);
         if (oneStep) {
-            where = gitDirection(closest);
+            where = to.direction(me);
         } else {
-            where = safePathTo(board, me, closest);
+            where = safePathTo(board, me, to);
         }
         underMe = board.getAt(where.change(me));
-        if (oneStep && closest.act) {
+        if (oneStep && to.willMark()) {
             return ACT.toString() + ',' + where.toString();
         }
         return where.toString();
@@ -100,13 +100,6 @@ public class AISolver implements Solver<Board> {
         return pt(1, 1).itsMe(me)
                 && board.getAt(RIGHT.change(me)) == HIDDEN
                 && board.getAt(UP.change(me)) == HIDDEN;
-    }
-
-    private Direction gitDirection(Action to) {
-        return getValues().stream()
-                .filter(direction -> direction.change(me).itsMe(to))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException());
     }
 
     private Direction safePathTo(Board board, Point from, Action to) {
@@ -140,7 +133,7 @@ public class AISolver implements Solver<Board> {
                             .filter(pt -> !pt.isOutOf(board.size()))
                             .noneMatch(pt -> board.isAt(pt, NONE)
                                     // а тут мы не собираемся идти, а просто там флажок поставим
-                                    || (point.equals(to) && to.act)
+                                    || (point.equals(to) && to.willMark())
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
                                         && pt.equals(board.getMe())

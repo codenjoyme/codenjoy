@@ -69,9 +69,9 @@ public class Field {
                 } else if (value == FLAG_VALUE) {
                     field[x][y].setMine();
                 } else if (value == DETECTOR_VALUE) {
-                    field[x][y].setValue(DETECTOR_VALUE);
+                    field[x][y].value(DETECTOR_VALUE);
                 } else {
-                    field[x][y].setValue(value);
+                    field[x][y].value(value);
                 }
             }
         }
@@ -95,7 +95,7 @@ public class Field {
         groups.clear();
         for (Cell cell : cells) {
             if (cell.isValued() && cell.hasUnknownAround()) {
-                groups.add(new Group(cell.getUnknownCells(), cell.getValue()));
+                groups.add(new Group(cell.unknownCells(), cell.value()));
             }
         }
     }
@@ -154,13 +154,13 @@ public class Field {
 
         return cell.neighbours().stream()
                 .anyMatch(it -> !it.isUnknown()
-                        && (it.getValue() == NONE_VALUE));
+                        && (it.value() == NONE_VALUE));
     }
 
     private void determineMarkOpenIndefinite() {
         islands.forEach(island -> {
-            toOpen.addAll(island.getToOpen());
-            toMark.addAll(island.getToMark());
+            toOpen.addAll(island.open());
+            toMark.addAll(island.mark());
         });
     }
 

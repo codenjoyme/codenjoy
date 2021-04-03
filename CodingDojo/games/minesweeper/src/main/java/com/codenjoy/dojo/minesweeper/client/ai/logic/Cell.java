@@ -27,11 +27,15 @@ public class Cell extends PointImpl {
         return valued;
     }
 
-    public int getValue() {
+    public int value() {
         return value;
     }
 
-    public void setValue(int value) {
+    public List<Cell> neighbours() {
+        return neighbours;
+    }
+
+    public void value(int value) {
         this.value = value;
         valued = true;
         unknown = false;
@@ -56,7 +60,7 @@ public class Cell extends PointImpl {
         valued = false;
     }
 
-    public List<Cell> getUnknownCells() {
+    public List<Cell> unknownCells() {
         return neighbours.stream()
                 .filter(Cell::isUnknown)
                 .collect(toList());
@@ -75,9 +79,4 @@ public class Cell extends PointImpl {
                 unknown,
                 valued);
     }
-
-    public List<Cell> neighbours() {
-        return neighbours;
-    }
-
 }
