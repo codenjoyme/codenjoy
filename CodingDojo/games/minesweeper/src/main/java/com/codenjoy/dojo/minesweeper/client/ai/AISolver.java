@@ -81,7 +81,7 @@ public class AISolver implements Solver<Board> {
         Direction where;
         boolean oneStep = isNeighbours(to, me);
         if (oneStep) {
-            where = to.direction(me);
+            where = me.direction(to);
         } else {
             where = safePathTo(board, me, to);
         }

@@ -18,11 +18,4 @@ public class Action extends PointImpl {
     public boolean willMark() {
         return mark;
     }
-
-    public Direction direction(Point from) {
-        return getValues().stream()
-                .filter(direction -> direction.change(from).itsMe(this))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException());
-    }
 }
