@@ -16,6 +16,13 @@
         <module.name>snakebattle</module.name>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
