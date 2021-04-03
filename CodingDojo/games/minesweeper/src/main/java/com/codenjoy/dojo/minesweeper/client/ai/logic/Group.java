@@ -4,6 +4,8 @@ import com.codenjoy.dojo.minesweeper.model.Elements;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.minesweeper.client.ai.logic.Action.*;
+import static com.codenjoy.dojo.minesweeper.model.Elements.*;
 import static java.util.stream.Collectors.toList;
 
 public class Group {
@@ -31,12 +33,12 @@ public class Group {
     }
 
     private Action action() {
-        if (element == Elements.NONE || element == Elements.DETECTOR) {
-            return Action.GO;
+        if (element == NONE || element == DETECTOR) {
+            return GO;
         } else if (size() == element.value()) {
-            return Action.MARK;
+            return MARK;
         } else {
-            return Action.NOTHING;
+            return NOTHING;
         }
     }
 }

@@ -6,18 +6,20 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codenjoy.dojo.minesweeper.model.Elements.*;
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
 public class Cell extends PointImpl {
 
     private Elements element;
-    private boolean valued = false;
-    private boolean unknown = true;
-    private List<Cell> neighbours = new ArrayList();
+    private boolean valued;
+    private List<Cell> neighbours;
     private Action action;
 
     public Cell(int x, int y) {
         super(x, y);
+        neighbours = new ArrayList();
     }
 
     public void add(Cell cell) {
@@ -25,22 +27,21 @@ public class Cell extends PointImpl {
     }
 
     public void set(Elements element) {
-        valued = (element != Elements.HIDDEN);
+        valued = (element != HIDDEN);
         if (valued) {
             this.element = element;
         }
-        unknown = !valued;
     }
 
     public List<Cell> unknownCells() {
         return neighbours.stream()
-                .filter(Cell::isUnknown)
+                .filter(not(Cell::isValued))
                 .collect(toList());
     }
 
     public boolean hasUnknownAround() {
         return neighbours.stream()
-                .anyMatch(Cell::isUnknown);
+                .anyMatch(not(Cell::isValued));
     }
 
     @Override
@@ -49,16 +50,14 @@ public class Cell extends PointImpl {
         cell.neighbours = neighbours;
         cell.element = element;
         cell.valued = valued;
-        cell.unknown = unknown;
         return cell;
     }
 
     @Override
     public String toString() {
-        return String.format("%s:value=%s,unknown=%s,valued=%s,action=%s",
+        return String.format("%s:value=%s,valued=%s,action=%s",
                 super.toString(),
                 element,
-                unknown,
                 valued,
                 action);
     }
@@ -83,7 +82,4 @@ public class Cell extends PointImpl {
         return action;
     }
 
-    public boolean isUnknown() {
-        return unknown;
-    }
 }

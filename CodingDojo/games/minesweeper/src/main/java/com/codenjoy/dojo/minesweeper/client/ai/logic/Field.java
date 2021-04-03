@@ -7,6 +7,8 @@ import com.codenjoy.dojo.services.QDirection;
 import java.util.*;
 import java.util.function.Function;
 
+import static com.codenjoy.dojo.minesweeper.client.ai.logic.Action.*;
+import static com.codenjoy.dojo.minesweeper.model.Elements.*;
 import static java.util.stream.Collectors.toCollection;
 
 public class Field {
@@ -36,7 +38,7 @@ public class Field {
                     .map(direction -> direction.change(cell))
                     .filter(pt -> !pt.isOutOf(size))
                     .map(pt -> cell(pt))
-                    .filter(neighbour -> neighbour.element() != Elements.BORDER)
+                    .filter(neighbour -> neighbour.element() != BORDER)
                     .forEach(neighbour -> cell.add(neighbour));
         }
     }
@@ -61,10 +63,9 @@ public class Field {
         }
     }
 
-    private boolean isReachableCell(Cell cell) {
+    private boolean isReachable(Cell cell) {
         return cell.neighbours().stream()
-                .anyMatch(it -> !it.isUnknown()
-                        && (it.element() == Elements.NONE));
+                .anyMatch(it -> it.isValued() && (it.element() == NONE));
     }
 
     public Collection<Cell> actions() {
@@ -72,12 +73,12 @@ public class Field {
                 // все группы клеток разбиваем в плоскую коллекцию
                 .flatMap(group -> group.list().stream())
                 // пропускаем клеточки в отношении которых ничего не поделать
-                .filter(cell -> cell.action() != Action.NOTHING)
+                .filter(cell -> cell.action() != NOTHING)
                 // активные действия MARK совершаются в направлении '*' а значит туда мы не зайдем
                 // а вот GO надо бы проверить на доступность клеточки
-                .filter(cell -> cell.action() == Action.MARK || isReachableCell(cell))
+                .filter(cell -> cell.action() == MARK || isReachable(cell))
                 // сперва нас интересуют активные действия в устранении мин
-                .sorted((cell1, cell2) -> Boolean.compare(cell1.action() != Action.MARK, cell2.action() != Action.MARK))
+                .sorted((cell1, cell2) -> Boolean.compare(cell1.action() != MARK, cell2.action() != MARK))
                 // мы исключаем все дубликаты
                 .collect(toCollection(LinkedHashSet::new));
     }

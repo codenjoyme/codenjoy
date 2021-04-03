@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static com.codenjoy.dojo.minesweeper.client.ai.logic.Action.MARK;
+import static com.codenjoy.dojo.minesweeper.client.ai.logic.Action.*;
 import static com.codenjoy.dojo.minesweeper.model.Elements.*;
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -48,8 +48,10 @@ public class AISolver implements Solver<Board> {
     private Point me;
     private Elements underMe;
     private Direction where;
+    private Dice dice;
 
     public AISolver(Dice dice) {
+        this.dice = dice;
     }
 
     public String get(Board board) {
