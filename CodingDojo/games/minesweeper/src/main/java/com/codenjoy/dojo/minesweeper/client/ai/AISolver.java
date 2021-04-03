@@ -52,12 +52,13 @@ public class AISolver implements Solver<Board> {
 
     private Point me;
     private Elements underMe;
+    private Direction where;
 
     public AISolver(Dice dice) {
     }
 
     public String get(Board board) {
-        System.out.println(board.toString());
+        // System.out.println(board.toString());
 
         if (board.isGameOver() || board.isWin()) {
             return STOP.toString();
@@ -73,21 +74,28 @@ public class AISolver implements Solver<Board> {
         field.scan(pt -> convert(board.getAt(pt).ch()));
         List<Action> actions = field.actions();
         if (actions.isEmpty()) {
-            // не знаем куда походить и надо рисковать
-        }
-
-        Action to = getClosest(actions);
-        Direction where;
-        boolean oneStep = isNeighbours(to, me);
-        if (oneStep) {
-            where = me.direction(to);
+            // не знаем куда походить - надо сделать шаг назад
+            // если на прошлом тике в месте куда я пришел было '*'
+            // это может подсказать что было подомной
+            if (underMe == HIDDEN && where != null) {
+                where = where.inverted();
+            } else {
+                // а тут уже надо рисковать )
+                throw new RuntimeException(); // TODO решить это
+            }
         } else {
-            where = safePathTo(board, me, to);
+            Action to = getClosest(actions);
+            boolean oneStep = isNeighbours(to, me);
+            if (oneStep) {
+                where = me.direction(to);
+            } else {
+                where = safePathTo(board, me, to);
+            }
+            if (oneStep && to.willMark()) {
+                return ACT.toString() + ',' + where.toString();
+            }
         }
         underMe = board.getAt(where.change(me));
-        if (oneStep && to.willMark()) {
-            return ACT.toString() + ',' + where.toString();
-        }
         return where.toString();
     }
 
