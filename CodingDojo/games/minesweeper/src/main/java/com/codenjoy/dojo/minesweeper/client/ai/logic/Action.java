@@ -1,10 +1,7 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-
-import static com.codenjoy.dojo.services.Direction.getValues;
 
 public class Action extends PointImpl {
 

@@ -32,69 +32,6 @@ public class Island {
                 .anyMatch(group::isCross);
     }
 
-    public void optimize() {
-        doFractionZeroGroupsInList();
-
-        boolean repeat;
-        do {
-            repeat = false;
-
-            for (int i = 0; i < list.size() - 1; ++i) {
-                Group first = list.get(i);
-                if (first.value() < 0) {
-                    list.remove(i--);
-                }
-
-                for (int j = i + 1; j < list.size(); ++j) {
-                    Group second = list.get(j);
-                    if (first != second && first.isCross(second)) {
-                        if (first.equals(second)) {
-                            list.remove(j--);
-                        } else if (first.contains(second)) {
-                            first.subtraction(second);
-                            repeat = true;
-                        } else if (second.contains(first)) {
-                            second.subtraction(first);
-                            repeat = true;
-                        } else {
-                            Group overlap = first.overlap(second);
-                            if (overlap == null) {
-                                overlap = second.overlap(first);
-                                if (overlap != null) {
-                                    second.subtraction(first);
-                                    repeat = true;
-                                    add(overlap);
-                                }
-                            } else {
-                                first.subtraction(second);
-                                repeat = true;
-                                add(overlap);
-                            }
-                        }
-                    }
-                }
-            }
-        } while (repeat);
-
-        determine();
-        amountCells = size();
-    }
-
-    private void doFractionZeroGroupsInList() {
-        for (int i = 0; i < list.size() - 1; ++i) {
-            Group first = list.get(i);
-            if (first.size() > 1 && first.value() == 0) {
-                for (Cell cell : first.list()) {
-                    List<Cell> cells = new ArrayList(1);
-                    cells.add(cell);
-                    list.add(new Group(cells, 0));
-                }
-
-                list.remove(i--);
-            }
-        }
-    }
-
     private void setIndefiniteCells() {
         indefiniteCells = new ArrayList();
         for (Group group : indefinite) {
@@ -114,7 +51,7 @@ public class Island {
         return amountCells;
     }
 
-    private void determine() {
+    public void determine() {
         for (Group group : list) {
             if (group.value() == NONE_VALUE || group.value() == DETECTOR_VALUE) {
                 for (Cell cell : group.list()) {
@@ -130,7 +67,7 @@ public class Island {
         }
 
         setIndefiniteCells();
-        return;
+        amountCells = size();
     }
 
     public List<Cell> open() {

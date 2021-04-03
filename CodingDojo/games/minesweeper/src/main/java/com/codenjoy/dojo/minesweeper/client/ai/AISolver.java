@@ -73,11 +73,11 @@ public class AISolver implements Solver<Board> {
         field.scan(pt -> convert(board.getAt(pt).ch()));
         field.play();
         List<Action> actions = field.actions();
+        if (actions.isEmpty()) {
+            // не знаем куда походить и надо рисковать
+        }
 
         Action to = getClosest(actions);
-        if (to == null) {
-            throw new RuntimeException(); // TODO решить это
-        }
         Direction where;
         boolean oneStep = isNeighbours(to, me);
         if (oneStep) {

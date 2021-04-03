@@ -29,32 +29,6 @@ public class Group {
                 .anyMatch(list::contains);
     }
 
-    public void subtraction(Group group) {
-        list.removeAll(group.list);
-        value -= group.value;
-    }
-
-    public boolean contains(Group group) {
-        return list.containsAll(group.list);
-    }
-
-    public Group overlap(Group group) {
-        List<Cell> overlap = new ArrayList();
-
-        for (Cell cell : group.list) {
-            if (list.contains(cell)) {
-                overlap.add(cell);
-            }
-        }
-
-        int mine = value - (list.size() - overlap.size());
-        if (mine != group.value) {
-            return null;
-        } else {
-            return new Group(overlap, mine);
-        }
-    }
-
     public boolean equals(Object o) {
         if (this == o) {
             return true;

@@ -92,7 +92,6 @@ public class Field {
     }
 
     private void setGroups() {
-        groups.clear();
         for (Cell cell : cells) {
             if (cell.isValued() && cell.hasUnknownAround()) {
                 groups.add(new Group(cell.unknownCells(), cell.value()));
@@ -100,25 +99,20 @@ public class Field {
         }
     }
 
-    private void optimizeIslands() {
-        islands.forEach(island -> island.optimize());
-    }
-
     private void divideGroupsToIslands(List<Group> groups) {
-        islands.clear();
         for (Group group : groups) {
             boolean added = false;
             Island addedTo = null;
 
             for (int i = 0; i < islands.size(); ++i) {
-                Island currentIsland = islands.get(i);
-                if (currentIsland.isCross(group)) {
+                Island current = islands.get(i);
+                if (current.isCross(group)) {
                     if (!added) {
-                        currentIsland.add(group);
+                        current.add(group);
                         added = true;
-                        addedTo = currentIsland;
+                        addedTo = current;
                     } else {
-                        addedTo.add(currentIsland);
+                        addedTo.add(current);
                         islands.remove(i);
                     }
                 }
@@ -131,10 +125,8 @@ public class Field {
     }
 
     public void play() {
-        islands.clear();
         setGroups();
         divideGroupsToIslands(groups);
-        optimizeIslands();
         determineMarkOpenIndefinite();
         filterReachableCells(toOpen);
     }
@@ -159,6 +151,7 @@ public class Field {
 
     private void determineMarkOpenIndefinite() {
         islands.forEach(island -> {
+            island.determine();
             toOpen.addAll(island.open());
             toMark.addAll(island.mark());
         });
