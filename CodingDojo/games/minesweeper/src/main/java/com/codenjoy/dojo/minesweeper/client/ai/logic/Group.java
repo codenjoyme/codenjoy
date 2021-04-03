@@ -7,9 +7,9 @@ import static java.util.stream.Collectors.toList;
 public class Group {
 
     private List<Cell> list;
-    private int value;
+    private Value value;
 
-    public Group(List<Cell> cells, int value) {
+    public Group(List<Cell> cells, Value value) {
         this.value = value;
 
         list = cells.stream()
@@ -31,7 +31,7 @@ public class Group {
     private Action action() {
         if (value == Value.NONE || value == Value.DETECTOR) {
             return Action.GO;
-        } else if (size() == value) {
+        } else if (size() == value.get()) {
             return Action.MARK;
         } else {
             return Action.NOTHING;

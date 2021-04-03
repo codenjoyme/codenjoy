@@ -165,9 +165,9 @@ public class AISolver implements Solver<Board> {
         return result;
     }
 
-    private int convert(char element) {
+    private Value convert(char element) {
         if (ONE_MINE.ch() <= element && element <= EIGHT_MINES.ch()) {
-            return Character.getNumericValue(element);
+            return Value.valueOf(Character.getNumericValue(element));
         }
 
         if (element == HIDDEN.ch()) {
@@ -198,6 +198,6 @@ public class AISolver implements Solver<Board> {
             }
         }
 
-        return element;
+        throw new IllegalArgumentException("Not supported element: " + element);
     }
 }

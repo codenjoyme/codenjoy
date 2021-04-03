@@ -47,10 +47,10 @@ public class Field {
         }
     }
 
-    public void scan(Function<Point, Integer> get) {
+    public void scan(Function<Point, Value> get) {
         for (int x = 0; x < size; ++x) {
             for (int y = 0; y < size; ++y) {
-                int value = get.apply(pt(x, y));
+                Value value = get.apply(pt(x, y));
                 if (value == Value.BORDER || value == Value.BANG) {
                     continue;
                 }

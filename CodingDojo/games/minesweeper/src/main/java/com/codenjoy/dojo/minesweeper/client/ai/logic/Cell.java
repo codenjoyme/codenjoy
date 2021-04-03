@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.toList;
 
 public class Cell extends PointImpl {
 
-    private int value;
+    private Value value;
     private boolean valued = false;
     private boolean unknown = true;
     private List<Cell> neighbours = new ArrayList();
@@ -27,7 +27,7 @@ public class Cell extends PointImpl {
         return valued;
     }
 
-    public int value() {
+    public Value value() {
         return value;
     }
 
@@ -43,7 +43,7 @@ public class Cell extends PointImpl {
         return action;
     }
 
-    public void value(int value) {
+    public void value(Value value) {
         this.value = value;
         valued = true;
         unknown = false;
@@ -89,7 +89,7 @@ public class Cell extends PointImpl {
     public String toString() {
         return String.format("%s:value=%s,unknown=%s,valued=%s,action=%s",
                 super.toString(),
-                value,
+                value.name(),
                 unknown,
                 valued,
                 action);
