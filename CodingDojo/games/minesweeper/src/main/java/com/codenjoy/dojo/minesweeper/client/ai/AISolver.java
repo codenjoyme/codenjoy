@@ -27,10 +27,13 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.PlayField;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.WaveField;
+import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.algs.DeikstraFindWay;
+import com.codenjoy.dojo.utils.TestUtils;
 
 import java.util.*;
 
@@ -44,186 +47,199 @@ public class AISolver implements Solver<Board> {
     public static final int FLAG_VALUE = 11;
     public static final int NONE_VALUE = 0;
     public static final int BANG_VALUE = 12;
-    private Dice dice;
-    private Board board;
+    public static final int DETECTOR_VALUE = 10;
+    public static final int BORDER_VALUE = -1;
+
     private Point me;
     private int[][] field;
-    private List<Direction> safePath = new ArrayList();
+    private Elements underMe;
 
     public AISolver(Dice dice) {
-        this.dice = dice;
     }
 
     public String get(Board board) {
-        String result;
         if (board.isGameOver()) {
             field = null;
             return STOP.toString();
         }
-        this.board = board;
 
-        if (isFirstTurn()) {
+        me = board.getMe();
+
+        if (isFirstTurn(board)) {
             return UP.toString();
         }
 
-        if (field == null) {
-            createField();
-        }
+        System.out.println(board.toString());
 
-        field = fillFieldWithBoard();
-        Field field = new Field(new PlayField(this.field, 0));
+        field = fillField(board);
+        Field field = new Field(new PlayField(this.field));
 
         field.play();
-        Point[] pts = field.getToMark();
-        Point[] toOpen = field.getToOpen();
+        Point[] mark = field.getToMark();
+        Point[] open = field.getToOpen();
 
-        Map.Entry<Point, Boolean> closest = getClosest(toMap(pts, toOpen));
-        if (isNeighbours(closest.getKey(), me)) {
-            result = getAction(closest);
-        } else {
-            setSafePathTo(closest.getKey());
-            result = whereToGo();
+        PointAction closest = getClosest(actions(mark, open));
+        if (closest == null) {
+            throw new RuntimeException(); // TODO решить это
         }
+        Direction where;
+        if (isNeighbours(closest.pt, me)) {
+            where = gitDirection(closest);
 
-        return result;
-    }
-
-    private String whereToGo() {
-        Collections.sort(safePath);
-        return safePath.remove(0).toString();
+        } else {
+            where = safePathTo(board, me, closest.pt);
+        }
+        underMe = board.getAt(where.change(me));
+        if (!closest.action) {
+            return ACT.toString() + ',' + where.toString();
+        }
+        return where.toString();
     }
 
     private boolean isNeighbours(Point pt1, Point pt2) {
         return pt1.distance(pt2) <= 1.0D;
     }
 
-    private boolean isFirstTurn() {
-        return board.getAt(1, board.size() - 3).ch() == HIDDEN.ch()
-                && board.getAt(2, board.size() - 2).ch() == HIDDEN.ch();
+    private boolean isFirstTurn(Board board) {
+        return pt(1, 1).itsMe(me)
+                && board.getAt(RIGHT.change(me)) == HIDDEN
+                && board.getAt(UP.change(me)) == HIDDEN;
     }
 
-    private void createField() {
-        field = new int[board.size() - 2][board.size() - 2];
-        for (int i = 0; i < field.length; ++i) {
-            for (int j = 0; j < field[i].length; ++j) {
-                field[i][j] = HIDDEN_VALUE;
+    private Direction gitDirection(PointAction action) {
+        return getValues().stream()
+                .filter(direction -> direction.change(me).itsMe(action.pt))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException());
+    }
+
+    private Direction safePathTo(Board board, Point from, Point to) {
+        DeikstraFindWay way = new DeikstraFindWay();
+        way.getPossibleWays(board.size(), possible(board));
+
+        System.out.println(TestUtils.drawPossibleWays(3,
+                way.getBasic().toMap(),
+                board.size(),
+                pt -> board.getAt(pt).ch()));
+
+        List<Direction> path = way.buildPath(from, Arrays.asList(to));
+        if (path.isEmpty()) {
+            throw new RuntimeException(); // TODO решить это
+        }
+
+        return path.get(0);
+    }
+
+    private DeikstraFindWay.Possible possible(Board board) {
+        return new DeikstraFindWay.Possible() {
+            @Override
+            public boolean possible(Point point) {
+                if (board.isAt(point, BORDER)) return false;
+
+                // если на пути неизвестность
+                if (board.isAt(point, HIDDEN)) {
+                    // мы смотрим соседей, если там нет ни одной пустой клетки - идти опасно
+                    if (QDirection.getValues().stream()
+                            .map(direction -> direction.change(point))
+                            .filter(pt -> !pt.isOutOf(board.size()))
+                            .noneMatch(pt -> board.isAt(pt, NONE)
+                                    // так же мы помним с прошлого хода, что под нами было
+                                    || (underMe != null
+                                        && pt.equals(board.getMe())
+                                        && underMe == NONE))) return false;
+                }
+
+                return true;
             }
+        };
+    }
+
+    public static class PointAction {
+        public Point pt;
+        public boolean action;
+
+        public PointAction(Point pt, boolean action) {
+            this.pt = pt;
+            this.action = action;
         }
     }
 
-    private String getAction(Map.Entry<Point, Boolean> dest) {
-        int dx = (dest.getKey()).getX() - me.getX();
-        int dy = (dest.getKey()).getY() - me.getY();
-        String result;
-        Point neighbour;
-        if (Math.abs(dx) > Math.abs(dy)) {
-            int signumX = (int) Math.signum(dx);
-            neighbour = pt(me.getX() + signumX, me.getY());
-            if (isFree(neighbour) && !neighbour.equals(dest.getKey())) {
-                result = getDirectionBydY(dy);
-            } else {
-                result = getDirectionBydX(dx);
-            }
-        } else {
-            int signumY = (int) Math.signum(dy);
-            neighbour = pt(me.getX(), me.getY() + signumY);
-            if (isFree(neighbour) && !neighbour.equals(dest.getKey())) {
-                result = getDirectionBydX(dx);
-            } else {
-                result = getDirectionBydY(dy);
-            }
-        }
-
-        if (neighbour.equals(dest.getKey()) && !dest.getValue()) {
-            result = ACT.toString() + ',' + result;
-        }
-
-        return result;
-    }
-
-    private boolean isFree(Point pt) {
-        return field[pt.getX()][pt.getY()] == 9;
-    }
-
-    private void setSafePathTo(Point target) {
-        WaveField waveField = new WaveField(board);
-        target = pt(target.getX() + 1, target.getY() + 1);
-        safePath = waveField.findWay(target);
-    }
-
-    private String getDirectionBydX(int dx) {
-        if (dx > 0) {
-            return RIGHT.toString();
-        } else if (dx < 0) {
-            return LEFT.toString();
-        } else {
-            return Direction.valueOf(dice.next(2)).toString();
-        }
-    }
-
-    private String getDirectionBydY(int dy) {
-        if (dy < 0) {
-            return UP.toString();
-        } else if (dy > 0) {
-            return DOWN.toString();
-        } else {
-            return Direction.valueOf(dice.next(2) + 2).toString();
-        }
-    }
-
-    private Map<Point, Boolean> toMap(Point[] toMark, Point[] toOpen) {
-        HashMap result = new HashMap();
+    private List<PointAction> actions(Point[] toMark, Point[] toOpen) {
+        List<PointAction> result = new LinkedList<>();
 
         for (int i = 0; i < toMark.length; ++i) {
-            result.put(toMark[i], false);
+            result.add(new PointAction(toMark[i], false));
         }
 
         for (int i = 0; i < toOpen.length; ++i) {
-            result.put(toOpen[i], true);
+            result.add(new PointAction(toOpen[i], true));
         }
 
         return result;
     }
 
-    private Map.Entry<Point, Boolean> getClosest(Map<Point, Boolean> points) {
+    private PointAction getClosest(List<PointAction> actions) {
         double min = 1.7976931348623157E308D;
-        Map.Entry result = null;
+        PointAction result = null;
 
-        for (Map.Entry<Point, Boolean> entry : points.entrySet()) {
-            if (entry.getKey().equals(me)) continue;
-            double distance = me.distance(entry.getKey());
+        for (PointAction action : actions) {
+            if (action.pt.equals(me)) continue;
+            double distance = me.distance(action.pt);
             if (distance < min) {
                 min = distance;
-                result = entry;
+                result = action;
             }
         }
 
         return result;
     }
 
-    private int[][] fillFieldWithBoard() {
-        int[][] result = new int[board.size() - 2][board.size() - 2];
+    private int[][] fillField(Board board) {
+        int[][] result = new int[board.size()][board.size()];
 
         for (int i = 0; i < result.length; ++i) {
             for (int j = 0; j < result[i].length; ++j) {
-                char element = board.getAt(i + 1, j + 1).ch();
-                if (ONE_MINE.ch() <= element && element <= EIGHT_MINES.ch()) {
-                    result[i][j] = Character.getNumericValue(element);
-                } else if (element == HIDDEN.ch()) {
-                    result[i][j] = HIDDEN_VALUE;
-                } else if (element == FLAG.ch()) {
-                    result[i][j] = FLAG_VALUE;
-                } else if (element == NONE.ch()) {
-                    result[i][j] = NONE_VALUE;
-                } else if (element == BANG.ch()) {
-                    result[i][j] = BANG_VALUE;
-                } else if (element == DETECTOR.ch()) {
-                    me = pt(i, j);
-                    result[i][j] = field[i][j];
-                }
+                char element = board.getAt(i, j).ch();
+                result[i][j] = convert(element);
             }
         }
 
         return result;
+    }
+
+    private int convert(char element) {
+        if (ONE_MINE.ch() <= element && element <= EIGHT_MINES.ch()) {
+            return Character.getNumericValue(element);
+        }
+
+        if (element == HIDDEN.ch()) {
+            return HIDDEN_VALUE;
+        }
+
+        if (element == BORDER.ch()) {
+            return BORDER_VALUE;
+        }
+
+        if (element == FLAG.ch()) {
+            return FLAG_VALUE;
+        }
+
+        if (element == NONE.ch()) {
+            return NONE_VALUE;
+        }
+
+        if (element == BANG.ch()) {
+            return BANG_VALUE;
+        }
+
+        if (element == DETECTOR.ch()) {
+            if (underMe == null || underMe == HIDDEN) {
+                return DETECTOR_VALUE;
+            } else {
+                return convert(underMe.ch());
+            }
+        }
+
+        return element;
     }
 }

@@ -24,16 +24,9 @@ package com.codenjoy.dojo.minesweeper.model;
 
 
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-/**
- * User: oleksii.morozov
- * Date: 10/14/12
- * Time: 12:39 PM
- */
 public class Sapper extends PlayerHero<Field> implements State<Elements, Object> {
 
     private boolean isDead = false;

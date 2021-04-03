@@ -1,11 +1,13 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.minesweeper.client.ai.AISolver.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Field {
@@ -53,37 +55,12 @@ public class Field {
     private void setCellsNeighbours() {
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
-                if (x > 0) {
-                    field[x][y].addNeighbour(field[x - 1][y]);
-                }
-
-                if (y > 0) {
-                    field[x][y].addNeighbour(field[x][y - 1]);
-                }
-
-                if (x > 0 && y > 0) {
-                    field[x][y].addNeighbour(field[x - 1][y - 1]);
-                }
-
-                if (x < width - 1) {
-                    field[x][y].addNeighbour(field[x + 1][y]);
-                }
-
-                if (y < height - 1) {
-                    field[x][y].addNeighbour(field[x][y + 1]);
-                }
-
-                if (x < width - 1 && y < height - 1) {
-                    field[x][y].addNeighbour(field[x + 1][y + 1]);
-                }
-
-                if (x > 0 && y < height - 1) {
-                    field[x][y].addNeighbour(field[x - 1][y + 1]);
-                }
-
-                if (x < width - 1 && y > 0) {
-                    field[x][y].addNeighbour(field[x + 1][y - 1]);
-                }
+                Point point = pt(x, y);
+                QDirection.getValues().stream()
+                        .map(direction -> direction.change(point))
+                        .filter(pt -> !pt.isOutOf(1, 1, width))
+                        .forEach(pt -> field[point.getX()][point.getY()]
+                                        .addNeighbour(field[pt.getX()][pt.getY()]));
             }
         }
     }
@@ -92,14 +69,18 @@ public class Field {
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 int value = playField.get(x, y);
-                if (value != 10 && value != 12) {
-                    if (value == 9) {
-                        field[x][y].setUnknown();
-                    } else if (value == 11) {
-                        field[x][y].setMine();
-                    } else {
-                        field[x][y].setValue(value);
-                    }
+                if (value == BORDER_VALUE || value == BANG_VALUE) {
+                    continue;
+                }
+
+                if (value == HIDDEN_VALUE) {
+                    field[x][y].setUnknown();
+                } else if (value == FLAG_VALUE) {
+                    field[x][y].setMine();
+                } else if (value == DETECTOR_VALUE) {
+                    field[x][y].setValue(DETECTOR_VALUE);
+                } else {
+                    field[x][y].setValue(value);
                 }
             }
         }
@@ -163,24 +144,20 @@ public class Field {
     }
 
     private boolean isReachableCell(Cell cell) {
-        int x = cell.getX();
-        int y = cell.getY();
-        if (x > 0 && !field[x - 1][y].isUnknown()) {
-            return true;
-        } else if (y > 0 && !field[x][y - 1].isUnknown()) {
-            return true;
-        } else if (x < width - 1 && !field[x + 1][y].isUnknown()) {
-            return true;
-        } else {
-            return y < height - 1 && !field[x][y + 1].isUnknown();
+        if (cell.isOutOf(1, 1, width)) { // с учетом границ
+            return false;
         }
+
+        return cell.neighbours().stream()
+                .anyMatch(it -> !it.isUnknown()
+                        && (it.getValue() == NONE_VALUE));
     }
 
     public Point[] getToOpen() {
         Point[] result = new Point[toOpen.size()];
 
         for (int i = 0; i < toOpen.size(); ++i) {
-            result[i] = pt(toOpen.get(i).getX(), toOpen.get(i).getY());
+            result[i] = toOpen.get(i).copy();
         }
 
         return result;
@@ -190,7 +167,7 @@ public class Field {
         Point[] result = new Point[toMark.size()];
 
         for (int i = 0; i < toMark.size(); ++i) {
-            result[i] = pt(toMark.get(i).getX(), toMark.get(i).getY());
+            result[i] = toMark.get(i).copy();
         }
 
         return result;

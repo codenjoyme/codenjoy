@@ -1,6 +1,10 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.codenjoy.dojo.minesweeper.client.ai.AISolver.DETECTOR_VALUE;
+import static com.codenjoy.dojo.minesweeper.client.ai.AISolver.NONE_VALUE;
 
 public class Island {
 
@@ -112,7 +116,7 @@ public class Island {
 
     private void determine() {
         for (Group group : list) {
-            if (group.getValue() == 0) {
+            if (group.getValue() == NONE_VALUE || group.getValue() == DETECTOR_VALUE) {
                 for (Cell cell : group.getList()) {
                     toOpen.add(cell);
                 }

@@ -12,7 +12,7 @@ public class Cell extends PointImpl {
     private int value;
     private boolean valued = false;
     private boolean unknown = true;
-    private final List<Cell> neighbours = new ArrayList();
+    private List<Cell> neighbours = new ArrayList();
 
     public Cell(int x, int y) {
         super(x, y);
@@ -59,5 +59,18 @@ public class Cell extends PointImpl {
     public boolean hasUnknownAround() {
         return neighbours.stream()
                 .anyMatch(Cell::isUnknown);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s:value=%s,unknown=%s,valued=%s",
+                super.toString(),
+                value,
+                unknown,
+                valued);
+    }
+
+    public List<Cell> neighbours() {
+        return neighbours;
     }
 }

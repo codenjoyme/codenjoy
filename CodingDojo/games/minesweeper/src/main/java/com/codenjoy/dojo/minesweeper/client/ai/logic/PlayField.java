@@ -9,25 +9,19 @@ public class PlayField {
     private int amount;
     private int[][] field;
 
-    public PlayField(int width, int height, int amount) {
-        this.width = width;
-        this.height = height;
-        this.amount = amount;
-        field = new int[width][height];
-    }
-
-    public PlayField(int[][] field, int minesLeft) {
-        this(field.length, field[0].length, 0);
+    public PlayField(int[][] field) {
+        width = field.length;
+        height = field[0].length;
         this.field = field;
-        amount = getAmount(field) + minesLeft;
+        amount = getAmount();
     }
 
-    private int getAmount(int[][] field) {
+    private int getAmount() {
         int result = 0;
-        for (int i = 0; i < field.length; ++i) {
-            int[] arr = field[i];
-            for (int j = 0; j < arr.length; ++j) {
-                if (arr[j] == FLAG_VALUE) {
+        for (int x = 0; x < width; ++x) {
+            int[] arr = field[x];
+            for (int y = 0; y < height; ++y) {
+                if (arr[y] == FLAG_VALUE) {
                     ++result;
                 }
             }
