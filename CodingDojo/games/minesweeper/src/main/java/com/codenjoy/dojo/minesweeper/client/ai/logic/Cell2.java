@@ -10,20 +10,20 @@ import java.util.List;
 public class Cell2 {
 
     private boolean walkable;
-    private final Point point;
+    private Point point;
     private int wave;
-    private final List<Cell2> neighbours = new ArrayList();
+    private List<Cell2> neighbours = new ArrayList();
 
     public Cell2(int x, int y) {
-        this.point = new PointImpl(x, y);
+        point = new PointImpl(x, y);
     }
 
     public void addNeighbour(Cell2 cell) {
-        this.neighbours.add(cell);
+        neighbours.add(cell);
     }
 
     public boolean isWalkable() {
-        return this.walkable;
+        return walkable;
     }
 
     public void setWalkable(boolean walkable) {
@@ -31,28 +31,22 @@ public class Cell2 {
     }
 
     public void initWave() {
-        this.wave = 2147483646;
+        wave = 2147483646;
     }
 
     public void makeWave() {
-        Iterator i$ = this.neighbours.iterator();
-
-        while (i$.hasNext()) {
-            Cell2 neighbour = (Cell2) i$.next();
-            if (neighbour.isWalkable() && neighbour.wave + 1 > this.wave) {
-                neighbour.wave = this.wave + 1;
+        for (Cell2 neighbour : neighbours) {
+            if (neighbour.isWalkable() && neighbour.wave + 1 > wave) {
+                neighbour.wave = wave + 1;
             }
         }
 
-        this.makeNeighboursWaves();
+        makeNeighboursWaves();
     }
 
     private void makeNeighboursWaves() {
-        Iterator i$ = this.neighbours.iterator();
-
-        while (i$.hasNext()) {
-            Cell2 neighbour = (Cell2) i$.next();
-            if (neighbour.isWalkable() && neighbour.wave == this.wave + 1) {
+        for (Cell2 neighbour : neighbours) {
+            if (neighbour.isWalkable() && neighbour.wave == wave + 1) {
                 neighbour.makeWave();
             }
         }
@@ -60,18 +54,10 @@ public class Cell2 {
     }
 
     public Cell2 getPrevWaveCell() {
-        Iterator i$ = this.neighbours.iterator();
-
-        Cell2 neighbour;
-        do {
-            if (!i$.hasNext()) {
-                return null;
-            }
-
-            neighbour = (Cell2) i$.next();
-        } while (!neighbour.isWalkable() || neighbour.wave >= this.wave);
-
-        return neighbour;
+        return neighbours.stream()
+                .filter(cell -> cell.isWalkable() && cell.wave < wave)
+                .findFirst()
+                .orElse(null);
     }
 
     public void setWave(int wave) {
@@ -79,10 +65,7 @@ public class Cell2 {
     }
 
     public Point getPoint() {
-        return this.point;
+        return point;
     }
 
-    public String toString() {
-        return this.walkable ? "." : "Ж";
-    }
 }
