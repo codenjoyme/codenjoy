@@ -5,7 +5,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codenjoy.dojo.minesweeper.client.ai.AISolver.FLAG_VALUE;
 import static java.util.stream.Collectors.toList;
 
 public class Cell extends PointImpl {
@@ -14,6 +13,7 @@ public class Cell extends PointImpl {
     private boolean valued = false;
     private boolean unknown = true;
     private List<Cell> neighbours = new ArrayList();
+    private Action action;
 
     public Cell(int x, int y) {
         super(x, y);
@@ -35,6 +35,14 @@ public class Cell extends PointImpl {
         return neighbours;
     }
 
+    public void action(Action action) {
+        this.action = action;
+    }
+
+    public Action action() {
+        return action;
+    }
+
     public void value(int value) {
         this.value = value;
         valued = true;
@@ -42,7 +50,7 @@ public class Cell extends PointImpl {
     }
 
     public void setMine() {
-        value = FLAG_VALUE;
+        value = Value.FLAG;
         unknown = false;
         valued = true;
     }
@@ -68,11 +76,23 @@ public class Cell extends PointImpl {
     }
 
     @Override
+    public Cell copy() {
+        Cell cell = new Cell(x, y);
+        cell.neighbours = neighbours;
+        cell.value = value;
+        cell.valued = valued;
+        cell.unknown = unknown;
+        return cell;
+    }
+
+    @Override
     public String toString() {
-        return String.format("%s:value=%s,unknown=%s,valued=%s",
+        return String.format("%s:value=%s,unknown=%s,valued=%s,action=%s",
                 super.toString(),
                 value,
                 unknown,
-                valued);
+                valued,
+                action);
     }
+
 }

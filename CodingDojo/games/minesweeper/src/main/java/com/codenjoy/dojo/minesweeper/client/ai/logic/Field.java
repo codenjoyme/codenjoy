@@ -6,9 +6,8 @@ import com.codenjoy.dojo.services.QDirection;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.codenjoy.dojo.minesweeper.client.ai.AISolver.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toCollection;
 
 public class Field {
 
@@ -52,16 +51,16 @@ public class Field {
         for (int x = 0; x < size; ++x) {
             for (int y = 0; y < size; ++y) {
                 int value = get.apply(pt(x, y));
-                if (value == BORDER_VALUE || value == BANG_VALUE) {
+                if (value == Value.BORDER || value == Value.BANG) {
                     continue;
                 }
 
-                if (value == HIDDEN_VALUE) {
+                if (value == Value.HIDDEN) {
                     field[x][y].setUnknown();
-                } else if (value == FLAG_VALUE) {
+                } else if (value == Value.FLAG) {
                     field[x][y].setMine();
-                } else if (value == DETECTOR_VALUE) {
-                    field[x][y].value(DETECTOR_VALUE);
+                } else if (value == Value.DETECTOR) {
+                    field[x][y].value(Value.DETECTOR);
                 } else {
                     field[x][y].value(value);
                 }
@@ -85,22 +84,21 @@ public class Field {
 
         return cell.neighbours().stream()
                 .anyMatch(it -> !it.isUnknown()
-                        && (it.value() == NONE_VALUE));
+                        && (it.value() == Value.NONE));
     }
 
-    public List<Action> actions() {
-        List<Action> result = new LinkedList<>();
-        Set<Cell> cells = new HashSet<>();
-        groups.stream()
-                .flatMap(group -> group.actions().stream())
-                .filter(action -> action.willMark() || isReachableCell(action.cell()))
-                .sorted((action1, action2) -> Boolean.compare(!action1.willMark(), !action2.willMark()))
-                .forEach(action -> {
-                    if (!cells.contains(action.cell())) {
-                        cells.add(action.cell());
-                        result.add(action);
-                    }
-                });
-        return result;
+    public Collection<Cell> actions() {
+        return groups.stream()
+                // все группы клеток разбиваем в плоскую коллекцию
+                .flatMap(group -> group.list().stream())
+                // пропускаем клеточки в отношении которых ничего не поделать
+                .filter(cell -> cell.action() != Action.NOTHING)
+                // активные действия MARK совершаются в направлении '*' а значит туда мы не зайдем
+                // а вот GO надо бы проверить на доступность клеточки
+                .filter(cell -> cell.action() == Action.MARK || isReachableCell(cell))
+                // сперва нас интересуют активные действия в устранении мин
+                .sorted((cell1, cell2) -> Boolean.compare(cell1.action() != Action.MARK, cell2.action() != Action.MARK))
+                // мы исключаем все дубликаты
+                .collect(toCollection(LinkedHashSet::new));
     }
 }

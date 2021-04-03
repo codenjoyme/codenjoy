@@ -25,8 +25,9 @@ package com.codenjoy.dojo.minesweeper.client.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.minesweeper.client.Board;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.Action;
+import com.codenjoy.dojo.minesweeper.client.ai.logic.Cell;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
+import com.codenjoy.dojo.minesweeper.client.ai.logic.Value;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -35,20 +36,15 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
+import static com.codenjoy.dojo.minesweeper.client.ai.logic.Action.MARK;
 import static com.codenjoy.dojo.minesweeper.model.Elements.*;
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AISolver implements Solver<Board> {
-
-    public static final int HIDDEN_VALUE = 9;
-    public static final int FLAG_VALUE = 11;
-    public static final int NONE_VALUE = 0;
-    public static final int BANG_VALUE = 12;
-    public static final int DETECTOR_VALUE = 10;
-    public static final int BORDER_VALUE = -1;
 
     private Point me;
     private Elements underMe;
@@ -72,7 +68,7 @@ public class AISolver implements Solver<Board> {
 
         Field field = new Field(board.size());
         field.scan(pt -> convert(board.getAt(pt).ch()));
-        List<Action> actions = field.actions();
+        Collection<Cell> actions = field.actions();
         if (actions.isEmpty()) {
             // не знаем куда походить - надо сделать шаг назад
             // если на прошлом тике в месте куда я пришел было '*'
@@ -84,14 +80,14 @@ public class AISolver implements Solver<Board> {
                 throw new RuntimeException(); // TODO решить это
             }
         } else {
-            Action to = getClosest(actions);
+            Cell to = getClosest(actions);
             boolean oneStep = isNeighbours(to, me);
             if (oneStep) {
                 where = me.direction(to);
             } else {
                 where = safePathTo(board, me, to);
             }
-            if (oneStep && to.willMark()) {
+            if (oneStep && to.action() == MARK) {
                 return ACT.toString() + ',' + where.toString();
             }
         }
@@ -109,7 +105,7 @@ public class AISolver implements Solver<Board> {
                 && board.getAt(UP.change(me)) == HIDDEN;
     }
 
-    private Direction safePathTo(Board board, Point from, Action to) {
+    private Direction safePathTo(Board board, Point from, Cell to) {
         DeikstraFindWay way = new DeikstraFindWay();
         way.getPossibleWays(board.size(), possible(board, to));
 
@@ -126,7 +122,7 @@ public class AISolver implements Solver<Board> {
         return path.get(0);
     }
 
-    private DeikstraFindWay.Possible possible(Board board, Action to) {
+    private DeikstraFindWay.Possible possible(Board board, Cell to) {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) {
@@ -140,7 +136,7 @@ public class AISolver implements Solver<Board> {
                             .filter(pt -> !pt.isOutOf(board.size()))
                             .noneMatch(pt -> board.isAt(pt, NONE)
                                     // а тут мы не собираемся идти, а просто там флажок поставим
-                                    || (point.equals(to) && to.willMark())
+                                    || (point.equals(to) && to.action() == MARK)
                                     // так же мы помним с прошлого хода, что под нами было
                                     || (underMe != null
                                         && pt.equals(board.getMe())
@@ -152,11 +148,11 @@ public class AISolver implements Solver<Board> {
         };
     }
 
-    private Action getClosest(List<Action> actions) {
+    private Cell getClosest(Collection<Cell> actions) {
         double min = 1.7976931348623157E308D; // TODO magic was here )
-        Action result = null;
+        Cell result = null;
 
-        for (Action action : actions) {
+        for (Cell action : actions) {
             if (action.equals(me)) continue;
 
             double distance = me.distance(action);
@@ -175,28 +171,28 @@ public class AISolver implements Solver<Board> {
         }
 
         if (element == HIDDEN.ch()) {
-            return HIDDEN_VALUE;
+            return Value.HIDDEN;
         }
 
         if (element == BORDER.ch()) {
-            return BORDER_VALUE;
+            return Value.BORDER;
         }
 
         if (element == FLAG.ch()) {
-            return FLAG_VALUE;
+            return Value.FLAG;
         }
 
         if (element == NONE.ch()) {
-            return NONE_VALUE;
+            return Value.NONE;
         }
 
         if (element == BANG.ch()) {
-            return BANG_VALUE;
+            return Value.BANG;
         }
 
         if (element == DETECTOR.ch()) {
             if (underMe == null || underMe == HIDDEN) {
-                return DETECTOR_VALUE;
+                return Value.DETECTOR;
             } else {
                 return convert(underMe.ch());
             }
