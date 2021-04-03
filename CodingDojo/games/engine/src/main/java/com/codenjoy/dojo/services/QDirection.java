@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -43,6 +45,14 @@ public enum QDirection { // TODO test expansion
         this.value = value;
         this.dx = dx;
         this.dy = dy;
+    }
+
+    public static List<QDirection> getValues() {
+        return Arrays.asList(
+                LEFT, LEFT_UP,
+                UP, RIGHT_UP,
+                RIGHT, RIGHT_DOWN,
+                DOWN, LEFT_DOWN);
     }
 
     public static QDirection valueOf(int i) {
