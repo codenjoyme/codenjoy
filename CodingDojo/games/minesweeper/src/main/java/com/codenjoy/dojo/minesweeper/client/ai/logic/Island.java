@@ -9,11 +9,7 @@ public class Island {
     private List<Cell> toMark = new ArrayList();
     private List<Group> indefinite = new ArrayList();
     private int amountCells;
-    private Deque<StringBuilder> stack = new LinkedList();
     private List<Cell> indefiniteCells;
-    private Integer[] countOfMines;
-    private MinesAndCombinationAmountsOfIsland mx0;
-    private IslandMinesCombs islandMinesCombs;
 
     public Island(Group group) {
         add(group);
@@ -132,106 +128,6 @@ public class Island {
 
         setIndefiniteCells();
         return;
-    }
-
-    public void resolve() {
-        for (Group group : indefinite) {
-            group.setComb();
-        }
-
-        makeTree(indefinite.listIterator());
-        computePossibilities();
-    }
-
-    private void setPossibilities(int amountCombs) {
-        for (int i = 0; i < countOfMines.length; ++i) {
-            indefiniteCells.get(i).setPossibility(100.0D * (double) countOfMines[i] / (double) amountCombs);
-        }
-    }
-
-    private void makeTree(ListIterator<Group> iterator) {
-        if (iterator.hasNext()) {
-            Group group = iterator.next();
-            int combAmount = group.getCombSize();
-
-            for (int i = 0; i < combAmount; ++i) {
-                if (group.checkCombination(i)) {
-                    group.storeCells();
-                    group.setCellsComb(i);
-                    if (checkIslandComb()) {
-                        makeTree(iterator);
-                    }
-
-                    group.restoreCells();
-                    if (iterator.hasPrevious()) {
-                        iterator.previous();
-                    }
-                }
-            }
-        } else {
-            storeComb();
-        }
-
-    }
-
-    private boolean checkIslandComb() {
-        return list.stream()
-                .allMatch(Group::checkCells);
-    }
-
-    private void storeComb() {
-        StringBuilder combSB = new StringBuilder(list.size());
-        for (Cell cell : indefiniteCells) {
-            if (cell.isMine()) {
-                combSB.append('1');
-            }
-
-            if (cell.isValued()) {
-                combSB.append('0');
-            }
-
-            if (cell.isUnknown()) {
-                combSB.append('2');
-            }
-        }
-
-        stack.push(combSB);
-    }
-
-    private void computePossibilities() {
-        int amountOfComb = stack.size();
-        countOfMines = new Integer[indefiniteCells.size()];
-        mx0 = new MinesAndCombinationAmountsOfIsland();
-        islandMinesCombs = new IslandMinesCombs(indefiniteCells);
-
-        for (int i = 0; i < countOfMines.length; ++i) {
-            countOfMines[i] = 0;
-        }
-
-        for (int i = 0; i < amountOfComb; ++i) {
-            StringBuilder combSB = stack.pop();
-            int[] mxCountOfMines = new int[indefiniteCells.size()];
-            int mines = 0;
-
-            for (int j = 0; j < indefiniteCells.size(); ++j) {
-                if (combSB.charAt(j) == '1') {
-                    Integer[] var7 = countOfMines;
-                    var7[j] = var7[j] + 1;
-                    mxCountOfMines[j]++;
-                    ++mines;
-                }
-            }
-
-            mx0.add(mines, mxCountOfMines);
-            islandMinesCombs.incCombsByMines(mines);
-            islandMinesCombs.addArrayCombs(mines, mxCountOfMines);
-        }
-
-        setPossibilities(amountOfComb);
-    }
-
-    public List<Cell> getIndefiniteCells() {
-        return indefiniteCells;
     }
 
     public List<Cell> getToOpen() {

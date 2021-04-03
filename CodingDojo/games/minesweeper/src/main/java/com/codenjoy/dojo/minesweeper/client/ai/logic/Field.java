@@ -3,12 +3,10 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static java.util.stream.Collectors.toList;
 
 public class Field {
 
@@ -160,14 +158,6 @@ public class Field {
         determineMarkOpenIndefinite();
         filterReachableCells(toMark);
         filterReachableCells(toOpen);
-        if (!hasDecision()) {
-            islands.forEach(Island::resolve);
-            List<Cell> deepCells = getDeepCells();
-            setPossibility(deepCells, 100.0D);
-            List<Cell> minPosCells = getMinPosCells();
-            minPossibility = minPosCells.size() == 0 ? 100.0D : minPosCells.get(0).getPossibility();
-            toOpen.addAll(minPosCells);
-        }
     }
 
     private void filterReachableCells(List<Cell> cells) {
@@ -212,54 +202,11 @@ public class Field {
         return result;
     }
 
-    private List<Cell> getMinPosCells() {
-        List<Cell> result = new ArrayList();
-        double min = 100.0D;
-
-        while (true) {
-            Cell cell = cells.stream()
-                    .filter(it -> it.isUnknown() && isReachableCell(it) && !it.equals(myCoord))
-                    .findFirst()
-                    .orElse(null);
-            if (cell == null) {
-                return Arrays.asList();
-            }
-
-            if (cell.getPossibility() == min) {
-                result.add(cell);
-            } else if (cell.getPossibility() < min) {
-                min = cell.getPossibility();
-                result.clear();
-                result.add(cell);
-            }
-        }
-    }
-
-    private void setPossibility(List<Cell> list, double possibility) {
-        list.forEach(cell -> cell.setPossibility(possibility));
-    }
-
-    private List<Cell> getUnknownCells() {
-        return cells.stream()
-                .filter(Cell::isUnknown)
-                .collect(toList());
-    }
-
-    private List<Cell> getDeepCells() {
-        List<Cell> unknown = getUnknownCells();
-        islands.forEach(island -> unknown.removeAll(island.getIndefiniteCells()));
-        return unknown;
-    }
-
     private void determineMarkOpenIndefinite() {
         islands.forEach(island -> {
             toOpen.addAll(island.getToOpen());
             toMark.addAll(island.getToMark());
         });
-    }
-
-    private boolean hasDecision() {
-        return toMark.size() > 0 || toOpen.size() > 0;
     }
 
     public double getMinPossibility() {

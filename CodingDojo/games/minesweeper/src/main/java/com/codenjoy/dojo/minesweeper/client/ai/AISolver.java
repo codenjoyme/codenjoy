@@ -74,23 +74,16 @@ public class AISolver implements Solver<Board> {
             field.play();
             Point[] pts = field.getToMark();
             Point[] toOpen = field.getToOpen();
-            if (isOnJustMarked(pts) || movedTo == 42 && pts.length == 0 && field.getMinPossibility() > 0.0D) {
-                result = getEscapeTo();
-            } else {
-                Map.Entry<Point, Boolean> closest = getClosest(toMap(pts, toOpen));
-                if (closest != null) {
-                    if (isNeighbours(closest.getKey(), me)) {
-                        result = getAction(closest);
-                    } else {
-                        setSafePathTo(closest.getKey());
-                        result = whereToGo();
-                    }
-                } else {
-                    result = getEscapeTo();
-                }
-            }
 
-            if (result.startsWith("ACT,") && movedTo == 45) {
+            Map.Entry<Point, Boolean> closest = getClosest(toMap(pts, toOpen));
+            if (closest != null) {
+                if (isNeighbours(closest.getKey(), me)) {
+                    result = getAction(closest);
+                } else {
+                    setSafePathTo(closest.getKey());
+                    result = whereToGo();
+                }
+            } else {
                 result = getEscapeTo();
             }
 
@@ -158,16 +151,6 @@ public class AISolver implements Solver<Board> {
                 field[i][j] = 9;
             }
         }
-    }
-
-    private boolean isOnJustMarked(Point[] toMark) {
-        for (int i = 0; i < toMark.length; ++i) {
-            Point point = toMark[i];
-            if (point.equals(me)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private String getAction(Map.Entry<Point, Boolean> dest) {
