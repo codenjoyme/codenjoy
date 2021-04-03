@@ -47,7 +47,7 @@ public class Cell extends PointImpl implements State<Elements, Object> {
             if (minesNear == 0) {
                 return Elements.NONE;
             } else {
-                return Elements.printMinesCount(minesNear);
+                return Elements.get(minesNear);
             }
         }
 

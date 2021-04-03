@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
+import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 
@@ -35,7 +36,7 @@ public class Field {
                     .map(direction -> direction.change(cell))
                     .filter(pt -> !pt.isOutOf(size))
                     .map(pt -> cell(pt))
-                    .filter(neighbour -> neighbour.value() != Value.BORDER)
+                    .filter(neighbour -> neighbour.element() != Elements.BORDER)
                     .forEach(neighbour -> cell.add(neighbour));
         }
     }
@@ -44,7 +45,7 @@ public class Field {
         return cells.get(cells.indexOf(point));
     }
 
-    public void scan(Function<Point, Value> get) {
+    public void scan(Function<Point, Elements> get) {
         for (Cell cell : cells) {
             cell.set(get.apply(cell));
         }
@@ -55,7 +56,7 @@ public class Field {
     private void setGroups() {
         for (Cell cell : cells) {
             if (cell.isValued() && cell.hasUnknownAround()) {
-                groups.add(new Group(cell.unknownCells(), cell.value()));
+                groups.add(new Group(cell.unknownCells(), cell.element()));
             }
         }
     }
@@ -63,7 +64,7 @@ public class Field {
     private boolean isReachableCell(Cell cell) {
         return cell.neighbours().stream()
                 .anyMatch(it -> !it.isUnknown()
-                        && (it.value() == Value.NONE));
+                        && (it.element() == Elements.NONE));
     }
 
     public Collection<Cell> actions() {

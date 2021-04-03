@@ -27,7 +27,6 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Cell;
 import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.Value;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -65,7 +64,7 @@ public class AISolver implements Solver<Board> {
         }
 
         Field field = new Field(board.size());
-        field.scan(pt -> convert(board.getAt(pt).ch()));
+        field.scan(pt -> convert(board.getAt(pt)));
         Collection<Cell> actions = field.actions();
         if (actions.isEmpty()) {
             // не знаем куда походить - надо сделать шаг назад
@@ -164,39 +163,15 @@ public class AISolver implements Solver<Board> {
         return result;
     }
 
-    private Value convert(char element) {
-        if (ONE_MINE.ch() <= element && element <= EIGHT_MINES.ch()) {
-            return Value.valueOf(Character.getNumericValue(element));
-        }
-
-        if (element == HIDDEN.ch()) {
-            return Value.HIDDEN;
-        }
-
-        if (element == BORDER.ch()) {
-            return Value.BORDER;
-        }
-
-        if (element == FLAG.ch()) {
-            return Value.FLAG;
-        }
-
-        if (element == NONE.ch()) {
-            return Value.NONE;
-        }
-
-        if (element == BANG.ch()) {
-            return Value.BANG;
-        }
-
-        if (element == DETECTOR.ch()) {
+    private Elements convert(Elements element) {
+        if (element == DETECTOR) {
             if (underMe == null || underMe == HIDDEN) {
-                return Value.DETECTOR;
+                return element;
             } else {
-                return convert(underMe.ch());
+                return convert(underMe);
             }
         }
 
-        throw new IllegalArgumentException("Not supported element: " + element);
+        return element;
     }
 }

@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.minesweeper.client.ai.logic;
 
+import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import static java.util.stream.Collectors.toList;
 
 public class Cell extends PointImpl {
 
-    private Value value;
+    private Elements element;
     private boolean valued = false;
     private boolean unknown = true;
     private List<Cell> neighbours = new ArrayList();
@@ -23,10 +24,10 @@ public class Cell extends PointImpl {
         neighbours.add(cell);
     }
 
-    public void set(Value value) {
-        valued = (value != Value.HIDDEN);
+    public void set(Elements element) {
+        valued = (element != Elements.HIDDEN);
         if (valued) {
-            this.value = value;
+            this.element = element;
         }
         unknown = !valued;
     }
@@ -46,7 +47,7 @@ public class Cell extends PointImpl {
     public Cell copy() {
         Cell cell = new Cell(x, y);
         cell.neighbours = neighbours;
-        cell.value = value;
+        cell.element = element;
         cell.valued = valued;
         cell.unknown = unknown;
         return cell;
@@ -56,7 +57,7 @@ public class Cell extends PointImpl {
     public String toString() {
         return String.format("%s:value=%s,unknown=%s,valued=%s,action=%s",
                 super.toString(),
-                value,
+                element,
                 unknown,
                 valued,
                 action);
@@ -66,8 +67,8 @@ public class Cell extends PointImpl {
         return valued;
     }
 
-    public Value value() {
-        return value;
+    public Elements element() {
+        return element;
     }
 
     public List<Cell> neighbours() {

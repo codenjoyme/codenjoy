@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import javax.swing.text.html.parser.Element;
 import java.util.*;
 
 import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.*;
@@ -200,7 +201,7 @@ public class Minesweeper implements Field {
     public int minesNear(Point pt) {
         Integer count = walkAt.get(pt);
         if (count == null) {
-            return -1;
+            return Elements.NONE.value;
         }
         return count;
     }
