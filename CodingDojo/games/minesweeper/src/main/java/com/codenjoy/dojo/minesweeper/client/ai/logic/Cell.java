@@ -5,6 +5,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codenjoy.dojo.minesweeper.client.ai.AISolver.FLAG_VALUE;
 import static java.util.stream.Collectors.toList;
 
 public class Cell extends PointImpl {
@@ -37,8 +38,9 @@ public class Cell extends PointImpl {
     }
 
     public void setMine() {
+        value = FLAG_VALUE;
         unknown = false;
-        valued = false;
+        valued = true;
     }
 
     public boolean isUnknown() {

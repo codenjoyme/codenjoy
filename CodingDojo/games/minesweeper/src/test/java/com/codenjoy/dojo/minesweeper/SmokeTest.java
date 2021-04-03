@@ -26,6 +26,7 @@ package com.codenjoy.dojo.minesweeper;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.client.ai.AISolver;
+import com.codenjoy.dojo.minesweeper.services.Events;
 import com.codenjoy.dojo.minesweeper.services.GameRunner;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -37,6 +38,7 @@ import java.util.Arrays;
 import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.BOARD_SIZE;
 import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.MINES_ON_BOARD;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class SmokeTest {
 
@@ -61,6 +63,10 @@ public class SmokeTest {
                 },
                 Arrays.asList(new AISolver(dice)),
                 Arrays.asList(new Board()),
-                (o1, o2) -> assertEquals(o1, o2));
+                (o1, o2) -> {
+                    assertFalse(((String)o2).contains(Events.KILL_ON_MINE.name()));
+                    assertFalse(((String)o2).contains(Events.FORGET_CHARGE.name()));
+                    assertEquals(o1, o2);
+                });
     }
 }

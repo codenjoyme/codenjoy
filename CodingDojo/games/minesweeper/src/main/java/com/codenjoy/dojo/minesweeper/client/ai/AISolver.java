@@ -177,11 +177,12 @@ public class AISolver implements Solver<Board> {
     }
 
     private PointAction getClosest(List<PointAction> actions) {
-        double min = 1.7976931348623157E308D;
+        double min = 1.7976931348623157E308D; // TODO magic was here )
         PointAction result = null;
 
         for (PointAction action : actions) {
             if (action.pt.equals(me)) continue;
+
             double distance = me.distance(action.pt);
             if (distance < min) {
                 min = distance;
