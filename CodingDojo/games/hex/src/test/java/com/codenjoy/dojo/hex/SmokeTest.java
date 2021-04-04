@@ -47,11 +47,12 @@ public class SmokeTest {
     public void test() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        // about 14s
+        // about 13 sec
         int players = 5;
+        int ticks = 1000;
         Supplier<Solver> solver = () -> new AISolver(dice);
 
-        Smoke.play(1000, "SmokeTest.data",
+        Smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {

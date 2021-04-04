@@ -47,13 +47,13 @@ public class SmokeTest {
     @Test
     public void testSoft() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
-        LocalGameRunner.showPlayers = null;
 
-        // about 3,5 sec
+        // about 2.5 sec
         int ticks = 1000;
         int players = 2;
         Supplier<Solver> solver = () -> new AISolver(dice);
 
+        LocalGameRunner.showPlayers = null;
         Smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
@@ -100,14 +100,14 @@ public class SmokeTest {
     @Test
     public void testHard() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 20000);
-        LocalGameRunner.showPlayers = "1";
 
-        // about 16 sec
+        // about 14 sec
         int ticks = 100;
         int players = 10;
         int enemies = 5;
         Supplier<Solver> solver = () -> new AISolver(dice);
 
+        LocalGameRunner.showPlayers = "1";
         Smoke.play(ticks, "SmokeTestHard.data",
                 new GameRunner() {
                     @Override

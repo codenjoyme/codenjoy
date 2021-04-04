@@ -44,13 +44,14 @@ public class SmokeTest {
     @Test
     public void test() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 1000, 200);
-        LocalGameRunner.showPlayers = "1,2";
 
         // about 16 sec
         int players = 5;
+        int ticks = 1000;
         Supplier<Solver> solver = () -> new AISolver(dice);
 
-        Smoke.play(1000, "SmokeTest.data",
+        LocalGameRunner.showPlayers = "1,2";
+        Smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {
