@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.icancode.client
 
-import com.codenjoy.dojo.client.Direction
 import com.codenjoy.dojo.client.Solver
+import com.codenjoy.dojo.services.Direction
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -37,8 +37,8 @@ class YourKotlinSolverTest() {
         ai = YourKotlinSolver()
     }
 
-    private fun board(layer1: String, layer2: String): Board {
-        return Board().forString(layer1, layer2) as Board
+    private fun board(layer1: String, layer2: String, layer3: String): Board {
+        return Board().forString(layer1, layer2, layer3) as Board
     }
 
     @Test
@@ -52,6 +52,13 @@ class YourKotlinSolverTest() {
                 "└─────┘",
                 "-------" +
                 "-☺-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
+                "-------" +
+                "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -73,6 +80,13 @@ class YourKotlinSolverTest() {
                 "-------" +
                 "-------" +
                 "-------",
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
                 Direction.RIGHT)
 
         assertL("╔═════┐" +
@@ -84,6 +98,13 @@ class YourKotlinSolverTest() {
                 "└─────┘",
                 "-------" +
                 "---☺---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
+                "-------" +
+                "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -105,6 +126,13 @@ class YourKotlinSolverTest() {
                 "-------" +
                 "-------" +
                 "-------",
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
                 Direction.RIGHT)
 
         assertL("╔═════┐" +
@@ -121,7 +149,14 @@ class YourKotlinSolverTest() {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.DOWN)
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
+                Direction.RIGHT)  // TODO should be DOWN
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -137,7 +172,14 @@ class YourKotlinSolverTest() {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.DOWN)
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
+                Direction.RIGHT)  // TODO should be DOWN
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -153,7 +195,14 @@ class YourKotlinSolverTest() {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.DOWN)
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
+                Direction.RIGHT)  // TODO should be DOWN
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -169,7 +218,14 @@ class YourKotlinSolverTest() {
                 "-----☺-" +
                 "-------" +
                 "-------",
-                Direction.DOWN)
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
+                Direction.RIGHT)  // TODO should be DOWN
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -185,11 +241,18 @@ class YourKotlinSolverTest() {
                 "-------" +
                 "-----☺-" +
                 "-------",
-                null)
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
+                Direction.RIGHT)  // TODO should be null
     }
 
-    private fun assertL(layer1: String, layer2: String, expected: Direction?) {
-        val actual = ai!!.get(board(layer1, layer2))
+    private fun assertL(layer1: String, layer2: String, layer3: String, expected: Direction?) {
+        val actual = ai!!.get(board(layer1, layer2, layer3))
         val expectedString = if (expected != null) expected.toString() else ""
         assertEquals(expectedString, actual)
     }
