@@ -171,7 +171,7 @@ public class SmokeTest {
                     "7: 1:☼☼☼☼☼☼☼☼☼\n" +
                     "7: 1:\n" +
                     "7: 1:Scores: 0\n" +
-                    "7: 1:Answer: \n" +
+                    "7: 1:Answer:\n" +
                     "7: 1:Fire Event: WIN\n" +
                     "7: 1:Fire Event: TOP_GOAL\n" +
                     "------------------------------------------\n" +
@@ -186,7 +186,7 @@ public class SmokeTest {
                     "8: 1:☼☼☼☼☼☼☼☼☼\n" +
                     "8: 1:\n" +
                     "8: 1:Scores: 1\n" +
-                    "8: 1:Answer: \n" +
+                    "8: 1:Answer:\n" +
                     "8: 1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                     "------------------------------------------\n" +
                     "9: 1:☼☼☼☼☼☼☼☼☼\n" +
@@ -252,7 +252,7 @@ public class SmokeTest {
                     "13: 1:☼☼☼☼☼☼☼☼☼\n" +
                     "13: 1:\n" +
                     "13: 1:Scores: 1\n" +
-                    "13: 1:Answer: \n" +
+                    "13: 1:Answer:\n" +
                     "13: 1:Fire Event: WIN\n" +
                     "13: 1:Fire Event: TOP_GOAL\n" +
                     "------------------------------------------\n" +
@@ -267,7 +267,7 @@ public class SmokeTest {
                     "14: 1:☼☼☼☼☼☼☼☼☼\n" +
                     "14: 1:\n" +
                     "14: 1:Scores: 2\n" +
-                    "14: 1:Answer: \n" +
+                    "14: 1:Answer:\n" +
                     "14: 1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                     "------------------------------------------\n" +
                     "15: 1:☼☼☼☼☼☼☼☼☼\n" +
