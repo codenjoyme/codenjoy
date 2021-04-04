@@ -49,15 +49,14 @@ public class AI2Solver implements Solver<Board> {
         this.board = board;
         if (board.isGameOver())
             return "";
-        Direction result = Direction.STOP;
-        result = findDirection(board);
+        Direction result = findDirection(board);
         if (result != null) {
             if(isStoneOrBombAtop() && bullets > 0){
                 if(isBulletAtop()){
                     return result.toString();
                 }
                 bullets--;
-                return result + Direction.ACT.toString();
+                return result.ACT(false);
             }
             return result.toString();
         }

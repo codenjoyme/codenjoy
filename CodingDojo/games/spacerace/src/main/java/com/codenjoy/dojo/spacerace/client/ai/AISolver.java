@@ -52,7 +52,7 @@ public class AISolver implements Solver<Board> {
 
         delay++;
         if (delay >= 3){
-            result += Direction.UP.ACT.toString();
+            result += "," + Direction.ACT.toString();
             delay = 0;
         }
 
