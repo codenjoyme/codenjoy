@@ -53,6 +53,7 @@ public interface PlayerService extends Tickable {
 
     void closeRegistration();
     boolean isRegistrationOpened();
+    boolean isRegistrationOpened(String room);
     void openRegistration();
 
     void reloadAI(String id);

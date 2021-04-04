@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.web.controller.RoomsAliaser;
 import com.codenjoy.dojo.web.controller.Validator;
 import lombok.AllArgsConstructor;
@@ -62,6 +63,7 @@ public class RegistrationService {
     private Validator validator;
     private RoomsAliaser rooms;
     private PlayerService playerService;
+    private RoomService roomService;
     private ConfigProperties properties;
     private AuthenticationManager authenticationManager;
     private UserDetailsService userDetailsService;
@@ -93,7 +95,7 @@ public class RegistrationService {
             registration.updateNameAndEmail(id, name, email);
         } else {
             if (!registered) {
-                if (!playerService.isRegistrationOpened()) {
+                if (!playerService.isRegistrationOpened(player.getRoom())) {
                     return openRegistrationForm(request, model, id, email, name);
                 }
                 Registration.User user = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles());
@@ -202,6 +204,10 @@ public class RegistrationService {
     }
 
     public String register(String id, String code, String game, String room, String ip) {
+        if (!roomService.isOpened(room)) {
+            return "login?closed=true";
+        }
+
         Player player = playerService.register(id, game, room, ip);
         if (player == NullPlayer.INSTANCE) {
             return "login";

@@ -170,7 +170,7 @@ public class RestAdminController {
     }
 
     @GetMapping(ROOM + "/pause/{enabled}")
-    public void setEnabled(@PathVariable("room") String room,
+    public void setRoomActive(@PathVariable("room") String room,
                            @PathVariable("enabled") boolean enabled)
     {
         validator.checkRoom(room, CANT_BE_NULL);
@@ -179,10 +179,25 @@ public class RestAdminController {
     }
 
     @GetMapping(ROOM + "/pause")
-    public boolean getEnabled(@PathVariable("room") String room) {
+    public boolean isRoomActive(@PathVariable("room") String room) {
         validator.checkRoom(room, CANT_BE_NULL);
 
         return roomService.isActive(room);
+    }
+
+    @GetMapping(ROOM + "/registration/open/{enabled}")
+    public void setRoomRegistrationOpened(@PathVariable("room") String room,
+                        @PathVariable("enabled") boolean enabled) {
+        validator.checkRoom(room, CANT_BE_NULL);
+
+        roomService.setOpened(room, enabled);
+    }
+
+    @GetMapping(ROOM + "/registration/open")
+    public boolean isRoomRegistrationOpened(@PathVariable("room") String room) {
+        validator.checkRoom(room, CANT_BE_NULL);
+
+        return roomService.isOpened(room);
     }
 
     @GetMapping(ROOM + "/scores/clear")

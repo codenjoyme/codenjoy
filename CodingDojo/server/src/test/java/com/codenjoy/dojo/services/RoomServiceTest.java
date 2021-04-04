@@ -49,8 +49,23 @@ public class RoomServiceTest {
 
     @Test
     public void shouldRoomIsNotActive_ifNotPresent() {
+        // given
+        assertEquals(false, service.exists("non-exists-room"));
+
         // when then
+        // комната которой не существует неактивна
         assertEquals(false, service.isActive("non-exists-room"));
+    }
+
+    @Test
+    public void shouldRoomRegistrationIsClosed_ifNotPresent() {
+        // given
+        assertEquals(false, service.exists("non-exists-room"));
+
+        // when then
+        // комната которой не существует должна быть открыта для регистрации
+        // иначе не создастся первый пользователь и не создаст эту комнату
+        assertEquals(true, service.isOpened("non-exists-room"));
     }
 
     @Test
@@ -60,6 +75,15 @@ public class RoomServiceTest {
 
         // when then
         assertEquals(true, service.isActive("room"));
+    }
+
+    @Test
+    public void shouldRoomRegistrationIsOpenedByDefault_ifPresent() {
+        // given
+        service.create("room", game1);
+
+        // when then
+        assertEquals(true, service.isOpened("room"));
     }
 
     @Test
@@ -86,6 +110,7 @@ public class RoomServiceTest {
 
         // then
         assertEquals(true, service.isActive("room"));
+        assertEquals(true, service.isOpened("room"));
 
         assertEquals("RoomGameType{type=GameType[first], " +
                         "settings=First[Parameter 1=15, Parameter 2=true]}",
@@ -96,12 +121,29 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void shouldException_whenSetActiveOfNonExistsRoom() {
+    public void shouldNoEffect_whenSetActiveOfNonExistsRoom() {
         // when
         service.setActive("room", true);
 
         // then
         assertEquals(false, service.isActive("room"));
+    }
+
+    @Test
+    public void shouldNoEffect_whenSetRegistrationOpenedOfNonExistsRoom() {
+        // given
+        // ее нет но она открыта
+        assertEquals(true, service.isOpened("room"));
+        assertEquals(false, service.exists("room"));
+
+        // when
+        // пробуем закрыть
+        service.setOpened("room", false);
+
+        // then
+        // а нечего закрывать так как нет комнаты )
+        assertEquals(true, service.isOpened("room"));
+        assertEquals(false, service.exists("room"));
     }
 
     @Test
@@ -123,6 +165,24 @@ public class RoomServiceTest {
     }
 
     @Test
+    public void shouldChangeRoomRegistrationStatus() {
+        // given
+        service.create("room", mock(GameType.class));
+
+        // when
+        service.setOpened("room", false);
+
+        // then
+        assertEquals(false, service.isOpened("room"));
+
+        // when
+        service.setOpened("room", true);
+
+        // then
+        assertEquals(true, service.isOpened("room"));
+    }
+
+    @Test
     public void shouldGetState_ifCreated() {
         // given
         service.create("room", game1);
@@ -131,7 +191,8 @@ public class RoomServiceTest {
         assertEquals("RoomState(name=room, " +
                         "type=RoomGameType{type=GameType[first], " +
                         "settings=First[Parameter 1=15, Parameter 2=true]}, " +
-                        "active=true)",
+                        "active=true, " +
+                        "opened=true)",
                 service.state("room").toString());
     }
 

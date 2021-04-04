@@ -35,8 +35,9 @@ public class RoomState {
     private String name;
     private GameType type;
     private Boolean active;
+    private Boolean opened;
 
     public RoomState(RoomState state) {
-        this(state.name, state.type, state.active);
+        this(state.name, state.type, state.active, state.opened);
     }
 }

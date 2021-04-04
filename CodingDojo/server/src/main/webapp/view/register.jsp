@@ -83,53 +83,64 @@ License along with this program.  If not, see
                     </div>
                 </c:if>
                 <c:if test="${opened}">
+                    <form:errors path="readableName" cssClass="error-message" />
                     <div id="readableName" class="field not-valid" not-empty>
-                        <form:errors path="readableName" cssClass="error-message" />
                         <form:input type="text" placeholder="FirstName LastName" path="readableName"/>
                         <span class="icon fa"></span>
                     </div>
+
+                    <form:errors path="email" cssClass="error-message" />
                     <div id="email" class="field not-valid">
-                        <form:errors path="email" cssClass="error-message" />
                         <form:input type="email" placeholder="Email address (valid)" path="email"/>
                         <span class="icon fa"></span>
                     </div>
+
+                    <form:errors path="password" cssClass="error-message" />
                     <div id="password" class="field not-valid">
-                        <form:errors path="password" cssClass="error-message" />
                         <input type="password" placeholder="Password"/>
                         <span class="icon fa"></span>
                     </div>
+
+                    <form:errors path="passwordConfirmation" cssClass="error-message" />
                     <div id="passwordConfirmation" class="field not-valid">
-                        <form:errors path="passwordConfirmation" cssClass="error-message" />
                         <input type="password" placeholder="Confirm password"/>
                         <span class="icon fa"></span>
                     </div>
+
                     <div id="data" hidden>
                         <form:input type="text" path="data"/>
                     </div>
+
                     <div id="password-md5" hidden>
                         <form:input type="hidden" path="password"/>
                     </div>
+
                     <div id="passwordConfirmation-md5" hidden>
                         <form:input type="hidden" path="passwordConfirmation"/>
                     </div>
+
                     <!-- add attribute 'not-empty' to the div if you want to enable validation -->
                     <div id="data1" class="field not-valid" not-empty hidden>
                         <input type="text" placeholder="Country / City"/>
                         <span class="icon fa"></span>
                     </div>
+
                     <div id="data2" class="field not-valid" not-empty hidden>
                         <!-- also you can change input placeholder="..." -->
                         <input type="text" placeholder="Primary skill / Tech level"/>
                         <span class="icon fa"></span>
                     </div>
+
                     <div id="data3" class="field not-valid" not-empty hidden>
                         <input type="text" placeholder="Company / Position"/>
                         <span class="icon fa"></span>
                     </div>
+
                     <div id="data4" class="field not-valid" not-empty hidden>
                         <input type="text" placeholder="Experience"/>
                         <span class="icon fa"></span>
                     </div>
+
                     <c:if test="${not adminLogin}">
                         <div id="game" class="field valid" hidden>
                             <form:select id="gameSelect" items="${games}" path="game"/>
@@ -144,6 +155,7 @@ License along with this program.  If not, see
                             </select>
                         </div>
                     </c:if>
+
                     <button class="btn-submit" id="submit-button" type="button">Sign up</button>
                 </c:if>
             </div>

@@ -51,6 +51,16 @@ public class RoomService {
         return rooms.get(room).getActive();
     }
 
+    public boolean isOpened(String room) {
+        if (!exists(room)) {
+            // комната которой не существует должна быть открыта для регистрации
+            // иначе не создастся первый пользователь и не создаст тут комнату
+            return true;
+        }
+
+        return rooms.get(room).getOpened();
+    }
+
     public boolean exists(String room) {
         return !Validator.isEmpty(room)
                 && rooms.containsKey(room);
@@ -73,13 +83,21 @@ public class RoomService {
         rooms.get(room).setActive(value);
     }
 
+    public void setOpened(String room, boolean value) {
+        if (!exists(room)) {
+            log.warn("Room '{}' not found", room);
+            return;
+        }
+        rooms.get(room).setOpened(value);
+    }
+
     public GameType create(String room, GameType gameType) {
         if (exists(room)) {
             return rooms.get(room).getType();
         }
 
         RoomGameType decorator = new RoomGameType(gameType);
-        RoomState state = new RoomState(room, decorator, true);
+        RoomState state = new RoomState(room, decorator, true, true);
         rooms.put(room, state);
 
         return decorator;

@@ -60,11 +60,21 @@ public class RegistrationValidator implements Validator {
             return;
         }
 
-        if (!playerService.isRegistrationOpened()) {
-            errors.rejectValue("readableName", "registration.closed");
+        Player player = (Player) target;
+
+        String room = player.getRoom();
+        if (StringUtils.isEmpty(room)) {
+            // TODO сделать так, чтобы на форме регистрации/логина задавалась roomName
+            room = player.getGame();
         }
 
-        Player player = (Player) target;
+        if (!playerService.isRegistrationOpened(room)) {
+            if (playerService.isRegistrationOpened()) {
+                errors.rejectValue("email", "registration.room.closed");
+            } else {
+                errors.rejectValue("email", "registration.closed");
+            }
+        }
 
         String name = player.getReadableName();
 

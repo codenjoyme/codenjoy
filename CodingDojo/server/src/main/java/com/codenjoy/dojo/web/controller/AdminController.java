@@ -244,6 +244,22 @@ public class AdminController {
 
     // ----------------
 
+    @GetMapping("/room/registration/stop")
+    public String openRoom(HttpServletRequest request) {
+        String room = getGameRoom(request);
+        roomService.setOpened(room, false);
+        return getAdmin(request);
+    }
+
+    @GetMapping("/room/registration/start")
+    public String closeRoom(HttpServletRequest request) {
+        String room = getGameRoom(request);
+        roomService.setOpened(room, true);
+        return getAdmin(request);
+    }
+
+    // ----------------
+
     @GetMapping("/game/pause")
     public String pauseGame(HttpServletRequest request) {
         String room = getGameRoom(request);
@@ -506,6 +522,7 @@ public class AdminController {
         model.addAttribute("timerPeriod", timerService.getPeriod());
         model.addAttribute("defaultProgress", getDefaultProgress(gameType));
         model.addAttribute("active", roomService.isActive(room));
+        model.addAttribute("roomOpened", roomService.isOpened(room));
         model.addAttribute("recording", actionLogger.isWorking());
         model.addAttribute("autoSave", autoSaver.isWorking());
         model.addAttribute("debugLog", debugService.isWorking());
