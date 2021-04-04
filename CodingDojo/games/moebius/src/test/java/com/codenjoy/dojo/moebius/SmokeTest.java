@@ -29,164 +29,35 @@ import com.codenjoy.dojo.moebius.client.ai.AISolver;
 import com.codenjoy.dojo.moebius.services.GameRunner;
 import com.codenjoy.dojo.moebius.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 
-import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.SIZE;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class SmokeTest {
-    private int index;
 
     @Test
     public void test() {
-        // given
-        List<String> messages = new LinkedList<>();
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 11;
-        LocalGameRunner.printConversions = false;
-        LocalGameRunner.printBoardOnly = true;
-        LocalGameRunner.printDice = false;
-        LocalGameRunner.printTick = true;
+        // about 1.3 sec
+        int ticks = 1000;
+        Smoke.play(ticks, "SmokeTest.data",
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
 
-        Dice dice = LocalGameRunner.getDice(
-                0, 0, 1, 1, 1,
-                1, 1, 1, 2, 2,
-                1, 2, 1, 3, 3,
-                1, 3, 2, 1, 2,
-                2, 1, 2, 2, 5,
-                2, 2, 2, 3, 6,
-                2, 3, 3, 1, 0,
-                3, 1, 3, 2, 1,
-                3, 2, 3, 3, 3);
-
-        GameRunner gameType = new GameRunner() {
-            @Override
-            public Dice getDice() {
-                return dice;
-            }
-
-            @Override
-            public GameSettings getSettings() {
-                return super.getSettings()
-                        .integer(SIZE, 5);
-            }
-        };
-
-        // when
-        LocalGameRunner.run(gameType,
-                new AISolver(dice),
-                new Board());
-
-        // then
-        assertEquals("1: 1:╔═══╗\n" +
-                    "1: 1:║   ║\n" +
-                    "1: 1:║   ║\n" +
-                    "1: 1:║   ║\n" +
-                    "1: 1:╚═══╝\n" +
-                    "1: 1:\n" +
-                    "1: 1:Scores: 0\n" +
-                    "1: 1:Answer: ACT(0,0)\n" +
-                    "------------------------------------------\n" +
-                    "2: 1:╔═══╗\n" +
-                    "2: 1:║   ║\n" +
-                    "2: 1:║   ║\n" +
-                    "2: 1:║╚  ║\n" +
-                    "2: 1:╔═══╝\n" +
-                    "2: 1:\n" +
-                    "2: 1:Scores: 0\n" +
-                    "2: 1:Answer: ACT(1,1)\n" +
-                    "------------------------------------------\n" +
-                    "3: 1:╔═══╗\n" +
-                    "3: 1:║   ║\n" +
-                    "3: 1:║╔  ║\n" +
-                    "3: 1:║╔  ║\n" +
-                    "3: 1:╔═══╝\n" +
-                    "3: 1:\n" +
-                    "3: 1:Scores: 0\n" +
-                    "3: 1:Answer: ACT(1,2)\n" +
-                    "------------------------------------------\n" +
-                    "4: 1:╔═══╗\n" +
-                    "4: 1:║╗  ║\n" +
-                    "4: 1:║╗  ║\n" +
-                    "4: 1:║╔  ║\n" +
-                    "4: 1:╔═══╝\n" +
-                    "4: 1:\n" +
-                    "4: 1:Scores: 0\n" +
-                    "4: 1:Answer: ACT(1,3)\n" +
-                    "------------------------------------------\n" +
-                    "5: 1:╔═══╗\n" +
-                    "5: 1:║╝  ║\n" +
-                    "5: 1:║╗  ║\n" +
-                    "5: 1:║╔╔ ║\n" +
-                    "5: 1:╔═══╝\n" +
-                    "5: 1:\n" +
-                    "5: 1:Scores: 0\n" +
-                    "5: 1:Answer: ACT(2,1)\n" +
-                    "------------------------------------------\n" +
-                    "6: 1:╔═══╗\n" +
-                    "6: 1:║╝  ║\n" +
-                    "6: 1:║╗║ ║\n" +
-                    "6: 1:║╔╗ ║\n" +
-                    "6: 1:╔═══╝\n" +
-                    "6: 1:\n" +
-                    "6: 1:Scores: 0\n" +
-                    "6: 1:Answer: ACT(2,2)\n" +
-                    "------------------------------------------\n" +
-                    "7: 1:╔═══╗\n" +
-                    "7: 1:║╝╬ ║\n" +
-                    "7: 1:║╗═ ║\n" +
-                    "7: 1:║╔╗ ║\n" +
-                    "7: 1:╔═══╝\n" +
-                    "7: 1:\n" +
-                    "7: 1:Scores: 0\n" +
-                    "7: 1:Answer: ACT(2,3)\n" +
-                    "------------------------------------------\n" +
-                    "8: 1:╔═══╗\n" +
-                    "8: 1:║╝╬ ║\n" +
-                    "8: 1:║╗═ ║\n" +
-                    "8: 1:║╔╗╝║\n" +
-                    "8: 1:╔═══╝\n" +
-                    "8: 1:\n" +
-                    "8: 1:Scores: 0\n" +
-                    "8: 1:Answer: ACT(3,1)\n" +
-                    "------------------------------------------\n" +
-                    "9: 1:╔═══╗\n" +
-                    "9: 1:║╝╬ ║\n" +
-                    "9: 1:║╗═╚║\n" +
-                    "9: 1:║╔╗╚║\n" +
-                    "9: 1:╔═══╝\n" +
-                    "9: 1:\n" +
-                    "9: 1:Scores: 0\n" +
-                    "9: 1:Answer: ACT(3,2)\n" +
-                    "------------------------------------------\n" +
-                    "10: 1:╔═══╗\n" +
-                    "10: 1:║╝╬╗║\n" +
-                    "10: 1:║╗═╔║\n" +
-                    "10: 1:║╔╗╚║\n" +
-                    "10: 1:╔═══╝\n" +
-                    "10: 1:\n" +
-                    "10: 1:Scores: 0\n" +
-                    "10: 1:Answer:\n" +
-                    "10: 1:Fire Event: GAME_OVER\n" +
-                    "------------------------------------------\n" +
-                    "11: 1:╔═══╗\n" +
-                    "11: 1:║╝╬╗║\n" +
-                    "11: 1:║╗═╗║\n" +
-                    "11: 1:║╔╗╚║\n" +
-                    "11: 1:╔═══╝\n" +
-                    "11: 1:\n" +
-                    "11: 1:Scores: 0\n" +
-                    "11: 1:Answer:\n" +
-                    "11: 1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                    "------------------------------------------",
-                String.join("\n", messages));
-
+                    @Override
+                    public GameSettings getSettings() {
+                        return new GameSettings();
+                    }
+                },
+                Arrays.asList(new AISolver(dice)),
+                Arrays.asList(new Board()),
+                (o1, o2) -> assertEquals(o1, o2));
     }
 }
