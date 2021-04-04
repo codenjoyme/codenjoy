@@ -24,5 +24,6 @@ package com.codenjoy.dojo.startandjump.services;
 
 
 public enum Events {
-    STILL_ALIVE, LOSE
+    STILL_ALIVE,
+    LOSE
 }
