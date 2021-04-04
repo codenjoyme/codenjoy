@@ -115,9 +115,10 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
             return false;
         }
 
-        for (E element : elements) {
-            for (int layer = 0; layer < countLayers(); ++layer) {
-                if (getAt(layer, point.getX(), point.getY()).equals(element)) {
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            E found = getAt(layer, point.getX(), point.getY());
+                for (E element : elements) {
+                if (found.equals(element)) {
                     return true;
                 }
             }
