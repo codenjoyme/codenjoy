@@ -304,6 +304,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
                         }
                     }
                     if (currentIsDrawName) {
+                        if (canvas.isHighlighted()) {
+                            font = defaultHighlightedFont();
+                        }
                         drawName(playerId, currentPoint, font, currentHeroData);
                     }
                 }
@@ -325,11 +328,31 @@ function initCanvases(contextPath, players, allPlayersScreen,
         };
     };
 
+    function defaultFont() {
+        return {
+            font: "15px 'Verdana, sans-serif'",
+            fillStyle: '#0FF',
+            textAlign: 'left',
+            shadowColor: '#000',
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowBlur: 7
+        }
+    }
+
+    function defaultHighlightedFont() {
+        var font = defaultFont();
+        font.font = "20px 'Verdana, sans-serif'";
+        font.fillStyle = '#FF0';
+        font.shadowBlur = 15;
+        return font;
+    }
+
     function defaultDrawBoard(drawer) {
         drawer.clear();
         drawer.drawBack();
         drawer.drawLayers();
-        drawer.drawPlayerNames();
+        drawer.drawPlayerNames(defaultFont(), null);
         drawer.drawFog();
     }
 
@@ -423,20 +446,22 @@ function initCanvases(contextPath, players, allPlayersScreen,
             );
         }
 
+        var highlighted = false;
+
+        canvas.click(function() {
+            highlighted = !highlighted;
+        });
+
+        var isHighlighted = function() {
+            return highlighted;
+        }
+
         var drawText = function(text, pt, font) {
             if (pt.x == -1 || pt.y == -1) return;
 
             var ctx = canvas[0].getContext("2d");
             if (!font) {
-                font = {
-                    font: "15px 'Verdana, sans-serif'",
-                    fillStyle: "#0FF",
-                    textAlign: "left",
-                    shadowColor: "#000",
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0,
-                    shadowBlur: 7
-                }
+                font = defaultFont();
             }
             ctx.font = font.font;
             ctx.fillStyle =  font.fillStyle;
@@ -478,7 +503,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
             drawText: drawText,
             clear : clear,
             getCanvasSize : getCanvasSize,
-            getPlotSize : getPlotSize
+            getPlotSize : getPlotSize,
+            isHighlighted : isHighlighted
         };
     }
 
