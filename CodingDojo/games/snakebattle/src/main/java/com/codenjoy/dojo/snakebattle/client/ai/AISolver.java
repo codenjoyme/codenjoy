@@ -127,7 +127,7 @@ public class AISolver implements Solver<Board> {
         int size = board.size();
 
         Point from = board.getMe();
-        List<Point> to = board.get(APPLE, GOLD, FURY_PILL, FLYING_PILL); //, FLYING_PILL, FURY_PILL
+        List<Point> to = board.get(FURY_PILL, FLYING_PILL, APPLE, GOLD); //, FLYING_PILL, FURY_PILL
         DeikstraFindWay.Possible map = possible(board, excludePoints);
         return way.getShortestWay(size, from, to, map);
     }

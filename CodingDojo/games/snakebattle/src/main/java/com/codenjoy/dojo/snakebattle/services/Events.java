@@ -35,6 +35,8 @@ public class Events {
     public static final Events STONE = new Events("STONE");
     public static final Function<Integer, Events> EAT = amount -> new Events("EAT", amount);
     public static final Events GOLD = new Events("GOLD");
+    public static final Events FLYING = new Events("FLYING");
+    public static final Events FURY = new Events("FURY");
 
     private String type;
     private int amount;
