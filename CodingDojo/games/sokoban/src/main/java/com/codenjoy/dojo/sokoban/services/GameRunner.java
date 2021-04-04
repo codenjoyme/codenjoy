@@ -34,9 +34,9 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.sokoban.client.Board;
-import com.codenjoy.dojo.sokoban.client.ai.ApofigSolver;
-import com.codenjoy.dojo.sokoban.model.game.Sokoban;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.Elements;
+import com.codenjoy.dojo.sokoban.client.ai.AISolver;
+import com.codenjoy.dojo.sokoban.model.Sokoban;
+import com.codenjoy.dojo.sokoban.model.items.Elements;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -54,6 +54,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
+        // TODO сделать загрузку уровней
         return new Sokoban(settings.level(), getDice(), settings);
     }
 
@@ -74,17 +75,18 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
+        // TODO разобраться сама игра многопользовательская или однопользовательская?
         return MultiplayerType.MULTIPLE;
     }
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener, playerId, settings);
+        return new Player(listener, settings);
     }
 
     @Override
     public Class<? extends Solver> getAI() {
-        return ApofigSolver.class;
+        return AISolver.class;
     }
 
     @Override

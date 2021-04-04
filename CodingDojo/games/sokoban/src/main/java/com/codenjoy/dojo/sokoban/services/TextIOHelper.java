@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.helper;
+package com.codenjoy.dojo.sokoban.services;
 
 /*-
  * #%L

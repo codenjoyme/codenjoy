@@ -23,25 +23,43 @@ package com.codenjoy.dojo.sokoban.model.items;
  */
 
 
-import com.codenjoy.dojo.sokoban.model.itemsImpl.*;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.sokoban.model.Field;
+import com.codenjoy.dojo.sokoban.services.Player;
 
-import java.util.List;
+public class Mark extends PointEnriched<Field> implements State<Elements, Player> {
 
-public interface Level {
+    private boolean isFilled;
 
-    int getSize();
+    public Mark(Point point) {
+        super(point);
+    }
 
-    int getMarksToWin();
+    @Override
+    public void init(Field field) {
+        this.field = field;
+    }
 
-    List<Wall> getWalls();
+    @Override
+    public void tick() {
 
-    List<Hero> getHero();
+        if (field != null) {
+            isFilled = this.field.isBoxOnTheMark(this);
+        }
+    }
 
-    List<Gold> getGold();
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.MARK_TO_WIN;
+    }
 
-    List<Box> getBoxes();
 
-    List<Mark> getMarks();
+    public boolean isFilled() {
+        return isFilled;
+    }
 
-    List<BoxOnTheMark> getBoxesOnTheMarks();
+    public void setFilled(boolean filled) {
+        isFilled = filled;
+    }
 }

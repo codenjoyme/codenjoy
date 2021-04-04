@@ -29,23 +29,16 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.sokoban.client.Board;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.Elements;
+import com.codenjoy.dojo.sokoban.model.items.Elements;
 
 import java.util.List;
 
-/**
- * Это алгоритм твоего бота. Он будет запускаться в игру с первым
- * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
- * Реализуй его как хочешь, хоть на Random (только используй для этого
- * {@see Dice} что приходит через конструктор).
- * Для его запуска воспользуйся методом {@see ApofigSolver#main}
- */
-public class ApofigSolver implements Solver<Board> {
+public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
     private Dice dice;
 
-    public ApofigSolver(Dice dice) {
+    public AISolver(Dice dice) {
         this.dice = dice;
         this.way = new DeikstraFindWay();
     }
@@ -58,7 +51,6 @@ public class ApofigSolver implements Solver<Board> {
                 int y = point.getY();
 
                 if (board.isBarrierAt(x, y)) return false;
-                if (board.isBombAt(x, y)) return false;
 
                 return true;
             }
@@ -85,9 +77,8 @@ public class ApofigSolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
 
-
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.GOLD);
+        List<Point> to = board.get(Elements.BOX);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }

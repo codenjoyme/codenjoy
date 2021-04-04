@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.itemsImpl;
+package com.codenjoy.dojo.sokoban.model.items;
 
 /*-
  * #%L
@@ -26,11 +26,12 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.sokoban.model.items.Field;
+import com.codenjoy.dojo.sokoban.model.Field;
 import com.codenjoy.dojo.sokoban.services.Player;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
 
     private boolean alive;
     private Direction direction;
@@ -75,24 +76,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public void act(int... p) {
-        if (!alive) return;
-
-        field.setBomb(this);
-    }
-
-    @Override
     public void tick() {
         if (!alive) return;
 
         if (direction != null) {
             Point dest = direction.change(this);
             Point newDest = direction.change(dest);
-
-            if (field.isBomb(dest)) {
-                alive = false;
-                field.removeBomb(dest);
-            }
 
             if (!(field.isBarrier(newDest) || field.isMark(newDest))) {
                 if (field.isBox(dest)) {

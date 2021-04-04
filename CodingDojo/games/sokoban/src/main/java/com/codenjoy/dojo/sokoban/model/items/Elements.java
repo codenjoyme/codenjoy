@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.itemsImpl;
+package com.codenjoy.dojo.sokoban.model.items;
 
 /*-
  * #%L
@@ -27,15 +27,13 @@ import com.codenjoy.dojo.services.printer.CharElements;
 
 public enum Elements implements CharElements {
 
-    NONE(' '),       // например это пустое место, куда можно перейти герою
-    NONSE('`'),       // например это пустое место, куда можно перейти герою
-    WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
-    HERO('☺'),       // hero worker
-    BOX('■'),           // this is a box
-    MARK_TO_WIN('X'),  // this is a feild where a hero should move boxes
-    BOX_ON_THE_MARK('*'),  // this is a feild includes box overlaped mark
-    GOLD('$'),       // in further maybe это то, за чем будет охота
-    BOMB('x');       // in further maybe а это бомба, на которой можно подорваться
+    NONE(' '),             // например это пустое место, куда можно перейти герою
+    NONSE('`'),            // TODO добавить описание
+    WALL('☼'),             // а это стенка, через которую я хочу чтобы проходить нельзя было
+    HERO('☺'),             // hero worker
+    BOX('■'),              // this is a box
+    MARK_TO_WIN('X'),      // this is a feild where a hero should move boxes
+    BOX_ON_THE_MARK('*');  // this is a feild includes box overlaped mark
 
     final char ch;
 

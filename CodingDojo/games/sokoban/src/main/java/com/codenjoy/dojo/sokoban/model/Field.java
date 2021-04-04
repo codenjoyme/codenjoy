@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.itemsImpl;
+package com.codenjoy.dojo.sokoban.model;
 
 /*-
  * #%L
@@ -24,18 +24,32 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.sokoban.services.Player;
 
-public class Wall extends PointImpl implements State<Elements, Player> {
+public interface Field extends GameField<Player> {
 
-    public Wall(Point point) {
-        super(point);
-    }
+    boolean isBarrier(Point pt);
 
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.WALL;
-    }
+    boolean isBox(Point pt);
+
+    boolean isBoxOnTheMark(Point pt);
+
+    void moveBox(Point pt, Point newPt);
+
+    void setBox(Point pt);
+
+    boolean isMark(Point pt);
+
+    Point getFreeRandom();
+
+    boolean isFree(Point pt);
+
+    void setBoxOnTheMark(Point pt);
+
+    void removeBoxOnTheMark(Point pt);
+
+    void removeBox(Point pt);
+
+    void setMark(Point pt);
 }

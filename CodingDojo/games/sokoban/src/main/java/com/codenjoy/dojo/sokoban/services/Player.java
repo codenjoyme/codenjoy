@@ -25,9 +25,8 @@ package com.codenjoy.dojo.sokoban.services;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.settings.SettingsReader;
-import com.codenjoy.dojo.sokoban.model.items.Field;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.Hero;
+import com.codenjoy.dojo.sokoban.model.Field;
+import com.codenjoy.dojo.sokoban.model.items.Hero;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,14 +38,9 @@ public class Player extends GamePlayer<Hero, Field> {
     private static Logger log = getLogger(Player.class.getName());
 
     public Hero hero;
-    private String name;
 
-    public Player(EventListener listener, String name, GameSettings settings) {
+    public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
-        this.name = name;
-        if (!Storage.levels.containsKey(name)) {
-            Storage.levels.put(name, 1);
-        }
     }
 
     public void event(Events event) {
@@ -54,7 +48,6 @@ public class Player extends GamePlayer<Hero, Field> {
             case LOOSE:
                 break;
             case WIN:
-                increaseLevel(1);
                 break;
         }
 
@@ -76,22 +69,4 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero != null && hero.isAlive();
     }
 
-
-    private void increaseLevel(int value) {
-        int lvl = Storage.levels.get(this.name);
-        if (lvl <= (Storage.MAX_VALUE - value)) {
-            Storage.levels.put(this.name, lvl + value);
-            log.log(Level.INFO, String.format("reached lvl:%d\t max limit:%d", lvl + value, Storage.MAX_VALUE));
-        } else {
-            log.log(Level.WARNING, "reached max limit: {}", Storage.MAX_VALUE);
-        }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

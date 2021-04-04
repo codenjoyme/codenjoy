@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.sokoban.model.itemsImpl;
+package com.codenjoy.dojo.sokoban.model.items;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,48 +22,29 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
  * #L%
  */
 
-
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.sokoban.services.Player;
 
-/**
- * Boxes to push
- */
-public class Box extends PointImpl implements State<Elements, Player> {
-    private boolean alive;
-    private Direction direction;
-    private boolean isBlocked;
-    private boolean isOnMark;
+public class BoxOnTheMark extends PointImpl implements State<Elements, Player> {
 
-    public Box(Point xy) {
-        super(xy);
-        direction = null;
-        alive = true;
+    private boolean isActive;
+
+    public BoxOnTheMark(Point point) {
+        super(point);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BOX;
+        return Elements.BOX_ON_THE_MARK;
     }
 
-    public boolean isBlocked() {
-        return isBlocked;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
+    public void setActive(boolean active) {
+        isActive = active;
     }
-
-    public boolean isOnMark() {
-        return isOnMark;
-    }
-
-    public void setOnMark(boolean onMark) {
-        isOnMark = onMark;
-    }
-
-
 }

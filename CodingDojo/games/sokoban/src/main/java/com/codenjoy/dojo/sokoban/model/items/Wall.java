@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.itemsImpl;
+package com.codenjoy.dojo.sokoban.model.items;
 
 /*-
  * #%L
@@ -24,43 +24,18 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.sokoban.model.items.Field;
-import com.codenjoy.dojo.sokoban.model.items.PointEnriched;
 import com.codenjoy.dojo.sokoban.services.Player;
 
-public class Mark extends PointEnriched<Field> implements State<Elements, Player> {
+public class Wall extends PointImpl implements State<Elements, Player> {
 
-    private boolean isFilled;
-
-    public Mark(Point point) {
+    public Wall(Point point) {
         super(point);
     }
 
     @Override
-    public void init(Field field) {
-        this.field = field;
-    }
-
-    @Override
-    public void tick() {
-
-        if (field != null) {
-            isFilled = this.field.isBoxOnTheMark(this);
-        }
-    }
-
-    @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.MARK_TO_WIN;
-    }
-
-
-    public boolean isFilled() {
-        return isFilled;
-    }
-
-    public void setFilled(boolean filled) {
-        isFilled = filled;
+        return Elements.WALL;
     }
 }

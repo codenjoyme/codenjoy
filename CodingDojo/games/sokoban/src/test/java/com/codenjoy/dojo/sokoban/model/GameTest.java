@@ -27,13 +27,11 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.settings.SettingsReader;
-import com.codenjoy.dojo.sokoban.helper.TextIOHelper;
-import com.codenjoy.dojo.sokoban.model.game.Sokoban;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.Box;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.Hero;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.LevelImpl;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.Mark;
+import com.codenjoy.dojo.sokoban.services.TextIOHelper;
+import com.codenjoy.dojo.sokoban.model.items.Box;
+import com.codenjoy.dojo.sokoban.model.items.Hero;
+import com.codenjoy.dojo.sokoban.model.levels.LevelImpl;
+import com.codenjoy.dojo.sokoban.model.items.Mark;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
 import com.codenjoy.dojo.sokoban.services.Player;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -41,6 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.sokoban.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -54,13 +53,16 @@ public class GameTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
     private Box box;
     private Mark mark;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        settings = new GameSettings();
+        printer = new PrinterFactoryImpl();
     }
 
     private void dice(int... ints) {
@@ -71,6 +73,8 @@ public class GameTest {
     }
 
     private void givenF1(String board, int marksToWin) {
+        settings.string(LEVEL_MAP, board);
+
         LevelImpl level;
         if (marksToWin != 0)
             level = new LevelImpl(board, marksToWin);
@@ -78,10 +82,9 @@ public class GameTest {
             level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
-        GameSettings settings = new GameSettings();
         game = new Sokoban(level, dice, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener, "PlayerFirst", settings);
+        player = new Player(listener, settings);
         game.newGame(player);
         player.hero = hero;
 
@@ -90,7 +93,7 @@ public class GameTest {
         this.hero = game.getHeroes().get(0);
     }
 
-    private void givenF(String board) {
+    private void givenFl(String board) {
         givenF1(board, 0);
     }
 
@@ -110,12 +113,12 @@ public class GameTest {
     // initial map is created (map == walls && boxes)
     @Test
     public void shouldFieldWithBoxesAtStart() {
-
-        givenF("☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼" +
                 "☼■XX☼" +
                 "☼ ■X☼" +
                 "☼☺ ■☼" +
                 "☼☼☼☼☼");
+
         assertE("☼☼☼☼☼" +
                 "☼■XX☼" +
                 "☼ ■X☼" +
@@ -126,7 +129,7 @@ public class GameTest {
     // hero is moving in 4 directions (UP, DOWN, LEFT, RIGHT)
     @Test
     public void shouldMoveHeroin4Directioons() {
-        givenF("☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
@@ -168,7 +171,7 @@ public class GameTest {
         String testBoardInit = "☼☼☼" +
                 "☼☺☼" +
                 "☼☼☼";
-        givenF(testBoardInit);
+        givenFl(testBoardInit);
 
         hero.left();
         game.tick();
@@ -191,7 +194,7 @@ public class GameTest {
     //hero can push boxes in 4 directions (UP, DOWN, LEFT, RIGHT)
     @Test
     public void shouldPushBoxesIn4Direcitons() {
-        givenF("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ■■  ☼" +
                 "☼ ■☺  ☼" +
@@ -241,32 +244,46 @@ public class GameTest {
     //hero cannot push boxes if wall is next element after a box in the direction of hero pushing.
     @Test
     public void shouldNotPushBoxesIn4DirecitonsIfNextIsWall() {
-        String testBoardInit = "☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼" +
                 "☼ ■ ☼" +
                 "☼■☺■☼" +
                 "☼ ■ ☼" +
-                "☼☼☼☼☼";
-        givenF(testBoardInit);
+                "☼☼☼☼☼");
 
         hero.left();
         game.tick();
-        assertE(testBoardInit);
+        assertE("☼☼☼☼☼" +
+                "☼ ■ ☼" +
+                "☼■☺■☼" +
+                "☼ ■ ☼" +
+                "☼☼☼☼☼");
 
         hero.up();
         game.tick();
-        assertE(testBoardInit);
+        assertE("☼☼☼☼☼" +
+                "☼ ■ ☼" +
+                "☼■☺■☼" +
+                "☼ ■ ☼" +
+                "☼☼☼☼☼");
 
         hero.right();
         game.tick();
-        assertE(testBoardInit);
+        assertE("☼☼☼☼☼" +
+                "☼ ■ ☼" +
+                "☼■☺■☼" +
+                "☼ ■ ☼" +
+                "☼☼☼☼☼");
 
         for (int i = 0; i < 2; i++) {
             hero.down();
             game.tick();
         }
-        assertE(testBoardInit);
+        assertE("☼☼☼☼☼" +
+                "☼ ■ ☼" +
+                "☼■☺■☼" +
+                "☼ ■ ☼" +
+                "☼☼☼☼☼");
     }
-
 
     //    DONE: if expected (definied by scenario) boxes in the marks == win event (in perspective == next level/scenario).
     @Test
@@ -276,7 +293,7 @@ public class GameTest {
                 "☼  ■☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼";
-        givenF(testBoardInit);
+        givenFl(testBoardInit);
         hero.right();
         game.tick();
         assertTrue("\nWe need to have same expected and real marks, but" +
@@ -295,7 +312,7 @@ public class GameTest {
                 "☼  ■☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼";
-        givenF(testBoardInit);
+        givenFl(testBoardInit);
         hero.right();
         game.tick();
         assertE(testBoardAfter);
@@ -313,7 +330,7 @@ public class GameTest {
                 "☼  ■☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼";
-        givenF(testBoardInit);
+        givenFl(testBoardInit);
         hero.right();
         game.tick();
         assertE(testBoardAfter);
@@ -333,7 +350,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼☼☼☼☼☼";
-        givenF(testBoardInit);
+        givenFl(testBoardInit);
         for (int i = 0; i < 2; i++) {
             hero.right();
             game.tick();
@@ -344,7 +361,7 @@ public class GameTest {
     @Test
     public void shouldReadlevelFromRtfResource() {
         String testBoardInit = TextIOHelper.getStringFromResourcesRtf(0);
-        givenF(testBoardInit);
+        givenFl(testBoardInit);
         assertE(testBoardInit);
     }
 
@@ -352,7 +369,7 @@ public class GameTest {
     public void shouldReadLevelFromRtfResourceWithSpacesAtTheEnd5FirstLevels() {
         for (int i = 1; i < 6; i++) {
             String testBoardInit = TextIOHelper.getStringFromResourcesRtf(i);
-            givenF(testBoardInit);
+            givenFl(testBoardInit);
             assertE(testBoardInit);
         }
     }

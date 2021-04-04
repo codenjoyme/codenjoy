@@ -23,43 +23,44 @@ package com.codenjoy.dojo.sokoban.model.items;
  */
 
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.sokoban.services.Player;
 
-/**
- * Так случилось что доска знает про героя, а герой про доску.
- * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
- */
-public interface Field extends GameField<Player> {
+public class Box extends PointImpl implements State<Elements, Player> {
+    private boolean alive;
+    private Direction direction;
+    private boolean isBlocked;
+    private boolean isOnMark;
 
-    boolean isBarrier(Point pt);
+    public Box(Point xy) {
+        super(xy);
+        direction = null;
+        alive = true;
+    }
 
-    boolean isBox(Point pt);
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.BOX;
+    }
 
-    boolean isBoxOnTheMark(Point pt);
+    public boolean isBlocked() {
+        return isBlocked;
+    }
 
-    void moveBox(Point pt, Point newPt);
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
 
-    void setBox(Point pt);
+    public boolean isOnMark() {
+        return isOnMark;
+    }
 
-    boolean isMark(Point pt);
+    public void setOnMark(boolean onMark) {
+        isOnMark = onMark;
+    }
 
-    Point getFreeRandom();
 
-    boolean isFree(Point pt);
-
-    boolean isBomb(Point pt);
-
-    void setBomb(Point pt);
-
-    void setBoxOnTheMark(Point pt);
-
-    void removeBoxOnTheMark(Point pt);
-
-    void removeBox(Point pt);
-
-    void removeBomb(Point pt);
-
-    void setMark(Point pt);
 }

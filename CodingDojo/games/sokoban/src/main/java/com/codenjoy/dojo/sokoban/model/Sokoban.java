@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.game;
+package com.codenjoy.dojo.sokoban.model;
 
 /*-
  * #%L
@@ -25,12 +25,9 @@ package com.codenjoy.dojo.sokoban.model.game;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
-import com.codenjoy.dojo.sokoban.model.items.Field;
-import com.codenjoy.dojo.sokoban.model.items.Level;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.*;
+import com.codenjoy.dojo.sokoban.model.items.*;
+import com.codenjoy.dojo.sokoban.model.levels.Level;
 import com.codenjoy.dojo.sokoban.services.Events;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
 import com.codenjoy.dojo.sokoban.services.Player;
@@ -42,11 +39,6 @@ import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sokoban#tick()}
- */
 public class Sokoban implements Field {
 
     public static final int MAX = 100;
@@ -56,8 +48,6 @@ public class Sokoban implements Field {
     private int size;
     private List<BoxOnTheMark> boxesOnTheMarks;
     private List<Wall> walls;
-    private List<Gold> gold;
-    private List<Bomb> bombs;
     private List<Box> boxes;
     private List<Mark> marks;
     private boolean boxesBlocked;
@@ -76,23 +66,16 @@ public class Sokoban implements Field {
         boxesOnTheMarks = level.getBoxesOnTheMarks();
         this.settings = settings;
         marks.stream().forEach(mark -> mark.init(this));
-        gold = level.getGold();
         this.marksToWin = level.getMarksToWin();
         players = new LinkedList<>();
-        bombs = new LinkedList<>();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
         realMarksToWin = 0;
         Player player = players.get(0);
         Hero hero = player.getHero();
         hero.tick();
-
-        heroCheckingReachGold(player, hero);
 
         if (!hero.isAlive() || boxesBlocked) {
             player.event(Events.LOOSE);
@@ -115,22 +98,6 @@ public class Sokoban implements Field {
             player.event(Events.WIN);
         }
 
-    }
-
-    /**
-     * cheking reached Gold if so - triggered Win
-     *
-     * @param player Player obj
-     * @param hero   particular case of player = player.getHero()
-     */
-    private void heroCheckingReachGold(Player player, Hero hero) {
-        if (gold.contains(hero)) {
-            gold.remove(hero);
-            player.event(Events.WIN);
-            isWon = true;
-            Point pos = getFreeRandom();
-            gold.add(new Gold(pos));
-        }
     }
 
     public int size() {
@@ -174,16 +141,9 @@ public class Sokoban implements Field {
 
     @Override
     public boolean isFree(Point pt) {
-        return !(gold.contains(pt)
-                || bombs.contains(pt)
-                || walls.contains(pt)
+        return !(walls.contains(pt)
                 || boxes.contains(pt)
                 || getHeroes().contains(pt));
-    }
-
-    @Override
-    public boolean isBomb(Point pt) {
-        return bombs.contains(pt);
     }
 
     @Override
@@ -211,22 +171,10 @@ public class Sokoban implements Field {
     }
 
     @Override
-    public void setBomb(Point pt) {
-        if (!bombs.contains(pt)) {
-            bombs.add(new Bomb(pt));
-        }
-    }
-
-    @Override
     public void setMark(Point pt) {
         if (!marks.contains(pt)) {
             marks.add(new Mark(pt));
         }
-    }
-
-    @Override
-    public void removeBomb(Point pt) {
-        bombs.remove(pt);
     }
 
     @Override
@@ -244,10 +192,6 @@ public class Sokoban implements Field {
     @Override
     public void removeBox(Point pt) {
         boxes.remove(pt);
-    }
-
-    public List<Gold> getGold() {
-        return gold;
     }
 
     public List<Hero> getHeroes() {
@@ -278,10 +222,6 @@ public class Sokoban implements Field {
         return walls;
     }
 
-    public List<Bomb> getBombs() {
-        return bombs;
-    }
-
     public List<BoxOnTheMark> getBoxesOnTheMarks() {
         return boxesOnTheMarks;
     }
@@ -309,9 +249,7 @@ public class Sokoban implements Field {
                 LinkedList<Point> result = new LinkedList<>();
                 result.addAll(getWalls());
                 result.addAll(getHeroes());
-                result.addAll(getGold());
                 result.addAll(getBoxesOnTheMarks());
-                result.addAll(getBombs());
                 result.addAll(getBoxes());
                 result.addAll(getMarks());
                 return result;

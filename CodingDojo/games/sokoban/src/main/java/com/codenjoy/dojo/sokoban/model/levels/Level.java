@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.itemsImpl;
+package com.codenjoy.dojo.sokoban.model.levels;
 
 /*-
  * #%L
@@ -23,26 +23,23 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
  */
 
 
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.sokoban.services.Player;
+import com.codenjoy.dojo.sokoban.model.items.*;
 
-/**
- * Артефакт: Бомба на поле
- */
-public class Bomb extends PointImpl implements State<Elements, Player> {
+import java.util.List;
 
-    public Bomb(int x, int y) {
-        super(x, y);
-    }
+public interface Level {
 
-    public Bomb(Point point) {
-        super(point);
-    }
+    int getSize();
 
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BOMB;
-    }
+    int getMarksToWin();
+
+    List<Wall> getWalls();
+
+    List<Hero> getHero();
+
+    List<Box> getBoxes();
+
+    List<Mark> getMarks();
+
+    List<BoxOnTheMark> getBoxesOnTheMarks();
 }

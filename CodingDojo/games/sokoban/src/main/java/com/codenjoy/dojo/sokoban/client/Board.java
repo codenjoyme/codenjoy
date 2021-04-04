@@ -25,9 +25,9 @@ package com.codenjoy.dojo.sokoban.client;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.Elements;
+import com.codenjoy.dojo.sokoban.model.items.Elements;
 
-import static com.codenjoy.dojo.sokoban.model.itemsImpl.Elements.*;
+import static com.codenjoy.dojo.sokoban.model.items.Elements.*;
 
 /**
  * Класс, обрабатывающий строковое представление доски.
@@ -56,7 +56,4 @@ public class Board extends AbstractBoard<Elements> {
         return false;  // TODO realize condition of GameOver
     }
 
-    public boolean isBombAt(int x, int y) {
-        return isAt(x, y, BOMB);
-    }
 }
