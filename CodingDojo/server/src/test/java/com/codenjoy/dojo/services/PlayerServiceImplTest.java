@@ -206,8 +206,9 @@ public class PlayerServiceImplTest {
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(printer));
         when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
 
-        // по умолчанию все команаты будут активными
+        // по умолчанию все команаты будут активными и открытыми для регистрации
         when(roomService.isActive(anyString())).thenReturn(true);
+        when(roomService.isOpened(anyString())).thenReturn(true);
 
         doAnswer(inv -> {
             String id = inv.getArgument(0);
@@ -303,11 +304,8 @@ public class PlayerServiceImplTest {
         playerService.closeRegistration();
 
         // then
-        Player player = createPlayer(VASYA);
-        assertSame(NullPlayer.INSTANCE, player);
-
-        player = playerService.get(VASYA);
-        assertSame(NullPlayer.INSTANCE, player);
+        assertNotCreated(createPlayer(VASYA));
+        assertNotCreated(playerService.get(VASYA));
 
         assertFalse(playerService.isRegistrationOpened());
 
@@ -317,11 +315,8 @@ public class PlayerServiceImplTest {
         // then
         assertTrue(playerService.isRegistrationOpened());
 
-        player = createPlayer(VASYA);
-        assertSame(VASYA, player.getId());
-
-        player = playerService.get(VASYA);
-        assertSame(VASYA, player.getId());
+        assertCreated(createPlayer(VASYA));
+        assertSame(VASYA, playerService.get(VASYA).getId());
     }
 
     @Test
@@ -369,6 +364,92 @@ public class PlayerServiceImplTest {
 
     protected void setActive(String room, boolean active) {
         when(roomService.isActive(room)).thenReturn(active);
+    }
+
+    protected void setRegistrationOpened(String room, boolean opened) {
+        when(roomService.isOpened(room)).thenReturn(opened);
+    }
+
+    @Test
+    public void shouldNotCreateUsers_forRoomWhereRegistrationIsClosed_case1() {
+        // given
+        setRegistrationOpened("room1", false);
+
+        // when
+        assertNotCreated(createPlayer(VASYA, "game1", "room1"));
+        assertNotCreated(createPlayer(PETYA, "game1", "room1"));
+        assertCreated(createPlayer(KATYA, "game1", "room2"));
+        assertCreated(createPlayer(OLIA, "game3", "room3"));
+
+        // then
+        assertPlayers("[katya, olia]");
+
+        // when
+        setRegistrationOpened("room1", true);
+
+        assertCreated(createPlayer(VASYA, "game1", "room1"));
+        assertCreated(createPlayer(PETYA, "game1", "room1"));
+
+        // then
+        assertPlayers("[katya, olia, vasya, petya]");
+    }
+
+    @Test
+    public void shouldNotCreateUsers_forRoomWhereRegistrationIsClosed_case2() {
+        // given
+        setRegistrationOpened("room2", false);
+
+        // when
+        assertCreated(createPlayer(VASYA, "game1", "room1"));
+        assertCreated(createPlayer(PETYA, "game1", "room1"));
+        assertNotCreated(createPlayer(KATYA, "game1", "room2"));
+        assertCreated(createPlayer(OLIA, "game3", "room3"));
+
+        // then
+        assertPlayers("[vasya, petya, olia]");
+
+        // when
+        setRegistrationOpened("room2", true);
+
+        assertCreated(createPlayer(KATYA, "game1", "room2"));
+
+        // then
+        assertPlayers("[vasya, petya, olia, katya]");
+    }
+
+    private void assertCreated(Player player) {
+        assertNotSame(NullPlayer.INSTANCE, player);
+    }
+
+    private void assertNotCreated(Player player) {
+        assertSame(NullPlayer.INSTANCE, player);
+    }
+
+    @Test
+    public void shouldNotCreateUsers_forRoomWhereRegistrationIsClosed_case3() {
+        // given
+        setRegistrationOpened("room1", false);
+        setRegistrationOpened("room3", false);
+
+        // when
+        assertNotCreated(createPlayer(VASYA, "game1", "room1"));
+        assertNotCreated(createPlayer(PETYA, "game1", "room1"));
+        assertCreated(createPlayer(KATYA, "game1", "room2"));
+        assertNotCreated(createPlayer(OLIA, "game3", "room3"));
+
+        // then
+        assertPlayers("[katya]");
+
+        // when
+        setRegistrationOpened("room1", true);
+        setRegistrationOpened("room3", true);
+
+        assertCreated(createPlayer(VASYA, "game1", "room1"));
+        assertCreated(createPlayer(PETYA, "game1", "room1"));
+        assertCreated(createPlayer(OLIA, "game3", "room3"));
+
+        // then
+        assertPlayers("[katya, vasya, petya, olia]");
     }
 
     @Test
@@ -504,7 +585,7 @@ public class PlayerServiceImplTest {
 
         //then
         assertEquals(NullPlayer.INSTANCE, playerService.get(VASYA));
-        assertNotSame(NullPlayer.INSTANCE, playerService.get(PETYA));
+        assertCreated(playerService.get(PETYA));
         assertEquals(1, playerGames.size());
     }
 
@@ -539,6 +620,10 @@ public class PlayerServiceImplTest {
     private Player createPlayer(String id, String game, String room) {
         Player player = playerService.register(id, game, room,
                 getCallbackUrl(id));
+        if (player == NullPlayer.INSTANCE) {
+            return player;
+        }
+
         players.add(player);
         chatIds.put(room, Math.abs(id.hashCode()));
 

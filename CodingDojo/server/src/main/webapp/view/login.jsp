@@ -82,6 +82,11 @@ License along with this program.  If not, see
                         <spring:message key="login.credentials.invalid" />
                     </div>
                 </c:if>
+                <c:if test="${param.closed}">
+                    <div id="error-message" class="error-message">
+                        <spring:message key="registration.room.closed" />
+                    </div>
+                </c:if>
                 <c:if test="${!opened}">
                     <div id="error-message" class="error-message">
                         <spring:message key="registration.closed" />

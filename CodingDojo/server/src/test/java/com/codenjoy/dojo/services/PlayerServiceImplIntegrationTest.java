@@ -35,6 +35,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.room.RoomService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,6 +60,7 @@ public class PlayerServiceImplIntegrationTest {
     private GameSaver saver;
     private GameService gameService;
     private Controller screenController;
+    private RoomService roomService;
     private Controller playerController;
     private PlayerGames playerGames;
     private Registration registration;
@@ -80,6 +82,9 @@ public class PlayerServiceImplIntegrationTest {
 
                 PlayerServiceImplIntegrationTest.this.gameService
                         = this.gameService = mock(GameService.class);
+
+                PlayerServiceImplIntegrationTest.this.roomService
+                        = this.roomService = mock(RoomService.class);
 
                 PlayerServiceImplIntegrationTest.this.autoSaver
                         = this.autoSaver = mock(AutoSaver.class);
@@ -130,7 +135,10 @@ public class PlayerServiceImplIntegrationTest {
         when(gameService.getGameType(anyString(), anyString())).thenAnswer(
                 inv -> getOrCreateGameType(inv.getArgument(0))
         );
+
+        // по умолчанию все команаты будут активными и открытыми для регистрации
         when(gameService.exists(anyString())).thenReturn(true);
+        when(roomService.isOpened(anyString())).thenReturn(true);
 
         when(chat.getLastMessageIds()).thenReturn(new HashMap<>());
 

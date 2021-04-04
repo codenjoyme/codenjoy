@@ -44,7 +44,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class,
@@ -104,72 +108,215 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldStartStopGame_oneRoom() {
         // given
-        assertEquals(false, service.getEnabled("name"));
+        assertEquals(false, service.isRoomActive("name"));
         assertEquals("false", get("/rest/admin/room/name/pause"));
 
-        roomService.create("name", new FirstGameType());
+        register("player", "ip", "name", "first");
 
         // TODO я думаю что сервис напрямую дергать не надо, т.к. его никто так вызывать не будет, только через rest
-        assertEquals(true, service.getEnabled("name"));
+        assertEquals(true, service.isRoomActive("name"));
         assertEquals("true", get("/rest/admin/room/name/pause"));
 
+        assertPlayersInActiveRooms("[player->name]");
+
         // when
-        service.setEnabled("name", false);
+        service.setRoomActive("name", false);
 
         // then
-        assertEquals(false, service.getEnabled("name"));
+        assertEquals(false, service.isRoomActive("name"));
         assertEquals("false", get("/rest/admin/room/name/pause"));
+
+        assertPlayersInActiveRooms("[]");
 
         // when
         assertEquals("", get("/rest/admin/room/name/pause/true"));
 
         // then
-        assertEquals(true, service.getEnabled("name"));
+        assertEquals(true, service.isRoomActive("name"));
         assertEquals("true", get("/rest/admin/room/name/pause"));
+
+        assertPlayersInActiveRooms("[player->name]");
+    }
+
+    public void assertPlayersInActiveRooms(String expected) {
+        assertEquals(expected,
+                playerGames.active().stream()
+                    .map(pg -> pg.getPlayer().getId() + "->" + pg.getRoom())
+                    .collect(toList())
+                    .toString());
     }
 
     @Test
     public void shouldStartStopGame_severalRooms() {
         // given
-        assertEquals(false, service.getEnabled("name1"));
+        assertEquals(false, service.isRoomActive("name1"));
         assertEquals("false", get("/rest/admin/room/name2/pause"));
 
-        roomService.create("name1", new FirstGameType());
-        roomService.create("name2", new SecondGameType());
+        register("player1", "ip1", "name1", "first");
+        register("player2", "ip2", "name1", "first");
+        register("player3", "ip3", "name2", "second");
 
-        assertEquals(true, service.getEnabled("name1"));
+        assertEquals(true, service.isRoomActive("name1"));
         assertEquals("true", get("/rest/admin/room/name2/pause"));
+
+        assertPlayersInActiveRooms("[player1->name1, player2->name1, player3->name2]");
 
         // when
-        service.setEnabled("name1", false);
+        service.setRoomActive("name1", false);
 
         // then
-        assertEquals(false, service.getEnabled("name1"));
+        assertEquals(false, service.isRoomActive("name1"));
         assertEquals("true", get("/rest/admin/room/name2/pause"));
+
+        assertPlayersInActiveRooms("[player3->name2]");
 
         // when
         assertEquals("", get("/rest/admin/room/name1/pause/true"));
 
         // then
-        assertEquals(true, service.getEnabled("name1"));
+        assertEquals(true, service.isRoomActive("name1"));
         assertEquals("true", get("/rest/admin/room/name2/pause"));
+
+        assertPlayersInActiveRooms("[player1->name1, player2->name1, player3->name2]");
     }
 
     @Test
     public void shouldStartStopGame_validation() {
         // when then
         assertException("Room name is invalid: '$bad$'",
-                () -> service.getEnabled("$bad$"));
+                () -> service.isRoomActive("$bad$"));
 
         assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
                 "/rest/admin/room/$bad$/pause/true");
 
         // when then
         assertException("Room name is invalid: '$bad$'",
-                () -> service.setEnabled("$bad$", true));
+                () -> service.setRoomActive("$bad$", true));
 
         assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
                 "/rest/admin/room/$bad$/pause");
+    }
+
+    @Test
+    public void shouldOpenCloseRoomRegistration_oneRoom() {
+        // given
+        // комнаты нет, но в нее можно зарегаться
+        assertEquals(true, service.isRoomRegistrationOpened("name"));
+        assertEquals("true", get("/rest/admin/room/name/registration/open"));
+
+        register("player1", "ip1", "name", "first");
+        assertPlayersInActiveRooms("[player1->name]");
+
+        // а теперь она есть, т.к. зашел первый пользователь
+        // и по умолчанию регистрация так же открыта
+        assertEquals(true, service.isRoomRegistrationOpened("name"));
+        assertEquals("true", get("/rest/admin/room/name/registration/open"));
+
+        assertEquals(true, playerService.isRegistrationOpened("name"));
+
+        // when
+        service.setRoomRegistrationOpened("name", false);
+
+        // then
+        assertEquals(false, service.isRoomRegistrationOpened("name"));
+        assertEquals("false", get("/rest/admin/room/name/registration/open"));
+
+        assertEquals(false, playerService.isRegistrationOpened("name"));
+
+        // when
+        register("player2", "ip2", "name", "first"); // not created
+
+        // then
+        assertPlayersInActiveRooms("[player1->name]");
+
+        // when
+        assertEquals("", get("/rest/admin/room/name/registration/open/true"));
+
+        // then
+        assertEquals(true, service.isRoomRegistrationOpened("name"));
+        assertEquals("true", get("/rest/admin/room/name/registration/open"));
+
+        assertEquals(true, playerService.isRegistrationOpened("name"));
+
+        // when
+        register("player2", "ip2", "name", "first");
+
+        // then
+        assertPlayersInActiveRooms("[player1->name, player2->name]");
+    }
+
+    @Test
+    public void shouldOpenCloseRoomRegistration_severalRooms() {
+        // given
+        // комнаты нет, но в нее можно зарегаться
+        assertEquals(true, service.isRoomRegistrationOpened("name1"));
+        assertEquals("true", get("/rest/admin/room/name2/registration/open"));
+
+        register("player1", "ip1", "name1", "first");
+        register("player2", "ip2", "name1", "first");
+        register("player3", "ip3", "name2", "second");
+        assertPlayersInActiveRooms("[player1->name1, player2->name1, player3->name2]");
+
+        // а теперь она есть, т.к. зашел первый пользователь
+        // и по умолчанию регистрация так же открыта
+        assertEquals(true, service.isRoomRegistrationOpened("name1"));
+        assertEquals("true", get("/rest/admin/room/name2/registration/open"));
+
+        assertEquals(true, playerService.isRegistrationOpened("name1"));
+        assertEquals(true, playerService.isRegistrationOpened("name2"));
+
+        // when
+        service.setRoomRegistrationOpened("name1", false);
+
+        // then
+        assertEquals(false, service.isRoomRegistrationOpened("name1"));
+        assertEquals("true", get("/rest/admin/room/name2/registration/open"));
+
+        assertEquals(false, playerService.isRegistrationOpened("name1"));
+        assertEquals(true, playerService.isRegistrationOpened("name2"));
+
+        // when
+        register("player4", "ip4", "name1", "first"); // not created
+        register("player5", "ip5", "name2", "second");
+
+        // then
+        assertPlayersInActiveRooms("[player1->name1, player2->name1, player3->name2, " +
+                "player5->name2]");
+
+        // when
+        assertEquals("", get("/rest/admin/room/name1/registration/open/true"));
+
+        // then
+        assertEquals(true, service.isRoomRegistrationOpened("name1"));
+        assertEquals("true", get("/rest/admin/room/name2/registration/open"));
+
+        assertEquals(true, playerService.isRegistrationOpened("name1"));
+        assertEquals(true, playerService.isRegistrationOpened("name2"));
+
+        // when
+        register("player6", "ip6", "name1", "first");
+        register("player7", "ip7", "name2", "second");
+
+        // then
+        assertPlayersInActiveRooms("[player1->name1, player2->name1, player3->name2, " +
+                "player5->name2, player6->name1, player7->name2]");
+    }
+
+    @Test
+    public void shouldOpenCloseRoomRegistration_validation() {
+        // when then
+        assertException("Room name is invalid: '$bad$'",
+                () -> service.isRoomRegistrationOpened("$bad$"));
+
+        assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
+                "/rest/admin/room/$bad$/registration/open/true");
+
+        // when then
+        assertException("Room name is invalid: '$bad$'",
+                () -> service.setRoomRegistrationOpened("$bad$", true));
+
+        assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
+                "/rest/admin/room/$bad$/registration/open");
     }
 
     @Test

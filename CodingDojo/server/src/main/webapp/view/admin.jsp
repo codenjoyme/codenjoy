@@ -204,6 +204,23 @@
         </tr>
     </table>
 
+    <table class="admin-table" id="closeRoomRegistration">
+        <tr>
+            <td>
+                <c:choose>
+                    <c:when test="${roomOpened}">
+                        <b><spring:message key="registration.room.active"/></b></br>
+                        <a href="${ctx}/admin/room/registration/stop?room=${room}#closeRoomRegistration">Close room registration</a>.
+                    </c:when>
+                    <c:otherwise>
+                        <b><spring:message key="registration.room.closed"/></b></br>
+                        <a href="${ctx}/admin/room/registration/start?room=${room}#closeRoomRegistration">Open room registration</a>.
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+    </table>
+
     <form:form modelAttribute="adminSettings" action="admin#semifinal" method="POST">
         <table class="admin-table" id="semifinal">
             <tr colspan="2">

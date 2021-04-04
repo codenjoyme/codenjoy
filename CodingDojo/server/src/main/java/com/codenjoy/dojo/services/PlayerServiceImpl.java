@@ -28,7 +28,6 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Chat;
@@ -39,6 +38,7 @@ import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -84,6 +84,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected ActionLogger actionLogger;
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties config;
+    @Autowired protected RoomService roomService;
     @Autowired protected Semifinal semifinal;
     @Autowired protected SimpleProfiler profiler;
 
@@ -112,7 +113,7 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             log.debug("Registered user {} in game {}", id, game);
 
-            if (!config.isRegistrationOpened()) {
+            if (!isRegistrationOpened(room)) {
                 return NullPlayer.INSTANCE;
             }
 
@@ -612,6 +613,12 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public boolean isRegistrationOpened() {
         return config.isRegistrationOpened();
+    }
+
+    @Override
+    public boolean isRegistrationOpened(String room) {
+        return isRegistrationOpened()
+                && roomService.isOpened(room);
     }
 
     @Override
