@@ -29,10 +29,7 @@ import com.codenjoy.dojo.quake2d.model.Elements;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AISolver implements Solver<Board> {
 
@@ -115,20 +112,11 @@ public class AISolver implements Solver<Board> {
     }
 
     private List<Direction> inversionOfDirection(int pSize, Point pFrom, List<Point> pTo_OtherHero, DeikstraFindWay.Possible pMap) {
-        List<Direction> locDirectionList = way.getShortestWay(pSize, pFrom, pTo_OtherHero, pMap);
-        Direction locDirection = locDirectionList.get(0);
-        if (locDirection == Direction.UP) {
-            locDirection = Direction.DOWN;
-        } else if (locDirection == Direction.DOWN) {
-            locDirection = Direction.UP;
-        } else if (locDirection == Direction.LEFT) {
-            locDirection = Direction.RIGHT;
-        } else {
-            locDirection = Direction.LEFT;
+        List<Direction> path = way.getShortestWay(pSize, pFrom, pTo_OtherHero, pMap);
+        if (path.isEmpty()) {
+            return Arrays.asList();
         }
-        locDirectionList = new LinkedList<Direction>();
-        locDirectionList.add(locDirection);
-        return locDirectionList;
+        return Arrays.asList(path.get(0).inverted());
     }
 
 //    private Hero isAnyHeroWithAbility() {
