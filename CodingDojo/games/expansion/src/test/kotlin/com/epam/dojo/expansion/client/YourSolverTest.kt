@@ -34,11 +34,10 @@ import org.junit.Test
 import com.codenjoy.dojo.services.PointImpl.pt
 import com.codenjoy.dojo.expansion.client.Command.*
 import junit.framework.Assert.assertEquals
-import org.mockito.Mockito.mock
 
 class YourSolverTest {
 
-    private var ai: Solver<*>? = null
+    private var ai: Solver<Board>? = null
 
     @Before
     fun setup() {
@@ -55,16 +54,16 @@ class YourSolverTest {
     fun should() {
         assertL(
                 "{'myBase':{'x':1,'y':5}," +
-                        "'myColor':0," +
-                        "'forces':'" +
-                        "-=#-=#-=#-=#-=#-=#-=#" +
-                        "-=#00A-=#-=#-=#-=#-=#" +
-                        "-=#-=#-=#-=#-=#-=#-=#" +
-                        "-=#-=#-=#-=#-=#-=#-=#" +
-                        "-=#-=#-=#-=#-=#-=#-=#" +
-                        "-=#-=#-=#-=#-=#-=#-=#" +
-                        "-=#-=#-=#-=#-=#-=#-=#'" +
-                        "}",
+                "'myColor':0," +
+                "'forces':'" +
+                "-=#-=#-=#-=#-=#-=#-=#" +
+                "-=#00A-=#-=#-=#-=#-=#" +
+                "-=#-=#-=#-=#-=#-=#-=#" +
+                "-=#-=#-=#-=#-=#-=#-=#" +
+                "-=#-=#-=#-=#-=#-=#-=#" +
+                "-=#-=#-=#-=#-=#-=#-=#" +
+                "-=#-=#-=#-=#-=#-=#-=#'" +
+                "}",
                 "╔═════┐" +
                 "║1...$│" +
                 "║.....│" +

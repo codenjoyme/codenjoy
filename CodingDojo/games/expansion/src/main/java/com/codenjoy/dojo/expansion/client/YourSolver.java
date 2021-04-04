@@ -43,6 +43,9 @@ public class YourSolver extends AbstractSolver {
         this.dice = dice;
     }
 
+    public YourSolver() {
+    }
+
     /**
      * @param board use it for find elements on board
      * @return what hero should do in this tick (for this board)
