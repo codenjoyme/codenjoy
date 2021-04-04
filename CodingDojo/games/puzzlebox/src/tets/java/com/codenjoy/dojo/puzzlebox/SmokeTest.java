@@ -25,414 +25,54 @@ package com.codenjoy.dojo.puzzlebox;
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.puzzlebox.client.Board;
+import com.codenjoy.dojo.puzzlebox.client.YourSolver;
 import com.codenjoy.dojo.puzzlebox.client.ai.AISolver;
 import com.codenjoy.dojo.puzzlebox.services.GameRunner;
 import com.codenjoy.dojo.puzzlebox.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 
 import static com.codenjoy.dojo.puzzlebox.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
-    private Dice dice;
-
     @Test
     public void test() {
-        // given
-        List<String> messages = new LinkedList<>();
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 20;
+        // about 1.2 sec
+        int ticks = 1000;
 
-        Dice dice = LocalGameRunner.getDice(
-                0, 1, 2, 3, 4, // random numbers
-                0, 1, 2, 3, 4,
-                0, 1, 2, 3, 4,
-                0, 1, 2, 3, 4,
-                0, 1, 2, 3, 4);
+        Smoke.play(ticks, "SmokeTest.data",
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
 
-        GameRunner gameType = new GameRunner() {
-            @Override
-            public Dice getDice() {
-                return dice;
-            }
-
-            @Override
-            public GameSettings getSettings() {
-                return super.getSettings()
-                        .string(LEVEL_MAP,
-                                "☼☼☼☼☼☼☼☼☼☼☼" +
-                                "☼    ☼    ☼" +
-                                "☼☼☼       ☼" +
-                                "☼   0    ☼☼" +
-                                "☼        0☼" +
-                                "☼         ☼" +
-                                "☼         ☼" +
-                                "☼  #      ☼" +
-                                "☼         ☼" +
-                                "☼#   0  # ☼" +
-                                "☼☼☼☼☼☼☼☼☼☼☼");
-            }
-        };
-
-        // when
-        LocalGameRunner.run(gameType,
-                new AISolver(dice),
-                new Board());
-
-        // then
-        assertEquals("1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼  #      ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼#   0  # ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: LEFT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼ #       ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼1   0  # ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: RIGHT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼#        ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼ #  0  1 ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: UP, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼#        ☼\n" +
-                        "1:☼       # ☼\n" +
-                        "1:☼  # 0    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: DOWN, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼       # ☼\n" +
-                        "1:☼#        ☼\n" +
-                        "1:☼   #0    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:4\n" +
-                        "DICE_CORRECTED < 4 :0\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: LEFT, ACT\n" +
-                        "1:Fire Event: FILL\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼       # ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼#   @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: LEFT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼       # ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼#   @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: RIGHT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼       #0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼ #  @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: UP, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0   #☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼  # @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: DOWN, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼     # ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼   #@    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:4\n" +
-                        "DICE_CORRECTED < 4 :0\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: LEFT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼  # ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼   #@    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: LEFT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼  # ☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼  # @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: RIGHT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼   #☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼ #  @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: UP, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼   #☼\n" +
-                        "1:☼☼☼       ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼#   @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: DOWN, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼      #☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼#   @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:4\n" +
-                        "DICE_CORRECTED < 4 :0\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: LEFT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼      #☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼#   @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: LEFT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼     # ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼1   @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:1\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: RIGHT, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼    #  ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼ #  @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: UP, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼   #   ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼  # @    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: DOWN, ACT\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼    ☼    ☼\n" +
-                        "1:☼☼☼  #    ☼\n" +
-                        "1:☼   0    ☼☼\n" +
-                        "1:☼        0☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼         ☼\n" +
-                        "1:☼   #@    ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:4\n" +
-                        "DICE_CORRECTED < 4 :0\n" +
-                        "1:Scores: 1\n" +
-                        "1:Answer: LEFT, ACT\n" +
-                        "------------------------------------------",
-                String.join("\n", messages));
-
+                    @Override
+                    public GameSettings getSettings() {
+                        return new GameSettings()
+                                .string(LEVEL_MAP,
+                                        "☼☼☼☼☼☼☼☼☼☼☼" +
+                                        "☼    ☼    ☼" +
+                                        "☼☼☼       ☼" +
+                                        "☼   0    ☼☼" +
+                                        "☼        0☼" +
+                                        "☼         ☼" +
+                                        "☼         ☼" +
+                                        "☼  #      ☼" +
+                                        "☼         ☼" +
+                                        "☼#   0  # ☼" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼");
+                    }
+                },
+                Arrays.asList(new AISolver(dice)),
+                Arrays.asList(new Board()),
+                (o1, o2) -> assertEquals(o1, o2));
     }
 }
