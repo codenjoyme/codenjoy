@@ -242,9 +242,11 @@ public class SnakeBoard extends RoundField<Player> implements Field {
             }
             if (flyingPills.contains(head)) {
                 flyingPills.remove(head);
+                player.event(Events.FLYING);
             }
             if (furyPills.contains(head)) {
                 furyPills.remove(head);
+                player.event(Events.FURY);
             }
         }
     }

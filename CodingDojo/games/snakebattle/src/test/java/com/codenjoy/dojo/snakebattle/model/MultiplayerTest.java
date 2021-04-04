@@ -834,6 +834,7 @@ public class MultiplayerTest {
         game.tick();
         game.tick();
 
+        verifyEvents(heroEvents, "[FURY]");
         verifyEvents(enemyEvents, "[APPLE, APPLE]");
 
         hero.down();
@@ -1434,6 +1435,8 @@ public class MultiplayerTest {
                 "☼☼☼☼☼☼☼☼");
 
         game.tick();
+        verifyEvents(enemyEvents, "[FURY]");
+
         game.tick();
 
         verifyEvents(heroEvents, "[DIE]");
@@ -1513,6 +1516,8 @@ public class MultiplayerTest {
                 "☼☼☼☼☼☼☼☼");
 
         game.tick();
+        verifyEvents(enemyEvents, "[FURY]");
+
         game.tick();
 
         verifyEvents(heroEvents, "[DIE]");
@@ -1590,6 +1595,8 @@ public class MultiplayerTest {
                 "☼☼☼☼☼☼☼☼");
 
         game.tick();
+
+        verifyEvents(enemyEvents, "[FURY]");
 
         assertH("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -1694,6 +1701,8 @@ public class MultiplayerTest {
 
         game.tick();
 
+        verifyEvents(enemyEvents, "[FURY]");
+
         assertH("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼╔══════╗☼\n" +
                 "☼║╔═══╕ ║☼\n" +
@@ -1786,6 +1795,8 @@ public class MultiplayerTest {
                 "☼☼☼☼☼☼☼☼");
 
         game.tick();
+        verifyEvents(heroEvents, "[FLYING]");
+
         hero.up();
         game.tick();
         game.tick();
@@ -2112,7 +2123,7 @@ public class MultiplayerTest {
         game.tick();
 
         verifyEvents(heroEvents, "[DIE]");
-        verifyEvents(enemyEvents, "[EAT[5], WIN]");
+        verifyEvents(enemyEvents, "[EAT[5], FURY, WIN]");
 
         assertH("☼☼☼☼☼☼☼☼" +
                 "☼┌─ö   ☼" +
@@ -2172,7 +2183,7 @@ public class MultiplayerTest {
 
         game.tick();
 
-        verifyEvents(heroEvents, "[EAT[5], WIN]");
+        verifyEvents(heroEvents, "[EAT[5], FURY, WIN]");
         verifyEvents(enemyEvents, "[DIE]");
 
         assertH("☼☼☼☼☼☼☼☼" +
@@ -2479,6 +2490,8 @@ public class MultiplayerTest {
         enemy.right();
         hero.right();
         game.tick();
+
+        verifyEvents(enemyEvents, "[FURY]");
 
         assertH("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
