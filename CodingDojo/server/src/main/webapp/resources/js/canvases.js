@@ -205,8 +205,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
                     }
                     x++;
                     if (x == boardSize) {
-                       x = 0;
-                       y--;
+                        x = 0;
+                        y--;
                     }
                 }
             }
@@ -305,7 +305,15 @@ function initCanvases(contextPath, players, allPlayersScreen,
                     }
                     if (currentIsDrawName) {
                         if (canvas.isHighlighted()) {
-                            font = defaultHighlightedFont();
+                            var mark = Object.assign({}, font);
+                            mark.font = "80px 'Verdana, sans-serif'";
+                            mark.fillStyle = '#FF0';
+                            mark.shadowBlur = 0;
+                            // эти магические числа подогнаны под разные игры с разными размерами спрайтов
+                            mark.dx = 0.5*plotSize - 40;
+                            mark.dy = -0.5*plotSize + 27;
+                            var markPoint = { x : currentPoint.x - 1, y : currentPoint.y - 1 };
+                            canvas.drawText('⌾', markPoint, mark);
                         }
                         drawName(playerId, currentPoint, font, currentHeroData);
                     }
@@ -338,14 +346,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
             shadowOffsetY: 0,
             shadowBlur: 7
         }
-    }
-
-    function defaultHighlightedFont() {
-        var font = defaultFont();
-        font.font = "20px 'Verdana, sans-serif'";
-        font.fillStyle = '#FF0';
-        font.shadowBlur = 15;
-        return font;
     }
 
     function defaultDrawBoard(drawer) {
@@ -396,12 +396,12 @@ function initCanvases(contextPath, players, allPlayersScreen,
         var canvas = $("#" + playerId);
         var size = calculateTextSize(text);
         score.css({
-                position: "absolute",
-                marginLeft: 0,
-                marginTop: 0,
-                left: canvas.position().left + canvas.width()/2 - size.clientWidth/2,
-                top: canvas.position().top + canvas.height()/2 - size.clientHeight/2
-            });
+            position: "absolute",
+            marginLeft: 0,
+            marginTop: 0,
+            left: canvas.position().left + canvas.width()/2 - size.clientWidth/2,
+            top: canvas.position().top + canvas.height()/2 - size.clientHeight/2
+        });
 
         score.html(text);
 
@@ -448,8 +448,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var highlighted = false;
 
-        canvas.click(function() {
-            highlighted = !highlighted;
+        canvas.click(function(event) {
+            if (event.shiftKey) {
+                highlighted = !highlighted;
+            }
         });
 
         var isHighlighted = function() {
