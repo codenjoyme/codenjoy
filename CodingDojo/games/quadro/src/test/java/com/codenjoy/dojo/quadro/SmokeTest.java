@@ -4,7 +4,7 @@ package com.codenjoy.dojo.quadro;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2018 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,377 +23,53 @@ package com.codenjoy.dojo.quadro;
  */
 
 
-import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.quadro.client.Board;
 import com.codenjoy.dojo.quadro.client.ai.AISolver;
 import com.codenjoy.dojo.quadro.services.GameRunner;
 import com.codenjoy.dojo.quadro.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 
 import static com.codenjoy.dojo.quadro.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
-    private Dice dice;
-
     @Test
     public void test() {
-        // given
-        List<String> messages = new LinkedList<>();
+        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 10;
+        // about 1.4 sec
+        int ticks = 1000;
 
-        Dice dice = LocalGameRunner.getDice(
-                0, 1, 2, 3, 4, // random numbers
-                0, 2, 2, 3, 1,
-                0, 1, 4, 1, 2,
-                1, 3, 2, 4, 1,
-                1, 3, 0, 0, 1,
-                0, 0, 1, 0, 2,
-                1, 3, 2, 4, 1,
-                0, 1, 1, 3, 3,
-                0, 2, 0, 0, 2,
-                0, 1, 2, 2, 1,
-                1, 3, 4, 3, 4,
-                1, 3, 2, 4, 1,
-                0, 1, 3, 1, 1);
+        Smoke.play(ticks, "SmokeTest.data",
+                new GameRunner() {
+                    @Override
+                    public Dice getDice() {
+                        return dice;
+                    }
 
-        GameRunner gameType = new GameRunner() {
-            @Override
-            public Dice getDice() {
-                return dice;
-            }
-
-            @Override
-            public GameSettings getSettings() {
-                return super.getSettings()
-                        .string(LEVEL_MAP,
-                                "         " +
-                                "         " +
-                                "         " +
-                                "         " +
-                                "         " +
-                                "         " +
-                                "   o     " +
-                                "   ox    " +
-                                " xxoox   ");
-            }
-        };
-
-        // when
-        LocalGameRunner.run(gameType,
-                new LinkedList<Solver>() {{
-                    add(new AISolver(dice));
-                    add(new AISolver(dice));
-                }},
-                new LinkedList<>() {{
-                    add(new Board());
-                    add(new Board());
-                }});
-
-        // then
-        assertEquals("1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   o     \n" +
-                        "1:   ox    \n" +
-                        "1: xxoox   \n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(0)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   o     \n" +
-                        "2:   ox    \n" +
-                        "2: xxoox   \n" +
-                        "2:\n" +
-                        "DICE:1\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   o     \n" +
-                        "1:   ox    \n" +
-                        "1:oxxoox   \n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(2)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   o     \n" +
-                        "2:   ox    \n" +
-                        "2:oxxoox   \n" +
-                        "2:\n" +
-                        "DICE:3\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(3)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   x     \n" +
-                        "1:   o     \n" +
-                        "1:   ox    \n" +
-                        "1:oxxoox   \n" +
-                        "1:\n" +
-                        "DICE:4\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(4)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   x     \n" +
-                        "2:   o     \n" +
-                        "2:   ox    \n" +
-                        "2:oxxoox   \n" +
-                        "2:\n" +
-                        "DICE:0\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(0)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   x     \n" +
-                        "1:   oo    \n" +
-                        "1:   ox    \n" +
-                        "1:oxxoox   \n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(2)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   x     \n" +
-                        "2:   oo    \n" +
-                        "2:   ox    \n" +
-                        "2:oxxoox   \n" +
-                        "2:\n" +
-                        "DICE:2\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(2)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   x     \n" +
-                        "1:   oo    \n" +
-                        "1:  xox    \n" +
-                        "1:oxxoox   \n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(3)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   x     \n" +
-                        "2:   oo    \n" +
-                        "2:  xox    \n" +
-                        "2:oxxoox   \n" +
-                        "2:\n" +
-                        "DICE:1\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   o     \n" +
-                        "1:   x     \n" +
-                        "1:   oo    \n" +
-                        "1:  xox    \n" +
-                        "1:oxxoox   \n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(0)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   o     \n" +
-                        "2:   x     \n" +
-                        "2:   oo    \n" +
-                        "2:  xox    \n" +
-                        "2:oxxoox   \n" +
-                        "2:\n" +
-                        "DICE:1\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   o     \n" +
-                        "1:   x     \n" +
-                        "1:   oo    \n" +
-                        "1: xxox    \n" +
-                        "1:oxxoox   \n" +
-                        "1:\n" +
-                        "DICE:4\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(4)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   o     \n" +
-                        "2:   x     \n" +
-                        "2:   oo    \n" +
-                        "2: xxox    \n" +
-                        "2:oxxoox   \n" +
-                        "2:\n" +
-                        "DICE:1\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   o     \n" +
-                        "1:   xo    \n" +
-                        "1:   oo    \n" +
-                        "1: xxox    \n" +
-                        "1:oxxoox   \n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(2)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   o     \n" +
-                        "2:   xo    \n" +
-                        "2:   oo    \n" +
-                        "2: xxox    \n" +
-                        "2:oxxoox   \n" +
-                        "2:\n" +
-                        "DICE:1\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   o     \n" +
-                        "1:   xo    \n" +
-                        "1: x oo    \n" +
-                        "1: xxox    \n" +
-                        "1:oxxoox   \n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(3)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   o     \n" +
-                        "2:   xo    \n" +
-                        "2: x oo    \n" +
-                        "2: xxox    \n" +
-                        "2:oxxoox   \n" +
-                        "2:\n" +
-                        "DICE:2\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(2)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:         \n" +
-                        "1:   o     \n" +
-                        "1:   o     \n" +
-                        "1:   xo    \n" +
-                        "1: x oo    \n" +
-                        "1: xxox    \n" +
-                        "1:oxxoox   \n" +
-                        "1:\n" +
-                        "DICE:4\n" +
-                        "1:Scores: 0\n" +
-                        "1:Answer: ACT(4)\n" +
-                        "2:Board:\n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:         \n" +
-                        "2:   o     \n" +
-                        "2:   o     \n" +
-                        "2:   xo    \n" +
-                        "2: x oo    \n" +
-                        "2: xxox    \n" +
-                        "2:oxxoox   \n" +
-                        "2:\n" +
-                        "DICE:1\n" +
-                        "2:Scores: 0\n" +
-                        "2:Answer: ACT(1)\n" +
-                        "1:Fire Event: LOOSE\n" +
-                        "2:Fire Event: WIN\n" +
-                        "------------------------------------------",
-                String.join("\n", messages));
-
+                    @Override
+                    public GameSettings getSettings() {
+                        return new GameSettings()
+                                .string(LEVEL_MAP,
+                                        "         " +
+                                        "         " +
+                                        "         " +
+                                        "         " +
+                                        "         " +
+                                        "         " +
+                                        "   o     " +
+                                        "   ox    " +
+                                        " xxoox   ");
+                    }
+                },
+                Arrays.asList(new AISolver(dice), new AISolver(dice)),
+                Arrays.asList(new Board(), new Board()),
+                (o1, o2) -> assertEquals(o1, o2));
     }
 }
