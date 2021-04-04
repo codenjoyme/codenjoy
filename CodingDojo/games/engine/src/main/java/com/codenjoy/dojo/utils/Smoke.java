@@ -45,18 +45,18 @@ public class Smoke {
     public static final String SOURCE_FOLDER = "src/test/resources/";
     public static final String TARGET_FOLDER = "target/";
 
-    public static void play(int iterations,
+    public static void play(int ticks,
                             String fileName,
                             GameType gameRunner,
                             List<Solver> solvers,
                             List<ClientBoard> boards,
                             BiConsumer<Object, Object> assertor)
     {
-        play(iterations, fileName, true,
+        play(ticks, fileName, true,
                 gameRunner, solvers, boards, assertor);
     }
 
-    public static void play(int iterations,
+    public static void play(int ticks,
                             String fileName,
                             boolean printBoardOnly,
                             GameType gameRunner,
@@ -69,7 +69,7 @@ public class Smoke {
 
         LocalGameRunner.timeout = 0;
         LocalGameRunner.out = messages::add;
-        LocalGameRunner.countIterations = iterations;
+        LocalGameRunner.countIterations = ticks;
         LocalGameRunner.printConversions = false;
         LocalGameRunner.printBoardOnly = printBoardOnly;
         LocalGameRunner.printDice = false;
