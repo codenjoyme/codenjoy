@@ -34,9 +34,6 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by indigo on 2016-09-22.
- */
 public class AbstractLayeredBoardTest {
 
     public static final int LAYER_1 = 0;
