@@ -59,6 +59,10 @@ setup.setupSprites = function() {
         setup.gameMode = localStorage.getItem(STORAGE_GAME_TYPE);
     }
 
+    if (!setup.gameMode) { // TODO это тут надо потому что join на main page и форма регистрации иногда отпускает без указания мода
+        setup.gameMode = MODE_JS;
+    }
+
     if (setup.gameMode == MODE_JS) {
         setup.enableBefunge = false;
         setup.sprites = SPRITES_ROBOT;
@@ -73,7 +77,7 @@ setup.setupSprites = function() {
         setup.sprites = SPRITES_ROBOT;
         setup.onlyLeaderBoard = true;
     } else {
-        throw new Error("Unknown iCanCode mode: " + gameMode);
+        throw new Error("Unknown iCanCode mode: " + setup.gameMode);
     }
     setup.isDrawByOrder = (setup.sprites == SPRITES_EKIDS);
 }
