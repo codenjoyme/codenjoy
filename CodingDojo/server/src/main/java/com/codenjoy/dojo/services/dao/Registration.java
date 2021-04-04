@@ -391,13 +391,18 @@ public class Registration {
         }
     }
 
+    // TODO юнит тест что админов не удаляют
     public void remove(String id) {
-        pool.update("DELETE FROM users WHERE id = ?;",
+        pool.update("DELETE FROM users " +
+                    "WHERE id = ? " +
+                    "AND roles NOT LIKE '%" + ROLE_ADMIN + "%';",
                 new Object[]{id});
     }
 
+    // TODO юнит тест что админов не удаляют
     public void removeAll() {
-        pool.update("DELETE FROM users WHERE roles NOT LIKE '%" + ROLE_ADMIN + "%';");
+        pool.update("DELETE FROM users " +
+                "WHERE roles NOT LIKE '%" + ROLE_ADMIN + "%';");
     }
 
 }
