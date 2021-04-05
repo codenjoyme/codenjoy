@@ -56,12 +56,12 @@ export default [
 	{
 		image: battle_wall,
 		title: `BATTLE_WALL('☼')`,
-		description: `Стіна, яку, у звичайний умовах, не можна зруйнувати`,
+		description: `Стіна, яку(у звичайний умовах) не можна зруйнувати`,
 	},
 	{
 		image: bang,
 		title: `BANG('Ѡ')`,
-		description: `Місце вибуху ворожего танку`,
+		description: `Місце вибуху ворожого танку`,
 	},
 	{
 		image: ice,
@@ -156,7 +156,7 @@ export default [
 	{
 		image: bullet,
 		title: `BULLET('•')`,
-		description: `Куля. Або власна або ворожа`,
+		description: `Куля. Власна або ворожа`,
 	},
 	{
 		image: tank_up,
@@ -201,22 +201,22 @@ export default [
 	{
 		image: ai_tank_up,
 		title: `AI_TANK_UP('?')`,
-		description: `AI-танк. Рухаєтсья у одному йому відомих напрямках`,
+		description: `AI-танк. Дивиться вгору`,
 	},
 	{
 		image: ai_tank_right,
 		title: `AI_TANK_RIGHT('»')`,
-		description: `AI-танк. Рухаєтсья у одному йому відомих напрямках`,
+		description: `AI-танк. Дивиться вправо`,
 	},
 	{
 		image: ai_tank_down,
 		title: `AI_TANK_DOWN('¿')`,
-		description: `AI-танк. Рухаєтсья у одному йому відомих напрямках`,
+		description: `AI-танк. Дивиться донизу`,
 	},
 	{
 		image: ai_tank_left,
 		title: `AI_TANK_LEFT('«')`,
-		description: `AI-танк. Рухаєтсья у одному йому відомих напрямках`,
+		description: `AI-танк. Дивиться вліво`,
 	},
 	{
 		image: ai_tank_prize,
