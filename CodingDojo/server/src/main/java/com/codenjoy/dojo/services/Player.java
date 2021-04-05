@@ -33,6 +33,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDateTime;
+
 import static com.codenjoy.dojo.services.GameServiceImpl.removeNumbers;
 
 @Getter
@@ -59,6 +61,7 @@ public class Player implements ScreenRecipient, Closeable {
     private GameType gameType;
     private InformationCollector eventListener;
     private Closeable ai;
+    private LocalDateTime lastResponseTime = LocalDateTime.MAX;
 
     public Player(String id) {
         this.id = id;
@@ -154,4 +157,11 @@ public class Player implements ScreenRecipient, Closeable {
         this.passwordConfirmation = null;
     }
 
+    public LocalDateTime getLastResponseTime() {
+        return lastResponseTime;
+    }
+
+    public void updateLastResponseTime() {
+        this.lastResponseTime = LocalDateTime.now();
+    }
 }

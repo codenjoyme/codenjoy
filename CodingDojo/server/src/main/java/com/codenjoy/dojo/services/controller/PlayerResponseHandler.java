@@ -43,6 +43,7 @@ public class PlayerResponseHandler implements ResponseHandler {
     public void onResponse(PlayerSocket socket, String message) {
         log.debug("Received response: {} from player: {}", message, player.getId());
         new PlayerCommand(joystick, message).execute();
+        player.updateLastResponseTime();
     }
 
     @Override

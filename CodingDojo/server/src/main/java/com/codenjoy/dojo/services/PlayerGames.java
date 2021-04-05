@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -41,11 +42,14 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
+import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 
 @Component
 @FieldNameConstants
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
+
+    public static final Long INACTIVE_MINUTES_LIMIT = 5L;
 
     public static final boolean ALL = true;
     public static final boolean ACTIVE = !ALL;
@@ -266,6 +270,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
         for (PlayerGame playerGame : active) {
+            Player player = playerGame.getPlayer();
             Game game = playerGame.getGame();
             String room = playerGame.getRoom();
 
@@ -291,6 +296,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
                     game.newGame();
                 });
+            }
+            Duration inactiveTime = Duration.between(player.getLastResponseTime(), now());
+            if (inactiveTime.toMinutes() > INACTIVE_MINUTES_LIMIT) {
+                quiet(() -> removeCurrent(player));
             }
         }
 
