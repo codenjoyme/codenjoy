@@ -66,6 +66,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
 
         playerService.removeAll();
         registration.removeAll();
+        roomService.removeAll();
     }
 
     // проверяем что для залогиненого пользователя все методы сервиса отрабатывают
@@ -93,6 +94,78 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
         assertEquals("true", get("/rest/room/validRoom/player/validPlayer/joined"));
+    }
+
+
+    // проверяем что если закрыта регистрация в комнате этой, то зарегаться не получится
+    @Test
+    public void shouldJoinJoinedAndLeave_whenRegistrationIsClosed() {
+        // given
+        register("validPlayer", "ip", "validRoom", "first");
+        asUser("validPlayer", "validPlayer");
+
+        // then
+        assertEquals("true", get("/rest/room/validRoom/joined"));
+        assertEquals("true", get("/rest/room/validRoom/player/validPlayer/joined"));
+
+        // when
+        roomService.setOpened("validRoom", false);
+        assertEquals("true", get("/rest/room/validRoom/leave"));
+
+        // then
+        assertEquals("false", get("/rest/room/validRoom/joined"));
+        assertEquals("false", get("/rest/room/validRoom/player/validPlayer/joined"));
+
+        // then
+        // не получается зайти
+        assertEquals("", get("/rest/room/validRoom/game/first/join"));
+
+        // then
+        assertEquals("false", get("/rest/room/validRoom/joined"));
+        assertEquals("false", get("/rest/room/validRoom/player/validPlayer/joined"));
+
+        // when
+        roomService.setOpened("validRoom", true);
+
+        // then
+        // могу зайти
+        assertEquals("{'code':'4020021687627278468','id':'validPlayer'}",
+                quote(get("/rest/room/validRoom/game/first/join")));
+
+        assertEquals("true", get("/rest/room/validRoom/joined"));
+        assertEquals("true", get("/rest/room/validRoom/player/validPlayer/joined"));
+    }
+
+    // проверяем что если закрыта регистрация в комнате этой, то могу зайти в другую, новую
+    @Test
+    public void shouldJoinJoinedAndLeave_whenRegistrationIsClosed_caseGoToAnotherRoom() {
+        // given
+        register("validPlayer", "ip", "validRoom", "first");
+        asUser("validPlayer", "validPlayer");
+
+        // then
+        assertEquals("true", get("/rest/room/validRoom/joined"));
+        assertEquals("true", get("/rest/room/validRoom/player/validPlayer/joined"));
+
+        // when
+        roomService.setOpened("validRoom", false);
+        assertEquals("true", get("/rest/room/validRoom/leave"));
+
+        // then
+        assertEquals("false", get("/rest/room/validRoom/joined"));
+        assertEquals("false", get("/rest/room/validRoom/player/validPlayer/joined"));
+
+        // then
+        // не получается зайти
+        assertEquals("{'code':'4020021687627278468','id':'validPlayer'}",
+                quote(get("/rest/room/anotherNewRoom/game/first/join")));
+
+        // then
+        assertEquals("false", get("/rest/room/validRoom/joined"));
+        assertEquals("false", get("/rest/room/validRoom/player/validPlayer/joined"));
+
+        assertEquals("true", get("/rest/room/anotherNewRoom/joined"));
+        assertEquals("true", get("/rest/room/anotherNewRoom/player/validPlayer/joined"));
     }
 
     // в этом тесте все методы отвечают либо false либо null, а все потому что

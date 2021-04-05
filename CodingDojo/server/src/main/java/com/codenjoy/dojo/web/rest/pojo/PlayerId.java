@@ -22,7 +22,7 @@ package com.codenjoy.dojo.web.rest.pojo;
  * #L%
  */
 
-import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.Player;
 import lombok.Getter;
 
 @Getter
@@ -31,8 +31,8 @@ public class PlayerId {
     private String id;
     private String code;
 
-    public PlayerId(Registration.User user) {
-        code = user.getCode();
-        id = user.getId();
+    public PlayerId(Player player) {
+        code = player.getCode();
+        id = player.getId();
     }
 }
