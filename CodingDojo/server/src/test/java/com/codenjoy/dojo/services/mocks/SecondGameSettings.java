@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.mocks;
 
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +32,8 @@ import java.util.List;
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER3;
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER4;
 
-public class SecondGameSettings extends SettingsImpl implements SettingsReader<FirstGameSettings> {
+public class SecondGameSettings extends SettingsImpl
+        implements SettingsReader<SecondGameSettings> {
 
     public enum Keys implements Key {
 
@@ -56,6 +58,10 @@ public class SecondGameSettings extends SettingsImpl implements SettingsReader<F
     }
 
     public SecondGameSettings() {
+        init();
+    }
+
+    public void init() {
         integer(PARAMETER3, 43);
         bool(PARAMETER4, false);
         boolValue(PARAMETER4).update(true);

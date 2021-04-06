@@ -115,15 +115,23 @@ public class RestRoomController {
         validator.checkRoom(room, CANT_BE_NULL);
 
         if (user == null) {
+            // TODO информировать dojorena что именно пошло не так
             return null;
         }
 
         if (!gameService.exists(game)) {
+            // TODO информировать dojorena что именно пошло не так
             return null;
         }
 
-        playerService.register(user.getId(), game, room, request.getRemoteAddr());
+        Player player = playerService.register(user.getId(), game, room, request.getRemoteAddr());
 
-        return new PlayerId(user);
+        if (player == NullPlayer.INSTANCE) {
+            // TODO информировать dojorena что именно пошло не так
+            return null;
+        }
+
+        player.setCode(user.getCode());
+        return new PlayerId(player);
     }
 }

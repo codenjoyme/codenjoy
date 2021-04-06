@@ -28,6 +28,7 @@ import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;
+import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.Chance;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -37,15 +38,14 @@ import java.util.List;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.services.settings.Chance.CHANCE_RESERVED;
 
-public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings>, RoundSettings {
+public class GameSettings extends SettingsImpl
+        implements SettingsReader<GameSettings>,
+        RoundSettings<GameSettings>,
+                SemifinalSettings<GameSettings> {
 
     public enum Keys implements Key {
-
-        MULTIPLE("[Game] Is multiple or disposable"),
-        PLAYERS_PER_ROOM("[Game] Players per room for disposable"),
 
         AI_TICKS_PER_SHOOT("[Game] Ticks until the next AI Tank shoot"),
         TANK_TICKS_PER_SHOOT("[Game] Ticks until the next Tank shoot"),
@@ -89,20 +89,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        bool(MULTIPLE, false);
-        integer(PLAYERS_PER_ROOM, 20);
-        // включен ли режим раундов
-        bool(ROUNDS_ENABLED, true);
-        // сколько тиков на 1 раунд
-        integer(TIME_PER_ROUND, 200);
-        // сколько тиков победитель будет сам оставаться после всех побежденных
-        integer(TIME_FOR_WINNER, 1);
-        // обратный отсчет перед началом раунда
-        integer(TIME_BEFORE_START, 5);
-        // сколько раундов (с тем же составом героев) на 1 матч
-        integer(ROUNDS_PER_MATCH, 1);
-        // сколько тиков должно пройти от начала раунда, чтобы засчитать победу
-        integer(MIN_TICKS_FOR_WIN, 1);
+        initRound();
+        initSemifinal();
+
+        // сколько участников в комнате
+        playersPerRoom().update(20);
 
         integer(AI_TICKS_PER_SHOOT, 10);
         integer(TANK_TICKS_PER_SHOOT, 4);
@@ -126,6 +117,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(KILL_YOUR_TANK_PENALTY, 0);
         integer(KILL_OTHER_HERO_TANK_SCORE, 50);
         integer(KILL_OTHER_AI_TANK_SCORE, 25);
+
 
         multiline(LEVEL_MAP,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +

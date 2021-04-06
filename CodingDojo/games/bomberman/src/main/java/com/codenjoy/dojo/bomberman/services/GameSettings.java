@@ -27,6 +27,7 @@ import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;
+import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.apache.commons.lang3.StringUtils;
@@ -35,14 +36,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 
-public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings>, RoundSettings {
+public class GameSettings extends SettingsImpl
+        implements SettingsReader<GameSettings>,
+        RoundSettings<GameSettings>,
+                    SemifinalSettings<GameSettings> {
 
     public enum Keys implements Key {
 
-        MULTIPLE("[Game] Is multiple or disposable"),
-        PLAYERS_PER_ROOM("[Game] Players per room for disposable"),
         KILL_WALL_SCORE("[Score] Kill wall score"),
         KILL_MEAT_CHOPPER_SCORE("[Score] Kill meat chopper score"),
         KILL_OTHER_HERO_SCORE("[Score] Kill other hero score"),
@@ -83,6 +84,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
+        initRound();
+        initSemifinal();
+
         integer(KILL_WALL_SCORE, 1);
         integer(KILL_MEAT_CHOPPER_SCORE, 10);
         integer(KILL_OTHER_HERO_SCORE, 20);
@@ -97,21 +101,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(BOARD_SIZE, boardSize);
         integer(DESTROY_WALL_COUNT, (boardSize * boardSize) / 10);
         integer(MEAT_CHOPPERS_COUNT, 5);
-
-        bool(MULTIPLE, false);
-        integer(PLAYERS_PER_ROOM, 5);
-        // включен ли режим раундов
-        bool(ROUNDS_ENABLED, true);
-        // сколько тиков на 1 раунд
-        integer(TIME_PER_ROUND, 200);
-        // сколько тиков победитель будет сам оставаться после всех побежденных
-        integer(TIME_FOR_WINNER, 1);
-        // обратный отсчет перед началом раунда
-        integer(TIME_BEFORE_START, 5);
-        // сколько раундов (с тем же составом героев) на 1 матч
-        integer(ROUNDS_PER_MATCH, 1);
-        // сколько тиков должно пройти от начала раунда, чтобы засчитать победу
-        integer(MIN_TICKS_FOR_WIN, 1);
 
         string(DEFAULT_PERKS, StringUtils.EMPTY);
         PerksSettingsWrapper perks =

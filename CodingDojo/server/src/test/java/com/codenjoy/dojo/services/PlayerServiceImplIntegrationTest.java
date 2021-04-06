@@ -36,6 +36,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,7 +53,7 @@ public class PlayerServiceImplIntegrationTest {
 
     private PlayerService service;
 
-    private Semifinal semifinal;
+    private SemifinalService semifinal;
     private ConfigProperties config;
     private ActionLogger actionLogger;
     private AutoSaver autoSaver;
@@ -106,7 +107,7 @@ public class PlayerServiceImplIntegrationTest {
                 config.setRegistrationOpened(true);
 
                 PlayerServiceImplIntegrationTest.this.semifinal
-                        = this.semifinal = mock(Semifinal.class);
+                        = this.semifinal = mock(SemifinalService.class);
 
                 this.isAiNeeded = true;
             }

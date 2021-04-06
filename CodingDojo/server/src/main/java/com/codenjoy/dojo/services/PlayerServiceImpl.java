@@ -40,6 +40,7 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import lombok.extern.slf4j.Slf4j;
@@ -85,7 +86,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties config;
     @Autowired protected RoomService roomService;
-    @Autowired protected Semifinal semifinal;
+    @Autowired protected SemifinalService semifinal;
     @Autowired protected SimpleProfiler profiler;
 
     @Value("${game.ai}")
@@ -642,7 +643,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void cleanAllScores(String room) {
         lock.writeLock().lock();
         try {
-            semifinal.clean(); // TODO semifinal должен научиться работать для определенных комнат
+            semifinal.clean(room);
 
             playerGames.getAll(withRoom(room))
                 .forEach(PlayerGame::clearScore);

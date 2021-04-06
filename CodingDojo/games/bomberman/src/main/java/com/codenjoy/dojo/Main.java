@@ -34,7 +34,6 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
-import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.MULTIPLE;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 
 public class Main {
@@ -55,11 +54,8 @@ public class Main {
         GameSettings gameSettings = new GameSettings()
                 .update(settings);
 
-        if (!contains(settings, ROUNDS_ENABLED)
-                && !contains(settings, MULTIPLE))
-        {
+        if (!contains(settings, ROUNDS_ENABLED)) {
             String json = "{\n" +
-                    "  'MULTIPLE':true,\n" +
                     "  'ROUNDS_ENABLED':false\n" +
                     "}\n";
             LocalGameRunner.out.accept("Simple mode! Hardcoded: \n" + json);
@@ -85,7 +81,7 @@ public class Main {
     }
 
     private static boolean contains(JSONObject settings, SettingsReader.Key key) {
-        return settings.has(SettingsReader.Key.keyToName(RoundSettings.allRoundsKeys(), key.key()));
+        return settings.has(SettingsReader.keyToName(RoundSettings.allRoundsKeys(), key.key()));
     }
 
     private static Dice getDice(String randomSeed) {

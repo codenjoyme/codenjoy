@@ -30,7 +30,9 @@ import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthorities;
+import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -117,10 +119,13 @@ public abstract class AbstractRestControllerTest {
     protected GameService games;
 
     @Autowired
-    protected SemifinalSettings semifinal;
+    protected SemifinalService semifinalService;
 
     @Autowired
     protected DebugService debugService;
+
+    @Autowired
+    protected RoomService roomService;
 
     @Before
     public void setUp() {

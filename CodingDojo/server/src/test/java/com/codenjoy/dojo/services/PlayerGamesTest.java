@@ -84,7 +84,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void testGet_exists() {
         // given
-        Player player = createPlayer("game");
+        Player player = createPlayer();
 
         // when
         PlayerGame playerGame = playerGames.get(player.getId());
@@ -164,9 +164,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void testGetAllPlayersByType() {
         // given
-        Player player = createPlayer();
-        Player secondPlayer = createPlayer();
-        Player thirdPlayer = createPlayer("game2");
+        Player player = createPlayer("room", "game");
+        Player secondPlayer = createPlayer("room", "game");
+        Player thirdPlayer = createPlayer("room2", "game2");
 
         // when
         List<Player> result = playerGames.getPlayers("game");
@@ -240,8 +240,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testGetGameTypes() {
         // given
         Player player = createPlayer();
-        Player player2 = createPlayer("game2");
-        playerGames.add(player2, "room", null);
+        Player player2 = createPlayer("room2", "game2");
+        playerGames.add(player2, "room2", null);
 
         // when
         List<GameType> gameTypes = playerGames.getGameTypes();
@@ -275,7 +275,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", "room2", "game2", type); // paused
         createPlayer("player3", "room3", "game1", type);
 
-        setActive("room2", false);
+        givenActive("room2", false);
 
         lazyJoysticks.get(0).right();
         verifyNoMoreInteractions(joysticks.get(0));
@@ -298,19 +298,19 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldTickGameType() {
         // given
-        createPlayer("game2");
-        createPlayer("game3");
-        createPlayer("game2"); // второй игрок к уже существующей game2
+        createPlayer("room2", "game2");
+        createPlayer("room3", "game3");
+        createPlayer("room2", "game2"); // второй игрок к уже существующей room2/game2
 
         // when
         playerGames.tick();
 
         // then
-        InOrder order = inOrder(gameTypes.get(0), gameTypes.get(1), gameTypes.get(2));
+        assertEquals(2, gameTypes.size());
+        InOrder order = inOrder(gameTypes.get(0), gameTypes.get(1));
 
         order.verify(gameTypes.get(0)).quietTick();
         order.verify(gameTypes.get(1)).quietTick();
-        order.verify(gameTypes.get(2)).quietTick();
     }
 
     @Test
@@ -357,7 +357,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", "room2", "game2", type); // paused
         createPlayer("player3", "room3", "game1", type);
 
-        setActive("room2", false);
+        givenActive("room2", false);
 
         resetAllFields();
         playerIsNotAlive(0);
@@ -373,7 +373,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         verifyNewGameCreated(2);
 
         // when
-        setActive("room2", true);
+        givenActive("room2", true);
         resetAllFields();
 
         playerGames.tick();
@@ -437,7 +437,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", "room2", "game2", type); // paused
         createPlayer("player3", "room3", "game1", type);
 
-        setActive("room2", false);
+        givenActive("room2", false);
 
         resetAllFields();
 
@@ -450,7 +450,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         verifyFieldTicked(2);
 
         // when
-        setActive("room2", true);
+        givenActive("room2", true);
         resetAllFields();
 
         playerGames.tick();
@@ -1366,20 +1366,33 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testChangeRoom_keepSave() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
+
+        when(fieldSaves.getSave())
+                .thenReturn(new JSONObject("{\"fiedData\":1}"),
+                        new JSONObject("{\"fiedData\":2}"),
+                        new JSONObject("{\"fiedData\":3}"),
+                        new JSONObject("{\"fiedData\":4}"));
+
         createPlayer("player1", "room", "game", type, new PlayerSave("{\"some\":\"data1\"}"));
         createPlayer("player2", "room", "game", type, new PlayerSave("{\"some\":\"data2\"}"));
 
+        // вначале два плеера в одной комнате
         assertRooms("{0=[player1, player2]}");
 
+        assertSave("player1", "{\"fiedData\":1}");
+        assertSave("player2", "{\"fiedData\":1}");
+
         // when
+        // потом один покидает комнату и переходит в другую
         playerGames.changeRoom("player1", "otherRoom");
 
         // then
-        assertRooms("{1=[player2], " +
-                "2=[player1]}");
+        //  второй игрок при этом остается один в комнате и потому сперва покидает ее заходя на новую
+        // а тот, кто самовольно перешел так же размещается в своей новой комнате
+        assertRooms("{1=[player2], 2=[player1]}");
 
-        assertSave("player1", "{\"some\":\"data1\"}");
-        assertSave("player2", "{\"some\":\"data2\"}");
+        assertSave("player1", "{\"fiedData\":3}");
+        assertSave("player2", "{\"fiedData\":2}");
     }
 
     @Test
@@ -1951,10 +1964,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testGetAll_withType() {
         // given
         MultiplayerType type = MultiplayerType.SINGLE;
-        createPlayer("player1", "room", "game1", type);
-        createPlayer("player2", "room", "game1", type);
-        createPlayer("player3", "room", "game2", type);
-        createPlayer("player4", "room", "game3", type);
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room1", "game1", type);
+        createPlayer("player3", "room2", "game2", type);
+        createPlayer("player4", "room3", "game3", type);
 
         // when then
         assertPlayers("[player1, player2]", playerGames.getAll(withType("game1")));
@@ -1966,10 +1979,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testGetAll_withAll() {
         // given
         MultiplayerType type = MultiplayerType.SINGLE;
-        createPlayer("player1", "room", "game1", type);
-        createPlayer("player2", "room", "game1", type);
-        createPlayer("player3", "room", "game2", type);
-        createPlayer("player4", "room", "game3", type);
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room1", "game1", type);
+        createPlayer("player3", "room2", "game2", type);
+        createPlayer("player4", "room3", "game3", type);
 
         // when then
         assertPlayers("[player1, player2, player3, player4]", playerGames.getAll(withAll()));
@@ -1999,7 +2012,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player4", "room2", "game2", type); // paused
         createPlayer("player5", "room3", "game1", type);
 
-        setActive("room2", false);
+        givenActive("room2", false);
 
         // when then
         assertPlayers("[player1, player2, player5]", playerGames.getAll(playerGames.withActive()));
@@ -2016,7 +2029,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player4", "room2", "game2", type); // paused
         createPlayer("player5", "room3", "game1", type);
 
-        setActive("room2", false);
+        givenActive("room2", false);
 
         // when then
         assertEquals("[room1, room3]", playerGames.getRooms(ACTIVE).toString());
