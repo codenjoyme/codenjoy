@@ -243,6 +243,13 @@ public class Registration {
         );
     }
 
+    public String getIdByGitHubUsername(String username) {
+        return pool.select("SELECT id FROM users WHERE github_username = ?;",
+                new Object[]{username},
+                rs -> rs.next() ? rs.getString("id") : null
+        );
+    }
+
     public String getCodeById(String id) {
         return pool.select("SELECT code FROM users WHERE id = ?;",
                 new Object[]{id},

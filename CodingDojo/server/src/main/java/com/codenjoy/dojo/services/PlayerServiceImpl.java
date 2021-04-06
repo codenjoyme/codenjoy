@@ -271,6 +271,19 @@ public class PlayerServiceImpl implements PlayerService {
         return WebSocketRunner.runAI(id, code, solver, board);
     }
 
+    @Override
+    public void updateScore(String gitHubUsername, double score){
+        String id = registration.getIdByGitHubUsername(gitHubUsername);
+        updatePlayerScore(id, score);
+    }
+
+    private void updatePlayerScore(String id, double score) {
+        Player player = new Player();
+        player.setId(id);
+        player.setScore(score);
+        saver.updateScore(player,System.currentTimeMillis());
+    }
+
     private Player getPlayer(PlayerSave save, String game, String room) {
         String name = save.getId();
         String callbackUrl = save.getCallbackUrl();

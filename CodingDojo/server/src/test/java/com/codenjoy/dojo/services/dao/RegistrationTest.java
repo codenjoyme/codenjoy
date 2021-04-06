@@ -83,7 +83,7 @@ public class RegistrationTest {
     @Test
     public void shouldApprove_registered() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),"username").getCode();
 
         // then
         assertTrue(registration.registered("id"));
@@ -100,14 +100,14 @@ public class RegistrationTest {
     @Test
     public void shouldRegisterWithData() {
         // when
-        String code = registration.register("id", "email", "name", "pass", "someData", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "someData", USER.roles(),"username").getCode();
 
         // then
         assertEquals(CODE_FOR_ID_AND_PASS, code);
 
         Registration.User user = registration.getUserByCode(code);
 
-        Registration.User expected = new Registration.User("id", "email", "name", 0, "pass", CODE_FOR_ID_AND_PASS, "someData", USER.roles());
+        Registration.User expected = new Registration.User("id", "email", "name", 0, "pass", CODE_FOR_ID_AND_PASS, "someData", USER.roles(),"username");
 
         assertUsersEqual(expected, user, "pass", PASSWORD_ENCODER);
     }
@@ -135,7 +135,7 @@ public class RegistrationTest {
     @Test
     public void shouldSuccessLogin() {
         // given
-        Registration.User user = registration.register("id", "email", "name", "pass", "data", Arrays.asList());
+        Registration.User user = registration.register("id", "email", "name", "pass", "data", Arrays.asList(),"username");
         registration.approve(user.getCode());
 
         // when
@@ -148,7 +148,7 @@ public class RegistrationTest {
     @Test
     public void shouldUnSuccessLogin_whenNoApproveEmail() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList());
+        registration.register("id", "email", "name", "pass", "data", Arrays.asList(),"username");
 
         // when
         String code = registration.login("id", "pass");
@@ -160,7 +160,7 @@ public class RegistrationTest {
     @Test
     public void shouldUnSuccessLogin_whenBadPassword() {
         // given
-        Registration.User user = registration.register("id", "email", "name", "pass", "data", Arrays.asList());
+        Registration.User user = registration.register("id", "email", "name", "pass", "data", Arrays.asList(),"username");
         registration.approve(user.getCode());
 
         // when
@@ -173,7 +173,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetCodeById() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList());
+        registration.register("id", "email", "name", "pass", "data", Arrays.asList(),"username");
 
         // when
         String code = registration.getCodeById("id");
@@ -185,7 +185,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetCodeById_ifNotFound() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList());
+        registration.register("id", "email", "name", "pass", "data", Arrays.asList(),"username");
 
         // when
         String code = registration.getCodeById("bad_id");
@@ -197,7 +197,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByCode() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", Arrays.asList()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", Arrays.asList(),"username").getCode();
 
         // when
         String id = registration.getIdByCode(code);
@@ -209,7 +209,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetNameById() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList());
+        registration.register("id", "email", "name", "pass", "data", Arrays.asList(),"username");
 
         // when
         String name = registration.getNameById("id");
@@ -221,7 +221,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByCode_ifNotFound() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList());
+        registration.register("id", "email", "name", "pass", "data", Arrays.asList(),"username");
 
         // when
         String email = registration.getIdByCode("bad_code");
@@ -233,11 +233,11 @@ public class RegistrationTest {
     @Test
     public void shouldUpdateReadableName() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles()).getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles()).getCode();
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles(),"username").getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles(),"username").getCode();
 
-        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
-        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
+        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(),"username");
+        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(),"username");
 
         Registration.User actualUser1 = registration.getUserByCode(code1);
         Registration.User actualUser2 = registration.getUserByCode(code2);
@@ -257,11 +257,11 @@ public class RegistrationTest {
     @Test
     public void shouldUpdateId() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles()).getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles()).getCode();
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles(),"username").getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles(),"username").getCode();
 
-        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
-        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
+        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(),"username");
+        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(),"username");
 
         Registration.User actualUser1 = registration.getUserByCode(code1);
         Registration.User actualUser2 = registration.getUserByCode(code2);
@@ -281,11 +281,11 @@ public class RegistrationTest {
     @Test
     public void shouldUpdateNameAndEmail() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles()).getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles()).getCode();
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles(),"username").getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles(),"username").getCode();
 
-        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
-        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
+        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(),"username");
+        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(),"username");
 
         Registration.User actualUser1 = registration.getUserByCode(code1);
         Registration.User actualUser2 = registration.getUserByCode(code2);
@@ -306,18 +306,18 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceExistingUser() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(),"username").getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(),"username").getCode();
 
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
+        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(),"username");
+        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(),"username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
 
         // when
-        Registration.User updated = new Registration.User("id1", "email1", "name1", 1, "newPassword1", "newCode1", "newData1", USER.roles());
+        Registration.User updated = new Registration.User("id1", "email1", "name1", 1, "newPassword1", "newCode1", "newData1", USER.roles(),"username");
         registration.replace(updated);
 
         // then
@@ -328,18 +328,18 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceExistingUser_withoutCode() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(),"username").getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(),"username").getCode();
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
+        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(),"username");
+        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(),"username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
 
         // when
         String noCode = null;
-        Registration.User updated = new Registration.User("id1", "email1", "name1", 1, "newPassword1", noCode, "newData1", USER.roles());
+        Registration.User updated = new Registration.User("id1", "email1", "name1", 1, "newPassword1", noCode, "newData1", USER.roles(),"username");
         registration.replace(updated);
 
         // then
@@ -350,17 +350,17 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceNonExistingUser() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(),"username").getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(),"username").getCode();
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
+        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(),"username");
+        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(),"username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
 
         // when
-        Registration.User updated = new Registration.User("user3", "email3", "name3", 1, "newPassword3", "newCode3", "newData3", USER.roles());
+        Registration.User updated = new Registration.User("user3", "email3", "name3", 1, "newPassword3", "newCode3", "newData3", USER.roles(),"username");
         registration.replace(updated);
 
         // then
@@ -372,11 +372,11 @@ public class RegistrationTest {
     @Test
     public void shouldRemoveUser() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(),"username").getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(),"username").getCode();
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
+        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(),"username");
+        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(),"username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);;
@@ -391,11 +391,11 @@ public class RegistrationTest {
     @Test
     public void shouldRemoveAllUsers() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(),"username").getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(),"username").getCode();
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
+        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(),"username");
+        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(),"username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
@@ -410,10 +410,10 @@ public class RegistrationTest {
     @Test
     public void shouldRemoveAllUsers_exceptAdmins() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles()).getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles()).getCode();
-        String code3 = registration.register("admin3", "email3", "name3", "pass3", "someData3", ADMIN.roles()).getCode();
-        String code4 = registration.register("admin4", "email4", "name4", "pass4", "someData4", ADMIN.roles()).getCode();
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles(),"username1").getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles(),"username2").getCode();
+        String code3 = registration.register("admin3", "email3", "name3", "pass3", "someData3", ADMIN.roles(),"username3").getCode();
+        String code4 = registration.register("admin4", "email4", "name4", "pass4", "someData4", ADMIN.roles(),"username4").getCode();
 
         // when
         registration.removeAll();
@@ -430,7 +430,7 @@ public class RegistrationTest {
     public void shouldCheckUser_whenOnlyEmails() {
         // given
         String email = "user@email.com";
-        String code = registration.register(email, "email", "name", "pass", "someData", Arrays.asList()).getCode();
+        String code = registration.register(email, "email", "name", "pass", "someData", Arrays.asList(),"username").getCode();
 
         // when then
         assertEquals(email, registration.checkUser(email, code));
@@ -442,7 +442,7 @@ public class RegistrationTest {
         String email = "user@email.com";
         String id = Hash.getId(email, HASH);
         
-        String code = registration.register(id, "email", "name", "pass", "someData", Arrays.asList()).getCode();
+        String code = registration.register(id, "email", "name", "pass", "someData", Arrays.asList(),"username").getCode();
 
         // when then
         assertEquals(null, registration.checkUser(email, code));
@@ -455,7 +455,7 @@ public class RegistrationTest {
         String email = "user@email.com";
         String id = Hash.getId(email, HASH);
         
-        String code = registration.register(email, "email", "name", "pass", "someData", Arrays.asList()).getCode();
+        String code = registration.register(email, "email", "name", "pass", "someData", Arrays.asList(),"username").getCode();
 
         // when then
         assertEquals(null, registration.checkUser(id, code));
@@ -468,7 +468,7 @@ public class RegistrationTest {
         String email = "user@email.com";
         String id = Hash.getId(email, HASH);
         
-        String code = registration.register(id, "email", "name", "pass", "someData", Arrays.asList()).getCode();
+        String code = registration.register(id, "email", "name", "pass", "someData", Arrays.asList(),"username").getCode();
 
         // when then
         assertEquals(id, registration.checkUser(id, code));
@@ -484,7 +484,7 @@ public class RegistrationTest {
         when(properties.isEmailVerificationNeeded()).thenReturn(true);
 
         // when
-        Registration.User user = registration.registerApproved(id, email, readableName);
+        Registration.User user = registration.registerApproved(id, email, readableName,null);
         
         // then
         assertEquals(false, StringUtils.isEmpty(user.getId()));
@@ -500,7 +500,7 @@ public class RegistrationTest {
         when(properties.isEmailVerificationNeeded()).thenReturn(true);
 
         // when
-        Registration.User user = registration.registerApproved(id, email, readableName);
+        Registration.User user = registration.registerApproved(id, email, readableName,null);
 
         // then
         assertEquals("id", user.getId());
@@ -516,7 +516,7 @@ public class RegistrationTest {
         when(properties.isEmailVerificationNeeded()).thenReturn(false);
 
         // when
-        Registration.User user = registration.registerApproved(id, email, readableName);
+        Registration.User user = registration.registerApproved(id, email, readableName,null);
 
         // then
         assertEquals("id", user.getId());
@@ -538,11 +538,11 @@ public class RegistrationTest {
     @Test
     public void shouldGetOrRegister_whenFoundById() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),null).getCode();
         String id = registration.getIdByCode(code);
         
         // when
-        Registration.User user = registration.getOrRegister(id, null, null);
+        Registration.User user = registration.getOrRegister(id, null, null,null);
 
         // then
         assertEquals(code, user.getCode());
@@ -552,11 +552,11 @@ public class RegistrationTest {
     @Test
     public void shouldGetOrRegister_whenFoundByEmail() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),null).getCode();
         String id = registration.getIdByCode(code);
 
         // when
-        Registration.User user = registration.getOrRegister(null, "email", null);
+        Registration.User user = registration.getOrRegister(null, "email", null,null);
 
         // then
         assertEquals(id, user.getId());
@@ -570,7 +570,7 @@ public class RegistrationTest {
         when(properties.isEmailVerificationNeeded()).thenReturn(false);
 
         // when
-        Registration.User user = registration.getOrRegister("id", "email", "name");
+        Registration.User user = registration.getOrRegister("id", "email", "name",null);
 
         // then
         assertEquals(false, StringUtils.isEmpty(user.getId()));
@@ -589,7 +589,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetUserById_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),"username").getCode();
         String id = registration.getIdByCode(code);
         
         // when
@@ -614,7 +614,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByEmail_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),"username").getCode();
 
         // when
         String id = registration.getIdByEmail("email");
@@ -636,7 +636,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByName_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),"username").getCode();
 
         // when
         String id = registration.getIdByName("name");
@@ -658,7 +658,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetEmailById_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),"username").getCode();
 
         // when
         String email = registration.getEmailById("id");
@@ -679,7 +679,7 @@ public class RegistrationTest {
     @Test
     public void shouldEmailIsUsed_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),"username").getCode();
 
         // when
         boolean used = registration.emailIsUsed("email");
@@ -700,7 +700,7 @@ public class RegistrationTest {
     @Test
     public void shouldNameIsUsed_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),"username").getCode();
 
         // when
         boolean used = registration.nameIsUsed("name");
@@ -725,7 +725,7 @@ public class RegistrationTest {
     @Test
     public void shouldCheckUserByPassword_badPassword() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),"username").getCode();
         String id = registration.getIdByCode(code);
         String password = "bad_password";
 
@@ -751,7 +751,7 @@ public class RegistrationTest {
     @Test
     public void shouldCheckUser_goodId() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles()).getCode();
+        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(),"username").getCode();
         String id = registration.getIdByCode(code);
 
         // when
@@ -759,5 +759,18 @@ public class RegistrationTest {
 
         // then
         assertEquals(id, actualId);
+    }
+
+
+    @Test
+    public void shouldGetIdByGitHubUsername() {
+        // given
+        registration.register("id", "email", "name", "pass", "data", Arrays.asList(),"username");
+
+        // when
+        String id = registration.getIdByGitHubUsername("username");
+
+        // then
+        assertEquals("id", id);
     }
 }
