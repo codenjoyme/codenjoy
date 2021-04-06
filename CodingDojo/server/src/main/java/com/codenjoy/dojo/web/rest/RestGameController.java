@@ -152,5 +152,17 @@ public class RestGameController {
         }
         playerService.cleanScores(user.getId());
     }
+
+    @GetMapping("/update/{username}/score")
+    public void updateUserScore(@PathVariable("username") String username,
+                                  @RequestBody double score) {
+        if (username == null) {
+            return;
+        }
+
+        playerService.updateScore(username,score);
+
+
+    }
 }
 

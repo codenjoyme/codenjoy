@@ -37,4 +37,6 @@ public interface GameSaver {
     List<String> getSavedList();
     
     void delete(String id);
+
+    void updateScore(Player player, long time);
 }
