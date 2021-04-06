@@ -37,14 +37,16 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        GAME_LEVELS("Game Levels"),
-        GLASS_SIZE("Glass Size"),
-        FIGURE_DROPPED_SCORE("Figure dropped score score"),
-        ONE_LINE_REMOVED_SCORE("One line removed score"),
-        TWO_LINES_REMOVED_SCORE("Two lines removed score"),
-        THREE_LINES_REMOVED_SCORE("Three lines removed score"),
-        FOUR_LINES_REMOVED_SCORE("Four lines removed score"),
-        GLASS_OVERFLOWN_PENALTY("Glass overflown penalty");
+        GAME_LEVELS("[Game] Game Levels"),
+        GLASS_SIZE("[Game] Glass Size"),
+
+        SCORE_MODE("[Score] Score mode (cumulative or maximum between overflows)"),
+        FIGURE_DROPPED_SCORE("[Score] Figure dropped score score"),
+        ONE_LINE_REMOVED_SCORE("[Score] One line removed score"),
+        TWO_LINES_REMOVED_SCORE("[Score] Two lines removed score"),
+        THREE_LINES_REMOVED_SCORE("[Score] Three lines removed score"),
+        FOUR_LINES_REMOVED_SCORE("[Score] Four lines removed score"),
+        GLASS_OVERFLOWN_PENALTY("[Score] Glass overflown penalty");
 
         private String key;
 
@@ -67,6 +69,8 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         options(GAME_LEVELS, levels(),
                 ProbabilityWithoutOverflownLevels.class.getSimpleName());
         integer(GLASS_SIZE, 18);
+
+        bool(SCORE_MODE, true);
         integer(FIGURE_DROPPED_SCORE, 1);
         integer(ONE_LINE_REMOVED_SCORE, 10);
         integer(TWO_LINES_REMOVED_SCORE, 30);

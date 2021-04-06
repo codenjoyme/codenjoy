@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.services;
+package com.codenjoy.dojo.tetris.services.scores;
 
 /*-
  * #%L
@@ -24,23 +24,26 @@ package com.codenjoy.dojo.tetris.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.tetris.services.GameSettings;
 
 import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
 
-public class Scores implements PlayerScores {
+public class CumulativeScores implements PlayerScores {
 
-    private volatile int score;
+    protected volatile int score;
+    protected GameSettings settings;
 
-    private GameSettings settings;
-
-    public Scores(int score, GameSettings settings) {
+    public CumulativeScores(int score, GameSettings settings) {
         this.score = score;
         this.settings = settings;
     }
 
     @Override
     public int clear() {
-        return score = 0;
+        int result = score;
+        score = 0;
+        return result;
     }
 
     @Override
@@ -61,15 +64,15 @@ public class Scores implements PlayerScores {
         score = Math.max(0, score);
     }
 
-    private void figureDropped(int figureIndex) {
+    protected void figureDropped(int figureIndex) {
         score += settings.integer(FIGURE_DROPPED_SCORE) * figureIndex;
     }
 
-    private void glassOverflown(int level) {
+    protected void glassOverflown(int level) {
         score -= settings.integer(GLASS_OVERFLOWN_PENALTY) * level;
     }
 
-    private void linesRemoved(int level, int count) {
+    protected void linesRemoved(int level, int count) {
         switch (count) {
             case 1:
                 score += settings.integer(ONE_LINE_REMOVED_SCORE) * level;

@@ -35,6 +35,7 @@ public interface PlayerScores extends EventListener {
 
     /**
      * @return очистка очков с возвращением последнего значения.
+     * // TODO почти ни в одной реализации это не так + ко всему оно игнорится
      */
     int clear();
 

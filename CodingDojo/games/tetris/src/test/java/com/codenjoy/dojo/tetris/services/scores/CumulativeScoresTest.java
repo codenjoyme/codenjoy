@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.services;
+package com.codenjoy.dojo.tetris.services.scores;
 
 /*-
  * #%L
@@ -24,15 +24,17 @@ package com.codenjoy.dojo.tetris.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.tetris.services.Events;
+import com.codenjoy.dojo.tetris.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class ScoresTest {
+public class CumulativeScoresTest {
 
-    private PlayerScores scores;
-    private GameSettings settings;
+    protected PlayerScores scores;
+    protected GameSettings settings;
 
     public void isLinesRemoved(int level, int lines) {
         scores.event(Events.linesRemoved(level, lines));
@@ -49,12 +51,20 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new GameSettings();
-        scores = new Scores(0, settings);
+        scores = getScores(0);
+    }
+
+    public PlayerScores getScores(int score) {
+        return new CumulativeScores(score, settings);
+    }
+
+    public void assertScore(int expected) {
+        assertEquals(expected, scores.getScore());
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        scores = getScores(140);
 
         isLinesRemoved(1, 1);
         isLinesRemoved(1, 2);
@@ -83,10 +93,8 @@ public class ScoresTest {
     public void shouldClearScore() {
         isLinesRemoved(1, 1);
 
-        scores.clear();
+        assertEquals(10, scores.clear());
 
         assertEquals(0, scores.getScore());
     }
-
-
 }

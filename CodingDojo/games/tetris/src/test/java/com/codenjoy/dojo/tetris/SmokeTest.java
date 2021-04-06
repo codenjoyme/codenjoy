@@ -35,8 +35,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GAME_LEVELS;
-import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GLASS_SIZE;
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
