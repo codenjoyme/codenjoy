@@ -71,18 +71,19 @@ public class PlayerGameSaver implements GameSaver {
                 });
     }
 
+    @Override
     public void updateGame(Player player, String save, long time) {
         pool.update("UPDATE saves " +
-                        "SET time = ?, player_id = ?, callback_url = ?, room_name = ?, game_name = ?, score = ?, save = ?, repository_url = ?" +
-                        "WHERE player_id = '"+player.getId()+"';",
+                        "SET time = ?, callback_url = ?, room_name = ?, game_name = ?, score = ?, save = ?, repository_url = ?" +
+                        "WHERE player_id = ?;",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
-                        player.getId(),
                         player.getCallbackUrl(),
                         player.getRoom(),
                         player.getGame(),
                         player.getScore(),
                         save,
-                        player.getRepositoryUrl()
+                        player.getRepositoryUrl(),
+                        player.getId()
                 });
     }
 
@@ -125,4 +126,16 @@ public class PlayerGameSaver implements GameSaver {
         pool.update("DELETE FROM saves WHERE player_id = ?;",
                 new Object[]{id});
     }
+
+    @Override
+    public void updateScore(Player player, long time) {
+        pool.update("UPDATE saves " +
+                        "SET time = ?, score = ?" +
+                        "WHERE player_id = ?;",
+                new Object[]{JDBCTimeUtils.toString(new Date(time)),
+                        player.getScore(),
+                        player.getId()
+                });
+    }
+
 }

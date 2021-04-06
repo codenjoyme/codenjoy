@@ -29,6 +29,9 @@ public interface PlayerService extends Tickable {
 
     Player register(String id, String game, String room, String ip,String repositoryUrl);
     Player register(PlayerSave save);
+
+    void updateScore(String gitHubUsername, double score);
+
     List<Player> getAll();
     List<Player> getAll(String game);
     List<Player> getAllInRoom(String room);
