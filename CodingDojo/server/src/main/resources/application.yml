@@ -29,15 +29,6 @@ game:
   player:
     score:
       cleanup: false
-  semifinal:
-    enabled: false
-    timeout: 900
-    limit:
-      percentage: true
-      value: 50
-    board:
-      reset: true
-      shuffle: true
 
 board.save.ticks: 1
 

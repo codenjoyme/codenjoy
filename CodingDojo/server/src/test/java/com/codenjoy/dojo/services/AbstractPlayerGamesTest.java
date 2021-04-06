@@ -55,22 +55,17 @@ public class AbstractPlayerGamesTest {
     protected List<GamePlayer> gamePlayers = new LinkedList<>();
     protected List<GameField> fields = new LinkedList<>();
     protected RoomService roomService;
+    protected GameField fieldSaves = mock(GameField.class);
 
     @Before
     public void setUp() {
         playerGames = new PlayerGames();
-
-        roomService = playerGames.roomService = mock(RoomService.class);
-        // по умолчанию все комнаты активны
-        when(roomService.isActive(anyString())).thenReturn(true);
+        roomService = playerGames.roomService = new RoomService();
+        when(fieldSaves.getSave()).thenReturn(null);
     }
 
     protected Player createPlayer() {
-        return createPlayer("game");
-    }
-
-    protected Player createPlayer(String game) {
-        return createPlayer("room", game);
+        return createPlayer("room", "game");
     }
 
     protected Player createPlayer(String room, String game) {
@@ -125,8 +120,12 @@ public class AbstractPlayerGamesTest {
         return player;
     }
 
-    protected void setActive(String room, boolean active) {
-        when(roomService.isActive(room)).thenReturn(active);
+    protected void givenActive(String room, boolean active) {
+        roomService.setActive(room, active);
+    }
+
+    protected void givenRegistrationOpened(String room, boolean opened) {
+        roomService.setOpened(room, opened);
     }
 
     protected Player createPlayerWithScore(int score, String room) {
@@ -141,22 +140,12 @@ public class AbstractPlayerGamesTest {
         when(gamePlayers.get(index).shouldLeave()).thenReturn(!stillPlay);
     }
 
-    protected Player createPlayer(String name, String game,
+    protected Player createPlayer(String id, String game,
                                   String room, MultiplayerType type,
                                   PlayerSave save, Object board)
     {
-        GameService gameService = mock(GameService.class);
-        GameType gameType = mock(GameType.class);
-        gameTypes.add(gameType);
-        PlayerScores scores = mock(PlayerScores.class);
-        when(gameType.getPlayerScores(anyInt(), any())).thenReturn(scores);
-        when(gameType.getSettings()).thenReturn(mock(Settings.class));
-        when(gameType.name()).thenReturn(game);
-        when(gameService.getGameType(anyString())).thenReturn(gameType);
-        when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
-        when(gameService.exists(anyString())).thenReturn(true);
-
-        Player player = new Player(name, "url", new RoomGameType(gameType), scores, mock(Information.class));
+        GameType gameType = getGameType(game, room);
+        Player player = new Player(id, "url", gameType, gameType.getPlayerScores(0, null), mock(Information.class));
         player.setEventListener(mock(InformationCollector.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
@@ -172,7 +161,8 @@ public class AbstractPlayerGamesTest {
                         inv -> {
                             GameField field = mock(GameField.class);
                             when(field.reader()).thenReturn(mock(BoardReader.class));
-                            when(field.getSave()).thenReturn(getSaveJson(save));
+                            JSONObject value = fieldSaves.getSave();
+                            when(field.getSave()).thenReturn(value);
                             fields.add(field);
                             return field;
                         },
@@ -185,6 +175,34 @@ public class AbstractPlayerGamesTest {
         gamePlayers.add(env.gamePlayer);
 
         return player;
+    }
+
+    // так как у нас есть комнаты, то для одной и той же room мы берем tameType из кеша roomService
+    private GameType getGameType(String game, String room) {
+        if (roomService.exists(room)) {
+            return roomService.gameType(room);
+        } else {
+            GameType basicType = createGameType(game, room);
+            return roomService.create(room, basicType);
+        }
+    }
+
+    // при каждой новой room должен дергаться этот метод
+    private GameType createGameType(String game, String room) {
+        GameType gameType = mock(GameType.class);
+        doReturn(settings(room)).when(gameType).getSettings();
+        when(gameType.getPlayerScores(anyInt(), any())).thenAnswer(inv -> mock(PlayerScores.class));
+        when(gameType.name()).thenReturn(game);
+        GameService gameService = mock(GameService.class);
+        when(gameService.getGameType(anyString())).thenReturn(gameType);
+        when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
+        when(gameService.exists(anyString())).thenReturn(true);
+        gameTypes.add(gameType);
+        return gameType;
+    }
+
+    protected Settings settings(String room) {
+        return mock(Settings.class);
     }
 
     private JSONObject getSaveJson(PlayerSave save) {

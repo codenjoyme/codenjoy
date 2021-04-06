@@ -35,9 +35,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_PRIZE_LIMIT;
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;

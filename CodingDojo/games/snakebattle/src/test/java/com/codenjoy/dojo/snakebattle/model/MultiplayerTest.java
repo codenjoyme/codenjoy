@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
@@ -68,7 +67,7 @@ public class MultiplayerTest {
         dice = mock(Dice.class);
 
         settings = new TestGameSettings()
-                .integer(MIN_TICKS_FOR_WIN, 1);
+                .integer(ROUNDS_MIN_TICKS_FOR_WIN, 1);
     }
 
     private void givenFl(String board) {
@@ -1081,7 +1080,7 @@ public class MultiplayerTest {
     // змейка не стартует сразу если стоит таймер
     @Test
     public void shouldWaitTillTimer_thenStart() {
-        settings.integer(TIME_BEFORE_START, 4);
+        settings.integer(ROUNDS_TIME_BEFORE_START, 4);
 
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1154,7 +1153,7 @@ public class MultiplayerTest {
     // если одна змейка погибает, стартует новый раунд
     @Test
     public void shouldStartNewGame_whenGameOver() {
-        settings.integer(TIME_BEFORE_START, 1)
+        settings.integer(ROUNDS_TIME_BEFORE_START, 1)
                 .integer(ROUNDS_PER_MATCH, 3);
 
         givenFl("☼☼☼☼☼☼☼☼" +
@@ -2835,7 +2834,7 @@ public class MultiplayerTest {
     // если тиков для победы недостаточно, то WIN ты не получишь
     @Test
     public void shouldNoWin_whenIsNotEnoughTicksForWin() {
-        settings.integer(MIN_TICKS_FOR_WIN, 10);
+        settings.integer(ROUNDS_MIN_TICKS_FOR_WIN, 10);
 
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼┌─┐   ☼" +

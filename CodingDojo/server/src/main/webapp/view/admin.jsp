@@ -221,49 +221,6 @@
         </tr>
     </table>
 
-    <form:form modelAttribute="adminSettings" action="admin#semifinal" method="POST">
-        <table class="admin-table" id="semifinal">
-            <tr colspan="2">
-                <td><b>Semifinal settings</b></td>
-            </tr>
-            <tr>
-                <td>Enable semifinal</td>
-                <td><form:checkbox path="semifinal.enabled"/></td>
-            <tr>
-            <tr>
-                <td>Ticks timeout</td>
-                <td><form:input path="semifinal.timeout"/></td>
-            </tr>
-            <tr>
-                <td>Current tick</td>
-                <td>${semifinalTick}</td>
-            <tr>
-            </tr>
-                <td>Рercent/Count</td>
-                <td><form:checkbox path="semifinal.percentage"/></td>
-            </tr>
-            <tr>
-                <td>Finalists limit</td>
-                <td><form:input path="semifinal.limit"/></td>
-            </tr>
-            <tr>
-                <td>Reset board</td>
-                <td><form:checkbox path="semifinal.resetBoard"/></td>
-            </tr>
-            <tr>
-                <td>Shuffle board</td>
-                <td><form:checkbox path="semifinal.shuffleBoard"/></td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="hidden" name="game" value="${game}"/>
-                    <input type="hidden" name="room" value="${room}"/>
-                    <input type="submit" value="Save"/>
-                </td>
-            </tr>
-        </table>
-    </form:form>
-
     <table class="admin-table" id="cleanGame">
         <tr>
             <tr colspan="2">
@@ -381,6 +338,96 @@
             </tr>
         </table>
     </form:form>
+
+    <c:if test="${not empty adminSettings.rounds.parameters}">
+        <form:form modelAttribute="adminSettings" action="admin#rounds" method="POST">
+            <table class="admin-table" id="rounds">
+                <tr colspan="2">
+                    <td><b>Rounds settings</b></td>
+                </tr>
+                <tr>
+                    <td>Enable Rounds</td>
+                    <td><form:checkbox path="rounds.roundsEnabled"/></td>
+                <tr>
+                <tr>
+                    <td>Players per room</td>
+                    <td><form:input path="rounds.playersPerRoom"/></td>
+                </tr>
+                <tr>
+                    <td>Time per Round</td>
+                    <td><form:input path="rounds.timePerRound"/></td>
+                </tr>
+                <tr>
+                    <td>Time for Winner</td>
+                    <td><form:input path="rounds.timeForWinner"/></td>
+                </tr>
+                <tr>
+                    <td>Time before start Round</td>
+                    <td><form:input path="rounds.timeBeforeStart"/></td>
+                </tr>
+                <tr>
+                    <td>Rounds per Match</td>
+                    <td><form:input path="rounds.roundsPerMatch"/></td>
+                </tr>
+                <tr>
+                    <td>Min ticks for win</td>
+                    <td><form:input path="rounds.minTicksForWin"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="hidden" name="game" value="${game}"/>
+                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="submit" value="Save"/>
+                    </td>
+                </tr>
+            </table>
+        </form:form>
+    </c:if>
+
+    <c:if test="${not empty adminSettings.semifinal.parameters}">
+        <form:form modelAttribute="adminSettings" action="admin#semifinal" method="POST">
+            <table class="admin-table" id="semifinal">
+                <tr colspan="2">
+                    <td><b>Semifinal settings</b></td>
+                </tr>
+                <tr>
+                    <td>Enable semifinal</td>
+                    <td><form:checkbox path="semifinal.enabled"/></td>
+                <tr>
+                <tr>
+                    <td>Ticks before recalculation</td>
+                    <td><form:input path="semifinal.timeout"/></td>
+                </tr>
+                <tr>
+                    <td>Current tick</td>
+                    <td>${semifinalTick}</td>
+                <tr>
+                <tr>
+                    <td>Percentage or quantitative criterion</td>
+                    <td><form:checkbox path="semifinal.percentage"/></td>
+                </tr>
+                <tr>
+                    <td>Finalists limit (% or count)</td>
+                    <td><form:input path="semifinal.limit"/></td>
+                </tr>
+                <tr>
+                    <td>Reset board after recalculation</td>
+                    <td><form:checkbox path="semifinal.resetBoard"/></td>
+                </tr>
+                <tr>
+                    <td>Shuffle board after recalculation</td>
+                    <td><form:checkbox path="semifinal.shuffleBoard"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="hidden" name="game" value="${game}"/>
+                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="submit" value="Save"/>
+                    </td>
+                </tr>
+            </table>
+        </form:form>
+    </c:if>
 
     <c:if test="${parameters.size() != 0}">
         <form:form modelAttribute="adminSettings" action="admin#gameSettings" method="POST">

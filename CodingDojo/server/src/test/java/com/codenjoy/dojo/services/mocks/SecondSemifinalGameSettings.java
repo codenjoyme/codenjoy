@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.room;
+package com.codenjoy.dojo.services.mocks;
 
 /*-
  * #%L
@@ -22,27 +22,13 @@ package com.codenjoy.dojo.services.room;
  * #L%
  */
 
-import com.codenjoy.dojo.services.GameType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 
-@Data
-@AllArgsConstructor
-@ToString
-public class RoomState {
+public class SecondSemifinalGameSettings extends SecondGameSettings
+        implements SemifinalSettings<SecondGameSettings> {
 
-    private String name;
-    private GameType type;
-    private boolean active;
-    private boolean opened;
-    private int tick;
-
-    public void resetTick() {
-        tick = 0;
-    }
-
-    public void tick() {
-        tick++;
+    public SecondSemifinalGameSettings() {
+        init();
+        initSemifinal();
     }
 }

@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services.room;
+package com.codenjoy.dojo.services.mocks;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2021 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,27 +22,14 @@ package com.codenjoy.dojo.services.room;
  * #L%
  */
 
-import com.codenjoy.dojo.services.GameType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
 
-@Data
-@AllArgsConstructor
-@ToString
-public class RoomState {
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
-    private String name;
-    private GameType type;
-    private boolean active;
-    private boolean opened;
-    private int tick;
+public class SecondSemifinalGameType extends SecondGameType {
 
-    public void resetTick() {
-        tick = 0;
+    @Override
+    public SettingsImpl getSettings() {
+        return new SecondSemifinalGameSettings();
     }
 
-    public void tick() {
-        tick++;
-    }
 }

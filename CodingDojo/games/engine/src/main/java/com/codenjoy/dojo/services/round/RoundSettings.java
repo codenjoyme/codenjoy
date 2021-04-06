@@ -26,18 +26,24 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-public interface RoundSettings {
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
+import static com.codenjoy.dojo.services.round.RoundSettingsImpl.ROUNDS;
+
+public interface RoundSettings<T extends SettingsReader> extends SettingsReader<T> {
 
     public enum Keys implements SettingsReader.Key {
 
-        ROUNDS_ENABLED("[Game][Rounds] Enabled"),
-        TIME_PER_ROUND("[Rounds] Time per Round"),
-        TIME_FOR_WINNER("[Rounds] Time for Winner"),
-        TIME_BEFORE_START("[Rounds] Time before start Round"),
-        ROUNDS_PER_MATCH("[Rounds] Rounds per Match"),
-        MIN_TICKS_FOR_WIN("[Rounds] Min ticks for win");
+        ROUNDS_ENABLED(ROUNDS + " Enabled"),
+        ROUNDS_PLAYERS_PER_ROOM(ROUNDS + " Players per room"),
+        ROUNDS_TIME(ROUNDS + " Time per Round"),
+        ROUNDS_TIME_FOR_WINNER(ROUNDS + " Time for Winner"),
+        ROUNDS_TIME_BEFORE_START(ROUNDS + " Time before start Round"),
+        ROUNDS_PER_MATCH(ROUNDS + " Rounds per Match"),
+        ROUNDS_MIN_TICKS_FOR_WIN(ROUNDS + " Min ticks for win");
 
         private String key;
 
@@ -51,33 +57,174 @@ public interface RoundSettings {
         }
     }
 
+    static boolean isRounds(List<Key> values) {
+        return values.contains(ROUNDS_ENABLED);
+    }
+
     static List<SettingsReader.Key> allRoundsKeys() {
         return Arrays.asList(Keys.values());
     }
 
-    Parameter<?> getParameter(String name);
-
-    default Parameter<Integer> timeBeforeStart() {
-        return getParameter(Keys.TIME_BEFORE_START.key()).type(Integer.class);
+    static Optional<? extends String> keyToName(List<Key> values, String value) {
+        return Optional.ofNullable(
+                isRounds(values)
+                        ? SettingsReader.Key.keyToName(values, value).orElse(null)
+                        : null);
     }
 
-    default Parameter<Integer> roundsPerMatch() {
-        return getParameter(Keys.ROUNDS_PER_MATCH.key()).type(Integer.class);
+    static Optional<? extends String> nameToKey(List<Key> values, String value) {
+        return Optional.ofNullable(
+                isRounds(values)
+                        ? SettingsReader.Key.nameToKey(values, value).orElse(null)
+                        : null);
     }
 
-    default Parameter<Integer> minTicksForWin() {
-        return getParameter(Keys.MIN_TICKS_FOR_WIN.key()).type(Integer.class);
+    default void initRound() {
+        // включен ли режим раундов
+        bool(ROUNDS_ENABLED, true);
+
+        // сколько участников в комнате
+        integer(ROUNDS_PLAYERS_PER_ROOM, 5);
+
+        // сколько тиков на 1 раунд
+        integer(ROUNDS_TIME, 200);
+
+        // сколько тиков победитель будет сам оставаться после всех побежденных
+        integer(ROUNDS_TIME_FOR_WINNER, 1);
+
+        // обратный отсчет перед началом раунда
+        integer(ROUNDS_TIME_BEFORE_START, 5);
+
+        // сколько раундов (с тем же составом героев) на 1 матч
+        integer(ROUNDS_PER_MATCH, 1);
+
+        // сколько тиков должно пройти от начала раунда, чтобы засчитать победу
+        integer(ROUNDS_MIN_TICKS_FOR_WIN, 1);
+    }
+
+    // parameters getters
+
+    default Parameter<Boolean> roundsEnabled() {
+        return boolValue(Keys.ROUNDS_ENABLED);
+    }
+
+    default Parameter<Integer> playersPerRoom() {
+        return integerValue(Keys.ROUNDS_PLAYERS_PER_ROOM);
     }
 
     default Parameter<Integer> timePerRound() {
-        return getParameter(Keys.TIME_PER_ROUND.key()).type(Integer.class);
+        return integerValue(ROUNDS_TIME);
     }
 
     default Parameter<Integer> timeForWinner() {
-        return getParameter(Keys.TIME_FOR_WINNER.key()).type(Integer.class);
+        return integerValue(Keys.ROUNDS_TIME_FOR_WINNER);
     }
 
-    default Parameter<Boolean> roundsEnabled() {
-        return getParameter(Keys.ROUNDS_ENABLED.key()).type(Boolean.class);
+    default Parameter<Integer> timeBeforeStart() {
+        return integerValue(Keys.ROUNDS_TIME_BEFORE_START);
+    }
+
+    default Parameter<Integer> roundsPerMatch() {
+        return integerValue(Keys.ROUNDS_PER_MATCH);
+    }
+
+    default Parameter<Integer> minTicksForWin() {
+        return integerValue(Keys.ROUNDS_MIN_TICKS_FOR_WIN);
+    }
+
+    // update methods
+
+    // TODO test me
+    default List<Parameter> getRoundsParams() {
+        if (getParameters().isEmpty()) {
+            return Arrays.asList();
+        }
+        return new LinkedList<>(){{
+            add(roundsEnabled());
+            add(playersPerRoom());
+            add(timePerRound());
+            add(timeForWinner());
+            add(timeBeforeStart());
+            add(roundsPerMatch());
+            add(minTicksForWin());
+        }};
+    }
+
+    default RoundSettings update(RoundSettings input) {
+        setRoundsEnabled(input.isRoundsEnabled());
+        setPlayersPerRoom(input.getPlayersPerRoom());
+        setTimePerRound(input.getTimePerRound());
+        setTimeForWinner(input.getTimeForWinner());
+        setTimeBeforeStart(input.getTimeBeforeStart());
+        setRoundsPerMatch(input.getRoundsPerMatch());
+        setMinTicksForWin(input.getMinTicksForWin());
+        return this;
+    }
+
+    // getters
+
+    default boolean isRoundsEnabled() {
+        return roundsEnabled().getValue();
+    }
+
+    default int getPlayersPerRoom() {
+        return playersPerRoom().getValue();
+    }
+
+    default int getTimePerRound() {
+        return timePerRound().getValue();
+    }
+
+    default int getTimeForWinner() {
+        return timeForWinner().getValue();
+    }
+
+    default int getTimeBeforeStart() {
+        return timeBeforeStart().getValue();
+    }
+
+    default int getRoundsPerMatch() {
+        return roundsPerMatch().getValue();
+    }
+
+    default int getMinTicksForWin() {
+        return minTicksForWin().getValue();
+    }
+
+    // setters
+
+    default RoundSettings setRoundsEnabled(boolean input) {
+        roundsEnabled().update(input);
+        return this;
+    }
+
+    default RoundSettings setPlayersPerRoom(int input) {
+        playersPerRoom().update(input);
+        return this;
+    }
+
+    default RoundSettings setTimePerRound(int input) {
+        timePerRound().update(input);
+        return this;
+    }
+
+    default RoundSettings setTimeForWinner(int input) {
+        timeForWinner().update(input);
+        return this;
+    }
+
+    default RoundSettings setTimeBeforeStart(int input) {
+        timeBeforeStart().update(input);
+        return this;
+    }
+
+    default RoundSettings setRoundsPerMatch(int input) {
+        roundsPerMatch().update(input);
+        return this;
+    }
+
+    default RoundSettings setMinTicksForWin(int input) {
+        minTicksForWin().update(input);
+        return this;
     }
 }

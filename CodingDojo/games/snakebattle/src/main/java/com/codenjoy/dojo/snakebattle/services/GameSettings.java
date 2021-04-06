@@ -31,24 +31,22 @@ import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 
-public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings>, RoundSettings {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings>, RoundSettings<GameSettings> {
 
     public enum Keys implements Key {
 
-        PLAYERS_PER_ROOM("Players per Room"),
-        FLYING_COUNT("Flying count"),
-        FURY_COUNT("Fury count"),
-        STONE_REDUCED("Stone reduced value"),
-        WIN_SCORE("Win score"),
-        APPLE_SCORE("Apple score"),
-        GOLD_SCORE("Gold score"),
-        DIE_PENALTY("Die penalty"),
-        STONE_SCORE("Stone score"),
-        EAT_SCORE("Eat enemy score"),
-        LEVEL_MAP("Level map");
+        FLYING_COUNT("[Game] Flying count"),
+        FURY_COUNT("[Game] Fury count"),
+        STONE_REDUCED("[Game] Stone reduced value"),
+        WIN_SCORE("[Score] Win score"),
+        APPLE_SCORE("[Score] Apple score"),
+        GOLD_SCORE("[Score] Gold score"),
+        DIE_PENALTY("[Score] Die penalty"),
+        STONE_SCORE("[Score] Stone score"),
+        EAT_SCORE("[Score] Eat enemy score"),
+        LEVEL_MAP("[Level] Map");
 
         private String key;
 
@@ -68,14 +66,14 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
     
     public GameSettings() {
-        bool(ROUNDS_ENABLED, true);
-        integer(TIME_PER_ROUND, 300);
-        integer(TIME_FOR_WINNER, 1);
-        integer(TIME_BEFORE_START, 5);
-        integer(ROUNDS_PER_MATCH, 3);
-        integer(MIN_TICKS_FOR_WIN, 40);
+        initRound();
+        // сколько тиков на 1 раунд
+        timePerRound().update(300);
+        // сколько раундов (с тем же составом героев) на 1 матч
+        roundsPerMatch().update(3);
+        // // сколько тиков должно пройти от начала раунда, чтобы засчитать победу
+        minTicksForWin().update(40);
 
-        integer(PLAYERS_PER_ROOM, 5);
         integer(FLYING_COUNT, 10);
         integer(FURY_COUNT, 10);
         integer(STONE_REDUCED, 3);

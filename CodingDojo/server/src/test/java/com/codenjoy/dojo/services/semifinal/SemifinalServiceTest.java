@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.semifinal;
 
 /*-
  * #%L
@@ -23,123 +23,145 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.AbstractPlayerGamesTest;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertNotSame;
+import static org.mockito.Mockito.*;
 
-public class SemifinalTest extends AbstractPlayerGamesTest {
+public class SemifinalServiceTest extends AbstractPlayerGamesTest {
 
-    private Semifinal semifinal;
+    private SemifinalService semifinal;
     private int timeout;
-    private SemifinalSettings settings;
 
     @Before
     public void setup() {
+        super.setUp();
+
         timeout = 3;
-        semifinal = new Semifinal();
-        settings = semifinal.settings = new SemifinalSettings();
-        settings.setEnabled(true);
-        settings.setTimeout(timeout);
-        settings.setPercentage(true);
-        settings.setLimit(50);
-        settings.setResetBoard(false);
-        settings.setShuffleBoard(false);
+        semifinal = new SemifinalService();
+        semifinal.roomService = roomService;
         semifinal.playerGames = playerGames;
         semifinal.clean();
+        roomService.removeAll();
+    }
+    
+    protected Settings settings(String room) {
+        return (Settings) new SemifinalSettingsImpl()
+                    .setEnabled(true)
+                    .setTimeout(timeout)
+                    .setPercentage(true)
+                    .setLimit(50)
+                    .setResetBoard(false)
+                    .setShuffleBoard(false);
     }
 
     @Test
     public void shouldResetTicks_whenRoundDone() {
         // given
-        settings.setTimeout(3);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(80);
 
-        assertEquals(0, semifinal.getTime());
+        updateSettings("room")
+                .setTimeout(3);
+
+        assertEquals(0, semifinal.getTime("room"));
 
         // when then
         semifinal.tick();
-        assertEquals(1, semifinal.getTime());
+        assertEquals(1, semifinal.getTime("room"));
 
         // when then
         semifinal.tick();
-        assertEquals(2, semifinal.getTime());
+        assertEquals(2, semifinal.getTime("room"));
 
         // when then
         semifinal.tick();
-        assertEquals(0, semifinal.getTime());
+        assertEquals(0, semifinal.getTime("room"));
 
         // when then
         semifinal.tick();
-        assertEquals(1, semifinal.getTime());
+        assertEquals(1, semifinal.getTime("room"));
 
         // when then
         semifinal.tick();
-        assertEquals(2, semifinal.getTime());
+        assertEquals(2, semifinal.getTime("room"));
 
         // when then
         semifinal.tick();
-        assertEquals(0, semifinal.getTime());
+        assertEquals(0, semifinal.getTime("room"));
+    }
+
+    private SemifinalSettings<SettingsReader> updateSettings(String room) {
+        return (SemifinalSettings<SettingsReader>) roomService.settings(room);
     }
 
     @Test
     public void shouldResetTicks_whenClear() {
         // given
-        settings.setTimeout(10);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(80);
 
+        updateSettings("room")
+                .setTimeout(10);
+
         semifinal.tick();
         semifinal.tick();
         semifinal.tick();
-        assertEquals(3, semifinal.getTime());
+        assertEquals(3, semifinal.getTime("room"));
 
         // when
         semifinal.clean();
 
         // then
-        assertEquals(0, semifinal.getTime());
+        assertEquals(0, semifinal.getTime("room"));
     }
 
     @Test
     public void shouldDoNotCalculateTicks_whenDisabled() {
         // given
-        settings.setEnabled(false);
-        settings.setTimeout(3);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(80);
 
-        assertEquals(0, semifinal.getTime());
+        updateSettings("room")
+                .setEnabled(false)
+                .setTimeout(3);
+
+        assertEquals(0, semifinal.getTime("room"));
 
         // when then
         semifinal.tick();
-        assertEquals(0, semifinal.getTime());
+        assertEquals(0, semifinal.getTime("room"));
 
         // when then
         semifinal.tick();
-        assertEquals(0, semifinal.getTime());
+        assertEquals(0, semifinal.getTime("room"));
     }
 
     @Test
     public void shouldDoNothing_whenDisabled() {
         // given
-        settings.setEnabled(false);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(80);
         Player player3 = createPlayerWithScore(60);
         Player player4 = createPlayerWithScore(40);
         Player player5 = createPlayerWithScore(20);
+
+        updateSettings("room")
+                .setEnabled(false);
 
         // when
         ticksTillTimeout();
@@ -155,9 +177,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut50PercentUsers_whenAccurateCut() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(50);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
         Player player3 = createPlayerWithScore(80);
@@ -174,6 +193,10 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player14 = createPlayerWithScore(6);
         Player player15 = createPlayerWithScore(5);
         Player player16 = createPlayerWithScore(4);
+
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(50);
 
         // when
         ticksTillTimeout();
@@ -203,9 +226,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut50PercentUsers_whenAccurateCut_whenSeveralRooms() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(50);
-
         Player player1 = createPlayerWithScore(100, "room1");
         Player player2 = createPlayerWithScore(90, "room1");
         Player player3 = createPlayerWithScore(80, "room1");
@@ -223,6 +243,14 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player14 = createPlayerWithScore(6, "room2");
         Player player15 = createPlayerWithScore(5, "room2");
         Player player16 = createPlayerWithScore(4, "room2");
+
+        updateSettings("room1")
+                .setPercentage(true)
+                .setLimit(50);
+
+        updateSettings("room2")
+                .setPercentage(true)
+                .setLimit(50);
 
         // when
         ticksTillTimeout();
@@ -256,9 +284,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut50PercentUsers_whenAccurateCut_whenSeveralRooms_someIsNotActive() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(50);
-
         Player player1 = createPlayerWithScore(100, "room1");
         Player player2 = createPlayerWithScore(90, "room1");
         Player player3 = createPlayerWithScore(80, "room1");
@@ -277,7 +302,16 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player15 = createPlayerWithScore(5, "room2");
         Player player16 = createPlayerWithScore(4, "room2");
 
-        setActive("room1", false);
+        updateSettings("room1")
+                .setPercentage(true)
+                .setLimit(50);
+
+        updateSettings("room2")
+                .setPercentage(true)
+                .setLimit(50);
+
+        givenActive("room1", false);
+        givenActive("room2", true);
 
         // when
         ticksTillTimeout();
@@ -311,9 +345,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut30PercentUsers_whenNotAccurateCut() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(30);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
         Player player3 = createPlayerWithScore(80);
@@ -330,6 +361,10 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player14 = createPlayerWithScore(6);
         Player player15 = createPlayerWithScore(5);
         Player player16 = createPlayerWithScore(4);
+
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(30);
 
         // when
         ticksTillTimeout();
@@ -353,9 +388,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut1PercentUsers_whenNotAccurateCut() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(1);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
         Player player3 = createPlayerWithScore(80);
@@ -373,6 +405,10 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player15 = createPlayerWithScore(5);
         Player player16 = createPlayerWithScore(4);
 
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(1);
+
         // when
         ticksTillTimeout();
 
@@ -383,11 +419,12 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut1PercentUsers_whenNotAccurateCut_caseTwoPlayers() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(1);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(50);
+
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(1);
 
         // when
         ticksTillTimeout();
@@ -399,9 +436,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut20PercentUsers_whenAccurateCut() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(20);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
         Player player3 = createPlayerWithScore(80);
@@ -412,6 +446,10 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player8 = createPlayerWithScore(30);
         Player player9 = createPlayerWithScore(20);
         Player player10 = createPlayerWithScore(10);
+
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(20);
 
         // when
         ticksTillTimeout();
@@ -423,9 +461,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut20PercentUsers_whenAccurateCut_mixedScoreOrder() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(20);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(80);
         Player player3 = createPlayerWithScore(60);
@@ -437,6 +472,10 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player9 = createPlayerWithScore(30);
         Player player10 = createPlayerWithScore(10);
 
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(20);
+
         // when
         ticksTillTimeout();
 
@@ -447,9 +486,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCutOnly3Users_from10() {
         // given
-        settings.setPercentage(false);
-        settings.setLimit(3);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
         Player player3 = createPlayerWithScore(80);
@@ -461,6 +497,10 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player9 = createPlayerWithScore(20);
         Player player10 = createPlayerWithScore(10);
 
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(3);
+
         // when
         ticksTillTimeout();
 
@@ -471,12 +511,13 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCutOnly3Users_from3() {
         // given
-        settings.setPercentage(false);
-        settings.setLimit(3);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
         Player player3 = createPlayerWithScore(80);
+
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(3);
 
         // when
         ticksTillTimeout();
@@ -488,10 +529,11 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCutOnly3Users_from1() {
         // given
-        settings.setPercentage(false);
-        settings.setLimit(3);
-
         Player player1 = createPlayerWithScore(100);
+
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(3);
 
         // when
         ticksTillTimeout();
@@ -503,11 +545,12 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldLeaveLastUser() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(50);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(50);
+
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(50);
 
         ticksTillTimeout();
         assertActive(player1);
@@ -528,14 +571,15 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTournament() {
         // given
-        settings.setResetBoard(true);
-
         int winner = 100;
         int looser = 1;
         Player player1 = createPlayerWithScore(winner, "player1", MultiplayerType.TOURNAMENT);
         Player player2 = createPlayerWithScore(looser, "player2", MultiplayerType.TOURNAMENT);
         Player player3 = createPlayerWithScore(winner, "player3", MultiplayerType.TOURNAMENT);
         Player player4 = createPlayerWithScore(looser, "player4", MultiplayerType.TOURNAMENT);
+
+        updateSettings("room")
+                .setResetBoard(true);
 
         assertEquals(2, fields.size());
         assertEquals(fields.get(0), playerGames.get("player1").getField());
@@ -559,8 +603,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple() {
         // given
-        settings.setResetBoard(true);
-
         int winner = 100;
         int looser = 1;
         Player player1 = createPlayerWithScore(winner, "player1", MultiplayerType.TRIPLE);
@@ -571,6 +613,9 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player6 = createPlayerWithScore(looser, "player6", MultiplayerType.TRIPLE);
         Player player7 = createPlayerWithScore(looser, "player7", MultiplayerType.TRIPLE);
         Player player8 = createPlayerWithScore(winner, "player8", MultiplayerType.TRIPLE);
+
+        updateSettings("room")
+                .setResetBoard(true);
 
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5, player6], " +
@@ -588,8 +633,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_whenSeveralRooms() {
         // given
-        settings.setResetBoard(true);
-
         int winner = 100;
         int looser = 1;
         createPlayerWithScore(winner, "player1-1", "room1", MultiplayerType.TRIPLE);
@@ -609,7 +652,13 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         createPlayerWithScore(winner, "player1-8", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-8", "room2", MultiplayerType.TRIPLE);
 
-        // обрати внимание, что тут схоже с предыдущим тестом
+        updateSettings("room1")
+                .setResetBoard(true);
+
+        updateSettings("room2")
+                .setResetBoard(true);
+
+        // обрати внимание, что тут схоже с соседним тестом
         assertRooms("{0=[player1-1, player1-2, player1-3], " +
                 "1=[player2-1, player2-2, player2-3], " +
                 "2=[player1-4, player1-5, player1-6], " +
@@ -622,17 +671,15 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
 
         // then
         assertRooms("{6=[player1-1, player1-4, player1-5], " +
-                "7=[player2-1, player2-4, player2-5], " +
-                "8=[player1-8], " +
+                "7=[player1-8], " +
+                "8=[player2-1, player2-4, player2-5], " +
                 "9=[player2-8]}");
         assertEquals(10, fields.size());
     }
 
     @Test
-    public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_whenSeveralRooms_someIsNotActive() {
+    public void shouldCleanScoresAfterCut_whenNotSetResetBoard_caseTriple_whenSeveralRooms() {
         // given
-        settings.setResetBoard(true);
-
         int winner = 100;
         int looser = 1;
         createPlayerWithScore(winner, "player1-1", "room1", MultiplayerType.TRIPLE);
@@ -652,9 +699,66 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         createPlayerWithScore(winner, "player1-8", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-8", "room2", MultiplayerType.TRIPLE);
 
-        setActive("room1", false);
+        updateSettings("room1")
+                .setResetBoard(false);
 
-        // обрати внимание, что тут схоже с предыдущим тестом
+        updateSettings("room2")
+                .setResetBoard(false);
+
+        // обрати внимание, что тут схоже с соседним тестом
+        assertRooms("{0=[player1-1, player1-2, player1-3], " +
+                "1=[player2-1, player2-2, player2-3], " +
+                "2=[player1-4, player1-5, player1-6], " +
+                "3=[player2-4, player2-5, player2-6], " +
+                "4=[player1-7, player1-8], " +
+                "5=[player2-7, player2-8]}");
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        // в этом смысла не много, но мало ли сенсей захочет
+        assertRooms("{0=[player1-1], " +
+                        "1=[player2-1], " +
+                        "2=[player1-4, player1-5], " +
+                        "3=[player2-4, player2-5], " +
+                        "4=[player1-8], " +
+                        "5=[player2-8]}");
+        assertEquals(6, fields.size());
+    }
+
+    @Test
+    public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_whenSeveralRooms_someIsNotActive() {
+        // given
+        int winner = 100;
+        int looser = 1;
+        createPlayerWithScore(winner, "player1-1", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-1", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-2", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-2", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-3", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-3", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-4", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-4", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-5", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-5", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-6", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-6", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-7", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-7", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-8", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-8", "room2", MultiplayerType.TRIPLE);
+
+        updateSettings("room1")
+                .setResetBoard(true);
+
+        updateSettings("room2")
+                .setResetBoard(true);
+
+        givenActive("room1", false);
+        givenActive("room2", true);
+
+        // обрати внимание, что тут схоже с соседним тестом
         assertRooms("{0=[player1-1, player1-2, player1-3], " +
                 "1=[player2-1, player2-2, player2-3], " +
                 "2=[player1-4, player1-5, player1-6], " +
@@ -677,9 +781,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_shuffle() {
         // given
-        settings.setResetBoard(true);
-        settings.setShuffleBoard(true);
-
         int winner = 100;
         int looser = 1;
         Player player1 = createPlayerWithScore(winner, "player1", MultiplayerType.TRIPLE);
@@ -690,6 +791,10 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player6 = createPlayerWithScore(looser, "player6", MultiplayerType.TRIPLE);
         Player player7 = createPlayerWithScore(looser, "player7", MultiplayerType.TRIPLE);
         Player player8 = createPlayerWithScore(winner, "player8", MultiplayerType.TRIPLE);
+
+        updateSettings("room")
+                .setResetBoard(true)
+                .setShuffleBoard(true);
 
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5, player6], " +
@@ -731,12 +836,13 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCleanScoresAfterCut_whenIsNotSetResetBoard() {
         // given
-        settings.setResetBoard(false);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
         Player player3 = createPlayerWithScore(80);
         Player player4 = createPlayerWithScore(70);
+
+        updateSettings("room")
+                .setResetBoard(false);
 
         // when
         ticksTillTimeout();
@@ -769,9 +875,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenSameScore_casePercentage() {
         // given
-        settings.setPercentage(true);
-        settings.setLimit(50);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
         Player player3 = createPlayerWithScore(80);
@@ -782,6 +885,10 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player8 = createPlayerWithScore(30);
         Player player9 = createPlayerWithScore(20);
         Player player10 = createPlayerWithScore(10);
+
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(50);
 
         // when
         ticksTillTimeout();
@@ -793,9 +900,6 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenSameScore_caseNotPercentage() {
         // given
-        settings.setPercentage(false);
-        settings.setLimit(4);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
         Player player3 = createPlayerWithScore(80);
@@ -807,6 +911,10 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         Player player9 = createPlayerWithScore(20);
         Player player10 = createPlayerWithScore(10);
 
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(4);
+
         // when
         ticksTillTimeout();
 
@@ -817,13 +925,14 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenAllScoresAreSame_cutOne() {
         // given
-        settings.setPercentage(false);
-        settings.setLimit(1);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(100);
         Player player3 = createPlayerWithScore(100);
         Player player4 = createPlayerWithScore(100);
+
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(1);
 
         // when
         ticksTillTimeout();
@@ -835,13 +944,14 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenAllScoresAreSame_cutTwo() {
         // given
-        settings.setPercentage(false);
-        settings.setLimit(2);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(100);
         Player player3 = createPlayerWithScore(100);
         Player player4 = createPlayerWithScore(100);
+
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(2);
 
         // when
         ticksTillTimeout();
@@ -853,13 +963,14 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenAllScoresAreSame_cutExactSame() {
         // given
-        settings.setPercentage(false);
-        settings.setLimit(4);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(100);
         Player player3 = createPlayerWithScore(100);
         Player player4 = createPlayerWithScore(100);
+
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(4);
 
         // when
         ticksTillTimeout();
@@ -871,18 +982,90 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenAllScoresAreSame_cutMoreThanPlayers() {
         // given
-        settings.setPercentage(false);
-        settings.setLimit(10);
-
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(100);
         Player player3 = createPlayerWithScore(100);
         Player player4 = createPlayerWithScore(100);
+
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(10);
 
         // when
         ticksTillTimeout();
 
         // then
         assertActive(player1, player2, player3, player4);
+    }
+
+    @Test
+    public void shouldGetSettings_whenAllowed() {
+        // given
+        Player player = createPlayer();
+
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(10);
+
+        // when
+        SemifinalSettingsImpl settings = semifinal.semifinalSettings("room");
+
+        // then
+        assertEquals(updateSettings("room").toString(), settings.toString());
+        assertEquals("SettingsImpl(map={" +
+                "[Semifinal] Enabled=[[Semifinal] Enabled:Boolean = def[false] val[true]], " +
+                "[Semifinal] Timeout=[[Semifinal] Timeout:Integer = multiline[false] def[900] val[3]], " +
+                "[Semifinal] Percentage=[[Semifinal] Percentage:Boolean = def[true] val[false]], " +
+                "[Semifinal] Limit=[[Semifinal] Limit:Integer = multiline[false] def[50] val[10]], " +
+                "[Semifinal] Reset board=[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]]})", settings.toString());
+    }
+
+    @Test
+    public void shouldGetSettings_whenAllowed_thenTryToUpdate() {
+        // given
+        Player player = createPlayer();
+
+        updateSettings("room")
+                .setPercentage(false)
+                .setLimit(10);
+
+        // when
+        SemifinalSettingsImpl settings = semifinal.semifinalSettings("room");
+        settings.setLimit(34)
+                .setPercentage(true)
+                .setTimeout(101);
+
+        // then
+        assertEquals(updateSettings("room").toString(), settings.toString());
+        assertEquals("SettingsImpl(map={" +
+                "[Semifinal] Enabled=[[Semifinal] Enabled:Boolean = def[false] val[true]], " +
+                "[Semifinal] Timeout=[[Semifinal] Timeout:Integer = multiline[false] def[900] val[101]], " +
+                "[Semifinal] Percentage=[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
+                "[Semifinal] Limit=[[Semifinal] Limit:Integer = multiline[false] def[50] val[34]], " +
+                "[Semifinal] Reset board=[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]]})", settings.toString());
+    }
+
+    @Test
+    public void shouldGetSettings_whenNotAllowed() {
+        // given
+        Player player = createPlayer();
+
+        SemifinalSettings original = updateSettings("room");
+        original.setPercentage(false)
+                .setLimit(10);
+
+        // эмулирую другой тип сеттингов, который без semifinal
+        GameType gameType = mock(GameType.class);
+        when(gameType.getSettings()).thenReturn(new SettingsImpl());
+        roomService.state("room").get().setType(gameType);
+
+        // when
+        SemifinalSettingsImpl settings = semifinal.semifinalSettings("room");
+
+        // then
+        assertNotSame(original.toString(), settings.toString());
+        assertEquals("SettingsImpl(map={})", settings.toString());
     }
 }

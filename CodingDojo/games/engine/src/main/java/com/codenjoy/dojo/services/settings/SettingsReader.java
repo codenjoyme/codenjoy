@@ -23,38 +23,44 @@ package com.codenjoy.dojo.services.settings;
  */
 
 import com.codenjoy.dojo.services.round.RoundSettings;
+import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import org.json.JSONObject;
 
 import java.util.List;
-
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
+import java.util.Optional;
 
 public interface SettingsReader<T extends SettingsReader> {
 
     interface Key {
-
         String key();
 
-        // TODO вот это как-то по проще не получится сделать?
-        static String keyToName(List<Key> values, String value) {
+        static Optional<String> keyToName(List<Key> values, String value) {
             return values.stream()
                     .filter(element -> element.key().equals(value))
                     .map(Key::toString)
-                    .findFirst()
-                    .orElseGet(() -> (!isRounds(values)) ? keyToName(RoundSettings.allRoundsKeys(), value) : null);
+                    .findFirst();
         }
 
-        static String nameToKey(List<Key> values, String value) {
+        static Optional<String> nameToKey(List<Key> values, String value) {
             return values.stream()
                     .filter(element -> element.toString().equals(value))
                     .map(Key::key)
-                    .findFirst()
-                    .orElseGet(() -> (!isRounds(values)) ? nameToKey(RoundSettings.allRoundsKeys(), value) : null);
+                    .findFirst();
         }
+    }
 
-        private static boolean isRounds(List<Key> values) {
-            return values.contains(ROUNDS_ENABLED);
-        }
+    static String keyToName(List<Key> values, String value) {
+        return Key.keyToName(values, value)
+                .or(() -> RoundSettings.keyToName(RoundSettings.allRoundsKeys(), value))
+                .or(() -> SemifinalSettings.keyToName(SemifinalSettings.allSemifinalKeys(), value))
+                .orElseThrow(() -> new IllegalArgumentException("Parameter not found: " + value));
+    }
+
+    static String nameToKey(List<Key> values, String value) {
+        return Key.nameToKey(values, value)
+                .or(() -> RoundSettings.nameToKey(RoundSettings.allRoundsKeys(), value))
+                .or(() -> SemifinalSettings.nameToKey(SemifinalSettings.allSemifinalKeys(), value))
+                .orElseThrow(() -> new IllegalArgumentException("Parameter not found: " + value));
     }
 
     // methods from Settings
@@ -169,20 +175,20 @@ public interface SettingsReader<T extends SettingsReader> {
 
     // json
 
+    List<Key> allKeys();
+
     default T update(JSONObject json) {
         json.keySet().forEach(name -> {
-            String key = Key.nameToKey(allKeys(), name);
+            String key = nameToKey(allKeys(), name);
             getParameter(key).update(json.get(name));
         });
         return (T)this;
     }
 
-    List<Key> allKeys();
-
     default JSONObject asJson() {
         return new JSONObject(){{
             getParameters().forEach(param ->
-                    put(Key.keyToName(allKeys(), param.getName()), param.getValue()));
+                    put(keyToName(allKeys(), param.getName()), param.getValue()));
         }};
     }
 }

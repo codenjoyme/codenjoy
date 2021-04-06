@@ -35,6 +35,7 @@ import com.codenjoy.dojo.services.security.ViewDelegationService;
 import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +49,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static com.codenjoy.dojo.services.round.RoundSettingsImpl.ROUNDS;
+import static com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl.SEMIFINAL;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -73,7 +76,7 @@ public class AdminController {
     private final Registration registration;
     private final RoomsAliaser rooms;
     private final ViewDelegationService viewDelegationService;
-    private final Semifinal semifinal;
+    private final SemifinalService semifinal;
     private final RoomService roomService;
 
 
@@ -326,14 +329,26 @@ public class AdminController {
         if (!result.hasErrors()) {
             // do nothing
         }
+
+        String game = settings.getGame();
+        String room = settings.getRoom();
+
         if (settings.getPlayers() != null) {
             playerService.updateAll(settings.getPlayers());
         }
 
         if (settings.getSemifinal() != null) {
             try {
-                semifinal.settings().apply(settings.getSemifinal());
-                semifinal.clean();
+                semifinal.semifinalSettings(room).update(settings.getSemifinal());
+                semifinal.clean(room);
+            } catch (Exception e) {
+                // do nothing
+            }
+        }
+
+        if (settings.getRounds() != null) {
+            try {
+                semifinal.roundSettings(room).update(settings.getRounds());
             } catch (Exception e) {
                 // do nothing
             }
@@ -346,9 +361,6 @@ public class AdminController {
                 // do nothing
             }
         }
-
-        String game = settings.getGame();
-        String room = settings.getRoom();
 
         if (settings.getProgress() != null) {
             playerService.loadSaveForAll(room, settings.getProgress());
@@ -397,6 +409,7 @@ public class AdminController {
     public void updateParameters(String game, String room, List<Object> updated, List<Exception> errors) {
         Settings gameSettings = gameService.getGameType(game, room).getSettings();
         List<Parameter> actual = gameSettings.getParameters();
+        removeSemifinalAndRounds(actual);
         for (int index = 0; index < actual.size(); index++) {
             try {
                 Parameter parameter = actual.get(index);
@@ -407,6 +420,11 @@ public class AdminController {
                 errors.add(e);
             }
         }
+    }
+
+    public void removeSemifinalAndRounds(List<Parameter> params) {
+        params.removeIf(p -> p.getName().startsWith(SEMIFINAL)
+                            || p.getName().startsWith(ROUNDS));
     }
 
     public void generateNewPlayers(String game, String room, String mask, int count) {
@@ -510,9 +528,9 @@ public class AdminController {
 
         // готовим данные для странички
         Settings gameSettings = gameType.getSettings();
-        List<Parameter> parameters = gameSettings.getParameters();
+        List<Parameter> parameters = new LinkedList<>(gameSettings.getParameters());
         model.addAttribute("settings", parameters);
-        model.addAttribute("semifinalTick", semifinal.getTime());
+        model.addAttribute("semifinalTick", semifinal.getTime(room));
         model.addAttribute("game", game);
         model.addAttribute("room", room);
         model.addAttribute("gameVersion", gameType.getVersion());
@@ -527,7 +545,7 @@ public class AdminController {
         model.addAttribute("autoSave", autoSaver.isWorking());
         model.addAttribute("debugLog", debugService.isWorking());
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        AdminSettings settings = getAdminSettings(parameters);
+        AdminSettings settings = getAdminSettings(parameters, room);
         model.addAttribute("adminSettings", settings);
         List<PlayerInfo> saves = saveService.getSaves();
         model.addAttribute("gameRooms", roomService.gameRooms());
@@ -543,23 +561,26 @@ public class AdminController {
         return save.toString().replace('"', '\'');
     }
 
-    public AdminSettings getAdminSettings(List<Parameter> parameters) {
-        AdminSettings settings = new AdminSettings();
+    public AdminSettings getAdminSettings(List<Parameter> parameters, String room) {
+        AdminSettings result = new AdminSettings();
 
-        settings.setSemifinal(semifinal.settings().clone());
-
-        settings.setParameters(new LinkedList<>());
-        for (Parameter p : parameters) {
-            settings.getParameters().add(p.getValue());
-        }
+        // сохраняем для отображения semifinal settings pojo
+        result.setSemifinal(semifinal.semifinalSettings(room));
+        // сохраняем для отображения round settings pojo
+        result.setRounds(semifinal.roundSettings(room));
+        // удаляем semifinal и rounds параметры
+        removeSemifinalAndRounds(parameters);
+        // а теперь сохраняем отдельно ключики оставшихся параметров
+        result.setParameters(parameters.stream()
+                .map(Parameter::getValue)
+                .collect(toList()));
 
         Set<String> enabled = rooms.game();
-        List<Object> games = gameService.getGames()
-                                .stream()
-                                .map(name -> enabled.contains(name))
-                                .collect(toList());
-        settings.setGames(games);
-        return settings;
+        result.setGames(gameService.getGames().stream()
+                .map(name -> enabled.contains(name))
+                .collect(toList()));
+
+        return result;
     }
 
     private String getGameRoom(HttpServletRequest request) {

@@ -29,10 +29,9 @@ import com.codenjoy.dojo.web.controller.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
@@ -43,12 +42,9 @@ public class RoomService {
     private Map<String, RoomState> rooms = new ConcurrentHashMap<>();
 
     public boolean isActive(String room) {
-        if (!exists(room)) {
-            log.warn("Room '{}' not found", room);
-            return false;
-        }
-
-        return rooms.get(room).getActive();
+        return state(room)
+                .map(RoomState::isActive)
+                .orElse(false);
     }
 
     public boolean isOpened(String room) {
@@ -58,7 +54,7 @@ public class RoomService {
             return true;
         }
 
-        return rooms.get(room).getOpened();
+        return rooms.get(room).isOpened();
     }
 
     public boolean exists(String room) {
@@ -66,29 +62,23 @@ public class RoomService {
                 && rooms.containsKey(room);
     }
 
-    public RoomState state(String room) {
+    public Optional<RoomState> state(String room) {
         if (!exists(room)) {
             log.warn("Room '{}' not found", room);
-            return null;
+            return Optional.empty();
         }
 
-        return new RoomState(rooms.get(room));
+        return Optional.of(rooms.get(room));
     }
 
     public void setActive(String room, boolean value) {
-        if (!exists(room)) {
-            log.warn("Room '{}' not found", room);
-            return;
-        }
-        rooms.get(room).setActive(value);
+        state(room)
+                .ifPresent(state -> state.setActive(value));
     }
 
     public void setOpened(String room, boolean value) {
-        if (!exists(room)) {
-            log.warn("Room '{}' not found", room);
-            return;
-        }
-        rooms.get(room).setOpened(value);
+        state(room)
+                .ifPresent(state -> state.setOpened(value));
     }
 
     public GameType create(String room, GameType gameType) {
@@ -97,18 +87,22 @@ public class RoomService {
         }
 
         RoomGameType decorator = new RoomGameType(gameType);
-        RoomState state = new RoomState(room, decorator, true, true);
+        RoomState state = new RoomState(room, decorator, true, true, 0);
         rooms.put(room, state);
-
         return decorator;
     }
 
     public Settings settings(String room) {
-        if (!exists(room)) {
-            log.warn("Room '{}' not found", room);
-            return null;
-        }
-        return rooms.get(room).getType().getSettings();
+        return (Settings) state(room)
+                .map(RoomState::getType)
+                .map(GameType::getSettings)
+                .orElse(null);
+    }
+
+    public GameType gameType(String room) {
+        return state(room)
+                .map(RoomState::getType)
+                .orElse(null);
     }
 
     public void removeAll() {
@@ -116,18 +110,21 @@ public class RoomService {
     }
 
     public List<String> names() {
-        return rooms.values().stream()
-                .sorted(Comparator.comparing(o -> o.getType().name() + o.getName()))
+        return allSorted()
                 .map(roomState -> roomState.getName())
                 .collect(toList());
     }
 
+    private Stream<RoomState> allSorted() {
+        return rooms.values().stream()
+                .sorted(Comparator.comparing(o -> o.getType().name() + o.getName()));
+    }
+
     public String game(String room) {
-        if (!exists(room)) {
-            log.warn("Room '{}' not found", room);
-            return null;
-        }
-        return state(room).getType().name();
+        return state(room)
+                .map(RoomState::getType)
+                .map(GameType::name)
+                .orElse(null);
     }
 
     public List<GameRooms> gameRooms() {
@@ -138,5 +135,26 @@ public class RoomService {
                 .sorted(Comparator.comparing(Map.Entry::getKey))
                 .map(entry -> new GameRooms(entry.getKey(), entry.getValue()))
                 .collect(toList());
+    }
+
+    public void resetTick(String room) {
+        state(room)
+                .ifPresent(RoomState::resetTick);
+    }
+
+    public void tick(String room) {
+        state(room)
+                .ifPresent(RoomState::tick);
+    }
+
+    public Collection<RoomState> all() {
+        return allSorted()
+                .collect(toList());
+    }
+
+    public int getTick(String room) {
+        return state(room)
+                .map(RoomState::getTick)
+                .orElse(-1);
     }
 }

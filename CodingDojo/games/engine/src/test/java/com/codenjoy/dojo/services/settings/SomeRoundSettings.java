@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.mocks;
+package com.codenjoy.dojo.services.settings;
 
 /*-
  * #%L
@@ -22,22 +22,22 @@ package com.codenjoy.dojo.services.mocks;
  * #L%
  */
 
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.services.round.RoundSettings;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
-import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER2;
+import static com.codenjoy.dojo.services.settings.SomeGameSettings.Keys.*;
 
-public class FirstGameSettings extends SettingsImpl
-        implements SettingsReader<FirstGameSettings> {
+public class SomeRoundSettings extends SettingsImpl
+        implements RoundSettings<SomeRoundSettings> {
 
     public enum Keys implements Key {
 
         PARAMETER1("Parameter 1"),
-        PARAMETER2("Parameter 2");
+        PARAMETER2("Parameter 2"),
+        PARAMETER3("Parameter 3"),
+        PARAMETER4("Parameter 4");
 
         private String key;
 
@@ -53,21 +53,21 @@ public class FirstGameSettings extends SettingsImpl
 
     @Override
     public List<Key> allKeys() {
-        return Arrays.asList(Keys.values());
+        return Arrays.asList(SomeGameSettings.Keys.values());
     }
 
-    public FirstGameSettings() {
-        init();
-    }
+    public SomeRoundSettings() {
+        initRound();
 
-    public void init() {
         integer(PARAMETER1, 12);
         integerValue(PARAMETER1).update(15);
         bool(PARAMETER2, true);
+        real(PARAMETER3, 0.5);
+        string(PARAMETER4, "string");
     }
 
     @Override
     public String toString() {
-        return "First" + super.toStringShort();
+        return "Some" + super.toStringShort();
     }
 }

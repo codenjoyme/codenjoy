@@ -45,6 +45,7 @@ import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.GraphicPrinter;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
 import lombok.SneakyThrows;
@@ -64,7 +65,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.IOException;
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -121,7 +121,7 @@ public class PlayerServiceImplTest {
     private Chat chat;
 
     @MockBean
-    private Semifinal semifinal;
+    private SemifinalService semifinal;
 
     @MockBean
     private ActionLogger actionLogger;
@@ -1356,7 +1356,7 @@ public class PlayerServiceImplTest {
         verify(gameField(KATYA), never()).clearScore();
         verify(gameField(OLIA), never()).clearScore();
 
-        verify(semifinal).clean();
+        verify(semifinal).clean("room1");
     }
 
     private PlayerScores playerScores(int index) {

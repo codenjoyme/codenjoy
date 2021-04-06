@@ -36,8 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @UtilityClass
 public class TestUtils {
@@ -72,8 +71,12 @@ public class TestUtils {
             }
         }
 
+        if (gameType instanceof RoomGameType) {
+            gameType = ((RoomGameType)gameType).getWrapped();
+        }
+
         when(gameType.getMultiplayerType(any())).thenReturn(type);
-        when(gameType.createGame(anyInt(), any())).thenAnswer(getGame);
+        doAnswer(getGame).when(gameType).createGame(anyInt(), any());
         PrinterFactory printerFactory = mock(PrinterFactory.class);
         when(gameType.getPrinterFactory()).thenReturn(printerFactory);
         when(printerFactory.getPrinter(any(BoardReader.class), any()))

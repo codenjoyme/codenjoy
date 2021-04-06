@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.round;
  * #L%
  */
 
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
@@ -30,7 +31,7 @@ public class RoundImpl implements Round {
 
     private RoundGameField<RoundGamePlayer<RoundPlayerHero, RoundGameField>> field;
 
-    private RoundSettings settings;
+    private RoundSettings<SettingsReader> settings;
 
     private Timer startTimer;
     private Timer roundTimer;

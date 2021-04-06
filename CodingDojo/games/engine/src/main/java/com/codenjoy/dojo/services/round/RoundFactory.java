@@ -22,9 +22,11 @@ package com.codenjoy.dojo.services.round;
  * #L%
  */
 
+import com.codenjoy.dojo.services.settings.SettingsReader;
+
 public class RoundFactory {
 
-    public static Round get(RoundSettings settings) {
+    public static Round get(RoundSettings<SettingsReader> settings) {
         if (settings.roundsEnabled().getValue()) {
             return new RoundImpl(settings);
         } else {
