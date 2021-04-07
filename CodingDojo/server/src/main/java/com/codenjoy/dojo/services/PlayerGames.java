@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.google.common.collect.Multimap;
 import lombok.experimental.FieldNameConstants;
 import org.json.JSONObject;
@@ -42,14 +44,14 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
+import static com.codenjoy.dojo.services.settings.CommonGameSettings.Keys.INACTIVITY_TIMEOUT;
+import static com.codenjoy.dojo.services.settings.CommonGameSettings.Keys.KICK_INACTIVE_PLAYERS;
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 
 @Component
 @FieldNameConstants
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
-
-    public static final Long INACTIVE_MINUTES_LIMIT = 5L;
 
     public static final boolean ALL = true;
     public static final boolean ACTIVE = !ALL;
@@ -275,7 +277,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             String room = playerGame.getRoom();
 
             GameType gameType = playerGame.getGameType();
-            MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
+            Settings settings = gameType.getSettings();
+            MultiplayerType type = gameType.getMultiplayerType(settings);
             if (game.isGameOver()) {
                 quiet(() -> {
                     JSONObject level = game.getSave();
@@ -297,9 +300,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                     game.newGame();
                 });
             }
-            Duration inactiveTime = Duration.between(player.getLastResponseTime(), now());
-            if (inactiveTime.toMinutes() > INACTIVE_MINUTES_LIMIT) {
-                quiet(() -> removeCurrent(player));
+            if (Objects.nonNull(settings)
+                    && settings.hasParameter(KICK_INACTIVE_PLAYERS.key())
+                    && settings.hasParameter(INACTIVITY_TIMEOUT.key())) {
+                kickPlayerIfInactiveTimeout(settings, player);
             }
         }
 
@@ -317,6 +321,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
+    }
+
+    private void kickPlayerIfInactiveTimeout(Settings settings, Player player) {
+        Parameter<?> kickInactivePlayerParameter = settings.getParameter(KICK_INACTIVE_PLAYERS.key());
+        if (kickInactivePlayerParameter.type(Boolean.class).getValue()) {
+            Parameter<?> inactivityTimeoutParameter = settings.getParameter(INACTIVITY_TIMEOUT.key());
+            Duration inactiveTime = Duration.between(player.getLastResponseTime(), now());
+            if (inactiveTime.toMinutes() >= inactivityTimeoutParameter.type(Integer.class).getValue()) {
+                quiet(() -> removeCurrent(player));
+            }
+        }
     }
 
     // перевод текущего игрока в новую комнату

@@ -24,15 +24,14 @@ package com.codenjoy.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.icancode.services.levels.Level;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.services.settings.CommonGameSettings;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 
-public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+public final class GameSettings extends CommonGameSettings<GameSettings> {
 
     public static final String CLASSIC_TRAINING = "Single training & all in one final";
     public static final String ALL_SINGLE = "All levels are single";
@@ -74,7 +73,9 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     @Override
     public List<Key> allKeys() {
-        return Arrays.asList(Keys.values());
+        List<Key> superKeys = super.allKeys();
+        superKeys.addAll(Arrays.asList(Keys.values()));
+        return superKeys;
     }
 
     public GameSettings() {
