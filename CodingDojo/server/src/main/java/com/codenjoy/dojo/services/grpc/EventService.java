@@ -22,31 +22,42 @@ package com.codenjoy.dojo.services.grpc;
  * #L%
  */
 
-
-import com.codenjoy.dojo.UserDetailsRequest;
-import com.codenjoy.dojo.UserDetailsResponse;
-import com.codenjoy.dojo.UserDetailsServiceGrpc;
-import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.Event;
+import com.codenjoy.dojo.EventServiceGrpc;
+import com.codenjoy.dojo.EventsRequest;
+import com.codenjoy.dojo.EventsResponse;
+import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServiceImplBase {
+import java.util.Map;
 
-    private final Registration registration;
+@Service
+public class EventService extends EventServiceGrpc.EventServiceImplBase {
+
+    private final PlayerGameSaver playerGameSaver;
 
     @Autowired
-    public UserDetailsService(Registration registration) {
-        this.registration = registration;
+    public EventService(PlayerGameSaver playerGameSaver) {
+        this.playerGameSaver = playerGameSaver;
     }
 
     @Override
-    public void getUserDetails(UserDetailsRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
-        String id = request.getId();
-        String email = this.registration.getEmailById(id);
+    public void getAllEvents(EventsRequest request, StreamObserver<EventsResponse> responseObserver) {
+        Map<String, String> events = playerGameSaver.getEventsList();
 
-        responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).build());
+        EventsResponse.Builder response = EventsResponse.newBuilder();
+
+        events.forEach((key, value) -> {
+            Event eventResponse = Event.newBuilder()
+                    .setRoomName(key)
+                    .setGameName(value)
+                    .build();
+            response.addEvent(eventResponse);
+        });
+
+        responseObserver.onNext(response.build());
         responseObserver.onCompleted();
     }
 }

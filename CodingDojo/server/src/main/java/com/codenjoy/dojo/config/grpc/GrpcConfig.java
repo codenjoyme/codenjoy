@@ -22,6 +22,7 @@ package com.codenjoy.dojo.config.grpc;
  * #L%
  */
 
+import com.codenjoy.dojo.services.grpc.EventService;
 import com.codenjoy.dojo.services.grpc.LeaderboardService;
 import com.codenjoy.dojo.services.grpc.UserDetailsService;
 import com.dojo.common.GrpcServer;
@@ -39,8 +40,9 @@ public class GrpcConfig {
     public GrpcConfig(@Value("${grpc.executor.pool.size}") final int applicationExecutorPoolSize,
                       @Value("${grpc.server.port}") final int port,
                       final LeaderboardService leaderboardService,
-                      final UserDetailsService userDetailsService) {
-        this.grpcServer = new GrpcServer(applicationExecutorPoolSize, port, leaderboardService, userDetailsService);
+                      final UserDetailsService userDetailsService,
+                      final EventService eventService) {
+        this.grpcServer = new GrpcServer(applicationExecutorPoolSize, port, leaderboardService, userDetailsService, eventService);
     }
 
     @Bean

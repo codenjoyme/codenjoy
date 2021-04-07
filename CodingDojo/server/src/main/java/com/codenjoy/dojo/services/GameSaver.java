@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 
 
 import java.util.List;
+import java.util.Map;
 
 public interface GameSaver {
     
@@ -39,4 +40,8 @@ public interface GameSaver {
     void delete(String id);
 
     void updateScore(Player player, long time);
+
+    Map<String, String> getEventsList();
+
+    String getRoomNameByPlayerId(String id);
 }
