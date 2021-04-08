@@ -47,17 +47,17 @@ public class EventService extends EventServiceGrpc.EventServiceImplBase {
     public void getAllEvents(EventsRequest request, StreamObserver<EventsResponse> responseObserver) {
         Map<String, String> events = playerGameSaver.getEventsList();
 
-        EventsResponse.Builder response = EventsResponse.newBuilder();
+        EventsResponse.Builder responseBuilder = EventsResponse.newBuilder();
 
         events.forEach((key, value) -> {
-            Event eventResponse = Event.newBuilder()
+            Event event = Event.newBuilder()
                     .setRoomName(key)
                     .setGameName(value)
                     .build();
-            response.addEvent(eventResponse);
+            responseBuilder.addEvent(event);
         });
 
-        responseObserver.onNext(response.build());
+        responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
 }
