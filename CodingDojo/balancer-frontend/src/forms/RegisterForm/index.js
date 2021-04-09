@@ -26,7 +26,7 @@ const errorNeededValue = "Обов'язкове поле!";
 const errorWrongFormat = 'Невірний формат';
 const errorToSmall = 'Замало символів!';
 const errorToBig = 'Забагато символів!';
-const errorEnglishLetters = 'Тільки англійскі літери!';
+const errorEnglishLetters = 'Тільки англійські літери!';
 const errorPasswordNotEqual = 'Паролі мають співпадати!';
 
 const requiredShortString = Yup.string()

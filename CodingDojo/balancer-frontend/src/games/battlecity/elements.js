@@ -26,7 +26,6 @@ import tank_right from './images/sprite/tank_right.png';
 import tank_up from './images/sprite/tank_up.png';
 import tree from './images/sprite/tree.png';
 import wall from './images/sprite/wall.png';
-import wall_destroyed from './images/sprite/wall_destroyed.png';
 import wall_destroyed_down from './images/sprite/wall_destroyed_down.png';
 import wall_destroyed_down_left from './images/sprite/wall_destroyed_down_left.png';
 import wall_destroyed_down_right from './images/sprite/wall_destroyed_down_right.png';
