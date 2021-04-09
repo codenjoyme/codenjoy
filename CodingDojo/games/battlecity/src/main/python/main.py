@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+
+from sys import version_info
+import os
+from webclient import WebClient
+from solver import DirectionSolver
+from urllib.parse import urlparse, parse_qs
+
+
+
+def get_url_for_ws(url):
+    parsed_url = urlparse(url)
+    query = parse_qs(parsed_url.query)
+    print('=======================================================')
+    print('user')
+    print(parsed_url.path.split('/')[-1])
+    print('code')
+    print(query['code'][0])
+    return "{}://{}/codenjoy-contest/ws?user={}&code={}".format('ws' if parsed_url.scheme == 'http' else 'wss',
+                                                                parsed_url.netloc,
+                                                                parsed_url.path.split('/')[-1],
+                                                                query['code'][0])
+
+
+def main():
+    assert version_info[0] == 3, "You should run me with Python 3.x"
+    game_host=os.environ.get('GAME_HOST', 'localhost')
+    game_port=os.environ.get('GAME_PORT', '49154')
+    # game_port=os.environ.get('GAME_PORT', '8080')
+    # substitute following link with the one you've copied in your browser after registration
+    url = f"http://{game_host}:{game_port}/codenjoy-contest/board/player/0?code=000000000000"
+    direction_solver = DirectionSolver()
+
+    wcl = WebClient(url=get_url_for_ws(url), solver=direction_solver)
+    wcl.run_forever()
+
+
+if __name__ == '__main__':
+    main()
