@@ -92,27 +92,41 @@
                         <p>here 'user' - player id and 'code' - your security token. You can get if from browser address bar of board
                             page after registration/login.</p>
                         <p>After the connection is established, the client will regularly (every second)
-                            recieve a symbol string with encoded state of the field.</p>
+                            receive a symbol string with encoded state of the field.</p>
 
                         <p>String length equals field area. Adding hyphen every sqrt(length(string))
                             symbols will give a comprehensible view of the field..</p>
                         <p>Field example:</p>
-                        <pre>
-                             ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
-                             ☼☼            ☼
-                             ☼☼     $      ☼
-                             ☼☼           @☼
-                             ☼#           ▲☼
-                             ☼☼           ║☼
-                             ☼☼   ○       ║☼
-                             ☼#           ║☼
-                             ☼☼         ╘═╝☼
-                             ☼☼      %     ☼
-                             ☼☼   ×—>      ☼
-                             ☼☼            ☼
-                             ☼☼       ●    ☼
-                             ☼☼            ☼
-                             ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+<pre>☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
+☼☼  ○                       ●☼
+☼#                           ☼
+☼☼      ☼#         ●         ☼
+☼☼                           ☼
+☼#                        æ  ☼
+☼☼                ☼#      │  ☼
+☼☼      ☼☼☼        ☼  ☼   │  ☼
+☼#      ☼          ☼  ☼   │  ☼
+☼☼      ☼        ● ☼  ☼   │  ☼
+☼☼      ☼☼☼æ       ○   ● ┌┘  ☼
+☼#         │    ☼#     <─┘ ● ☼
+☼☼     ○<──┘  ●           æ  ☼
+☼☼     ▲             ☼   ˄│  ☼
+☼#     ║                 └┘  ☼
+☼☼     ║                     ☼
+☼☼     ║           ☼#     ●● ☼
+☼#     ║ ☼☼ ☼                ☼
+☼☼     ║    ☼                ☼
+☼☼  ●  ║ ☼☼ ☼                ☼
+☼#     ║    ☼             ●  ☼
+☼☼ ● ╘═╝   ☼#                ☼
+☼☼     ●           ○         ☼
+☼#                  ☼☼☼   ●  ☼
+☼☼                        ● ●☼
+☼☼               ☼☼☼#        ☼
+☼#                           ☼
+☼☼                           ☼
+☼☼                           ☼
+☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
                         <p>Sprite UI:</p>
                         <img src="./board.JPG"/>
 
@@ -427,8 +441,9 @@
                             - Snake that eats gold gets bonus points.</p>
                         <p><b>Exceptional cases:</b><br>
                             - Snakes can bite off their own tails, becoming shorter without any negative effects.<br>
-                            - If two snakes collide head-on, the shortest snake dies. The surviving snake becomes shorter
-                            - by the length of the dead one (if that makes it shorter than two cells, it dies as well).<br>
+                            - If two snakes collide head-on, the shortest snake dies. The surviving snake becomes
+                            shorter - by the length of the dead one (if that makes it shorter than two cells, it dies as well).<br>
+                            - The bitten off part of the tail always disappears, and the snake is shortened.
                             - If two snakes, one of which is under the flying pill, collide, nothing happens.<br>
                             - If two snakes collide, the under the fury pill always wins.<br>
                             - If two furious snakes collide, common collision rules are used.</p>
