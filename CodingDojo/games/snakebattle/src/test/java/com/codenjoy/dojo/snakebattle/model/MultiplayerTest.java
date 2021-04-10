@@ -164,6 +164,53 @@ public class MultiplayerTest {
                 "☼☼☼☼☼☼☼");
     }
 
+    // если режим игры не rounds а multiple то змеи активны сразу
+    @Test
+    public void shouldNotSleepingSnake_whenGameIsMultiplayer() {
+        // given
+        settings.bool(ROUNDS_ENABLED, false);
+
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        // then
+        hero.setActive(true);
+        enemy.setActive(true);
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        // when
+        game.tick();
+
+        // then
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ╘► ☼" +
+                "☼     ☼" +
+                "☼  ×> ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
     // проверяем что обе змейки умирают, когда врезаются в равного соперника
     // и получаем оповещение о смерти
     @Test
