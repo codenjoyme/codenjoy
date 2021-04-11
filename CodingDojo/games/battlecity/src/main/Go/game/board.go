@@ -29,26 +29,12 @@ import (
 	"sync"
 )
 
-const boardSize = 35
+const boardSize = 34
 
 type msg struct {
-	HeroPosition     Point
-	ShowName         bool
-	Offset           Point
-	LevelFinished    bool
-	LayersContentRaw rawLayers `json:"layers"`
-	LayersContentMap mapLayers
-	LevelProgress    levelProgress
-}
-
-type rawLayers []string
-
-type mapLayers map[int][]rune
-
-type levelProgress struct {
-	Total      int
-	Current    int
-	LastPassed int
+	HeroPosition Point
+	ShowName     bool
+	ContentRune  []rune
 }
 
 type Point struct {
@@ -63,43 +49,28 @@ type Board struct {
 
 //Show returns string representation of current state of board
 func (b *Board) Show() string {
-	if len(b.msg.LayersContentMap) == 0 {
+	if len(b.msg.ContentRune) == 0 {
 		return ""
 	}
 	repr := strings.Builder{}
-	for i := 0; i < boardSize; i++ {
-		for j := 0; j < boardSize; j++ {
-			repr.Write([]byte(fmt.Sprintf("%c", b.msg.LayersContentMap[0][i*boardSize+j])))
+	for i := 0; i < b.BoardSize(); i++ {
+		for j := 0; j < b.BoardSize(); j++ {
+			repr.Write([]byte(fmt.Sprintf("%c", b.msg.ContentRune[i*b.BoardSize()+j])))
 		}
 		repr.Write([]byte("\n"))
 	}
 
 	repr.Write([]byte("\n"))
 
-	for i := 0; i < boardSize; i++ {
-		for j := 0; j < boardSize; j++ {
-			repr.Write([]byte(fmt.Sprintf("%c", b.msg.LayersContentMap[1][i*boardSize+j])))
-		}
-		repr.Write([]byte("\n"))
-	}
-
-	repr.Write([]byte("\n"))
-
-	for i := 0; i < boardSize; i++ {
-		for j := 0; j < boardSize; j++ {
-			repr.Write([]byte(fmt.Sprintf("%c", b.msg.LayersContentMap[2][i*boardSize+j])))
-		}
-		repr.Write([]byte("\n"))
-	}
 	return repr.String()
 }
 
 func (b *Board) IsAt(point Point, element Element) bool {
 	index := b.pointToIndex(point)
-	if index < 0 || index >= len(b.msg.LayersContentMap[element.getLayer()]) {
+	if index < 0 || index >= len(b.msg.ContentRune) {
 		return false
 	}
-	return b.msg.LayersContentMap[element.getLayer()][index] == rune(element)
+	return b.msg.ContentRune[index] == rune(element)
 }
 
 func (b *Board) IsAnyAt(point Point, element []Element) bool {
@@ -118,12 +89,11 @@ func (b *Board) IsNear(p Point, element Element) bool {
 		b.IsAt(Point{p.X + 1, p.Y}, element)
 }
 
-func (b *Board) GetAt(p Point) []Element {
-	elements := make([]Element, 0)
-	for _, c := range b.msg.LayersContentMap {
-		elements = append(elements, Element(c[b.pointToIndex(p)]))
+func (b *Board) GetAt(p Point) Element {
+	if b.isOutOfField(p) {
+		return BATTLE_WALL
 	}
-	return elements
+	return Element(b.msg.ContentRune[b.pointToIndex(p)])
 }
 
 func (b *Board) GetAllPoints(elements ...Element) []Point {
@@ -136,7 +106,7 @@ func (b *Board) GetAllPoints(elements ...Element) []Point {
 
 func (b *Board) GetElementPoints(element Element) []Point {
 	l := make([]Point, 0)
-	for _, i := range findAll(b.msg.LayersContentMap[element.getLayer()], rune(element)) {
+	for _, i := range findAll(b.msg.ContentRune, rune(element)) {
 		l = append(l, b.indexToPoint(i))
 	}
 	return l
@@ -144,156 +114,165 @@ func (b *Board) GetElementPoints(element Element) []Point {
 
 func (b *Board) IsBarrierAt(point Point) bool {
 	return b.IsAnyAt(point, []Element{
-		FLOOR, START, EXIT, GOLD, HOLE, //layer1
-		EMPTY, GOLD,
-		LASER_DOWN, LASER_UP, LASER_LEFT, LASER_RIGHT,
-		ROBO_OTHER, ROBO_OTHER_FLYING, ROBO_OTHER_FALLING, ROBO_OTHER_LASER,
-		ROBO, ROBO_FLYING, ROBO_FALLING, ROBO_LASER, //layer 2
+		BATTLE_WALL,
+		WALL,
+		WALL_DESTROYED_DOWN,
+		WALL_DESTROYED_UP,
+		WALL_DESTROYED_LEFT,
+		WALL_DESTROYED_RIGHT,
+		WALL_DESTROYED_DOWN_TWICE,
+		WALL_DESTROYED_UP_TWICE,
+		WALL_DESTROYED_LEFT_TWICE,
+		WALL_DESTROYED_RIGHT_TWICE,
+		WALL_DESTROYED_LEFT_RIGHT,
+		WALL_DESTROYED_UP_DOWN,
+		WALL_DESTROYED_UP_LEFT,
+		WALL_DESTROYED_RIGHT_UP,
+		WALL_DESTROYED_DOWN_LEFT,
+		WALL_DESTROYED_DOWN_RIGHT,
 	})
 }
 
 func (b *Board) GetBarriers() []Point {
 	return b.GetAllPoints(
-		FLOOR, START, EXIT, GOLD, HOLE, //layer1
-		EMPTY, GOLD,
-		LASER_DOWN, LASER_UP, LASER_LEFT, LASER_RIGHT,
-		ROBO_OTHER, ROBO_OTHER_FLYING, ROBO_OTHER_FALLING, ROBO_OTHER_LASER,
-		ROBO, ROBO_FLYING, ROBO_FALLING, ROBO_LASER, //layer 2
+		BATTLE_WALL,
+		WALL,
+		WALL_DESTROYED_DOWN,
+		WALL_DESTROYED_UP,
+		WALL_DESTROYED_LEFT,
+		WALL_DESTROYED_RIGHT,
+		WALL_DESTROYED_DOWN_TWICE,
+		WALL_DESTROYED_UP_TWICE,
+		WALL_DESTROYED_LEFT_TWICE,
+		WALL_DESTROYED_RIGHT_TWICE,
+		WALL_DESTROYED_LEFT_RIGHT,
+		WALL_DESTROYED_UP_DOWN,
+		WALL_DESTROYED_UP_LEFT,
+		WALL_DESTROYED_RIGHT_UP,
+		WALL_DESTROYED_DOWN_LEFT,
+		WALL_DESTROYED_DOWN_RIGHT,
 	)
 }
 
-func (b *Board) IsHoleAt(point Point) bool {
-	return !b.IsAt(point, HOLE)
+func (b *Board) IsBulletAt(point Point) bool {
+	return !b.IsAt(point, BULLET)
+}
+
+func (b *Board) GetBullets() []Point {
+	return b.GetAllPoints(
+		BULLET,
+	)
+}
+
+func (b *Board) IsRiverAt(point Point) bool {
+	return !b.IsAt(point, RIVER)
+}
+
+func (b *Board) GetRivers() []Point {
+	return b.GetAllPoints(
+		RIVER,
+	)
+}
+
+func (b *Board) IsTreeAt(point Point) bool {
+	return !b.IsAt(point, TREE)
+}
+
+func (b *Board) GetTrees() []Point {
+	return b.GetAllPoints(
+		TREE,
+	)
+}
+
+func (b *Board) IsIceAt(point Point) bool {
+	return !b.IsAt(point, ICE)
+}
+
+func (b *Board) GetIces() []Point {
+	return b.GetAllPoints(
+		ICE,
+	)
+}
+
+func (b *Board) IsPrizeAt(point Point) bool {
+	return !b.IsAt(point, PRIZE)
+}
+
+func (b *Board) GetPrizes() []Point {
+	return b.GetAllPoints(
+		PRIZE,
+	)
+}
+
+func (b *Board) IsImmortalityPrizeAt(point Point) bool {
+	return !b.IsAt(point, PRIZE_IMMORTALITY)
+}
+
+func (b *Board) GetImmortalityPrizes() []Point {
+	return b.GetAllPoints(
+		PRIZE_IMMORTALITY,
+	)
+}
+
+func (b *Board) IsBreakingWallsPrizeAt(point Point) bool {
+	return !b.IsAt(point, PRIZE_BREAKING_WALLS)
+}
+
+func (b *Board) GetBreakingWallsPrizes() []Point {
+	return b.GetAllPoints(
+		PRIZE_BREAKING_WALLS,
+	)
+}
+
+func (b *Board) IsWalkingOnWaterPrizeAt(point Point) bool {
+	return !b.IsAt(point, PRIZE_WALKING_ON_WATER)
+}
+
+func (b *Board) GetWalkingOnWaterPrizes() []Point {
+	return b.GetAllPoints(
+		PRIZE_WALKING_ON_WATER,
+	)
+}
+
+func (b *Board) IsNoSlidingPrizeAt(point Point) bool {
+	return !b.IsAt(point, PRIZE_NO_SLIDING)
+}
+
+func (b *Board) GetNoSlidingPrizes() []Point {
+	return b.GetAllPoints(
+		PRIZE_BREAKING_WALLS,
+	)
 }
 
 func (b *Board) GetMe() Point {
 	return b.GetAllPoints(
-		ROBO_FALLING, //layer2
-		ROBO_LASER,
-		ROBO,
-		ROBO_FLYING, //layer3
+		TANK_UP,
+		TANK_DOWN,
+		TANK_LEFT,
+		TANK_RIGHT,
 	)[0]
 }
 
-func (b *Board) GetOtherHeroes() []Point {
+func (b *Board) GetEnemies() []Point {
 	return b.GetAllPoints(
-		ROBO_OTHER_FALLING, //layer2
-		ROBO_OTHER_LASER,
-		ROBO_OTHER,
-		ROBO_OTHER_FLYING, //layer3
+		AI_TANK_UP,
+		AI_TANK_DOWN,
+		AI_TANK_LEFT,
+		AI_TANK_RIGHT,
+		OTHER_TANK_UP,
+		OTHER_TANK_DOWN,
+		OTHER_TANK_LEFT,
+		OTHER_TANK_RIGHT,
+		AI_TANK_PRIZE,
 	)
 }
 
-func (b *Board) GetLaserMachines() []Point {
-	return b.GetAllPoints(
-		LASER_MACHINE_CHARGING_LEFT, //layer1
-		LASER_MACHINE_CHARGING_RIGHT,
-		LASER_MACHINE_CHARGING_UP,
-		LASER_MACHINE_CHARGING_DOWN,
-
-		LASER_MACHINE_READY_LEFT,
-		LASER_MACHINE_READY_RIGHT,
-		LASER_MACHINE_READY_UP,
-		LASER_MACHINE_READY_DOWN,
-	)
-}
-
-func (b *Board) GetLasers() []Point {
-	return b.GetAllPoints(
-		LASER_LEFT, //layer2
-		LASER_RIGHT,
-		LASER_UP,
-		LASER_DOWN,
-	)
-}
-
-func (b *Board) GetWalls() []Point {
-	return b.GetAllPoints(
-		ANGLE_IN_LEFT, //layer1
-		WALL_FRONT,
-		ANGLE_IN_RIGHT,
-		WALL_RIGHT,
-		ANGLE_BACK_RIGHT,
-		WALL_BACK,
-		ANGLE_BACK_LEFT,
-		WALL_LEFT,
-		WALL_BACK_ANGLE_LEFT,
-		WALL_BACK_ANGLE_RIGHT,
-		ANGLE_OUT_RIGHT,
-		ANGLE_OUT_LEFT,
-		SPACE,
-	)
-}
-
-func (b *Board) IsWallAt(point Point) bool {
-	return b.IsAnyAt(point, []Element{
-		ANGLE_IN_LEFT, //layer1
-		WALL_FRONT,
-		ANGLE_IN_RIGHT,
-		WALL_RIGHT,
-		ANGLE_BACK_RIGHT,
-		WALL_BACK,
-		ANGLE_BACK_LEFT,
-		WALL_LEFT,
-		WALL_BACK_ANGLE_LEFT,
-		WALL_BACK_ANGLE_RIGHT,
-		ANGLE_OUT_RIGHT,
-		ANGLE_OUT_LEFT,
-		SPACE,
-	})
-}
-
-func (b *Board) GetBoxes() []Point {
-	return b.GetAllPoints(
-		BOX, //layer2
-	)
-}
-
-func (b *Board) GetHoles() []Point {
-	return b.GetAllPoints(
-		HOLE, //layer1
-		ROBO_FALLING,
-		ROBO_OTHER_FALLING,
-	)
-}
-
-func (b *Board) GetExits() []Point {
-	return b.GetAllPoints(
-		EXIT, //layer1
-	)
-}
-
-func (b *Board) GetStarts() []Point {
-	return b.GetAllPoints(
-		START, //layer1
-	)
-}
-
-func (b *Board) GetGold() []Point {
-	return b.GetAllPoints(
-		GOLD, //layer1
-	)
-}
-
-func (b *Board) GetZombies() []Point {
-	return b.GetAllPoints(
-		FEMALE_ZOMBIE, //layer2
-		MALE_ZOMBIE,
-		ZOMBIE_DIE,
-	)
-}
-
-func (b *Board) GetPerks() []Point {
-	return b.GetAllPoints(
-		DEATH_RAY_PERK, //layer1
-		UNLIMITED_FIRE_PERK,
-		UNSTOPPABLE_LASER_PERK,
-	)
-}
-
-func (b *Board) AreMyHeroesDead() bool {
+func (b *Board) IsGameOver() bool {
 	return 0 == len(b.GetAllPoints(
-		ROBO, ROBO_FALLING, ROBO_LASER,
+		TANK_UP,
+		TANK_DOWN,
+		TANK_LEFT,
+		TANK_RIGHT,
 	))
 }
 
@@ -302,7 +281,7 @@ func (b *Board) BoardSize() int {
 }
 
 func findAll(content []rune, symbol rune) []int {
-	indexes := []int{}
+	var indexes []int
 	for i, el := range content {
 		if el == symbol {
 			indexes = append(indexes, i)
@@ -339,15 +318,18 @@ func (b *Board) getAction() action.Action {
 	return *b.command
 }
 
-func (r rawLayers) toMap() mapLayers {
-	m := make(map[int][]rune)
-
-	//for i, l := range []string(r) {
-	//	//j := i
-	//	//if i == boardSize{
-	//	//	j = 0
-	//	//}
-	//	//m[i] = []rune(l)
-	//}
-	return m
+func (b *Board) isOutOfField(p Point) bool {
+	return p.X > b.BoardSize()-1 || p.X < 0 || p.Y > b.BoardSize()-1 || p.Y < 0
 }
+
+//
+//func toRunes(s string) []rune {
+//	for i, l := range []string(r) {
+//		//j := i
+//		if i == boardSize {
+//			//j = 0
+//		}
+//		m[i] = []rune(l)
+//	}
+//	return []rune{}
+//}

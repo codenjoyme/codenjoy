@@ -27,50 +27,26 @@ import "battlecity/direction"
 type Action string
 
 const (
-	NOTHING Action = "Act"
-	DIE     Action = "Act(0)"
-	JUMP    Action = "Act(1)"
-	FIRE    Action = "Act(3)"
-	PULL    Action = "Act(2)"
-	RESET   Action = "Act(0)"
+	NOTHING = ""
+	ACT     = "ACT"
 )
 
-//Resets current level
-func Reset() Action {
-	return RESET
-}
-
-//Says to Hero jump to direction
-func JumpTo(d direction.Direction) Action {
-	return Action(string(JUMP) + "," + d.String())
-}
-
-//Says to Hero jump in place
-func Jump() Action {
-	return JUMP
-}
-
-//Says to Hero Move to direction
+//Says to Tank to move to direction
 func Move(d direction.Direction) Action {
 	return Action(d.String())
 }
 
-//Says to Hero fire on this direction
-func Fire(d direction.Direction) Action {
-	return Action(string(FIRE) + "," + d.String())
+//Says to Tank move on this direction then fire
+func MoveFire(d direction.Direction) Action {
+	return Action(d.String() + "," + ACT)
 }
 
-//Says to Hero pull box on this direction
-func Pull(d direction.Direction) Action {
-	return Action(string(PULL) + "," + d.String())
+//Says to Tank fire then move on this direction
+func FireMove(d direction.Direction) Action {
+	return Action(ACT + "," + d.String())
 }
 
 //Says to Hero to do nothing
 func DoNothing() Action {
 	return NOTHING
-}
-
-//Says to Hero to die
-func Die() Action {
-	return DIE
 }

@@ -39,7 +39,7 @@ const (
 
 // It's var for testing purposes
 var gameProtocol = "ws"
-var nothingPtr = action.NOTHING
+var nothingPtr = action.DoNothing()
 
 type game struct {
 	brd *Board
@@ -128,14 +128,10 @@ func readWriteSocket(brd *Board, conn *websocket.Conn, c communication) {
 
 func updateBoard(m string, b *Board) error {
 	boardContent := strings.Replace(m, "board=", "", 1)
-	//if err := json.Unmarshal([]byte(boardContent), &b.m); err != nil {
-	//	return err
-	//}
 
 	b.msg = &msg{}
-	b.msg.LayersContentRaw = rawLayers{boardContent}
-	b.msg.LayersContentMap = b.msg.LayersContentRaw.toMap()
-	fmt.Println(boardContent) // Use this to display game board in console output
+	b.msg.ContentRune = []rune(boardContent)
+	fmt.Println(b.Show()) // Use this to display game board in console output
 	return nil
 }
 

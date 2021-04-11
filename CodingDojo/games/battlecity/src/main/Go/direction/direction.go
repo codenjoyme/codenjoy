@@ -32,7 +32,7 @@ const (
 )
 
 func (d Direction) String() string {
-	return [...]string{"up", "DOWN", "RIGHT", "left"}[d]
+	return [...]string{"UP", "DOWN", "RIGHT", "LEFT"}[d]
 }
 
 func (d Direction) IsValid() bool {

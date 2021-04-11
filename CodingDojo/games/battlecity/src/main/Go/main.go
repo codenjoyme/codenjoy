@@ -28,7 +28,7 @@ import (
 )
 
 func main() {
-	browserURL := "http://127.0.0.1:8080/codenjoy-contest/board/player/loehratkw9h404sb70uw?code=240409986715971219&game=battlecity"
+	browserURL := "http://codenjoy.com/codenjoy-contest/board/player/{player-id}?code={code}&game=battlecity"
 
 	game, c := game.StartGame(browserURL)
 	b := game.GetBoard()
