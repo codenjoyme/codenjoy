@@ -180,8 +180,7 @@
                     <doCheck>false</doCheck>
                     <doUpdate>false</doUpdate>
                     <providerImplementations>
-<!--                        <git>jgit</git>-->
-                        <svn>javasvn</svn>
+                        <git>jgit</git>
                     </providerImplementations>
                     <scmConnectionUrl>scm:git:</scmConnectionUrl>
                     <scmDirectory>${project.basedir}/../../../</scmDirectory>
