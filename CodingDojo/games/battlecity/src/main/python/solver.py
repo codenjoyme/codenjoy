@@ -3,11 +3,8 @@
 
 from board import Board
 from command import Command
-# from element import Element
 from random import choice
-import collections
 
-history=collections.deque([],maxlen=20)
 _COURSES = ('LEFT','RIGHT','DOWN','UP')
 
 """ This class should contain the movement generation algorithm."""

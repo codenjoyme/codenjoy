@@ -26,8 +26,8 @@ def get_url_for_ws(url):
 def main():
     assert version_info[0] == 3, "You should run me with Python 3.x"
     game_host=os.environ.get('GAME_HOST', 'localhost')
-    game_port=os.environ.get('GAME_PORT', '49154')
-    # game_port=os.environ.get('GAME_PORT', '8080')
+    # game_port=os.environ.get('GAME_PORT', '49154')
+    game_port=os.environ.get('GAME_PORT', '8080')
     # substitute following link with the one you've copied in your browser after registration
     url = f"http://{game_host}:{game_port}/codenjoy-contest/board/player/0?code=000000000000"
     direction_solver = DirectionSolver()
