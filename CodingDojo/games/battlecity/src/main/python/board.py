@@ -4,30 +4,24 @@
 from math import sqrt
 from element import Element
 from point import Point
-from  textwrap import  wrap
 
-_DIRECTIONS= dict(
-                LEFT='TANK_LEFT',
-                RIGHT='TANK_RIGHT',
-                UP='TANK_UP',
-                DOWN='TANK_DOWN',
-                ACT='TANK_LEFT',
-                )
+WALLS = ('WALL', 'WALL_DESTROYED_DOWN', 'WALL_DESTROYED_UP', 'WALL_DESTROYED_LEFT',
+         'WALL_DESTROYED_RIGHT', 'WALL_DESTROYED_DOWN_TWICE', 'WALL_DESTROYED_UP_TWICE',
+         'WALL_DESTROYED_LEFT_TWICE', 'WALL_DESTROYED_RIGHT_TWICE', 'WALL_DESTROYED_LEFT_RIGHT',
+         'WALL_DESTROYED_UP_DOWN', 'WALL_DESTROYED_UP_LEFT', 'WALL_DESTROYED_RIGHT_UP',
+         'WALL_DESTROYED_DOWN_LEFT',  'WALL_DESTROYED_DOWN_RIGHT',)
 
+MY_TANK = ('TANK_UP', 'TANK_DOWN', 'TANK_LEFT', 'TANK_RIGHT',)
+
+AI_TANK = ('AI_TANK_UP', 'AI_TANK_RIGHT', 'AI_TANK_DOWN', 'AI_TANK_LEFT',)
+
+OTHER_TANK = ('OTHER_TANK_UP', 'OTHER_TANK_RIGHT', 'OTHER_TANK_DOWN', 'OTHER_TANK_LEFT',)
 
 
 class Board:
 
     def __init__(self, board_string):
         self._string = board_string.replace('\n', '')
-        # self._string = board_string
-
-        # if self._string[39]!='☼':
-        #     # a = ''.join(reversed(self._string))
-        #     invert =  True
-        #     # self._string = ''.join(reversed(self._string))
-        #     # self._string = ''.join(''.join(reversed(i)) for i in wrap(self._string[:34*5-1],34,drop_whitespace=False))
-
         self._len = len(self._string)  # the length of the string
         self._size = int(sqrt(self._len))  # size of the board
         print("Board size is sqrt", self._len, self._size)
@@ -38,7 +32,7 @@ class Board:
         _a_char = element.char
         for i, c in enumerate(self._string):
             if c == _a_char:
-                 _points.append(self._strpos2pt(i))
+                _points.append(self._strpos2pt(i))
         return _points
 
     def _strpos2pt(self, strpos):
@@ -54,48 +48,39 @@ class Board:
         return Element(self._string[self._xy2strpos(x, y)])
 
     def is_at(self, x, y, element_object):
-        return element_object==self.get_at(x, y)
+        return element_object == self.get_at(x, y)
 
     def is_barrier_at(self, x, y):
         """ Return true if barrier is at x,y."""
         return Point(x, y) in self.barriers
 
-    def is_tray_at(self, x, y):
-        """ Return true if tray is at x,y."""
-        return Point(x, y) in self.tray
+    def is_tree_at(self, x, y):
+        """ Return true if tree is at x,y."""
+        return Point(x, y) in self.tree
 
     def is_other_tank_at(self, x, y):
         """ Return true if other_tank is at x,y."""
         return Point(x, y) in self.other_tank
 
-
-
     @property
     def my_tank(self):
         points = []
-        points.extend(self._find_all(Element('TANK_UP')))
-        points.extend(self._find_all(Element('TANK_DOWN')))
-        points.extend(self._find_all(Element('TANK_LEFT')))
-        points.extend(self._find_all(Element('TANK_RIGHT')))
+        for item in MY_TANK:
+            points.extend(self._find_all(Element(item)))
         return points
-
 
     @property
     def ai_tank(self):
         points = []
-        points.extend(self._find_all(Element('AI_TANK_UP')))
-        points.extend(self._find_all(Element('AI_TANK_RIGHT')))
-        points.extend(self._find_all(Element('AI_TANK_DOWN')))
-        points.extend(self._find_all(Element('AI_TANK_LEFT')))
+        for item in AI_TANK:
+            points.extend(self._find_all(Element(item)))
         return points
 
     @property
     def other_tank(self):
         points = []
-        points.extend(self._find_all(Element('OTHER_TANK_UP')))
-        points.extend(self._find_all(Element('OTHER_TANK_RIGHT')))
-        points.extend(self._find_all(Element('OTHER_TANK_DOWN')))
-        points.extend(self._find_all(Element('OTHER_TANK_LEFT')))
+        for item in OTHER_TANK:
+            points.extend(self._find_all(Element(item)))
         return points
 
     @property
@@ -119,8 +104,6 @@ class Board:
         points.extend(self.ice)
         points.extend(self.ai_tank)
         points.extend(self.other_tank)
-        points.extend(self.tree)
-        # points.extend(self.bullet)
         return points
 
     @property
@@ -130,28 +113,23 @@ class Board:
         points.extend(self.other_tank)
         return points
 
-
     @property
     def ice(self):
         points = []
         points.extend(self._find_all(Element('ICE')))
         return points
-        # return self._find_all(Element('ICE'))
 
     @property
     def river(self):
         points = []
         points.extend(self._find_all(Element('RIVER')))
         return points
-        # return self._find_all(Element('RIVER'))
 
     @property
     def tree(self):
         points = []
         points.extend(self._find_all(Element('TREE')))
         return points
-        return self._find_all(Element('TREE'))
-
 
     @property
     def battle_walls(self):
@@ -159,72 +137,49 @@ class Board:
         points.extend(self._find_all(Element('BATTLE_WALL')))
         return points
 
-
     @property
     def walls(self):
         points = []
-        points.extend(self._find_all(Element('WALL')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_DOWN')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_UP')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_LEFT')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_RIGHT')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_DOWN_TWICE')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_UP_TWICE')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_LEFT_TWICE')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_RIGHT_TWICE')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_LEFT_RIGHT')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_UP_DOWN')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_UP_LEFT')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_RIGHT_UP')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_DOWN_LEFT')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_UP_LEFT')))
-        points.extend(self._find_all(Element('WALL_DESTROYED_DOWN_RIGHT')))
+        for item in WALLS:
+            points.extend(self._find_all(Element(item)))
         return points
 
-
     def is_near(self, x, y, elem):
+        """ Return number  of the element near a point  x,y"""
         _is_near = False
         if not Point(x, y).is_bad(self._size):
-            _is_near = (self.is_at(x + 1, y, elem) or
-                        self.is_at(x - 1, y, elem) or
-                        self.is_at(x, 1 + y, elem) or
-                        self.is_at(x, 1 - y, elem))
+            _is_near = (self.is_at(x+1, y, elem) or
+                        self.is_at(x-1, y, elem) or
+                        self.is_at(x, y+1, elem) or
+                        self.is_at(x, y-1, elem))
         return _is_near
 
     def is_near_all(self, x, y, points):
+        """ Return number  of points near a point  x,y."""
         _near_count = 0
         if not Point(x, y).is_bad(self._size) and points:
-            for _x, _y in ((x + 1, y), (x - 1, y), (x, 1 + y), (x, 1 - y)):
+            for _x, _y in ((x+1, y), (x-1, y), (x, y+1), (x, y-1)):
                 if Point(_x, _y) in points:
                     _near_count += 1
         return _near_count
 
     def direction(self, x, y):
-        course = ('LEFT', 'RIGHT', 'DOWN', 'UP')
+        """ returns the direction of the point  x,y """
+        courses = ('LEFT', 'RIGHT', 'DOWN', 'UP')
         if not Point(x, y).is_bad(self._size):
-            _dir = self.get_at(x,y)
-            for item in course:
+            _dir = self.get_at(x, y)
+            for item in courses:
                 if item in str(_dir.name).rpartition('_'):
                     return item
-
-
-
-    def count_near(self, x, y, elem):
-        _near_count = 0
-        if not Point(x, y).is_bad(self._size):
-            for _x, _y in ((x + 1, y), (x - 1, y), (x, 1 + y), (x, 1 - y)):
-                if self.is_at(_x, _y, elem):
-                    _near_count += 1
-        return _near_count
-
+        else:
+            return None
 
     def to_string(self):
-        return ("Board:\n{brd}\nTank at: {tnk}{tank_img}\nOther Tank "
-                "at: {others}\nAI Tank at: {aitnk}\nBullet at:"
+        return ("Board:\n{brd}\nTank at: {tnk}\nOther Tank "
+                "at: {other}\nAI Tank at: {aitnk}\nBullet at:"
                 "{blt}".format(brd=self._line_by_line(),
                                tnk=self.my_tank,
-                               tank_img=self.my_tank,
-                               others=self.other_tank,
+                               other=self.other_tank,
                                aitnk=self.ai_tank,
                                blt=self.bullet)
                 )

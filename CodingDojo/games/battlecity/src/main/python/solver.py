@@ -8,7 +8,7 @@ from random import choice
 import collections
 
 history=collections.deque([],maxlen=20)
-_COURSES = ['LEFT','RIGHT','DOWN','UP']
+_COURSES = ('LEFT','RIGHT','DOWN','UP')
 
 """ This class should contain the movement generation algorithm."""
 
@@ -26,9 +26,9 @@ class DirectionSolver:
     def get(self, board_string):
         """ The function that should be implemented."""
         self._board = Board(board_string)
-        _command = "ACT," + str(self.find_command())
-        # _command = str(self.find_command())
+        _command = str(self.find_command())
         print("Sending Command {}".format(_command))
+        # return ''.join(_command)
         return ''.join(_command)
 
     def find_command(self):
@@ -37,8 +37,6 @@ class DirectionSolver:
         _direction = choice(course)
         print(self._board.to_string())
         all_tanks = self._board.tanks
-
-        # tank in trees
         if not self._board.my_tank:
             __dir = choice((course))
         else:
@@ -54,16 +52,13 @@ class DirectionSolver:
 
     def next_step(self,x,y,_direction):
         course = list(_COURSES)
+        ''''find new coordinates for the direction'''
+
         _direction = Command(_direction)
         _x, _y = _direction.new_x(x), _direction.new_y(y)
-        lockup = self._board.is_near_all(_x, _y, self._board.barriers)
-        while self._board.is_barrier_at(_x, _y) or lockup >= 3:
-            if len(course)<3:
-                course = list(_COURSES)
-            course.remove(str(_direction))
-            _direction = Command(choice(course))
-            _x, _y = _direction.new_x(x), _direction.new_y(y)
-            lockup = self._board.is_near_all(_x, _y, self._board.barriers)
+
+        """analyzing a new course and choice of old or new course"""
+
         return _direction
 
 
