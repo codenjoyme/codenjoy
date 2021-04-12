@@ -24,21 +24,23 @@ package game
 
 import (
 	"battlecity/action"
-	"errors"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"log"
+	"math"
 	"net/url"
 	"strings"
 )
 
 const (
-	gamePath          = "/codenjoy-contest/ws"
-	gameQueryTemplate = "user=%s&code=%s&gameName=battlecity"
+	gameQueryTemplate = "user=%s&code=%s"
 )
 
-// It's var for testing purposes
-var gameProtocol = "ws"
+var (
+	gameProtocolS = "wss"
+	gameProtocol  = "ws"
+)
+
 var nothingPtr = action.DoNothing()
 
 type game struct {
@@ -128,9 +130,9 @@ func readWriteSocket(brd *Board, conn *websocket.Conn, c communication) {
 
 func updateBoard(m string, b *Board) error {
 	boardContent := strings.Replace(m, "board=", "", 1)
-
 	b.msg = &msg{}
 	b.msg.ContentRune = []rune(boardContent)
+	b.size = int(math.Sqrt(float64(len(b.msg.ContentRune))))
 	fmt.Println(b.Show()) // Use this to display game board in console output
 	return nil
 }
@@ -144,36 +146,22 @@ func getConnection(u url.URL) (*websocket.Conn, error) {
 // createURL creates valid connection URL from raw url copied from browser url input in the game window
 // example browserURL: "https://epam-botchallenge.com/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=battlecity"
 func createURL(browserURL string) (url.URL, error) {
-	// get host name
-	//mutatedUrl := browserURL
-	mutatedUrl := strings.Replace(browserURL, "http://", "", 1)
-	urlParts := strings.Split(mutatedUrl, "/")
-	if len(urlParts) != 5 {
-		return url.URL{}, errors.New("Invalid URL, can't get host name, url: " + browserURL)
+	gURL, err := url.Parse(browserURL)
+	if err != nil {
+		return url.URL{}, err
 	}
-	host := urlParts[0]
-
-	// get player id
-	mutatedUrl = strings.Replace(mutatedUrl, host+"/codenjoy-contest/board/player/", "", 1)
-	urlParts = strings.Split(mutatedUrl, "?")
-	if len(urlParts) != 2 {
-		return url.URL{}, errors.New("Invalid URL, can't get player ID, url: " + browserURL)
-	}
-	player := urlParts[0]
-
-	// get game code
-	mutatedUrl = strings.Replace(mutatedUrl, player+"?code=", "", 1)
-	urlParts = strings.Split(mutatedUrl, "&")
-	if len(urlParts) != 2 {
-		return url.URL{}, errors.New("Invalid URL, can't get game code, url: " + browserURL)
-	}
-	code := urlParts[0]
+	pp := strings.Split(gURL.Path, "/")
 
 	u := url.URL{
+		Path:     pp[1] + "/ws",
+		RawQuery: fmt.Sprintf(gameQueryTemplate, pp[4], strings.Split(gURL.RawQuery, "=")[1]),
 		Scheme:   gameProtocol,
-		Host:     host,
-		Path:     gamePath,
-		RawQuery: fmt.Sprintf(gameQueryTemplate, player, code),
+		Host:     gURL.Host,
 	}
+
+	if u.Scheme == "https" {
+		u.Scheme = gameProtocolS
+	}
+
 	return u, nil
 }

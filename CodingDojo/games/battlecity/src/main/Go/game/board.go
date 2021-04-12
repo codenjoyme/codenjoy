@@ -29,8 +29,6 @@ import (
 	"sync"
 )
 
-const boardSize = 34
-
 type msg struct {
 	HeroPosition Point
 	ShowName     bool
@@ -45,6 +43,7 @@ type Board struct {
 	msg     *msg
 	command *action.Action
 	m       sync.Mutex
+	size    int
 }
 
 //Show returns string representation of current state of board
@@ -99,12 +98,12 @@ func (b *Board) GetAt(p Point) Element {
 func (b *Board) GetAllPoints(elements ...Element) []Point {
 	p := make([]Point, 0)
 	for _, e := range elements {
-		p = append(p, b.GetElementPoints(e)...)
+		p = append(p, b.getElementPoints(e)...)
 	}
 	return p
 }
 
-func (b *Board) GetElementPoints(element Element) []Point {
+func (b *Board) getElementPoints(element Element) []Point {
 	l := make([]Point, 0)
 	for _, i := range findAll(b.msg.ContentRune, rune(element)) {
 		l = append(l, b.indexToPoint(i))
@@ -240,17 +239,31 @@ func (b *Board) IsNoSlidingPrizeAt(point Point) bool {
 
 func (b *Board) GetNoSlidingPrizes() []Point {
 	return b.GetAllPoints(
-		PRIZE_BREAKING_WALLS,
+		PRIZE_NO_SLIDING,
+	)
+}
+
+func (b *Board) IsVisibilityPrizeAt(point Point) bool {
+	return !b.IsAt(point, PRIZE_VISIBILITY)
+}
+
+func (b *Board) GetVisibilityPrizes() []Point {
+	return b.GetAllPoints(
+		PRIZE_VISIBILITY,
 	)
 }
 
 func (b *Board) GetMe() Point {
-	return b.GetAllPoints(
+	ap := b.GetAllPoints(
 		TANK_UP,
 		TANK_DOWN,
 		TANK_LEFT,
 		TANK_RIGHT,
-	)[0]
+	)
+	if len(ap) == 0 {
+		return Point{}
+	}
+	return ap[0]
 }
 
 func (b *Board) GetEnemies() []Point {
@@ -277,7 +290,7 @@ func (b *Board) IsGameOver() bool {
 }
 
 func (b *Board) BoardSize() int {
-	return boardSize
+	return b.size
 }
 
 func findAll(content []rune, symbol rune) []int {
