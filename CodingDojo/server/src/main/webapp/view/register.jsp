@@ -62,8 +62,11 @@ License along with this program.  If not, see
                 <div id="navbar" class="navbar-collapse collapse">
                     <nav class="nav pull-right text-right">
                         <ul class="nav-list">
-                            <li class="title icancode-title inline"><a id="additional-link" href="#"></a></li>
-                            <li class="title icancode-title inline"><a id="help-link" href="#"></a></li>
+                            <li class="inline">
+                                <a href="${ctx}/login">
+                                    <button class="btn-submit btn-small" type="button">Sign in</button>
+                                </a>
+                            </li>
                             <sec:authorize access="isAuthenticated()">
                                 <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
                             </sec:authorize>
