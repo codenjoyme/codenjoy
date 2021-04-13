@@ -341,6 +341,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <revisionOnScmFailure>no.scm.config.in.pom</revisionOnScmFailure>
                     <doCheck>false</doCheck>
                     <doUpdate>false</doUpdate>
                     <providerImplementations>
