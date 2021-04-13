@@ -39,10 +39,10 @@ class Board:
         return Point(*self._strpos2xy(strpos))
 
     def _strpos2xy(self, strpos):
-        return strpos % self._size, strpos // self._size
+        return strpos % self._size, self._size - (strpos // self._size)
 
     def _xy2strpos(self, x, y):
-        return self._size * y + x
+        return self._size * (self._size - y) + x
 
     def get_at(self, x, y):
         return Element(self._string[self._xy2strpos(x, y)])
