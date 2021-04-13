@@ -27,10 +27,8 @@ import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.settings.Chance;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.services.settings.CommonGameSettings;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +38,7 @@ import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.services.settings.Chance.CHANCE_RESERVED;
 
-public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings>, RoundSettings {
+public class GameSettings extends CommonGameSettings<GameSettings> {
 
     public enum Keys implements Key {
 
@@ -85,7 +83,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     @Override
     public List<Key> allKeys() {
-        return Arrays.asList(Keys.values());
+        List<Key> superKeys = super.allKeys();
+        superKeys.addAll(Arrays.asList(Keys.values()));
+        return superKeys;
     }
 
     public GameSettings() {

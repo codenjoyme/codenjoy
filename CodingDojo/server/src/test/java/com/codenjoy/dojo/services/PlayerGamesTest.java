@@ -28,17 +28,23 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static com.codenjoy.dojo.services.PlayerGames.*;
-import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.DISPOSABLE;
-import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
+import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -2029,5 +2035,103 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                         .map(it -> it.getPlayer().getId())
                         .collect(toList())
                         .toString());
+    }
+
+    @Test
+    public void removePlayers_afterInactivityTimeoutLimit() {
+        playerGames = spy(this.playerGames);
+
+        int inactivityTimeout = 5;
+        Player player1 = createPlayer("player1", "room", "game", MULTIPLE);
+        player1.setLastResponseTime(LocalDateTime.MAX);
+        Player player2 = createPlayer("player2", "room", "game", MULTIPLE);
+        player2.setLastResponseTime(LocalDateTime.now().minus(inactivityTimeout + 10, MINUTES));
+        Player player3 = createPlayer("player3", "room", "game", MULTIPLE);
+        player3.setLastResponseTime(LocalDateTime.now().minus(inactivityTimeout, MINUTES));
+
+        Parameter parameter = mock(Parameter.class, RETURNS_DEEP_STUBS);
+        when(parameter.type(Boolean.class).getValue()).thenReturn(Boolean.TRUE);
+        when(parameter.type(Integer.class).getValue()).thenReturn(inactivityTimeout);
+        for (PlayerGame playerGame : playerGames.active()) {
+            Settings settings = playerGame.getGameType().getSettings();
+            when(settings.hasParameter(anyString())).thenReturn(true);
+            when(settings.getParameter(anyString())).thenReturn(parameter);
+        }
+
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player1".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player2".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player3".equals(g.getPlayer().getId())));
+
+        playerGames.tick();
+
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player1".equals(g.getPlayer().getId())));
+        assertFalse(playerGames.active().stream().anyMatch(g -> "player2".equals(g.getPlayer().getId())));
+        assertFalse(playerGames.active().stream().anyMatch(g -> "player3".equals(g.getPlayer().getId())));
+
+        verify(playerGames).removeCurrent(player2);
+        verify(playerGames).removeCurrent(player3);
+    }
+
+    @Test
+    public void doNotRemovePlayers_afterInactivityTimeoutLimit_ifKickParameterAbsent(){
+        playerGames = spy(this.playerGames);
+
+        int inactivityTimeout = 5;
+        Player player1 = createPlayer("player1", "room", "game", MULTIPLE);
+        player1.setLastResponseTime(LocalDateTime.MAX);
+        Player player2 = createPlayer("player2", "room", "game", MULTIPLE);
+        player2.setLastResponseTime(LocalDateTime.now().minus(inactivityTimeout + 10, MINUTES));
+        Player player3 = createPlayer("player3", "room", "game", MULTIPLE);
+        player3.setLastResponseTime(LocalDateTime.now().minus(inactivityTimeout, MINUTES));
+
+        for (PlayerGame playerGame : playerGames.active()) {
+            Settings settings = playerGame.getGameType().getSettings();
+            when(settings.hasParameter(anyString())).thenReturn(false);
+        }
+
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player1".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player2".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player3".equals(g.getPlayer().getId())));
+
+        playerGames.tick();
+
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player1".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player2".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player3".equals(g.getPlayer().getId())));
+
+        verify(playerGames, never()).removeCurrent(any(Player.class));
+    }
+
+    @Test
+    public void doNotRemovePlayers_afterInactivityTimeoutLimit_ifKickParameterFalse() {
+        playerGames = spy(this.playerGames);
+
+        int inactivityTimeout = 5;
+        Player player1 = createPlayer("player1", "room", "game", MULTIPLE);
+        player1.setLastResponseTime(LocalDateTime.MAX);
+        Player player2 = createPlayer("player2", "room", "game", MULTIPLE);
+        player2.setLastResponseTime(LocalDateTime.now().minus(inactivityTimeout + 10, MINUTES));
+        Player player3 = createPlayer("player3", "room", "game", MULTIPLE);
+        player3.setLastResponseTime(LocalDateTime.now().minus(inactivityTimeout, MINUTES));
+
+        Parameter parameter = mock(Parameter.class, RETURNS_DEEP_STUBS);
+        when(parameter.type(Boolean.class).getValue()).thenReturn(Boolean.FALSE);
+        for (PlayerGame playerGame : playerGames.active()) {
+            Settings settings = playerGame.getGameType().getSettings();
+            when(settings.hasParameter(anyString())).thenReturn(true);
+            when(settings.getParameter(anyString())).thenReturn(parameter);
+        }
+
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player1".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player2".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player3".equals(g.getPlayer().getId())));
+
+        playerGames.tick();
+
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player1".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player2".equals(g.getPlayer().getId())));
+        assertTrue(playerGames.active().stream().anyMatch(g -> "player3".equals(g.getPlayer().getId())));
+
+        verify(playerGames, never()).removeCurrent(any(Player.class));
     }
 }
