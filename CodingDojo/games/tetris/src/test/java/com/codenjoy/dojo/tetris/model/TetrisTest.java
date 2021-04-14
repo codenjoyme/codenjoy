@@ -90,14 +90,14 @@ public class TetrisTest {
     }
 
     private void assrtDr(String expected) {
-        Printer printer = printerFactory.getPrinter(new BoardReader() {
+        Printer printer = printerFactory.getPrinter(new BoardReader<Player>() {
             @Override
             public int size() {
                 return game.size();
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Plot>() {{
                     addAll(hero.dropped());
                     addAll(hero.currentFigure());

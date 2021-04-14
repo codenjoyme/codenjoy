@@ -71,14 +71,14 @@ public class WallsTest {
     }
 
     private String print(final Walls walls) {
-        Printer<String> printer = factory.getPrinter(new BoardReader() {
+        Printer<String> printer = factory.getPrinter(new BoardReader<Player>() {
             @Override
             public int size() {
                 return SIZE;
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return walls;
             }
         }, null);

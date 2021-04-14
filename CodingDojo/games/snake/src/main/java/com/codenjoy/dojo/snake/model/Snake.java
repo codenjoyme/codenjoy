@@ -171,7 +171,7 @@ public class Snake implements Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Snake.this.size;
 
             @Override
@@ -180,7 +180,7 @@ public class Snake implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>(){{
                     walls.forEach(this::add);
                     snake().forEach(this::add);

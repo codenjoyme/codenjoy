@@ -32,12 +32,5 @@ public interface BoardReader<P> {
 
     int size();
 
-    // TODO перевести сюда все игры и убрать метод
-    default Iterable<? extends Point> elements() {
-        return elements(null);
-    }
-
-    default Iterable<? extends Point> elements(P player) {
-        return elements();
-    }
+    Iterable<? extends Point> elements(P player);
 }

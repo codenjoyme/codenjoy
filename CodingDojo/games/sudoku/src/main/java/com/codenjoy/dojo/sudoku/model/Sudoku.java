@@ -174,7 +174,7 @@ public class Sudoku implements Field {
     }
 
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Sudoku.this.size;
 
             @Override
@@ -183,7 +183,7 @@ public class Sudoku implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>(){{
                     addAll(Sudoku.this.walls);
                     addAll(Sudoku.this.cells);

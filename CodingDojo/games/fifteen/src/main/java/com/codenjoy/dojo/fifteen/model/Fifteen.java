@@ -142,7 +142,7 @@ public class Fifteen implements Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Fifteen.this.size;
 
             @Override
@@ -151,7 +151,7 @@ public class Fifteen implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>() {{
                     addAll(Fifteen.this.getWalls());
                     addAll(Fifteen.this.getHeroes());

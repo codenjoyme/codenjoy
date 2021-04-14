@@ -128,14 +128,14 @@ public class A2048 implements Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             @Override
             public int size() {
                 return A2048.this.size;
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return () -> new Iterator<Point>() {
                     private int x = 0;
                     private int y = 0;

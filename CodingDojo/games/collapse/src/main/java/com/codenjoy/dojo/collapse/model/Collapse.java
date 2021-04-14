@@ -193,7 +193,7 @@ public class Collapse implements Field {
     }
 
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Collapse.this.size;
 
             @Override
@@ -202,7 +202,7 @@ public class Collapse implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>(){{
                     addAll(Collapse.this.walls.values());
                     addAll(Collapse.this.cells.values());

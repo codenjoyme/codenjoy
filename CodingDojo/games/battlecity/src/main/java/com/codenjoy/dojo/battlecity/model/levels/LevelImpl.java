@@ -23,6 +23,7 @@ package com.codenjoy.dojo.battlecity.model.levels;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.battlecity.model.items.*;
 import com.codenjoy.dojo.services.Dice;
@@ -133,14 +134,14 @@ public class LevelImpl implements Level {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             @Override
             public int size() {
                 return LevelImpl.this.size();
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<>() {{
                     addAll(LevelImpl.this.getBorders());
                     addAll(LevelImpl.this.getWalls());

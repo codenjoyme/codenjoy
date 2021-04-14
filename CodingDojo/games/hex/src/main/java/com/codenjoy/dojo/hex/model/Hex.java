@@ -270,7 +270,7 @@ public class Hex implements Field {
 
 
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Hex.this.size;
 
             @Override
@@ -279,7 +279,7 @@ public class Hex implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>() {{
                     addAll(Hex.this.getHeroes());
                     addAll(Hex.this.getWalls());

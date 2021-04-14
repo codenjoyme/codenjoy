@@ -80,14 +80,14 @@ public class LocalGameRunnerTest {
             public BoardReader reader() {
                 messages.add("GET_READER" + id());
 
-                return new BoardReader() {
+                return new BoardReader<GamePlayer>() {
                     @Override
                     public int size() {
                         return id++;
                     }
 
                     @Override
-                    public Iterable<? extends Point> elements() {
+                    public Iterable<? extends Point> elements(GamePlayer player) {
                         return new LinkedList<Point>(){{
                             add(pt(1, id++));
                             add(pt(2, id++));
@@ -97,7 +97,7 @@ public class LocalGameRunnerTest {
 
                     @Override
                     public String toString() {
-                        return String.format("size:%s,elements:%s", size(), elements());
+                        return String.format("size:%s,elements:%s", size(), elements(null));
                     }
                 };
             }

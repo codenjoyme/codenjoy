@@ -464,7 +464,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     }
 
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = SnakeBoard.this.size;
 
             @Override
@@ -473,7 +473,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedHashSet<Point>(){{
                     drawHeroes(hero -> !hero.isAlive(), hero -> Arrays.asList(hero.head()));
                     drawHeroes(hero -> hero.isFlying(), hero -> hero.reversedBody());

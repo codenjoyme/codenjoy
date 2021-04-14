@@ -237,7 +237,7 @@ public class Quake2D implements Field {
     }
 
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Quake2D.this.size;
 
             @Override
@@ -246,7 +246,7 @@ public class Quake2D implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<>(){{
                     addAll(Quake2D.this.getWalls());
                     addAll(Quake2D.this.getHeroes());

@@ -382,7 +382,7 @@ public class Battlecity extends RoundField<Player> implements Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Battlecity.this.size;
 
             @Override
@@ -391,7 +391,7 @@ public class Battlecity extends RoundField<Player> implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>() {{
                     addAll(Battlecity.this.borders());
                     addAll(Battlecity.this.allTanks());

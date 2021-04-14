@@ -208,7 +208,7 @@ public class Minesweeper implements Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Minesweeper.this.size();
 
             @Override
@@ -217,7 +217,7 @@ public class Minesweeper implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<>() {{
                     add(Minesweeper.this.sapper());
                     addAll(Minesweeper.this.getMines());

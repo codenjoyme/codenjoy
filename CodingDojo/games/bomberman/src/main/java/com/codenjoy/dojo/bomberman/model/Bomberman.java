@@ -507,7 +507,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private final int size = Bomberman.this.size();
 
             @Override
@@ -516,7 +516,7 @@ public class Bomberman extends RoundField<Player> implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 List<Point> elements = new LinkedList<>();
 
                 elements.addAll(Bomberman.this.heroes(ALL));

@@ -187,7 +187,7 @@ public class Sample implements Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Sample.this.size;
 
             @Override
@@ -196,7 +196,7 @@ public class Sample implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>(){{
                     addAll(Sample.this.getWalls());
                     addAll(Sample.this.getHeroes());

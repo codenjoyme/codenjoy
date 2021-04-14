@@ -23,11 +23,12 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 
-public final class NullBoardReader implements BoardReader {
+public final class NullBoardReader implements BoardReader<GamePlayer> {
 
     public static final BoardReader INSTANCE = new NullBoardReader();
 
@@ -41,7 +42,7 @@ public final class NullBoardReader implements BoardReader {
     }
 
     @Override
-    public Iterable<? extends Point> elements() {
+    public Iterable<? extends Point> elements(GamePlayer player) {
         return new LinkedList<>();
     }
 }

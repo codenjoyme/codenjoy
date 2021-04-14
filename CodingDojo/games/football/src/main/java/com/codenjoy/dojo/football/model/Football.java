@@ -213,7 +213,7 @@ public class Football implements Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Football.this.size;
 
             @Override
@@ -222,7 +222,7 @@ public class Football implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>() {{
                     addAll(Football.this.getWalls());
                     addAll(Football.this.getHeroes());

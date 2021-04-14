@@ -60,14 +60,14 @@ public class PrinterTest {
         when(board.getWalls()).thenReturn(new Walls());
         when(board.snake()).thenReturn(null);
 
-        printer = printerFactory.getPrinter(new BoardReader() {
+        printer = printerFactory.getPrinter(new BoardReader<Player>() {
             @Override
             public int size() {
                 return BOARD_SIZE;
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new HashSet<Point>(){{
                     board.getWalls().forEach(this::add);
                     if (board.snake() != null) {

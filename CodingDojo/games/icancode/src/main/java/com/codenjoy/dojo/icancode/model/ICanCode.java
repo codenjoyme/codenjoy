@@ -366,14 +366,14 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             @Override
             public int size() {
                 return ICanCode.this.size();
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return null; // because layeredReader() implemented here
             }
         };

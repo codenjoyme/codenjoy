@@ -373,8 +373,8 @@ public class BoomEngineOriginalTest {
         assertEquals(expected, actual);
     }
 
-    public String print(final List<Blast> blast, final List<? extends Wall> barriers, final Point source) {
-        Printer<String> printer = printerFactory.getPrinter(new BoardReader() {
+    public String print(List<Blast> blast, List<? extends Wall> barriers, Point source) {
+        Printer<String> printer = printerFactory.getPrinter(new BoardReader<Player>() {
             @Override
             public int size() {
                 return SIZE;
@@ -393,7 +393,7 @@ public class BoomEngineOriginalTest {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>() {{
                     addAll(barriers);
                     add(new B(source));

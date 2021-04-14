@@ -174,7 +174,7 @@ public class Moebius implements Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Moebius.this.size;
 
             @Override
@@ -183,7 +183,7 @@ public class Moebius implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<Point>(){{
                     addAll(Moebius.this.getLines());
                 }};

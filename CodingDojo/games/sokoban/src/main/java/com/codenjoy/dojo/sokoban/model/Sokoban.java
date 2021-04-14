@@ -236,7 +236,7 @@ public class Sokoban implements Field {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
             private int size = Sokoban.this.size;
 
             @Override
@@ -245,7 +245,7 @@ public class Sokoban implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 LinkedList<Point> result = new LinkedList<>();
                 result.addAll(getWalls());
                 result.addAll(getHeroes());
