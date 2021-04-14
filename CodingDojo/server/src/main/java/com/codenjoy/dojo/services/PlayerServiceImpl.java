@@ -272,17 +272,28 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void updateScore(String gitHubUsername, double score){
+    public void updateScore(String gitHubUsername,long score){
         String id = registration.getIdByGitHubUsername(gitHubUsername);
+        updateScoreList(id, score);
         updatePlayerScore(id, score);
     }
 
-    private void updatePlayerScore(String id, double score) {
+    private void updateScoreList(String id, long score) {
+        for(PlayerGame playerGame :playerGames.getAll()){
+            Player player = playerGame.getPlayer();
+            if(player.getId().equals(id)){
+                player.setScore(score);
+            }
+        }
+    }
+
+    private void updatePlayerScore(String id, long score) {
         Player player = new Player();
         player.setId(id);
         player.setScore(score);
         saver.updateScore(player,System.currentTimeMillis());
     }
+
 
     private Player getPlayer(PlayerSave save, String game, String room) {
         String name = save.getId();
@@ -310,9 +321,9 @@ public class PlayerServiceImpl implements PlayerService {
             player.setRepositoryUrl(gameServerService.createOrGetRepository(player.getGitHubUsername()));
 
             player.setGameType(gameType);
-            PlayerGame playerGame = playerGames.add(player, room, save);
 
-            player = playerGame.getPlayer();
+            PlayerGame playerGame = playerGames.add(player, room, save);
+            //player = playerGame.getPlayer();
 
             player.setReadableName(registration.getNameById(player.getId()));
 
@@ -721,6 +732,11 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.readLock().unlock();
         }
+    }
+
+    @Override
+    public GameSaver getGameSaver(){
+        return saver;
     }
 
 }

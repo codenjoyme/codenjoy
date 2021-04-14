@@ -25,16 +25,25 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerGame;
+import com.codenjoy.dojo.services.PlayerGames;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
+import com.codenjoy.dojo.services.lock.LockedGame;
+import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.web.rest.pojo.PScores;
 
 import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class PlayerGameSaver implements GameSaver {
+
+    private PlayerGames playerGames;
 
     private CrudConnectionThreadPool pool;
 
@@ -138,4 +147,23 @@ public class PlayerGameSaver implements GameSaver {
                 });
     }
 
+    @Override
+    public List<PlayerSave> loadAllSaves() {
+        return pool.select("SELECT * FROM saves",
+                rs -> {
+                    List<PlayerSave> result = new LinkedList<>();
+                    while (rs.next()) {
+                        Player player = new Player(rs.getString("player_id"));
+                        player.setCallbackUrl(rs.getString("callback_url"));
+                        player.setScore(rs.getString("score"));
+                        player.setRoom(rs.getString("room_name"));
+                        player.setGame(rs.getString("game_name"));
+                        player.setData(rs.getString("save"));
+                        player.setRepositoryUrl(rs.getString("repository_url"));
+                        result.add(new PlayerSave(player));
+                    }
+                    return result;
+                });
+
+    }
 }

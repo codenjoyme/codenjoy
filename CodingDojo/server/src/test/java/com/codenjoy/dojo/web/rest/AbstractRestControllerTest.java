@@ -172,8 +172,8 @@ public abstract class AbstractRestControllerTest {
     protected PlayerGame register(String id, String ip, String room, String game) {
         String password = Hash.md5(id);
         String readableName = id + "-name";
-        registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles());
-        playerService.register(id, game, room, ip);
+        registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles(),"ghusername");
+        playerService.register(id, game, room, ip,"repository");
         PlayerGame playerGame = playerGames.get(id);
         resetMocks(playerGame);
         return playerGame;

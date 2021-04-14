@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 public class RestGameControllerTests {
 
     public static final String GITHUB_USERNAME = "username";
-    public static final double SCORE = 5;
+    public static final long SCORE = 5;
 
     @InjectMocks
     private RestGameController restGameController;

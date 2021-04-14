@@ -155,7 +155,7 @@ public class RestGameController {
 
     @GetMapping("/update/{username}/score")
     public void updateUserScore(@PathVariable("username") String username,
-                                  @RequestBody double score) {
+                                  @RequestBody long score) {
         if (username == null) {
             return;
         }

@@ -29,6 +29,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Collections;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,6 +47,15 @@ public class PlayerServiceImplTests {
     private Registration registration;
 
     @Mock
+    private PlayerGames playerGames;
+
+    @Mock
+    private PlayerGame playerGame;
+
+    @Mock
+    private Player player;
+
+    @Mock
     private GameSaver saver;
 
 
@@ -52,11 +63,17 @@ public class PlayerServiceImplTests {
     public void updateScoreTest() {
         //Arrange
         when(registration.getIdByGitHubUsername(GITHUB_USERNAME)).thenReturn("1");
+        when(playerGames.getAll()).thenReturn(Collections.singletonList(playerGame));
+        when(player.getId()).thenReturn("1");
+        when(playerGame.getPlayer()).thenReturn(player);
 
         //Act
         playerService.updateScore(GITHUB_USERNAME, 5);
 
         //Assert
         verify(registration, times(1)).getIdByGitHubUsername(GITHUB_USERNAME);
+        verify(playerGames, times(1)).getAll();
+        verify(player, times(1)).getId();
+        verify(playerGame, times(1)).getPlayer();
     }
 }

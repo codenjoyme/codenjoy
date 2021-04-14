@@ -22,8 +22,10 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.web.rest.pojo.PScores;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,6 +44,9 @@ public class PlayerGamesView {
 
     @Autowired
     protected PlayerGames service;
+
+    @Autowired
+    protected Registration registration;
 
     public Map<String, GameData> getGamesDataMap() {
         Map<String, GuiPlotColorDecoder> decoders = getDecoders();
@@ -125,18 +130,21 @@ public class PlayerGamesView {
                         pg -> pg.getPlayer().getScore()));
     }
 
-    public List<PScoresOf> getScoresForGame(String game) {
-        return scoresFor(pg -> pg.getPlayer().getGame().equals(game));
+    public List<PScores> getScoresForGame(String game) {
+        return scoresFor(pg -> pg.getGame().equals(game));
     }
 
-    private List<PScoresOf> scoresFor(Predicate<PlayerGame> predicate) {
-        return service.all().stream()
+    private List<PScores> scoresFor(Predicate<PlayerSave> predicate) {
+        return service
+                .getGameSaver()
+                .loadAllSaves()
+                .stream()
                 .filter(predicate)
-                .map(pg -> new PScoresOf(pg))
+                .map(ps -> new PScores(ps,registration.getNameById(ps.getId())))
                 .collect(toList());
     }
 
-    public List<PScoresOf> getScoresForRoom(String room) {
+    public List<PScores> getScoresForRoom(String room) {
         return scoresFor(pg -> pg.getRoom().equals(room));
     }
 

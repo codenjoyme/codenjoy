@@ -542,7 +542,7 @@ public class PlayerServiceImplTest {
 
     private Player createPlayer(String id, String game, String room) {
         Player player = playerService.register(id, game, room,
-                getCallbackUrl(id));
+                getCallbackUrl(id),"repository");
         players.add(player);
         chatIds.put(room, Math.abs(id.hashCode()));
 
@@ -588,7 +588,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayerFromSavedPlayerGame_whenPlayerNotRegisterYet() {
         // given
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 100, null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 100,"{}","repository");
 
         // when
         playerService.register(save);
@@ -610,7 +610,7 @@ public class PlayerServiceImplTest {
         Player registeredPlayer = createPlayer(VASYA);
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", "other_room", 200, null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", "other_room", 200,"{}","repository");
 
         // when
         playerService.register(save);
@@ -633,7 +633,7 @@ public class PlayerServiceImplTest {
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
         assertEquals(0, registeredPlayer.getScore());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 200, null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 200,"{}","repository");
 
         // when
         playerService.register(save);
@@ -1552,7 +1552,7 @@ public class PlayerServiceImplTest {
         // given
         when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
         when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
-        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", "room", 100, null);
+        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", "room", 100,"{}","repository");
 
         // when
         playerService.register(save);

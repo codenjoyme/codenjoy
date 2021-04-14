@@ -144,7 +144,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayer_whenNotRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "url", "game", "room", 100, null);
+        PlayerSave save = new PlayerSave("vasia", "url", "game", "room", 100, null, null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersNotRegistered();
 
@@ -160,7 +160,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayer_whenRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "game", "room", 100, null);
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "game", "room", 100, null, null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersRegistered();
 
@@ -177,12 +177,12 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayerWithExternalSave_whenNotRegistered_caseSaveExists() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "game", "room", 0, "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "game", "room", 0, "{'save':'data'}", null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersNotRegistered();
 
         // when
-        saveService.load("vasia", "game", "room", "{'save':'data'}");
+        saveService.load("vasia", "game", "room", "{'save':'data'}", null);
 
         // then
         verify(saver).loadGame("vasia");
@@ -208,7 +208,7 @@ public class SaveServiceImplTest {
         allPlayersNotRegistered();
 
         // when
-        saveService.load("vasia", "game", "room", "{'save':'data'}");
+        saveService.load("vasia", "game", "room", "{'save':'data'}", null);
 
         // then
         verify(saver).loadGame("vasia");
@@ -230,12 +230,12 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayerWithExternalSave_whenRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "game", "room", 0, "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "game", "room", 0, "{'save':'data'}", null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersRegistered();
 
         // when
-        saveService.load("vasia", "game", "room", "{'save':'data'}");
+        saveService.load("vasia", "game", "room", "{'save':'data'}", null);
 
         // then
         verify(saver).loadGame("vasia");
@@ -265,7 +265,7 @@ public class SaveServiceImplTest {
 
         PlayerSave save1 = new PlayerSave(activeSavedPlayer);
         PlayerSave save2 = new PlayerSave(activePlayer);
-        PlayerSave save3 = new PlayerSave("saved", "http://saved:1234", "saved game room", "room", 15, "data for saved");
+        PlayerSave save3 = new PlayerSave("saved", "http://saved:1234", "saved game room", "room", 15, "data for saved", null);
 
         when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
         when(saver.loadGame("activeSaved")).thenReturn(save1);
