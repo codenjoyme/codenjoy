@@ -28,9 +28,16 @@ import com.codenjoy.dojo.services.Point;
 /**
  * Этот абстракция над доской для Printer
  */
-public interface BoardReader {
+public interface BoardReader<P> {
 
     int size();
 
-    Iterable<? extends Point> elements();
+    // TODO перевести сюда все игры и убрать метод
+    default Iterable<? extends Point> elements() {
+        return elements(null);
+    }
+
+    default Iterable<? extends Point> elements(P player) {
+        return elements();
+    }
 }

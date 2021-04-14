@@ -108,7 +108,7 @@ class PrinterImpl implements Printer<String> {
             field = new Object[size][size];
             len = new byte[size][size];
 
-            addAll(board.elements());
+            addAll(board.elements(player));
         }
 
         @Override

@@ -213,7 +213,7 @@ public class Loderunner implements Field {
     }
 
     public BoardReader reader() {
-        return new BoardReader() {
+        return new BoardReader<Player>() {
 
             @Override
             public int size() {
@@ -221,7 +221,7 @@ public class Loderunner implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements() {
+            public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<>() {{
                     addAll(Loderunner.this.getHeroes());
                     addAll(Loderunner.this.enemies());
