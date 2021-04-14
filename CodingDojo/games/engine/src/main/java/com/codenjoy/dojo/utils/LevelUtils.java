@@ -72,4 +72,8 @@ public class LevelUtils {
                         entry.getKey()).stream())
                 .collect(toList());
     }
+
+    public static String clear(String map) {
+        return map.replaceAll("[\n\r]", "");
+    }
 }

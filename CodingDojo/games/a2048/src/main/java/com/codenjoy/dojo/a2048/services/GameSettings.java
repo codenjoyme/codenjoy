@@ -140,61 +140,62 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     private String buildMap(int size) {
-        String noBreaks = StringUtils.leftPad("", size*size, ' ');
+        String line = StringUtils.leftPad("", size, ' ') + '\n';
+        String noBreaks = line.repeat(size);
         if (breaks() == BREAKS_NOT_EXISTS) {
             return noBreaks;
         }
 
         switch (size) {
             case 3 : return
-                    "   " +
-                    " x " +
-                    "   ";
+                    "   \n" +
+                    " x \n" +
+                    "   \n";
             case 4 : return
-                    "    " +
-                    " x  " +
-                    "  x " +
-                    "    ";
+                    "    \n" +
+                    " x  \n" +
+                    "  x \n" +
+                    "    \n";
             case 5 : return
-                    "  x  " +
-                    "     " +
-                    "x   x" +
-                    "     " +
-                    "  x  ";
+                    "  x  \n" +
+                    "     \n" +
+                    "x   x\n" +
+                    "     \n" +
+                    "  x  \n";
             case 6 : return
-                    "  xx  " +
-                    "      " +
-                    "x    x" +
-                    "x    x" +
-                    "      " +
-                    "  xx  ";
+                    "  xx  \n" +
+                    "      \n" +
+                    "x    x\n" +
+                    "x    x\n" +
+                    "      \n" +
+                    "  xx  \n";
             case 7 : return
-                    "  xxx  " +
-                    "   x   " +
-                    "x     x" +
-                    "xx   xx" +
-                    "x     x" +
-                    "   x   " +
-                    "  xxx  ";
+                    "  xxx  \n" +
+                    "   x   \n" +
+                    "x     x\n" +
+                    "xx   xx\n" +
+                    "x     x\n" +
+                    "   x   \n" +
+                    "  xxx  \n";
             case 8 : return
-                    "   xx   " +
-                    "   xx   " +
-                    "        " +
-                    "xx    xx" +
-                    "xx    xx" +
-                    "        " +
-                    "   xx   " +
-                    "   xx   ";
+                    "   xx   \n" +
+                    "   xx   \n" +
+                    "        \n" +
+                    "xx    xx\n" +
+                    "xx    xx\n" +
+                    "        \n" +
+                    "   xx   \n" +
+                    "   xx   \n";
             case 9 : return
-                    "   xxx   " +
-                    "   x x   " +
-                    "         " +
-                    "xx     xx" +
-                    "x       x" +
-                    "xx     xx" +
-                    "         " +
-                    "   x x   " +
-                    "   xxx   ";
+                    "   xxx   \n" +
+                    "   x x   \n" +
+                    "         \n" +
+                    "xx     xx\n" +
+                    "x       x\n" +
+                    "xx     xx\n" +
+                    "         \n" +
+                    "   x x   \n" +
+                    "   xxx   \n";
             default: return noBreaks;
         }
     }

@@ -29,6 +29,7 @@ public class Encoding {
     
     public static final String UTF8 = "UTF-8";
 
+    // TODO есть класс LevelUtils метод clear похож, может туда перенести?
     public static String replaceN(String value) {
         return value.replace("\\n", "\n")
                 .replace("\\r", "\r")
@@ -36,10 +37,5 @@ public class Encoding {
                 .replace("\n\r", "\n")
                 .replace("\r", "\n");
     }
-
-    public static String removeN(String value) {
-        return value.replaceAll("\n|\r", "");
-    }
-
 
 }

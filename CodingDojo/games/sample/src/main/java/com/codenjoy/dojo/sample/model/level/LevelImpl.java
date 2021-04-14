@@ -27,6 +27,8 @@ import com.codenjoy.dojo.sample.model.Hero;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.utils.LevelUtils;
+
 import static com.codenjoy.dojo.utils.LevelUtils.*;
 
 import java.util.List;
@@ -40,12 +42,11 @@ import static com.codenjoy.dojo.sample.model.Elements.WALL;
  */
 public class LevelImpl implements Level {
 
-    private final LengthToXY xy;
-
+    private LengthToXY xy;
     private String map;
 
     public LevelImpl(String map) {
-        this.map = map;
+        this.map = LevelUtils.clear(map);
         xy = new LengthToXY(size());
     }
 

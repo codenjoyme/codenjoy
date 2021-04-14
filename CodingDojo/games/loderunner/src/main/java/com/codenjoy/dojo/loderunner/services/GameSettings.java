@@ -119,10 +119,10 @@ public class GameSettings extends SettingsImpl
     }
 
     public Level level(Dice dice) {
-        return new LevelImpl(getMap().replace("\n", "").replace("\r", ""), dice);
+        return new LevelImpl(map(), dice);
     }
 
-    public String getMap() {
+    public String map() {
         String path = string(MAP_PATH);
         if (MAP_PATH_NONE.equals(path)) {
             return string(LEVEL_MAP);

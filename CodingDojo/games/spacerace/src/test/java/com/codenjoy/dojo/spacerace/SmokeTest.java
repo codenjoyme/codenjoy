@@ -60,26 +60,26 @@ public class SmokeTest {
                     public GameSettings getSettings() {
                         return super.getSettings()
                                 .string(LEVEL_MAP,
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼" +
-                                        "☼                  ☼");
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼" +
+                                        "☼                  \n☼");
                     }
                 },
                 Arrays.asList(new AISolver(dice), new AI2Solver(dice), new AI3Solver(dice)),

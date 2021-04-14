@@ -41,6 +41,7 @@ import com.codenjoy.dojo.tetris.model.*;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
 import com.codenjoy.dojo.tetris.services.scores.CumulativeScores;
 import com.codenjoy.dojo.tetris.services.scores.MaxScores;
+import com.codenjoy.dojo.utils.LevelUtils;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -119,7 +120,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     public PrinterFactory getPrinterFactory() {
         return PrinterFactory.get((BoardReader reader, Printer<String> printer, Player player) -> {
             String data = printer.print();
-            String board = data.replace("\n", "").replace(" ", ".");
+            String board = LevelUtils.clear(data).replace(" ", ".");
 
             Hero hero = player.getHero();
 

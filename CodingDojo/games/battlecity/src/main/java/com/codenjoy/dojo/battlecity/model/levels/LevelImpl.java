@@ -39,12 +39,12 @@ import static com.codenjoy.dojo.services.Direction.*;
 
 public class LevelImpl implements Level {
 
-    private final LengthToXY xy;
-    private final Dice dice;
-    private final String map;
+    private LengthToXY xy;
+    private Dice dice;
+    private String map;
 
     public LevelImpl(String map, Dice dice) {
-        this.map = map;
+        this.map = LevelUtils.clear(map);
         this.dice = dice;
         xy = new LengthToXY(size());
     }

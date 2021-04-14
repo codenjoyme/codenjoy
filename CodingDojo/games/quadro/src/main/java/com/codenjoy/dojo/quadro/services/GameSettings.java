@@ -65,15 +65,15 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(DRAW_SCORE, 3);
 
         multiline(LEVEL_MAP,
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         ");
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
     }
 
     public Level level() {

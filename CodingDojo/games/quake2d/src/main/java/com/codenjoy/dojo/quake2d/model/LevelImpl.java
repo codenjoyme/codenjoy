@@ -24,17 +24,18 @@ package com.codenjoy.dojo.quake2d.model;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class LevelImpl implements Level {
-    private final LengthToXY xy;
 
+    private LengthToXY xy;
     private String map;
 
     public LevelImpl(String map) {
-        this.map = map;
+        this.map = LevelUtils.clear(map);
         xy = new LengthToXY(getSize());
     }
 

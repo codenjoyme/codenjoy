@@ -35,7 +35,7 @@ public class LevelImpl implements Level {
     private int size;
 
     public LevelImpl(String board) {
-        map = board;
+        map = LevelUtils.clear(board);
         size = (int)Math.sqrt(board.length());
         xy = new LengthToXY(size());
     }

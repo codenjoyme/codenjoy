@@ -47,7 +47,7 @@ public class LevelImpl implements Level {
     public LevelImpl(String input) {
         all = input;
 
-        split(all.replaceAll("[\n\r]", ""));
+        split(LevelUtils.clear(all));
         parse();
     }
 

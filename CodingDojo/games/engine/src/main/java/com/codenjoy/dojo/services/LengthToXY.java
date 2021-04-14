@@ -44,7 +44,7 @@ public class LengthToXY { // TODO есть точно такой же в com.cod
     }
 
     public static class Map { // TODO test me
-        private final LengthToXY xy;
+        private LengthToXY xy;
         private char[] map;
 
         public Map(String map) {

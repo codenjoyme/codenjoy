@@ -61,14 +61,14 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(WIN_SCORE, 30);
 
         multiline(LEVEL_MAP,
-                "tksfaskt" +
-                "pppppppp" +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "PPPPPPPP" +
-                "TKSFASKT");
+                "tksfaskt\n" +
+                "pppppppp\n" +
+                "        \n" +
+                "        \n" +
+                "        \n" +
+                "        \n" +
+                "PPPPPPPP\n" +
+                "TKSFASKT\n");
     }
 
     public Level level() {

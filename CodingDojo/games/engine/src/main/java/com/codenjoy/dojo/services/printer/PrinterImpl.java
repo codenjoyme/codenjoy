@@ -75,7 +75,7 @@ class PrinterImpl implements Printer<String> {
         field = new char[size][size];
         printer.init();
 
-        printer.printAll((x, y, ch) -> PrinterImpl.this.set(x, y, ch));
+        printer.printAll(PrinterImpl.this::set);
     }
 
     private void set(int x, int y, char ch) {

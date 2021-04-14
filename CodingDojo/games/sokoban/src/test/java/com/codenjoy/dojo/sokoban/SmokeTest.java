@@ -61,12 +61,12 @@ public class SmokeTest {
                     public GameSettings getSettings() {
                         return super.getSettings()
                                 .string(LEVEL_MAP,
-                                        "☼☼☼☼☼☼" +
-                                        "☼☺   ☼" +
-                                        "☼ X ■☼" +
-                                        "☼    ☼" +
-                                        "☼ *  ☼" +
-                                        "☼☼☼☼☼☼");
+                                        "☼☼☼☼☼☼\n" +
+                                        "☼☺   ☼\n" +
+                                        "☼ X ■☼\n" +
+                                        "☼    ☼\n" +
+                                        "☼ *  ☼\n" +
+                                        "☼☼☼☼☼☼\n");
                     }
                 },
                 Arrays.asList(new AISolver(dice)),

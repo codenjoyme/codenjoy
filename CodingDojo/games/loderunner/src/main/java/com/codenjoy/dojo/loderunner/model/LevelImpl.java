@@ -43,7 +43,7 @@ public class LevelImpl implements Level {
     private String map;
 
     public LevelImpl(String map, Dice dice) {
-        this.map = map;
+        this.map = LevelUtils.clear(map);
         this.dice = dice;
         ai = new AI();
         xy = new LengthToXY(getSize());

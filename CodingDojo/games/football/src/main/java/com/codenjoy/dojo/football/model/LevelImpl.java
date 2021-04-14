@@ -35,12 +35,11 @@ import static com.codenjoy.dojo.football.model.Elements.*;
 
 public class LevelImpl implements Level {
 
-    private final LengthToXY xy;
-
+    private LengthToXY xy;
     private String map;
 
     public LevelImpl(String map) {
-        this.map = map;
+        this.map = LevelUtils.clear(map);
         xy = new LengthToXY(getSize());
     }
 

@@ -65,24 +65,24 @@ public class SmokeTest {
                     public GameSettings getSettings() {
                         return super.getSettings()
                                 .string(LEVEL_MAP,
-                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                                        "☼~~~~~~~~H   ~~~☼" +
-                                        "☼        H###   ☼" +
-                                        "☼   ~~~~~H    ##☼" +
-                                        "☼H##     H##    ☼" +
-                                        "☼H       H~~~~~ ☼" +
-                                        "☼H       H      ☼" +
-                                        "☼H#####  H      ☼" +
-                                        "☼H         #####☼" +
-                                        "☼H  ~~~»        ☼" +
-                                        "☼H##   ######H H☼" +
-                                        "☼H~~~        H H☼" +
-                                        "☼H             H☼" +
-                                        "☼H   ~~~~~~~~~ H☼" +
-                                        "☼###H    H     H☼" +
-                                        "☼   H    H     H☼" +
-                                        "☼###############☼" +
-                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼")
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                                        "☼~~~~~~~~H   ~~~☼\n" +
+                                        "☼        H###   ☼\n" +
+                                        "☼   ~~~~~H    ##☼\n" +
+                                        "☼H##     H##    ☼\n" +
+                                        "☼H       H~~~~~ ☼\n" +
+                                        "☼H       H      ☼\n" +
+                                        "☼H#####  H      ☼\n" +
+                                        "☼H         #####☼\n" +
+                                        "☼H  ~~~»        ☼\n" +
+                                        "☼H##   ######H H☼\n" +
+                                        "☼H~~~        H H☼\n" +
+                                        "☼H             H☼\n" +
+                                        "☼H   ~~~~~~~~~ H☼\n" +
+                                        "☼###H    H     H☼\n" +
+                                        "☼   H    H     H☼\n" +
+                                        "☼###############☼\n" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
                                 .integer(SHADOW_PILLS_COUNT, 1)
                                 .integer(GOLD_COUNT_GREEN, 5)
                                 .integer(GOLD_COUNT_RED, 6)

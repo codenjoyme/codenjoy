@@ -167,11 +167,7 @@ public class GameSettings extends SettingsImpl
     }
 
     public Level level(Dice dice) {
-        return new LevelImpl(map(), dice);
-    }
-
-    public String map() {
-        return string(LEVEL_MAP).replace("\n", "").replace("\r", "");
+        return new LevelImpl(string(LEVEL_MAP), dice);
     }
 
 }

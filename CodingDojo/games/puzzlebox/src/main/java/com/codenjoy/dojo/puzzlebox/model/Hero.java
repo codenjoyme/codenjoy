@@ -123,10 +123,11 @@ public class Hero extends PlayerHero<Field> {
         }
 
         while (boxes.get(currentIndex).getDone()){
-            currentIndex ++;
+            currentIndex++;
 
             if(currentIndex >= boxes.size()) {
                 currentIndex = 0;
+                break;
             }
         }
     }

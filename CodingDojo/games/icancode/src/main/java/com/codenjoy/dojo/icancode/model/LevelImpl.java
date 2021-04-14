@@ -27,6 +27,7 @@ import com.codenjoy.dojo.icancode.model.items.perks.PerkUtils;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class LevelImpl implements Level {
     private GameSettings settings;
 
     public LevelImpl(String map, GameSettings settings) {
+        map = LevelUtils.clear(map);
         cells = new Cell[map.length()];
         size = (int) Math.sqrt(map.length());
         this.settings = settings;

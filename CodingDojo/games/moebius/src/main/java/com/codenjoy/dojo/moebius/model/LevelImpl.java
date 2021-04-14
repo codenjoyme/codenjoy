@@ -32,8 +32,8 @@ import java.util.List;
 import static com.codenjoy.dojo.moebius.model.Elements.*;
 
 public class LevelImpl implements Level {
-    private final LengthToXY xy;
 
+    private LengthToXY xy;
     private String map;
 
     public LevelImpl(int size) {

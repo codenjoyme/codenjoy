@@ -25,11 +25,10 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 import com.codenjoy.dojo.expansion.model.Elements;
 import com.codenjoy.dojo.expansion.model.IField;
-import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,6 +47,7 @@ public class LevelImpl implements Level {
 
     public LevelImpl(String name, String map, int viewSize) {
         this.name = name;
+        map = LevelUtils.clear(map);
         cells = new Cell[map.length()];
         size = (int) Math.sqrt(map.length());
         this.viewSize = viewSize;

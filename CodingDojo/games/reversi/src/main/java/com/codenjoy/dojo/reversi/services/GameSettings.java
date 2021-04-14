@@ -65,14 +65,14 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(LOOSE_PENALTY, 0);
 
         multiline(LEVEL_MAP,
-                "        " +
-                "        " +
-                "        " +
-                "   xO   " +
-                "   Ox   " +
-                "        " +
-                "        " +
-                "        ");
+                "        \n" +
+                "        \n" +
+                "        \n" +
+                "   xO   \n" +
+                "   Ox   \n" +
+                "        \n" +
+                "        \n" +
+                "        \n");
     }
 
     public Level level() {
