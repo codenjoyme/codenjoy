@@ -31,8 +31,8 @@ Move = collections.namedtuple('Move', 'id, x, y')
 class Directions(object):
     left = Move(0, -1,  0)
     right = Move(1,  1,  0)
-    up = Move(2,  0, -1)
-    down = Move(3,  0,  1)
+    up = Move(2,  0, 1)
+    down = Move(3,  0,  -1)
     act = Move(4,  0,  0)
     stop = Move(5,  0,  0)
 
