@@ -109,6 +109,20 @@ public class PlayerGameSaver implements GameSaver {
         public String getTime() {
             return time;
         }
+
+        @Override
+        public String toString() {
+            return String.format(
+                    "Save[time:%s, id:%s, url:%s, game:%s, " +
+                    "room:%s, score:%s, save:%s]",
+                    getTime(),
+                    getId(),
+                    getCallbackUrl(),
+                    getGame(),
+                    getRoom(),
+                    getScore(),
+                    getSave());
+        }
     }
 
     @Override
