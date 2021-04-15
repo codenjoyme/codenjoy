@@ -229,6 +229,13 @@ public class Registration {
         );
     }
 
+    public String getEmailByGitHubUsername(String gitHubUsername) {
+        return pool.select("SELECT email FROM users WHERE github_username = ?;",
+                new Object[]{gitHubUsername},
+                rs -> rs.next() ? rs.getString("email") : null
+        );
+    }
+
     public String getNameById(String id) {
         return pool.select("SELECT readable_name FROM users WHERE id = ?;",
                 new Object[]{id},
