@@ -51,6 +51,10 @@ public class AutoSaver extends Suspendable implements Tickable {
         super.setActive(active);
     }
 
+    public int ticks() {
+        return ticks;
+    }
+
     @Override
     public void tick() {
         if (!active) {

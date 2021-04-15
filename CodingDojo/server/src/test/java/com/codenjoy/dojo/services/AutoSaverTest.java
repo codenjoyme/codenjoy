@@ -59,7 +59,7 @@ public class AutoSaverTest {
         verify(save, only()).loadAll();
         reset(save);
 
-        for (int count = 0; count < AutoSaver.TICKS - 2; count++) {
+        for (int count = 0; count < autoSaver.ticks() - 2; count++) {
             autoSaver.tick();
         }
 
