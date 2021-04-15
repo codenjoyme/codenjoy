@@ -34,7 +34,8 @@ import java.util.concurrent.Executors;
 @RequiredArgsConstructor
 public class AutoSaver extends Suspendable implements Tickable {
 
-    public static final int TICKS = 30;
+    @Value("${game.save.ticks}")
+    private int ticks = 30;
 
     @Value("${game.save.load-on-start}")
     private boolean loadOnStart = true;
@@ -64,7 +65,7 @@ public class AutoSaver extends Suspendable implements Tickable {
         }
 
         count++;
-        if (count % TICKS == (TICKS - 1)) {
+        if (count % ticks == (ticks - 1)) {
             // executor.submit потому что sqlite тормозит при сохранении
             executor.submit(() -> save.saveAll());
         }

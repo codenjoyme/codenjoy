@@ -24,6 +24,7 @@ mvc:
 game:
   save:
     auto: true
+    ticks: 30
     load-on-start: true
   ai: true
   player:
