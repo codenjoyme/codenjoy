@@ -36,6 +36,7 @@ public class PlayerGameSaver implements GameSaver {
     private CrudConnectionThreadPool pool;
 
     public PlayerGameSaver(ConnectionThreadPoolFactory factory) {
+        // TODO renname room_name -> room, game_name -> game
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS saves (" +
                         "time varchar(255), " +
@@ -44,7 +45,11 @@ public class PlayerGameSaver implements GameSaver {
                         "room_name varchar(255)," +
                         "game_name varchar(255)," +
                         "score varchar(255)," +
-                        "save varchar(255));");
+                        "save varchar(255));",
+                // TODO вторая табличка костыль для производительности потому как DISTINCT на большой таблице очень долго ранается, вообще это давно пора переделать
+                "CREATE TABLE IF NOT EXISTS saves_players (" +
+                        "player_id varchar(255), " +
+                        "room_name varchar(255));");
     }
 
     void removeDatabase() {
@@ -56,13 +61,29 @@ public class PlayerGameSaver implements GameSaver {
         pool.update("INSERT INTO saves " +
                         "(time, player_id, callback_url, room_name, game_name, score, save) " +
                         "VALUES (?,?,?,?,?,?,?);",
-                new Object[]{JDBCTimeUtils.toString(new Date(time)),
+                new Object[]{
+                        JDBCTimeUtils.toString(new Date(time)),
                         player.getId(),
                         player.getCallbackUrl(),
                         player.getRoom(),
                         player.getGame(),
                         player.getScore(),
                         save
+                });
+
+        pool.update("INSERT INTO saves_players " +
+                        "(player_id, room_name) " +
+                        "VALUES (?,?) " +
+                        "EXCEPT " +
+                        "SELECT player_id, room_name " +
+                        "FROM saves_players " +
+                        "WHERE player_id = ? " +
+                        "AND room_name = ?;",
+                new Object[]{
+                        player.getId(),
+                        player.getRoom(),
+                        player.getId(),
+                        player.getRoom()
                 });
     }
 
@@ -93,7 +114,7 @@ public class PlayerGameSaver implements GameSaver {
     public List<String> getSavedList() {
         // TODO убедиться, что загружены самые последние
         return pool.select("SELECT DISTINCT player_id " +
-                        "FROM saves;",
+                        "FROM saves_players;",
                 rs -> new LinkedList<String>(){{
                     while (rs.next()) {
                         add(rs.getString("player_id"));
@@ -105,7 +126,7 @@ public class PlayerGameSaver implements GameSaver {
     public List<String> getSavedList(String room) {
         // TODO убедиться, что загружены самые последние
         return pool.select("SELECT DISTINCT player_id " +
-                        "FROM saves " +
+                        "FROM saves_players " +
                         "WHERE room_name = ?;",
                 new Object[]{room},
                 rs -> new LinkedList<String>(){{
@@ -120,5 +141,22 @@ public class PlayerGameSaver implements GameSaver {
         pool.update("DELETE FROM saves " +
                         "WHERE player_id = ?;",
                 new Object[]{id});
+
+        pool.update("DELETE FROM saves_players " +
+                        "WHERE player_id = ?;",
+                new Object[]{id});
+    }
+
+    @Override
+    public void delete(String id, String room) {
+        pool.update("DELETE FROM saves " +
+                        "WHERE player_id = ? " +
+                        "AND room_name = ?;",
+                new Object[]{id, room});
+
+        pool.update("DELETE FROM saves_players " +
+                        "WHERE player_id = ? " +
+                        "AND room_name = ?;",
+                new Object[]{id, room});
     }
 }

@@ -32,6 +32,7 @@ import org.junit.Test;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -72,7 +73,7 @@ public class PlayerGameSaverTest {
         saver.saveGame(player, "{'key':'value'}", now);
 
         PlayerSave loaded = saver.loadGame("vasia");
-        
+
         // then
         assertEqualsProperties(player, loaded);
         assertEquals("{'key':'value'}", loaded.getSave());
@@ -82,6 +83,17 @@ public class PlayerGameSaverTest {
 
         // then
         assertEquals("[]", saver.getSavedList().toString());
+    }
+
+    @Test
+    public void shouldLoadNotExtistsGame() {
+        // given
+
+        // when
+        PlayerSave loaded = saver.loadGame("not-exists");
+
+        // then
+        assertSame(PlayerSave.NULL, loaded);
     }
 
     private GameType getGameType(PlayerScores scores) {
@@ -158,5 +170,64 @@ public class PlayerGameSaverTest {
 
         // then
         assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
+    }
+
+    @Test
+    public void shouldRemoveForPlayer() {
+        // given
+        givenSituation();
+
+        assertEquals("[vasia, katia, maria]", saver.getSavedList("room").toString());
+        assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
+
+        // when
+        saver.delete("maria");
+
+        // then
+        assertEquals("[vasia, katia]", saver.getSavedList("room").toString());
+        assertEquals("[]", saver.getSavedList("otherRoom").toString());
+    }
+
+    public void givenSituation() {
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player3 = new Player("maria", "http://127.0.0.5:9999", PlayerTest.mockGameType("game"), getScores(30), getInfo("Some another info"));
+
+        long now = System.currentTimeMillis();
+
+        player1.setRoom("room");
+        saver.saveGame(player1, "{'key':'value'}", now);
+
+        player2.setRoom("room");
+        saver.saveGame(player2, "{'key':'value'}", now);
+
+        player3.setRoom("otherRoom");
+        saver.saveGame(player3, "{'key':'value'}", now);
+
+        player3.setRoom("room");
+        saver.saveGame(player3, "{'key':'value'}", now);
+    }
+
+    @Test
+    public void shouldRemoveForPlayerInRoom() {
+        // given
+        givenSituation();
+
+        assertEquals("[vasia, katia, maria]", saver.getSavedList("room").toString());
+        assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
+
+        // when
+        saver.delete("maria", "room");
+
+        // then
+        assertEquals("[vasia, katia]", saver.getSavedList("room").toString());
+        assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
+
+        // when
+        saver.delete("maria", "otherRoom");
+
+        // then
+        assertEquals("[vasia, katia]", saver.getSavedList("room").toString());
+        assertEquals("[]", saver.getSavedList("otherRoom").toString());
     }
 }
