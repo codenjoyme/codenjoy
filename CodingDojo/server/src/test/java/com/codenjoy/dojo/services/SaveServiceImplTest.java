@@ -53,6 +53,7 @@ public class SaveServiceImplTest {
     private PlayerGames playerGames;
     private GameSaver saver;
 
+    private List<Registration.User> users;
     private List<Player> players;
     private List<GameField> fields;
     public static final boolean NOT_REGISTERED = false;
@@ -66,6 +67,7 @@ public class SaveServiceImplTest {
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
         }};
 
+        users = new LinkedList<>();
         players = new LinkedList<>();
         fields = new LinkedList<>();
 
@@ -467,12 +469,15 @@ public class SaveServiceImplTest {
     }
 
     private void createUser(String id) {
-        Optional<Registration.User> user = Optional.of(new Registration.User() {{
+        Registration.User user = new Registration.User() {{
+            setId(id);
             setCode("code_" + id);
             setReadableName("readable_" + id);
-        }});
+        }};
+        users.add(user);
 
-        when(registration.getUserById(id)).thenReturn(user);
+        when(registration.getUserById(id)).thenReturn(Optional.of(user));
+        when(registration.getUsers()).thenReturn(users);
     }
 
     private void scores(Player player, Object score) {

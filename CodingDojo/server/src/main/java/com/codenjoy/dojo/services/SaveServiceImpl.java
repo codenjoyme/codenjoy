@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+import static java.util.stream.Collectors.toMap;
 
 @Component("saveService")
 public class SaveServiceImpl implements SaveService {
@@ -142,10 +143,14 @@ public class SaveServiceImpl implements SaveService {
     }
 
     private List<PlayerInfo> getSaves(List<Player> active, List<String> saved) {
+        // TODO сделать тут SELECT WHERE id IN
+        Map<String, Registration.User> users = registration.getUsers().stream()
+                .collect(toMap(user -> user.getId(), user -> user));
+
         Map<String, PlayerInfo> map = new HashMap<>();
         for (Player player : active) {
             PlayerInfo info = new PlayerInfo(player);
-            setDataFromRegistration(info, player.getId());
+            setDataFromRegistration(info, users, player.getId());
             setSaveFromField(info, playerGames.get(player.getId()));
 
             map.put(player.getId(), info);
@@ -161,7 +166,7 @@ public class SaveServiceImpl implements SaveService {
             } else {
                 PlayerSave save = saver.loadGame(id);
                 PlayerInfo info = new PlayerInfo(save, null, null);
-                setDataFromRegistration(info, id);
+                setDataFromRegistration(info, users, id);
 
                 map.put(id, info);
             }
@@ -173,12 +178,15 @@ public class SaveServiceImpl implements SaveService {
         return result;
     }
 
-    private void setDataFromRegistration(PlayerInfo info, String name) {
-        registration.getUserById(name)
-                .ifPresent((user) -> {
-                    info.setCode(user.getCode());
-                    info.setReadableName(user.getReadableName());
-                });
+    private void setDataFromRegistration(PlayerInfo info,
+                                         Map<String, Registration.User> users,
+                                         String id)
+    {
+        Registration.User user = users.get(id);
+        if (user != null) {
+            info.setCode(user.getCode());
+            info.setReadableName(user.getReadableName());
+        }
     }
 
     void setSaveFromField(PlayerInfo info, PlayerGame playerGame) {
