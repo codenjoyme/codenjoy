@@ -7,6 +7,7 @@ const result = function(){
         case 'icancode' : return icancode;
         case 'bomberman' : return bomberman;
         case 'battlecity' : return battlecity;
+        default : Error('Wrong or missed param REACT_APP_GAME');
     }
 }();
 
