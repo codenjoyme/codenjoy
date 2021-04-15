@@ -29,12 +29,17 @@ import java.util.List;
 public interface GameSaver {
     
     void saveGame(Player player, String save, long time);
-    
+
+    void saveGames(List<PlayerGame> playerGames, long now);
+
     PlayerSave loadGame(String id);
-    
+
     List<String> getSavedList();
 
     List<String> getSavedList(String room);
 
     void delete(String id);
+
+    void delete(String id, String room);
+
 }

@@ -50,9 +50,7 @@ public class SaveServiceImpl implements SaveService {
 
     private long saveAll(List<PlayerGame> playerGames) {
         long now = System.currentTimeMillis();
-        for (PlayerGame playerGame : playerGames) {
-            saveGame(playerGame, now);
-        }
+        saver.saveGames(playerGames, now);
         return now;
     }
 

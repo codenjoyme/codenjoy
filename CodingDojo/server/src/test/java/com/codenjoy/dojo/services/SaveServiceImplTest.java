@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.codenjoy.dojo.services.PlayerSave.NULL;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -491,8 +492,19 @@ public class SaveServiceImplTest {
         long time = saveService.saveAll();
 
         // then
-        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
-        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
+        assertSaveAll(time, "[first, second]");
+    }
+
+    public void assertSaveAll(long time, String expected) {
+        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+        verify(saver).saveGames(captor.capture(), eq(time));
+        List<PlayerGame> playerGames = captor.getValue();
+        assertEquals(expected,
+                playerGames.stream()
+                        .map(PlayerGame::getPlayer)
+                        .map(Player::getId)
+                        .collect(toList())
+                        .toString());
     }
 
     @Test
@@ -510,8 +522,7 @@ public class SaveServiceImplTest {
         long time = saveService.saveAll("room1");
 
         // then
-        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
-        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
+        assertSaveAll(time, "[first, second]");
         verifyNoMoreInteractions(saver);
     }
 

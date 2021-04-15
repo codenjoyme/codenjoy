@@ -23,15 +23,29 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
-import com.codenjoy.dojo.services.GameSaver;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerSave;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.*;
+import org.json.JSONObject;
 
 import java.sql.Date;
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 public class PlayerGameSaver implements GameSaver {
+
+    public static final String INSERT_SAVES_QUERY = "INSERT INTO saves " +
+                    "(time, player_id, callback_url, room_name, game_name, score, save) " +
+                    "VALUES (?,?,?,?,?,?,?);";
+
+    public static final String INSERT_SAVES_PLAYERS_QUERY = "INSERT INTO saves_players " +
+                    "(player_id, room_name) " +
+                    "VALUES (?,?) " +
+                    "EXCEPT " +
+                    "SELECT player_id, room_name " +
+                    "FROM saves_players " +
+                    "WHERE player_id = ? " +
+                    "AND room_name = ?;";
 
     private CrudConnectionThreadPool pool;
 
@@ -56,11 +70,84 @@ public class PlayerGameSaver implements GameSaver {
         pool.removeDatabase();
     }
 
+    private static class Save {
+
+        private Game game;
+        private Player player;
+        private String time;
+
+        public Save(PlayerGame playerGame, String time) {
+            this.player = playerGame.getPlayer();
+            this.game = playerGame.getGame();
+            this.time = time;
+        }
+
+        public JSONObject getSave() {
+            return game.getSave();
+        }
+
+        public String getScore() {
+            return player.getScore().toString();
+        }
+
+        public String getGame() {
+            return player.getGame();
+        }
+
+        public String getRoom() {
+            return player.getRoom();
+        }
+
+        public String getCallbackUrl() {
+            return player.getCallbackUrl();
+        }
+
+        public String getId() {
+            return player.getId();
+        }
+
+        public String getTime() {
+            return time;
+        }
+    }
+
+    @Override
+    public void saveGames(List<PlayerGame> playerGames, long time) {
+        String timeString = JDBCTimeUtils.toString(new Date(time));
+        List<Save> data = playerGames.stream()
+                .map(playerGame -> new Save(playerGame, timeString))
+                .collect(toList());
+
+        // TODO надо тут еще транзакцию навешать на эти два запроса
+        pool.batchUpdate(INSERT_SAVES_QUERY,
+                data,
+                (stmt, save) -> {
+                    stmt.setObject(1, save.getTime());
+                    stmt.setObject(2, save.getId());
+                    stmt.setObject(3, save.getCallbackUrl());
+                    stmt.setObject(4, save.getRoom());
+                    stmt.setObject(5, save.getGame());
+                    stmt.setObject(6, save.getScore());
+                    stmt.setObject(7, save.getSave());
+                    return true;
+                });
+
+        pool.batchUpdate(INSERT_SAVES_PLAYERS_QUERY,
+                data,
+                (stmt, save) -> {
+                    stmt.setObject(1, save.getId());
+                    stmt.setObject(2, save.getRoom());
+                    stmt.setObject(3, save.getId());
+                    stmt.setObject(4, save.getRoom());
+
+                    return true;
+                });
+    }
+
     @Override
     public void saveGame(Player player, String save, long time) {
-        pool.update("INSERT INTO saves " +
-                        "(time, player_id, callback_url, room_name, game_name, score, save) " +
-                        "VALUES (?,?,?,?,?,?,?);",
+        // TODO надо тут еще транзакцию навешать на эти два запроса
+        pool.update(INSERT_SAVES_QUERY,
                 new Object[]{
                         JDBCTimeUtils.toString(new Date(time)),
                         player.getId(),
@@ -71,14 +158,7 @@ public class PlayerGameSaver implements GameSaver {
                         save
                 });
 
-        pool.update("INSERT INTO saves_players " +
-                        "(player_id, room_name) " +
-                        "VALUES (?,?) " +
-                        "EXCEPT " +
-                        "SELECT player_id, room_name " +
-                        "FROM saves_players " +
-                        "WHERE player_id = ? " +
-                        "AND room_name = ?;",
+        pool.update(INSERT_SAVES_PLAYERS_QUERY,
                 new Object[]{
                         player.getId(),
                         player.getRoom(),
