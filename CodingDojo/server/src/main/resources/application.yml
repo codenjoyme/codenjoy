@@ -95,3 +95,8 @@ github:
   host:
     name: localhost
     port: 8081
+grpc:
+  server:
+    port: 9090
+  executor:
+    pool.size: 5

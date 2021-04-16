@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.grpc.handler.UpdateHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -39,13 +40,15 @@ import static org.mockito.Mockito.verify;
 public class RestGameControllerTests {
 
     public static final String GITHUB_USERNAME = "username";
-    public static final double SCORE = 5;
+    public static final long SCORE = 5L;
 
     @InjectMocks
     private RestGameController restGameController;
 
     @Mock
     private PlayerService playerService;
+    @Mock
+    private UpdateHandler updateHandler;
 
     @Test
     public void updateUserScore() {
@@ -57,6 +60,7 @@ public class RestGameControllerTests {
 
         //Assert
         verify(playerService, times(1)).updateScore(GITHUB_USERNAME, SCORE);
+        verify(updateHandler, times(1)).sendUpdate(GITHUB_USERNAME, SCORE);
     }
 
     @Test
@@ -65,5 +69,6 @@ public class RestGameControllerTests {
         restGameController.updateUserScore(null, SCORE);
         //Assert
         verify(playerService, times(0)).updateScore(null, SCORE);
+        verify(updateHandler, times(0)).sendUpdate(null, SCORE);
     }
 }

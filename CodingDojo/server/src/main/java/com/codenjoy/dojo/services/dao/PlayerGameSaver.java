@@ -31,8 +31,10 @@ import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerGameSaver implements GameSaver {
 
@@ -138,4 +140,27 @@ public class PlayerGameSaver implements GameSaver {
                 });
     }
 
+    @Override
+    public Map<String, String> getEventsList() {
+        return pool.select("SELECT DISTINCT room_name, game_name FROM saves;",
+                rs -> {
+                    Map<String, String> result = new HashMap<>();
+                    while (rs.next()) {
+                        String roomName = rs.getString("room_name");
+                        String gameName = rs.getString("game_name");
+                        result.put(roomName, gameName);
+                    }
+                    return result;
+                }
+        );
+    }
+
+    @Override
+    public String getRoomNameByPlayerId(String id) {
+        return pool.select("SELECT room_name FROM saves " +
+                        "WHERE player_id = ?",
+                new Object[]{id},
+                rs -> rs.next() ? rs.getString("room_name") : null
+        );
+    }
 }

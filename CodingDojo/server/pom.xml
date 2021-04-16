@@ -23,6 +23,7 @@
         <!-- please do not update these versions
              they are not in spring boot  -->
         <json.version>20180813</json.version> <!-- do not update -->
+        <dojo.version>1.0.0-SNAPSHOT</dojo.version>
         <commons-collections.version>4.4</commons-collections.version>
         <reflections.version>0.9.11</reflections.version> <!-- do not update -->
         <fest-reflect.version>1.4.1</fest-reflect.version>
@@ -738,6 +739,17 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dojo</groupId>
+            <artifactId>messages</artifactId>
+            <version>${dojo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dojo</groupId>
+            <artifactId>common</artifactId>
+            <version>${dojo.version}</version>
         </dependency>
 
         <!-- JETTY BEGINS -->
