@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import java.util.List;
+import java.util.Map;
 
 public interface PlayerService extends Tickable {
 
@@ -41,6 +42,7 @@ public interface PlayerService extends Tickable {
     void removeAll(String room);
     Player getRandom(String game);
     GameType getAnyGameWithPlayers();
+    Map<String, Integer> getRoomCounts();
 
     void cleanAllScores();
     void cleanAllScores(String room);

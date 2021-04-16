@@ -850,6 +850,25 @@ public class PlayerServiceImplTest {
         assertPlayers("[katya, olia]");
     }
 
+    @Test
+    public void shouldGetRoomCounts() {
+        // given
+        createPlayer(VASYA, "game1", "room1");
+        createPlayer(PETYA, "game1", "room1");
+        createPlayer(KATYA, "game1", "room2");
+        createPlayer(OLIA, "game3", "room3");
+
+        when(roomService.names()).thenReturn(Arrays.asList(
+                "room1", "room2", "room3", "room4"));
+
+        // when
+        Map<String, Integer> roomCounts = playerService.getRoomCounts();
+
+        // then
+        assertEquals("{room1=2, room2=1, room3=1, room4=0}",
+                roomCounts.toString());
+    }
+
     private void assertPlayers(String expected) {
         assertEquals(expected,
                 playerService.getAll().stream()

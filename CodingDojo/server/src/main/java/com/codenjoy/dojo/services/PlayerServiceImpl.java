@@ -59,6 +59,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+import static java.util.stream.Collectors.toMap;
 
 @Component("playerService")
 @Slf4j
@@ -711,6 +712,28 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.readLock().unlock();
         }
+    }
+
+    @Override
+    public Map<String, Integer> getRoomCounts() {
+        lock.readLock().lock();
+        try {
+            List<Player> players = playerGames.players();
+            return roomService.names().stream()
+                    .map(room -> new HashMap.SimpleEntry<>(room, count(players, room)))
+                    .collect(toMap(entry -> entry.getKey(),
+                            entry -> entry.getValue(),
+                            (value1, value2) -> value2,
+                            LinkedHashMap::new));
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    private int count(List<Player> players, String room) {
+        return (int) players.stream()
+                .filter(player -> room.equals(player.getRoom()))
+                .count();
     }
 
 }
