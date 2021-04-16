@@ -116,8 +116,7 @@ public class RegistrationTest {
             fail("Expected exception");
         } catch (Exception e) {
             // then
-            assertEquals("java.util.concurrent.ExecutionException: " +
-                    "org.springframework.security.core.userdetails.UsernameNotFoundException: " +
+            assertEquals("org.springframework.security.core.userdetails.UsernameNotFoundException: " +
                     "User with code 'bad_code' does not exist", e.toString());
         }
     }
@@ -415,7 +414,11 @@ public class RegistrationTest {
         registration.removeAll();
 
         // then
-        assertEquals("[admin3, admin4]",
+        assertUsers("[admin3, admin4]");
+    }
+
+    public void assertUsers(String expected) {
+        assertEquals(expected,
                 registration.getUsers().stream()
                         .map(Registration.User::getName)
                         .collect(toList())
@@ -460,6 +463,23 @@ public class RegistrationTest {
                         "Registration.User(email=email3, id=id3, readableName=name3, approved=0, code=8196566518765037475, data=someData3), \n" +
                         "Registration.User(email=email5, id=admin5, readableName=name5, approved=0, code=8742437141300845912, data=someData5)]",
                 users.toString().replace(", Registration", ", \nRegistration"));
+    }
+
+    @Test
+    public void shouldNotRemoveAdmins_whenRemove() {
+        // given
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles()).getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles()).getCode();
+        String code3 = registration.register("id3", "email3", "name3", "pass3", "someData3", USER.roles()).getCode();
+        String code4 = registration.register("admin4", "email4", "name4", "pass4", "someData4", ADMIN.roles()).getCode();
+        String code5 = registration.register("admin5", "email5", "name5", "pass5", "someData5", ADMIN.roles()).getCode();
+
+        // when
+        registration.remove("id2");
+        registration.remove("admin4");
+
+        // then
+        assertUsers("[id1, id3, admin4, admin5]");
     }
 
     @Test

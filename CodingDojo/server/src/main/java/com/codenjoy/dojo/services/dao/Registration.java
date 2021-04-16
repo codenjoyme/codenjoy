@@ -487,7 +487,6 @@ public class Registration {
         }
     }
 
-    // TODO юнит тест что админов не удаляют
     public void remove(String id) {
         pool.update("DELETE FROM users " +
                     "WHERE id = ? " +
@@ -495,7 +494,6 @@ public class Registration {
                 new Object[]{id});
     }
 
-    // TODO юнит тест что админов не удаляют
     public void removeAll() {
         pool.update("DELETE FROM users " +
                 "WHERE roles NOT LIKE '%" + ROLE_ADMIN + "%';");
