@@ -289,6 +289,7 @@ public class PlayerServiceImpl implements PlayerService {
 
             player = playerGame.getPlayer();
 
+            // TODO N+1 проблема во время загрузки приложения
             player.setReadableName(registration.getNameById(player.getId()));
 
             log.debug("Player {} starting new game {}", name, playerGame.getGame());
