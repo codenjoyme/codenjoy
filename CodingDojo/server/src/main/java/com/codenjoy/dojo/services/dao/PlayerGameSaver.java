@@ -82,8 +82,8 @@ public class PlayerGameSaver implements GameSaver {
             this.time = time;
         }
 
-        public JSONObject getSave() {
-            return game.getSave();
+        public String getSave() {
+            return game.getSave().toString();
         }
 
         public String getScore() {

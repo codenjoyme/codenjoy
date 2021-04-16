@@ -181,7 +181,11 @@ public class PlayerGameSaverTest {
         Player player3 = new Player("maria", "http://127.0.0.5:9999", PlayerTest.mockGameType("game"), getScores(30), getInfo("Some another info"));
 
         Game game = mock(Game.class);
-        when(game.getSave()).thenReturn(new JSONObject("{'key':'value'}"));
+        when(game.getSave()).thenReturn(
+                new JSONObject("{'key':'value1'}"),
+                new JSONObject("{'key':'value2'}"),
+                new JSONObject("{'key':'value3'}")
+        );
 
         // when
         long now = System.currentTimeMillis();
@@ -197,7 +201,10 @@ public class PlayerGameSaverTest {
         assertEquals("[vasia, katia]", saver.getSavedList("room").toString());
         assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
 
-        // then
+        assertEquals("PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={\"key\":\"value1\"})", saver.loadGame("vasia").toString());
+        assertEquals("PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={\"key\":\"value2\"})", saver.loadGame("katia").toString());
+        assertEquals("PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={\"key\":\"value3\"})", saver.loadGame("maria").toString());
+
         assertEquals("room", player1.getRoom());
         assertEquals("room", player2.getRoom());
         assertEquals("otherRoom", player3.getRoom());
