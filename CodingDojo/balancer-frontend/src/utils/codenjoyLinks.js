@@ -1,6 +1,6 @@
 import Game from '../games';
 
-const protocol = process.env.REACT_APP_GAME_SCHEMA
+const protocol = process.env.REACT_APP_GAME_SCHEMA;
 
 export const getGameConnectionString = (server, code, email) =>
     `${protocol}://${server}/codenjoy-contest/board/player/${email}?code=${code}`;
