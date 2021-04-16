@@ -192,7 +192,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player register(PlayerSave save) {
-        log.info("PlayerGames:register -> save {}", save);
+        log.info("PlayerGames:register -> save {}", save.toString());
         lock.writeLock().lock();
         try {
             return justRegister(save);

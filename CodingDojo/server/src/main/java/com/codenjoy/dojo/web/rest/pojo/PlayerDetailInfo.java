@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -37,6 +38,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class PlayerDetailInfo {
 
     private String id;
