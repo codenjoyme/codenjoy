@@ -62,16 +62,16 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public void loadAll() {
-        for (String id : saver.getSavedList()) {
-            load(id);
-        }
+        loadAll(saver.loadAll(saver.getSavedList()));
+    }
+
+    private void loadAll(List<PlayerSave> saves) {
+        saves.forEach(this::load);
     }
 
     @Override
     public void loadAll(String room) {
-        for (String id : saver.getSavedList(room)) {
-            load(id);
-        }
+        loadAll(saver.loadAll(saver.getSavedList(room)));
     }
 
     @Override
@@ -93,16 +93,20 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public boolean load(String id) {
-        PlayerSave save = saver.loadGame(id);
+        return load(saver.loadGame(id));
+    }
+
+    public boolean load(PlayerSave save) {
         if (save == PlayerSave.NULL) {
             return false;
         }
 
-        resetPlayer(id, save);
+        resetPlayer(save);
         return true;
     }
 
-    private void resetPlayer(String id, PlayerSave save) {
+    private void resetPlayer(PlayerSave save) {
+        String id = save.getId();
         if (players.contains(id)) {
             players.remove(id);
         }
@@ -118,7 +122,8 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public void load(String id, String game, String room, String save) {
         String ip = tryGetIpFromSave(id);
-        resetPlayer(id, new PlayerSave(id, ip, game, room, 0, save));
+        PlayerSave playerSave = new PlayerSave(id, ip, game, room, 0, save);
+        resetPlayer(playerSave);
     }
 
     private String tryGetIpFromSave(String id) {

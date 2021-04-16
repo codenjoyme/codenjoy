@@ -33,6 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Stubber;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -541,10 +542,10 @@ public class SaveServiceImplTest {
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
         allPlayersNotRegistered();
 
-        PlayerSave first = mock(PlayerSave.class);
-        PlayerSave second = mock(PlayerSave.class);
-        when(saver.loadGame("first")).thenReturn(first);
-        when(saver.loadGame("second")).thenReturn(second);
+        PlayerSave first = save("room", "first");
+        PlayerSave second = save("room", "second");
+
+        setup(first, second).when(saver).loadAll(anyList());
 
         // when
         saveService.loadAll();
@@ -566,18 +567,11 @@ public class SaveServiceImplTest {
         createPlayer("second", "room2");
         createPlayer("third", "room1");
 
-        PlayerSave first = mock(PlayerSave.class);
-        when(first.getRoom()).thenReturn("room1");
+        PlayerSave first = save("room1", "first");
+        PlayerSave second = save("room2", "second");
+        PlayerSave third = save("room1", "third");
 
-        PlayerSave second = mock(PlayerSave.class);
-        when(second.getRoom()).thenReturn("room2");
-
-        PlayerSave third = mock(PlayerSave.class);
-        when(third.getRoom()).thenReturn("room1");
-
-        when(saver.loadGame("first")).thenReturn(first);
-        when(saver.loadGame("second")).thenReturn(second);
-        when(saver.loadGame("third")).thenReturn(third);
+        setup(first, second, third).when(saver).loadAll(anyList());
 
         // when
         saveService.loadAll("room1");
@@ -598,18 +592,11 @@ public class SaveServiceImplTest {
         when(saver.getSavedList("room1")).thenReturn(Arrays.asList("first", "third"));
         when(saver.getSavedList("room2")).thenReturn(Arrays.asList("second"));
 
-        PlayerSave first = mock(PlayerSave.class);
-        when(first.getRoom()).thenReturn("room1");
+        PlayerSave first = save("room1", "first");
+        PlayerSave second = save("room2", "second");
+        PlayerSave third = save("room1", "third");
 
-        PlayerSave second = mock(PlayerSave.class);
-        when(second.getRoom()).thenReturn("room2");
-
-        PlayerSave third = mock(PlayerSave.class);
-        when(third.getRoom()).thenReturn("room1");
-
-        when(saver.loadGame("first")).thenReturn(first);
-        when(saver.loadGame("second")).thenReturn(second);
-        when(saver.loadGame("third")).thenReturn(third);
+        setup(first, second, third).when(saver).loadAll(anyList());
 
         // when
         saveService.loadAll("room1");
@@ -624,6 +611,23 @@ public class SaveServiceImplTest {
         verifyNoMoreInteractions(playerService);
     }
 
+    public Stubber setup(PlayerSave... saves) {
+        return doAnswer(inv -> {
+            List<PlayerSave> result = new LinkedList<>(){{
+                addAll(Arrays.asList(saves));
+            }};
+            List<String> argument = inv.getArgument(0);
+            result.removeIf(it -> !argument.contains(it.getId()));
+            return result;
+        });
+    }
+
+    public PlayerSave save(String room, String id) {
+        PlayerSave result = mock(PlayerSave.class);
+        when(result.getRoom()).thenReturn(room);
+        when(result.getId()).thenReturn(id);
+        return result;
+    }
 
     private void allPlayersNotRegistered() {
         when(playerService.contains(anyString())).thenReturn(NOT_REGISTERED);
@@ -635,10 +639,10 @@ public class SaveServiceImplTest {
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
         allPlayersRegistered();
 
-        PlayerSave first = mock(PlayerSave.class);
-        PlayerSave second = mock(PlayerSave.class);
-        when(saver.loadGame("first")).thenReturn(first);
-        when(saver.loadGame("second")).thenReturn(second);
+        PlayerSave first = save("room", "first");
+        PlayerSave second = save("room", "second");
+
+        setup(first, second).when(saver).loadAll(anyList());
 
         // when
         saveService.loadAll();

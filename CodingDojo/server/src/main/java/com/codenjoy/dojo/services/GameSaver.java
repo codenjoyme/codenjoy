@@ -42,4 +42,5 @@ public interface GameSaver {
 
     void delete(String id, String room);
 
+    List<PlayerSave> loadAll(List<String> ids);
 }

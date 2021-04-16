@@ -24,12 +24,17 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.jdbc.*;
-import org.json.JSONObject;
+import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
+import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
+import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 
 import java.sql.Date;
-import java.util.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class PlayerGameSaver implements GameSaver {
@@ -191,17 +196,40 @@ public class PlayerGameSaver implements GameSaver {
                 new Object[]{id},
                 rs -> {
                     if (rs.next()) {
-                        String callbackUrl = rs.getString("callback_url");
-                        String score = rs.getString("score");
-                        String room = rs.getString("room_name");
-                        String game = rs.getString("game_name");
-                        String save = rs.getString("save");
-                        return new PlayerSave(id, callbackUrl, game, room, score, save);
+                        return extractPlayerSave(rs);
                     } else {
                         return PlayerSave.NULL;
                     }
                 }
         );
+    }
+
+    public PlayerSave extractPlayerSave(ResultSet rs) throws SQLException {
+        return new PlayerSave(
+                rs.getString("player_id"),
+                rs.getString("callback_url"),
+                rs.getString("game_name"),
+                rs.getString("room_name"),
+                rs.getString("score"),
+                rs.getString("save"));
+    }
+
+    @Override
+    public List<PlayerSave> loadAll(List<String> ids) {
+        String idsString = "('" + ids.stream().collect(joining("','")) + "')";
+        return pool.select("SELECT * " +
+                        "FROM saves s1, " +
+                        "    (SELECT max(time) as time, player_id " +
+                        "       FROM saves " +
+                        "       WHERE player_id in " + idsString +
+                        "       GROUP BY player_id) s2 " +
+                        "WHERE s1.time = s2.time " +
+                        "    AND s1.player_id = s2.player_id",
+                rs -> new LinkedList<PlayerSave>(){{
+                    while (rs.next()) {
+                        add(extractPlayerSave(rs));
+                    }
+                }});
     }
 
     @Override
