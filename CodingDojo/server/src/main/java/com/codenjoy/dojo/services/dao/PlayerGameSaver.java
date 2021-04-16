@@ -141,6 +141,25 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
+    public List<PlayerSave> loadAllSaves() {
+        return pool.select("SELECT * FROM saves",
+                rs -> {
+                    List<PlayerSave> result = new LinkedList<>();
+                    while (rs.next()) {
+                        Player player = new Player(rs.getString("player_id"));
+                        player.setCallbackUrl(rs.getString("callback_url"));
+                        player.setScore(rs.getString("score"));
+                        player.setRoom(rs.getString("room_name"));
+                        player.setGame(rs.getString("game_name"));
+                        player.setData(rs.getString("save"));
+                        player.setRepositoryUrl(rs.getString("repository_url"));
+                        result.add(new PlayerSave(player));
+                    }
+                    return result;
+                });
+
+    }
+    @Override
     public Map<String, String> getEventsList() {
         return pool.select("SELECT DISTINCT room_name, game_name FROM saves;",
                 rs -> {

@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
@@ -51,11 +52,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public static final boolean ACTIVE = !ALL;
 
     private List<PlayerGame> all = new LinkedList<>();
-
     private Consumer<PlayerGame> onAdd;
     private Consumer<PlayerGame> onRemove;
     private ReadWriteLock lock = new ReentrantReadWriteLock();
     private Spreader spreader = new Spreader();
+
+    @Autowired
+    private GameSaver gameSaver;
 
     @Autowired
     protected RoomService roomService;
@@ -106,6 +109,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             alone.forEach(gp -> play(gp.getGame(), gp.getRoom(),
                     gp.getGameType(), gp.getGame().getSave()));
         }
+    }
+
+    public List<PlayerGame> getAll() {
+        return all;
     }
 
     public PlayerGame get(String id) {
@@ -164,7 +171,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return playerGame;
     }
 
-    private Single buildSingle(Player player, GameType gameType) {
+    public Single buildSingle(Player player, GameType gameType) {
         GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
                 player.getId(), gameType.getSettings());
 
@@ -453,5 +460,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 .map(PlayerGame::getRoom)
                 .distinct()
                 .collect(toList());
+    }
+
+    public GameSaver getGameSaver() {
+        return gameSaver;
     }
 }

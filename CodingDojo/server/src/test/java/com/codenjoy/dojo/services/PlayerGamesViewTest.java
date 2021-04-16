@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.codenjoy.dojo.web.rest.pojo.PScores;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONArray;
@@ -282,7 +283,7 @@ public class PlayerGamesViewTest {
         addNewPlayer(gameType2, 789, getHeroData(24, pt(8, 7), "data9"));
 
         // when
-        List<PScoresOf> scores = playerGamesView.getScoresForGame("game1");
+        List<PScores> scores = playerGamesView.getScoresForGame("game1");
 
         // then
         assertEquals("[" +
@@ -314,7 +315,7 @@ public class PlayerGamesViewTest {
         addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"));
 
         // when
-        List<PScoresOf> scores = playerGamesView.getScoresForRoom("room1");
+        List<PScores> scores = playerGamesView.getScoresForRoom("room1");
 
         // then
         assertEquals("[{'score':123,'name':'readable_user1','id':'user1'}," +

@@ -44,6 +44,8 @@ import static org.mockito.Mockito.*;
 })
 public class AutoSaverTest {
 
+    public static final int TICKS = 30;
+
     @Autowired
     private AutoSaver autoSaver;
 
@@ -59,7 +61,7 @@ public class AutoSaverTest {
         verify(save, only()).loadAll();
         reset(save);
 
-        for (int count = 0; count < AutoSaver.TICKS - 2; count++) {
+        for (int count = 0; count < TICKS - 2; count++) {
             autoSaver.tick();
         }
 

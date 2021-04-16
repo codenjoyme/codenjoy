@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,13 +24,21 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.BoardLog;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.GuiPlotColorDecoder;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.PlayerGamesView;
+import com.codenjoy.dojo.services.PlayerSave;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
-import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
+import com.codenjoy.dojo.web.rest.pojo.PScores;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.AllArgsConstructor;
 import org.json.JSONException;
@@ -71,9 +79,8 @@ public class RestBoardController {
 
     @GetMapping("/player/{player}/{code}/level/{level}")
     public synchronized boolean changeLevel(@PathVariable("player") String id,
-                                @PathVariable("code") String code,
-                                @PathVariable("level") int level)
-    {
+                                            @PathVariable("code") String code,
+                                            @PathVariable("level") int level) {
         validator.checkPlayerCode(id, code);
 
         playerGames.changeLevel(id, level);
@@ -83,21 +90,20 @@ public class RestBoardController {
 
     // TODO ROOM тут наверное room надо, хотя вот ниже есть метод...
     @GetMapping("/game/{game}/scores")
-    public List<PScoresOf> getPlayersScoresForGame(@PathVariable("game") String game) {
+    public List<PScores> getPlayersScoresForGame(@PathVariable("game") String game) {
         return playerGamesView.getScoresForGame(game);
     }
 
     // TODO test me
     @GetMapping("/room/{room}/scores")
-    public List<PScoresOf> getPlayersScoresForRoom(@PathVariable("room") String room) {
+    public List<PScores> getPlayersScoresForRoom(@PathVariable("room") String room) {
         return playerGamesView.getScoresForRoom(room);
     }
 
     // TODO test me
     @GetMapping("/player/{player}/{code}/reset")
     public synchronized boolean reset(@PathVariable("player") String id,
-                                      @PathVariable("code") String code)
-    {
+                                      @PathVariable("code") String code) {
         validator.checkPlayerCode(id, code);
 
         if (!playerService.contains(id)) {
@@ -124,8 +130,7 @@ public class RestBoardController {
             @PathVariable("player") String id,
             @PathVariable("code") String code,
             @PathVariable("game") String game,
-            @PathVariable("room") String room)
-    {
+            @PathVariable("room") String room) {
         validator.checkPlayerId(id, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
         validator.checkGame(game, CANT_BE_NULL);
@@ -145,8 +150,7 @@ public class RestBoardController {
     // TODO test me
     @GetMapping("/player/{player}/log/{time}")
     public List<BoardLog> changeLevel(@PathVariable("player") String id,
-                                            @PathVariable("time") Long time)
-    {
+                                      @PathVariable("time") Long time) {
         validator.checkPlayerId(id, CANT_BE_NULL);
 
         if (registration.checkUser(id) == null) {

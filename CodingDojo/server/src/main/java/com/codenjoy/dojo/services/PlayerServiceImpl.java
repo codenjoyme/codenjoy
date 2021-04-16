@@ -272,9 +272,19 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void updateScore(String gitHubUsername, long score){
+    public void updateScore(String gitHubUsername,long score){
         String id = registration.getIdByGitHubUsername(gitHubUsername);
+        updateScoreList(id, score);
         updatePlayerScore(id, score);
+    }
+
+    private void updateScoreList(String id, long score) {
+        for(PlayerGame playerGame :playerGames.getAll()){
+            Player player = playerGame.getPlayer();
+            if(player.getId().equals(id)){
+                player.setScore(score);
+            }
+        }
     }
 
     private void updatePlayerScore(String id, long score) {
@@ -721,6 +731,11 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.readLock().unlock();
         }
+    }
+
+    @Override
+    public GameSaver getGameSaver(){
+        return saver;
     }
 
 }
