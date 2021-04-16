@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.google.common.collect.Multimap;
 import lombok.experimental.FieldNameConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,6 +50,7 @@ import static com.codenjoy.dojo.services.settings.CommonGameSettings.Keys.KICK_I
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @Component
 @FieldNameConstants
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
@@ -163,10 +165,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         play(game, room, gameType, parseSave(save));
 
         PlayerGame playerGame = new PlayerGame(player, game, room);
+        log.info("PlayerGames:add -> playerGame {}", playerGame);
         if (onAdd != null) {
             onAdd.accept(playerGame);
         }
-        all.add(playerGame);
+        boolean added = all.add(playerGame);
+        log.info("PlayerGames:add -> all.add(playerGame) - {}", added);
         return playerGame;
     }
 
@@ -264,6 +268,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     @Override
     public void tick() {
         List<PlayerGame> active = active();
+        log.info("PlayerGames:tick -> active {}", active);
 
         // по всем джойстикам отправили сообщения играм
         active.forEach(PlayerGame::quietTick);
@@ -343,6 +348,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private void reload(Game game, String room, JSONObject save, boolean reloadAlone) {
+        log.info("PlayerGames:reload -> game {}, room {}, save {}, reloadAlone {}",
+                game, room, save, reloadAlone);
         PlayerGame playerGame = getPlayerGame(game);
         playerGame.setRoom(room);
         GameType gameType = playerGame.getGameType();
@@ -369,6 +376,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public void reloadAll(boolean shuffle, Predicate<PlayerGame> predicate) {
         List<PlayerGame> games = getAll(predicate);
+        log.info("PlayerGames:reloadAll -> games {}", games);
 
         if (shuffle) {
             Collections.shuffle(games);
@@ -382,7 +390,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return all.stream()
                 .filter(pg -> pg.equals(by(game)))
                 .findFirst()
-                .orElseThrow(IllegalStateException::new);
+                .orElseThrow(() -> {
+                    log.info("PlayerGames:getPlayerGame -> all {}, game {}", all, game);
+                    return new IllegalStateException();
+                });
     }
 
     private void quiet(Runnable runnable) {

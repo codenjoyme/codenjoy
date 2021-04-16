@@ -110,7 +110,7 @@ public class PlayerServiceImpl implements PlayerService {
     public Player register(String id, String game, String room, String ip) {
         lock.writeLock().lock();
         try {
-            log.debug("Registered user {} in game {}", id, game);
+            log.info("PlayerGames:register -> Registered user {} in game {}", id, game);
 
             if (!config.isRegistrationOpened()) {
                 return NullPlayer.INSTANCE;
@@ -192,6 +192,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player register(PlayerSave save) {
+        log.info("PlayerGames:register -> save {}", save);
         lock.writeLock().lock();
         try {
             return justRegister(save);
@@ -205,7 +206,10 @@ public class PlayerServiceImpl implements PlayerService {
         String game = save.getGame();
         String room = save.getRoom();
 
+        log.info("PlayerGames:justRegister -> id {}, game {}, room {}", id, game, room);
+
         if (!gameService.exists(game)) {
+            log.info("PlayerGames:justRegister -> !gameService.exists(game)");
             return NullPlayer.INSTANCE;
         }
 
@@ -282,6 +286,8 @@ public class PlayerServiceImpl implements PlayerService {
             player.setEventListener(listener);
 
             player.setGameType(gameType);
+            log.info("PlayerGames:getPlayer -> playerGames.add(player {}, room {}, save {})",
+                    player, room, save);
             PlayerGame playerGame = playerGames.add(player, room, save);
 
             player = playerGame.getPlayer();
