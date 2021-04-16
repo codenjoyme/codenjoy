@@ -547,7 +547,7 @@ public class AdminController {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         AdminSettings settings = getAdminSettings(parameters, room);
         model.addAttribute("adminSettings", settings);
-        List<PlayerInfo> saves = saveService.getSaves();
+        List<PlayerInfo> saves = saveService.getSaves(room);
         model.addAttribute("gameRooms", roomService.gameRooms());
         model.addAttribute("playersCount", getRoomCounts(saves));
         settings.setPlayers(preparePlayers(model, room, saves));

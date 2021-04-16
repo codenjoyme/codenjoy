@@ -35,10 +35,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PlayerSave.NULL;
 import static java.util.stream.Collectors.toList;
@@ -479,6 +476,16 @@ public class SaveServiceImplTest {
 
         when(registration.getUserById(id)).thenReturn(Optional.of(user));
         when(registration.getUsers()).thenReturn(users);
+        setup(users).when(registration).getUsers(anyCollection());
+    }
+
+    public Stubber setup(List<Registration.User> input) {
+        return doAnswer(inv -> {
+            List<Registration.User> result = new LinkedList<>(input);
+            Collection<String> argument = inv.getArgument(0);
+            result.removeIf(it -> !argument.contains(it.getId()));
+            return result;
+        });
     }
 
     private void scores(Player player, Object score) {

@@ -336,13 +336,24 @@ public class Registration {
     }
 
     public List<User> getUsers() {
-        return pool.select("SELECT * FROM users;", rs -> {
-            List<User> result = new LinkedList<>();
-            while (rs.next()) {
-                result.add(extractUser(rs));
-            }
-            return result;
-        });
+        return pool.select("SELECT * FROM users;",
+                rs -> extractUsers(rs));
+    }
+
+    public List<User> getUsers(Collection<String> ids) {
+        String idsString = "('" + ids.stream().collect(joining("','")) + "')";
+        return pool.select("SELECT * " +
+                        "FROM users " +
+                        "WHERE id IN " + idsString + ";",
+                rs -> extractUsers(rs));
+    }
+
+    public List<User> extractUsers(ResultSet rs) throws SQLException {
+        List<User> result = new LinkedList<>();
+        while (rs.next()) {
+            result.add(extractUser(rs));
+        }
+        return result;
     }
 
     private User extractUser(ResultSet rs) throws SQLException {

@@ -135,21 +135,20 @@ public class SaveServiceImpl implements SaveService {
     public List<PlayerInfo> getSaves() {
         List<Player> active = players.getAll();
         List<String> savedList = saver.getSavedList();
-
         return getSaves(active, savedList);
     }
 
-    @Override // TODO test me
+    @Override
     public List<PlayerInfo> getSaves(String room) {
         List<Player> active = players.getAllInRoom(room);
         List<String> savedList = saver.getSavedList(room);
-
         return getSaves(active, savedList);
     }
 
     private List<PlayerInfo> getSaves(List<Player> active, List<String> saved) {
-        // TODO сделать тут SELECT WHERE id IN
-        Map<String, Registration.User> users = registration.getUsers().stream()
+        Set<String> ids = new LinkedHashSet<>(saved);
+        active.forEach(player -> ids.add(player.getId()));
+        Map<String, Registration.User> users = registration.getUsers(ids).stream()
                 .collect(toMap(user -> user.getId(), user -> user));
 
         Map<String, PlayerInfo> map = new HashMap<>();

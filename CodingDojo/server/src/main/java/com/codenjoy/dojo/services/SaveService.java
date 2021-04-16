@@ -32,13 +32,11 @@ public interface SaveService {
     void loadAll(String room);
     long save(String id);
     List<PlayerInfo> getSaves();
+    List<PlayerInfo> getSaves(String room);
     long saveAll();
     long saveAll(String room);
     void loadAll();
     void removeSave(String id);
     void removeAllSaves();
-
-    List<PlayerInfo> getSaves(String room);
-
     void removeAllSaves(String room);
 }
