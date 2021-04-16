@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -38,6 +39,25 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
 
     public CrudConnectionThreadPool(int count, Supplier<Connection> factory) {
        super(count, factory);
+    }
+
+    public void createIndex(String table, boolean unique, boolean cluster, String... columns) {
+        String indexNamePart = Arrays.stream(columns).collect(Collectors.joining("_"));
+        String indexName = String.format("%s_%s_index", indexNamePart, table);
+        String columnsSubquery = Arrays.stream(columns).collect(Collectors.joining(", "));
+        update(String.format("CREATE %s INDEX IF NOT EXISTS %s ON %s (%s);",
+                unique?"UNIQUE":"",
+                indexName,
+                table, columnsSubquery));
+
+        if (cluster) {
+            createCluster(table, indexName);
+        }
+    }
+
+    public void createCluster(String table, String indexName) {
+        update(String.format("ALTER TABLE %s CLUSTER ON %s;",
+                table, indexName));
     }
 
     public <T> T select(String query, Object[] parameters, ObjectMapper<T> mapper) {

@@ -103,9 +103,8 @@ public class ActionLoggerTest {
         waitFor();
 
         // then
-        assertLogs("BoardLog(time=101, playerId=player1, game=game1, score=123, board=player1Board:101, message=null, command=[])\n" +
-                   "BoardLog(time=101, playerId=player2, game=game2, score=234, board=player2Board:101, message=null, command=[])",
-                logger.getAll());
+        assertAllLogs("[BoardLog(time=101, playerId=player1, game=game1, score=123, board=player1Board:101, message=null, command=[]), \n" +
+                "BoardLog(time=101, playerId=player2, game=game2, score=234, board=player2Board:101, message=null, command=[])]");
     }
 
     private void allRoomsAreActive() {
@@ -143,8 +142,7 @@ public class ActionLoggerTest {
         waitFor();
 
         // then
-        assertLogs("",
-                logger.getAll());
+        assertAllLogs("[]");
     }
 
     private void givenPlayers() {
@@ -189,8 +187,7 @@ public class ActionLoggerTest {
         waitFor();
 
         // then
-        assertLogs("BoardLog(time=101, playerId=player1, game=game1, score=123, board=player1Board:101, message=null, command=[])",
-                logger.getAll());;
+        assertAllLogs("[BoardLog(time=101, playerId=player1, game=game1, score=123, board=player1Board:101, message=null, command=[])]");
     }
 
     @Test
@@ -207,11 +204,24 @@ public class ActionLoggerTest {
         waitFor();
 
         // then
+        assertAllLogs("[BoardLog(time=101, playerId=player1, game=game1, score=123, board=player1Board:101, message=null, command=[]), \n" +
+                "BoardLog(time=101, playerId=player2, game=game2, score=234, board=player2Board:101, message=null, command=[]), \n" +
+                "BoardLog(time=102, playerId=player1, game=game1, score=123, board=player1Board:102, message=null, command=[]), \n" +
+                "BoardLog(time=102, playerId=player2, game=game2, score=234, board=player2Board:102, message=null, command=[]), \n" +
+                "BoardLog(time=103, playerId=player1, game=game1, score=123, board=player1Board:103, message=null, command=[]), \n" +
+                "BoardLog(time=103, playerId=player2, game=game2, score=234, board=player2Board:103, message=null, command=[]), \n" +
+                "BoardLog(time=104, playerId=player1, game=game1, score=123, board=player1Board:104, message=null, command=[]), \n" +
+                "BoardLog(time=104, playerId=player2, game=game2, score=234, board=player2Board:104, message=null, command=[])]");
+
         assertEquals(104,
                 logger.getLastTime("player1"));
 
         assertEquals(104,
                 logger.getLastTime("player2"));
+    }
+
+    public void assertAllLogs(String expected) {
+        assertEquals(expected, logger.getAll().toString().replace(", BoardLog", ", \nBoardLog"));
     }
 
     @Test

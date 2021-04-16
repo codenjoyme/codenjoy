@@ -27,10 +27,10 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -40,6 +40,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Slf4j
 public class ActionLogger extends Suspendable {
 
     @Value("${board.save.ticks}")
@@ -60,6 +61,7 @@ public class ActionLogger extends Suspendable {
                     "command varchar(255), " +
                     "message varchar(255), " +
                     "board varchar(10000));");
+        pool.createIndex("player_boards", true, true, "player_id", "time");
         active = false;
         count = 0;
     }
@@ -73,35 +75,29 @@ public class ActionLogger extends Suspendable {
     }
 
     public void saveToDB() {
-        pool.run(connection -> {
-            String sql = "INSERT INTO player_boards " +
-                    "(time, player_id, game_type, score, command, message, board) " +
-                    "VALUES (?,?,?,?,?,?,?);";
+        List<BoardLog> list = getCached();
+        pool.batchUpdate("INSERT INTO player_boards " +
+                "(time, player_id, game_type, score, command, message, board) " +
+                "VALUES (?,?,?,?,?,?,?);",
+                list,
+                (stmt, log) -> {
+                    stmt.setString(1, JDBCTimeUtils.toString(new Date(log.getTime())));
+                    stmt.setString(2, log.getPlayerId());
+                    stmt.setString(3, log.getGame());
+                    stmt.setString(4, log.getScore().toString());
+                    stmt.setString(5, log.getCommand());
+                    stmt.setString(6, log.getMessage());
+                    stmt.setString(7, log.getBoard());
+                    return true;
+                });
+    }
 
-            BoardLog data;
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                int size = cache.size();
-                for (int i = 0; i < size; i++) {
-                    data = cache.poll();
-                    if (data == null) {
-                        break;
-                    }
-
-                    stmt.setString(1, JDBCTimeUtils.toString(new Date(data.getTime())));
-                    stmt.setString(2, data.getPlayerId());
-                    stmt.setString(3, data.getGame());
-                    stmt.setString(4, data.getScore().toString());
-                    stmt.setString(5, data.getCommand());
-                    stmt.setString(6, data.getMessage());
-                    stmt.setString(7, data.getBoard());
-                    stmt.addBatch();
-                }
-                stmt.executeBatch();
-            } catch (SQLException e) {
-                throw new RuntimeException("Error saving log", e);
-            }
-            return null;
-        });
+    public List<BoardLog> getCached() {
+        List<BoardLog> result = new LinkedList<>();
+        while (!cache.isEmpty()) {
+            result.add(cache.poll());
+        }
+        return result;
     }
 
     public void log(PlayerGames playerGames) {
@@ -122,7 +118,13 @@ public class ActionLogger extends Suspendable {
 
         if (count++ % ticks == 0) {
             // executor.submit потому что sqlite тормозит при сохранении
-            executor.submit(() -> saveToDB());
+            executor.submit(() -> {
+                try {
+                    saveToDB();
+                } catch (Exception e) {
+                    log.error("Error during save all saves", e);
+                }
+            });
         }
     }
 

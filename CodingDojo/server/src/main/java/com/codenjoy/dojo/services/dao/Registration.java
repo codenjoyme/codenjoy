@@ -76,7 +76,8 @@ public class Registration {
                     ADMIN_USER_ID, adminEmail, "admin", APPROVED, adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER,
                     ADMIN_USER_ID));
         }
-        pool = factory.create(initialScripts.toArray(new String[initialScripts.size()]));
+        pool = factory.create(initialScripts.toArray(new String[0]));
+        pool.createIndex("users", true, true, "email");
     }
 
     void removeDatabase() {

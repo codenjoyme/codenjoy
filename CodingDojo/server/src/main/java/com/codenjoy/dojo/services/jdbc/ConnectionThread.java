@@ -26,12 +26,13 @@ package com.codenjoy.dojo.services.jdbc;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 @Getter
 @AllArgsConstructor
+@Slf4j
 public class ConnectionThread extends Thread {
 
     private Runnable task;
@@ -41,6 +42,8 @@ public class ConnectionThread extends Thread {
     public void run() {
         try {
             task.run();
+        } catch (Throwable e) {
+            log.error("Error in thread", e);
         } finally {
             close();
         }

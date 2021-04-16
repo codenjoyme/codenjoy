@@ -80,4 +80,9 @@ public class SqliteConnectionThreadPool extends CrudPrimaryKeyConnectionThreadPo
     protected String clearLastInsertedIdQuery(String table, String column) {
         return String.format("UPDATE sqlite_sequence SET seq = 0 WHERE name = '%s'", table);
     }
+
+    @Override
+    public void createCluster(String table, String indexName) {
+        // do nothing, there is not clusters in sqlite indexes
+    }
 }

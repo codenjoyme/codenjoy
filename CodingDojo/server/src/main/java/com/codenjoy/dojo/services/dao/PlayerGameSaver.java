@@ -69,6 +69,10 @@ public class PlayerGameSaver implements GameSaver {
                 "CREATE TABLE IF NOT EXISTS saves_players (" +
                         "player_id varchar(255), " +
                         "room_name varchar(255));");
+        pool.createIndex("saves", true, true, "time", "player_id");
+        pool.createIndex("saves", false, true, "room_name");
+        pool.createIndex("saves", false, true, "player_id");
+        pool.createIndex("saves_players", true, true, "player_id", "room_name");
     }
 
     void removeDatabase() {
