@@ -1,8 +1,6 @@
 import Game from '../games';
 
-const protocol = process.env.REACT_APP_IS_SECURE
-    ? process.env.REACT_APP_IS_SECURE
-    : 'http';
+const protocol = process.env.REACT_APP_GAME_SCHEMA
 
 export const getGameConnectionString = (server, code, email) =>
     `${protocol}://${server}/codenjoy-contest/board/player/${email}?code=${code}`;
