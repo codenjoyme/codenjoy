@@ -67,11 +67,8 @@ public class GameServer {
                                   String score, String save)
     {
         try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Create new player {} ({}) for '{}' on server {} with save {} and score {}",
-                        id, code, name, server, save, score);
-            }
-
+            logger.info("Create new player {} ({}) for '{}' on server {} with save {} and score {}",
+                    id, code, name, server, save, score);
             PlayerDetailInfo player = new PlayerDetailInfo(
                 id,
                 name,
@@ -91,7 +88,8 @@ public class GameServer {
                     "{}",
                     Arrays.asList(ROLE_USER.name()))
             );
-
+            logger.info("GameServer:createNewPlayer -> configGameType:",config.getGame().getType());
+            logger.info("GameServer:createNewPlayer -> Player {}",player);
             return gameClientResolver.resolveClient(server).registerPlayer(player);
         } catch (GameServerClientException e) {
             String message = "Cant create new player. Status is: " + e.getMessage();
