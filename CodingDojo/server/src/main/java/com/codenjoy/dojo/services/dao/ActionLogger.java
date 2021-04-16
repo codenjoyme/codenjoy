@@ -61,7 +61,7 @@ public class ActionLogger extends Suspendable {
                     "command varchar(255), " +
                     "message varchar(255), " +
                     "board varchar(10000));");
-        pool.createIndex("player_boards", true, true, "player_id", "time");
+        pool.createIndex("player_boards", true, true, "time", "player_id");
         active = false;
         count = 0;
     }
