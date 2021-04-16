@@ -84,10 +84,12 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         chat.removeAll();
         playerService.removeAll();
         roomService.removeAll();
+        registration.removeAll();
 
         register("player", "ip", "validRoom", "first");
         register("player2", "ip", "validRoom", "first");
         register("otherPlayer", "ip", "otherRoom", "first");
+
         asUser("player", "player");
     }
 

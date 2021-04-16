@@ -181,7 +181,9 @@ public abstract class AbstractRestControllerTest {
         registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles());
         playerService.register(id, game, room, ip);
         PlayerGame playerGame = playerGames.get(id);
-        if (playerGame != NullPlayerGame.INSTANCE) {
+        if (playerGame == NullPlayerGame.INSTANCE) {
+            registration.remove(id); // удаляем если не можем создать
+        } else {
             resetMocks(playerGame);
         }
         return playerGame;
