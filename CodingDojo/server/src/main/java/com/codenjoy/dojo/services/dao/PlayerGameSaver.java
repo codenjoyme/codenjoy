@@ -25,25 +25,18 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerGame;
-import com.codenjoy.dojo.services.PlayerGames;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
-import com.codenjoy.dojo.services.lock.LockedGame;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
-import com.codenjoy.dojo.web.rest.pojo.PScores;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.Map;
 
 public class PlayerGameSaver implements GameSaver {
-
-    private PlayerGames playerGames;
 
     private CrudConnectionThreadPool pool;
 
@@ -165,5 +158,28 @@ public class PlayerGameSaver implements GameSaver {
                     return result;
                 });
 
+    }
+    @Override
+    public Map<String, String> getEventsList() {
+        return pool.select("SELECT DISTINCT room_name, game_name FROM saves;",
+                rs -> {
+                    Map<String, String> result = new HashMap<>();
+                    while (rs.next()) {
+                        String roomName = rs.getString("room_name");
+                        String gameName = rs.getString("game_name");
+                        result.put(roomName, gameName);
+                    }
+                    return result;
+                }
+        );
+    }
+
+    @Override
+    public String getRoomNameByPlayerId(String id) {
+        return pool.select("SELECT room_name FROM saves " +
+                        "WHERE player_id = ?",
+                new Object[]{id},
+                rs -> rs.next() ? rs.getString("room_name") : null
+        );
     }
 }

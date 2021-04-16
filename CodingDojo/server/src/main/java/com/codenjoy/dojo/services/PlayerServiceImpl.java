@@ -294,7 +294,6 @@ public class PlayerServiceImpl implements PlayerService {
         saver.updateScore(player,System.currentTimeMillis());
     }
 
-
     private Player getPlayer(PlayerSave save, String game, String room) {
         String name = save.getId();
         String callbackUrl = save.getCallbackUrl();
@@ -321,9 +320,9 @@ public class PlayerServiceImpl implements PlayerService {
             player.setRepositoryUrl(gameServerService.createOrGetRepository(player.getGitHubUsername()));
 
             player.setGameType(gameType);
-
             PlayerGame playerGame = playerGames.add(player, room, save);
-            //player = playerGame.getPlayer();
+
+            player = playerGame.getPlayer();
 
             player.setReadableName(registration.getNameById(player.getId()));
 

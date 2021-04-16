@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,13 +23,24 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.GuiPlotColorDecoder;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.grpc.handler.UpdateHandler;
 import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PSprites;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +49,8 @@ import java.util.Map;
 @RequestMapping("/rest/game")
 @AllArgsConstructor
 public class RestGameController {
+
+    private UpdateHandler updateHandler;
 
     private GameService gameService;
 
@@ -63,7 +76,7 @@ public class RestGameController {
 
         PSprites sprites = new PSprites(spritesAlphabet(), spritesUrl(name),
                 spritesNames(name), spritesValues(name));
-        
+
         return new PGameTypeInfo(game, room, help(name), client(name), ws(), sprites);
     }
 
@@ -153,16 +166,15 @@ public class RestGameController {
         playerService.cleanScores(user.getId());
     }
 
-    @GetMapping("/update/{username}/score")
+    @PostMapping("/update/{username}/score")
     public void updateUserScore(@PathVariable("username") String username,
-                                  @RequestBody long score) {
+                                @RequestBody long score) {
         if (username == null) {
             return;
         }
 
-        playerService.updateScore(username,score);
-
-
+        updateHandler.sendUpdate(username, score);
+        playerService.updateScore(username, score);
     }
 }
 
