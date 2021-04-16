@@ -223,9 +223,9 @@ public class PlayerGameSaver implements GameSaver {
         String idsString = "('" + ids.stream().collect(joining("','")) + "')";
         return pool.select("SELECT * " +
                         "FROM saves s1, " +
-                        "    (SELECT max(time) as time, player_id " +
+                        "    (SELECT max(time) AS time, player_id " +
                         "       FROM saves " +
-                        "       WHERE player_id in " + idsString +
+                        "       WHERE player_id IN " + idsString +
                         "       GROUP BY player_id) s2 " +
                         "WHERE s1.time = s2.time " +
                         "    AND s1.player_id = s2.player_id",

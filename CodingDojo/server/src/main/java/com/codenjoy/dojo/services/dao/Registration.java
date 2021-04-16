@@ -45,6 +45,7 @@ import static com.codenjoy.dojo.services.dao.Registration.User.APPROVED;
 import static com.codenjoy.dojo.services.dao.Registration.User.NOT_APPROVED;
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_USER;
+import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 public class Registration {
@@ -70,10 +71,27 @@ public class Registration {
                 "data varchar(255)," +
                 "roles varchar(255));");
         if (initAdminUser) {
-            initialScripts.add(String.format("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
-                    " select '%s', '%s', '%s', %s,  '%s', '%s', '{}', '%s, %s'" +
-                    " where not exists (select 1 from users where id = '%s')",
-                    ADMIN_USER_ID, adminEmail, "admin", APPROVED, adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER,
+            initialScripts.add(String.format(
+                    "INSERT INTO users " +
+                            "(id, " +
+                            "email, " +
+                            "readable_name, " +
+                            "email_approved, " +
+                            "password, " +
+                            "code, " +
+                            "data, " +
+                            "roles) " +
+                    "SELECT '%s', '%s', '%s', %s,  '%s', '%s', '{}', '%s, %s' " +
+                    "WHERE NOT EXISTS " +
+                    "(SELECT 1 FROM users WHERE id = '%s')",
+                    ADMIN_USER_ID,
+                    adminEmail,
+                    "admin",
+                    APPROVED,
+                    adminPassword,
+                    "000000000000",
+                    ROLE_ADMIN,
+                    ROLE_USER,
                     ADMIN_USER_ID));
         }
         pool = factory.create(initialScripts.toArray(new String[0]));
@@ -85,14 +103,18 @@ public class Registration {
     }
 
     public boolean approved(String id) {
-        return pool.select("SELECT * FROM users WHERE id = ?;",
+        return pool.select("SELECT * " +
+                        "FROM users " +
+                        "WHERE id = ?;",
                 new Object[]{id},
                 rs -> rs.next() && rs.getInt("email_approved") == APPROVED
         );
     }
 
     public boolean registered(String id) {
-        return pool.select("SELECT count(*) AS total FROM users WHERE id = ?;",
+        return pool.select("SELECT count(*) AS total " +
+                        "FROM users " +
+                        "WHERE id = ?;",
                 new Object[]{id},
                 rs -> exists(rs, " id " + id)
         );
@@ -138,14 +160,33 @@ public class Registration {
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
         
-        pool.update("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles) VALUES (?,?,?,?,?,?,?,?);",
-                new Object[]{id, email, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles)});
+        pool.update("INSERT INTO users " +
+                        "(id, " +
+                        "email, " +
+                        "readable_name, " +
+                        "email_approved, " +
+                        "password, " +
+                        "code, " +
+                        "data, " +
+                        "roles) " +
+                        "VALUES (?,?,?,?,?,?,?,?);",
+                new Object[]{id,
+                        email,
+                        readableName,
+                        NOT_APPROVED,
+                        password,
+                        code,
+                        data,
+                        GameAuthorities.joinRoles(roles)});
         
         return getUserByCode(code);
     }
 
     public String login(String id, String password) {
-        return pool.select("SELECT code, password FROM users WHERE id = ? AND email_approved = ?;",
+        return pool.select("SELECT code, password " +
+                        "FROM users " +
+                        "WHERE id = ? " +
+                        "AND email_approved = ?;",
                 new Object[]{id, APPROVED},
                 rs -> {
                     if (!rs.next()) {
@@ -188,78 +229,100 @@ public class Registration {
     }
 
     public String getIdByCode(String code) {
-        return pool.select("SELECT id FROM users WHERE code = ?;",
+        return pool.select("SELECT id " +
+                        "FROM users " +
+                        "WHERE code = ?;",
                 new Object[]{code},
-                rs -> rs.next() ? rs.getString("id") : null
-        );
+                rs -> extractParam(rs, "id"));
     }
 
     public boolean emailIsUsed(String email) {
-        return pool.select("SELECT count(*) AS total FROM users WHERE email = ?;",
+        return pool.select("SELECT count(*) AS total " +
+                        "FROM users " +
+                        "WHERE email = ?;",
                 new Object[]{email},
                 rs -> exists(rs, " email " + email)
         );
     }
 
     public boolean nameIsUsed(String name) {
-        return pool.select("SELECT count(*) AS total FROM users WHERE readable_name = ?;",
+        return pool.select("SELECT count(*) AS total " +
+                        "FROM users " +
+                        "WHERE readable_name = ?;",
                 new Object[]{name},
                 rs -> exists(rs, " name " + name)
         );
     }
 
     public String getEmailById(String id) {
-        return pool.select("SELECT email FROM users WHERE id = ?;",
+        return pool.select("SELECT email " +
+                        "FROM users " +
+                        "WHERE id = ?;",
                 new Object[]{id},
-                rs -> rs.next() ? rs.getString("email") : null
-        );
+                rs -> extractParam(rs, "email"));
     }
 
     public String getIdByName(String name) {
-        return pool.select("SELECT id FROM users WHERE readable_name = ?;",
+        return pool.select("SELECT id " +
+                        "FROM users " +
+                        "WHERE readable_name = ?;",
                 new Object[]{name},
-                rs -> rs.next() ? rs.getString("id") : null
-        );
+                rs -> extractParam(rs, "id"));
+    }
+
+    public String extractParam(ResultSet rs, String id) throws SQLException {
+        return rs.next() ? rs.getString(id) : null;
     }
 
     public String getIdByEmail(String email) {
-        return pool.select("SELECT id FROM users WHERE email = ?;",
+        return pool.select("SELECT id " +
+                        "FROM users " +
+                        "WHERE email = ?;",
                 new Object[]{email},
-                rs -> rs.next() ? rs.getString("id") : null
-        );
+                rs -> extractParam(rs, "id"));
     }
 
     public String getNameById(String id) {
-        return pool.select("SELECT readable_name FROM users WHERE id = ?;",
+        return pool.select("SELECT readable_name " +
+                        "FROM users " +
+                        "WHERE id = ?;",
                 new Object[]{id},
-                rs -> rs.next() ? rs.getString("readable_name") : null
-        );
+                rs -> extractParam(rs, "readable_name"));
     }
 
     public String getCodeById(String id) {
-        return pool.select("SELECT code FROM users WHERE id = ?;",
+        return pool.select("SELECT code " +
+                        "FROM users " +
+                        "WHERE id = ?;",
                 new Object[]{id},
-                rs -> rs.next() ? rs.getString("code") : null
-        );
+                rs -> extractParam(rs, "code"));
     }
 
     public void approve(String code) {
-        pool.update("UPDATE users SET email_approved = ? WHERE code = ?;",
+        pool.update("UPDATE users " +
+                        "SET email_approved = ? " +
+                        "WHERE code = ?;",
                 new Object[]{APPROVED, code});
     }
 
     public void updateReadableName(String id, String name) {
-        pool.update("UPDATE users SET readable_name = ? WHERE id = ?;",
+        pool.update("UPDATE users " +
+                        "SET readable_name = ? " +
+                        "WHERE id = ?;",
                 new Object[]{name, id});
     }
 
     public void updateId(String name, String id) {
-        pool.update("UPDATE users SET id = ? WHERE readable_name = ?;",
+        pool.update("UPDATE users " +
+                        "SET id = ? " +
+                        "WHERE readable_name = ?;",
                 new Object[]{id, name});
     }
 
     public void updateNameAndEmail(String id, String name, String email) {
-        pool.update("UPDATE users SET readable_name = ?, email = ? WHERE id = ?;",
+        pool.update("UPDATE users " +
+                        "SET readable_name = ?, email = ? " +
+                        "WHERE id = ?;",
                 new Object[]{name, email, id});
     }
 
@@ -283,7 +346,10 @@ public class Registration {
             super("anonymous", "", Collections.emptyList());
         }
 
-        public User(String id, String email, String readableName, int approved, String password, String code, String data, Collection<String> roles) {
+        public User(String id, String email, String readableName,
+                    int approved, String password, String code,
+                    String data, Collection<String> roles)
+        {
             super(email, password, GameAuthorities.toGranted(roles));
             this.id = id;
             this.email = email;
@@ -309,30 +375,31 @@ public class Registration {
     }
 
     public User getUserByCode(String code) {
-        return pool.select("SELECT * FROM users where code = ?", new Object[] {code}, rs -> {
-            if (!rs.next()) {
-                throw new UsernameNotFoundException(String.format("User with code '%s' does not exist", code));
-            }
-            return extractUser(rs);
-        });
+        return pool.select("SELECT * FROM users where code = ?",
+                new Object[]{code},
+                rs -> extractOptionalUser(rs))
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with code '%s' does not exist", code)));
     }
 
     public Optional<User> getUserByEmail(String email) {
-        return pool.select("SELECT * FROM users where email = ?", new Object[] {email}, rs -> {
-            if (!rs.next()) {
-                return Optional.empty();
-            }
-            return Optional.of(extractUser(rs));
-        });
+        return pool.select("SELECT * FROM users where email = ?",
+                new Object[]{email},
+                rs -> extractOptionalUser(rs));
+
     }
 
     public Optional<User> getUserById(String id) {
-        return pool.select("SELECT * FROM users where id = ?", new Object[] {id}, rs -> {
-            if (!rs.next()) {
-                return Optional.empty();
-            }
-            return Optional.of(extractUser(rs));
-        });
+        return pool.select("SELECT * FROM users where id = ?",
+                new Object[]{id},
+                rs -> extractOptionalUser(rs));
+    }
+
+    public Optional<User> extractOptionalUser(ResultSet rs) throws SQLException {
+        if (!rs.next()) {
+            return Optional.empty();
+        }
+        return Optional.of(extractUser(rs));
     }
 
     public List<User> getUsers() {
@@ -395,10 +462,27 @@ public class Registration {
         };
 
         if (getCodeById(user.getId()) == null) {
-            pool.update("INSERT INTO users (readable_name, email, email_approved, password, code, data, roles, id) VALUES (?,?,?,?,?,?,?,?);",
+            pool.update("INSERT INTO users " +
+                            "(readable_name, " +
+                            "email, " +
+                            "email_approved, " +
+                            "password, " +
+                            "code, " +
+                            "data, " +
+                            "roles, " +
+                            "id) " +
+                            "VALUES (?,?,?,?,?,?,?,?);",
                     parameters);
         } else {
-            pool.update("UPDATE users SET readable_name = ?, email = ?, email_approved = ?, password = ?, code = ?, data = ?, roles = ? WHERE id = ?;",
+            pool.update("UPDATE users " +
+                            "SET readable_name = ?, " +
+                            "email = ?, " +
+                            "email_approved = ?, " +
+                            "password = ?, " +
+                            "code = ?, " +
+                            "data = ?, " +
+                            "roles = ? " +
+                            "WHERE id = ?;",
                     parameters);
         }
     }
