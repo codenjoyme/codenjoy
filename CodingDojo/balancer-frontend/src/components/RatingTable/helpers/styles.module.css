@@ -31,8 +31,8 @@
 }
 
 :root {
-    --lampSize: 24px;
-    --marginLeft: 25px;
+    --lampSize: 17pxpx;
+    --marginLeft: 10px;
 }
 
 .exitedRoom {
