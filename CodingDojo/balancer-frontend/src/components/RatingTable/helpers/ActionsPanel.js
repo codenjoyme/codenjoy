@@ -6,6 +6,7 @@ import {
     faArrowRight,
     faAnchor,
     faLightbulb,
+    faPowerOff,
 } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
 
@@ -23,10 +24,10 @@ export default class ActionsPanel extends Component {
         } else if (this.props.isRoomJoined) {
             return 'Підключення до кімнати здійснено';
         } else if (this.props.ownIndex === -1) {
-            return 'У Вас відсутня ігрова кімната';
+            return 'Підключити мене в кімнату';
         }
 
-        return 'Ви знаходитеся в ігровій кімнаті';
+        return 'Ви знаходитеся в ігровій кімнаті. Вийти?';
     }
 
     _getLampStyle() {
@@ -128,7 +129,7 @@ export default class ActionsPanel extends Component {
                 />
                 { id && active && (
                     <FontAwesomeIcon
-                        icon={ faLightbulb }
+                        icon={ faPowerOff }
                         title={ this._getTitle() }
                         className={ this._getLampStyle() }
                         onClick={
