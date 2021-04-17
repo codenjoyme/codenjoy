@@ -515,14 +515,14 @@ public class PlayerServiceImpl implements PlayerService {
             // do nothing
         }
 
-        // TODO ROOM test me
         boolean updateRoomName = input.getRoom() != null
                 && !playerGame.getRoom().equals(input.getRoom());
         if (updateRoomName) {
-            updated.setRoom(input.getRoom());
-            // TODO тут как-то неочевидно, что создается рума если ее не существовало раннее
-            GameType game = gameService.getGameType(input.getGame(), input.getRoom());
-            playerGames.changeRoom(input.getId(), input.getRoom());
+            String id = input.getId();
+            String callbackUrl = input.getCallbackUrl();
+            String newRoom = input.getRoom();
+            String game = updated.getGame();
+            changeRoom(id, game, newRoom, callbackUrl);
         }
         
         Game game = playerGame.getGame();
@@ -534,6 +534,20 @@ public class PlayerServiceImpl implements PlayerService {
                         input.getId(),
                         new JSONObject(newSave));
             }
+        }
+    }
+
+    private void changeRoom(String id, String game, String newRoom, String url) {
+        String newGame = roomService.game(newRoom);
+        boolean changeRoom = newGame == null || game.equals(newGame);
+        if (changeRoom) {
+            // меняем комнату
+            gameService.getGameType(game, newRoom);     // тут создастся новая комната
+            playerGames.changeRoom(id, game, newRoom);
+        } else {
+            // меняем игру
+            remove(id);
+            register(id, newGame, newRoom, url);
         }
     }
 

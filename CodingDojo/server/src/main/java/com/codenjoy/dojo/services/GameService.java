@@ -42,6 +42,7 @@ public interface GameService {
 
     GameType getGameType(String game);
 
+    // TODO из названия как-то неочевидно, что создается рума если ее не существовало раннее
     GameType getGameType(String game, String room);
 
     String getDefaultRoom();

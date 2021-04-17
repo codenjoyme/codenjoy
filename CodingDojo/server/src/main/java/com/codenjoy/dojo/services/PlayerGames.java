@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.web.controller.Validator;
 import com.google.common.collect.Multimap;
 import lombok.experimental.FieldNameConstants;
 import org.json.JSONObject;
@@ -413,15 +414,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         playerGame.fireOnLevelChanged();
     }
 
-    // TODO а что если я поменяю комнату с изменением игры?
-    public void changeRoom(String playerId, String room) {
-        if (room == null) {
+    public void changeRoom(String playerId, String gameName, String newRoom) {
+        if (Validator.isEmpty(newRoom) || Validator.isEmpty(gameName)) {
             return;
         }
         PlayerGame playerGame = get(playerId);
+        if (!playerGame.getPlayer().getGame().equals(gameName)) {
+            return; // TODO а что если я поменяю комнату с изменением игры - тест
+        }
         JSONObject save = playerGame.getGame().getSave();
         Game game = playerGame.getGame();
-        reload(game, room, save);
+        reload(game, newRoom, save);
     }
 
     public PlayerGame get(int index) {
