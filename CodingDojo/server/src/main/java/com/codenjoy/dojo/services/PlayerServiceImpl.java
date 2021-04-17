@@ -682,9 +682,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void cleanScores(String id) {
         lock.writeLock().lock();
         try {
-            PlayerGame playerGame = playerGames.get(id);
-            playerGame.clearScore();
-            playerGame.getGame().getProgress().reset();
+            playerGames.get(id).clearScore();
         } finally {
             lock.writeLock().unlock();
         }

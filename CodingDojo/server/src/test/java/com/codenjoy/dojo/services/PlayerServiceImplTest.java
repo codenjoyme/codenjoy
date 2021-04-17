@@ -60,6 +60,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.verification.VerificationMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -213,13 +214,16 @@ public class PlayerServiceImplTest {
 
     public void setupGameType(GameType gameType, String game) {
         when(gameType.name()).thenReturn(game);
+
         when(gameType.getBoardSize(any())).thenReturn(v(15));
+
         when(gameType.getPlayerScores(anyInt(), any())).thenAnswer(inv -> {
             PlayerScores scores = mock(PlayerScores.class);
             when(scores.getScore()).thenReturn(0);
             playerScores.add(scores);
             return scores;
         });
+
         when(gameType.createGame(anyInt(), any())).thenAnswer(inv -> {
             GameField field = mock(GameField.class);
             gameFields.add(field);
@@ -227,6 +231,7 @@ public class PlayerServiceImplTest {
             when(field.reader()).thenReturn(mock(BoardReader.class));
             return field;
         });
+
         when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
                 .thenAnswer(inv -> {
                     String id = inv.getArgument(1);
@@ -243,12 +248,23 @@ public class PlayerServiceImplTest {
                     when(gamePlayer.isAlive()).thenReturn(true);
                     return gamePlayer;
                 });
+
         when(gameType.getPlots()).thenReturn(Elements.values());
+
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(printer));
-        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
+
+        spyMultiplayerType(gameType, MultiplayerType.SINGLE);
+
         if (gameTypePostSetup != null) {
             gameTypePostSetup.accept(gameType);
         }
+    }
+
+    // оборачиваем progress в spy - мы будем потом верифаить на нем что вызывалось
+    public static void spyMultiplayerType(GameType gameType, MultiplayerType real) {
+        MultiplayerType type = spy(real);
+        when(type.progress()).thenAnswer(inv -> spy(inv.callRealMethod()));
+        when(gameType.getMultiplayerType(any())).thenReturn(type);
     }
 
     static class APlayerHero extends PlayerHero implements NoActJoystick, NoDirectionJoystick {
@@ -1112,7 +1128,7 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         // then
-        verify(field1, times(1)).quietTick();
+        verify(field1, once()).quietTick();
     }
 
     @Test
@@ -1415,30 +1431,36 @@ public class PlayerServiceImplTest {
         playerService.cleanAllScores();
 
         // then
-        verify(playerScores(0)).clear();
-        verify(playerScores(1)).clear();
+        verify(playerScores(0), once()).clear();
+        verify(playerScores(1), once()).clear();
 
-        verify(gameField(VASYA)).clearScore();
-        verify(gameField(PETYA)).clearScore();
+        verify(gameField(VASYA), once()).clearScore();
+        verify(gameField(PETYA), once()).clearScore();
 
-        verify(semifinal).clean();
+        verify(playerGames.get(VASYA).getGame().getProgress(), once()).reset();
+        verify(playerGames.get(PETYA).getGame().getProgress(), once()).reset();
+
+        verify(semifinal, once()).clean();
     }
 
     @Test
     public void shouldCleanScores() {
         // given
-        createPlayer(VASYA);
-        createPlayer(PETYA);
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
 
         // when
         playerService.cleanScores(VASYA);
 
         // then
-        verify(playerScores(0), only()).clear();
+        verify(playerScores(0), once()).clear();
         verify(playerScores(1), never()).clear();
 
-        verify(gameField(VASYA), only()).clearScore();
+        verify(gameField(VASYA), once()).clearScore();
         verify(gameField(PETYA), never()).clearScore();
+
+        verify(playerGames.get(VASYA).getGame().getProgress(), once()).reset();
+        verify(playerGames.get(PETYA).getGame().getProgress(), never()).reset();
 
         verify(semifinal, never()).clean();
     }
@@ -1455,17 +1477,26 @@ public class PlayerServiceImplTest {
         playerService.cleanAllScores("room1");
 
         // then
-        verify(playerScores(0)).clear();
-        verify(playerScores(1)).clear();
-        verifyNoMoreInteractions(playerScores(2));
-        verifyNoMoreInteractions(playerScores(3));
+        verify(playerScores(0), once()).clear();
+        verify(playerScores(1), once()).clear();
+        verify(playerScores(2), never()).clear();
+        verify(playerScores(3), never()).clear();
 
-        verify(gameField(VASYA)).clearScore();
-        verify(gameField(PETYA)).clearScore();
+        verify(gameField(VASYA), once()).clearScore();
+        verify(gameField(PETYA), once()).clearScore();
         verify(gameField(KATYA), never()).clearScore();
         verify(gameField(OLIA), never()).clearScore();
 
-        verify(semifinal).clean("room1");
+        verify(playerGames.get(VASYA).getGame().getProgress(), once()).reset();
+        verify(playerGames.get(PETYA).getGame().getProgress(), once()).reset();
+        verify(playerGames.get(KATYA).getGame().getProgress(), never()).reset();
+        verify(playerGames.get(OLIA).getGame().getProgress(), never()).reset();
+
+        verify(semifinal, once()).clean("room1");
+    }
+
+    private VerificationMode once() {
+        return times(1);
     }
 
     private PlayerScores playerScores(int index) {

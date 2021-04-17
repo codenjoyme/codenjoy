@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.nullobj.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -228,5 +229,26 @@ public class PlayerGameTest {
         // then
         assertEquals("otherRoom", playerGame.getRoom());
         assertEquals("otherRoom", playerGame.getPlayer().getRoom());
+    }
+
+    @Test
+    public void testClearScores() {
+        // given
+        gameType = PlayerTest.mockGameType("game");
+        player = spy(new Player("player", "url", gameType,
+                NullPlayerScores.INSTANCE, NullInformation.INSTANCE));
+        game = mock(Game.class);
+        LevelProgress progress = mock(LevelProgress.class);
+        when(game.getProgress()).thenReturn(progress);
+
+        playerGame = new PlayerGame(player, game, "room");
+
+        // when
+        playerGame.clearScore();
+
+        // then
+        verify(game.getProgress()).reset();
+        verify(player).clearScore();
+        verify(game).clearScore();
     }
 }
