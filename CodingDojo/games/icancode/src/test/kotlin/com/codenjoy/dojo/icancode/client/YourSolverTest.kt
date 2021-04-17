@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.icancode.client
 
-import com.codenjoy.dojo.client.Direction
 import com.codenjoy.dojo.client.Solver
+import com.codenjoy.dojo.services.Direction
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -34,7 +34,7 @@ class YourKotlinSolverTest() {
 
     @Before
     fun setup() {
-        ai = YourKotlinSolver()
+        ai = YourKotlinSolver(null)
     }
 
     private fun board(layer1: String, layer2: String): Board {
