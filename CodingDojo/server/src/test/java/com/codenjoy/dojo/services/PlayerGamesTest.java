@@ -1311,7 +1311,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
 
         // then
         assertRooms("{0=[player2, player3], " +
@@ -1332,8 +1332,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.changeRoom("player1", "otherRoom");
-        playerGames.changeRoom("player3", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
+        playerGames.changeRoom("player3", "game", "otherRoom");
 
         // then
         assertRooms("{1=[player1, player3], " +
@@ -1354,7 +1354,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.changeRoom("player1", null);
+        playerGames.changeRoom("player1", "game", null);
 
         // then
         assertRooms("{0=[player1, player2, player3]}");
@@ -1384,7 +1384,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // потом один покидает комнату и переходит в другую
-        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
 
         // then
         //  второй игрок при этом остается один в комнате и потому сперва покидает ее заходя на новую
@@ -1410,8 +1410,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room=[[player1, player2], [player3, player4]]}");
 
         // when
-        playerGames.changeRoom("player1", "otherRoom");
-        playerGames.changeRoom("player2", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
+        playerGames.changeRoom("player2", "game", "otherRoom");
 
         // then
         assertRooms("{1=[player3, player4], " +
@@ -1438,8 +1438,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "otherRoom");
-        playerGames.changeRoom("player2", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
+        playerGames.changeRoom("player2", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1473,8 +1473,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "otherRoom");
-        playerGames.changeRoom("player2", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
+        playerGames.changeRoom("player2", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1505,8 +1505,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "otherRoom");
-        playerGames.changeRoom("player2", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
+        playerGames.changeRoom("player2", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1540,8 +1540,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "otherRoom");
-        playerGames.changeRoom("player2", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
+        playerGames.changeRoom("player2", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1572,7 +1572,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1603,7 +1603,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player1", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
