@@ -1299,6 +1299,25 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertEquals(fields.get(1), playerGames.get("player5").getField());
     }
 
+    @Test
+    public void testChangeRoom_doNothing_whenTryToChangeGame() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3]}");
+
+        // when
+        String changed = "otherGame";
+        playerGames.changeRoom("player1", changed, "otherRoom");
+
+        // then
+        assertRooms("{0=[player1, player2, player3]}");
+
+        assertRoomsNames("{room=[[player1, player2, player3]]}");
+    }
 
     @Test
     public void testChangeRoom_oneLeftTwoRemained() {
@@ -1344,7 +1363,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void testChangeRoom_nullRoomDoNothing() {
+    public void testChangeRoom_doNothing_whenNullParameters() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
         createPlayer("player1", "room", "game", type);
@@ -1355,6 +1374,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         playerGames.changeRoom("player1", "game", null);
+        playerGames.changeRoom("player1", "game", "");
+        playerGames.changeRoom("player1", null, "otherRoom");
+        playerGames.changeRoom("player1", "", "otherRoom");
 
         // then
         assertRooms("{0=[player1, player2, player3]}");

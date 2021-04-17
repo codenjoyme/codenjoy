@@ -420,7 +420,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
         PlayerGame playerGame = get(playerId);
         if (!playerGame.getPlayer().getGame().equals(gameName)) {
-            return; // TODO а что если я поменяю комнату с изменением игры - тест
+            return;
         }
         JSONObject save = playerGame.getGame().getSave();
         Game game = playerGame.getGame();
