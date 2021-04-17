@@ -452,13 +452,13 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void updateAll(List<PlayerInfo> players) {
+    public void updateAll(List<? extends Player> players) {
         lock.writeLock().lock();
         try {
             if (players == null) {
                 return;
             }
-            Iterator<PlayerInfo> iterator = players.iterator();
+            Iterator<? extends Player> iterator = players.iterator();
             while (iterator.hasNext()) {
                 Player player = iterator.next();
                 if (player.getId() == null) {
@@ -479,7 +479,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void update(Player player) { // TODO test me
+    public void update(Player player) {
         lock.writeLock().lock();
         try {
             updatePlayer(playerGames.get(player.getId()), player);
@@ -750,5 +750,4 @@ public class PlayerServiceImpl implements PlayerService {
                 .filter(player -> room.equals(player.getRoom()))
                 .count();
     }
-
 }

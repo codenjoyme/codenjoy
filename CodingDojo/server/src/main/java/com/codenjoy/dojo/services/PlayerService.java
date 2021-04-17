@@ -37,7 +37,7 @@ public interface PlayerService extends Tickable {
     void update(Player player);
     boolean contains(String id);
     Player get(String id);
-    void updateAll(List<PlayerInfo> players);
+    void updateAll(List<? extends Player> players);
     void removeAll();
     void removeAll(String room);
     Player getRandom(String game);

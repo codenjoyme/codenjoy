@@ -933,6 +933,25 @@ public class PlayerServiceImplTest {
                 roomCounts.toString());
     }
 
+    @Test
+    public void shouldGetAnyGameWithPlayers() {
+        // given
+        createPlayer(VASYA, "game1", "room1");
+        createPlayer(PETYA, "game1", "room1");
+        createPlayer(KATYA, "game1", "room2");
+        createPlayer(OLIA, "game3", "room3");
+        gameService.getGameType("game4", "room4");
+
+        when(roomService.names()).thenReturn(Arrays.asList(
+                "room1", "room2", "room3", "room4"));
+
+        // when
+        GameType gameType = playerService.getAnyGameWithPlayers();
+
+        // then
+        assertEquals("game1", gameType.name());
+    }
+
     private void assertPlayers(String expected) {
         assertEquals(expected,
                 playerService.getAll().stream()
@@ -1476,13 +1495,26 @@ public class PlayerServiceImplTest {
 
         // when
         List<PlayerInfo> infos = new LinkedList<>();
-        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
-        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "new-game"));
+        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "game"));
+        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "game"));
         playerService.updateAll(infos);
 
         // then
-        List<Player> all = playerService.getAll();
-        assertUpdatedVasyaAndPetya(all);
+        assertUpdated("[new-vasya, new-petya]", playerService.getAll());
+    }
+
+    @Test
+    public void shouldUpdate_mainCase() {
+        // given
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        // when
+        playerService.update(new PlayerInfo(VASYA, "new-pass1", "new-url1", "game"));
+        playerService.update(new PlayerInfo(PETYA, "new-pass2", "new-url2", "game"));
+
+        // then
+        assertUpdated("[vasya, petya]", playerService.getAll());
     }
 
     @Test
@@ -1495,8 +1527,8 @@ public class PlayerServiceImplTest {
         // TODO implement
     }
 
-    private void assertUpdatedVasyaAndPetya(List<Player> all) {
-        assertEquals("[new-vasya, new-petya]", all.toString());
+    private void assertUpdated(String expected, List<Player> all) {
+        assertEquals(expected, all.toString());
 
         Player player1 = all.get(0);
         assertEquals("new-url1", player1.getCallbackUrl());
@@ -1519,14 +1551,13 @@ public class PlayerServiceImplTest {
 
         // when
         List<PlayerInfo> infos = new LinkedList<>();
-        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
-        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "new-game"));
-        infos.add(new PlayerInfo(null, "new-pass2", "new-url2", "new-game"));
+        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "game"));
+        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "game"));
+        infos.add(new PlayerInfo(null, "new-pass2", "new-url2", "game"));
         playerService.updateAll(infos);
 
         // then
-        List<Player> all = playerService.getAll();
-        assertUpdatedVasyaAndPetya(all);
+        assertUpdated("[new-vasya, new-petya]", playerService.getAll());
     }
 
     @Test
@@ -1536,7 +1567,7 @@ public class PlayerServiceImplTest {
         createPlayer(PETYA);
 
         List<PlayerInfo> infos = new LinkedList<>();
-        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
+        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "game"));
 
         try {
             // when

@@ -89,6 +89,7 @@ public class AdminController {
         saveService.load(id, getGameName(request), getGameRoom(request), save);
         return "redirect:/board/player/" + id;
     }
+
     // используется как rest для апдейта полей конкретного player на admin page
     @PostMapping("/user/info")
     public @ResponseBody String update(@RequestBody Player player) {
