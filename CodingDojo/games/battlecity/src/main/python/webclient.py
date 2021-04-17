@@ -41,7 +41,6 @@ def _on_message(webclient, message):
     """
     try:
         board = message.lstrip("board=")
-        print(board)
         webclient.send(webclient._solver.get(board))
     except Exception as e:
         print("Exception occurred")

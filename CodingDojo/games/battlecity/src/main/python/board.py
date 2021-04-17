@@ -46,7 +46,6 @@ class Board:
         self._string = board_string.replace('\n', '')
         self._len = len(self._string)  # the length of the string
         self._size = int(sqrt(self._len))  # size of the board
-        print("Board size is sqrt", self._len, self._size)
         self._board = []
 
     def _find_all(self, element):
@@ -197,7 +196,7 @@ class Board:
             return None
 
     def to_string(self):
-        return ("Board:\n{brd}\nTank at: {tnk}\nOther Tank "
+        return ("\nBoard:\n{brd}\nTank at: {tnk}\nOther Tank "
                 "at: {other}\nAI Tank at: {aitnk}\nBullet at:"
                 "{blt}".format(brd=self._line_by_line(),
                                tnk=self.my_tank,
