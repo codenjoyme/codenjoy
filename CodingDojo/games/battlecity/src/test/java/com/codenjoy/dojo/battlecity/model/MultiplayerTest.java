@@ -107,6 +107,106 @@ public class MultiplayerTest {
     }
 
     @Test
+    public void shouldCantDoAnything_whenRoundIsNotStarted_whenRoundsEnabled() {
+        settings.bool(ROUNDS_ENABLED, true);
+
+        dice(1, 1,
+                1, 2,
+                2, 2);
+
+        givenGame();
+
+        tanks1.newGame();
+        tanks2.newGame();
+
+        assertEquals(false, hero1().isActive());
+        assertEquals(true, hero1().isAlive());
+
+        assertEquals(false, hero2().isActive());
+        assertEquals(true, hero2().isAlive());
+
+        assertD("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼˄  ☼\n" +
+                "☼▲  ☼\n" +
+                "☼☼☼☼☼\n", player1
+        );
+
+        hero1().right();
+        hero1().act();
+
+        hero2().right();
+        game.tick();
+
+        assertEquals(false, hero1().isActive());
+        assertEquals(true, hero1().isAlive());
+
+        assertEquals(false, hero2().isActive());
+        assertEquals(true, hero2().isAlive());
+
+        assertD("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼˄  ☼\n" +
+                "☼▲  ☼\n" +
+                "☼☼☼☼☼\n", player1
+        );
+    }
+
+    @Test
+    public void shouldCanDoAnything_whenRoundsDisabled() {
+        settings.bool(ROUNDS_ENABLED, false);
+
+        dice(1, 1,
+                1, 2,
+                2, 2);
+
+        givenGame();
+
+        tanks1.newGame();
+        tanks2.newGame();
+
+        assertEquals(true, hero1().isActive());
+        assertEquals(true, hero1().isAlive());
+
+        assertEquals(true, hero2().isActive());
+        assertEquals(true, hero2().isAlive());
+
+        assertD("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼˄  ☼\n" +
+                "☼▲  ☼\n" +
+                "☼☼☼☼☼\n", player1
+        );
+
+        hero1().right();
+        hero1().act();
+
+        hero2().right();
+        game.tick();
+
+        assertEquals(true, hero1().isActive());
+        assertEquals(true, hero1().isAlive());
+
+        assertEquals(true, hero2().isActive());
+        assertEquals(true, hero2().isAlive());
+
+        assertD("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ˃ ☼\n" +
+                "☼ ►•☼\n" +
+                "☼☼☼☼☼\n", player1
+        );
+    }
+
+    public Tank hero2() {
+        return (Tank) tanks2.getPlayer().getHero();
+    }
+
+    public Tank hero1() {
+        return (Tank) tanks1.getPlayer().getHero();
+    }
+
+    @Test
     public void shouldRandomPosition_whenKillTank() {
         dice(1, 1,
                 1, 2,
@@ -124,7 +224,7 @@ public class MultiplayerTest {
                 "☼☼☼☼☼\n", player1
         );
 
-        tanks1.getPlayer().getHero().act();
+        hero1().act();
         game.tick();
 
         assertD("☼☼☼☼☼\n" +
@@ -167,7 +267,7 @@ public class MultiplayerTest {
                 "☼☼☼☼☼\n", player1
         );
 
-        tanks1.getPlayer().getHero().act();
+        hero1().act();
         game.tick();
 
         assertD("☼☼☼☼☼\n" +
@@ -215,7 +315,7 @@ public class MultiplayerTest {
                 "☼☼☼☼☼\n", player1
         );
 
-        tanks1.getPlayer().getHero().act();
+        hero1().act();
         game.tick();
 
         assertD("☼☼☼☼☼\n" +
