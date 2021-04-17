@@ -41,6 +41,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public enum Keys implements Key {
 
+        CHEATS("Cheats enabled"),
         PERK_DROP_RATIO("Perk drop ratio"),
         PERK_AVAILABILITY("Perk availability"),
         PERK_ACTIVITY("Perk activity"),
@@ -78,6 +79,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
+        bool(CHEATS, false);
         integer(PERK_DROP_RATIO, 50);
         integer(PERK_AVAILABILITY, 10);
         integer(PERK_ACTIVITY, 10);

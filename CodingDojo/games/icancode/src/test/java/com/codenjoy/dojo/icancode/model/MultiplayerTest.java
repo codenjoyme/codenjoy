@@ -314,6 +314,142 @@ public class MultiplayerTest {
     }
 
     @Test
+    public void shouldNextLevel_whenUseCheat() {
+        // given
+        settings.bool(CHEATS, false);
+
+        givenFl("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘",
+                "╔══┐" +
+                "║S.│" +
+                "║E.│" +
+                "└──┘",
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        // when
+        hero1().act(-1);
+        tick();
+
+        verifyNoInteractions(listener1);
+
+        // when
+        settings.bool(CHEATS, true);
+        hero1().act(-1);
+        tick();
+
+        // then
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
+
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║E.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when
+        hero1().act(-1);
+        tick();
+
+        // then
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║E.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when
+        hero1().act(-1);
+        tick();
+
+        // then
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        verifyNoMoreInteractions(listener1);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+    }
+
+    @Test
     public void shouldSeveralPlayersCollectionAtLastLevel() {
         // given
         givenFl("╔══┐" +
