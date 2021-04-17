@@ -36,7 +36,7 @@ public class PlayerInfo extends Player {
     private boolean hidden;
     private boolean aiPlayer;
 
-    private PlayerInfo(String id, String readableName, String code, String url, String room, String game, Object scoreValue, boolean saved) {
+    protected PlayerInfo(String id, String readableName, String code, String url, String room, String game, Object scoreValue, boolean saved) {
         setId(id);
         setReadableName(readableName);
         setCode(code);

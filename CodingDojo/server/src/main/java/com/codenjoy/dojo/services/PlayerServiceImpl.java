@@ -209,7 +209,7 @@ public class PlayerServiceImpl implements PlayerService {
         String room = save.getRoom();
 
         if (!gameService.exists(game)) {
-            return NullPlayer.INSTANCE;
+            return NullPlayer.INSTANCE; // TODO test me
         }
 
         Player player = getPlayer(save, game, room);
@@ -332,7 +332,7 @@ public class PlayerServiceImpl implements PlayerService {
                 String board = cacheBoards.get(player);
                 // TODO в конце концов если if (pair == null || pair.noSockets()) то ничего не отправляется, и зря гоняли но вроде как из кеша берем, так что проблем быть не должно
                 if (playerController.requestControl(player, board)) {
-                    requested++;
+                    requested++; // TODO test me
                 }
             } catch (Exception e) {
                 log.error("Unable to send control request to player " + player.getId() +
@@ -515,14 +515,20 @@ public class PlayerServiceImpl implements PlayerService {
             // do nothing
         }
 
+        boolean updateCallbackUrl = StringUtils.isNotEmpty(input.getCallbackUrl());
+        if (updateCallbackUrl) {
+            updated.setCallbackUrl(input.getCallbackUrl());
+        }
+
         boolean updateRoomName = input.getRoom() != null
                 && !playerGame.getRoom().equals(input.getRoom());
         if (updateRoomName) {
             String id = input.getId();
-            String callbackUrl = input.getCallbackUrl();
+            String callbackUrl = updated.getCallbackUrl();
             String newRoom = input.getRoom();
+            String newGame = input.getGame();
             String game = updated.getGame();
-            changeRoom(id, game, newRoom, callbackUrl);
+            changeRoom(id, game, newGame, newRoom, callbackUrl);
         }
         
         Game game = playerGame.getGame();
@@ -537,8 +543,12 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    private void changeRoom(String id, String game, String newRoom, String url) {
-        String newGame = roomService.game(newRoom);
+    private void changeRoom(String id, String game, String newGame, String newRoom, String url) {
+        if (StringUtils.isEmpty(newGame)) {
+            // если игру не указали, пробуем достать из комнаты
+            newGame = roomService.game(newRoom);
+        }
+        // если такой комнаты нет или игра не отличается - мы меняем только комнату
         boolean changeRoom = newGame == null || game.equals(newGame);
         if (changeRoom) {
             // меняем комнату
@@ -668,7 +678,7 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    @Override
+    @Override // TODO test me
     public void cleanScores(String id) {
         lock.writeLock().lock();
         try {
@@ -679,7 +689,7 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    @Override
+    @Override // TODO test me
     public void reloadAllRooms() {
         lock.writeLock().lock();
         try {
@@ -689,7 +699,7 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    @Override
+    @Override // TODO test me
     public void reloadAllRooms(String room) {
         lock.writeLock().lock();
         try {

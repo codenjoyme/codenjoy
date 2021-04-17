@@ -176,6 +176,7 @@ public class PlayerServiceImplTest {
         when(gameService.getGameType(anyString(), anyString())).thenAnswer(inv -> {
             String game = inv.getArgument(0);
             String room = inv.getArgument(1);
+            when(roomService.game(room)).thenReturn(game);
             return getGameType(game, room);
         });
         when(gameService.exists(anyString())).thenReturn(true);
@@ -198,7 +199,7 @@ public class PlayerServiceImplTest {
         playerService.init();
     }
 
-    public Object getGameType(String game, String room) {
+    public GameType getGameType(String game, String room) {
         if (!gameTypes.containsKey(room)) {
             GameType gameType = mock(GameType.class);
             setupGameType(gameType, game);
@@ -1515,6 +1516,191 @@ public class PlayerServiceImplTest {
 
         // then
         assertUpdated("[vasya, petya]", playerService.getAll());
+    }
+
+    @Test
+    public void shouldUpdate_changeRoom_caseNewRoom_sameGame_chooseGame() {
+        // given
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
+
+        assertEquals("[vasya, petya]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[vasya, petya]",
+                playerService.getAllInRoom("room").toString());
+
+        // when
+        playerService.update(new PlayerInfo(VASYA, null, null, null,
+                "otherRoom", "game", null, true));
+
+        // then
+        assertEquals("[vasya, petya]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[petya]",
+                playerService.getAllInRoom("room").toString());
+
+        assertEquals("[vasya]",
+                playerService.getAllInRoom("otherRoom").toString());
+    }
+
+    @Test
+    public void shouldUpdate_changeRoom_caseNewRoom_sameGame_notSetGame() {
+        // given
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
+
+        assertEquals("[vasya, petya]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[vasya, petya]",
+                playerService.getAllInRoom("room").toString());
+
+        // when
+        String game = null; // мы не установили игру
+        playerService.update(new PlayerInfo(VASYA, null, null, null,
+                "otherRoom", game, null, true));
+
+        // then
+        assertEquals("[vasya, petya]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[petya]",
+                playerService.getAllInRoom("room").toString());
+
+        assertEquals("[vasya]",
+                playerService.getAllInRoom("otherRoom").toString());
+    }
+
+    @Test
+    public void shouldUpdate_changeRoom_caseExistingRoom_sameGame_chooseGame() {
+        // given
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
+        createPlayer(OLIA, "game", "otherRoom");
+
+        assertEquals("[vasya, petya, olia]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[vasya, petya]",
+                playerService.getAllInRoom("room").toString());
+
+        assertEquals("[olia]",
+                playerService.getAllInRoom("otherRoom").toString());
+
+        // when
+        playerService.update(new PlayerInfo(VASYA, null, null, null,
+                "otherRoom", "game", null, true));
+
+        // then
+        assertEquals("[vasya, petya, olia]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[petya]",
+                playerService.getAllInRoom("room").toString());
+
+        assertEquals("[vasya, olia]",
+                playerService.getAllInRoom("otherRoom").toString());
+    }
+
+    @Test
+    public void shouldUpdate_changeRoom_caseExistingRoom_sameGame_notSetGame() {
+        // given
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
+        createPlayer(OLIA, "game", "otherRoom");
+
+        assertEquals("[vasya, petya, olia]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[vasya, petya]",
+                playerService.getAllInRoom("room").toString());
+
+        assertEquals("[olia]",
+                playerService.getAllInRoom("otherRoom").toString());
+
+        // when
+        String game = null; // мы не установили игру
+        playerService.update(new PlayerInfo(VASYA, null, null, null,
+                "otherRoom", game, null, true));
+
+        // then
+        assertEquals("[vasya, petya, olia]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[petya]",
+                playerService.getAllInRoom("room").toString());
+
+        assertEquals("[vasya, olia]",
+                playerService.getAllInRoom("otherRoom").toString());
+    }
+
+    @Test
+    public void shouldUpdate_changeRoom_caseNewRoom_otherGame() {
+        // given
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
+
+        assertEquals("[vasya, petya]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[vasya, petya]",
+                playerService.getAllInRoom("room").toString());
+
+        // when
+        playerService.update(new PlayerInfo(VASYA, null, null, null,
+                "otherRoom", "otherGame", null, true));
+
+        // then
+        assertEquals("[petya]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[vasya]",
+                playerService.getAll("otherGame").toString());
+
+        assertEquals("[petya]",
+                playerService.getAllInRoom("room").toString());
+
+        assertEquals("[vasya]",
+                playerService.getAllInRoom("otherRoom").toString());
+    }
+
+    @Test
+    public void shouldUpdate_changeRoom_caseExistingRoom_otherGame() {
+        // given
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
+        createPlayer(OLIA, "otherGame", "otherRoom");
+
+        assertEquals("[vasya, petya]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[olia]",
+                playerService.getAll("otherGame").toString());
+
+        assertEquals("[vasya, petya]",
+                playerService.getAllInRoom("room").toString());
+
+        assertEquals("[olia]",
+                playerService.getAllInRoom("otherRoom").toString());
+
+        // when
+        playerService.update(new PlayerInfo(VASYA, null, null, null,
+                "otherRoom", "otherGame", null, true));
+
+        // then
+        assertEquals("[petya]",
+                playerService.getAll("game").toString());
+
+        assertEquals("[olia, vasya]",
+                playerService.getAll("otherGame").toString());
+
+        assertEquals("[petya]",
+                playerService.getAllInRoom("room").toString());
+
+        assertEquals("[olia, vasya]",
+                playerService.getAllInRoom("otherRoom").toString());
     }
 
     @Test
