@@ -150,6 +150,7 @@ public class PlayerServiceImplTest {
     private List<GamePlayer> gamePlayers = new LinkedList<>();
     private List<GameField> gameFields = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
+    private List<String> ids = new LinkedList<>();
     private List<PlayerHero> heroesData = new LinkedList<>();
     private List<PlayerScores> playerScores = new LinkedList<>();
     private Map<String, Integer> chatIds = new HashMap<>();
@@ -228,6 +229,9 @@ public class PlayerServiceImplTest {
         });
         when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
                 .thenAnswer(inv -> {
+                    String id = inv.getArgument(1);
+                    ids.add(id);
+
                     Joystick joystick = mock(Joystick.class);
                     joysticks.add(joystick);
 
@@ -1689,11 +1693,14 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendPlayerNameToGame() {
         // given
-        createPlayer(VASYA);
-        createPlayer(PETYA);
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
+        createPlayer(OLIA, "game", "otherRoom");
+        createPlayer(KATYA, "otherGame", "otherRoom2");
 
         // when then
-        // TODO implement
+        assertEquals("[vasya, petya, olia, katya]", players.toString());
+        assertEquals("[vasya, petya, olia, katya]", ids.toString());
     }
 
     private void assertUpdated(String expected, List<Player> all) {
