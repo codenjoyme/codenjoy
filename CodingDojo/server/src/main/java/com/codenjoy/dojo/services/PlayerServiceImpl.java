@@ -420,7 +420,7 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getAll(String game) {
         lock.readLock().lock();
         try {
-            return playerGames.getPlayers(game);
+            return playerGames.getPlayersByGame(game);
         } finally {
             lock.readLock().unlock();
         }
@@ -709,7 +709,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return playerGames.iterator().next().getPlayer();
             }
 
-            Iterator<Player> iterator = playerGames.getPlayers(game).iterator();
+            Iterator<Player> iterator = playerGames.getPlayersByGame(game).iterator();
             if (!iterator.hasNext()) return NullPlayer.INSTANCE;
             return iterator.next();
         } finally {

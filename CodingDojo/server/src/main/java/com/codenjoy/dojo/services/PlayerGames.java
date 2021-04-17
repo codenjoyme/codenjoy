@@ -247,17 +247,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
      * @return Возвращает уникальные (недублирующиеся) GameType в которые сейчас играют.
      */
     public List<GameType> getGameTypes() {
-        List<GameType> result = new LinkedList<>();
+        Map<String, GameType> result = new LinkedHashMap<>();
 
         for (PlayerGame playerGame : all) {
             GameType gameType = playerGame.getGameType();
             gameType = RoomGameType.unwrap(gameType);
-            if (!result.contains(gameType)) {
-                result.add(gameType);
+            if (!result.containsKey(gameType.name())) {
+                result.put(gameType.name(), gameType);
             }
         }
 
-        return result;
+        return new ArrayList<>(result.values());
     }
 
     @Override
@@ -376,7 +376,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 .forEach(pg -> remove(pg.getPlayer()));
     }
 
-    public List<Player> getPlayers(String game) {
+    public List<Player> getPlayersByGame(String game) {
         return all.stream()
                 .map(playerGame -> playerGame.getPlayer())
                 .filter(player -> player.getGame().equals(game))

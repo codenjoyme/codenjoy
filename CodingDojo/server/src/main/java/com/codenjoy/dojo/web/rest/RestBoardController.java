@@ -186,7 +186,7 @@ public class RestBoardController {
 
     @GetMapping("/{game}/status")
     public Map<String, Object> checkGameIsActive(@PathVariable("game") String game) {
-        boolean active = playerGames.getPlayers(game).size() > 0;
+        boolean active = playerGames.getPlayersByGame(game).size() > 0;
         return Collections.singletonMap("active", active);
     }
 }

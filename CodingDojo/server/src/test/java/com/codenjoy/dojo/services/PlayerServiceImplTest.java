@@ -66,6 +66,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -138,11 +139,9 @@ public class PlayerServiceImplTest {
     @Autowired
     private PlayerServiceImpl playerService;
 
-    @Mock
-    private GameType gameType;
-    
+
     private InformationCollector informationCollector;
-    
+
     @Mock
     private GraphicPrinter printer;
     private List<Joystick> joysticks = new LinkedList<>();
@@ -152,6 +151,8 @@ public class PlayerServiceImplTest {
     private List<PlayerHero> heroesData = new LinkedList<>();
     private List<PlayerScores> playerScores = new LinkedList<>();
     private Map<String, Integer> chatIds = new HashMap<>();
+    private Map<String, GameType> gameTypes = new HashMap<>();
+    private Consumer<GameType> gameTypePostSetup;
 
     @Before
     public void setUp() {
@@ -167,44 +168,19 @@ public class PlayerServiceImplTest {
 
         when(printer.print(any(), any())).thenReturn("1234");
 
-        when(gameService.getGameType(anyString())).thenReturn(gameType);
-        when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
+        heroesData.addAll(Arrays.asList(heroData(1, 2), heroData(3, 4), heroData(5, 6), heroData(7, 8)));
+        when(gameService.getGameType(anyString())).thenAnswer(inv -> {
+            String game = inv.getArgument(0);
+            return getGameType(game, game);
+        });
+        when(gameService.getGameType(anyString(), anyString())).thenAnswer(inv -> {
+            String game = inv.getArgument(0);
+            String room = inv.getArgument(1);
+            return getGameType(game, room);
+        });
         when(gameService.exists(anyString())).thenReturn(true);
 
         when(chat.getLastMessageIds()).thenReturn(chatIds);
-
-        when(gameType.getBoardSize(any())).thenReturn(v(15));
-        when(gameType.getPlayerScores(anyInt(), any())).thenAnswer(inv -> {
-            PlayerScores scores = mock(PlayerScores.class);
-            when(scores.getScore()).thenReturn(0);
-            playerScores.add(scores);
-            return scores;
-        });
-        when(gameType.createGame(anyInt(), any())).thenAnswer(inv -> {
-            GameField field = mock(GameField.class);
-            gameFields.add(field);
-
-            when(field.reader()).thenReturn(mock(BoardReader.class));
-            return field;
-        });
-        heroesData.addAll(Arrays.asList(heroData(1, 2), heroData(3, 4), heroData(5, 6), heroData(7, 8)));
-        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
-                .thenAnswer(inv -> {
-                    Joystick joystick = mock(Joystick.class);
-                    joysticks.add(joystick);
-
-                    GamePlayer gamePlayer = mock(GamePlayer.class);
-                    gamePlayers.add(gamePlayer);
-
-                    when(gamePlayer.getJoystick()).thenReturn(joystick);
-                    when(gamePlayer.getHero()).thenReturn(heroesData.get(gamePlayers.size() - 1));
-                    when(gamePlayer.isAlive()).thenReturn(true);
-                    return gamePlayer;
-                });
-        when(gameType.name()).thenReturn("game");
-        when(gameType.getPlots()).thenReturn(Elements.values());
-        when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(printer));
-        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
 
         // по умолчанию все команаты будут активными и открытыми для регистрации
         when(roomService.isActive(anyString())).thenReturn(true);
@@ -220,6 +196,52 @@ public class PlayerServiceImplTest {
         playerService.openRegistration();
 
         playerService.init();
+    }
+
+    public Object getGameType(String game, String room) {
+        if (!gameTypes.containsKey(room)) {
+            GameType gameType = mock(GameType.class);
+            setupGameType(gameType, game);
+            gameTypes.put(room, gameType);
+        }
+        return gameTypes.get(room);
+    }
+
+    public void setupGameType(GameType gameType, String game) {
+        when(gameType.name()).thenReturn(game);
+        when(gameType.getBoardSize(any())).thenReturn(v(15));
+        when(gameType.getPlayerScores(anyInt(), any())).thenAnswer(inv -> {
+            PlayerScores scores = mock(PlayerScores.class);
+            when(scores.getScore()).thenReturn(0);
+            playerScores.add(scores);
+            return scores;
+        });
+        when(gameType.createGame(anyInt(), any())).thenAnswer(inv -> {
+            GameField field = mock(GameField.class);
+            gameFields.add(field);
+
+            when(field.reader()).thenReturn(mock(BoardReader.class));
+            return field;
+        });
+        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
+                .thenAnswer(inv -> {
+                    Joystick joystick = mock(Joystick.class);
+                    joysticks.add(joystick);
+
+                    GamePlayer gamePlayer = mock(GamePlayer.class);
+                    gamePlayers.add(gamePlayer);
+
+                    when(gamePlayer.getJoystick()).thenReturn(joystick);
+                    when(gamePlayer.getHero()).thenReturn(heroesData.get(gamePlayers.size() - 1));
+                    when(gamePlayer.isAlive()).thenReturn(true);
+                    return gamePlayer;
+                });
+        when(gameType.getPlots()).thenReturn(Elements.values());
+        when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(printer));
+        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
+        if (gameTypePostSetup != null) {
+            gameTypePostSetup.accept(gameType);
+        }
     }
 
     private PlayerHero heroData(int x, int y) {
@@ -279,7 +301,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayer() {
         // given
-        createPlayer(VASYA);
+        createPlayer(VASYA, "game", "room");
 
         // when
         Player player = playerService.get(VASYA);
@@ -290,9 +312,13 @@ public class PlayerServiceImplTest {
         assertNull(player.getPassword());
         assertNull(player.getCode());
         assertEquals(VASYA_URL, player.getCallbackUrl());
-        assertSame(gameType, player.getGameType());
+        assertSame(gameType("room"), player.getGameType());
         assertNull(player.getMessage());
         assertEquals(0, player.getScore());
+    }
+
+    private GameType gameType(String room) {
+        return gameTypes.get(room);
     }
 
     @Test
@@ -486,8 +512,8 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendAdditionalInfoToAllPlayers() {
         // given
-        createPlayer(VASYA);
-        createPlayer(PETYA);
+        createPlayer(VASYA, "game", "room1");
+        createPlayer(PETYA, "game", "room2");
 
         when(printer.print(any(), any()))
                 .thenReturn("1234")
@@ -614,7 +640,7 @@ public class PlayerServiceImplTest {
     }
 
     private Player createPlayer(String id) {
-        return createPlayer(id, id + " game", id + " room");
+        return createPlayer(id, "game", "room");
     }
 
     private Player createPlayer(String id, String game, String room) {
@@ -628,7 +654,7 @@ public class PlayerServiceImplTest {
         chatIds.put(room, Math.abs(id.hashCode()));
 
         if (player != NullPlayer.INSTANCE) {
-            verify(gameType, atLeastOnce()).createGame(anyInt(), any());
+            verify(gameType(room), atLeastOnce()).createGame(anyInt(), any());
         }
 
         return player;
@@ -675,7 +701,7 @@ public class PlayerServiceImplTest {
         playerService.register(save);
 
         // then
-        verify(gameType).getPlayerScores(eq(100), any());
+        verify(gameType("room")).getPlayerScores(eq(100), any());
         when(playerScores(0).getScore()).thenReturn(100);
 
         Player player = playerService.get(VASYA);
@@ -697,7 +723,7 @@ public class PlayerServiceImplTest {
         playerService.register(save);
 
         // then
-        verify(gameType).getPlayerScores(eq(200), any());
+        verify(gameType("other_room")).getPlayerScores(eq(200), any());
         when(playerScores(1).getScore()).thenReturn(200);
 
         Player player = playerService.get(VASYA);
@@ -710,7 +736,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldNotUpdatePlayerFromSavedPlayerGame_whenPlayerAlreadyRegistered_whenSameGameType() {
         // given
-        Player registeredPlayer = createPlayer(VASYA);
+        Player registeredPlayer = createPlayer(VASYA, "game", "room");
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
         assertEquals(0, registeredPlayer.getScore());
 
@@ -720,8 +746,8 @@ public class PlayerServiceImplTest {
         playerService.register(save);
 
         // then
-        verify(gameType).getPlayerScores(eq(0), any());
-        when(playerScores(1).getScore()).thenReturn(0);
+        verify(gameType("room")).getPlayerScores(eq(0), any());
+        when(playerScores(0).getScore()).thenReturn(0);
 
         Player player = playerService.get(VASYA);
 
@@ -851,6 +877,44 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void shouldGetAllInRoom() {
+        // given
+        createPlayer(VASYA, "game1", "room1");
+        createPlayer(PETYA, "game1", "room1");
+        createPlayer(KATYA, "game1", "room2");
+        createPlayer(OLIA, "game3", "room3");
+
+        // when then
+        assertEquals("[vasya, petya]",
+                playerService.getAllInRoom("room1").toString());
+
+        assertEquals("[katya]",
+                playerService.getAllInRoom("room2").toString());
+
+        assertEquals("[olia]",
+                playerService.getAllInRoom("room3").toString());
+
+        assertEquals("[]",
+                playerService.getAllInRoom("room4").toString());
+    }
+
+    @Test
+    public void shouldGetAll_forGame() {
+        // given
+        createPlayer(VASYA, "game1", "room1");
+        createPlayer(PETYA, "game1", "room1");
+        createPlayer(KATYA, "game1", "room2");
+        createPlayer(OLIA, "game3", "room3");
+
+        // when then
+        assertEquals("[vasya, petya, katya]",
+                playerService.getAll("game1").toString());
+
+        assertEquals("[olia]",
+                playerService.getAll("game3").toString());
+    }
+
+    @Test
     public void shouldGetRoomCounts() {
         // given
         createPlayer(VASYA, "game1", "room1");
@@ -880,8 +944,8 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldTickForEachGames_whenSeparateBordersGameType() {
         // given
-        createPlayer(VASYA);
-        createPlayer(PETYA);
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
 
         Game game1 = createGame(gameField(VASYA));
         Game game2 = createGame(gameField(PETYA));
@@ -891,7 +955,7 @@ public class PlayerServiceImplTest {
         setup(game1);
         setup(game2);
 
-        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
+        when(gameType("room").getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
 
         // when
         playerService.tick();
@@ -910,8 +974,8 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldContinueTicks_whenException() {
         // given
-        createPlayer(VASYA);
-        createPlayer(PETYA);
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
 
         Game game1 = createGame(gameField(VASYA));
         Game game2 = createGame(gameField(PETYA));
@@ -924,7 +988,7 @@ public class PlayerServiceImplTest {
         GameField field2 = game2.getField();
         doThrow(new RuntimeException()).when(field1).tick();
 
-        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
+        when(gameType("room").getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
 
         // when
         playerService.tick();
@@ -950,8 +1014,8 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldTickForOneGame_whenSingleBordersGameType() {
         // given
-        createPlayer(VASYA);
-        createPlayer(PETYA);
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
 
         Game game1 = createGame(gameField(VASYA));
         Game game2 = createGame(gameField(PETYA));
@@ -963,7 +1027,7 @@ public class PlayerServiceImplTest {
         when(game2.getField()).thenReturn(field1);
         doThrow(new RuntimeException()).when(field1).tick();
 
-        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.MULTIPLE);   // тут отличия с прошлым тестом
+        when(gameType("room").getMultiplayerType(any())).thenReturn(MultiplayerType.MULTIPLE); // тут отличия с прошлым тестом
 
         // when
         playerService.tick();
@@ -1023,8 +1087,8 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldContinueTicks_whenException_caseMultiplayer() {
         // given
-        createPlayer(VASYA);
-        createPlayer(PETYA);
+        createPlayer(VASYA, "game", "room");
+        createPlayer(PETYA, "game", "room");
 
         Game game1 = createGame(gameField(VASYA));
         Game game2 = createGame(gameField(PETYA));
@@ -1033,7 +1097,7 @@ public class PlayerServiceImplTest {
         setup(game1);
         setup(game2);
 
-        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.MULTIPLE); // тут отличия с прошлым тестом
+        when(gameType("room").getMultiplayerType(any())).thenReturn(MultiplayerType.MULTIPLE); // тут отличия с прошлым тестом
         GameField field1 = game1.getField();
         when(game2.getField()).thenReturn(field1);
 
@@ -1387,7 +1451,7 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        assertEquals(VASYA, playerService.getRandom(gameType.name()).getId());
+        assertEquals(VASYA, playerService.getRandom("game").getId());
     }
 
     @Test
@@ -1625,20 +1689,22 @@ public class PlayerServiceImplTest {
         WebSocketRunner.ATTEMPTS = 0;
         WebSocketRunner.TIMEOUT = 100;
 
-        when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
-        when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
+        gameTypePostSetup = gameType -> {
+            when(gameType.getAI()).thenReturn(AISolverStub.class);
+            when(gameType.getBoard()).thenReturn(BoardStub.class);
+        };
 
-        String game = createPlayer(VASYA).getGame();
+        String game = createPlayer(VASYA, "game", "room").getGame();
 
-        verify(gameType, times(1)).getAI();
-        verify(gameType, times(1)).getBoard();
+        verify(gameType("room"), times(1)).getAI();
+        verify(gameType("room"), times(1)).getBoard();
 
         // when
         playerService.reloadAI(VASYA);
 
         // then
-        verify(gameType, times(2)).getAI();
-        verify(gameType, times(2)).getBoard();
+        verify(gameType("room"), times(2)).getAI();
+        verify(gameType("room"), times(2)).getBoard();
 
         PlayerGame playerGame = playerGames.get(VASYA);
         assertEquals(game, playerGame.getPlayer().getGame());
@@ -1650,16 +1716,19 @@ public class PlayerServiceImplTest {
     @Test
     public void testLoadPlayersFromSaveAndLoadAI() {
         // given
-        when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
-        when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
+        gameTypePostSetup = gameType -> {
+            when(gameType.getAI()).thenReturn(AISolverStub.class);
+            when(gameType.getBoard()).thenReturn(BoardStub.class);
+        };
+
         PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", "room", 100, null);
 
         // when
         playerService.register(save);
 
         // then
-        verify(gameType).getAI();
-        verify(gameType).getBoard();
+        verify(gameType("room")).getAI();
+        verify(gameType("room")).getBoard();
 
         PlayerGame playerGame = playerGames.get(VASYA_AI);
         assertEquals("game", playerGame.getPlayer().getGame());

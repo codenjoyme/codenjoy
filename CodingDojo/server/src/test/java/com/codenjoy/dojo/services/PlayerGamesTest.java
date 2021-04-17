@@ -169,7 +169,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player thirdPlayer = createPlayer("room2", "game2");
 
         // when
-        List<Player> result = playerGames.getPlayers("game");
+        List<Player> result = playerGames.getPlayersByGame("game");
 
         // then
         assertEquals(2, result.size());
@@ -177,7 +177,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertEquals(secondPlayer, result.get(1));
 
         // when
-        List<Player> result2 = playerGames.getPlayers("game2");
+        List<Player> result2 = playerGames.getPlayersByGame("game2");
 
         // then
         assertEquals(1, result2.size());
@@ -239,7 +239,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void testGetGameTypes() {
         // given
-        Player player = createPlayer();
+        Player player = createPlayer("room", "game");
         Player player2 = createPlayer("room2", "game2");
         playerGames.add(player2, "room2", null);
 
