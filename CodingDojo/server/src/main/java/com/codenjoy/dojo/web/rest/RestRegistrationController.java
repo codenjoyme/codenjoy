@@ -29,7 +29,6 @@ import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +40,6 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping("/rest")
 @AllArgsConstructor
-@Slf4j
 public class RestRegistrationController {
 
     private Registration registration;
@@ -73,7 +71,6 @@ public class RestRegistrationController {
     // TODO test me
     @PostMapping("/player/create")
     public synchronized String createPlayer(@RequestBody PlayerDetailInfo player) {
-        log.info("RestRegistrationController:createPlayer -> Body {}", player);
         Registration.User user = player.getRegistration().build();
         registration.replace(user);
 
