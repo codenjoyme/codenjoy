@@ -34,7 +34,7 @@ class YourKotlinSolverTest() {
 
     @Before
     fun setup() {
-        ai = YourKotlinSolver()
+        ai = YourKotlinSolver(null)
     }
 
     private fun board(layer1: String, layer2: String, layer3: String): Board {

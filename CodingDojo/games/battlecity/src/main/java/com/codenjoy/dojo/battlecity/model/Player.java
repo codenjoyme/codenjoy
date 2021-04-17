@@ -80,7 +80,7 @@ public class Player extends RoundGamePlayer<Tank, Field> {
         hero.init(field);
         reset();
 
-        if (!roundsEnabled()) {
+        if (!roundsEnabled()) { // TODO test me
             hero.setActive(true);
         }
     }

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.CHEATS;
 import static java.util.stream.Collectors.toList;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
@@ -222,6 +223,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void nextLevel() {
+        if (!settings().bool(CHEATS)) return;
+
         Cell to = field.getEndPosition();
         field.move(item, to);
     }
@@ -241,7 +244,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             fire();
         } else if (is.act(0)) {
             reset();
-        } else if (is.act(-1)) { // TODO test me
+        } else if (is.act(-1)) {
             nextLevel();
         }
     }
