@@ -33,6 +33,8 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
+import com.codenjoy.dojo.services.joystick.NoActJoystick;
+import com.codenjoy.dojo.services.joystick.NoDirectionJoystick;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
@@ -245,38 +247,19 @@ public class PlayerServiceImplTest {
         }
     }
 
+    static class APlayerHero extends PlayerHero implements NoActJoystick, NoDirectionJoystick {
+        public APlayerHero(int x, int y) {
+            super(x, y);
+        }
+
+        @Override
+        public void tick() {
+            // do nothing
+        }
+    }
+
     private PlayerHero heroData(int x, int y) {
-        return new PlayerHero(pt(x, y)) {
-            @Override
-            public void down() {
-
-            }
-
-            @Override
-            public void up() {
-
-            }
-
-            @Override
-            public void left() {
-
-            }
-
-            @Override
-            public void right() {
-
-            }
-
-            @Override
-            public void act(int... p) {
-
-            }
-
-            @Override
-            public void tick() {
-
-            }
-        };
+        return new APlayerHero(x, y);
     }
 
     enum Elements implements CharElements {
