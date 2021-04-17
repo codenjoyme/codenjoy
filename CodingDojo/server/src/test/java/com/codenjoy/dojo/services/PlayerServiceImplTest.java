@@ -1425,6 +1425,25 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void shouldCleanScores() {
+        // given
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        // when
+        playerService.cleanScores(VASYA);
+
+        // then
+        verify(playerScores(0), only()).clear();
+        verify(playerScores(1), never()).clear();
+
+        verify(gameField(VASYA), only()).clearScore();
+        verify(gameField(PETYA), never()).clearScore();
+
+        verify(semifinal, never()).clean();
+    }
+
+    @Test
     public void shouldCleanAllScores_forRoom() {
         // given
         createPlayer(VASYA, "game1", "room1");

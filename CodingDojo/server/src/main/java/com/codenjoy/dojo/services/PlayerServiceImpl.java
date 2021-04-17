@@ -678,7 +678,7 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    @Override // TODO test me
+    @Override
     public void cleanScores(String id) {
         lock.writeLock().lock();
         try {
