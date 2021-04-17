@@ -76,4 +76,13 @@ public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameF
         event(dieEvent);
         shouldLeave = lastRound;
     }
+
+    public void newHero(F field) {
+        initHero(field);
+        if (!roundsEnabled()) {
+            hero.setActive(true);
+        }
+    }
+
+    public abstract void initHero(F field);
 }

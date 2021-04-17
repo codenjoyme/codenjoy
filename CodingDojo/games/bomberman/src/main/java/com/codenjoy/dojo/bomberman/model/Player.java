@@ -42,7 +42,8 @@ public class Player extends RoundGamePlayer<Hero, Field> {
         return hero;
     }
 
-    public void newHero(Field field) {
+    @Override
+    public void initHero(Field field) {
         if (hero != null) {
             hero.setPlayer(null);
             hero = null;
@@ -56,10 +57,6 @@ public class Player extends RoundGamePlayer<Hero, Field> {
         hero.move(pt.get());
         hero.setPlayer(this);
         hero.init(field);
-
-        if (!roundsEnabled()) { // TODO test me
-            hero.setActive(true);
-        }
     }
 
     @Override
