@@ -27,12 +27,9 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_TICKS_PER_SHOOT;
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.KILL_HITS_AI_PRIZE;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 
 public class AITankPrize extends AITank {
-
-    private final int CHANGE_EVERY_TICKS = 4;
 
     private int damage;
     private int ticks;
@@ -67,9 +64,13 @@ public class AITankPrize extends AITank {
         return settings().integer(KILL_HITS_AI_PRIZE);
     }
 
+    private int changeEveryTicks() {
+        return settings().integer(AI_PRIZE_SPRITE_CHANGE_TICKS);
+    }
+
     @Override
     public Elements subState() {
-        if (ticks % CHANGE_EVERY_TICKS == 0 && !wounded) {
+        if (ticks % changeEveryTicks() == 0 && !wounded) {
             return Elements.AI_TANK_PRIZE;
         }
 
