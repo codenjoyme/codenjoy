@@ -71,8 +71,8 @@ class RulesContainer extends Component {
         const loggedIn = [ server, code, id ].every(Boolean);
 
         return (loggedIn && !!settings)
-            ? ( <b>&nbsp;(<a href="#settings">{ settings[0][name] }*</a>)</b> )
-            : ( <b><a href='#settings'>*</a></b> );
+            ? ( <b>&nbsp;(<a href="#settings">{ settings[0][name].toString() }</a>)</b> )
+            : ( <b><a href='#settings' alt="треба авторизуватись, щоб побачити">*</a></b> );
     }
 
     render() {
@@ -389,6 +389,10 @@ class RulesContainer extends Component {
                             <li>Кількість пострілів, які потрібно зробити по призовому танку: { this._gets('killHitsAiPrize') }.</li>
                             <li>Час існування призу на полі: { this._gets('prizeOnField') }.</li>
                             <li>Час впливу призу на танк: { this._gets('prizeWorking') }.</li>
+                            <li>Отримати ці данні в форматі xml можа за посиланням:
+                                <a href={ settingsLink } rel='noopener noreferrer' target='_blank'>
+                                    параметри гри<img src={ Icon } alt='Параметри гри'/></a>.
+                            </li>
                         </ul>
                     </div>
                     <p>
