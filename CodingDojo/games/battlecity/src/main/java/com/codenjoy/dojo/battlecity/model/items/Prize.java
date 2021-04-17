@@ -25,13 +25,15 @@ package com.codenjoy.dojo.battlecity.model.items;
 
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 
 import java.util.function.Consumer;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PRIZE_SPRITE_CHANGE_TICKS;
+
 public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
 
-    public static final int CHANGE_EVERY_TICKS = 2;
     private final Elements elements;
     private final int prizeOnField;
     private final int prizeWorking;
@@ -41,6 +43,7 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
     private Consumer<Object> onDestroy;
     private int timeout;
     private int ticks;
+    private GameSettings settings;
 
     public Prize(Point pt, int prizeOnField, int prizeWorking, Elements elements) {
         super(pt);
@@ -51,17 +54,25 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
         active = true;
     }
 
+    public void init(GameSettings settings) {
+        this.settings = settings;
+    }
+
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (destroyed) {
             return Elements.BANG;
         }
 
-        if (ticks % CHANGE_EVERY_TICKS == 0) {
+        if (ticks % changeEveryTicks() == 0) {
             return Elements.PRIZE;
         }
 
         return elements;
+    }
+
+    public int changeEveryTicks() {
+        return settings.integer(PRIZE_SPRITE_CHANGE_TICKS);
     }
 
     @Override

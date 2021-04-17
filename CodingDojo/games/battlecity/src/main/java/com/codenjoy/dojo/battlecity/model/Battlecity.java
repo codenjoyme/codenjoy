@@ -247,6 +247,7 @@ public class Battlecity extends RoundField<Player> implements Field {
 
     @Override
     public void add(Prize prize) {
+        prize.init(settings);
         prizes.add(prize);
     }
 

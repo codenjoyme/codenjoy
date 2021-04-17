@@ -61,6 +61,7 @@ public class GameSettings extends SettingsImpl
         PRIZE_WORKING("[Prize] Working time of the prize after catch up"),
         AI_PRIZE_LIMIT("[Prize] The total number of prize tanks and prizes on the board"),
         AI_PRIZE_SPRITE_CHANGE_TICKS("[Prize] AI Tank sprite changes every ticks"),
+        PRIZE_SPRITE_CHANGE_TICKS("[Prize] Prize sprite changes every ticks"),
 
         CHANCE_IMMORTALITY("[Chance] Prize immortality"),
         CHANCE_BREAKING_WALLS("[Chance] Prize breaking walls"),
@@ -112,6 +113,7 @@ public class GameSettings extends SettingsImpl
         integer(PRIZE_WORKING, 30);
         integer(AI_PRIZE_LIMIT, 3);
         integer(AI_PRIZE_SPRITE_CHANGE_TICKS, 4);
+        integer(PRIZE_SPRITE_CHANGE_TICKS, 2);
 
         integer(CHANCE_RESERVED, 30);
         integer(CHANCE_IMMORTALITY, 20);
