@@ -668,7 +668,6 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             playerGames.get(id).clearScore();
-            playerGames.get(id).getGame().getProgress().reset();
         } finally {
             lock.writeLock().unlock();
         }
