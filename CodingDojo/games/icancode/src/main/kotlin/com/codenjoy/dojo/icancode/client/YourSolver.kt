@@ -32,8 +32,6 @@ import com.codenjoy.dojo.services.RandomDice
  */
 class YourKotlinSolver(dice: Dice?) : AbstractSolver(dice) {
 
-    constructor() : super(null)
-
     override fun whatToDo(board: Board): Command {
         with(board) {
             if (!isMeAlive) return Command.doNothing()
