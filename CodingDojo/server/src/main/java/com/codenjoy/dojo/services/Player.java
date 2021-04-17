@@ -61,7 +61,7 @@ public class Player implements ScreenRecipient, Closeable {
     private GameType gameType;
     private InformationCollector eventListener;
     private Closeable ai;
-    private LocalDateTime lastResponseTime = LocalDateTime.MAX;
+    private LocalDateTime lastResponseTime = LocalDateTime.now();
 
     public Player(String id) {
         this.id = id;
