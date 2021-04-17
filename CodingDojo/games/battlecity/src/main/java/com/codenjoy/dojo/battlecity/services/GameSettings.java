@@ -53,6 +53,7 @@ public class GameSettings extends SettingsImpl
         PENALTY_WALKING_ON_WATER("[Game] Penalty time when walking on water"),
         SHOW_MY_TANK_UNDER_TREE("[Game] Show my tank under tree"),
         WALL_REGENERATE_TIME("[Game] Wall regenerate time"),
+        TICKS_STUCK_BY_RIVER("[Game] Ticks AI Tank gets stuck by river"),
 
         SPAWN_AI_PRIZE("[Prize] Count spawn for AI Tank with prize"),
         KILL_HITS_AI_PRIZE("[Prize] Hits to kill AI Tank with prize"),
@@ -102,6 +103,7 @@ public class GameSettings extends SettingsImpl
         integer(PENALTY_WALKING_ON_WATER, 2);
         bool(SHOW_MY_TANK_UNDER_TREE, false);
         integer(WALL_REGENERATE_TIME, 30);
+        integer(TICKS_STUCK_BY_RIVER, 5);
 
         integer(SPAWN_AI_PRIZE, 4);
         integer(KILL_HITS_AI_PRIZE, 3);

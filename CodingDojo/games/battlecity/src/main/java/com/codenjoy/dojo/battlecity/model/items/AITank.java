@@ -31,11 +31,11 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_TICKS_PER_SHOOT;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TICKS_STUCK_BY_RIVER;
 
 public class AITank extends Tank {
 
     public static final int MAX = 10;
-    private final int ticksStandByRiver = 5;
 
     private Dice dice;
     public boolean dontShoot = false;
@@ -55,6 +55,10 @@ public class AITank extends Tank {
         return settings().integer(AI_TICKS_PER_SHOOT);
     }
 
+    public int ticksStuckByRiver() {
+        return settings().integer(TICKS_STUCK_BY_RIVER);
+    }
+
     @Override
     public void move() {
         shootIfReady();
@@ -67,7 +71,7 @@ public class AITank extends Tank {
                 direction = Direction.random(dice);
             }
 
-            if (count == ticksStandByRiver) {
+            if (count == ticksStuckByRiver()) {
                 direction = Direction.random(dice);
                 count = 0;
             }
