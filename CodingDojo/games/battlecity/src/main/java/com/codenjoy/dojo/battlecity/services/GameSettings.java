@@ -52,6 +52,7 @@ public class GameSettings extends SettingsImpl
         SLIPPERINESS("[Game] Value of tank sliding on ice"),
         PENALTY_WALKING_ON_WATER("[Game] Penalty time when walking on water"),
         SHOW_MY_TANK_UNDER_TREE("[Game] Show my tank under tree"),
+        WALL_REGENERATE_TIME("[Game] Wall regenerate time"),
 
         SPAWN_AI_PRIZE("[Prize] Count spawn for AI Tank with prize"),
         KILL_HITS_AI_PRIZE("[Prize] Hits to kill AI Tank with prize"),
@@ -100,6 +101,7 @@ public class GameSettings extends SettingsImpl
         integer(SLIPPERINESS, 3);
         integer(PENALTY_WALKING_ON_WATER, 2);
         bool(SHOW_MY_TANK_UNDER_TREE, false);
+        integer(WALL_REGENERATE_TIME, 30);
 
         integer(SPAWN_AI_PRIZE, 4);
         integer(KILL_HITS_AI_PRIZE, 3);

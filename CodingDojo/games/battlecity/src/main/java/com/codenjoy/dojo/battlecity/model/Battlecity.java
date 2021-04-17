@@ -433,10 +433,6 @@ public class Battlecity extends RoundField<Player> implements Field {
         return borders;
     }
 
-    public void addBorder(List<Border> borders) {
-        this.borders.addAll(borders);
-    }
-
     public void addTree(Tree tree) {
         trees.add(tree);
     }
@@ -453,28 +449,33 @@ public class Battlecity extends RoundField<Player> implements Field {
         rivers.add(river);
     }
 
+    public void addWall(Wall wall) {
+        wall.init(settings);
+        walls.add(wall);
+    }
+
     public AiGenerator getAiGenerator() {
         return aiGen;
     }
 
     public void addWall(List<Wall> walls) {
-        this.walls.addAll(walls);
+        walls.forEach(this::addWall);
     }
 
-    public void addWall(Wall wall) {
-        walls.add(wall);
+    public void addBorder(List<Border> borders) {
+        borders.forEach(this::addBorder);
     }
 
     public void addRiver(List<River> rivers) {
-        this.rivers.addAll(rivers);
+        rivers.forEach(this::addRiver);
     }
 
     public void addTree(List<Tree> trees) {
-        this.trees.addAll(trees);
+        trees.forEach(this::addTree);
     }
 
     public void addIce(List<Ice> ice) {
-        this.ice.addAll(ice);
+        ice.forEach(this::addIce);
     }
 
     @Override

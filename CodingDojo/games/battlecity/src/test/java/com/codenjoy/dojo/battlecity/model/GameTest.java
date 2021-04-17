@@ -2731,7 +2731,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        for (int i = 7; i <= Wall.REGENERATE_TIME; i++) {
+        for (int i = 7; i <= settings.integer(WALL_REGENERATE_TIME); i++) {
             game.tick();
         }
 
@@ -2956,7 +2956,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        for (int i = 3; i <= Wall.REGENERATE_TIME; i++) {
+        for (int i = 3; i <= settings.integer(WALL_REGENERATE_TIME); i++) {
             game.tick();
         }
 
@@ -2971,7 +2971,7 @@ public class GameTest {
         hero(0).right();
         game.tick();
 
-        for (int i = 2; i <= Wall.REGENERATE_TIME; i++) {
+        for (int i = 2; i <= settings.integer(WALL_REGENERATE_TIME); i++) {
             assertD("☼☼☼☼☼☼☼\n" +
                     "☼     ☼\n" +
                     "☼     ☼\n" +
@@ -3020,7 +3020,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        for (int i = 3; i <= Wall.REGENERATE_TIME; i++) {
+        for (int i = 3; i <= settings.integer(WALL_REGENERATE_TIME); i++) {
             game.tick();
         }
 

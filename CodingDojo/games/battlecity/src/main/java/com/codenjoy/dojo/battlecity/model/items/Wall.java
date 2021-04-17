@@ -25,20 +25,26 @@ package com.codenjoy.dojo.battlecity.model.items;
 
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 
-public class Wall extends PointImpl implements Tickable, State<Elements, Player> {
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.WALL_REGENERATE_TIME;
 
-    public static final int REGENERATE_TIME = 30; // TODO вынести в settings
+public class Wall extends PointImpl implements Tickable, State<Elements, Player> {
 
     private Elements ch;
     private int timer;
     private boolean overDamage;
+    private GameSettings settings;
 
     public Wall(Point pt) {
         super(pt);
         reset();
         overDamage = false;
+    }
+
+    public void init(GameSettings settings) {
+        this.settings = settings;
     }
 
     public void destroy(Bullet bullet) {
@@ -100,7 +106,7 @@ public class Wall extends PointImpl implements Tickable, State<Elements, Player>
 
     @Override
     public void tick() {
-        if (timer == REGENERATE_TIME) {
+        if (timer == settings.integer(WALL_REGENERATE_TIME)) {
             timer = 0;
             reset();
         }
@@ -116,4 +122,5 @@ public class Wall extends PointImpl implements Tickable, State<Elements, Player>
     public boolean destroyed() {
         return ch.power() == 0;
     }
+
 }
