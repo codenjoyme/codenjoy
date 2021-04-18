@@ -83,7 +83,6 @@ public class SmokeTest {
                     }
                 },
                 Arrays.asList(new AISolver(dice), new AI2Solver(dice), new AI3Solver(dice)),
-                Arrays.asList(new Board(), new Board(), new Board()),
-                (o1, o2) -> assertEquals(o1, o2));
+                Arrays.asList(new Board(), new Board(), new Board()));
     }
 }

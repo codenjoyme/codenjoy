@@ -93,8 +93,7 @@ public class SmokeTest {
                 Stream.generate(solver)
                         .limit(players).collect(toList()),
                 Stream.generate(() -> new Board())
-                        .limit(players).collect(toList()),
-                (o1, o2) -> assertEquals(o1, o2));
+                        .limit(players).collect(toList()));
     }
 
     @Test
@@ -124,7 +123,6 @@ public class SmokeTest {
                 Stream.generate(solver)
                         .limit(players).collect(toList()),
                 Stream.generate(() -> new Board())
-                        .limit(players).collect(toList()),
-                (o1, o2) -> assertEquals(o1, o2));
+                        .limit(players).collect(toList()));
     }
 }

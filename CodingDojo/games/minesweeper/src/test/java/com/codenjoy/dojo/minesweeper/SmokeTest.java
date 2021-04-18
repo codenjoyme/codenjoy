@@ -49,6 +49,12 @@ public class SmokeTest {
         // about 5 sec
         int ticks = 1000;
 
+        Smoke.recheck = actual -> {
+            // мы ни разу не проиграли и всегда правильно отгадывали где мины
+            assertFalse(actual.contains(Events.KILL_ON_MINE.name()));
+            assertFalse(actual.contains(Events.FORGET_CHARGE.name()));
+        };
+
         Smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
@@ -64,14 +70,6 @@ public class SmokeTest {
                     }
                 },
                 Arrays.asList(new AISolver(dice)),
-                Arrays.asList(new Board()),
-                (o1, o2) -> {
-                    if (o2.toString().contains("Fire Event:")) {
-                        // мы ни разу не проиграли и всегда правильно отгадывали где мины
-                        assertFalse(((String)o2).contains(Events.KILL_ON_MINE.name()));
-                        assertFalse(((String)o2).contains(Events.FORGET_CHARGE.name()));
-                    }
-                    assertEquals(o1, o2);
-                });
+                Arrays.asList(new Board()));
     }
 }

@@ -35,10 +35,11 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.utils.events.MockitoJunitTesting;
+import com.codenjoy.dojo.utils.events.Testing;
 import lombok.experimental.UtilityClass;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -47,6 +48,8 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public class TestUtils {
 
     public static final int COUNT_NUMBERS = 3;
+
+    private static final Testing TESTING = new MockitoJunitTesting();
 
     public static String injectN(String expected) {
         int size = (int) Math.sqrt(expected.length());
@@ -213,26 +216,29 @@ public class TestUtils {
      * проверяем порционно, потому что в 'mvn test'
      * не видно на больших данных, где именно отличие и это проблема в отладке
      * @param allFirst true - если проверяем все сразу, false - если сперва порционно тик за тиком
-     * @param assertor так как assertEquals нельзя использовать в prod code, а этот класс нельзя переместить в test и затянуть потом как дупенденси, тут лямбда )
      * @param expectedAll что должно быть
      * @param actualAll что реально пришло
      */
-    public static void assertSmoke(boolean allFirst, BiConsumer<Object, Object> assertor, String expectedAll, String actualAll) {
+    public static void assertSmoke(boolean allFirst, String expectedAll, String actualAll) {
         String[] expected = expectedAll.split(LocalGameRunner.SEP);
         String[] actual = actualAll.split(LocalGameRunner.SEP);
 
         if (allFirst) {
-            assertor.accept(expectedAll, actualAll);
+            assertEquals(expectedAll, actualAll);
         }
 
         for (int i = 0; i < Math.min(expected.length, actual.length); i++) {
-            assertor.accept(expected[i], actual[i]);
+            assertEquals(expected[i], actual[i]);
         }
-        assertor.accept(expected.length, actual.length);
+        assertEquals(expected.length, actual.length);
 
         if (!allFirst) {
-            assertor.accept(expectedAll, actualAll);
+            assertEquals(expectedAll, actualAll);
         }
+    }
+
+    private static void assertEquals(Object o1, Object o2) {
+        TESTING.assertEquals(o1, o2);
     }
 
 }

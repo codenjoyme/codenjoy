@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @UtilityClass
@@ -45,15 +46,17 @@ public class Smoke {
     public static final String SOURCE_FOLDER = "src/test/resources/";
     public static final String TARGET_FOLDER = "target/";
 
+    // если потребуется дополнительна проверка финального результата, использу это чудо
+    public static Consumer<String> recheck;
+
     public static void play(int ticks,
                             String fileName,
                             GameType gameRunner,
                             List<Solver> solvers,
-                            List<ClientBoard> boards,
-                            BiConsumer<Object, Object> assertor)
+                            List<ClientBoard> boards)
     {
         play(ticks, fileName, true,
-                gameRunner, solvers, boards, assertor);
+                gameRunner, solvers, boards);
     }
 
     public static void play(int ticks,
@@ -61,8 +64,7 @@ public class Smoke {
                             boolean printBoardOnly,
                             GameType gameRunner,
                             List<Solver> solvers,
-                            List<ClientBoard> boards,
-                            BiConsumer<Object, Object> assertor)
+                            List<ClientBoard> boards)
     {
         // given
         List<String> messages = new LinkedList<>();
@@ -89,7 +91,11 @@ public class Smoke {
             expected = StringUtils.EMPTY;
             saveToFile(expectedFile, actual);
         }
-        TestUtils.assertSmoke(true, assertor, expected, actual);
+
+        TestUtils.assertSmoke(true, expected, actual);
+        if (recheck != null) {
+            recheck.accept(actual);
+        }
     }
 
     public void saveToFile(String path, String data) {
