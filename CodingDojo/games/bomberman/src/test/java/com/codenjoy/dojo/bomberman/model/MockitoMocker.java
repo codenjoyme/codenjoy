@@ -28,14 +28,18 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
             Method assertEquals = assertClass.getDeclaredMethod("assertEquals", Object.class, Object.class);
             assertEquals.invoke(assertClass, o1, o2);
         } catch (Exception e) {
-            if (e instanceof InvocationTargetException) {
-                Throwable target = ((InvocationTargetException) e).getTargetException();
-                if (target instanceof Error) {
-                    throw (Error)target;
-                }
-            }
-            throw new RuntimeException(e);
+            process(e);
         }
+    }
+
+    public void process(Exception e) {
+        if (e instanceof InvocationTargetException) {
+            Throwable target = ((InvocationTargetException) e).getTargetException();
+            if (target instanceof Error) {
+                throw (Error)target;
+            }
+        }
+        throw new RuntimeException(e);
     }
 
     @Override
