@@ -116,21 +116,13 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     @Override
     public <T, S extends T> EventsListenersAssert.Captor<T> captorForClass(Class<S> clazz) {
-        ArgumentCaptor<T> captor = null;
-        try {
-            Method method = argumentCaptorClass.getDeclaredMethod("forClass", Class.class);
-            captor = (ArgumentCaptor<T>) method.invoke(argumentCaptorClass, clazz);
-        } catch (Exception e) {
-            process(e);
-        }
-
-        ArgumentCaptor<T> finalCaptor = captor;
+        ArgumentCaptor<T> captor = getArgumentCaptor(clazz);
         return new EventsListenersAssert.Captor<T>() {
             @Override
             public T capture() {
                 try {
                     Method method = argumentCaptorClass.getDeclaredMethod("capture");
-                    return (T) method.invoke(finalCaptor);
+                    return (T) method.invoke(captor);
                 } catch (Exception e) {
                     process(e);
                 }
@@ -139,16 +131,25 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
             @Override
             public List<T> getAllValues() {
-                return finalCaptor.getAllValues();
-
-//                try {
-//                    Method method = argumentCaptorClass.getDeclaredMethod("getAllValues");
-//                    return (List<T>) method.invoke(finalCaptor);
-//                } catch (Exception e) {
-//                    process(e);
-//                }
-//                return null;
+                try {
+                    Method method = argumentCaptorClass.getDeclaredMethod("getAllValues");
+                    return (List<T>) method.invoke(captor);
+                } catch (Exception e) {
+                    process(e);
+                }
+                return null;
             }
         };
+    }
+
+    public <T, S extends T> ArgumentCaptor<T> getArgumentCaptor(Class<S> clazz) {
+        ArgumentCaptor<T> captor = null;
+        try {
+            Method method = argumentCaptorClass.getDeclaredMethod("forClass", Class.class);
+            captor = (ArgumentCaptor<T>) method.invoke(argumentCaptorClass, clazz);
+        } catch (Exception e) {
+            process(e);
+        }
+        return captor;
     }
 }
