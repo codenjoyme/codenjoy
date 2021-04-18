@@ -50,7 +50,7 @@ public class CommonGameSettings<T extends CommonGameSettings> extends SettingsIm
     }
 
     public CommonGameSettings() {
-        bool(KICK_INACTIVE_PLAYERS, true);
+        bool(KICK_INACTIVE_PLAYERS, false);
         integer(INACTIVITY_TIMEOUT, 5);
     }
 

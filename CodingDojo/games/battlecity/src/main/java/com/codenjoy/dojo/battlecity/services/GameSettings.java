@@ -90,7 +90,7 @@ public class GameSettings extends CommonGameSettings<GameSettings> {
 
     public GameSettings() {
         bool(MULTIPLE, false);
-        integer(PLAYERS_PER_ROOM, 20);
+        integer(PLAYERS_PER_ROOM, 5);
         // включен ли режим раундов
         bool(ROUNDS_ENABLED, true);
         // сколько тиков на 1 раунд
@@ -108,7 +108,7 @@ public class GameSettings extends CommonGameSettings<GameSettings> {
         integer(TANK_TICKS_PER_SHOOT, 4);
         integer(SLIPPERINESS, 3);
         integer(PENALTY_WALKING_ON_WATER, 2);
-        bool(SHOW_MY_TANK_UNDER_TREE, false);
+        bool(SHOW_MY_TANK_UNDER_TREE, true);
 
         integer(SPAWN_AI_PRIZE, 4);
         integer(KILL_HITS_AI_PRIZE, 3);
