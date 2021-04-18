@@ -73,14 +73,12 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     @Override
     public void verifyNoMoreInteractions(Object... mocks) {
-        Mockito.verifyNoMoreInteractions(mocks);
-
-//        try {
-//            Method method = mockitoClass.getDeclaredMethod("verifyNoMoreInteractions", Object[].class);
-//            method.invoke(mockitoClass, (Object)mocks);
-//        } catch (Exception e) {
-//            process(e);
-//        }
+        try {
+            Method method = mockitoClass.getDeclaredMethod("verifyNoMoreInteractions", Object[].class);
+            method.invoke(mockitoClass, (Object)mocks);
+        } catch (Exception e) {
+            process(e);
+        }
     }
 
     @Override
