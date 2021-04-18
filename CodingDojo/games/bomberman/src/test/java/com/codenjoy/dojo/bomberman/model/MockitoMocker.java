@@ -94,15 +94,13 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     @Override
     public Object never() {
-        return Mockito.never();
-
-//        try {
-//            Method method = mockitoClass.getDeclaredMethod("never");
-//            return method.invoke(mockitoClass);
-//        } catch (Exception e) {
-//            process(e);
-//        }
-//        return null;
+        try {
+            Method method = mockitoClass.getDeclaredMethod("never");
+            return method.invoke(mockitoClass);
+        } catch (Exception e) {
+            process(e);
+        }
+        return null;
     }
 
     @Override
