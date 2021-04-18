@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -64,9 +65,14 @@ public abstract class AbstractGameTest {
         games = new LinkedList<>();
 
         dice = mock(Dice.class);
-        settings = new GameSettings();
+        settings = new TestGameSettings();
         printer = new PrinterFactoryImpl();
-        events = new EventsListenersAssert(listeners, Events.class);
+        events = new EventsListenersAssert(() -> listeners, Events.class);
+    }
+
+    @After
+    public void tearDown() {
+        events.verifyNoEvents();
     }
 
     public void dice(int... ints) {

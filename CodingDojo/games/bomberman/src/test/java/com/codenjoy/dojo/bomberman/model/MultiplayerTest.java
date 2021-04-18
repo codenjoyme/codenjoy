@@ -1072,8 +1072,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "҉    \n" +
                 "҉x   \n", game(0));
 
-        events.verifyAllEvents(
-                "listener(0) => [KILL_MEAT_CHOPPER]\n");
+        events.verifyAllEvents("[KILL_MEAT_CHOPPER]");
 
         tick();
 

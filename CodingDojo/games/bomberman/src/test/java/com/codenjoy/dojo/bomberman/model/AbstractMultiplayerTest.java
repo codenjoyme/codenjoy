@@ -60,7 +60,7 @@ public abstract class AbstractMultiplayerTest {
     protected Dice dice = mock(Dice.class);
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
     protected PerksSettingsWrapper perks;
-    protected EventsListenersAssert events = new EventsListenersAssert(listeners, Events.class);
+    protected EventsListenersAssert events = new EventsListenersAssert(() -> listeners, Events.class);
 
     public void setup() {
         perks = settings.perksSettings();

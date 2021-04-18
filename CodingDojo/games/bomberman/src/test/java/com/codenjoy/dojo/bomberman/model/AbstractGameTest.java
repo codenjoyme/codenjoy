@@ -65,13 +65,11 @@ public class AbstractGameTest {
         chopperDice = mock(Dice.class);
         settings = spy(new TestGameSettings());
         printer = new PrinterFactoryImpl();
-        events = new EventsListenersAssert(Arrays.asList(), Events.class);
+        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
         perks = settings.perksSettings();
         bombsPower(1);
 
         givenWalls();
-
-        listener = mock(EventListener.class);
 
         withWalls(walls);
 
@@ -89,6 +87,7 @@ public class AbstractGameTest {
     protected void givenBoard(int size, int x, int y) {
         settings.integer(BOARD_SIZE, size);
         field = new Bomberman(dice, settings);
+        listener = mock(EventListener.class);
         player = new Player(listener, settings);
         game = new Single(player, printer);
         game.on(field);

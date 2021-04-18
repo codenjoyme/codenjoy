@@ -30,12 +30,15 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
+import com.codenjoy.dojo.snakebattle.services.Events;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.snakebattle.model.MultiplayerTest.verifyEvents;
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -49,14 +52,16 @@ public class GameTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
     private GameSettings settings;
+    private EventsListenersAssert events;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-
         settings = new TestGameSettings();
+        printer = new PrinterFactoryImpl();
+        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
     }
 
     private void givenFl(String board) {
@@ -191,7 +196,7 @@ public class GameTest {
 
         game.tick();
 
-        verifyEvents(listener, "[GOLD]");
+        events.verifyEvents(listener, "[GOLD]");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -223,7 +228,7 @@ public class GameTest {
 
         game.tick();
 
-        verifyEvents(listener, "[APPLE]");
+        events.verifyEvents(listener, "[APPLE]");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -254,7 +259,7 @@ public class GameTest {
 
         game.tick();
 
-        verifyEvents(listener, "[DIE]");
+        events.verifyEvents(listener, "[DIE]");
 
         assertEquals(false, hero.isAlive());
         assertEquals(true, hero.isActive());
@@ -301,7 +306,7 @@ public class GameTest {
 
         game.tick();
 
-        verifyEvents(listener, "[STONE]");
+        events.verifyEvents(listener, "[STONE]");
 
         assertEquals(true, hero.isAlive());
         assertEquals(true, hero.isActive());
@@ -705,7 +710,7 @@ public class GameTest {
 
         game.tick();
 
-        verifyEvents(listener, "[DIE]");
+        events.verifyEvents(listener, "[DIE]");
 
         assertEquals(false, hero.isAlive());
         assertEquals(true, hero.isActive());
