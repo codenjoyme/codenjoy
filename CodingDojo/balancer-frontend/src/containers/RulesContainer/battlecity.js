@@ -86,6 +86,7 @@ class RulesContainer extends Component {
         const settingsLink = process.env.REACT_APP_API_SERVER + '/codenjoy-balancer/rest/game/settings/get';
         const privacyRulesDetailsUrl = privacyRulesUrl + '#details3';
         const joinSlackUrl = process.env.REACT_APP_JOIN_CHAT_LINK;
+        const practiceServerUrl = "https://practice.epam-botchallenge.com/";
         const clientLink = loggedIn
             ? (
                 <a href={ getJavaClient(server) }>Завантажити клієнт</a>
@@ -112,14 +113,26 @@ class RulesContainer extends Component {
                         який буде тривати до <span className='command'>{ dayTimeEnd }</span>!
                     </p>
                     <p>
-                        Також зверніть увагу, що у Фіналі час від часу ми будемо повертати гравців на перший рівень,
-                        щоб прибрати вплив ботів, які не грають.
+                        Також зверніть увагу, що у Фіналі неактивні ігроки можуть бути кікнуті з ігрової кімнати, щоб не заважати іншим грати.
+                    </p>
+
+                    <h2 className='title'>Сервер для тренувать</h2>
+                    <p>
+                        Основний ігровий сервер буде працювати лише в ігрові часи. Якшо вам необхідно потренуватися - ми зробили
+                        тестовий сервер, котрий буде увімкнений цілодобово.
+                    </p>
+                    <p>
+                        Звертаємо вашу увагу на те, що на тестовому сервері необхідно також реєструватится. І бали, зароблені на тестовому
+                        сервері не йдуть в залік змагань.
+                    </p>
+                    <p>
+                        Тестовий сервер доступний за адресою: <a href={ practiceServerUrl } target="_blank" rel="noopener noreferrer">{ practiceServerUrl }</a>
                     </p>
 
                     <h2 className='title'>У чому суть гри?</h2>
-                     <div className='subTitle' id='commands'>
-                                            Параметри гри:
-                     </div>
+                    <div className='subTitle' id='commands'>
+                        Параметри гри:
+                    </div>
 
                     <p>
                         Потрібно написати свого бота для танку, який здатен обіграти інших
