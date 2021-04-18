@@ -24,6 +24,7 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.TestGameSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -31,6 +32,7 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.EventsListenersAssert;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -38,7 +40,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.bomberman.model.EventsListenersAssert.assertAll;
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
@@ -60,7 +61,8 @@ public abstract class AbstractMultiplayerTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
     protected PerksSettingsWrapper perks;
 
-    protected EventsListenersAssert events = new EventsListenersAssert(listeners);
+    protected EventsListenersAssert events = new EventsListenersAssert(listeners,
+            Events.class, new MockitoMocker());
 
     public void setup() {
         perks = settings.perksSettings();
@@ -161,7 +163,7 @@ public abstract class AbstractMultiplayerTest {
     }
 
     protected void assertBoards(String expected, Integer... indexes) {
-        assertAll(expected, games.size(), indexes, index -> {
+        events.assertAll(expected, games.size(), indexes, index -> {
             Object actual = game(index).getBoardAsString();
             return String.format("game(%s)\n%s\n", index, actual);
         });

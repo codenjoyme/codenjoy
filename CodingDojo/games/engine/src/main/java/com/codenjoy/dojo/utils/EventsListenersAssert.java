@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.utils;
 
 /*-
  * #%L
@@ -87,8 +87,8 @@ public class EventsListenersAssert {
         return indexes;
     }
 
-    private void assertAll(String expected, int size, Integer[] indexes,
-                           Function<Integer, String> function) {
+    public void assertAll(String expected, int size, Integer[] indexes,
+                          Function<Integer, String> function) {
         indexes = range(size, indexes);
 
         String actual = "";

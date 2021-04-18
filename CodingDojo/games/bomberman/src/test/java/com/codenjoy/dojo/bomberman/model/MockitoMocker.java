@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.utils.EventsListenersAssert;
 import org.junit.Assert;
