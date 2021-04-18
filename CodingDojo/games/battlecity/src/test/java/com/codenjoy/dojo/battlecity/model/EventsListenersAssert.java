@@ -22,7 +22,6 @@ package com.codenjoy.dojo.battlecity.model;
  * #L%
  */
 
-import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
@@ -41,14 +40,16 @@ import static org.mockito.Mockito.*;
 public class EventsListenersAssert {
 
     private List<EventListener> listeners;
+    private Class eventsClass;
 
-    public EventsListenersAssert(List<EventListener> listeners) {
+    public EventsListenersAssert(List<EventListener> listeners, Class eventsClass) {
         this.listeners = listeners;
+        this.eventsClass = eventsClass;
     }
 
-    public static String getEvents(EventListener events) {
+    private String getEvents(EventListener events) {
         try {
-            ArgumentCaptor<Events> captor = ArgumentCaptor.forClass(Events.class);
+            ArgumentCaptor captor = ArgumentCaptor.forClass(eventsClass);
             verify(events, atLeast(1)).event(captor.capture());
             return captor.getAllValues().toString();
         } catch (WantedButNotInvoked e) {
@@ -58,7 +59,7 @@ public class EventsListenersAssert {
         }
     }
 
-    public static Integer[] range(int size, Integer[] indexes) {
+    private Integer[] range(int size, Integer[] indexes) {
         if (indexes.length == 0) {
             indexes = IntStream.range(0, size)
                     .boxed()
@@ -67,7 +68,7 @@ public class EventsListenersAssert {
         return indexes;
     }
 
-    public static void assertAll(String expected, int size, Integer[] indexes,
+    private void assertAll(String expected, int size, Integer[] indexes,
                            Function<Integer, String> function)
     {
         indexes = range(size, indexes);
@@ -80,7 +81,7 @@ public class EventsListenersAssert {
         assertEquals(expected, actual);
     }
 
-    protected void verifyNoEvents(Integer... indexes) {
+    public void verifyNoEvents(Integer... indexes) {
         try {
            for (int i = 0; i < listeners.size(); i++) {
                 if (indexes.length == 0 || Arrays.asList(indexes).contains(i)) {
@@ -92,10 +93,10 @@ public class EventsListenersAssert {
         }
     }
 
-    protected void verifyEvents(EventListener events, String expected) {
+    public void verifyEvents(EventListener events, String expected) {
         if (expected.equals("[]")) {
             try {
-                verify(events, never()).event(any(Events.class));
+                verify(events, never()).event(any(eventsClass));
             } catch (NeverWantedButInvoked e) {
                 assertEquals(expected, getEvents(events));
             }
@@ -105,7 +106,7 @@ public class EventsListenersAssert {
         reset(events);
     }
 
-    protected void verifyAllEvents(String expected, Integer... indexes) {
+    public void verifyAllEvents(String expected, Integer... indexes) {
         assertAll(expected, listeners.size(), indexes, index -> {
             Object actual = getEvents(listeners.get(index));
             return String.format("listener(%s) => %s\n", index, actual);

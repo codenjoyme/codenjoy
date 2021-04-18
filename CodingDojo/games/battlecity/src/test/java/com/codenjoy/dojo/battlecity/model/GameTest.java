@@ -28,6 +28,7 @@ import com.codenjoy.dojo.battlecity.model.items.AITank;
 import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Wall;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
+import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -64,7 +65,7 @@ public class GameTest {
 
     private List<Tank> heroes = new LinkedList<>();
     private List<EventListener> listeners = new LinkedList<>();
-    private EventsListenersAssert events = new EventsListenersAssert(listeners);
+    private EventsListenersAssert events = new EventsListenersAssert(listeners, Events.class);
 
     private Dice dice(int... values) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
