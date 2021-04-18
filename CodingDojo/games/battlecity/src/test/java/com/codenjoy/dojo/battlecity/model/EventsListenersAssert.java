@@ -24,8 +24,8 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import org.mockito.ArgumentCaptor;
-import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.Mockito;
+import org.mockito.verification.VerificationMode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,34 +34,47 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
-import static org.mockito.Mockito.*;
 
-// TODO ###223 подумать как точно такой же клас в Bomberman удалить
 public class EventsListenersAssert {
 
     private List<EventListener> listeners;
     private Class eventsClass;
     private BiConsumer<Object, Object> assertor;
+    private Mocker mocker;
+
+    public interface Mocker {
+        <T> T verify(T mock, VerificationMode mode);
+    }
 
     public EventsListenersAssert(List<EventListener> listeners,
                                  Class eventsClass,
-                                 BiConsumer<Object, Object> assertor)
+                                 BiConsumer<Object, Object> assertor,
+                                 Mocker mocker)
     {
         this.listeners = listeners;
         this.eventsClass = eventsClass;
         this.assertor = assertor;
+        this.mocker = mocker;
     }
 
     private String getEvents(EventListener events) {
         try {
             ArgumentCaptor captor = ArgumentCaptor.forClass(eventsClass);
-            verify(events, atLeast(1)).event(captor.capture());
+            Mockito.verify(events, Mockito.atLeast(1)).event(captor.capture());
             return captor.getAllValues().toString();
-        } catch (WantedButNotInvoked e) {
-            return "[]";
+        } catch (Throwable e) {
+            if (is(e, "WantedButNotInvoked")) {
+                return "[]";
+            } else {
+                throw e;
+            }
         } finally {
-            reset(events);
+            Mockito.reset(events);
         }
+    }
+
+    private boolean is(Throwable e, String exception) {
+        return e.getClass().getSimpleName().equals(exception);
     }
 
     private Integer[] range(int size, Integer[] indexes) {
@@ -90,25 +103,33 @@ public class EventsListenersAssert {
         try {
            for (int i = 0; i < listeners.size(); i++) {
                 if (indexes.length == 0 || Arrays.asList(indexes).contains(i)) {
-                    verifyNoMoreInteractions(listeners.get(i));
+                    Mockito.verifyNoMoreInteractions(listeners.get(i));
                 }
             }
-        } catch (AssertionError e) {
-            verifyAllEvents("", indexes);
+        } catch (Throwable e) {
+            if (is(e, "AssertionError")) {
+                verifyAllEvents("", indexes);
+            } else {
+                throw e;
+            }
         }
     }
 
     public void verifyEvents(EventListener events, String expected) {
         if (expected.equals("[]")) {
             try {
-                verify(events, never()).event(any(eventsClass));
-            } catch (NeverWantedButInvoked e) {
-                assertor.accept(expected, getEvents(events));
+                Mockito.verify(events, Mockito.never()).event(Mockito.any(eventsClass));
+            } catch (Throwable e) {
+                if (is(e, "NeverWantedButInvoked")) {
+                    assertor.accept(expected, getEvents(events));
+                } else {
+                    throw e;
+                }
             }
         } else {
             assertor.accept(expected, getEvents(events));
         }
-        reset(events);
+        Mockito.reset(events);
     }
 
     public void verifyAllEvents(String expected, Integer... indexes) {
