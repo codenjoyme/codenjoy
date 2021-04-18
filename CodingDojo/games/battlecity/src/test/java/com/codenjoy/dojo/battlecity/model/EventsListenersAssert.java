@@ -23,13 +23,9 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 import com.codenjoy.dojo.services.EventListener;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-import org.mockito.verification.VerificationMode;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -40,32 +36,41 @@ public class EventsListenersAssert {
 
     private List<EventListener> listeners;
     private Class eventsClass;
-    private BiConsumer<Object, Object> assertor;
     private Mocker mocker;
 
     public interface Mocker {
-        <T> T verify(T mock, VerificationMode mode);
+        void assertEquals(Object o1, Object o2);
+        <T> T verify(T mock, Object mode);
+        <T> void reset(T... mocks);
+        void verifyNoMoreInteractions(Object... mocks);
+        <T> T any(Class<T> type);
+        Object never();
+        Object atLeast(int minNumberOfInvocations);
+        <T, S extends T> Captor<T> captorForClass(Class<S> clazz);
+    }
+
+    public interface Captor<T> {
+        T capture();
+        List<T> getAllValues();
     }
 
     public EventsListenersAssert(List<EventListener> listeners,
                                  Class eventsClass,
-                                 BiConsumer<Object, Object> assertor,
                                  Mocker mocker) {
         this.listeners = listeners;
         this.eventsClass = eventsClass;
-        this.assertor = assertor;
         this.mocker = mocker;
     }
 
     private String getEvents(EventListener events) {
         String result = tryCatch(
                 () -> {
-                    ArgumentCaptor captor = ArgumentCaptor.forClass(eventsClass);
-                    Mockito.verify(events, Mockito.atLeast(1)).event(captor.capture());
+                    Captor captor = mocker.captorForClass(eventsClass);
+                    mocker.verify(events, mocker.atLeast(1)).event(captor.capture());
                     return captor.getAllValues().toString();
                 },
                 "WantedButNotInvoked", () -> "[]");
-        Mockito.reset(events);
+        mocker.reset(events);
         return result;
     }
 
@@ -91,7 +96,7 @@ public class EventsListenersAssert {
             actual += function.apply(indexes[i]);
         }
 
-        assertor.accept(expected, actual);
+        mocker.assertEquals(expected, actual);
     }
 
     private static <A> A tryCatch(Supplier<A> tryCode,
@@ -112,7 +117,7 @@ public class EventsListenersAssert {
                 () -> {
                     for (int i = 0; i < listeners.size(); i++) {
                         if (indexes.length == 0 || Arrays.asList(indexes).contains(i)) {
-                            Mockito.verifyNoMoreInteractions(listeners.get(i));
+                            mocker.verifyNoMoreInteractions(listeners.get(i));
                         }
                     }
                     return null;
@@ -127,17 +132,17 @@ public class EventsListenersAssert {
         if (expected.equals("[]")) {
             tryCatch(
                     () -> {
-                        Mockito.verify(events, Mockito.never()).event(Mockito.any(eventsClass));
+                        mocker.verify(events, mocker.never()).event(mocker.any(eventsClass));
                         return null;
                     },
                     "NeverWantedButInvoked", () -> {
-                        assertor.accept(expected, getEvents(events));
+                        mocker.assertEquals(expected, getEvents(events));
                         return null;
                     });
         } else {
-            assertor.accept(expected, getEvents(events));
+            mocker.assertEquals(expected, getEvents(events));
         }
-        Mockito.reset(events);
+        mocker.reset(events);
     }
 
     public void verifyAllEvents(String expected, Integer... indexes) {

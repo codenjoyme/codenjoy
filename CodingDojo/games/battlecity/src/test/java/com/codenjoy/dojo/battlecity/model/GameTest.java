@@ -65,8 +65,7 @@ public class GameTest {
 
     private List<Tank> heroes = new LinkedList<>();
     private List<EventListener> listeners = new LinkedList<>();
-    private EventsListenersAssert events = new EventsListenersAssert(listeners,
-            Events.class, (o1, o2) -> assertEquals(o1, o2), null);
+    private EventsListenersAssert events = new EventsListenersAssert(listeners, Events.class, new MockitoMocker());
 
     private Dice dice(int... values) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
