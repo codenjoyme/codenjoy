@@ -83,15 +83,13 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     @Override
     public <T> T any(Class<T> type) {
-        return Mockito.any(type);
-
-//        try {
-//            Method method = mockitoClass.getDeclaredMethod("any", Class.class);
-//            return (T) method.invoke(mockitoClass, type);
-//        } catch (Exception e) {
-//            process(e);
-//        }
-//        return null;
+        try {
+            Method method = mockitoClass.getDeclaredMethod("any", Class.class);
+            return (T) method.invoke(mockitoClass, type);
+        } catch (Exception e) {
+            process(e);
+        }
+        return null;
     }
 
     @Override
