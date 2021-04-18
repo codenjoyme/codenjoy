@@ -29,11 +29,11 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 // TODO ###223 подумать как точно такой же клас в Bomberman удалить
@@ -41,10 +41,15 @@ public class EventsListenersAssert {
 
     private List<EventListener> listeners;
     private Class eventsClass;
+    private BiConsumer<Object, Object> assertor;
 
-    public EventsListenersAssert(List<EventListener> listeners, Class eventsClass) {
+    public EventsListenersAssert(List<EventListener> listeners,
+                                 Class eventsClass,
+                                 BiConsumer<Object, Object> assertor)
+    {
         this.listeners = listeners;
         this.eventsClass = eventsClass;
+        this.assertor = assertor;
     }
 
     private String getEvents(EventListener events) {
@@ -78,7 +83,7 @@ public class EventsListenersAssert {
             actual += function.apply(indexes[i]);
         }
 
-        assertEquals(expected, actual);
+        assertor.accept(expected, actual);
     }
 
     public void verifyNoEvents(Integer... indexes) {
@@ -98,10 +103,10 @@ public class EventsListenersAssert {
             try {
                 verify(events, never()).event(any(eventsClass));
             } catch (NeverWantedButInvoked e) {
-                assertEquals(expected, getEvents(events));
+                assertor.accept(expected, getEvents(events));
             }
         } else {
-            assertEquals(expected, getEvents(events));
+            assertor.accept(expected, getEvents(events));
         }
         reset(events);
     }
