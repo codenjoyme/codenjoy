@@ -1,6 +1,6 @@
-package com.codenjoy.dojo.bomberman.model;
+package com.codenjoy.dojo.utils.events;
 
-import com.codenjoy.dojo.utils.EventsListenersAssert;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.utils;
+package com.codenjoy.dojo.utils.events;
 
 /*-
  * #%L
@@ -54,12 +54,10 @@ public class EventsListenersAssert {
         List<T> getAllValues();
     }
 
-    public EventsListenersAssert(List<EventListener> listeners,
-                                 Class eventsClass,
-                                 Mocker mocker) {
+    public EventsListenersAssert(List<EventListener> listeners, Class eventsClass) {
         this.listeners = listeners;
         this.eventsClass = eventsClass;
-        this.mocker = mocker;
+        this.mocker = new MockitoMocker();
     }
 
     private String getEvents(EventListener events) {

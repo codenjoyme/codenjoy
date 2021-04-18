@@ -36,7 +36,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.utils.EventsListenersAssert;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,8 +66,7 @@ public class GameTest {
 
     private List<Tank> heroes = new LinkedList<>();
     private List<EventListener> listeners = new LinkedList<>();
-    private EventsListenersAssert events = new EventsListenersAssert(listeners,
-            Events.class, new MockitoMocker());
+    private EventsListenersAssert events = new EventsListenersAssert(listeners, Events.class);
 
     private Dice dice(int... values) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));

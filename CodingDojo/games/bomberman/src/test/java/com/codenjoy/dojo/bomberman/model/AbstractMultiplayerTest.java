@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.utils.EventsListenersAssert;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -61,8 +61,7 @@ public abstract class AbstractMultiplayerTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
     protected PerksSettingsWrapper perks;
 
-    protected EventsListenersAssert events = new EventsListenersAssert(listeners,
-            Events.class, new MockitoMocker());
+    protected EventsListenersAssert events = new EventsListenersAssert(listeners, Events.class);
 
     public void setup() {
         perks = settings.perksSettings();
