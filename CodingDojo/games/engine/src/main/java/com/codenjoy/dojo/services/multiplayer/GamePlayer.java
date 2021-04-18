@@ -56,7 +56,8 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      */
     public void event(Object event) {
         if (progress != null && progress.getCurrent() <= progress.getPassed()) {
-            return; // TODO test me
+            // tested in icancode MultiplayerTest.shouldNotFireWinEvent_ifLevelAlreadyPassed
+            return;
         }
 
         if (listener != null) {

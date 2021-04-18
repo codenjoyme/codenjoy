@@ -24,12 +24,9 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
-import com.codenjoy.dojo.icancode.model.items.Zombie;
-import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.model.items.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.GameSettings;
-import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -1008,6 +1005,8 @@ public class MultiplayerTest {
             return false;
         }
 
+        single.close();
+        single.getPlayer().setProgress(progress);
         if (level == levels.size() + 1) {
             single.on(gameMultiple);
         } else {
@@ -5029,5 +5028,304 @@ public class MultiplayerTest {
                 "║.S.│" +
                 "║.E.│" +
                 "└───┘");
+    }
+
+    @Test
+    public void shouldNotFireWinEvent_ifLevelAlreadyPassed() {
+        // given
+        givenFl("╔══┐" +
+                "║S$│" +
+                "║.E│" +
+                "└──┘",
+                "╔══┐" +
+                "║.S│" +
+                "║E$│" +
+                "└──┘",
+                "╔══┐" +
+                "║E.│" +
+                "║$S│" +
+                "└──┘",
+                "╔══┐" + // multiple
+                "║$E│" +
+                "║S.│" +
+                "└──┘"
+        );
+
+        assertL(single1,
+                "╔══┐" +
+                "║S$│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // pick gold
+        hero1().right();
+        tick();
+
+        // when done 1 level - go to 2 (single)
+        hero1().down();
+        tick();
+        tick();
+
+        verify(listener1).event(Events.WIN(1));
+        reset(listener1);
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║E$│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // pick gold
+        hero1().down();
+        tick();
+
+        // when done 2 level - go to 3 (single)
+        hero1().left();
+        tick();
+        tick();
+
+        verify(listener1).event(Events.WIN(1));
+        reset(listener1);
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║$S│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // pick gold
+        hero1().left();
+        tick();
+
+        // when done 3 level - go to 4 (multiple)
+        hero1().up();
+        tick();
+        tick();
+
+        verify(listener1).event(Events.WIN(1));
+        reset(listener1);
+
+        // then
+        assertL(single1,
+                "╔══┐" + // multiple
+                "║$E│" +
+                "║S$│" +  // TODO тут золота не должно быть
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // pick gold
+        hero1().up();
+        tick();
+
+        // when done 4 level - start 4 again (multiple)
+        hero1().right();
+        tick();
+        tick();
+
+        verify(listener1).event(Events.WIN(1));
+        reset(listener1);
+
+        // then
+        assertL(single1,
+                "╔══┐" + // multiple
+                "║$E│" +
+                "║S$│" + // TODO тут золота не должно быть
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // pick gold
+        hero1().up();
+        tick();
+
+        // when done 4 level - start 4 again multiple)
+        hero1().right();
+        tick();
+        tick();
+
+        verify(listener1).event(Events.WIN(1));
+        reset(listener1);
+
+        // then
+        assertL(single1,
+                "╔══┐" + // multiple
+                "║$E│" +
+                "║S$│" +    // TODO тут золота не должно быть
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when try to change level 1  - success from multiple to single
+        player1TryLoadLevel(1);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S$│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // pick gold
+        hero1().right();
+        tick();
+
+        // when done 1 level - go to 2 (single)
+        hero1().down();
+        tick();
+        tick();
+
+        verifyNoInteractions(listener1); // but without scores
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║E$│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // pick gold
+        hero1().down();
+        tick();
+
+        // when done 2 level - go to 3 (single)
+        hero1().left();
+        tick();
+        tick();
+
+        verifyNoInteractions(listener1); // but without scores
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║.S│" +   // TODO тут должно быть золото
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // pick gold
+        hero1().left();
+        tick();
+
+        // when done 3 level - go to 4 (multiple)
+        hero1().up();
+        tick();
+        tick();
+
+        verifyNoInteractions(listener1); // but without scores
+
+        // then
+        assertL(single1,
+                "╔══┐" + // multiple
+                "║$E│" +
+                "║S$│" +    // TODO тут не должно быть золото
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // pick gold
+        hero1().up();
+        tick();
+
+        // when done 4 level - start 4 again (multiple)
+        hero1().right();
+        tick();
+        tick();
+
+        verify(listener1).event(Events.WIN(1));  // this is multiple - score is ok
+        reset(listener1);
+
+        // then
+        assertL(single1,
+                "╔══┐" + // multiple
+                "║$E│" +
+                "║S$│" +      // TODO тут не должно быть золото
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // pick gold
+        hero1().up();
+        tick();
+
+        // when done 4 level - start 4 again multiple)
+        hero1().right();
+        tick();
+        tick();
+
+        verify(listener1).event(Events.WIN(1));  // this is multiple - score is ok
+        reset(listener1);
+
+        // then
+        assertL(single1,
+                "╔══┐" + // multiple
+                "║$E│" +
+                "║S$│" +             // TODO тут не должно быть золото
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
     }
 }
