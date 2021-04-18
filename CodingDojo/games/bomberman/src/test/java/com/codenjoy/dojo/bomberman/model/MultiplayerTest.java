@@ -727,7 +727,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "҉H҉҉ \n", game(0));
 
         events.verifyAllEvents(
-                "listener(0) => [KILL_DESTROY_WALL]\n" +
+                "listener(0) => [KILL_DESTdROY_WALL]\n" +
                 "listener(1) => [KILL_DESTROY_WALL]\n");
 
         tick();
