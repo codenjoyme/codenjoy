@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sample.model.level;
 
 
 import com.codenjoy.dojo.sample.model.Hero;
+import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 
@@ -38,6 +39,8 @@ public interface Level {
      * @return Размер поля (обязательно квадратное)
      */
     int size();
+
+    List<Bomb> bombs();
 
     List<Wall> walls();
 

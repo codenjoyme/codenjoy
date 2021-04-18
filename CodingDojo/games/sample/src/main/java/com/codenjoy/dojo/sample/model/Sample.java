@@ -65,10 +65,10 @@ public class Sample implements Field {
         this.dice = dice;
         walls = level.walls();
         gold = level.gold();
+        bombs = level.bombs();
         size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
-        bombs = new LinkedList<>();
     }
 
     /**
@@ -96,7 +96,7 @@ public class Sample implements Field {
             Hero hero = player.getHero();
 
             if (!hero.isAlive()) {
-                player.event(Events.LOOSE);
+                player.event(Events.LOSE);
             }
         }
     }

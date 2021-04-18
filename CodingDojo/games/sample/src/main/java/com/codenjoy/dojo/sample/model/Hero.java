@@ -38,10 +38,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private boolean alive;
     private Direction direction;
+    private boolean bomb;
 
     public Hero(Point xy) {
         super(xy);
         direction = null;
+        bomb = false;
         alive = true;
     }
 
@@ -82,12 +84,17 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void act(int... p) {
         if (!alive) return;
 
-        field.setBomb(this);
+        bomb = true;
     }
 
     @Override
     public void tick() {
         if (!alive) return;
+
+        if (bomb) {
+            field.setBomb(this);
+            bomb = false;
+        }
 
         if (direction != null) {
             Point to = direction.change(this.copy());
