@@ -2,7 +2,6 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.utils.EventsListenersAssert;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,12 +28,19 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     @Override
     public void assertEquals(Object o1, Object o2) {
+        call("assertEquals",
+                new Class[]{Object.class, Object.class},
+                new Object[]{o1, o2});
+    }
+
+    public Object call(String name, Class[] argsTypes, Object[] args) {
         try {
-            Method method = assertClass.getDeclaredMethod("assertEquals", Object.class, Object.class);
-            method.invoke(assertClass, o1, o2);
+            Method method = assertClass.getDeclaredMethod(name, argsTypes);
+            return method.invoke(assertClass, args);
         } catch (Exception e) {
             process(e);
         }
+        return null;
     }
 
     public void process(Exception e) {
