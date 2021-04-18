@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.Date;
@@ -45,6 +46,9 @@ public class ActionLogger extends Suspendable {
 
     @Value("${board.save.ticks}")
     private int ticks;
+
+    @Autowired
+    private TimeService time;
 
     protected ExecutorService executor = Executors.newSingleThreadExecutor();
     private Queue<BoardLog> cache = new ConcurrentLinkedQueue<>();
@@ -129,7 +133,7 @@ public class ActionLogger extends Suspendable {
     }
 
     protected long now() {
-        return System.currentTimeMillis();
+        return time.now();
     }
 
     public List<BoardLog> getAll() {

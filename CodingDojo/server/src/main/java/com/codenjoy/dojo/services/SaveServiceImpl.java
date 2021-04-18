@@ -42,6 +42,7 @@ public class SaveServiceImpl implements SaveService {
     @Autowired protected PlayerService players;
     @Autowired protected Registration registration;
     @Autowired protected PlayerGames playerGames;
+    @Autowired protected TimeService time;
     @Autowired protected ConfigProperties config;
 
     @Override
@@ -50,7 +51,7 @@ public class SaveServiceImpl implements SaveService {
     }
 
     private long saveAll(List<PlayerGame> playerGames) {
-        long now = System.currentTimeMillis();
+        long now = time.now();
         saver.saveGames(playerGames, now);
         return now;
     }
@@ -77,12 +78,13 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public long save(String id) {
         PlayerGame playerGame = playerGames.get(id);
-        if (playerGame != NullPlayerGame.INSTANCE) {
-            long now = System.currentTimeMillis();
-            saveGame(playerGame, now);
-            return now;
+        if (playerGame == NullPlayerGame.INSTANCE) {
+            return -1;
         }
-        return -1;
+
+        long now = time.now();
+        saveGame(playerGame, now);
+        return now;
     }
 
     private void saveGame(PlayerGame playerGame, long time) {

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -34,6 +35,8 @@ public class SimpleProfiler {
     private long time;
     private long phaseTime;
     private String message;
+    @Autowired
+    private TimeService timeService;
 
     private final PlayerGames playerGames;
 
@@ -47,7 +50,7 @@ public class SimpleProfiler {
     }
 
     private long now() {
-        return System.currentTimeMillis();
+        return timeService.now();
     }
 
     public synchronized void phase(String phase) {

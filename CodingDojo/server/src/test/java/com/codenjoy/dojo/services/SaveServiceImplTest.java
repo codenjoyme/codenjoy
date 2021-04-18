@@ -50,6 +50,7 @@ public class SaveServiceImplTest {
     private PlayerService playerService;
     private PlayerGames playerGames;
     private GameSaver saver;
+    private TimeService time;
 
     private List<Registration.User> users;
     private List<Player> players;
@@ -63,6 +64,7 @@ public class SaveServiceImplTest {
             this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
+            this.time = SaveServiceImplTest.this.time = spy(TimeService.class);
         }};
 
         users = new LinkedList<>();
