@@ -12,11 +12,15 @@ import java.util.List;
 public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     private Class<?> assertClass;
+    private Class<?> mockitoClass;
+    private Class<?> mockitoVerificationModeClass;
 
     public MockitoMocker() {
         try {
             ClassLoader classLoader = this.getClass().getClassLoader();
             assertClass = classLoader.loadClass("org.junit.Assert");
+            mockitoClass = classLoader.loadClass("org.mockito.Mockito");
+            mockitoVerificationModeClass = classLoader.loadClass("org.mockito.verification.VerificationMode");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -38,13 +42,22 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
             if (target instanceof Error) {
                 throw (Error)target;
             }
+            if (target instanceof RuntimeException) {
+                throw (RuntimeException)target;
+            }
         }
         throw new RuntimeException(e);
     }
 
     @Override
     public <T> T verify(T mock, Object mode) {
-        return Mockito.verify(mock, (VerificationMode) mode);
+        try {
+            Method assertEquals = mockitoClass.getDeclaredMethod("verify", Object.class, mockitoVerificationModeClass);
+            return (T) assertEquals.invoke(assertClass, mock, mode);
+        } catch (Exception e) {
+            process(e);
+        }
+        return null;
     }
 
     @Override
