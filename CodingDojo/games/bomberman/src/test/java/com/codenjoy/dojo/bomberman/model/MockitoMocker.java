@@ -29,8 +29,8 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
     @Override
     public void assertEquals(Object o1, Object o2) {
         try {
-            Method assertEquals = assertClass.getDeclaredMethod("assertEquals", Object.class, Object.class);
-            assertEquals.invoke(assertClass, o1, o2);
+            Method method = assertClass.getDeclaredMethod("assertEquals", Object.class, Object.class);
+            method.invoke(assertClass, o1, o2);
         } catch (Exception e) {
             process(e);
         }
@@ -52,8 +52,8 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
     @Override
     public <T> T verify(T mock, Object mode) {
         try {
-            Method assertEquals = mockitoClass.getDeclaredMethod("verify", Object.class, mockitoVerificationModeClass);
-            return (T) assertEquals.invoke(assertClass, mock, mode);
+            Method method = mockitoClass.getDeclaredMethod("verify", Object.class, mockitoVerificationModeClass);
+            return (T) method.invoke(mockitoClass, mock, mode);
         } catch (Exception e) {
             process(e);
         }
@@ -62,7 +62,12 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     @Override
     public <T> void reset(T... mocks) {
-        Mockito.reset(mocks);
+        try {
+            Method method = mockitoClass.getDeclaredMethod("reset", Object[].class);
+            method.invoke(mockitoClass, (Object)mocks);
+        } catch (Exception e) {
+            process(e);
+        }
     }
 
     @Override
