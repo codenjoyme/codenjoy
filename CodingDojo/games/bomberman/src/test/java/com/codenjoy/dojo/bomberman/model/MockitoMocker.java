@@ -100,7 +100,7 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     @Override
     public <T, S extends T> EventsListenersAssert.Captor<T> captorForClass(Class<S> clazz) {
-        ArgumentCaptor<T> captor = getArgumentCaptor(clazz);
+        Object captor = getArgumentCaptor(clazz);
         return new EventsListenersAssert.Captor<T>() {
             @Override
             public T capture() {
@@ -126,8 +126,8 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
         };
     }
 
-    public <T, S extends T> ArgumentCaptor<T> getArgumentCaptor(Class<S> clazz) {
-        return (ArgumentCaptor<T>) call(argumentCaptorClass, "forClass",
+    public Object getArgumentCaptor(Class clazz) {
+        return call(argumentCaptorClass, "forClass",
                 new Class[]{Class.class},
                 new Object[]{clazz});
     }
