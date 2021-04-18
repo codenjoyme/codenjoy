@@ -24,17 +24,18 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.bomberman.TestGameSettings;
+import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.bomberman.model.EventsListenersAssert.getEvents;
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -56,6 +57,7 @@ public class AbstractGameTest {
     protected Bomberman field;
     private PrinterFactory printer;
     protected PerksSettingsWrapper perks;
+    protected EventsListenersAssert events = new EventsListenersAssert(Arrays.asList(), Events.class);
 
     @Before
     public void setUp() {
@@ -237,6 +239,6 @@ public class AbstractGameTest {
     }
 
     protected void verifyAllEvents(String expected) {
-        assertEquals(expected, getEvents(listener));
+        assertEquals(expected, events.getEvents(listener));
     }
 }

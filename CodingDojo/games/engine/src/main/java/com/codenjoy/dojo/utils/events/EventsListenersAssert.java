@@ -44,7 +44,7 @@ public class EventsListenersAssert {
         this.testing = new MockitoJunitTesting();
     }
 
-    private String getEvents(EventListener events) {
+    public String getEvents(EventListener events) {
         String result = tryCatch(
                 () -> {
                     Testing.Captor captor = testing.captorForClass(eventsClass);
