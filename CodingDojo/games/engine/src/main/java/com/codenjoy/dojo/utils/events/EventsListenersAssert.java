@@ -114,7 +114,7 @@ public class EventsListenersAssert {
         if (expected.equals("[]")) {
             tryCatch(
                     () -> {
-                        testing.verify(events, testing.never()).event(testing.any(eventsClass));
+                        testing.verify(events, testing.never()).event(testing.anyObject());
                         return null;
                     },
                     "NeverWantedButInvoked", () -> {

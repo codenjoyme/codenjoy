@@ -60,8 +60,16 @@ public class MockitoJunitTesting implements Testing {
     // а так вызываются методы на объекте
     public Object call(Class<?> clazz, String name, Class[] argsTypes, Object thizz, Object[] args) {
         try {
+            // ищем метод у класса
             Method method = clazz.getDeclaredMethod(name, argsTypes);
             return method.invoke(thizz, args);
+        } catch (NoSuchMethodException e) {
+            if (clazz.equals(Object.class)) {
+                // дальше Object не пойдем
+                throw new RuntimeException(e);
+            }
+            // пойдем поищем у родителя методы
+            return call(clazz.getSuperclass(), name, argsTypes, thizz, args);
         } catch (Exception e) {
             process(e);
         }
@@ -112,10 +120,10 @@ public class MockitoJunitTesting implements Testing {
     }
 
     @Override
-    public <T> T any(Class<T> type) {
-        return (T) callStatic(Mockito, "any",
-                new Class[]{Class.class},
-                new Object[]{type});
+    public <T> T anyObject() {
+        return (T) callStatic(Mockito, "anyObject",
+                new Class[]{},
+                new Object[]{});
     }
 
     @Override

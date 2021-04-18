@@ -34,7 +34,7 @@ public interface Testing {
 
     void verifyNoMoreInteractions(Object... mocks);
 
-    <T> T any(Class<T> type);
+    <T> T anyObject();
 
     Object never();
 
