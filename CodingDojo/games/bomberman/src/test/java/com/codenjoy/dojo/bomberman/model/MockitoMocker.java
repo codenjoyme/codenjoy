@@ -116,20 +116,19 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     @Override
     public <T, S extends T> EventsListenersAssert.Captor<T> captorForClass(Class<S> clazz) {
-        ArgumentCaptor<T> captor = ArgumentCaptor.forClass(clazz);
+        ArgumentCaptor<T> captor = null;
+        try {
+            Method method = argumentCaptorClass.getDeclaredMethod("forClass", Class.class);
+            captor = (ArgumentCaptor<T>) method.invoke(argumentCaptorClass, clazz);
+        } catch (Exception e) {
+            process(e);
+        }
 
-//        Object captor = null;
-//        try {
-//            Method method = argumentCaptorClass.getDeclaredMethod("forClass", Class.class);
-//            captor = method.invoke(argumentCaptorClass, clazz);
-//        } catch (Exception e) {
-//            process(e);
-//        }
-
+        ArgumentCaptor<T> finalCaptor = captor;
         return new EventsListenersAssert.Captor<T>() {
             @Override
             public T capture() {
-                return captor.capture();
+                return finalCaptor.capture();
 
 //                try {
 //                    Method method = argumentCaptorClass.getDeclaredMethod("capture");
@@ -142,7 +141,7 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
             @Override
             public List<T> getAllValues() {
-                return captor.getAllValues();
+                return finalCaptor.getAllValues();
 
 //                try {
 //                    Method method = argumentCaptorClass.getDeclaredMethod("getAllValues");
