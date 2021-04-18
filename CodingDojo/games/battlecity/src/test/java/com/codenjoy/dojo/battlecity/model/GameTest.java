@@ -59,14 +59,12 @@ public class GameTest {
 
     protected Dice dice;
     private Battlecity game;
-    private List<Player> players = new LinkedList<>();
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
-
+    private List<Player> players;
+    private PrinterFactory printerFactory;
     private GameSettings settings;
-
-    private List<Tank> heroes = new LinkedList<>();
-    private List<EventListener> listeners = new LinkedList<>();
-    private EventsListenersAssert events = new EventsListenersAssert(listeners, Events.class);
+    private List<Tank> heroes;
+    private List<EventListener> listeners;
+    private EventsListenersAssert events;
 
     private Dice dice(int... values) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
@@ -78,8 +76,14 @@ public class GameTest {
     
     @Before
     public void setup() {
-        settings = new TestGameSettings();
+        listeners = new LinkedList<>();
+        players = new LinkedList<>();
+        heroes = new LinkedList<>();
+
         dice = mock(Dice.class);
+        settings = new TestGameSettings();
+        printerFactory = new PrinterFactoryImpl();
+        events = new EventsListenersAssert(listeners, Events.class);
     }
 
     @After
