@@ -47,10 +47,10 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
         if (e instanceof InvocationTargetException) {
             Throwable target = ((InvocationTargetException) e).getTargetException();
             if (target instanceof Error) {
-                throw (Error)target;
+                throw (Error) target;
             }
             if (target instanceof RuntimeException) {
-                throw (RuntimeException)target;
+                throw (RuntimeException) target;
             }
         }
         throw new RuntimeException(e);
@@ -59,25 +59,22 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
     @Override
     public <T> T verify(T mock, Object mode) {
         return (T) call(mockitoClass, "verify",
-                new Class[]{ Object.class, mockitoVerificationModeClass},
-                new Object[] {mock, mode});
+                new Class[]{Object.class, mockitoVerificationModeClass},
+                new Object[]{mock, mode});
     }
 
     @Override
     public <T> void reset(T... mocks) {
-        try {
-            Method method = mockitoClass.getDeclaredMethod("reset", Object[].class);
-            method.invoke(mockitoClass, (Object)mocks);
-        } catch (Exception e) {
-            process(e);
-        }
+        call(mockitoClass, "reset",
+                new Class[]{Object[].class},
+                new Object[]{(Object) mocks});
     }
 
     @Override
     public void verifyNoMoreInteractions(Object... mocks) {
         try {
             Method method = mockitoClass.getDeclaredMethod("verifyNoMoreInteractions", Object[].class);
-            method.invoke(mockitoClass, (Object)mocks);
+            method.invoke(mockitoClass, (Object) mocks);
         } catch (Exception e) {
             process(e);
         }
