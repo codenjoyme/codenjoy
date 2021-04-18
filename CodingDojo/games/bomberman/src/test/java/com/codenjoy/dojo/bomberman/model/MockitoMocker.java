@@ -105,15 +105,13 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
 
     @Override
     public Object atLeast(int minNumberOfInvocations) {
-        return Mockito.atLeast(minNumberOfInvocations);
-
-//        try {
-//            Method method = mockitoClass.getDeclaredMethod("atLeast", int.class);
-//            return method.invoke(mockitoClass, minNumberOfInvocations);
-//        } catch (Exception e) {
-//            process(e);
-//        }
-//        return null;
+        try {
+            Method method = mockitoClass.getDeclaredMethod("atLeast", int.class);
+            return method.invoke(mockitoClass, minNumberOfInvocations);
+        } catch (Exception e) {
+            process(e);
+        }
+        return null;
     }
 
     @Override
