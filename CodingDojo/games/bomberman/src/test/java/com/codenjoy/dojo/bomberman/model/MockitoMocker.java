@@ -94,8 +94,8 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
     @Override
     public Object atLeast(int minNumberOfInvocations) {
         return call(mockitoClass, "atLeast",
-                new Class[]{},
-                new Object[]{});
+                new Class[]{int.class},
+                new Object[]{minNumberOfInvocations});
     }
 
     @Override
@@ -127,13 +127,8 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
     }
 
     public <T, S extends T> ArgumentCaptor<T> getArgumentCaptor(Class<S> clazz) {
-        ArgumentCaptor<T> captor = null;
-        try {
-            Method method = argumentCaptorClass.getDeclaredMethod("forClass", Class.class);
-            captor = (ArgumentCaptor<T>) method.invoke(argumentCaptorClass, clazz);
-        } catch (Exception e) {
-            process(e);
-        }
-        return captor;
+        return (ArgumentCaptor<T>) call(argumentCaptorClass, "forClass",
+                new Class[]{Class.class},
+                new Object[]{clazz});
     }
 }
