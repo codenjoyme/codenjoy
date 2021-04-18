@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.utils.events;
 
-import com.codenjoy.dojo.utils.events.EventsListenersAssert;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -13,14 +11,14 @@ import java.util.List;
  * Вот так вот! И такой код тоже бывает. Но не забываем, что любой подход - это упражнение по программированию.
  * Если найдешь лучшее решение, кроме как импортировать Maven и JUnit не для тестов - ждем PullRequest.
  */
-public class MockitoMocker implements EventsListenersAssert.Mocker {
+public class MockitoJunitTesting implements Testing {
 
     private Class<?> Assert;
     private Class<?> Mockito;
     private Class<?> VerificationMode;
     private Class<?> ArgumentCaptor;
 
-    public MockitoMocker() {
+    public MockitoJunitTesting() {
         try {
             ClassLoader classLoader = this.getClass().getClassLoader();
             Assert = classLoader.loadClass("org.junit.Assert");
@@ -119,9 +117,9 @@ public class MockitoMocker implements EventsListenersAssert.Mocker {
     }
 
     @Override
-    public <T, S extends T> EventsListenersAssert.Captor<T> captorForClass(Class<S> clazz) {
+    public <T, S extends T> Testing.Captor<T> captorForClass(Class<S> clazz) {
         Object captor = getArgumentCaptor(clazz);
-        return new EventsListenersAssert.Captor<T>() {
+        return new Testing.Captor<T>() {
             @Override
             public T capture() {
                 return (T) call(ArgumentCaptor, "capture",

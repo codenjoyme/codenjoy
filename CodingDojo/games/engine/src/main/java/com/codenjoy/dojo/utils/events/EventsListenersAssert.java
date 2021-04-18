@@ -36,39 +36,23 @@ public class EventsListenersAssert {
 
     private List<EventListener> listeners;
     private Class eventsClass;
-    private Mocker mocker;
-
-    public interface Mocker {
-        void assertEquals(Object o1, Object o2);
-        <T> T verify(T mock, Object mode);
-        <T> void reset(T... mocks);
-        void verifyNoMoreInteractions(Object... mocks);
-        <T> T any(Class<T> type);
-        Object never();
-        Object atLeast(int minNumberOfInvocations);
-        <T, S extends T> Captor<T> captorForClass(Class<S> clazz);
-    }
-
-    public interface Captor<T> {
-        T capture();
-        List<T> getAllValues();
-    }
+    private Testing testing;
 
     public EventsListenersAssert(List<EventListener> listeners, Class eventsClass) {
         this.listeners = listeners;
         this.eventsClass = eventsClass;
-        this.mocker = new MockitoMocker();
+        this.testing = new MockitoJunitTesting();
     }
 
     private String getEvents(EventListener events) {
         String result = tryCatch(
                 () -> {
-                    Captor captor = mocker.captorForClass(eventsClass);
-                    mocker.verify(events, mocker.atLeast(1)).event(captor.capture());
+                    Testing.Captor captor = testing.captorForClass(eventsClass);
+                    testing.verify(events, testing.atLeast(1)).event(captor.capture());
                     return captor.getAllValues().toString();
                 },
                 "WantedButNotInvoked", () -> "[]");
-        mocker.reset(events);
+        testing.reset(events);
         return result;
     }
 
@@ -94,7 +78,7 @@ public class EventsListenersAssert {
             actual += function.apply(indexes[i]);
         }
 
-        mocker.assertEquals(expected, actual);
+        testing.assertEquals(expected, actual);
     }
 
     private static <A> A tryCatch(Supplier<A> tryCode,
@@ -115,7 +99,7 @@ public class EventsListenersAssert {
                 () -> {
                     for (int i = 0; i < listeners.size(); i++) {
                         if (indexes.length == 0 || Arrays.asList(indexes).contains(i)) {
-                            mocker.verifyNoMoreInteractions(listeners.get(i));
+                            testing.verifyNoMoreInteractions(listeners.get(i));
                         }
                     }
                     return null;
@@ -130,17 +114,17 @@ public class EventsListenersAssert {
         if (expected.equals("[]")) {
             tryCatch(
                     () -> {
-                        mocker.verify(events, mocker.never()).event(mocker.any(eventsClass));
+                        testing.verify(events, testing.never()).event(testing.any(eventsClass));
                         return null;
                     },
                     "NeverWantedButInvoked", () -> {
-                        mocker.assertEquals(expected, getEvents(events));
+                        testing.assertEquals(expected, getEvents(events));
                         return null;
                     });
         } else {
-            mocker.assertEquals(expected, getEvents(events));
+            testing.assertEquals(expected, getEvents(events));
         }
-        mocker.reset(events);
+        testing.reset(events);
     }
 
     public void verifyAllEvents(String expected, Integer... indexes) {
