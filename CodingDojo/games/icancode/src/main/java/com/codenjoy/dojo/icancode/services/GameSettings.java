@@ -42,29 +42,33 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
 
     public enum Keys implements Key {
 
-        CHEATS("Cheats enabled"),
-        PERK_DROP_RATIO("Perk drop ratio"),
-        PERK_AVAILABILITY("Perk availability"),
-        PERK_ACTIVITY("Perk activity"),
-        DEATH_RAY_PERK_RANGE("Death-Ray perk range"),
-        WIN_SCORE("Win score"),
-        GOLD_SCORE("Gold score"),
-        KILL_ZOMBIE_SCORE("Kill zombie score"),
-        KILL_HERO_SCORE("Kill hero score"),
-        ENABLE_KILL_SCORE("Enable score for kill"),
-        LOOSE_PENALTY("Loose penalty"),
-        IS_TRAINING_MODE("Is training mode"),
-        GUN_RECHARGE("Heroes gun recharge"),
-        GUN_SHOT_QUEUE("Heroes gun need to relax after a series of shots"),
-        GUN_REST_TIME("Heroes gun rest time(ticks)"),
-        DEFAULT_PERKS("Default hero perks on training and contest"),
-        TICKS_PER_NEW_ZOMBIE("Ticks per new zombie"),
-        COUNT_ZOMBIES_ON_MAP("Count zombies"),
-        WALK_EACH_TICKS("Zombie walks tick timeout"),
-        GAME_MODE("Game mode"),
-        ROOM_SIZE("Room size"),
-        VIEW_SIZE("Map view size"),
-        LEVELS_COUNT("Levels count");
+        IS_TRAINING_MODE("[Game] Is training mode"),
+        GAME_MODE("[Game] Game mode"),
+        ROOM_SIZE("[Game] Room size"),
+        VIEW_SIZE("[Game] Map view size"),
+        LEVELS_COUNT("[Game] Levels count"),
+        CHEATS("[Game] Cheats enabled"),
+
+        GUN_RECHARGE("[Gun] Heroes gun recharge"),
+        GUN_SHOT_QUEUE("[Gun] Heroes gun need to relax after a series of shots"),
+        GUN_REST_TIME("[Gun] Heroes gun rest time(ticks)"),
+
+        TICKS_PER_NEW_ZOMBIE("[Zombie] Ticks per new zombie"),
+        COUNT_ZOMBIES_ON_MAP("[Zombie] Count zombies"),
+        WALK_EACH_TICKS("[Zombie] Zombie walks tick timeout"),
+
+        DEFAULT_PERKS("[Perk] Default hero perks on training and contest"),
+        PERK_DROP_RATIO("[Perk] Drop ratio"),
+        PERK_AVAILABILITY("[Perk] Availability"),
+        PERK_ACTIVITY("[Perk] Activity"),
+        DEATH_RAY_PERK_RANGE("[Perk] Death-Ray perk range"),
+
+        WIN_SCORE("[Score] Win score"),
+        GOLD_SCORE("[Score] Gold score"),
+        KILL_ZOMBIE_SCORE("[Score] Kill zombie score"),
+        ENABLE_KILL_SCORE("[Score] Enable score for kill"),
+        KILL_HERO_SCORE("[Score] Kill hero score"),
+        LOOSE_PENALTY("[Score] Loose penalty");
 
         private String key;
 
@@ -84,37 +88,41 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        bool(CHEATS, false);
-        integer(PERK_DROP_RATIO, 50);
-        integer(PERK_AVAILABILITY, 10);
-        integer(PERK_ACTIVITY, 10);
-        integer(DEATH_RAY_PERK_RANGE, 10);
-        integer(WIN_SCORE, 25);
-        integer(GOLD_SCORE, 10);
-        integer(KILL_ZOMBIE_SCORE, 5);
-        integer(KILL_HERO_SCORE, 10);
-        bool(ENABLE_KILL_SCORE, true);
-        integer(LOOSE_PENALTY, 5);
         bool(IS_TRAINING_MODE, true);
+        options(GAME_MODE,
+                Arrays.asList(
+                        CLASSIC_TRAINING,
+                        ALL_SINGLE,
+                        ALL_IN_ROOMS,
+                        TRAINING_MULTIMAP
+                ),
+                CLASSIC_TRAINING);
+        integer(ROOM_SIZE, 5);
+        integer(VIEW_SIZE, 20);
+        integer(LEVELS_COUNT, 0);
+        bool(CHEATS, false);
 
         integer(GUN_RECHARGE, 2);
         integer(GUN_SHOT_QUEUE, 10);
         integer(GUN_REST_TIME, 10);
 
-        string(DEFAULT_PERKS, ",ajm");
-
         integer(TICKS_PER_NEW_ZOMBIE, 20);
         integer(COUNT_ZOMBIES_ON_MAP, 4);
         integer(WALK_EACH_TICKS, 2);
 
-        options(GAME_MODE, Arrays.asList(
-                CLASSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP),
-                CLASSIC_TRAINING);
-        integer(ROOM_SIZE, 5);
+        string(DEFAULT_PERKS, ",ajm");
+        integer(PERK_DROP_RATIO, 50);
+        integer(PERK_AVAILABILITY, 10);
+        integer(PERK_ACTIVITY, 10);
+        integer(DEATH_RAY_PERK_RANGE, 10);
 
-        integer(VIEW_SIZE, 20);
+        integer(WIN_SCORE, 25);
+        integer(GOLD_SCORE, 10);
+        integer(KILL_ZOMBIE_SCORE, 5);
+        bool(ENABLE_KILL_SCORE, true);
+        integer(KILL_HERO_SCORE, 10);
+        integer(LOOSE_PENALTY, 5);
 
-        integer(LEVELS_COUNT, 0);
         Levels.setup(this);
     }
 
