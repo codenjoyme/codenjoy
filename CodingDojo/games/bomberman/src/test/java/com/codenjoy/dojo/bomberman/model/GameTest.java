@@ -437,7 +437,7 @@ public class GameTest extends AbstractGameTest {
                 "҉    \n" +
                 "҉Ѡ   \n");
 
-        verifyAllEvents("[DIED]");
+        events.verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -448,7 +448,7 @@ public class GameTest extends AbstractGameTest {
                 "     \n" +
                 " Ѡ   \n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -571,7 +571,7 @@ public class GameTest extends AbstractGameTest {
                 "҉    \n" +
                 "҉Ѡ   \n");
 
-        verifyAllEvents("[DIED]");
+        events.verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -582,7 +582,7 @@ public class GameTest extends AbstractGameTest {
                 "     \n" +
                 " Ѡ   \n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -615,7 +615,7 @@ public class GameTest extends AbstractGameTest {
                 " ҉   \n" +
                 "Ѡ҉҉  \n");
 
-        verifyAllEvents("[DIED]");
+        events.verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -626,7 +626,7 @@ public class GameTest extends AbstractGameTest {
                 "     \n" +
                 "Ѡ    \n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -657,7 +657,7 @@ public class GameTest extends AbstractGameTest {
                 "҉҉   \n" +
                 "Ѡ    \n");
 
-        verifyAllEvents("[DIED]");
+        events.verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -668,7 +668,7 @@ public class GameTest extends AbstractGameTest {
                 "     \n" +
                 "Ѡ    \n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -701,7 +701,7 @@ public class GameTest extends AbstractGameTest {
                 "Ѡ    \n" +
                 "҉҉   \n");
 
-        verifyAllEvents("[DIED]");
+        events.verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -712,7 +712,7 @@ public class GameTest extends AbstractGameTest {
                 "Ѡ    \n" +
                 "     \n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -822,7 +822,7 @@ public class GameTest extends AbstractGameTest {
                 "  Ѡ  \n" +
                 "     \n");
 
-        verifyAllEvents("[DIED]");
+        events.verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -832,7 +832,7 @@ public class GameTest extends AbstractGameTest {
                 "  Ѡ  \n" +
                 "     \n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -1624,7 +1624,7 @@ public class GameTest extends AbstractGameTest {
                 "#1   \n" +
                 "x҉҉  \n");
 
-        verifyAllEvents("[KILL_MEAT_CHOPPER]");
+        events.verifyAllEvents("[KILL_MEAT_CHOPPER]");
 
         field.tick();
 
@@ -1634,7 +1634,7 @@ public class GameTest extends AbstractGameTest {
                 "H҉҉  \n" +
                 " ҉   \n");
 
-        verifyAllEvents("[KILL_DESTROY_WALL]");
+        events.verifyAllEvents("[KILL_DESTROY_WALL]");
 
         field.tick();
 
@@ -1644,7 +1644,7 @@ public class GameTest extends AbstractGameTest {
                 " ҉   \n" +
                 "     \n");
 
-        verifyAllEvents("[KILL_MEAT_CHOPPER]");
+        events.verifyAllEvents("[KILL_MEAT_CHOPPER]");
 
         field.tick();
 
@@ -1654,7 +1654,7 @@ public class GameTest extends AbstractGameTest {
                 "     \n" +
                 "     \n");
 
-        verifyAllEvents("[KILL_DESTROY_WALL]");
+        events.verifyAllEvents("[KILL_DESTROY_WALL]");
 
         hero.left();
         field.tick();
@@ -1680,7 +1680,7 @@ public class GameTest extends AbstractGameTest {
                 "     \n" +
                 "     \n");
 
-        verifyAllEvents("[DIED]");
+        events.verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -1753,7 +1753,7 @@ public class GameTest extends AbstractGameTest {
                 "#2   \n" +
                 "&1   \n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
 
         hero.right();
         field.tick();
@@ -1772,7 +1772,7 @@ public class GameTest extends AbstractGameTest {
                 "     \n" +
                 "     \n");
 
-        verifyAllEvents("[KILL_MEAT_CHOPPER, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]");
+        events.verifyAllEvents("[KILL_MEAT_CHOPPER, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]");
     }
 
     // если я двинулся за пределы стены и тут же поставил бомбу, то бомба упадет на моем текущем месте

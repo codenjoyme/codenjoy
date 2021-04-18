@@ -176,7 +176,7 @@ public class PerksTest extends AbstractGameTest {
 
         assertEquals("[]", field.perks().toString());
 
-        verifyAllEvents("[KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
+        events.verifyAllEvents("[KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
 
         // when
         field.tick();
@@ -222,7 +222,7 @@ public class PerksTest extends AbstractGameTest {
                 "☺    #\n" +
                 "#+####\n");
 
-        verifyAllEvents("[CATCH_PERK]");
+        events.verifyAllEvents("[CATCH_PERK]");
         assertEquals(before + settings.integer(CATCH_PERK_SCORE), hero.scores());
         assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
     }
@@ -347,7 +347,7 @@ public class PerksTest extends AbstractGameTest {
                 "#+####\n");
 
         // все тихо
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
 
         // when
         field.tick();
@@ -362,7 +362,7 @@ public class PerksTest extends AbstractGameTest {
                 "#x####\n");
 
         // пошел сигнал об этом
-        verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
+        events.verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
 
         // такой себе хак, мы в домике
         hero.move(3, 4);
@@ -426,7 +426,7 @@ public class PerksTest extends AbstractGameTest {
                 "     +\n" +
                 "# ####\n");
 
-        verifyAllEvents("[DIED]");
+        events.verifyAllEvents("[DIED]");
 
         field.tick();
 
@@ -493,7 +493,7 @@ public class PerksTest extends AbstractGameTest {
                 "#+####\n");
 
         // все тихо
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
 
         // when
         field.tick();
@@ -508,7 +508,7 @@ public class PerksTest extends AbstractGameTest {
                 "#x####\n");
 
         // пошел сигнал об этом
-        verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
+        events.verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
 
         // when
         field.tick();
@@ -533,7 +533,7 @@ public class PerksTest extends AbstractGameTest {
                 "# ####\n");
 
         // пошел сигнал об этом
-        verifyAllEvents("[KILL_MEAT_CHOPPER, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
+        events.verifyAllEvents("[KILL_MEAT_CHOPPER, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
 
         // when
         field.tick();
@@ -546,7 +546,7 @@ public class PerksTest extends AbstractGameTest {
                 "     +\n" +
                 "# ####\n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
     }
 
 
@@ -587,7 +587,7 @@ public class PerksTest extends AbstractGameTest {
                 "     +\n" +
                 "# ####\n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
 
         // породили три чудовища
         field.tick();
@@ -599,7 +599,7 @@ public class PerksTest extends AbstractGameTest {
                 " ҉   +\n" +
                 "# ####\n");
 
-        verifyAllEvents("[DROP_PERK, DROP_PERK, DROP_PERK]");
+        events.verifyAllEvents("[DROP_PERK, DROP_PERK, DROP_PERK]");
 
         // и они пошли за нами
         field.tick();
@@ -629,7 +629,7 @@ public class PerksTest extends AbstractGameTest {
                 "     +\n" +
                 "# ####\n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
     }
 
     // если анти-митчоперы не могут найти к тебе короткий путь - они выпиливаются
@@ -660,7 +660,7 @@ public class PerksTest extends AbstractGameTest {
                 "     +\n" +
                 "# ####\n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
     }
 
     // если мы вызвали потустороннюю нечисть, то наш суицид ее успокоит, отправив обратно
@@ -701,7 +701,7 @@ public class PerksTest extends AbstractGameTest {
                 "#+####\n");
 
         // все тихо
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
 
         // when
         field.tick();
@@ -716,7 +716,7 @@ public class PerksTest extends AbstractGameTest {
                 "#x####\n");
 
         // пошел сигнал об этом
-        verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
+        events.verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
 
         // охотник идет
         field.tick();
@@ -740,7 +740,7 @@ public class PerksTest extends AbstractGameTest {
                 "  &  +\n" +
                 "#  ###\n");
 
-        verifyAllEvents("[DIED]");
+        events.verifyAllEvents("[DIED]");
 
     }
 
@@ -1524,7 +1524,7 @@ public class PerksTest extends AbstractGameTest {
                 "H    \n" +
                 "҉҉҉Ѡ \n");
 
-        verifyAllEvents("[DIED, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]");
+        events.verifyAllEvents("[DIED, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]");
 
         // только сейчас перк забрался
         assertEquals("[]",
@@ -1538,7 +1538,7 @@ public class PerksTest extends AbstractGameTest {
                 "     \n" +
                 "   Ѡ \n");
 
-        verifyAllEvents("[]");
+        events.verifyAllEvents("[]");
 
         assertEquals("[]",
                 hero.getPerks().toString());

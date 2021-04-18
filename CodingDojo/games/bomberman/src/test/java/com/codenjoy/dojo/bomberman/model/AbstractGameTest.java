@@ -57,19 +57,19 @@ public class AbstractGameTest {
     protected Bomberman field;
     private PrinterFactory printer;
     protected PerksSettingsWrapper perks;
-    protected EventsListenersAssert events = new EventsListenersAssert(Arrays.asList(), Events.class);
+    protected EventsListenersAssert events;
 
     @Before
     public void setUp() {
-        printer = new PrinterFactoryImpl();
+        dice = mock(Dice.class);
+        chopperDice = mock(Dice.class);
         settings = spy(new TestGameSettings());
+        printer = new PrinterFactoryImpl();
+        events = new EventsListenersAssert(Arrays.asList(), Events.class);
         perks = settings.perksSettings();
         bombsPower(1);
 
         givenWalls();
-
-        chopperDice = mock(Dice.class);
-        dice = mock(Dice.class);
 
         listener = mock(EventListener.class);
 
@@ -236,9 +236,5 @@ public class AbstractGameTest {
         chopper.stop();
         walls.add(chopper);
         return chopper;
-    }
-
-    protected void verifyAllEvents(String expected) {
-        assertEquals(expected, events.getEvents(listener));
     }
 }
