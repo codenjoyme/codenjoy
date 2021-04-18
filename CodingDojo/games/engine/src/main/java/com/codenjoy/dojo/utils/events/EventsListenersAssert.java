@@ -34,14 +34,18 @@ import static java.util.stream.Collectors.toList;
 
 public class EventsListenersAssert {
 
-    private List<EventListener> listeners;
+    private Supplier<List<EventListener>> listeners;
     private Class eventsClass;
     private Testing testing;
 
-    public EventsListenersAssert(List<EventListener> listeners, Class eventsClass) {
+    public EventsListenersAssert(Supplier<List<EventListener>> listeners, Class eventsClass) {
         this.listeners = listeners;
         this.eventsClass = eventsClass;
         this.testing = new MockitoJunitTesting();
+    }
+
+    private List<EventListener> listeners() {
+        return listeners.get();
     }
 
     public String getEvents(EventListener events) {
@@ -97,9 +101,9 @@ public class EventsListenersAssert {
     public void verifyNoEvents(Integer... indexes) {
         tryCatch(
                 () -> {
-                    for (int i = 0; i < listeners.size(); i++) {
+                    for (int i = 0; i < listeners().size(); i++) {
                         if (indexes.length == 0 || Arrays.asList(indexes).contains(i)) {
-                            testing.verifyNoMoreInteractions(listeners.get(i));
+                            testing.verifyNoMoreInteractions(listeners().get(i));
                         }
                     }
                     return null;
@@ -128,9 +132,14 @@ public class EventsListenersAssert {
     }
 
     public void verifyAllEvents(String expected, Integer... indexes) {
-        assertAll(expected, listeners.size(), indexes, index -> {
-            Object actual = getEvents(listeners.get(index));
-            return String.format("listener(%s) => %s\n", index, actual);
+        int size = listeners().size();
+        assertAll(expected, size, indexes, index -> {
+            Object actual = getEvents(listeners().get(index));
+            if (size == 1) {
+                return actual.toString();
+            } else {
+                return String.format("listener(%s) => %s\n", index, actual);
+            }
         });
     }
 }
