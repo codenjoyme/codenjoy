@@ -502,6 +502,12 @@ public class PlayerServiceImpl implements PlayerService {
             registration.updateReadableName(input.getId(), input.getReadableName());
         }
 
+        boolean updateEmail = StringUtils.isNotEmpty(input.getEmail());
+        if (updateEmail) {
+            updated.setEmail(input.getEmail());
+            registration.updateEmail(input.getId(), input.getEmail());
+        }
+
         boolean updateId = !playerGame.getPlayer().getId().equals(input.getId());
         if (updateId) {
             updated.setId(input.getId());

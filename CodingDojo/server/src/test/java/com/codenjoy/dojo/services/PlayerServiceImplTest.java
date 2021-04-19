@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -796,7 +796,7 @@ public class PlayerServiceImplTest {
         // when, then
         checkInfo("");
     }
-    
+
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifPositiveValue() {
         // given
@@ -1438,7 +1438,7 @@ public class PlayerServiceImplTest {
         // given
         createPlayer(VASYA);
         createPlayer(PETYA);
-        
+
         // when
         playerService.cleanAllScores();
 
@@ -1765,8 +1765,14 @@ public class PlayerServiceImplTest {
 
         // when
         List<PlayerInfo> infos = new LinkedList<>();
-        infos.add(new PlayerInfo(VASYA, "new-code1", "new-url1", "game"));
-        infos.add(new PlayerInfo(PETYA, "new-code2", "new-url2", "game"));
+        infos.add(new PlayerInfo(VASYA, "new-code1", "new-url1", "game") {{
+            setEmail("new-email1");
+            setReadableName("new-readableName1");
+        }});
+        infos.add(new PlayerInfo(PETYA, "new-code2", "new-url2", "game") {{
+            setEmail("new-email2");
+            setReadableName("new-readableName2");
+        }});
         playerService.updateAll(infos);
 
         // then
@@ -1780,8 +1786,14 @@ public class PlayerServiceImplTest {
         createPlayer(PETYA);
 
         // when
-        playerService.update(new PlayerInfo(VASYA, "new-code1", "new-url1", "game"));
-        playerService.update(new PlayerInfo(PETYA, "new-code2", "new-url2", "game"));
+        playerService.update(new PlayerInfo(VASYA, "new-code1", "new-url1", "game") {{
+            setEmail("new-email1");
+            setReadableName("new-readableName1");
+        }});
+        playerService.update(new PlayerInfo(PETYA, "new-code2", "new-url2", "game") {{
+            setEmail("new-email2");
+            setReadableName("new-readableName2");
+        }});
 
         // then
         assertUpdated("[vasya, petya]", playerService.getAll());
@@ -1992,12 +2004,20 @@ public class PlayerServiceImplTest {
         assertEquals("new-url1", player1.getCallbackUrl());
         assertEquals(null, player1.getCode());
         assertEquals("game", player1.getGame());
+        assertEquals("new-email1", player1.getEmail());
+        verify(registration).updateEmail(VASYA, "new-email1");
+        assertEquals("new-readableName1", player1.getReadableName());
+        verify(registration).updateReadableName(VASYA, "new-readableName1");
         assertEquals(null, player1.getPassword());
 
         Player player2 = all.get(1);
         assertEquals("new-url2", player2.getCallbackUrl());
         assertEquals(null, player2.getCode());
         assertEquals("game", player1.getGame());
+        assertEquals("new-email2", player2.getEmail());
+        verify(registration).updateEmail(PETYA, "new-email2");
+        assertEquals("new-readableName2", player2.getReadableName());
+        verify(registration).updateReadableName(PETYA, "new-readableName2");
         assertEquals(null, player2.getPassword());
     }
 
@@ -2009,9 +2029,18 @@ public class PlayerServiceImplTest {
 
         // when
         List<PlayerInfo> infos = new LinkedList<>();
-        infos.add(new PlayerInfo(VASYA, "new-pass1", "new-url1", "game"));
-        infos.add(new PlayerInfo(PETYA, "new-pass2", "new-url2", "game"));
-        infos.add(new PlayerInfo(null, "new-pass2", "new-url2", "game"));
+        infos.add(new PlayerInfo(VASYA, "new-pass1", "new-url1", "game") {{
+            setEmail("new-email1");
+            setReadableName("new-readableName1");
+        }});
+        infos.add(new PlayerInfo(PETYA, "new-pass2", "new-url2", "game") {{
+            setEmail("new-email2");
+            setReadableName("new-readableName2");
+        }});
+        infos.add(new PlayerInfo(null, "new-pass3", "new-url3", "game") {{
+            setEmail("new-email3");
+            setReadableName("new-readableName3");
+        }});
         playerService.updateAll(infos);
 
         // then

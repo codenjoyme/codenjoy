@@ -312,6 +312,13 @@ public class Registration {
                 new Object[]{name, id});
     }
 
+    public void updateEmail(String id, String email) {
+        pool.update("UPDATE users " +
+                        "SET email = ? " +
+                        "WHERE id = ?;",
+                new Object[]{email, id});
+    }
+
     public void updateId(String name, String id) {
         pool.update("UPDATE users " +
                         "SET id = ? " +

@@ -250,6 +250,30 @@ public class RegistrationTest {
     }
 
     @Test
+    public void shouldUpdateEmail() {
+        // given
+        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles()).getCode();
+        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles()).getCode();
+
+        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
+        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
+
+        Registration.User actualUser1 = registration.getUserByCode(code1);
+        Registration.User actualUser2 = registration.getUserByCode(code2);
+
+        assertUsersEqual(expectedUser1, actualUser1, "pass1", PASSWORD_ENCODER);
+        assertUsersEqual(expectedUser2, actualUser2, "pass2", PASSWORD_ENCODER);
+
+        // when
+        registration.updateEmail("id1", "updatedEmail1");
+        actualUser1 = registration.getUserByCode(code1);
+
+        // then
+        assertUsersEqual(expectedUser1.setEmail("updatedEmail1"), actualUser1, "pass1", PASSWORD_ENCODER);
+        assertUsersEqual(expectedUser2, actualUser2, "pass2", PASSWORD_ENCODER);
+    }
+
+    @Test
     public void shouldUpdateId() {
         // given
         String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles()).getCode();
