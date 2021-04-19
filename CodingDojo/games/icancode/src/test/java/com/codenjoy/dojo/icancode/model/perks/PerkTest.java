@@ -87,6 +87,8 @@ public class PerkTest extends AbstractGameTest {
         // then
         game.tick();
 
+        events.verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
+
         assertE("------" +
                 "--☺---" +
                 "------" +

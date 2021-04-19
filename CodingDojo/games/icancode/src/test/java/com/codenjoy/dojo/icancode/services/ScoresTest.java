@@ -23,11 +23,12 @@ package com.codenjoy.dojo.icancode.services;
  */
 
 
-import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.services.PlayerScores;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.model.ICanCode.CONTEST;
+import static com.codenjoy.dojo.icancode.model.ICanCode.TRAINING;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
@@ -36,36 +37,45 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
-    public void loose() {
-        scores.event(new Events());
+    public boolean single() {
+        return TRAINING;
     }
 
-    public void win() {
-        scores.event(Events.WIN(0));
+    public boolean multiple() {
+        return CONTEST;
+    }
+
+    public void looseSingle() {
+        scores.event(new Events(single()));
+    }
+
+    public void winSingle() {
+        scores.event(Events.WIN(0, single()));
     }
 
     public void winMultiple() {
-        scores.event(Events.WIN(0, ICanCode.CONTEST));
+        scores.event(Events.WIN(0, multiple()));
     }
 
-    public void win(int goldCount) {
-        scores.event(Events.WIN(goldCount));
+
+    public void winSingle(int goldCount) {
+        scores.event(Events.WIN(goldCount, single()));
     }
 
-    public void killHero(int count) {
-        scores.event(Events.KILL_HERO(count, ICanCode.TRAINING));
+    public void killHeroSingle(int count) {
+        scores.event(Events.KILL_HERO(count, single()));
     }
 
-    public void killZombie(int count) {
-        scores.event(Events.KILL_ZOMBIE(count, ICanCode.TRAINING));
+    public void killZombieSingle(int count) {
+        scores.event(Events.KILL_ZOMBIE(count, single()));
     }
 
     public void killHeroMultiple(int count) {
-        scores.event(Events.KILL_HERO(count, ICanCode.CONTEST));
+        scores.event(Events.KILL_HERO(count, multiple()));
     }
 
     public void killZombieMultiple(int count) {
-        scores.event(Events.KILL_ZOMBIE(count, ICanCode.CONTEST));
+        scores.event(Events.KILL_ZOMBIE(count, multiple()));
     }
 
     @Before
@@ -78,12 +88,12 @@ public class ScoresTest {
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        win();
-        win();
-        win();
-        win();
+        winSingle();
+        winSingle();
+        winSingle();
+        winSingle();
 
-        loose();
+        looseSingle();
 
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
@@ -107,9 +117,9 @@ public class ScoresTest {
     public void shouldWithWithGold() {
         scores = new Scores(0, settings);
 
-        win(0);  //+
-        win(1);  //+
-        win(2);  //+
+        winSingle(0);  //+
+        winSingle(1);  //+
+        winSingle(2);  //+
 
         assertEquals(3 * settings.integer(WIN_SCORE)
                 + 3 * settings.integer(GOLD_SCORE),
@@ -118,14 +128,14 @@ public class ScoresTest {
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();
+        looseSingle();
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        win();
+        winSingle();
 
         scores.clear();
 
@@ -136,8 +146,8 @@ public class ScoresTest {
     public void shouldNotCountZombieKillInSingleMode() {
         settings.bool(ENABLE_KILL_SCORE, true);
 
-        killZombie(1);
-        killHero(1);
+        killZombieSingle(1);
+        killHeroSingle(1);
 
         assertEquals(0, scores.getScore());
     }

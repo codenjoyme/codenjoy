@@ -75,7 +75,7 @@
 3: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 3: 3:Scores: 0
 3: 3:Answer: ACT(-1)
-3: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+3: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 4: 3: Layer1                 Layer2                Layer3
 4: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -181,7 +181,7 @@
 7: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 7: 3:Scores: 25
 7: 3:Answer: ACT(2),UP
-7: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+7: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 8: 3: Layer1                 Layer2                Layer3
 8: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -261,7 +261,7 @@
 10: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 10: 3:Scores: 20
 10: 3:Answer: ACT(-1)
-10: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+10: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 11: 3: Layer1                 Layer2                Layer3
 11: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -341,7 +341,7 @@
 13: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 13: 3:Scores: 45
 13: 3:Answer: ACT(-1)
-13: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+13: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 14: 3: Layer1                 Layer2                Layer3
 14: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -629,7 +629,7 @@
 24: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 24: 3:Scores: 70
 24: 3:Answer: ACT(-1)
-24: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+24: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 25: 3: Layer1                 Layer2                Layer3
 25: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -995,7 +995,7 @@
 38: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 38: 3:Scores: 95
 38: 3:Answer: ACT(-1)
-38: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+38: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 39: 3: Layer1                 Layer2                Layer3
 39: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -1075,7 +1075,7 @@
 41: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 41: 3:Scores: 120
 41: 3:Answer: ACT(-1)
-41: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+41: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 42: 3: Layer1                 Layer2                Layer3
 42: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -1415,7 +1415,7 @@
 54: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 54: 3:Scores: 145
 54: 3:Answer: ACT(-1)
-54: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+54: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 55: 3: Layer1                 Layer2                Layer3
 55: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -1495,7 +1495,7 @@
 57: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 57: 3:Scores: 170
 57: 3:Answer: ACT(3),DOWN
-57: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+57: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 58: 3: Layer1                 Layer2                Layer3
 58: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -1548,7 +1548,7 @@
 59: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 59: 3:Scores: 170
 59: 3:Answer: ACT(-1)
-59: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+59: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 60: 3: Layer1                 Layer2                Layer3
 60: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -1914,7 +1914,7 @@
 73: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 73: 3:Scores: 195
 73: 3:Answer: ACT(-1)
-73: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+73: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 74: 3: Layer1                 Layer2                Layer3
 74: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -2072,7 +2072,7 @@
 79: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 79: 3:Scores: 220
 79: 3:Answer: ACT(2),LEFT
-79: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+79: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 80: 3: Layer1                 Layer2                Layer3
 80: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -2126,7 +2126,7 @@
 81: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 81: 3:Scores: 215
 81: 3:Answer: UP
-81: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+81: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 82: 3: Layer1                 Layer2                Layer3
 82: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -2388,7 +2388,7 @@
 91: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 91: 3:Scores: 210
 91: 3:Answer: LEFT
-91: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+91: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 92: 3: Layer1                 Layer2                Layer3
 92: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -2832,7 +2832,7 @@
 108: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 108: 3:Scores: 235
 108: 3:Answer: ACT(-1)
-108: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+108: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 109: 3: Layer1                 Layer2                Layer3
 109: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -3198,7 +3198,7 @@
 122: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 122: 3:Scores: 260
 122: 3:Answer: ACT(-1)
-122: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+122: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 123: 3: Layer1                 Layer2                Layer3
 123: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -3564,7 +3564,7 @@
 136: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 136: 3:Scores: 285
 136: 3:Answer: ACT(-1)
-136: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+136: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 137: 3: Layer1                 Layer2                Layer3
 137: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -3644,7 +3644,7 @@
 139: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 139: 3:Scores: 310
 139: 3:Answer: ACT(-1)
-139: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+139: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 140: 3: Layer1                 Layer2                Layer3
 140: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -3984,7 +3984,7 @@
 152: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 152: 3:Scores: 335
 152: 3:Answer: ACT(-1)
-152: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+152: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 153: 3: Layer1                 Layer2                Layer3
 153: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -4064,7 +4064,7 @@
 155: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 155: 3:Scores: 360
 155: 3:Answer: ACT(3),DOWN
-155: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+155: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 156: 3: Layer1                 Layer2                Layer3
 156: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -4117,7 +4117,7 @@
 157: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 157: 3:Scores: 360
 157: 3:Answer: ACT(-1)
-157: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+157: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 158: 3: Layer1                 Layer2                Layer3
 158: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -4483,7 +4483,7 @@
 171: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 171: 3:Scores: 385
 171: 3:Answer: ACT(-1)
-171: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+171: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 172: 3: Layer1                 Layer2                Layer3
 172: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -4641,7 +4641,7 @@
 177: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 177: 3:Scores: 410
 177: 3:Answer: ACT(2),LEFT
-177: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+177: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 178: 3: Layer1                 Layer2                Layer3
 178: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -4695,7 +4695,7 @@
 179: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 179: 3:Scores: 405
 179: 3:Answer: UP
-179: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+179: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 180: 3: Layer1                 Layer2                Layer3
 180: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -4957,7 +4957,7 @@
 189: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 189: 3:Scores: 400
 189: 3:Answer: LEFT
-189: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+189: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 190: 3: Layer1                 Layer2                Layer3
 190: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -5401,7 +5401,7 @@
 206: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 206: 3:Scores: 425
 206: 3:Answer: ACT(-1)
-206: 3:Fire Event: Events{type=WIN, goldCount=1, killCount=0, multiple=false}
+206: 3:Fire Event: WIN(gold=1, kill=0, single)
 ------------------------------------------
 207: 3: Layer1                 Layer2                Layer3
 207: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -5871,7 +5871,7 @@
 224: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 224: 3:Scores: 460
 224: 3:Answer: ACT(2)
-224: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+224: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 225: 3: Layer1                 Layer2                Layer3
 225: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -6497,7 +6497,7 @@
 248: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 248: 3:Scores: 485
 248: 3:Answer: ACT(-1)
-248: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+248: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 249: 3: Layer1                 Layer2                Layer3
 249: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -7071,7 +7071,7 @@
 270: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 270: 3:Scores: 510
 270: 3:Answer: ACT(-1)
-270: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+270: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 271: 3: Layer1                 Layer2                Layer3
 271: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -7229,7 +7229,7 @@
 276: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 276: 3:Scores: 535
 276: 3:Answer: ACT(-1)
-276: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+276: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 277: 3: Layer1                 Layer2                Layer3
 277: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -7465,7 +7465,7 @@
 285: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 285: 3:Scores: 560
 285: 3:Answer: DOWN
-285: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+285: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 286: 3: Layer1                 Layer2                Layer3
 286: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -8143,7 +8143,7 @@
 311: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 311: 3:Scores: 555
 311: 3:Answer: ACT(-1)
-311: 3:Fire Event: Events{type=WIN, goldCount=1, killCount=0, multiple=false}
+311: 3:Fire Event: WIN(gold=1, kill=0, single)
 ------------------------------------------
 312: 3: Layer1                 Layer2                Layer3
 312: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -8197,7 +8197,7 @@
 313: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 313: 3:Scores: 590
 313: 3:Answer: UP
-313: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+313: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 314: 3: Layer1                 Layer2                Layer3
 314: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -8329,7 +8329,7 @@
 318: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 318: 3:Scores: 585
 318: 3:Answer: ACT(-1)
-318: 3:Fire Event: Events{type=WIN, goldCount=2, killCount=0, multiple=false}
+318: 3:Fire Event: WIN(gold=2, kill=0, single)
 ------------------------------------------
 319: 3: Layer1                 Layer2                Layer3
 319: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -9059,7 +9059,7 @@
 346: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 346: 3:Scores: 630
 346: 3:Answer: ACT(-1)
-346: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+346: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 347: 3: Layer1                 Layer2                Layer3
 347: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -9607,7 +9607,7 @@
 367: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 367: 3:Scores: 655
 367: 3:Answer: ACT(-1)
-367: 3:Fire Event: Events{type=WIN, goldCount=2, killCount=0, multiple=false}
+367: 3:Fire Event: WIN(gold=2, kill=0, single)
 ------------------------------------------
 368: 3: Layer1                 Layer2                Layer3
 368: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -9999,7 +9999,7 @@
 382: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 382: 3:Scores: 700
 382: 3:Answer: ACT(3),UP
-382: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+382: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 383: 3: Layer1                 Layer2                Layer3
 383: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -10208,7 +10208,7 @@
 390: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 390: 3:Scores: 700
 390: 3:Answer: ACT(-1)
-390: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+390: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 391: 3: Layer1                 Layer2                Layer3
 391: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -10288,7 +10288,7 @@
 393: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 393: 3:Scores: 725
 393: 3:Answer: ACT(3),DOWN
-393: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+393: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 394: 3: Layer1                 Layer2                Layer3
 394: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -10341,7 +10341,7 @@
 395: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 395: 3:Scores: 725
 395: 3:Answer: ACT(-1)
-395: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+395: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 396: 3: Layer1                 Layer2                Layer3
 396: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -10707,7 +10707,7 @@
 409: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 409: 3:Scores: 750
 409: 3:Answer: ACT(-1)
-409: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+409: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 410: 3: Layer1                 Layer2                Layer3
 410: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -10891,7 +10891,7 @@
 416: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 416: 3:Scores: 775
 416: 3:Answer: ACT(-1)
-416: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+416: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 417: 3: Layer1                 Layer2                Layer3
 417: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -11439,7 +11439,7 @@
 437: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 437: 3:Scores: 800
 437: 3:Answer: ACT(-1)
-437: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+437: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 438: 3: Layer1                 Layer2                Layer3
 438: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -11779,7 +11779,7 @@
 450: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 450: 3:Scores: 825
 450: 3:Answer: RIGHT
-450: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+450: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 451: 3: Layer1                 Layer2                Layer3
 451: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -12171,7 +12171,7 @@
 465: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 465: 3:Scores: 820
 465: 3:Answer: ACT(3),UP
-465: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+465: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 466: 3: Layer1                 Layer2                Layer3
 466: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -12380,7 +12380,7 @@
 473: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 473: 3:Scores: 820
 473: 3:Answer: DOWN
-473: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+473: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 474: 3: Layer1                 Layer2                Layer3
 474: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -13058,7 +13058,7 @@
 499: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 499: 3:Scores: 815
 499: 3:Answer: ACT(-1)
-499: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+499: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 500: 3: Layer1                 Layer2                Layer3
 500: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -13268,7 +13268,7 @@
 507: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 507: 3:Scores: 840
 507: 3:Answer: ACT(-1)
-507: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+507: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 508: 3: Layer1                 Layer2                Layer3
 508: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -13348,7 +13348,7 @@
 510: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 510: 3:Scores: 865
 510: 3:Answer: ACT(2),UP
-510: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+510: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 511: 3: Layer1                 Layer2                Layer3
 511: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -13454,7 +13454,7 @@
 514: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 514: 3:Scores: 860
 514: 3:Answer: ACT(-1)
-514: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+514: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 515: 3: Layer1                 Layer2                Layer3
 515: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -13586,7 +13586,7 @@
 519: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 519: 3:Scores: 885
 519: 3:Answer: ACT(3),DOWN
-519: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+519: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 520: 3: Layer1                 Layer2                Layer3
 520: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -13640,7 +13640,7 @@
 521: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 521: 3:Scores: 880
 521: 3:Answer: ACT(-1)
-521: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+521: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 522: 3: Layer1                 Layer2                Layer3
 522: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -14032,7 +14032,7 @@
 536: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 536: 3:Scores: 905
 536: 3:Answer: ACT(3),UP
-536: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+536: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 537: 3: Layer1                 Layer2                Layer3
 537: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -14241,7 +14241,7 @@
 544: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 544: 3:Scores: 905
 544: 3:Answer: ACT(-1)
-544: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+544: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 545: 3: Layer1                 Layer2                Layer3
 545: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -14321,7 +14321,7 @@
 547: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 547: 3:Scores: 930
 547: 3:Answer: ACT(3),DOWN
-547: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+547: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 548: 3: Layer1                 Layer2                Layer3
 548: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -14374,7 +14374,7 @@
 549: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 549: 3:Scores: 930
 549: 3:Answer: ACT(-1)
-549: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+549: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 550: 3: Layer1                 Layer2                Layer3
 550: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -14740,7 +14740,7 @@
 563: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 563: 3:Scores: 955
 563: 3:Answer: ACT(-1)
-563: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+563: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 564: 3: Layer1                 Layer2                Layer3
 564: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -14924,7 +14924,7 @@
 570: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 570: 3:Scores: 980
 570: 3:Answer: ACT(-1)
-570: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+570: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 571: 3: Layer1                 Layer2                Layer3
 571: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -15472,7 +15472,7 @@
 591: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 591: 3:Scores: 1005
 591: 3:Answer: ACT(-1)
-591: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+591: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 592: 3: Layer1                 Layer2                Layer3
 592: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -15812,7 +15812,7 @@
 604: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 604: 3:Scores: 1030
 604: 3:Answer: RIGHT
-604: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+604: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 605: 3: Layer1                 Layer2                Layer3
 605: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -16100,7 +16100,7 @@
 615: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 615: 3:Scores: 1025
 615: 3:Answer: ACT(-1)
-615: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+615: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 616: 3: Layer1                 Layer2                Layer3
 616: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -16206,7 +16206,7 @@
 619: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 619: 3:Scores: 1050
 619: 3:Answer: ACT(-1)
-619: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+619: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 620: 3: Layer1                 Layer2                Layer3
 620: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -16390,7 +16390,7 @@
 626: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 626: 3:Scores: 1075
 626: 3:Answer: ACT(3),UP
-626: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+626: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 627: 3: Layer1                 Layer2                Layer3
 627: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -16470,7 +16470,7 @@
 629: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 629: 3:Scores: 1070
 629: 3:Answer: ACT(-1)
-629: 3:Fire Event: Events{type=WIN, goldCount=1, killCount=0, multiple=false}
+629: 3:Fire Event: WIN(gold=1, kill=0, single)
 ------------------------------------------
 630: 3: Layer1                 Layer2                Layer3
 630: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -16602,7 +16602,7 @@
 634: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 634: 3:Scores: 1105
 634: 3:Answer: ACT(1),DOWN
-634: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+634: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 635: 3: Layer1                 Layer2                Layer3
 635: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -16629,7 +16629,7 @@
 635: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 635: 3:Scores: 1105
 635: 3:Answer: ACT(3),DOWN
-635: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+635: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 636: 3: Layer1                 Layer2                Layer3
 636: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -16943,7 +16943,7 @@
 647: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 647: 3:Scores: 1100
 647: 3:Answer: ACT(-1)
-647: 3:Fire Event: Events{type=WIN, goldCount=1, killCount=0, multiple=false}
+647: 3:Fire Event: WIN(gold=1, kill=0, single)
 ------------------------------------------
 648: 3: Layer1                 Layer2                Layer3
 648: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -17101,7 +17101,7 @@
 653: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 653: 3:Scores: 1135
 653: 3:Answer: ACT(-1)
-653: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+653: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 654: 3: Layer1                 Layer2                Layer3
 654: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -17311,7 +17311,7 @@
 661: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 661: 3:Scores: 1160
 661: 3:Answer: ACT(-1)
-661: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+661: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 662: 3: Layer1                 Layer2                Layer3
 662: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -17391,7 +17391,7 @@
 664: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 664: 3:Scores: 1185
 664: 3:Answer: ACT(2),UP
-664: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+664: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 665: 3: Layer1                 Layer2                Layer3
 665: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -17497,7 +17497,7 @@
 668: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 668: 3:Scores: 1180
 668: 3:Answer: ACT(-1)
-668: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+668: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 669: 3: Layer1                 Layer2                Layer3
 669: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -17629,7 +17629,7 @@
 673: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 673: 3:Scores: 1205
 673: 3:Answer: ACT(3),DOWN
-673: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+673: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 674: 3: Layer1                 Layer2                Layer3
 674: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -17683,7 +17683,7 @@
 675: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 675: 3:Scores: 1200
 675: 3:Answer: ACT(-1)
-675: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+675: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 676: 3: Layer1                 Layer2                Layer3
 676: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -18023,7 +18023,7 @@
 688: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 688: 3:Scores: 1225
 688: 3:Answer: ACT(2),LEFT
-688: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+688: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 689: 3: Layer1                 Layer2                Layer3
 689: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -18363,7 +18363,7 @@
 701: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 701: 3:Scores: 1220
 701: 3:Answer: ACT(3),LEFT
-701: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+701: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 702: 3: Layer1                 Layer2                Layer3
 702: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -18416,7 +18416,7 @@
 703: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 703: 3:Scores: 1220
 703: 3:Answer: ACT(-1)
-703: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+703: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 704: 3: Layer1                 Layer2                Layer3
 704: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -18834,7 +18834,7 @@
 719: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 719: 3:Scores: 1245
 719: 3:Answer: ACT(3),LEFT
-719: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+719: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 720: 3: Layer1                 Layer2                Layer3
 720: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -18966,7 +18966,7 @@
 724: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 724: 3:Scores: 1240
 724: 3:Answer: ACT(-1)
-724: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+724: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 725: 3: Layer1                 Layer2                Layer3
 725: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -19020,7 +19020,7 @@
 726: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 726: 3:Scores: 1265
 726: 3:Answer: ACT(2),UP
-726: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+726: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 727: 3: Layer1                 Layer2                Layer3
 727: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -19308,7 +19308,7 @@
 737: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 737: 3:Scores: 1260
 737: 3:Answer: ACT(1),DOWN
-737: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+737: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 738: 3: Layer1                 Layer2                Layer3
 738: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -19414,7 +19414,7 @@
 741: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 741: 3:Scores: 1255
 741: 3:Answer: ACT(3),RIGHT
-741: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+741: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 742: 3: Layer1                 Layer2                Layer3
 742: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -19519,7 +19519,7 @@
 745: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 745: 3:Scores: 1255
 745: 3:Answer: ACT(-1)
-745: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+745: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 746: 3: Layer1                 Layer2                Layer3
 746: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -19807,7 +19807,7 @@
 756: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 756: 3:Scores: 1280
 756: 3:Answer: ACT(3),DOWN
-756: 3:Fire Event: Events{type=LOOSE, goldCount=0, killCount=0, multiple=false}
+756: 3:Fire Event: LOOSE(gold=0, kill=0, single)
 ------------------------------------------
 757: 3: Layer1                 Layer2                Layer3
 757: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -19887,7 +19887,7 @@
 759: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 759: 3:Scores: 1275
 759: 3:Answer: ACT(-1)
-759: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+759: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 760: 3: Layer1                 Layer2                Layer3
 760: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -20617,7 +20617,7 @@
 787: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 787: 3:Scores: 1300
 787: 3:Answer: ACT(-1)
-787: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+787: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 788: 3: Layer1                 Layer2                Layer3
 788: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -21165,7 +21165,7 @@
 808: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 808: 3:Scores: 1325
 808: 3:Answer: ACT(-1)
-808: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+808: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 809: 3: Layer1                 Layer2                Layer3
 809: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -21713,7 +21713,7 @@
 829: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 829: 3:Scores: 1350
 829: 3:Answer: ACT(-1)
-829: 3:Fire Event: Events{type=WIN, goldCount=2, killCount=0, multiple=false}
+829: 3:Fire Event: WIN(gold=2, kill=0, single)
 ------------------------------------------
 830: 3: Layer1                 Layer2                Layer3
 830: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -22105,7 +22105,7 @@
 844: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 844: 3:Scores: 1395
 844: 3:Answer: ACT(3),UP
-844: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+844: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 845: 3: Layer1                 Layer2                Layer3
 845: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -22314,7 +22314,7 @@
 852: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 852: 3:Scores: 1395
 852: 3:Answer: ACT(-1)
-852: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+852: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 853: 3: Layer1                 Layer2                Layer3
 853: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -22394,7 +22394,7 @@
 855: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 855: 3:Scores: 1420
 855: 3:Answer: ACT(3),DOWN
-855: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+855: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 856: 3: Layer1                 Layer2                Layer3
 856: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -22447,7 +22447,7 @@
 857: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 857: 3:Scores: 1420
 857: 3:Answer: ACT(-1)
-857: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+857: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 858: 3: Layer1                 Layer2                Layer3
 858: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -22813,7 +22813,7 @@
 871: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 871: 3:Scores: 1445
 871: 3:Answer: ACT(-1)
-871: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+871: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 872: 3: Layer1                 Layer2                Layer3
 872: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -22997,7 +22997,7 @@
 878: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 878: 3:Scores: 1470
 878: 3:Answer: ACT(-1)
-878: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+878: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 879: 3: Layer1                 Layer2                Layer3
 879: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -23545,7 +23545,7 @@
 899: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 899: 3:Scores: 1495
 899: 3:Answer: ACT(-1)
-899: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+899: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 900: 3: Layer1                 Layer2                Layer3
 900: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -24275,7 +24275,7 @@
 927: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 927: 3:Scores: 1520
 927: 3:Answer: ACT(-1)
-927: 3:Fire Event: Events{type=WIN, goldCount=2, killCount=0, multiple=false}
+927: 3:Fire Event: WIN(gold=2, kill=0, single)
 ------------------------------------------
 928: 3: Layer1                 Layer2                Layer3
 928: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -24667,7 +24667,7 @@
 942: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 942: 3:Scores: 1565
 942: 3:Answer: ACT(3),UP
-942: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+942: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 943: 3: Layer1                 Layer2                Layer3
 943: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -24876,7 +24876,7 @@
 950: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 950: 3:Scores: 1565
 950: 3:Answer: ACT(-1)
-950: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+950: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 951: 3: Layer1                 Layer2                Layer3
 951: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -24956,7 +24956,7 @@
 953: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 953: 3:Scores: 1590
 953: 3:Answer: ACT(3),DOWN
-953: 3:Fire Event: Events{type=KILL_HERO, goldCount=0, killCount=1, multiple=false}
+953: 3:Fire Event: KILL_HERO(gold=0, kill=1, single)
 ------------------------------------------
 954: 3: Layer1                 Layer2                Layer3
 954: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -25009,7 +25009,7 @@
 955: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 955: 3:Scores: 1590
 955: 3:Answer: ACT(-1)
-955: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+955: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 956: 3: Layer1                 Layer2                Layer3
 956: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -25375,7 +25375,7 @@
 969: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 969: 3:Scores: 1615
 969: 3:Answer: ACT(-1)
-969: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+969: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 970: 3: Layer1                 Layer2                Layer3
 970: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -25559,7 +25559,7 @@
 976: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 976: 3:Scores: 1640
 976: 3:Answer: ACT(-1)
-976: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+976: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 977: 3: Layer1                 Layer2                Layer3
 977: 3:  01234567890123456789   01234567890123456789   01234567890123456789
@@ -26107,7 +26107,7 @@
 997: 3:  01234567890123456789   01234567890123456789   01234567890123456789
 997: 3:Scores: 1665
 997: 3:Answer: ACT(-1)
-997: 3:Fire Event: Events{type=WIN, goldCount=0, killCount=0, multiple=false}
+997: 3:Fire Event: WIN(gold=0, kill=0, single)
 ------------------------------------------
 998: 3: Layer1                 Layer2                Layer3
 998: 3:  01234567890123456789   01234567890123456789   01234567890123456789

@@ -25,10 +25,9 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
-import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.model.items.perks.Perk;
+import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.GameSettings;
-import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -37,9 +36,12 @@ import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,10 +65,11 @@ public abstract class AbstractGameTest {
 
     protected Hero hero;
     protected Dice dice;
-    protected EventListener listener;
+    private EventListener listener;
     protected Player player;
     private Player otherPlayer;
     protected GameSettings settings;
+    protected EventsListenersAssert events;
 
     @Before
     public void setup() {
@@ -82,7 +85,14 @@ public abstract class AbstractGameTest {
                 .integer(GUN_SHOT_QUEUE, 0)
                 .string(DEFAULT_PERKS, "ajm,ajm");
 
+        listener = mock(EventListener.class);
+        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
         dice = mock(Dice.class);
+    }
+
+    @After
+    public void tearDown() {
+        events.verifyNoEvents();
     }
 
     protected void ticks(int count) {
@@ -107,7 +117,6 @@ public abstract class AbstractGameTest {
         settings.integer(VIEW_SIZE, viewSize);
         Level level = createLevels(new String[]{board}).get(0);
         game = new ICanCode(level, dice, mode, settings);
-        listener = mock(EventListener.class);
         player = new Player(listener, settings);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);

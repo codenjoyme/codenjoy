@@ -22,8 +22,6 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.services.Events;
-import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
@@ -32,8 +30,6 @@ import static com.codenjoy.dojo.icancode.services.LevelsTest.VIEW_SIZE_TESTING;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class GameTest extends AbstractGameTest {
 
@@ -368,7 +364,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.WIN(0));
+        events.verifyAllEvents("[WIN(gold=0, kill=0, single)]");
 
         assertE("-----" +
                 "-----" +
@@ -399,6 +395,8 @@ public class GameTest extends AbstractGameTest {
         // then
         assertEquals(true, player.isWin());
         assertEquals(false, player.isAlive());
+
+        events.verifyAllEvents("[WIN(gold=0, kill=0, single)]");
 
         // when
         game.newGame(player);
@@ -478,7 +476,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.WIN(0));
+        events.verifyAllEvents("[WIN(gold=0, kill=0, single)]");
 
         assertL("     " +
                 "╔═══┐" +
@@ -505,7 +503,7 @@ public class GameTest extends AbstractGameTest {
         hero.right();
         game.tick();
 
-        verify(listener).event(Events.WIN(0));
+        events.verifyAllEvents("[WIN(gold=0, kill=0, single)]");
 
         assertEquals(true, player.isWin());
         assertEquals(false, player.isAlive());
@@ -525,7 +523,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertEquals(false, player.isWin());
         assertEquals(true, player.isAlive());
@@ -585,7 +583,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.LOOSE());
+        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
 
         assertL("╔══┐" +
                 "║SO│" +
@@ -693,7 +691,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.WIN(1));
+        events.verifyAllEvents("[WIN(gold=1, kill=0, single)]");
 
         assertL("     " +
                 "╔═══┐" +
@@ -729,7 +727,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.WIN(2));
+        events.verifyAllEvents("[WIN(gold=2, kill=0, single)]");
 
         assertL("      " +
                 "╔════┐" +
@@ -882,7 +880,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
     }
 
     @Test
@@ -1833,6 +1831,8 @@ public class GameTest extends AbstractGameTest {
                 "-----" +
                 "-----" +
                 "-----");
+
+        events.verifyAllEvents("[WIN(gold=0, kill=0, single)]");
     }
 
     @Test
@@ -1856,6 +1856,8 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
+        events.verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
+
         assertE("------" +
                 "--☺---" +
                 "--✝---" +
@@ -1906,6 +1908,8 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
+        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
+
         assertL("╔══┐" +
                 "║SO│" +
                 "║..│" +
@@ -2007,7 +2011,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.LOOSE());
+        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
 
         assertL("╔══┐" +
                 "║S.│" +

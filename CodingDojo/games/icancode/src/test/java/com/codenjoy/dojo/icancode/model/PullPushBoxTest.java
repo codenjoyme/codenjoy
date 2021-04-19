@@ -22,10 +22,7 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.services.Events;
 import org.junit.Test;
-
-import static org.mockito.Mockito.verify;
 
 public class PullPushBoxTest extends AbstractGameTest {
 
@@ -1407,7 +1404,7 @@ public class PullPushBoxTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.LOOSE());
+        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
 
         assertL("╔════┐" +
                 "║S.O.│" +

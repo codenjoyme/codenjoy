@@ -23,9 +23,6 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.items.Zombie;
-import com.codenjoy.dojo.icancode.model.items.ZombiePot;
-import com.codenjoy.dojo.icancode.services.Events;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -33,7 +30,6 @@ import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.Direction.LEFT;
 import static com.codenjoy.dojo.services.Direction.UP;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
 
 public class ZombieTest extends AbstractGameTest {
 
@@ -352,7 +348,7 @@ public class ZombieTest extends AbstractGameTest {
                 "------" +
                 "------");
 
-        verify(listener).event(Events.LOOSE());
+        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
         assertEquals(false, hero.isAlive());
         assertEquals(false, hero.isWin());
 
@@ -435,7 +431,7 @@ public class ZombieTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.KILL_ZOMBIE(1, false));
+        events.verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
         assertE("------" +
                 "--☺---" +
                 "------" +

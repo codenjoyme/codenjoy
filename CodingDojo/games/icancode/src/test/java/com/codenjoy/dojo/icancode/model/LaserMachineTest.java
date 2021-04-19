@@ -23,12 +23,9 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.services.Events;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class LaserMachineTest extends AbstractGameTest {
 
@@ -462,7 +459,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.LOOSE());
+        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
 
         assertL("╔═════┐" +
                 "║˃....│" +
@@ -514,7 +511,7 @@ public class LaserMachineTest extends AbstractGameTest {
         assertEquals(true, player.isAlive());
         assertEquals(false, player.isWin());
 
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
     }
 
     @Test
@@ -752,7 +749,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertL("╔═════┐" +
                 "║˃...S│" +
@@ -852,7 +849,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertL("╔═════┐" +
                 "║˃..S.│" +
@@ -882,7 +879,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertL("╔═════┐" +
                 "║˃..S.│" +
@@ -954,7 +951,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertL("╔═════┐" +
                 "║.....│" +
@@ -985,7 +982,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertL("╔═════┐" +
                 "║.....│" +
@@ -1058,7 +1055,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertL("╔═════┐" +
                 "║˃....│" +
@@ -1116,7 +1113,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         // then
         assertL("╔═════┐" +
@@ -1189,7 +1186,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.LOOSE());
+        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
 
         assertL("╔═════┐" +
                 "║˃....│" +
@@ -1226,7 +1223,7 @@ public class LaserMachineTest extends AbstractGameTest {
         assertEquals(true, player.isAlive());
         assertEquals(false, player.isWin());
 
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertL("╔═════┐" +
                 "║˃....│" +
@@ -1256,7 +1253,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
     }
 
     @Test
@@ -1295,7 +1292,7 @@ public class LaserMachineTest extends AbstractGameTest {
         hero.jump();
 
         // then
-        verify(listener).event(Events.LOOSE());
+        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
 
         assertL("╔═════┐" +
                 "║˃....│" +
@@ -1324,7 +1321,7 @@ public class LaserMachineTest extends AbstractGameTest {
         assertEquals(true, player.isAlive());
         assertEquals(false, player.isWin());
 
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertL("╔═════┐" +
                 "║˃....│" +
@@ -1346,7 +1343,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
     }
 
     @Test
@@ -1393,7 +1390,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         assertL("╔═════┐" +
                 "║˃....│" +
@@ -1451,7 +1448,7 @@ public class LaserMachineTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        events.verifyNoEvents();
 
         // then
         assertL("╔═════┐" +

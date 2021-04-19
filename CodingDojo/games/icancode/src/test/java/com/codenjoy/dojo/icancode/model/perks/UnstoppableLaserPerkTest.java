@@ -25,13 +25,10 @@ package com.codenjoy.dojo.icancode.model.perks;
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.model.items.perks.UnlimitedFirePerk;
 import com.codenjoy.dojo.icancode.model.items.perks.UnstoppableLaserPerk;
-import com.codenjoy.dojo.icancode.services.Events;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.GUN_RECHARGE;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_ACTIVITY;
 import static com.codenjoy.dojo.services.Direction.STOP;
-import static org.mockito.Mockito.verify;
 
 public class UnstoppableLaserPerkTest extends AbstractGameTest {
 
@@ -182,7 +179,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
 
         has(UnstoppableLaserPerk.class);
 
-        verify(listener).event(Events.KILL_HERO(1, true));
+        events.verifyAllEvents("[KILL_HERO(gold=0, kill=1, single)]");
 
         // when
         game.tick();
@@ -274,7 +271,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------");
 
         has(UnstoppableLaserPerk.class);
-        verify(listener).event(Events.KILL_ZOMBIE(1, true));
+        events.verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
 
         // when
         game.tick();
@@ -419,7 +416,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------");
 
         has(UnstoppableLaserPerk.class);
-        verify(listener).event(Events.KILL_ZOMBIE(1, true));
+        events.verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
 
         // whan
         game.tick();
@@ -452,7 +449,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------");
 
         has(UnstoppableLaserPerk.class);
-        verify(listener).event(Events.KILL_HERO(1, true));
+        events.verifyAllEvents("[KILL_HERO(gold=0, kill=1, single)]");
 
         // when
         game.tick();
