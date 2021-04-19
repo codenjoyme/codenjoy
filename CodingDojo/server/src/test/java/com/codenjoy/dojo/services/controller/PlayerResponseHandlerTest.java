@@ -41,12 +41,9 @@ public class PlayerResponseHandlerTest {
 
     @Test
     public void onResponse() {
-        assertEquals(player.getLastResponseTime(), LocalDateTime.MAX);
-
         PlayerResponseHandler playerResponseHandler = new PlayerResponseHandler(player, joystick);
         playerResponseHandler.onResponse(playerSocket, "act");
 
-        assertNotEquals(player.getLastResponseTime(), LocalDateTime.MAX);
         verify(player, atMost(1)).updateLastResponseTime();
     }
 }
