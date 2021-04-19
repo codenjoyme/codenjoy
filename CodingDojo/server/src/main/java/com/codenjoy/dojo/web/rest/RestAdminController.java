@@ -197,6 +197,7 @@ public class RestAdminController {
         return roomService.isOpened(room);
     }
 
+    // TODO сделать такой же самый, только для 1 плеера
     @GetMapping(ROOM + "/scores/clear")
     public void cleanScores(@PathVariable("room") String room) {
         validator.checkRoom(room, CANT_BE_NULL);

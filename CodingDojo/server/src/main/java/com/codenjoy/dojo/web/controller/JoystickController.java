@@ -44,6 +44,8 @@ public class JoystickController {
     private PlayerService playerService;
     private Validator validator;
 
+
+    // TODO сделать такой же метод, но без code с ADMIN доступом
     @GetMapping()
     public String joystick(@RequestParam("player") String id, // TODO playerId
                            @RequestParam("code") String code,
