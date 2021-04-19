@@ -319,7 +319,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player = createPlayer();
 
         // when
-        PlayerGame playerGame = playerGames.get(gamePlayers.get(0));
+        PlayerGame playerGame = playerGames.get(gamePlayers.get(0)).get();
 
         // then
         assertEquals(gamePlayers.get(0), playerGame.getGame().getPlayer());

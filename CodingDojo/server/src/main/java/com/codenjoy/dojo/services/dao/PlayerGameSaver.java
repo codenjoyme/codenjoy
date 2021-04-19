@@ -25,13 +25,24 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerGame;
 import com.codenjoy.dojo.services.PlayerSave;
-import com.codenjoy.dojo.services.jdbc.*;
+import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
+import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
+import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlayerGameSaver implements GameSaver {
+
+    private static final String INSERT_SAVES_QUERY =
+            "INSERT INTO saves " +
+            "(time, player_id, callback_url, room_name, game_name, score, save) " +
+            "VALUES (?,?,?,?,?,?,?);";
 
     private CrudConnectionThreadPool pool;
 
@@ -51,12 +62,94 @@ public class PlayerGameSaver implements GameSaver {
         pool.removeDatabase();
     }
 
+    public static class Save {
+
+        private Player player;
+        private String time;
+        private String save;
+
+        public Save(PlayerGame playerGame, String time) {
+            player = playerGame.getPlayer();
+            this.time = time;
+
+            // осторожно! внутри есть блокировка, потому делаем это в конструкторе
+            // если отпустим внутрь pool там будет выполняться в другом потоке
+            // и случится завис, потому что одну write блокировку мы уже взяли в PSI
+            save = playerGame.getGame().getSave().toString();
+        }
+
+        public String getSave() {
+            return save;
+        }
+
+        public String getScore() {
+            return player.getScore().toString();
+        }
+
+        public String getGame() {
+            return player.getGame();
+        }
+
+        public String getRoom() {
+            return player.getRoom();
+        }
+
+        public String getCallbackUrl() {
+            return player.getCallbackUrl();
+        }
+
+        public String getId() {
+            return player.getId();
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        @Override
+        public String toString() {
+            return String.format(
+                    "Save[time:%s, id:%s, url:%s, game:%s, " +
+                    "room:%s, score:%s, save:%s]",
+                    getTime(),
+                    getId(),
+                    getCallbackUrl(),
+                    getGame(),
+                    getRoom(),
+                    getScore(),
+                    getSave());
+        }
+    }
+
+    @Override
+    public void saveGames(List<PlayerGame> playerGames, long time) {
+        if (playerGames.isEmpty()) return;
+
+        String timeString = JDBCTimeUtils.toString(new Date(time));
+        List<Save> data = playerGames.stream()
+                .map(playerGame -> new Save(playerGame, timeString))
+                .collect(toList());
+
+        // TODO надо тут еще транзакцию навешать на эти два запроса
+        pool.batchUpdate(INSERT_SAVES_QUERY,
+                data,
+                (stmt, save) -> {
+                    stmt.setObject(1, save.getTime());
+                    stmt.setObject(2, save.getId());
+                    stmt.setObject(3, save.getCallbackUrl());
+                    stmt.setObject(4, save.getRoom());
+                    stmt.setObject(5, save.getGame());
+                    stmt.setObject(6, save.getScore());
+                    stmt.setObject(7, save.getSave());
+                    return true;
+                });
+    }
+
     @Override
     public void saveGame(Player player, String save, long time) {
-        pool.update("INSERT INTO saves " +
-                        "(time, player_id, callback_url, room_name, game_name, score, save) " +
-                        "VALUES (?,?,?,?,?,?,?);",
-                new Object[]{JDBCTimeUtils.toString(new Date(time)),
+        pool.update(INSERT_SAVES_QUERY,
+                new Object[]{
+                        JDBCTimeUtils.toString(new Date(time)),
                         player.getId(),
                         player.getCallbackUrl(),
                         player.getRoom(),

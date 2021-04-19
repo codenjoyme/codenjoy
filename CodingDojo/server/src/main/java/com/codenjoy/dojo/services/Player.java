@@ -72,6 +72,14 @@ public class Player implements ScreenRecipient, Closeable {
         this.info = info;
     }
 
+    public Player(PlayerSave playerSave) {
+        id = playerSave.getId();
+        callbackUrl = playerSave.getCallbackUrl();
+        game = playerSave.getGame();
+        room = playerSave.getRoom();
+        score = playerSave.getScore();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null) return false;
