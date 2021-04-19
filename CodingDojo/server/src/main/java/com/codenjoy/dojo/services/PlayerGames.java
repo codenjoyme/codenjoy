@@ -113,18 +113,20 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
     }
 
+    // TODO по хорошему тут тоже надо optional
     public PlayerGame get(String id) {
-        return all.stream()
-                .filter(pg -> pg.getPlayer().getId().equals(id))
-                .findFirst()
+        return get(pg -> Objects.equals(id, pg.getPlayerId()))
                 .orElse(NullPlayerGame.INSTANCE);
     }
 
-    public PlayerGame get(GamePlayer player) {
+    public Optional<PlayerGame> get(Predicate<PlayerGame> filter) {
         return all.stream()
-                .filter(pg -> pg.getGame().getPlayer().equals(player))
-                .findFirst()
-                .orElse(null);
+                .filter(filter)
+                .findFirst();
+    }
+
+    public Optional<PlayerGame> get(GamePlayer player) {
+        return get(pg -> Objects.equals(player, pg.getGame().getPlayer()));
     }
 
     private void play(Game game, String room, GameType gameType, JSONObject save) {
@@ -193,8 +195,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         List<GamePlayer> alone = spreader.remove(game.getPlayer());
 
         return alone.stream()
-                .map(p -> get(p))       // GamePlayer
-                .filter(p -> p != null) // PlayerGame
+                .map(this::get)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(toList());
     }
 
@@ -237,6 +240,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public static Predicate<PlayerGame> withRoom(String room) {
         return pg -> pg.getRoom().equals(room);
+    }
+
+    public static Predicate<PlayerGame> exclude(List<String> ids) {
+        return pg -> !ids.contains(pg.getPlayerId());
     }
 
     public Predicate<PlayerGame> withActive() {

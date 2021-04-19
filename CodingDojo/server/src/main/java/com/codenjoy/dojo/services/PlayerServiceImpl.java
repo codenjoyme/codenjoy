@@ -58,7 +58,9 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.services.PlayerGames.exclude;
 import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 @Component("playerService")
@@ -89,6 +91,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected RoomService roomService;
     @Autowired protected SemifinalService semifinal;
     @Autowired protected SimpleProfiler profiler;
+    @Autowired protected TimeService time;
 
     @Value("${game.ai}")
     protected boolean isAiNeeded;
@@ -458,31 +461,28 @@ public class PlayerServiceImpl implements PlayerService {
             if (players == null) {
                 return;
             }
-            Iterator<? extends Player> iterator = players.iterator();
-            while (iterator.hasNext()) {
-                Player player = iterator.next();
-                if (player.getId() == null) {
-                    iterator.remove();
-                }
-            }
-
-            if (playerGames.size() != players.size()) {
-                throw new IllegalArgumentException("Diff players count");
-            }
-
-            for (int index = 0; index < playerGames.size(); index ++) {
-                updatePlayer(playerGames.get(index), players.get(index));
-            }
+            players.stream()
+                    // TODO почему тут могут быть id null посмотреть git history?
+                    .filter(player -> player.getId() != null)
+                    .forEach(player -> updatePlayer(found(player), player));
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    private PlayerGame found(Player player) {
+        PlayerGame playerGame = playerGames.get(player.getId());
+        if (playerGame == NullPlayerGame.INSTANCE) {
+            throw new IllegalArgumentException("Player not found by id: " + player.getId());
+        }
+        return playerGame;
     }
 
     @Override
     public void update(Player player) {
         lock.writeLock().lock();
         try {
-            updatePlayer(playerGames.get(player.getId()), player);
+            updatePlayer(found(player), player);
         } finally {
             lock.writeLock().unlock();
         }
@@ -491,7 +491,8 @@ public class PlayerServiceImpl implements PlayerService {
     private void updatePlayer(PlayerGame playerGame, Player input) {
         Player updated = playerGame.getPlayer();
 
-        if (StringUtils.isNotEmpty(input.getCallbackUrl())) {
+        boolean updateCallbackUrl = StringUtils.isNotEmpty(input.getCallbackUrl());
+        if (updateCallbackUrl) {
             updated.setCallbackUrl(input.getCallbackUrl());
         }
 
@@ -508,16 +509,12 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         try {
-            if (input.getScore() != null) {
+            boolean updateScore = input.getScore() != null;
+            if (updateScore) {
                 updated.getScores().update(input.getScore());
             }
         } catch (Exception e) {
             // do nothing
-        }
-
-        boolean updateCallbackUrl = StringUtils.isNotEmpty(input.getCallbackUrl());
-        if (updateCallbackUrl) {
-            updated.setCallbackUrl(input.getCallbackUrl());
         }
 
         boolean updateRoomName = input.getRoom() != null
@@ -532,10 +529,12 @@ public class PlayerServiceImpl implements PlayerService {
         }
         
         Game game = playerGame.getGame();
-        if (game != null && (game.getSave() != null || updateRoomName)) {
+        boolean saveExists = game != null && (game.getSave() != null || updateRoomName);
+        if (saveExists) {
             String oldSave = game.getSave().toString();
             String newSave = input.getData();
-            if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
+            boolean updateSave = !PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave);
+            if (updateSave) {
                 playerGames.setLevel(
                         input.getId(),
                         new JSONObject(newSave));
@@ -659,7 +658,11 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             semifinal.clean();
 
-            playerGames.forEach(PlayerGame::clearScore);
+            List<PlayerGame> active = playerGames.all();
+            active.forEach(PlayerGame::clearScore);
+
+            List<String> saved = saver.getSavedList();
+            clearAllSavedScores(active, saved);
         } finally {
             lock.writeLock().unlock();
         }
@@ -671,11 +674,33 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             semifinal.clean(room);
 
-            playerGames.getAll(withRoom(room))
-                .forEach(PlayerGame::clearScore);
+            List<PlayerGame> active = playerGames.getAll(withRoom(room));
+            active.forEach(PlayerGame::clearScore);
+
+            List<String> saved = saver.getSavedList(room);
+            clearAllSavedScores(active, saved);
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    public void clearAllSavedScores(List<PlayerGame> active, List<String> saved) {
+        long now = time.now();
+        saved.forEach(id -> cleanSavedScore(now, id));
+
+        List<PlayerGame> notSaved = active.stream()
+                .filter(exclude(saved))
+                .collect(toList());
+        saver.saveGames(notSaved, now);
+    }
+
+    public void cleanSavedScore(long now, String id) {
+        PlayerSave playerSave = saver.loadGame(id);
+        GameType type = roomService.gameType(playerSave.getRoom());
+        String save = gameService.getDefaultProgress(type);
+        Player player = new Player(playerSave);
+        player.setScore(0);
+        saver.saveGame(player, save, now);
     }
 
     @Override
@@ -683,6 +708,7 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             playerGames.get(id).clearScore();
+            cleanSavedScore(time.now(), id);
         } finally {
             lock.writeLock().unlock();
         }

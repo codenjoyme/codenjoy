@@ -250,60 +250,60 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals(true, runners.containsKey("player7"));
 
         // обновили описание ребят
-        List<PlayerInfo> infos = service.getAll().stream().map(player -> new PlayerInfo(player.getId() + "_updated",
-                player.getCode(), player.getCallbackUrl(), player.getGame())).collect(toList());
+        List<PlayerInfo> infos = service.getAll().stream().map(player -> new PlayerInfo(player.getId(),
+                player.getCode(), player.getCallbackUrl() + "_updated", player.getGame())).collect(toList());
         service.updateAll(infos);
-        assertEquals("[game1-super-ai_updated, " +
-                "player1_updated, player4_updated, player5_updated, " +
-                "player6_updated, game3-super-ai_updated, " +
-                "player7_updated]", service.getAll().toString());
+        assertEquals("[game1-super-ai, " +
+                "player1, player4, player5, " +
+                "player6, game3-super-ai, " +
+                "player7]", service.getAll().toString());
 
         // зарегали существующего пользователя в другую игру
-        expected = "[game1-super-ai_updated, player1_updated, player6_updated]";
+        expected = "[game1-super-ai, player1, player6]";
         assertEquals(expected, service.getAll("game1").toString());
         assertEquals(expected, service.getAllInRoom("room1").toString());
-        expected = "[player4_updated, player5_updated]";
+        expected = "[player4, player5]";
         assertEquals(expected, service.getAll("game2").toString());
         assertEquals(expected, service.getAllInRoom("room2").toString());
-        player1 = service.register("player1_updated", "game2", "room2", "callback1");
-        expected = "[game1-super-ai_updated, player6_updated]";
+        player1 = service.register("player1", "game2", "room2", "callback1");
+        expected = "[game1-super-ai, player6]";
         assertEquals(expected, service.getAll("game1").toString());
         assertEquals(expected, service.getAllInRoom("room1").toString());
-        expected = "[player4_updated, player5_updated, game2-super-ai, player1_updated]";
+        expected = "[player4, player5, game2-super-ai, player1]";
         // TODO какого фига сюда AI ломится? Там же есть ребята уже
         assertEquals(expected, service.getAll("game2").toString());
         assertEquals(expected, service.getAllInRoom("room2").toString());
-        expected = "[game3-super-ai_updated, player7_updated]";
+        expected = "[game3-super-ai, player7]";
         assertEquals(expected, service.getAll("game3").toString());
         assertEquals(expected, service.getAllInRoom("room3").toString());
 
         // пользователь перешел в другую комнату той же игры
-        player1 = service.register("player1_updated", "game2", "room4", "callback1");
-        expected = "[game1-super-ai_updated, player6_updated]";
+        player1 = service.register("player1", "game2", "room4", "callback1");
+        expected = "[game1-super-ai, player6]";
         assertEquals(expected, service.getAll("game1").toString());
         assertEquals(expected, service.getAllInRoom("room1").toString());
-        assertEquals("[player4_updated, player5_updated, game2-super-ai, player1_updated]",
+        assertEquals("[player4, player5, game2-super-ai, player1]",
                 service.getAll("game2").toString()); // тут отличие game2 != room2
-        assertEquals("[player4_updated, player5_updated, game2-super-ai]",
+        assertEquals("[player4, player5, game2-super-ai]",
                 service.getAllInRoom("room2").toString()); // тут отличие game2 != room2
-        expected = "[game3-super-ai_updated, player7_updated]";
+        expected = "[game3-super-ai, player7]";
         assertEquals(expected, service.getAll("game3").toString());
         assertEquals(expected, service.getAllInRoom("room3").toString());
         assertEquals("[]", service.getAll("game4").toString()); // нет такой игры
-        assertEquals("[player1_updated]", service.getAllInRoom("room4").toString());
+        assertEquals("[player1]", service.getAllInRoom("room4").toString());
 
         // удалили всех из комнаты 1
         service.removeAll("room2");
-        expected = "[game1-super-ai_updated, player6_updated]";
+        expected = "[game1-super-ai, player6]";
         assertEquals(expected, service.getAll("game1").toString());
         assertEquals(expected, service.getAllInRoom("room1").toString());
-        assertEquals("[player1_updated]", service.getAll("game2").toString()); // тут отличие game2 != room2
+        assertEquals("[player1]", service.getAll("game2").toString()); // тут отличие game2 != room2
         assertEquals("[]", service.getAllInRoom("room2").toString()); // тут отличие game2 != room2
-        expected = "[game3-super-ai_updated, player7_updated]";
+        expected = "[game3-super-ai, player7]";
         assertEquals(expected, service.getAll("game3").toString());
         assertEquals(expected, service.getAllInRoom("room3").toString());
         assertEquals("[]", service.getAll("game4").toString()); // нет такой игры
-        assertEquals("[player1_updated]", service.getAllInRoom("room4").toString());
+        assertEquals("[player1]", service.getAllInRoom("room4").toString());
 
         // удалили всех нафиг
         service.removeAll();

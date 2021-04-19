@@ -504,9 +504,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         // given
         register("player1", "ip1", "room1", "first");
         register("player2", "ip2", "room1", "first");
-
         register("player3", "ip3", "room2", "first");
-
         register("player4", "ip4", "room3", "second");
 
         service.setScores("room1", "player1", "10");
@@ -528,15 +526,26 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertScores("{player1=0, player2=0, player3=0, player4=0}");
 
         // when
-        service.load("room1", "player1"); // save exists
-        // service.load("room1", "player2"); // do not load
-        assertEquals("", get("/rest/admin/room/room2/load/player3")); // save exists
-        assertEquals("", get("/rest/admin/room/room3/load/player4")); // save not exists
+        service.load("room1", "player1");    // saved, cleaned - last value is 0
+        // service.load("room1", "player2"); // saved, cleaned - last value is 0 = do not load
+        assertEquals("", get("/rest/admin/room/room2/load/player3")); // saved, cleaned - last value is 0
+        assertEquals("", get("/rest/admin/room/room3/load/player4")); // not saved, cleaned - last value is 0
 
         // then
-        assertScores("{player1=10, player2=0, player3=30, player4=0}");
+        assertScores("{player1=0, player2=0, player3=0, player4=0}");
 
         // when
+        service.setScores("room1", "player1", "11");
+        service.setScores("room1", "player2", "22");
+        service.setScores("room2", "player3", "33");
+        service.setScores("room3", "player4", "44");
+
+        service.saveAll("room1");
+        assertEquals("", get("/rest/admin/room/room2/saveAll"));
+
+        // then
+        assertScores("{player1=11, player2=22, player3=33, player4=44}");
+
         service.gameOverAll("room1");
         service.gameOverAll("room2");
         service.gameOverAll("room3");
@@ -544,13 +553,13 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         // then
         assertScores("{}");
 
-        service.load("room1", "player1"); // save exists
-        // service.load("room1", "player2"); // do not load
-        service.load("room2", "player3"); // save exists
-        service.load("room3", "player4"); // save not exists
+        service.load("room1", "player1");    // saved, cleaned, saved - last value is 11
+        // service.load("room1", "player2"); // saved, cleaned, saved - last value is 22, do not load
+        service.load("room2", "player3");    // saved, cleaned, saved - last value is 33
+        service.load("room3", "player4");    // not saved, cleaned    - last value is 0
 
         // then
-        assertScores("{player1=10, player3=30}");
+        assertScores("{player1=11, player3=33, player4=0}");
     }
 
     @Test

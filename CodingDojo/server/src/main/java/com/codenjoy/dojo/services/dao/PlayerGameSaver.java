@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -79,20 +80,24 @@ public class PlayerGameSaver implements GameSaver {
         pool.removeDatabase();
     }
 
-    private static class Save {
+    public static class Save {
 
-        private Game game;
         private Player player;
         private String time;
+        private String save;
 
         public Save(PlayerGame playerGame, String time) {
-            this.player = playerGame.getPlayer();
-            this.game = playerGame.getGame();
+            player = playerGame.getPlayer();
             this.time = time;
+
+            // осторожно! внутри есть блокировка, потому делаем это в конструкторе
+            // если отпустим внутрь pool там будет выполняться в другом потоке
+            // и случится завис, потому что одну write блокировку мы уже взяли в PSI
+            save = playerGame.getGame().getSave().toString();
         }
 
         public String getSave() {
-            return game.getSave().toString();
+            return save;
         }
 
         public String getScore() {
@@ -136,6 +141,8 @@ public class PlayerGameSaver implements GameSaver {
 
     @Override
     public void saveGames(List<PlayerGame> playerGames, long time) {
+        if (playerGames.isEmpty()) return;
+
         String timeString = JDBCTimeUtils.toString(new Date(time));
         List<Save> data = playerGames.stream()
                 .map(playerGame -> new Save(playerGame, timeString))
@@ -220,6 +227,10 @@ public class PlayerGameSaver implements GameSaver {
 
     @Override
     public List<PlayerSave> loadAll(List<String> ids) {
+        if (ids.isEmpty()) {
+            return Arrays.asList();
+        }
+
         String idsString = "('" + ids.stream().collect(joining("','")) + "')";
         return pool.select("SELECT * " +
                         "FROM saves s1, " +
