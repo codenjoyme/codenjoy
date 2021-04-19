@@ -47,4 +47,6 @@ public interface GameService {
     String getDefaultRoom();
 
     boolean exists(String game);
+
+    String getDefaultProgress(GameType gameType);
 }
