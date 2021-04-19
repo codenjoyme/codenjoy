@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 
-import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Progressive;
 import com.codenjoy.dojo.services.multiplayer.types.*;
 import org.json.JSONObject;
 
@@ -235,7 +235,7 @@ public class MultiplayerType {
         return this.getClass().getSimpleName().toLowerCase().replace("type", "");
     }
 
-    public int loadProgress(Game game, JSONObject save) {
+    public int loadProgress(Progressive game, JSONObject save) {
         int roomSize = getRoomSize();
         game.setProgress(progress());
         return roomSize;

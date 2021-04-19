@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services.multiplayer.types;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Progressive;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Single;
@@ -73,7 +73,7 @@ public class LevelsType extends MultiplayerType {
     }
 
     @Override
-    public int loadProgress(Game game, JSONObject save) {
+    public int loadProgress(Progressive game, JSONObject save) {
         if (!save.has("levelProgress")) {
             return super.loadProgress(game, save);
         }
