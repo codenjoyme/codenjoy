@@ -49,7 +49,7 @@ public class TestUtils {
 
     public static final int COUNT_NUMBERS = 3;
 
-    private static final Testing TESTING = new MockitoJunitTesting();
+    private static Testing TESTING = null;
 
     public static String injectN(String expected) {
         int size = (int) Math.sqrt(expected.length());
@@ -238,6 +238,10 @@ public class TestUtils {
     }
 
     private static void assertEquals(Object o1, Object o2) {
+        if (TESTING == null) {
+            // это тут потому что статика пытается сразу загрузить классы, которых нет
+            TESTING = new MockitoJunitTesting();
+        }
         TESTING.assertEquals(o1, o2);
     }
 
