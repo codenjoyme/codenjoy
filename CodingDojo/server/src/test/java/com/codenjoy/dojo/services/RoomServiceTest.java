@@ -158,6 +158,22 @@ public class RoomServiceTest {
     }
 
     @Test
+    public void shouldGetGameType_ifCreated() {
+        // given
+        service.create("room", game1);
+
+        // when then
+        assertEquals("RoomGameType{type=GameType[first], settings=First[Parameter 1=15, Parameter 2=true]}",
+                service.gameType("room").toString());
+    }
+
+    @Test
+    public void shouldGetGameType_ifNotCreated() {
+        // when then
+        assertEquals(null, service.gameType("room"));
+    }
+
+    @Test
     public void shouldAllSettings_isSame_inOneRoom() {
         // given
         service.create("room", game1);

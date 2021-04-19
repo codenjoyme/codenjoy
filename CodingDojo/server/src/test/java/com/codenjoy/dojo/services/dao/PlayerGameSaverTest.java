@@ -25,10 +25,13 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
@@ -82,6 +85,46 @@ public class PlayerGameSaverTest {
 
         // then
         assertEquals("[]", saver.getSavedList().toString());
+    }
+
+    @Test
+    public void shouldSaveAll() {
+        // given
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        Player player3 = new Player("maria", "http://127.0.0.5:9999", PlayerTest.mockGameType("game"), getScores(30), getInfo("Some another info"));
+
+        Game game = mock(Game.class);
+        when(game.getSave()).thenReturn(
+                new JSONObject("{'key':'value1'}"),
+                new JSONObject("{'key':'value2'}"),
+                new JSONObject("{'key':'value3'}")
+        );
+
+        // when
+        long now = System.currentTimeMillis();
+
+        List<PlayerGame> playerGames = Arrays.asList(
+                new PlayerGame(player1, game, "room"),
+                new PlayerGame(player2, game, "room"),
+                new PlayerGame(player3, game, "otherRoom")
+        );
+        saver.saveGames(playerGames, now);
+
+        // then
+        assertEquals("[vasia, katia]", saver.getSavedList("room").toString());
+        assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
+
+        assertEquals("PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={\"key\":\"value1\"})",
+                saver.loadGame("vasia").toString());
+        assertEquals("PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={\"key\":\"value2\"})",
+                saver.loadGame("katia").toString());
+        assertEquals("PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={\"key\":\"value3\"})",
+                saver.loadGame("maria").toString());
+
+        assertEquals("room", player1.getRoom());
+        assertEquals("room", player2.getRoom());
+        assertEquals("otherRoom", player3.getRoom());
     }
 
     private GameType getGameType(PlayerScores scores) {
