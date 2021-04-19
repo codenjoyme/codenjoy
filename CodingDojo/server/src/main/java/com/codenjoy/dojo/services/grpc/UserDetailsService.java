@@ -23,7 +23,8 @@ package com.codenjoy.dojo.services.grpc;
  */
 
 
-import com.codenjoy.dojo.UserDetailsRequest;
+import com.codenjoy.dojo.ByIdRequest;
+import com.codenjoy.dojo.ByUsernameRequest;
 import com.codenjoy.dojo.UserDetailsResponse;
 import com.codenjoy.dojo.UserDetailsServiceGrpc;
 import com.codenjoy.dojo.services.dao.Registration;
@@ -42,8 +43,18 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
     }
 
     @Override
-    public void getUserDetails(UserDetailsRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
+    public void getUserDetailsById(ByIdRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
         String id = request.getId();
+        String email = this.registration.getEmailById(id);
+
+        responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).build());
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getUserDetailsByUsername(ByUsernameRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
+        String username = request.getUsername();
+        String id = this.registration.getIdByGitHubUsername(username);
         String email = this.registration.getEmailById(id);
 
         responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).build());
