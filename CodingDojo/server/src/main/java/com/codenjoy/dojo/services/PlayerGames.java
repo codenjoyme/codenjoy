@@ -240,6 +240,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return pg -> pg.getRoom().equals(room);
     }
 
+    public static Predicate<PlayerGame> exclude(List<String> ids) {
+        return pg -> !ids.contains(pg.getPlayerId());
+    }
+
     public Predicate<PlayerGame> withActive() {
         return playerGame -> roomService.isActive(playerGame.getRoom());
     }

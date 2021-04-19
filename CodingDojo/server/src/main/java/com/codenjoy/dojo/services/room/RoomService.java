@@ -105,11 +105,15 @@ public class RoomService {
     }
 
     public String game(String room) {
+        return gameType(room).name();
+    }
+
+    public GameType gameType(String room) {
         if (!exists(room)) {
             log.warn("Room '{}' not found", room);
             return null;
         }
-        return state(room).getType().name();
+        return state(room).getType();
     }
 
     public List<GameRooms> gameRooms() {

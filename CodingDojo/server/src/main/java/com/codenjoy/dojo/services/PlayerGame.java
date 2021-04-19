@@ -156,6 +156,7 @@ public class PlayerGame implements Tickable {
     public void clearScore() {
         player.clearScore();
         game.clearScore();
+        game.getProgress().reset();
     }
 
     public void fireOnLevelChanged() {
