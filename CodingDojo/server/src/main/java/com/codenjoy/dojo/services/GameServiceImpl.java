@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.classloader.GameLoader;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.room.RoomService;
@@ -31,6 +32,7 @@ import com.codenjoy.dojo.utils.ReflectUtils;
 import com.codenjoy.dojo.web.controller.Validator;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -211,5 +213,16 @@ public class GameServiceImpl implements GameService {
     public boolean exists(String game) {
         return !Validator.isEmpty(game)
                 && cache.containsKey(game);
+    }
+
+    /**
+     * @return Вовзращает сейв для этой игры по умолчанию с прогрессом
+     * (если он предусмотрен) на первом уровне.
+     */
+    @Override // TODO test me
+    public String getDefaultProgress(GameType gameType) {
+        MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
+        JSONObject save = type.progress().saveTo(new JSONObject());
+        return save.toString().replace('"', '\'');
     }
 }

@@ -539,7 +539,7 @@ public class AdminController {
         model.addAttribute("generateCount", "30");
         model.addAttribute("generateRoom", room);
         model.addAttribute("timerPeriod", timerService.getPeriod());
-        model.addAttribute("defaultProgress", getDefaultProgress(gameType));
+        model.addAttribute("defaultProgress", gameService.getDefaultProgress(gameType));
         model.addAttribute("active", roomService.isActive(room));
         model.addAttribute("roomOpened", roomService.isOpened(room));
         model.addAttribute("recording", actionLogger.isWorking());
@@ -554,12 +554,6 @@ public class AdminController {
         settings.setPlayers(preparePlayers(model, room, saves));
 
         return "admin";
-    }
-
-    public String getDefaultProgress(GameType game) {
-        MultiplayerType type = game.getMultiplayerType(game.getSettings());
-        JSONObject save = type.progress().saveTo(new JSONObject());
-        return save.toString().replace('"', '\'');
     }
 
     public AdminSettings getAdminSettings(List<Parameter> parameters, String room) {
