@@ -192,6 +192,7 @@ public class SaveServiceImpl implements SaveService {
         if (user != null) {
             info.setCode(user.getCode());
             info.setReadableName(user.getReadableName());
+            info.setEmail(user.getEmail());
         }
     }
 

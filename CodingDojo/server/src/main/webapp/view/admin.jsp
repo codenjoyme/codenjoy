@@ -477,7 +477,9 @@
                 </tr>
                 <tr>
                     <td class="header">PlayerId</td>
+                    <td class="header">Code</td>
                     <td class="header">PlayerName</td>
+                    <td class="header">Email</td>
                     <td class="header">RoomName</td>
                     <td class="header">Score</td>
                     <td class="header">IP</td>
@@ -518,10 +520,12 @@
                     </c:choose>
                         <c:choose>
                             <c:when test="${player.active}">
-                                <td><form:input class="input-id" readonly="true" index="${status.index}" path="players[${status.index}].id"/></td>
+                                <td><form:input class="input-id"       path="players[${status.index}].id"   readonly="true" index="${status.index}"/></td>
+                                <td><form:input class="input-code"     path="players[${status.index}].code" readonly="true"/></td>
                                 <td><form:input class="input-readable" path="players[${status.index}].readableName"/></td>
-                                <td><form:input class="input-room" path="players[${status.index}].room"/></td>
-                                <td><form:input class="input-score" path="players[${status.index}].score"/></td>
+                                <td><form:input class="input-email"    path="players[${status.index}].email"/></td>
+                                <td><form:input class="input-room"     path="players[${status.index}].room"/></td>
+                                <td><form:input class="input-score"    path="players[${status.index}].score"/></td>
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
@@ -593,8 +597,10 @@
 
                             <c:otherwise>
                                 <td><input type="text" readonly="true" class="input-id"       value="${player.id}"/></td>
+                                <td><input type="text" readonly="true" class="input-code"     value="${player.code}"/></td>
                                 <td><input type="text" readonly="true" class="input-readable" value="${player.readableName}"/></td>
-                                <td><input type="text" readonly="true" class="input-room" value="${player.room}"/></td>
+                                <td><input type="text" readonly="true" class="input-email"    value="${player.email}"/></td>
+                                <td><input type="text" readonly="true" class="input-room"     value="${player.room}"/></td>
                                 <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
                                 <td>UDLRA</td>

@@ -101,6 +101,8 @@ public class SaveServiceImplTest {
         when(player.getRoom()).thenReturn(room);
         when(player.hasAi()).thenReturn(true);
         when(player.getCallbackUrl()).thenReturn("http://" + id + ":1234");
+        when(player.getEmail()).thenReturn(null);        // берется из registration
+        when(player.getReadableName()).thenReturn(null); // берется из registration
         when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
         when(playerService.get(id)).thenReturn(player);
         players.add(player);
@@ -298,6 +300,7 @@ public class SaveServiceImplTest {
         assertEquals("active", active.getId());
         assertEquals("code_active", active.getCode());
         assertEquals("readable_active", active.getReadableName());
+        assertEquals("active@email.com", active.getEmail());
         assertEquals("http://active:1234", active.getCallbackUrl());
         assertEquals("game room", active.getGame());
         assertEquals("{\"data\":2}", active.getData());
@@ -310,6 +313,7 @@ public class SaveServiceImplTest {
         assertEquals("activeSaved", activeSaved.getId());
         assertEquals("code_activeSaved", activeSaved.getCode());
         assertEquals("readable_activeSaved", activeSaved.getReadableName());
+        assertEquals("activeSaved@email.com", activeSaved.getEmail());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
         assertEquals("game room", activeSaved.getGame());
         assertEquals("{\"data\":1}", activeSaved.getData());
@@ -322,6 +326,7 @@ public class SaveServiceImplTest {
         assertEquals("saved", saved.getId());
         assertEquals("code_saved", saved.getCode());
         assertEquals("readable_saved", saved.getReadableName());
+        assertEquals("saved@email.com", saved.getEmail());
         assertEquals("http://saved:1234", saved.getCallbackUrl());
         assertEquals("saved game room", saved.getGame());
         assertNull(saved.getData());
@@ -388,6 +393,7 @@ public class SaveServiceImplTest {
         assertEquals("active", active.getId());
         assertEquals("code_active", active.getCode());
         assertEquals("readable_active", active.getReadableName());
+        assertEquals("active@email.com", active.getEmail());
         assertEquals("http://active:1234", active.getCallbackUrl());
         assertEquals("game room", active.getGame());
         assertEquals("{\"data\":2}", active.getData());
@@ -400,6 +406,7 @@ public class SaveServiceImplTest {
         assertEquals("activeSaved", activeSaved.getId());
         assertEquals("code_activeSaved", activeSaved.getCode());
         assertEquals("readable_activeSaved", activeSaved.getReadableName());
+        assertEquals("activeSaved@email.com", activeSaved.getEmail());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
         assertEquals("game room", activeSaved.getGame());
         assertEquals("{\"data\":1}", activeSaved.getData());
@@ -412,6 +419,7 @@ public class SaveServiceImplTest {
         assertEquals("saved", saved.getId());
         assertEquals("code_saved", saved.getCode());
         assertEquals("readable_saved", saved.getReadableName());
+        assertEquals("saved@email.com", saved.getEmail());
         assertEquals("http://saved:1234", saved.getCallbackUrl());
         assertEquals("saved game room", saved.getGame());
         assertNull(saved.getData());
@@ -434,6 +442,7 @@ public class SaveServiceImplTest {
         assertEquals("activeInOtherRoom", active.getId());
         assertEquals("code_activeInOtherRoom", active.getCode());
         assertEquals("readable_activeInOtherRoom", active.getReadableName());
+        assertEquals("activeInOtherRoom@email.com", active.getEmail());
         assertEquals("http://activeInOtherRoom:1234", active.getCallbackUrl());
         assertEquals("game otherRoom", active.getGame());
         assertEquals("{\"data\":4}", active.getData());
@@ -446,6 +455,7 @@ public class SaveServiceImplTest {
         assertEquals("activeSavedInOtherRoom", activeSaved.getId());
         assertEquals("code_activeSavedInOtherRoom", activeSaved.getCode());
         assertEquals("readable_activeSavedInOtherRoom", activeSaved.getReadableName());
+        assertEquals("activeSavedInOtherRoom@email.com", activeSaved.getEmail());
         assertEquals("http://activeSavedInOtherRoom:1234", activeSaved.getCallbackUrl());
         assertEquals("game otherRoom", activeSaved.getGame());
         assertEquals("{\"data\":3}", activeSaved.getData());
@@ -458,6 +468,7 @@ public class SaveServiceImplTest {
         assertEquals("savedInOtherRoom", saved.getId());
         assertEquals("code_savedInOtherRoom", saved.getCode());
         assertEquals("readable_savedInOtherRoom", saved.getReadableName());
+        assertEquals("savedInOtherRoom@email.com", saved.getEmail());
         assertEquals("http://savedInOtherRoom:2345", saved.getCallbackUrl());
         assertEquals("saved game otherRoom", saved.getGame());
         assertNull(saved.getData());
@@ -473,6 +484,7 @@ public class SaveServiceImplTest {
             setId(id);
             setCode("code_" + id);
             setReadableName("readable_" + id);
+            setEmail(id + "@email.com");
         }};
         users.add(user);
 

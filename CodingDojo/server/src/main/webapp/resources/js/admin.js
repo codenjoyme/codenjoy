@@ -153,8 +153,10 @@ pages.admin = function() {
                 });
             };
 
+            // setup(PLAYER_ID); // readonly
+            // setup('code');    // readonly
             setup('readableName');
-            setup(PLAYER_ID);
+            setup('email');
             setup('room');
             setup('score');
             setup('callbackUrl');
