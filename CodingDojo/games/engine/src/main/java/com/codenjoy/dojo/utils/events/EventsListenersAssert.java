@@ -48,6 +48,11 @@ public class EventsListenersAssert {
         return listeners.get();
     }
 
+    public String getEvents(Integer... indexes) {
+        int size = listeners().size();
+        return collectAll(size, indexes, index -> getEventsFormatted(size, index));
+    }
+
     public String getEvents(EventListener events) {
         String result = tryCatch(
                 () -> {
@@ -60,8 +65,13 @@ public class EventsListenersAssert {
         return result;
     }
 
-    private static boolean is(Throwable e, String exception) {
-        return e.getClass().getSimpleName().equals(exception);
+    private static boolean is(Class e, String exception) {
+        if (e == null) {
+            return false;
+        }
+
+        return e.getSimpleName().equals(exception)
+                || is(e.getSuperclass(), exception);
     }
 
     private Integer[] range(int size, Integer[] indexes) {
@@ -74,15 +84,22 @@ public class EventsListenersAssert {
     }
 
     public void assertAll(String expected, int size, Integer[] indexes,
-                          Function<Integer, String> function) {
+                          Function<Integer, String> function)
+    {
+        String actual = collectAll(size, indexes, function);
+        testing.assertEquals(expected, actual);
+    }
+
+    public String collectAll(int size, Integer[] indexes,
+                             Function<Integer, String> function)
+    {
         indexes = range(size, indexes);
 
         String actual = "";
         for (int i = 0; i < indexes.length; i++) {
             actual += function.apply(indexes[i]);
         }
-
-        testing.assertEquals(expected, actual);
+        return actual;
     }
 
     private static <A> A tryCatch(Supplier<A> tryCode,
@@ -90,7 +107,7 @@ public class EventsListenersAssert {
         try {
             return tryCode.get();
         } catch (Throwable e) {
-            if (is(e, exception)) {
+            if (is(e.getClass(), exception)) {
                 return failureCode.get();
             } else {
                 throw e;
@@ -133,13 +150,15 @@ public class EventsListenersAssert {
 
     public void verifyAllEvents(String expected, Integer... indexes) {
         int size = listeners().size();
-        assertAll(expected, size, indexes, index -> {
-            Object actual = getEvents(listeners().get(index));
-            if (size == 1) {
-                return actual.toString();
-            } else {
-                return String.format("listener(%s) => %s\n", index, actual);
-            }
-        });
+        assertAll(expected, size, indexes, index -> getEventsFormatted(size, index));
+    }
+
+    public String getEventsFormatted(int size, Integer index) {
+        Object actual = getEvents(listeners().get(index));
+        if (size == 1) {
+            return actual.toString();
+        } else {
+            return String.format("listener(%s) => %s\n", index, actual);
+        }
     }
 }
