@@ -155,7 +155,7 @@ func createURL(browserURL string) (url.URL, error) {
 	u := url.URL{
 		Path:     pp[1] + "/ws",
 		RawQuery: fmt.Sprintf(gameQueryTemplate, pp[4], strings.Split(gURL.RawQuery, "=")[1]),
-		Scheme:   gameProtocol,
+		Scheme:   gameProtocolS,
 		Host:     gURL.Host,
 	}
 
