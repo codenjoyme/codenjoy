@@ -4,6 +4,10 @@ import {  connect  } from 'react-redux';
 // import classnames from 'classnames';
 import {  Link  } from 'react-router-dom';
 import {  CopyToClipboard  } from 'react-copy-to-clipboard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faPowerOff,
+} from '@fortawesome/free-solid-svg-icons';
 
 // proj
 import {  GameElements  } from '../../components';
@@ -116,7 +120,7 @@ class RulesContainer extends Component {
                         Також зверніть увагу, що у Фіналі неактивні ігроки можуть бути кікнуті з ігрової кімнати, щоб не заважати іншим грати.
                     </p>
 
-                    <h2 className='title'>Сервер для тренувать</h2>
+                    <h2 className='title'>Сервер для тренувань</h2>
                     <p>
                         Основний ігровий сервер буде працювати лише в ігрові часи. Якшо вам необхідно потренуватися - ми зробили
                         тестовий сервер, котрий буде увімкнений цілодобово.
@@ -128,6 +132,24 @@ class RulesContainer extends Component {
                     <p>
                         Тестовий сервер доступний за адресою: <a href={ practiceServerUrl } target="_blank" rel="noopener noreferrer">{ practiceServerUrl }</a>
                     </p>
+
+                    <h2 className='title'>Що ми будемо робити с неактивними гравцями?</h2>
+                    <div>
+                        <p>
+                            Для того, щоб не заважати ігровому процессу та не спрощувати іншим гравцям гру,
+                            впродовж ігрових дніх ми будемо робити kick тим ботам, що не мали ніякої активності
+                            за останні <span className='command'>2 години</span>. Якшо так трапилося, що вашого бота кікнуло - достатьню або авторизуватися
+                            на сервері заново, або скористатися кнопкою
+                            <FontAwesomeIcon
+                                className = { Styles.exitedRoom }
+                                icon = { faPowerOff }
+                            />
+                            яка впустить вашого бота назад у ігрову кімнату.
+                        </p>
+                        <p>
+                            В день проведення фіналу ми зменшемо дозволенний період неактивності вашого бота до <span className='command'>1хв</span>.
+                        </p>
+                    </div>
 
                     <h2 className='title'>У чому суть гри?</h2>
                     <div className='subTitle' id='commands'>

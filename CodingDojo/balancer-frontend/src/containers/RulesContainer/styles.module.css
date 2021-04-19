@@ -64,3 +64,11 @@ ul {
     list-style-type: disc;
     margin-left: 40px;
 }
+
+.exitedRoom {
+    font-size: 17px;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+    color: rgb(221, 98, 98);
+}
