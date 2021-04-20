@@ -3852,7 +3852,7 @@ public class GameTest {
     }
 
     @Test
-    public void iLooseScoresWhenDoHarakiri() {
+    public void iLoseScoresWhenDoHarakiri() {
         settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +

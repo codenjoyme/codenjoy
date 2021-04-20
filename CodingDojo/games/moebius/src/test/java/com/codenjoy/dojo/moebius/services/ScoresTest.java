@@ -24,13 +24,10 @@ package com.codenjoy.dojo.moebius.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.LOOSE_PENALTY;
+import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.LOSE_PENALTY;
 import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.WIN_SCORE;
 import static org.junit.Assert.assertEquals;
 
@@ -66,7 +63,7 @@ public class ScoresTest {
 
         assertEquals(140
                 + (1+2+3+4) * settings.integer(WIN_SCORE)
-                - settings.integer(LOOSE_PENALTY),
+                - settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 

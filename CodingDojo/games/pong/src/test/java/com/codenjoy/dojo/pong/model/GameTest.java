@@ -492,7 +492,7 @@ public class GameTest {
     }
 
     @Test
-    public void shouldHeroLooseBall() {
+    public void shouldHeroLoseBall() {
         givenFl("          " +
                 "----------" +
                 "|        |" +
@@ -547,7 +547,7 @@ public class GameTest {
 
         game.tick();
 
-        verify(listener).event(Events.LOOSE);
+        verify(listener).event(Events.LOSE);
 
         assertE("          " +
                 "----------" +

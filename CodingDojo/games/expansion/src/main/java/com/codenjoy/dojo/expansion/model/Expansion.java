@@ -50,7 +50,7 @@ public class Expansion implements Tickable, IField {
     public static Events WIN_MULTIPLE;
     public static Events DRAW_MULTIPLE;
     public static final Events WIN_SINGLE = Events.WIN(0);
-    public static final Events LOOSE = Events.LOOSE();
+    public static final Events LOSE = Events.LOSE();
 
     private static Logger logger = DLoggerFactory.getLogger(Expansion.class);
 
@@ -339,7 +339,7 @@ public class Expansion implements Tickable, IField {
         if (!exists) {
             losers.add(player);
             player.hero.die();
-            return LOOSE;
+            return LOSE;
         }
         return null;
     }

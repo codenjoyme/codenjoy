@@ -68,7 +68,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         KILL_ZOMBIE_SCORE("[Score] Kill zombie score"),
         ENABLE_KILL_SCORE("[Score] Enable score for kill"),
         KILL_HERO_SCORE("[Score] Kill hero score"),
-        LOOSE_PENALTY("[Score] Loose penalty");
+        LOSE_PENALTY("[Score] Lose penalty");
 
         private String key;
 
@@ -121,7 +121,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(KILL_ZOMBIE_SCORE, 5);
         bool(ENABLE_KILL_SCORE, true);
         integer(KILL_HERO_SCORE, 10);
-        integer(LOOSE_PENALTY, 5);
+        integer(LOSE_PENALTY, 5);
 
         Levels.setup(this);
     }

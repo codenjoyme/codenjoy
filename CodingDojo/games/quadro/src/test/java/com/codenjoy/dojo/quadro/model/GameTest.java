@@ -251,7 +251,7 @@ public class GameTest {
                 "    o    ");
 
         verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOOSE);
+        verify(listener2).event(Events.LOSE);
     }
 
     // Ничего, когда в ряд 4 фишки желтого игрока вертикально но есть между чужая фишка
@@ -313,7 +313,7 @@ public class GameTest {
                 " x       " +
                 "ox       ");
 
-        verify(listener1).event(Events.LOOSE);
+        verify(listener1).event(Events.LOSE);
         verify(listener2).event(Events.WIN);
     }
 
@@ -471,7 +471,7 @@ public class GameTest {
 
     // Если игрок пропустил 10 ходов, то он проиграл
     @Test
-    public void shouldLoose_whenMissed10Act() {
+    public void shouldLose_whenMissed10Act() {
         givenFl("         " +
                 "         " +
                 "         " +
@@ -499,7 +499,7 @@ public class GameTest {
                 "         " +
                 "         ");
 
-        verify(listener1).event(Events.LOOSE);
+        verify(listener1).event(Events.LOSE);
         verify(listener2).event(Events.WIN);
     }
 
@@ -806,7 +806,7 @@ public class GameTest {
         game.tick();
 
         verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOOSE);
+        verify(listener2).event(Events.LOSE);
 
         for (int i = 0; i < Quadro.TIMEOUT_TICKS; i++) {
             game.tick();
@@ -851,7 +851,7 @@ public class GameTest {
                 " o       " +
                 "oxxxxxo  ");
 
-        verify(listener1).event(Events.LOOSE);
+        verify(listener1).event(Events.LOSE);
         verify(listener2).event(Events.WIN);
     }
 
@@ -888,7 +888,7 @@ public class GameTest {
                 "  xxo    " +
                 "oxooooo  ");
 
-        verify(listener1).event(Events.LOOSE);
+        verify(listener1).event(Events.LOSE);
         verify(listener2).event(Events.WIN);
     }
 
@@ -1048,7 +1048,7 @@ public class GameTest {
                 "  xxo    " +
                 "oxooooo  ");
 
-        verify(listener1).event(Events.LOOSE);
+        verify(listener1).event(Events.LOSE);
         verify(listener2).event(Events.WIN);
     }
 
@@ -1080,7 +1080,7 @@ public class GameTest {
                 "  oxoox  " +
                 "oxooooox ");
 
-        verify(listener1).event(Events.LOOSE);
+        verify(listener1).event(Events.LOSE);
         verify(listener2).event(Events.WIN);
     }
 
@@ -1112,7 +1112,7 @@ public class GameTest {
                 "  oxoox  " +
                 "oxooooox ");
 
-        verify(listener1).event(Events.LOOSE);
+        verify(listener1).event(Events.LOSE);
         verify(listener2).event(Events.WIN);
     }
 }

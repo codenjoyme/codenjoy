@@ -24,8 +24,6 @@ package com.codenjoy.dojo.sokoban.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,8 +34,8 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
-    public void loose() {
-        scores.event(Events.LOOSE);
+    public void lose() {
+        scores.event(Events.LOSE);
     }
 
     public void win() {
@@ -59,14 +57,14 @@ public class ScoresTest {
         win();
         win();
 
-        loose();
+        lose();
 
         assertEquals(160, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();
+        lose();
 
         assertEquals(0, scores.getScore());
     }

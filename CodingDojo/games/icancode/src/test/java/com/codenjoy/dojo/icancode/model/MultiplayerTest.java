@@ -1138,8 +1138,8 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [LOOSE(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => [LOOSE(gold=0, kill=0, multiple)]\n");
+                "listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
+                "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
                 "╔═══┐" +
@@ -1665,7 +1665,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [LOOSE(gold=0, kill=0, multiple)]\n" +
+                "listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
                 "listener(1) => []\n");
 
         assertL(single1,
@@ -1704,7 +1704,7 @@ public class MultiplayerTest {
         // then
         events.verifyAllEvents(
                 "listener(0) => []\n" +
-                "listener(1) => [LOOSE(gold=0, kill=0, multiple)]\n");
+                "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n");
         assertL(single1,
                 "╔═══┐" +
                 "║S..│" +
@@ -4103,7 +4103,7 @@ public class MultiplayerTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_HERO(gold=0, kill=1, multiple)]\n" +
-                "listener(1) => [LOOSE(gold=0, kill=0, multiple)]\n");
+                "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n");
     }
 
     @Test
@@ -4155,7 +4155,7 @@ public class MultiplayerTest {
 
         events.verifyAllEvents("" +
                 "listener(0) => [KILL_HERO(gold=0, kill=1, multiple)]\n" +
-                "listener(1) => [LOOSE(gold=0, kill=0, multiple)]\n");
+                "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n");
     }
 
     @Test
@@ -4223,10 +4223,10 @@ public class MultiplayerTest {
         String events = this.events.getEvents();
         try {
             assertEquals("listener(0) => []\n" +
-                    "listener(1) => [LOOSE(gold=0, kill=0, multiple)]\n",
+                    "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n",
                     events);
         } catch (ComparisonFailure e) {
-            assertEquals("listener(0) => [LOOSE(gold=0, kill=0, multiple)]\n" +
+            assertEquals("listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
                     "listener(1) => []\n",
                     events);
         }
@@ -4555,7 +4555,7 @@ public class MultiplayerTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_HERO(gold=0, kill=1, multiple)]\n" +
-                "listener(1) => [LOOSE(gold=0, kill=0, multiple)]\n");
+                "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n");
 
         assertE(single1,
                 "------" +
@@ -4653,7 +4653,7 @@ public class MultiplayerTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_HERO(gold=0, kill=1, multiple)]\n" +
-                "listener(1) => [LOOSE(gold=0, kill=0, multiple)]\n");
+                "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n");
 
         assertE(single1,
                 "------" +
@@ -4760,7 +4760,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [LOOSE(gold=0, kill=0, multiple)]\n" +
+                "listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
                 "listener(1) => [KILL_HERO(gold=0, kill=1, multiple)]\n");
 
         assertE(single1,
@@ -4839,7 +4839,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [LOOSE(gold=0, kill=0, multiple)]\n" +
+                "listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
                 "listener(1) => [KILL_HERO(gold=0, kill=1, multiple)]\n");
 
         assertE(single1,
@@ -4925,7 +4925,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [LOOSE(gold=0, kill=0, multiple)]\n" +
+                "listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
                 "listener(1) => [KILL_HERO(gold=0, kill=1, multiple)]\n");
 
         assertE(single1,
@@ -5007,7 +5007,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [LOOSE(gold=0, kill=0, multiple)]\n" +
+                "listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
                 "listener(1) => [KILL_HERO(gold=0, kill=1, multiple)]\n");
 
         assertE(single1,
@@ -5070,7 +5070,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [LOOSE(gold=0, kill=0, multiple)]\n" +
+                "listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
                 "listener(1) => [KILL_HERO(gold=0, kill=1, multiple)]\n");
 
         assertE(single1,

@@ -38,7 +38,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     public enum Keys implements Key {
 
         WIN_SCORE("Win score"),
-        LOOSE_PENALTY("Loose penalty"),
+        LOSE_PENALTY("Lose penalty"),
         DRAW_SCORE("Draw score"),
         LEVEL_MAP("Level map");
 
@@ -61,7 +61,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public GameSettings() {
         integer(WIN_SCORE, 10);
-        integer(LOOSE_PENALTY, 1);
+        integer(LOSE_PENALTY, 1);
         integer(DRAW_SCORE, 3);
 
         multiline(LEVEL_MAP,

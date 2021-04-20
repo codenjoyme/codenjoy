@@ -30,7 +30,7 @@ public class Event {
 
     // TODO подумать в контексте фреймворка как сделать так, чтобы любой ивент мог передавать параметры
     public enum EventEnum {
-        WIN, LOOSE;
+        WIN, LOSE;
     }
 
     @Override

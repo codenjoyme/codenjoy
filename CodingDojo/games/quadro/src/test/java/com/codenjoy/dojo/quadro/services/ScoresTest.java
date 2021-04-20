@@ -24,8 +24,6 @@ package com.codenjoy.dojo.quadro.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,8 +39,8 @@ public class ScoresTest {
         scores.event(Events.WIN);
     }
 
-    private void loose() {
-        scores.event(Events.LOOSE);
+    private void lose() {
+        scores.event(Events.LOSE);
     }
 
     private void draw() {
@@ -65,18 +63,18 @@ public class ScoresTest {
 
         draw();
 
-        loose();
+        lose();
 
         assertEquals(140
                 + 3 * settings.integer(WIN_SCORE)
                 + settings.integer(DRAW_SCORE)
-                - settings.integer(LOOSE_PENALTY),
+                - settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldStillZero_ifLessThan0() {
-        loose();
+        lose();
 
         assertEquals(0, scores.getScore());
     }

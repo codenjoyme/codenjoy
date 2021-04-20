@@ -24,5 +24,5 @@ package com.codenjoy.dojo.quadro.services;
 
 
 public enum Events {
-    WIN, LOOSE, DRAW;
+    WIN, LOSE, DRAW;
 }

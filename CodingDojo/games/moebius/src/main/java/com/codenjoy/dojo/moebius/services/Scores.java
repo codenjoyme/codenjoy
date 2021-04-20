@@ -25,7 +25,7 @@ package com.codenjoy.dojo.moebius.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 
-import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.LOOSE_PENALTY;
+import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.LOSE_PENALTY;
 import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.WIN_SCORE;
 
 public class Scores implements PlayerScores {
@@ -56,7 +56,7 @@ public class Scores implements PlayerScores {
                 score += settings.integer(WIN_SCORE) * events.getLines();
                 break;
             case GAME_OVER:
-                score -= settings.integer(LOOSE_PENALTY);
+                score -= settings.integer(LOSE_PENALTY);
                 break;
         }
         score = Math.max(0, score);

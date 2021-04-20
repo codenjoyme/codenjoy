@@ -37,12 +37,12 @@ public class Events {
         return new Events(Type.KILL_HERO, killCount, multiple);
     }
 
-    public static Events LOOSE(boolean multiple) {
+    public static Events LOSE(boolean multiple) {
         return new Events(multiple);
     }
 
     public enum Type {
-        WIN, LOOSE,
+        WIN, LOSE,
         KILL_ZOMBIE, KILL_HERO;
     }
 
@@ -66,7 +66,7 @@ public class Events {
 
     public Events(boolean multiple) {
         this.multiple = multiple;
-        type = Type.LOOSE;
+        type = Type.LOSE;
     }
 
     public boolean isMultiple() {

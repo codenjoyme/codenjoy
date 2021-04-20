@@ -100,7 +100,7 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
             while (history.size() > 10)
                 history.remove();
             if (salesResult.isBankrupt()) {
-                event(new EventArgs(EventType.LOOSE,
+                event(new EventArgs(EventType.LOSE,
                         salesResult.getProfit(),
                         salesResult.getAssetsAfter()));
             } else {

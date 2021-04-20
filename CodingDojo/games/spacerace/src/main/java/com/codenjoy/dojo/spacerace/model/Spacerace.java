@@ -91,7 +91,7 @@ public class Spacerace implements Field {
             Hero hero = player.getHero();
 
             if (!hero.isAlive()) {
-                player.event(Events.LOOSE);
+                player.event(Events.LOSE);
             }
         }
     }

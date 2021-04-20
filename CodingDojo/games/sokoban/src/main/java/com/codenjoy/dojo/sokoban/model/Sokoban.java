@@ -78,7 +78,7 @@ public class Sokoban implements Field {
         hero.tick();
 
         if (!hero.isAlive() || boxesBlocked) {
-            player.event(Events.LOOSE);
+            player.event(Events.LOSE);
         }
 
         for (Mark mark : marks) {

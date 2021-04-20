@@ -571,7 +571,7 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldLoose_whenFallInHole() {
+    public void shouldLose_whenFallInHole() {
         // given
         givenFl("╔══┐" +
                 "║SO│" +
@@ -583,7 +583,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
+        events.verifyAllEvents("[LOSE(gold=0, kill=0, single)]");
 
         assertL("╔══┐" +
                 "║SO│" +
@@ -602,7 +602,7 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void shouldNewGameAfterFallInHole() {
         // given
-        shouldLoose_whenFallInHole();
+        shouldLose_whenFallInHole();
 
         assertL("╔══┐" +
                 "║SO│" +
@@ -1908,7 +1908,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
+        events.verifyAllEvents("[LOSE(gold=0, kill=0, single)]");
 
         assertL("╔══┐" +
                 "║SO│" +
@@ -2011,7 +2011,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
+        events.verifyAllEvents("[LOSE(gold=0, kill=0, single)]");
 
         assertL("╔══┐" +
                 "║S.│" +

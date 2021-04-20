@@ -36,7 +36,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     public enum Keys implements Key {
 
         WIN_SCORE("Win score"),
-        LOOSE_PENALTY("Loose penalty"),
+        LOSE_PENALTY("Lose penalty"),
         BANKRUPT_PENALTY("Bankrupt penalty"),
         LIMIT_DAYS("Limit days");
 
@@ -59,7 +59,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public GameSettings() {
         integer(WIN_SCORE, 30);
-        integer(LOOSE_PENALTY, 100);
+        integer(LOSE_PENALTY, 100);
 
         integer(BANKRUPT_PENALTY, 100);
         integer(LIMIT_DAYS, 30);

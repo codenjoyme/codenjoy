@@ -24,10 +24,8 @@ package com.codenjoy.dojo.hex.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
-import static com.codenjoy.dojo.hex.services.GameSettings.Keys.LOOSE_PENALTY;
+import static com.codenjoy.dojo.hex.services.GameSettings.Keys.LOSE_PENALTY;
 import static com.codenjoy.dojo.hex.services.GameSettings.Keys.WIN_SCORE;
 
 public class Scores implements PlayerScores {
@@ -56,8 +54,8 @@ public class Scores implements PlayerScores {
 
         if (hexEvent.getType() == Event.EventEnum.WIN) {
             score += settings.integer(WIN_SCORE) * hexEvent.getCount();
-        } else if (hexEvent.getType() == Event.EventEnum.LOOSE) {
-            score -= settings.integer(LOOSE_PENALTY) * hexEvent.getCount();
+        } else if (hexEvent.getType() == Event.EventEnum.LOSE) {
+            score -= settings.integer(LOSE_PENALTY) * hexEvent.getCount();
         }
         score = Math.max(0, score);
     }

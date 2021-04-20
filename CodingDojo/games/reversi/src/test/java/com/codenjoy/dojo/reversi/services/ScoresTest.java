@@ -24,9 +24,6 @@ package com.codenjoy.dojo.reversi.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,8 +35,8 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
-    public void loose() {
-        scores.event(Events.LOOSE());
+    public void lose() {
+        scores.event(Events.LOSE());
     }
 
     public void win() {
@@ -68,18 +65,18 @@ public class ScoresTest {
         flip(35);
         flip(45);
 
-        loose();
+        lose();
 
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
                 + (35 + 45)*settings.integer(FLIP_SCORE)
-                - settings.integer(LOOSE_PENALTY),
+                - settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();
+        lose();
 
         assertEquals(0, scores.getScore());
     }

@@ -703,7 +703,7 @@ public class GameTest {
     }
 
     @Test
-    public void shouldLooseWhenNewGame() {
+    public void shouldLoseWhenNewGame() {
         givenFl("");
 
         joystick.act(2, 1);

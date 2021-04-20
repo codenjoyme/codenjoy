@@ -27,5 +27,5 @@ public enum Events {
     SUCCESS,
     FAIL,
     WIN,
-    LOOSE;
+    LOSE;
 }

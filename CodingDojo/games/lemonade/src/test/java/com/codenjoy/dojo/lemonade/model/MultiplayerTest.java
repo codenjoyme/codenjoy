@@ -210,8 +210,8 @@ public class MultiplayerTest {
 
         // then
         /*verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOOSE);
-        verify(listener3).event(Events.LOOSE);*/
+        verify(listener2).event(Events.LOSE);
+        verify(listener3).event(Events.LOSE);*/
 
         // when
         field.tick();

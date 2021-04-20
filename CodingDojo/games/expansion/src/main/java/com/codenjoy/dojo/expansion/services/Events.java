@@ -33,12 +33,12 @@ public class Events {
         return new Events(score);
     }
 
-    public static Events LOOSE() {
+    public static Events LOSE() {
         return new Events();
     }
 
     public enum Type {
-        WIN, LOOSE;
+        WIN, LOSE;
 
     }
     private Type type;
@@ -51,7 +51,7 @@ public class Events {
     }
 
     public Events() {
-        type = Type.LOOSE;
+        type = Type.LOSE;
         this.score = 0;
     }
 

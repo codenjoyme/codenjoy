@@ -130,7 +130,7 @@ class RulesContainer extends Component {
                     <p>
                         Герой втрачає очки за:
                         <ul>
-                            <li>пенальті за загибель: { this._gets('loosePenalty') }.</li>
+                            <li>пенальті за загибель: { this._gets('losePenalty') }.</li>
                         </ul>
                     </p>
 
@@ -352,7 +352,7 @@ class RulesContainer extends Component {
                             <li>Винагорода за доставку 1 мішка золота до виходу: { this._gets('goldScore') }.</li>
                             <li>Винагорода за вбивство іншого героя: { this._gets('killHeroScore') }.</li>
                             <li>Винагорода за знищення зомбі: { this._gets('killZombieScore') }.</li>
-                            <li>Очки за поразку: { this._gets('loosePenalty') }.</li>
+                            <li>Очки за поразку: { this._gets('losePenalty') }.</li>
                             <li>Частота випадання перків : { this._gets('perkDropRatio') }.</li>
                             <li>Термін доступності перків на карті: { this._gets('perkAvailability') }.</li>
                             <li>Термін дії перків: { this._gets('perkActivity') }.</li>

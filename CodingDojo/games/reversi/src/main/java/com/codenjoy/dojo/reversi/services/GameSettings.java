@@ -39,7 +39,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
         WIN_SCORE("Win score"),
         FLIP_SCORE("Flip score"),
-        LOOSE_PENALTY("Loose penalty"),
+        LOSE_PENALTY("Lose penalty"),
         LEVEL_MAP("Level map");
 
         private String key;
@@ -62,7 +62,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     public GameSettings() {
         integer(WIN_SCORE, 100);
         integer(FLIP_SCORE, 1);
-        integer(LOOSE_PENALTY, 0);
+        integer(LOSE_PENALTY, 0);
 
         multiline(LEVEL_MAP,
                 "        \n" +

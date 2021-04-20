@@ -120,7 +120,7 @@ public class ICanCode implements Tickable, Field {
                 hero.resetHeroKillCount();
             }
             if (!hero.isAlive()) {
-                player.event(Events.LOOSE(contest));
+                player.event(Events.LOSE(contest));
             } else if (hero.isWin()) {
                 player.event(Events.WIN(hero.getGoldCount(), contest));
                 hero.die();

@@ -35,7 +35,7 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
-    public void loose() {
+    public void lose() {
         scores.event(Events.LOSE);
     }
 
@@ -58,7 +58,7 @@ public class ScoresTest {
         win();
         win();
 
-        loose();
+        lose();
 
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
@@ -68,7 +68,7 @@ public class ScoresTest {
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();
+        lose();
 
         assertEquals(0, scores.getScore());
     }

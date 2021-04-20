@@ -25,7 +25,7 @@ package com.codenjoy.dojo.reversi.services;
 public class Events {
 
     private static final String WIN = "WIN";
-    private static final String LOOSE = "LOOSE";
+    private static final String LOSE = "LOSE";
     private static final String FLIP = "FLIP";
 
     private String name;
@@ -40,8 +40,8 @@ public class Events {
         return new Events(WIN, 1);
     }
 
-    public static Events LOOSE() {
-        return new Events(LOOSE, 1);
+    public static Events LOSE() {
+        return new Events(LOSE, 1);
     }
 
     public static Events FLIP(int count) {
@@ -61,8 +61,8 @@ public class Events {
         return count;
     }
 
-    public boolean isLoose() {
-        return name.equals(LOOSE);
+    public boolean isLose() {
+        return name.equals(LOSE);
     }
 
     public boolean isWin() {

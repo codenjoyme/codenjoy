@@ -1438,7 +1438,7 @@
 60: 2:Answer: ACT(7,7)
 60: 2:Fire Event: FLIP:1
 60: 1:Fire Event: WIN:1
-60: 2:Fire Event: LOOSE:1
+60: 2:Fire Event: LOSE:1
 ------------------------------------------
 61: 1:xxOxxxxx
 61: 1:xxOOxOxO
@@ -2902,7 +2902,7 @@
 121: 2:Scores: 153
 121: 2:Answer: ACT(2,7)
 121: 2:Fire Event: FLIP:7
-121: 1:Fire Event: LOOSE:1
+121: 1:Fire Event: LOSE:1
 121: 2:Fire Event: WIN:1
 ------------------------------------------
 122: 1:xxxxxOOO
@@ -4367,7 +4367,7 @@
 182: 2:Scores: 352
 182: 2:Answer: ACT(5,7)
 182: 2:Fire Event: FLIP:8
-182: 1:Fire Event: LOOSE:1
+182: 1:Fire Event: LOSE:1
 182: 2:Fire Event: WIN:1
 ------------------------------------------
 183: 1:xxxxxxxx
@@ -5832,7 +5832,7 @@
 243: 2:Scores: 545
 243: 2:Answer: ACT(0,6)
 243: 2:Fire Event: FLIP:5
-243: 1:Fire Event: LOOSE:1
+243: 1:Fire Event: LOSE:1
 243: 2:Fire Event: WIN:1
 ------------------------------------------
 244: 1:xxxxxxxx
@@ -7298,7 +7298,7 @@
 304: 2:Answer: ACT(6,7)
 304: 2:Fire Event: FLIP:1
 304: 1:Fire Event: WIN:1
-304: 2:Fire Event: LOOSE:1
+304: 2:Fire Event: LOSE:1
 ------------------------------------------
 305: 1:xxxxxxxO
 305: 1:OxxOOxxx
@@ -8762,7 +8762,7 @@
 365: 2:Scores: 820
 365: 2:Answer: ACT(4,0)
 365: 2:Fire Event: FLIP:2
-365: 1:Fire Event: LOOSE:1
+365: 1:Fire Event: LOSE:1
 365: 2:Fire Event: WIN:1
 ------------------------------------------
 366: 1:Oxxxxxxx
@@ -10228,7 +10228,7 @@
 426: 2:Answer:
 426: 1:Fire Event: FLIP:4
 426: 1:Fire Event: WIN:1
-426: 2:Fire Event: LOOSE:1
+426: 2:Fire Event: LOSE:1
 ------------------------------------------
 427: 1:X.......
 427: 1:...XXX..
@@ -11692,7 +11692,7 @@
 487: 2:Scores: 1070
 487: 2:Answer: ACT(0,4)
 487: 2:Fire Event: FLIP:4
-487: 1:Fire Event: LOOSE:1
+487: 1:Fire Event: LOSE:1
 487: 2:Fire Event: WIN:1
 ------------------------------------------
 488: 1:xxxxxxxx
@@ -13158,7 +13158,7 @@
 548: 2:Answer: ACT(7,6)
 548: 2:Fire Event: FLIP:4
 548: 1:Fire Event: WIN:1
-548: 2:Fire Event: LOOSE:1
+548: 2:Fire Event: LOSE:1
 ------------------------------------------
 549: 1:xxOOOOOO
 549: 1:xxOOOxxx
@@ -14622,7 +14622,7 @@
 609: 2:Scores: 1330
 609: 2:Answer: ACT(6,2)
 609: 2:Fire Event: FLIP:7
-609: 1:Fire Event: LOOSE:1
+609: 1:Fire Event: LOSE:1
 609: 2:Fire Event: WIN:1
 ------------------------------------------
 610: 1:OOOOOOxx
@@ -16088,7 +16088,7 @@
 670: 2:Answer: ACT(7,7)
 670: 2:Fire Event: FLIP:1
 670: 1:Fire Event: WIN:1
-670: 2:Fire Event: LOOSE:1
+670: 2:Fire Event: LOSE:1
 ------------------------------------------
 671: 1:xxOxxxxx
 671: 1:xxOOxOxO
@@ -17552,7 +17552,7 @@
 731: 2:Scores: 1590
 731: 2:Answer: ACT(2,7)
 731: 2:Fire Event: FLIP:7
-731: 1:Fire Event: LOOSE:1
+731: 1:Fire Event: LOSE:1
 731: 2:Fire Event: WIN:1
 ------------------------------------------
 732: 1:xxxxxOOO
@@ -19017,7 +19017,7 @@
 792: 2:Scores: 1789
 792: 2:Answer: ACT(5,7)
 792: 2:Fire Event: FLIP:8
-792: 1:Fire Event: LOOSE:1
+792: 1:Fire Event: LOSE:1
 792: 2:Fire Event: WIN:1
 ------------------------------------------
 793: 1:xxxxxxxx
@@ -20482,7 +20482,7 @@
 853: 2:Scores: 1982
 853: 2:Answer: ACT(0,6)
 853: 2:Fire Event: FLIP:5
-853: 1:Fire Event: LOOSE:1
+853: 1:Fire Event: LOSE:1
 853: 2:Fire Event: WIN:1
 ------------------------------------------
 854: 1:xxxxxxxx
@@ -21948,7 +21948,7 @@
 914: 2:Answer: ACT(6,7)
 914: 2:Fire Event: FLIP:1
 914: 1:Fire Event: WIN:1
-914: 2:Fire Event: LOOSE:1
+914: 2:Fire Event: LOSE:1
 ------------------------------------------
 915: 1:xxxxxxxO
 915: 1:OxxOOxxx
@@ -23412,7 +23412,7 @@
 975: 2:Scores: 2257
 975: 2:Answer: ACT(4,0)
 975: 2:Fire Event: FLIP:2
-975: 1:Fire Event: LOOSE:1
+975: 1:Fire Event: LOSE:1
 975: 2:Fire Event: WIN:1
 ------------------------------------------
 976: 1:Oxxxxxxx

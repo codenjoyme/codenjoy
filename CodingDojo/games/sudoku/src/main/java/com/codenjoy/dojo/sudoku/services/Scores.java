@@ -55,8 +55,8 @@ public class Scores implements PlayerScores {
             score -= settings.integer(FAIL_PENALTY);
         } else if (event.equals(Events.SUCCESS)) {
             score += settings.integer(SUCCESS_SCORE);
-        } else if (event.equals(Events.LOOSE)) {
-            score -= settings.integer(LOOSE_PENALTY);
+        } else if (event.equals(Events.LOSE)) {
+            score -= settings.integer(LOSE_PENALTY);
         }
         score = Math.max(0, score);
     }

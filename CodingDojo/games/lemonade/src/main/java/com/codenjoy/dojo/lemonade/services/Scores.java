@@ -24,8 +24,6 @@ package com.codenjoy.dojo.lemonade.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.BANKRUPT_PENALTY;
 
@@ -60,7 +58,7 @@ public class Scores implements PlayerScores {
                 if (mode == ScoreMode.LAST_DAY_ASSETS)
                     score = Math.max(score, toScore(eventArgs.assetsAfter));
                 break;
-            case LOOSE:
+            case LOSE:
                 if (mode == ScoreMode.SUM_OF_PROFITS)
                     score -= settings.integer(BANKRUPT_PENALTY);
                 break;

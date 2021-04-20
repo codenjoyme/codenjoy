@@ -45,7 +45,7 @@ public class ScoresTest {
         return CONTEST;
     }
 
-    public void looseSingle() {
+    public void loseSingle() {
         scores.event(new Events(single()));
     }
 
@@ -93,11 +93,11 @@ public class ScoresTest {
         winSingle();
         winSingle();
 
-        looseSingle();
+        loseSingle();
 
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
-                - settings.integer(LOOSE_PENALTY),
+                - settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 
@@ -128,7 +128,7 @@ public class ScoresTest {
 
     @Test
     public void shouldStillZeroAfterDead() {
-        looseSingle();
+        loseSingle();
 
         assertEquals(0, scores.getScore());
     }

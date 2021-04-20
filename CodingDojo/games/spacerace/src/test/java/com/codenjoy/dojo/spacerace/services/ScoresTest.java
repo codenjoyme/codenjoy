@@ -23,7 +23,6 @@ package com.codenjoy.dojo.spacerace.services;
  */
 
 import com.codenjoy.dojo.services.PlayerScores;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,8 +34,8 @@ public class ScoresTest {
 
     private GameSettings settings;
 
-    public void loose() {
-        scores.event(Events.LOOSE);
+    public void lose() {
+        scores.event(Events.LOSE);
     }
 
     public void destroyEnemy() {
@@ -71,14 +70,14 @@ public class ScoresTest {
 
         destroyBomb();
 
-        loose();
+        lose();
 
         assertEquals(2090, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();
+        lose();
 
         assertEquals(0, scores.getScore());
     }

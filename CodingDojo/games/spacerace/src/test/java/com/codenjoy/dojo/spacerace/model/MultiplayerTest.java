@@ -240,7 +240,7 @@ public class MultiplayerTest {
                 "☼ ☻ ☼\n");
 
         verify(listener3).event(Events.DESTROY_ENEMY);
-        verify(listener2).event(Events.LOOSE);
+        verify(listener2).event(Events.LOSE);
         verifyNoMoreInteractions(listener1);
 
         assertTrue(game2.isGameOver());
@@ -295,7 +295,7 @@ public class MultiplayerTest {
                 "☼ ☻ ☼\n");
 
         verify(listener3).event(Events.DESTROY_ENEMY);
-        verify(listener2).event(Events.LOOSE);
+        verify(listener2).event(Events.LOSE);
         verifyNoMoreInteractions(listener1);
 
         assertTrue(game2.isGameOver());
@@ -368,7 +368,7 @@ public class MultiplayerTest {
                 "☼   ☼\n");
 
         verify(listener3).event(Events.DESTROY_ENEMY);
-        verify(listener2).event(Events.LOOSE);
+        verify(listener2).event(Events.LOSE);
         verifyNoMoreInteractions(listener1);
 
         assertTrue(game2.isGameOver());

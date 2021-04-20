@@ -47,8 +47,8 @@ public class ScoresTest {
         scores.event(Events.WIN);
     }
 
-    private void loose() {
-        scores.event(Events.LOOSE);
+    private void lose() {
+        scores.event(Events.LOSE);
     }
 
     @Before
@@ -70,13 +70,13 @@ public class ScoresTest {
 
         win(); // +1000
 
-        loose(); // -500
+        lose(); // -500
 
         assertEquals(140
                 + 4 * settings.integer(SUCCESS_SCORE)
                 - settings.integer(FAIL_PENALTY)
                 + settings.integer(WIN_SCORE)
-                - settings.integer(LOOSE_PENALTY),
+                - settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 

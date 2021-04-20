@@ -764,7 +764,7 @@ public class PerksTest extends AbstractGameTest {
         field.tick();
 
         // then
-        assertEquals("Hero had to loose perk",
+        assertEquals("Hero had to lose perk",
                 0, player.getHero().getPerks().size());
     }
 

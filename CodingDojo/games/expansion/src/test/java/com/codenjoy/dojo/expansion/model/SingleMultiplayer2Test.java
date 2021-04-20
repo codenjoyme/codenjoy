@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.expansion.services.Events.LOOSE;
+import static com.codenjoy.dojo.expansion.services.Events.LOSE;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectNN;
 import static org.junit.Assert.assertEquals;
@@ -296,7 +296,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
         spreader.tickAll();
 
-        verify(PLAYER1).event(LOOSE());
+        verify(PLAYER1).event(LOSE());
         verifyNoMoreInteractions(PLAYER2);
         verify(PLAYER3).event(WIN());
         verifyNoMoreInteractions(PLAYER4);
@@ -365,7 +365,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         verifyNoMoreInteractions(PLAYER1);
-        verify(PLAYER2).event(LOOSE());
+        verify(PLAYER2).event(LOSE());
         verifyNoMoreInteractions(PLAYER3);
         verifyNoMoreInteractions(PLAYER4);
 
@@ -445,7 +445,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         verifyNoMoreInteractions(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
         verifyNoMoreInteractions(PLAYER3);
-        verify(PLAYER4).event(LOOSE());
+        verify(PLAYER4).event(LOSE());
 
         assertE("-------" +
                 "-----♥-" +
@@ -1014,7 +1014,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
         verify(PLAYER1).event(WIN());
-        verify(PLAYER2).event(LOOSE());
+        verify(PLAYER2).event(LOSE());
 
         // when
         spreader.tickAll();
@@ -1142,7 +1142,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldCantResetAfterLoose() {
+    public void shouldCantResetAfterLose() {
         // given
         shouldLosePlayersCanGetInfoAboutGame();
 
@@ -1964,7 +1964,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldCanResetOnThisBoardIfLoose_player1KillPlayer2() {
+    public void shouldCanResetOnThisBoardIfLose_player1KillPlayer2() {
         // given
         givenFl("╔═══┐" +
                 "║1.2│" +
@@ -2041,7 +2041,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         verify(PLAYER1).event(WIN());
-        verify(PLAYER2).event(LOOSE());
+        verify(PLAYER2).event(LOSE());
 
         assertE("-----" +
                 "-♥-♦-" +
@@ -2057,7 +2057,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldCanResetOnThisBoardIfLoose_player2KillPlayer1() {
+    public void shouldCanResetOnThisBoardIfLose_player2KillPlayer1() {
         // given
         givenFl("╔═══┐" +
                 "║2.1│" +
@@ -2134,7 +2134,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         spreader.tickAll();
 
         verify(PLAYER2).event(WIN());
-        verify(PLAYER1).event(LOOSE());
+        verify(PLAYER1).event(LOSE());
 
         assertE("-----" +
                 "-♦-♥-" +

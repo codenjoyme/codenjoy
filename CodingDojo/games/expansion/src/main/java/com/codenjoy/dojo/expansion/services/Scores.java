@@ -102,7 +102,7 @@ public class Scores implements PlayerScores {
 
         if (events.getType() == Events.Type.WIN) {
             this.score += score;
-        } else if (events.getType() == Events.Type.LOOSE) {
+        } else if (events.getType() == Events.Type.LOSE) {
             this.score -= score;
         }
         this.score = Math.max(0, this.score);

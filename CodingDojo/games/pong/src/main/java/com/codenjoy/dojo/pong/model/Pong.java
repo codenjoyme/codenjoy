@@ -26,7 +26,6 @@ import com.codenjoy.dojo.pong.services.Events;
 import com.codenjoy.dojo.pong.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -77,7 +76,7 @@ public class Pong implements Field {
 
         for (Player player : players) {
             if (playerPassedBall(player)) {
-                player.event(Events.LOOSE);
+                player.event(Events.LOSE);
                 allExcept(player).forEach(p -> p.event(Events.WIN));
                 resetBall();
                 return;

@@ -553,7 +553,7 @@ public class GameTest {
 
     // побеждает белый, когда все поле занято им
     @Test
-    public void shouldWinLoose_noEmptySpace_whiteWin() {
+    public void shouldWinLose_noEmptySpace_whiteWin() {
         givenFl("oooooooo" +
                 "oooooooo" +
                 "oooooooo" +
@@ -595,7 +595,7 @@ public class GameTest {
 
         verify(listener1).event(Events.FLIP(4));
         verify(listener1).event(Events.WIN());
-        verify(listener2).event(Events.LOOSE());
+        verify(listener2).event(Events.LOSE());
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -613,7 +613,7 @@ public class GameTest {
     
     // побеждает черный, когда все поле занято им
     @Test
-    public void shouldWinLoose_noEmptySpace_blackWin() {
+    public void shouldWinLose_noEmptySpace_blackWin() {
         givenFl("xxxxxxxx" +
                 "xxxxxxxx" +
                 "xxxxxxxx" +
@@ -652,7 +652,7 @@ public class GameTest {
                 "xxxxxxxx",
                 player1);
 
-        verify(listener1).event(Events.LOOSE());
+        verify(listener1).event(Events.LOSE());
         verify(listener2).event(Events.FLIP(4));
         verify(listener2).event(Events.WIN());
         verifyNoMoreInteractions();
@@ -672,7 +672,7 @@ public class GameTest {
 
     // побеждает белый, когда не осталось фишек у черного
     @Test
-    public void shouldWinLoose_noBlackChip_whiteWin() {
+    public void shouldWinLose_noBlackChip_whiteWin() {
         givenFl("        " +
                 "        " +
                 "        " +
@@ -713,7 +713,7 @@ public class GameTest {
 
         verify(listener1).event(Events.FLIP(3));
         verify(listener1).event(Events.WIN());
-        verify(listener2).event(Events.LOOSE());
+        verify(listener2).event(Events.LOSE());
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -731,7 +731,7 @@ public class GameTest {
 
     // побеждает черный, когда не осталось фишек у белого
     @Test
-    public void shouldWinLoose_noWhiteChip_blackWin() {
+    public void shouldWinLose_noWhiteChip_blackWin() {
         givenFl("        " +
                 "        " +
                 "        " +
@@ -770,7 +770,7 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Events.LOOSE());
+        verify(listener1).event(Events.LOSE());
         verify(listener2).event(Events.FLIP(3));
         verify(listener2).event(Events.WIN());
         verifyNoMoreInteractions();
@@ -790,7 +790,7 @@ public class GameTest {
 
     // побеждает белый, когда не осталось куда ходить обоим и у черного фишек меньше
     @Test
-    public void shouldWinLoose_noBlackChipPossibleTurn_whiteWin() {
+    public void shouldWinLose_noBlackChipPossibleTurn_whiteWin() {
         givenFl("       X" +
                 "        " +
                 "        " +
@@ -832,7 +832,7 @@ public class GameTest {
 
         verify(listener1).event(Events.FLIP(3));
         verify(listener1).event(Events.WIN());
-        verify(listener2).event(Events.LOOSE());
+        verify(listener2).event(Events.LOSE());
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
@@ -850,7 +850,7 @@ public class GameTest {
 
     // побеждает черный, когда не осталось куда ходить обоим и у черного фишек меньше
     @Test
-    public void shouldWinLoose_noWhiteChipPossibleTurn_blackWin() {
+    public void shouldWinLose_noWhiteChipPossibleTurn_blackWin() {
         givenFl("       O" +
                 "        " +
                 "        " +
@@ -889,7 +889,7 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Events.LOOSE());
+        verify(listener1).event(Events.LOSE());
         verify(listener2).event(Events.FLIP(3));
         verify(listener2).event(Events.WIN());
         verifyNoMoreInteractions();
@@ -1509,7 +1509,7 @@ public class GameTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Events.LOOSE());
+        verify(listener1).event(Events.LOSE());
         verify(listener2).event(Events.FLIP(1));
         verify(listener2).event(Events.WIN());
         verifyNoMoreInteractions();
@@ -1578,7 +1578,7 @@ public class GameTest {
 
         verify(listener1).event(Events.FLIP(1));
         verify(listener1).event(Events.WIN());
-        verify(listener2).event(Events.LOOSE());
+        verify(listener2).event(Events.LOSE());
         verifyNoMoreInteractions();
 
         game.tick(); // reset to new game

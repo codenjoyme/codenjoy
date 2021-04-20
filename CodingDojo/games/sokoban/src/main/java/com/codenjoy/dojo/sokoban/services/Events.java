@@ -25,5 +25,5 @@ package com.codenjoy.dojo.sokoban.services;
 
 public enum Events {
     WIN,
-    LOOSE
+    LOSE
 }

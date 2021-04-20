@@ -39,7 +39,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     public enum Keys implements Key {
 
         WIN_SCORE("Win score"),
-        LOOSE_PENALTY("Loose penalty"),
+        LOSE_PENALTY("Lose penalty"),
         SIZE("Size");
 
         private String key;
@@ -62,7 +62,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     public GameSettings() {
         integer(SIZE, 15);
         integer(WIN_SCORE, 1);
-        integer(LOOSE_PENALTY, 0);
+        integer(LOSE_PENALTY, 0);
     }
 
     public Level level() {

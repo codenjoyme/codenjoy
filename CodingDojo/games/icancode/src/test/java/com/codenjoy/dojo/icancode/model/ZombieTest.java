@@ -348,7 +348,7 @@ public class ZombieTest extends AbstractGameTest {
                 "------" +
                 "------");
 
-        events.verifyAllEvents("[LOOSE(gold=0, kill=0, single)]");
+        events.verifyAllEvents("[LOSE(gold=0, kill=0, single)]");
         assertEquals(false, hero.isAlive());
         assertEquals(false, hero.isWin());
 

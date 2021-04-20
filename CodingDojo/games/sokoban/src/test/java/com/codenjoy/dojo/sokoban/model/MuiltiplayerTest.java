@@ -187,7 +187,7 @@ public class MuiltiplayerTest {
 //                "☼    ☼\n" +
 //                "☼☼☼☼☼☼\n");
 //
-//        verify(listener3).event(Events.LOOSE);
+//        verify(listener3).event(Events.LOSE);
 //        assertTrue(game3.isGameOver());
 //
 //        dice(4, 1);

@@ -27,5 +27,6 @@ package com.codenjoy.dojo.pong.services;
  * или, быть может, наоборот - он поднял что-то ценное и ты хочешь ему дать бонус. Вот все все ивенты.
  */
 public enum Events {
-    LOOSE, WIN
+    LOSE,
+    WIN
 }

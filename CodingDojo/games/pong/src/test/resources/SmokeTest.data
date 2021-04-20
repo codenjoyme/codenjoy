@@ -316,7 +316,7 @@
 11: 2:
 11: 2:Scores: 0
 11: 2:Answer: STOP
-11: 2:Fire Event: LOOSE
+11: 2:Fire Event: LOSE
 11: 1:Fire Event: WIN
 ------------------------------------------
 12: 1:           
@@ -637,7 +637,7 @@
 22: 2:
 22: 2:Scores: 0
 22: 2:Answer: STOP
-22: 2:Fire Event: LOOSE
+22: 2:Fire Event: LOSE
 22: 1:Fire Event: WIN
 ------------------------------------------
 23: 1:           
@@ -784,7 +784,7 @@
 27: 2:
 27: 2:Scores: 0
 27: 2:Answer: STOP
-27: 2:Fire Event: LOOSE
+27: 2:Fire Event: LOSE
 27: 1:Fire Event: WIN
 ------------------------------------------
 28: 1:           
@@ -1105,7 +1105,7 @@
 38: 2:
 38: 2:Scores: 0
 38: 2:Answer: STOP
-38: 2:Fire Event: LOOSE
+38: 2:Fire Event: LOSE
 38: 1:Fire Event: WIN
 ------------------------------------------
 39: 1:           
@@ -1252,7 +1252,7 @@
 43: 2:
 43: 2:Scores: 0
 43: 2:Answer: STOP
-43: 2:Fire Event: LOOSE
+43: 2:Fire Event: LOSE
 43: 1:Fire Event: WIN
 ------------------------------------------
 44: 1:           
@@ -1573,7 +1573,7 @@
 54: 2:
 54: 2:Scores: 0
 54: 2:Answer: STOP
-54: 2:Fire Event: LOOSE
+54: 2:Fire Event: LOSE
 54: 1:Fire Event: WIN
 ------------------------------------------
 55: 1:           
@@ -1894,7 +1894,7 @@
 65: 2:
 65: 2:Scores: 0
 65: 2:Answer: STOP
-65: 2:Fire Event: LOOSE
+65: 2:Fire Event: LOSE
 65: 1:Fire Event: WIN
 ------------------------------------------
 66: 1:           
@@ -2215,7 +2215,7 @@
 76: 2:
 76: 2:Scores: 0
 76: 2:Answer: STOP
-76: 2:Fire Event: LOOSE
+76: 2:Fire Event: LOSE
 76: 1:Fire Event: WIN
 ------------------------------------------
 77: 1:           
@@ -2536,7 +2536,7 @@
 87: 2:
 87: 2:Scores: 0
 87: 2:Answer: STOP
-87: 2:Fire Event: LOOSE
+87: 2:Fire Event: LOSE
 87: 1:Fire Event: WIN
 ------------------------------------------
 88: 1:           
@@ -2683,7 +2683,7 @@
 92: 2:
 92: 2:Scores: 0
 92: 2:Answer: STOP
-92: 2:Fire Event: LOOSE
+92: 2:Fire Event: LOSE
 92: 1:Fire Event: WIN
 ------------------------------------------
 93: 1:           
@@ -3004,7 +3004,7 @@
 103: 2:
 103: 2:Scores: 0
 103: 2:Answer: STOP
-103: 2:Fire Event: LOOSE
+103: 2:Fire Event: LOSE
 103: 1:Fire Event: WIN
 ------------------------------------------
 104: 1:           
@@ -3151,7 +3151,7 @@
 108: 2:
 108: 2:Scores: 0
 108: 2:Answer: STOP
-108: 2:Fire Event: LOOSE
+108: 2:Fire Event: LOSE
 108: 1:Fire Event: WIN
 ------------------------------------------
 109: 1:           
@@ -3298,7 +3298,7 @@
 113: 2:
 113: 2:Scores: 0
 113: 2:Answer: STOP
-113: 2:Fire Event: LOOSE
+113: 2:Fire Event: LOSE
 113: 1:Fire Event: WIN
 ------------------------------------------
 114: 1:           
@@ -3619,7 +3619,7 @@
 124: 2:
 124: 2:Scores: 0
 124: 2:Answer: STOP
-124: 2:Fire Event: LOOSE
+124: 2:Fire Event: LOSE
 124: 1:Fire Event: WIN
 ------------------------------------------
 125: 1:           
@@ -3766,7 +3766,7 @@
 129: 2:
 129: 2:Scores: 0
 129: 2:Answer: STOP
-129: 2:Fire Event: LOOSE
+129: 2:Fire Event: LOSE
 129: 1:Fire Event: WIN
 ------------------------------------------
 130: 1:           
@@ -3913,7 +3913,7 @@
 134: 2:
 134: 2:Scores: 0
 134: 2:Answer: STOP
-134: 2:Fire Event: LOOSE
+134: 2:Fire Event: LOSE
 134: 1:Fire Event: WIN
 ------------------------------------------
 135: 1:           
@@ -4234,7 +4234,7 @@
 145: 2:
 145: 2:Scores: 0
 145: 2:Answer: STOP
-145: 2:Fire Event: LOOSE
+145: 2:Fire Event: LOSE
 145: 1:Fire Event: WIN
 ------------------------------------------
 146: 1:           
@@ -4381,7 +4381,7 @@
 150: 2:
 150: 2:Scores: 0
 150: 2:Answer: STOP
-150: 2:Fire Event: LOOSE
+150: 2:Fire Event: LOSE
 150: 1:Fire Event: WIN
 ------------------------------------------
 151: 1:           
@@ -4702,7 +4702,7 @@
 161: 2:
 161: 2:Scores: 0
 161: 2:Answer: STOP
-161: 2:Fire Event: LOOSE
+161: 2:Fire Event: LOSE
 161: 1:Fire Event: WIN
 ------------------------------------------
 162: 1:           
@@ -4849,7 +4849,7 @@
 166: 2:
 166: 2:Scores: 0
 166: 2:Answer: STOP
-166: 2:Fire Event: LOOSE
+166: 2:Fire Event: LOSE
 166: 1:Fire Event: WIN
 ------------------------------------------
 167: 1:           
@@ -5170,7 +5170,7 @@
 177: 2:
 177: 2:Scores: 0
 177: 2:Answer: STOP
-177: 2:Fire Event: LOOSE
+177: 2:Fire Event: LOSE
 177: 1:Fire Event: WIN
 ------------------------------------------
 178: 1:           
@@ -5491,7 +5491,7 @@
 188: 2:
 188: 2:Scores: 0
 188: 2:Answer: STOP
-188: 2:Fire Event: LOOSE
+188: 2:Fire Event: LOSE
 188: 1:Fire Event: WIN
 ------------------------------------------
 189: 1:           
@@ -5812,7 +5812,7 @@
 199: 2:
 199: 2:Scores: 0
 199: 2:Answer: STOP
-199: 2:Fire Event: LOOSE
+199: 2:Fire Event: LOSE
 199: 1:Fire Event: WIN
 ------------------------------------------
 200: 1:           
@@ -6133,7 +6133,7 @@
 210: 2:
 210: 2:Scores: 0
 210: 2:Answer: STOP
-210: 2:Fire Event: LOOSE
+210: 2:Fire Event: LOSE
 210: 1:Fire Event: WIN
 ------------------------------------------
 211: 1:           
@@ -6280,7 +6280,7 @@
 215: 2:
 215: 2:Scores: 0
 215: 2:Answer: STOP
-215: 2:Fire Event: LOOSE
+215: 2:Fire Event: LOSE
 215: 1:Fire Event: WIN
 ------------------------------------------
 216: 1:           
@@ -6601,7 +6601,7 @@
 226: 2:
 226: 2:Scores: 0
 226: 2:Answer: STOP
-226: 2:Fire Event: LOOSE
+226: 2:Fire Event: LOSE
 226: 1:Fire Event: WIN
 ------------------------------------------
 227: 1:           
@@ -6922,7 +6922,7 @@
 237: 2:
 237: 2:Scores: 0
 237: 2:Answer: STOP
-237: 2:Fire Event: LOOSE
+237: 2:Fire Event: LOSE
 237: 1:Fire Event: WIN
 ------------------------------------------
 238: 1:           
@@ -7069,7 +7069,7 @@
 242: 2:
 242: 2:Scores: 0
 242: 2:Answer: STOP
-242: 2:Fire Event: LOOSE
+242: 2:Fire Event: LOSE
 242: 1:Fire Event: WIN
 ------------------------------------------
 243: 1:           
@@ -7390,7 +7390,7 @@
 253: 2:
 253: 2:Scores: 0
 253: 2:Answer: STOP
-253: 2:Fire Event: LOOSE
+253: 2:Fire Event: LOSE
 253: 1:Fire Event: WIN
 ------------------------------------------
 254: 1:           
@@ -7537,7 +7537,7 @@
 258: 2:
 258: 2:Scores: 0
 258: 2:Answer: STOP
-258: 2:Fire Event: LOOSE
+258: 2:Fire Event: LOSE
 258: 1:Fire Event: WIN
 ------------------------------------------
 259: 1:           
@@ -7684,7 +7684,7 @@
 263: 2:
 263: 2:Scores: 0
 263: 2:Answer: STOP
-263: 2:Fire Event: LOOSE
+263: 2:Fire Event: LOSE
 263: 1:Fire Event: WIN
 ------------------------------------------
 264: 1:           
@@ -7831,7 +7831,7 @@
 268: 2:
 268: 2:Scores: 0
 268: 2:Answer: STOP
-268: 2:Fire Event: LOOSE
+268: 2:Fire Event: LOSE
 268: 1:Fire Event: WIN
 ------------------------------------------
 269: 1:           
@@ -7978,7 +7978,7 @@
 273: 2:
 273: 2:Scores: 0
 273: 2:Answer: STOP
-273: 2:Fire Event: LOOSE
+273: 2:Fire Event: LOSE
 273: 1:Fire Event: WIN
 ------------------------------------------
 274: 1:           
@@ -8299,7 +8299,7 @@
 284: 2:
 284: 2:Scores: 0
 284: 2:Answer: STOP
-284: 2:Fire Event: LOOSE
+284: 2:Fire Event: LOSE
 284: 1:Fire Event: WIN
 ------------------------------------------
 285: 1:           
@@ -8620,7 +8620,7 @@
 295: 2:
 295: 2:Scores: 0
 295: 2:Answer: STOP
-295: 2:Fire Event: LOOSE
+295: 2:Fire Event: LOSE
 295: 1:Fire Event: WIN
 ------------------------------------------
 296: 1:           
@@ -8767,7 +8767,7 @@
 300: 2:
 300: 2:Scores: 0
 300: 2:Answer: STOP
-300: 2:Fire Event: LOOSE
+300: 2:Fire Event: LOSE
 300: 1:Fire Event: WIN
 ------------------------------------------
 301: 1:           
@@ -9088,7 +9088,7 @@
 311: 2:
 311: 2:Scores: 0
 311: 2:Answer: STOP
-311: 2:Fire Event: LOOSE
+311: 2:Fire Event: LOSE
 311: 1:Fire Event: WIN
 ------------------------------------------
 312: 1:           
@@ -9409,7 +9409,7 @@
 322: 2:
 322: 2:Scores: 0
 322: 2:Answer: STOP
-322: 2:Fire Event: LOOSE
+322: 2:Fire Event: LOSE
 322: 1:Fire Event: WIN
 ------------------------------------------
 323: 1:           
@@ -9556,7 +9556,7 @@
 327: 2:
 327: 2:Scores: 0
 327: 2:Answer: STOP
-327: 2:Fire Event: LOOSE
+327: 2:Fire Event: LOSE
 327: 1:Fire Event: WIN
 ------------------------------------------
 328: 1:           
@@ -9877,7 +9877,7 @@
 338: 2:
 338: 2:Scores: 0
 338: 2:Answer: STOP
-338: 2:Fire Event: LOOSE
+338: 2:Fire Event: LOSE
 338: 1:Fire Event: WIN
 ------------------------------------------
 339: 1:           
@@ -10024,7 +10024,7 @@
 343: 2:
 343: 2:Scores: 0
 343: 2:Answer: STOP
-343: 2:Fire Event: LOOSE
+343: 2:Fire Event: LOSE
 343: 1:Fire Event: WIN
 ------------------------------------------
 344: 1:           
@@ -10345,7 +10345,7 @@
 354: 2:
 354: 2:Scores: 0
 354: 2:Answer: STOP
-354: 2:Fire Event: LOOSE
+354: 2:Fire Event: LOSE
 354: 1:Fire Event: WIN
 ------------------------------------------
 355: 1:           
@@ -10492,7 +10492,7 @@
 359: 2:
 359: 2:Scores: 0
 359: 2:Answer: STOP
-359: 2:Fire Event: LOOSE
+359: 2:Fire Event: LOSE
 359: 1:Fire Event: WIN
 ------------------------------------------
 360: 1:           
@@ -10639,7 +10639,7 @@
 364: 2:
 364: 2:Scores: 0
 364: 2:Answer: STOP
-364: 2:Fire Event: LOOSE
+364: 2:Fire Event: LOSE
 364: 1:Fire Event: WIN
 ------------------------------------------
 365: 1:           
@@ -10786,7 +10786,7 @@
 369: 2:
 369: 2:Scores: 0
 369: 2:Answer: STOP
-369: 2:Fire Event: LOOSE
+369: 2:Fire Event: LOSE
 369: 1:Fire Event: WIN
 ------------------------------------------
 370: 1:           
@@ -11107,7 +11107,7 @@
 380: 2:
 380: 2:Scores: 0
 380: 2:Answer: STOP
-380: 2:Fire Event: LOOSE
+380: 2:Fire Event: LOSE
 380: 1:Fire Event: WIN
 ------------------------------------------
 381: 1:           
@@ -11254,7 +11254,7 @@
 385: 2:
 385: 2:Scores: 0
 385: 2:Answer: STOP
-385: 2:Fire Event: LOOSE
+385: 2:Fire Event: LOSE
 385: 1:Fire Event: WIN
 ------------------------------------------
 386: 1:           
@@ -11575,7 +11575,7 @@
 396: 2:
 396: 2:Scores: 0
 396: 2:Answer: STOP
-396: 2:Fire Event: LOOSE
+396: 2:Fire Event: LOSE
 396: 1:Fire Event: WIN
 ------------------------------------------
 397: 1:           
@@ -11896,7 +11896,7 @@
 407: 2:
 407: 2:Scores: 0
 407: 2:Answer: STOP
-407: 2:Fire Event: LOOSE
+407: 2:Fire Event: LOSE
 407: 1:Fire Event: WIN
 ------------------------------------------
 408: 1:           
@@ -12043,7 +12043,7 @@
 412: 2:
 412: 2:Scores: 0
 412: 2:Answer: STOP
-412: 2:Fire Event: LOOSE
+412: 2:Fire Event: LOSE
 412: 1:Fire Event: WIN
 ------------------------------------------
 413: 1:           
@@ -12190,7 +12190,7 @@
 417: 2:
 417: 2:Scores: 0
 417: 2:Answer: STOP
-417: 2:Fire Event: LOOSE
+417: 2:Fire Event: LOSE
 417: 1:Fire Event: WIN
 ------------------------------------------
 418: 1:           
@@ -12337,7 +12337,7 @@
 422: 2:
 422: 2:Scores: 0
 422: 2:Answer: STOP
-422: 2:Fire Event: LOOSE
+422: 2:Fire Event: LOSE
 422: 1:Fire Event: WIN
 ------------------------------------------
 423: 1:           
@@ -12658,7 +12658,7 @@
 433: 2:
 433: 2:Scores: 0
 433: 2:Answer: STOP
-433: 2:Fire Event: LOOSE
+433: 2:Fire Event: LOSE
 433: 1:Fire Event: WIN
 ------------------------------------------
 434: 1:           
@@ -12805,7 +12805,7 @@
 438: 2:
 438: 2:Scores: 0
 438: 2:Answer: STOP
-438: 2:Fire Event: LOOSE
+438: 2:Fire Event: LOSE
 438: 1:Fire Event: WIN
 ------------------------------------------
 439: 1:           
@@ -13126,7 +13126,7 @@
 449: 2:
 449: 2:Scores: 0
 449: 2:Answer: STOP
-449: 2:Fire Event: LOOSE
+449: 2:Fire Event: LOSE
 449: 1:Fire Event: WIN
 ------------------------------------------
 450: 1:           
@@ -13273,7 +13273,7 @@
 454: 2:
 454: 2:Scores: 0
 454: 2:Answer: STOP
-454: 2:Fire Event: LOOSE
+454: 2:Fire Event: LOSE
 454: 1:Fire Event: WIN
 ------------------------------------------
 455: 1:           
@@ -13420,7 +13420,7 @@
 459: 2:
 459: 2:Scores: 0
 459: 2:Answer: STOP
-459: 2:Fire Event: LOOSE
+459: 2:Fire Event: LOSE
 459: 1:Fire Event: WIN
 ------------------------------------------
 460: 1:           
@@ -13741,7 +13741,7 @@
 470: 2:
 470: 2:Scores: 0
 470: 2:Answer: STOP
-470: 2:Fire Event: LOOSE
+470: 2:Fire Event: LOSE
 470: 1:Fire Event: WIN
 ------------------------------------------
 471: 1:           
@@ -14062,7 +14062,7 @@
 481: 2:
 481: 2:Scores: 0
 481: 2:Answer: STOP
-481: 2:Fire Event: LOOSE
+481: 2:Fire Event: LOSE
 481: 1:Fire Event: WIN
 ------------------------------------------
 482: 1:           
@@ -14209,7 +14209,7 @@
 486: 2:
 486: 2:Scores: 0
 486: 2:Answer: STOP
-486: 2:Fire Event: LOOSE
+486: 2:Fire Event: LOSE
 486: 1:Fire Event: WIN
 ------------------------------------------
 487: 1:           
@@ -14356,7 +14356,7 @@
 491: 2:
 491: 2:Scores: 0
 491: 2:Answer: STOP
-491: 2:Fire Event: LOOSE
+491: 2:Fire Event: LOSE
 491: 1:Fire Event: WIN
 ------------------------------------------
 492: 1:           
@@ -14677,7 +14677,7 @@
 502: 2:
 502: 2:Scores: 0
 502: 2:Answer: STOP
-502: 2:Fire Event: LOOSE
+502: 2:Fire Event: LOSE
 502: 1:Fire Event: WIN
 ------------------------------------------
 503: 1:           
@@ -14998,7 +14998,7 @@
 513: 2:
 513: 2:Scores: 0
 513: 2:Answer: STOP
-513: 2:Fire Event: LOOSE
+513: 2:Fire Event: LOSE
 513: 1:Fire Event: WIN
 ------------------------------------------
 514: 1:           
@@ -15319,7 +15319,7 @@
 524: 2:
 524: 2:Scores: 0
 524: 2:Answer: STOP
-524: 2:Fire Event: LOOSE
+524: 2:Fire Event: LOSE
 524: 1:Fire Event: WIN
 ------------------------------------------
 525: 1:           
@@ -15640,7 +15640,7 @@
 535: 2:
 535: 2:Scores: 0
 535: 2:Answer: STOP
-535: 2:Fire Event: LOOSE
+535: 2:Fire Event: LOSE
 535: 1:Fire Event: WIN
 ------------------------------------------
 536: 1:           
@@ -15961,7 +15961,7 @@
 546: 2:
 546: 2:Scores: 0
 546: 2:Answer: STOP
-546: 2:Fire Event: LOOSE
+546: 2:Fire Event: LOSE
 546: 1:Fire Event: WIN
 ------------------------------------------
 547: 1:           
@@ -16282,7 +16282,7 @@
 557: 2:
 557: 2:Scores: 0
 557: 2:Answer: STOP
-557: 2:Fire Event: LOOSE
+557: 2:Fire Event: LOSE
 557: 1:Fire Event: WIN
 ------------------------------------------
 558: 1:           
@@ -16429,7 +16429,7 @@
 562: 2:
 562: 2:Scores: 0
 562: 2:Answer: STOP
-562: 2:Fire Event: LOOSE
+562: 2:Fire Event: LOSE
 562: 1:Fire Event: WIN
 ------------------------------------------
 563: 1:           
@@ -16750,7 +16750,7 @@
 573: 2:
 573: 2:Scores: 0
 573: 2:Answer: STOP
-573: 2:Fire Event: LOOSE
+573: 2:Fire Event: LOSE
 573: 1:Fire Event: WIN
 ------------------------------------------
 574: 1:           
@@ -16897,7 +16897,7 @@
 578: 2:
 578: 2:Scores: 0
 578: 2:Answer: STOP
-578: 2:Fire Event: LOOSE
+578: 2:Fire Event: LOSE
 578: 1:Fire Event: WIN
 ------------------------------------------
 579: 1:           
@@ -17218,7 +17218,7 @@
 589: 2:
 589: 2:Scores: 0
 589: 2:Answer: STOP
-589: 2:Fire Event: LOOSE
+589: 2:Fire Event: LOSE
 589: 1:Fire Event: WIN
 ------------------------------------------
 590: 1:           
@@ -17539,7 +17539,7 @@
 600: 2:
 600: 2:Scores: 0
 600: 2:Answer: STOP
-600: 2:Fire Event: LOOSE
+600: 2:Fire Event: LOSE
 600: 1:Fire Event: WIN
 ------------------------------------------
 601: 1:           
@@ -17860,7 +17860,7 @@
 611: 2:
 611: 2:Scores: 0
 611: 2:Answer: STOP
-611: 2:Fire Event: LOOSE
+611: 2:Fire Event: LOSE
 611: 1:Fire Event: WIN
 ------------------------------------------
 612: 1:           
@@ -18181,7 +18181,7 @@
 622: 2:
 622: 2:Scores: 0
 622: 2:Answer: STOP
-622: 2:Fire Event: LOOSE
+622: 2:Fire Event: LOSE
 622: 1:Fire Event: WIN
 ------------------------------------------
 623: 1:           
@@ -18328,7 +18328,7 @@
 627: 2:
 627: 2:Scores: 0
 627: 2:Answer: STOP
-627: 2:Fire Event: LOOSE
+627: 2:Fire Event: LOSE
 627: 1:Fire Event: WIN
 ------------------------------------------
 628: 1:           
@@ -18649,7 +18649,7 @@
 638: 2:
 638: 2:Scores: 0
 638: 2:Answer: STOP
-638: 2:Fire Event: LOOSE
+638: 2:Fire Event: LOSE
 638: 1:Fire Event: WIN
 ------------------------------------------
 639: 1:           
@@ -18796,7 +18796,7 @@
 643: 2:
 643: 2:Scores: 0
 643: 2:Answer: STOP
-643: 2:Fire Event: LOOSE
+643: 2:Fire Event: LOSE
 643: 1:Fire Event: WIN
 ------------------------------------------
 644: 1:           
@@ -18943,7 +18943,7 @@
 648: 2:
 648: 2:Scores: 0
 648: 2:Answer: STOP
-648: 2:Fire Event: LOOSE
+648: 2:Fire Event: LOSE
 648: 1:Fire Event: WIN
 ------------------------------------------
 649: 1:           
@@ -19264,7 +19264,7 @@
 659: 2:
 659: 2:Scores: 0
 659: 2:Answer: STOP
-659: 2:Fire Event: LOOSE
+659: 2:Fire Event: LOSE
 659: 1:Fire Event: WIN
 ------------------------------------------
 660: 1:           
@@ -19411,7 +19411,7 @@
 664: 2:
 664: 2:Scores: 0
 664: 2:Answer: STOP
-664: 2:Fire Event: LOOSE
+664: 2:Fire Event: LOSE
 664: 1:Fire Event: WIN
 ------------------------------------------
 665: 1:           
@@ -19558,7 +19558,7 @@
 669: 2:
 669: 2:Scores: 0
 669: 2:Answer: STOP
-669: 2:Fire Event: LOOSE
+669: 2:Fire Event: LOSE
 669: 1:Fire Event: WIN
 ------------------------------------------
 670: 1:           
@@ -19879,7 +19879,7 @@
 680: 2:
 680: 2:Scores: 0
 680: 2:Answer: STOP
-680: 2:Fire Event: LOOSE
+680: 2:Fire Event: LOSE
 680: 1:Fire Event: WIN
 ------------------------------------------
 681: 1:           
@@ -20026,7 +20026,7 @@
 685: 2:
 685: 2:Scores: 0
 685: 2:Answer: STOP
-685: 2:Fire Event: LOOSE
+685: 2:Fire Event: LOSE
 685: 1:Fire Event: WIN
 ------------------------------------------
 686: 1:           
@@ -20347,7 +20347,7 @@
 696: 2:
 696: 2:Scores: 0
 696: 2:Answer: STOP
-696: 2:Fire Event: LOOSE
+696: 2:Fire Event: LOSE
 696: 1:Fire Event: WIN
 ------------------------------------------
 697: 1:           
@@ -20494,7 +20494,7 @@
 701: 2:
 701: 2:Scores: 0
 701: 2:Answer: STOP
-701: 2:Fire Event: LOOSE
+701: 2:Fire Event: LOSE
 701: 1:Fire Event: WIN
 ------------------------------------------
 702: 1:           
@@ -20815,7 +20815,7 @@
 712: 2:
 712: 2:Scores: 0
 712: 2:Answer: STOP
-712: 2:Fire Event: LOOSE
+712: 2:Fire Event: LOSE
 712: 1:Fire Event: WIN
 ------------------------------------------
 713: 1:           
@@ -21136,7 +21136,7 @@
 723: 2:
 723: 2:Scores: 0
 723: 2:Answer: STOP
-723: 2:Fire Event: LOOSE
+723: 2:Fire Event: LOSE
 723: 1:Fire Event: WIN
 ------------------------------------------
 724: 1:           
@@ -21457,7 +21457,7 @@
 734: 2:
 734: 2:Scores: 0
 734: 2:Answer: STOP
-734: 2:Fire Event: LOOSE
+734: 2:Fire Event: LOSE
 734: 1:Fire Event: WIN
 ------------------------------------------
 735: 1:           
@@ -21778,7 +21778,7 @@
 745: 2:
 745: 2:Scores: 0
 745: 2:Answer: STOP
-745: 2:Fire Event: LOOSE
+745: 2:Fire Event: LOSE
 745: 1:Fire Event: WIN
 ------------------------------------------
 746: 1:           
@@ -21925,7 +21925,7 @@
 750: 2:
 750: 2:Scores: 0
 750: 2:Answer: STOP
-750: 2:Fire Event: LOOSE
+750: 2:Fire Event: LOSE
 750: 1:Fire Event: WIN
 ------------------------------------------
 751: 1:           
@@ -22246,7 +22246,7 @@
 761: 2:
 761: 2:Scores: 0
 761: 2:Answer: STOP
-761: 2:Fire Event: LOOSE
+761: 2:Fire Event: LOSE
 761: 1:Fire Event: WIN
 ------------------------------------------
 762: 1:           
@@ -22567,7 +22567,7 @@
 772: 2:
 772: 2:Scores: 0
 772: 2:Answer: STOP
-772: 2:Fire Event: LOOSE
+772: 2:Fire Event: LOSE
 772: 1:Fire Event: WIN
 ------------------------------------------
 773: 1:           
@@ -22714,7 +22714,7 @@
 777: 2:
 777: 2:Scores: 0
 777: 2:Answer: STOP
-777: 2:Fire Event: LOOSE
+777: 2:Fire Event: LOSE
 777: 1:Fire Event: WIN
 ------------------------------------------
 778: 1:           
@@ -23035,7 +23035,7 @@
 788: 2:
 788: 2:Scores: 0
 788: 2:Answer: STOP
-788: 2:Fire Event: LOOSE
+788: 2:Fire Event: LOSE
 788: 1:Fire Event: WIN
 ------------------------------------------
 789: 1:           
@@ -23182,7 +23182,7 @@
 793: 2:
 793: 2:Scores: 0
 793: 2:Answer: STOP
-793: 2:Fire Event: LOOSE
+793: 2:Fire Event: LOSE
 793: 1:Fire Event: WIN
 ------------------------------------------
 794: 1:           
@@ -23329,7 +23329,7 @@
 798: 2:
 798: 2:Scores: 0
 798: 2:Answer: STOP
-798: 2:Fire Event: LOOSE
+798: 2:Fire Event: LOSE
 798: 1:Fire Event: WIN
 ------------------------------------------
 799: 1:           
@@ -23476,7 +23476,7 @@
 803: 2:
 803: 2:Scores: 0
 803: 2:Answer: STOP
-803: 2:Fire Event: LOOSE
+803: 2:Fire Event: LOSE
 803: 1:Fire Event: WIN
 ------------------------------------------
 804: 1:           
@@ -23623,7 +23623,7 @@
 808: 2:
 808: 2:Scores: 0
 808: 2:Answer: STOP
-808: 2:Fire Event: LOOSE
+808: 2:Fire Event: LOSE
 808: 1:Fire Event: WIN
 ------------------------------------------
 809: 1:           
@@ -23944,7 +23944,7 @@
 819: 2:
 819: 2:Scores: 0
 819: 2:Answer: STOP
-819: 2:Fire Event: LOOSE
+819: 2:Fire Event: LOSE
 819: 1:Fire Event: WIN
 ------------------------------------------
 820: 1:           
@@ -24265,7 +24265,7 @@
 830: 2:
 830: 2:Scores: 0
 830: 2:Answer: STOP
-830: 2:Fire Event: LOOSE
+830: 2:Fire Event: LOSE
 830: 1:Fire Event: WIN
 ------------------------------------------
 831: 1:           
@@ -24412,7 +24412,7 @@
 835: 2:
 835: 2:Scores: 0
 835: 2:Answer: STOP
-835: 2:Fire Event: LOOSE
+835: 2:Fire Event: LOSE
 835: 1:Fire Event: WIN
 ------------------------------------------
 836: 1:           
@@ -24733,7 +24733,7 @@
 846: 2:
 846: 2:Scores: 0
 846: 2:Answer: STOP
-846: 2:Fire Event: LOOSE
+846: 2:Fire Event: LOSE
 846: 1:Fire Event: WIN
 ------------------------------------------
 847: 1:           
@@ -25054,7 +25054,7 @@
 857: 2:
 857: 2:Scores: 0
 857: 2:Answer: STOP
-857: 2:Fire Event: LOOSE
+857: 2:Fire Event: LOSE
 857: 1:Fire Event: WIN
 ------------------------------------------
 858: 1:           
@@ -25201,7 +25201,7 @@
 862: 2:
 862: 2:Scores: 0
 862: 2:Answer: STOP
-862: 2:Fire Event: LOOSE
+862: 2:Fire Event: LOSE
 862: 1:Fire Event: WIN
 ------------------------------------------
 863: 1:           
@@ -25522,7 +25522,7 @@
 873: 2:
 873: 2:Scores: 0
 873: 2:Answer: STOP
-873: 2:Fire Event: LOOSE
+873: 2:Fire Event: LOSE
 873: 1:Fire Event: WIN
 ------------------------------------------
 874: 1:           
@@ -25669,7 +25669,7 @@
 878: 2:
 878: 2:Scores: 0
 878: 2:Answer: STOP
-878: 2:Fire Event: LOOSE
+878: 2:Fire Event: LOSE
 878: 1:Fire Event: WIN
 ------------------------------------------
 879: 1:           
@@ -25990,7 +25990,7 @@
 889: 2:
 889: 2:Scores: 0
 889: 2:Answer: STOP
-889: 2:Fire Event: LOOSE
+889: 2:Fire Event: LOSE
 889: 1:Fire Event: WIN
 ------------------------------------------
 890: 1:           
@@ -26137,7 +26137,7 @@
 894: 2:
 894: 2:Scores: 0
 894: 2:Answer: STOP
-894: 2:Fire Event: LOOSE
+894: 2:Fire Event: LOSE
 894: 1:Fire Event: WIN
 ------------------------------------------
 895: 1:           
@@ -26284,7 +26284,7 @@
 899: 2:
 899: 2:Scores: 0
 899: 2:Answer: STOP
-899: 2:Fire Event: LOOSE
+899: 2:Fire Event: LOSE
 899: 1:Fire Event: WIN
 ------------------------------------------
 900: 1:           
@@ -26431,7 +26431,7 @@
 904: 2:
 904: 2:Scores: 0
 904: 2:Answer: STOP
-904: 2:Fire Event: LOOSE
+904: 2:Fire Event: LOSE
 904: 1:Fire Event: WIN
 ------------------------------------------
 905: 1:           
@@ -26752,7 +26752,7 @@
 915: 2:
 915: 2:Scores: 0
 915: 2:Answer: STOP
-915: 2:Fire Event: LOOSE
+915: 2:Fire Event: LOSE
 915: 1:Fire Event: WIN
 ------------------------------------------
 916: 1:           
@@ -26899,7 +26899,7 @@
 920: 2:
 920: 2:Scores: 0
 920: 2:Answer: STOP
-920: 2:Fire Event: LOOSE
+920: 2:Fire Event: LOSE
 920: 1:Fire Event: WIN
 ------------------------------------------
 921: 1:           
@@ -27220,7 +27220,7 @@
 931: 2:
 931: 2:Scores: 0
 931: 2:Answer: STOP
-931: 2:Fire Event: LOOSE
+931: 2:Fire Event: LOSE
 931: 1:Fire Event: WIN
 ------------------------------------------
 932: 1:           
@@ -27541,7 +27541,7 @@
 942: 2:
 942: 2:Scores: 0
 942: 2:Answer: STOP
-942: 2:Fire Event: LOOSE
+942: 2:Fire Event: LOSE
 942: 1:Fire Event: WIN
 ------------------------------------------
 943: 1:           
@@ -27688,7 +27688,7 @@
 947: 2:
 947: 2:Scores: 0
 947: 2:Answer: STOP
-947: 2:Fire Event: LOOSE
+947: 2:Fire Event: LOSE
 947: 1:Fire Event: WIN
 ------------------------------------------
 948: 1:           
@@ -27835,7 +27835,7 @@
 952: 2:
 952: 2:Scores: 0
 952: 2:Answer: STOP
-952: 2:Fire Event: LOOSE
+952: 2:Fire Event: LOSE
 952: 1:Fire Event: WIN
 ------------------------------------------
 953: 1:           
@@ -27982,7 +27982,7 @@
 957: 2:
 957: 2:Scores: 0
 957: 2:Answer: STOP
-957: 2:Fire Event: LOOSE
+957: 2:Fire Event: LOSE
 957: 1:Fire Event: WIN
 ------------------------------------------
 958: 1:           
@@ -28303,7 +28303,7 @@
 968: 2:
 968: 2:Scores: 0
 968: 2:Answer: STOP
-968: 2:Fire Event: LOOSE
+968: 2:Fire Event: LOSE
 968: 1:Fire Event: WIN
 ------------------------------------------
 969: 1:           
@@ -28450,7 +28450,7 @@
 973: 2:
 973: 2:Scores: 0
 973: 2:Answer: STOP
-973: 2:Fire Event: LOOSE
+973: 2:Fire Event: LOSE
 973: 1:Fire Event: WIN
 ------------------------------------------
 974: 1:           
@@ -28771,7 +28771,7 @@
 984: 2:
 984: 2:Scores: 0
 984: 2:Answer: STOP
-984: 2:Fire Event: LOOSE
+984: 2:Fire Event: LOSE
 984: 1:Fire Event: WIN
 ------------------------------------------
 985: 1:           
@@ -28918,7 +28918,7 @@
 989: 2:
 989: 2:Scores: 0
 989: 2:Answer: STOP
-989: 2:Fire Event: LOOSE
+989: 2:Fire Event: LOSE
 989: 1:Fire Event: WIN
 ------------------------------------------
 990: 1:           
@@ -29065,7 +29065,7 @@
 994: 2:
 994: 2:Scores: 0
 994: 2:Answer: STOP
-994: 2:Fire Event: LOOSE
+994: 2:Fire Event: LOSE
 994: 1:Fire Event: WIN
 ------------------------------------------
 995: 1:           

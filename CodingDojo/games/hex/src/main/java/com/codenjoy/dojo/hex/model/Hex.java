@@ -109,7 +109,7 @@ public class Hex implements Field {
                         transitions.get(player).add(otherHero);
 
                         otherPlayer.getHeroes().remove(otherHero);
-                        otherPlayer.loose(1);
+                        otherPlayer.lose(1);
                     }
                 }
             }

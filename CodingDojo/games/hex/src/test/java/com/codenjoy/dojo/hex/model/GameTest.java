@@ -627,7 +627,7 @@ public class GameTest {
 
         // then
         verify(listener1).event(new Event(Event.EventEnum.WIN, 2));
-        verify(listener2).event(new Event(Event.EventEnum.LOOSE, 1));
+        verify(listener2).event(new Event(Event.EventEnum.LOSE, 1));
 
         assertE("☼☼☼☼☼" +
                 "☼  ♥☼" +
@@ -727,7 +727,7 @@ public class GameTest {
 
         // then
         verify(listener1).event(new Event(Event.EventEnum.WIN, 3));
-        verify(listener2).event(new Event(Event.EventEnum.LOOSE, 2));
+        verify(listener2).event(new Event(Event.EventEnum.LOSE, 2));
 
     }
 
@@ -910,7 +910,7 @@ public class GameTest {
                 "☼☼☼☼☼☼");
 
         verify(listener1).event(new Event(Event.EventEnum.WIN, 2));
-        verify(listener2).event(new Event(Event.EventEnum.LOOSE, 2));
+        verify(listener2).event(new Event(Event.EventEnum.LOSE, 2));
     }
 
     @Test
@@ -935,7 +935,7 @@ public class GameTest {
                 "☼  ♥ ☼" +
                 "☼☼☼☼☼☼");
 
-        verify(listener1).event(new Event(Event.EventEnum.LOOSE, 1));
+        verify(listener1).event(new Event(Event.EventEnum.LOSE, 1));
         verify(listener2).event(new Event(Event.EventEnum.WIN, 1));
     }
 
@@ -967,8 +967,8 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener1).event(new Event(Event.EventEnum.LOOSE, 1));
-        verify(listener2).event(new Event(Event.EventEnum.LOOSE, 1));
+        verify(listener1).event(new Event(Event.EventEnum.LOSE, 1));
+        verify(listener2).event(new Event(Event.EventEnum.LOSE, 1));
 
         // when
         game.tick();

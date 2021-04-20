@@ -36,8 +36,8 @@ import static junit.framework.Assert.assertEquals;
 public class ScoresTest {
     private Scores scores;
 
-    public void loose() {
-        scores.event(Events.LOOSE());
+    public void lose() {
+        scores.event(Events.LOSE());
     }
 
     public void win(int goldCount) {
@@ -53,7 +53,7 @@ public class ScoresTest {
         win(1);  //+
         win(1);  //+
 
-        loose(); //-
+        lose(); //-
 
         assertEquals(140 + 4 - 0, score());
     }
@@ -66,7 +66,7 @@ public class ScoresTest {
     public void shouldStillZeroAfterDead() {
         scores = new Scores("{'score':0}");
 
-        loose();   //-
+        lose();   //-
 
         assertEquals(0, score());
     }

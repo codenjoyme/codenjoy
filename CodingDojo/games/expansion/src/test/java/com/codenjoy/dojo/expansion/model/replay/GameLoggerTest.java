@@ -260,7 +260,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldCreateNewFileWhenSomebodyLoose() {
+    public void shouldCreateNewFileWhenSomebodyLose() {
         // given
         settings.gameLoggingEnable(true);
 

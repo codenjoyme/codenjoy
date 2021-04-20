@@ -95,7 +95,7 @@ public class Player extends GamePlayer<Hero, Field> {
                 questionIndex++;
             } else {
                 logFailure(question, answer);
-                event(Events.LOOSE);
+                event(Events.LOSE);
                 questionIndex = 0;
             }
         }

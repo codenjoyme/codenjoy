@@ -37,7 +37,7 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
-    public void loose() {
+    public void lose() {
         scores.event(Events.BOTTOM_GOAL);
     }
 
@@ -60,7 +60,7 @@ public class ScoresTest {
         win();
         win();
 
-        loose();
+        lose();
 
         assertEquals(1
                 + 4 * settings.integer(WIN_SCORE),
@@ -69,7 +69,7 @@ public class ScoresTest {
 
     @Test
     public void cantBeLessThanZero() {
-        loose();
+        lose();
 
         assertEquals(0, scores.getScore());
     }

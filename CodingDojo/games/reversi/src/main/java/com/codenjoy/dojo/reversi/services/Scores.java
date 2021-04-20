@@ -55,8 +55,8 @@ public class Scores implements PlayerScores {
             score += settings.integer(FLIP_SCORE) * event.count();
         } else if (event.isWin()) {
             score += settings.integer(WIN_SCORE);
-        } else if (event.isLoose()) {
-            score -= settings.integer(LOOSE_PENALTY);
+        } else if (event.isLose()) {
+            score -= settings.integer(LOSE_PENALTY);
         }
         score = Math.max(0, score);
     }

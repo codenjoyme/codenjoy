@@ -24,10 +24,8 @@ package com.codenjoy.dojo.sampletext.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
-import static com.codenjoy.dojo.sampletext.services.GameSettings.Keys.LOOSE_PENALTY;
+import static com.codenjoy.dojo.sampletext.services.GameSettings.Keys.LOSE_PENALTY;
 import static com.codenjoy.dojo.sampletext.services.GameSettings.Keys.WIN_SCORE;
 
 /**
@@ -58,8 +56,8 @@ public class Scores implements PlayerScores {
     public void event(Object event) {
         if (event.equals(Events.WIN)) {
             score += settings.integer(WIN_SCORE);
-        } else if (event.equals(Events.LOOSE)) {
-            score -= settings.integer(LOOSE_PENALTY);
+        } else if (event.equals(Events.LOSE)) {
+            score -= settings.integer(LOSE_PENALTY);
         }
         score = Math.max(0, score);
     }

@@ -55,8 +55,8 @@ public class Scores implements PlayerScores {
             score += settings.integer(DESTROY_STONE_SCORE);
         } else if (event.equals(Events.DESTROY_ENEMY)) {
             score += settings.integer(DESTROY_ENEMY_SCORE);
-        } else if (event.equals(Events.LOOSE)) {
-            score -= settings.integer(LOOSE_PENALTY);
+        } else if (event.equals(Events.LOSE)) {
+            score -= settings.integer(LOSE_PENALTY);
         }
         score = Math.max(0, score);
     }

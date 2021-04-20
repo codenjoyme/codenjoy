@@ -370,7 +370,7 @@
 4: 5:Scores: 30
 4: 5:Answer: ACT(10,1,1),LEFT
 4: 1:Fire Event: WIN(1)
-4: 2:Fire Event: LOOSE(1)
+4: 2:Fire Event: LOSE(1)
 4: 3:Fire Event: WIN(2)
 ------------------------------------------
 5: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -650,7 +650,7 @@
 7: 5:
 7: 5:Scores: 90
 7: 5:Answer: ACT(13,2),UP
-7: 1:Fire Event: LOOSE(1)
+7: 1:Fire Event: LOSE(1)
 7: 4:Fire Event: WIN(2)
 7: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -745,7 +745,7 @@
 8: 5:Scores: 120
 8: 5:Answer: ACT(7,1,1),UP
 8: 1:Fire Event: WIN(2)
-8: 4:Fire Event: LOOSE(2)
+8: 4:Fire Event: LOSE(2)
 8: 4:Fire Event: WIN(1)
 ------------------------------------------
 9: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -934,7 +934,7 @@
 10: 5:Answer: ACT(7,1,1),LEFT
 10: 1:Fire Event: WIN(2)
 10: 2:Fire Event: WIN(1)
-10: 4:Fire Event: LOOSE(1)
+10: 4:Fire Event: LOSE(1)
 10: 4:Fire Event: WIN(1)
 ------------------------------------------
 11: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -1027,7 +1027,7 @@
 11: 5:
 11: 5:Scores: 150
 11: 5:Answer: ACT(13,2),UP
-11: 1:Fire Event: LOOSE(1)
+11: 1:Fire Event: LOSE(1)
 11: 4:Fire Event: WIN(1)
 ------------------------------------------
 12: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -1120,7 +1120,7 @@
 12: 5:
 12: 5:Scores: 150
 12: 5:Answer: ACT(8,1,1),UP
-12: 1:Fire Event: LOOSE(3)
+12: 1:Fire Event: LOSE(3)
 12: 4:Fire Event: WIN(3)
 ------------------------------------------
 13: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -1215,7 +1215,7 @@
 13: 5:Answer: ACT(13,1,1),LEFT
 13: 1:Fire Event: WIN(2)
 13: 3:Fire Event: WIN(1)
-13: 4:Fire Event: LOOSE(2)
+13: 4:Fire Event: LOSE(2)
 ------------------------------------------
 14: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 14: 1:☼    ♠♠ ♠  ♠  ☼
@@ -1307,9 +1307,9 @@
 14: 5:
 14: 5:Scores: 150
 14: 5:Answer: ACT(11,1,1),RIGHT
-14: 1:Fire Event: LOOSE(3)
+14: 1:Fire Event: LOSE(3)
 14: 1:Fire Event: WIN(2)
-14: 4:Fire Event: LOOSE(1)
+14: 4:Fire Event: LOSE(1)
 14: 4:Fire Event: WIN(3)
 ------------------------------------------
 15: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -1588,8 +1588,8 @@
 17: 5:Answer: ACT(13,1),LEFT
 17: 1:Fire Event: WIN(1)
 17: 2:Fire Event: WIN(1)
-17: 3:Fire Event: LOOSE(1)
-17: 4:Fire Event: LOOSE(1)
+17: 3:Fire Event: LOSE(1)
+17: 4:Fire Event: LOSE(1)
 17: 5:Fire Event: WIN(1)
 ------------------------------------------
 18: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -1774,7 +1774,7 @@
 19: 5:
 19: 5:Scores: 180
 19: 5:Answer: ACT(12,1,1),LEFT
-19: 1:Fire Event: LOOSE(1)
+19: 1:Fire Event: LOSE(1)
 19: 4:Fire Event: WIN(2)
 ------------------------------------------
 20: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -1867,7 +1867,7 @@
 20: 5:
 20: 5:Scores: 180
 20: 5:Answer: ACT(5,1),UP
-20: 1:Fire Event: LOOSE(2)
+20: 1:Fire Event: LOSE(2)
 20: 3:Fire Event: WIN(1)
 20: 4:Fire Event: WIN(2)
 ------------------------------------------
@@ -2056,7 +2056,7 @@
 22: 1:Fire Event: WIN(3)
 22: 2:Fire Event: WIN(1)
 22: 3:Fire Event: WIN(1)
-22: 4:Fire Event: LOOSE(3)
+22: 4:Fire Event: LOSE(3)
 22: 5:Fire Event: WIN(1)
 ------------------------------------------
 23: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -2243,7 +2243,7 @@
 24: 5:Scores: 210
 24: 5:Answer: ACT(12,2),LEFT
 24: 1:Fire Event: WIN(1)
-24: 3:Fire Event: LOOSE(1)
+24: 3:Fire Event: LOSE(1)
 24: 3:Fire Event: WIN(1)
 24: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -2337,7 +2337,7 @@
 25: 5:
 25: 5:Scores: 240
 25: 5:Answer: ACT(13,2),UP
-25: 1:Fire Event: LOOSE(2)
+25: 1:Fire Event: LOSE(2)
 25: 2:Fire Event: WIN(1)
 25: 3:Fire Event: WIN(2)
 25: 4:Fire Event: WIN(1)
@@ -2432,9 +2432,9 @@
 26: 5:
 26: 5:Scores: 240
 26: 5:Answer: ACT(12,2),DOWN
-26: 2:Fire Event: LOOSE(1)
+26: 2:Fire Event: LOSE(1)
 26: 3:Fire Event: WIN(1)
-26: 4:Fire Event: LOOSE(1)
+26: 4:Fire Event: LOSE(1)
 26: 4:Fire Event: WIN(1)
 26: 5:Fire Event: WIN(2)
 ------------------------------------------
@@ -2529,7 +2529,7 @@
 27: 5:Scores: 300
 27: 5:Answer: ACT(11,2),LEFT
 27: 2:Fire Event: WIN(1)
-27: 3:Fire Event: LOOSE(1)
+27: 3:Fire Event: LOSE(1)
 27: 4:Fire Event: WIN(1)
 27: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -2715,7 +2715,7 @@
 29: 5:
 29: 5:Scores: 330
 29: 5:Answer: ACT(13,2),UP
-29: 1:Fire Event: LOOSE(1)
+29: 1:Fire Event: LOSE(1)
 29: 2:Fire Event: WIN(1)
 29: 3:Fire Event: WIN(1)
 29: 4:Fire Event: WIN(1)
@@ -2810,10 +2810,10 @@
 30: 5:
 30: 5:Scores: 330
 30: 5:Answer: ACT(10,2),UP
-30: 1:Fire Event: LOOSE(1)
+30: 1:Fire Event: LOSE(1)
 30: 1:Fire Event: WIN(1)
 30: 2:Fire Event: WIN(1)
-30: 3:Fire Event: LOOSE(1)
+30: 3:Fire Event: LOSE(1)
 30: 3:Fire Event: WIN(1)
 ------------------------------------------
 31: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -2906,7 +2906,7 @@
 31: 5:
 31: 5:Scores: 330
 31: 5:Answer: ACT(12,2),DOWN
-31: 1:Fire Event: LOOSE(1)
+31: 1:Fire Event: LOSE(1)
 31: 1:Fire Event: WIN(1)
 31: 4:Fire Event: WIN(1)
 ------------------------------------------
@@ -3095,9 +3095,9 @@
 33: 5:
 33: 5:Scores: 360
 33: 5:Answer: ACT(10,1),LEFT
-33: 1:Fire Event: LOOSE(1)
+33: 1:Fire Event: LOSE(1)
 33: 1:Fire Event: WIN(2)
-33: 3:Fire Event: LOOSE(1)
+33: 3:Fire Event: LOSE(1)
 33: 4:Fire Event: WIN(2)
 33: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -3191,7 +3191,7 @@
 34: 5:
 34: 5:Scores: 390
 34: 5:Answer: ACT(5,1),UP
-34: 1:Fire Event: LOOSE(1)
+34: 1:Fire Event: LOSE(1)
 34: 3:Fire Event: WIN(1)
 34: 4:Fire Event: WIN(1)
 ------------------------------------------
@@ -3287,7 +3287,7 @@
 35: 5:Answer: ACT(13,3,1),UP
 35: 1:Fire Event: WIN(1)
 35: 2:Fire Event: WIN(1)
-35: 3:Fire Event: LOOSE(1)
+35: 3:Fire Event: LOSE(1)
 ------------------------------------------
 36: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 36: 1:☼    ♠♠♠♠♠♠  ♠☼
@@ -3380,7 +3380,7 @@
 36: 5:Scores: 390
 36: 5:Answer: ACT(12,2),DOWN
 36: 1:Fire Event: WIN(3)
-36: 4:Fire Event: LOOSE(2)
+36: 4:Fire Event: LOSE(2)
 ------------------------------------------
 37: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 37: 1:☼    ♠♠♠♠♠♠  ♠☼
@@ -3472,7 +3472,7 @@
 37: 5:
 37: 5:Scores: 390
 37: 5:Answer: ACT(9,1,1),UP
-37: 1:Fire Event: LOOSE(1)
+37: 1:Fire Event: LOSE(1)
 37: 3:Fire Event: WIN(1)
 ------------------------------------------
 38: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -3565,13 +3565,13 @@
 38: 5:
 38: 5:Scores: 390
 38: 5:Answer: ACT(10,2,1),LEFT
-38: 1:Fire Event: LOOSE(1)
+38: 1:Fire Event: LOSE(1)
 38: 1:Fire Event: WIN(4)
 38: 2:Fire Event: WIN(1)
-38: 3:Fire Event: LOOSE(3)
+38: 3:Fire Event: LOSE(3)
 38: 3:Fire Event: WIN(1)
 38: 4:Fire Event: WIN(1)
-38: 5:Fire Event: LOOSE(1)
+38: 5:Fire Event: LOSE(1)
 38: 5:Fire Event: WIN(1)
 ------------------------------------------
 39: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -3665,7 +3665,7 @@
 39: 5:Scores: 320
 39: 5:Answer: ACT(12,3),LEFT
 39: 1:Fire Event: WIN(1)
-39: 4:Fire Event: LOOSE(2)
+39: 4:Fire Event: LOSE(2)
 39: 5:Fire Event: WIN(2)
 ------------------------------------------
 40: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -3850,7 +3850,7 @@
 41: 5:Scores: 380
 41: 5:Answer: ACT(8,3),LEFT
 41: 1:Fire Event: WIN(2)
-41: 3:Fire Event: LOOSE(2)
+41: 3:Fire Event: LOSE(2)
 41: 4:Fire Event: WIN(1)
 41: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -3944,9 +3944,9 @@
 42: 5:
 42: 5:Scores: 410
 42: 5:Answer: ACT(11,3),LEFT
-42: 1:Fire Event: LOOSE(2)
+42: 1:Fire Event: LOSE(2)
 42: 1:Fire Event: WIN(2)
-42: 3:Fire Event: LOOSE(2)
+42: 3:Fire Event: LOSE(2)
 42: 3:Fire Event: WIN(2)
 42: 4:Fire Event: WIN(1)
 42: 5:Fire Event: WIN(1)
@@ -4041,7 +4041,7 @@
 43: 5:
 43: 5:Scores: 440
 43: 5:Answer: ACT(10,3),DOWN
-43: 1:Fire Event: LOOSE(4)
+43: 1:Fire Event: LOSE(4)
 43: 3:Fire Event: WIN(3)
 43: 4:Fire Event: WIN(2)
 43: 5:Fire Event: WIN(1)
@@ -4136,7 +4136,7 @@
 44: 5:
 44: 5:Scores: 470
 44: 5:Answer: ACT(7,3),DOWN
-44: 1:Fire Event: LOOSE(6)
+44: 1:Fire Event: LOSE(6)
 44: 1:Fire Event: WIN(1)
 44: 3:Fire Event: WIN(3)
 44: 5:Fire Event: WIN(4)
@@ -4324,8 +4324,8 @@
 46: 5:
 46: 5:Scores: 620
 46: 5:Answer: ACT(10,4),RIGHT
-46: 1:Fire Event: LOOSE(1)
-46: 4:Fire Event: LOOSE(3)
+46: 1:Fire Event: LOSE(1)
+46: 4:Fire Event: LOSE(3)
 46: 5:Fire Event: WIN(3)
 ------------------------------------------
 47: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -4418,7 +4418,7 @@
 47: 5:
 47: 5:Scores: 710
 47: 5:Answer: ACT(9,3),UP
-47: 1:Fire Event: LOOSE(1)
+47: 1:Fire Event: LOSE(1)
 47: 1:Fire Event: WIN(1)
 47: 3:Fire Event: WIN(2)
 47: 5:Fire Event: WIN(1)
@@ -4513,10 +4513,10 @@
 48: 5:
 48: 5:Scores: 740
 48: 5:Answer: ACT(10,4,1),DOWN
-48: 1:Fire Event: LOOSE(1)
+48: 1:Fire Event: LOSE(1)
 48: 1:Fire Event: WIN(3)
-48: 2:Fire Event: LOOSE(1)
-48: 3:Fire Event: LOOSE(3)
+48: 2:Fire Event: LOSE(1)
+48: 3:Fire Event: LOSE(3)
 48: 3:Fire Event: WIN(1)
 48: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -4610,7 +4610,7 @@
 49: 5:
 49: 5:Scores: 770
 49: 5:Answer: ACT(8,5),DOWN
-49: 4:Fire Event: LOOSE(3)
+49: 4:Fire Event: LOSE(3)
 49: 5:Fire Event: WIN(4)
 ------------------------------------------
 50: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -4705,7 +4705,7 @@
 50: 5:Answer: ACT(12,2,1),LEFT
 50: 1:Fire Event: WIN(3)
 50: 3:Fire Event: WIN(1)
-50: 5:Fire Event: LOOSE(2)
+50: 5:Fire Event: LOSE(2)
 ------------------------------------------
 51: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 51: 1:☼    ♠♠♠♠♠♠  ♠☼
@@ -4798,9 +4798,9 @@
 51: 5:Scores: 690
 51: 5:Answer: ACT(13,3,1),UP
 51: 1:Fire Event: WIN(2)
-51: 2:Fire Event: LOOSE(2)
+51: 2:Fire Event: LOSE(2)
 51: 3:Fire Event: WIN(3)
-51: 4:Fire Event: LOOSE(1)
+51: 4:Fire Event: LOSE(1)
 ------------------------------------------
 52: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 52: 1:☼    ♠♠♠♠♠♠  ♠☼
@@ -4892,11 +4892,11 @@
 52: 5:
 52: 5:Scores: 690
 52: 5:Answer: ACT(9,7,1),UP
-52: 1:Fire Event: LOOSE(3)
+52: 1:Fire Event: LOSE(3)
 52: 1:Fire Event: WIN(2)
 52: 3:Fire Event: WIN(2)
-52: 4:Fire Event: LOOSE(3)
-52: 5:Fire Event: LOOSE(2)
+52: 4:Fire Event: LOSE(3)
+52: 5:Fire Event: LOSE(2)
 52: 5:Fire Event: WIN(4)
 ------------------------------------------
 53: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -4990,12 +4990,12 @@
 53: 5:Scores: 610
 53: 5:Answer: ACT(9,7,1),LEFT
 53: 1:Fire Event: WIN(2)
-53: 2:Fire Event: LOOSE(1)
+53: 2:Fire Event: LOSE(1)
 53: 2:Fire Event: WIN(1)
-53: 3:Fire Event: LOOSE(2)
+53: 3:Fire Event: LOSE(2)
 53: 3:Fire Event: WIN(1)
 53: 4:Fire Event: WIN(1)
-53: 5:Fire Event: LOOSE(1)
+53: 5:Fire Event: LOSE(1)
 ------------------------------------------
 54: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 54: 1:☼    ♠♠♠♠♠♠  ♠☼
@@ -5088,9 +5088,9 @@
 54: 5:Scores: 510
 54: 5:Answer: ACT(6,1,1),UP
 54: 1:Fire Event: WIN(5)
-54: 3:Fire Event: LOOSE(5)
+54: 3:Fire Event: LOSE(5)
 54: 4:Fire Event: WIN(2)
-54: 5:Fire Event: LOOSE(1)
+54: 5:Fire Event: LOSE(1)
 ------------------------------------------
 55: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 55: 1:☼    ♠♠♠♠♠♠  ♠☼
@@ -5182,7 +5182,7 @@
 55: 5:
 55: 5:Scores: 410
 55: 5:Answer: ACT(13,1,1),LEFT
-55: 1:Fire Event: LOOSE(1)
+55: 1:Fire Event: LOSE(1)
 55: 1:Fire Event: WIN(1)
 55: 3:Fire Event: WIN(2)
 ------------------------------------------
@@ -5276,10 +5276,10 @@
 56: 5:
 56: 5:Scores: 410
 56: 5:Answer: ACT(9,2,1),LEFT
-56: 1:Fire Event: LOOSE(1)
+56: 1:Fire Event: LOSE(1)
 56: 1:Fire Event: WIN(3)
 56: 2:Fire Event: WIN(1)
-56: 3:Fire Event: LOOSE(4)
+56: 3:Fire Event: LOSE(4)
 56: 3:Fire Event: WIN(1)
 56: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -5373,9 +5373,9 @@
 57: 5:
 57: 5:Scores: 440
 57: 5:Answer: ACT(8,6,1),LEFT
-57: 1:Fire Event: LOOSE(5)
+57: 1:Fire Event: LOSE(5)
 57: 1:Fire Event: WIN(2)
-57: 3:Fire Event: LOOSE(1)
+57: 3:Fire Event: LOSE(1)
 57: 5:Fire Event: WIN(5)
 ------------------------------------------
 58: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -5468,12 +5468,12 @@
 58: 5:
 58: 5:Scores: 590
 58: 5:Answer: ACT(9,5,1),UP
-58: 1:Fire Event: LOOSE(1)
-58: 2:Fire Event: LOOSE(2)
+58: 1:Fire Event: LOSE(1)
+58: 2:Fire Event: LOSE(2)
 58: 2:Fire Event: WIN(1)
 58: 3:Fire Event: WIN(2)
 58: 4:Fire Event: WIN(2)
-58: 5:Fire Event: LOOSE(2)
+58: 5:Fire Event: LOSE(2)
 ------------------------------------------
 59: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 59: 1:☼    ♠♠♠♠♠♠♠  ☼
@@ -5565,9 +5565,9 @@
 59: 5:
 59: 5:Scores: 390
 59: 5:Answer: ACT(9,3),UP
-59: 1:Fire Event: LOOSE(2)
+59: 1:Fire Event: LOSE(2)
 59: 1:Fire Event: WIN(2)
-59: 3:Fire Event: LOOSE(2)
+59: 3:Fire Event: LOSE(2)
 59: 3:Fire Event: WIN(2)
 59: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -5663,7 +5663,7 @@
 60: 5:Answer: ACT(7,7),UP
 60: 1:Fire Event: WIN(3)
 60: 2:Fire Event: WIN(1)
-60: 5:Fire Event: LOOSE(3)
+60: 5:Fire Event: LOSE(3)
 60: 5:Fire Event: WIN(1)
 ------------------------------------------
 61: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -5756,13 +5756,13 @@
 61: 5:
 61: 5:Scores: 150
 61: 5:Answer: ACT(10,1,1),RIGHT
-61: 1:Fire Event: LOOSE(2)
+61: 1:Fire Event: LOSE(2)
 61: 1:Fire Event: WIN(3)
 61: 2:Fire Event: WIN(2)
-61: 3:Fire Event: LOOSE(1)
+61: 3:Fire Event: LOSE(1)
 61: 3:Fire Event: WIN(2)
 61: 4:Fire Event: WIN(1)
-61: 5:Fire Event: LOOSE(3)
+61: 5:Fire Event: LOSE(3)
 ------------------------------------------
 62: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 62: 1:☼    ♠♠♠♠♠ ♠♠ ☼
@@ -5856,7 +5856,7 @@
 62: 5:Answer: ACT(13,2),DOWN
 62: 1:Fire Event: WIN(1)
 62: 2:Fire Event: WIN(3)
-62: 4:Fire Event: LOOSE(2)
+62: 4:Fire Event: LOSE(2)
 ------------------------------------------
 63: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 63: 1:☼    ♠♠♠♠♠ ♠♠ ☼
@@ -5949,7 +5949,7 @@
 63: 5:Scores: 0
 63: 5:Answer: ACT(12,1),UP
 63: 4:Fire Event: WIN(3)
-63: 5:Fire Event: LOOSE(2)
+63: 5:Fire Event: LOSE(2)
 ------------------------------------------
 64: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 64: 1:☼    ♠♠♠♠♠ ♠♠ ☼
@@ -6041,11 +6041,11 @@
 64: 5:
 64: 5:Scores: 0
 64: 5:Answer: ACT(11,1,1),RIGHT
-64: 1:Fire Event: LOOSE(4)
+64: 1:Fire Event: LOSE(4)
 64: 2:Fire Event: WIN(1)
 64: 3:Fire Event: WIN(4)
 64: 4:Fire Event: WIN(3)
-64: 5:Fire Event: LOOSE(2)
+64: 5:Fire Event: LOSE(2)
 ------------------------------------------
 65: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 65: 1:☼    ♠♠♠♠♠  ♠♠☼
@@ -6137,14 +6137,14 @@
 65: 5:
 65: 5:Scores: 0
 65: 5:Answer: ACT(5,1,1),LEFT
-65: 1:Fire Event: LOOSE(4)
+65: 1:Fire Event: LOSE(4)
 65: 1:Fire Event: WIN(3)
-65: 2:Fire Event: LOOSE(1)
+65: 2:Fire Event: LOSE(1)
 65: 2:Fire Event: WIN(3)
 65: 3:Fire Event: WIN(4)
-65: 4:Fire Event: LOOSE(2)
+65: 4:Fire Event: LOSE(2)
 65: 4:Fire Event: WIN(3)
-65: 5:Fire Event: LOOSE(4)
+65: 5:Fire Event: LOSE(4)
 ------------------------------------------
 66: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 66: 1:☼  ♠  ♠♠♠♠  ♠♠☼
@@ -6236,7 +6236,7 @@
 66: 5:
 66: 5:Scores: 0
 66: 5:Answer: ACT(10,2),DOWN
-66: 4:Fire Event: LOOSE(1)
+66: 4:Fire Event: LOSE(1)
 ------------------------------------------
 67: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 67: 1:☼  ♠  ♠♠♠♠  ♠♠☼
@@ -6329,9 +6329,9 @@
 67: 5:Scores: 0
 67: 5:Answer: ACT(8,1,1),RIGHT
 67: 1:Fire Event: WIN(7)
-67: 2:Fire Event: LOOSE(1)
+67: 2:Fire Event: LOSE(1)
 67: 3:Fire Event: WIN(1)
-67: 5:Fire Event: LOOSE(7)
+67: 5:Fire Event: LOSE(7)
 ------------------------------------------
 68: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 68: 1:☼  ♠  ♠♠ ♠♠ ♠♠☼
@@ -6425,7 +6425,7 @@
 68: 5:Answer: ACT(12,1),UP
 68: 1:Fire Event: WIN(3)
 68: 2:Fire Event: WIN(1)
-68: 3:Fire Event: LOOSE(4)
+68: 3:Fire Event: LOSE(4)
 ------------------------------------------
 69: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 69: 1:☼  ♠  ♠♠ ♠♠ ♠♠☼
@@ -6517,10 +6517,10 @@
 69: 5:
 69: 5:Scores: 0
 69: 5:Answer: ACT(6,6,1),UP
-69: 1:Fire Event: LOOSE(5)
+69: 1:Fire Event: LOSE(5)
 69: 2:Fire Event: WIN(2)
 69: 3:Fire Event: WIN(1)
-69: 4:Fire Event: LOOSE(2)
+69: 4:Fire Event: LOSE(2)
 69: 5:Fire Event: WIN(5)
 ------------------------------------------
 70: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -6613,7 +6613,7 @@
 70: 5:
 70: 5:Scores: 150
 70: 5:Answer: ACT(7,2,1),UP
-70: 1:Fire Event: LOOSE(2)
+70: 1:Fire Event: LOSE(2)
 70: 4:Fire Event: WIN(1)
 70: 5:Fire Event: WIN(2)
 ------------------------------------------
@@ -6707,11 +6707,11 @@
 71: 5:
 71: 5:Scores: 210
 71: 5:Answer: ACT(13,2),LEFT
-71: 2:Fire Event: LOOSE(1)
+71: 2:Fire Event: LOSE(1)
 71: 3:Fire Event: WIN(3)
-71: 4:Fire Event: LOOSE(2)
+71: 4:Fire Event: LOSE(2)
 71: 4:Fire Event: WIN(1)
-71: 5:Fire Event: LOOSE(1)
+71: 5:Fire Event: LOSE(1)
 71: 5:Fire Event: WIN(3)
 ------------------------------------------
 72: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -6804,9 +6804,9 @@
 72: 5:
 72: 5:Scores: 200
 72: 5:Answer: ACT(12,1),LEFT
-72: 3:Fire Event: LOOSE(2)
+72: 3:Fire Event: LOSE(2)
 72: 4:Fire Event: WIN(3)
-72: 5:Fire Event: LOOSE(1)
+72: 5:Fire Event: LOSE(1)
 72: 5:Fire Event: WIN(1)
 ------------------------------------------
 73: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -6899,7 +6899,7 @@
 73: 5:
 73: 5:Scores: 130
 73: 5:Answer: ACT(6,1),UP
-73: 2:Fire Event: LOOSE(1)
+73: 2:Fire Event: LOSE(1)
 73: 2:Fire Event: WIN(1)
 73: 4:Fire Event: WIN(2)
 ------------------------------------------
@@ -6993,7 +6993,7 @@
 74: 5:
 74: 5:Scores: 130
 74: 5:Answer: ACT(8,2,1),UP
-74: 1:Fire Event: LOOSE(2)
+74: 1:Fire Event: LOSE(2)
 74: 2:Fire Event: WIN(1)
 74: 3:Fire Event: WIN(1)
 74: 5:Fire Event: WIN(1)
@@ -7088,14 +7088,14 @@
 75: 5:
 75: 5:Scores: 160
 75: 5:Answer: ACT(8,3,1),DOWN
-75: 1:Fire Event: LOOSE(1)
+75: 1:Fire Event: LOSE(1)
 75: 1:Fire Event: WIN(1)
-75: 2:Fire Event: LOOSE(5)
+75: 2:Fire Event: LOSE(5)
 75: 2:Fire Event: WIN(5)
-75: 3:Fire Event: LOOSE(5)
+75: 3:Fire Event: LOSE(5)
 75: 3:Fire Event: WIN(3)
 75: 4:Fire Event: WIN(2)
-75: 5:Fire Event: LOOSE(1)
+75: 5:Fire Event: LOSE(1)
 75: 5:Fire Event: WIN(1)
 ------------------------------------------
 76: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -7188,14 +7188,14 @@
 76: 5:
 76: 5:Scores: 90
 76: 5:Answer: ACT(8,3),UP
-76: 1:Fire Event: LOOSE(2)
+76: 1:Fire Event: LOSE(2)
 76: 1:Fire Event: WIN(5)
 76: 2:Fire Event: WIN(1)
-76: 3:Fire Event: LOOSE(3)
+76: 3:Fire Event: LOSE(3)
 76: 3:Fire Event: WIN(1)
-76: 4:Fire Event: LOOSE(1)
+76: 4:Fire Event: LOSE(1)
 76: 4:Fire Event: WIN(4)
-76: 5:Fire Event: LOOSE(3)
+76: 5:Fire Event: LOSE(3)
 ------------------------------------------
 77: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 77: 1:☼  ♠  ♠♠ ♠♠♠♠♠☼
@@ -7287,7 +7287,7 @@
 77: 5:
 77: 5:Scores: 0
 77: 5:Answer: ACT(3,1),RIGHT
-77: 2:Fire Event: LOOSE(5)
+77: 2:Fire Event: LOSE(5)
 77: 3:Fire Event: WIN(5)
 77: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -7381,10 +7381,10 @@
 78: 5:
 78: 5:Scores: 30
 78: 5:Answer: ACT(6,1),LEFT
-78: 1:Fire Event: LOOSE(2)
+78: 1:Fire Event: LOSE(2)
 78: 2:Fire Event: WIN(4)
 78: 3:Fire Event: WIN(2)
-78: 4:Fire Event: LOOSE(4)
+78: 4:Fire Event: LOSE(4)
 78: 5:Fire Event: WIN(1)
 ------------------------------------------
 79: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -7477,12 +7477,12 @@
 79: 5:
 79: 5:Scores: 60
 79: 5:Answer: ACT(9,4),LEFT
-79: 1:Fire Event: LOOSE(1)
+79: 1:Fire Event: LOSE(1)
 79: 1:Fire Event: WIN(1)
 79: 2:Fire Event: WIN(1)
-79: 4:Fire Event: LOOSE(3)
+79: 4:Fire Event: LOSE(3)
 79: 4:Fire Event: WIN(2)
-79: 5:Fire Event: LOOSE(1)
+79: 5:Fire Event: LOSE(1)
 79: 5:Fire Event: WIN(4)
 ------------------------------------------
 80: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -7575,7 +7575,7 @@
 80: 5:
 80: 5:Scores: 120
 80: 5:Answer: ACT(9,1),LEFT
-80: 2:Fire Event: LOOSE(2)
+80: 2:Fire Event: LOSE(2)
 80: 4:Fire Event: WIN(3)
 80: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -7669,11 +7669,11 @@
 81: 5:
 81: 5:Scores: 150
 81: 5:Answer: ACT(8,4,1),LEFT
-81: 1:Fire Event: LOOSE(1)
+81: 1:Fire Event: LOSE(1)
 81: 1:Fire Event: WIN(1)
 81: 2:Fire Event: WIN(1)
-81: 3:Fire Event: LOOSE(1)
-81: 4:Fire Event: LOOSE(1)
+81: 3:Fire Event: LOSE(1)
+81: 4:Fire Event: LOSE(1)
 81: 5:Fire Event: WIN(2)
 ------------------------------------------
 82: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -7766,10 +7766,10 @@
 82: 5:
 82: 5:Scores: 210
 82: 5:Answer: ACT(6,5,1),DOWN
-82: 1:Fire Event: LOOSE(2)
+82: 1:Fire Event: LOSE(2)
 82: 2:Fire Event: WIN(1)
-82: 3:Fire Event: LOOSE(1)
-82: 4:Fire Event: LOOSE(2)
+82: 3:Fire Event: LOSE(1)
+82: 4:Fire Event: LOSE(2)
 82: 5:Fire Event: WIN(3)
 ------------------------------------------
 83: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -7862,9 +7862,9 @@
 83: 5:
 83: 5:Scores: 300
 83: 5:Answer: ACT(6,4,1),DOWN
-83: 2:Fire Event: LOOSE(3)
+83: 2:Fire Event: LOSE(3)
 83: 2:Fire Event: WIN(2)
-83: 3:Fire Event: LOOSE(2)
+83: 3:Fire Event: LOSE(2)
 83: 4:Fire Event: WIN(4)
 ------------------------------------------
 84: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -7957,9 +7957,9 @@
 84: 5:
 84: 5:Scores: 300
 84: 5:Answer: ACT(6,4),LEFT
-84: 1:Fire Event: LOOSE(4)
-84: 2:Fire Event: LOOSE(2)
-84: 3:Fire Event: LOOSE(2)
+84: 1:Fire Event: LOSE(4)
+84: 2:Fire Event: LOSE(2)
+84: 3:Fire Event: LOSE(2)
 84: 3:Fire Event: WIN(2)
 84: 4:Fire Event: WIN(5)
 84: 5:Fire Event: WIN(2)
@@ -8054,9 +8054,9 @@
 85: 5:
 85: 5:Scores: 360
 85: 5:Answer: ACT(7,2),LEFT
-85: 2:Fire Event: LOOSE(2)
+85: 2:Fire Event: LOSE(2)
 85: 2:Fire Event: WIN(4)
-85: 3:Fire Event: LOOSE(4)
+85: 3:Fire Event: LOSE(4)
 85: 3:Fire Event: WIN(1)
 85: 4:Fire Event: WIN(3)
 85: 5:Fire Event: WIN(1)
@@ -8152,11 +8152,11 @@
 86: 5:Scores: 390
 86: 5:Answer: ACT(7,5),DOWN
 86: 1:Fire Event: WIN(7)
-86: 2:Fire Event: LOOSE(2)
+86: 2:Fire Event: LOSE(2)
 86: 2:Fire Event: WIN(3)
-86: 4:Fire Event: LOOSE(3)
+86: 4:Fire Event: LOSE(3)
 86: 4:Fire Event: WIN(2)
-86: 5:Fire Event: LOOSE(7)
+86: 5:Fire Event: LOSE(7)
 ------------------------------------------
 87: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 87: 1:☼  ♠♠♠♠♠♠♠♠♠♠♠☼
@@ -8248,7 +8248,7 @@
 87: 5:
 87: 5:Scores: 0
 87: 5:Answer: ACT(3,1,1),LEFT
-87: 1:Fire Event: LOOSE(1)
+87: 1:Fire Event: LOSE(1)
 87: 1:Fire Event: WIN(1)
 87: 3:Fire Event: WIN(2)
 ------------------------------------------
@@ -8342,7 +8342,7 @@
 88: 5:
 88: 5:Scores: 0
 88: 5:Answer: ACT(5,4,1),LEFT
-88: 1:Fire Event: LOOSE(2)
+88: 1:Fire Event: LOSE(2)
 88: 5:Fire Event: WIN(2)
 ------------------------------------------
 89: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -8436,8 +8436,8 @@
 89: 5:Scores: 60
 89: 5:Answer: ACT(1,1,1),RIGHT
 89: 1:Fire Event: WIN(4)
-89: 4:Fire Event: LOOSE(2)
-89: 5:Fire Event: LOOSE(1)
+89: 4:Fire Event: LOSE(2)
+89: 5:Fire Event: LOSE(1)
 ------------------------------------------
 90: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 90: 1:☼  ♠♠♠♠♠♠♠♠♠♠♠☼
@@ -8529,13 +8529,13 @@
 90: 5:
 90: 5:Scores: 0
 90: 5:Answer: ACT(2,5),RIGHT
-90: 1:Fire Event: LOOSE(3)
+90: 1:Fire Event: LOSE(3)
 90: 1:Fire Event: WIN(3)
-90: 2:Fire Event: LOOSE(1)
+90: 2:Fire Event: LOSE(1)
 90: 2:Fire Event: WIN(4)
-90: 3:Fire Event: LOOSE(3)
+90: 3:Fire Event: LOSE(3)
 90: 4:Fire Event: WIN(1)
-90: 5:Fire Event: LOOSE(2)
+90: 5:Fire Event: LOSE(2)
 90: 5:Fire Event: WIN(4)
 ------------------------------------------
 91: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -8628,7 +8628,7 @@
 91: 5:
 91: 5:Scores: 120
 91: 5:Answer: ACT(2,4,1),RIGHT
-91: 2:Fire Event: LOOSE(5)
+91: 2:Fire Event: LOSE(5)
 91: 3:Fire Event: WIN(5)
 91: 4:Fire Event: WIN(1)
 ------------------------------------------
@@ -8722,13 +8722,13 @@
 92: 5:
 92: 5:Scores: 120
 92: 5:Answer: ACT(3,4),LEFT
-92: 1:Fire Event: LOOSE(1)
+92: 1:Fire Event: LOSE(1)
 92: 1:Fire Event: WIN(4)
-92: 2:Fire Event: LOOSE(4)
+92: 2:Fire Event: LOSE(4)
 92: 2:Fire Event: WIN(1)
-92: 4:Fire Event: LOOSE(1)
+92: 4:Fire Event: LOSE(1)
 92: 4:Fire Event: WIN(4)
-92: 5:Fire Event: LOOSE(3)
+92: 5:Fire Event: LOSE(3)
 92: 5:Fire Event: WIN(2)
 ------------------------------------------
 93: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -8822,10 +8822,10 @@
 93: 5:Scores: 60
 93: 5:Answer: ACT(3,1,1),LEFT
 93: 1:Fire Event: WIN(3)
-93: 2:Fire Event: LOOSE(1)
+93: 2:Fire Event: LOSE(1)
 93: 2:Fire Event: WIN(1)
 93: 4:Fire Event: WIN(2)
-93: 5:Fire Event: LOOSE(3)
+93: 5:Fire Event: LOSE(3)
 ------------------------------------------
 94: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 94: 1:☼♠  ♠♠♠♠♠♠♠♠♠♠☼
@@ -8917,12 +8917,12 @@
 94: 5:
 94: 5:Scores: 0
 94: 5:Answer: ACT(3,5,1),DOWN
-94: 1:Fire Event: LOOSE(3)
+94: 1:Fire Event: LOSE(3)
 94: 1:Fire Event: WIN(1)
-94: 2:Fire Event: LOOSE(3)
+94: 2:Fire Event: LOSE(3)
 94: 3:Fire Event: WIN(2)
 94: 4:Fire Event: WIN(1)
-94: 5:Fire Event: LOOSE(1)
+94: 5:Fire Event: LOSE(1)
 94: 5:Fire Event: WIN(3)
 ------------------------------------------
 95: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -9016,11 +9016,11 @@
 95: 5:Scores: 90
 95: 5:Answer: ACT(3,4),DOWN
 95: 1:Fire Event: WIN(1)
-95: 2:Fire Event: LOOSE(2)
+95: 2:Fire Event: LOSE(2)
 95: 2:Fire Event: WIN(2)
-95: 4:Fire Event: LOOSE(2)
+95: 4:Fire Event: LOSE(2)
 95: 4:Fire Event: WIN(2)
-95: 5:Fire Event: LOOSE(1)
+95: 5:Fire Event: LOSE(1)
 ------------------------------------------
 96: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 96: 1:☼♠  ♠♠♠♠♠♠♠♠♠♠☼
@@ -9112,11 +9112,11 @@
 96: 5:
 96: 5:Scores: 0
 96: 5:Answer: ACT(4,1),UP
-96: 1:Fire Event: LOOSE(1)
-96: 2:Fire Event: LOOSE(4)
+96: 1:Fire Event: LOSE(1)
+96: 2:Fire Event: LOSE(4)
 96: 2:Fire Event: WIN(4)
 96: 3:Fire Event: WIN(6)
-96: 4:Fire Event: LOOSE(5)
+96: 4:Fire Event: LOSE(5)
 96: 4:Fire Event: WIN(1)
 96: 5:Fire Event: WIN(1)
 ------------------------------------------
@@ -9212,8 +9212,8 @@
 97: 5:Answer: ACT(3,4,1),LEFT
 97: 1:Fire Event: WIN(2)
 97: 2:Fire Event: WIN(3)
-97: 4:Fire Event: LOOSE(2)
-97: 5:Fire Event: LOOSE(2)
+97: 4:Fire Event: LOSE(2)
+97: 5:Fire Event: LOSE(2)
 ------------------------------------------
 98: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 98: 1:☼♠  ♠♠♠♠♠♠♠♠♠♠☼
@@ -9305,7 +9305,7 @@
 98: 5:
 98: 5:Scores: 0
 98: 5:Answer: ACT(1,4),DOWN
-98: 2:Fire Event: LOOSE(1)
+98: 2:Fire Event: LOSE(1)
 ------------------------------------------
 99: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 99: 1:☼♠  ♠♠♠♠♠♠♠♠♠♠☼
@@ -9397,10 +9397,10 @@
 99: 5:
 99: 5:Scores: 0
 99: 5:Answer: ACT(2,4,1),DOWN
-99: 1:Fire Event: LOOSE(1)
+99: 1:Fire Event: LOSE(1)
 99: 2:Fire Event: WIN(3)
 99: 3:Fire Event: WIN(1)
-99: 4:Fire Event: LOOSE(3)
+99: 4:Fire Event: LOSE(3)
 ------------------------------------------
 100: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 100: 1:☼♠  ♠♠♠♠♠♠♠♠♠♠☼
@@ -9492,9 +9492,9 @@
 100: 5:
 100: 5:Scores: 0
 100: 5:Answer: ACT(1,5,1),UP
-100: 2:Fire Event: LOOSE(1)
+100: 2:Fire Event: LOSE(1)
 100: 2:Fire Event: WIN(1)
-100: 3:Fire Event: LOOSE(1)
+100: 3:Fire Event: LOSE(1)
 100: 4:Fire Event: WIN(1)
 ------------------------------------------
 101: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -9588,7 +9588,7 @@
 101: 5:Scores: 0
 101: 5:Answer: ACT(2,4),RIGHT
 101: 3:Fire Event: WIN(1)
-101: 4:Fire Event: LOOSE(1)
+101: 4:Fire Event: LOSE(1)
 101: 5:Fire Event: WIN(1)
 ------------------------------------------
 102: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -9682,9 +9682,9 @@
 102: 5:Scores: 30
 102: 5:Answer: ACT(2,4,1),DOWN
 102: 1:Fire Event: WIN(3)
-102: 2:Fire Event: LOOSE(2)
+102: 2:Fire Event: LOSE(2)
 102: 3:Fire Event: WIN(2)
-102: 5:Fire Event: LOOSE(3)
+102: 5:Fire Event: LOSE(3)
 ------------------------------------------
 103: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 103: 1:☼♠  ♠♠♠♠♠♠♠♠♠♠☼
@@ -9778,7 +9778,7 @@
 103: 5:Answer: ACT(1,1),UP
 103: 1:Fire Event: WIN(2)
 103: 3:Fire Event: WIN(1)
-103: 5:Fire Event: LOOSE(2)
+103: 5:Fire Event: LOSE(2)
 ------------------------------------------
 104: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 104: 1:☼♠  ♠♠♠♠♠♠♠♠♠♠☼
@@ -9871,7 +9871,7 @@
 104: 5:Scores: 0
 104: 5:Answer: ACT(2,5,1),DOWN
 104: 2:Fire Event: WIN(1)
-104: 4:Fire Event: LOOSE(1)
+104: 4:Fire Event: LOSE(1)
 ------------------------------------------
 105: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 105: 1:☼♠  ♠♠♠♠♠♠♠♠♠♠☼
@@ -9963,10 +9963,10 @@
 105: 5:
 105: 5:Scores: 0
 105: 5:Answer: ACT(1,1),UP
-105: 1:Fire Event: LOOSE(3)
+105: 1:Fire Event: LOSE(3)
 105: 1:Fire Event: WIN(1)
 105: 3:Fire Event: WIN(1)
-105: 5:Fire Event: LOOSE(1)
+105: 5:Fire Event: LOSE(1)
 105: 5:Fire Event: WIN(3)
 ------------------------------------------
 106: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -10059,7 +10059,7 @@
 106: 5:
 106: 5:Scores: 90
 106: 5:Answer: ACT(3,4),DOWN
-106: 1:Fire Event: LOOSE(3)
+106: 1:Fire Event: LOSE(3)
 106: 5:Fire Event: WIN(4)
 ------------------------------------------
 107: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -10154,7 +10154,7 @@
 107: 5:Answer: ACT(3,4,1),DOWN
 107: 1:Fire Event: WIN(2)
 107: 2:Fire Event: WIN(1)
-107: 5:Fire Event: LOOSE(2)
+107: 5:Fire Event: LOSE(2)
 ------------------------------------------
 108: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 108: 1:☼♠  ☺☺♠♠♠♠♠♠♠♠☼
@@ -10248,9 +10248,9 @@
 108: 5:Answer: ACT(3,5,1),DOWN
 108: 1:Fire Event: WIN(1)
 108: 2:Fire Event: WIN(2)
-108: 3:Fire Event: LOOSE(1)
-108: 4:Fire Event: LOOSE(1)
-108: 5:Fire Event: LOOSE(1)
+108: 3:Fire Event: LOSE(1)
+108: 4:Fire Event: LOSE(1)
+108: 5:Fire Event: LOSE(1)
 ------------------------------------------
 109: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 109: 1:☼♠  ☺☺♠♠♠♠♠♠♠♠☼
@@ -10342,7 +10342,7 @@
 109: 5:
 109: 5:Scores: 0
 109: 5:Answer: ACT(7,1,1),UP
-109: 1:Fire Event: LOOSE(2)
+109: 1:Fire Event: LOSE(2)
 109: 5:Fire Event: WIN(2)
 ------------------------------------------
 110: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -10435,9 +10435,9 @@
 110: 5:
 110: 5:Scores: 60
 110: 5:Answer: ACT(4,5,1),DOWN
-110: 1:Fire Event: LOOSE(4)
+110: 1:Fire Event: LOSE(4)
 110: 2:Fire Event: WIN(1)
-110: 4:Fire Event: LOOSE(1)
+110: 4:Fire Event: LOSE(1)
 110: 5:Fire Event: WIN(4)
 ------------------------------------------
 111: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -10532,7 +10532,7 @@
 111: 5:Answer: ACT(4,5,1),DOWN
 111: 1:Fire Event: WIN(2)
 111: 2:Fire Event: WIN(1)
-111: 5:Fire Event: LOOSE(2)
+111: 5:Fire Event: LOSE(2)
 ------------------------------------------
 112: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 112: 1:☼♠  ☺☺♠♠♠♠♠♠♠♠☼
@@ -10624,10 +10624,10 @@
 112: 5:
 112: 5:Scores: 0
 112: 5:Answer: ACT(12,3,1),LEFT
-112: 1:Fire Event: LOOSE(6)
+112: 1:Fire Event: LOSE(6)
 112: 1:Fire Event: WIN(1)
 112: 2:Fire Event: WIN(1)
-112: 5:Fire Event: LOOSE(1)
+112: 5:Fire Event: LOSE(1)
 112: 5:Fire Event: WIN(6)
 ------------------------------------------
 113: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼

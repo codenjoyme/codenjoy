@@ -23,21 +23,12 @@ package com.codenjoy.dojo.lemonade.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.AbstractJsonSolver;
 import com.codenjoy.dojo.client.AbstractTextBoard;
-import com.codenjoy.dojo.client.AbstractTextSolver;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.lemonade.client.Board;
 import com.codenjoy.dojo.lemonade.model.WeatherForecast;
 import com.codenjoy.dojo.services.Dice;
-import org.json.JSONObject;
 
-/**
- * User: your name
- * Это твой алгоритм AI для игры. Реализуй его на свое усмотрение.
- * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
- * фреймворк для тебя.
- */
 public class AISolver implements Solver<Board> {
 
     private Dice dice;

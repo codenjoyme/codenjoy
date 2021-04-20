@@ -65,8 +65,8 @@ public class Scores implements PlayerScores {
                 }
                 score += settings.integer(GOLD_SCORE) * events.getGoldCount();
                 break;
-            case LOOSE:
-                score -= settings.integer(LOOSE_PENALTY);
+            case LOSE:
+                score -= settings.integer(LOSE_PENALTY);
                 break;
             case KILL_ZOMBIE:
                 if (settings.bool(ENABLE_KILL_SCORE) && events.isMultiple())

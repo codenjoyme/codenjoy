@@ -31,7 +31,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -151,9 +150,9 @@ public class Reversi implements Field {
             blackPlayer().event(Events.WIN());
         } else if (countBlack < countWhite) {
             whitePlayer().event(Events.WIN());
-            blackPlayer().event(Events.LOOSE());
+            blackPlayer().event(Events.LOSE());
         } else if (countBlack > countWhite) {
-            whitePlayer().event(Events.LOOSE());
+            whitePlayer().event(Events.LOSE());
             blackPlayer().event(Events.WIN());
         }
     }

@@ -24,8 +24,6 @@ package com.codenjoy.dojo.lemonade.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,8 +37,8 @@ public class ScoresTest {
 
     private GameSettings settings;
 
-    public void loose() {
-        scores.event(new EventArgs(EventType.LOOSE, 1, 0.3));
+    public void lose() {
+        scores.event(new EventArgs(EventType.LOSE, 1, 0.3));
     }
 
     public void win() {
@@ -64,17 +62,17 @@ public class ScoresTest {
         win();
         win();
 
-        loose();
+        lose();
 
         Assert.assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
-                - settings.integer(LOOSE_PENALTY),
+                - settings.integer(LOSE_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();
+        lose();
 
         Assert.assertEquals(0, scores.getScore());
     }

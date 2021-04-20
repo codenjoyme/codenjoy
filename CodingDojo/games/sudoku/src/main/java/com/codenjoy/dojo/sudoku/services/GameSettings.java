@@ -38,7 +38,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
         WIN_SCORE("Win score"),
         FAIL_PENALTY("Fail penalty"),
-        LOOSE_PENALTY("Loose penalty"),
+        LOSE_PENALTY("Lose penalty"),
         SUCCESS_SCORE("Success score"),
         LEVELS_COUNT("Levels count");
 
@@ -62,7 +62,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     public GameSettings() {
         integer(WIN_SCORE, 1000);
         integer(FAIL_PENALTY, 10);
-        integer(LOOSE_PENALTY, 500);
+        integer(LOSE_PENALTY, 500);
         integer(SUCCESS_SCORE, 10);
         integer(LEVELS_COUNT, 0);
         Levels.setup(this);

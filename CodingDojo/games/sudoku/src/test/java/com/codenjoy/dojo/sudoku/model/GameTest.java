@@ -392,7 +392,7 @@ public class GameTest {
     }
 
     @Test
-    public void shouldLooseWhenNewGame() {
+    public void shouldLoseWhenNewGame() {
         shouldFieldAtStart();
 
         joystick.act(2, 2, 5);
@@ -402,7 +402,7 @@ public class GameTest {
         joystick.act(0); // просим новую игру
         game.tick();
 
-        verify(listener).event(Events.LOOSE);
+        verify(listener).event(Events.LOSE);
         verifyNoMoreInteractions(listener);
 
         assertTrue(game.isGameOver());

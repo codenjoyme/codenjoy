@@ -31,7 +31,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.*;
 
@@ -174,9 +173,9 @@ public class Quadro implements Field {
 
         if (color) {
             players.get(0).event(Events.WIN);
-            players.get(1).event(Events.LOOSE);
+            players.get(1).event(Events.LOSE);
         } else {
-            players.get(0).event(Events.LOOSE);
+            players.get(0).event(Events.LOSE);
             players.get(1).event(Events.WIN);
         }
     }

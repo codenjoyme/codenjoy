@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.sokoban.model.Field;
 import com.codenjoy.dojo.sokoban.model.items.Hero;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.util.logging.Logger.getLogger;
@@ -45,7 +44,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public void event(Events event) {
         switch (event) {
-            case LOOSE:
+            case LOSE:
                 break;
             case WIN:
                 break;

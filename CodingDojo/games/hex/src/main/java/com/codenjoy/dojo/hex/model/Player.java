@@ -42,7 +42,7 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
     private Heroes heroes;
     private Hero newHero;
     private Elements element;
-    private int loose;
+    private int lose;
     private int win;
 
     public Player(EventListener listener, GameSettings settings) {
@@ -135,7 +135,7 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
         if (newHero == hero) {
             boolean remove = heroes.remove(hero);
             if (remove) {
-                loose(1);
+                lose(1);
             }
             newHero = null;
         }
@@ -183,8 +183,8 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
         this.element = element;
     }
 
-    public void loose(int count) {
-        loose += count;
+    public void lose(int count) {
+        lose += count;
     }
 
     public void win(int count) {
@@ -192,9 +192,9 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
     }
 
     public void fireEvents() {
-        if (loose > 0) {
-            listener.event(new Event(Event.EventEnum.LOOSE, loose));
-            loose = 0;
+        if (lose > 0) {
+            listener.event(new Event(Event.EventEnum.LOSE, lose));
+            lose = 0;
         }
 
         if (win > 0) {

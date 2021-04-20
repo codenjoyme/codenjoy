@@ -34,7 +34,7 @@ public class ICanCodeGameSettings extends AbstractSettings {
     public static final String KILL_ZOMBIE_SCORE = "Kill zombie score";
     public static final String KILL_HERO_SCORE = "Kill hero score";
     public static final String ENABLE_SCORE_FOR_KILL = "Enable score for kill";
-    public static final String LOOSE_PENALTY = "Loose penalty";
+    public static final String LOSE_PENALTY = "Lose penalty";
     public static final String IS_TRAINING_MODE = "Is training mode";
     public static final String ROOM_SIZE = "Room size";
     public static final String PERK_DROP_RATIO = "Perk drop ratio";
@@ -53,8 +53,8 @@ public class ICanCodeGameSettings extends AbstractSettings {
         return getInteger(ROOM_SIZE);
     }
 
-    public Integer getLoosePenalty() {
-        return getInteger(LOOSE_PENALTY);
+    public Integer getLosePenalty() {
+        return getInteger(LOSE_PENALTY);
     }
 
     public Integer getKillHeroScore() {
@@ -113,8 +113,8 @@ public class ICanCodeGameSettings extends AbstractSettings {
         add(ROOM_SIZE, input);
     }
 
-    public void setLoosePenalty(Integer input) {
-        add(LOOSE_PENALTY, input);
+    public void setLosePenalty(Integer input) {
+        add(LOSE_PENALTY, input);
     }
 
     public void setKillHeroScore(Integer input) {
@@ -176,7 +176,7 @@ public class ICanCodeGameSettings extends AbstractSettings {
         update(parameters, KILL_ZOMBIE_SCORE);
         update(parameters, KILL_HERO_SCORE);
         update(parameters, ENABLE_SCORE_FOR_KILL);
-        update(parameters, LOOSE_PENALTY);
+        update(parameters, LOSE_PENALTY);
         update(parameters, IS_TRAINING_MODE);
         update(parameters, ROOM_SIZE);
         update(parameters, PERK_DROP_RATIO);

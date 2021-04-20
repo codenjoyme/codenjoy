@@ -572,11 +572,11 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTournament() {
         // given
         int winner = 100;
-        int looser = 1;
+        int loser = 1;
         Player player1 = createPlayerWithScore(winner, "player1", MultiplayerType.TOURNAMENT);
-        Player player2 = createPlayerWithScore(looser, "player2", MultiplayerType.TOURNAMENT);
+        Player player2 = createPlayerWithScore(loser, "player2", MultiplayerType.TOURNAMENT);
         Player player3 = createPlayerWithScore(winner, "player3", MultiplayerType.TOURNAMENT);
-        Player player4 = createPlayerWithScore(looser, "player4", MultiplayerType.TOURNAMENT);
+        Player player4 = createPlayerWithScore(loser, "player4", MultiplayerType.TOURNAMENT);
 
         updateSettings("room")
                 .setResetBoard(true);
@@ -604,14 +604,14 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple() {
         // given
         int winner = 100;
-        int looser = 1;
+        int loser = 1;
         Player player1 = createPlayerWithScore(winner, "player1", MultiplayerType.TRIPLE);
-        Player player2 = createPlayerWithScore(looser, "player2", MultiplayerType.TRIPLE);
-        Player player3 = createPlayerWithScore(looser, "player3", MultiplayerType.TRIPLE);
+        Player player2 = createPlayerWithScore(loser, "player2", MultiplayerType.TRIPLE);
+        Player player3 = createPlayerWithScore(loser, "player3", MultiplayerType.TRIPLE);
         Player player4 = createPlayerWithScore(winner, "player4", MultiplayerType.TRIPLE);
         Player player5 = createPlayerWithScore(winner, "player5", MultiplayerType.TRIPLE);
-        Player player6 = createPlayerWithScore(looser, "player6", MultiplayerType.TRIPLE);
-        Player player7 = createPlayerWithScore(looser, "player7", MultiplayerType.TRIPLE);
+        Player player6 = createPlayerWithScore(loser, "player6", MultiplayerType.TRIPLE);
+        Player player7 = createPlayerWithScore(loser, "player7", MultiplayerType.TRIPLE);
         Player player8 = createPlayerWithScore(winner, "player8", MultiplayerType.TRIPLE);
 
         updateSettings("room")
@@ -634,21 +634,21 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_whenSeveralRooms() {
         // given
         int winner = 100;
-        int looser = 1;
+        int loser = 1;
         createPlayerWithScore(winner, "player1-1", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-1", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-2", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-2", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-3", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-3", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-2", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-2", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-3", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-3", "room2", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player1-4", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-4", "room2", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player1-5", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-5", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-6", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-6", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-7", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-7", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-6", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-6", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-7", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-7", "room2", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player1-8", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-8", "room2", MultiplayerType.TRIPLE);
 
@@ -681,21 +681,21 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     public void shouldCleanScoresAfterCut_whenNotSetResetBoard_caseTriple_whenSeveralRooms() {
         // given
         int winner = 100;
-        int looser = 1;
+        int loser = 1;
         createPlayerWithScore(winner, "player1-1", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-1", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-2", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-2", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-3", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-3", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-2", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-2", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-3", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-3", "room2", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player1-4", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-4", "room2", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player1-5", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-5", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-6", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-6", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-7", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-7", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-6", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-6", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-7", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-7", "room2", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player1-8", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-8", "room2", MultiplayerType.TRIPLE);
 
@@ -731,21 +731,21 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_whenSeveralRooms_someIsNotActive() {
         // given
         int winner = 100;
-        int looser = 1;
+        int loser = 1;
         createPlayerWithScore(winner, "player1-1", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-1", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-2", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-2", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-3", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-3", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-2", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-2", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-3", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-3", "room2", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player1-4", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-4", "room2", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player1-5", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-5", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-6", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-6", "room2", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player1-7", "room1", MultiplayerType.TRIPLE);
-        createPlayerWithScore(looser, "player2-7", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-6", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-6", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player1-7", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(loser, "player2-7", "room2", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player1-8", "room1", MultiplayerType.TRIPLE);
         createPlayerWithScore(winner, "player2-8", "room2", MultiplayerType.TRIPLE);
 
@@ -782,14 +782,14 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_shuffle() {
         // given
         int winner = 100;
-        int looser = 1;
+        int loser = 1;
         Player player1 = createPlayerWithScore(winner, "player1", MultiplayerType.TRIPLE);
-        Player player2 = createPlayerWithScore(looser, "player2", MultiplayerType.TRIPLE);
-        Player player3 = createPlayerWithScore(looser, "player3", MultiplayerType.TRIPLE);
+        Player player2 = createPlayerWithScore(loser, "player2", MultiplayerType.TRIPLE);
+        Player player3 = createPlayerWithScore(loser, "player3", MultiplayerType.TRIPLE);
         Player player4 = createPlayerWithScore(winner, "player4", MultiplayerType.TRIPLE);
         Player player5 = createPlayerWithScore(winner, "player5", MultiplayerType.TRIPLE);
-        Player player6 = createPlayerWithScore(looser, "player6", MultiplayerType.TRIPLE);
-        Player player7 = createPlayerWithScore(looser, "player7", MultiplayerType.TRIPLE);
+        Player player6 = createPlayerWithScore(loser, "player6", MultiplayerType.TRIPLE);
+        Player player7 = createPlayerWithScore(loser, "player7", MultiplayerType.TRIPLE);
         Player player8 = createPlayerWithScore(winner, "player8", MultiplayerType.TRIPLE);
 
         updateSettings("room")
