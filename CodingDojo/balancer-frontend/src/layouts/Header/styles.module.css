@@ -8,6 +8,24 @@
     color: white;
 }
 
+.logoContainer.epam {
+    width: auto;
+    margin-right: 30px;
+}
+
+.logoContainer.epam:last-child {
+    margin-right: 0;
+}
+
+.logoContainer.epam img {
+    width: auto;
+    height: 35px;
+}
+
+.logoContainer.epam.anywhere img {
+    height: 25px;
+}
+
 .logoContainer,
 .logoContainer:active,
 .logoContainer:focus,
@@ -82,6 +100,20 @@
 
 .logout {
     cursor: pointer;
+}
+
+@media all and (max-width: 1500px) {
+    .logoContainer.epam {
+        margin-right: 30px;
+    }
+
+    .logoContainer.epam img {
+        height: 22px;
+    }
+
+    .logoContainer.epam.anywhere img {
+        height: 13px;
+    }
 }
 
 @media all and (max-width: 1090px) {

@@ -7,6 +7,8 @@ import classnames from 'classnames';
 // proj
 import { book } from '../../routes';
 import Game from '../../games';
+import EpamLogo from '../../styles/images/logos/EPAM_LOGO_White.png';
+import EpamAnywhereLogo from '../../styles/images/logos/Epam_Anywhere_Logo.svg';
 
 // own
 import Styles from './styles.module.css';
@@ -18,10 +20,25 @@ class HeaderComponent extends PureComponent {
         return (
             <header>
                 <div className={ Styles.container }>
-                    <NavLink className={ Styles.logoContainer } to={ book.home }>
-                        <img className={ Styles.logo } src={ Game.logo } alt='' />
-                    </NavLink>
+                    <ul>
+                        <NavLink className={ Styles.logoContainer } to={ book.home }>
+                            <img className={ Styles.logo } src={ Game.logo } alt='' />
+                        </NavLink>
 
+                        <a className={ classnames(
+                            Styles.logoContainer,
+                            Styles.epam
+                        ) } href='https://epa.ms/1fYT56' target='_blank'>
+                            <img src={ EpamLogo } alt='Epam' />
+                        </a>
+                        <a className={ classnames(
+                            Styles.logoContainer,
+                            Styles.epam,
+                            Styles.anywhere
+                        ) } href='https://anywhere.epam.com/' target='_blank'>
+                            <img src={ EpamAnywhereLogo } alt='Epam Anywhere' />
+                        </a>
+                    </ul>
                     <ul>
                         <li>
                             <NavLink className={ Styles.navMenu } activeClassName={ Styles.activeMenu } to={ book.home }>
