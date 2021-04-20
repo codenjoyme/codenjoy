@@ -34,7 +34,7 @@ const HomeContainer = () => (
                 <img className={ Styles.prizeImage } src={ Third } alt='Civilization'
                      title='Настільна гра \"Цивілізація: Новий світанок\"'/>
             </div>
-            <Link to={ book.rules } className={ Styles.acceptButton }>
+            <Link to={ book.register } className={ Styles.acceptButton }>
                 Виклик прийнято
             </Link>
         </div>
