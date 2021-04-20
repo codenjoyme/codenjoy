@@ -39,6 +39,7 @@ import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.semifinal.SemifinalStatus;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.transport.screen.ScreenData;
@@ -148,6 +149,16 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             PlayerGame playerGame = playerGames.get(id);
             registerAI(id, playerGame.getGameType().name(), playerGame.getRoom()); // TODO ROOM test me
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public SemifinalStatus getSemifinalStatus(String room) {
+        lock.writeLock().lock();
+        try {
+            return semifinal.getSemifinalStatus(room);
         } finally {
             lock.writeLock().unlock();
         }
