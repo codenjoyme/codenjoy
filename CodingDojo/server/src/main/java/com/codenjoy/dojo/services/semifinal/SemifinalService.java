@@ -145,6 +145,12 @@ public class SemifinalService implements Tickable {
         }
     }
 
+    public SemifinalStatus getSemifinalStatus(String room) { // TODO test me
+        int current = roomService.getTick(room);
+        SemifinalSettings settings = semifinalSettings(room);
+        return new SemifinalStatus(current, settings);
+    }
+
     public RoundSettingsImpl roundSettings(String room) { // TODO перенести бы их куда-то
         Settings settings = roomService.settings(room);
         if (isRoundAllowed(settings)) {

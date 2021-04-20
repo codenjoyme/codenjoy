@@ -28,11 +28,11 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.semifinal.SemifinalStatus;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerId;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -104,6 +104,13 @@ public class RestRoomController {
         }
 
         return validator.isPlayerInRoom(playerId, room);
+    }
+
+    @GetMapping("/room/{room}/semifinal")
+    public SemifinalStatus getSemifinalTick(@PathVariable("room") String room) {
+        validator.checkRoom(room, CANT_BE_NULL);
+
+        return playerService.getSemifinalStatus(room);
     }
 
     @GetMapping("/room/{room}/game/{game}/join")

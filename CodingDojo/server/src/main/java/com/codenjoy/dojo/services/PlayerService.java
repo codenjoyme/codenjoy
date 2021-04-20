@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.semifinal.SemifinalStatus;
+
 import java.util.List;
 
 public interface PlayerService extends Tickable {
@@ -57,4 +59,6 @@ public interface PlayerService extends Tickable {
     void openRegistration();
 
     void reloadAI(String id);
+
+    SemifinalStatus getSemifinalStatus(String room);
 }
