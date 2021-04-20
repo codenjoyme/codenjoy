@@ -77,6 +77,7 @@ public class SmokeTest {
             @Override
             public GameSettings getSettings() {
                 return super.getSettings()
+                        .bool(CHEATS, true)
                         .integer(PERK_ACTIVITY, 10)
                         .integer(PERK_AVAILABILITY, 10)
                         .integer(PERK_DROP_RATIO, 100)
