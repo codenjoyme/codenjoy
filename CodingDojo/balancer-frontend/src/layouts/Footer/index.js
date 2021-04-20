@@ -8,6 +8,8 @@ import { FacebookShareButton } from 'react-share';
 // proj
 import { book } from '../../routes';
 import Styles from './styles.module.css';
+import JStifyLogo from '../../styles/images/logos/JStifyLogoCropped.png';
+import DojorenaLogo from '../../styles/images/logos/DojorenaLogo.png';
 
 const orgEmail = process.env.REACT_APP_EVENT_ORG_EMAIL;
 const joinSlackUrl = process.env.REACT_APP_JOIN_CHAT_LINK;
@@ -29,10 +31,22 @@ export class Footer extends PureComponent {
                         </NavLink>
                     </li>
                 </ul>
+                <ul className={ Styles.navigation }>
+                    <li>
+                        <a href='https://www.youtube.com/channel/UCY82a2l4__P1F2QvLPbwnmA' target="_blank">
+                            <img src={ JStifyLogo } alt='JStify' height={ 50 }/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='https://dojorena.io/' target="_blank">
+                            <img src={ DojorenaLogo } alt='Dojorena' width={ 40 }/>
+                        </a>
+                    </li>
+                </ul>
                 <ul className={ classnames(Styles.navigation) }>
                     <li>
                         <a href={ 'mailto:' + orgEmail }>
-                            Зв'язатися з нами
+                            <span>Зв'язатися з нами</span>
                             <FontAwesomeIcon
                                 className={ Styles.navigationIcon }
                                 icon={ [ 'far', 'envelope' ] }
@@ -46,7 +60,7 @@ export class Footer extends PureComponent {
                                 className={ Styles.facebookShare }
                                 url={ process.env.REACT_APP_EVENT_LINK }
                             >
-                                Поділитися
+                                <span>Поділитися</span>
                                 <FontAwesomeIcon
                                     className={ Styles.navigationIcon }
                                     icon={ [ 'fas', 'share-alt' ] }
@@ -57,7 +71,7 @@ export class Footer extends PureComponent {
                     </li>
                     <li>
                         <a href={ joinSlackUrl } rel='noopener noreferrer' target='_blank'>
-                            Долучайтесь до чату в Slack
+                            <span>Долучайтесь до чату в Slack</span>
                             <FontAwesomeIcon
                                 className={ Styles.navigationIcon }
                                 icon={ [ 'fab', 'slack' ] }
@@ -67,7 +81,7 @@ export class Footer extends PureComponent {
                     </li>
                     <li>
                         <a href={ joinTelegramUrl } rel='noopener noreferrer' target='_blank'>
-                            або в Telegram
+                            <span>або в Telegram</span>
                             <FontAwesomeIcon
                                 className={ Styles.navigationIcon }
                                 icon={ [ 'fab', 'telegram-plane' ] }
