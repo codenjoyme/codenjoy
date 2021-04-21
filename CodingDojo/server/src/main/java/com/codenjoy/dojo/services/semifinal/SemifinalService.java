@@ -93,7 +93,7 @@ public class SemifinalService implements Tickable {
                             .collect(toList());
 
             // единственного героя оставляем и не удаляем
-            if (games.size() <= 1) continue; // TODO потестить
+            if (games.size() <= 1) continue;
 
             // адская формула рассчета индекса разделения списка
             int index = reader.isPercentage()
