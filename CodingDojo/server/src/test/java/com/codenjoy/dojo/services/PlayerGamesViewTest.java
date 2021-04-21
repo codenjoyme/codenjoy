@@ -59,6 +59,7 @@ public class PlayerGamesViewTest {
     private List<GameType> gameTypes;
     private List<HeroData> heroesData;
     private List<GamePlayer> gamePlayers;
+    private List<PlayerScores> playerScores;
 
     @Before
     public void setup() {
@@ -72,6 +73,7 @@ public class PlayerGamesViewTest {
         gameTypes = new LinkedList<>();
         heroesData = new LinkedList<>();
         gamePlayers = new LinkedList<>();
+        playerScores = new LinkedList<>();
     }
 
     @Test
@@ -294,6 +296,36 @@ public class PlayerGamesViewTest {
     }
 
     @Test
+    public void testGetScoresForGame_caseJsonScore() {
+        // given
+        testGetScoresForGame();
+
+        // переопределяем скоры игроков, так чтобы они были уже в json зашиты
+        assertEquals(6, playerScores.size());
+        for (int index = 0; index < players.size(); index++) {
+            Player player = players.get(index);
+            PlayerScores score = playerScores.get(index);
+            JSONObject json = new JSONObject() {{
+                // + 1000 чтобы быть точно уверенными, что мы тут были
+                put("score", (Integer)player.getScore() + 1000);
+                put("data", "something");
+            }};
+            when(score.getScore()).thenReturn(json);
+        }
+
+        // when
+        List<PScoresOf> scores = playerGamesView.getScoresForGame("game1");
+
+        // then
+        assertEquals("[" +
+                        "{'score':1123,'name':'readable_user1','id':'user1'}," +
+                        "{'score':1234,'name':'readable_user2','id':'user2'}," +
+                        "{'score':1345,'name':'readable_user3','id':'user3'}," +
+                        "{'score':1456,'name':'readable_user4','id':'user4'}]",
+                JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
+    }
+
+    @Test
     public void testGetScoresForRoom() {
         // given
         GameField field1 = mock(GameField.class);
@@ -460,6 +492,7 @@ public class PlayerGamesViewTest {
 
     private PlayerGame addNewPlayer(GameType gameType, String room, int scores, HeroData heroData) {
         PlayerScores gameScore = mock(PlayerScores.class);
+        playerScores.add(gameScore);
         when(gameScore.getScore()).thenReturn(scores);
 
         GamePlayer gamePlayer = mock(GamePlayer.class);

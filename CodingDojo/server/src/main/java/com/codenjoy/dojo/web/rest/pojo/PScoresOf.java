@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.rest.pojo;
 
 import com.codenjoy.dojo.services.PlayerGame;
 import lombok.AllArgsConstructor;
+import org.json.JSONObject;
 
 @AllArgsConstructor
 public class PScoresOf {
@@ -39,7 +40,18 @@ public class PScoresOf {
     }
 
     public int getScore() {
-        return Integer.valueOf(playerGame.getPlayer().getScore().toString());
+        Object score = playerGame.getPlayer().getScore();
+        if (score instanceof JSONObject) {
+            // это для игрушек, которые передают чуть больше инфы на фронт об очках
+            return ((JSONObject)score).getInt("score");
+        } else {
+            try {
+               return Integer.valueOf(score.toString());
+            } catch (Exception e) {
+                return -1;
+            }
+
+        }
     }
 
 }
