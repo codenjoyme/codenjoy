@@ -24,12 +24,15 @@ package com.codenjoy.dojo.services.semifinal;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class SemifinalStatus {
 
     private int tick;
+    private int count;
     private boolean enabled;
     private int timeout;
     private boolean percentage;
@@ -37,8 +40,9 @@ public class SemifinalStatus {
     private boolean resetBoard;
     private boolean shuffleBoard;
 
-    public SemifinalStatus(int tick, SemifinalSettings settings) {
+    public SemifinalStatus(int tick, int count, SemifinalSettings settings) {
         this.tick = tick;
+        this.count = count;
         this.enabled = settings.isEnabled();
         this.timeout = settings.getTimeout();
         this.percentage = settings.isPercentage();

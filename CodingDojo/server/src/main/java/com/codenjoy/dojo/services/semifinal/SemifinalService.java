@@ -145,10 +145,12 @@ public class SemifinalService implements Tickable {
         }
     }
 
-    public SemifinalStatus getSemifinalStatus(String room) { // TODO test me
+    public SemifinalStatus getSemifinalStatus(String room) {
         int current = roomService.getTick(room);
         SemifinalSettings settings = semifinalSettings(room);
-        return new SemifinalStatus(current, settings);
+        int countPlayers = playerGames.getPlayersByRoom(room).size();
+        // TODO прочитать тут SemifinalSettings на игре, у которой нет полуфиналов - получаю ошибку
+        return new SemifinalStatus(current, countPlayers, settings);
     }
 
     public RoundSettingsImpl roundSettings(String room) { // TODO перенести бы их куда-то

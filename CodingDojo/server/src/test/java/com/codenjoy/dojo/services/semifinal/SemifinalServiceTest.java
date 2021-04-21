@@ -105,6 +105,78 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
         assertEquals(0, semifinal.getTime("room"));
     }
 
+    @Test
+    public void shouldGetSemifinalStatus() {
+        // given
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(90);
+        Player player3 = createPlayerWithScore(80);
+        Player player4 = createPlayerWithScore(70);
+        Player player5 = createPlayerWithScore(60);
+        Player player6 = createPlayerWithScore(50);
+        Player player7 = createPlayerWithScore(40);
+        Player player8 = createPlayerWithScore(30);
+        Player player9 = createPlayerWithScore(20);
+        Player player10 = createPlayerWithScore(10);
+
+        updateSettings("room")
+                .setEnabled(true)
+                .setTimeout(3)
+                .setPercentage(true)
+                .setLimit(70)
+                .setResetBoard(true)
+                .setShuffleBoard(true);
+
+        assertEquals("SemifinalStatus(tick=0, count=10, enabled=true, " +
+                        "timeout=3, percentage=true, limit=70, " +
+                        "resetBoard=true, shuffleBoard=true)",
+                semifinal.getSemifinalStatus("room").toString());
+
+        // when then
+        semifinal.tick();
+        assertEquals("SemifinalStatus(tick=1, count=10, enabled=true, " +
+                        "timeout=3, percentage=true, limit=70, " +
+                        "resetBoard=true, shuffleBoard=true)",
+                semifinal.getSemifinalStatus("room").toString());
+
+        // when then
+        semifinal.tick();
+        assertEquals("SemifinalStatus(tick=2, count=10, enabled=true, " +
+                        "timeout=3, percentage=true, limit=70, " +
+                        "resetBoard=true, shuffleBoard=true)",
+                semifinal.getSemifinalStatus("room").toString());
+
+        // новый полуфинал
+        // when then
+        semifinal.tick();
+        assertEquals("SemifinalStatus(tick=0, count=7, enabled=true, " +
+                        "timeout=3, percentage=true, limit=70, " +
+                        "resetBoard=true, shuffleBoard=true)",
+                semifinal.getSemifinalStatus("room").toString());
+
+        // when then
+        semifinal.tick();
+        assertEquals("SemifinalStatus(tick=1, count=7, enabled=true, " +
+                        "timeout=3, percentage=true, limit=70, " +
+                        "resetBoard=true, shuffleBoard=true)",
+                semifinal.getSemifinalStatus("room").toString());
+
+        // when then
+        semifinal.tick();
+        assertEquals("SemifinalStatus(tick=2, count=7, enabled=true, " +
+                        "timeout=3, percentage=true, limit=70, " +
+                        "resetBoard=true, shuffleBoard=true)",
+                semifinal.getSemifinalStatus("room").toString());
+
+        // новый полуфинал
+        // when then
+        semifinal.tick();
+        assertEquals("SemifinalStatus(tick=0, count=5, enabled=true, " +
+                        "timeout=3, percentage=true, limit=70, " +
+                        "resetBoard=true, shuffleBoard=true)",
+                semifinal.getSemifinalStatus("room").toString());
+    }
+
     private SemifinalSettings<SettingsReader> updateSettings(String room) {
         return (SemifinalSettings<SettingsReader>) roomService.settings(room);
     }
