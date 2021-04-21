@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import com.codenjoy.dojo.services.nullobj.NullParameter;
 import lombok.ToString;
 
 import java.util.LinkedHashMap;
@@ -77,7 +78,7 @@ public class SettingsImpl implements Settings {
         if (map.containsKey(name)) {
             return map.get(name);
         }
-        throw new IllegalArgumentException(String.format("Parameter with name '%s' not found", name));
+        return NullParameter.INSTANCE.get();
     }
 
     @Override

@@ -58,7 +58,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
         semifinal.clean();
         roomService.removeAll();
     }
-    
+
     protected Settings settings(String room) {
         return (Settings) new SemifinalSettingsImpl()
                     .setEnabled(true)
@@ -177,7 +177,37 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
                 semifinal.getSemifinalStatus("room").toString());
     }
 
-    private SemifinalSettings<SettingsReader> updateSettings(String room) {
+    @Test
+    public void shouldGetSemifinalStatus_ifThereIsNoSemifinalSettings() {
+        // given
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(90);
+        Player player3 = createPlayerWithScore(80);
+        Player player4 = createPlayerWithScore(70);
+        Player player5 = createPlayerWithScore(60);
+        Player player6 = createPlayerWithScore(50);
+        Player player7 = createPlayerWithScore(40);
+        Player player8 = createPlayerWithScore(30);
+        Player player9 = createPlayerWithScore(20);
+        Player player10 = createPlayerWithScore(10);
+
+        noSemifinalFor("room");
+
+        // when then
+        assertEquals("SemifinalStatus(tick=null, count=10, enabled=false, " +
+                        "timeout=null, percentage=null, limit=null, " +
+                        "resetBoard=null, shuffleBoard=null)",
+                semifinal.getSemifinalStatus("room").toString());
+
+        // when then
+        semifinal.tick();
+        assertEquals("SemifinalStatus(tick=null, count=10, enabled=false, " +
+                        "timeout=null, percentage=null, limit=null, " +
+                        "resetBoard=null, shuffleBoard=null)",
+                semifinal.getSemifinalStatus("room").toString());
+    }
+
+        private SemifinalSettings<SettingsReader> updateSettings(String room) {
         return (SemifinalSettings<SettingsReader>) roomService.settings(room);
     }
 
@@ -1266,10 +1296,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
         original.setPercentage(false)
                 .setLimit(10);
 
-        // эмулирую другой тип сеттингов, который без semifinal
-        GameType gameType = mock(GameType.class);
-        when(gameType.getSettings()).thenReturn(new SettingsImpl());
-        roomService.state("room").get().setType(gameType);
+        noSemifinalFor("room");
 
         // when
         SemifinalSettingsImpl settings = semifinal.semifinalSettings("room");
@@ -1277,5 +1304,12 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
         // then
         assertNotSame(original.toString(), settings.toString());
         assertEquals("SettingsImpl(map={})", settings.toString());
+    }
+
+    // эмулирую другой тип сеттингов, который без semifinal
+    public void noSemifinalFor(String room) {
+        GameType gameType = mock(GameType.class);
+        when(gameType.getSettings()).thenReturn(new SettingsImpl());
+        roomService.state(room).get().setType(gameType);
     }
 }

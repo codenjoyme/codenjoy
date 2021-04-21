@@ -24,98 +24,125 @@ package com.codenjoy.dojo.services.nullobj;
 
 
 import com.codenjoy.dojo.services.settings.Parameter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
+@Slf4j
 public final class NullParameter<T> implements Parameter<T> {
 
-    public static final Parameter INSTANCE = new NullParameter();
+    public static final Supplier<Parameter> INSTANCE = () -> {
+        warn("Attempting to use NullParameter");
+        return new NullParameter();
+    };
 
     private NullParameter() {
         // do nothing
     }
 
+    private static void warn() {
+        warn("You are working with NullParameter");
+    }
+
+    private static void warn(String message) {
+        log.warn(message, new IllegalStateException());
+    }
+
     @Override
     public T getValue() {
+        warn();
         return (T)new Object();
     }
 
     @Override
     public String getType() {
+        warn();
         return StringUtils.EMPTY;
     }
 
     @Override
     public Class<?> getValueType() {
+        warn();
         return Object.class;
     }
 
     @Override
     public String getName() {
+        warn();
         return StringUtils.EMPTY;
     }
 
     @Override
     public Parameter<T> update(Object value) {
+        warn();
         return null;
     }
 
     @Override
     public Parameter<T> def(T value) {
-        return INSTANCE;
+        warn();
+        return INSTANCE.get();
     }
 
     @Override
     public <V> Parameter<V> type(Class<V> type) {
-        return INSTANCE;
+        warn();
+        return INSTANCE.get();
     }
 
     @Override
     public Parameter<T> parser(Function<String, T> parser) {
-        return INSTANCE;
+        warn();
+        return INSTANCE.get();
     }
 
     @Override
     public void select(int index) {
-        // do nothing
+        warn();
     }
 
     @Override
     public Parameter<T> onChange(Consumer<T> consumer) {
-        return INSTANCE;
+        warn();
+        return INSTANCE.get();
     }
 
     @Override
     public boolean changed() {
+        warn();
         return false;
     }
 
     @Override
     public void changesReacted() {
-        // do nothing
+        warn();
     }
 
     @Override
     public List<T> getOptions() {
+        warn();
         return Arrays.asList();
     }
 
     @Override
     public T getDefault() {
+        warn();
         return null;
     }
 
     @Override
     public void reset() {
-        // do nothing
+        warn();
     }
 
     @Override
     public Parameter<T> clone() {
+        warn();
         return this;
     }
 }

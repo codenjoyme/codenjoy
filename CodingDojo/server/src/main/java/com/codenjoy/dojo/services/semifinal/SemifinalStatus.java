@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.semifinal;
  * #L%
  */
 
+import com.codenjoy.dojo.services.nullobj.NullParameter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -31,18 +32,22 @@ import lombok.ToString;
 @ToString
 public class SemifinalStatus {
 
-    private int tick;
+    private Integer tick;
     private int count;
-    private boolean enabled;
-    private int timeout;
-    private boolean percentage;
-    private int limit;
-    private boolean resetBoard;
-    private boolean shuffleBoard;
+    private Boolean enabled;
+    private Integer timeout;
+    private Boolean percentage;
+    private Integer limit;
+    private Boolean resetBoard;
+    private Boolean shuffleBoard;
 
     public SemifinalStatus(int tick, int count, SemifinalSettings settings) {
-        this.tick = tick;
         this.count = count;
+        if (settings.isEnabledValue() instanceof NullParameter) {
+            this.enabled = false;
+            return;
+        }
+        this.tick = tick;
         this.enabled = settings.isEnabled();
         this.timeout = settings.getTimeout();
         this.percentage = settings.isPercentage();

@@ -135,7 +135,7 @@ public class SemifinalService implements Tickable {
         return settings instanceof RoundSettings;
     }
 
-    public SemifinalSettingsImpl semifinalSettings(String room) { // TODO перенести бы их куда-то
+    public SemifinalSettingsImpl semifinalSettings(String room) {
         Settings settings = roomService.settings(room);
         if (isSemifinalAllowed(settings)) {
             return new SemifinalSettingsImpl((SemifinalSettings) settings);
@@ -149,7 +149,6 @@ public class SemifinalService implements Tickable {
         int current = roomService.getTick(room);
         SemifinalSettings settings = semifinalSettings(room);
         int countPlayers = playerGames.getPlayersByRoom(room).size();
-        // TODO прочитать тут SemifinalSettings на игре, у которой нет полуфиналов - получаю ошибку
         return new SemifinalStatus(current, countPlayers, settings);
     }
 
