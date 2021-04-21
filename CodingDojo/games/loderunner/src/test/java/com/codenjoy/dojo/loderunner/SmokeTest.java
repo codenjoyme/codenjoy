@@ -27,9 +27,9 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.client.ai.AISolver;
-import com.codenjoy.dojo.loderunner.client.ai.DummyAISolver;
 import com.codenjoy.dojo.loderunner.services.GameRunner;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
+import com.codenjoy.dojo.loderunner.services.levels.Level1;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
@@ -100,7 +100,8 @@ public class SmokeTest {
     public void testHard() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 20000);
 
-        // about 14 sec
+        // about 14 sec Level1 map
+        // about 84 sec Level2 map
         int ticks = 100;
         int players = 10;
         int enemies = 5;
@@ -117,6 +118,7 @@ public class SmokeTest {
                     @Override
                     public GameSettings getSettings() {
                         return super.getSettings()
+                                .string(LEVEL_MAP, Level1.get())
                                 .integer(ENEMIES_COUNT, enemies);
                     }
                 },

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.loderunner.services;
 
 import com.codenjoy.dojo.loderunner.model.Level;
 import com.codenjoy.dojo.loderunner.model.LevelImpl;
+import com.codenjoy.dojo.loderunner.services.levels.Level1;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;

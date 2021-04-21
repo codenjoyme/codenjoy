@@ -22,6 +22,8 @@ package com.codenjoy.dojo.loderunner.services;
  * #L%
  */
 
+import com.codenjoy.dojo.loderunner.services.levels.Level1;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;

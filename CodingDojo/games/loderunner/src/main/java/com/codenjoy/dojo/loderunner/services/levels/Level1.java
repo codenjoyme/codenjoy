@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.services;
+package com.codenjoy.dojo.loderunner.services.levels;
 
 /*-
  * #%L
