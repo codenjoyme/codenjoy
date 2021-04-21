@@ -51,6 +51,7 @@ public class AbstractPlayerGamesTest {
     protected List<GameType> gameTypes = new LinkedList<>();
     protected Map<Player, Closeable> ais = new HashMap<>();
     protected List<Joystick> joysticks = new LinkedList<>();
+    protected List<Player> players = new LinkedList<>();
     protected List<Joystick> lazyJoysticks = new LinkedList<>();
     protected List<GamePlayer> gamePlayers = new LinkedList<>();
     protected List<GameField> fields = new LinkedList<>();
@@ -69,7 +70,7 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayer(String room, String game) {
-        return createPlayer("player" + Calendar.getInstance().getTimeInMillis(),
+        return createPlayer("player" + (players.size() + 1),
                 room, game,
                 MultiplayerType.SINGLE);
     }
@@ -146,6 +147,7 @@ public class AbstractPlayerGamesTest {
     {
         GameType gameType = getGameType(game, room);
         Player player = new Player(id, "url", gameType, gameType.getPlayerScores(0, null), mock(Information.class));
+        players.add(player);
         player.setEventListener(mock(InformationCollector.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
