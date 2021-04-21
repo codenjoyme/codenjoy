@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.PreparedStatement;
@@ -43,6 +44,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 public class Scores {
 
     private CrudConnectionThreadPool pool;
@@ -104,22 +106,68 @@ public class Scores {
         long time = parse(to);
 
         List<String> finalists = new LinkedList<>();
-        return getDaysBetween(from, to).stream()
+
+        log.info("exclude {}", exclude);
+
+        List<LocalDate> daysBetween = getDaysBetween(from, to);
+        log.info("daysBetween {}", daysBetween);
+
+        List<String> dayFormat = daysBetween.stream()
                 .map(day -> day.format(Scores.DAY_FORMATTER))
+                .collect(Collectors.toList());
+        log.info("dayFormat {}", dayFormat);
+
+        List<String> filterPast = dayFormat.stream()
                 .filter(day -> isPast(day, time))
-                .flatMap(day -> getScores(day, time).stream()
-                    .filter(score -> score.getScore() > 0)
-                    .sorted(Comparator.comparingInt(PlayerScore::getScore).reversed())
-                    .filter(score -> !exclude.contains(score.getId()))
-                    .filter(score -> !finalists.contains(score.getId()))
-                    .limit(finalistsCount)
-                    .map(score -> {
-                        finalists.add(score.getId());
-                        score.setDay(day);
-                        return score;
-                    })
-            )
-            .collect(Collectors.toList());
+                .collect(Collectors.toList());
+        log.info("filterPast {}", filterPast);
+
+        List<PlayerScore> theFinalists = filterPast.stream()
+                .flatMap(day -> {
+                            List<PlayerScore> scores = getScores(day, time);
+                            log.info("scores {}", scores);
+
+                            List<PlayerScore> filterZero = scores.stream()
+                                    .filter(score -> score.getScore() > 0)
+                                    .collect(Collectors.toList());
+                            log.info("filterZero {}", filterZero);
+
+                            List<PlayerScore> sorted = filterZero.stream()
+                                    .sorted(Comparator.comparingInt(PlayerScore::getScore).reversed())
+                                    .collect(Collectors.toList());
+                            log.info("sorted {}", sorted);
+
+                            List<PlayerScore> filterExcluded = sorted.stream()
+                                    .filter(score -> !exclude.contains(score.getId()))
+                                    .collect(Collectors.toList());
+                            log.info("filter excluded {}", filterExcluded);
+
+                            List<PlayerScore> filterFinalists = filterExcluded.stream()
+                                    .filter(score -> !finalists.contains(score.getId()))
+                                    .collect(Collectors.toList());
+                            log.info("finalists {}", finalists);
+                            log.info("filter finalists {}", finalists);
+
+                            List<PlayerScore> limit = filterFinalists.stream()
+                                    .limit(finalistsCount)
+                                    .collect(Collectors.toList());
+                            log.info("limit {}", limit);
+
+                            List<PlayerScore> playerScore = limit.stream()
+                                    .map(score -> {
+                                        finalists.add(score.getId());
+                                        log.info("finalists.add({})", score.getId());
+                                        score.setDay(day);
+                                        return score;
+                                    }).collect(Collectors.toList());
+                            log.info("playerScore {}", playerScore);
+
+                            return playerScore.stream();
+                        }
+                )
+                .collect(Collectors.toList());
+        log.info("theFinalists {}", theFinalists);
+        return theFinalists;
     }
 
     private String plusDay(String day) {

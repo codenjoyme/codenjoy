@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.web.rest.dto.settings.AbstractSettings;
 import com.codenjoy.dojo.web.rest.dto.settings.BattleCityGameSettings;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,7 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @Component
 public class Dispatcher {
 
@@ -256,6 +258,7 @@ public class Dispatcher {
         );
 
         List<PlayerScore> result = prepareScoresForClient(list);
+        log.info("preparedScores {}", result);
         return result;
     }
 
