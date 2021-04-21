@@ -62,6 +62,7 @@ public class Scores implements PlayerScores {
             return - settings.integer(KILL_YOUR_TANK_PENALTY);
         }
 
+        // TODO тут множится количество очков от убийств, надо отключатор в сеттинги выделить
         if (event.isKillOtherHeroTank()) {
             return settings.integer(KILL_OTHER_HERO_TANK_SCORE) * event.getAmount();
         }
