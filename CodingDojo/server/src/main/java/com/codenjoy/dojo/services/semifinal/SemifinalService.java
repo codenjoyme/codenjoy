@@ -97,7 +97,7 @@ public class SemifinalService implements Tickable {
 
             // адская формула рассчета индекса разделения списка
             int index = reader.isPercentage()
-                    ? (int)((1D - 1D*reader.getLimit()/100)*games.size())
+                    ? (int)Math.ceil((1D - 1D*reader.getLimit()/100)*(games.size() - 1))
                     : (games.size() - Math.min(reader.getLimit(), games.size()));
 
             // если на границе "отрезания" есть участники с тем же числом очков,

@@ -224,6 +224,144 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     }
 
     @Test
+    public void shouldCut30PercentUsers_checkThatThereWillBeOnlyOne() {
+        // given
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(90);
+        Player player3 = createPlayerWithScore(80);
+        Player player4 = createPlayerWithScore(70);
+        Player player5 = createPlayerWithScore(60);
+        Player player6 = createPlayerWithScore(50);
+        Player player7 = createPlayerWithScore(40);
+        Player player8 = createPlayerWithScore(30);
+        Player player9 = createPlayerWithScore(20);
+        Player player10 = createPlayerWithScore(10);
+
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(70);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5, player6, player7);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1);
+    }
+
+    @Test
+    public void shouldCut1PercentUsers_checkThatThereWillBeOnlyOne() {
+        // given
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(90);
+        Player player3 = createPlayerWithScore(80);
+        Player player4 = createPlayerWithScore(70);
+        Player player5 = createPlayerWithScore(60);
+        Player player6 = createPlayerWithScore(50);
+        Player player7 = createPlayerWithScore(40);
+        Player player8 = createPlayerWithScore(30);
+        Player player9 = createPlayerWithScore(20);
+        Player player10 = createPlayerWithScore(10);
+
+        updateSettings("room")
+                .setPercentage(true)
+                .setLimit(99);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5,
+                player6, player7, player8, player9);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5,
+                player6, player7, player8);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5,
+                player6, player7);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5,
+                player6);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1);
+    }
+
+    @Test
     public void shouldCut50PercentUsers_whenAccurateCut_whenSeveralRooms() {
         // given
         Player player1 = createPlayerWithScore(100, "room1");
@@ -343,7 +481,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void shouldCut30PercentUsers_whenNotAccurateCut() {
+    public void shouldCut70PercentUsers_whenNotAccurateCut() {
         // given
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -386,7 +524,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void shouldCut1PercentUsers_whenNotAccurateCut() {
+    public void shouldCut99PercentUsers_whenNotAccurateCut() {
         // given
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -417,7 +555,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void shouldCut1PercentUsers_whenNotAccurateCut_caseTwoPlayers() {
+    public void shouldCut99PercentUsers_whenNotAccurateCut_caseTwoPlayers() {
         // given
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(50);
@@ -434,7 +572,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void shouldCut20PercentUsers_whenAccurateCut() {
+    public void shouldCut80PercentUsers_whenAccurateCut() {
         // given
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -459,7 +597,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void shouldCut20PercentUsers_whenAccurateCut_mixedScoreOrder() {
+    public void shouldCut80PercentUsers_whenAccurateCut_mixedScoreOrder() {
         // given
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(80);
