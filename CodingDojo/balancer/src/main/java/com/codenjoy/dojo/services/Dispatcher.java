@@ -236,10 +236,8 @@ public class Dispatcher {
 
         scores.cleanWinnerFlags();
 
-        result.forEach(finalist -> {
-            scores.setWinnerFlag(finalist, true);
-            finalist.setWinner(true);
-        });
+        scores.setWinnerFlag(result, true);
+        result.forEach(finalist -> finalist.setWinner(true));
 
         currentScores.clear();
         currentFinalists.clear();
