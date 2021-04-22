@@ -40,16 +40,22 @@ import static org.mockito.Mockito.mock;
 
 public class PerformanceTest {
 
+    private Profiler profiler;
+
     @Test
     public void test() {
+
+        // about 11 sec
         int boardSize = 100;
         int walls = 600;
         int meatChoppers = 100;
         int players = 100;
-        int ticks = 1;
+        int ticks = 1000;
 
-        Profiler p = new Profiler();
-        p.start();
+        profiler = new Profiler(){{
+            PRINT_SOUT = true;
+        }};
+        profiler.start();
 
         GameRunner runner = new GameRunner();
         runner.getSettings()
@@ -64,27 +70,33 @@ public class PerformanceTest {
             games.add(TestUtils.buildGame(runner, mock(EventListener.class), factory));
         }
 
-        p.done("creation");
+        profiler.done("creation");
 
         for (int i = 0; i < ticks; i++) {
-            games.get(0).getField().tick();
-            p.done("tick");
+            for (Game game : games) {
+                game.getField().tick();
+            }
+            profiler.done("tick");
 
             for (int j = 0; j < games.size(); j++) {
                 games.get(j).getBoardAsString();
             }
-            p.done("print");
+            profiler.done("print");
         }
 
-        p.print();
+        profiler.print();
 
-//        assertLess(p.get("creation"), 1000);
-//        assertLess(p.get("print"), 600);
-//        assertLess(p.get("tick"), 600);
+        int reserve = 3;
+        // сколько пользователей - столько раз выполнялось
+        assertLess("print", 7000 * reserve);
+        assertLess("tick", 4000 * reserve);
+        // выполнялось единожды
+        assertLess("creation", 1000 * reserve);
 
     }
 
-    private void assertLess(long actual, int expected) {
+    private void assertLess(String phase, double expected) {
+        double actual = profiler.info(phase).getTime();
         assertTrue(actual + " > " + expected, actual < expected);
     }
 }
