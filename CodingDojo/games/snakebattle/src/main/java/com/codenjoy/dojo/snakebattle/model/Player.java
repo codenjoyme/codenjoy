@@ -44,6 +44,12 @@ public class Player extends RoundGamePlayer<Hero, Field> {
         hero.setPlayer(this);
     }
 
+    @Override
+    public void start(int round, Object startEvent) {
+        super.start(round, startEvent);
+        // hero.clear(); TODO test me
+    }
+
     public void newHero(Field field) {
         hero = new Hero(field.getFreeStart());
         hero.setPlayer(this);
