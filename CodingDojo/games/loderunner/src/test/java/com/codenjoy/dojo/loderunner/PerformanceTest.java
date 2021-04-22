@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner;
  */
 
 import com.codenjoy.dojo.loderunner.services.GameRunner;
+import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -45,7 +46,7 @@ public class PerformanceTest {
     @Test
     public void test() {
 
-        // about 20 sec
+        // about 19 sec
         int enemies = 4;
         int players = 100;
         int ticks = 100;
@@ -55,9 +56,13 @@ public class PerformanceTest {
         }};
         profiler.start();
 
-        GameRunner runner = new GameRunner();
-        runner.getSettings()
-                .integer(ENEMIES_COUNT, enemies);
+        GameRunner runner = new GameRunner(){
+            @Override
+            public GameSettings getSettings() {
+                return super.getSettings()
+                    .integer(ENEMIES_COUNT, enemies);
+            }
+        };
 
         PrinterFactory factory = new PrinterFactoryImpl();
 

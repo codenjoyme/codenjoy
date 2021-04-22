@@ -45,23 +45,27 @@ public class PerformanceTest {
     @Test
     public void test() {
 
-        // about 11 sec
+        // about 16 sec
         int boardSize = 100;
         int walls = 600;
         int meatChoppers = 100;
         int players = 100;
-        int ticks = 1000;
+        int ticks = 100;
 
         profiler = new Profiler(){{
             PRINT_SOUT = true;
         }};
         profiler.start();
 
-        GameRunner runner = new GameRunner();
-        runner.getSettings()
-                .integer(BOARD_SIZE, boardSize)
-                .integer(DESTROY_WALL_COUNT, walls)
-                .integer(MEAT_CHOPPERS_COUNT, meatChoppers);
+        GameRunner runner = new GameRunner(){
+            @Override
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .integer(BOARD_SIZE, boardSize)
+                        .integer(DESTROY_WALL_COUNT, walls)
+                        .integer(MEAT_CHOPPERS_COUNT, meatChoppers);
+            }
+        };
 
         PrinterFactory factory = new PrinterFactoryImpl();
 
@@ -89,7 +93,7 @@ public class PerformanceTest {
         int reserve = 3;
         // сколько пользователей - столько раз выполнялось
         assertLess("print", 7000 * reserve);
-        assertLess("tick", 4000 * reserve);
+        assertLess("tick", 8000 * reserve);
         // выполнялось единожды
         assertLess("creation", 1000 * reserve);
 
