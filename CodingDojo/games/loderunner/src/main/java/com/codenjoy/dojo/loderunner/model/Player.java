@@ -23,19 +23,18 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.round.RoundGamePlayer;
 
 import java.util.Optional;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
+public class Player extends RoundGamePlayer<Hero, Field> {
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
@@ -47,14 +46,39 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     @Override
+    public void start(int round, Object startEvent) {
+        super.start(round, startEvent);
+        hero.clearScores();
+    }
+
+    @Override
     public void newHero(Field field) {
         Optional<Point> pt = field.getFreeRandom();
         hero = new Hero(pt.orElseGet(() -> pt(0, 0)), Direction.RIGHT);
         hero.init(field);
+
+        if (!roundsEnabled()) {
+            hero.setActive(true);
+        }
     }
 
     @Override
     public boolean isAlive() {
         return hero != null && hero.isAlive();
+    }
+
+    public void kill(Events event) {
+        hero.increaseScore();
+        this.event(event);
+    }
+
+    public void die(Events event) {
+        hero.clearScores();
+        this.event(event);
+    }
+
+    // only for testing
+    public void setHero(Hero hero) {
+        this.hero = hero;
     }
 }

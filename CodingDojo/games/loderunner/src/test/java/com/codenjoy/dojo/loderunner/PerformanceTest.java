@@ -22,106 +22,77 @@ package com.codenjoy.dojo.loderunner;
  * #L%
  */
 
-import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.loderunner.services.GameRunner;
-import com.codenjoy.dojo.loderunner.services.GameSettings;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.profile.Profiler;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
-import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 public class PerformanceTest {
 
-    private GameRunner runner;
-    private GameSettings settings;
-    private GameField field;
-    private List<EventListener> listeners;
-    private PrinterFactoryImpl printerFactory;
-    private List<Game> games;
-    private List<Joystick> heroes;
-    private Dice dice;
-    private List<GamePlayer> players;
+    private Profiler profiler;
 
     @Test
     public void test() {
-        dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 20000);
-        LocalGameRunner.printConversions = false;
-        LocalGameRunner.printDice = false;
 
-        // about 14 sec
+        // about 20 sec
+        int enemies = 4;
+        int players = 100;
         int ticks = 100;
-        int playersCount = 100;
-        int enemies = 20;
 
-        runner = new GameRunner();
-        settings = runner.getSettings()
+        profiler = new Profiler(){{
+            PRINT_SOUT = true;
+        }};
+        profiler.start();
+
+        GameRunner runner = new GameRunner();
+        runner.getSettings()
                 .integer(ENEMIES_COUNT, enemies);
-        field = runner.createGame(0, settings);
-        printerFactory = new PrinterFactoryImpl();
-        listeners = new LinkedList<>();
-        heroes = new LinkedList<>();
-        players = new LinkedList<>();
 
-        games = Stream.generate(() -> createGame())
-                .limit(playersCount).collect(toList());
+        PrinterFactory factory = new PrinterFactoryImpl();
 
-        long start = now();
+        List<Game> games = new LinkedList<>();
+        for (int i = 0; i < players; i++) {
+            games.add(TestUtils.buildGame(runner, mock(EventListener.class), factory));
+        }
+
+        profiler.done("creation");
+
         for (int i = 0; i < ticks; i++) {
-            heroes.forEach(hero -> act(move(hero)));
-            field.tick();
-            games.stream()
-                    .filter(game -> game.isGameOver())
-                    .forEach(game -> game.newGame());
-            List<String> boards = games.stream()
-                    .map(game -> (String)game.getBoardAsString())
-                    .collect(toList());
-//            System.out.println(boards.get(0));
+            for (Game game : games) {
+                game.getField().tick();
+            }
+            profiler.done("tick");
+
+            for (int j = 0; j < games.size(); j++) {
+                games.get(j).getBoardAsString();
+            }
+            profiler.done("print");
         }
-        System.out.println((now() - start)/ticks);
+
+        profiler.print();
+
+        int reserve = 3;
+        // сколько пользователей - столько раз выполнялось
+        assertLess("print", 3000 * reserve);
+        assertLess("tick", 16000 * reserve);
+        // выполнялось единожды
+        assertLess("creation", 2500 * reserve);
+
     }
 
-    private long now() {
-        return Calendar.getInstance().getTimeInMillis();
-    }
-
-    private Joystick act(Joystick joystick) {
-        if (dice.next(2) == 0) {
-            joystick.act();
-        }
-        return joystick;
-    }
-
-    private Joystick move(Joystick joystick) {
-        switch (Direction.random(dice)) {
-            case UP: joystick.up(); break;
-            case DOWN: joystick.down(); break;
-            case LEFT: joystick.left(); break;
-            case RIGHT: joystick.right(); break;
-        }
-        return joystick;
-    }
-
-    public Single createGame() {
-        EventListener listener = mock(EventListener.class);
-        listeners.add(listener);
-        GamePlayer player = runner.createPlayer(listener,
-                String.valueOf(listeners.size()), settings);
-        players.add(player);
-        Single single = new Single(player, printerFactory);
-        single.on(field);
-        single.newGame();
-        heroes.add(player.getHero());
-        return single;
+    private void assertLess(String phase, double expected) {
+        double actual = profiler.info(phase).getTime();
+        assertTrue(actual + " > " + expected, actual < expected);
     }
 }

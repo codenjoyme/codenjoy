@@ -241,7 +241,7 @@ public class AITest {
         for (Hero hero : level.getHeroes()) {
             Player player = new Player(mock(EventListener.class), settings);
             loderunner.newGame(player);
-            player.hero = hero;
+            player.setHero(hero);
             hero.init(loderunner);
             loderunner.resetHeroes();
         }

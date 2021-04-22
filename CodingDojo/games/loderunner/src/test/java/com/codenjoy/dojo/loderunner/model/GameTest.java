@@ -38,6 +38,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.PORTALS_COUNT;
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -59,7 +60,6 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         ai = mock(EnemyAI.class);
-        settings = new GameSettings();
         printer = new PrinterFactoryImpl();
         enemy = new EnemyJoystick();
         settings = new TestSettings();
@@ -83,14 +83,15 @@ public class GameTest {
             hero = level.getHeroes().get(0);
         }
 
+        // TODO распутать клубок
         game = new Loderunner(level, dice, settings);
         listener = mock(EventListener.class);
+        dice(hero.getX(), hero.getY());
         player = new Player(listener, settings);
         game.newGame(player);
-        player.hero = hero;
-        hero.init(game);
-        game.resetHeroes();
         this.hero = game.getHeroes().get(0);
+        this.hero.direction = hero.direction;
+        dice(0); // всегда дальше выбираем нулевой индекс
     }
 
     private void assertE(String expected) {

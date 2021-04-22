@@ -87,4 +87,8 @@ public class Players implements Iterable<Player> {
         players.remove(player);
         resetHeroes();
     }
+
+    public List<Player> all() {
+        return players;
+    }
 }

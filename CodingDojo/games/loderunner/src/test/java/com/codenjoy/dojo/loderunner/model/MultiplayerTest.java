@@ -43,6 +43,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_PILLS_COUNT;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -52,10 +53,13 @@ public class MultiplayerTest {
 
     private Dice dice;
     private List<EventListener> listeners = new LinkedList<>();
+    private List<Player> players = new LinkedList<>();
+    private List<Hero> heroes = new LinkedList<>();
     private List<Game> games = new LinkedList<>();
     private Loderunner field;
     private PrinterFactory printerFactory;
     private GameSettings settings;
+    protected EventsListenersAssert events = new EventsListenersAssert(listeners);
 
     @Before
     public void setUp()  {
@@ -74,6 +78,7 @@ public class MultiplayerTest {
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
+        // TODO сделать как в других играх, чтобы инфа о плеерах тянулась с givenFl
         givenPlayer(1, 4);
         givenPlayer(2, 2);
         givenPlayer(3, 4);
@@ -264,8 +269,8 @@ public class MultiplayerTest {
 
     }
 
-    private Joystick hero(int index) {
-        return game(index).getPlayer().getHero();
+    private Hero hero(int index) {
+        return (Hero) game(index).getPlayer().getHero();
     }
 
     private EventListener listener(int index) {
@@ -974,11 +979,13 @@ public class MultiplayerTest {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
         Player player = new Player(listener, settings);
+        players.add(player);
         Single game = new Single(player, printerFactory);
         games.add(game);
         game.on(field);
         dice(x, y);
         game.newGame();
+        heroes.add(player.getHero());
         return player;
     }
 
@@ -1054,5 +1061,895 @@ public class MultiplayerTest {
                 "☼ ►( ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
+    }
+
+
+    // тест с раундами: игра не начнется, пока не соберутся игроки
+    // в достаточном количестве
+    // TODO тест реально не тестирует этого, а просто эмулирует -
+    //      возможно в будущем придумается фреймворк, который будет
+    //      тестить эту фичу вглубь с rooms логикой которая сейчас на
+    //      стороне сервера а могла бы быть в engine.
+    @Test
+    public void shouldStopGame_whenRoundIsNotStarted() {
+        settings.bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_TIME_BEFORE_START, 1)
+                .integer(ROUNDS_PER_MATCH, 1)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, 3);
+
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        givenPlayer(1, 1);
+        givenPlayer(3, 1);
+
+        // when
+        // юзеров недостаточно, ничего не происходит
+        tick();
+
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼► (   ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼( ►   ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        // when
+        // попытка переместиться
+        hero(0).right();
+        hero(1).right();
+
+        tick();
+
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼► (   ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼( ►   ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        // when
+        givenPlayer(5, 1);
+
+        // вот а тут уже укомплектована комната - погнали!
+        tick();
+
+        events.verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼► ( ( ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼( ► ( ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert3("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼( ( ► ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        // when
+        // попытка переместиться
+        hero(0).right();
+        hero(1).right();
+        hero(2).right();
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ► ( (☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ( ► (☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert3("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ( ( ►☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void winnerIsTheOneWhoBuriedTheMostPlayers() {
+        settings.bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_TIME_BEFORE_START, 1)
+                .integer(ROUNDS_PER_MATCH, 1)
+                .integer(ROUNDS_TIME, 30)
+                .integer(ROUNDS_TIME_FOR_WINNER, 5)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, 8);
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼" +
+                "☼        ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼HH☼☼☼☼" +
+                "☼   HH   ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼HH☼☼☼☼" +
+                "☼   HH   ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼☼☼☼☼☼☼");
+
+        givenPlayer(3, 2); // соревнующиеся ребята
+        givenPlayer(6, 2);
+
+        givenPlayer(1, 2); // 1 этаж
+        givenPlayer(8, 2);
+
+        givenPlayer(1, 5); // 2 этаж
+        givenPlayer(8, 5);
+
+        givenPlayer(1, 8); // 3 этаж
+        givenPlayer(8, 8);
+
+        tick();
+
+        events.verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n" +
+                "listener(3) => [START_ROUND, [Round 1]]\n" +
+                "listener(4) => [START_ROUND, [Round 1]]\n" +
+                "listener(5) => [START_ROUND, [Round 1]]\n" +
+                "listener(6) => [START_ROUND, [Round 1]]\n" +
+                "listener(7) => [START_ROUND, [Round 1]]\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼(  HH  (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼( ►HH( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        drill(2, 3);
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼(  HH  (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼ ⊏ЯHH⌊⊐ ☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        goUp();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼( ◄HH( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        drill(4, 5);
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼ ⊏ЯHH⌊⊐ ☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        goUp();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(1, 1);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(2) => [KILL_HERO]\n" +
+                "listener(3) => [KILL_HERO]\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼( ◄  ( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#Z#HH#Z#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼( ◄  ( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        drill(6, 7);
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼ ⊏Я  ⌊⊐ ☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊  ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+
+        assertScores(1, 1);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(2, 2);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => [KILL_HERO]\n" +
+                "listener(5) => [KILL_HERO]\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊  ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#Z#HH#Z#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊  ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        assertScores(2, 2);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(3, 3);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => [KILL_HERO]\n" +
+                "listener(7) => [KILL_HERO]\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊  ☼\n" +
+                "☼#Z#HH#Z#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assertScores(3, 3);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊  ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+
+        assertScores(3, 3);
+        events.verifyAllEvents(
+                "listener(0) => [WIN_ROUND]\n" +
+                "listener(1) => [WIN_ROUND]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 2]]\n" +
+                "listener(1) => [START_ROUND, [Round 2]]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+    }
+
+    public void assertScores(int score1, int score2) {
+        assertEquals(score1, hero(0).scores());
+        assertEquals(score2, hero(1).scores());
+    }
+
+    @Test
+    public void twoWinnersIfTheyHaveEqualKillsBeforeTimeout () {
+        settings.bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_TIME_BEFORE_START, 1)
+                .integer(ROUNDS_PER_MATCH, 1)
+                .integer(ROUNDS_TIME, 30)
+                .integer(ROUNDS_TIME_FOR_WINNER, 5)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, 8);
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼" +
+                "☼        ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼HH☼☼☼☼" +
+                "☼   HH   ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼HH☼☼☼☼" +
+                "☼   HH   ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼☼☼☼☼☼☼");
+
+        givenPlayer(3, 2); // соревнующиеся ребята
+        givenPlayer(6, 2);
+
+        givenPlayer(1, 2); // 1 этаж
+        givenPlayer(8, 2);
+
+        givenPlayer(1, 5); // 2 этаж
+        givenPlayer(8, 5);
+
+        givenPlayer(1, 8); // 3 этаж
+        givenPlayer(8, 8);
+
+        tick();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n" +
+                "listener(3) => [START_ROUND, [Round 1]]\n" +
+                "listener(4) => [START_ROUND, [Round 1]]\n" +
+                "listener(5) => [START_ROUND, [Round 1]]\n" +
+                "listener(6) => [START_ROUND, [Round 1]]\n" +
+                "listener(7) => [START_ROUND, [Round 1]]\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼(  HH  (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼( ►HH( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        drill(2, 3);
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼(  HH  (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼ ⊏ЯHH⌊⊐ ☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        goUp();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼( ◄HH( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        drill(4, 5);
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼ ⊏ЯHH⌊⊐ ☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        goUp();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(1, 1);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(2) => [KILL_HERO]\n" +
+                "listener(3) => [KILL_HERO]\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼( ◄  ( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#Z#HH#Z#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼( ◄  ( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        drill(6, -1);
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼ ⊏Я  ⌊ (☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼#(#HH# #☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+
+        assertScores(1, 1);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(2, 2);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => [KILL_HERO]\n" +
+                "listener(5) => [KILL_HERO]\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼#(#HH# #☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#Z#HH#Z#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼#(#HH# #☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        assertScores(2, 2);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(3, 2);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => [KILL_HERO]\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼#Z#HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assertScores(3, 2);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+
+        assertScores(3, 2);
+        events.verifyAllEvents(
+                "listener(0) => [WIN_ROUND]\n" +
+                "listener(1) => [[Time is over]]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => [[Time is over]]\n");
+
+        tick();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 2]]\n" +
+                "listener(1) => [START_ROUND, [Round 2]]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => [START_ROUND, [Round 2]]\n");
+
+        tick();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+    }
+
+    public void goUp() {
+        // идут на следующий этаж
+        hero(0).right();
+        hero(1).left();
+        tick();
+
+        hero(0).up();
+        hero(1).up();
+        tick();
+
+        hero(0).up();
+        hero(1).up();
+        tick();
+
+        hero(0).up();
+        hero(1).up();
+        tick();
+
+        hero(0).left();
+        hero(1).right();
+        tick();
+    }
+
+    public void drill(int left, int right) {
+        // сверлят ямки
+        hero(0).left();
+        hero(0).act();
+        hero(1).right();
+        hero(1).act();
+        // падают в ямки
+        if (left != -1) {
+            hero(left).right();
+        }
+        if (right != -1) {
+            hero(right).left();
+        }
+        tick();
+    }
+
+    public void tick() {
+        events.verifyNoEvents();
+        removeAllDied();
+        // эмуляция проверки загрузки комнаты, если комната недогружена то не тикаем
+        // вообше это делает фреймворк, тут лишь эмулируем
+        if (settings.bool(ROUNDS_ENABLED)) {
+            if (settings.integer(ROUNDS_PLAYERS_PER_ROOM) != heroes.size()) {
+                return;
+            }
+        }
+        field.tick();
+    }
+
+    // TODO тут дублирование с bomberman, может продумать единую архитектуру
+    //      тестов работающую и для rounds и реализовать во всех играх начиная
+    //      с bomberman, loderunnes, snakebattle и battlecity
+    protected void removeAllDied() {
+        players.forEach(player -> {
+            if (!player.isAlive()) {
+                field.remove(player(players.indexOf(player)));
+            }
+        });
+    }
+
+    protected Player player(int index) {
+        return players.get(index);
+    }
+
+    protected void resetHeroes() {
+        heroes.clear();
+        players.forEach(player -> heroes.add(player.getHero()));
     }
 }

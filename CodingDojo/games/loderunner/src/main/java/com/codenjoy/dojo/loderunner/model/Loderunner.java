@@ -28,6 +28,7 @@ import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.*;
 import java.util.function.Function;
@@ -36,7 +37,7 @@ import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.BoardUtils.NO_SPACE;
 import static java.util.stream.Collectors.toList;
 
-public class Loderunner implements Field {
+public class Loderunner extends RoundField<Player> implements Field {
 
     private int size;
     private Level level;
@@ -57,6 +58,7 @@ public class Loderunner implements Field {
     private List<Function<Point, Point>> finder;
 
     public Loderunner(Level level, Dice dice, GameSettings settings) {
+        super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_HERO, settings);
         this.dice = dice;
         this.level = level;
         this.settings = settings;
@@ -78,6 +80,7 @@ public class Loderunner implements Field {
         }};
 
         init();
+        resetAllPlayers(); // TODO test me
     }
 
     private void init() {
@@ -97,8 +100,6 @@ public class Loderunner implements Field {
             enemy.init(this);
         }
 
-        players.resetAll();
-
         generatePills();
         generateGold();
         generatePortals();
@@ -106,7 +107,29 @@ public class Loderunner implements Field {
     }
 
     @Override
-    public void tick() {
+    public void resetAllPlayers() {
+        players.resetAll();
+    }
+
+    @Override
+    public void clearScore() { // TODO test me
+        init();
+        super.clearScore(); // тут так же произойдет reset all players
+        getHeroes().forEach(Hero::clearScores); // TODO проверить что эта строка тут не обязательна
+    }
+
+    @Override
+    protected List<Player> players() {
+        return players.all();
+    }
+
+    @Override
+    protected void cleanStuff() {
+        // do nothing
+    }
+
+    @Override
+    protected void tickField() {
 //        if (!level.getMapUUID().equals(mapUUID)) {
 //            init();
 //        } TODO сделать по другому автоперезагрузку уровней
@@ -125,7 +148,7 @@ public class Loderunner implements Field {
         portalsGo();
 
         for (Player player : die) {
-            player.event(Events.KILL_HERO);
+            player.die(Events.KILL_HERO);   // TODO test me
             Hero deadHero = player.getHero();
             rewardMurderers(deadHero);
         }
@@ -133,11 +156,16 @@ public class Loderunner implements Field {
         generateEnemies();
     }
 
+    @Override
+    protected void setNewObjects() {
+        // do nothing
+    }
+
     private void rewardMurderers(Point pt) {
         players.stream()
                 .filter(player -> player.getHero().under(PillType.SHADOW_PILL))
                 .filter(shadow -> shadow.getHero().itsMe(pt))
-                .forEach(murderer -> murderer.event(Events.KILL_ENEMY));
+                .forEach(murderer -> murderer.kill(Events.KILL_ENEMY));  // TODO test me
 
     }
 
@@ -258,7 +286,7 @@ public class Loderunner implements Field {
                 Hero killer = brick.get().getDrilledBy();
                 Player killerPlayer = players.getPlayer(killer);
                 if (killerPlayer != null && killerPlayer != player) {
-                    killerPlayer.event(Events.KILL_ENEMY);
+                    killerPlayer.kill(Events.KILL_ENEMY);    // TODO test me
                 }
             }
         }
@@ -369,7 +397,7 @@ public class Loderunner implements Field {
 
     @Override
     public void suicide(Hero hero) {
-        players.getPlayer(hero).event(Events.SUICIDE);
+        players.getPlayer(hero).die(Events.SUICIDE);   // TODO test me
     }
 
     @Override

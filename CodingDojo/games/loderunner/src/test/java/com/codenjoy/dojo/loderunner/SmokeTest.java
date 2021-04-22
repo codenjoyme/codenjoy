@@ -39,6 +39,7 @@ import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 
@@ -64,6 +65,7 @@ public class SmokeTest {
                     @Override
                     public GameSettings getSettings() {
                         return super.getSettings()
+                                .bool(ROUNDS_ENABLED, false)
                                 .string(LEVEL_MAP,
                                         "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                                         "☼~~~~~~~~H   ~~~☼" +
@@ -118,6 +120,7 @@ public class SmokeTest {
                     @Override
                     public GameSettings getSettings() {
                         return super.getSettings()
+                                .bool(ROUNDS_ENABLED, false)
                                 .integer(ENEMIES_COUNT, enemies);
                     }
                 },

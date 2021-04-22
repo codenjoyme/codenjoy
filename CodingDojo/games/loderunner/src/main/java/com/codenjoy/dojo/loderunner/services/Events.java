@@ -23,10 +23,15 @@ package com.codenjoy.dojo.loderunner.services;
  */
 
 public enum Events {
-    KILL_ENEMY,
-    KILL_HERO,
-    GET_YELLOW_GOLD,
+    START_ROUND,      // раунд стартовал
+    WIN_ROUND,        // герой победил в раунде
+
+    KILL_ENEMY,       // герой замуровал в стенке другого героя
+    KILL_HERO,        // героя убили
+
+    GET_YELLOW_GOLD,  // подобрано золото
     GET_GREEN_GOLD,
     GET_RED_GOLD,
-    SUICIDE;
+
+    SUICIDE;          // герой заблудился и решил суициднуться
 }

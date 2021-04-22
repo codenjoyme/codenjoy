@@ -133,6 +133,10 @@ public abstract class RoundField<P extends RoundGamePlayer<? extends RoundPlayer
         round.clear();
         inactive.clear();
 
+        resetAllPlayers();
+    }
+
+    public void resetAllPlayers() {
         players().forEach(p -> newGame(p));
     }
 
