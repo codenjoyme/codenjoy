@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGames.withRoom;
@@ -92,6 +93,17 @@ public class SaveServiceImpl implements SaveService {
         if (playerGame != NullPlayerGame.INSTANCE) {
             long now = System.currentTimeMillis();
             saveGame(playerGame, now);
+            return now;
+        }
+        return -1;
+    }
+
+    @Override
+    public long save(Player player) {
+        String data = Optional.ofNullable(player.getData()).orElse("{}");
+        if (player.getGame() != null) {
+            long now = System.currentTimeMillis();
+            saver.saveGame(player, data, now);
             return now;
         }
         return -1;

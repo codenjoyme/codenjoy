@@ -30,7 +30,7 @@ import com.codenjoy.dojo.StopRequest;
 import com.codenjoy.dojo.StopResponse;
 import com.codenjoy.dojo.services.grpc.handler.UpdateHandler;
 import com.codenjoy.dojo.web.rest.RestBoardController;
-import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
+import com.codenjoy.dojo.web.rest.pojo.PScores;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,7 +71,7 @@ public class LeaderboardService extends LeaderboardServiceGrpc.LeaderboardServic
     }
 
     private LeaderboardResponse getLeaderboardOnStart(LeaderboardRequest request) {
-        List<PScoresOf> players = restBoardController.getPlayersScoresForRoom(request.getContestId());
+        List<PScores> players = restBoardController.getPlayersScoresForRoom(request.getContestId());
 
         return LeaderboardResponse.newBuilder()
                 .setContestId(request.getContestId())

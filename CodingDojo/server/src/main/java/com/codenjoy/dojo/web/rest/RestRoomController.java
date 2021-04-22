@@ -23,7 +23,6 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.GameServerService;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
@@ -119,7 +118,6 @@ public class RestRoomController {
                                                   // to bypass authentication process
                                                   @RequestBody Registration.User user) {
         validator.checkRoom(room, CANT_BE_NULL);
-        String repositoryUrl = gameServerService.createOrGetRepository(user.getGitHubUsername());
 
         if (user == null) {
             return null;
@@ -128,10 +126,11 @@ public class RestRoomController {
         if (!gameService.exists(game)) {
             return null;
         }
+        String repositoryUrl = gameServerService.createOrGetRepository(user.getGitHubUsername());
 
-        playerService.register(user.getId(), game, room, request.getRemoteAddr(),repositoryUrl);
+        Player player = playerService.register(user.getId(), game, room, request.getRemoteAddr(), repositoryUrl);
 
-        saveService.save(user.getId());
+        saveService.save(player);
 
         return new PlayerId(user);
     }

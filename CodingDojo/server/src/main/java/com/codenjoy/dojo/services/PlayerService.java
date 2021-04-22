@@ -59,6 +59,5 @@ public interface PlayerService extends Tickable {
     void openRegistration();
 
     void reloadAI(String id);
-
-    GameSaver getGameSaver();
+    void updateUserRepository(String id, String repository);
 }

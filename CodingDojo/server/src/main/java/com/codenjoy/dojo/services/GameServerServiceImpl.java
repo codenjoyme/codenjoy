@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class GameServerServiceImpl implements GameServerService {
+    public static final String REPOSITORY_NOT_FOUND = "Repository not found!";
 
     private final ConfigProperties config;
     private final RestTemplate restTemplate;
@@ -40,14 +41,15 @@ public class GameServerServiceImpl implements GameServerService {
 
     @Override
     public String createOrGetRepository(String gitHubUsername) {
-        try {
-            return restTemplate.getForObject(createHostUrl()+gitHubUsername, String.class);
-        } catch (Exception e) {
-            return "Repository not found!";
-        }
+        return restTemplate.getForObject(createHostUrl() + gitHubUsername, String.class);
     }
 
-    private String createHostUrl(){
+    @Override
+    public String recover(String gitHubUsername) {
+        return REPOSITORY_NOT_FOUND;
+    }
+
+    private String createHostUrl() {
         return "http://" + config.getGitHubHostName() + ":" +
                 config.getGitHubPort() + "/repository?username=";
     }
