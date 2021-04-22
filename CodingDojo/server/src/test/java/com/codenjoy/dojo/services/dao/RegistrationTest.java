@@ -789,6 +789,17 @@ public class RegistrationTest {
         assertEquals(id, actualId);
     }
 
+    @Test
+    public void shouldGetGitHubUsernameById() {
+        // given
+        registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+
+        // when
+        String username = registration.getGitHubUsernameById("id");
+
+        // then
+        assertEquals("username", username);
+    }
 
     @Test
     public void shouldGetIdByGitHubUsername() {

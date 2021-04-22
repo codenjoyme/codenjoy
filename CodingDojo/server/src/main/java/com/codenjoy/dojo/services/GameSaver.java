@@ -40,7 +40,7 @@ public interface GameSaver {
 
     void delete(String id);
 
-    void updateScore(Player player, long time);
+    void updateScore(String playerId, long score, long time);
 
     List<PlayerSave> loadAllSaves();
 

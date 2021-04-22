@@ -277,7 +277,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void updateScore(String gitHubUsername, long score) {
         String id = registration.getIdByGitHubUsername(gitHubUsername);
         updateScoreList(id, score);
-        updatePlayerScore(id, score);
+        saver.updateScore(id, score, System.currentTimeMillis());
     }
 
     private void updateScoreList(String id, long score) {
@@ -287,13 +287,6 @@ public class PlayerServiceImpl implements PlayerService {
                 player.setScore(score);
             }
         }
-    }
-
-    private void updatePlayerScore(String id, long score) {
-        Player player = new Player();
-        player.setId(id);
-        player.setScore(score);
-        saver.updateScore(player, System.currentTimeMillis());
     }
 
     private Player getPlayer(PlayerSave save, String game, String room) {

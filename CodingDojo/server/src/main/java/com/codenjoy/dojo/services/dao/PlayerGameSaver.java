@@ -147,13 +147,13 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void updateScore(Player player, long time) {
+    public void updateScore(String playerId, long score, long time) {
         pool.update("UPDATE saves " +
                         "SET time = ?, score = ?" +
                         "WHERE player_id = ?;",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
-                        player.getScore(),
-                        player.getId()
+                        score,
+                        playerId
                 });
     }
 
@@ -201,9 +201,4 @@ public class PlayerGameSaver implements GameSaver {
         );
     }
 
-
-    public int updateGitHubRepository(String gitHubUsername, String oldGitHubUsername) {
-        return pool.update("UPDATE users SET github_username = ? WHERE github_username = ?;",
-                new Object[]{gitHubUsername,oldGitHubUsername});
-    }
 }
