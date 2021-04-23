@@ -24,6 +24,7 @@ package com.codenjoy.dojo.loderunner.services;
 
 
 import com.codenjoy.dojo.loderunner.model.LevelImpl;
+import com.codenjoy.dojo.loderunner.services.levels.Big;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
@@ -116,7 +117,7 @@ public class GameSettings extends SettingsImpl
         integer(KILL_ENEMY_SCORE, 10);
         integer(SUICIDE_PENALTY, 10);
 
-        multiline(LEVEL_MAP, BigLevels.all().get(0));
+        multiline(LEVEL_MAP, Big.all().get(0));
         string(MAP_PATH, MAP_PATH_NONE);
     }
 

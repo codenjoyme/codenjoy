@@ -22,6 +22,8 @@ package com.codenjoy.dojo.loderunner.services;
  * #L%
  */
 
+import com.codenjoy.dojo.loderunner.services.levels.Big;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -43,7 +45,7 @@ public class MapLoader {
         } catch (FileNotFoundException e) {
             log.log(java.util.logging.Level.WARNING, "Map loading error", e);
         }
-        return BigLevels.all().get(0);
+        return Big.all().get(0);
     }
 
 }

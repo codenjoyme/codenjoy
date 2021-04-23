@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.services;
+package com.codenjoy.dojo.loderunner.services.levels;
 
 /*-
  * #%L
@@ -25,7 +25,7 @@ package com.codenjoy.dojo.loderunner.services;
 import java.util.Arrays;
 import java.util.List;
 
-public class BigLevels {
+public class Big {
 
     public static List<String> all() {
         return Arrays.asList(

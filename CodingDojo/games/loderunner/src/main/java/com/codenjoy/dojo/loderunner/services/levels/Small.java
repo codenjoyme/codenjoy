@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.services;
+package com.codenjoy.dojo.loderunner.services.levels;
 
 /*-
  * #%L
@@ -22,10 +22,14 @@ package com.codenjoy.dojo.loderunner.services;
  * #L%
  */
 
-public class Level1Small {
+import java.util.Arrays;
+import java.util.List;
 
-    public static String get1() {
-        return  "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+public class Small {
+
+    public static List<String> all() {
+        return Arrays.asList(
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼                            ☼\n" +
                 "☼##H########################H☼\n" +
                 "☼  H                        H☼\n" +
@@ -54,11 +58,9 @@ public class Level1Small {
                 "☼    H######         #######H☼\n" +
                 "☼H☼  H  ◄                   H☼\n" +
                 "☼##########☼☼☼######☼☼######H☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n";
-    }
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n",
 
-    public static String get2() {
-        return  "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼H            ~~H~~~~☼☼☼☼☼☼☼H☼\n" +
                 "☼H~~~~  ######  H         H☼H☼\n" +
                 "☼H              ##H#######H☼H☼\n" +
@@ -87,11 +89,9 @@ public class Level1Small {
                 "☼H  ####H######         #####☼\n" +
                 "☼H      H      H#######H     ☼\n" +
                 "☼##############H       H#####☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n";
-    }
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n",
 
-    public static String get3() {
-        return  "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼~~~~~~~~~~           ~~~~~~~☼\n" +
                 "☼HH       H##########H       ☼\n" +
                 "☼######H  H          H#☼☼☼☼☼#☼\n" +
@@ -120,11 +120,9 @@ public class Level1Small {
                 "☼  H        ~~~~~~~~~~~~~~H  ☼\n" +
                 "☼  H####H                 H  ☼\n" +
                 "☼☼☼☼☼☼☼☼☼######☼☼☼☼☼☼☼#######☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n";
-    }
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n",
 
-    public static String get4() {
-        return  "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼☼☼☼☼☼☼☼       H   ~~~~~~~~~H☼\n" +
                 "☼H         ####H  ☼         H☼\n" +
                 "☼HH######H     ###☼☼☼☼☼☼☼☼ ~H☼\n" +
@@ -153,6 +151,6 @@ public class Level1Small {
                 "☼H########H##      H#####   H☼\n" +
                 "☼                  H        H☼\n" +
                 "☼############################☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n";
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 }
