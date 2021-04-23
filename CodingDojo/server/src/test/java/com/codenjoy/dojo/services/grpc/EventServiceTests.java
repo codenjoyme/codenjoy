@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.grpc;
 
 import com.codenjoy.dojo.EventsRequest;
 import com.codenjoy.dojo.EventsResponse;
+import com.codenjoy.dojo.config.grpc.EventsConfig;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import io.grpc.stub.StreamObserver;
 import org.junit.Before;
@@ -50,6 +51,9 @@ public class EventServiceTests {
     private StreamObserver<EventsResponse> streamObserver;
 
     @Mock
+    private EventsConfig eventsConfig;
+
+    @Mock
     private PlayerGameSaver playerGameSaver;
 
     private EventService eventService;
@@ -59,7 +63,7 @@ public class EventServiceTests {
         this.request = EventsRequest.newBuilder().build();
         this.response = EventsResponse.newBuilder().build();
         this.events = new HashMap<>();
-        this.eventService = new EventService(playerGameSaver);
+        this.eventService = new EventService(playerGameSaver, eventsConfig);
     }
 
     @Test
