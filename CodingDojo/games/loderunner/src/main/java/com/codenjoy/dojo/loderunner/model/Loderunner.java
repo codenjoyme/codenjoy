@@ -149,7 +149,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         portalsGo();
 
         for (Player player : die) {
-            player.die(Events.KILL_HERO);   // TODO test me
             Hero deadHero = player.getHero();
             rewardMurderers(deadHero);
         }
@@ -166,7 +165,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         players.stream()
                 .filter(player -> player.getHero().under(PillType.SHADOW_PILL))
                 .filter(shadow -> shadow.getHero().itsMe(pt))
-                .forEach(murderer -> murderer.kill(Events.KILL_ENEMY));  // TODO test me
+                .forEach(murderer -> murderer.event(Events.KILL_ENEMY));
 
     }
 
@@ -287,7 +286,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 Hero killer = brick.get().getDrilledBy();
                 Player killerPlayer = players.getPlayer(killer);
                 if (killerPlayer != null && killerPlayer != player) {
-                    killerPlayer.kill(Events.KILL_ENEMY);    // TODO test me
+                    killerPlayer.event(Events.KILL_ENEMY);
                 }
             }
         }
@@ -398,7 +397,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public void suicide(Hero hero) {
-        players.getPlayer(hero).die(Events.SUICIDE);   // TODO test me
+        players.getPlayer(hero).event(Events.SUICIDE);
     }
 
     @Override

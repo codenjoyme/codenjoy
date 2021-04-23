@@ -1507,9 +1507,21 @@ public class MultiplayerTest {
                 "☼☼☼☼☼☼☼☼☼☼\n");
 
         tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊  ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
         tick();
 
-        assertScores(3, 3);
+        assertScores(0, 0);
         events.verifyAllEvents(
                 "listener(0) => [WIN_ROUND]\n" +
                 "listener(1) => [WIN_ROUND]\n" +
@@ -1520,22 +1532,21 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        tick();
-
-        assertScores(0, 0);
-        events.verifyAllEvents(
-                "listener(0) => [START_ROUND, [Round 2]]\n" +
-                "listener(1) => [START_ROUND, [Round 2]]\n" +
-                "listener(2) => []\n" +
-                "listener(3) => []\n" +
-                "listener(4) => []\n" +
-                "listener(5) => []\n" +
-                "listener(6) => []\n" +
-                "listener(7) => []\n");
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Ѡ  Z  ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
 
         tick();
 
         assertScores(0, 0);
+        assertEquals(0, field.players().size());
         events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
@@ -1545,6 +1556,42 @@ public class MultiplayerTest {
                 "listener(5) => []\n" +
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assertScores(0, 0);
+        assertEquals(0, field.players().size());
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
     }
 
     public void assertScores(int score1, int score2) {
@@ -1553,7 +1600,7 @@ public class MultiplayerTest {
     }
 
     @Test
-    public void twoWinnersIfTheyHaveEqualKillsBeforeTimeout () {
+    public void twoWinnersIfTheyHaveEqualKillsBeforeTimeout_caseOneRounds() {
         settings.bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TIME_BEFORE_START, 1)
                 .integer(ROUNDS_PER_MATCH, 1)
@@ -1841,9 +1888,12 @@ public class MultiplayerTest {
                 "☼☼☼☼☼☼☼☼☼☼\n");
 
         tick();
-        tick();
 
         assertScores(3, 2);
+
+        tick();
+
+        assertScores(0, 2);    // TODO тут надо чистить так же очки hero когда ему приходит [Time is over]
         events.verifyAllEvents(
                 "listener(0) => [WIN_ROUND]\n" +
                 "listener(1) => [[Time is over]]\n" +
@@ -1853,6 +1903,363 @@ public class MultiplayerTest {
                 "listener(5) => []\n" +
                 "listener(6) => []\n" +
                 "listener(7) => [[Time is over]]\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Ѡ  Z Z☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assertScores(0, 2);
+        assertEquals(0, field.players().size());
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+    }
+    
+    @Test
+    public void twoWinnersIfTheyHaveEqualKillsBeforeTimeout_caseTwoRounds() {
+        settings.bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_TIME_BEFORE_START, 1)
+                .integer(ROUNDS_PER_MATCH, 2)
+                .integer(ROUNDS_TIME, 30)
+                .integer(ROUNDS_TIME_FOR_WINNER, 5)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, 8);
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼" +
+                "☼        ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼HH☼☼☼☼" +
+                "☼   HH   ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼HH☼☼☼☼" +
+                "☼   HH   ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼☼☼☼☼☼☼");
+
+        givenPlayer(3, 2); // соревнующиеся ребята
+        givenPlayer(6, 2);
+
+        givenPlayer(1, 2); // 1 этаж
+        givenPlayer(8, 2);
+
+        givenPlayer(1, 5); // 2 этаж
+        givenPlayer(8, 5);
+
+        givenPlayer(1, 8); // 3 этаж
+        givenPlayer(8, 8);
+
+        tick();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n" +
+                "listener(3) => [START_ROUND, [Round 1]]\n" +
+                "listener(4) => [START_ROUND, [Round 1]]\n" +
+                "listener(5) => [START_ROUND, [Round 1]]\n" +
+                "listener(6) => [START_ROUND, [Round 1]]\n" +
+                "listener(7) => [START_ROUND, [Round 1]]\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼(  HH  (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼( ►HH( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        drill(2, 3);
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼(  HH  (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼ ⊏ЯHH⌊⊐ ☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        goUp();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼( ◄HH( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        drill(4, 5);
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼(      (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼ ⊏ЯHH⌊⊐ ☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        goUp();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(1, 1);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(2) => [KILL_HERO]\n" +
+                "listener(3) => [KILL_HERO]\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼( ◄  ( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#Z#HH#Z#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼( ◄  ( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        drill(6, -1);
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼ ⊏Я  ⌊ (☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼#(#HH# #☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+
+        assertScores(1, 1);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(2, 2);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => [KILL_HERO]\n" +
+                "listener(5) => [KILL_HERO]\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼#(#HH# #☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#Z#HH#Z#☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼#(#HH# #☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        assertScores(2, 2);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        tick();
+
+        assertScores(3, 2);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => [KILL_HERO]\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼#Z#HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assertScores(3, 2);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼  Я  ⌊ (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assertScores(3, 2);
+
+        dice(3, 2,
+            6, 2,
+            8, 2);
+
+        tick();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => [WIN_ROUND]\n" +
+                "listener(1) => [[Time is over]]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n" +
+                "listener(6) => []\n" +
+                "listener(7) => [[Time is over]]\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼  ►HH( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
 
         tick();
 
@@ -1867,6 +2274,17 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => [START_ROUND, [Round 2]]\n");
 
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼  ►HH( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
+
         tick();
 
         assertScores(0, 0);
@@ -1879,6 +2297,17 @@ public class MultiplayerTest {
                 "listener(5) => []\n" +
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
+
+        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼  ►HH( (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n");
     }
 
     public void goUp() {

@@ -63,6 +63,7 @@ public class Borders {
     }
 
     public boolean contains(Point pt) {
+        if (pt.isOutOf(size)) return false;
         return borders[pt.getX()][pt.getY()] != null;
     }
 }

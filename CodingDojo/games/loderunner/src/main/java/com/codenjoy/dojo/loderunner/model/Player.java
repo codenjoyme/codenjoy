@@ -55,6 +55,7 @@ public class Player extends RoundGamePlayer<Hero, Field> {
     public void newHero(Field field) {
         Optional<Point> pt = field.getFreeRandom();
         hero = new Hero(pt.orElseGet(() -> pt(0, 0)), Direction.RIGHT);
+        hero.setPlayer(this);
         hero.init(field);
 
         if (!roundsEnabled()) {
@@ -67,14 +68,23 @@ public class Player extends RoundGamePlayer<Hero, Field> {
         return hero != null && hero.isAlive();
     }
 
-    public void kill(Events event) {
-        hero.increaseScore();
-        this.event(event);
-    }
+    @Override
+    public void event(Object event) {
+        super.event(event);
 
-    public void die(Events event) {
-        hero.clearScores();
-        this.event(event);
+        if (event instanceof Events) {
+            switch ((Events) event) {
+                case KILL_ENEMY:
+                    hero.increaseScore();
+                    break;
+                case START_ROUND:
+                case SUICIDE:
+                case KILL_HERO:
+                case WIN_ROUND:
+                    hero.clearScores();
+                    break;
+            }
+        }
     }
 
     // only for testing

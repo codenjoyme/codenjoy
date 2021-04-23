@@ -1811,9 +1811,7 @@ public class GameTest {
                 "☼Ѡ#☼" +
                 "☼☼☼☼");
 
-        // TODO если после кончины героя не сделать в том же тике newGame то с каждым тиком будут начисляться штрафные очки.
-        // может пора уже все игрушки перевести в режим - я сама себя восстанавливаю, а не PlayerServiceImpl
-        verify(listener, times(2)).event(Events.KILL_HERO);
+        verify(listener, times(1)).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
     }
 

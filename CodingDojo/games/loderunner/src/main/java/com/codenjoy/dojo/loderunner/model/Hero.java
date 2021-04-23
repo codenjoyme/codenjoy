@@ -47,7 +47,6 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     private boolean moving;
     private boolean drill;
     private boolean drilled;
-    private boolean alive;
     private boolean jump;
     private int score;
 
@@ -58,7 +57,6 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         moving = false;
         drilled = false;
         drill = false;
-        alive = true;
         jump = false;
     }
 
@@ -107,7 +105,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         if (!isActiveAndAlive()) return;
 
         if (p.length == 1 && p[0] == 0) {
-            alive = false;
+            die();
             field.suicide(this);
             return;
         }
@@ -170,11 +168,12 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         }
     }
 
+    @Override
     public boolean isAlive() {
-        if (alive) {
+        if (super.isAlive()) {
             checkAlive();
         }
-        return alive;
+        return super.isAlive();
     }
 
     public void increaseScore() {
@@ -202,7 +201,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         // TODO: перепроверить. Кажется, где-то проскакивает ArrayIndexOutOfBoundsException
         boolean killedByEnemy = field.isEnemyAt(this) && !isShadow();
         if (field.isFullBrick(this) || killedByEnemy) {
-            alive = false;
+            die();
         }
     }
 
@@ -236,7 +235,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         Ladder ladder = filterOne(alsoAtPoint, Ladder.class);
         Pipe pipe = filterOne(alsoAtPoint, Pipe.class);
 
-        if (!alive) {
+        if (!isAlive()) {
             return HERO_DIE;
         }
 
