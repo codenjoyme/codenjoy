@@ -235,7 +235,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         Ladder ladder = filterOne(alsoAtPoint, Ladder.class);
         Pipe pipe = filterOne(alsoAtPoint, Pipe.class);
 
-        if (!isAlive()) {
+        if (!isAlive() || !isActive()) {
             return HERO_DIE;
         }
 

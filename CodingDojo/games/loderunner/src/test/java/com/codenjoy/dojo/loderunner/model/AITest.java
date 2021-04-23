@@ -75,6 +75,7 @@ public class AITest {
             dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
             loderunner.newGame(player);
             player.setHero(hero);
+            hero.setActive(true);
             hero.init(loderunner);
             loderunner.resetHeroes();
         }

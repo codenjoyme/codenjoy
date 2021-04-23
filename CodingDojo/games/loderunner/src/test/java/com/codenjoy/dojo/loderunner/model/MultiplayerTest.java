@@ -1103,7 +1103,7 @@ public class MultiplayerTest {
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
-                "☼► (   ☼\n" +
+                "☼Ѡ Z   ☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
         assert2("☼☼☼☼☼☼☼☼\n" +
@@ -1112,7 +1112,7 @@ public class MultiplayerTest {
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
-                "☼( ►   ☼\n" +
+                "☼Z Ѡ   ☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
         // when
@@ -1132,7 +1132,7 @@ public class MultiplayerTest {
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
-                "☼► (   ☼\n" +
+                "☼Ѡ Z   ☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
         assert2("☼☼☼☼☼☼☼☼\n" +
@@ -1141,7 +1141,7 @@ public class MultiplayerTest {
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
-                "☼( ►   ☼\n" +
+                "☼Z Ѡ   ☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
         // when
@@ -2257,7 +2257,7 @@ public class MultiplayerTest {
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
-                "☼  ►HH( (☼\n" +
+                "☼  ѠHHZ Z☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n");
 

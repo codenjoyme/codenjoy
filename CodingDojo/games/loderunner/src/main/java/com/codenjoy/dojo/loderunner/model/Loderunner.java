@@ -629,7 +629,8 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public List<Point> visibleHeroes() {
-        return getHeroes().stream()
+        return aliveActive().stream()   // TODO test что охотники не гонятся за точками спауна
+                .map(Player::getHero)
                 .filter(hero -> !hero.under(PillType.SHADOW_PILL))
                 .collect(toList());
     }
