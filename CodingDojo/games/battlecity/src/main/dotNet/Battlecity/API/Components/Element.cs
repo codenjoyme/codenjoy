@@ -123,6 +123,10 @@ namespace Battlecity.API
         [Description("2")]
         PRIZE_BREAKING_WALLS,
         [Description("3")]
-        PRIZE_WALKING_ON_WATER
+        PRIZE_WALKING_ON_WATER,
+        [Description("4")]
+        PRIZE_VISIBILITY,
+        [Description("5")]
+        PRIZE_NO_SLIDING
     }
 }
