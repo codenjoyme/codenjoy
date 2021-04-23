@@ -472,6 +472,11 @@ public class Loderunner extends RoundField<Player> implements Field {
         return activeHeroes().contains(pt);
     }
 
+    // TODO test
+    //      может ли пройти через него охотник - да
+    //      можно ли сверлить под ним - да
+    //      является ли место с ним дыркой - да
+    //      является ли место с ним препятствием - нет
     @Override
     public List<Hero> activeHeroes() {
         return aliveActive().stream()
