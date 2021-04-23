@@ -66,7 +66,9 @@ public interface Field extends RoundGameField<Player> {
 
     boolean isBorder(Point pt);
 
-    List<Hero> getHeroes();
+    List<Hero> activeHeroes();
+
+    List<Hero> allHeroes();
 
     void suicide(Hero hero);
 

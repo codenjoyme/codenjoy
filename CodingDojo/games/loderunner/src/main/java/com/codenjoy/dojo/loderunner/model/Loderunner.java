@@ -67,7 +67,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         borders = new Borders(level.getSize());
 
         finder = new ArrayList<>(){{
-            add(pt -> getFrom(getHeroes(), pt));
+            add(pt -> getFrom(allHeroes(), pt));
             add(pt -> getFrom(enemies(), pt));
             add(pt -> getFrom(yellowGold(), pt));
             add(pt -> getFrom(greenGold(), pt));
@@ -116,7 +116,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     public void clearScore() { // TODO test me
         init();
         super.clearScore(); // тут так же произойдет reset all players
-        getHeroes().forEach(Hero::clearScores); // TODO проверить что эта строка тут не обязательна
+        allHeroes().forEach(Hero::clearScores); // TODO проверить что эта строка тут не обязательна
     }
 
     @Override
@@ -252,7 +252,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             @Override
             public Iterable<? extends Point> elements() {
                 return new LinkedList<>() {{
-                    addAll(Loderunner.this.getHeroes());
+                    addAll(Loderunner.this.allHeroes());
                     addAll(Loderunner.this.enemies());
                     addAll(Loderunner.this.yellowGold());
                     addAll(Loderunner.this.greenGold());
@@ -412,7 +412,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 || greenGold.contains(over)
                 || redGold.contains(over)
                 || isFullBrick(over)
-                || getHeroes().contains(over)
+                || activeHeroes().contains(over)
                 || enemies.contains(over)) {
             return false;
         }
@@ -469,7 +469,19 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isHeroAt(Point pt) {
-        return getHeroes().contains(pt);
+        return activeHeroes().contains(pt);
+    }
+
+    @Override
+    public List<Hero> activeHeroes() {
+        return aliveActive().stream()
+                .map(Player::getHero)
+                .collect(toList());
+    }
+
+    @Override
+    public List<Hero> allHeroes() {
+        return players.heroes();
     }
 
     @Override
@@ -523,11 +535,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     @Override
     public boolean isBorder(Point pt) {
         return borders.contains(pt);
-    }
-
-    @Override
-    public List<Hero> getHeroes() {
-        return players.heroes();
     }
 
     public void newGame(Player player) {
@@ -629,8 +636,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public List<Point> visibleHeroes() {
-        return aliveActive().stream()   // TODO test что охотники не гонятся за точками спауна
-                .map(Player::getHero)
+        return activeHeroes().stream()   // TODO test что охотники не гонятся за точками спауна
                 .filter(hero -> !hero.under(PillType.SHADOW_PILL))
                 .collect(toList());
     }

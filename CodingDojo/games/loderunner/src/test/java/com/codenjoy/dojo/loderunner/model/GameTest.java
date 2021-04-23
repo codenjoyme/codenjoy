@@ -38,7 +38,6 @@ import org.mockito.stubbing.OngoingStubbing;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.PORTALS_COUNT;
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -89,7 +88,7 @@ public class GameTest {
         dice(hero.getX(), hero.getY());
         player = new Player(listener, settings);
         game.newGame(player);
-        this.hero = game.getHeroes().get(0);
+        this.hero = game.allHeroes().get(0);
         this.hero.direction = hero.direction;
         dice(0); // всегда дальше выбираем нулевой индекс
     }

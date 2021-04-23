@@ -535,13 +535,13 @@ public class AITest {
         Enemy enemy1 = level.getEnemies().get(0);
         assertEquals("[2,4]", enemy1.toString());
 
-        Hero hero1 = loderunner.getHeroes().get(0);
+        Hero hero1 = loderunner.allHeroes().get(0);
         assertEquals("[1,3]", hero1.toString());
 
         Enemy enemy2 = level.getEnemies().get(1);
         assertEquals("[4,4]", enemy2.toString());
 
-        Hero hero2 = loderunner.getHeroes().get(1);
+        Hero hero2 = loderunner.allHeroes().get(1);
         assertEquals("[5,3]", hero2.toString());
 
         assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy1, Arrays.asList(hero2)));
@@ -596,7 +596,7 @@ public class AITest {
 
         // проверяем следующую команду для первого чертика
         Enemy enemy1 = level.getEnemies().get(0);
-        Hero hero1 = loderunner.getHeroes().get(0);
+        Hero hero1 = loderunner.allHeroes().get(0);
         assertEquals("[3,2]", enemy1.toString());
         assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy1, Arrays.asList(hero1)));
 
@@ -624,7 +624,7 @@ public class AITest {
 
         // проверяем следующую команду для второго чертика
         Enemy enemy2 = level.getEnemies().get(1);
-        Hero hero2 = loderunner.getHeroes().get(1);
+        Hero hero2 = loderunner.allHeroes().get(1);
         assertEquals("[4,2]", enemy2.toString());
         assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy2, Arrays.asList(hero2)));
 
@@ -668,7 +668,7 @@ public class AITest {
         // пробуем чтобы первый чертик пошел за вторым игроком
         Enemy enemy2 = level.getEnemies().get(1);
         assertEquals("[4,2]", enemy2.toString());
-        Hero hero1 = loderunner.getHeroes().get(0);
+        Hero hero1 = loderunner.allHeroes().get(0);
         assertEquals("[2,6]", hero1.toString());
         assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy2, Arrays.asList(hero1)).toString());
 
@@ -693,7 +693,7 @@ public class AITest {
         // пробуем чтобы второй чертик пошел за первым игроком
         Enemy enemy1 = level.getEnemies().get(0);
         assertEquals("[3,2]", enemy1.toString());
-        Hero hero2 = loderunner.getHeroes().get(1);
+        Hero hero2 = loderunner.allHeroes().get(1);
         assertEquals("[5,6]", hero2.toString());
         assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy1, Arrays.asList(hero2)).toString());
 
@@ -718,7 +718,7 @@ public class AITest {
 
     private void assertQ(String expected) {
         Enemy enemy = level.getEnemies().get(0);
-        assertW(enemy, (List)loderunner.getHeroes(), expected);
+        assertW(enemy, (List)loderunner.allHeroes(), expected);
     }
 
     private void assertW(Point from, List<Point> to, String expected) {
