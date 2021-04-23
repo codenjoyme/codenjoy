@@ -42,22 +42,22 @@ public class DeikstraFindWayTest {
     @Test
     public void testFindShortestWay() {
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X*    X\n" +
-                "X*    X\n" +
-                "X*    X\n" +
-                "X****FX\n" +
+                "XS*   X\n" +
+                "X **  X\n" +
+                "X  ** X\n" +
+                "X   **X\n" +
+                "X    FX\n" +
                 "XXXXXXX\n");
     }
 
     @Test
     public void testFindShortestWay_ifThereAreTwoWays_equalsByDistance() {
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X*XXX X\n" +
-                "X*XXX X\n" +
-                "X*XXX X\n" +
-                "X****FX\n" +
+                "XS****X\n" +
+                "X XXX*X\n" +
+                "X XXX*X\n" +
+                "X XXX*X\n" +
+                "X    FX\n" +
                 "XXXXXXX\n");
     }
 
@@ -108,35 +108,43 @@ public class DeikstraFindWayTest {
     @Test
     public void testFindShortestWayWhenBrickOnWay() {
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X**   X\n" +
-                "XO*   X\n" +
-                "X *   X\n" +
-                "X ***FX\n" +
+                "XS*   X\n" +
+                "X **  X\n" +
+                "XO ** X\n" +
+                "X   **X\n" +
+                "X    FX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X**   X\n" +
-                "XO**  X\n" +
+                "XS**  X\n" +
                 "X O*  X\n" +
+                "X  ***X\n" +
+                "X   O*X\n" +
+                "X    FX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS O  X\n" +
+                "X*O   X\n" +
+                "X*****X\n" +
+                "X   O*X\n" +
+                "X    FX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS O  X\n" +
+                "X*O   X\n" +
+                "X**O  X\n" +
+                "X **O X\n" +
                 "X  **FX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X**   X\n" +
-                "XO**  X\n" +
-                "X O***X\n" +
-                "X   OFX\n" +
-                "XXXXXXX\n");
-
-        asrtWay("XXXXXXX\n" +
-                "XS    X\n" +
-                "X**** X\n" +
-                "XO O* X\n" +
-                "X O **X\n" +
-                "X   OFX\n" +
+                "XS O  X\n" +
+                "X*O   X\n" +
+                "X* O  X\n" +
+                "X*O O X\n" +
+                "X****FX\n" +
                 "XXXXXXX\n");
     }
 
@@ -187,7 +195,7 @@ public class DeikstraFindWayTest {
 
         assertP(board,
                 "{[1,4]=[RIGHT],\n" +
-                "[1,5]=[DOWN, RIGHT],\n" +
+                "[1,5]=[RIGHT, DOWN],\n" +
                 "[2,2]=[RIGHT],\n" +
                 "[2,3]=[DOWN],\n" +
                 "[2,4]=[DOWN],\n" +
@@ -200,8 +208,8 @@ public class DeikstraFindWayTest {
 
         asrtWay(board,
                 "XXXXXXX\n" +
-                "XS˅F*OX\n" +
-                "X**O*OX\n" +
+                "XS*F*OX\n" +
+                "X˃*O*OX\n" +
                 "XO*O*OX\n" +
                 "XO***OX\n" +
                 "XOOOOOX\n" +
@@ -370,7 +378,7 @@ public class DeikstraFindWayTest {
 
         board = (AbstractBoard) board.forString(map);
 
-        Map<Point, List<Direction>> ways = new DeikstraFindWay().getPossibleWays(board.size(), getPossible(board));
+        Map<Point, List<Direction>> ways = new DeikstraFindWay().getPossibleWays(board.size(), getPossible(board)).toMap();
 
         Map<Point, List<Direction>> result = new TreeMap<>();
         for (Map.Entry<Point, List<Direction>> entry : ways.entrySet()) {
