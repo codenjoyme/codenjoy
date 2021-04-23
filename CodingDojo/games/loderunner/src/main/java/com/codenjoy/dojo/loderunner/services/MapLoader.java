@@ -25,7 +25,6 @@ package com.codenjoy.dojo.loderunner.services;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MapLoader {
@@ -42,9 +41,9 @@ public class MapLoader {
             }
             return map.toString();
         } catch (FileNotFoundException e) {
-            log.log(Level.WARNING, "Map loading error", e);
+            log.log(java.util.logging.Level.WARNING, "Map loading error", e);
         }
-        return Level1.get();
+        return BigLevels.all().get(0);
     }
 
 }

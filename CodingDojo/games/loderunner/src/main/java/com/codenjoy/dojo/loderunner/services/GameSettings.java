@@ -23,7 +23,6 @@ package com.codenjoy.dojo.loderunner.services;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.Level;
 import com.codenjoy.dojo.loderunner.model.LevelImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;
@@ -117,11 +116,11 @@ public class GameSettings extends SettingsImpl
         integer(KILL_ENEMY_SCORE, 10);
         integer(SUICIDE_PENALTY, 10);
 
-        multiline(LEVEL_MAP, Level1.get());
+        multiline(LEVEL_MAP, BigLevels.all().get(0));
         string(MAP_PATH, MAP_PATH_NONE);
     }
 
-    public Level level(Dice dice) {
+    public com.codenjoy.dojo.loderunner.model.Level level(Dice dice) {
         return new LevelImpl(getMap().replace("\n", "").replace("\r", ""), dice);
     }
 
