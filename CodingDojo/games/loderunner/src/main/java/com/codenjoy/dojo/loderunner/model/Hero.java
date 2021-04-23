@@ -210,6 +210,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
             || (isShadow() && isRegularPlayerAt(underHero()));
     }
 
+
     private Point underHero() {
         return DOWN.change(this);
     }
