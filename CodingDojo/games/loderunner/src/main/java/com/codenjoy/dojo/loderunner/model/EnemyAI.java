@@ -26,8 +26,10 @@ package com.codenjoy.dojo.loderunner.model;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.List;
+
 public interface EnemyAI {
 
-    Direction getDirection(Field field, Point from, Point to);
+    Direction getDirection(Field field, Point from, List<Point> to);
 
 }

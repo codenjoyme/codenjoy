@@ -2228,8 +2228,7 @@ public class GameTest {
         verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
-        dice(0, // охотимся за первым игроком
-            1, 3);
+        dice(1, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
         game.newGame(player);
 

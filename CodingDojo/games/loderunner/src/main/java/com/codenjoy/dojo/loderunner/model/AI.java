@@ -33,10 +33,12 @@ import static com.codenjoy.dojo.services.Direction.*;
 
 public class AI implements EnemyAI {
 
-    private DeikstraFindWay way = new DeikstraFindWay(true);
+    public static boolean POSSIBLE_IS_CONSTANT = true;
+
+    private DeikstraFindWay way = new DeikstraFindWay(POSSIBLE_IS_CONSTANT);
 
     @Override
-    public Direction getDirection(Field field, Point from, Point to) {
+    public Direction getDirection(Field field, Point from, List<Point> to) {
         if (to == null) return null;
 
         Direction direction = null;
@@ -75,10 +77,10 @@ public class AI implements EnemyAI {
     }
 
     public Map<Point, List<Direction>> ways(Field field) {
-        return way.getPossibleWays(field.size(), possible(field));
+        return way.getPossibleWays(field.size(), possible(field)).toMap();
     }
 
-    public List<Direction> getPath(Field field, Point from, Point to) {
-        return way.getShortestWay(field.size(), from, Arrays.asList(to), possible(field));
+    public List<Direction> getPath(Field field, Point from, List<Point> to) {
+        return way.getShortestWay(field.size(), from, to, possible(field));
     }
 }

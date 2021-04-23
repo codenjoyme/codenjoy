@@ -71,4 +71,6 @@ public interface Field extends RoundGameField<Player> {
     void suicide(Hero hero);
 
     List<Brick> bricks();
+
+    List<Point> visibleHeroes();
 }

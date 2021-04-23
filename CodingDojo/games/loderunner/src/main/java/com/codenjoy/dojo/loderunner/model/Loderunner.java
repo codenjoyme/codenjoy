@@ -48,7 +48,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<RedGold> redGold;
     private List<Pill> pills;
     private List<Portal> portals;
-    private List<Border> borders;
+    private Borders borders;
     private List<Brick> bricks;
     private List<Ladder> ladder;
     private List<Pipe> pipe;
@@ -64,6 +64,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         this.settings = settings;
         players = new Players(this);
         enemies = new LinkedList<>();
+        borders = new Borders(level.getSize());
 
         finder = new ArrayList<>(){{
             add(pt -> getFrom(getHeroes(), pt));
@@ -71,7 +72,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             add(pt -> getFrom(yellowGold(), pt));
             add(pt -> getFrom(greenGold(), pt));
             add(pt -> getFrom(redGold(), pt));
-            add(pt -> getFrom(borders(), pt));
+            add(pt -> borders.get(pt));
             add(pt -> getFrom(bricks(), pt));
             add(pt -> getFrom(ladder(), pt));
             add(pt -> getFrom(pills(), pt));
@@ -85,7 +86,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     private void init() {
         size = level.getSize();
-        borders = level.getBorders();
+        borders.addAll(level.getBorders());
         bricks = level.getBricks();
         ladder = level.getLadder();
         pipe = level.getPipe();
@@ -201,7 +202,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         for (int i = 0; i < Math.abs(count); i++) {
             Optional<Point> pt = getFreeRandom();
             if (pt.isPresent()) {
-                Enemy enemy = new Enemy(pt.get(), Direction.LEFT, level.getAi(), dice);
+                Enemy enemy = new Enemy(pt.get(), Direction.LEFT, level.getAi());
                 enemies.add(enemy);
                 enemy.init(this);
             }
@@ -616,7 +617,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     public List<Border> borders() {
-        return borders;
+        return borders.all();
     }
 
     public List<Enemy> enemies() {
@@ -625,6 +626,13 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     public List<Brick> bricks() {
         return bricks;
+    }
+
+    @Override
+    public List<Point> visibleHeroes() {
+        return getHeroes().stream()
+                .filter(hero -> !hero.under(PillType.SHADOW_PILL))
+                .collect(toList());
     }
 
     public List<Ladder> ladder() {

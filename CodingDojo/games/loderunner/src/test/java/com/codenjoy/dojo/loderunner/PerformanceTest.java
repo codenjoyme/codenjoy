@@ -27,6 +27,7 @@ import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -46,7 +47,7 @@ public class PerformanceTest {
     @Test
     public void test() {
 
-        // about 19 sec
+        // about 30 sec
         int enemies = 4;
         int players = 100;
         int ticks = 100;
@@ -66,10 +67,8 @@ public class PerformanceTest {
 
         PrinterFactory factory = new PrinterFactoryImpl();
 
-        List<Game> games = new LinkedList<>();
-        for (int i = 0; i < players; i++) {
-            games.add(TestUtils.buildGame(runner, mock(EventListener.class), factory));
-        }
+        List<Game> games = TestUtils.getGames(players, runner,
+                factory, () -> mock(EventListener.class));
 
         profiler.done("creation");
 
@@ -89,10 +88,10 @@ public class PerformanceTest {
 
         int reserve = 3;
         // сколько пользователей - столько раз выполнялось
-        assertLess("print", 3000 * reserve);
-        assertLess("tick", 16000 * reserve);
+        assertLess("print", 4500 * reserve);
+        assertLess("tick", 28000 * reserve);
         // выполнялось единожды
-        assertLess("creation", 2500 * reserve);
+        assertLess("creation", 1500 * reserve);
 
     }
 

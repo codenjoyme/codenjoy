@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.client;
+package com.codenjoy.dojo.loderunner.client.ai;
 
 /*-
  * #%L
@@ -25,6 +25,7 @@ package com.codenjoy.dojo.loderunner.client;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
@@ -48,7 +49,7 @@ public class YourSolverChecker implements Solver<Board> {
         if (board.isGameOver()) return "";
 
         long delta = now() - time;
-        long delta2 = Math.abs(delta - 1400);
+        long delta2 = Math.abs(delta - 1000);
         Date time = Calendar.getInstance().getTime();
         System.out.print(time.toString() + " > " + delta2);
         if (delta2 > 300) {
