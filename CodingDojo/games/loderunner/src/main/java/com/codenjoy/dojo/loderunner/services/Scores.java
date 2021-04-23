@@ -42,10 +42,14 @@ public class Scores implements PlayerScores {
 
     @Override
     public int clear() {
+        clearSeties();
+        return score = 0;
+    }
+
+    private void clearSeties() {
         countRed = 0;
         countGreen = 0;
         countYellow = 0;
-        return score = 0;
     }
 
     @Override
@@ -67,11 +71,10 @@ public class Scores implements PlayerScores {
         } else if (event.equals(Events.KILL_ENEMY)) {
             score += settings.integer(KILL_ENEMY_SCORE);
         } else if (event.equals(Events.KILL_HERO)) {
-            countRed = 0;
-            countGreen = 0;
-            countYellow = 0;
+            clearSeties();
             score -= settings.integer(KILL_HERO_PENALTY);
         } else if (event.equals(Events.SUICIDE)) {
+            clearSeties();
             score -= settings.integer(SUICIDE_PENALTY);
         }
         score = Math.max(0, score);
