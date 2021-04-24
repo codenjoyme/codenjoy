@@ -31,7 +31,6 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
@@ -53,7 +52,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<Brick> bricks;
     private List<Ladder> ladder;
     private List<Pipe> pipe;
-    private int portalsTicksLive;
+    private int portalsTimer;
     private Dice dice;
     private GameSettings settings;
     private List<Function<Point, Point>> finder;
@@ -96,6 +95,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         redGold = level.getRedGold();
         pills = level.getPills();
         portals = level.getPortals();
+        resetPortalsTimer();
 
         enemies = level.getEnemies();
         for (Enemy enemy : enemies) {
@@ -186,7 +186,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generatePortals() {
-        portalsTicksLive = Math.max(1, settings.integer(PORTAL_TICKS));
         generate(portals, PORTALS_COUNT,
                 pt -> new Portal(pt));
     }
@@ -359,11 +358,17 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     // TODO сделать чтобы каждый портал сам тикал свое время
     private void portalsGo() {
-        if (this.portalsTicksLive == 0) {
+        if (portalsTimer == 0) {
+            resetPortalsTimer();
+            portals.clear();
             generatePortals();
         } else {
-            this.portalsTicksLive--;
+            portalsTimer--;
         }
+    }
+
+    private void resetPortalsTimer() {
+        portalsTimer = Math.max(1, settings.integer(PORTAL_TICKS));
     }
 
     @Override
@@ -589,5 +594,9 @@ public class Loderunner extends RoundField<Player> implements Field {
     // only for testing
     void resetHeroes() {
         players.resetHeroes();
+    }
+
+    public int getPortalsTimer() {
+        return portalsTimer;
     }
 }

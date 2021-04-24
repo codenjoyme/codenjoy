@@ -3904,7 +3904,8 @@ public class GameTest {
     public void iCanJumpThroughPortals() {
         settings.integer(PORTALS_COUNT, 2);
 
-        dice(1, 2, 3, 3);
+        dice(1, 2,
+            3, 3);
         givenFl("☼☼☼☼☼" +
                 "☼  ⊛☼" +
                 "☼⊛◄ ☼" +
@@ -3917,6 +3918,87 @@ public class GameTest {
         assertE("☼☼☼☼☼" +
                 "☼  ]☼" +
                 "☼⊛  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛ ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛ ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void portalsAreRecreatedEveryFewTicks() {
+        settings.integer(PORTALS_COUNT, 2)
+                .integer(PORTAL_TICKS, 5);
+
+        givenFl("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛◄ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        assertEquals(5, game.getPortalsTimer());
+
+        hero.left();
+        game.tick();
+
+        assertEquals(4, game.getPortalsTimer());
+
+        assertE("☼☼☼☼☼" +
+                "☼  ]☼" +
+                "☼⊛  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(3, game.getPortalsTimer());
+
+        assertE("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛ ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(2, game.getPortalsTimer());
+
+        game.tick();
+
+        assertEquals(1, game.getPortalsTimer());
+
+        game.tick();
+
+        assertEquals(0, game.getPortalsTimer());
+
+        assertE("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛ ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        dice(1, 3,  // new portals
+            2, 3);
+        game.tick();
+
+        assertEquals(5, game.getPortalsTimer());
+
+        assertE("☼☼☼☼☼" +
+                "☼⊛⊛ ☼" +
+                "☼  ◄☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
     }
@@ -4587,6 +4669,34 @@ public class GameTest {
                 "☼ ►    ☼" +  // TODO героя приходится смещать, потому что при очистке его прошлое место занято им самим
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldResetPortalsTimeout_whenClearBoard() {
+        portalsAreRecreatedEveryFewTicks();
+
+        assertE("☼☼☼☼☼" +
+                "☼⊛⊛ ☼" +
+                "☼  ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        assertEquals(5, game.getPortalsTimer());
+
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertEquals(2, game.getPortalsTimer());
+
+        // when
+        dice(3, 3, // new portals
+            3, 2,
+            1, 2); // new hero
+        game.clearScore();
+
+        // then
+        assertEquals(5, game.getPortalsTimer());
     }
 
     private void reloadAllHeroes() {
