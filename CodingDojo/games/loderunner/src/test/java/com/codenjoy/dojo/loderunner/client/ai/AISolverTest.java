@@ -124,7 +124,7 @@ public class AISolverTest {
                 "☼☼###☼##☼## ☼" +
                 "☼☼###☼$     ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼",
-                "[LEFT, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT, DOWN, DOWN, LEFT, LEFT, LEFT, LEFT, LEFT]");
+                "[LEFT, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN, RIGHT, DOWN, DOWN, RIGHT, RIGHT, DOWN, DOWN, LEFT, LEFT, LEFT, LEFT, LEFT]");
 
         assertW("☼☼☼☼☼☼☼☼☼☼" +
                 "☼    H   ☼" +

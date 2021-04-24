@@ -41,7 +41,6 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
                 .integer(ROUNDS_TIME_BEFORE_START, 5)
                 .integer(ROUNDS_PER_MATCH, 3)
                 .integer(ROUNDS_MIN_TICKS_FOR_WIN, 1)
-                .integer(ROUNDS_MIN_TICKS_FOR_WIN, 1)
                 .integer(ROUNDS_TIME, 10)
                 .integer(ROUNDS_TIME_FOR_WINNER, 2);
     }

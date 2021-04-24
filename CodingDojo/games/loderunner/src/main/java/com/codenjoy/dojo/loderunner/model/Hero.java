@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.StateUtils;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,29 +40,29 @@ import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_TIC
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
-    private Direction direction;
+    protected Direction direction;
     private Map<PillType, Integer> pills = new HashMap<>();
     private boolean moving;
     private boolean drill;
     private boolean drilled;
-    private boolean alive;
     private boolean jump;
+    private int score;
 
     public Hero(Point xy, Direction direction) {
         super(xy);
         this.direction = direction;
+        score = 0;
         moving = false;
         drilled = false;
         drill = false;
-        alive = true;
         jump = false;
     }
 
     @Override
     public void down() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         if (field.isLadder(this) || field.isLadder(underHero())) {
             direction = DOWN;
@@ -73,7 +74,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void up() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         if (field.isLadder(this)) {
             direction = Direction.UP;
@@ -83,7 +84,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void left() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         drilled = false;
         direction = Direction.LEFT;
@@ -92,7 +93,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void right() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         drilled = false;
         direction = Direction.RIGHT;
@@ -101,10 +102,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         if (p.length == 1 && p[0] == 0) {
-            alive = false;
+            die();
             field.suicide(this);
             return;
         }
@@ -118,7 +119,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void tick() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         if (isFall()) {
             move(DOWN);
@@ -167,11 +168,25 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
+    @Override
     public boolean isAlive() {
-        if (alive) {
+        if (super.isAlive()) {
             checkAlive();
         }
-        return alive;
+        return super.isAlive();
+    }
+
+    public void increaseScore() {
+        score++;
+    }
+
+    public void clearScores() {
+        score = 0;
+    }
+
+    @Override
+    public int scores() {
+        return score;
     }
 
     public boolean under(PillType pill) {
@@ -184,9 +199,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private void checkAlive() {
         // TODO: перепроверить. Кажется, где-то проскакивает ArrayIndexOutOfBoundsException
-        boolean killedByEnemy = field.isEnemyAt(this) && !isShadow();
+        boolean killedByEnemy = field.isEnemyAt(this) && !isShadow() && super.isActive(); // TODO test me
         if (field.isFullBrick(this) || killedByEnemy) {
-            alive = false;
+            die();
         }
     }
 
@@ -220,7 +235,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         Ladder ladder = filterOne(alsoAtPoint, Ladder.class);
         Pipe pipe = filterOne(alsoAtPoint, Pipe.class);
 
-        if (!alive) {
+        if (!isAlive() || !isActive()) {
             return HERO_DIE;
         }
 

@@ -25,8 +25,9 @@ package com.codenjoy.dojo.loderunner.services;
 
 import com.codenjoy.dojo.loderunner.model.Level;
 import com.codenjoy.dojo.loderunner.model.LevelImpl;
-import com.codenjoy.dojo.loderunner.services.levels.Level1;
+import com.codenjoy.dojo.loderunner.services.levels.Big;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -38,6 +39,7 @@ import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 
 public class GameSettings extends SettingsImpl
         implements SettingsReader<GameSettings>,
+                    RoundSettings<GameSettings>,
                     SemifinalSettings<GameSettings> {
 
     public static final String MAP_PATH_NONE = "none";
@@ -89,6 +91,7 @@ public class GameSettings extends SettingsImpl
     }
 
     public GameSettings() {
+        initRound();
         initSemifinal();
 
         integer(SHADOW_PILLS_COUNT, 0);
@@ -115,7 +118,7 @@ public class GameSettings extends SettingsImpl
         integer(KILL_ENEMY_SCORE, 10);
         integer(SUICIDE_PENALTY, 10);
 
-        multiline(LEVEL_MAP, Level1.get());
+        multiline(LEVEL_MAP, Big.all().get(0));
         string(MAP_PATH, MAP_PATH_NONE);
     }
 

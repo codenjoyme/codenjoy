@@ -128,8 +128,8 @@ public class LevelImpl implements Level {
     public List<Enemy> getEnemies() {
         return LevelUtils.getObjects(xy, map,
                 new HashMap<>(){{
-                    put(ENEMY_LEFT, pt -> new Enemy(pt, Direction.LEFT, ai, dice));
-                    put(ENEMY_RIGHT, pt -> new Enemy(pt, Direction.RIGHT, ai, dice));
+                    put(ENEMY_LEFT, pt -> new Enemy(pt, Direction.LEFT, ai));
+                    put(ENEMY_RIGHT, pt -> new Enemy(pt, Direction.RIGHT, ai));
                 }});
     }
 

@@ -29,7 +29,7 @@ import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.client.ai.AISolver;
 import com.codenjoy.dojo.loderunner.services.GameRunner;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
-import com.codenjoy.dojo.loderunner.services.levels.Level1;
+import com.codenjoy.dojo.loderunner.services.levels.Big;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
@@ -39,8 +39,8 @@ import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
@@ -48,7 +48,7 @@ public class SmokeTest {
     public void testSoft() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        // about 2.5 sec
+        // about 2.6 sec
         int ticks = 1000;
         int players = 2;
         Supplier<Solver> solver = () -> new AISolver(dice);
@@ -64,6 +64,7 @@ public class SmokeTest {
                     @Override
                     public GameSettings getSettings() {
                         return super.getSettings()
+                                .bool(ROUNDS_ENABLED, false)
                                 .string(LEVEL_MAP,
                                         "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                                         "☼~~~~~~~~H   ~~~☼\n" +
@@ -100,8 +101,7 @@ public class SmokeTest {
     public void testHard() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 20000);
 
-        // about 14 sec Level1 map
-        // about 84 sec Level2 map
+        // about 14 sec
         int ticks = 100;
         int players = 10;
         int enemies = 5;
@@ -118,7 +118,8 @@ public class SmokeTest {
                     @Override
                     public GameSettings getSettings() {
                         return super.getSettings()
-                                .string(LEVEL_MAP, Level1.get())
+                                .bool(ROUNDS_ENABLED, false)
+                                .string(LEVEL_MAP, Big.all().get(0))
                                 .integer(ENEMIES_COUNT, enemies);
                     }
                 },

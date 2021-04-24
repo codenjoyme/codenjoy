@@ -161,6 +161,8 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public void tick() {
+        // TODO добавить проверку if (!isActiveAndAlive()) return;
+
         gunType();
 
         gun.tick();

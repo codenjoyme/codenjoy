@@ -53,8 +53,8 @@ public class LocalGameRunner {
     public static boolean printBoardOnly = false;
     public static Consumer<String> out = System.out::println;
     public static Integer countIterations = null;
-    public static boolean printConversions = true;
-    public static boolean printDice = true;
+    public static boolean printConversions = false;
+    public static boolean printDice = false;
     public static boolean printTick = false;
     public static boolean printSeed = false;
     public static String showPlayers = null;

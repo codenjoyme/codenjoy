@@ -25,10 +25,13 @@ package com.codenjoy.dojo.loderunner;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 
 public class TestSettings extends GameSettings {
 
     public TestSettings() {
+        bool(ROUNDS_ENABLED, false);
+
         integer(KILL_HERO_PENALTY, 0);
         integer(KILL_ENEMY_SCORE, 10);
 

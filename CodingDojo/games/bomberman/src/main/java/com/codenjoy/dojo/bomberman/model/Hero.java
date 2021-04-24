@@ -222,6 +222,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public void tick() {
+        // TODO добавить проверку if (!isActiveAndAlive()) return;
         perks.tick();
     }
 
@@ -239,6 +240,10 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     public int scores() {
         return score;
+    }
+
+    public void clearScores() {
+        score = 0;
     }
 
     public void addScore(int added) {

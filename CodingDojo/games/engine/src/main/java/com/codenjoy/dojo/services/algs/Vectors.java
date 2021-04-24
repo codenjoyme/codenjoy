@@ -45,7 +45,6 @@ public class Vectors {
     }
 
     public void add(List<Point> goals, Point from, int pathLength) {
-        Point goal = goals.get(0); // TODO добавить все цели
         boolean[] goes = ways.get(from).goes();
         Status status = points.add(from);
         for (int index = 0; index < goes.length; index++) {
@@ -53,7 +52,7 @@ public class Vectors {
 
             Direction direction = Direction.valueOf(index);
             status.add(direction);
-            queue.add(new Vector(from, direction, goal, pathLength));
+            queue.add(new Vector(from, direction, goals, pathLength));
         }
     }
 

@@ -45,7 +45,7 @@ public class PerformanceTest {
     @Test
     public void test() {
 
-        // about 14 sec
+        // about 37 sec
         int boardSize = 100;
         int walls = 600;
         int meatChoppers = 100;
@@ -69,10 +69,8 @@ public class PerformanceTest {
 
         PrinterFactory factory = new PrinterFactoryImpl();
 
-        List<Game> games = new LinkedList<>();
-        for (int i = 0; i < players; i++) {
-            games.add(TestUtils.buildGame(runner, mock(EventListener.class), factory));
-        }
+        List<Game> games = TestUtils.getGames(players, runner,
+                factory, () -> mock(EventListener.class));
 
         profiler.done("creation");
 
@@ -92,10 +90,10 @@ public class PerformanceTest {
 
         int reserve = 3;
         // сколько пользователей - столько раз выполнялось
-        assertLess("print", 6000 * reserve);
-        assertLess("tick", 7000 * reserve);
+        assertLess("print", 12000 * reserve);
+        assertLess("tick", 26000 * reserve);
         // выполнялось единожды
-        assertLess("creation", 1000 * reserve);
+        assertLess("creation", 500 * reserve);
 
     }
 

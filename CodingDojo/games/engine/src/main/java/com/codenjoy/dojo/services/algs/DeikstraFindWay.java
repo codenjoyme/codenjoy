@@ -122,8 +122,12 @@ public class DeikstraFindWay {
     }
 
     private Path getPath(Point from, List<Point> inputGoals) {
-        Set<Point> goals = new HashSet<>(inputGoals);
         Path path = new Path(size);
+        if (from == null || inputGoals.isEmpty()) {
+            return path;
+        }
+
+        Set<Point> goals = new HashSet<>(inputGoals);
         Vectors vectors = new Vectors(size, ways());
         vectors.add(inputGoals, from, 0);
         Vector current;
@@ -148,7 +152,8 @@ public class DeikstraFindWay {
             } else {
                 // do nothing
             }
-            goals.remove(current.from());
+            boolean remove = goals.remove(current.from());
+            if (remove) break;
         }
 
         return path;

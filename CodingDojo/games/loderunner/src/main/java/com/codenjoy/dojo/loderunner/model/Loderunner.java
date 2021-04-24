@@ -28,6 +28,7 @@ import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.*;
 import java.util.function.Function;
@@ -35,7 +36,7 @@ import java.util.function.Function;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static java.util.stream.Collectors.toList;
 
-public class Loderunner implements Field {
+public class Loderunner extends RoundField<Player> implements Field {
 
     private int size;
     private Level level;
@@ -46,7 +47,7 @@ public class Loderunner implements Field {
     private List<RedGold> redGold;
     private List<Pill> pills;
     private List<Portal> portals;
-    private List<Border> borders;
+    private Borders borders;
     private List<Brick> bricks;
     private List<Ladder> ladder;
     private List<Pipe> pipe;
@@ -56,19 +57,21 @@ public class Loderunner implements Field {
     private List<Function<Point, Point>> finder;
 
     public Loderunner(Level level, Dice dice, GameSettings settings) {
+        super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_HERO, settings);
         this.dice = dice;
         this.level = level;
         this.settings = settings;
         players = new Players(this);
         enemies = new LinkedList<>();
+        borders = new Borders(level.getSize());
 
         finder = new ArrayList<>(){{
-            add(pt -> getFrom(getHeroes(), pt));
+            add(pt -> getFrom(allHeroes(), pt));
             add(pt -> getFrom(enemies(), pt));
             add(pt -> getFrom(yellowGold(), pt));
             add(pt -> getFrom(greenGold(), pt));
             add(pt -> getFrom(redGold(), pt));
-            add(pt -> getFrom(borders(), pt));
+            add(pt -> borders.get(pt));
             add(pt -> getFrom(bricks(), pt));
             add(pt -> getFrom(ladder(), pt));
             add(pt -> getFrom(pills(), pt));
@@ -77,11 +80,12 @@ public class Loderunner implements Field {
         }};
 
         init();
+        resetAllPlayers(); // TODO test me
     }
 
     private void init() {
         size = level.getSize();
-        borders = level.getBorders();
+        borders.addAll(level.getBorders());
         bricks = level.getBricks();
         ladder = level.getLadder();
         pipe = level.getPipe();
@@ -96,8 +100,6 @@ public class Loderunner implements Field {
             enemy.init(this);
         }
 
-        players.resetAll();
-
         generatePills();
         generateGold();
         generatePortals();
@@ -105,7 +107,29 @@ public class Loderunner implements Field {
     }
 
     @Override
-    public void tick() {
+    public void resetAllPlayers() {
+        players.resetAll();
+    }
+
+    @Override
+    public void clearScore() { // TODO test me
+        init();
+        super.clearScore(); // тут так же произойдет reset all players
+        allHeroes().forEach(Hero::clearScores); // TODO проверить что эта строка тут не обязательна
+    }
+
+    @Override
+    protected List<Player> players() {
+        return players.all();
+    }
+
+    @Override
+    protected void cleanStuff() {
+        // do nothing
+    }
+
+    @Override
+    protected void tickField() {
 //        if (!level.getMapUUID().equals(mapUUID)) {
 //            init();
 //        } TODO сделать по другому автоперезагрузку уровней
@@ -124,12 +148,16 @@ public class Loderunner implements Field {
         portalsGo();
 
         for (Player player : die) {
-            player.event(Events.KILL_HERO);
             Hero deadHero = player.getHero();
             rewardMurderers(deadHero);
         }
         generatePills();
         generateEnemies();
+    }
+
+    @Override
+    protected void setNewObjects() {
+        // do nothing
     }
 
     private void rewardMurderers(Point pt) {
@@ -172,7 +200,7 @@ public class Loderunner implements Field {
         for (int i = 0; i < Math.abs(count); i++) {
             Optional<Point> pt = freeRandom();
             if (pt.isPresent()) {
-                Enemy enemy = new Enemy(pt.get(), Direction.LEFT, level.getAi(), dice);
+                Enemy enemy = new Enemy(pt.get(), Direction.LEFT, level.getAi());
                 enemies.add(enemy);
                 enemy.init(this);
             }
@@ -223,7 +251,7 @@ public class Loderunner implements Field {
             @Override
             public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<>() {{
-                    addAll(Loderunner.this.getHeroes());
+                    addAll(Loderunner.this.allHeroes());
                     addAll(Loderunner.this.enemies());
                     addAll(Loderunner.this.yellowGold());
                     addAll(Loderunner.this.greenGold());
@@ -383,7 +411,7 @@ public class Loderunner implements Field {
                 || greenGold.contains(over)
                 || redGold.contains(over)
                 || isFullBrick(over)
-                || getHeroes().contains(over)
+                || activeHeroes().contains(over)
                 || enemies.contains(over)) {
             return false;
         }
@@ -439,7 +467,24 @@ public class Loderunner implements Field {
 
     @Override
     public boolean isHeroAt(Point pt) {
-        return getHeroes().contains(pt);
+        return activeHeroes().contains(pt);
+    }
+
+    // TODO test
+    //      может ли пройти через него охотник - да
+    //      можно ли сверлить под ним - да
+    //      является ли место с ним дыркой - да
+    //      является ли место с ним препятствием - нет
+    @Override
+    public List<Hero> activeHeroes() {
+        return aliveActive().stream()
+                .map(Player::getHero)
+                .collect(toList());
+    }
+
+    @Override
+    public List<Hero> allHeroes() {
+        return players.heroes();
     }
 
     @Override
@@ -493,11 +538,6 @@ public class Loderunner implements Field {
     @Override
     public boolean isBorder(Point pt) {
         return borders.contains(pt);
-    }
-
-    @Override
-    public List<Hero> getHeroes() {
-        return players.heroes();
     }
 
     public void newGame(Player player) {
@@ -586,7 +626,7 @@ public class Loderunner implements Field {
     }
 
     public List<Border> borders() {
-        return borders;
+        return borders.all();
     }
 
     public List<Enemy> enemies() {
@@ -595,6 +635,13 @@ public class Loderunner implements Field {
 
     public List<Brick> bricks() {
         return bricks;
+    }
+
+    @Override
+    public List<Point> visibleHeroes() {
+        return activeHeroes().stream()   // TODO test что охотники не гонятся за точками спауна
+                .filter(hero -> !hero.under(PillType.SHADOW_PILL))
+                .collect(toList());
     }
 
     public List<Ladder> ladder() {
@@ -612,9 +659,5 @@ public class Loderunner implements Field {
     // only for testing
     void resetHeroes() {
         players.resetHeroes();
-    }
-
-    Players players() {
-        return players;
     }
 }

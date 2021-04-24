@@ -25,6 +25,8 @@ package com.codenjoy.dojo.services.algs;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.List;
+
 /**
  * Клас инкапсулирующий намерение отправиться из точки
  * from в точку to по направлению direction.
@@ -45,11 +47,18 @@ public class Vector implements Comparable<Vector> {
     private Direction where;
     private int rating;
 
-    public Vector(Point from, Direction where, Point goal, int pathLength) {
+    public Vector(Point from, Direction where, List<Point> goals, int pathLength) {
         this.from = from;
         this.where = where;
         this.to = where.change(from);
-        this.rating = (int)(1000*(to.distance(goal) + pathLength));
+
+        int sum = 0;
+        for (Point goal : goals) {
+            sum += to.distance(goal);
+        }
+        double average = sum / goals.size();
+
+        this.rating = (int)(1000*(average + pathLength));
     }
 
     @Override

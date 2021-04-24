@@ -23,19 +23,16 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.round.RoundGamePlayer;
 
 import java.util.Optional;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
-public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
+public class Player extends RoundGamePlayer<Hero, Field> {
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
@@ -47,7 +44,13 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     @Override
-    public void newHero(Field field) {
+    public void start(int round, Object startEvent) {
+        super.start(round, startEvent);
+        hero.clearScores();
+    }
+
+    @Override
+    public void initHero(Field field) {
         if (hero != null) {
             hero = null;
         }
@@ -57,11 +60,36 @@ public class Player extends GamePlayer<Hero, Field> {
             throw new RuntimeException("Not enough space for Hero");
         }
         hero = new Hero(pt.get(), Direction.RIGHT);
+        hero.setPlayer(this);
         hero.init(field);
     }
 
     @Override
     public boolean isAlive() {
         return hero != null && hero.isAlive();
+    }
+
+    @Override
+    public void event(Object event) {
+        super.event(event);
+
+        if (event instanceof Events) {
+            switch ((Events) event) {
+                case KILL_ENEMY:
+                    hero.increaseScore();
+                    break;
+                case START_ROUND:
+                case SUICIDE:
+                case KILL_HERO:
+                case WIN_ROUND:
+                    hero.clearScores();
+                    break;
+            }
+        }
+    }
+
+    // only for testing
+    public void setHero(Hero hero) {
+        this.hero = hero;
     }
 }

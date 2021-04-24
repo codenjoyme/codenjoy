@@ -42,8 +42,8 @@ public class DeikstraFindWayTest {
     @Test
     public void testFindShortestWay() {
         asrtWay("XXXXXXX\n" +
-                "XS*   X\n" +
-                "X **  X\n" +
+                "XS**  X\n" +
+                "X  *  X\n" +
                 "X  ** X\n" +
                 "X   **X\n" +
                 "X    FX\n" +
@@ -108,32 +108,32 @@ public class DeikstraFindWayTest {
     @Test
     public void testFindShortestWayWhenBrickOnWay() {
         asrtWay("XXXXXXX\n" +
-                "XS*   X\n" +
-                "X **  X\n" +
+                "XS**  X\n" +
+                "X  *  X\n" +
                 "XO ** X\n" +
                 "X   **X\n" +
                 "X    FX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
-                "XS*   X\n" +
-                "X **  X\n" +
+                "XS**  X\n" +
+                "X  *  X\n" +
                 "XO ** X\n" +
                 "X O **X\n" +
                 "X    FX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
-                "XS*   X\n" +
-                "X **  X\n" +
+                "XS**  X\n" +
+                "X  *  X\n" +
                 "XO ** X\n" +
                 "X O **X\n" +
                 "X   OFX\n" +
                 "XXXXXXX\n");
 
         asrtWay("XXXXXXX\n" +
-                "XS*   X\n" +
-                "X *** X\n" +
+                "XS**  X\n" +
+                "X  ** X\n" +
                 "XO O* X\n" +
                 "X O **X\n" +
                 "X   OFX\n" +
@@ -193,6 +193,38 @@ public class DeikstraFindWayTest {
                 "XO O* X\n" +
                 "X O **X\n" +
                 "X   OFX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS**  X\n" +
+                "X O*  X\n" +
+                "X  ***X\n" +
+                "X   O*X\n" +
+                "X    FX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS O  X\n" +
+                "X*O   X\n" +
+                "X*****X\n" +
+                "X   O*X\n" +
+                "X    FX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS O  X\n" +
+                "X*O   X\n" +
+                "X**O  X\n" +
+                "X **O X\n" +
+                "X  **FX\n" +
+                "XXXXXXX\n");
+
+        asrtWay("XXXXXXX\n" +
+                "XS O  X\n" +
+                "X*O   X\n" +
+                "X* O  X\n" +
+                "X*O O X\n" +
+                "X****FX\n" +
                 "XXXXXXX\n");
     }
 

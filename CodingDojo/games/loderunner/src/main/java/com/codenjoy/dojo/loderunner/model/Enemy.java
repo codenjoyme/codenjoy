@@ -23,12 +23,9 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.services.*;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Enemy extends PointImpl implements Tickable, Fieldable, State<Elements, Player> {
 
@@ -36,13 +33,10 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
     private EnemyAI ai;
     private Field field;
     private Class<? extends Point> withGold;
-    private Hero huntHim;
-    private Hero oldHurt;
-    private Dice dice;
+    private List<Point> preys;
 
-    public Enemy(Point pt, Direction direction, EnemyAI ai, Dice dice) {
+    public Enemy(Point pt, Direction direction, EnemyAI ai) {
         super(pt);
-        this.dice = dice;
         withGold = null;
         this.direction = direction;
         this.ai = ai;
@@ -59,20 +53,9 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
 
     @Override
     public void tick() {
-        if (huntHim == null || !huntHim.isAlive() || huntHim.under(PillType.SHADOW_PILL)) {
-            List<Hero> heroes = new LinkedList<>(field.getHeroes())
-                    .stream()
-                    .filter(hero -> !hero.under(PillType.SHADOW_PILL))
-                    .collect(Collectors.toList());
-            if (oldHurt != null) { // если я бегал за героем, который спрятался
-                heroes.remove(oldHurt); // исключаю его из поиска // TODO подумать, тут может быть кейс, когда герой один и он появился уже а я за ним бегать не могу
-            }
-            if (heroes.size() != 0) { // если осталось за кем гоняться
-                huntHim = heroes.get(dice.next(heroes.size())); // попробуем
-                oldHurt = null;
-            }
-        }
-
+        // TODO если за кем-то охотник уже охотится, то выбрать другую жертву
+        preys = field.visibleHeroes();
+        
         if (isFall()) {
             if (field.isBrick(underEnemy()) && withGold != null) {
                 // TODO герой не может оставить золото, если он залез в ямку под лестницу, золото должно появиться сбоку
@@ -85,10 +68,8 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
                 move(Direction.UP.change(this));
             }
         } else {
-            Direction direction = ai.getDirection(field, this, huntHim);
+            Direction direction = ai.getDirection(field, this, preys);
             if (direction == null) {
-                oldHurt = huntHim;
-                huntHim = null;
                 return;
             }
 

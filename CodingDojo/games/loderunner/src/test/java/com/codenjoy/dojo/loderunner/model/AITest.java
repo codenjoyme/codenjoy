@@ -37,6 +37,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -73,7 +74,8 @@ public class AITest {
             Player player = new Player(mock(EventListener.class), settings);
             dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
             loderunner.newGame(player);
-            player.hero = hero;
+            player.setHero(hero);
+            hero.setActive(true);
             hero.init(loderunner);
             loderunner.resetHeroes();
         }
@@ -99,7 +101,7 @@ public class AITest {
         assertEquals(expected,
                 ai.getPath(loderunner,
                         level.getEnemies().get(0),
-                        level.getHeroes().get(0)).toString());
+                        (List)level.getHeroes()).toString());
     }
 
     private void dice(int... ints) {
@@ -533,19 +535,19 @@ public class AITest {
         Enemy enemy1 = level.getEnemies().get(0);
         assertEquals("[2,4]", enemy1.toString());
 
-        Hero hero1 = loderunner.getHeroes().get(0);
+        Hero hero1 = loderunner.allHeroes().get(0);
         assertEquals("[1,3]", hero1.toString());
 
         Enemy enemy2 = level.getEnemies().get(1);
         assertEquals("[4,4]", enemy2.toString());
 
-        Hero hero2 = loderunner.getHeroes().get(1);
+        Hero hero2 = loderunner.allHeroes().get(1);
         assertEquals("[5,3]", hero2.toString());
 
-        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy1, hero2));
-        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN]", ai.getPath(loderunner, enemy1, hero2).toString());
+        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy1, Arrays.asList(hero2)));
+        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN]", ai.getPath(loderunner, enemy1, Arrays.asList(hero2)).toString());
 
-        assertW(enemy1, hero2,
+        assertW(enemy1, Arrays.asList(hero2),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "              \n" +
                 " ☼ # # # # # ☼\n" +
@@ -561,10 +563,10 @@ public class AITest {
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "              \n");
 
-        assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy2, hero1));
-        assertEquals("[LEFT, LEFT, LEFT, DOWN]", ai.getPath(loderunner, enemy2, hero1).toString());
+        assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy2, Arrays.asList(hero1)));
+        assertEquals("[LEFT, LEFT, LEFT, DOWN]", ai.getPath(loderunner, enemy2, Arrays.asList(hero1)).toString());
 
-        assertW(enemy2, hero1,
+        assertW(enemy2, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "              \n" +
                 " ☼ # # # # # ☼\n" +
@@ -594,15 +596,33 @@ public class AITest {
 
         // проверяем следующую команду для первого чертика
         Enemy enemy1 = level.getEnemies().get(0);
-        Hero hero1 = loderunner.getHeroes().get(0);
+        Hero hero1 = loderunner.allHeroes().get(0);
         assertEquals("[3,2]", enemy1.toString());
-        assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy1, hero1));
+        assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy1, Arrays.asList(hero1)));
 
         // проверяем весь путь для первого чертика
         assertEquals("[2,6]", hero1.toString());
-        assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy1, hero1).toString());
+        assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy1, Arrays.asList(hero1)).toString());
 
-        assertW(enemy1, hero1,
+        assertW(enemy1, Arrays.asList(hero1),
+                " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "                \n" +
+                " ☼ .→◄ . . ) . ☼\n" +
+                "   ↑            \n" +
+                " ☼ H # . . # H ☼\n" +
+                "   ↑            \n" +
+                " ☼ H . . . . H ☼\n" +
+                "   ↑            \n" +
+                " ☼ H . . . . H ☼\n" +
+                "   ↑            \n" +
+                " ☼ H←.←« « . H ☼\n" +
+                "                \n" +
+                " ☼ # # # # # # ☼\n" +
+                "                \n" +
+                " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "                \n");
+
+        assertW(enemy1, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ .→◄ . . ) . ☼\n" +
@@ -622,15 +642,15 @@ public class AITest {
 
         // проверяем следующую команду для второго чертика
         Enemy enemy2 = level.getEnemies().get(1);
-        Hero hero2 = loderunner.getHeroes().get(1);
+        Hero hero2 = loderunner.allHeroes().get(1);
         assertEquals("[4,2]", enemy2.toString());
-        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy2, hero2));
+        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy2, Arrays.asList(hero2)));
 
         // проверяем весь путь для второго чертика
         assertEquals("[5,6]", hero2.toString());
-        assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy2, hero2).toString());
+        assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy2, Arrays.asList(hero2)).toString());
 
-        assertW(enemy2, hero2,
+        assertW(enemy2, Arrays.asList(hero2),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ . ◄ . . )←. ☼\n" +
@@ -666,11 +686,29 @@ public class AITest {
         // пробуем чтобы первый чертик пошел за вторым игроком
         Enemy enemy2 = level.getEnemies().get(1);
         assertEquals("[4,2]", enemy2.toString());
-        Hero hero1 = loderunner.getHeroes().get(0);
+        Hero hero1 = loderunner.allHeroes().get(0);
         assertEquals("[2,6]", hero1.toString());
-        assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy2, hero1).toString());
+        assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy2, Arrays.asList(hero1)).toString());
 
-        assertW(enemy2, hero1,
+        assertW(enemy2, Arrays.asList(hero1),
+                " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "                \n" +
+                " ☼ .→◄ . . ) . ☼\n" +
+                "   ↑            \n" +
+                " ☼ H # . . # H ☼\n" +
+                "   ↑            \n" +
+                " ☼ H . . . . H ☼\n" +
+                "   ↑            \n" +
+                " ☼ H . . . . H ☼\n" +
+                "   ↑            \n" +
+                " ☼ H←.←«←« . H ☼\n" +
+                "                \n" +
+                " ☼ # # # # # # ☼\n" +
+                "                \n" +
+                " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "                \n");
+
+        assertW(enemy2, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ .→◄ . . ) . ☼\n" +
@@ -691,11 +729,11 @@ public class AITest {
         // пробуем чтобы второй чертик пошел за первым игроком
         Enemy enemy1 = level.getEnemies().get(0);
         assertEquals("[3,2]", enemy1.toString());
-        Hero hero2 = loderunner.getHeroes().get(1);
+        Hero hero2 = loderunner.allHeroes().get(1);
         assertEquals("[5,6]", hero2.toString());
-        assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy1, hero2).toString());
+        assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy1, Arrays.asList(hero2)).toString());
 
-        assertW(enemy1, hero2,
+        assertW(enemy1, Arrays.asList(hero2),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ . ◄ . . )←. ☼\n" +
@@ -716,11 +754,11 @@ public class AITest {
 
     private void assertQ(String expected) {
         Enemy enemy = level.getEnemies().get(0);
-        Hero hero = loderunner.getHeroes().get(0);
-        assertW(enemy, hero, expected);
+        List<Point> heroes = (List)loderunner.allHeroes();
+        assertW(enemy, heroes, expected);
     }
 
-    private void assertW(Point from, Point to, String expected) {
+    private void assertW(Point from, List<Point> to, String expected) {
         List<Direction> path = ai.getPath(loderunner, from, to);
         Printer printer = new PrinterFactoryImpl<>().getPrinter(loderunner.reader(),
                 loderunner.players().iterator().next());
@@ -739,177 +777,177 @@ public class AITest {
     public void performanceTest() {
         AI.POSSIBLE_IS_CONSTANT = true;
 
-        // about 10s
+        // about 7s
         setupAI("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼                             ~~~~~~~~~      ◄    ~~~~~~~☼" +
+                "☼     ◄                ◄      ~~~~~~~~~      ◄    ~~~~~~~☼" +
                 "☼##H########################H#H       H##########H       ☼" +
-                "☼  H                        H######H  H          H#☼☼☼☼☼#☼" +
+                "☼  H            ◄           H######H  H          H#☼☼☼☼☼#☼" +
                 "☼H☼☼#☼☼H    H#########H     H#     H#####H#####H##  ~~~~~☼" +
                 "☼H     H    H         H#####H#     H ~   H     H  ~~     ☼" +
                 "☼H#☼#☼#H    H         H  ~~~ #####H#     H     H    ~~   ☼" +
                 "☼H  ~  H~~~~H~~~~~~   H           H   H######H##      ~~ ☼" +
                 "☼H     H    H     H###☼☼☼☼☼☼H☼    H~~~H      H          #☼" +
                 "☼H     H    H#####H         H     H      H#########H     ☼" +
-                "☼☼###☼##☼##☼H         H###H##    H##     H#       ##     ☼" +
+                "☼☼###☼##☼##☼H         H###H## ◄  H##     H#       ##     ☼" +
                 "☼☼###☼~~~~  H         H   H######H######### H###H #####H#☼" +
                 "☼☼   ☼      H   ~~~~~~H   H      H          H# #H      H ☼" +
                 "☼########H###☼☼☼☼     H  ############   ###### ##########☼" +
-                "☼        H            H                                  ☼" +
+                "☼        H     ◄      H                           ◄      ☼" +
                 "☼H##########################H########~~~####H############☼" +
                 "☼H                 ~~~      H               H            ☼" +
                 "☼#######H#######            H###~~~~      ############H  ☼" +
                 "☼       H~~~~~~~~~~         H                         H  ☼" +
                 "☼       H    ##H   #######H##########~~~~~~~H######## H  ☼" +
-                "☼       H    ##H          H                 H         H  ☼" +
+                "☼   ◄   H    ##H          H                 H         H  ☼" +
                 "☼##H#####    ########H#######~~~~  ~~~#########~~~~~  H  ☼" +
                 "☼  H                 H                            ~~~~H  ☼" +
                 "☼#########H##########H        #☼☼☼☼☼☼#   ☼☼☼☼☼☼☼      H  ☼" +
-                "☼         H          H        ~      ~                H  ☼" +
-                "☼☼☼       H~~~~~~~~~~H         ######   ###########   H  ☼" +
+                "☼         H          H        ~      ~      ◄         H  ☼" +
+                "☼☼☼       H~~~~~~~~~~H      «  ######   ###########   H  ☼" +
                 "☼    H######         #######H           ~~~~~~~~~~~~~~H  ☼" +
-                "☼H☼  H  ◄                   H  H####H                 H  ☼" +
+                "☼H☼  H                      H  H####H                 H  ☼" +
                 "☼H☼☼#☼☼☼☼☼☼☼☼☼☼☼☼###☼☼☼☼☼☼☼☼H☼☼☼☼☼☼☼☼#☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼#☼" +
                 "☼H            ~~H~~~~☼☼☼☼☼☼☼H☼☼☼☼☼☼☼       H   ~~~~~~~~~H☼" +
                 "☼H~~~~  ######  H         H☼H☼H        ####H  ☼         H☼" +
-                "☼H              ##H#######H☼H☼H######H     ###☼☼☼☼☼☼☼☼ ~H☼" +
+                "☼H    ◄         ##H#######H☼H☼H######H     ###☼☼☼☼☼☼☼☼ ~H☼" +
                 "☼H#########       H    ~~~H☼H☼H~~~   H~~~~~ ##        ~ H☼" +
-                "☼H        ###H####H##H     ☼H☼       H     ###☼☼☼☼☼☼ ~  H☼" +
+                "☼H        ###H####H##H ◄   ☼H☼       H     ###☼☼☼☼☼☼ ~  H☼" +
                 "☼H           H      #######☼H☼#####  H#####   ~~~~~~~ ~ H☼" +
-                "☼~~~~~~~~~~~~H       H~~~~~☼H☼~~~~~  H             ~ ~  H☼" +
-                "☼     H              H     ☼H☼     ##########H          H☼" +
+                "☼~~~~~~~~~~~~H       H~~~~~☼H☼~~~~~  H  ◄          ~ ~  H☼" +
+                "☼     H              H     ☼H☼     ##########H    ◄     H☼" +
                 "☼ ### #############H H#####☼H☼               H ######## H☼" +
                 "☼H                 H       ☼H☼#######        H          H☼" +
-                "☼H#####         H##H####                ###H#########   H☼" +
+                "☼H#####   ◄     H##H####                ###H#########   H☼" +
                 "☼H      H######### H   ############        H            H☼" +
                 "☼H##    H          H~~~~~~                 H #######H## H☼" +
                 "☼~~~~#####H#   ~~~~H         ########H     H        H   H☼" +
-                "☼         H        H      ~~~~~~~~   H     H        H   H☼" +
+                "☼     ◄   H        H      ~~~~~~~~   H  ◄  H        H   H☼" +
                 "☼   ########H    ######H##        ##############    H   H☼" +
                 "☼           H          H        ~~~~~           ##H#####H☼" +
                 "☼H    ###########H     H#####H         H##H       H     H☼" +
-                "☼H###            H     H     ###########  ##H###  H     H☼" +
+                "☼H###  ◄         H     H     ###########  ##H###  H     H☼" +
                 "☼H  ######  ##H######  H                    H   ##H###  H☼" +
                 "☼H            H ~~~~~##H###H     #########H##           H☼" +
                 "☼    H########H#       H   ######         H             H☼" +
-                "☼ ###H        H         ~~~~~H      ##H###H####H###     H☼" +
+                "☼ ###H  ◄     H         ~~~~~H      ##H###H####H###     H☼" +
                 "☼    H########H#########     H        H        H        H☼" +
-                "☼H   H                       H        H        H        H☼" +
+                "☼H   H                       H    ◄   H        H  ◄     H☼" +
                 "☼H  ####H######         #####H########H##      H#####   H☼" +
-                "☼H«     H      H#######H                       H        H☼" +
+                "☼H      H      H#######H                       H        H☼" +
                 "☼##############H       H#################################☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
 
         assertQ(" ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                                                                                                                    \n" +
-                " ☼ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ~ ~ ~ ~ ~ ~ ~ ~ ~→.→.→.→.→.→.→◄ . . . . ~ ~ ~ ~ ~ ~ ~ ☼\n" +
-                "                                                                             ↑                                      \n" +
+                " ☼ . . . . . ◄ . . . . . . . . . . . . . . . . ) . . . . . . ~ ~ ~ ~ ~ ~ ~ ~ ~ . . . . . . ) . . . . ~ ~ ~ ~ ~ ~ ~ ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ # # H # # # # # # # # # # # # # # # # # # # # # # # # H # H . . . . . . . H # # # # # # # # # # H . . . . . . . ☼\n" +
-                "                                                                             ↑                                      \n" +
-                " ☼ . . H . . . . . . . . . . . . . . . . . . . . . . . . H # # # # # # H→.→.→H . . . . . . . . . . H # ☼ ☼ ☼ ☼ ☼ # ☼\n" +
-                "                                                                       ↑                                            \n" +
+                "                                                                                                                    \n" +
+                " ☼ . . H . . . . . . . . . . . . ) . . . . . . . . . . . H # # # # # # H . . H . . . . . . . . . . H # ☼ ☼ ☼ ☼ ☼ # ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ H ☼ ☼ # ☼ ☼ H . . . . H # # # # # # # # # H . . . . . H # . . . . . H # # # # # H # # # # # H # # . . ~ ~ ~ ~ ~ ☼\n" +
-                "                                                                       ↑                                            \n" +
-                " ☼ H . . . . . H . . . . H . . . . . . . . . H # # # # # H # . . . . .→H . ~ . . . H . . . . . H . . ~ ~ . . . . . ☼\n" +
-                "                                                                     ↑                                              \n" +
+                "                                                                                                                    \n" +
+                " ☼ H . . . . . H . . . . H . . . . . . . . . H # # # # # H # . . . . . H . ~ . . . H . . . . . H . . ~ ~ . . . . . ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ H # ☼ # ☼ # H . . . . H . . . . . . . . . H . . ~ ~ ~ . # # # # # H # . . . . . H . . . . . H . . . . ~ ~ . . . ☼\n" +
-                "                                                                     ↑                                              \n" +
+                "                                                                                                                    \n" +
                 " ☼ H . . ~ . . H ~ ~ ~ ~ H ~ ~ ~ ~ ~ ~ . . . H . . . . . . . . . . . H . . . H # # # # # # H # # . . . . . . ~ ~ . ☼\n" +
-                "                                                                     ↑                                              \n" +
+                "                                                                                                                    \n" +
                 " ☼ H . . . . . H . . . . H . . . . . H # # # ☼ ☼ ☼ ☼ ☼ ☼ H ☼ . . . . H ~ ~ ~ H . . . . . . H . . . . . . . . . . # ☼\n" +
-                "                                                                     ↑                                              \n" +
-                " ☼ H . . . . . H . . . . H # # # # # H . . . .→.→.→.→.→.→H→. . . . .→H . . . . . . H # # # # # # # # # H . . . . . ☼\n" +
-                "                                             ↑             ↓       ↑                                                \n" +
-                " ☼ ☼ # # # ☼ # # ☼ # # ☼ H . . . . . . . . . H # # # H # # .→.→.→.→H # # . . . . . H # . . . . . . . # # . . . . . ☼\n" +
-                "                                             ↑                                                                      \n" +
+                "                                                                                                                    \n" +
+                " ☼ H . . . . . H . . . . H # # # # # H . . . . . . . . . H . . . . . H . . . . . . H # # # # # # # # # H . . . . . ☼\n" +
+                "                                                                                                                    \n" +
+                " ☼ ☼ # # # ☼ # # ☼ # # ☼ H . . . . . . . . . H # # # H # # . ) . . H # # . . . . . H # . . . . . . . # # . . . . . ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ ☼ # # # ☼ ~ ~ ~ ~ . . H . . . . . . . . . H . . . H # # # # # # H # # # # # # # # # . H # # # H . # # # # # H # ☼\n" +
-                "                                             ↑                                                                      \n" +
+                "                                                                                                                    \n" +
                 " ☼ ☼ . . . ☼ . . . . . . H . . . ~ ~ ~ ~ ~ ~ H . . . H . . . . . . H . . . . . . . . . . H # . # H . . . . . . H . ☼\n" +
-                "                                             ↑                                                                      \n" +
+                "                                                                                                                    \n" +
                 " ☼ # # # # # # # # H # # # ☼ ☼ ☼ ☼ . . . . . H . . # # # # # # # # # # # # . . . # # # # # # . # # # # # # # # # # ☼\n" +
-                "                                             ↑                                                                      \n" +
-                " ☼ . . . . . . . . H . . . . . . . . . . . . H←.←.←.←.←.←. . . . . . . . . . . . . . . . . . . . . . . . . . . . . ☼\n" +
-                "                                                         ↑                                                          \n" +
+                "                                                                                                                    \n" +
+                " ☼ . . . . . . . . H . . . . . ) . . . . . . H . . . . . . . . . . . . . . . . . . . . . . . . . . . ) . . . . . . ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ H # # # # # # # # # # # # # # # # # # # # # # # # # # H # # # # # # # # ~ ~ ~ # # # # H # # # # # # # # # # # # ☼\n" +
-                "                                                         ↑                                                          \n" +
+                "                                                                                                                    \n" +
                 " ☼ H . . . . . . . . . . . . . . . . . ~ ~ ~ . . . . . . H . . . . . . . . . . . . . . . H . . . . . . . . . . . . ☼\n" +
-                "                                                         ↑                                                          \n" +
+                "                                                                                                                    \n" +
                 " ☼ # # # # # # # H # # # # # # # . . . . . . . . . . . . H # # # ~ ~ ~ ~ . . . . . . # # # # # # # # # # # # H . . ☼\n" +
-                "                                                         ↑                                                          \n" +
-                " ☼ . . . . . . . H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ . . . . . . . .→.→H . . . . . . . . . . . . . . . . . . . . . . . . . H . . ☼\n" +
-                "                                                     ↑                                                              \n" +
+                "                                                                                                                    \n" +
+                " ☼ . . . . . . . H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ . . . . . . . . . H . . . . . . . . . . . . . . . . . . . . . . . . . H . . ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ . . . . . . . H . . . . # # H . . . # # # # # # # H # # # # # # # # # # ~ ~ ~ ~ ~ ~ ~ H # # # # # # # # . H . . ☼\n" +
-                "                                                     ↑                                                              \n" +
-                " ☼ . . . . . . . H . . . . # # H . . . . . .→.→.→.→.→H . . . . . . . . . . . . . . . . . H . . . . . . . . . H . . ☼\n" +
-                "                                           ↑                                                                        \n" +
+                "                                                                                                                    \n" +
+                " ☼ . . . ) . . . H . . . . # # H . . . . . . . . . . H . . . . . . . . . . . . . . . . . H . . . . . . . . . H . . ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ # # H # # # # # . . . . # # # # # # # # H # # # # # # # ~ ~ ~ ~ . . ~ ~ ~ # # # # # # # # # ~ ~ ~ ~ ~ . . H . . ☼\n" +
-                "                                           ↑                                                                        \n" +
+                "                                                                                                                    \n" +
                 " ☼ . . H . . . . . . . . . . . . . . . . . H . . . . . . . . . . . . . . . . . . . . . . . . . . . . ~ ~ ~ ~ H . . ☼\n" +
-                "                                           ↑                                                                        \n" +
+                "                                                                                                                    \n" +
                 " ☼ # # # # # # # # # H # # # # # # # # # # H . . . . . . . . # ☼ ☼ ☼ ☼ ☼ ☼ # . . . ☼ ☼ ☼ ☼ ☼ ☼ ☼ . . . . . . H . . ☼\n" +
-                "                                           ↑                                                                        \n" +
-                " ☼ . . . . . . . . . H . . . . . . . . . . H . . . . . . . . ~ . . . . . . ~ . . . . . . . . . . . . . . . . H . . ☼\n" +
-                "                                           ↑                                                                        \n" +
-                " ☼ ☼ ☼ . . .→.→.→.→.→H→~→~→~→~→~→~→~→~→~→~→H . . . . . . . . . # # # # # # . . . # # # # # # # # # # # . . . H . . ☼\n" +
-                "           ↑                                                                                                        \n" +
-                " ☼ .→.→. . H # # # # # # . . . . . . . . . # # # # # # # H . . . . . . . . . . . ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ H . . ☼\n" +
-                "   ↑   ↓   ↑                                                                                                        \n" +
-                " ☼ H ☼ .→.→H . . ) . . . . . . . . . . . . . . . . . . . H . . H # # # # H . . . . . . . . . . . . . . . . . H . . ☼\n" +
-                "   ↑                                                                                                                \n" +
+                "                                                                                                                    \n" +
+                " ☼ . . . . . . . . . H . . . . . . . . . . H . . . . . . . . ~ . . . . . . ~ . . . . . . ) . . . . . . . . . H . . ☼\n" +
+                "                                                                                                                    \n" +
+                " ☼ ☼ ☼ . . . . . . . H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ H . . . . . . « . . # # # # # # . . . # # # # # # # # # # # . . . H . . ☼\n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ . . . . H # # # # # # . . . . . . . . . # # # # # # # H . . . . . . . . . . . ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ H . . ☼\n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ H ☼ . . H . . . . . . . . . . . . . . . . . . . . . . H . . H # # # # H . . . . . . . . . . . . . . . . . H . . ☼\n" +
+                "                                                         ↓                                                          \n" +
                 " ☼ H ☼ ☼ # ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ # # # ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ H ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ # ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ # ☼\n" +
-                "   ↑                                                                                                                \n" +
-                " ☼ H . . . . . .←.←.←.←.←.←.←~←~←H ~ ~ ~ ~ ☼ ☼ ☼ ☼ ☼ ☼ ☼ H ☼ ☼ ☼ ☼ ☼ ☼ ☼ . . . . . . . H . . . ~ ~ ~ ~ ~ ~ ~ ~ ~ H ☼\n" +
-                "   ↑           ↓                 ↑                                                                                  \n" +
-                " ☼ H ~ ~ ~ ~ . . # # # # # # . . H←.←. . . . . . . . H ☼ H ☼ H . . . . . . . . # # # # H . . ☼ . . . . . . . . . H ☼\n" +
-                "   ↑           ↓                     ↑                                                                              \n" +
-                " ☼ H←.←.←.←.←.←. . . . . . . . . # # H # # # # # # # H ☼ H ☼ H # # # # # # H . . . . . # # # ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ . ~ H ☼\n" +
-                "                                     ↑                                                                              \n" +
-                " ☼ H # # # # # # # # # . . .→.→.→.→.→H . . . . ~ ~ ~ H ☼ H ☼ H ~ ~ ~ . . . H ~ ~ ~ ~ ~ . # # . . . . . . . . ~ . H ☼\n" +
-                "                           ↑                                                                                        \n" +
-                " ☼ H . . . . . . . . # # # H # # # # H # # H . . . . . ☼ H ☼ . . . . . . . H . . . . . # # # ☼ ☼ ☼ ☼ ☼ ☼ . ~ . . H ☼\n" +
-                "                           ↑                                                                                        \n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ H . . . . . . . . . . . . ~ ~ H ~ ~ ~ ~ ☼ ☼ ☼ ☼ ☼ ☼ ☼ H ☼ ☼ ☼ ☼ ☼ ☼ ☼ . . . . . . . H . . . ~ ~ ~ ~ ~ ~ ~ ~ ~ H ☼\n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ H ~ ~ ~ ~ . . # # # # # # . . H . . . . . . . . . H ☼ H ☼ H . . . . . . . . # # # # H . . ☼ . . . . . . . . . H ☼\n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ H . . . . ) . . . . . . . . . # # H # # # # # # # H ☼ H ☼ H # # # # # # H . . . . . # # # ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ . ~ H ☼\n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ H # # # # # # # # # . . . . . . . H . . . . ~ ~ ~ H ☼ H ☼ H ~ ~ ~ . . . H ~ ~ ~ ~ ~ . # # . . . . . . . . ~ . H ☼\n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ H . . . . . . . . # # # H # # # # H # # H . ) . . . ☼ H ☼ . . . . . . . H . . . . . # # # ☼ ☼ ☼ ☼ ☼ ☼ . ~ . . H ☼\n" +
+                "                                                         ↓                                                          \n" +
                 " ☼ H . . . . . . . . . . . H . . . . . . # # # # # # # ☼ H ☼ # # # # # . . H # # # # # . . . ~ ~ ~ ~ ~ ~ ~ . ~ . H ☼\n" +
-                "                           ↑                                                                                        \n" +
-                " ☼ ~ ~ ~ ~ ~ ~→~→~→~→~→~→~→H . . . . . . . H ~ ~ ~ ~ ~ ☼ H ☼ ~ ~ ~ ~ ~ . . H . . . . . . . . . . . . . ~ . ~ . . H ☼\n" +
-                "             ↑                                                                                                      \n" +
-                " ☼ . . . . . H←.←.←.←.←.←.←.←.←.←.←.←.←. . H . . . . . ☼ H ☼ . . . . . # # # # # # # # # # H . . . . . . . . . . H ☼\n" +
-                "                                       ↑                                                                            \n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ H . . . . . . . H ~ ~ ~ ~ ~ ☼ H ☼ ~ ~ ~ ~ ~ . . H . . ) . . . . . . . . . . ~ . ~ . . H ☼\n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ . . . . . H . . . . . . . . . . . . . . H . . . . . ☼ H ☼ . . . . . # # # # # # # # # # H . . . . ) . . . . . H ☼\n" +
+                "                                                         ↓                                                          \n" +
                 " ☼ . # # # . # # # # # # # # # # # # # H . H # # # # # ☼ H ☼ . . . . . . . . . . . . . . . H . # # # # # # # # . H ☼\n" +
-                "                                       ↑                                                                            \n" +
+                "                                                         ↓                                                          \n" +
                 " ☼ H . . . . . . . . . . . . . . . . . H . . . . . . . ☼ H ☼ # # # # # # # . . . . . . . . H . . . . . . . . . . H ☼\n" +
-                "                                       ↑                                                                            \n" +
-                " ☼ H # # # # # . . . . . . . . . H # # H # # # # . . . . . . . . . . . . . . . . # # # H # # # # # # # # # . . . H ☼\n" +
-                "                                       ↑                                                                            \n" +
+                "                                                         ↓                                                          \n" +
+                " ☼ H # # # # # . . . ) . . . . . H # # H # # # # . . . . .→.→.→.→.→.→.→. . . . . # # # H # # # # # # # # # . . . H ☼\n" +
+                "                                                                       ↓                                            \n" +
                 " ☼ H . . . . . . H # # # # # # # # # . H . . . # # # # # # # # # # # # . . . . . . . . H . . . . . . . . . . . . H ☼\n" +
-                "                                       ↑                                                                            \n" +
-                " ☼ H # # . . . . H . . . . . . . . . . H ~ ~ ~ ~ ~ ~ . . . . . . . . . . . . . . . . . H . # # # # # # # H # # . H ☼\n" +
-                "                                       ↑                                                                            \n" +
+                "                                                                       ↓                                            \n" +
+                " ☼ H # # . . . . H . . . . . . . . . . H ~ ~ ~ ~ ~ ~ . . . . . . . . . .→.→.→. . . . . H . # # # # # # # H # # . H ☼\n" +
+                "                                                                             ↓                                      \n" +
                 " ☼ ~ ~ ~ ~ # # # # # H # . . . ~ ~ ~ ~ H . . . . . . . . . # # # # # # # # H . . . . . H . . . . . . . . H . . . H ☼\n" +
-                "                                       ↑                                                                            \n" +
-                " ☼ . . . . . . . . . H . . . . . . . . H←.←.←.←. . . ~ ~ ~ ~ ~ ~ ~ ~ . . . H . . . . . H . . . . . . . . H . . . H ☼\n" +
-                "                                               ↑                                                                    \n" +
+                "                                                                             ↓                                      \n" +
+                " ☼ . . . . . ) . . . H . . . . . . . . H . . . . . . ~ ~ ~ ~ ~ ~ ~ ~ . . . H .→.→) . . H . . . . . . . . H . . . H ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ . . . # # # # # # # # H . . . . # # # # # # H # # . . . . . . . . # # # # # # # # # # # # # # . . . . H . . . H ☼\n" +
-                "                                               ↑                                                                    \n" +
+                "                                                                                                                    \n" +
                 " ☼ . . . . . . . . . . . H . . . . . . . . . . H . . . . . . . . ~ ~ ~ ~ ~ . . . . . . . . . . . # # H # # # # # H ☼\n" +
-                "                                               ↑                                                                    \n" +
+                "                                                                                                                    \n" +
                 " ☼ H . . . . # # # # # # # # # # # H . . . . . H # # # # # H . . . . . . . . . H # # H . . . . . . . H . . . . . H ☼\n" +
-                "                                               ↑                                                                    \n" +
-                " ☼ H # # # . . . . . . . . . .→.→.→H→.→.→.→. . H . . . . . # # # # # # # # # # # . . # # H # # # . . H . . . . . H ☼\n" +
-                "                             ↑             ↓   ↑                                                                    \n" +
-                " ☼ H . . # # # # # # . . # # H # # # # # # .→.→H . . . . . . . . . . . . . . . . . . . . H . . . # # H # # # . . H ☼\n" +
-                "                             ↑                                                                                      \n" +
-                " ☼ H . . . .→.→.→.→.→.→.→.→.→H . ~ ~ ~ ~ ~ # # H # # # H . . . . . # # # # # # # # # H # # . . . . . . . . . . . H ☼\n" +
-                "           ↑                                                                                                        \n" +
+                "                                                                                                                    \n" +
+                " ☼ H # # # . . ) . . . . . . . . . H . . . . . H . . . . . # # # # # # # # # # # . . # # H # # # . . H . . . . . H ☼\n" +
+                "                                                                                                                    \n" +
+                " ☼ H . . # # # # # # . . # # H # # # # # # . . H . . . . . . . . . . . . . . . . . . . . H . . . # # H # # # . . H ☼\n" +
+                "                                                                                                                    \n" +
+                " ☼ H . . . . . . . . . . . . H . ~ ~ ~ ~ ~ # # H # # # H . . . . . # # # # # # # # # H # # . . . . . . . . . . . H ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ . . . . H # # # # # # # # H # . . . . . . . H . . . # # # # # # . . . . . . . . . H . . . . . . . . . . . . . H ☼\n" +
-                "           ↑                                                                                                        \n" +
-                " ☼ . # # # H . . . . . . . . H . . . . . . . . . ~ ~ ~ ~ ~ H . . . . . . # # H # # # H # # # # H # # # . . . . . H ☼\n" +
-                "           ↑                                                                                                        \n" +
+                "                                                                                                                    \n" +
+                " ☼ . # # # H . . ) . . . . . H . . . . . . . . . ~ ~ ~ ~ ~ H . . . . . . # # H # # # H # # # # H # # # . . . . . H ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ . . . . H # # # # # # # # H # # # # # # # # # . . . . . H . . . . . . . . H . . . . . . . . H . . . . . . . . H ☼\n" +
-                "           ↑                                                                                                        \n" +
-                " ☼ H . . . H←.←.←. . . . . . . . . . . . . . . . . . . . . H . . . . . . . . H . . . . . . . . H . . . . . . . . H ☼\n" +
-                "                 ↑                                                                                                  \n" +
+                "                                                                                                                    \n" +
+                " ☼ H . . . H . . . . . . . . . . . . . . . . . . . . . . . H . . . . ) . . . H . . . . . . . . H . . ) . . . . . H ☼\n" +
+                "                                                                                                                    \n" +
                 " ☼ H . . # # # # H # # # # # # . . . . . . . . . # # # # # H # # # # # # # # H # # . . . . . . H # # # # # . . . H ☼\n" +
-                "                 ↑                                                                                                  \n" +
-                " ☼ H «→.→.→.→.→.→H . . . . . . H # # # # # # # H . . . . . . . . . . . . . . . . . . . . . . . H . . . . . . . . H ☼\n" +
+                "                                                                                                                    \n" +
+                " ☼ H . . . . . . H . . . . . . H # # # # # # # H . . . . . . . . . . . . . . . . . . . . . . . H . . . . . . . . H ☼\n" +
                 "                                                                                                                    \n" +
                 " ☼ # # # # # # # # # # # # # # H . . . . . . . H # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ☼\n" +
                 "                                                                                                                    \n" +
@@ -917,18 +955,9 @@ public class AITest {
                 "                                                                                                                    \n");
 
         for (int i = 0; i < 10000; i++) {
-            assertD("[RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT, RIGHT, " +
-                    "RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, " +
-                    "RIGHT, DOWN, RIGHT, RIGHT, UP, UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, UP, UP, UP, UP, UP, UP, UP, " +
-                    "LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, UP, RIGHT, RIGHT, " +
-                    "RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, LEFT, LEFT, " +
-                    "UP, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN, LEFT, LEFT, LEFT, LEFT, LEFT, " +
-                    "LEFT, UP, UP, UP, UP, UP, RIGHT, RIGHT, DOWN, RIGHT, RIGHT, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, " +
-                    "RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, UP, " +
-                    "UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, RIGHT, RIGHT, UP, UP, UP, UP, LEFT, LEFT, LEFT, " +
-                    "LEFT, LEFT, LEFT, UP, UP, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, RIGHT, " +
-                    "RIGHT, RIGHT, RIGHT, UP, RIGHT, UP, UP, UP, UP, RIGHT, UP, UP, RIGHT, RIGHT, RIGHT, UP, UP, RIGHT, " +
-                    "RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT]");
+            assertD("[DOWN, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN, " +
+                    "DOWN, DOWN, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, " +
+                    "RIGHT, RIGHT, RIGHT, DOWN, DOWN, RIGHT, RIGHT]");
         }
     }
 }

@@ -59,7 +59,6 @@ public class GameTest {
     public void setup() {
         dice = mock(Dice.class);
         ai = mock(EnemyAI.class);
-        settings = new GameSettings();
         printer = new PrinterFactoryImpl();
         enemy = new EnemyJoystick();
         settings = new TestSettings();
@@ -83,16 +82,23 @@ public class GameTest {
             hero = level.getHeroes().get(0);
         }
 
+        // TODO распутать клубок
         game = new Loderunner(level, dice, settings);
         listener = mock(EventListener.class);
+        dice(hero.getX(), hero.getY());
         player = new Player(listener, settings);
         dice(hero.getX(), hero.getY());  // позиция рассчитывается рендомно из dice
         game.newGame(player);
-        player.hero = hero;
-        hero.init(game);
-        game.resetHeroes();
-        this.hero = game.getHeroes().get(0);
-        dice(0); // дальше охотник будет гоняться за первым попавшимся героем
+
+//        player.hero = hero;
+//        hero.init(game);
+//        game.resetHeroes();
+//        this.hero = game.getHeroes().get(0);
+//        dice(0); // дальше охотник будет гоняться за первым попавшимся героем
+
+        this.hero = game.allHeroes().get(0);
+        this.hero.direction = hero.direction;
+        dice(0); // всегда дальше выбираем нулевой индекс
     }
 
     private void assertE(String expected) {
@@ -1812,9 +1818,7 @@ public class GameTest {
                 "☼Ѡ#☼" +
                 "☼☼☼☼");
 
-        // TODO если после кончины героя не сделать в том же тике newGame то с каждым тиком будут начисляться штрафные очки.
-        // может пора уже все игрушки перевести в режим - я сама себя восстанавливаю, а не PlayerServiceImpl
-        verify(listener, times(2)).event(Events.KILL_HERO);
+        verify(listener, times(1)).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
     }
 
@@ -2229,8 +2233,7 @@ public class GameTest {
         verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
-        dice(0, // охотимся за первым игроком
-            1, 3);
+        dice(1, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
         game.newGame(player);
 

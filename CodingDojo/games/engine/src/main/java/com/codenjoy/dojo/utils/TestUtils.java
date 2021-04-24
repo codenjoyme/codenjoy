@@ -41,6 +41,9 @@ import lombok.experimental.UtilityClass;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -70,9 +73,22 @@ public class TestUtils {
         return result.toString();
     }
 
-    public static Game  buildGame(GameType gameType, EventListener listener, PrinterFactory factory) {
+    public static List<Game> getGames(int players, GameType runner, PrinterFactory factory, Supplier<EventListener> listener) {
+        GameField field = TestUtils.buildField(runner);
+        List<Game> games = new LinkedList<>();
+        for (int i = 0; i < players; i++) {
+            games.add(TestUtils.buildSingle(runner, field, listener.get(), factory));
+        }
+        return games;
+    }
+
+    public static Game buildGame(GameType gameType, EventListener listener, PrinterFactory factory) {
+        GameField gameField = buildField(gameType);
+        return buildSingle(gameType, gameField, listener, factory);
+    }
+
+    public static Game buildSingle(GameType gameType, GameField gameField, EventListener listener, PrinterFactory factory) {
         Settings settings = gameType.getSettings();
-        GameField gameField = gameType.createGame(LevelProgress.levelsStartsFrom1, settings);
         GamePlayer gamePlayer = gameType.createPlayer(listener, null, settings);
         Game game = new Single(gamePlayer, factory);
         game.on(gameField);
@@ -155,9 +171,9 @@ public class TestUtils {
     }
 
     public static String drawShortestWay(Point from,
-                                        List<Direction> shortestWay,
-                                        int size,
-                                        Function<Point, Character> getAt)
+                                         List<Direction> shortestWay,
+                                         int size,
+                                         Function<Point, Character> getAt)
     {
         Map<Point, List<Direction>> map = new HashMap<>();
 
@@ -181,6 +197,11 @@ public class TestUtils {
         }
 
         return buffer.toString();
+    }
+
+    public static GameField buildField(GameType gameType) {
+        Settings settings = gameType.getSettings();
+        return gameType.createGame(LevelProgress.levelsStartsFrom1, settings);
     }
 
     public static String printWay(String expected,

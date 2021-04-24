@@ -341,10 +341,11 @@ function initCanvases(contextPath, players, allPlayersScreen,
             font: "15px 'Verdana, sans-serif'",
             fillStyle: '#0FF',
             textAlign: 'left',
-            shadowColor: '#000',
-            shadowOffsetX: 0,
-            shadowOffsetY: 0,
-            shadowBlur: 7
+            // TODO придумать как-то фон, чтобы шрифт читался
+            // shadowColor: '#000',
+            // shadowOffsetX: 0,
+            // shadowOffsetY: 0,
+            // shadowBlur: 7
         }
     }
 
@@ -419,6 +420,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             canvas[0].width = canvasSize;
             canvas[0].height = canvasSize;
         }
+        var ctx = canvas[0].getContext("2d");
 
         var drawPlot = function(color, x, y) {
             var image = images[color];
@@ -426,7 +428,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         var drawImage = function(image, x, y, dx, dy) {
-            var ctx = canvas[0].getContext("2d");
             ctx.drawImage(
                 image,
                 x * plotSize - (image.width - plotSize)/2 + dx,
@@ -436,7 +437,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var fillImage = function(color) {
             var image = images[color];
-            var ctx = canvas[0].getContext("2d");
             ctx.drawImage(
                 image,
                 0,
@@ -461,17 +461,17 @@ function initCanvases(contextPath, players, allPlayersScreen,
         var drawText = function(text, pt, font) {
             if (pt.x == -1 || pt.y == -1) return;
 
-            var ctx = canvas[0].getContext("2d");
             if (!font) {
                 font = defaultFont();
             }
             ctx.font = font.font;
             ctx.fillStyle =  font.fillStyle;
             ctx.textAlign = font.textAlign;
-            ctx.shadowColor = font.shadowColor;
-            ctx.shadowOffsetX = font.shadowOffsetX;
-            ctx.shadowOffsetY = font.shadowOffsetY;
-            ctx.shadowBlur = font.shadowBlur;
+            // TODO придумать как-то фон, чтобы шрифт читался
+            // ctx.shadowColor = font.shadowColor;
+            // ctx.shadowOffsetX = font.shadowOffsetX;
+            // ctx.shadowOffsetY = font.shadowOffsetY;
+            // ctx.shadowBlur = font.shadowBlur;
 
             var x = (pt.x + 1) * plotSize;
             var y = (boardSize - pt.y - 1) * plotSize - 5;
@@ -481,10 +481,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
             if (!!font.dy) {
                 y += font.dy;
             }
-            for (var i = 0; i < 10; i++) {
-                ctx.fillText(text, x, y);
-            }
-            ctx.shadowBlur = 0;
+            ctx.fillText(text, x, y);
+            //ctx.shadowBlur = 0;
         }
 
         var clear = function() {
