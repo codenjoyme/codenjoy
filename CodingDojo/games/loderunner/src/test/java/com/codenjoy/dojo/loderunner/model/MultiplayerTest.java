@@ -30,10 +30,11 @@ import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -57,15 +58,21 @@ public class MultiplayerTest {
     private List<Hero> heroes = new LinkedList<>();
     private List<Game> games = new LinkedList<>();
     private Loderunner field;
-    private PrinterFactory printerFactory;
+    private PrinterFactory printer;
     private GameSettings settings;
-    protected EventsListenersAssert events = new EventsListenersAssert(listeners);
+    protected EventsListenersAssert events;
 
     @Before
     public void setUp()  {
         dice = mock(Dice.class);
-        printerFactory = new PrinterFactoryImpl();
+        printer = new PrinterFactoryImpl();
         settings = new TestSettings();
+        events = new EventsListenersAssert(() -> listeners, Events.class);
+    }
+
+    @After
+    public void tearDown() {
+        events.verifyNoEvents();
     }
 
     private void dice(int... ints) {
@@ -377,9 +384,31 @@ public class MultiplayerTest {
                 .getHero().pick(PillType.SHADOW_PILL);
         givenPlayer(2, 2);
 
+        assert1("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⊳(    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⋉►    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
         hero(0).right();
 
         field.tick();
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_HERO]\n");
 
         assert1("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
@@ -399,10 +428,12 @@ public class MultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        verify(listener(0)).event(Events.KILL_ENEMY);
-        verify(listener(1)).event(Events.KILL_HERO);
-
+        field.remove(player(1)); // он геймовер его уберут
         field.tick();
+
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n");
 
         assert1("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
@@ -460,6 +491,10 @@ public class MultiplayerTest {
         dice(3, 3); // new pill
         field.tick();
 
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_HERO]\n");
+
         assert1("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
@@ -478,10 +513,12 @@ public class MultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        verify(listener(0)).event(Events.KILL_ENEMY);
-        verify(listener(1)).event(Events.KILL_HERO);
-
+        field.remove(player(1)); // он геймовер его уберут
         field.tick();
+
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n");
 
         assert1("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
@@ -560,6 +597,10 @@ public class MultiplayerTest {
         hero(0).up();
         field.tick();
 
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_HERO]\n");
+
         assert1("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
@@ -578,10 +619,12 @@ public class MultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        verify(listener(0)).event(Events.KILL_ENEMY);
-        verify(listener(1)).event(Events.KILL_HERO);
-
+        field.remove(player(1)); // он геймовер его уберут
         field.tick();
+
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n");
 
         assert1("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
@@ -987,7 +1030,7 @@ public class MultiplayerTest {
         listeners.add(listener);
         Player player = new Player(listener, settings);
         players.add(player);
-        Single game = new Single(player, printerFactory);
+        Single game = new Single(player, printer);
         games.add(game);
         game.on(field);
         dice(x, y);  // позиция рассчитывается рендомно из dice

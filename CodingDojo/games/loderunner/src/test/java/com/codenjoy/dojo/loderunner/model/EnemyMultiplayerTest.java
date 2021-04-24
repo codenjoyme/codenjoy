@@ -32,9 +32,13 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
+
+import java.util.Arrays;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static org.junit.Assert.assertEquals;
@@ -50,12 +54,19 @@ public class EnemyMultiplayerTest {
     private Loderunner field;
     private PrinterFactory printerFactory;
     private GameSettings settings;
+    private EventsListenersAssert events;
 
     @Before
     public void setUp() {
         dice = mock(Dice.class);
         printerFactory = new PrinterFactoryImpl();
         settings = new TestSettings();
+        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
+    }
+
+    @After
+    public void tearDown() {
+        events.verifyNoEvents();
     }
 
     // чертик идет за тобой
@@ -147,7 +158,7 @@ public class EnemyMultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        verify(listener).event(Events.KILL_HERO);
+        events.verifyAllEvents("KILL_HERO");
         assertTrue(game.isGameOver());
 
         dice(1, 4);

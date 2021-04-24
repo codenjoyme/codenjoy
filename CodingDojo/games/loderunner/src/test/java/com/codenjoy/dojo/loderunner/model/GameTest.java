@@ -31,15 +31,18 @@ import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
+
+import java.util.Arrays;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.PORTALS_COUNT;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -54,6 +57,7 @@ public class GameTest {
     private Joystick enemy;
     private PrinterFactory printer;
     private GameSettings settings;
+    protected EventsListenersAssert events;
 
     @Before
     public void setup() {
@@ -62,6 +66,12 @@ public class GameTest {
         printer = new PrinterFactoryImpl();
         enemy = new EnemyJoystick();
         settings = new TestSettings();
+        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
+    }
+
+    @After
+    public void tearDown() {
+        events.verifyNoEvents();
     }
 
     private void dice(int... ints) {
@@ -89,13 +99,6 @@ public class GameTest {
         player = new Player(listener, settings);
         dice(hero.getX(), hero.getY());  // позиция рассчитывается рендомно из dice
         game.newGame(player);
-
-//        player.hero = hero;
-//        hero.init(game);
-//        game.resetHeroes();
-//        this.hero = game.getHeroes().get(0);
-//        dice(0); // дальше охотник будет гоняться за первым попавшимся героем
-
         this.hero = game.allHeroes().get(0);
         this.hero.direction = hero.direction;
         dice(0); // всегда дальше выбираем нулевой индекс
@@ -561,8 +564,7 @@ public class GameTest {
                 "☼Ѡ##☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(Events.KILL_HERO);
-        verifyNoMoreInteractions(listener);
+        events.verifyAllEvents("[KILL_HERO]");
 
         dice(2, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте
@@ -619,8 +621,7 @@ public class GameTest {
                 "☼Ѡ##☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(Events.KILL_HERO);
-        verifyNoMoreInteractions(listener);
+        events.verifyAllEvents("[KILL_HERO]");
 
         dice(2, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте
@@ -756,7 +757,7 @@ public class GameTest {
         dice(2, 3);
         hero.right();
         game.tick();
-        verify(listener).event(Events.GET_YELLOW_GOLD);
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         assertE("☼☼☼☼☼" +
                 "☼ $ ☼" +
@@ -786,7 +787,7 @@ public class GameTest {
         dice(3, 3);
         hero.right();
         game.tick();
-        verify(listener).event(Events.GET_YELLOW_GOLD);
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         assertE("☼☼☼☼☼" +
                 "☼  $☼" +
@@ -1297,6 +1298,8 @@ public class GameTest {
                 "☼ $   ☼" +
                 "☼☼☼☼☼☼☼");
 
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+
         dice(2, 5);
         game.tick();
 
@@ -1307,6 +1310,8 @@ public class GameTest {
                 "☼ $   ☼" +
                 "☼ $   ☼" +
                 "☼☼☼☼☼☼☼");
+
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         dice(3, 5);
         game.tick();
@@ -1319,6 +1324,8 @@ public class GameTest {
                 "☼ $   ☼" +
                 "☼☼☼☼☼☼☼");
 
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+
         dice(4, 5);
         game.tick();
 
@@ -1330,7 +1337,7 @@ public class GameTest {
                 "☼ ◄   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener, times(4)).event(Events.GET_YELLOW_GOLD);
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
     }
 
     // если я просверлил дырку и падаю в нее, а под ней ничего нет - то я падаю пока не найду препятствие
@@ -1818,8 +1825,7 @@ public class GameTest {
                 "☼Ѡ#☼" +
                 "☼☼☼☼");
 
-        verify(listener, times(1)).event(Events.KILL_HERO);
-        verifyNoMoreInteractions(listener);
+        events.verifyAllEvents("[KILL_HERO]");
     }
 
     // я могу сверлить стенки под стенками, если те разрушены
@@ -2230,8 +2236,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(Events.KILL_HERO);
-        verifyNoMoreInteractions(listener);
+        events.verifyAllEvents("[KILL_HERO]");
 
         dice(1, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
@@ -2264,8 +2269,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(Events.KILL_HERO);
-        verifyNoMoreInteractions(listener);
+        events.verifyAllEvents("[KILL_HERO]");
 
         dice(0,  // охотимся за первым игроком
             3, 3);
@@ -2298,8 +2302,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(Events.KILL_HERO);
-        verifyNoMoreInteractions(listener);
+        events.verifyAllEvents("[KILL_HERO]");
 
         dice(3, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
@@ -2331,8 +2334,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(Events.KILL_HERO);
-        verifyNoMoreInteractions(listener);
+        events.verifyAllEvents("[KILL_HERO]");
 
         dice(0,  // охотимся за первым игроком
             3, 3);
@@ -2898,6 +2900,8 @@ public class GameTest {
                 "☼####X#☼" +
                 "☼☼☼☼☼☼☼☼");
 
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+
         hero.left();
         game.tick();
 
@@ -2913,6 +2917,8 @@ public class GameTest {
         hero.left();
         dice(2, 6);
         game.tick();
+
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$$    ☼" +
@@ -2990,6 +2996,8 @@ public class GameTest {
         hero.left();
         game.tick();
 
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$     ☼" +
                 "☼   ~~ ☼" +
@@ -3025,6 +3033,9 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼");
 
         game.tick();
+
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+
         game.tick();
         game.tick();
         game.tick();
@@ -3749,6 +3760,8 @@ public class GameTest {
         game.tick();
         game.tick();
 
+        events.verifyAllEvents("[KILL_HERO]");
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -3816,6 +3829,8 @@ public class GameTest {
         game.tick();
         game.tick();
 
+        events.verifyAllEvents("[KILL_HERO]");
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -3872,7 +3887,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(Events.SUICIDE);
+        events.verifyAllEvents("[KILL_HERO, SUICIDE]");
     }
 
     @Test
