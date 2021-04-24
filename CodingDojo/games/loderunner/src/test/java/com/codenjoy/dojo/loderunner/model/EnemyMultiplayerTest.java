@@ -41,6 +41,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.loderunner.model.GameTest.getLevel;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -93,8 +94,8 @@ public class EnemyMultiplayerTest {
         game.newGame();
     }
 
-    private void setupGm(String map) {
-        Level level = new LevelImpl(map, dice);
+    private void setupGm(String board) {
+        LevelImpl level = getLevel(board, settings, dice);
         field = new Loderunner(level, dice, settings);
 
         for (Hero hero : level.getHeroes()) {

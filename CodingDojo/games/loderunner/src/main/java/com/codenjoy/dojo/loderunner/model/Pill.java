@@ -30,8 +30,8 @@ public class Pill extends PointImpl implements State<Elements, Player> {
 
     private PillType pillType;
 
-    public Pill(Point point, PillType pillType) {
-        super(point);
+    public Pill(Point pt, PillType pillType) {
+        super(pt);
         this.pillType = pillType;
     }
 

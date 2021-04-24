@@ -56,10 +56,6 @@ public interface Field extends RoundGameField<Player> {
 
     void leaveGold(Point pt, Class<? extends Point> clazz);
 
-    void leavePill(Point pt, PillType pill);
-
-    void leavePortal(Point pt);
-
     boolean under(Point pt, PillType pill);
 
     int size();

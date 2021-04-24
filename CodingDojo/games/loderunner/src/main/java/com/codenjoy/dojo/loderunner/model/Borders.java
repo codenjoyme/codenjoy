@@ -35,14 +35,11 @@ public class Borders {
 
     public Borders(int size) {
         this.size = size;
-        all = new ArrayList<>(size);
-        borders = new Border[size][size];
-        for (int x = 0; x < size; x++) {
-            borders[x] = new Border[size];
-        }
+        clear();
     }
 
-    public void addAll(List<Border> borders) {
+    public void setAll(List<Border> borders) {
+        clear();
         for (Border border : borders) {
             set(border, border);
             all.add(border);
@@ -65,5 +62,13 @@ public class Borders {
     public boolean contains(Point pt) {
         if (pt.isOutOf(size)) return false;
         return borders[pt.getX()][pt.getY()] != null;
+    }
+
+    public void clear() {
+        all = new ArrayList<>(size);
+        borders = new Border[size][size];
+        for (int x = 0; x < size; x++) {
+            borders[x] = new Border[size];
+        }
     }
 }

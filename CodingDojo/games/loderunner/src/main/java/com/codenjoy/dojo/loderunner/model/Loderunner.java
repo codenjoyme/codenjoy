@@ -51,7 +51,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<Brick> bricks;
     private List<Ladder> ladder;
     private List<Pipe> pipe;
-    private int portalsTicksLive;
+    private int portalsTimer;
     private Dice dice;
     private GameSettings settings;
     private List<Function<Point, Point>> finder;
@@ -85,7 +85,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     private void init() {
         size = level.getSize();
-        borders.addAll(level.getBorders());
+        borders.setAll(level.getBorders());
         bricks = level.getBricks();
         ladder = level.getLadder();
         pipe = level.getPipe();
@@ -94,12 +94,17 @@ public class Loderunner extends RoundField<Player> implements Field {
         redGold = level.getRedGold();
         pills = level.getPills();
         portals = level.getPortals();
+        resetPortalsTimer();
 
         enemies = level.getEnemies();
         for (Enemy enemy : enemies) {
             enemy.init(this);
         }
 
+        generateAll();
+    }
+
+    private void generateAll() {
         generatePills();
         generateGold();
         generatePortals();
@@ -112,10 +117,9 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void clearScore() { // TODO test me
+    public void clearScore() {
         init();
         super.clearScore(); // тут так же произойдет reset all players
-        allHeroes().forEach(Hero::clearScores); // TODO проверить что эта строка тут не обязательна
     }
 
     @Override
@@ -144,15 +148,14 @@ public class Loderunner extends RoundField<Player> implements Field {
 
         die.addAll(bricksGo());
 
-        generateGold();
         portalsGo();
 
         for (Player player : die) {
             Hero deadHero = player.getHero();
             rewardMurderers(deadHero);
         }
-        generatePills();
-        generateEnemies();
+
+        generateAll();
     }
 
     @Override
@@ -168,70 +171,51 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     }
 
-    private void generatePills() {
-        int count = shadowPills();
-
-        if (count <= pills.size()) {
-            pills = pills.stream().limit(count).collect(toList());
-            return;
-        }
-        count = count - pills.size();
-        for (int i = 0; i < Math.abs(count); i++) {
-            Optional<Point> pt = freeRandom();
-            if (pt.isPresent()) {
-                leavePill(pt.get(), PillType.SHADOW_PILL);
-            }
-        }
+    private void generateGold()  {
+        generate(yellowGold, GOLD_COUNT_YELLOW, pt -> new YellowGold(pt));
+        generate(greenGold,  GOLD_COUNT_GREEN, pt -> new GreenGold(pt));
+        generate(redGold,    GOLD_COUNT_RED, pt -> new RedGold(pt));
     }
 
-    private int shadowPills() {
-        int count = settings.integer(SHADOW_PILLS_COUNT);
-        return count < 0 ? 0 : count;
+    private void generatePills() {
+        generate(pills, SHADOW_PILLS_COUNT,
+                pt -> new Pill(pt, PillType.SHADOW_PILL));
     }
 
     private void generateEnemies() {
-        int count = enemiesCount();
-
-        if (count < enemies.size()) {
-            enemies = enemies.stream().limit(count).collect(toList());
-            return;
-        }
-        count = count - enemies.size();
-        for (int i = 0; i < Math.abs(count); i++) {
-            Optional<Point> pt = freeRandom();
-            if (pt.isPresent()) {
-                Enemy enemy = new Enemy(pt.get(), Direction.LEFT, level.getAi());
-                enemies.add(enemy);
-                enemy.init(this);
-            }
-        }
-    }
-
-    private int enemiesCount() {
-        int count = settings.integer(ENEMIES_COUNT);
-        return count < 0 ? 0 : count;
+        generate(enemies, ENEMIES_COUNT, pt -> {
+            Enemy enemy = new Enemy(pt, Direction.LEFT, level.getAi());
+            enemy.init(this);
+            return enemy;
+        });
     }
 
     private void generatePortals() {
-        int ticks = portalTicks();
-        this.portalsTicksLive = ticks;
+        generate(portals, PORTALS_COUNT,
+                pt -> new Portal(pt));
+    }
 
-        int count = settings.integer(PORTALS_COUNT);
-
-        portals.clear();
-        if (count > 0) {
-            for (int i = 0; i < count; i++) {
+    private <T> void generate(List<T> list,
+                          GameSettings.Keys key,
+                          Function<Point, T> creator)
+    {
+        int count = Math.max(0, settings.integer(key));
+        int added = count - list.size();
+        if (added == 0) {
+            return;
+        } else if (added < 0) {
+            // удаляем из существующих
+            // важно оставить текущие, потому что метод работает каждый тик
+            list.subList(count, list.size()).clear();
+        } else {
+            // добавляем недостающих к тем что есть
+            for (int i = 0; i < added; i++) {
                 Optional<Point> pt = freeRandom();
                 if (pt.isPresent()) {
-                    leavePortal(pt.get());
+                    list.add(creator.apply(pt.get()));
                 }
             }
         }
-    }
-
-    private int portalTicks() {
-        int ticks = settings.integer(PORTAL_TICKS);
-        return ticks < 1 ? 1 : ticks;
     }
 
     private List<Player> getDied() {
@@ -377,12 +361,19 @@ public class Loderunner extends RoundField<Player> implements Field {
         }
     }
 
+    // TODO сделать чтобы каждый портал сам тикал свое время
     private void portalsGo() {
-        if (this.portalsTicksLive == 0) {
+        if (portalsTimer == 0) {
+            resetPortalsTimer();
+            portals.clear();
             generatePortals();
         } else {
-            this.portalsTicksLive--;
+            portalsTimer--;
         }
+    }
+
+    private void resetPortalsTimer() {
+        portalsTimer = Math.max(1, settings.integer(PORTAL_TICKS));
     }
 
     @Override
@@ -513,16 +504,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void leavePill(Point pt, PillType pill) {
-        pills.add(new Pill(pt, pill));
-    }
-
-    @Override
-    public void leavePortal(Point pt) {
-        portals.add(new Portal(pt));
-    }
-
-    @Override
     public boolean under(Point pt, PillType pill) {
         return players.stream()
                 .map(Player::getHero)
@@ -558,54 +539,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         Optional<Point> pt = freeRandom();
         if (pt.isPresent()) {
             leaveGold(pt.get(), type);
-        }
-    }
-
-    private void generateGold()  {
-        int yellow = settings.integer(GOLD_COUNT_YELLOW);
-        int green = settings.integer(GOLD_COUNT_GREEN);
-        int red = settings.integer(GOLD_COUNT_RED);
-        green = Math.max(green, 0);
-        red = Math.max(red, 0);
-
-        if (yellow >= 0 && yellow <= yellowGold.size()) {
-            yellowGold = yellowGold.stream()
-                    .limit(yellow)
-                    .collect(toList());
-        }
-        if (green <= greenGold.size()) {
-            greenGold = greenGold.stream()
-                    .limit(green)
-                    .collect(toList());
-        }
-        if (red <= redGold.size()) {
-            redGold = redGold.stream()
-                    .limit(red)
-                    .collect(toList());
-        }
-
-        yellow = yellow - yellowGold.size();
-        for (int i = 0; i < Math.max(0, yellow); i++) {
-            Optional<Point> pt = freeRandom();
-            if (pt.isPresent()) {
-                yellowGold.add(new YellowGold(pt.get()));
-            }
-        }
-
-        green = green - greenGold.size();
-        for (int i = 0; i < Math.max(0, green); i++) {
-            Optional<Point> pt = freeRandom();
-            if (pt.isPresent()) {
-                greenGold.add(new GreenGold(pt.get()));
-            }
-        }
-
-        red = red - redGold.size();
-        for (int i = 0; i < Math.max(0, red); i++) {
-            Optional<Point> pt = freeRandom();
-            if (pt.isPresent()) {
-                redGold.add(new RedGold(pt.get()));
-            }
         }
     }
 
@@ -660,5 +593,9 @@ public class Loderunner extends RoundField<Player> implements Field {
     // only for testing
     void resetHeroes() {
         players.resetHeroes();
+    }
+
+    public int getPortalsTimer() {
+        return portalsTimer;
     }
 }

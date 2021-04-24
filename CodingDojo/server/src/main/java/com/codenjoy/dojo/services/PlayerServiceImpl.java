@@ -377,11 +377,16 @@ public class PlayerServiceImpl implements PlayerService {
                 GameData gameData = gameDataMap.get(player.getId());
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
-                Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
+                Object encoded = null;
+                try {
+                    Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
 
-                GuiPlotColorDecoder decoder = gameData.getDecoder();
-                cacheBoards.put(player, decoder.encodeForClient(board));
-                Object encoded = decoder.encodeForBrowser(board);
+                    GuiPlotColorDecoder decoder = gameData.getDecoder();
+                    cacheBoards.put(player, decoder.encodeForClient(board));
+                    encoded = decoder.encodeForBrowser(board);
+                } catch (Exception e) {
+                    log.error("Error during draw board for player: " + player.getId(), e);
+                }
 
                 int boardSize = gameData.getBoardSize();
                 Object score = player.getScore();

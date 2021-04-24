@@ -38,9 +38,10 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.PORTALS_COUNT;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -50,6 +51,8 @@ public class GameTest {
 
     private Loderunner game;
     private Hero hero;
+    private List<Hero> heroes = new LinkedList<>();
+    private List<Player> players = new LinkedList<>();
     private Dice dice;
     private EventListener listener;
     private Player player;
@@ -67,6 +70,7 @@ public class GameTest {
         enemy = new EnemyJoystick();
         settings = new TestSettings();
         events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
+        Brick.DRILL_TIMER = 13;
     }
 
     @After
@@ -82,26 +86,42 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board, dice);
+        LevelImpl level = getLevel(board, settings, dice);
         level.setAI(ai);
 
-        Hero hero;
         if (level.getHeroes().isEmpty()) {
             throw new IllegalStateException("Нет героя!");
-        } else {
-            hero = level.getHeroes().get(0);
         }
 
-        // TODO распутать клубок
         game = new Loderunner(level, dice, settings);
         listener = mock(EventListener.class);
-        dice(hero.getX(), hero.getY());
-        player = new Player(listener, settings);
-        dice(hero.getX(), hero.getY());  // позиция рассчитывается рендомно из dice
-        game.newGame(player);
-        this.hero = game.allHeroes().get(0);
-        this.hero.direction = hero.direction;
+
+        for (Hero hero : level.getHeroes()) {
+            dice(hero.getX(), hero.getY());
+            Player player = new Player(listener, settings);
+            players.add(player);
+            game.newGame(player);
+            heroes.add(player.getHero());
+            player.getHero().direction = hero.direction;
+        }
+        this.hero = heroes.get(0);
+        this.player = players.get(0);
         dice(0); // всегда дальше выбираем нулевой индекс
+    }
+
+    public static LevelImpl getLevel(String board, GameSettings settings, Dice dice) {
+        LevelImpl level = new LevelImpl(board, dice);
+        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
+                .integer(GOLD_COUNT_RED, level.getRedGold().size())
+                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
+                .integer(PORTALS_COUNT, level.getPortals().size())
+                .integer(ENEMIES_COUNT, level.getEnemies().size())
+                .integer(SHADOW_PILLS_COUNT, level.getPills().size());
+        return level;
+    }
+
+    private Hero hero(int index) {
+        return heroes.get(index);
     }
 
     private void assertE(String expected) {
@@ -150,6 +170,64 @@ public class GameTest {
                 "☼   ☼" +
                 "☼ Я ☼" +
                 "☼ ##☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldDrillCounter() {
+        shouldDrillLeft();
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Я ☼" +
+                "☼ ##☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Я ☼" +
+                "☼4##☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Я ☼" +
+                "☼3##☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Я ☼" +
+                "☼2##☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Я ☼" +
+                "☼1##☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Я ☼" +
+                "☼###☼" +
                 "☼☼☼☼☼");
     }
 
@@ -1973,7 +2051,6 @@ public class GameTest {
     // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо
     @Test
     public void shouldEnemyMoveLeft() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
@@ -1992,7 +2069,6 @@ public class GameTest {
 
     @Test
     public void shouldEnemyMoveRight() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
@@ -2012,7 +2088,6 @@ public class GameTest {
     // если небыло команды чертик никуда не идет
     @Test
     public void shouldEnemyStopWhenNoMoreRightCommand() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  «☼" +
@@ -2040,7 +2115,6 @@ public class GameTest {
     // Чертик останавливается возле границы
     @Test
     public void shouldEnemyStopWhenWallRight() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  »☼" +
@@ -2059,7 +2133,6 @@ public class GameTest {
 
     @Test
     public void shouldEnemyStopWhenWallLeft() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼«  ☼" +
@@ -2079,7 +2152,6 @@ public class GameTest {
     // В просверленную яму чертик легко может упасть
     @Test
     public void shouldEnemyFallInPitLeft() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼« ◄☼" +
@@ -2109,7 +2181,6 @@ public class GameTest {
 
     @Test
     public void shouldEnemyFallInPitRight() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄ «☼" +
@@ -2147,7 +2218,6 @@ public class GameTest {
     // при падении чертик не может передвигаться влево и вправо - ему мешают стены
     @Test
     public void shouldEnemyCantGoLeftIfWall() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyFallInPitRight();
 
         enemy.left();
@@ -2162,7 +2232,6 @@ public class GameTest {
 
     @Test
     public void shouldEnemyCantGoRightIfWall() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyFallInPitLeft();
 
         enemy.right();
@@ -2178,7 +2247,6 @@ public class GameTest {
     // монстр сидит в ямке некоторое количество тиков, потом он вылазит
     @Test
     public void shouldMonsterGetUpFromPit() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyFallInPitLeft();
 
         game.tick();
@@ -2219,7 +2287,6 @@ public class GameTest {
     // если чертик попадает на героя - тот погибает
     @Test
     public void shouldHeroDieWhenMeetWithEnemy() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄ «☼" +
@@ -2252,7 +2319,6 @@ public class GameTest {
     // другой кейс, когда оба двигаются на встречу друг к другу
     @Test
     public void shouldHeroDieWhenMeetWithEnemy2() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄« ☼" +
@@ -2286,7 +2352,6 @@ public class GameTest {
     // другой кейс, когда игрок идет на чертика
     @Test
     public void shouldHeroDieWhenMeetWithEnemy_whenHeroWalk() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄« ☼" +
@@ -2318,7 +2383,6 @@ public class GameTest {
     // другой кейс, когда чертик идет на игрока
     @Test
     public void shouldHeroDieWhenMeetWithEnemy_whenEnemyWalk() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄« ☼" +
@@ -2351,7 +2415,6 @@ public class GameTest {
     // Чертик может зайти на лестницу и выйти обратно
     @Test
     public void shouldEnemyCanGoOnLadder() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2380,7 +2443,6 @@ public class GameTest {
     // Чертик может карабкаться по лестнице вверх
     @Test
     public void shouldEnemyCanGoOnLadderUp() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2418,7 +2480,6 @@ public class GameTest {
     // Чертик не может вылезти с лестницей за границы
     @Test
     public void shouldEnemyCantGoOnBarrierFromLadder() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyCanGoOnLadderUp();
 
         assertE("☼☼☼☼►" +
@@ -2449,7 +2510,6 @@ public class GameTest {
     // Чертик может спустится вниз, но не дальше границы экрана
     @Test
     public void shouldEnemyCanGoOnLadderDown() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyCanGoOnLadderUp();
 
         assertE("☼☼☼☼►" +
@@ -2489,7 +2549,6 @@ public class GameTest {
     // Чертик может в любой момент спрыгнуть с лестницы и будет падать до тех пор пока не наткнется на препятствие
     @Test
     public void shouldEnemyCanFly() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyCanGoOnLadderUp();
 
         assertE("☼☼☼☼►" +
@@ -2527,7 +2586,6 @@ public class GameTest {
     // Чертик может поднятся по лестнице и зайти на площадку
     @Test
     public void shouldEnemyCanGoFromLadderToArea() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼H  ☼" +
                 "☼H# ☼" +
@@ -2600,7 +2658,6 @@ public class GameTest {
     // пока чертик падает он не может двигаться влево и справо, даже если там есть площадки
     @Test
     public void shouldEnemyCantMoveWhenFall() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼  »  ☼" +
                 "☼     ☼" +
@@ -2657,7 +2714,6 @@ public class GameTest {
     // если чертик с площадки заходит на трубу то он ползет по ней
     @Test
     public void shouldEnemyPipe() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼»~~~ ☼" +
@@ -2703,7 +2759,6 @@ public class GameTest {
     // с трубы чертик может спрыгунть и тогда он будет падать до препятствия
     @Test
     public void shouldEnemyFallFromPipe() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyPipe();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2759,7 +2814,6 @@ public class GameTest {
     // чертик может похитить 1 золото в падении
     @Test
     public void shouldEnemyGetGoldWhenFallenFromPipe() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼  $~~«☼" +
@@ -2841,7 +2895,6 @@ public class GameTest {
 
     @Test
     public void shouldEnemyLeaveGoldWhenFallInPit() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyGetGoldWhenFallenFromPipe();
 
         enemy.right();
@@ -2884,7 +2937,6 @@ public class GameTest {
 
     @Test
     public void shouldIWalkOnEnemyInPitAndGetGold() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyLeaveGoldWhenFallInPit();
 
         hero.left();     //я могу пройти по нему сверху и забрать золото
@@ -2932,7 +2984,6 @@ public class GameTest {
 
     @Test
     public void shouldNoMoreGoldAEnemy() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldIWalkOnEnemyInPitAndGetGold();
 
         for (int c = 4; c < Brick.DRILL_TIMER; c++) { // враг вылазит
@@ -2980,7 +3031,6 @@ public class GameTest {
     // я могу ходить по монстру, который в ямке
     @Test
     public void shouldIWalkOnEnemy() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyLeaveGoldWhenFallInPit();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3058,7 +3108,6 @@ public class GameTest {
     // TODO сделать так, чтобы мог
     @Test
     public void shouldICantDrillUnderEnemy() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ►»☼" +
@@ -3078,7 +3127,6 @@ public class GameTest {
     // если я просверлил дырку монстр падает в нее, а под ней ничего нет - монстр не проваливается сквозь
     @Test
     public void shouldEnemyStayOnPitWhenUnderPitIsFree() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼" +
                 "☼» ◄  ☼" +
                 "☼#####☼" +
@@ -3152,7 +3200,6 @@ public class GameTest {
     // если в процессе падения чертик вдург наткнулся на трубу то он повисаю на ней
     @Test
     public void shouldEnemyPipeWhenFall() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼  »  ☼" +
                 "☼# ###☼" +
@@ -3216,7 +3263,6 @@ public class GameTest {
     // чертик может спрыгнуть с трубы
     @Test
     public void shouldEnemyCanJumpFromPipe() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼  «  ☼" +
                 "☼     ☼" +
@@ -3271,7 +3317,6 @@ public class GameTest {
     // плюс чертик должен иметь возможность спустится по лестнице
     @Test
     public void shouldEnemyCantWalkThroughWallDown() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼ « ☼" +
                 "☼ H ☼" +
@@ -3337,7 +3382,6 @@ public class GameTest {
     // Чертику нельзя проходить с лестницы через бетон направо или налево
     @Test
     public void shouldEnemyCantWalkThroughWallLeftRight() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼☼H☼☼" +
@@ -3384,7 +3428,6 @@ public class GameTest {
     // чертику нельзя проходить через бетон
     @Test
     public void shouldEnemyCantWalkThroughWallLeftRight2() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼   ☼" +
@@ -3413,7 +3456,6 @@ public class GameTest {
     // Чертику нельзя спрыгивать с трубы что сразу над бетоном, протелая сквозь него
     @Test
     public void shouldEnemyCantJumpThroughWall() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼►" +
                 "☼  » ☼" +
                 "☼  ~ ☼" +
@@ -3444,7 +3486,6 @@ public class GameTest {
     // если чертик спрыгивает с последней секции лестницы
     @Test
     public void shouldEnemyJumpFromLadderDown() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼►" +
                 "☼ »  ☼" +
                 "☼ H##☼" +
@@ -3497,7 +3538,6 @@ public class GameTest {
     // Чертик не может прыгять вверх :)
     @Test
     public void shouldEnemyCantJump() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼    ☼" +
@@ -3519,7 +3559,6 @@ public class GameTest {
     // я могу прыгнуть на голову монстру и мне ничего не будет
     @Test
     public void shouldICanJumpAtEnemyHead() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼" +
                 "☼ ◄ ☼" +
                 "☼   ☼" +
@@ -3564,7 +3603,6 @@ public class GameTest {
     // А когда снова упадет, то оставит
     @Test
     public void shouldGetGoldWheExitFromPit() {
-        settings.integer(ENEMIES_COUNT, 1);
         shouldEnemyLeaveGoldWhenFallInPit();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3622,7 +3660,6 @@ public class GameTest {
     // Если чертик упал на другого чертика который был на трубе, то они складываются в один :)
     @Test
     public void shouldEnemyStayOnOtherAtThePipe() {
-        settings.integer(ENEMIES_COUNT, 2);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼  «   ☼" +
                 "☼      ☼" +
@@ -3684,7 +3721,6 @@ public class GameTest {
 
     @Test
     public void shouldEnemyDontStopOnPipe() {
-        settings.integer(ENEMIES_COUNT, 2);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -3736,7 +3772,6 @@ public class GameTest {
     // Чертик должен сам проваливаться на героя, а не впрыгивать в него
     @Test
     public void shouldEnemyStayOnHeroAtThePipe() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼  «   ☼" +
                 "☼      ☼" +
@@ -3790,7 +3825,6 @@ public class GameTest {
     // Чертик проваливается в яму за героем и там его находит
     @Test
     public void shouldEnemyFindHeroAtPit() {
-        settings.integer(ENEMIES_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -3870,8 +3904,7 @@ public class GameTest {
     }
 
     @Test
-    public void iLoseScoresWhenDoHarakiri() {
-        settings.integer(ENEMIES_COUNT, 1);
+    public void iLooseScoresWhenDoHarakiri() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ◄ ☼" +
@@ -3894,7 +3927,8 @@ public class GameTest {
     public void iCanJumpThroughPortals() {
         settings.integer(PORTALS_COUNT, 2);
 
-        dice(1, 2, 3, 3);
+        dice(1, 2,
+            3, 3);
         givenFl("☼☼☼☼☼" +
                 "☼  ⊛☼" +
                 "☼⊛◄ ☼" +
@@ -3907,6 +3941,87 @@ public class GameTest {
         assertE("☼☼☼☼☼" +
                 "☼  ]☼" +
                 "☼⊛  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛ ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛ ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void portalsAreRecreatedEveryFewTicks() {
+        settings.integer(PORTALS_COUNT, 2)
+                .integer(PORTAL_TICKS, 5);
+
+        givenFl("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛◄ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        assertEquals(5, game.getPortalsTimer());
+
+        hero.left();
+        game.tick();
+
+        assertEquals(4, game.getPortalsTimer());
+
+        assertE("☼☼☼☼☼" +
+                "☼  ]☼" +
+                "☼⊛  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(3, game.getPortalsTimer());
+
+        assertE("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛ ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(2, game.getPortalsTimer());
+
+        game.tick();
+
+        assertEquals(1, game.getPortalsTimer());
+
+        game.tick();
+
+        assertEquals(0, game.getPortalsTimer());
+
+        assertE("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛ ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        dice(1, 3,  // new portals
+            2, 3);
+        game.tick();
+
+        assertEquals(5, game.getPortalsTimer());
+
+        assertE("☼☼☼☼☼" +
+                "☼⊛⊛ ☼" +
+                "☼  ◄☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
     }
@@ -3938,8 +4053,682 @@ public class GameTest {
         }
     }
 
-    // если монстр не успел вылезти из ямки и она заросла то монстр умирает?
-    // когда монстр умирает, то на карте появляется новый
+    @Test
+    public void shouldResetHeroAndEnemy_whenClearBoard() {
+        // given
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  « ◄ ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  « ◄ ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ «  ◄ ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        dice(1, 2); // new hero coordinates
+        game.clearScore();
+
+        // then
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼► «   ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldResetHeroScores_whenClearBoard() {
+        // given
+        Brick.DRILL_TIMER = 4;
+
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ◄ ◄ ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ◄ ) ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        hero(0).act();
+        hero(0).right();
+        hero(1).left();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  R⊐  ☼" +
+                "☼###*##☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  R   ☼" +
+                "☼###)##☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(0, hero(0).scores());
+        assertEquals(0, hero(1).scores());
+        assertEquals(true, hero(0).isAlive());
+        assertEquals(true, hero(1).isAlive());
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  R   ☼" +
+                "☼###)##☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(1, hero(0).scores());
+        assertEquals(0, hero(1).scores());
+        assertEquals(true, hero(0).isAlive());
+        assertEquals(false, hero(1).isAlive());
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  R   ☼" +
+                "☼###Z##☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        dice(1, 2,
+            6, 2);
+        game.clearScore();
+        reloadAllHeroes();
+
+        // then
+        assertEquals(0, hero(0).scores());
+        assertEquals(0, hero(1).scores());
+        assertEquals(true, hero(0).isAlive());
+        assertEquals(true, hero(1).isAlive());
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►    (☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldCollectAllGold() {
+        // given
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►$$&@@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►$$&@@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        verify(listener).event(Events.GET_YELLOW_GOLD);
+        verifyNoMoreInteractions(listener);
+        reset(listener);
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ ►$&@@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        verify(listener).event(Events.GET_YELLOW_GOLD);
+        verifyNoMoreInteractions(listener);
+        reset(listener);
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ►&@@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        verify(listener).event(Events.GET_GREEN_GOLD);
+        verifyNoMoreInteractions(listener);
+        reset(listener);
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼   ►@@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        verify(listener).event(Events.GET_RED_GOLD);
+        verifyNoMoreInteractions(listener);
+        reset(listener);
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼    ►@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        verify(listener).event(Events.GET_RED_GOLD);
+        verifyNoMoreInteractions(listener);
+        reset(listener);
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼     ►☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldResetGold_whenClearBoard() {
+        // given
+        shouldCollectAllGold();
+
+        // when
+        dice(1, 2);
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►$$&@@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // добавим еще золота
+        settings.integer(GOLD_COUNT_YELLOW, settings.integer(GOLD_COUNT_YELLOW) + 2)
+                .integer(GOLD_COUNT_RED,    settings.integer(GOLD_COUNT_RED) + 3)
+                .integer(GOLD_COUNT_GREEN,  settings.integer(GOLD_COUNT_GREEN) + 1);
+        dice(
+            2, 3, // yellow
+            3, 3, // yellow
+            4, 3, // green
+            5, 3, // red
+            6, 3, // red
+            6, 4, // red
+            1, 6  // герой
+        );
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼[     ☼" +
+                "☼      ☼" +
+                "☼     @☼" +
+                "☼ $$&@@☼" +
+                "☼ $$&@@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // удалим золота
+        settings.integer(GOLD_COUNT_YELLOW, 1)
+                .integer(GOLD_COUNT_RED,    1)
+                .integer(GOLD_COUNT_GREEN,  1);
+
+        dice(2, 6);  // герой
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼ [    ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ $ &@ ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldEndlesslyWalkThroughThePortals_untilExit() {
+        // given
+        settings.integer(PORTALS_COUNT, 3);
+
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼►⊛    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼►⊛    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   [  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ⊛    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼   [  ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ⊛    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ►    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // что интересно, если ты не выйдешь из портала то в следующий тик отправишься дальше
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   [  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ⊛    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼   [  ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ⊛    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ►    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ⊛►   ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldResetPortals_whenClearBoard() {
+        shouldEndlesslyWalkThroughThePortals_untilExit();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ⊛►   ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // добавим еще один портал
+        settings.integer(PORTALS_COUNT, settings.integer(PORTALS_COUNT) + 1);
+        dice(2, 4, // new portal
+            1, 2); // hero
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ⊛ ⊛  ☼" +
+                "☼      ☼" +
+                "☼►⊛    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // оставим два портала
+        settings.integer(PORTALS_COUNT, 2);
+        dice(1, 2); // hero
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ►    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldResetPills_whenClearBoard() {
+        // given
+        settings.integer(SHADOW_PILLS_COUNT, 3);
+
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►S S S☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►S S S☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertEquals(false, hero.under(Pill.PillType.SHADOW_PILL));
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼     ⊳☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertEquals(true, hero.under(Pill.PillType.SHADOW_PILL));
+
+        // when
+        // почистим все
+        dice(1, 2);  // hero
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertEquals(false, hero.under(Pill.PillType.SHADOW_PILL));
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►S S S☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // добавим еще
+        settings.integer(SHADOW_PILLS_COUNT, settings.integer(SHADOW_PILLS_COUNT) + 2);
+        dice(
+                3, 3, // new pills
+                5, 3,
+                1, 6  // hero
+        );
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼[     ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  S S ☼" +
+                "☼ S S S☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // оставим только 1
+        settings.integer(SHADOW_PILLS_COUNT, 1);
+        dice(1, 2);  // hero
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►S    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldRemoveOldWalls_whenClearBoard() {
+        // given
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼     ►☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼     ►☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertEquals(7 * 4, game.borders().size());
+
+        // when
+        dice(1, 2); // new hero
+        game.clearScore();
+
+        // then
+        assertEquals(7 * 4, game.borders().size());
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►     ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        dice(2, 2); // new hero
+        game.clearScore();
+
+        // then
+        assertEquals(7 * 4, game.borders().size());
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ ►    ☼" +  // TODO героя приходится смещать, потому что при очистке его прошлое место занято им самим
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldResetPortalsTimeout_whenClearBoard() {
+        portalsAreRecreatedEveryFewTicks();
+
+        assertE("☼☼☼☼☼" +
+                "☼⊛⊛ ☼" +
+                "☼  ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        assertEquals(5, game.getPortalsTimer());
+
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertEquals(2, game.getPortalsTimer());
+
+        // when
+        dice(3, 3, // new portals
+            3, 2,
+            1, 2); // new hero
+        game.clearScore();
+
+        // then
+        assertEquals(5, game.getPortalsTimer());
+    }
+
+    private void reloadAllHeroes() {
+        players = game.players();
+        player = players.get(0);
+
+        heroes = game.allHeroes();
+        hero = heroes.get(0);
+    }
 
     // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
 
