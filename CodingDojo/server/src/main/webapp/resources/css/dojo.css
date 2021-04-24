@@ -105,6 +105,10 @@ span.pow {
     height:24px;
 }
 
+.admin-table input[readonly="true"] {
+    background-color: papayawhip;
+}
+
 .admin-table .input-score {
     width:50px !important;
 }
