@@ -105,7 +105,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<RedGold> getRedGold() {
-        return  LevelUtils.getObjects(xy, map,
+        return LevelUtils.getObjects(xy, map,
                 RedGold::new,
                 RED_GOLD);
     }

@@ -86,6 +86,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     private void init() {
         size = level.getSize();
+        borders.clear();
         borders.addAll(level.getBorders());
         bricks = level.getBricks();
         ladder = level.getLadder();
@@ -113,10 +114,9 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void clearScore() { // TODO test me
+    public void clearScore() {
         init();
         super.clearScore(); // тут так же произойдет reset all players
-        allHeroes().forEach(Hero::clearScores); // TODO проверить что эта строка тут не обязательна
     }
 
     @Override
@@ -173,7 +173,9 @@ public class Loderunner extends RoundField<Player> implements Field {
         int count = shadowPills();
 
         if (count <= pills.size()) {
-            pills = pills.stream().limit(count).collect(toList());
+            pills = pills.stream()
+                    .limit(count)
+                    .collect(toList());
             return;
         }
         count = count - pills.size();
@@ -194,7 +196,9 @@ public class Loderunner extends RoundField<Player> implements Field {
         int count = enemiesCount();
 
         if (count < enemies.size()) {
-            enemies = enemies.stream().limit(count).collect(toList());
+            enemies = enemies.stream()
+                    .limit(count)
+                    .collect(toList());
             return;
         }
         count = count - enemies.size();
@@ -218,14 +222,19 @@ public class Loderunner extends RoundField<Player> implements Field {
         this.portalsTicksLive = ticks;
 
         int count = settings.integer(PORTALS_COUNT);
+        count = Math.max(count, 0);
 
-        portals.clear();
-        if (count > 0) {
-            for (int i = 0; i < count; i++) {
-                Optional<Point> pt = getFreeRandom();
-                if (pt.isPresent()) {
-                    leavePortal(pt.get());
-                }
+        if (count >= 0 && count <= portals.size()) {
+            portals = portals.stream()
+                    .limit(count)
+                    .collect(toList());
+        }
+
+        count = count - portals.size();
+        for (int i = 0; i < Math.max(0, count); i++) {
+            Optional<Point> pt = getFreeRandom();
+            if (pt.isPresent()) {
+                leavePortal(pt.get());
             }
         }
     }
@@ -567,6 +576,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         int yellow = settings.integer(GOLD_COUNT_YELLOW);
         int green = settings.integer(GOLD_COUNT_GREEN);
         int red = settings.integer(GOLD_COUNT_RED);
+        yellow = Math.max(yellow, 0);
         green = Math.max(green, 0);
         red = Math.max(red, 0);
 

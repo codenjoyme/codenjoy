@@ -30,7 +30,8 @@ import com.codenjoy.dojo.services.Tickable;
 
 public class Brick extends PointImpl implements Tickable, State<Elements, Player> {
 
-    public static final int DRILL_TIMER = 13;
+    // TODO move to settings
+    public static int DRILL_TIMER = 13;
     public static final Brick NULL = new Brick(pt(-1, -1));
     private int drill;
 
