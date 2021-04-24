@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.ReflectUtils;
 import com.codenjoy.dojo.web.controller.Validator;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+@Slf4j
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 
@@ -221,8 +223,14 @@ public class GameServiceImpl implements GameService {
      */
     @Override // TODO test me
     public String getDefaultProgress(GameType gameType) {
-        MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
-        JSONObject save = type.progress().saveTo(new JSONObject());
-        return save.toString().replace('"', '\'');
+        try {
+            // TODO почему-то на проде тут NPE
+            MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
+            JSONObject save = type.progress().saveTo(new JSONObject());
+            return save.toString().replace('"', '\'');
+        } catch (Exception e) {
+            log.error("Something wrong while getDefaultProgress", e);
+            return "{}";
+        }
     }
 }
