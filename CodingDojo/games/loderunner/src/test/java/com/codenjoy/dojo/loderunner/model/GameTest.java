@@ -4392,7 +4392,7 @@ public class GameTest {
 
         // when
         // добавим еще один портал
-        settings.integer(PORTALS_COUNT, 4);
+        settings.integer(PORTALS_COUNT, settings.integer(PORTALS_COUNT) + 1);
         dice(2, 4, // new portal
             1, 2); // hero
         game.clearScore();
@@ -4408,7 +4408,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼");
 
         // when
-        // уберем два портала
+        // оставим два портала
         settings.integer(PORTALS_COUNT, 2);
         dice(1, 2); // hero
         game.clearScore();
@@ -4483,6 +4483,8 @@ public class GameTest {
         game.clearScore();
         reloadAllHeroes();
 
+        assertEquals(false, hero.under(Pill.PillType.SHADOW_PILL));
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -4525,6 +4527,64 @@ public class GameTest {
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼►S    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldRemoveOldWalls_whenClearBoard() {
+        // given
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼     ►☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼     ►☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertEquals(7 * 4, game.borders().size());
+
+        // when
+        dice(1, 2); // new hero
+        game.clearScore();
+
+        // then
+        assertEquals(7 * 4, game.borders().size());
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►     ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        dice(2, 2); // new hero
+        game.clearScore();
+
+        // then
+        assertEquals(7 * 4, game.borders().size());
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ ►    ☼" +  // TODO героя приходится смещать, потому что при очистке его прошлое место занято им самим
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
     }

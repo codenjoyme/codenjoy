@@ -87,8 +87,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     private void init() {
         size = level.getSize();
-        borders.clear();
-        borders.addAll(level.getBorders());
+        borders.setAll(level.getBorders());
         bricks = level.getBricks();
         ladder = level.getLadder();
         pipe = level.getPipe();

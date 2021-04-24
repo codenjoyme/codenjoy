@@ -38,7 +38,8 @@ public class Borders {
         clear();
     }
 
-    public void addAll(List<Border> borders) {
+    public void setAll(List<Border> borders) {
+        clear();
         for (Border border : borders) {
             set(border, border);
             all.add(border);
