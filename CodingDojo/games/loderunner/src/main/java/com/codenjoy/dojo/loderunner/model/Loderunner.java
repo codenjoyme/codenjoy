@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
@@ -170,78 +171,35 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generatePills() {
-        int count = shadowPills();
-
-        if (count <= pills.size()) {
-            pills = pills.stream()
-                    .limit(count)
-                    .collect(toList());
-            return;
-        }
-        count = count - pills.size();
-        for (int i = 0; i < Math.abs(count); i++) {
-            Optional<Point> pt = getFreeRandom();
-            if (pt.isPresent()) {
-                leavePill(pt.get(), PillType.SHADOW_PILL);
-            }
-        }
-    }
-
-    private int shadowPills() {
-        int count = settings.integer(SHADOW_PILLS_COUNT);
-        return count < 0 ? 0 : count;
+        regenerate(pills, SHADOW_PILLS_COUNT, pt -> leavePill(pt, PillType.SHADOW_PILL));
     }
 
     private void generateEnemies() {
-        int count = enemiesCount();
-
-        if (count < enemies.size()) {
-            enemies = enemies.stream()
-                    .limit(count)
-                    .collect(toList());
-            return;
-        }
-        count = count - enemies.size();
-        for (int i = 0; i < Math.abs(count); i++) {
-            Optional<Point> pt = getFreeRandom();
-            if (pt.isPresent()) {
-                Enemy enemy = new Enemy(pt.get(), Direction.LEFT, level.getAi());
-                enemies.add(enemy);
-                enemy.init(this);
-            }
-        }
-    }
-
-    private int enemiesCount() {
-        int count = settings.integer(ENEMIES_COUNT);
-        return count < 0 ? 0 : count;
+        regenerate(enemies, ENEMIES_COUNT, pt -> leaveEnemy(pt));
     }
 
     private void generatePortals() {
-        int ticks = portalTicks();
-        this.portalsTicksLive = ticks;
-
-        int count = settings.integer(PORTALS_COUNT);
-        count = Math.max(count, 0);
-
-        if (count >= 0 && count <= portals.size()) {
-            portals = portals.stream()
-                    .limit(count)
-                    .collect(toList());
-        }
-
-        count = count - portals.size();
-        for (int i = 0; i < Math.max(0, count); i++) {
-            Optional<Point> pt = getFreeRandom();
-            if (pt.isPresent()) {
-                leavePortal(pt.get());
-            }
-        }
+        portalsTicksLive = Math.max(1, settings.integer(PORTAL_TICKS));
+        regenerate(portals, PORTALS_COUNT, pt -> leavePortal(pt));
     }
 
-    private int portalTicks() {
-        int ticks = settings.integer(PORTAL_TICKS);
-        return ticks < 1 ? 1 : ticks;
+    private void regenerate(List<? extends Point> list,
+                            GameSettings.Keys key,
+                            Consumer<Point> consumer)
+    {
+        int count = Math.max(0, settings.integer(key));
+
+        if (count >= 0 && count <= list.size()) {
+            list.subList(count, list.size()).clear();
+        }
+
+        count = Math.max(0, count - list.size());
+        for (int i = 0; i < count; i++) {
+            Optional<Point> pt = getFreeRandom();
+            if (pt.isPresent()) {
+                consumer.accept(pt.get());
+            }
+        }
     }
 
     private List<Player> getDied() {
@@ -387,6 +345,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         }
     }
 
+    // TODO сделать чтобы каждый портал сам тикал свое время
     private void portalsGo() {
         if (this.portalsTicksLive == 0) {
             generatePortals();
@@ -534,6 +493,13 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
+    public void leaveEnemy(Point pt) {
+        Enemy enemy = new Enemy(pt, Direction.LEFT, level.getAi());
+        enemies.add(enemy);
+        enemy.init(this);
+    }
+
+    @Override
     public boolean under(Point pt, PillType pill) {
         return players.stream()
                 .map(Player::getHero)
@@ -573,52 +539,9 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generateGold()  {
-        int yellow = settings.integer(GOLD_COUNT_YELLOW);
-        int green = settings.integer(GOLD_COUNT_GREEN);
-        int red = settings.integer(GOLD_COUNT_RED);
-        yellow = Math.max(yellow, 0);
-        green = Math.max(green, 0);
-        red = Math.max(red, 0);
-
-        if (yellow >= 0 && yellow <= yellowGold.size()) {
-            yellowGold = yellowGold.stream()
-                    .limit(yellow)
-                    .collect(toList());
-        }
-        if (green <= greenGold.size()) {
-            greenGold = greenGold.stream()
-                    .limit(green)
-                    .collect(toList());
-        }
-        if (red <= redGold.size()) {
-            redGold = redGold.stream()
-                    .limit(red)
-                    .collect(toList());
-        }
-
-        yellow = yellow - yellowGold.size();
-        for (int i = 0; i < Math.max(0, yellow); i++) {
-            Optional<Point> pt = getFreeRandom();
-            if (pt.isPresent()) {
-                yellowGold.add(new YellowGold(pt.get()));
-            }
-        }
-
-        green = green - greenGold.size();
-        for (int i = 0; i < Math.max(0, green); i++) {
-            Optional<Point> pt = getFreeRandom();
-            if (pt.isPresent()) {
-                greenGold.add(new GreenGold(pt.get()));
-            }
-        }
-
-        red = red - redGold.size();
-        for (int i = 0; i < Math.max(0, red); i++) {
-            Optional<Point> pt = getFreeRandom();
-            if (pt.isPresent()) {
-                redGold.add(new RedGold(pt.get()));
-            }
-        }
+        regenerate(yellowGold, GOLD_COUNT_YELLOW, pt -> yellowGold.add(new YellowGold(pt)));
+        regenerate(greenGold,  GOLD_COUNT_GREEN,  pt -> greenGold.add(new GreenGold(pt)));
+        regenerate(redGold,    GOLD_COUNT_RED,    pt -> redGold.add(new RedGold(pt)));
     }
 
     public List<Portal> portals() {

@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.loderunner.model.GameTest.getLevel;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -60,14 +60,10 @@ public class AITest {
         AI.POSSIBLE_IS_CONSTANT = true;
     }
 
-    private void setupAI(String map) {
+    private void setupAI(String board) {
         dice = mock(Dice.class);
-        level = new LevelImpl(map, dice);
-        GameSettings settings = new TestSettings()
-                .integer(ENEMIES_COUNT, level.getEnemies().size())
-                .integer(PORTALS_COUNT, level.getPortals().size())
-                .integer(SHADOW_PILLS_COUNT, level.getPills().size());
-
+        GameSettings settings = new TestSettings();
+        level = getLevel(board, settings, dice);
         loderunner = new Loderunner(level, dice, settings);
 
         for (Hero hero : level.getHeroes()) {

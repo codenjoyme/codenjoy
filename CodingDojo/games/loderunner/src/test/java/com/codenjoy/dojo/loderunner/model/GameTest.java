@@ -76,14 +76,7 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board, dice);
-        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
-                .integer(GOLD_COUNT_RED, level.getRedGold().size())
-                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
-                .integer(PORTALS_COUNT, level.getPortals().size())
-                .integer(ENEMIES_COUNT, level.getEnemies().size())
-                .integer(SHADOW_PILLS_COUNT, level.getPills().size());
-
+        LevelImpl level = getLevel(board, settings, dice);
         level.setAI(ai);
 
         if (level.getHeroes().isEmpty()) {
@@ -104,6 +97,17 @@ public class GameTest {
         this.hero = heroes.get(0);
         this.player = players.get(0);
         dice(0); // всегда дальше выбираем нулевой индекс
+    }
+
+    public static LevelImpl getLevel(String board, GameSettings settings, Dice dice) {
+        LevelImpl level = new LevelImpl(board, dice);
+        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
+                .integer(GOLD_COUNT_RED, level.getRedGold().size())
+                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
+                .integer(PORTALS_COUNT, level.getPortals().size())
+                .integer(ENEMIES_COUNT, level.getEnemies().size())
+                .integer(SHADOW_PILLS_COUNT, level.getPills().size());
+        return level;
     }
 
     private Hero hero(int index) {
@@ -4099,7 +4103,7 @@ public class GameTest {
     }
 
     @Test
-    public void shouldResetGold_whenClearBoard() {
+    public void shouldCollectAllGold() {
         // given
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4200,6 +4204,12 @@ public class GameTest {
                 "☼     ►☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldResetGold_whenClearBoard() {
+        // given
+        shouldCollectAllGold();
 
         // when
         dice(1, 2);
@@ -4212,6 +4222,51 @@ public class GameTest {
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼►$$&@@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // добавим еще золота
+        settings.integer(GOLD_COUNT_YELLOW, settings.integer(GOLD_COUNT_YELLOW) + 2)
+                .integer(GOLD_COUNT_RED,    settings.integer(GOLD_COUNT_RED) + 3)
+                .integer(GOLD_COUNT_GREEN,  settings.integer(GOLD_COUNT_GREEN) + 1);
+        dice(
+            2, 3, // yellow
+            3, 3, // yellow
+            4, 3, // green
+            5, 3, // red
+            6, 3, // red
+            6, 4, // red
+            1, 6  // герой
+        );
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼[     ☼" +
+                "☼      ☼" +
+                "☼     @☼" +
+                "☼ $$&@@☼" +
+                "☼ $$&@@☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // удалим золота
+        settings.integer(GOLD_COUNT_YELLOW, 1)
+                .integer(GOLD_COUNT_RED,    1)
+                .integer(GOLD_COUNT_GREEN,  1);
+
+        dice(2, 6);  // герой
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼ [    ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ $ &@ ☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
     }
@@ -4335,9 +4390,9 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        settings.integer(PORTALS_COUNT, 4);
-
         // when
+        // добавим еще один портал
+        settings.integer(PORTALS_COUNT, 4);
         dice(2, 4, // new portal
             1, 2); // hero
         game.clearScore();
@@ -4351,8 +4406,23 @@ public class GameTest {
                 "☼►⊛    ☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
-    }
 
+        // when
+        // уберем два портала
+        settings.integer(PORTALS_COUNT, 2);
+        dice(1, 2); // hero
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼   ⊛  ☼" +
+                "☼      ☼" +
+                "☼ ►    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
 
     private void reloadAllHeroes() {
         players = game.players();

@@ -30,7 +30,6 @@ import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -41,6 +40,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.loderunner.model.GameTest.getLevel;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_PILLS_COUNT;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
@@ -72,9 +72,9 @@ public class MultiplayerTest {
     @Test
     public void shouldMultipleGame() { // TODO разделить тест на части
         givenFl("☼☼☼☼☼☼" +
-                "☼    ☼" +
+                "☼► ► ☼" +
                 "☼####☼" +
-                "☼   $☼" +
+                "☼ ► $☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
@@ -996,8 +996,8 @@ public class MultiplayerTest {
         }
     }
 
-    private void givenFl(String map) {
-        Level level = new LevelImpl(map, dice);
+    private void givenFl(String board) {
+        LevelImpl level = getLevel(board, settings, dice);
         field = new Loderunner(level, dice, settings);
     }
 
