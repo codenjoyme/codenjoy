@@ -32,4 +32,5 @@ public interface EnemyAI {
 
     Direction getDirection(Field field, Point from, List<Point> to);
 
+    Point getReached();
 }

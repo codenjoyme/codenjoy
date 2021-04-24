@@ -27,13 +27,11 @@ import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
@@ -47,7 +45,7 @@ public class PerformanceTest {
     @Test
     public void test() {
 
-        // about 30 sec
+        // about 24 sec
         int enemies = 4;
         int players = 100;
         int ticks = 100;
@@ -88,10 +86,10 @@ public class PerformanceTest {
 
         int reserve = 3;
         // сколько пользователей - столько раз выполнялось
-        assertLess("print", 4500 * reserve);
-        assertLess("tick", 28000 * reserve);
+        assertLess("print", 3000 * reserve);
+        assertLess("tick", 20000 * reserve);
         // выполнялось единожды
-        assertLess("creation", 1500 * reserve);
+        assertLess("creation", 1300 * reserve);
     }
 
     private void assertLess(String phase, double expected) {

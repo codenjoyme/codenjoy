@@ -43,6 +43,7 @@ public class DeikstraFindWay {
     private int size;
     private Possible checker;
     private boolean possibleIsConstant;
+    private Point reached;
 
     public DeikstraFindWay() {
         this(false);
@@ -153,7 +154,10 @@ public class DeikstraFindWay {
                 // do nothing
             }
             boolean remove = goals.remove(current.from());
-            if (remove) break;
+            if (remove) {
+                reached = current.from();
+                break;
+            }
         }
 
         return path;
@@ -220,5 +224,9 @@ public class DeikstraFindWay {
 
     public Points getDynamic() {
         return dynamic;
+    }
+
+    public Point getReached() {
+        return reached;
     }
 }

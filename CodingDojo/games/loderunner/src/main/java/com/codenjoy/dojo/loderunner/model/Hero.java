@@ -189,6 +189,10 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         return score;
     }
 
+    public boolean isVisible() {
+        return !under(PillType.SHADOW_PILL);
+    }
+
     public boolean under(PillType pill) {
         return pills.containsKey(pill);
     }

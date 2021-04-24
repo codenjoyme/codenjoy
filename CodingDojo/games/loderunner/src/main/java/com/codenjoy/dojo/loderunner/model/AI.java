@@ -85,4 +85,9 @@ public class AI implements EnemyAI {
     public List<Direction> getPath(Field field, Point from, List<Point> to) {
         return way.getShortestWay(field.size(), from, to, possible(field));
     }
+
+    @Override
+    public Point getReached() {
+        return way.getReached();
+    }
 }

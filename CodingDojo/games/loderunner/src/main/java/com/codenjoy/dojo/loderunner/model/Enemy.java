@@ -25,7 +25,11 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.services.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.stream.Collectors.toList;
 
 public class Enemy extends PointImpl implements Tickable, Fieldable, State<Elements, Player> {
 
@@ -33,7 +37,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
     private EnemyAI ai;
     private Field field;
     private Class<? extends Point> withGold;
-    private List<Point> preys;
+    private Hero prey;
 
     public Enemy(Point pt, Direction direction, EnemyAI ai) {
         super(pt);
@@ -47,52 +51,101 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
         this.field = field;
     }
 
-    private Point underEnemy() {
-        return Direction.DOWN.change(this);
+    private Point under(Point pt) {
+        return Direction.DOWN.change(pt);
     }
 
     @Override
     public void tick() {
-        // TODO если за кем-то охотник уже охотится, то выбрать другую жертву
-        preys = field.visibleHeroes();
-        
         if (isFall()) {
-            if (field.isBrick(underEnemy()) && withGold != null) {
+            // при падении в ямку оставляем золото
+            if (field.isBrick(under(this)) && withGold != null) {
                 // TODO герой не может оставить золото, если он залез в ямку под лестницу, золото должно появиться сбоку
                 field.leaveGold(this, withGold);
                 withGold = null;
             }
             move(x, y - 1);
-        } else if (field.isBrick(this)) {
+            return;
+        }
+
+        if (field.isBrick(this)) {
+            // если ямка заросла, выбираемся
             if (field.isFullBrick(this)) {
                 move(Direction.UP.change(this));
             }
-        } else {
-            Direction direction = ai.getDirection(field, this, preys);
-            if (direction == null) {
-                return;
-            }
-
-            if (direction == Direction.UP && !field.isLadder(this)) return;
-
-            if (direction != Direction.DOWN) {
-                this.direction = direction;
-            }
-            Point pt = direction.change(this);
-
-            // чертик чертику не помеха - пусть проходят друг сквозь друга
-            // if (field.isEnemyAt(pt.getX(), pt.getY())) return;
-
-            if (!field.isHeroAt(pt)
-                    && field.isBarrier(pt)) return;
-
-            move(pt);
+            return;
         }
+
+        List<Hero> heroes = field.visibleHeroes();
+
+        // если тот, за км охотились уже ушел с поля или умер, или стал невидимым - будем искать нового
+        if (prey == null || !prey.isActiveAndAlive() || prey.isVisible()) {
+            prey = null;
+        }
+
+        List<Hero> free = getFreePreys(heroes);
+
+        Direction direction = ai.getDirection(field, this, (List)free);
+        if (direction == null) {
+            prey = null;
+            return;
+        }
+        Point reached = ai.getReached();
+        prey = findHero(heroes, reached);
+
+        if (direction == Direction.UP && !field.isLadder(this)) return;
+
+        if (direction != Direction.DOWN) {
+            this.direction = direction;
+        }
+        Point pt = direction.change(this);
+
+        // чертик чертику не помеха - пусть проходят друг сквозь друга
+        // if (field.isEnemyAt(pt.getX(), pt.getY())) return;
+
+        if (!field.isHeroAt(pt)
+                && field.isBarrier(pt)) return;
+
+        move(pt);
+    }
+
+    private List<Hero> getFreePreys(List<Hero> all) {
+        // у нас уже есть за кем охотиться
+        if (prey != null) {
+            return Arrays.asList(prey);
+        }
+
+        // ищем за кем охотиться
+        List<Enemy> enemies = field.enemies();
+        // выбираем только тех, за кем еще никто не охотится
+        List<Hero> free = all.stream()
+                .filter(prey -> enemies.stream()
+                        .map(enemy -> enemy.prey())
+                        .filter(Objects::nonNull)
+                        .noneMatch(escaping -> prey.equals(escaping)))
+                .collect(toList());
+        // если все заняты, будем бежать за ближайшим
+        if (free.isEmpty()) {
+            return all;
+        }
+
+        return free;
+    }
+
+    private Hero findHero(List<Hero> preys, Point reached) {
+        return preys.stream()
+                .filter(it -> it.equals(reached))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private Hero prey() {
+        return prey;
     }
 
     public boolean isFall() {
         return !field.isBrick(this)
-                && (field.isHeroAt(underEnemy())
+                && (field.isHeroAt(under(this))
                     || field.isPit(this))
                 && !field.isPipe(this)
                 && !field.isLadder(this);

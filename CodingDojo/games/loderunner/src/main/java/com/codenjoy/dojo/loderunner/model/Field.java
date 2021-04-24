@@ -74,5 +74,7 @@ public interface Field extends RoundGameField<Player> {
 
     List<Brick> bricks();
 
-    List<Point> visibleHeroes();
+    List<Hero> visibleHeroes();
+
+    List<Enemy> enemies();
 }

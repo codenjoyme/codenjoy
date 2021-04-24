@@ -629,6 +629,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         return borders.all();
     }
 
+    @Override
     public List<Enemy> enemies() {
         return enemies;
     }
@@ -638,9 +639,9 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public List<Point> visibleHeroes() {
+    public List<Hero> visibleHeroes() {
         return activeHeroes().stream()   // TODO test что охотники не гонятся за точками спауна
-                .filter(hero -> !hero.under(PillType.SHADOW_PILL))
+                .filter(Hero::isVisible)
                 .collect(toList());
     }
 
