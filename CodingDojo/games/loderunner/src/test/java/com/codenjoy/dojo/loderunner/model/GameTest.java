@@ -4424,6 +4424,111 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼");
     }
 
+    @Test
+    public void shouldResetPills_whenClearBoard() {
+        // given
+        settings.integer(SHADOW_PILLS_COUNT, 3);
+
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►S S S☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►S S S☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertEquals(false, hero.under(Pill.PillType.SHADOW_PILL));
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼     ⊳☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertEquals(true, hero.under(Pill.PillType.SHADOW_PILL));
+
+        // when
+        // почистим все
+        dice(1, 2);  // hero
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►S S S☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // добавим еще
+        settings.integer(SHADOW_PILLS_COUNT, settings.integer(SHADOW_PILLS_COUNT) + 2);
+        dice(
+                3, 3, // new pills
+                5, 3,
+                1, 6  // hero
+        );
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼[     ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  S S ☼" +
+                "☼ S S S☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        // оставим только 1
+        settings.integer(SHADOW_PILLS_COUNT, 1);
+        dice(1, 2);  // hero
+        game.clearScore();
+        reloadAllHeroes();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼►S    ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
     private void reloadAllHeroes() {
         players = game.players();
         heroes = game.allHeroes();

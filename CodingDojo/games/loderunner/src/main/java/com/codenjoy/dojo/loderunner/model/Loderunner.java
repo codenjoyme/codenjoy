@@ -103,6 +103,10 @@ public class Loderunner extends RoundField<Player> implements Field {
             enemy.init(this);
         }
 
+        generateAll();
+    }
+
+    private void generateAll() {
         generatePills();
         generateGold();
         generatePortals();
@@ -146,15 +150,14 @@ public class Loderunner extends RoundField<Player> implements Field {
 
         die.addAll(bricksGo());
 
-        generateGold();
         portalsGo();
 
         for (Player player : die) {
             Hero deadHero = player.getHero();
             rewardMurderers(deadHero);
         }
-        generatePills();
-        generateEnemies();
+
+        generateAll();
     }
 
     @Override
@@ -171,33 +174,43 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generatePills() {
-        regenerate(pills, SHADOW_PILLS_COUNT, pt -> leavePill(pt, PillType.SHADOW_PILL));
+        generate(pills, SHADOW_PILLS_COUNT,
+                pt -> new Pill(pt, PillType.SHADOW_PILL));
     }
 
     private void generateEnemies() {
-        regenerate(enemies, ENEMIES_COUNT, pt -> leaveEnemy(pt));
+        generate(enemies, ENEMIES_COUNT, pt -> {
+            Enemy enemy = new Enemy(pt, Direction.LEFT, level.getAi());
+            enemy.init(this);
+            return enemy;
+        });
     }
 
     private void generatePortals() {
         portalsTicksLive = Math.max(1, settings.integer(PORTAL_TICKS));
-        regenerate(portals, PORTALS_COUNT, pt -> leavePortal(pt));
+        generate(portals, PORTALS_COUNT,
+                pt -> new Portal(pt));
     }
 
-    private void regenerate(List<? extends Point> list,
-                            GameSettings.Keys key,
-                            Consumer<Point> consumer)
+    private <T> void generate(List<T> list,
+                          GameSettings.Keys key,
+                          Function<Point, T> creator)
     {
         int count = Math.max(0, settings.integer(key));
-
-        if (count >= 0 && count <= list.size()) {
+        int added = count - list.size();
+        if (added == 0) {
+            return;
+        } else if (added < 0) {
+            // удаляем из существующих
+            // важно оставить текущие, потому что метод работает каждый тик
             list.subList(count, list.size()).clear();
-        }
-
-        count = Math.max(0, count - list.size());
-        for (int i = 0; i < count; i++) {
-            Optional<Point> pt = getFreeRandom();
-            if (pt.isPresent()) {
-                consumer.accept(pt.get());
+        } else {
+            // добавляем недостающих к тем что есть
+            for (int i = 0; i < added; i++) {
+                Optional<Point> pt = getFreeRandom();
+                if (pt.isPresent()) {
+                    list.add(creator.apply(pt.get()));
+                }
             }
         }
     }
@@ -483,23 +496,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void leavePill(Point pt, PillType pill) {
-        pills.add(new Pill(pt, pill));
-    }
-
-    @Override
-    public void leavePortal(Point pt) {
-        portals.add(new Portal(pt));
-    }
-
-    @Override
-    public void leaveEnemy(Point pt) {
-        Enemy enemy = new Enemy(pt, Direction.LEFT, level.getAi());
-        enemies.add(enemy);
-        enemy.init(this);
-    }
-
-    @Override
     public boolean under(Point pt, PillType pill) {
         return players.stream()
                 .map(Player::getHero)
@@ -539,9 +535,9 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generateGold()  {
-        regenerate(yellowGold, GOLD_COUNT_YELLOW, pt -> yellowGold.add(new YellowGold(pt)));
-        regenerate(greenGold,  GOLD_COUNT_GREEN,  pt -> greenGold.add(new GreenGold(pt)));
-        regenerate(redGold,    GOLD_COUNT_RED,    pt -> redGold.add(new RedGold(pt)));
+        generate(yellowGold, GOLD_COUNT_YELLOW, pt -> new YellowGold(pt));
+        generate(greenGold,  GOLD_COUNT_GREEN, pt -> new GreenGold(pt));
+        generate(redGold,    GOLD_COUNT_RED, pt -> new RedGold(pt));
     }
 
     public List<Portal> portals() {
