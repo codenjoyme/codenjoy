@@ -182,6 +182,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     public void clearScores() {
         score = 0;
+        pills.clear();
     }
 
     @Override

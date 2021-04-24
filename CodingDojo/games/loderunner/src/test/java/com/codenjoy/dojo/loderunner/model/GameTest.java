@@ -4591,7 +4591,10 @@ public class GameTest {
 
     private void reloadAllHeroes() {
         players = game.players();
+        player = players.get(0);
+
         heroes = game.allHeroes();
+        hero = heroes.get(0);
     }
 
     // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
