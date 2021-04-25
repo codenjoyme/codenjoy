@@ -14,9 +14,10 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
+import static org.apache.commons.lang3.StringUtils.repeat;
 
 @Component
 public class WhatsNextService {
@@ -43,6 +44,7 @@ public class WhatsNextService {
             singles.add(single);
         });
 
+        int maxLength = game.reader().size() + 12;
         List<String> results = new LinkedList<>();
         List<String> ticks = Arrays.asList(allActions.split(";"));
         for (int tick = 0; tick < ticks.size(); tick++) {
@@ -58,9 +60,7 @@ public class WhatsNextService {
 
             game.tick();
 
-            String tickHeader =
-                    "|       tick " + countFromOne(tick) + "       \n" +
-                    "+--------------------\n";
+            String tickHeader = printHeader(maxLength, tick);
             results.add(tickHeader);
 
             for (int index = 0; index < singles.size(); index++) {
@@ -72,20 +72,47 @@ public class WhatsNextService {
                         single.getBoardAsString().toString(),
                         info.getMessage()
                 );
-                List<String> lines = Arrays.asList(result.split("\n"));
-                String prefix = String.format("| (%s) ", countFromOne(index));
-                result = lines.stream()
-                        .map(line -> prefix + line)
-                        .collect(joining("\n")) + "\n";
-                results.add("|\n");
+                result = formatSpaces(maxLength, index, result);
                 results.add(result);
             }
-            results.add("|\n");
-            results.add("+--------------------\n");
+            results.add("|" + repeat(' ', maxLength - 1) + "\n");
+            results.add(breakLine(maxLength));
         }
-        return "+--------------------\n" +
+        return breakLine(maxLength) +
                 results.stream()
                         .collect(joining(""));
+    }
+
+    private String formatSpaces(int maxLength, int index, String result) {
+        List<String> lines = new ArrayList<>();
+        lines.addAll(Arrays.asList(result.split("\n")));
+
+        String prefix = String.format("| (%s) ", countFromOne(index));
+        lines = lines.stream()
+                .map(line -> prefix + line)
+                .collect(toList());
+
+        lines.add(0, "|");
+
+        lines = lines.stream()
+                .map(line -> line + repeat(' ', maxLength - line.length()))
+                .collect(toList());
+
+        return lines.stream()
+                .collect(joining("\n")) + "\n";
+    }
+
+    private String printHeader(int maxLength, int tick) {
+        String tickInfo = "tick " + countFromOne(tick);
+        int spacesLength = (maxLength - tickInfo.length()) / 2;
+        String spaces = repeat(' ', spacesLength);
+        return String.format("|%s%s%s\n%s",
+                spaces, tickInfo, spaces,
+                breakLine(maxLength));
+    }
+
+    private String breakLine(int maxLength) {
+        return "+" + repeat('-', maxLength - 1) + "\n";
     }
 
     private int countFromOne(int number) {
