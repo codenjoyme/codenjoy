@@ -66,7 +66,6 @@ public class Scores {
         pool.removeDatabase();
     }
 
-    // TODO исправить тесты
     public void saveScore(long time, String id, int score, boolean winner) {
         Date date = new Date(time);
         pool.update("INSERT INTO scores " +
@@ -132,15 +131,18 @@ public class Scores {
         return calendar.getTimeInMillis();
     }
 
-    public void setWinnerFlag(PlayerScore playerScore, boolean isWinner) {
-        pool.update("update scores set winner = ? where" +
-                        " day = ? and time = ? and id = ? and score = ?",
-                isWinner ? 1 : 0,
-                playerScore.getDay(),
-                playerScore.getTime(),
-                playerScore.getId(),
-                playerScore.getScore()
-        );
+    public void setWinnerFlag(List<PlayerScore> playerScores, boolean isWinner) {
+        pool.batchUpdate("update scores set winner = ? where" +
+                " day = ? and time = ? and id = ? and score = ?",
+                playerScores,
+                (stmt, playerScore) -> {
+                    stmt.setInt(1, isWinner ? 1 : 0);
+                    stmt.setString(2, playerScore.getDay());
+                    stmt.setString(3, playerScore.getTime());
+                    stmt.setString(4, playerScore.getId());
+                    stmt.setInt(5, playerScore.getScore());
+                    return true;
+                });
     }
 
     public void cleanWinnerFlags() {
@@ -187,6 +189,7 @@ public class Scores {
                 add(new PlayerScore(
                         rs.getString("id"),
                         rs.getInt("score"),
+                        rs.getString("day"),
                         rs.getString("time"),
                         rs.getInt("winner") == 1));
             }

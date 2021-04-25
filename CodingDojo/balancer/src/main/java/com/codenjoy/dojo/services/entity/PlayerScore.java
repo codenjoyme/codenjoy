@@ -41,9 +41,10 @@ public class PlayerScore {
         // do nothing
     }
 
-    public PlayerScore(String id, int score, String time, boolean isWinner) {
+    public PlayerScore(String id, int score, String day, String time, boolean isWinner) {
         this.id = id;
         this.score = score;
+        this.day = day;
         this.time = time;
         this.winner = isWinner;
     }
