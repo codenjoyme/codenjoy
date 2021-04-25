@@ -20,8 +20,7 @@ public class WatsNextServiceTest {
 
     @Test
     public void shouldHeroMove_whenSendCommand() {
-        whatsNx("sample",
-                "☼☼☼☼☼\n" +
+        whatsNx("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼ ☺ ☼\n" +
                 "☼   ☼\n" +
@@ -46,8 +45,7 @@ public class WatsNextServiceTest {
 
     @Test
     public void shouldCatchEvents_whenGameFiredIt() {
-        whatsNx("sample",
-                "☼☼☼☼☼\n" +
+        whatsNx("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼☺x ☼\n" +
                 "☼   ☼\n" +
@@ -72,8 +70,7 @@ public class WatsNextServiceTest {
 
     @Test
     public void shouldMultiplayer_onlyOnePlayerGo() {
-        whatsNx("sample",
-                "☼☼☼☼☼\n" +
+        whatsNx("☼☼☼☼☼\n" +
                 "☼☺ ☺☼\n" +
                 "☼   ☼\n" +
                 "☼   ☼\n" +
@@ -108,8 +105,7 @@ public class WatsNextServiceTest {
     public void shouldMethodIsFast() {
         // about 2.3 sec
         for (int i = 0; i < 10000; i++) {
-            whatsNx("sample",
-                    "☼☼☼☼☼\n" +
+            whatsNx("☼☼☼☼☼\n" +
                     "☼☺ ☺☼\n" +
                     "☼   ☼\n" +
                     "☼☺ ☺☼\n" +
@@ -159,8 +155,7 @@ public class WatsNextServiceTest {
 
     @Test
     public void shouldMultiplayer_everyHeroCanGo() {
-        whatsNx("sample",
-                "☼☼☼☼☼\n" +
+        whatsNx("☼☼☼☼☼\n" +
                 "☼☺  ☼\n" +
                 "☼   ☼\n" +
                 "☼  ☺☼\n" +
@@ -193,8 +188,7 @@ public class WatsNextServiceTest {
 
     @Test
     public void shouldSeveralTicksOnMultiplayer() {
-        whatsNx("sample",
-                "☼☼☼☼☼\n" +
+        whatsNx("☼☼☼☼☼\n" +
                 "☼☺  ☼\n" +
                 "☼   ☼\n" +
                 "☼  ☺☼\n" +
@@ -246,7 +240,77 @@ public class WatsNextServiceTest {
                 "+----------------\n");
     }
 
-    private void whatsNx(String room, String actions, String command, String expected) {
+    @Test
+    public void shouldPrintBigBoard() {
+        whatsNx("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼       ☺       ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼               ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n",
+
+                "(0)->[ACT, LEFT]",
+
+                "+----------------------------\n" +
+                "|           tick 1           \n" +
+                "+----------------------------\n" +
+                "|                            \n" +
+                "| (1) Board:                 \n" +
+                "| (1) ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼      ☺x       ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼               ☼      \n" +
+                "| (1) ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼      \n" +
+                "| (1) Events:[]              \n" +
+                "|                            \n" +
+                "+----------------------------\n");
+    }
+
+    @Test
+    public void shouldPrintSmallBoard() {
+        whatsNx("☼☼☼\n" +
+                "☼☺☼\n" +
+                "☼☼☼\n",
+
+                "(0)->[ACT]",
+
+                "+--------------\n" +
+                "|    tick 1    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n");
+    }
+
+    private void whatsNx(String actions, String command, String expected) {
         String board = whatsNext.calculate(gameType, actions, command);
         assertEquals(expected, board);
     }
