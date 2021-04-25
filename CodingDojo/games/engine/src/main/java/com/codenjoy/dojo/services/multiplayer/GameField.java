@@ -29,6 +29,10 @@ import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Supplier;
+
 /**
  * Любая игра должна реализовать этот интерфейс чтобы с ней мог работать фреймворк
  * @param <P> Объъект-игрок, который предоставляет героя в игре
@@ -64,4 +68,8 @@ public interface GameField<P extends GamePlayer> extends Tickable {
     int hashCode();
 
     SettingsReader settings();
+
+    default List<P> load(String board, Supplier<P> createPlayer) {
+        return Arrays.asList();
+    }
 }

@@ -4,7 +4,7 @@ package com.codenjoy.dojo.services;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2020 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,29 +22,36 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+import org.json.JSONObject;
+
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Collector {
+public class EventListenerCollector implements EventListener, ChangeLevelListener, Information {
 
-    private List<String> list = new CopyOnWriteArrayList<>();
+    private EventListener listener;
+    private Collector collector = new Collector();
 
-    public String popAll() {
-        String result = list.toString();
-        list.clear();
-        return result;
-    }
-
-    public void put(String data) {
-        list.add(data);
-    }
-
-    public void put(String format, String data) {
-        put(String.format(format, data));
+    public EventListenerCollector(EventListener listener) {
+        this.listener = listener;
     }
 
     @Override
-    public String toString() {
-        return list.toString();
+    public void event(Object event) {
+        collector.put(event.toString());
+        listener.event(event);
+    }
+
+    @Override
+    public String getMessage() {
+        return collector.toString();
+    }
+
+    @Override
+    public void levelChanged(LevelProgress progress) {
+        collector.put("LEVEL " + progress.getCurrent());
     }
 }

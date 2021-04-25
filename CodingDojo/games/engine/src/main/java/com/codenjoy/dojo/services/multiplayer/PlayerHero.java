@@ -41,6 +41,7 @@ import org.json.JSONObject;
 public abstract class PlayerHero<F extends GameField> extends PointImpl implements Joystick, NoMessageJoystick, Tickable {
 
     protected F field;
+    public boolean initialized = false;
 
     public PlayerHero(int x, int y) {
         super(x, y);

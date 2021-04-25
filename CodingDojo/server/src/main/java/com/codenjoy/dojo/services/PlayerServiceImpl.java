@@ -34,6 +34,9 @@ import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
@@ -159,6 +162,44 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             return semifinal.getSemifinalStatus(room);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public String whatsNext(String room, String board, int playerIndex, String command) {
+        lock.writeLock().lock();
+        try {
+            if (!roomService.exists(room)) {
+                return null;
+            }
+
+            GameType gameType = roomService.gameType(room);
+            Settings settings = gameType.getSettings();
+            GameField game = gameType.createGame(0, settings);
+            List<EventListenerCollector> infos = new LinkedList<>();
+            List<GamePlayer> players  = game.load(board, () -> {
+                PlayerScores scores = gameType.getPlayerScores(0, settings);
+                EventListenerCollector listener = new EventListenerCollector(scores);
+                infos.add(listener);
+                GamePlayer player = gameType.createPlayer(listener, StringUtils.EMPTY, settings);
+                return player;
+            });
+            List<Single> singles = new LinkedList<>();
+            players.forEach(player -> {
+                Single single = new Single(player, gameType.getPrinterFactory());
+                single.on(game);
+                single.newGame();
+                singles.add(single);
+            });
+            Single single = singles.get(playerIndex);
+            new PlayerCommand(single.getJoystick(), command).execute();
+            game.tick();
+            return String.format("Board:\n%s" +
+                    "Events:%s\n",
+                    single.getBoardAsString().toString(),
+                    infos.get(playerIndex).getMessage());
         } finally {
             lock.writeLock().unlock();
         }

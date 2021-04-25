@@ -27,6 +27,7 @@ import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.sample.model.level.Level;
+import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
@@ -39,6 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static java.util.function.Predicate.*;
 import static java.util.stream.Collectors.toList;
@@ -56,19 +58,23 @@ public class Sample implements Field {
 
     private List<Player> players;
 
-    private final int size;
+    private int size;
     private Dice dice;
 
     private GameSettings settings;
 
     public Sample(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
+        players = new LinkedList<>();
+        this.settings = settings;
+        init(level);
+    }
+
+    private void init(Level level) {
         walls = level.walls();
         gold = level.gold();
         bombs = level.bombs();
         size = level.size();
-        this.settings = settings;
-        players = new LinkedList<>();
     }
 
     /**
@@ -205,5 +211,20 @@ public class Sample implements Field {
                 }};
             }
         };
+    }
+
+    @Override
+    public List<Player> load(String board, Supplier<Player> createPlayer) {
+        Level level = new LevelImpl(board);
+        List<Player> players = new LinkedList<>();
+        level.heroes().forEach(hero -> {
+            Player player = createPlayer.get();
+            player.hero = hero;
+            player.hero.initialized = true;
+            players.add(player);
+
+        });
+        init(level);
+        return players;
     }
 }
