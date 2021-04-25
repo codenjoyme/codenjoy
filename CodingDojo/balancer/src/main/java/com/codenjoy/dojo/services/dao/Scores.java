@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -49,8 +50,11 @@ public class Scores {
     @Autowired protected ConfigProperties config;
 
     private static final String DAY_FORMAT = "yyyy-MM-dd";
+    public static final String TIME_FORMAT = "HH:mm";
     private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern(DAY_FORMAT);
     public static final SimpleDateFormat DAY_FORMATTER2 = new SimpleDateFormat(DAY_FORMAT);
+    public static final DateFormat DAY_TO_STRING_FORMATTER = new SimpleDateFormat(DAY_FORMAT);
+    public static final DateFormat TIME_TO_STRING_FORMATTER = new SimpleDateFormat(TIME_FORMAT);
 
     public Scores(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
@@ -223,6 +227,15 @@ public class Scores {
     public String getDay(long time) {
         Date date = new Date(time);
         return DAY_FORMATTER2.format(date);
+    }
+
+    public long getExistTimeInSavedScores(long time) {
+        Date date = new Date(time);
+
+        String timeRequest = DAY_TO_STRING_FORMATTER.format(date) + "T" + TIME_TO_STRING_FORMATTER.format(date) + "%";
+        return pool.select("SELECT time FROM scores WHERE time LIKE ? ORDER BY time ASC LIMIT 1;",
+                new Object[]{timeRequest},
+                rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 
     public long getLastTimeOfPast(String day) {

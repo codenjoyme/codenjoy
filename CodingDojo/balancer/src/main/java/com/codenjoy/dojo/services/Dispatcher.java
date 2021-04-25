@@ -263,11 +263,43 @@ public class Dispatcher {
             return cached;
         }
 
-        List<PlayerScore> list = scores.getScores(day, getNow());
-        List<PlayerScore> result = prepareScoresForClient(list);
+        long nowTime = getNow();
+
+        List<PlayerScore> scoresForTimeNow = scores.getScores(day, nowTime);
+        List<PlayerScore> result = prepareScoresForClient(scoresForTimeNow);
+
+        updatePreparedScoresWithStartHourScores(result, day, nowTime);
 
         currentScores.put(day, result);
         return result;
+    }
+
+    private void updatePreparedScoresWithStartHourScores(List<PlayerScore> scores, String day, long nowTime) {
+        long startOfHour = getStartOfHourTime(nowTime);
+        long presentTimeForHourStart = this.scores.getExistTimeInSavedScores(startOfHour);
+        if (presentTimeForHourStart == 0) {
+            logger.info("Dispatcher->updateScore: Does't have scores for time {}", new Date(startOfHour).toString());
+            return;
+        }
+
+        List<PlayerScore> scoresForHourStart = this.scores.getScores(day, presentTimeForHourStart);
+
+        Map<String, PlayerScore> scoresMap = scoresForHourStart.stream().collect(Collectors.toMap(entry -> entry.getId(), entry -> entry));
+
+        scores.forEach(playerScore -> {
+            if (scoresMap.containsKey(playerScore.getId())) {
+                PlayerScore prevPlayerScore = scoresMap.get(playerScore.getId());
+                if (playerScore.getScore() >= prevPlayerScore.getScore()) {
+                    playerScore.setLastHourScore(playerScore.getScore() - prevPlayerScore.getScore());
+                }
+            }
+        });
+    }
+
+    private long getStartOfHourTime(long nowTime) {
+        Date startOfHour = new Date(nowTime);
+        startOfHour.setMinutes(0);
+        return startOfHour.getTime();
     }
 
     // иначе (если юзать только lastTime) в момент, когда берем сегодня утром getScores
