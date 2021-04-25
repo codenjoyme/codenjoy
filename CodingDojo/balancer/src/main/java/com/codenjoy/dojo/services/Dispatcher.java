@@ -274,7 +274,7 @@ public class Dispatcher {
         return result;
     }
 
-    private void updatePreparedScoresWithStartHourScores(List<PlayerScore> scores, String day, long nowTime) {
+    private void updatePreparedScoresWithStartHourScores(List<PlayerScore> playerScores, String day, long nowTime) {
         long startOfHour = getStartOfHourTime(nowTime);
         long presentTimeForHourStart = this.scores.getExistTimeInSavedScores(startOfHour);
         if (presentTimeForHourStart == 0) {
@@ -282,11 +282,11 @@ public class Dispatcher {
             return;
         }
 
-        List<PlayerScore> scoresForHourStart = this.scores.getScores(day, presentTimeForHourStart);
+        List<PlayerScore> scoresForHourStart = getPlayerScoresCached(day, presentTimeForHourStart);
 
         Map<String, PlayerScore> scoresMap = scoresForHourStart.stream().collect(Collectors.toMap(entry -> entry.getId(), entry -> entry));
 
-        scores.forEach(playerScore -> {
+        playerScores.forEach(playerScore -> {
             if (scoresMap.containsKey(playerScore.getId())) {
                 PlayerScore prevPlayerScore = scoresMap.get(playerScore.getId());
                 if (playerScore.getScore() >= prevPlayerScore.getScore()) {
@@ -294,6 +294,23 @@ public class Dispatcher {
                 }
             }
         });
+    }
+
+    private List<PlayerScore> getPlayerScoresCached(String day, long time) {
+        String cacheName = getCacheName(time);
+
+        List<PlayerScore> scoresForHourStart;
+        if (currentScores.containsKey(cacheName)) {
+            scoresForHourStart = currentScores.get(cacheName);
+        } else {
+            scoresForHourStart = scores.getScores(day, time);
+            currentScores.put(cacheName, scoresForHourStart);
+        }
+        return scoresForHourStart;
+    }
+
+    private String getCacheName(long time) {
+        return new Date(time).toString();
     }
 
     private long getStartOfHourTime(long nowTime) {
