@@ -198,8 +198,9 @@ public class PlayerServiceImpl implements PlayerService {
 
             List<String> results = new LinkedList<>();
             List<String> ticks = Arrays.asList(allActions.split(";"));
-            ticks.forEach(tick -> {
-                Map<Integer, String> actions = command(tick);
+            for (int tick = 0; tick < ticks.size(); tick++) {
+                String tickActions = ticks.get(tick);
+                Map<Integer, String> actions = command(tickActions);
                 for (int index = 0; index < singles.size(); index++) {
                     Single single = singles.get(index);
                     String action = actions.get(index);
@@ -209,6 +210,12 @@ public class PlayerServiceImpl implements PlayerService {
                 }
 
                 game.tick();
+
+                String tickHeader =
+                        "+--------------------\n" +
+                        "|       tick " + countFromOne(tick) + "       \n" +
+                        "+--------------------\n";
+                results.add(tickHeader);
 
                 for (int index = 0; index < singles.size(); index++) {
                     Single single = singles.get(index);
@@ -220,19 +227,25 @@ public class PlayerServiceImpl implements PlayerService {
                             info.getMessage()
                     );
                     List<String> lines = Arrays.asList(result.split("\n"));
-                    String preffix = String.format("(%s) ", index + 1);
+                    String prefix = String.format("| (%s) ", countFromOne(index));
                     result = lines.stream()
-                            .map(line -> preffix + line)
-                            .collect(joining("\n"));
-                    result += "\n--------------------\n";
+                            .map(line -> prefix + line)
+                            .collect(joining("\n")) + "\n";
+                    results.add("|\n");
                     results.add(result);
                 }
-            });
+                results.add("|\n");
+                results.add("+--------------------\n");
+            }
             return results.stream()
                     .collect(joining(""));
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    private int countFromOne(int number) {
+        return number + 1;
     }
 
     private static Pattern ACTION_PATTERN = Pattern.compile("(\\((\\d)\\)->\\[(.*)\\])", Pattern.CASE_INSENSITIVE);
