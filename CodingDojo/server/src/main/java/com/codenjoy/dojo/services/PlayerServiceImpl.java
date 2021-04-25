@@ -42,9 +42,9 @@ import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.services.semifinal.SemifinalStatus;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import lombok.extern.slf4j.Slf4j;
@@ -212,7 +212,6 @@ public class PlayerServiceImpl implements PlayerService {
                 game.tick();
 
                 String tickHeader =
-                        "+--------------------\n" +
                         "|       tick " + countFromOne(tick) + "       \n" +
                         "+--------------------\n";
                 results.add(tickHeader);
@@ -237,8 +236,9 @@ public class PlayerServiceImpl implements PlayerService {
                 results.add("|\n");
                 results.add("+--------------------\n");
             }
-            return results.stream()
-                    .collect(joining(""));
+            return "+--------------------\n" +
+                    results.stream()
+                            .collect(joining(""));
         } finally {
             lock.writeLock().unlock();
         }
