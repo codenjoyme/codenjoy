@@ -63,7 +63,7 @@ public class WatsNextServiceTest {
                 "| (1) ☼ X ☼      \n" +
                 "| (1) ☼   ☼      \n" +
                 "| (1) ☼☼☼☼☼      \n" +
-                "| (1) Events:[LOSE]\n" +
+                "| (1) Events:[LOSE, -100]\n" +
                 "|                \n" +
                 "+----------------\n");
     }

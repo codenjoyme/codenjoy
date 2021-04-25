@@ -1,9 +1,6 @@
 package com.codenjoy.dojo.services.whatsnext;
 
-import com.codenjoy.dojo.services.EventListenerCollector;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PlayerCommand;
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
@@ -23,13 +20,25 @@ public class WhatsNextService {
 
     private static Pattern ACTION_PATTERN = Pattern.compile("(\\((\\d)\\)->\\[(.*)\\])", Pattern.CASE_INSENSITIVE);
 
+    public static class Info extends InformationCollector {
+        public Info(PlayerScores playerScores) {
+            super(playerScores);
+        }
+
+        @Override
+        public void event(Object event) {
+            pool.add(event.toString());
+            super.event(event);
+        }
+    }
+
     public String calculate(GameType gameType, String board, String allActions) {
         Settings settings = gameType.getSettings();
         GameField game = gameType.createGame(0, settings);
-        List<EventListenerCollector> infos = new LinkedList<>();
+        List<Info> infos = new LinkedList<>();
         List<GamePlayer> players  = game.load(board, () -> {
-            PlayerScores scores = gameType.getPlayerScores(0, settings);
-            EventListenerCollector listener = new EventListenerCollector(scores);
+            PlayerScores scores = gameType.getPlayerScores(1000, settings);
+            Info listener = new Info(scores);
             infos.add(listener);
             GamePlayer player = gameType.createPlayer(listener, StringUtils.EMPTY, settings);
             return player;
@@ -64,12 +73,12 @@ public class WhatsNextService {
 
             for (int index = 0; index < singles.size(); index++) {
                 Single single = singles.get(index);
-                EventListenerCollector info = infos.get(index);
+                Info info = infos.get(index);
                 String result = String.format(
                         "Board:\n%s" +
                         "Events:%s\n",
                         single.getBoardAsString().toString(),
-                        info.getMessage()
+                        info.all().toString()
                 );
                 result = formatSpaces(maxLength, index, result);
                 results.add(result);
