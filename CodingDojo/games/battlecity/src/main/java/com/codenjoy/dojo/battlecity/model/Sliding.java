@@ -68,4 +68,9 @@ public class Sliding {
     public void stop() {
         tick = slipperiness();
     }
+
+    public void reset(Direction direction) {
+        tick = 0;
+        before = direction;
+    }
 }
