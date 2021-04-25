@@ -195,7 +195,7 @@ public class WatsNextServiceTest {
                 "☼☼☼☼☼\n",
 
                 "(2)->[ACT, UP]&(1)->[ACT, DOWN];" +
-                "(1)->[DOWN]&(2)->[UP];",
+                "(1)->[DOWN]&(2)->[UP]",
 
                 "+----------------\n" +
                 "|     tick 1     \n" +
@@ -297,8 +297,236 @@ public class WatsNextServiceTest {
 
                 "(1)->[ACT]",
 
+                expectedResult());
+    }
+
+    @Test
+    public void shouldIgnoreLastActionSeparator_caseOne() {
+        String willIgnore = "&";
+
+        whatsNx("☼☼☼\n" +
+                "☼☺☼\n" +
+                "☼☼☼\n",
+
+                "(1)->[ACT]" + willIgnore,
+
+                expectedResult());
+    }
+
+    @Test
+    public void shouldIgnoreLastActionSeparator_caseSeveral() {
+        String willIgnore = "&&&";
+
+        whatsNx("☼☼☼\n" +
+                "☼☺☼\n" +
+                "☼☼☼\n",
+
+                "(1)->[ACT]" + willIgnore,
+
+                expectedResult());
+    }
+
+    @Test
+    public void shouldIgnoreFirstActionSeparator_caseOne() {
+        String willIgnore = "&";
+
+        whatsNx("☼☼☼\n" +
+                "☼☺☼\n" +
+                "☼☼☼\n",
+
+                willIgnore + "(1)->[ACT]",
+
+                expectedResult());
+    }
+
+    @Test
+    public void shouldIgnoreFirstActionSeparator_caseSeveral() {
+        String willIgnore = "&&&";
+
+        whatsNx("☼☼☼\n" +
+                "☼☺☼\n" +
+                "☼☼☼\n",
+
+                willIgnore + "(1)->[ACT]",
+
+                expectedResult());
+    }
+
+    public String expectedResult() {
+        return  "+--------------\n" +
+                "|    tick 1    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n";
+    }
+
+    @Test
+    public void shouldNotIgnoreLastTickSeparator_caseOne() {
+        String willNotIgnore = ";";
+
+        whatsNx("☼☼☼\n" +
+                "☼☺☼\n" +
+                "☼☼☼\n",
+
+                "(1)->[ACT]" + willNotIgnore,
+
                 "+--------------\n" +
                 "|    tick 1    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n" +
+                "|    tick 2    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n");
+    }
+
+    @Test
+    public void shouldNotIgnoreLastTickSeparator_caseSeveral() {
+        String willNotIgnore = ";;;";
+
+        whatsNx("☼☼☼\n" +
+                "☼☺☼\n" +
+                "☼☼☼\n",
+
+                "(1)->[ACT]" + willNotIgnore,
+
+                "+--------------\n" +
+                "|    tick 1    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n" +
+                "|    tick 2    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n" +
+                "|    tick 3    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n" +
+                "|    tick 4    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n");
+    }
+
+    @Test
+    public void shouldNotIgnoreFirstTickSeparator_caseOne() {
+        String willNotIgnore = ";";
+
+        whatsNx("☼☼☼\n" +
+                "☼☺☼\n" +
+                "☼☼☼\n",
+
+                willNotIgnore + "(1)->[ACT]",
+
+                "+--------------\n" +
+                "|    tick 1    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n" +
+                "|    tick 2    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n");
+    }
+
+    @Test
+    public void shouldNotIgnoreFirstTickSeparator_caseSeveral() {
+        String willNotIgnore = ";;;";
+
+        whatsNx("☼☼☼\n" +
+                "☼☺☼\n" +
+                "☼☼☼\n",
+
+                willNotIgnore + "(1)->[ACT]",
+
+                "+--------------\n" +
+                "|    tick 1    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n" +
+                "|    tick 2    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n" +
+                "|    tick 3    \n" +
+                "+--------------\n" +
+                "|              \n" +
+                "| (1) Board:   \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) ☼☺☼      \n" +
+                "| (1) ☼☼☼      \n" +
+                "| (1) Events:[]\n" +
+                "|              \n" +
+                "+--------------\n" +
+                "|    tick 4    \n" +
                 "+--------------\n" +
                 "|              \n" +
                 "| (1) Board:   \n" +

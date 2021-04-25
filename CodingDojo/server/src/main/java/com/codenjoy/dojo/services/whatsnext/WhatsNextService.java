@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.commons.lang3.StringUtils.repeat;
@@ -46,7 +45,7 @@ public class WhatsNextService {
 
         int maxLength = game.reader().size() + 12;
         List<String> results = new LinkedList<>();
-        List<String> ticks = Arrays.asList(allActions.split(";"));
+        List<String> ticks = split(allActions, ";", true);
         for (int tick = 0; tick < ticks.size(); tick++) {
             String tickActions = ticks.get(tick);
             Map<Integer, String> actions = command(tickActions);
@@ -120,7 +119,7 @@ public class WhatsNextService {
     }
 
     private Map<Integer, String> command(String tick) {
-        List<String> actions = Arrays.asList(tick.split("&"));
+        List<String> actions = split(tick, "&", false);
         return actions.stream()
                 .map(action -> {
                     Matcher matcher = ACTION_PATTERN.matcher(action);
@@ -133,6 +132,12 @@ public class WhatsNextService {
                     }
                 })
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private List<String> split(String tick, String regex, boolean empty) {
+        return Arrays.stream(tick.split(regex, -1))
+                .filter(line -> empty || !StringUtils.isEmpty(line))
+                .collect(toList());
     }
 
 }
