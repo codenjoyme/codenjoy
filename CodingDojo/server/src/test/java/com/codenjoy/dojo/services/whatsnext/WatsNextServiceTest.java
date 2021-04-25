@@ -1,43 +1,21 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.whatsnext;
 
-import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.sample.services.GameRunner;
-import com.codenjoy.dojo.web.rest.AbstractRestControllerTest;
+import com.codenjoy.dojo.services.GameType;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.assertEquals;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class,
-        properties = "spring.main.allow-bean-definition-overriding=true")
-@RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
-@Import(WatsNextPlayerServiceImplTest.ContextConfiguration.class)
-@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
-@WebAppConfiguration
-public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
+public class WatsNextServiceTest {
 
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return AbstractRestControllerTest.gameService(GameRunner.class);
-        }
-    }
+    private GameType gameType;
+    private WhatsNextService whatsNext;
 
     @Before
     public void setUp() {
-        super.setUp();
+        gameType = new GameRunner();
+        whatsNext = new WhatsNextService();
     }
 
     @Test
@@ -126,10 +104,10 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
                 "+----------------\n");
     }
 
-    @Test(timeout = 30000)
+    @Test(timeout = 10000)
     public void shouldMethodIsFast() {
-        // about 13 sec
-        for (int i = 0; i < 100000; i++) {
+        // about 2.3 sec
+        for (int i = 0; i < 10000; i++) {
             whatsNx("sample",
                     "☼☼☼☼☼\n" +
                     "☼☺ ☺☼\n" +
@@ -244,7 +222,7 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
                 "| (2) ☼  x☼      \n" +
                 "| (2) ☼☼☼☼☼      \n" +
                 "| (2) Events:[]  \n" +
-                "|\n" +
+                "|                \n" +
                 "+----------------\n" +
                 "|     tick 2     \n" +
                 "+----------------\n" +
@@ -269,7 +247,7 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
     }
 
     private void whatsNx(String room, String actions, String command, String expected) {
-        String board = playerService.whatsNext(room, actions, command);
+        String board = whatsNext.calculate(gameType, actions, command);
         assertEquals(expected, board);
     }
 
