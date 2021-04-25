@@ -52,7 +52,7 @@ public class WhatsNextService {
             Map<Integer, String> actions = command(tickActions);
             for (int index = 0; index < singles.size(); index++) {
                 Single single = singles.get(index);
-                String action = actions.get(index);
+                String action = actions.get(countFromOne(index));
                 if (StringUtils.isNotEmpty(action)) {
                     new PlayerCommand(single.getJoystick(), action).execute();
                 }

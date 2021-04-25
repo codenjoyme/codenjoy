@@ -26,7 +26,7 @@ public class WatsNextServiceTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n",
 
-                "(0)->[ACT, LEFT]",
+                "(1)->[ACT, LEFT]",
 
                 "+----------------\n" +
                 "|     tick 1     \n" +
@@ -51,7 +51,7 @@ public class WatsNextServiceTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n",
 
-                "(0)->[RIGHT]",
+                "(1)->[RIGHT]",
 
                 "+----------------\n" +
                 "|     tick 1     \n" +
@@ -76,7 +76,7 @@ public class WatsNextServiceTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n",
 
-                "(1)->[ACT, LEFT]",
+                "(2)->[ACT, LEFT]",
 
                 "+----------------\n" +
                 "|     tick 1     \n" +
@@ -111,7 +111,7 @@ public class WatsNextServiceTest {
                     "☼☺ ☺☼\n" +
                     "☼☼☼☼☼\n",
 
-                    "(3)->[ACT, LEFT]",
+                    "(4)->[ACT, LEFT]",
 
                     "+----------------\n" +
                     "|     tick 1     \n" +
@@ -161,7 +161,7 @@ public class WatsNextServiceTest {
                 "☼  ☺☼\n" +
                 "☼☼☼☼☼\n",
 
-                "(1)->[ACT, UP]&(0)->[ACT, DOWN]",
+                "(2)->[ACT, UP]&(1)->[ACT, DOWN]",
 
                 "+----------------\n" +
                 "|     tick 1     \n" +
@@ -194,8 +194,8 @@ public class WatsNextServiceTest {
                 "☼  ☺☼\n" +
                 "☼☼☼☼☼\n",
 
-                "(1)->[ACT, UP]&(0)->[ACT, DOWN];" +
-                "(0)->[DOWN]&(1)->[UP];",
+                "(2)->[ACT, UP]&(1)->[ACT, DOWN];" +
+                "(1)->[DOWN]&(2)->[UP];",
 
                 "+----------------\n" +
                 "|     tick 1     \n" +
@@ -260,7 +260,7 @@ public class WatsNextServiceTest {
                 "☼               ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n",
 
-                "(0)->[ACT, LEFT]",
+                "(1)->[ACT, LEFT]",
 
                 "+----------------------------\n" +
                 "|           tick 1           \n" +
@@ -295,7 +295,7 @@ public class WatsNextServiceTest {
                 "☼☺☼\n" +
                 "☼☼☼\n",
 
-                "(0)->[ACT]",
+                "(1)->[ACT]",
 
                 "+--------------\n" +
                 "|    tick 1    \n" +
