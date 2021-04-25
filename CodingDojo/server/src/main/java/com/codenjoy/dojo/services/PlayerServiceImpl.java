@@ -61,11 +61,12 @@ import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.codenjoy.dojo.services.PlayerGames.exclude;
 import static com.codenjoy.dojo.services.PlayerGames.withRoom;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 @Component("playerService")
 @Slf4j
@@ -168,7 +169,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public String whatsNext(String room, String board, int playerIndex, String command) {
+    public String whatsNext(String room, String board, String allActions) {
         lock.writeLock().lock();
         try {
             if (!roomService.exists(room)) {
@@ -186,6 +187,7 @@ public class PlayerServiceImpl implements PlayerService {
                 GamePlayer player = gameType.createPlayer(listener, StringUtils.EMPTY, settings);
                 return player;
             });
+
             List<Single> singles = new LinkedList<>();
             players.forEach(player -> {
                 Single single = new Single(player, gameType.getPrinterFactory());
@@ -193,16 +195,62 @@ public class PlayerServiceImpl implements PlayerService {
                 single.newGame();
                 singles.add(single);
             });
-            Single single = singles.get(playerIndex);
-            new PlayerCommand(single.getJoystick(), command).execute();
-            game.tick();
-            return String.format("Board:\n%s" +
-                    "Events:%s\n",
-                    single.getBoardAsString().toString(),
-                    infos.get(playerIndex).getMessage());
+
+            List<String> results = new LinkedList<>();
+            List<String> ticks = Arrays.asList(allActions.split(";"));
+            ticks.forEach(tick -> {
+                Map<Integer, String> actions = command(tick);
+                for (int index = 0; index < singles.size(); index++) {
+                    Single single = singles.get(index);
+                    String action = actions.get(index);
+                    if (StringUtils.isNotEmpty(action)) {
+                        new PlayerCommand(single.getJoystick(), action).execute();
+                    }
+                }
+
+                game.tick();
+
+                for (int index = 0; index < singles.size(); index++) {
+                    Single single = singles.get(index);
+                    EventListenerCollector info = infos.get(index);
+                    String result = String.format(
+                            "Board:\n%s" +
+                            "Events:%s\n",
+                            single.getBoardAsString().toString(),
+                            info.getMessage()
+                    );
+                    List<String> lines = Arrays.asList(result.split("\n"));
+                    String preffix = String.format("(%s) ", index + 1);
+                    result = lines.stream()
+                            .map(line -> preffix + line)
+                            .collect(joining("\n"));
+                    result += "\n--------------------\n";
+                    results.add(result);
+                }
+            });
+            return results.stream()
+                    .collect(joining(""));
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    private static Pattern ACTION_PATTERN = Pattern.compile("(\\((\\d)\\)->\\[(.*)\\])", Pattern.CASE_INSENSITIVE);
+
+    private Map<Integer, String> command(String tick) {
+        List<String> actions = Arrays.asList(tick.split("&"));
+        return actions.stream()
+                .map(action -> {
+                    Matcher matcher = ACTION_PATTERN.matcher(action);
+                    if (matcher.matches()) {
+                        String group1 = matcher.group(2);
+                        String group2 = matcher.group(3);
+                        return new HashMap.SimpleEntry<>(Integer.valueOf(group1), group2);
+                    } else {
+                        throw new RuntimeException("Unparsed action: " + action);
+                    }
+                })
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private void registerAIIfNeeded(String forPlayer, String game, String room) {

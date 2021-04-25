@@ -190,17 +190,16 @@ public class RestBoardController {
         return Collections.singletonMap("active", active);
     }
 
-    @GetMapping("/room/{room}/whats-next/{board}/{index}/{command}")
+    @GetMapping("/room/{room}/whats-next/{board}/{actions}")
     public String whatsNext(@PathVariable("room") String room,
                             @PathVariable("board") String board,
-                            @PathVariable("index") int playerIndex,
-                            @PathVariable("command") String command)
+                            @PathVariable("actions") String actions)
     {
         validator.checkRoom(room, CANT_BE_NULL);
         validator.checkNotNull("Board", board);
-        validator.checkNotNull("Command", command);
+        validator.checkNotNull("Actions", actions);
         validator.checkNotNull("Board", board);
 
-        return playerService.whatsNext(room, board, playerIndex, command);
+        return playerService.whatsNext(room, board, actions);
     }
 }

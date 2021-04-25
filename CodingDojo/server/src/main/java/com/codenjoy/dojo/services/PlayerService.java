@@ -64,5 +64,5 @@ public interface PlayerService extends Tickable {
 
     SemifinalStatus getSemifinalStatus(String room);
 
-    String whatsNext(String room, String board, int playerIndex, String command);
+    String whatsNext(String room, String board, String actions);
 }

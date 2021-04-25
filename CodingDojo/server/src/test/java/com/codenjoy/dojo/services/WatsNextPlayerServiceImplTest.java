@@ -48,14 +48,17 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
                 "☼ ☺ ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n",
-                0, "ACT, LEFT",
-                "Board:\n" +
-                "☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼☺x ☼\n" +
-                "☼   ☼\n" +
-                "☼☼☼☼☼\n" +
-                "Events:[]\n");
+
+                "(0)->[ACT, LEFT]",
+
+                "(1) Board:\n" +
+                "(1) ☼☼☼☼☼\n" +
+                "(1) ☼   ☼\n" +
+                "(1) ☼☺x ☼\n" +
+                "(1) ☼   ☼\n" +
+                "(1) ☼☼☼☼☼\n" +
+                "(1) Events:[]\n" +
+                "--------------------\n");
     }
 
     @Test
@@ -66,39 +69,51 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
                 "☼☺x ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n",
-                0, "RIGHT",
-                "Board:\n" +
-                "☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼ X ☼\n" +
-                "☼   ☼\n" +
-                "☼☼☼☼☼\n" +
-                "Events:[LOSE]\n");
+
+                "(0)->[RIGHT]",
+
+                "(1) Board:\n" +
+                "(1) ☼☼☼☼☼\n" +
+                "(1) ☼   ☼\n" +
+                "(1) ☼ X ☼\n" +
+                "(1) ☼   ☼\n" +
+                "(1) ☼☼☼☼☼\n" +
+                "(1) Events:[LOSE]\n" +
+                "--------------------\n");
     }
 
     @Test
-    public void shouldMultiplayer() {
-        for (int i = 0; i < 100000; i++) {
-            whatsNx("sample",
-                    "☼☼☼☼☼\n" +
-                    "☼☺ ☺☼\n" +
-                    "☼   ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n",
-                    1, "ACT, LEFT",
-                    "Board:\n" +
-                    "☼☼☼☼☼\n" +
-                    "☼☻☺x☼\n" +
-                    "☼   ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n" +
-                    "Events:[]\n");
-        }
+    public void shouldMultiplayer_onlyOnePlayerGo() {
+        whatsNx("sample",
+                "☼☼☼☼☼\n" +
+                "☼☺ ☺☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n",
+
+                "(1)->[ACT, LEFT]",
+
+                "(1) Board:\n" +
+                "(1) ☼☼☼☼☼\n" +
+                "(1) ☼☺☻x☼\n" +
+                "(1) ☼   ☼\n" +
+                "(1) ☼   ☼\n" +
+                "(1) ☼☼☼☼☼\n" +
+                "(1) Events:[]\n" +
+                "--------------------\n" +
+                "(2) Board:\n" +
+                "(2) ☼☼☼☼☼\n" +
+                "(2) ☼☻☺x☼\n" +
+                "(2) ☼   ☼\n" +
+                "(2) ☼   ☼\n" +
+                "(2) ☼☼☼☼☼\n" +
+                "(2) Events:[]\n" +
+                "--------------------\n");
     }
 
-    @Test(timeout = 20000)
+    @Test(timeout = 30000)
     public void shouldMethodIsFast() {
-        // about 5 sec
+        // about 13 sec
         for (int i = 0; i < 100000; i++) {
             whatsNx("sample",
                     "☼☼☼☼☼\n" +
@@ -106,19 +121,75 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
                     "☼   ☼\n" +
                     "☼☺ ☺☼\n" +
                     "☼☼☼☼☼\n",
-                    3, "ACT, LEFT",
-                    "Board:\n" +
-                    "☼☼☼☼☼\n" +
-                    "☼☻ ☻☼\n" +
-                    "☼   ☼\n" +
-                    "☼☻☺x☼\n" +
-                    "☼☼☼☼☼\n" +
-                    "Events:[]\n");
+
+                    "(3)->[ACT, LEFT]",
+
+                    "(1) Board:\n" +
+                    "(1) ☼☼☼☼☼\n" +
+                    "(1) ☼☺ ☻☼\n" +
+                    "(1) ☼   ☼\n" +
+                    "(1) ☼☻☻x☼\n" +
+                    "(1) ☼☼☼☼☼\n" +
+                    "(1) Events:[]\n" +
+                    "--------------------\n" +
+                    "(2) Board:\n" +
+                    "(2) ☼☼☼☼☼\n" +
+                    "(2) ☼☻ ☺☼\n" +
+                    "(2) ☼   ☼\n" +
+                    "(2) ☼☻☻x☼\n" +
+                    "(2) ☼☼☼☼☼\n" +
+                    "(2) Events:[]\n" +
+                    "--------------------\n" +
+                    "(3) Board:\n" +
+                    "(3) ☼☼☼☼☼\n" +
+                    "(3) ☼☻ ☻☼\n" +
+                    "(3) ☼   ☼\n" +
+                    "(3) ☼☺☻x☼\n" +
+                    "(3) ☼☼☼☼☼\n" +
+                    "(3) Events:[]\n" +
+                    "--------------------\n" +
+                    "(4) Board:\n" +
+                    "(4) ☼☼☼☼☼\n" +
+                    "(4) ☼☻ ☻☼\n" +
+                    "(4) ☼   ☼\n" +
+                    "(4) ☼☻☺x☼\n" +
+                    "(4) ☼☼☼☼☼\n" +
+                    "(4) Events:[]\n" +
+                    "--------------------\n");
         }
     }
 
-    private void whatsNx(String room, String inputBoard, int playerIndex, String command, String expected) {
-        String board = playerService.whatsNext(room, inputBoard, playerIndex, command);
+    @Test
+    public void shouldMultiplayer_everyHeroCanGo() {
+        whatsNx("sample",
+                "☼☼☼☼☼\n" +
+                "☼☺  ☼\n" +
+                "☼   ☼\n" +
+                "☼  ☺☼\n" +
+                "☼☼☼☼☼\n",
+
+                "(1)->[ACT, DOWN]&(0)->[ACT, UP]",
+
+                "(1) Board:\n" +
+                "(1) ☼☼☼☼☼\n" +
+                "(1) ☼☺  ☼\n" +
+                "(1) ☼   ☼\n" +
+                "(1) ☼  ☻☼\n" +
+                "(1) ☼☼☼☼☼\n" +
+                "(1) Events:[]\n" +
+                "--------------------\n" +
+                "(2) Board:\n" +
+                "(2) ☼☼☼☼☼\n" +
+                "(2) ☼☻  ☼\n" +
+                "(2) ☼   ☼\n" +
+                "(2) ☼  ☺☼\n" +
+                "(2) ☼☼☼☼☼\n" +
+                "(2) Events:[]\n" +
+                "--------------------\n");
+    }
+
+    private void whatsNx(String room, String actions, String command, String expected) {
+        String board = playerService.whatsNext(room, actions, command);
         assertEquals(expected, board);
     }
 
