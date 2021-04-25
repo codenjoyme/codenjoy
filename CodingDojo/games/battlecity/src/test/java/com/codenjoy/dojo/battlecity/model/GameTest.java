@@ -204,6 +204,200 @@ public class GameTest {
     }
 
     @Test
+    public void shouldResetSlidingTicksWhenLeaveIce() {
+        settings.integer(SLIPPERINESS, 2);
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   #▲#   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // LEFT -> UP [sliding]
+        hero(0).left();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   #▲#   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // LEFT -> UP [sliding]
+        hero(0).left();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   #▲#   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // LEFT -> LEFT
+        hero(0).left();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ◄##   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // UP -> LEFT [sliding]
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼  ◄###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // sliding state should be reset because the tank left ice
+
+        // RIGHT -> RIGHT
+        hero(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ►##   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // DOWN -> RIGHT [sliding]
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   #►#   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // DOWN -> RIGHT [sliding]
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ##►   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // DOWN -> DOWN [sliding]
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ##▼   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // RIGHT -> DOWN [sliding]
+        hero(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ##▼   ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // RIGHT -> RIGHT
+        hero(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###   ☼\n" +
+                "☼   ###►  ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
     public void shouldTankCanGoIfIceAtWayWithoutSliding_whenTankTakePrize() {
         settings.integer(PRIZE_ON_FIELD, 5)
                 .integer(KILL_HITS_AI_PRIZE, 1)
