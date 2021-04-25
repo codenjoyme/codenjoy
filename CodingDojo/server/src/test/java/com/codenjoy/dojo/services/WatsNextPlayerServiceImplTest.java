@@ -41,7 +41,7 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void test() {
+    public void shouldHeroMove_whenSendCommand() {
         whatsNx("sample",
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -56,7 +56,10 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n" +
                 "Events:[]\n");
+    }
 
+    @Test
+    public void shouldCatchEvents_whenGameFiredIt() {
         whatsNx("sample",
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -71,6 +74,24 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n" +
                 "Events:[LOSE]\n");
+    }
+
+    @Test
+    public void shouldMultiplayer() {
+        whatsNx("sample",
+                "☼☼☼☼☼\n" +
+                "☼☺ ☺☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n",
+                1, "ACT, LEFT",
+                "Board:\n" +
+                "☼☼☼☼☼\n" +
+                "☼☻☺x☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n" +
+                "Events:[]\n");
     }
 
     private void whatsNx(String room, String inputBoard, int playerIndex, String command, String expected) {
