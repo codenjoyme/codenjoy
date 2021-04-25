@@ -78,20 +78,43 @@ public class WatsNextPlayerServiceImplTest extends AbstractRestControllerTest {
 
     @Test
     public void shouldMultiplayer() {
-        whatsNx("sample",
-                "☼☼☼☼☼\n" +
-                "☼☺ ☺☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼☼☼☼☼\n",
-                1, "ACT, LEFT",
-                "Board:\n" +
-                "☼☼☼☼☼\n" +
-                "☼☻☺x☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼☼☼☼☼\n" +
-                "Events:[]\n");
+        for (int i = 0; i < 100000; i++) {
+            whatsNx("sample",
+                    "☼☼☼☼☼\n" +
+                    "☼☺ ☺☼\n" +
+                    "☼   ☼\n" +
+                    "☼   ☼\n" +
+                    "☼☼☼☼☼\n",
+                    1, "ACT, LEFT",
+                    "Board:\n" +
+                    "☼☼☼☼☼\n" +
+                    "☼☻☺x☼\n" +
+                    "☼   ☼\n" +
+                    "☼   ☼\n" +
+                    "☼☼☼☼☼\n" +
+                    "Events:[]\n");
+        }
+    }
+
+    @Test(timeout = 20000)
+    public void shouldMethodIsFast() {
+        // about 5 sec
+        for (int i = 0; i < 100000; i++) {
+            whatsNx("sample",
+                    "☼☼☼☼☼\n" +
+                    "☼☺ ☺☼\n" +
+                    "☼   ☼\n" +
+                    "☼☺ ☺☼\n" +
+                    "☼☼☼☼☼\n",
+                    3, "ACT, LEFT",
+                    "Board:\n" +
+                    "☼☼☼☼☼\n" +
+                    "☼☻ ☻☼\n" +
+                    "☼   ☼\n" +
+                    "☼☻☺x☼\n" +
+                    "☼☼☼☼☼\n" +
+                    "Events:[]\n");
+        }
     }
 
     private void whatsNx(String room, String inputBoard, int playerIndex, String command, String expected) {
