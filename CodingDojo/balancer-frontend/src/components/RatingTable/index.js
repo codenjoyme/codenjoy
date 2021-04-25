@@ -151,12 +151,20 @@ class RatingTableHandler extends Component {
                                 width={ 400 }
                             />
                             <Column
+                                label='З  початку години'
+                                className={ Styles.ratingScore }
+                                dataKey='lastHourScore'
+                                flexGrow={ 0 }
+                                flexShrink={ 0 }
+                                width={ 170 }
+                            />
+                            <Column
                                 label='Бали'
                                 className={ Styles.ratingColumn }
                                 dataKey='score'
                                 flexGrow={ 0 }
                                 flexShrink={ 0 }
-                                width={ 80 }
+                                width={ 100 }
                             />
                         </Table>
                     ) }
