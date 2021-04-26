@@ -1,4 +1,4 @@
-/*-
+﻿/*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
@@ -19,32 +19,16 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using System;
-using System.Text;
-using SpaceRace.Api;
-
-namespace SpaceRace
+namespace SpaceRace.Api.Interfaces
 {
-    class Program
+    public interface IDirection
     {
-        static void Main(string[] args)
-        {
-            // creating and starting a bot instance
-            Console.OutputEncoding = Encoding.Unicode;
-            
-            var logger = new Logger();
-            var bot = new Solver(logger);
-            using var api = new Api.Api(
-                Configuration.ConnectionString, 
-                Configuration.ReconnectionIntervalMS, 
-                bot,
-                logger);
-
-            // waiting for any key
-            Console.ReadKey();
-
-            // on any key - asking AI client to stop.
-            api.Stop();
-        }
+        bool IsAct { get; }
+        IDirection WithAct();
+        Point Change(Point point);
+        
+        string ToString();
+        
+        
     }
 }

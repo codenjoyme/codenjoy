@@ -22,12 +22,12 @@
 
 namespace SpaceRace.Api
 {
-    public struct BoardPoint
+    public struct Point
     {
         public readonly int X;
         public readonly int Y;
 
-        public BoardPoint(int x, int y)
+        public Point(int x, int y)
         {
             X = x;
             Y = y;
@@ -43,43 +43,43 @@ namespace SpaceRace.Api
         }
 
         /// <summary>
-        /// Returns new BoardPoint object shifted left to "delta" points
+        /// Returns new Point object shifted left to "delta" points
         /// </summary>
-        public BoardPoint ShiftLeft(int delta = 1)
+        public Point ShiftLeft(int delta = 1)
         {
-            return new BoardPoint(X - delta, Y);
+            return new Point(X - delta, Y);
         }
 
         /// <summary>
-        /// Returns new BoardPoint object shifted right to "delta" points
+        /// Returns new Point object shifted right to "delta" points
         /// </summary>
-        public BoardPoint ShiftRight(int delta = 1)
+        public Point ShiftRight(int delta = 1)
         {
-            return new BoardPoint(X + delta, Y);
+            return new Point(X + delta, Y);
         }
 
         /// <summary>
-        /// Returns new BoardPoint object shifted top "delta" points
+        /// Returns new Point object shifted top "delta" points
         /// </summary>
-        public BoardPoint ShiftTop(int delta = 1)
+        public Point ShiftTop(int delta = 1)
         {
-            return new BoardPoint(X, Y - delta);
+            return new Point(X, Y - delta);
         }
 
         /// <summary>
-        /// Returns new BoardPoint object shifted bottom "delta" points
+        /// Returns new Point object shifted bottom "delta" points
         /// </summary>
-        public BoardPoint ShiftBottom(int delta = 1)
+        public Point ShiftBottom(int delta = 1)
         {
-            return new BoardPoint(X, Y + delta);
+            return new Point(X, Y + delta);
         }
 
-        public static bool operator ==(BoardPoint p1, BoardPoint p2)
+        public static bool operator ==(Point p1, Point p2)
         {
             return p1.X == p2.X && p1.Y == p2.Y;
         }
 
-        public static bool operator !=(BoardPoint p1, BoardPoint p2)
+        public static bool operator !=(Point p1, Point p2)
         {
             return !(p1 == p2);
         }
@@ -89,14 +89,14 @@ namespace SpaceRace.Api
             return string.Format("[{0},{1}]", X, Y);
         }
 
-        public bool Equals(BoardPoint other)
+        public bool Equals(Point other)
         {
             return X == other.X && Y == other.Y;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is BoardPoint other && Equals(other);
+            return obj is Point other && Equals(other);
         }
 
         public override int GetHashCode()

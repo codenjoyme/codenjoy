@@ -2,7 +2,7 @@
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,32 +19,21 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using System;
-using System.Text;
-using SpaceRace.Api;
+// Tune you application here
 
-namespace SpaceRace
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            // creating and starting a bot instance
-            Console.OutputEncoding = Encoding.Unicode;
-            
-            var logger = new Logger();
-            var bot = new Solver(logger);
-            using var api = new Api.Api(
-                Configuration.ConnectionString, 
-                Configuration.ReconnectionIntervalMS, 
-                bot,
-                logger);
+const connectionString = "http://localhost:8080/codenjoy-contest/board/player/w697usxnqn6s92hdp9sq?code=345398043395919424&game=spacerace";
+const isAdditionalLoggingEnabled = true;
+const connectionTimeout = 1000; // mS
 
-            // waiting for any key
-            Console.ReadKey();
 
-            // on any key - asking AI client to stop.
-            api.Stop();
-        }
-    }
-}
+
+//
+const Configuration = function(){
+    return {
+        connectionString: connectionString,
+        isAdditionalLoggingEnabled: isAdditionalLoggingEnabled,
+        connectionTimeout: connectionTimeout
+    };
+};
+
+if (module) module.exports = Configuration;

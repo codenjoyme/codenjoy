@@ -2,7 +2,7 @@
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,32 +19,22 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using System;
-using System.Text;
-using SpaceRace.Api;
 
-namespace SpaceRace
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            // creating and starting a bot instance
-            Console.OutputEncoding = Encoding.Unicode;
-            
-            var logger = new Logger();
-            var bot = new Solver(logger);
-            using var api = new Api.Api(
-                Configuration.ConnectionString, 
-                Configuration.ReconnectionIntervalMS, 
-                bot,
-                logger);
+console.log("starting");
+var Configuration = require("./Configuration.js");
+var Direction = require("./Direction.js");
+var Element = require("./Element.js");
+var Point = require("./Point.js");
+var Board = require("./Board.js");
+var Solver = require("./Solver.js");
+var Api = require("./Api.js");
 
-            // waiting for any key
-            Console.ReadKey();
+var printLogOnTextArea = false;
 
-            // on any key - asking AI client to stop.
-            api.Stop();
-        }
-    }
-}
+function drawBoard(board){};
+
+var WSocket = require('ws');
+var api = new Api(WSocket, Configuration, Direction, Element, Point, Board, Solver);
+console.log("initialized");
+api.start();
+console.log("started");

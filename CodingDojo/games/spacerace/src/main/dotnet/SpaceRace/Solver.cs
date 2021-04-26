@@ -20,46 +20,40 @@
  * #L%
  */
 using System;
-using System.Threading;
+using System.Collections.Generic;
 using SpaceRace.Api;
+using SpaceRace.Api.Interfaces;
 
 namespace SpaceRace
 {
     /// <summary>
     /// This is SpaceRaceAI client demo.
     /// </summary>
-    internal class MySpaceRaceBot : SpaceRaceBase
+    internal class Solver : ISolver
     {
-	    public MySpaceRaceBot(string serverUrl)
-            : base(serverUrl)
-	    {
-	    }
+        private ILogger Logger { get; }
 
+        public Solver(ILogger logger)
+        {
+            Logger = logger;
+        }
+        
         /// <summary>
         /// Called each game tick to make decision what to do (next move)
         /// </summary>
-        protected override string DoMove(GameBoard gameBoard)
+        public IDirection Get(Board board)
         {
-            //Just print current state (gameBoard) to console
-            Console.Clear();
-            gameBoard.PrintBoard();
-
             //TODO: Implement your logic here
             Random random = new Random(Environment.TickCount);
-            RacerAction action = (RacerAction)random.Next(0,5);
-
-            string actionString = RacerActionToString(action);
-
-            Console.WriteLine(actionString);
-            return actionString;
+            var movements = new List<IDirection>()
+            {
+                Direction.LEFT, Direction.RIGHT, Direction.DOWN, Direction.UP
+            };
+            
+            var action = movements[random.Next(0,4)];
+            if (random.Next(0, 1) == 1) action = action.WithAct();
+            return action;
         }
 
-        /// <summary>
-        /// Starts SpaceRace's client shutdown.
-        /// </summary>
-        public void InitiateExit()
-        {
-            _cts.Cancel();
-        }
     }
 }

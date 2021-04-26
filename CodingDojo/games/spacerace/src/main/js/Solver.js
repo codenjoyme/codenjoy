@@ -2,7 +2,7 @@
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,32 +19,30 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using System;
-using System.Text;
-using SpaceRace.Api;
 
-namespace SpaceRace
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            // creating and starting a bot instance
-            Console.OutputEncoding = Encoding.Unicode;
+var Solver =function (Direction, Element) {
+
+    return {
+
+        /**
+         * @return next hero action
+         */
+        get: function (board) {
+
+
+            // TODO your code here
             
-            var logger = new Logger();
-            var bot = new Solver(logger);
-            using var api = new Api.Api(
-                Configuration.ConnectionString, 
-                Configuration.ReconnectionIntervalMS, 
-                bot,
-                logger);
-
-            // waiting for any key
-            Console.ReadKey();
-
-            // on any key - asking AI client to stop.
-            api.Stop();
+            var directions = [Direction.UP, Direction.LEFT, Direction.RIGHT, Direction.DOWN];
+           
+            return directions[randomInt(0, directions.length)];
         }
-    }
+    };
+};
+
+
+function randomInt(min, max){
+    return Math.round(Math.random() * (min+max) - min);
 }
+
+
+if (module) module.exports = Solver;

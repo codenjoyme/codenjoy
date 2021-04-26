@@ -19,32 +19,20 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using System;
-using System.Text;
-using SpaceRace.Api;
-
-namespace SpaceRace
+namespace SpaceRace.Api
 {
-    class Program
+    public enum Element : short
     {
-        static void Main(string[] args)
-        {
-            // creating and starting a bot instance
-            Console.OutputEncoding = Encoding.Unicode;
-            
-            var logger = new Logger();
-            var bot = new Solver(logger);
-            using var api = new Api.Api(
-                Configuration.ConnectionString, 
-                Configuration.ReconnectionIntervalMS, 
-                bot,
-                logger);
-
-            // waiting for any key
-            Console.ReadKey();
-
-            // on any key - asking AI client to stop.
-            api.Stop();
-        }
+        None       = (short)' ',
+        Wall       = (short)'☼',
+        Hero       = (short)'☺',
+        OtherHero  = (short)'☻',
+        DeadHero   = (short)'+',
+        BulletPack = (short)'7',
+        Stone      = (short)'0',
+        Bomb       = (short)'♣',
+        Explosion  = (short)'x',
+        Gold       = (short)'$',
+        Bullet     = (short)'*'
     }
 }

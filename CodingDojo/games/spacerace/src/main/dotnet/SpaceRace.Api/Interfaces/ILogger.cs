@@ -1,4 +1,4 @@
-/*-
+﻿/*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
@@ -19,19 +19,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-namespace SpaceRace.Api
+namespace SpaceRace.Api.Interfaces
 {
-    public enum BoardElement : short
+    public interface ILogger
     {
-        None = (short)' ',
-        Wall = (short) '☼',
-        Hero = (short)'☺',
-        OtherHero = (short)'☻',
-        DeadHero = (short)'+',
-        BulletPack = (short)'7',
-        Stone = (short)'0',
-        Bomb = (short)'♣',
-        Explosion = (short)'x',
-        Bullet = (short)'*'
+        void Log(params object[] messages);
     }
 }

@@ -1,4 +1,4 @@
-/*-
+﻿/*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
@@ -20,31 +20,28 @@
  * #L%
  */
 using System;
-using System.Text;
-using SpaceRace.Api;
+using SpaceRace.Api.Interfaces;
 
-namespace SpaceRace
+namespace SpaceRace.Api
 {
-    class Program
+    public class Logger : IApiLogger
     {
-        static void Main(string[] args)
+        public void Log(params object[] messages)
         {
-            // creating and starting a bot instance
-            Console.OutputEncoding = Encoding.Unicode;
-            
-            var logger = new Logger();
-            var bot = new Solver(logger);
-            using var api = new Api.Api(
-                Configuration.ConnectionString, 
-                Configuration.ReconnectionIntervalMS, 
-                bot,
-                logger);
+            foreach (var message in messages)
+            {
+                Console.WriteLine($"{message}");
+            }
+        }
 
-            // waiting for any key
-            Console.ReadKey();
+        public void LogBoard(Board board)
+        {
+            Console.WriteLine($"{board}");
+        }
 
-            // on any key - asking AI client to stop.
-            api.Stop();
+        public void LogResult(IDirection direction)
+        {
+            Console.WriteLine($"{direction}");
         }
     }
 }
