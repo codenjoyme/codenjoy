@@ -19,21 +19,22 @@ public class ResultPrinter {
         maxLength = boardSize + 12;
     }
 
-    public void printBoard(List<Info> infos, List<Single> singles, List<String> results) {
+    public String printBoard(List<Info> infos, List<Single> singles) {
+        StringBuilder result = new StringBuilder();
         for (int index = 0; index < singles.size(); index++) {
             Single single = singles.get(index);
             Info info = infos.get(index);
-            String result = String.format(
+            String boardInfo = String.format(
                     "Board:\n%s" +
                             "Events:%s\n",
                     single.getBoardAsString().toString(),
                     info.all().toString()
             );
-            result = formatSpaces(index, result);
-            results.add(result);
+            result.append(formatSpaces(index, boardInfo));
         }
-        results.add("|" + repeat(' ', maxLength - 1) + "\n");
-        results.add(breakLine());
+        result.append("|" + repeat(' ', maxLength - 1) + "\n");
+        result.append(breakLine());
+        return result.toString();
     }
 
     private String formatSpaces(int index, String result) {

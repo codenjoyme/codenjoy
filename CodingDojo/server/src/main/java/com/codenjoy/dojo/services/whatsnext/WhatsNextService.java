@@ -17,6 +17,8 @@ import static java.util.stream.Collectors.*;
 @Component
 public class WhatsNextService {
 
+    // не хотелось рефакторить этот метод, дабы в нем было видно что делает сервер,
+    // чтобы создать игру
     public String calculate(GameType gameType, String board, String allActions) {
         Settings settings = gameType.getSettings();
         GameField game = gameType.createGame(0, settings);
@@ -41,7 +43,7 @@ public class WhatsNextService {
 
         ResultPrinter printer = new ResultPrinter(game.reader().size());
         results.add(printer.printInitialHeader());
-        printer.printBoard(infos, singles, results);
+        results.add(printer.printBoard(infos, singles));
 
         ActionsParser parser = new ActionsParser(allActions);
         List<Map<Integer, String>> ticksActions = parser.getTicksActions();
@@ -59,7 +61,7 @@ public class WhatsNextService {
 
             results.add(printer.printTickHeader(tick));
 
-            printer.printBoard(infos, singles, results);
+            results.add(printer.printBoard(infos, singles));
         }
         return printer.breakLine() +
                 results.stream().collect(joining(""));
