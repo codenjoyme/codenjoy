@@ -42,6 +42,14 @@ public class Sliding {
         this.settings = settings;
     }
 
+    public Direction getBefore() {
+        return before;
+    }
+
+    public boolean lastSlipperiness() {
+        return tick == slipperiness();
+    }
+
     private int slipperiness() {
         return settings.integer(SLIPPERINESS);
     }
