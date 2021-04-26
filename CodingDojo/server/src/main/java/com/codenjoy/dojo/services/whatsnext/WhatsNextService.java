@@ -1,6 +1,9 @@
 package com.codenjoy.dojo.services.whatsnext;
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.InformationCollector;
+import com.codenjoy.dojo.services.PlayerCommand;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
@@ -13,7 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.commons.lang3.StringUtils.repeat;
 
 @Component
 public class WhatsNextService {
@@ -52,11 +54,11 @@ public class WhatsNextService {
             singles.add(single);
         });
 
-        int maxLength = game.reader().size() + 12;
         List<String> results = new LinkedList<>();
 
-        results.add(printInitialHeader(maxLength));
-        printBoard(infos, singles, maxLength, results);
+        ResultPrinter printer = new ResultPrinter(game.reader().size());
+        results.add(printer.printInitialHeader());
+        printer.printBoard(infos, singles, results);
 
         List<String> ticks = split(allActions, ";", true);
         for (int tick = 0; tick < ticks.size(); tick++) {
@@ -72,86 +74,29 @@ public class WhatsNextService {
 
             game.tick();
 
-            results.add(printTickHeader(maxLength, tick));
+            results.add(printer.printTickHeader(tick));
 
-            printBoard(infos, singles, maxLength, results);
+            printer.printBoard(infos, singles, results);
         }
-        return breakLine(maxLength) +
-                results.stream()
-                        .collect(joining(""));
+        return printer.breakLine() +
+                results.stream().collect(joining(""));
     }
 
-    private void printBoard(List<Info> infos, List<Single> singles, int maxLength, List<String> results) {
-        for (int index = 0; index < singles.size(); index++) {
-            Single single = singles.get(index);
-            Info info = infos.get(index);
-            String result = String.format(
-                    "Board:\n%s" +
-                    "Events:%s\n",
-                    single.getBoardAsString().toString(),
-                    info.all().toString()
-            );
-            result = formatSpaces(maxLength, index, result);
-            results.add(result);
-        }
-        results.add("|" + repeat(' ', maxLength - 1) + "\n");
-        results.add(breakLine(maxLength));
-    }
-
-    private String formatSpaces(int maxLength, int index, String result) {
-        List<String> lines = new ArrayList<>();
-        lines.addAll(Arrays.asList(result.split("\n")));
-
-        String prefix = String.format("| (%s) ", countFromOne(index));
-        lines = lines.stream()
-                .map(line -> prefix + line)
-                .collect(toList());
-
-        lines.add(0, "|");
-
-        lines = lines.stream()
-                .map(line -> line + repeat(' ', maxLength - line.length()))
-                .collect(toList());
-
-        return lines.stream()
-                .collect(joining("\n")) + "\n";
-    }
-
-    private String printTickHeader(int maxLength, int tick) {
-        return printHeader(maxLength, "tick " + countFromOne(tick));
-    }
-
-    private String printInitialHeader(int maxLength) {
-        return printHeader(maxLength, "setup ");
-    }
-
-    private String printHeader(int maxLength, String tickInfo) {
-        int spacesLength = (maxLength - tickInfo.length()) / 2;
-        String spaces = repeat(' ', spacesLength);
-        return String.format("|%s%s%s\n%s",
-                spaces, tickInfo, spaces,
-                breakLine(maxLength));
-    }
-
-    private String breakLine(int maxLength) {
-        return "+" + repeat('-', maxLength - 1) + "\n";
-    }
-
-    private int countFromOne(int number) {
+    public static int countFromOne(int number) {
         return number + 1;
     }
 
     private Map<Integer, String> command(String tick) {
-        List<String> actions = split(tick, "&", false);
-        return actions.stream()
-                .map(action -> {
-                    Matcher matcher = ACTION_PATTERN.matcher(action);
+        List<String> actionsString = split(tick, "&", false);
+        return actionsString.stream()
+                .map(actionString -> {
+                    Matcher matcher = ACTION_PATTERN.matcher(actionString);
                     if (matcher.matches()) {
-                        String group1 = matcher.group(2);
-                        String group2 = matcher.group(3);
-                        return new HashMap.SimpleEntry<>(Integer.valueOf(group1), group2);
+                        String index = matcher.group(2);
+                        String action = matcher.group(3);
+                        return new HashMap.SimpleEntry<>(Integer.valueOf(index), action);
                     } else {
-                        throw new RuntimeException("Unparsed action: " + action);
+                        throw new RuntimeException("Unparsed action: " + actionString);
                     }
                 })
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
