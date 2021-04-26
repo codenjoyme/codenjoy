@@ -34,17 +34,8 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     @Override
-    public Hero getHero() {
-        return hero;
-    }
-
-    @Override
     public Hero initHero(Point pt) {
         return new Hero();
     }
 
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
 }

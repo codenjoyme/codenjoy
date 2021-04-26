@@ -78,7 +78,9 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
     /**
      * @return Герой игрока, готорым можно управлять через {@see Joystick}
      */
-    public abstract H getHero();
+    public H getHero() {
+        return hero;
+    }
 
     /**
      * @param hero Героя для игрока задаем в случае, если мы не
@@ -148,7 +150,9 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
     /**
      * @return Жив ли герой. Обычно делегируется герою.
      */
-    public abstract boolean isAlive();
+    public boolean isAlive() {
+        return hero != null && hero.isAlive();
+    }
 
     /**
      * @return Победил ли герой на этом уровне. TODO ##2 работает пока только с multiplayerType.isTraining()
