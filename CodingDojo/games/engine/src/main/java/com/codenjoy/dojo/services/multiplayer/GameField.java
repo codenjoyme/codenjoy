@@ -23,14 +23,15 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -71,5 +72,9 @@ public interface GameField<P extends GamePlayer> extends Tickable {
 
     default List<P> load(String board, Supplier<P> createPlayer) {
         return Arrays.asList();
+    }
+
+    default Optional<Point> freeRandom() {
+        return Optional.empty(); // TODO удалить тут и во всех играх заюзать реальный метод
     }
 }

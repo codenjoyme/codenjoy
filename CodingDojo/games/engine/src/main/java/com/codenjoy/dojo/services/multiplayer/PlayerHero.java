@@ -71,4 +71,8 @@ public abstract class PlayerHero<F extends GameField> extends PointImpl implemen
     public SettingsReader settings() {
         return field.settings();
     }
+
+    public boolean initialized() {
+        return initialized;
+    }
 }

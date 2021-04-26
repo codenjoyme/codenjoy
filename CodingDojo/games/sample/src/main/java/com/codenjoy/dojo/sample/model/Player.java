@@ -36,8 +36,6 @@ import java.util.Optional;
  */
 public class Player extends GamePlayer<Hero, Field> {
 
-    Hero hero;
-
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
@@ -47,24 +45,12 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     @Override
-    public void newHero(Field field) {
-        if (!hero.initialized) {
-            if (hero != null) {
-                hero = null;
-            }
-            Optional<Point> pt = field.freeRandom();
-            if (pt.isEmpty()) {
-                // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
-                throw new RuntimeException("Not enough space for Hero");
-            }
-            hero = new Hero(pt.get());
-        }
-        hero.init(field);
+    public Hero initHero(Point pt) {
+        return new Hero(pt);
     }
 
     @Override
     public boolean isAlive() {
         return hero != null && hero.isAlive();
     }
-
 }

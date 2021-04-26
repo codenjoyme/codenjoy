@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services.nullobj;
  * #L%
  */
 
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
@@ -40,8 +40,8 @@ public final class NullGamePlayer extends GamePlayer {
     }
 
     @Override
-    public void newHero(GameField field) {
-        // do nothing
+    public PlayerHero initHero(Point pt) {
+        return NullPlayerHero.INSTANCE;
     }
 
     @Override

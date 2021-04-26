@@ -219,8 +219,7 @@ public class Sample implements Field {
         List<Player> players = new LinkedList<>();
         level.heroes().forEach(hero -> {
             Player player = createPlayer.get();
-            player.hero = hero;
-            player.hero.initialized = true;
+            player.setHero(hero);
             players.add(player);
 
         });
