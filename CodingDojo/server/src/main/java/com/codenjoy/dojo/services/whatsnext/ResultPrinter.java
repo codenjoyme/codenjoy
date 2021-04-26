@@ -13,11 +13,11 @@ import static org.apache.commons.lang3.StringUtils.repeat;
 
 public class ResultPrinter {
 
-    private int maxLength;
+    private int width;
     private StringBuilder result;
 
     public ResultPrinter(int boardSize) {
-        maxLength = boardSize + 12;
+        width = boardSize + 12;
         result = new StringBuilder();
     }
 
@@ -33,7 +33,7 @@ public class ResultPrinter {
             );
             result.append(formatSpaces(index, boardInfo));
         }
-        result.append("|").append(repeat(' ', maxLength - 1)).append("\n");
+        result.append("|").append(repeat(' ', width - 1)).append("\n");
     }
 
     // TODO to use common StringBuilder here
@@ -49,7 +49,7 @@ public class ResultPrinter {
         lines.add(0, "|");
 
         lines = lines.stream()
-                .map(line -> line + repeat(' ', maxLength - line.length()))
+                .map(line -> line + repeat(' ', width - line.length()))
                 .collect(toList());
 
         return lines.stream()
@@ -64,16 +64,16 @@ public class ResultPrinter {
         printHeader("setup ");
     }
 
-    private void printHeader(String tickInfo) {
-        int spacesLength = (maxLength - tickInfo.length()) / 2;
+    private void printHeader(String message) {
+        int spacesLength = (width - message.length()) / 2;
         String spaces = repeat(' ', spacesLength);
         breakLine();
-        result.append(String.format("|%s%s%s\n", spaces, tickInfo, spaces));
+        result.append(String.format("|%s%s%s\n", spaces, message, spaces));
         breakLine();
     }
 
     public void breakLine() {
-        result.append("+").append(repeat('-', maxLength - 1)).append("\n");
+        result.append("+").append(repeat('-', width - 1)).append("\n");
     }
 
     @Override
