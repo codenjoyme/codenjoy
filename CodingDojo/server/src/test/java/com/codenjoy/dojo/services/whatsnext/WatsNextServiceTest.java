@@ -29,6 +29,8 @@ public class WatsNextServiceTest {
                 "(1)->[ACT, LEFT]",
 
                 "+----------------\n" +
+                "|     setup      \n" +
+                "+----------------\n" +
                 "|                \n" +
                 "| (1) Board:     \n" +
                 "| (1) ☼☼☼☼☼      \n" +
@@ -64,6 +66,8 @@ public class WatsNextServiceTest {
                 "(1)->[RIGHT]",
 
                 "+----------------\n" +
+                "|     setup      \n" +
+                "+----------------\n" +
                 "|                \n" +
                 "| (1) Board:     \n" +
                 "| (1) ☼☼☼☼☼      \n" +
@@ -98,6 +102,8 @@ public class WatsNextServiceTest {
 
                 "(2)->[ACT, LEFT]",
 
+                "+----------------\n" +
+                "|     setup      \n" +
                 "+----------------\n" +
                 "|                \n" +
                 "| (1) Board:     \n" +
@@ -151,6 +157,8 @@ public class WatsNextServiceTest {
 
                     "(4)->[ACT, LEFT]",
 
+                    "+----------------\n" +
+                    "|     setup      \n" +
                     "+----------------\n" +
                     "|                \n" +
                     "| (1) Board:     \n" +
@@ -236,6 +244,8 @@ public class WatsNextServiceTest {
                 "(2)->[ACT, UP]&(1)->[ACT, DOWN]",
 
                 "+----------------\n" +
+                "|     setup      \n" +
+                "+----------------\n" +
                 "|                \n" +
                 "| (1) Board:     \n" +
                 "| (1) ☼☼☼☼☼      \n" +
@@ -287,6 +297,8 @@ public class WatsNextServiceTest {
                 "(2)->[ACT, UP]&(1)->[ACT, DOWN];" +
                 "(1)->[DOWN]&(2)->[UP]",
 
+                "+----------------\n" +
+                "|     setup      \n" +
                 "+----------------\n" +
                 "|                \n" +
                 "| (1) Board:     \n" +
@@ -370,6 +382,8 @@ public class WatsNextServiceTest {
 
                 "(1)->[ACT, LEFT]",
 
+                "+----------------------------\n" +
+                "|           setup            \n" +
                 "+----------------------------\n" +
                 "|                            \n" +
                 "| (1) Board:                 \n" +
@@ -484,6 +498,8 @@ public class WatsNextServiceTest {
 
     public String expectedResult() {
         return  "+--------------\n" +
+                "|    setup     \n" +
+                "+--------------\n" +
                 "|              \n" +
                 "| (1) Board:   \n" +
                 "| (1) ☼☼☼      \n" +
@@ -514,6 +530,8 @@ public class WatsNextServiceTest {
 
                 "(1)->[ACT]" + willNotIgnore,
 
+                "+--------------\n" +
+                "|    setup     \n" +
                 "+--------------\n" +
                 "|              \n" +
                 "| (1) Board:   \n" +
@@ -555,6 +573,8 @@ public class WatsNextServiceTest {
 
                 "(1)->[ACT]" + willNotIgnore,
 
+                "+--------------\n" +
+                "|    setup     \n" +
                 "+--------------\n" +
                 "|              \n" +
                 "| (1) Board:   \n" +
@@ -617,6 +637,8 @@ public class WatsNextServiceTest {
                 willNotIgnore + "(1)->[ACT]",
 
                 "+--------------\n" +
+                "|    setup     \n" +
+                "+--------------\n" +
                 "|              \n" +
                 "| (1) Board:   \n" +
                 "| (1) ☼☼☼      \n" +
@@ -657,6 +679,8 @@ public class WatsNextServiceTest {
 
                 willNotIgnore + "(1)->[ACT]",
 
+                "+--------------\n" +
+                "|    setup     \n" +
                 "+--------------\n" +
                 "|              \n" +
                 "| (1) Board:   \n" +

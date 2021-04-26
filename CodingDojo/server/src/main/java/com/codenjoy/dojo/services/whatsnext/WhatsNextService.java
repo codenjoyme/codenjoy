@@ -55,6 +55,7 @@ public class WhatsNextService {
         int maxLength = game.reader().size() + 12;
         List<String> results = new LinkedList<>();
 
+        results.add(printInitialHeader(maxLength));
         printBoard(infos, singles, maxLength, results);
 
         List<String> ticks = split(allActions, ";", true);
@@ -71,8 +72,7 @@ public class WhatsNextService {
 
             game.tick();
 
-            String tickHeader = printHeader(maxLength, tick);
-            results.add(tickHeader);
+            results.add(printTickHeader(maxLength, tick));
 
             printBoard(infos, singles, maxLength, results);
         }
@@ -117,8 +117,15 @@ public class WhatsNextService {
                 .collect(joining("\n")) + "\n";
     }
 
-    private String printHeader(int maxLength, int tick) {
-        String tickInfo = "tick " + countFromOne(tick);
+    private String printTickHeader(int maxLength, int tick) {
+        return printHeader(maxLength, "tick " + countFromOne(tick));
+    }
+
+    private String printInitialHeader(int maxLength) {
+        return printHeader(maxLength, "setup ");
+    }
+
+    private String printHeader(int maxLength, String tickInfo) {
         int spacesLength = (maxLength - tickInfo.length()) / 2;
         String spaces = repeat(' ', spacesLength);
         return String.format("|%s%s%s\n%s",
