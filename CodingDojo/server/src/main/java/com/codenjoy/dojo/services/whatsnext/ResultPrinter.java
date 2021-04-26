@@ -14,13 +14,14 @@ import static org.apache.commons.lang3.StringUtils.repeat;
 public class ResultPrinter {
 
     private int maxLength;
+    private StringBuilder result;
 
     public ResultPrinter(int boardSize) {
         maxLength = boardSize + 12;
+        result = new StringBuilder();
     }
 
-    public String printBoard(List<Info> infos, List<Single> singles) {
-        StringBuilder result = new StringBuilder();
+    public void printBoard(List<Info> infos, List<Single> singles) {
         for (int index = 0; index < singles.size(); index++) {
             Single single = singles.get(index);
             Info info = infos.get(index);
@@ -32,11 +33,10 @@ public class ResultPrinter {
             );
             result.append(formatSpaces(index, boardInfo));
         }
-        result.append("|" + repeat(' ', maxLength - 1) + "\n");
-        result.append(breakLine());
-        return result.toString();
+        result.append("|").append(repeat(' ', maxLength - 1)).append("\n");
     }
 
+    // TODO to use common StringBuilder here
     private String formatSpaces(int index, String result) {
         List<String> lines = new ArrayList<>();
         lines.addAll(Arrays.asList(result.split("\n")));
@@ -56,23 +56,28 @@ public class ResultPrinter {
                 .collect(joining("\n")) + "\n";
     }
 
-    public String printTickHeader(int tick) {
-        return printHeader("tick " + countFromOne(tick));
+    public void printTickHeader(int tick) {
+        printHeader("tick " + countFromOne(tick));
     }
 
-    public String printInitialHeader() {
-        return printHeader("setup ");
+    public void printInitialHeader() {
+        printHeader("setup ");
     }
 
-    private String printHeader(String tickInfo) {
+    private void printHeader(String tickInfo) {
         int spacesLength = (maxLength - tickInfo.length()) / 2;
         String spaces = repeat(' ', spacesLength);
-        return String.format("|%s%s%s\n%s",
-                spaces, tickInfo, spaces,
-                breakLine());
+        breakLine();
+        result.append(String.format("|%s%s%s\n", spaces, tickInfo, spaces));
+        breakLine();
     }
 
-    public String breakLine() {
-        return "+" + repeat('-', maxLength - 1) + "\n";
+    public void breakLine() {
+        result.append("+").append(repeat('-', maxLength - 1)).append("\n");
+    }
+
+    @Override
+    public String toString() {
+        return result.toString();
     }
 }

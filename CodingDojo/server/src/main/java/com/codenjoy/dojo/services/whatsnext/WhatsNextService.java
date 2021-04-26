@@ -39,11 +39,9 @@ public class WhatsNextService {
             singles.add(single);
         });
 
-        List<String> results = new LinkedList<>();
-
         ResultPrinter printer = new ResultPrinter(game.reader().size());
-        results.add(printer.printInitialHeader());
-        results.add(printer.printBoard(infos, singles));
+        printer.printInitialHeader();
+        printer.printBoard(infos, singles);
 
         ActionsParser parser = new ActionsParser(allActions);
         List<Map<Integer, String>> ticksActions = parser.getTicksActions();
@@ -59,12 +57,11 @@ public class WhatsNextService {
 
             game.tick();
 
-            results.add(printer.printTickHeader(tick));
-
-            results.add(printer.printBoard(infos, singles));
+            printer.printTickHeader(tick);
+            printer.printBoard(infos, singles);
         }
-        return printer.breakLine() +
-                results.stream().collect(joining(""));
+        printer.breakLine();
+        return printer.toString();
     }
 
     public static int countFromOne(int number) {
