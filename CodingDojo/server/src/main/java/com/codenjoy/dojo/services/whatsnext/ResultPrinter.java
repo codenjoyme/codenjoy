@@ -13,7 +13,6 @@ public class ResultPrinter {
     private String breakLine;
     private int width;
     private StringBuilder result;
-    private int position;
 
     public ResultPrinter(int boardSize) {
         width = boardSize + 12;
@@ -32,36 +31,32 @@ public class ResultPrinter {
             String board = single.getBoardAsString().toString();
             List<String> lines = Arrays.asList(board.split("\n"));
 
-            newLine();
-            result.append(prefix).append("Board:");
-            endLine();
+            printLine(() -> result.append(prefix).append("Board:"));
 
             lines.forEach(line -> {
-                newLine();
-                result.append(prefix).append(line);
-                endLine();
+                printLine(() -> result.append(prefix).append(line));
             });
 
-            newLine();
-            result.append(prefix).append("Events:").append(info);
-            endLine();
+            printLine(() -> result.append(prefix).append("Events:").append(info));
         }
         boardSeparator();
     }
 
-    private void endLine() {
-        int length = result.length() - position;
-        result.append(repeat(' ', width - length)).append("\n");
+    private void printLine(Runnable line) {
+        int pos = length();
+
+        line.run();
+
+        int len = length() - pos;
+        result.append(repeat(' ', width - len)).append("\n");
     }
 
-    private void newLine() {
-        position = result.length();
+    private int length() {
+        return result.length();
     }
 
     public void boardSeparator() {
-        newLine();
-        result.append("|");
-        endLine();
+        printLine(() -> result.append("|"));
     }
 
     public void tickHeader(int tick) {
