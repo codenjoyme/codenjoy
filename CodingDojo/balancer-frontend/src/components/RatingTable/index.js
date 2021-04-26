@@ -160,11 +160,11 @@ class RatingTableHandler extends Component {
                             />
                             <Column
                                 label='Бали'
-                                className={ Styles.ratingColumn }
+                                className={ Styles.ratingScore }
                                 dataKey='score'
                                 flexGrow={ 0 }
                                 flexShrink={ 0 }
-                                width={ 100 }
+                                width={ 80 }
                             />
                         </Table>
                     ) }
