@@ -27,7 +27,6 @@ import com.codenjoy.dojo.battlecity.TestGameSettings;
 import com.codenjoy.dojo.battlecity.model.items.AITank;
 import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Wall;
-import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
@@ -111,30 +110,20 @@ public class GameTest {
         };
         game = (Battlecity) runner.createGame(0, settings);
 
-        Level level = settings.level(dice);
-        level.getTanks().forEach(tank ->
-            game.newGame(initPlayer(game, tank)));
+        settings.level(dice)
+                .getTanks()
+                .forEach(tank ->
+                        game.newGame(initPlayer(tank)));
 
         heroes = game.tanks();
     }
 
-    private Player initPlayer(Battlecity game, Tank tank) {
+    private Player initPlayer(Tank tank) {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
-
-        Player player = new Player(listener, settings){
-            @Override
-            public void newHero(Field field) {
-                hero = tank;
-                hero.setPlayer(this);
-                hero.setActive(true);
-                hero.setAlive(true);
-            }
-        };
-
+        Player player = new Player(listener, settings);
+        player.setHero(tank);
         players.add(player);
-
-        tank.init(game);
         return player;
     }
 
