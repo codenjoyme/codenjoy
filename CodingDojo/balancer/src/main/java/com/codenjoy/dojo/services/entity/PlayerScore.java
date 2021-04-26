@@ -36,7 +36,7 @@ public class PlayerScore {
     private String time;
     private String server;
     private boolean winner;
-    private int lastHourScore;
+    private String lastHourScore;
 
     public PlayerScore() {
         // do nothing
@@ -48,7 +48,7 @@ public class PlayerScore {
         this.day = day;
         this.time = time;
         this.winner = isWinner;
-        lastHourScore = score;
+        lastHourScore = "-";
     }
 
     @Override

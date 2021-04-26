@@ -290,7 +290,7 @@ public class Dispatcher {
             if (scoresMap.containsKey(playerScore.getId())) {
                 PlayerScore prevPlayerScore = scoresMap.get(playerScore.getId());
                 if (playerScore.getScore() >= prevPlayerScore.getScore()) {
-                    playerScore.setLastHourScore(playerScore.getScore() - prevPlayerScore.getScore());
+                    playerScore.setLastHourScore(Integer.toString(playerScore.getScore() - prevPlayerScore.getScore()));
                 }
             }
         });
