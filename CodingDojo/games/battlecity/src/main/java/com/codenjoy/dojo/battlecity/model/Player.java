@@ -54,10 +54,6 @@ public class Player extends RoundGamePlayer<Tank, Field> {
         killed = 0;
     }
 
-    public Tank getHero() {
-        return hero;
-    }
-
     public boolean isDestroyed() {
         return !isAlive();
     }
@@ -72,21 +68,9 @@ public class Player extends RoundGamePlayer<Tank, Field> {
     }
 
     @Override
-    public void initHero(Field field) {
-        if (hero != null) {
-            hero.setPlayer(null);
-            hero = null;
-        }
-        Optional<Point> pt = field.freeRandom();
-        if (pt.isEmpty()) {
-            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
-            throw new RuntimeException("Not enough space for Hero");
-        }
-        hero = new Tank(pt.get(), Direction.UP);
-        hero.setPlayer(this);
-        hero.removeBullets();
-        hero.init(field);
+    public Tank initHero(Point pt) {
         reset();
+        return new Tank(pt, Direction.UP);
     }
 
     public int score() {

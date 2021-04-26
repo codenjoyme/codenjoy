@@ -78,7 +78,7 @@ public abstract class PlayerHero<F extends GameField> extends PointImpl implemen
 
     public abstract boolean isAlive();
 
-    protected boolean manual() {
+    public boolean manual() {
         return manual;
     }
 
