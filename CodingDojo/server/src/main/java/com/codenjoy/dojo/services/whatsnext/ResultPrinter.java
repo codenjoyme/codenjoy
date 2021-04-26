@@ -21,7 +21,7 @@ public class ResultPrinter {
         result = new StringBuilder();
     }
 
-    public void printBoard(List<Info> infos, List<Single> singles) {
+    public void board(List<Info> infos, List<Single> singles) {
         for (int index = 0; index < singles.size(); index++) {
             Single single = singles.get(index);
             Info info = infos.get(index);
@@ -56,11 +56,11 @@ public class ResultPrinter {
                 .collect(joining("\n")) + "\n";
     }
 
-    public void printTickHeader(int tick) {
+    public void tickHeader(int tick) {
         printHeader("tick " + countFromOne(tick));
     }
 
-    public void printInitialHeader() {
+    public void initialHeader() {
         printHeader("setup ");
     }
 

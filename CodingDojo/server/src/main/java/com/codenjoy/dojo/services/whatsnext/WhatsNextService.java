@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-import static java.util.stream.Collectors.*;
-
 @Component
 public class WhatsNextService {
 
@@ -40,8 +38,8 @@ public class WhatsNextService {
         });
 
         ResultPrinter printer = new ResultPrinter(game.reader().size());
-        printer.printInitialHeader();
-        printer.printBoard(infos, singles);
+        printer.initialHeader();
+        printer.board(infos, singles);
 
         ActionsParser parser = new ActionsParser(allActions);
         List<Map<Integer, String>> ticksActions = parser.getTicksActions();
@@ -57,8 +55,8 @@ public class WhatsNextService {
 
             game.tick();
 
-            printer.printTickHeader(tick);
-            printer.printBoard(infos, singles);
+            printer.tickHeader(tick);
+            printer.board(infos, singles);
         }
         printer.breakLine();
         return printer.toString();
