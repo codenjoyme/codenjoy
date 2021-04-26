@@ -85,8 +85,8 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      *             хотим его инициализировать в рендомном месте карты.
      */
     public void setHero(H hero) {
+        hero.manual(true);
         this.hero = hero;
-        hero.initialized = true;
     }
 
     /**
@@ -112,17 +112,27 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      * @param field борда
      */
     public void newHero(F field) {
-        if (hero == null || !hero.initialized()) {
+        // если героя нет, или он не инициализирован вручную - мы поможем этому случиться
+        if (hero == null || !hero.manual()) {
             if (hero != null) {
                 hero = null;
             }
             Optional<Point> pt = field.freeRandom();
-            if (pt.isEmpty()) {
-                // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
-                throw new RuntimeException("Not enough space for Hero");
+            if (pt == null) {
+                // если freeRandom вернул null значит герой не располагается
+                // на поле и не содержит координаты
+                hero = initHero(null);
+            } else {
+                // иначе пытаемся понять есть ли на поле место
+                // если нет - все плохо, иначе создаем героя в этом месте
+                if (pt.isEmpty()) {
+                    // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
+                    throw new RuntimeException("Not enough space for Hero");
+                }
+                hero = initHero(pt.get());
             }
-            hero = initHero(pt.get());
         }
+        // инициализируем бордой и погнали!
         hero.init(field);
     }
 

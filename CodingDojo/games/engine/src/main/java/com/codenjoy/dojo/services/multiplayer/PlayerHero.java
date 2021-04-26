@@ -25,7 +25,6 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.NoMessageJoystick;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.json.JSONObject;
 
@@ -41,7 +40,12 @@ import org.json.JSONObject;
 public abstract class PlayerHero<F extends GameField> extends PointImpl implements Joystick, NoMessageJoystick, Tickable {
 
     protected F field;
-    public boolean initialized = false;
+
+    /**
+     * Этим флагом мы указываем, что герой уже создан нами и
+     * не надо искать ему место на поле.
+     */
+    private boolean manual = false;
 
     public PlayerHero(int x, int y) {
         super(x, y);
@@ -72,7 +76,11 @@ public abstract class PlayerHero<F extends GameField> extends PointImpl implemen
         return field.settings();
     }
 
-    public boolean initialized() {
-        return initialized;
+    protected boolean manual() {
+        return manual;
+    }
+
+    protected void manual(boolean manual) {
+        this.manual = manual;
     }
 }
