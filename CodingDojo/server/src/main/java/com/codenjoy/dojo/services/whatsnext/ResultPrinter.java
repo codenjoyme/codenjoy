@@ -13,12 +13,14 @@ import static org.apache.commons.lang3.StringUtils.repeat;
 
 public class ResultPrinter {
 
+    private String breakLine;
     private int width;
     private StringBuilder result;
 
     public ResultPrinter(int boardSize) {
         width = boardSize + 12;
         result = new StringBuilder();
+        breakLine = "+" + repeat('-', width - 1) + "\n";
     }
 
     public void board(List<Info> infos, List<Single> singles) {
@@ -73,7 +75,7 @@ public class ResultPrinter {
     }
 
     public void breakLine() {
-        result.append("+").append(repeat('-', width - 1)).append("\n");
+        result.append(breakLine);
     }
 
     @Override
