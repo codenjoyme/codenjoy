@@ -25,37 +25,42 @@ public class ResultPrinter {
 
     public void board(List<Info> infos, List<Single> singles) {
         for (int index = 0; index < singles.size(); index++) {
+            boardSeparator();
+
             Single single = singles.get(index);
-            Info info = infos.get(index);
-            String boardInfo = String.format(
-                    "Board:\n%s" +
-                            "Events:%s\n",
-                    single.getBoardAsString().toString(),
-                    info.all().toString()
+            String info = infos.get(index).all().toString();
+            String prefix = String.format("| (%s) ", countFromOne(index));
+
+            String board = single.getBoardAsString().toString();
+            List<String> lines = Arrays.asList(board.split("\n"));
+            result.append(prefix)
+                    .append("Board:")
+                    .append(repeat(' ',
+                            width - prefix.length() - 6))
+                    .append("\n");
+
+            lines.forEach(line ->
+                    result.append(prefix)
+                            .append(line)
+                            .append(repeat(' ',
+                                    width - prefix.length() - line.length()))
+                            .append("\n")
             );
-            result.append(formatSpaces(index, boardInfo));
+
+            result.append(prefix)
+                    .append("Events:")
+                    .append(info)
+                    .append(repeat(' ',
+                                   width - prefix.length() - 7 - info.length()))
+                    .append("\n");
         }
-        result.append("|").append(repeat(' ', width - 1)).append("\n");
+        boardSeparator();
     }
 
-    // TODO to use common StringBuilder here
-    private String formatSpaces(int index, String result) {
-        List<String> lines = new ArrayList<>();
-        lines.addAll(Arrays.asList(result.split("\n")));
-
-        String prefix = String.format("| (%s) ", countFromOne(index));
-        lines = lines.stream()
-                .map(line -> prefix + line)
-                .collect(toList());
-
-        lines.add(0, "|");
-
-        lines = lines.stream()
-                .map(line -> line + repeat(' ', width - line.length()))
-                .collect(toList());
-
-        return lines.stream()
-                .collect(joining("\n")) + "\n";
+    public void boardSeparator() {
+        result.append("|")
+                .append(repeat(' ', width - 1))
+                .append("\n");
     }
 
     public void tickHeader(int tick) {
