@@ -171,7 +171,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     @Override
     public boolean isAlive() {
         if (super.isAlive()) {
-            checkAlive();
+            checkAlive(); // TODO точно это надо делать в геттере?
         }
         return super.isAlive();
     }
