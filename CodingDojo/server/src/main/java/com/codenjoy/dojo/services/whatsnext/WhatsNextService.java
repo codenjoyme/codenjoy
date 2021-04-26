@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.services.whatsnext;
 
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.InformationCollector;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -17,18 +16,6 @@ import static java.util.stream.Collectors.*;
 
 @Component
 public class WhatsNextService {
-
-    public static class Info extends InformationCollector {
-        public Info(PlayerScores playerScores) {
-            super(playerScores);
-        }
-
-        @Override
-        public void event(Object event) {
-            pool.add(event.toString());
-            super.event(event);
-        }
-    }
 
     public String calculate(GameType gameType, String board, String allActions) {
         Settings settings = gameType.getSettings();

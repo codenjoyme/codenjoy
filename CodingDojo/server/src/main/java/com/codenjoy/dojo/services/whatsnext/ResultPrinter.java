@@ -19,10 +19,10 @@ public class ResultPrinter {
         maxLength = boardSize + 12;
     }
 
-    public void printBoard(List<WhatsNextService.Info> infos, List<Single> singles, List<String> results) {
+    public void printBoard(List<Info> infos, List<Single> singles, List<String> results) {
         for (int index = 0; index < singles.size(); index++) {
             Single single = singles.get(index);
-            WhatsNextService.Info info = infos.get(index);
+            Info info = infos.get(index);
             String result = String.format(
                     "Board:\n%s" +
                             "Events:%s\n",
