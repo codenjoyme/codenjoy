@@ -2,13 +2,10 @@ package com.codenjoy.dojo.services.whatsnext;
 
 import com.codenjoy.dojo.services.multiplayer.Single;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.whatsnext.WhatsNextService.countFromOne;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.repeat;
 
 public class ResultPrinter {
@@ -16,6 +13,7 @@ public class ResultPrinter {
     private String breakLine;
     private int width;
     private StringBuilder result;
+    private int position;
 
     public ResultPrinter(int boardSize) {
         width = boardSize + 12;
@@ -33,34 +31,37 @@ public class ResultPrinter {
 
             String board = single.getBoardAsString().toString();
             List<String> lines = Arrays.asList(board.split("\n"));
-            result.append(prefix)
-                    .append("Board:")
-                    .append(repeat(' ',
-                            width - prefix.length() - 6))
-                    .append("\n");
 
-            lines.forEach(line ->
-                    result.append(prefix)
-                            .append(line)
-                            .append(repeat(' ',
-                                    width - prefix.length() - line.length()))
-                            .append("\n")
-            );
+            newLine();
+            result.append(prefix).append("Board:");
+            endLine();
 
-            result.append(prefix)
-                    .append("Events:")
-                    .append(info)
-                    .append(repeat(' ',
-                                   width - prefix.length() - 7 - info.length()))
-                    .append("\n");
+            lines.forEach(line -> {
+                newLine();
+                result.append(prefix).append(line);
+                endLine();
+            });
+
+            newLine();
+            result.append(prefix).append("Events:").append(info);
+            endLine();
         }
         boardSeparator();
     }
 
+    private void endLine() {
+        int length = result.length() - position;
+        result.append(repeat(' ', width - length)).append("\n");
+    }
+
+    private void newLine() {
+        position = result.length();
+    }
+
     public void boardSeparator() {
-        result.append("|")
-                .append(repeat(' ', width - 1))
-                .append("\n");
+        newLine();
+        result.append("|");
+        endLine();
     }
 
     public void tickHeader(int tick) {
