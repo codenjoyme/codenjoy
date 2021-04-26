@@ -281,8 +281,11 @@ class RulesContainer extends Component {
                         <ul>
                             <li><span className='command'>Direction[UP, DOWN, LEFT, RIGHT]</span> - призводять до руху танк в заданому напрямку на 1 клітинку.</li>
                             <li><span className='command'>ACT</span> - танк робить постріл стоячи на місці. </li>
-                            <li><span className='command'>ACT,Direction</span> - танк робить постріл, а потім рухається у вказанному напрямку. </li>
-                            <li><span className='command'>Direction,ACT</span> - танк рухається та робить постріл у вказанному напрямку</li>
+                            <li>
+                                <span className='command'>ACT,Direction </span>
+                                або
+                                <span className='command'> Direction,ACT</span>- танк рухається та робить постріл у вказанному напрямку
+                            </li>
                         </ul>
                     <p>
                         Ваше завдання: підключитися з клієнтської частини до ігрового сервера через веб-сокет з'єднання.
