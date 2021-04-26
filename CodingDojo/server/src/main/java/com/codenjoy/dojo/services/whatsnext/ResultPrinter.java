@@ -70,7 +70,7 @@ public class ResultPrinter {
         int spacesLength = (width - message.length()) / 2;
         String spaces = repeat(' ', spacesLength);
         breakLine();
-        result.append(String.format("|%s%s%s\n", spaces, message, spaces));
+        result.append("|").append(spaces).append(message).append(spaces).append("\n");
         breakLine();
     }
 

@@ -147,7 +147,7 @@ public class WatsNextServiceTest {
 
     @Test(timeout = 20000)
     public void shouldMethodIsFast() {
-        // about 13.5 sec
+        // about 10 sec
         for (int i = 0; i < 100000; i++) {
             whatsNx("☼☼☼☼☼\n" +
                     "☼☺ ☺☼\n" +
