@@ -54,6 +54,9 @@ public class WhatsNextService {
 
         int maxLength = game.reader().size() + 12;
         List<String> results = new LinkedList<>();
+
+        printBoard(infos, singles, maxLength, results);
+
         List<String> ticks = split(allActions, ";", true);
         for (int tick = 0; tick < ticks.size(); tick++) {
             String tickActions = ticks.get(tick);
@@ -71,24 +74,28 @@ public class WhatsNextService {
             String tickHeader = printHeader(maxLength, tick);
             results.add(tickHeader);
 
-            for (int index = 0; index < singles.size(); index++) {
-                Single single = singles.get(index);
-                Info info = infos.get(index);
-                String result = String.format(
-                        "Board:\n%s" +
-                        "Events:%s\n",
-                        single.getBoardAsString().toString(),
-                        info.all().toString()
-                );
-                result = formatSpaces(maxLength, index, result);
-                results.add(result);
-            }
-            results.add("|" + repeat(' ', maxLength - 1) + "\n");
-            results.add(breakLine(maxLength));
+            printBoard(infos, singles, maxLength, results);
         }
         return breakLine(maxLength) +
                 results.stream()
                         .collect(joining(""));
+    }
+
+    private void printBoard(List<Info> infos, List<Single> singles, int maxLength, List<String> results) {
+        for (int index = 0; index < singles.size(); index++) {
+            Single single = singles.get(index);
+            Info info = infos.get(index);
+            String result = String.format(
+                    "Board:\n%s" +
+                    "Events:%s\n",
+                    single.getBoardAsString().toString(),
+                    info.all().toString()
+            );
+            result = formatSpaces(maxLength, index, result);
+            results.add(result);
+        }
+        results.add("|" + repeat(' ', maxLength - 1) + "\n");
+        results.add(breakLine(maxLength));
     }
 
     private String formatSpaces(int maxLength, int index, String result) {
