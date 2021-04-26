@@ -12,15 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.*;
 
 @Component
 public class WhatsNextService {
-
-    private static Pattern ACTION_PATTERN = Pattern.compile("(\\((\\d)\\)->\\[(.*)\\])", Pattern.CASE_INSENSITIVE);
 
     public static class Info extends InformationCollector {
         public Info(PlayerScores playerScores) {
@@ -60,10 +56,10 @@ public class WhatsNextService {
         results.add(printer.printInitialHeader());
         printer.printBoard(infos, singles, results);
 
-        List<String> ticks = split(allActions, ";", true);
-        for (int tick = 0; tick < ticks.size(); tick++) {
-            String tickActions = ticks.get(tick);
-            Map<Integer, String> actions = command(tickActions);
+        ActionsParser parser = new ActionsParser(allActions);
+        List<Map<Integer, String>> ticksActions = parser.getTicksActions();
+        for (int tick = 0; tick < ticksActions.size(); tick++) {
+            Map<Integer, String> actions = ticksActions.get(tick);
             for (int index = 0; index < singles.size(); index++) {
                 Single single = singles.get(index);
                 String action = actions.get(countFromOne(index));
@@ -84,28 +80,6 @@ public class WhatsNextService {
 
     public static int countFromOne(int number) {
         return number + 1;
-    }
-
-    private Map<Integer, String> command(String tick) {
-        List<String> actionsString = split(tick, "&", false);
-        return actionsString.stream()
-                .map(actionString -> {
-                    Matcher matcher = ACTION_PATTERN.matcher(actionString);
-                    if (matcher.matches()) {
-                        String index = matcher.group(2);
-                        String action = matcher.group(3);
-                        return new HashMap.SimpleEntry<>(Integer.valueOf(index), action);
-                    } else {
-                        throw new RuntimeException("Unparsed action: " + actionString);
-                    }
-                })
-                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    private List<String> split(String tick, String regex, boolean empty) {
-        return Arrays.stream(tick.split(regex, -1))
-                .filter(line -> empty || !StringUtils.isEmpty(line))
-                .collect(toList());
     }
 
 }
