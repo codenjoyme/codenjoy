@@ -89,8 +89,7 @@ public class GameTest {
         pool = new LevelsPoolImpl(Arrays.asList(levels));
         player = new Player(listener, pool, settings);
         game.newGame(player);
-        hero = player.hero;
-        hero.init(game);
+        hero = player.getHero();
     }
 
     private void thenHistory(String expected) {

@@ -64,6 +64,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         if (!alive) return;
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }
