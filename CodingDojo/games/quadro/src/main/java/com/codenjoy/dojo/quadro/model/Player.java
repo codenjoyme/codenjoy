@@ -36,6 +36,6 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public Hero createHero(Point pt) {
-        return new Hero();
+        return new Hero(field.getFreeColor());
     }
 }
