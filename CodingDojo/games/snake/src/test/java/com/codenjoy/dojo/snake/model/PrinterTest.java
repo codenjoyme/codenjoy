@@ -39,6 +39,7 @@ import org.junit.Test;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -193,6 +194,7 @@ public class PrinterTest {
         snake = new Hero(3, 3);
 
         when(board.createSnake()).thenReturn(snake);
+        when(board.freeRandom(any(Player.class))).thenReturn(null);
         listener = mock(EventListener.class);
         Player player = new Player(listener, mock(GameSettings.class));
         player.newHero(board);

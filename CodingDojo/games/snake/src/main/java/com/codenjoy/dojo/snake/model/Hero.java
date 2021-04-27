@@ -129,6 +129,7 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
         // do nothing
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }

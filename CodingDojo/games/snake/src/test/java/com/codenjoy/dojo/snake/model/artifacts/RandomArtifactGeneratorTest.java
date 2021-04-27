@@ -106,6 +106,8 @@ public class RandomArtifactGeneratorTest {
     private void initBoardMock() {
         board = mock(Field.class);
 
+        when(board.freeRandom(any(Player.class))).thenReturn(null);
+
         // на пути змейки всегда будет пустое место
         when(board.getAt(any(Point.class))).thenAnswer(new Answer<Object>() {
             @Override

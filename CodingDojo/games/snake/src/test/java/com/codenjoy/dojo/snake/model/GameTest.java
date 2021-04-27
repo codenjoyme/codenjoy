@@ -1031,7 +1031,7 @@ public class GameTest {
         setup();
     }
         
-    class HaveNothing implements ArtifactGenerator {
+    static class HaveNothing implements ArtifactGenerator {
         
         @Override
         public Apple generateApple(Hero snake, Apple apple, Stone stone, Walls walls, int boardSize) {
@@ -1045,7 +1045,7 @@ public class GameTest {
         
     }
     
-    class HaveApple implements ArtifactGenerator {
+    static class HaveApple implements ArtifactGenerator {
         
         private int x;
         private int y;
@@ -1066,7 +1066,7 @@ public class GameTest {
         }
     }
     
-    class HaveApples implements ArtifactGenerator {
+    static class HaveApples implements ArtifactGenerator {
         
         private Queue<Apple> apples = new LinkedList<>();
 
@@ -1088,7 +1088,7 @@ public class GameTest {
         }
     }
     
-    class MixGenerators implements ArtifactGenerator  {
+    static class MixGenerators implements ArtifactGenerator  {
     
         private ArtifactGenerator apples;
         private ArtifactGenerator stones;
@@ -1109,7 +1109,7 @@ public class GameTest {
         }
     }
     
-    class HaveStone implements ArtifactGenerator {
+    static class HaveStone implements ArtifactGenerator {
         
         private int x;
         private int y;
@@ -1130,7 +1130,7 @@ public class GameTest {
         }
     }
 
-    class HaveStones implements ArtifactGenerator {
+    static class HaveStones implements ArtifactGenerator {
 
         private Queue<Stone> stones = new LinkedList<Stone>();
 
