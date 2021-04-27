@@ -103,7 +103,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     public void setNewObjects() {
         int max = (players.size() / 2) + 1;
         int i = dice.next(50);
-        Optional<Point> pt = freeRandom(null);
+        Optional<Point> pt = freeRandom();
         if (!pt.isPresent()) {
             return;
         }
@@ -130,7 +130,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     }
 
     @Override
-    public Optional<Point> freeRandom(Player player) {
+    public Optional<Point> freeRandom() {
         return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
     }
 
@@ -281,16 +281,19 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     }
 
     @Override
-    public Point getFreeStart() {
+    public Optional<Point> freeRandom(Player player) {
         for (int i = 0; i < 10 && !starts.isEmpty(); i++) {
             StartFloor start = starts.get(dice.next(starts.size()));
-            if (freeOfHero(start))
-                return start;
+            if (freeOfHero(start)) {
+                return Optional.of(start);
+            }
         }
-        for (StartFloor start : starts)
-            if (freeOfHero(start))
-                return start;
-        return pt(0, 0);
+        for (StartFloor start : starts) {
+            if (freeOfHero(start)) {
+                return Optional.of(start);
+            }
+        }
+        return Optional.empty();
     }
 
     public boolean isFree(Point pt) {

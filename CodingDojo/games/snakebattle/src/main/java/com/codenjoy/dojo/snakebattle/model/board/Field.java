@@ -34,9 +34,7 @@ public interface Field extends RoundGameField<Player> {
 
     boolean isBarrier(Point p);
 
-    Optional<Point> freeRandom(Player player);
-
-    Point getFreeStart();
+    Optional<Point> freeRandom();
 
     boolean isApple(Point p);
 

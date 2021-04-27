@@ -73,6 +73,15 @@ public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameF
         shouldLeave = lastRound;
     }
 
+    @Override
+    public void setHero(H hero) {
+        super.setHero(hero);
+        if (hero != null) {
+            hero.setPlayer(this);
+        }
+    }
+
+    @Override
     public void newHero(F field) {
         if (shouldCreate()) {
             if (hero != null) {

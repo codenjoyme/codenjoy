@@ -89,7 +89,9 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      */
     public void setHero(H hero) {
         this.hero = hero;
-        this.hero.manual(true);
+        if (hero != null) {
+            hero.manual(true);
+        }
     }
 
     /**
