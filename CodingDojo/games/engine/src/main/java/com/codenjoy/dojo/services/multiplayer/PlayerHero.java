@@ -82,7 +82,7 @@ public abstract class PlayerHero<F extends GameField> extends PointImpl implemen
         return manual;
     }
 
-    protected void manual(boolean manual) {
+    public void manual(boolean manual) {
         this.manual = manual;
     }
 }
