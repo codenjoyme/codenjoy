@@ -22,6 +22,7 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
+import com.codenjoy.dojo.football.services.Events;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -29,9 +30,17 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.joining;
+import static org.apache.commons.lang3.StringUtils.repeat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -47,11 +56,13 @@ public class MultiplayerTest {
     private Game game3;
     private Dice dice;
     private Football field;
+    private EventsListenersAssert events;
+    private LevelImpl level;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        Level level = new LevelImpl(
+        level = new LevelImpl(
                 "☼☼┴┴☼☼" +
                 "☼    ☼" +
                 "☼  ∙ ☼" +
@@ -76,6 +87,8 @@ public class MultiplayerTest {
         game3 = new Single(new Player(listener3, settings), factory);
         game3.on(field);
 
+        events = new EventsListenersAssert(() -> Arrays.asList(listener1, listener2, listener3), Events.class);
+
         dice(1, 1);
         game1.newGame();
 
@@ -84,118 +97,140 @@ public class MultiplayerTest {
 
         dice(3, 1);
         game3.newGame();
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ∙ ☼ ☼  ∙ ☼ ☼  ∙ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ∙ ☼ ☼  ∙ ☼ ☼  ∙ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ∙ ☼ ☼  ∙ ☼ ☼  ∙ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+    }
+
+    @After
+    public void tearDown() {
+        events.verifyNoEvents();
     }
 
     private void dice(int x, int y) {
         when(dice.next(anyInt())).thenReturn(x, y);
     }
 
-    private void asrtFl1(String expected) {
-        assertEquals(expected, game1.getBoardAsString());
+    // TODO попробовать этот подход в других Multiplayer играх
+    private void asrtFls(String expected) {
+        List<String> board1 = boardLines(game1);
+        List<String> board2 = boardLines(game2);
+        List<String> board3 = boardLines(game3);
+
+        String empty = repeat(" ", level.getSize());
+
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < board1.size(); i++) {
+            result.add(String.format("%s %s %s\n",
+                    (board1 != null) ? board1.get(i) : empty,
+                    (board2 != null) ? board2.get(i) : empty,
+                    (board3 != null) ? board3.get(i) : empty
+            ));
+        }
+        assertEquals(expected, result.stream().collect(joining("")));
     }
 
-    private void asrtFl2(String expected) {
-        assertEquals(expected, game2.getBoardAsString());
-    }
-
-    private void asrtFl3(String expected) {
-        assertEquals(expected, game3.getBoardAsString());
+    private List<String> boardLines(Game game) {
+        try {
+            return Arrays.asList(game.getBoardAsString().toString().split("\n"));
+        } catch (IllegalStateException e) {
+            return null;
+        }
     }
 
     // рисуем несколько игроков
     @Test
     public void shouldPrint() {
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼ ♣  ☼\n" +
-                "☼  ∙ ☼\n" +
-                "☼    ☼\n" +
-                "☼☺ ♦ ☼\n" +
-                "☼☼==☼☼\n");
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ∙ ☼ ☼  ∙ ☼ ☼  ∙ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
 
-        asrtFl2(
-                "☼☼==☼☼\n" +
-                "☼ ☺  ☼\n" +
-                "☼  ∙ ☼\n" +
-                "☼    ☼\n" +
-                "☼♣ ♣ ☼\n" +
-                "☼☼⌂⌂☼☼\n");
-        
-        asrtFl3(
-                "☼☼⌂⌂☼☼\n" +
-                "☼ ♣  ☼\n" +
-                "☼  ∙ ☼\n" +
-                "☼    ☼\n" +
-                "☼♦ ☺ ☼\n" +
-                "☼☼==☼☼\n");
-        
         game3.getJoystick().up();
         field.tick();
+
         game3.getJoystick().up();
         field.tick();
-        asrtFl3(
-                "☼☼⌂⌂☼☼\n" +
-                "☼ ♣  ☼\n" +
-                "☼  ☻ ☼\n" +
-                "☼    ☼\n" +
-                "☼♦   ☼\n" +
-                "☼☼==☼☼\n");
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ♥ ☼ ☼  ♠ ☼ ☼  ☻ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
         game3.getJoystick().act(Actions.HIT_DOWN.getValue());
         game3.getJoystick().down();
         field.tick();
         
-        asrtFl3(
-                "☼☼⌂⌂☼☼\n" +
-                "☼ ♣  ☼\n" +
-                "☼    ☼\n" +
-                "☼  ☻ ☼\n" +
-                "☼♦   ☼\n" +
-                "☼☼==☼☼\n");
-        
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼  ♥ ☼ ☼  ♠ ☼ ☼  ☻ ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
     }
 
     // Каждый игрок может упраыляться за тик игры независимо
     @Test
     public void shouldJoystick() {
-        
         game1.getJoystick().up();
         game2.getJoystick().down();
         game3.getJoystick().right();
 
         field.tick();
 
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼    ☼\n" +
-                "☼ ♣∙ ☼\n" +
-                "☼☺   ☼\n" +
-                "☼   ♦☼\n" +
-                "☼☼==☼☼\n");
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼ ♣∙ ☼ ☼ ☺∙ ☼ ☼ ♣∙ ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼   ♦☼ ☼   ♣☼ ☼   ☺☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
     }
 
     // игроков можно удалять из игры
     @Test
     public void shouldRemove() {
-        game3.close();
+        game2.close();
 
         field.tick();
 
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼ ♣  ☼\n" +
-                "☼  ∙ ☼\n" +
-                "☼    ☼\n" +
-                "☼☺   ☼\n" +
-                "☼☼==☼☼\n");
+        asrtFls("☼☼⌂⌂☼☼        ☼☼⌂⌂☼☼\n" +
+                "☼    ☼        ☼    ☼\n" +
+                "☼  ∙ ☼        ☼  ∙ ☼\n" +
+                "☼    ☼        ☼    ☼\n" +
+                "☼☺ ♦ ☼        ☼♦ ☺ ☼\n" +
+                "☼☼==☼☼        ☼☼==☼☼\n");
     }
 
     // игрок может пробросить мяч через другого
     @Test
     public void shouldPassBallThroughPlayer() {
-        
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼ ♣  ☼\n" +
-                "☼  ∙ ☼\n" +
-                "☼    ☼\n" +
-                "☼☺ ♦ ☼\n" +
-                "☼☼==☼☼\n");
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ∙ ☼ ☼  ∙ ☼ ☼  ∙ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
         
         game2.getJoystick().down();
         game3.getJoystick().up();
@@ -206,32 +241,31 @@ public class MultiplayerTest {
         game2.getJoystick().right();
         field.tick();
         
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼    ☼\n" +
-                "☼  ♥ ☼\n" +
-                "☼  ♣ ☼\n" +
-                "☼☺   ☼\n" +
-                "☼☼==☼☼\n");
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼  ♥ ☼ ☼  ♠ ☼ ☼  ☻ ☼\n" +
+                "☼  ♣ ☼ ☼  ☺ ☼ ☼  ♣ ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
         
         game3.getJoystick().act(Actions.HIT_DOWN.getValue());
         field.tick();
-        
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼    ☼\n" +
-                "☼  ♦ ☼\n" +
-                "☼  ♠ ☼\n" +
-                "☼☺   ☼\n" +
-                "☼☼==☼☼\n");
-        
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼  ♦ ☼ ☼  ♣ ☼ ☼  ☺ ☼\n" +
+                "☼  ♠ ☼ ☼  ☻ ☼ ☼  ♠ ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
         field.tick();
-        
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼    ☼\n" +
-                "☼  ♦ ☼\n" +
-                "☼  ♣ ☼\n" +
-                "☼☺ * ☼\n" +
-                "☼☼==☼☼\n");
-        
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼  ♦ ☼ ☼  ♣ ☼ ☼  ☺ ☼\n" +
+                "☼  ♣ ☼ ☼  ☺ ☼ ☼  ♣ ☼\n" +
+                "☼☺ * ☼ ☼♣ * ☼ ☼♦ * ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
     }
 
     // другой игрок может остановить мяч
@@ -245,33 +279,33 @@ public class MultiplayerTest {
         field.tick();
         game2.getJoystick().right();
         field.tick();
-        
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼    ☼\n" +
-                "☼  ♥ ☼\n" +
-                "☼  ♣ ☼\n" +
-                "☼☺   ☼\n" +
-                "☼☼==☼☼\n");
-        
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼  ♥ ☼ ☼  ♠ ☼ ☼  ☻ ☼\n" +
+                "☼  ♣ ☼ ☼  ☺ ☼ ☼  ♣ ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
         game3.getJoystick().act(Actions.HIT_DOWN.getValue());
         field.tick();
-        
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼    ☼\n" +
-                "☼  ♦ ☼\n" +
-                "☼  ♠ ☼\n" +
-                "☼☺   ☼\n" +
-                "☼☼==☼☼\n");
-        
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼  ♦ ☼ ☼  ♣ ☼ ☼  ☺ ☼\n" +
+                "☼  ♠ ☼ ☼  ☻ ☼ ☼  ♠ ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
         game2.getJoystick().act(Actions.STOP_BALL.getValue());
         field.tick();
-        
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼    ☼\n" +
-                "☼  ♦ ☼\n" +
-                "☼  ♠ ☼\n" +
-                "☼☺   ☼\n" +
-                "☼☼==☼☼\n");
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼  ♦ ☼ ☼  ♣ ☼ ☼  ☺ ☼\n" +
+                "☼  ♠ ☼ ☼  ☻ ☼ ☼  ♠ ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
     }
     
     // игрок не может пойи на другого игрока
@@ -282,38 +316,147 @@ public class MultiplayerTest {
 
         field.tick();
 
-        asrtFl1("☼☼⌂⌂☼☼\n" +
-                "☼ ♣  ☼\n" +
-                "☼  ∙ ☼\n" +
-                "☼    ☼\n" +
-                "☼ ☺♦ ☼\n" +
-                "☼☼==☼☼\n");
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ∙ ☼ ☼  ∙ ☼ ☼  ∙ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼ ☺♦ ☼ ☼ ♣♣ ☼ ☼ ♦☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
     }
     
     // счет начисляется
     @Test
     public void scoreMultiplayerTest() {
+        game3.getJoystick().up();
+        field.tick();
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ∙ ☼ ☼  ∙ ☼ ☼  ∙ ☼\n" +
+                "☼  ♦ ☼ ☼  ♣ ☼ ☼  ☺ ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
 
         game3.getJoystick().up();
         field.tick();
-        game3.getJoystick().up();
-        field.tick();
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ♥ ☼ ☼  ♠ ☼ ☼  ☻ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
 
         game3.getJoystick().act(Actions.HIT_UP.getValue());
         field.tick();
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣* ☼ ☼ ☺* ☼ ☼ ♣* ☼\n" +
+                "☼  ♦ ☼ ☼  ♣ ☼ ☼  ☺ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
         field.tick();
 
-        asrtFl1("☼☼⌂x☼☼\n" +
-                "☼ ♣  ☼\n" +
-                "☼  ♦ ☼\n" +
-                "☼    ☼\n" +
-                "☼☺   ☼\n" +
-                "☼☼==☼☼\n");
+        asrtFls("☼☼⌂x☼☼ ☼☼=#☼☼ ☼☼⌂x☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ♦ ☼ ☼  ♣ ☼ ☼  ☺ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
+        events.verifyNoEvents();
 
         field.tick();
+
+        asrtFls("☼☼⌂x☼☼ ☼☼=#☼☼ ☼☼⌂x☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼  ♦ ☼ ☼  ♣ ☼ ☼  ☺ ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
         
         assertEquals(true, game1.isGameOver());
         assertEquals(true, game2.isGameOver());
         assertEquals(true, game3.isGameOver());
+        
+        events.verifyAllEvents(
+                "listener(0) => [WIN, TOP_GOAL]\n" +
+                "listener(1) => [TOP_GOAL]\n" +
+                "listener(2) => [WIN, TOP_GOAL]\n");
+    }
+
+    @Test
+    public void scoreMultiplayerTest_viseVersa() {
+        field.getBalls().get(0).move(2, 3);  // cheat
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼ ∙  ☼ ☼ ∙  ☼ ☼ ∙  ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
+        game2.getJoystick().down();
+        field.tick();
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼ ♠  ☼ ☼ ☻  ☼ ☼ ♠  ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
+        game2.getJoystick().act(Actions.HIT_DOWN.getValue());
+        field.tick();
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼ *  ☼ ☼ *  ☼ ☼ *  ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
+        game2.getJoystick().down();
+        field.tick();
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼☺*♦ ☼ ☼♣*♣ ☼ ☼♦*☺ ☼\n" +
+                "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
+
+        game2.getJoystick().act(Actions.HIT_DOWN.getValue());
+        field.tick();
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼#=☼☼ ☼☼x⌂☼☼ ☼☼#=☼☼\n");
+
+        events.verifyNoEvents();
+
+        game2.getJoystick().down();
+        field.tick();
+
+        asrtFls("☼☼⌂⌂☼☼ ☼☼==☼☼ ☼☼⌂⌂☼☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼    ☼ ☼    ☼ ☼    ☼\n" +
+                "☼ ♣  ☼ ☼ ☺  ☼ ☼ ♣  ☼\n" +
+                "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
+                "☼☼#=☼☼ ☼☼x⌂☼☼ ☼☼#=☼☼\n");
+
+        assertEquals(true, game1.isGameOver());
+        assertEquals(true, game2.isGameOver());
+        assertEquals(true, game3.isGameOver());
+
+        events.verifyAllEvents(
+                "listener(0) => [BOTTOM_GOAL]\n" +
+                "listener(1) => [WIN, BOTTOM_GOAL]\n" +
+                "listener(2) => [BOTTOM_GOAL]\n");
     }
 }

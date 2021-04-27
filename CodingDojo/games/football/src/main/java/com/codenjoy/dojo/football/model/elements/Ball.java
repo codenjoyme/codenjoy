@@ -31,9 +31,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-/**
- * Артефакт Мяч на поле
- */
 public class Ball extends PointImpl implements State<Elements, Player>, Tickable {
 
     private static final int DEFAULT_IMPULSE = 3; //после удара игрока мяч летит сам 3 такта
@@ -43,10 +40,6 @@ public class Ball extends PointImpl implements State<Elements, Player>, Tickable
     private int impulse;
     private int power;
     
-    public Ball(int x, int y) {
-        super(x, y);
-    }
-
     public Ball(Point point) {
         super(point);
     }
@@ -66,7 +59,6 @@ public class Ball extends PointImpl implements State<Elements, Player>, Tickable
 
     @Override
     public void tick() {
-        
         if ( !isBallMoving() ){
             direction = null;
         }
@@ -94,21 +86,18 @@ public class Ball extends PointImpl implements State<Elements, Player>, Tickable
     }
 
     public void down(int power) {
-
         direction = Direction.DOWN;
         setImpulse(DEFAULT_IMPULSE);
         setPower(power);
     }
 
     public void up(int power) {
-
         direction = Direction.UP;
         setImpulse(DEFAULT_IMPULSE);
         setPower(power);
     }
 
     public void left(int power) {
-
         direction = Direction.LEFT;
         setImpulse(DEFAULT_IMPULSE);
         setPower(power);

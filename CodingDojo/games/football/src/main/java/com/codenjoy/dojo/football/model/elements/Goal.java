@@ -55,7 +55,6 @@ public class Goal extends PointImpl implements State<Elements, Player> {
     
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        
         if (player.getMyGoal() == type) {
             if (isWithBall()) {
                 return Elements.HITED_MY_GOAL;
