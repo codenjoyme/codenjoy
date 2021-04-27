@@ -36,9 +36,10 @@ public class Hero extends PlayerHero<Field> {
     int deltaClicks;
     private Player player;
 
-    public Hero() {
+    public Hero(Player player) {
         super();
 
+        this.player = player;
         currentIndex = 0;
         boxes = new LinkedList<>();
     }
@@ -137,7 +138,8 @@ public class Hero extends PlayerHero<Field> {
         // do nothing
     }
 
-    public void init(Player player) {
-        this.player = player;
+    @Override
+    public boolean isAlive() {
+        return true;
     }
 }
