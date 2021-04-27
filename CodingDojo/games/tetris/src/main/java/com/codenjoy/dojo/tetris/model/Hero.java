@@ -47,6 +47,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
+    public boolean isAlive() {
+        return !levelCompleted();
+    }
+
+    @Override
     public void down() {
         drop = true;
     }

@@ -33,14 +33,8 @@ import com.codenjoy.dojo.tetris.services.GameSettings;
 
 public class Player extends GamePlayer<Hero, Field> {
 
-    Hero hero;
-
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
-    }
-
-    public Hero getHero() {
-        return hero;
     }
 
     @Override
@@ -72,7 +66,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public boolean isAlive() {
-        return hero != null && !hero.levelCompleted();
+        return hero != null && hero.isAlive();
     }
 
     @Override
