@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 public class Hero extends PlayerHero<Field> implements ActJoystick {
+
     private boolean alive;
 
     public Hero() {
@@ -46,6 +47,7 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
         move(p[0], p[1]);
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }
