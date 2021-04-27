@@ -31,10 +31,8 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
     private boolean color;
     private boolean act;
 
-    @Override
-    public void init(Field field) {
-        super.init(field);
-        color = field.getFreeColor();
+    public Hero(boolean color) {
+        this.color = color;
     }
 
     @Override
