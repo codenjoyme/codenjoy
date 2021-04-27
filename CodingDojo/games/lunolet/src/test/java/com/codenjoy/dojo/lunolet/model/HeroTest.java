@@ -39,7 +39,7 @@ public class HeroTest {
         Player player = new Player(listener, settings);
 
         Hero hero = new Hero(player);
-        hero.init(new LevelManager().getLevel(0));
+        hero.load(new LevelManager().getLevel(0));
 
         Assert.assertEquals(0, player.getCurrentLevel());
         Assert.assertTrue(hero.isAlive());
