@@ -181,7 +181,7 @@ public class Reversi implements Field {
         }
 
         if (players.size() == 1) {
-            Hero hero = players.get(0).hero;
+            Hero hero = players.get(0).getHero();
             if (hero == null) {
                 return true;
             } else {
@@ -190,8 +190,8 @@ public class Reversi implements Field {
         }
 
         if (players.size() == 2) {
-            Hero hero1 = players.get(0).hero;
-            Hero hero2 = players.get(1).hero;
+            Hero hero1 = players.get(0).getHero();
+            Hero hero2 = players.get(1).getHero();
             if (hero1 == null && hero2 == null) {
                 return true;
             } else if (hero1 == null) {
@@ -270,7 +270,6 @@ public class Reversi implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
-        player.hero = null;
     }
 
     @Override

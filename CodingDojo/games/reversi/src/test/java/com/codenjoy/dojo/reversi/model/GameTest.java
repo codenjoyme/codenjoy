@@ -1041,7 +1041,7 @@ public class GameTest {
                 player1);
 
         game.newGame(player2);
-        hero2 = player2.hero;
+        hero2 = player2.getHero();
 
         assertEquals(true, player2.isBlack());
 
@@ -1099,7 +1099,7 @@ public class GameTest {
                 player2);
 
         game.newGame(player1);
-        hero1 = player1.hero;
+        hero1 = player1.getHero();
 
         assertEquals(true, player1.isWhite());
 

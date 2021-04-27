@@ -37,11 +37,6 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
     }
 
     @Override
-    public void init(Field field) {
-        this.field = field;
-    }
-
-    @Override
     public void act(int... p) {
         if (p.length < 2) {
             act = false;
@@ -72,6 +67,7 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
         }
     }
 
+    @Override
     public boolean isAlive() {
         return true;
     }
