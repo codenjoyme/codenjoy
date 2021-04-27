@@ -295,7 +295,7 @@ public class AbstractLayeredBoardTest {
     }
 
     @Test
-    public void shouldWork_get_layer1() {
+    public void shouldWork_oneElement_get_layer1() {
         assertEquals("[[0,0], [0,1], [0,2], [0,3], [1,0], [1,3], " +
                         "[2,0], [2,3], [3,0], [3,1], [3,2], [3,3]]",
                 board.get(LAYER_1, Elements.ONE).toString());
@@ -311,7 +311,15 @@ public class AbstractLayeredBoardTest {
     }
 
     @Test
-    public void shouldWork_get_layer2() {
+    public void shouldWork_severalElements_get_layer1() {
+        assertEquals("[[0,0], [0,1], [0,2], [0,3], [1,0], [1,1], " +
+                        "[1,2], [1,3], [2,0], [2,1], [2,2], [2,3], " +
+                        "[3,0], [3,1], [3,2], [3,3]]",
+                board.get(LAYER_1, Elements.ONE, Elements.TWO, Elements.THREE).toString());
+    }
+
+    @Test
+    public void shouldWork_oneElement_get_layer2() {
         assertEquals("[]",
                 board.get(LAYER_2, Elements.ONE).toString());
 
@@ -323,6 +331,53 @@ public class AbstractLayeredBoardTest {
 
         assertEquals("[[1,1], [2,2]]",
                 board.get(LAYER_2, Elements.FOUR).toString());
+    }
+
+    @Test
+    public void shouldWork_severalElements_getFirst_layer2() {
+        assertEquals("[0,0]",
+                board.getFirst(LAYER_2, Elements.ONE, Elements.NONE, Elements.FOUR).toString());
+    }
+
+    @Test
+    public void shouldWork_oneElement_getFirst_layer1() {
+        assertEquals("[0,0]",
+                board.getFirst(LAYER_1, Elements.ONE).toString());
+
+        assertEquals("[1,1]",
+                board.getFirst(LAYER_1, Elements.TWO).toString());
+
+        assertEquals("[1,2]",
+                board.getFirst(LAYER_1, Elements.THREE).toString());
+
+        assertEquals(null,
+                board.getFirst(LAYER_1, Elements.NONE));
+    }
+
+    @Test
+    public void shouldWork_severalElements_getFirst_layer1() {
+        assertEquals("[0,0]",
+                board.getFirst(LAYER_1, Elements.ONE, Elements.TWO, Elements.THREE).toString());
+    }
+
+    @Test
+    public void shouldWork_oneElement_getFirst_layer2() {
+        assertEquals(null,
+                board.getFirst(LAYER_2, Elements.ONE));
+
+        assertEquals("[0,0]",
+                board.getFirst(LAYER_2, Elements.NONE).toString());
+
+        assertEquals("[1,1]",
+                board.getFirst(LAYER_2, Elements.FOUR).toString());
+    }
+
+    @Test
+    public void shouldWork_severalElements_get_layer2() {
+        assertEquals("[[0,0], [0,1], [0,2], [0,3], [1,0], " +
+                        "[1,1], [1,2], [1,3], [2,0], [2,1], " +
+                        "[2,2], [2,3], [3,0], [3,1], [3,2], [3,3]]",
+                board.get(LAYER_2, Elements.ONE, Elements.NONE, Elements.FOUR).toString());
     }
 
     @Test

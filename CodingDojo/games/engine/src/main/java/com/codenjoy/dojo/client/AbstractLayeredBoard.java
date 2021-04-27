@@ -23,13 +23,15 @@ package com.codenjoy.dojo.client;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.types.LevelsType;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.codenjoy.dojo.services.Point;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -90,6 +92,24 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
         return new TreeSet<>(all);
     }
 
+    private void getAnd(Function<Point, Boolean> function, int numLayer, E... elements) {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                for (E element : elements) {
+                    E value = valueOf(field(numLayer, x, y));
+                    if (equals(value, element)) {
+                        if (!function.apply(pt(x, y))) return;
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean equals(Object a, Object b) {
+        return (a == null && b == null)
+                || (a != null && a.equals(b));
+    }
+
     /**
      * @param numLayer Layer number (from 0).
      * @param elements List of elements that we try to find.
@@ -97,19 +117,19 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
      */
     protected List<Point> get(int numLayer, E... elements) {
         List<Point> result = new LinkedList<>();
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                for (E element : elements) {
-                    E value = valueOf(field(numLayer, x, y));
-                    if ((value == null && element == null)
-                            || (value != null && value.equals(element)))
-                    {
-                        result.add(pt(x, y));
-                    }
-                }
-            }
-        }
+        getAnd(pt -> { result.add(pt); return true; }, numLayer, elements);
         return result;
+    }
+
+    /**
+     * @param numLayer Layer number (from 0).
+     * @param elements List of elements that we try to find.
+     * @return First found position of element specified.
+     */
+    protected Point getFirst(int numLayer, E... elements) {
+        AtomicReference<Point> result = new AtomicReference<>();
+        getAnd(pt -> { result.set(pt); return false; }, numLayer, elements);
+        return result.get();
     }
 
     /**
