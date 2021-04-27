@@ -74,7 +74,7 @@ public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameF
     }
 
     public void newHero(F field) {
-        if (hero == null || !hero.manual()) {
+        if (shouldCreate()) {
             if (hero != null) {
                 hero.setPlayer(null);
             }
