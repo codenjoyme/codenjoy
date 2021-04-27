@@ -122,7 +122,7 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
             if (hero != null) {
                 hero = null;
             }
-            Optional<Point> pt = field.freeRandom();
+            Optional<Point> pt = field.freeRandom(this);
             if (pt == null) {
                 // если freeRandom вернул null значит герой не располагается
                 // на поле и не содержит координаты
