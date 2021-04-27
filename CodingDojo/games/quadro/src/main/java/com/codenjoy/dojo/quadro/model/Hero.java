@@ -28,16 +28,13 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 public class Hero extends PlayerHero<Field> implements ActJoystick {
 
-    private final boolean color;
+    private boolean color;
     private boolean act;
-
-    public Hero(boolean color) {
-        this.color = color;
-    }
 
     @Override
     public void init(Field field) {
-        this.field = field;
+        super.init(field);
+        color = field.getFreeColor();
     }
 
     @Override
@@ -60,6 +57,7 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
         act = false;
     }
 
+    @Override
     public boolean isAlive() {
         return true;
     }
