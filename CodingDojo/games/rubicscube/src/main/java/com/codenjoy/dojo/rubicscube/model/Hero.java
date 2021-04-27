@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 public class Hero extends PlayerHero<Field> implements ActJoystick {
 
-    private Player player;
     private String command;
 
     public boolean isAlive() {
@@ -47,7 +46,6 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
         if (p.length == 1 && p[0] == 0) {
             field.gameOver();
-            player.event(Events.FAIL);
             return;
         }
 
@@ -77,10 +75,6 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
             case 1 : break;
             case 2 : command += "2"; break;
         }
-    }
-
-    public void init(Player player) {
-        this.player = player;
     }
 
     public String pullCommand() {

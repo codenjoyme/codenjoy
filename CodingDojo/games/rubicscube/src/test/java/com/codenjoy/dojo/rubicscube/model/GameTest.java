@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -72,6 +73,7 @@ public class GameTest {
     private PrinterFactory printer = new PrinterFactoryImpl();
     private GameSettings settings;
 
+    @Before
     public void setup() {
         settings = new GameSettings();
     }

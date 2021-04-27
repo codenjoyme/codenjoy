@@ -25,30 +25,17 @@ package com.codenjoy.dojo.rubicscube.model;
 
 import com.codenjoy.dojo.rubicscube.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
     @Override
-    public Hero getHero() {
-        return hero;
-    }
-
-    @Override
-    public void newHero(Field field) {
-        hero = new Hero();
-        hero.init(field);
-        hero.init(this);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
+    public Hero createHero(Point pt) {
+        return new Hero();
     }
 }

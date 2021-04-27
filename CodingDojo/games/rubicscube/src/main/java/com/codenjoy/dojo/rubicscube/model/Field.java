@@ -26,6 +26,7 @@ package com.codenjoy.dojo.rubicscube.model;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 public interface Field extends GameField<Player> {
+
     boolean isGameOver();
 
     void gameOver();

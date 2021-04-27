@@ -105,6 +105,7 @@ public class RubicsCube implements Field {
 
     @Override
     public void gameOver() {
+        player.event(Events.FAIL);
         gameOver = true;
     }
 
