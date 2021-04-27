@@ -27,14 +27,14 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class Sapper extends PlayerHero<Field> implements State<Elements, Object> {
+public class Hero extends PlayerHero<Field> implements State<Elements, Object> {
 
     private boolean isDead = false;
     private MineDetector mineDetector;
     private Direction nextStep;
     private boolean useDetector;
 
-    public Sapper(int x, int y) {
+    public Hero(int x, int y) {
         super(x, y);
         useDetector = false;
     }
@@ -47,6 +47,7 @@ public class Sapper extends PlayerHero<Field> implements State<Elements, Object>
         isDead = true;
     }
 
+    @Override
     public boolean isAlive() {
         return !isDead() &&
                 !field.isEmptyDetectorButPresentMines() &&

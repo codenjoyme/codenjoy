@@ -24,9 +24,7 @@ package com.codenjoy.dojo.minesweeper.model;
 
 
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
@@ -73,5 +71,5 @@ public interface Field extends GameField<Player> {
 
     int minesNear(Point pt);
 
-    Sapper sapper();
+    Hero sapper();
 }

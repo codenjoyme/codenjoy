@@ -58,7 +58,7 @@ public class GameTest {
 
     @Test
     public void shouldLeaveEmptySpace_shouldWalkOnBoardRight() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         moveRight();
 
@@ -105,7 +105,7 @@ public class GameTest {
 
     @Test
     public void shouldLeaveEmptySpaceshouldWalkOnBoardDown() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         moveDown();
 
@@ -146,7 +146,7 @@ public class GameTest {
 
     @Test
     public void shouldLeaveEmptySpace_shouldWalkOnBoardUp() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         moveUp();
 
@@ -178,7 +178,7 @@ public class GameTest {
 
     @Test
     public void shouldLeaveEmptySpace_shouldWalkOnBoardLeft() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         moveLeft();
 
@@ -192,7 +192,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlag_whenSetRight() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         unbombRight();
 
@@ -206,7 +206,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlag_whenSetUp() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         unbombUp();
 
@@ -220,7 +220,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlag_whenSetDown() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         unbombDown();
 
@@ -234,7 +234,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlag_whenSetLeft() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         unbombLeft();
 
@@ -248,7 +248,7 @@ public class GameTest {
 
     @Test
     public void shouldDie_whenSapperAtBombs() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
 
         moveRight();
 
@@ -264,7 +264,7 @@ public class GameTest {
 
     @Test
     public void shouldSaveCommandAndActAfterTick() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
 
         game.sapper().right();
 
@@ -289,7 +289,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintAllBombs_whenSapperAtBombs() {
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
                 new Mine(2, 1), new Mine(2, 3));
 
@@ -310,7 +310,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperNoBombs() {
-        shouldBoardWith(new Sapper(3, 3), new Mine(1, 1));
+        shouldBoardWith(new Hero(3, 3), new Mine(1, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -322,7 +322,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperOneBombs() {
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3));
 
         assertBoard(
@@ -344,7 +344,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperTwoBombs() {
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2));
 
         assertBoard(
@@ -366,7 +366,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperThreeBombs() {
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1));
 
         assertBoard(
@@ -388,7 +388,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperFourBombs() {
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
                 new Mine(2, 1));
 
@@ -411,7 +411,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperFiveBombs() {
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
                 new Mine(2, 1), new Mine(2, 3));
 
@@ -435,7 +435,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperSixBombs() {
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
                 new Mine(2, 1), new Mine(2, 3),
                 new Mine(1, 3));
@@ -459,7 +459,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperSevenBombs() {
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
                 new Mine(2, 1), new Mine(2, 3),
                 new Mine(1, 3), new Mine(1, 1));
@@ -483,7 +483,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperEightBombs() {
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
                 new Mine(2, 1), new Mine(2, 3),
                 new Mine(1, 3), new Mine(1, 2), new Mine(1, 1));
@@ -507,7 +507,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombRight() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
 
         unbombRight();
 
@@ -523,7 +523,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombRightAndLeft() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2), new Mine(1, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(3, 2), new Mine(1, 2));
 
         unbombRight();
         unbombLeft();
@@ -540,7 +540,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlagOnEmptySpace_whenBombRight() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 2));
 
         unbombRight();
 
@@ -556,7 +556,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombDown() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(2, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(2, 1));
 
         unbombDown();
 
@@ -572,7 +572,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlagOnEmptySpace_whenBombDown() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(2, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(2, 1));
 
         unbombUp();
 
@@ -588,7 +588,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombUp() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(2, 3));
+        shouldBoardWith(new Hero(2, 2), new Mine(2, 3));
 
         unbombUp();
 
@@ -604,7 +604,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlagOnEmptySpace_whenBombUp() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(2, 3));
+        shouldBoardWith(new Hero(2, 2), new Mine(2, 3));
 
         unbombDown();
 
@@ -620,7 +620,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombLeft() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 2));
 
         unbombLeft();
 
@@ -640,7 +640,7 @@ public class GameTest {
 
     @Test
     public void shouldSetFlagOnEmptySpace_whenBombLeft() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
 
         unbombLeft();
 
@@ -658,7 +658,7 @@ public class GameTest {
     public void shouldWin_whenDestroyAllBombs() {
         settings.integer(DETECTOR_CHARGE, 8);
 
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
                 new Mine(2, 1), new Mine(2, 3),
                 new Mine(1, 3), new Mine(1, 2), new Mine(1, 1));
@@ -715,7 +715,7 @@ public class GameTest {
 
     @Test
     public void shouldLeaveBombMap_whenWalkBetweenBombs() {
-        shouldBoardWith(new Sapper(1, 1),
+        shouldBoardWith(new Hero(1, 1),
                 new Mine(2, 3), new Mine(2, 2));
 
         assertBoard(
@@ -796,7 +796,7 @@ public class GameTest {
                 game.reader(), null).print());
     }
 
-    private void shouldBoardWith(Sapper sapper, Mine... mines) {
+    private void shouldBoardWith(Hero sapper, Mine... mines) {
         listener = mock(EventListener.class);
         game = new MockBoard(sapper, mines);
     }
@@ -804,17 +804,12 @@ public class GameTest {
     private class MockBoard extends Minesweeper {
         private Player player;
 
-        public MockBoard(Sapper sapper, Mine...mines) {
+        public MockBoard(Hero hero, Mine...mines) {
             super((count, board) -> new ArrayList<>(),
                     settings.integer(MINES_ON_BOARD, mines.length));
 
-            player = new Player(listener, settings) {
-                @Override
-                public void newHero(Field field) {
-                    hero = sapper;
-                    hero.init(field);
-                }
-            };
+            player = new Player(listener, settings);
+            player.setHero(hero);
 
             GameTest.this.mines = new LinkedList<>();
             GameTest.this.mines.addAll(Arrays.asList(mines));
@@ -838,7 +833,7 @@ public class GameTest {
 
     @Test
     public void shouldFireEvent_whenDie() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(3, 2));
 
         moveRight();
 
@@ -860,7 +855,7 @@ public class GameTest {
 
     @Test
     public void shouldFireEvent_whenOpenSpace() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         moveRight();
 
@@ -876,7 +871,7 @@ public class GameTest {
 
     @Test
     public void shouldNotFireEvent_whenReturnsHome() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         moveRight();
 
@@ -905,7 +900,7 @@ public class GameTest {
     public void shouldFireEvent_whenNoMoreCharge() {
         settings.integer(DETECTOR_CHARGE, 3);
 
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 1));
 
         unbombDown();
 
@@ -946,7 +941,7 @@ public class GameTest {
     public void shouldPrintAllBoardBombs_whenNoMoreCharge_case1() {
         settings.integer(DETECTOR_CHARGE, 4);
 
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(2, 1),
                 new Mine(2, 3),
                 new Mine(1, 2),
@@ -969,7 +964,7 @@ public class GameTest {
     public void shouldPrintAllBoardBombs_whenNoMoreCharge_case2() {
         settings.integer(DETECTOR_CHARGE, 4);
 
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(1, 1),
                 new Mine(1, 3),
                 new Mine(3, 3),
@@ -992,7 +987,7 @@ public class GameTest {
     public void shouldPrintAllBoardBombs_whenNoMoreCharge_case3() {
         settings.integer(DETECTOR_CHARGE, 2);
 
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3),
                 new Mine(3, 1));
 
@@ -1011,7 +1006,7 @@ public class GameTest {
     public void shouldPrintAllBoardBombs_whenNoMoreCharge_case4() {
         settings.integer(DETECTOR_CHARGE, 2);
 
-        shouldBoardWith(new Sapper(2, 2),
+        shouldBoardWith(new Hero(2, 2),
                 new Mine(3, 3),
                 new Mine(3, 1));
 
@@ -1032,7 +1027,7 @@ public class GameTest {
 
     @Test
     public void shouldFireEvent_whenCleanMine() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2), new Mine(1, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(3, 2), new Mine(1, 2));
 
         unbombRight();
 
@@ -1048,7 +1043,7 @@ public class GameTest {
 
     @Test
     public void shouldFireEvent_whenCleanAllMines() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 2));
 
         unbombLeft();
 
@@ -1066,7 +1061,7 @@ public class GameTest {
 
     @Test
     public void shouldOnlyOneFlagPerSpace() {
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 2));
+        shouldBoardWith(new Hero(2, 2), new Mine(1, 2));
 
         unbombRight();
 
@@ -1087,7 +1082,7 @@ public class GameTest {
 
     @Test
     public void shouldCantGoOnBoard() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Hero(1, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -1139,7 +1134,7 @@ public class GameTest {
 
     @Test
     public void shouldCantUnbombOnBoard() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Hero(1, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
