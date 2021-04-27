@@ -66,7 +66,7 @@ public class GameTest {
         listener = mock(EventListener.class);
         player = new Player(listener, 1, settings);
         game.newGame(player);
-        hero = player.hero;
+        hero = player.getHero();
         hero.init(game);
     }
 

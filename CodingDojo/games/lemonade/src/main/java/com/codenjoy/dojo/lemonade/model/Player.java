@@ -28,6 +28,7 @@ import com.codenjoy.dojo.lemonade.services.EventType;
 import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.lemonade.services.ScoreMode;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import org.json.JSONArray;
@@ -41,7 +42,6 @@ import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
 public class Player extends GamePlayer<Hero, GameField<Player>> {
 
     private Queue<SalesResult> history;
-    Hero hero;
     private long heroRandomSeed;
 
     public Player(EventListener listener, long heroRandomSeed, GameSettings settings) {
@@ -60,18 +60,9 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
         }
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void newHero(GameField<Player> field) {
-        hero = new Hero(heroRandomSeed, history);
-        hero.init(field);
-    }
-
     @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
+    public Hero createHero(Point pt) {
+        return new Hero(heroRandomSeed, history);
     }
 
     public JSONObject getNextQuestion() { // TODO test me
