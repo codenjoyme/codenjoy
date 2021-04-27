@@ -26,7 +26,7 @@ package com.codenjoy.dojo.sokoban.model.items;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.sokoban.model.Field;
-import com.codenjoy.dojo.sokoban.services.Player;
+import com.codenjoy.dojo.sokoban.model.Player;
 
 public class Mark extends PointEnriched<Field> implements State<Elements, Player> {
 

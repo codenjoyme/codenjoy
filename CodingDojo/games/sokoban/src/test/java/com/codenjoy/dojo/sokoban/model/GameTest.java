@@ -33,7 +33,6 @@ import com.codenjoy.dojo.sokoban.model.items.Hero;
 import com.codenjoy.dojo.sokoban.model.levels.LevelImpl;
 import com.codenjoy.dojo.sokoban.model.items.Mark;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
-import com.codenjoy.dojo.sokoban.services.Player;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,21 +75,18 @@ public class GameTest {
         settings.string(LEVEL_MAP, board);
 
         LevelImpl level;
-        if (marksToWin != 0)
+        if (marksToWin != 0) {
             level = new LevelImpl(board, marksToWin);
-        else
+        } else {
             level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+        }
+        hero = level.getHero().get(0);
 
         game = new Sokoban(level, dice, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
+        player.setHero(hero);
         game.newGame(player);
-        player.hero = hero;
-
-        hero.init(game);
-
-        this.hero = game.getHeroes().get(0);
     }
 
     private void givenFl(String board) {

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.sokoban.services.Player;
+import com.codenjoy.dojo.sokoban.model.Player;
 
 public class Box extends PointImpl implements State<Elements, Player> {
     private boolean alive;
