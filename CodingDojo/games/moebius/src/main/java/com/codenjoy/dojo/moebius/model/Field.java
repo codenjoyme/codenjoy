@@ -30,7 +30,7 @@ import java.util.Optional;
 
 public interface Field extends GameField<Player> {
 
-    Optional<Point> freeRandom();
+    Optional<Point> freeRandom(Player player);
 
     boolean isFree(Point pt);
 

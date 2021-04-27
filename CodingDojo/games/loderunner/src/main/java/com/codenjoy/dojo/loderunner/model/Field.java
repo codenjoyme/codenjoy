@@ -38,7 +38,7 @@ public interface Field extends RoundGameField<Player> {
 
     boolean isPit(Point pt);
 
-    Optional<Point> freeRandom();
+    Optional<Point> freeRandom(Player player);
 
     boolean isLadder(Point pt);
 

@@ -103,7 +103,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     public void setNewObjects() {
         int max = (players.size() / 2) + 1;
         int i = dice.next(50);
-        Optional<Point> pt = freeRandom();
+        Optional<Point> pt = freeRandom(null);
         if (!pt.isPresent()) {
             return;
         }
@@ -130,7 +130,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     }
 
     @Override
-    public Optional<Point> freeRandom() {
+    public Optional<Point> freeRandom(Player player) {
         return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
     }
 

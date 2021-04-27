@@ -91,7 +91,7 @@ public class Sample implements Field {
                 gold.remove(hero);
                 player.event(Events.WIN);
 
-                Optional<Point> pos = freeRandom();
+                Optional<Point> pos = freeRandom(null);
                 if (pos.isPresent()) {
                     gold.add(new Gold(pos.get()));
                 }
@@ -125,7 +125,7 @@ public class Sample implements Field {
     }
 
     @Override
-    public Optional<Point> freeRandom() {
+    public Optional<Point> freeRandom(Player player) {
         return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
     }
 

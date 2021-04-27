@@ -65,5 +65,5 @@ public interface Field extends RoundGameField<Player> {  // TODO примени�
 
     Dice dice();
 
-    Optional<Point> freeRandom();
+    Optional<Point> freeRandom(Player player);
 }

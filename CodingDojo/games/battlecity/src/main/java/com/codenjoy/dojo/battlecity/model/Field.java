@@ -55,5 +55,5 @@ public interface Field extends RoundGameField<Player> {
 
     boolean isFree(Point pt);
 
-    Optional<Point> freeRandom();
+    Optional<Point> freeRandom(Player player);
 }

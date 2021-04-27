@@ -123,7 +123,7 @@ public class Fifteen implements Field {
     }
 
     @Override
-    public Optional<Point> freeRandom() {
+    public Optional<Point> freeRandom(Player player) {
         return Optional.of(level.getHero());
     }
 

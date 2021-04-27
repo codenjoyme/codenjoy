@@ -65,7 +65,7 @@ public class Moebius implements Field {
 
         removePipes();
 
-        Optional<Point> pt = freeRandom();
+        Optional<Point> pt = freeRandom(null);
         if (pt.isPresent()) {
             setLine(pt.get(), Elements.random(dice));
         } else {
@@ -134,7 +134,7 @@ public class Moebius implements Field {
     }
 
     @Override
-    public Optional<Point> freeRandom() {
+    public Optional<Point> freeRandom(Player player) {
         return BoardUtils.freeRandom(size, dice,
                 pt -> !pt.isOutOf(1, 1, size) && isFree(pt));
     }

@@ -55,7 +55,7 @@ public class Player extends GamePlayer<Hero, Field> {
         if (hero != null) {
             hero = null;
         }
-        Optional<Point> pt = field.freeRandom();
+        Optional<Point> pt = field.freeRandom(this);
         if (pt.isEmpty()) {
             // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
             throw new RuntimeException("Not enough space for Hero");

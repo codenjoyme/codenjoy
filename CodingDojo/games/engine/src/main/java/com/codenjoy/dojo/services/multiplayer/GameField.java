@@ -74,7 +74,7 @@ public interface GameField<P extends GamePlayer> extends Tickable {
         return Arrays.asList();
     }
 
-    default Optional<Point> freeRandom() {
+    default Optional<Point> freeRandom(P player) {
         // если тут вернуть null то GamePlayer.newHero
         // не будет пытаться искать координату для героя
         // актуально для игр, герои которых не бегают по полю

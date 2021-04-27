@@ -32,7 +32,7 @@ public interface Field extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 
-    Optional<Point> freeRandom();
+    Optional<Point> freeRandom(Player player);
 
     boolean isFree(Point pt);
 

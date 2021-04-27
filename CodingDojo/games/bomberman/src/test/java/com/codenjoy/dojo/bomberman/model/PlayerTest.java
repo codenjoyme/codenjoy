@@ -55,7 +55,7 @@ public class PlayerTest {
 
         field = mock(Field.class);
         when(field.settings()).thenReturn(settings);
-        when(field.freeRandom()).thenReturn(Optional.of(pt(0, 0)));
+        when(field.freeRandom(any())).thenReturn(Optional.of(pt(0, 0)));
 
         listener = mock(EventListener.class);
     }
