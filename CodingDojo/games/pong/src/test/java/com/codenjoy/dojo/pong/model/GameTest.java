@@ -65,13 +65,12 @@ public class GameTest {
         game = new Pong(level, dice, settings);
 
         if (!level.getHero().isEmpty()) {
-            Hero hero = level.getHero().get(0);
+            hero = level.getHero().get(0);
             listener = mock(EventListener.class);
             player = new Player(listener, settings);
             game.newGame(player);
-            player.hero = hero;
+            player.setHero(hero);
             hero.init(game);
-            this.hero = game.getHeroes().get(0);
         }
     }
 

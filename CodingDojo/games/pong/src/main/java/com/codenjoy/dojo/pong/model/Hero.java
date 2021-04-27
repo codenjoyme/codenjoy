@@ -44,10 +44,6 @@ public class Hero extends PlayerHero<Field> implements NoActJoystick {
         direction = null;
     }
 
-    public void init(Field field) {
-        this.field = field;
-    }
-
     @Override
     public void down() {
         direction = Direction.DOWN;
@@ -99,6 +95,7 @@ public class Hero extends PlayerHero<Field> implements NoActJoystick {
         return panel;
     }
 
+    @Override
     public boolean isAlive() {
         return true;
     }
