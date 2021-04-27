@@ -63,12 +63,12 @@ public class MultiplayerTest {
     @Before
     public void setup() {
         level = new LevelImpl(
-                "☼☼┴┴☼☼" +
-                "☼    ☼" +
-                "☼  ∙ ☼" +
-                "☼    ☼" +
-                "☼    ☼" +
-                "☼☼┬┬☼☼");
+                "☼☼┴┴☼☼\n" +
+                "☼    ☼\n" +
+                "☼  ∙ ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☼┬┬☼☼\n");
 
         dice = mock(Dice.class);
         GameSettings settings = new GameSettings();
@@ -382,9 +382,9 @@ public class MultiplayerTest {
         assertEquals(true, game3.isGameOver());
         
         events.verifyAllEvents(
-                "listener(0) => [WIN, TOP_GOAL]\n" +
-                "listener(1) => [TOP_GOAL]\n" +
-                "listener(2) => [WIN, TOP_GOAL]\n");
+                "listener(0) => [TOP_GOAL, WIN]\n" +
+                "listener(1) => [TOP_GOAL, LOSE]\n" +
+                "listener(2) => [TOP_GOAL, WIN]\n");
     }
 
     @Test
@@ -455,8 +455,8 @@ public class MultiplayerTest {
         assertEquals(true, game3.isGameOver());
 
         events.verifyAllEvents(
-                "listener(0) => [BOTTOM_GOAL]\n" +
-                "listener(1) => [WIN, BOTTOM_GOAL]\n" +
-                "listener(2) => [BOTTOM_GOAL]\n");
+                "listener(0) => [BOTTOM_GOAL, LOSE]\n" +
+                "listener(1) => [BOTTOM_GOAL, WIN]\n" +
+                "listener(2) => [BOTTOM_GOAL, LOSE]\n");
     }
 }

@@ -23,5 +23,8 @@ package com.codenjoy.dojo.football.services;
  */
 
 public enum Events {
-    WIN, TOP_GOAL, BOTTOM_GOAL;
+    WIN,
+    LOSE,
+    TOP_GOAL,
+    BOTTOM_GOAL;
 }

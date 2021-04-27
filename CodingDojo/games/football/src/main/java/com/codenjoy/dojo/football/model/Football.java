@@ -73,18 +73,14 @@ public class Football implements Field {
         for (Ball ball : balls) {
             for (Goal goal : topGoals) {
                 if (goal.itsMe(ball)) {
-                    for (Player player : players) {
-                        player.event(Events.TOP_GOAL);
-                    }
+                    checkGoal(Events.TOP_GOAL, Elements.TOP_GOAL);
                     return;
                 }
             }
 
             for (Goal goal : bottomGoals) {
                 if (goal.itsMe(ball)) {
-                    for (Player player : players) {
-                        player.event(Events.BOTTOM_GOAL);
-                    }
+                    checkGoal(Events.BOTTOM_GOAL, Elements.BOTTOM_GOAL);
                     return;
                 }
             }
@@ -116,6 +112,18 @@ public class Football implements Field {
                 if (goal.itsMe(ball)) {
                     goal.setBall(ball);
                 }
+            }
+        }
+    }
+
+    public void checkGoal(Events event, Elements element) {
+        for (Player player : players) {
+            player.event(event);
+            player.goalHited(true);
+            if (player.myGoal() != element) {
+                player.event(Events.WIN);
+            } else {
+                player.event(Events.LOSE);
             }
         }
     }

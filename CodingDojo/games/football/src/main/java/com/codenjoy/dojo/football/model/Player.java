@@ -40,30 +40,6 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener, settings);
     }
 
-    public void event(Events event) {
-        // TODO убрать это отсюда, но перед тем тесты написать - оно не покрыто
-        switch (event) {
-            case TOP_GOAL: 
-                goalHited = true;
-                if (myGoal != Elements.TOP_GOAL) {
-                    super.event(Events.WIN);
-                }
-                break;
-            case BOTTOM_GOAL: 
-                goalHited = true;
-                if (myGoal != Elements.BOTTOM_GOAL) {
-                    super.event(Events.WIN);
-                }
-                break;
-            case WIN:
-                break;
-        default:
-            break;
-        }
-        
-        super.event(event);
-    }
-
     @Override
     public Hero initHero(Point pt) {
         Hero hero = new Hero(pt);
@@ -102,4 +78,11 @@ public class Player extends GamePlayer<Hero, Field> {
         this.team = team;    
     }
 
+    public void goalHited(boolean goalHited) {
+        this.goalHited = goalHited;
+    }
+
+    public Elements myGoal() {
+        return myGoal;
+    }
 }
