@@ -66,8 +66,7 @@ public class GameTest {
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
         game.newGame(player);
-        hero = player.hero;
-        hero.init(game);
+        hero = player.getHero();
     }
 
     private void thenHistory(String expected) {

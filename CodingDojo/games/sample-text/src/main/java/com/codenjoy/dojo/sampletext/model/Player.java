@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sampletext.model;
 import com.codenjoy.dojo.sampletext.services.Events;
 import com.codenjoy.dojo.sampletext.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 import java.util.LinkedList;
@@ -37,10 +38,8 @@ import java.util.List;
  */
 public class Player extends GamePlayer<Hero, Field> {
 
-    private Field field;
     private List<QuestionAnswer> history;
     private int questionIndex;
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
@@ -54,19 +53,9 @@ public class Player extends GamePlayer<Hero, Field> {
         questionIndex = 0;
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void newHero(Field field) {
-        hero = new Hero();
-        this.field = field;
-        hero.init(field);
-    }
-
     @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
+    public Hero createHero(Point pt) {
+        return new Hero();
     }
 
     public String getNextQuestion() { // TODO test me
