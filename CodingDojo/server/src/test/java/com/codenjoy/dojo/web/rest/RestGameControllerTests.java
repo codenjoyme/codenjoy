@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -61,14 +61,5 @@ public class RestGameControllerTests {
         //Assert
         verify(playerService, times(1)).updateScore(GITHUB_USERNAME, SCORE);
         verify(updateHandler, times(1)).sendUpdate(GITHUB_USERNAME, SCORE);
-    }
-
-    @Test
-    public void updateUserScoreWhenUsernameIsNull() {
-        //Act
-        restGameController.updateUserScore(null, SCORE);
-        //Assert
-        verify(playerService, times(0)).updateScore(null, SCORE);
-        verify(updateHandler, times(0)).sendUpdate(null, SCORE);
     }
 }

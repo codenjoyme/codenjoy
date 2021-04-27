@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,7 +24,11 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.GameServiceImpl;
+import com.codenjoy.dojo.services.PlayerGame;
+import com.codenjoy.dojo.services.PlayerGamesView;
+import com.codenjoy.dojo.services.SaveService;
+import com.codenjoy.dojo.services.SemifinalSettings;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.room.RoomService;
@@ -39,13 +43,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
@@ -54,27 +61,16 @@ import static org.mockito.Mockito.*;
 @Import(RestAdminControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class RestAdminControllerTest extends AbstractRestControllerTest {
 
     private static SemifinalSettings saved;
-
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return AbstractRestControllerTest.gameService();
-        }
-    }
-
     @Autowired
     private RestAdminController service;
-
     @Autowired
     private PlayerGamesView playerGamesView;
-
     @Autowired
     private SaveService saveService;
-
     @Autowired
     private RoomService roomService;
 
@@ -653,5 +649,13 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'true','multiline':false,'name':'Semifinal reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'true','multiline':false,'name':'Semifinal shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
                 quote(settings2.toString()));
+    }
+
+    @TestConfiguration
+    public static class ContextConfiguration {
+        @Bean("gameService")
+        public GameServiceImpl gameService() {
+            return AbstractRestControllerTest.gameService();
+        }
     }
 }

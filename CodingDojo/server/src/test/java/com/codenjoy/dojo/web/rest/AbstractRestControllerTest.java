@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,7 +23,17 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.DebugService;
+import com.codenjoy.dojo.services.GameSaver;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.GameServiceImpl;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerGame;
+import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.SemifinalSettings;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
@@ -63,63 +73,34 @@ import static org.mockito.Mockito.reset;
 
 public abstract class AbstractRestControllerTest {
 
+    protected MockMvc mvc;
+    @Autowired
+    protected WebApplicationContext context;
+    @Autowired
+    protected PlayerService playerService;
+    @Autowired
+    protected Registration registration;
+    @Autowired
+    protected GameSaver gameSaver;
+    @Autowired
+    protected PlayerGames playerGames;
+    @Autowired
+    protected ConfigProperties config;
+    @Autowired
+    protected GameService games;
+    @Autowired
+    protected SemifinalSettings semifinal;
+    @Autowired
+    protected DebugService debugService;
+
     public static GameServiceImpl gameService() {
-        return new GameServiceImpl(){
+        return new GameServiceImpl() {
             @Override
             public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
                 return Arrays.asList(FirstGameType.class, SecondGameType.class);
             }
         };
     }
-
-    public static class PropertyOverrideContextInitializer
-            implements ApplicationContextInitializer<ConfigurableApplicationContext>
-    {
-        @Override
-        public void initialize(ConfigurableApplicationContext context) {
-            setup(context, "messages", "messages.db");
-            setup(context, "log", "logs.db");
-            setup(context, "payment", "payment.db");
-            setup(context, "saves", "saves.db");
-            setup(context, "users", "users.db");
-            setup(context, "settings", "settings.db");
-
-//            TestPropertySourceUtils.addPropertiesFilesToEnvironment(
-//                    context, "context-override-application.properties");
-        }
-
-        public void setup(ConfigurableApplicationContext context, String db, String file) {
-            String dbFile = "target/" + file + new Random().nextInt();
-            TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
-                    context, "database.files." + db + "=" + dbFile);
-        }
-    }
-
-    protected MockMvc mvc;
-
-    @Autowired
-    protected WebApplicationContext context;
-
-    @Autowired
-    protected PlayerService playerService;
-
-    @Autowired
-    protected Registration registration;
-
-    @Autowired
-    protected PlayerGames playerGames;
-
-    @Autowired
-    protected ConfigProperties config;
-
-    @Autowired
-    protected GameService games;
-
-    @Autowired
-    protected SemifinalSettings semifinal;
-
-    @Autowired
-    protected DebugService debugService;
 
     @Before
     public void setUp() {
@@ -172,8 +153,8 @@ public abstract class AbstractRestControllerTest {
     protected PlayerGame register(String id, String ip, String room, String game) {
         String password = Hash.md5(id);
         String readableName = id + "-name";
-        registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles(),"ghusername");
-        playerService.register(id, game, room, ip,"repository");
+        registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles(), "ghusername");
+        playerService.register(id, game, room, ip, "repository");
         PlayerGame playerGame = playerGames.get(id);
         resetMocks(playerGame);
         return playerGame;
@@ -210,7 +191,7 @@ public abstract class AbstractRestControllerTest {
     }
 
     @SneakyThrows
-    private String post(String uri) {
+    protected String post(String uri) {
         return process(200, MockMvcRequestBuilders.post(uri));
     }
 
@@ -270,7 +251,7 @@ public abstract class AbstractRestControllerTest {
             return new JSONObject(source);
         } catch (JSONException e) {
             System.out.println("actual data is: " + source);
-            return new JSONObject(){{
+            return new JSONObject() {{
                 put("message", "no json value");
             }};
         }
@@ -301,5 +282,27 @@ public abstract class AbstractRestControllerTest {
 
     protected String quotes(String input) {
         return "\"" + input + "\"";
+    }
+
+    public static class PropertyOverrideContextInitializer
+            implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        @Override
+        public void initialize(ConfigurableApplicationContext context) {
+            setup(context, "messages", "messages.db");
+            setup(context, "log", "logs.db");
+            setup(context, "payment", "payment.db");
+            setup(context, "saves", "saves.db");
+            setup(context, "users", "users.db");
+            setup(context, "settings", "settings.db");
+
+//            TestPropertySourceUtils.addPropertiesFilesToEnvironment(
+//                    context, "context-override-application.properties");
+        }
+
+        public void setup(ConfigurableApplicationContext context, String db, String file) {
+            String dbFile = "target/" + file + new Random().nextInt();
+            TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
+                    context, "database.files." + db + "=" + dbFile);
+        }
     }
 }

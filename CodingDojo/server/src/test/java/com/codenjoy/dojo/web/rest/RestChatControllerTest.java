@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -38,6 +38,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -55,25 +56,15 @@ import static org.mockito.Mockito.when;
 @Import(RestChatControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class RestChatControllerTest extends AbstractRestControllerTest {
-
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return AbstractRestControllerTest.gameService();
-        }
-    }
 
     @Autowired
     private Chat chat;
-
     @Autowired
     private RoomService roomService;
-
     @Autowired
     private PlayerService playerService;
-
     @SpyBean
     private TimeService time;
 
@@ -144,7 +135,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // then
         assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':23456,'topicId':null},\n" +
-                "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':34567,'topicId':null}]",
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':34567,'topicId':null}]",
                 fix(get("/rest/chat/validRoom/messages")));
 
         // when
@@ -200,7 +191,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertError("java.lang.IllegalArgumentException: " +
                         "There is no message with id " +
                         "'1' in room 'validRoom'",
-            "/rest/chat/validRoom/messages/1");
+                "/rest/chat/validRoom/messages/1");
 
         // when
         nowIs(12345L);
@@ -474,7 +465,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages?beforeId=0&inclusive=true")));
 
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null},\n" +
-                "{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':null}]",
+                        "{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':null}]",
                 fix(get("/rest/chat/validRoom/messages?beforeId=2&inclusive=true")));
 
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null},\n" +
@@ -722,5 +713,13 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals("[{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':null},\n" +
                         "{'id':7,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message7','time':12351,'topicId':null}]",
                 fix(get("/rest/chat/validRoom/messages")));
+    }
+
+    @TestConfiguration
+    public static class ContextConfiguration {
+        @Bean("gameService")
+        public GameServiceImpl gameService() {
+            return AbstractRestControllerTest.gameService();
+        }
     }
 }
