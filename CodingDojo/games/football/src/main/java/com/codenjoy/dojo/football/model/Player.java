@@ -41,6 +41,7 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public void event(Events event) {
+        // TODO убрать это отсюда, но перед тем тесты написать - оно не покрыто
         switch (event) {
             case TOP_GOAL: 
                 goalHited = true;
