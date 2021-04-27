@@ -40,7 +40,7 @@ public final class NullGamePlayer extends GamePlayer {
     }
 
     @Override
-    public PlayerHero initHero(Point pt) {
+    public PlayerHero createHero(Point pt) {
         return NullPlayerHero.INSTANCE;
     }
 

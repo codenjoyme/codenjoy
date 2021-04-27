@@ -34,7 +34,7 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener, settings);
     }
 
-    public Hero initHero(Point pt) {
+    public Hero createHero(Point pt) {
         return new Hero();
     }
 

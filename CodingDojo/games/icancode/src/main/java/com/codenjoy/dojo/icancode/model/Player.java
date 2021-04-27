@@ -36,8 +36,6 @@ import org.json.JSONObject;
 
 public class Player extends GamePlayer<Hero, Field> {
 
-    Hero hero;
-    private Field field;
     private Printer<PrinterData> printer;
 
     public Player(EventListener listener, GameSettings settings) {
@@ -52,22 +50,14 @@ public class Player extends GamePlayer<Hero, Field> {
                 Levels.COUNT_LAYERS);
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void newHero(Field field) {
-        this.field = field;
-        if (hero == null) {
-            hero = new Hero();
-        }
-
-        hero.init(field);
+    @Override
+    protected boolean shouldCreate() {
+        return hero == null;
     }
 
     @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
+    public Hero createHero(Point pt) {
+        return new Hero();
     }
 
     @Override
@@ -80,14 +70,10 @@ public class Player extends GamePlayer<Hero, Field> {
         return new ICanCodeHeroData();
     }
 
-    public Field getField() {
-        return field;
-    }
-
     // TODO test me
     public boolean isLevelFinished() {
         Hero hero = getHero();
-        Point exit = getField().getEndPosition();
+        Point exit = field.getEndPosition();
         return hero.getPosition().equals(exit) && !hero.isFlying();
     }
 

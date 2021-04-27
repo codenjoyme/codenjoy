@@ -75,7 +75,7 @@ public class Player extends GamePlayer<Hero, IField> {
     }
 
     @Override
-    public Hero initHero(Point pt) {
+    public Hero createHero(Point pt) {
         return new Hero();
     }
 

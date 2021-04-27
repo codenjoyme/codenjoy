@@ -68,7 +68,7 @@ public class Player extends RoundGamePlayer<Tank, Field> {
     }
 
     @Override
-    public Tank initHero(Point pt) {
+    public Tank createHero(Point pt) {
         reset();
         return new Tank(pt, Direction.UP);
     }

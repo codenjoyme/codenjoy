@@ -60,7 +60,7 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
     }
 
     @Override
-    public Hero initHero(Point pt) {
+    public Hero createHero(Point pt) {
         Hero hero = new Hero(pt, element);
         hero.init(field);
         heroes.clear();

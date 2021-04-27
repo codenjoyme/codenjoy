@@ -126,7 +126,7 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
             if (pt == null) {
                 // если freeRandom вернул null значит герой не располагается
                 // на поле и не содержит координаты
-                hero = initHero(null);
+                hero = createHero(null);
             } else {
                 // иначе пытаемся понять есть ли на поле место
                 // если нет - все плохо, иначе создаем героя в этом месте
@@ -134,7 +134,7 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
                     // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
                     throw new RuntimeException("Not enough space for Hero");
                 }
-                hero = initHero(pt.get());
+                hero = createHero(pt.get());
             }
         }
         // инициализируем бордой и погнали!
@@ -150,7 +150,7 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      * @param pt в каком месте карты мы это делаем
      * @return Созданный герой
      */
-    public H initHero(Point pt) {
+    public H createHero(Point pt) {
         return null;
     }
 
