@@ -31,31 +31,12 @@ import java.util.Optional;
 
 public class Player extends GamePlayer<Hero, Field> {
 
-    Hero hero;
-
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void newHero(Field field) {
-        if (hero != null) {
-            hero = null;
-        }
-        Optional<Point> pt = field.freeRandom(this);
-        if (pt.isEmpty()) {
-            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
-            throw new RuntimeException("Not enough space for Hero");
-        }
-        hero = new Hero(pt.get());
-        hero.init(field);
-    }
-
     @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
+    public Hero createHero(Point pt) {
+        return new Hero(pt);
     }
 }

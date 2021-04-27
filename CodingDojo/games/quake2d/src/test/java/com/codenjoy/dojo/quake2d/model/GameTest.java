@@ -47,7 +47,6 @@ public class GameTest {
     private Player player;
     private Player otherPlayer;
     private Hero otherHero;
-    private Ability ability;
     private PrinterFactory printer;
     private GameSettings settings;
 
@@ -67,27 +66,23 @@ public class GameTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+        hero = level.getHero().get(0);
 
         game = new Quake2D(level, dice, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
         dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
+        player.setHero(hero);
         game.newGame(player);
-        player.hero = hero;
-        hero.init(game);
-        player.hero.setHealth(Hero.START_HEALTH - player.hero.getHealth());
-        this.hero = game.getHeroes().get(0);
+        hero.setHealth(Hero.START_HEALTH - hero.getHealth());
 
 
         if (level.getOtherHero().size() != 0){
-            Hero otherHero = level.getOtherHero().get(0);
+            otherHero = level.getOtherHero().get(0);
             otherPlayer = new Player(listener, settings);
+            otherPlayer.setHero(otherHero);
             game.newGame(otherPlayer);
-            otherPlayer.hero = otherHero;
-            otherHero.init(game);
-            otherPlayer.hero.setHealth(Hero.START_HEALTH - player.hero.getHealth());
-            this.otherHero = game.getHeroes().get(1);
+            otherHero.setHealth(Hero.START_HEALTH - otherHero.getHealth());
         }
 
 
@@ -356,7 +351,7 @@ public class GameTest {
                 "☼ ☺  ☼" +
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
-        otherPlayer.hero.setHealth(-(Hero.START_HEALTH-Bullet.START_DAMAGE));
+        otherHero.setHealth(-(Hero.START_HEALTH-Bullet.START_DAMAGE));
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -444,7 +439,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        otherPlayer.hero.setHealth(-(Hero.START_HEALTH-Bullet.START_DAMAGE));
+        otherHero.setHealth(-(Hero.START_HEALTH-Bullet.START_DAMAGE));
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -456,8 +451,6 @@ public class GameTest {
 
         game.tick();
         otherHero.move(4, 3);
-        otherPlayer.hero = otherHero;
-
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼   ☻☼" +
@@ -497,9 +490,9 @@ public class GameTest {
 
         dice(3, 3, Ability.Type.DEFENCE.ordinal());
         makeTicks(Quake2D.ABILITY_TIME_EXIST);
-        player.hero.up();
+        hero.up();
         game.tick();
-        player.hero.right();
+        hero.right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -507,7 +500,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
-        assertNotNull(player.hero.getAbility());
+        assertNotNull(hero.getAbility());
     }
 
     private void makeTicks(int count){
@@ -547,7 +540,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-//        otherPlayer.hero.setHealth(Bullet.START_DAMAGE);
+//        otherHero.setHealth(Bullet.START_DAMAGE);
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -556,11 +549,11 @@ public class GameTest {
                 "☼ ☺  ☼" +
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
-        assertEquals(otherPlayer.hero.getHealth(), Hero.START_HEALTH - Bullet.START_DAMAGE*Bullet.WEAPON_MULTIPLICATOR);
+        assertEquals(otherHero.getHealth(), Hero.START_HEALTH - Bullet.START_DAMAGE*Bullet.WEAPON_MULTIPLICATOR);
 //
 //        game.tick();
 //        otherHero.move(4, 3);
-//        otherPlayer.hero = otherHero;
+//        otherHero = otherHero;
 //
 //        assertE("☼☼☼☼☼☼" +
 //                "☼    ☼" +
@@ -581,10 +574,10 @@ public class GameTest {
 
         dice(3, 3, Ability.Type.HEALTH.ordinal());
         makeTicks(Quake2D.ABILITY_TIME_EXIST);
-        player.hero.up();
+        hero.up();
         game.tick();
-        player.hero.setHealth(-(Bullet.START_DAMAGE + Ability.HEALTH_BONUS));
-        player.hero.right();
+        hero.setHealth(-(Bullet.START_DAMAGE + Ability.HEALTH_BONUS));
+        hero.right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -592,7 +585,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
-        assertEquals(Hero.START_HEALTH - Bullet.START_DAMAGE + (Ability.HEALTH_BONUS - Ability.HEALTH_BONUS), player.hero.getHealth());
+        assertEquals(Hero.START_HEALTH - Bullet.START_DAMAGE + (Ability.HEALTH_BONUS - Ability.HEALTH_BONUS), hero.getHealth());
     }
 
     @Test
@@ -605,7 +598,7 @@ public class GameTest {
                 "☼☼☼☼☼☼");
         makeTicks(Quake2D.ABILITY_TIME_EXIST);
         game.getAbilities().get(0).move(2, 2);
-        otherPlayer.hero.up();
+        otherHero.up();
         game.tick();
         assertE("☼☼☼☼☼☼" +
                 "☼ ☺  ☼" +
