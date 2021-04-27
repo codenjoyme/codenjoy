@@ -39,6 +39,7 @@ import java.util.Optional;
  */
 public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
 
+    protected F field;
     protected H hero;
     protected EventListener listener;
     protected SettingsReader settings;
@@ -114,8 +115,10 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      * @param field борда
      */
     public void newHero(F field) {
+        this.field = field;
+
         // если героя нет, или он не инициализирован вручную - мы поможем этому случиться
-        if (hero == null || !hero.manual()) {
+        if (shouldCreate()) {
             if (hero != null) {
                 hero = null;
             }
@@ -136,6 +139,10 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
         }
         // инициализируем бордой и погнали!
         hero.init(field);
+    }
+
+    protected boolean shouldCreate() {
+        return hero == null || !hero.manual();
     }
 
     /**

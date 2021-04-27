@@ -45,9 +45,7 @@ public class Player extends GamePlayer<Hero, IField> {
 
     private static Logger logger = DLoggerFactory.getLogger(Player.class);
 
-    Hero hero;
     private String name;
-    private IField field;
     private Printer<PrinterData> printer;
     private boolean isWin;
 
@@ -76,22 +74,9 @@ public class Player extends GamePlayer<Hero, IField> {
         //}
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void newHero(IField field) {
-        this.field = field;
-        if (hero == null) {
-            hero = new Hero();
-        }
-
-        hero.init(field);
-    }
-
     @Override
-    public boolean isAlive() {
-        return hero.isAlive();
+    public Hero initHero(Point pt) {
+        return new Hero();
     }
 
     @Override
@@ -170,10 +155,6 @@ public class Player extends GamePlayer<Hero, IField> {
         if (hero != null) {
             hero.destroy();
         }
-    }
-
-    public void setHero(Hero hero) {
-        this.hero = hero;
     }
 
     public String getName() {

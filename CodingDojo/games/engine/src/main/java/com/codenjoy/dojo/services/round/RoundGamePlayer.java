@@ -89,10 +89,4 @@ public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameF
         }
     }
 
-    @Override
-    public H initHero(Point pt) {
-        H hero = super.initHero(pt);
-        return hero;
-    }
-
 }

@@ -111,6 +111,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         direction = null;
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }

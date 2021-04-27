@@ -75,7 +75,9 @@ public class SoftSpreader {
         game.newGame();
         games.add(game);
 
-        heroes.add((Hero) game.getPlayer().getHero());
+        Hero hero = (Hero) game.getPlayer().getHero();
+        hero.manual(true);
+        heroes.add(hero);
     }
 
     protected void destroy(int player) {

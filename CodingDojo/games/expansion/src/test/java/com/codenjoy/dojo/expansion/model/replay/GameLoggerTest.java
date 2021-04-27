@@ -729,6 +729,15 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
         String hero3 = hero(PLAYER3).lg.id();
         String hero4 = hero(PLAYER4).lg.id();
 
+        System.out.println("player1 = " + player1);
+        System.out.println("player2 = " + player2);
+        System.out.println("player3 = " + player3);
+        System.out.println("player4 = " + player4);
+        System.out.println("hero1 = " + hero1);
+        System.out.println("hero2 = " + hero2);
+        System.out.println("hero3 = " + hero3);
+        System.out.println("hero4 = " + hero4);
+
         assertEquals(("Game started\n" +
                         "New player P@1a942c18 registered with hero H@55a147cc with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1'\n" +
                         "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@1a6d8329-1','playerName':'P@1a942c18'}\"\n" +
