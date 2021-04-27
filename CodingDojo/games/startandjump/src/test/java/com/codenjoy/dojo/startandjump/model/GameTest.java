@@ -48,11 +48,14 @@ public class GameTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        settings = new GameSettings();
+        printer = new PrinterFactoryImpl();
     }
 
     private void dice(int... ints) {
@@ -64,15 +67,12 @@ public class GameTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
-
-        GameSettings settings = new GameSettings();
+        hero = level.getHero().get(0);
         game = new StartAndJump(dice, level, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
+        player.setHero(hero);
         game.newGame(player);
-        player.hero = hero;
-        this.hero = game.getHeroes().get(0);
     }
 
     private void assertE(String expected) {
