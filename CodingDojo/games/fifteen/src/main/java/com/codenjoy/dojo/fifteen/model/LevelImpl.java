@@ -53,10 +53,14 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Hero> getHero() {
-        return LevelUtils.getObjects(xy, map,
+    public Hero getHero() {
+        List<Hero> heroes = LevelUtils.getObjects(xy, map,
                 (pt, el) -> new Hero(pt),
                 HERO);
+        if (heroes.isEmpty()) {
+            throw new RuntimeException("Hero not found on the map");
+        }
+        return heroes.get(0);
     }
 
     @Override

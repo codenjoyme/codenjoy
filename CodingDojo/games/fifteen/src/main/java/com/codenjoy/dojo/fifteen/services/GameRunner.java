@@ -27,7 +27,9 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.fifteen.client.Board;
 import com.codenjoy.dojo.fifteen.client.ai.AISolver;
 import com.codenjoy.dojo.fifteen.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -50,7 +52,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        Level level = new LevelImpl(new Randomizer().getRamdomMap(getDice()));
+        Level level = new LevelImpl(new Randomizer().getRandomMap(getDice()));
         return new Fifteen(level, getDice(), settings);
     }
 

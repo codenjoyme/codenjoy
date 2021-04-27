@@ -27,13 +27,11 @@ import com.codenjoy.dojo.fifteen.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import java.util.Optional;
 
 public class Fifteen implements Field {
 
@@ -62,7 +60,12 @@ public class Fifteen implements Field {
             Hero hero = player.getHero();
             hero.tick();
 
-            if(isAllPositionCorrect()){
+            Bonus bonus = hero.pullBonus();
+            if (bonus != null) {
+                player.event(bonus);
+            }
+
+            if (isAllPositionCorrect()){
                 player.event(Events.WIN);
                 player.getHero().die();
             }
@@ -79,15 +82,15 @@ public class Fifteen implements Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        Point pt = pt(x, y);
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt);
+    public boolean isBarrier(Point pt) {
+        return pt.isOutOf(size)
+                || walls.contains(pt);
     }
 
     @Override
-    public Digit getDigit(int x, int y) {
+    public Digit getDigit(Point pt) {
         for (Digit point : digits) {
-            if (point.itsMe(x, y)) {
+            if (point.itsMe(pt)) {
                 return point;
             }
         }
@@ -95,12 +98,9 @@ public class Fifteen implements Field {
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
-        return !digits.contains(pt) &&
-                !walls.contains(pt) &&
-                !getHeroes().contains(pt);
+    public boolean isFree(Point pt) {
+        return !digits.contains(pt)
+                && !walls.contains(pt);
     }
 
     public List<Hero> getHeroes() {
@@ -123,8 +123,8 @@ public class Fifteen implements Field {
     }
 
     @Override
-    public Hero getLevelHero() {
-        return level.getHero().get(0);
+    public Optional<Point> freeRandom() {
+        return Optional.of(level.getHero());
     }
 
     @Override

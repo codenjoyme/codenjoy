@@ -22,44 +22,20 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
-import com.codenjoy.dojo.fifteen.services.Events;
 import com.codenjoy.dojo.fifteen.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
-    public void event(Events event) {
-        if (listener != null) {
-            listener.event(event);
-        }
-    }
-
-    public void event(Bonus bonus) {
-        if (listener != null) {
-            listener.event(bonus);
-        }
-    }
-
-    public Hero getHero() {
-        return hero;
-    }
-
     @Override
-    public void newHero(Field field) {
-        hero = field.getLevelHero();
-        hero.setPlayer(this); // TODO try to remove this cyclic
-        hero.init(field);
+    public Hero initHero(Point pt) {
+        return new Hero(pt);
     }
 
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
 }

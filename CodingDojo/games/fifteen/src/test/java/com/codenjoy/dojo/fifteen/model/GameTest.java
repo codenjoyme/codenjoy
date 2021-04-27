@@ -23,11 +23,11 @@ package com.codenjoy.dojo.fifteen.model;
  */
 
 import com.codenjoy.dojo.fifteen.services.GameSettings;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,9 +35,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GameTest {
 
@@ -68,7 +67,7 @@ public class GameTest {
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
         game.newGame(player);
-        this.hero = game.getHeroes().get(0);
+        hero = player.getHero();
     }
 
     private void assertE(String expected) {
@@ -104,7 +103,7 @@ public class GameTest {
                 "******");
 
         game.tick();
-        assertTrue(hero.isAlive());
+        assertEquals(true, hero.isAlive());
 
         assertE("******" +
                 "*abcd*" +
@@ -123,7 +122,7 @@ public class GameTest {
                 "*mno+*" +
                 "******");
 
-        assertFalse(hero.isAlive());
+        assertEquals(false, hero.isAlive());
         game.newGame(player);
 
         assertE("******" +
@@ -243,13 +242,14 @@ public class GameTest {
     @Test
     public void testRandomInitialization() {
         dice();
-        String ramdomMap = new Randomizer().getRamdomMap(dice);
-        assertEquals("******" +
+        assertEquals(
+                "******" +
                 "*abcd*" +
                 "*efgh*" +
                 "*ijkl*" +
                 "*mno+*" +
-                "******", ramdomMap);
+                "******",
+                new Randomizer().getRandomMap(dice));
     }
 
     //проверка на правильный расклад
@@ -272,14 +272,14 @@ public class GameTest {
         test.add(Elements.N);
         test.add(Elements.O);
         test.add(Elements.HERO);
-        boolean result = new Randomizer().isSolvability(test);
-        assertTrue(result);
+        boolean result = new Randomizer().canBeSolved(test);
+        assertEquals(true, result);
     }
 
     //проверка на неправильный расклад
     @Test
     public void testIsSolvabilityFalse() {
-        List<Elements> test = new LinkedList<Elements>();
+        List<Elements> test = new LinkedList<>();
         test.add(Elements.A);
         test.add(Elements.B);
         test.add(Elements.C);
@@ -296,7 +296,7 @@ public class GameTest {
         test.add(Elements.O);
         test.add(Elements.N);
         test.add(Elements.HERO);
-        boolean result = new Randomizer().isSolvability(test);
-        assertFalse(result);
+        boolean result = new Randomizer().canBeSolved(test);
+        assertEquals(false, result);
     }
 }

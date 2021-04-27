@@ -22,11 +22,10 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.joystick.DirectionJoystick;
-import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Arrays;
@@ -37,19 +36,16 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
 
     private List<Digit> digits;
     private int moveCount;
-    private Player player;
     private boolean alive;
     private Direction direction;
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
+    private Bonus bonus;
 
     public Hero(Point xy) {
         super(xy);
         direction = null;
         alive = true;
         moveCount = 1;
+        bonus = null;
         digits = new LinkedList<>();
     }
 
@@ -86,20 +82,19 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         if (!alive) return;
 
         if (direction != null) {
-            int newX = direction.changeX(getX());
-            int newY = direction.changeY(getY());
+            Point dest = direction.change(this);
 
-            if (!field.isBarrier(newX, newY)) {
+            if (!field.isBarrier(dest)) {
                 moveCount++;
-                Digit digit = field.getDigit(newX, newY);
+                Digit digit = field.getDigit(dest);
                 digit.move(Hero.this);
-                move(newX, newY);
+                move(dest);
 
                 if (new DigitHandler().isRightPosition(digit)) {
 
-                   if(!digits.contains(digit)){
+                   if (!digits.contains(digit)){
                        int number = 1 + Arrays.asList(DigitHandler.DIGITS).indexOf(digit);
-                       player.event(new Bonus(moveCount, number));
+                       bonus = new Bonus(moveCount, number);
                        moveCount = 1;
                        digits.add(digit);
                    }
@@ -111,6 +106,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         direction = null;
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }
@@ -122,5 +118,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.HERO;
+    }
+
+    public Bonus pullBonus() {
+        Bonus result = bonus;
+        bonus = null;
+        return result;
     }
 }

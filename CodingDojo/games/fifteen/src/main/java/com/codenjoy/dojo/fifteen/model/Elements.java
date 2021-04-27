@@ -25,7 +25,7 @@ package com.codenjoy.dojo.fifteen.model;
 import com.codenjoy.dojo.services.printer.CharElements;
 
 public enum Elements implements CharElements {
-    // поля пятнашек
+
     A('a'),
     B('b'),
     C('c'),
