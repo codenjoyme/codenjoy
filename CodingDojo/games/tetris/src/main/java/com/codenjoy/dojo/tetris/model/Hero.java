@@ -48,7 +48,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public boolean isAlive() {
-        return !levelCompleted();
+        return !levels.levelCompleted();
     }
 
     @Override
@@ -113,7 +113,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     
     @Override
     public void tick() {
-        if (levelCompleted()) {
+        if (!isAlive()) {
             return;
         }
 
@@ -150,10 +150,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         Figure figure = field.take();
         setFigure(figure);
         showCurrentFigure();
-    }
-
-    public boolean levelCompleted() {
-        return levels.levelCompleted();
     }
 
     @Override
