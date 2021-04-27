@@ -141,11 +141,6 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
         }
         // инициализируем бордой и погнали!
         hero.init(field);
-
-        // TODO #4e3 потому что игра сама берет на себя создание нового Hero тут
-        //      это надо, иначе псоле первого gameOver не будет генериться байк
-        //      в рендомном месте. Но надо убрать
-        hero.manual(false);
     }
 
     protected boolean shouldCreate() {
