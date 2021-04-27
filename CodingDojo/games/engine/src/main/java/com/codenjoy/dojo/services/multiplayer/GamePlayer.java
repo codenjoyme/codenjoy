@@ -88,8 +88,8 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      *             хотим его инициализировать в рендомном месте карты.
      */
     public void setHero(H hero) {
-        hero.manual(true);
         this.hero = hero;
+        this.hero.manual(true);
     }
 
     /**
