@@ -46,7 +46,6 @@ public class Player extends RoundGamePlayer<Hero, Field> {
     public Hero createHero(Point pt) {
         Hero hero = new Hero(pt, Direction.RIGHT);
         hero.setPlayer(this);
-        hero.init(field);
         return hero;
     }
 
