@@ -30,11 +30,8 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-import java.util.Optional;
-
 public class Player extends GamePlayer<Hero, Field> {
 
-    Hero hero;
     private boolean goalHited;
     private Elements myGoal;
     private String team;
@@ -66,22 +63,11 @@ public class Player extends GamePlayer<Hero, Field> {
         super.event(event);
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void newHero(Field field) {
-        if (hero != null) {
-            hero = null;
-        }
-        Optional<Point> pt = field.freeRandom(this);
-        if (pt.isEmpty()) {
-            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
-            throw new RuntimeException("Not enough space for Hero");
-        }
-        hero = new Hero(pt.get());
+    @Override
+    public Hero initHero(Point pt) {
+        Hero hero = new Hero(pt);
         hero.setTeam(team);
-        hero.init(field);
+        return hero;
     }
 
     @Override

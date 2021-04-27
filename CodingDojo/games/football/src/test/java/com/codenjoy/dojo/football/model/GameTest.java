@@ -71,16 +71,14 @@ public class GameTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+        hero = level.getHero().get(0);
 
         game = new Football(level, dice, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
-        dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
+        player.setHero(hero);
         game.newGame(player);
-        player.hero = hero;
         hero.init(game);
-        this.hero = game.getHeroes().get(0);
     }
 
     private void assertE(String expected) {
