@@ -36,7 +36,6 @@ import java.util.Optional;
 
 public class Player extends GamePlayer<Hero, Field> implements Tickable {
 
-    private Field field;
     private Hero active;
     private boolean alive;
     private Heroes heroes;
@@ -61,18 +60,13 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
     }
 
     @Override
-    public void newHero(Field field) {
-        this.field = field;
-        Optional<Point> pt = field.freeRandom();
-        if (pt.isEmpty()) {
-            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
-            throw new RuntimeException("Not enough space for Hero");
-        }
-        Hero hero = new Hero(pt.get(), element);
+    public Hero initHero(Point pt) {
+        Hero hero = new Hero(pt, element);
         hero.init(field);
         heroes.clear();
         heroes.add(hero, this);
         alive = true;
+        return hero;
     }
 
     public void addHero(Hero newHero) {
