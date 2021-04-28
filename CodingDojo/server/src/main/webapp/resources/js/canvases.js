@@ -38,6 +38,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
     loadCanvasesData(alphabet, spriteElements, onLoad);
     var reloading = false;
     var readableNames = {};
+    var previousBoard = null;
 
     function toName(id) {
         return readableNames[id];
@@ -179,27 +180,46 @@ function initCanvases(contextPath, players, allPlayersScreen,
     }
 
     var getBoardDrawer = function(canvas, playerId, playerData, allPlayersScreen) {
+
         var getBoard = function() {
             return playerData.board;
         }
+
         var getHeroesData = function() {
             return playerData.coordinates;
         }
 
-        var drawAllLayers = function(layers, onDrawItem){
+        var drawAllLayers = function(layers, previous, onDrawItem){
             var isDrawByOrder = setup.isDrawByOrder;
+
+            var changedChar = function(charIndex) {
+                if (!previous) {
+                    return true;
+                }
+                for (var layerIndex = 0; layerIndex < layers.length; layerIndex++) {
+                    var color = layers[layerIndex][charIndex];
+                    var previousColor = previous[layerIndex][charIndex];
+
+                    if (color != previousColor) {
+                        return true;
+                    }
+                }
+                return false;
+            }
 
             var drawChar = function(plotIndex) {
                 var x = 0;
                 var y = boardSize - 1;
                 for (var charIndex = 0; charIndex < layers[0].length; charIndex++) {
-                    for (var layerIndex = 0; layerIndex < layers.length; layerIndex++) {
-                        var layer = layers[layerIndex];
-                        var color = layer[charIndex];
-                        if (!isDrawByOrder || plotIndex == color) {
-                            canvas.drawPlot(decode(color), x, y);
-                            if (!!onDrawItem) {
-                                onDrawItem(layers, layerIndex, charIndex, x, y);
+                    if (changedChar(charIndex)) {
+                        for (var layerIndex = 0; layerIndex < layers.length; layerIndex++) {
+                            var layer = layers[layerIndex];
+                            var color = layer[charIndex];
+                            if (!isDrawByOrder || plotIndex == color) {
+                                canvas.drawPlot(decode(color), x, y);
+                                if (!!onDrawItem) {
+                                    onDrawItem(layers, layerIndex, charIndex, x, y);
+                                }
                             }
                         }
                     }
@@ -235,15 +255,27 @@ function initCanvases(contextPath, players, allPlayersScreen,
             drawBackground('fog');
         }
 
+        var after = function() {
+            previousBoard = getBoard();
+        }
+
         var clear = function() {
             canvas.clear();
         }
 
         var drawLayers = function(onDrawItem) {
+            var drawOnlyChanges = true;
             var board = getBoard();
             var toDraw = (!board.layers) ? [board] : board.layers;
+            var previousToDraw = (!drawOnlyChanges || !previousBoard)
+                                        ? null
+                                        : (!previousBoard.layers)
+                                                ? [previousBoard]
+                                                : previousBoard.layers;
             try {
-                drawAllLayers(toDraw, onDrawItem);
+                canvas.restoreState();
+                drawAllLayers(toDraw, previousToDraw, onDrawItem);
+                canvas.saveState();
             } catch (err) {
                 console.log(err);
             }
@@ -329,6 +361,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             drawLayers : drawLayers,
             drawPlayerNames : drawPlayerNames,
             drawFog : drawFog,
+            after : after,
             canvas : canvas,
             playerId : playerId,
             playerData : playerData,
@@ -355,6 +388,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         drawer.drawLayers();
         drawer.drawPlayerNames(defaultFont(), null);
         drawer.drawFog();
+        drawer.after();
     }
 
     drawBoard = (!!drawBoard) ? drawBoard : defaultDrawBoard;
@@ -420,7 +454,24 @@ function initCanvases(contextPath, players, allPlayersScreen,
             canvas[0].width = canvasSize;
             canvas[0].height = canvasSize;
         }
+
         var ctx = canvas[0].getContext("2d");
+
+        var saveState = function() {
+            if (!canvas.saved) {
+                canvas.saved = document.createElement('canvas');
+                canvas.saved.width = canvas[0].width;
+                canvas.saved.height = canvas[0].height;
+                canvas.saved.ctx = canvas.saved.getContext('2d', { alpha: false });
+            }
+            canvas.saved.ctx.drawImage(canvas[0], 0, 0);
+        }
+
+        var restoreState = function() {
+            if (!!canvas.saved) {
+                ctx.drawImage(canvas.saved, 0, 0);
+            }
+        }
 
         var drawPlot = function(color, x, y) {
             var image = images[color];
@@ -502,6 +553,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
             drawPlot : drawPlot,
             drawText: drawText,
             clear : clear,
+            restoreState : restoreState,
+            saveState : saveState,
             getCanvasSize : getCanvasSize,
             getPlotSize : getPlotSize,
             isHighlighted : isHighlighted
