@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -38,6 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
 
     private static final String JAR = "jar";
@@ -55,16 +56,15 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
 
         setResourceResolvers(Arrays.asList(new PathResourceResolver() {
             @Override
-            @SneakyThrows
-            protected Resource getResource(String resource, Resource location) {
+
+            protected Resource getResource(String resource, Resource location) throws IOException {
                 if (resourcesCache.containsKey(resource)) {
                     return resourcesCache.get(resource);
                 }
 
-                Resource relative = location.createRelative(resource);
-                String path = relative.getURI().toString();
+                String path = tryGetPath(resource, location);
 
-                if (path.startsWith(PREFIX) && path.contains("*." + JAR)) {
+                if (path != null && path.startsWith(PREFIX) && path.contains("*." + JAR)) {
                     String[] split = path.split("\\*\\." + JAR);
                     String jarFolder = split[0].substring(PREFIX.length());
                     String fileInJar = split[1];
@@ -81,15 +81,35 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
                     }
                 }
 
-                return super.getResource(resource, location);
+                Resource result = super.getResource(resource, location);
+                if (result != null) {
+                    resourcesCache.put(resource, result);
+                }
+                return result;
             }
 
-            private Resource getResource(String resourcePath, String fileInJar, File jar) throws IOException {
-                URL url = new URL(PREFIX + jar.getPath().replace('\\', '/') + fileInJar);
-                FileUrlResource resource = new FileUrlResource(url);
-                return super.getResource(resourcePath, resource);
+            private Resource getResource(String resourcePath, String fileInJar, File jar) {
+                try {
+                    URL url = new URL(PREFIX + jar.getPath().replace('\\', '/') + fileInJar);
+                    FileUrlResource resource = new FileUrlResource(url);
+                    return super.getResource(resourcePath, resource);
+                } catch (Exception e) {
+                    log.debug(String.format("File not found in jar: '%s' '%s' '%s'",
+                            resourcePath, fileInJar, jar.toString()), e);
+                    return null;
+                }
+
             }
         }));
+    }
+
+    private String tryGetPath(String resource, Resource location) {
+        try {
+            Resource relative = location.createRelative(resource);
+            return relative.getURI().toString();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     private List<File> getJars(String jarFolder, String resource) {
