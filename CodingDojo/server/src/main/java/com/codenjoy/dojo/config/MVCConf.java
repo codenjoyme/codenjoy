@@ -22,7 +22,6 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
-import static com.codenjoy.dojo.services.JarResourceHttpRequestHandler.*;
 import com.codenjoy.dojo.services.JarResourceHttpRequestHandler;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
@@ -35,6 +34,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
@@ -42,6 +42,9 @@ import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import static com.codenjoy.dojo.services.JarResourceHttpRequestHandler.PREFIX;
 
 /**
  * @author Igor Petrov
@@ -82,6 +85,9 @@ public class MVCConf implements WebMvcConfigurer {
     @Bean
     public ResourceHttpRequestHandler resourceHttpRequestHandler() {
         return new JarResourceHttpRequestHandler(
+                CacheControl.maxAge(cachePeriod, TimeUnit.SECONDS)
+                        .noTransform()
+                        .mustRevalidate(),
                 "/resources/",
                 "classpath:/resources/",
                 "file:" + pluginsStatic,
