@@ -151,6 +151,11 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         }
 
         @Override
+        public boolean isAlive() {
+            return true;
+        }
+
+        @Override
         public void act(int... p) {
 
         }

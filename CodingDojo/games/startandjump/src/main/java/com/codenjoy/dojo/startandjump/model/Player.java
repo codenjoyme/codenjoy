@@ -37,6 +37,14 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     @Override
+    public void newHero(Field field) {
+        super.newHero(field);
+
+        // TODO чисто в тестах надо поправить в районе game.newGame и убрать отсюда этот метод
+        hero.manual(false);
+    }
+
+    @Override
     public Hero createHero(Point pt) {
         return new Hero(pt(0, 3));
     }

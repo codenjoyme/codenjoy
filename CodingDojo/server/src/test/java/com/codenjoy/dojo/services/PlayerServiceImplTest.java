@@ -285,6 +285,11 @@ public class PlayerServiceImplTest {
         }
 
         @Override
+        public boolean isAlive() {
+            return true;
+        }
+
+        @Override
         public void tick() {
             // do nothing
         }
