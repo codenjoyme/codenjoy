@@ -44,8 +44,11 @@ public class MVCConf implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
                 .addResourceHandler("/resources/**")
-                .addResourceLocations("/resources/", "classpath:/resources/")
-                .setCachePeriod(cachePeriod);
+                .addResourceLocations("/resources/", "classpath:/resources/");
+                // TODO проверить
+//                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.HOURS)
+//                         .noTransform()
+//                         .mustRevalidate());
     }
 
     @Bean

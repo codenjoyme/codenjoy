@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
@@ -51,9 +52,9 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
         return () -> new ConcurrentHashMap<>();
     }
 
-    public JarResourceHttpRequestHandler(String... locations) {
+    public JarResourceHttpRequestHandler(CacheControl cacheControl, String... locations) {
         setLocationValues(Arrays.asList(locations));
-
+        setCacheControl(cacheControl);
         setResourceResolvers(Arrays.asList(new PathResourceResolver() {
             @Override
 
