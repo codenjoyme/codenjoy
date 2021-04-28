@@ -29,8 +29,14 @@ import com.codenjoy.dojo.services.dao.Registration;
 import io.grpc.stub.StreamObserver;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Component
 public class UpdateHandler {
@@ -40,41 +46,76 @@ public class UpdateHandler {
 
     private final Map<String, StreamObserver<LeaderboardResponse>> streamObservers;
 
+    private final ExecutorService executorService;
+    private final BlockingQueue<Participant> participants;
+
     public UpdateHandler(GameSaver gameSaver, Registration registration) {
         this.gameSaver = gameSaver;
         this.registration = registration;
         this.streamObservers = new HashMap<>();
+
+        this.executorService = Executors.newSingleThreadExecutor();
+        this.participants = new LinkedBlockingQueue<>(10);
     }
 
-    public void addObserver(String roomName, StreamObserver<LeaderboardResponse> observer) {
-        this.streamObservers.put(roomName, observer);
+    public void addObserver(String contestId, StreamObserver<LeaderboardResponse> observer) {
+        this.streamObservers.put(contestId, observer);
     }
 
-    public StreamObserver<LeaderboardResponse> removeObserver(String roomName) {
-        return this.streamObservers.remove(roomName);
+    public StreamObserver<LeaderboardResponse> removeObserver(String contestId) {
+        return this.streamObservers.remove(contestId);
     }
 
     public void sendUpdate(String username, long score) {
-        LeaderboardResponse response = buildResponse(username, score);
+        Participant participant = buildParticipant(username, score);
+        try {
+            this.participants.put(participant);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
 
-        this.streamObservers.forEach((roomName, observer) -> {
-            if (response.getContestId().equals(roomName)) {
-                observer.onNext(response);
+        executorService.submit(() -> {
+            try {
+                Map<String, LeaderboardResponse.Builder> responseBuilders = drainQueue();
+                responseBuilders.values().forEach(this::buildResponseAndSend);
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
             }
         });
     }
 
-    private LeaderboardResponse buildResponse(String username, long score) {
+    private Participant buildParticipant(String username, long score) {
         String id = registration.getIdByGitHubUsername(username);
         String name = registration.getNameById(id);
-
-        Participant participant = Participant.newBuilder()
+        return Participant.newBuilder()
                 .setId(id)
                 .setName(name)
                 .setScore(score)
                 .build();
-        return LeaderboardResponse.newBuilder()
-                .setContestId(gameSaver.getRoomNameByPlayerId(id))
-                .addParticipant(participant).build();
+    }
+
+    private Map<String, LeaderboardResponse.Builder> drainQueue() throws InterruptedException {
+        List<Participant> participantList = new ArrayList<>();
+        participantList.add(participants.take());
+        participants.drainTo(participantList);
+
+        Map<String, LeaderboardResponse.Builder> responses = new HashMap<>();
+        for (Participant participant : participantList) {
+            String contestId = gameSaver.getRoomNameByPlayerId(participant.getId());
+            if (responses.containsKey(contestId)) {
+                responses.get(contestId).addParticipant(participant);
+            } else {
+                responses.put(contestId, LeaderboardResponse.newBuilder().setContestId(contestId).addParticipant(participant));
+            }
+        }
+        return responses;
+    }
+
+    private void buildResponseAndSend(LeaderboardResponse.Builder response) {
+        this.streamObservers.forEach((contestId, observer) -> {
+            if (contestId.equals(response.getContestId())) {
+                observer.onNext(response.build());
+            }
+        });
     }
 }
