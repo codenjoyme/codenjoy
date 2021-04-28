@@ -148,8 +148,8 @@ public class AdminController {
     public String reloadAllAI(HttpServletRequest request) {
         String room = getGameRoom(request);
 
-        playerService.getAllInRoom(room)
-                .stream().filter(not(Player::hasAi))
+        playerService.getAllInRoom(room).stream()
+                .filter(not(Player::hasAi))
                 .map(Player::getId)
                 .forEach(playerService::reloadAI);
 
