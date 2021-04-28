@@ -57,9 +57,17 @@ setup.setupSprites = function() {
     if (!setup.gameMode) {
         // check KEYS constants in register.js
         setup.gameMode = localStorage.getItem(STORAGE_GAME_TYPE);
+
+        // TODO почему-то сторится в сторадж строчка "undefined"
+        if (setup.gameMode == 'undefined') {
+            localStorage.removeItem(STORAGE_GAME_TYPE);
+            setup.gameMode = null;
+        }
     }
 
-    if (!setup.gameMode) { // TODO это тут надо потому что join на main page и форма регистрации иногда отпускает без указания мода
+    // TODO это тут надо потому что join на main page и
+    //      форма регистрации иногда отпускает без указания мода
+    if (!setup.gameMode) {
         setup.gameMode = MODE_JS;
     }
 
