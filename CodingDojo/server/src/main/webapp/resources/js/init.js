@@ -34,13 +34,27 @@ setup.enableAdvertisement = false;
 setup.showBody = true;
 setup.sprites = null;
 setup.heroInfo = null;
+/**
+ * На канве будут прорисовываться только измененные
+ * (между двумя тиками) спрайты, что сильно улучшит
+ * производительность отрисовки борды на канве.
+ * Особенно это заметно когда рисуется большое количество
+ * (больше 30 штук) больших по размеру (от 50x50) борд.
+ */
+setup.isDrawOnlyChanges = true;
+/**
+ * true - если спрайты будут рисоваться по типам
+ * в порядке, указанном в Elements. Иначе спрайты
+ * будут прорисовываться по координатам, независимо
+ * от их типа (слева направо, сверху вниз)
+ */
 setup.isDrawByOrder = false;
 setup.canvasCursor = 'auto';
 setup.loadBoardData = true;
 setup.drawCanvases = true;
 setup.enableChat = true;
 setup.setupSprites = function() {
-    // override this method if you want to customize srites before draw
+    // override this method if you want to customize sprites before draw
 }
 
 setup.debug = false;

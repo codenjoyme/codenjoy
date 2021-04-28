@@ -38,7 +38,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
     loadCanvasesData(alphabet, spriteElements, onLoad);
     var reloading = false;
     var readableNames = {};
-    var previousBoard = null;
+    var previousTickData = null;
 
     function toName(id) {
         return readableNames[id];
@@ -185,22 +185,29 @@ function initCanvases(contextPath, players, allPlayersScreen,
             return playerData.board;
         }
 
+        var getPrevBoard = function() {
+            return playerData.prevBoard;
+        }
+
+        var getLayers = function(board) {
+            return (!board.layers) ? [board] : board.layers;
+        }
+
         var getHeroesData = function() {
             return playerData.coordinates;
         }
 
-        var drawAllLayers = function(layers, previous, onDrawItem){
+        var drawAllLayers = function(layers, prevLayers, onDrawItem) {
             var isDrawByOrder = setup.isDrawByOrder;
 
-            var changedChar = function(charIndex) {
-                if (!previous) {
+            var isChanged = function(ch) {
+                if (!prevLayers) {
                     return true;
                 }
-                for (var layerIndex = 0; layerIndex < layers.length; layerIndex++) {
-                    var color = layers[layerIndex][charIndex];
-                    var previousColor = previous[layerIndex][charIndex];
-
-                    if (color != previousColor) {
+                for (var layer = 0; layer < layers.length; layer++) {
+                    var color = layers[layer][ch];
+                    var prevColor = prevLayers[layer][ch];
+                    if (color != prevColor) {
                         return true;
                     }
                 }
@@ -210,15 +217,14 @@ function initCanvases(contextPath, players, allPlayersScreen,
             var drawChar = function(plotIndex) {
                 var x = 0;
                 var y = boardSize - 1;
-                for (var charIndex = 0; charIndex < layers[0].length; charIndex++) {
-                    if (changedChar(charIndex)) {
-                        for (var layerIndex = 0; layerIndex < layers.length; layerIndex++) {
-                            var layer = layers[layerIndex];
-                            var color = layer[charIndex];
+                for (var ch = 0; ch < layers[0].length; ch++) {
+                    if (isChanged(ch)) {
+                        for (var layer = 0; layer < layers.length; layer++) {
+                            var color = layers[layer][ch];
                             if (!isDrawByOrder || plotIndex == color) {
                                 canvas.drawPlot(decode(color), x, y);
                                 if (!!onDrawItem) {
-                                    onDrawItem(layers, layerIndex, charIndex, x, y);
+                                    onDrawItem(layers, layer, ch, x, y);
                                 }
                             }
                         }
@@ -255,26 +261,24 @@ function initCanvases(contextPath, players, allPlayersScreen,
             drawBackground('fog');
         }
 
-        var after = function() {
-            previousBoard = getBoard();
-        }
-
         var clear = function() {
             canvas.clear();
         }
 
         var drawLayers = function(onDrawItem) {
-            var drawOnlyChanges = true;
-            var board = getBoard();
-            var toDraw = (!board.layers) ? [board] : board.layers;
-            var previousToDraw = (!drawOnlyChanges || !previousBoard)
-                                        ? null
-                                        : (!previousBoard.layers)
-                                                ? [previousBoard]
-                                                : previousBoard.layers;
+            var isDrawOnlyChanges = setup.isDrawOnlyChanges;
+
+            var layers = getLayers(getBoard());
+
+            var prevBoard = getPrevBoard();
+            var prevLayers = null;
+            if (isDrawOnlyChanges && !!prevBoard) {
+                prevLayers = getLayers(prevBoard);
+            }
+
             try {
                 canvas.restoreState();
-                drawAllLayers(toDraw, previousToDraw, onDrawItem);
+                drawAllLayers(layers, prevLayers, onDrawItem);
                 canvas.saveState();
             } catch (err) {
                 console.log(err);
@@ -361,7 +365,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
             drawLayers : drawLayers,
             drawPlayerNames : drawPlayerNames,
             drawFog : drawFog,
-            after : after,
             canvas : canvas,
             playerId : playerId,
             playerData : playerData,
@@ -388,7 +391,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
         drawer.drawLayers();
         drawer.drawPlayerNames(defaultFont(), null);
         drawer.drawFog();
-        drawer.after();
     }
 
     drawBoard = (!!drawBoard) ? drawBoard : defaultDrawBoard;
@@ -642,6 +644,11 @@ function initCanvases(contextPath, players, allPlayersScreen,
             return;
         }
 
+        for (var player in data) {
+            data[player].prevBoard = (!!previousTickData && !!previousTickData[player])
+                                            ? previousTickData[player].board : null;
+        }
+
         if (allPlayersScreen) {
             for (var player in data) {
                 drawUserCanvas(player, data[player], true);
@@ -652,6 +659,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 drawUserCanvas(player, data[player], false);
             }
         }
+        previousTickData = data;
     }
 
     Number.prototype.padLeft = function(base,chr){
