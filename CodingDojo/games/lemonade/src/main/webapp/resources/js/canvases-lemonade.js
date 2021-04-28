@@ -188,6 +188,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
                 font: "24px monospace",
                 fillStyle: "#AA0",
                 textAlign: "left",
+                // TODO 5f2 эта штука жутко тормозит во многих браузерах (не хром)
                 shadowColor: "#222",
                 shadowOffsetX: 0,
                 shadowOffsetY: 0,

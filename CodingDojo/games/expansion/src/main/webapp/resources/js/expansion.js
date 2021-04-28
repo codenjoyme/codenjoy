@@ -205,6 +205,7 @@ setup.drawBoard = function(drawer) {
     fonts.forces.fillStyles[BLUE] = "#306177";
     fonts.forces.fillStyles[YELLOW] = "#7f6c1b";
     fonts.forces.fillStyles[WHITE] = "#FFFFFF";
+    // TODO 5f2 эта штука жутко тормозит во многих браузерах (не хром)
     fonts.forces.shadowStyles = {};
     fonts.forces.shadowStyles[GREEN] = "#64d89b";
     fonts.forces.shadowStyles[RED] = "#d85e5b";
