@@ -32,6 +32,8 @@ import java.util.Arrays;
 
 public class AISolver implements Solver<Board> {
 
+    private static final int MAX_DEEP = 6;
+
     private Step[] path = new Step[102400];
     private int length = 0;
     private int deepIndex = 0;
@@ -39,7 +41,11 @@ public class AISolver implements Solver<Board> {
     private char[][] fieldPrev;
 
     private Dice dice;
-    private int maxDeep = 6;
+    private int maxDeep;
+
+    public AISolver(Dice dice) {
+        this(dice, MAX_DEEP);
+    }
 
     public AISolver(Dice dice, int maxDeep) {
         this.dice = dice;

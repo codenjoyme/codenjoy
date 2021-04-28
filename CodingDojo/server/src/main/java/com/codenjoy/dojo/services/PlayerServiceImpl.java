@@ -275,6 +275,7 @@ public class PlayerServiceImpl implements PlayerService {
                         .in(ai)
                         .newInstance(gameType.getDice());
             } catch (Exception e) {
+                log.warn("Cant find constructor with Dice parameter for: " + ai.toString());
                 solver = Reflection.constructor()
                         .withParameterTypes()
                         .in(ai)
@@ -288,6 +289,7 @@ public class PlayerServiceImpl implements PlayerService {
             WebSocketRunner runner = runAI(id, code, solver, board);
             return runner;
         } catch (Exception e) {
+            log.error("Cant find constructor with/without Dice parameter for: " + ai.toString(), e);
             return null;
         }
     }
