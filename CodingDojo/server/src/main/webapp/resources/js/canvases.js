@@ -341,7 +341,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             font: "15px 'Verdana, sans-serif'",
             fillStyle: '#0FF',
             textAlign: 'left',
-            // TODO придумать как-то фон, чтобы шрифт читался
+            // TODO 5f2 придумать как-то фон, чтобы шрифт читался
             // shadowColor: '#000',
             // shadowOffsetX: 0,
             // shadowOffsetY: 0,
