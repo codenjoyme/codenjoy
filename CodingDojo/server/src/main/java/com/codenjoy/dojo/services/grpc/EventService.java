@@ -26,6 +26,7 @@ import com.codenjoy.dojo.Event;
 import com.codenjoy.dojo.EventServiceGrpc;
 import com.codenjoy.dojo.EventsRequest;
 import com.codenjoy.dojo.EventsResponse;
+import com.codenjoy.dojo.config.grpc.EventsConfig;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,12 @@ import java.util.Map;
 public class EventService extends EventServiceGrpc.EventServiceImplBase {
 
     private final PlayerGameSaver playerGameSaver;
+    private final EventsConfig eventsConfig;
 
     @Autowired
-    public EventService(PlayerGameSaver playerGameSaver) {
+    public EventService(PlayerGameSaver playerGameSaver, EventsConfig eventsConfig) {
         this.playerGameSaver = playerGameSaver;
+        this.eventsConfig = eventsConfig;
     }
 
     @Override
@@ -50,9 +53,11 @@ public class EventService extends EventServiceGrpc.EventServiceImplBase {
         EventsResponse.Builder responseBuilder = EventsResponse.newBuilder();
 
         events.forEach((key, value) -> {
+            String url = eventsConfig.getProperty(key);
             Event event = Event.newBuilder()
                     .setRoomName(key)
                     .setGameName(value)
+                    .setGameServerUrl(url)
                     .build();
             responseBuilder.addEvent(event);
         });
