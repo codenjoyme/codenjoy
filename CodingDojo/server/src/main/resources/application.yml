@@ -100,3 +100,6 @@ grpc:
     port: 9090
   executor:
     pool.size: 5
+events:
+  eventsServers:
+    kata: localhost:9091
