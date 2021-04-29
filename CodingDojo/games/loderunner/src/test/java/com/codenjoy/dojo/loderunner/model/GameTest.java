@@ -4185,6 +4185,8 @@ public class GameTest {
                 "☼###Z##☼" +
                 "☼☼☼☼☼☼☼☼");
 
+        events.verifyAllEvents("[KILL_HERO, KILL_ENEMY]");
+
         // when
         dice(1, 2,
             6, 2);
