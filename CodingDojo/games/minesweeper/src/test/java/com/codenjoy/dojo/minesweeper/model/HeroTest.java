@@ -45,7 +45,7 @@ public class HeroTest {
     private static final int BOARD_SIZE = 5;
     private static final int CHARGE_COUNT = 8;
     private Field board;
-    private Sapper sapper;
+    private Hero sapper;
     private List<Mine> mines;
     private final MinesGenerator NO_MINES = new MockGenerator();
     private EventListener listener;

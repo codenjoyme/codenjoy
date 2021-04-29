@@ -34,14 +34,18 @@ import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.services.semifinal.SemifinalStatus;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.semifinal.SemifinalService;
+import com.codenjoy.dojo.services.whatsnext.WhatsNextService;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import lombok.extern.slf4j.Slf4j;
@@ -52,17 +56,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.codenjoy.dojo.services.PlayerGames.exclude;
 import static com.codenjoy.dojo.services.PlayerGames.withRoom;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 @Component("playerService")
 @Slf4j
@@ -93,6 +97,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected SemifinalService semifinal;
     @Autowired protected SimpleProfiler profiler;
     @Autowired protected TimeService time;
+    @Autowired protected WhatsNextService whatsNext;
 
     @Value("${game.ai}")
     protected boolean isAiNeeded;
@@ -159,6 +164,20 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             return semifinal.getSemifinalStatus(room);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override // TODO test me
+    public String whatsNext(String room, String board, String allActions) {
+        lock.writeLock().lock();
+        try {
+            if (!roomService.exists(room)) {
+                return null;
+            }
+            GameType gameType = roomService.gameType(room);
+            return whatsNext.calculate(gameType, board, allActions);
         } finally {
             lock.writeLock().unlock();
         }

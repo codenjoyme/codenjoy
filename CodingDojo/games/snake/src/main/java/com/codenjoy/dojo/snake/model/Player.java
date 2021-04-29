@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snake.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -32,32 +33,20 @@ import com.codenjoy.dojo.snake.services.GameSettings;
 
 public class Player extends GamePlayer<Hero, Field> {
 
-    private Hero snake;
-
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
     @Override
-    public Hero getHero() {
-        return snake;
-    }
-
-    @Override
     public HeroData getHeroData() {
-        return new HeroDataImpl(snake.getHead(),
+        return new HeroDataImpl(hero.getHead(),
                 MultiplayerType.SINGLE.isSingle());
     }
 
     @Override
-    public void newHero(Field field) {
-        snake = field.createSnake();
-        snake.init(field);
-        snake.init(this);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return snake != null && snake.isAlive();
+    public Hero createHero(Point pt) {
+        Hero hero = field.createSnake();
+        hero.init(this);
+        return hero;
     }
 }

@@ -4155,6 +4155,8 @@ public class GameTest {
 
         game.tick();
 
+        events.verifyNoEvents();
+
         assertEquals(0, hero(0).scores());
         assertEquals(0, hero(1).scores());
         assertEquals(true, hero(0).isAlive());
@@ -4170,6 +4172,8 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼");
 
         game.tick();
+
+        events.verifyAllEvents("[KILL_HERO, KILL_ENEMY]");
 
         assertEquals(1, hero(0).scores());
         assertEquals(0, hero(1).scores());

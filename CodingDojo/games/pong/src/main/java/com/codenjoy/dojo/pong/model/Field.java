@@ -31,5 +31,4 @@ public interface Field extends GameField<Player> {
 
     Barrier getBarrier(Point pt);
 
-    Point getNewHeroPosition();
 }

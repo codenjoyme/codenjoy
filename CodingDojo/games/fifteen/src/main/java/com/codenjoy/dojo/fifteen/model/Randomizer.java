@@ -10,12 +10,12 @@ package com.codenjoy.dojo.fifteen.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -30,19 +30,21 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.fifteen.model.Elements.HERO;
+
 public class Randomizer {
 
     private static final String TEMPLATE =
-                    "******" +
-                    "*%s*" +
-                    "*%s*" +
-                    "*%s*" +
-                    "*%s*" +
-                    "******";
+            "******" +
+            "*%s*" +
+            "*%s*" +
+            "*%s*" +
+            "*%s*" +
+            "******";
 
     private Dice dice;
 
-    public String getRamdomMap(Dice dice) {
+    public String getRandomMap(Dice dice) {
         this.dice = dice;
 
         String randomElements = getRandomElements();
@@ -69,29 +71,29 @@ public class Randomizer {
     private List<Elements> getRandomList() {
         List<Elements> result = new LinkedList<>();
         result.addAll(Arrays.asList(DigitHandler.DIGITS));
-        result.add(Elements.HERO);
+        result.add(HERO);
 
         do {
-            shufleList(result);
-        } while (!isSolvability(result));
+            shuffle(result);
+        } while (!canBeSolved(result));
 
         return result;
     }
 
-    private void shufleList(List<Elements> result) {
-        for (int i=result.size(); i > 1; i--)
-            Collections.swap(result, i-1, dice.next(i));
+    private void shuffle(List<Elements> result) {
+        for (int i = result.size(); i > 1; i--)
+            Collections.swap(result, i - 1, dice.next(i));
     }
 
-    public boolean isSolvability(List<Elements> result) {
+    public boolean canBeSolved(List<Elements> result) {
         int sum = 0;
         for (int i = 0; i < result.size(); i++) {
-            if (result.get(i) == Elements.HERO) {
+            if (result.get(i) == HERO) {
                 sum += 1 + i / (int) Math.sqrt(result.size());
                 continue;
             }
             for (int j = i + 1; j < result.size(); j++) {
-                if (result.get(j) == Elements.HERO) {
+                if (result.get(j) == HERO) {
                     continue;
                 }
                 if (result.get(j).ch() < result.get(i).ch()) {

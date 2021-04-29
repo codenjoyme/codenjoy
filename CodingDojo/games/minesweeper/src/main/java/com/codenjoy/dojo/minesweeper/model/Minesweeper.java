@@ -31,7 +31,6 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 
-import javax.swing.text.html.parser.Element;
 import java.util.*;
 
 import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.*;
@@ -172,7 +171,7 @@ public class Minesweeper implements Field {
     }
 
     @Override
-    public Sapper sapper() {
+    public Hero sapper() {
         return player.getHero();
     }
 

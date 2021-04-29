@@ -70,6 +70,7 @@ public class LevelManagerTest {
         Field field = mock(Field.class);
         when(field.getLevel(anyInt()))
                 .thenAnswer(inv -> manager.getLevel(inv.getArgument(0)));
+        when(field.freeRandom(any())).thenReturn(null);
         int levelNum = 0;
         while (true) {
             player.newHero(field);

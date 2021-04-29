@@ -189,4 +189,17 @@ public class RestBoardController {
         boolean active = playerGames.getPlayersByGame(game).size() > 0;
         return Collections.singletonMap("active", active);
     }
+
+    @GetMapping("/room/{room}/whats-next/{board}/{actions}")
+    public String whatsNext(@PathVariable("room") String room,
+                            @PathVariable("board") String board,
+                            @PathVariable("actions") String actions)
+    {
+        validator.checkRoom(room, CANT_BE_NULL);
+        validator.checkNotNull("Board", board);
+        validator.checkNotNull("Actions", actions);
+        validator.checkNotNull("Board", board);
+
+        return playerService.whatsNext(room, board, actions);
+    }
 }

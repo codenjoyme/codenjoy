@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.dao.Chat;
+import com.codenjoy.dojo.services.mocks.FirstGameType;
+import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.room.RoomService;
 import org.junit.Before;
 import org.junit.Test;

@@ -25,28 +25,17 @@ package com.codenjoy.dojo.quadro.model;
 
 import com.codenjoy.dojo.quadro.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
     @Override
-    public void newHero(Field field) {
-        hero = new Hero(field.getFreeColor());
-        hero.init(field);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
+    public Hero createHero(Point pt) {
+        return new Hero(field.getFreeColor());
     }
 }

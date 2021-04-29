@@ -86,7 +86,7 @@ public class Quake2D implements Field {
             counterOfAbility--;
         }
         if (abilities.isEmpty() && counterOfAbility == 0){
-            Optional<Point> pos = freeRandom();
+            Optional<Point> pos = freeRandom(null);
             if (pos.isPresent()) {
                 abilities.add(new Ability(pos.get(), dice));
             }
@@ -160,7 +160,7 @@ public class Quake2D implements Field {
     }
 
     @Override
-    public Optional<Point> freeRandom() {
+    public Optional<Point> freeRandom(Player player) {
         return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
     }
 

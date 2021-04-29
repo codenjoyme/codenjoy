@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.services;
+package com.codenjoy.dojo.sokoban.model;
 
 /*-
  * #%L
@@ -24,19 +24,18 @@ package com.codenjoy.dojo.sokoban.services;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.sokoban.model.Field;
 import com.codenjoy.dojo.sokoban.model.items.Hero;
+import com.codenjoy.dojo.sokoban.services.Events;
+import com.codenjoy.dojo.sokoban.services.GameSettings;
 
 import java.util.logging.Logger;
 
 import static java.util.logging.Logger.getLogger;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    private static Logger log = getLogger(Player.class.getName());
-
-    public Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
@@ -53,19 +52,8 @@ public class Player extends GamePlayer<Hero, Field> {
         super.event(event);
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
     @Override
-    public void newHero(Field field) {
-        hero = new Hero(field.getFreeRandom());
-        hero.init(field);
+    public Hero createHero(Point pt) {
+        return new Hero(pt);
     }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
-
 }

@@ -71,19 +71,16 @@ public class GameTest {
 
     private void given(String board) {
         LevelImpl level = new LevelImpl(board);
-
         game = new SnakeBoard(level, dice, settings);
-
-        Hero hero = level.getHero(game);
+        hero = level.getHero(game);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
+        player.setHero(hero);
         game.newGame(player);
-        if (hero != null) {
-            player.setHero(hero);
-            hero.init(game);
+        if (hero == null) {
+            hero = game.getHeroes().get(0);
         }
-        this.hero = game.getHeroes().get(0);
-        this.hero.setActive(true);
+        hero.setActive(true);
     }
 
     private void assertE(String expected) {

@@ -32,7 +32,7 @@ import java.util.List;
 
 public class InformationCollector implements EventListener, ChangeLevelListener, Information {
 
-    private Deque<String> pool = new LinkedList<>();
+    protected Deque<String> pool = new LinkedList<>();
     private PlayerScores playerScores;
     private Collector collector = new Collector();
     private static final String LEVEL = "Level ";
@@ -93,6 +93,10 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
             return null;
         }
         return result.toString().replace("[", "").replace("]", "");
+    }
+
+    public Deque<String> all() {
+        return pool;
     }
 
     private String infoAboutLevelChangedMustBeLast(String message) {

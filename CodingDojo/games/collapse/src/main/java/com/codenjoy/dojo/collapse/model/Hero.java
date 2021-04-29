@@ -36,6 +36,11 @@ public class Hero extends PlayerHero<Field> {
     }
 
     @Override
+    public boolean isAlive() {
+        return true; // "вечно молодой - вечно пьяный" (с)
+    }
+
+    @Override
     public void down() {
         direction = Direction.DOWN;
     }

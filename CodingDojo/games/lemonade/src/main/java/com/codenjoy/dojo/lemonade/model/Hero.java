@@ -119,6 +119,7 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
         if (!alive) return;
     }
 
+    @Override
     public boolean isAlive() {
         // if return false, server will restart game - avoiding this behavior
         return true;

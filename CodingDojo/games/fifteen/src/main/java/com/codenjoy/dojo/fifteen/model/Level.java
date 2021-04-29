@@ -28,7 +28,7 @@ public interface Level {
 
     int getSize();
 
-    List<Hero> getHero();
+    Hero getHero();
 
     List<Digit> getDigits();
 

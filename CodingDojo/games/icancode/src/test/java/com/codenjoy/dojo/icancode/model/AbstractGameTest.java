@@ -67,7 +67,6 @@ public abstract class AbstractGameTest {
     protected Dice dice;
     private EventListener listener;
     protected Player player;
-    private Player otherPlayer;
     protected GameSettings settings;
     protected EventsListenersAssert events;
 

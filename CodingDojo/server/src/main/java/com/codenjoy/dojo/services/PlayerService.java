@@ -63,4 +63,6 @@ public interface PlayerService extends Tickable {
     void reloadAI(String id);
 
     SemifinalStatus getSemifinalStatus(String room);
+
+    String whatsNext(String room, String board, String actions);
 }

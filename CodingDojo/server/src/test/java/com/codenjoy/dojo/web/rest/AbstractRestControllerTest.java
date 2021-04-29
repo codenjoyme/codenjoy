@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.client.CodenjoyContext;
+import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
@@ -67,10 +68,14 @@ import static org.mockito.Mockito.reset;
 public abstract class AbstractRestControllerTest {
 
     public static GameServiceImpl gameService() {
+        return gameService(FirstGameType.class, SecondGameType.class);
+    }
+
+    public static GameServiceImpl gameService(Class<? extends GameType>... games) {
         return new GameServiceImpl(){
             @Override
             public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                return Arrays.asList(FirstGameType.class, SecondGameType.class);
+                return Arrays.asList(games);
             }
         };
     }
@@ -127,11 +132,15 @@ public abstract class AbstractRestControllerTest {
     @Autowired
     protected RoomService roomService;
 
+    @Autowired
+    protected GameServiceImpl gameService;
+
     @Before
     public void setUp() {
         CodenjoyContext.setContext("codenjoy-contest");
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
 
+        gameService.init();
         debugService.resume();
     }
 

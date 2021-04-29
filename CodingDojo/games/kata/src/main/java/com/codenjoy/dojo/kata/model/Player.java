@@ -28,6 +28,7 @@ import com.codenjoy.dojo.kata.services.GameSettings;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,6 @@ public class Player extends GamePlayer<Hero, Field> {
 
     private LevelsPool level;
     private List<QuestionAnswers> history;
-    Hero hero;
     private Timer timer = new Timer();
 
     public Player(EventListener listener, LevelsPool level, GameSettings settings) {
@@ -78,18 +78,8 @@ public class Player extends GamePlayer<Hero, Field> {
         }
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void newHero(Field field) {
-        hero = new Hero();
-        hero.init(field);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
+    public Hero createHero(Point pt) {
+        return new Hero();
     }
 
     public List<String> getQuestions() {

@@ -25,7 +25,6 @@ package com.codenjoy.dojo.sokoban.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.sokoban.services.Player;
 
 public interface Field extends GameField<Player> {
 
@@ -40,8 +39,6 @@ public interface Field extends GameField<Player> {
     void setBox(Point pt);
 
     boolean isMark(Point pt);
-
-    Point getFreeRandom();
 
     boolean isFree(Point pt);
 

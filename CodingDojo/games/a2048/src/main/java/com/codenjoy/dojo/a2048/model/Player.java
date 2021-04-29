@@ -24,29 +24,18 @@ package com.codenjoy.dojo.a2048.model;
 
 import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
     @Override
-    public Hero getHero() {
-        return hero;
+    public Hero createHero(Point pt) {
+        return new Hero();
     }
 
-    @Override
-    public void newHero(Field field) {
-        hero = new Hero();
-        hero.init(field);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
 }

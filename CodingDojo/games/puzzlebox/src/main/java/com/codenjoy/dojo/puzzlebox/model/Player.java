@@ -25,31 +25,17 @@ package com.codenjoy.dojo.puzzlebox.model;
 
 import com.codenjoy.dojo.puzzlebox.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
     @Override
-    public Hero getHero() {
-        return hero;
+    public Hero createHero(Point pt) {
+        return new Hero(this);
     }
-
-    @Override
-    public void newHero(Field field) {
-        hero = new Hero();
-        hero.init(field);
-        hero.init(this);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return true;
-    }
-
 }

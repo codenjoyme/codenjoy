@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.sokoban.model.Field;
-import com.codenjoy.dojo.sokoban.services.Player;
+import com.codenjoy.dojo.sokoban.model.Player;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
 
@@ -105,6 +105,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         direction = null;
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }

@@ -23,11 +23,16 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Любая игра должна реализовать этот интерфейс чтобы с ней мог работать фреймворк
@@ -64,4 +69,15 @@ public interface GameField<P extends GamePlayer> extends Tickable {
     int hashCode();
 
     SettingsReader settings();
+
+    default List<P> load(String board, Supplier<P> createPlayer) {
+        return Arrays.asList();
+    }
+
+    default Optional<Point> freeRandom(P player) {
+        // если тут вернуть null то GamePlayer.newHero
+        // не будет пытаться искать координату для героя
+        // актуально для игр, герои которых не бегают по полю
+        return null;
+    }
 }

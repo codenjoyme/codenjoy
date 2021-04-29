@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -128,16 +129,16 @@ public class Pong implements Field {
     }
 
     @Override
-    public Point getNewHeroPosition() {
+    public Optional<Point> freeRandom(Player player) {
         Point center = getBoardCenter();
         if (players.size() > 0 && players.get(0).getHero() != null) {
             if (players.get(0).getHero().getX() == rightBound) {
-                return pt(leftBound, center.getY());
+                return Optional.of(pt(leftBound, center.getY()));
             } else {
-                return pt(rightBound, center.getY());
+                return Optional.of(pt(rightBound, center.getY()));
             }
         }
-        return pt(rightBound, center.getY());
+        return Optional.of(pt(rightBound, center.getY()));
     }
 
     private Point getBoardCenter() {

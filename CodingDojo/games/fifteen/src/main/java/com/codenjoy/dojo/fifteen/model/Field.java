@@ -22,15 +22,14 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 public interface Field extends GameField<Player> {
 
-    boolean isBarrier(int x, int y);
+    boolean isBarrier(Point pt);
 
-    Digit getDigit(int x, int y);
+    Digit getDigit(Point pt);
 
-    boolean isFree(int x, int y);
-
-    Hero getLevelHero();
+    boolean isFree(Point pt);
 }

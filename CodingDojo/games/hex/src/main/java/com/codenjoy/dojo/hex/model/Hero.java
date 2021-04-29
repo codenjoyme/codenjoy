@@ -117,5 +117,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     public Elements getElement() {
         return element;
     }
+
+    @Override
+    public boolean isAlive() {
+        return true;
+    }
 }
 

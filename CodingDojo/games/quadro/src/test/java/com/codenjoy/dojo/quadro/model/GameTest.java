@@ -688,7 +688,7 @@ public class GameTest {
                 "         ");
 
         game.newGame(player2);
-        hero2 = player2.hero;
+        hero2 = player2.getHero();
         hero1.act(4);
         game.tick();
         hero2.act(4);

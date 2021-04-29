@@ -210,7 +210,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         } else {
             // добавляем недостающих к тем что есть
             for (int i = 0; i < added; i++) {
-                Optional<Point> pt = freeRandom();
+                Optional<Point> pt = freeRandom(null);
                 if (pt.isPresent()) {
                     list.add(creator.apply(pt.get()));
                 }
@@ -437,7 +437,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public Optional<Point> freeRandom() {
+    public Optional<Point> freeRandom(Player player) {
         return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
     }
 
@@ -536,7 +536,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     private void getGoldEvent(Player player, Events event, Class type) {
         player.event(event);
-        Optional<Point> pt = freeRandom();
+        Optional<Point> pt = freeRandom(null);
         if (pt.isPresent()) {
             leaveGold(pt.get(), type);
         }

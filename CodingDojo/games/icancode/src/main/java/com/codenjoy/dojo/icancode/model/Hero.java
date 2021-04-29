@@ -419,6 +419,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return item.getCell();
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }

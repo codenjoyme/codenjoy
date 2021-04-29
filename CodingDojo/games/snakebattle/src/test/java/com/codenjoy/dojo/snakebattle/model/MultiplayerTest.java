@@ -87,23 +87,19 @@ public class MultiplayerTest {
 
         game = new SnakeBoard(level, dice,  settings);
 
-        Hero hero = level.getHero(game);
+        hero = level.getHero(game);
         hero.setActive(true);
         heroEvents = mock(EventListener.class);
         heroPlayer = new Player(heroEvents, settings);
-        game.newGame(heroPlayer);
         heroPlayer.setHero(hero);
-        hero.init(game);
-        this.hero = game.getHeroes().get(0);
+        game.newGame(heroPlayer);
 
-        Hero enemy = level.getEnemy(game);
+        enemy = level.getEnemy(game);
         enemy.setActive(true);
         enemyEvents = mock(EventListener.class);
         enemyPlayer = new Player(enemyEvents, settings);
-        game.newGame(enemyPlayer);
         enemyPlayer.setHero(enemy);
-        enemy.init(game);
-        this.enemy = game.getHeroes().get(1);
+        game.newGame(enemyPlayer);
     }
 
     // проверяем что соперник отображается на карте

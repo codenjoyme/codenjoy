@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 
 public class Hero extends PlayerHero<Field> {
 
-    private Player player;
     private Simulator simulator;
     private Point2D.Double target;
     private Point2D.Double targetPoint1;
@@ -41,15 +40,21 @@ public class Hero extends PlayerHero<Field> {
     private double levelLeft;
     private double levelRight;
     private boolean isAlive;
+    private Player player;
 
     public Hero(Player player) {
         this.player = player;
-
         simulator = new Simulator();
         isAlive = true;
     }
 
-    public void init(Level level) {
+    @Override
+    public void init(Field field) {
+        super.init(field);
+        load(field.getLevel(player.getCurrentLevel()));
+    }
+
+    public void load(Level level) {
         simulator.reset();
         simulator.DryMass = level.DryMass;
         simulator.setRelief(level.Relief);
@@ -95,6 +100,7 @@ public class Hero extends PlayerHero<Field> {
         }
     }
 
+    @Override
     public boolean isAlive() {
         return isAlive;
     }

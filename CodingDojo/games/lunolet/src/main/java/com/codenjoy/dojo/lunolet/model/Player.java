@@ -26,6 +26,7 @@ package com.codenjoy.dojo.lunolet.model;
 import com.codenjoy.dojo.lunolet.services.Events;
 import com.codenjoy.dojo.lunolet.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 import java.awt.geom.Point2D;
@@ -35,16 +36,11 @@ import java.util.List;
 public class Player extends GamePlayer<Hero, Field> {
 
     private int currentLevel;
-    private Hero hero;
     private List<Point2D.Double> crashes;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
         crashes = new LinkedList<>();
-    }
-
-    public Hero getHero() {
-        return hero;
     }
 
     public int getCurrentLevel() {
@@ -53,11 +49,6 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public void levelUp() {
         currentLevel++;
-    }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
     }
 
     public List<Point2D.Double> getCrashes() {
@@ -73,9 +64,8 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     @Override
-    public void newHero(Field field) {
-        hero = new Hero(this);
-        hero.init(field.getLevel(currentLevel));
+    public Hero createHero(Point pt) {
+        return new Hero(this);
     }
 
     public void event(Events event) {

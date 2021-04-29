@@ -149,7 +149,7 @@ public class AbstractBoardTest {
     }
 
     @Test
-    public void shouldWork_get() {
+    public void shouldWork_oneElement_get() {
         assertEquals("[[0,0], [0,1], [0,2], [0,3], [1,0], [1,3], " +
                         "[2,0], [2,3], [3,0], [3,1], [3,2], [3,3]]",
                 board.get(Elements.ONE).toString());
@@ -159,6 +159,32 @@ public class AbstractBoardTest {
 
         assertEquals("[[1,2], [2,2]]",
                 board.get(Elements.THREE).toString());
+    }
+
+    @Test
+    public void shouldWork_severalElements_get() {
+        assertEquals("[[0,0], [0,1], [0,2], [0,3], [1,0], [1,1], [1,2], " +
+                        "[1,3], [2,0], [2,1], [2,2], [2,3], [3,0], [3,1], " +
+                        "[3,2], [3,3]]",
+                board.get(Elements.ONE, Elements.TWO, Elements.THREE).toString());
+    }
+
+    @Test
+    public void shouldWork_oneElement_getFirst() {
+        assertEquals("[0,0]",
+                board.getFirst(Elements.ONE).toString());
+
+        assertEquals("[1,1]",
+                board.getFirst(Elements.TWO).toString());
+
+        assertEquals("[1,2]",
+                board.getFirst(Elements.THREE).toString());
+    }
+
+    @Test
+    public void shouldWork_severalElements_getFirst() {
+        assertEquals("[0,0]",
+                board.getFirst(Elements.ONE, Elements.TWO, Elements.THREE).toString());
     }
 
     @Test

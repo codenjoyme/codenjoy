@@ -24,7 +24,10 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.tetris.services.Events;
 
 import java.util.List;
 
@@ -37,13 +40,37 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean drop;
     private Figure figure;
     private Levels levels;
+    private Player player;
+
+    public Hero(Player player) {
+        this.player = player;
+    }
 
     @Override
     public void init(Field field) {
+        super.init(field);
+
         levels = field.getLevels();
         glass = new GlassImpl(field.size(), field.size(),
                 () -> levels.getCurrentLevelNumber() + 1);
-        this.field = field;
+        glass.setListener(object -> {
+            player.event(object);
+
+            Events event = (Events)object;
+            GlassEventListener listener = levelsListener();
+            if (event.isLinesRemoved()) {
+                listener.linesRemoved(event.getRemovedLines());
+            } else if (event.isFiguresDropped()) {
+                listener.figureDropped(Type.getByIndex(event.getFigureIndex()));
+            } else if (event.isGlassOverflown()) {
+                listener.glassOverflown();
+            }
+        });
+    }
+
+    @Override
+    public boolean isAlive() {
+        return !levels.levelCompleted();
     }
 
     @Override
@@ -108,7 +135,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     
     @Override
     public void tick() {
-        if (levelCompleted()) {
+        if (!isAlive()) {
             return;
         }
 
@@ -145,10 +172,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         Figure figure = field.take();
         setFigure(figure);
         showCurrentFigure();
-    }
-
-    public boolean levelCompleted() {
-        return levels.levelCompleted();
     }
 
     @Override

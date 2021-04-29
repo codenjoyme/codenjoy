@@ -24,30 +24,17 @@ package com.codenjoy.dojo.pong.model;
 
 import com.codenjoy.dojo.pong.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
     @Override
-    public void newHero(Field field) {
-        hero = new Hero(field.getNewHeroPosition());
-        hero.init(field);
+    public Hero createHero(Point pt) {
+        return new Hero(pt);
     }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
-
-    @Override
-    public Hero getHero() {
-        return hero;
-    }
-
 }

@@ -229,6 +229,7 @@ public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickabl
         return field.getBaseOf(this);
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }

@@ -49,9 +49,10 @@ public class YourSolverChecker implements Solver<Board> {
         if (board.isGameOver()) return "";
 
         long delta = now() - time;
-        long delta2 = Math.abs(delta - 1000);
+        long delta2 =delta - 1000;
         Date time = Calendar.getInstance().getTime();
-        System.out.print(time.toString() + " > " + delta2);
+        System.out.print(time.toString() + " > " + (delta2 < 0 ? delta2 : "+" + delta2));
+        delta2 =  Math.abs(delta2);
         if (delta2 > 300) {
             System.out.println(" !!!!!!!!");
         } else if (delta2 > 200) {

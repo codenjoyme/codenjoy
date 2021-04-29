@@ -53,6 +53,7 @@ public class DirectionTest {
         board = mock(Field.class);
         when(board.getSize()).thenReturn(100);
         when(board.getAt(any(PointImpl.class))).thenReturn(new EmptySpace(pt(0, 0)));
+        when(board.freeRandom(any(Player.class))).thenReturn(null);
 
         snake = new Hero(50, 50);
         when(board.createSnake()).thenReturn(snake);

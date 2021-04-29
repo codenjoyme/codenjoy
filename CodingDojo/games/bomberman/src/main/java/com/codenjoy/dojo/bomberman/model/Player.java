@@ -38,30 +38,17 @@ public class Player extends RoundGamePlayer<Hero, Field> {
     }
 
     @Override
-    public Hero getHero() {
-        return hero;
-    }
-
-    @Override
     public void start(int round, Object startEvent) {
         super.start(round, startEvent);
         // hero.clearScores(); TODO test me
     }
 
-    public void initHero(Field field) {
-        if (hero != null) {
-            hero.setPlayer(null);
-            hero = null;
-        }
-        Optional<Point> pt = field.freeRandom();
-        if (pt.isEmpty()) {
-            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
-            throw new RuntimeException("Not enough space for Hero");
-        }
-        hero = settings().getHero(settings().getLevel());
-        hero.move(pt.get());
-        hero.setPlayer(this);
-        hero.init(field);
+    @Override
+    public Hero createHero(Point pt) {
+        // TODO либо везде сделать так (в чем я не уверен), либо тут сделать как везде
+        Hero hero = settings().getHero(settings().getLevel());
+        hero.move(pt);
+        return hero;
     }
 
     @Override

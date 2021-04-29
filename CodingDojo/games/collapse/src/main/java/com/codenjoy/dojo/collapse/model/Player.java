@@ -23,31 +23,19 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
-import com.codenjoy.dojo.collapse.services.Events;
 import com.codenjoy.dojo.collapse.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
-    @Override
-    public Hero getHero() {
-        return hero;
+    public Hero createHero(Point pt) {
+        return new Hero();
     }
 
-    public void newHero(Field field) {
-        hero = new Hero();
-        hero.init(field);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null;
-    }
 }

@@ -10,12 +10,12 @@ package com.codenjoy.dojo.football.model.elements;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -49,6 +49,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
+    public boolean isAlive() {
+        return true;
+    }
+
+    @Override
     public void down() {
         direction = Direction.DOWN;
     }
@@ -73,45 +78,45 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         int action = 0;
         int param1 = 0;
         //int param2 = 0;
-        if(p.length > 0) {
+        if (p.length > 0) {
             action = p[0];
         }
-        if(p.length > 1) {
+        if (p.length > 1) {
             param1 = p[1];
         }
         /*if(p.length > 1) {
             param2 = p[2];
         }*/
         //for(int action : p) {
-            
-            if(action == Actions.HIT_RIGHT.getValue()) {
-                if (ball != null) {
-                    //ball.setImpulse(COUNTER);
-                    if(param1 == 0) param1 = 1;
-                    ball.right(param1);
-                }
-            } else if(action == Actions.HIT_UP.getValue()) {
-                if (ball != null) {
-                    //ball.setImpulse(COUNTER);
-                    if(param1 == 0) param1 = 1;
-                    ball.up(param1);
-                }
-            } else if(action == Actions.HIT_LEFT.getValue()) {
-                if (ball != null) {
-                    //ball.setImpulse(COUNTER);
-                    if(param1 == 0) param1 = 1;
-                    ball.left(param1);
-                }
-            } else if(action == Actions.HIT_DOWN.getValue()) {
-                if (ball != null) {
-                    if(param1 == 0) param1 = 1;
-                    ball.down(param1);
-                }
-            } else if(action == Actions.STOP_BALL.getValue()) {
-                if (ball != null) {
-                    ball.stop();
-                }
+
+        if (action == Actions.HIT_RIGHT.getValue()) {
+            if (ball != null) {
+                //ball.setImpulse(COUNTER);
+                if (param1 == 0) param1 = 1;
+                ball.right(param1);
             }
+        } else if (action == Actions.HIT_UP.getValue()) {
+            if (ball != null) {
+                //ball.setImpulse(COUNTER);
+                if (param1 == 0) param1 = 1;
+                ball.up(param1);
+            }
+        } else if (action == Actions.HIT_LEFT.getValue()) {
+            if (ball != null) {
+                //ball.setImpulse(COUNTER);
+                if (param1 == 0) param1 = 1;
+                ball.left(param1);
+            }
+        } else if (action == Actions.HIT_DOWN.getValue()) {
+            if (ball != null) {
+                if (param1 == 0) param1 = 1;
+                ball.down(param1);
+            }
+        } else if (action == Actions.STOP_BALL.getValue()) {
+            if (ball != null) {
+                ball.stop();
+            }
+        }
     }
 
     @Override
@@ -123,7 +128,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             if (!field.isBarrier(newX, newY)) {
                 move(newX, newY);
             }
-            
+
         }
         direction = null;
     }
@@ -139,13 +144,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         Hero playersHero = player.getHero();
-        if (playersHero == this){
+        if (playersHero == this) {
             if (isWithBall()) {
                 return Elements.HERO_W_BALL;
             } else {
                 return Elements.HERO;
             }
-        } else if (StringUtils.equals(playersHero.getTeam(), team)){
+        } else if (StringUtils.equals(playersHero.getTeam(), team)) {
             if (!isWithBall()) {
                 return Elements.TEAM_MEMBER;
             } else {

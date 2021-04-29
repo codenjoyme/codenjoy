@@ -55,6 +55,20 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         return result;
     }
 
+    /**
+     * @param elements List of elements that we try to find.
+     * @return First found position of element specified.
+     */
+    public Point getFirst(E... elements) {
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            Point pt = getFirst(layer, elements);
+            if (pt != null) {
+                return pt;
+            }
+        }
+        return null;
+    }
+
     public E getAt(int x, int y) {
         List<E> at = getAllAt(x, y);
         if (at.isEmpty()) {

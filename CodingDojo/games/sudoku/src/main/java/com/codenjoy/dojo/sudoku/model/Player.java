@@ -38,8 +38,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Player extends GamePlayer<PlayerHero, Field> {
 
-    private Field field;
-
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
@@ -86,11 +84,6 @@ public class Player extends GamePlayer<PlayerHero, Field> {
 
             field.set(pt, p[2]);
         };
-    }
-
-    @Override
-    public PlayerHero getHero() {
-        return null;
     }
 
     @Override

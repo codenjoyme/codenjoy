@@ -150,6 +150,11 @@ public class LocalGameRunnerTest {
             public void newHero(GameField field) {
                 hero = new PlayerHero() {
                     @Override
+                    public boolean isAlive() {
+                        return true;
+                    }
+
+                    @Override
                     public void down() {
                         gamePlayer.event("EVENT" + id() + "(DOWN)");
                     }

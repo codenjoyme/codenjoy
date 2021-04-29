@@ -62,22 +62,14 @@ public class BoardAddObjectsTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-
         GameSettings settings = new TestGameSettings();
-
         game = new SnakeBoard(level, mock(Dice.class), settings);
-
         Hero hero = level.getHero(game);
-
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener, settings);
+        player.setHero(hero);
         game.newGame(player);
-        if (hero != null) {
-            player.setHero(hero);
-            hero.init(game);
-        }
-        Hero hero1 = game.getHeroes().get(0);
-        hero1.setActive(true);
+        hero.setActive(true);
     }
 
     @Parameterized.Parameters

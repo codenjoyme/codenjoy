@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.round;
  */
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -30,7 +31,6 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 
 public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameField> extends GamePlayer<H, F> {
 
-    protected H hero;
     private boolean shouldLeave;
     private Parameter<Boolean> roundsEnabled;
 
@@ -55,10 +55,6 @@ public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameF
         shouldLeave = true;
     }
 
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
-
     public boolean isActive() {
         return hero != null && hero.isActive();
     }
@@ -77,12 +73,29 @@ public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameF
         shouldLeave = lastRound;
     }
 
+    @Override
+    public void setHero(H hero) {
+        super.setHero(hero);
+        if (hero != null) {
+            hero.setPlayer(this);
+        }
+    }
+
+    @Override
     public void newHero(F field) {
-        initHero(field);
+        if (shouldCreate()) {
+            if (hero != null) {
+                hero.setPlayer(null);
+            }
+        }
+
+        super.newHero(field);
+
+        hero.setPlayer(this);
+
         if (!roundsEnabled()) {
             hero.setActive(true);
         }
     }
 
-    public abstract void initHero(F field);
 }

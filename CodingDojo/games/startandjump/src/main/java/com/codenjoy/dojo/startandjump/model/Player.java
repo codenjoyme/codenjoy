@@ -24,6 +24,7 @@ package com.codenjoy.dojo.startandjump.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.startandjump.services.GameSettings;
 
@@ -31,24 +32,21 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Player extends GamePlayer<Hero, Field> {
 
-    Hero hero;
-
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
     @Override
     public void newHero(Field field) {
-        hero = new Hero(pt(0, 3));
+        super.newHero(field);
+
+        // TODO чисто в тестах надо поправить в районе game.newGame и убрать отсюда этот метод
+        hero.manual(false);
     }
 
     @Override
-    public boolean isAlive() {
-        return true;
+    public Hero createHero(Point pt) {
+        return new Hero(pt(0, 3));
     }
 
 }

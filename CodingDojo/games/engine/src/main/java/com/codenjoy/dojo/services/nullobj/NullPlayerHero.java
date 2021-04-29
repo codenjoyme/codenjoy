@@ -33,6 +33,11 @@ public final class NullPlayerHero extends PlayerHero {
     }
 
     @Override
+    public boolean isAlive() {
+        return false;
+    }
+
+    @Override
     public void down() {
         // do nothing
     }

@@ -90,7 +90,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
-    public Optional<Point> freeRandom() {
+    public Optional<Point> freeRandom(Player player) {
         return BoardUtils.freeRandom(size(), dice, pt -> isFree(pt));
     }
 

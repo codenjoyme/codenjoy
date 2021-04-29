@@ -53,12 +53,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         this.health = START_HEALTH;
     }
 
-    public void setAlive(boolean pAlive) {
-        alive = pAlive;
-    }
-
-    public void init(Field field) {
-        this.field = field;
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     @Override
@@ -133,6 +129,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }

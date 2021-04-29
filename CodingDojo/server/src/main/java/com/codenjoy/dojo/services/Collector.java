@@ -29,7 +29,6 @@ public class Collector {
 
     private List<String> list = new CopyOnWriteArrayList<>();
 
-
     public String popAll() {
         String result = list.toString();
         list.clear();
@@ -42,5 +41,10 @@ public class Collector {
 
     public void put(String format, String data) {
         put(String.format(format, data));
+    }
+
+    @Override
+    public String toString() {
+        return list.toString();
     }
 }

@@ -39,8 +39,6 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
-    public static final int MAX = 1000;
-
     private Level level;
     private boolean bomb;
     private Direction direction;

@@ -22,6 +22,7 @@ package com.codenjoy.dojo.sokoban.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -30,10 +31,10 @@ import com.codenjoy.dojo.sokoban.model.items.*;
 import com.codenjoy.dojo.sokoban.model.levels.Level;
 import com.codenjoy.dojo.sokoban.services.Events;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
-import com.codenjoy.dojo.sokoban.services.Player;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -125,18 +126,8 @@ public class Sokoban implements Field {
     }
 
     @Override
-    public Point getFreeRandom() {
-        int c = 0;
-        Point pt;
-        do {
-            pt = PointImpl.random(dice, size);
-        } while (!isFree(pt) && c++ < MAX);
-
-        if (c >= MAX) {
-            return pt(0, 0);
-        }
-
-        return pt;
+    public Optional<Point> freeRandom(Player player) {
+        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
     }
 
     @Override

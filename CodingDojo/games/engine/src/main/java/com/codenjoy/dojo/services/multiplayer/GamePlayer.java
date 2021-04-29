@@ -26,9 +26,11 @@ package com.codenjoy.dojo.services.multiplayer;
 import com.codenjoy.dojo.services.CustomMessage;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+
+import java.util.Optional;
 
 /**
  * Игрок внутри игры представлен в виде наследника этого класса.
@@ -37,6 +39,8 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
  */
 public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
 
+    protected F field;
+    protected H hero;
     protected EventListener listener;
     protected SettingsReader settings;
     private LevelProgress progress;
@@ -75,7 +79,20 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
     /**
      * @return Герой игрока, готорым можно управлять через {@see Joystick}
      */
-    public abstract H getHero();
+    public H getHero() {
+        return hero;
+    }
+
+    /**
+     * @param hero Героя для игрока задаем в случае, если мы не
+     *             хотим его инициализировать в рендомном месте карты.
+     */
+    public void setHero(H hero) {
+        this.hero = hero;
+        if (hero != null) {
+            hero.manual(true);
+        }
+    }
 
     /**
      * Ты можешь переопределить этот метод, и тогда у этих данных будет приоритет.
@@ -99,12 +116,52 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      * Когда создается новая игра для пользователя, кто-то должен создать героя
      * @param field борда
      */
-    public abstract void newHero(F field);
+    public void newHero(F field) {
+        this.field = field;
+
+        // если героя нет, или он не инициализирован вручную - мы поможем этому случиться
+        if (shouldCreate()) {
+            if (hero != null) {
+                hero = null;
+            }
+            Optional<Point> pt = field.freeRandom(this);
+            if (pt == null) {
+                // если freeRandom вернул null значит герой не располагается
+                // на поле и не содержит координаты
+                hero = createHero(null);
+            } else {
+                // иначе пытаемся понять есть ли на поле место
+                // если нет - все плохо, иначе создаем героя в этом месте
+                if (pt.isEmpty()) {
+                    // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
+                    throw new RuntimeException("Not enough space for Hero");
+                }
+                hero = createHero(pt.get());
+            }
+        }
+        // инициализируем бордой и погнали!
+        hero.init(field);
+    }
+
+    protected boolean shouldCreate() {
+        return hero == null || !hero.manual();
+    }
+
+    /**
+     * А так большинство игр создают своего героя
+     * @param pt в каком месте карты мы это делаем
+     * @return Созданный герой
+     */
+    public H createHero(Point pt) {
+        return null;
+    }
 
     /**
      * @return Жив ли герой. Обычно делегируется герою.
      */
-    public abstract boolean isAlive();
+    public boolean isAlive() {
+        return hero != null && hero.isAlive();
+    }
 
     /**
      * @return Победил ли герой на этом уровне. TODO ##2 работает пока только с multiplayerType.isTraining()

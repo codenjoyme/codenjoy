@@ -78,12 +78,9 @@ public class AISolverTest {
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener, settings);
 
+        player.setHero(hero);
         game.newGame(player);
-        if (hero != null) {
-            player.setHero(hero);
-            hero.init(game);
-            hero.setActive(true);
-        }
+        hero.setActive(true);
     }
 
     private void testSolution(Direction expected) {

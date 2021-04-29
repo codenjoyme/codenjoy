@@ -25,29 +25,23 @@ package com.codenjoy.dojo.moebius.model;
 
 import com.codenjoy.dojo.moebius.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Hero, Field> {
-
-    Hero hero;
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
     @Override
-    public Hero getHero() {
-        return hero;
+    protected boolean shouldCreate() {
+        return true;
     }
 
     @Override
-    public void newHero(Field field) {
-        hero = new Hero();
-        hero.init(field);
+    public Hero createHero(Point pt) {
+        return new Hero();
     }
 
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
 }

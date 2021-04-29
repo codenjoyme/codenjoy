@@ -25,26 +25,22 @@ package com.codenjoy.dojo.football.model;
 import com.codenjoy.dojo.football.model.elements.Hero;
 import com.codenjoy.dojo.football.services.Events;
 import com.codenjoy.dojo.football.services.GameSettings;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:47
- */
 public class GameTest {
 
     private Football game;
@@ -54,6 +50,7 @@ public class GameTest {
     private Player player;
     private PrinterFactory printer;
     private GameSettings settings;
+    private EventsListenersAssert events;
 
     @Before
     public void setup() {
@@ -71,183 +68,181 @@ public class GameTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+        hero = level.getHero().get(0);
 
         game = new Football(level, dice, settings);
         listener = mock(EventListener.class);
+        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
         player = new Player(listener, settings);
-        dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
+        player.setHero(hero);
         game.newGame(player);
-        player.hero = hero;
         hero.init(game);
-        this.hero = game.getHeroes().get(0);
     }
 
     private void assertE(String expected) {
-        assertEquals(TestUtils.injectN(expected),
+        assertEquals(expected,
                 printer.getPrinter(game.reader(), player).print());
     }
 
     // есть карта со мной
     @Test
     public void shouldFieldAtStart() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
     }
     
     @Test
     public void heroCanMove() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
         
         hero.up();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        assertE("☼☼☼☼☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
         
         hero.left();
         game.tick();
         
-        assertE("☼☼☼☼☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        assertE("☼☼☼☼☼\n" +
+                "☼☺  ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
         
         hero.right();
         game.tick();
         
-        assertE("☼☼☼☼☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        assertE("☼☼☼☼☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
         
         hero.down();
         game.tick();
         
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
     }
     
     @Test
     public void heroCannotPassThroughWalls() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
         
         hero.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
     }
     
     @Test
     public void ballIsPresent() {
-        givenFl("☼☼☼☼☼☼☼☼" +
-                "☼  ∙   ☼" +
-                "☼☺     ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        givenFl("☼☼☼☼☼☼☼☼\n" +
+                "☼  ∙   ☼\n" +
+                "☼☺     ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
         
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼  ∙   ☼" +
-                "☼☺     ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼  ∙   ☼\n" +
+                "☼☺     ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
     }
 
     @Test
     public void playerCanBeWithBall() {
-        givenFl("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☺∙    ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        givenFl("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☺∙    ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
         hero.right();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼ ☻    ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ☻    ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
     }
-    
+
+    @Test
     public void ballCanMove() {
-        
-        givenFl("☼☼☼☼☼☼☼☼" +
-                "☼∙     ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        givenFl("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ∙    ☼\n" +
+                "☼     ☺☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
         game.getBall(2, 2).right(1);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼ *    ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
-        
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  *   ☼\n" +
+                "☼     ☺☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
     }
     
     @Test
     public void playerCanMoveWithBall() {
-        givenFl("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☺*    ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        givenFl("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☺*    ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
         assertEquals(game.getBalls().size(), 1);
         assertEquals(true, game.isBall(2, 4));
@@ -255,14 +250,14 @@ public class GameTest {
         hero.right();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼ ☻    ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ☻    ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
         
         assertEquals(true, game.isBall(2, 4));
         
@@ -273,38 +268,38 @@ public class GameTest {
         
         assertEquals(true, game.getBall(3, 4) != null);
         
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼  ☻   ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ☻   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
     }
     
     @Test
     public void playerCanNotMoveWithBallThrowWall() {
-        givenFl("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼*☺    ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        givenFl("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼*☺    ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
         hero.left();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☻     ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☻     ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
         
         hero.left();
         game.tick();
@@ -312,233 +307,322 @@ public class GameTest {
         hero.left();
         game.tick();
         
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☻     ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☻     ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
         
         hero.right();
         hero.act(Actions.HIT_RIGHT.getValue());
         game.tick();
         
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼ ☻    ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ☻    ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
     }
     
     @Test
     public void gameStartsFromPlayerWithBallState() {
-        givenFl("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☻     ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        givenFl("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☻     ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
         hero.right();
         hero.act(Actions.HIT_RIGHT.getValue());
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼ ☻    ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ☻    ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
     }
     
     @Test
     public void playerHitsBallRight() {
-        givenFl("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼  ☻   ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        givenFl("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ☻   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
         hero.act(Actions.HIT_RIGHT.getValue());
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼  ☺*  ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ☺*  ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
         
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼  ☺ * ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ☺ * ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
     }
     
     @Test
     public void playerHitsTheGate() {
-        givenFl("☼☼☼┴┴☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼  ☻   ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼┬┬☼☼☼");
+        givenFl("☼☼☼┴┴☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ☻   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼┬┬☼☼☼\n");
         
         hero.act(Actions.HIT_UP.getValue());
         game.tick();
         game.tick();
         game.tick();
 
-        assertE("☼☼☼x⌂☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼  ☺   ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼==☼☼☼");
+        assertE("☼☼☼x⌂☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ☺   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼==☼☼☼\n");
     }
     
     @Test
     public void ballStopsWhetGetWall() {
-        givenFl("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼    ☻ ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        givenFl("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼    ☻ ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
         hero.act(Actions.HIT_RIGHT.getValue());
         game.tick();
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼    ☺*☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼    ☺*☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
         game.tick();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼    ☺∙☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼    ☺∙☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
     }
-    
+
+    @Test
     public void resetFieldAfterGoalAndNewGameCall() {
-        
-        givenFl("☼☼☼┴┴☼☼☼" +
-                "☼      ☼" +
-                "☼  ☻   ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼┬┬☼☼☼");
+        givenFl("☼☼☼┴┴☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼  ☻   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼┬┬☼☼☼\n");
         
         hero.act(Actions.HIT_UP.getValue());
         game.tick();
+
+        assertE("☼☼☼⌂⌂☼☼☼\n" +
+                "☼  *   ☼\n" +
+                "☼  ☺   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼==☼☼☼\n");
+
         game.tick();
-        dice(2, 2);
+
+        assertEquals(true, player.isAlive());
+        events.verifyNoEvents();
+
+        assertE("☼☼☼x⌂☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼  ☺   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼==☼☼☼\n");
+
+        game.tick();
+
+        assertEquals(false, player.isAlive());
+        events.verifyAllEvents("[TOP_GOAL, WIN]");
+
+        assertE("☼☼☼x⌂☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼  ☺   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼==☼☼☼\n");
+
         game.newGame(player);
+
+        assertEquals(true, player.isAlive());
+        events.verifyNoEvents();
         
-        assertE("☼☼☼┴┴☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼   *  ☼" +
-                "☼      ☼" +
-                "☼ ☺    ☼" +
-                "☼      ☼" +
-                "☼☼☼┬┬☼☼☼");
+        assertE("☼☼☼⌂⌂☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼  ☺   ☼\n" +
+                "☼   ∙  ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼==☼☼☼\n");
     }
-    
-    @Ignore
+
     @Test
     public void resetFieldAfterHittenGoal() {
-        
-        givenFl("☼☼☼┴┴☼☼☼" +
-                "☼      ☼" +
-                "☼  ☻   ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼┬┬☼☼☼");
+        givenFl("☼☼☼┴┴☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼  ☻   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼┬┬☼☼☼\n");
         
         hero.act(Actions.HIT_UP.getValue());
         game.tick();
+
+        assertE("☼☼☼⌂⌂☼☼☼\n" +
+                "☼  *   ☼\n" +
+                "☼  ☺   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼==☼☼☼\n");
+
         game.tick();
-        dice(2, 2);
+
+        assertEquals(true, player.isAlive());
+        events.verifyNoEvents();
+
+        assertE("☼☼☼x⌂☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼  ☺   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼==☼☼☼\n");
+
         game.tick();
-        verify(listener, only()).event(Events.TOP_GOAL);
-        
-        assertE("☼☼☼┴┴☼☼☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼   *  ☼" +
-                "☼      ☼" +
-                "☼ ☺    ☼" +
-                "☼      ☼" +
-                "☼☼☼┬┬☼☼☼");
+
+        assertEquals(false, player.isAlive());
+        events.verifyAllEvents("[TOP_GOAL, WIN]");
+
+        assertE("☼☼☼x⌂☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼  ☺   ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼==☼☼☼\n");
+
+        game.newGame(player);
+
+        assertEquals(true, player.isAlive());
+        events.verifyNoEvents();
+
+        assertE("☼☼☼⌂⌂☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼  ☺   ☼\n" +
+                "☼   ∙  ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼☼☼==☼☼☼\n");
     }
-    
-    @Ignore
+
     @Test
     public void resetFieldByNewGameCall() {
+        givenFl("☼☼☼x┴┴☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼  ☺    ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼┬┬┬☼☼☼\n");
         
-        givenFl("☼☼☼x┴┴☼☼☼" +
-                "☼       ☼" +
-                "☼  ☺    ☼" +
-                "☼       ☼" +
-                "☼       ☼" +
-                "☼       ☼" +
-                "☼       ☼" +
-                "☼       ☼" +
-                "☼☼☼┬┬┬☼☼☼");
-        
-        dice(2, 2);
         game.tick();
-        verify(listener, only()).event(Events.TOP_GOAL);
-        
-        assertE("☼☼☼┴┴┴☼☼☼" +
-                "☼       ☼" +
-                "☼       ☼" +
-                "☼       ☼" +
-                "☼   *   ☼" +
-                "☼       ☼" +
-                "☼ ☺     ☼" +
-                "☼       ☼" +
-                "☼☼☼┬┬┬☼☼☼");
+
+        assertEquals(true, player.isAlive());
+        events.verifyAllEvents("[]");
+
+        assertE("☼☼☼∙⌂⌂☼☼☼\n" +   // TODO тут как-то не очень
+                "☼       ☼\n" +
+                "☼  ☺    ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼===☼☼☼\n");
+
+        game.newGame(player);
+
+        assertEquals(true, player.isAlive());
+        events.verifyNoEvents();
+
+        assertE("☼☼☼∙⌂⌂☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼  ☺    ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼===☼☼☼\n");
     }
     
 }

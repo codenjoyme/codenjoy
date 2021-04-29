@@ -338,7 +338,7 @@ public class Expansion implements Tickable, IField {
         }
         if (!exists) {
             losers.add(player);
-            player.hero.die();
+            player.getHero().die();
             return LOSE;
         }
         return null;

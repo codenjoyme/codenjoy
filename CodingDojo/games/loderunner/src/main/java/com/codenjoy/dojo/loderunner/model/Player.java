@@ -30,17 +30,10 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.round.RoundGamePlayer;
 
-import java.util.Optional;
-
 public class Player extends RoundGamePlayer<Hero, Field> {
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
-    }
-
-    @Override
-    public Hero getHero() {
-        return hero;
     }
 
     @Override
@@ -50,23 +43,10 @@ public class Player extends RoundGamePlayer<Hero, Field> {
     }
 
     @Override
-    public void initHero(Field field) {
-        if (hero != null) {
-            hero = null;
-        }
-        Optional<Point> pt = field.freeRandom();
-        if (pt.isEmpty()) {
-            // TODO вот тут надо как-то сообщить плееру, борде и самому серверу, что нет место для героя
-            throw new RuntimeException("Not enough space for Hero");
-        }
-        hero = new Hero(pt.get(), Direction.RIGHT);
+    public Hero createHero(Point pt) {
+        Hero hero = new Hero(pt, Direction.RIGHT);
         hero.setPlayer(this);
-        hero.init(field);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
+        return hero;
     }
 
     @Override
@@ -86,10 +66,5 @@ public class Player extends RoundGamePlayer<Hero, Field> {
                     break;
             }
         }
-    }
-
-    // only for testing
-    public void setHero(Hero hero) {
-        this.hero = hero;
     }
 }

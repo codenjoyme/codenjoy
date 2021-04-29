@@ -133,11 +133,6 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     }
 
     @Override
-    public void init(Field field) {
-        this.field = field;
-    }
-
-    @Override
     public void down() {
         setNewDirection(DOWN);
     }
