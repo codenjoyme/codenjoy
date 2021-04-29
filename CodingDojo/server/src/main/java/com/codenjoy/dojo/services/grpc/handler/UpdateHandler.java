@@ -27,6 +27,8 @@ import com.codenjoy.dojo.Participant;
 import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.dao.Registration;
 import io.grpc.stub.StreamObserver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 @Component
 public class UpdateHandler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateHandler.class);
 
     private final GameSaver gameSaver;
     private final Registration registration;
@@ -55,7 +59,7 @@ public class UpdateHandler {
         this.streamObservers = new HashMap<>();
 
         this.executorService = Executors.newSingleThreadExecutor();
-        this.participants = new LinkedBlockingQueue<>(10);
+        this.participants = new LinkedBlockingQueue<>();
     }
 
     public void addObserver(String contestId, StreamObserver<LeaderboardResponse> observer) {
@@ -71,7 +75,7 @@ public class UpdateHandler {
         try {
             this.participants.put(participant);
         } catch (InterruptedException exception) {
-            exception.printStackTrace();
+            LOGGER.error(exception.getMessage());
         }
 
         executorService.submit(() -> {
@@ -79,7 +83,7 @@ public class UpdateHandler {
                 Map<String, LeaderboardResponse.Builder> responseBuilders = drainQueue();
                 responseBuilders.values().forEach(this::buildResponseAndSend);
             } catch (InterruptedException exception) {
-                exception.printStackTrace();
+                LOGGER.error(exception.getMessage());
             }
         });
     }
