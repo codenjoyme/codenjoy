@@ -43,6 +43,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.toList;
+
 public class LocalGameRunner {
 
     public static final String SEP = "------------------------------------------";
@@ -61,6 +63,21 @@ public class LocalGameRunner {
     public static boolean exit = false;
     public static int waitForPlayers = 1;
     public static int levelNumber = LevelProgress.levelsStartsFrom1;
+    /**
+     * Будем ли мы удалять (true) игрока с поля, когда он gameover
+     * или всего лишь делать ему newGame (false).
+     */
+    public static boolean removeWhenGameOver = false;
+    /**
+     * Будем ли мы удалять (true) игрока с поля, когда он win
+     * или ничего предпринимать не будем (false).
+     */
+    public static boolean removeWhenWin = false;
+    /**
+     * Будем ли мы возобновлять (true) игру всех игроков,
+     * если они все покинули игру или нет (false).
+     */
+    public static boolean reloadPlayersWhenGameOverAll = false;
 
     private Settings settings;
     private GameField field;
@@ -118,8 +135,11 @@ public class LocalGameRunner {
                     }
                 }
 
+                if (reloadPlayersWhenGameOverAll && activeGames().isEmpty()) {
+                    reloadAllGames();
+                }
+
                 if (games.size() < waitForPlayers) {
-                    tick = 0;
                     continue;
                 }
 
@@ -128,10 +148,15 @@ public class LocalGameRunner {
 
                     List<String> answers = new LinkedList<>();
                     for (Game game : games) {
-                        answers.add(askAnswer(games.indexOf(game)));
+                        int index = games.indexOf(game);
+                        if (game.getField() == null) {
+                            answers.add(null);
+                        } else {
+                            answers.add(askAnswer(index));
+                        }
                     }
 
-                    for (Game game : games) {
+                    for (Game game : activeGames()) {
                         int index = games.indexOf(game);
                         String answer = answers.get(index);
 
@@ -140,11 +165,23 @@ public class LocalGameRunner {
                         }
                     }
 
-                    for (int index = 0; index < games.size(); index++) {
-                        Game single = games.get(index);
-                        if (single.isGameOver()) {
-                            print(index, "PLAYER_GAME_OVER -> START_NEW_GAME");
-                            single.newGame();
+                    for (Game game : activeGames()) {
+                        int index = games.indexOf(game);
+                        if (removeWhenWin) {
+                            if (game.isWin() && !game.shouldLeave()) {
+                                print(index, "PLAYER_WIN -> REMOVE_FROM_GAME");
+                                game.close();
+                                continue;
+                            }
+                        }
+                        if (game.isGameOver()) {
+                            if (removeWhenGameOver) {
+                                print(index, "PLAYER_GAME_OVER -> REMOVE_FROM_GAME");
+                                game.close();
+                            } else {
+                                print(index, "PLAYER_GAME_OVER -> START_NEW_GAME");
+                                game.newGame();
+                            }
                         }
                     }
 
@@ -161,6 +198,12 @@ public class LocalGameRunner {
             }
         }
         return this;
+    }
+
+    private List<Game> activeGames() {
+        return games.stream()
+                .filter(game -> game.getField() != null)
+                .collect(toList());
     }
 
     private void debugAt(int tick) {
@@ -210,6 +253,12 @@ public class LocalGameRunner {
         solvers.add(solver);
         boards.add(board);
         games.add(createGame());
+    }
+
+    public synchronized void reloadAllGames() {
+        games.clear();
+        field = gameType.createGame(levelNumber, settings);
+        solvers.forEach(solver -> games.add(createGame()));
     }
 
     public synchronized void remove(Solver solver) {
@@ -274,8 +323,7 @@ public class LocalGameRunner {
     }
 
     private Game createGame() {
-        PlayerScores score = gameType.getPlayerScores(0, settings);
-        scores.add(score);
+        PlayerScores score = getScores();
         int index = scores.indexOf(score);
 
         GamePlayer gamePlayer = gameType.createPlayer(
@@ -291,6 +339,18 @@ public class LocalGameRunner {
         game.on(field);
         game.newGame();
         return game;
+    }
+
+    private PlayerScores getScores() {
+        // если мы чистили игры, то скоров больше и мы можем взять уже существующий
+        if (games.size() < scores.size()) {
+            return scores.get(games.size());
+        }
+
+        // иначе создаем новый скор для новой игры
+        PlayerScores score = gameType.getPlayerScores(0, settings);
+        scores.add(score);
+        return score;
     }
 
     private String getPlayerId() {
