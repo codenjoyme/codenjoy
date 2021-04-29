@@ -72,10 +72,10 @@ public class AdminPage {
         String status = registrationActiveStatus().getText();
         String linkText = registrationChangeActiveLink().getText();
         if (active) {
-            assertEquals("Registration is active", status);
+            assertEquals("Server registration is active", status);
             assertEquals("Close registration", linkText);
         } else {
-            assertEquals("Registration was closed", status);
+            assertEquals("Server registration was closed", status);
             assertEquals("Open registration", linkText);
         }
     }

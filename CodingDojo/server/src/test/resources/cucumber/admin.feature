@@ -22,11 +22,11 @@ Scenario: Admin can close/open registration
   When Click logout
 
   When Open registration page
-  Then See 'Registration was closed' registration error
+  Then See 'Server registration was closed' registration error
   And There is no controls on registration form
 
   When Open login page
-  Then See 'Registration was closed' login error
+  Then See 'Server registration was closed' login error
   And There is no controls on login form
 
   When Open admin login page
