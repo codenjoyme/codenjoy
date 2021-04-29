@@ -23,10 +23,10 @@ package com.codenjoy.dojo.services.grpc;
  */
 
 
-import com.codenjoy.dojo.ByIdRequest;
-import com.codenjoy.dojo.ByUsernameRequest;
+import com.codenjoy.dojo.UserDetailsIdRequest;
 import com.codenjoy.dojo.UserDetailsResponse;
 import com.codenjoy.dojo.UserDetailsServiceGrpc;
+import com.codenjoy.dojo.UserDetailsUsernameRequest;
 import com.codenjoy.dojo.services.dao.Registration;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
     }
 
     @Override
-    public void getUserDetailsById(ByIdRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
+    public void getUserDetailsById(UserDetailsIdRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
         String id = request.getId();
         String email = this.registration.getEmailById(id);
 
@@ -52,7 +52,7 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
     }
 
     @Override
-    public void getUserDetailsByUsername(ByUsernameRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
+    public void getUserDetailsByUsername(UserDetailsUsernameRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
         String username = request.getUsername();
         String id = this.registration.getIdByGitHubUsername(username);
         String email = this.registration.getEmailById(id);

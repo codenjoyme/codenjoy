@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services.grpc;
  * #L%
  */
 
-import com.codenjoy.dojo.ByIdRequest;
+import com.codenjoy.dojo.UserDetailsIdRequest;
 import com.codenjoy.dojo.UserDetailsResponse;
 import com.codenjoy.dojo.services.dao.Registration;
 import io.grpc.stub.StreamObserver;
@@ -42,7 +42,7 @@ public class UserDetailsServiceTests {
     private static final String USER_ID = "id";
     private static final String EMAIL = "email";
 
-    private ByIdRequest request;
+    private UserDetailsIdRequest request;
     private UserDetailsResponse response;
 
     @Mock
@@ -55,7 +55,7 @@ public class UserDetailsServiceTests {
 
     @Before
     public void init() {
-        this.request = ByIdRequest.newBuilder().setId(USER_ID).build();
+        this.request = UserDetailsIdRequest.newBuilder().setId(USER_ID).build();
         this.response = UserDetailsResponse.newBuilder().setId(USER_ID).setEmail(EMAIL).build();
         this.userDetailsService = new UserDetailsService(registration);
     }
