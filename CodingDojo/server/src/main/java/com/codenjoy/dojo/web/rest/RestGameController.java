@@ -166,12 +166,5 @@ public class RestGameController {
         playerService.cleanScores(user.getId());
     }
 
-    @PostMapping("/update/{username}/score")
-    public void updateUserScore(@PathVariable("username") String username,
-                                @RequestBody long score) {
-
-        updateHandler.sendUpdate(username, score);
-        playerService.updateScore(username, score);
-    }
 }
 

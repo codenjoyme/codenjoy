@@ -115,20 +115,4 @@ public class RestRegistrationController {
                 && playerService.contains(id);
     }
 
-    @PostMapping("/change/{username}/to/{newUsername}")
-    public int updateGitHubUsername(@PathVariable("username") String username,
-                                    @PathVariable("newUsername") String newUsername) {
-
-        String id = registration.getIdByGitHubUsername(username);
-        if (id == null) {
-            return 0;
-        }
-        String repository = gameServerService.createOrGetRepository(newUsername);
-
-        playerService.updateUserRepository(id, repository);
-
-        return registration.updateGitHubUsername(username, newUsername);
-    }
-
-
 }
