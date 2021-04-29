@@ -87,5 +87,5 @@ setup.setupSprites = function() {
     } else {
         throw new Error("Unknown iCanCode mode: " + setup.gameMode);
     }
-    setup.isDrawByOrder = (setup.sprites == SPRITES_EKIDS);
+    setup.isDrawByOrder = true;
 }

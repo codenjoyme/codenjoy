@@ -73,6 +73,14 @@ public enum Elements implements CharElements {
     ZOMBIE_START(LAYER1, 'Z'),
     GOLD(LAYER1, '$'),
 
+    // perks
+    UNSTOPPABLE_LASER_PERK(LAYER1, 'l'),
+    DEATH_RAY_PERK(LAYER1, 'r'),
+    UNLIMITED_FIRE_PERK(LAYER1, 'f'),
+    FIRE_PERK(LAYER1, 'a'),
+    JUMP_PERK(LAYER1, 'j'),
+    MOVE_BOXES_PERK(LAYER1, 'm'),
+
     // your robot
     ROBO(LAYER2, '☺'),
     ROBO_FALLING(LAYER2, 'o'),
@@ -95,14 +103,6 @@ public enum Elements implements CharElements {
     FEMALE_ZOMBIE(LAYER2, '♀'),
     MALE_ZOMBIE(LAYER2, '♂'),
     ZOMBIE_DIE(LAYER2, '✝'),
-
-    // perks
-    UNSTOPPABLE_LASER_PERK(LAYER1, 'l'),
-    DEATH_RAY_PERK(LAYER1, 'r'),
-    UNLIMITED_FIRE_PERK(LAYER1, 'f'),
-    FIRE_PERK(LAYER1, 'a'),
-    JUMP_PERK(LAYER1, 'j'),
-    MOVE_BOXES_PERK(LAYER1, 'm'),
 
     // system elements, don't touch it
     FOG(LAYER1, 'F'),
