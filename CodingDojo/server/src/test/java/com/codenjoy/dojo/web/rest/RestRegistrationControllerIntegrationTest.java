@@ -90,20 +90,6 @@ public class RestRegistrationControllerIntegrationTest extends AbstractRestContr
                 registration.getUserById("1").get().getCode());
     }
 
-    @Test
-    public void shouldUpdateGitHubUsername() {
-        String expected = "1";
-        assertEquals(expected, post("/rest/change/ghusername/to/username"));
-        assertEquals("username",
-                registration.getUserById("1").get().getGitHubUsername());
-    }
-
-    @Test
-    public void shouldNotUpdateGitHubUsername() {
-        String expected = "0";
-        assertEquals(expected, post("/rest/change/non-existing/to/username"));
-    }
-
     @TestConfiguration
     public static class ContextConfiguration {
         @Bean("gameService")

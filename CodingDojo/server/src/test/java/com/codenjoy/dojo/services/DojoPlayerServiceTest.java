@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.web.rest;
+package com.codenjoy.dojo.services;
 
 /*-
  * #%L
@@ -22,9 +22,9 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.services.GameServerService;
-import com.codenjoy.dojo.services.PlayerService;
+
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.grpc.handler.UpdateHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -32,25 +32,44 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
 @RunWith(SpringRunner.class)
-public class RestRegistrationControllerTest {
+public class DojoPlayerServiceTest {
 
     public static final String OLD_GITHUB_USERNAME = "dummy-username";
     public static final String NEW_GITHUB_USERNAME = "new-username";
+    public static final String GITHUB_USERNAME = "username";
+    public static final long SCORE = 5L;
 
     @InjectMocks
-    private RestRegistrationController restRegistrationController;
+    private DojoPlayerService dojoPlayerService;
 
-    @Mock
-    private Registration registration;
     @Mock
     private PlayerService playerService;
     @Mock
-    private GameServerService gameServerService;
+    private UpdateHandler updateHandler;
+    @Mock
+    private Registration registration;
+    @Mock
+    private GameServerServiceImpl gameServerService;
+
+    @Test
+    public void updateUserScore() {
+        //Arrange
+        doNothing().when(playerService).updateScore(GITHUB_USERNAME, SCORE);
+
+        //Act
+        dojoPlayerService.updateUserScore(GITHUB_USERNAME, SCORE);
+
+        //Assert
+        verify(playerService, times(1)).updateScore(GITHUB_USERNAME, SCORE);
+        verify(updateHandler, times(1)).sendUpdate(GITHUB_USERNAME, SCORE);
+    }
 
     @Test
     public void updateGitHubUsernameWhenIsExistingUsername() {
@@ -61,7 +80,7 @@ public class RestRegistrationControllerTest {
         when(registration.updateGitHubUsername(OLD_GITHUB_USERNAME, NEW_GITHUB_USERNAME)).thenReturn(1);
 
         //Act
-        int actual = restRegistrationController.updateGitHubUsername(OLD_GITHUB_USERNAME, NEW_GITHUB_USERNAME);
+        int actual = dojoPlayerService.updateGitHubUsername(OLD_GITHUB_USERNAME, NEW_GITHUB_USERNAME);
 
         //Assert
         assertEquals(1, actual);
@@ -75,7 +94,7 @@ public class RestRegistrationControllerTest {
         //Arrange
 
         //Act
-        int actual = restRegistrationController.updateGitHubUsername(OLD_GITHUB_USERNAME, NEW_GITHUB_USERNAME);
+        int actual = dojoPlayerService.updateGitHubUsername(OLD_GITHUB_USERNAME, NEW_GITHUB_USERNAME);
 
         //Assert
         assertEquals(0, actual);
