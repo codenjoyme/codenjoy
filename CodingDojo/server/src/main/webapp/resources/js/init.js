@@ -49,6 +49,11 @@ setup.isDrawOnlyChanges = true;
  * от их типа (слева направо, сверху вниз)
  */
 setup.isDrawByOrder = false;
+/**
+ * true если background и fog мы размножаем по канве,
+ * false если растягиваем.
+ */
+setup.isFillOrStrechBackground = true;
 setup.canvasCursor = 'auto';
 setup.loadBoardData = true;
 setup.drawCanvases = true;

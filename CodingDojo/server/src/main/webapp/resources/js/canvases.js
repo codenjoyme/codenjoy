@@ -249,7 +249,11 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var drawBackground = function(name) {
             if (plotsContains(name)) {
-                canvas.fillImage(name);
+                if (setup.isFillOrStrechBackground) {
+                    canvas.fillImage(name);
+                } else {
+                    canvas.strechImage(name);
+                }
             }
         }
 
@@ -266,20 +270,24 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         var drawLayers = function(onDrawItem) {
-            var isDrawOnlyChanges = setup.isDrawOnlyChanges;
+            var onlyChanges = setup.isDrawOnlyChanges;
 
             var layers = getLayers(getBoard());
 
             var prevBoard = getPrevBoard();
             var prevLayers = null;
-            if (isDrawOnlyChanges && !!prevBoard) {
+            if (onlyChanges && !!prevBoard) {
                 prevLayers = getLayers(prevBoard);
             }
 
             try {
-                canvas.restoreState();
+                if (onlyChanges) {
+                    canvas.restoreState();
+                }
                 drawAllLayers(layers, prevLayers, onDrawItem);
-                canvas.saveState();
+                if (onlyChanges) {
+                    canvas.saveState();
+                }
             } catch (err) {
                 console.log(err);
             }
@@ -488,7 +496,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             );
         }
 
-        var fillImage = function(color) {
+        var strechImage = function(color) {
             var image = images[color];
             ctx.drawImage(
                 image,
@@ -497,6 +505,17 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 canvas[0].width,
                 canvas[0].height
             );
+        }
+
+        var fillImage = function(color) {
+            var image = images[color];
+            var pattern = ctx.createPattern(image, "repeat");
+            ctx.rect(0,
+                0,
+                canvas[0].width,
+                canvas[0].height);
+            ctx.fillStyle = pattern;
+            ctx.fill();
         }
 
         var highlighted = false;
@@ -552,6 +571,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         return {
             fillImage : fillImage,
+            strechImage : strechImage,
             drawPlot : drawPlot,
             drawText: drawText,
             clear : clear,
