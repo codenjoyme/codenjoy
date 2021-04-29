@@ -39,6 +39,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     private Tank owner;
     private Consumer<Object> onDestroy;
     private boolean heavy;
+    private int tick;
 
     public Bullet(Field field, Direction tankDirection,
                   Point from, Tank owner,
@@ -53,6 +54,10 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
         heavy = false;
     }
 
+    public int getTick() {
+        return tick;
+    }
+
     public void remove() {
         moving = false;
         if (onDestroy != null) {
@@ -62,6 +67,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
 
     @Override
     public void moving(Point pt) {
+        tick++;
         if (pt.isOutOf(field.size())) {
             remove(); // TODO заимплементить взрыв
         } else {
