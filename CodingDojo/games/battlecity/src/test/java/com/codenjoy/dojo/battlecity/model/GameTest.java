@@ -10311,6 +10311,72 @@ public class GameTest {
     }
 
     @Test
+    public void bulletWithTick0ShouldNotAffectTank(){
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼     ˃▲  ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+        hero(0).up();
+        hero(1).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼      •  ☼\n" +
+                "☼      ▲  ☼\n" +
+                "☼      ˃  ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void bulletWithTick0ShouldNotAffectOtherBullet(){
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼      ˃  ☼\n" +
+                "☼         ☼\n" +
+                "☼      ▲  ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(1).act();
+        hero(1).right();
+        hero(0).up();
+        hero(0).act();
+        game.tick();
+
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼      •˃•☼\n" +
+                "☼      ▲  ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
     public void shouldHeroTakePrizeAndSeeAiUnderTree_visibility() {
         settings.integer(PRIZE_ON_FIELD, 5)
                 .integer(KILL_HITS_AI_PRIZE, 1);

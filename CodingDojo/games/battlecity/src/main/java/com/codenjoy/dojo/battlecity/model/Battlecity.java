@@ -139,7 +139,9 @@ public class Battlecity extends RoundField<Player> implements Field {
                 int index = bullets.indexOf(tank);
                 if (index != -1) {
                     Bullet bullet = bullets.get(index);
-                    affect(bullet);
+                    if (bullet.getTick() != 0) {
+                        affect(bullet);
+                    }
                 }
             }
         }
@@ -206,7 +208,7 @@ public class Battlecity extends RoundField<Player> implements Field {
         }
 
         for (Bullet bullet2 : bullets().toArray(new Bullet[0])) {
-            if (bullet != bullet2 && bullet.equals(bullet2)) {
+            if (bullet != bullet2 && bullet.equals(bullet2) && bullet2.getTick() != 0) {
                 bullet.boom();
                 bullet2.boom();
                 return;
