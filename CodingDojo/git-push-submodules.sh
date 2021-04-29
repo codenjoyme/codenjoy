@@ -10,6 +10,10 @@ do
     password+="$char"
 done
 
+cd ./games/chess
+git push https://codenjoyme:$password@github.com/codenjoyme/codenjoy-chess.git master
+cd ./../..
+
 cd ./games/excitebike
 git push https://codenjoyme:$password@github.com/codenjoyme/codenjoy-excitebike.git master 
 cd ./../..

@@ -1,3 +1,7 @@
+cd .\games\chess
+git push https://github.com/codenjoyme/codenjoy-chess.git master
+cd .\..\..
+
 cd .\games\excitebike
 git push https://github.com/codenjoyme/codenjoy-excitebike.git master 
 cd .\..\..
