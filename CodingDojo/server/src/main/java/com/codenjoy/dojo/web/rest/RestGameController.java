@@ -169,9 +169,6 @@ public class RestGameController {
     @PostMapping("/update/{username}/score")
     public void updateUserScore(@PathVariable("username") String username,
                                 @RequestBody long score) {
-        if (username == null) {
-            return;
-        }
 
         updateHandler.sendUpdate(username, score);
         playerService.updateScore(username, score);

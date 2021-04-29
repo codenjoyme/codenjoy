@@ -284,6 +284,11 @@ public class Registration {
                 new Object[]{name, email, id});
     }
 
+    public int updateGitHubUsername(String oldGitHubUsername, String gitHubUsername) {
+        return pool.update("UPDATE users SET github_username = ? WHERE github_username = ?;",
+                new Object[]{gitHubUsername,oldGitHubUsername});
+    }
+
     @Data
     @ToString(of = { "id", "email", "readableName", "approved", "code", "data" })
     @EqualsAndHashCode(callSuper = true)

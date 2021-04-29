@@ -90,6 +90,23 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
+    public void updateGame(PlayerSave playerSave, String save, long time) {
+        pool.update("UPDATE saves " +
+                        "SET time = ?, callback_url = ?, room_name = ?, game_name = ?, score = ?, save = ?, repository_url = ?" +
+                        "WHERE player_id = ?;",
+                new Object[]{JDBCTimeUtils.toString(new Date(time)),
+                        playerSave.getCallbackUrl(),
+                        playerSave.getRoom(),
+                        playerSave.getGame(),
+                        playerSave.getScore(),
+                        save,
+                        playerSave.getRepositoryUrl(),
+                        playerSave.getId()
+                });
+    }
+
+
+    @Override
     public PlayerSave loadGame(String id) {
         return pool.select("SELECT * FROM saves WHERE player_id = ? ORDER BY time DESC LIMIT 1;",
                 new Object[]{id},
@@ -130,13 +147,13 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void updateScore(Player player, long time) {
+    public void updateScore(String playerId, long score, long time) {
         pool.update("UPDATE saves " +
                         "SET time = ?, score = ?" +
                         "WHERE player_id = ?;",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
-                        player.getScore(),
-                        player.getId()
+                        score,
+                        playerId
                 });
     }
 
@@ -149,8 +166,8 @@ public class PlayerGameSaver implements GameSaver {
                         Player player = new Player(rs.getString("player_id"));
                         player.setCallbackUrl(rs.getString("callback_url"));
                         player.setScore(rs.getString("score"));
-                        player.setRoom(rs.getString("room_name"));
                         player.setGame(rs.getString("game_name"));
+                        player.setRoom(rs.getString("room_name"));
                         player.setData(rs.getString("save"));
                         player.setRepositoryUrl(rs.getString("repository_url"));
                         result.add(new PlayerSave(player));
@@ -159,6 +176,7 @@ public class PlayerGameSaver implements GameSaver {
                 });
 
     }
+
     @Override
     public Map<String, String> getEventsList() {
         return pool.select("SELECT DISTINCT room_name, game_name FROM saves;",
@@ -182,4 +200,5 @@ public class PlayerGameSaver implements GameSaver {
                 rs -> rs.next() ? rs.getString("room_name") : null
         );
     }
+
 }

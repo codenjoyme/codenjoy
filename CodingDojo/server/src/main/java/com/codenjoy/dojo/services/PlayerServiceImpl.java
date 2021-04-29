@@ -142,6 +142,8 @@ public class PlayerServiceImpl implements PlayerService {
 
             Player player = register(new PlayerSave(id, ip, game, room, save.getScore(), save.getSave(), repositoryUrl));
 
+            player.setRepositoryUrl(repositoryUrl);
+
             return player;
         } finally {
             lock.writeLock().unlock();
@@ -272,26 +274,19 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void updateScore(String gitHubUsername,long score){
+    public void updateScore(String gitHubUsername, long score) {
         String id = registration.getIdByGitHubUsername(gitHubUsername);
         updateScoreList(id, score);
-        updatePlayerScore(id, score);
+        saver.updateScore(id, score, System.currentTimeMillis());
     }
 
     private void updateScoreList(String id, long score) {
-        for(PlayerGame playerGame :playerGames.getAll()){
+        for (PlayerGame playerGame : playerGames.getAll()) {
             Player player = playerGame.getPlayer();
-            if(player.getId().equals(id)){
+            if (player.getId().equals(id)) {
                 player.setScore(score);
             }
         }
-    }
-
-    private void updatePlayerScore(String id, long score) {
-        Player player = new Player();
-        player.setId(id);
-        player.setScore(score);
-        saver.updateScore(player,System.currentTimeMillis());
     }
 
     private Player getPlayer(PlayerSave save, String game, String room) {
@@ -734,8 +729,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public GameSaver getGameSaver(){
-        return saver;
+    public void updateUserRepository(String id, String repository) {
+        PlayerSave playerSave = saver.loadGame(id);
+        playerSave.setRepositoryUrl(repository);
+        saver.updateGame(playerSave, playerSave.getSave(), System.currentTimeMillis());
     }
 
 }

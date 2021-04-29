@@ -2,5 +2,5 @@ database:
   host: localhost
   port: 5432
   name: 'codenjoy'
-  user: 'codenjoy'
-  password: 'localpwd'
+  user: 'postgres'
+  password: 'root'

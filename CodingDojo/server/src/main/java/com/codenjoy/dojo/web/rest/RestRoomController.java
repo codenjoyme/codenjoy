@@ -23,7 +23,6 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.GameServerService;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
@@ -37,6 +36,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -111,7 +111,7 @@ public class RestRoomController {
         return validator.isPlayerInRoom(playerId, room);
     }
 
-    @GetMapping("/room/{room}/game/{game}/join")
+    @PostMapping("/room/{room}/game/{game}/join")
     public synchronized PlayerId joinPlayerInRoom(@PathVariable("game") String game,
                                                   @PathVariable("room") String room,
                                                   HttpServletRequest request,
@@ -119,7 +119,6 @@ public class RestRoomController {
                                                   // to bypass authentication process
                                                   @RequestBody Registration.User user) {
         validator.checkRoom(room, CANT_BE_NULL);
-        String repositoryUrl = gameServerService.createOrGetRepository(user.getGitHubUsername());
 
         if (user == null) {
             return null;
@@ -128,10 +127,11 @@ public class RestRoomController {
         if (!gameService.exists(game)) {
             return null;
         }
+        String repositoryUrl = gameServerService.createOrGetRepository(user.getGitHubUsername());
 
-        playerService.register(user.getId(), game, room, request.getRemoteAddr(),repositoryUrl);
+        Player player = playerService.register(user.getId(), game, room, request.getRemoteAddr(), repositoryUrl);
 
-        saveService.save(user.getId());
+        saveService.save(player);
 
         return new PlayerId(user);
     }

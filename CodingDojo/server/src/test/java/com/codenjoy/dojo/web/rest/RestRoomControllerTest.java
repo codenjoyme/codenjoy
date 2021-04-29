@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -33,6 +33,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -47,15 +49,8 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 @Import(RestRoomControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class RestRoomControllerTest extends AbstractRestControllerTest {
-
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return AbstractRestControllerTest.gameService();
-        }
-    }
 
     @Autowired
     private RestRoomController service;
@@ -186,4 +181,34 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
                 "/rest/room/validRoom/player/$bad$/joined");
     }
 
+    @Test
+    public void shouldJoinRoom() {
+        register("1", "ip", "validRoom", "first");
+
+        String request = "{\n" +
+                "        \"email\":\"mail@mail.com\",\n" +
+                "        \"id\":\"1\",\n" +
+                "        \"readableName\":\"Name\",\n" +
+                "        \"approved\":\"1\",\n" +
+                "        \"code\":\"5600964726966732831\",\n" +
+                "        \"data\":\"{}\",\n" +
+                "        \"gitHubUsername\":\"ghusername\"\n" +
+                "}";
+
+
+        assertEquals("{\"id\":\"1\",\"code\":\"5600964726966732831\"}",
+                post(HttpStatus.OK.value(),
+                        "/rest/room/validRoom/game/first/join",
+                        request));
+
+        assertEquals("validRoom", gameSaver.loadGame("1").getRoom());
+    }
+
+    @TestConfiguration
+    public static class ContextConfiguration {
+        @Bean("gameService")
+        public GameServiceImpl gameService() {
+            return AbstractRestControllerTest.gameService();
+        }
+    }
 }

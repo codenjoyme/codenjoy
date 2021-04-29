@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,20 +25,30 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.GameServiceImpl;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.grpc.handler.UpdateHandler;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.Collections;
+
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 // TODO сделать удобным вовыд и расскомментить
 // import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
@@ -49,16 +59,12 @@ import static org.junit.Assert.assertEquals;
 @Import(RestGameControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class RestGameControllerTest extends AbstractRestControllerTest {
 
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return AbstractRestControllerTest.gameService();
-        }
-    }
-
+    @Autowired
+    @MockBean
+    private UpdateHandler updateHandler;
     @Autowired
     private RestGameController service;
 
@@ -66,7 +72,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
     public void shouldExists() {
         assertEquals(true, service.exists("first"));
         assertEquals("true", get("/rest/game/first/exists"));
-        
+
         assertEquals(true, service.exists("second"));
         assertEquals("true", get("/rest/game/second/exists"));
 
@@ -213,7 +219,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
 
         assertEquals(expected2, JsonUtils.prettyPrint(service.type("second", "room2")));
         assertEquals(expected2, JsonUtils.prettyPrint(get("/rest/game/second/room2/info")));
-        
+
         assertEquals(null, service.type("non-exists", "room3"));
         assertEquals("", get("/rest/game/non-exists/room3/info"));
     }
@@ -255,10 +261,10 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
 
     @Test
     public void shouldAllSprites() {
-        assertEquals("{first=[none= , wall=☼, hero=☺], second=[none= , red=R, green=G, blue=B]}", 
+        assertEquals("{first=[none= , wall=☼, hero=☺], second=[none= , red=R, green=G, blue=B]}",
                 service.allSprites().toString());
-        
-        assertEquals("{\"first\":[\"none= \",\"wall=☼\",\"hero=☺\"],\"second\":[\"none= \",\"red=R\",\"green=G\",\"blue=B\"]}", 
+
+        assertEquals("{\"first\":[\"none= \",\"wall=☼\",\"hero=☺\"],\"second\":[\"none= \",\"red=R\",\"green=G\",\"blue=B\"]}",
                 get("/rest/game/sprites"));
     }
 
@@ -267,10 +273,10 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
         assertEquals(true, service.isGraphic("first"));
         assertEquals(true, service.isGraphic("second"));
         assertEquals(null, service.isGraphic("non-exists"));
-        
+
         assertEquals("true", get("/rest/game/first/sprites/exists"));
         assertEquals("true", get("/rest/game/second/sprites/exists"));
-        assertEquals("",     get("/rest/game/non-exists/sprites/exists"));
+        assertEquals("", get("/rest/game/non-exists/sprites/exists"));
     }
 
     @Test
@@ -279,11 +285,11 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
         assertEquals("[none, red, green, blue]", service.spritesNames("second").toString());
         assertEquals(null, service.spritesNames("non-exists"));
 
-        assertEquals("[\"none\",\"wall\",\"hero\"]", 
+        assertEquals("[\"none\",\"wall\",\"hero\"]",
                 get("/rest/game/first/sprites/names"));
-        assertEquals("[\"none\",\"red\",\"green\",\"blue\"]", 
+        assertEquals("[\"none\",\"red\",\"green\",\"blue\"]",
                 get("/rest/game/second/sprites/names"));
-        assertEquals("", 
+        assertEquals("",
                 get("/rest/game/non-exists/sprites/names"));
     }
 
@@ -314,5 +320,29 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
         String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         assertEquals(expected, service.spritesAlphabet());
         assertEquals(expected, get("/rest/game/sprites/alphabet"));
+    }
+
+    @Test
+    public void shouldUpdateScore() {
+        registration.register("1", "dummy@email.com",
+                "Name", Hash.md5("password"), "{}",
+                Collections.singleton("ROLE_USER"), "username");
+
+        Player player = new Player();
+        player.setId("1");
+        player.setGitHubUsername("username");
+        gameSaver.saveGame(player, "{}", System.currentTimeMillis());
+
+        post(HttpStatus.OK.value(), "/rest/game/update/username/score", "60");
+        assertEquals("60",gameSaver.loadGame("1").getScore());
+        verify(updateHandler, times(1)).sendUpdate("username", 60);
+    }
+
+    @TestConfiguration
+    public static class ContextConfiguration {
+        @Bean("gameService")
+        public GameServiceImpl gameService() {
+            return AbstractRestControllerTest.gameService();
+        }
     }
 }

@@ -23,12 +23,13 @@ mvc:
 
 game:
   save:
-    auto: true
-    load-on-start: true
-  ai: true
+    auto: false
+    ticks: 30
+    load-on-start: false
+  ai: false
   player:
     score:
-      cleanup: true
+      cleanup: false
   semifinal:
     enabled: false
     timeout: 900
@@ -58,11 +59,11 @@ page:
   admin:
     url: ''
   help.language: ''
+
 email:
   verification: false
   password: ''
   name: info@codenjoy.com
-  hash: secureSoul
 
 donate.code:
 
@@ -79,7 +80,6 @@ admin:
 log.debug: false
 app:
   logging:
-    - com.epam.dojo
     - com.codenjoy
 logging:
   level:
@@ -90,3 +90,13 @@ logging:
     org:
       eclipse.jetty: info
       springframework.mvc: info
+      reflections: error
+github:
+  host:
+    name: localhost
+    port: 8081
+grpc:
+  server:
+    port: 9090
+  executor:
+    pool.size: 5
