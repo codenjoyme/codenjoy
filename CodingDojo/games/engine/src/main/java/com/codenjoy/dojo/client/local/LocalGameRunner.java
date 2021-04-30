@@ -168,7 +168,7 @@ public class LocalGameRunner {
                     for (Game game : activeGames()) {
                         int index = games.indexOf(game);
                         if (removeWhenWin) {
-                            if (game.isWin() && !game.shouldLeave()) {
+                            if (game.isWin() && game.shouldLeave()) {
                                 print(index, "PLAYER_WIN -> REMOVE_FROM_GAME");
                                 game.close();
                                 continue;
