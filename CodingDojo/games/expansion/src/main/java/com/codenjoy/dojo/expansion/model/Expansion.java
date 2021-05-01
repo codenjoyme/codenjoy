@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,7 +53,7 @@ public class Expansion implements Tickable, IField {
     public static final Events WIN_SINGLE = Events.WIN(0);
     public static final Events LOSE = Events.LOSE();
 
-    private static Logger logger = DLoggerFactory.getLogger(Expansion.class);
+    private static final Logger log = LoggerFactory.getLogger(Expansion.class);
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
@@ -95,8 +96,8 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void tick() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Expansion {} started tick", lg.id());
+        if (log.isDebugEnabled()) {
+            log.debug("Expansion {} started tick", lg.id());
         }
 
         ticker.tick();
@@ -105,8 +106,8 @@ public class Expansion implements Tickable, IField {
 
         roundTicks++;
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Expansion processing board calculations. " +
+        if (log.isDebugEnabled()) {
+            log.debug("Expansion processing board calculations. " +
                             "State before processing {}",
                     toString());
         }
@@ -143,8 +144,8 @@ public class Expansion implements Tickable, IField {
                 }
                 resetAllPlayers();
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Expansion round is out. All players will be removed! {}",
+                if (log.isDebugEnabled()) {
+                    log.debug("Expansion round is out. All players will be removed! {}",
                             toString());
                 }
             }
@@ -176,8 +177,8 @@ public class Expansion implements Tickable, IField {
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Expansion finished tick. " +
+        if (log.isDebugEnabled()) {
+            log.debug("Expansion finished tick. " +
                     "State after processing {}", toString());
         }
     }
@@ -201,7 +202,7 @@ public class Expansion implements Tickable, IField {
     }
 
     private void attack() {
-        if (logger.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             countChecker.before();
         }
 
@@ -212,8 +213,8 @@ public class Expansion implements Tickable, IField {
             nothingChanged &= !settings.attack().calculate(forces);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("During call attack() method for game {} found this " +
+        if (log.isDebugEnabled()) {
+            log.debug("During call attack() method for game {} found this " +
                             "forces count delta {} (it should be <= 0!)",
                     lg.id(),
                     countChecker.after());
@@ -249,7 +250,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void increase(Hero hero, List<ForcesMoves> increase) {
-        if (logger.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             countChecker.before();
         }
         nothingChanged = false;
@@ -269,8 +270,8 @@ public class Expansion implements Tickable, IField {
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("During call increase() method for hero {} found " +
+        if (log.isDebugEnabled()) {
+            log.debug("During call increase() method for hero {} found " +
                             "this forces count delta {} (hero can only {}!)",
                     hero.lg.id(),
                     countChecker.after(),
@@ -280,7 +281,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void move(Hero hero, List<ForcesMoves> movements) {
-        if (logger.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             countChecker.before();
         }
         nothingChanged = false;
@@ -302,11 +303,11 @@ public class Expansion implements Tickable, IField {
             force.move();
         }
 
-        if (logger.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             if (countChecker.after() != 0) {
                 System.out.println();
             }
-            logger.debug("During call move() method for hero {} found this " +
+            log.debug("During call move() method for hero {} found this " +
                             "forces count delta {} (it should be 0!)",
                     hero.lg.id(),
                     countChecker.after());

@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.web.rest.dto.settings.AbstractSettings;
 import com.codenjoy.dojo.web.rest.dto.settings.ICanCodeGameSettings;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -46,10 +46,9 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @Component
 public class Dispatcher {
-
-    private static Logger logger = DLoggerFactory.getLogger(Dispatcher.class);
 
     @Autowired Players players;
     @Autowired Scores scores;
@@ -127,8 +126,8 @@ public class Dispatcher {
     }
 
     public Player registerOnServer(Player player, String score, String save) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("User {} go to {}", player.getEmail(), player.getServer());
+        if (log.isDebugEnabled()) {
+            log.debug("User {} go to {}", player.getEmail(), player.getServer());
         }
 
         String code = game.createNewPlayer(
@@ -173,7 +172,7 @@ public class Dispatcher {
 
             return result;
         } catch (RestClientException e) {
-            logger.error("Error processing scores from server: " + server, e);
+            log.error("Error processing scores from server: " + server, e);
 
             if (scoresFromGameServers.containsKey(server)) {
                 return scoresFromGameServers.get(server);

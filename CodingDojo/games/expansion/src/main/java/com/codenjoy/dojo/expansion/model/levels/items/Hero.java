@@ -27,17 +27,16 @@ import com.codenjoy.dojo.expansion.client.Command;
 import com.codenjoy.dojo.expansion.model.*;
 import com.codenjoy.dojo.expansion.services.CodeSaver;
 import com.codenjoy.dojo.expansion.services.GameSettings;
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -45,7 +44,7 @@ import java.util.List;
 
 public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickable {
 
-    private static Logger logger = DLoggerFactory.getLogger(Hero.class);
+    private static final Logger log = LoggerFactory.getLogger(Hero.class);
 
     public static final String MOVEMENTS_KEY = Command.MOVEMENTS_KEY;
     public static final String INCREASE_KEY = Command.INCREASE_KEY;
@@ -122,8 +121,8 @@ public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickabl
 
     @Override
     public void message(String command) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Hero {} gets message from client {}", lg.id(), command);
+        if (log.isDebugEnabled()) {
+            log.debug("Hero {} gets message from client {}", lg.id(), command);
         }
 
         if (StringUtils.isEmpty(command)) {

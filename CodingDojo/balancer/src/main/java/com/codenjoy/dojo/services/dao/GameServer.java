@@ -23,16 +23,14 @@ package com.codenjoy.dojo.services.dao;
  */
 
 import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
-import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.httpclient.GameClientResolver;
 import com.codenjoy.dojo.services.httpclient.GameServerClientException;
 import com.codenjoy.dojo.web.controller.ErrorTicketService;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,10 +39,9 @@ import java.util.List;
 
 import static com.codenjoy.dojo.conf.Authority.ROLE_USER;
 
+@Slf4j
 @Component
 public class GameServer {
-
-    private static Logger logger = DLoggerFactory.getLogger(GameServer.class);
 
     @Autowired ConfigProperties config;
     @Autowired GameClientResolver gameClientResolver;
@@ -67,8 +64,8 @@ public class GameServer {
                                   String score, String save)
     {
         try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Create new player {} ({}) for '{}' on server {} with save {} and score {}",
+            if (log.isDebugEnabled()) {
+                log.debug("Create new player {} ({}) for '{}' on server {} with save {} and score {}",
                         id, code, name, server, save, score);
             }
 
@@ -95,29 +92,29 @@ public class GameServer {
             return gameClientResolver.resolveClient(server).registerPlayer(player);
         } catch (GameServerClientException e) {
             String message = "Cant create new player. Status is: " + e.getMessage();
-            logger.error(message);
+            log.error(message);
             throw e;
         }
     }
 
     public boolean existsOnServer(String server, String id) {
         try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Check is player {} exists on server {}",
+            if (log.isDebugEnabled()) {
+                log.debug("Check is player {} exists on server {}",
                         id, server);
             }
 
             return gameClientResolver.resolveClient(server).checkPlayerExists(id);
         } catch (GameServerClientException e) {
-            logger.error("Error check player exists on server: " + server, e);
+            log.error("Error check player exists on server: " + server, e);
             return false;
         }
     }
 
     public String clearScores(String server) {
         try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Clear all scores on server {}",
+            if (log.isDebugEnabled()) {
+                log.debug("Clear all scores on server {}",
                         server);
             }
 
@@ -126,7 +123,7 @@ public class GameServer {
             return "Successful";
 
         } catch (GameServerClientException e) {
-            logger.error("Error clearing scores on server: " + server, e);
+            log.error("Error clearing scores on server: " + server, e);
 
             return ErrorTicketService.getPrintableMessage(e);
         }
@@ -135,15 +132,15 @@ public class GameServer {
     public String gameEnable(String server, boolean enable) {
         String status = status(enable);
         try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Set status {} of game on server {}",
+            if (log.isDebugEnabled()) {
+                log.debug("Set status {} of game on server {}",
                         status, server);
             }
 
             Boolean enabled = gameClientResolver.resolveClient(server).checkGameEnabled(enable);
             return status(enabled);
         } catch (GameServerClientException e) {
-            logger.error("Error " + status + " game on server: " + server, e);
+            log.error("Error " + status + " game on server: " + server, e);
 
             return ErrorTicketService.getPrintableMessage(e);
         }
@@ -155,15 +152,15 @@ public class GameServer {
 
     public Boolean remove(String server, String id) {
         try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Remove player {} on server {}",
+            if (log.isDebugEnabled()) {
+                log.debug("Remove player {} on server {}",
                         id, server);
             }
             Boolean removed = gameClientResolver.resolveClient(server).removePlayer(id);
             return removed;
         } catch (GameServerClientException e) {
             String message = "Cant remove player. Status is: " + e.getMessage();
-            logger.error(message);
+            log.error(message);
             return false;
         }
     }

@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.httpclient.SmsGatewayClient;
+import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.properties.SmsProperties;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;

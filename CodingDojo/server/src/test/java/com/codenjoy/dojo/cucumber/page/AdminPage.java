@@ -23,10 +23,10 @@ package com.codenjoy.dojo.cucumber.page;
  */
 
 import com.codenjoy.dojo.services.AutoSaver;
-import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.log.DebugService;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;

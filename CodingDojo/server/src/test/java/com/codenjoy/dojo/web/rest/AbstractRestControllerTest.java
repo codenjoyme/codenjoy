@@ -27,6 +27,7 @@ import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;

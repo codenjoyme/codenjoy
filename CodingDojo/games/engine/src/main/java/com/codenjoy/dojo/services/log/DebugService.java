@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.log;
 
 /*-
  * #%L
@@ -23,35 +23,50 @@ package com.codenjoy.dojo.services;
  */
 
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
 
-import static com.codenjoy.dojo.services.DLoggerFactory.DEBUG_KEY;
+import java.util.List;
+import java.util.stream.Stream;
 
-@Component
 public class DebugService extends Suspendable {
 
-    @Value("${log.debug}")
+    private List<String> filter;
+
+    public DebugService(boolean active, List<String> filter) {
+        this.active = active;
+        this.filter = filter;
+    }
+
     public void setDebugEnable(boolean active) {
         super.setActive(active);
     }
 
     @Override
     public void pause() {
-        if (isWorking()) {
-            DLoggerFactory.settings.remove(DEBUG_KEY);
-        }
+        changePackageLoggingLevels(Level.INFO);
     }
 
     @Override
     public boolean isWorking() {
-        return DLoggerFactory.settings.containsKey(DEBUG_KEY);
+        return loggers()
+                .map(Logger::getLevel)
+                .anyMatch(Level.DEBUG::equals);
+    }
+
+    private Stream<Logger> loggers() {
+        return filter.stream()
+                .map(LoggerFactory::getLogger)
+                .map(Logger.class::cast);
     }
 
     @Override
     public void resume() {
-        if (!isWorking()) {
-            DLoggerFactory.settings.put(DEBUG_KEY, true);
-        }
+        changePackageLoggingLevels(Level.DEBUG);
+    }
+
+    private void changePackageLoggingLevels(Level level) {
+        loggers().forEach(logger -> logger.setLevel(level));
     }
 }

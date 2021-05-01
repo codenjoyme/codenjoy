@@ -77,17 +77,15 @@ admin:
   login: admin@codenjoyme.com
   password: admin
 
-log.debug: false
-app:
-  logging:
-    - com.epam.dojo
+log:
+  debug: false
+  filter: >
     - com.codenjoy
 logging:
   level:
     root: info
     com:
       codenjoy: info
-      epam.dojo: info
     org:
       eclipse.jetty: info
       springframework.mvc: info

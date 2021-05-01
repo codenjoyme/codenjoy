@@ -26,21 +26,20 @@ import com.codenjoy.dojo.services.GameProperties;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
+import com.codenjoy.dojo.services.log.DebugService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-/**
- * @author Igor Petrov
- * Created at 4/8/2019
- */
 @Configuration
 @EnableConfigurationProperties(GameProperties.class)
-public class AppConf {
+public class AppConfig {
 
     @Bean
     public ScheduledThreadPoolExecutor restSenderExecutorService(@Value("${sender.pool.size}") int poolSize) {
@@ -55,5 +54,12 @@ public class AppConf {
     @Bean
     public Players players(@Qualifier("playersPoolFactory") ConnectionThreadPoolFactory playersPoolFactory) {
         return new Players(playersPoolFactory);
+    }
+
+    @Bean
+    public DebugService debugService(@Value("${log.debug}") boolean active,
+                                     @Value("${log.filter}") String[] filter)
+    {
+        return new DebugService(active, Arrays.asList(filter));
     }
 }

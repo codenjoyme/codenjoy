@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.config;
+package com.codenjoy.dojo.services.log;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2019 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,15 +22,27 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+public abstract class Suspendable {
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+    protected boolean active;
 
-import java.util.List;
+    public void pause() {
+        active = false;
+    }
 
-@Data
-@ConfigurationProperties("app")
-public class AppProperties {
+    public void resume() {
+        active = true;
+    }
 
-    private List<String> logging;
+    public boolean isWorking() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        if (active) {
+            resume();
+        } else {
+            pause();
+        }
+    }
 }

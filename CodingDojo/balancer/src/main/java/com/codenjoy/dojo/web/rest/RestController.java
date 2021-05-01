@@ -32,15 +32,16 @@ import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.entity.server.Disqualified;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.web.controller.ErrorTicketService;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.BalancerValidator;
 import com.codenjoy.dojo.web.rest.dto.*;
 import com.codenjoy.dojo.web.rest.dto.settings.AbstractSettings;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.web.controller.BalancerValidator.CANT_BE_NULL;
 
+@Slf4j
 @Controller
 @RequestMapping(value = RestController.URI)
 public class RestController {
@@ -74,8 +76,6 @@ public class RestController {
     public static final String GAME_SETTINGS = "/game/settings";
     public static final String VERSION = "/version";
     public static final String LOGS = "/logs";
-
-    private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
     @Autowired private Players players;
     @Autowired private Scores scores;
@@ -372,14 +372,14 @@ public class RestController {
         try {
             result = action.onGame();
         } catch (Exception e) {
-            logger.error("Error at game server", e);
+            log.error("Error at game server", e);
             errors.add("At game server: " + ErrorTicketService.getPrintableMessage(e));
         }
 
         try {
             result = action.onBalancer(result);
         } catch (Exception e) {
-            logger.error("Error at balancer", e);
+            log.error("Error at balancer", e);
             errors.add("At balancer: " + ErrorTicketService.getPrintableMessage(e));
         }
 

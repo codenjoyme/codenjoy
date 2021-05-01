@@ -27,12 +27,17 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.expansion.client.Board;
 import com.codenjoy.dojo.expansion.client.ai.AISolver;
-import com.codenjoy.dojo.expansion.model.*;
+import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.expansion.model.Expansion;
+import com.codenjoy.dojo.expansion.model.Player;
+import com.codenjoy.dojo.expansion.model.Ticker;
 import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.LevelsFactory;
 import com.codenjoy.dojo.expansion.model.replay.GameLoggerImpl;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -44,6 +49,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -51,7 +57,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType<GameSettings>  {
 
-    private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
+    private static final Logger log = LoggerFactory.getLogger(GameRunner.class);
 
     private GameSettings settings; // TODO make stateless
 
@@ -76,8 +82,8 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Creating GameField for {}", levelNumber);
+        if (log.isDebugEnabled()) {
+            log.debug("Creating GameField for {}", levelNumber);
         }
 
         if (settings.singleTrainingMode()) {
@@ -101,8 +107,8 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Creating GamePlayer for {}", playerId);
+        if (log.isDebugEnabled()) {
+            log.debug("Creating GamePlayer for {}", playerId);
         }
 
         // TODO понять как достать тут сейв
@@ -175,8 +181,8 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
             result.put("available", player.getForcesPerTick());
             result.put("offset", new JSONObject(data.getOffset()));
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("getBoardAsString for player {} and field {} prepare {}",
+            if (log.isDebugEnabled()) {
+                log.debug("getBoardAsString for player {} and field {} prepare {}",
                         player.lg.id(),
                         player.getField().id(),
                         JsonUtils.toStringSorted(result));

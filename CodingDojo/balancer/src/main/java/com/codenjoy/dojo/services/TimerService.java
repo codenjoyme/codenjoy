@@ -23,8 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -33,10 +32,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
 public class TimerService implements Runnable {
-
-    private static Logger logger = DLoggerFactory.getLogger(TimerService.class);
 
     private ScheduledThreadPoolExecutor executor;
     private ScheduledFuture<?> future;
@@ -69,21 +67,21 @@ public class TimerService implements Runnable {
             dispatcher.updateScores();
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Error while updating scores", e);
+            log.error("Error while updating scores", e);
         }
     }
 
     public void pause() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Update score timer paused");
+        if (log.isDebugEnabled()) {
+            log.debug("Update score timer paused");
         }
 
         this.paused = true;
     }
 
     public void resume() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Update score timer started");
+        if (log.isDebugEnabled()) {
+            log.debug("Update score timer started");
         }
 
         this.paused = false;

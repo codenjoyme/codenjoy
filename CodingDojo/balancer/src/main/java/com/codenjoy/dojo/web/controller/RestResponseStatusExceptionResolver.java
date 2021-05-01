@@ -22,7 +22,7 @@ package com.codenjoy.dojo.web.controller;
  * #L%
  */
 
-import com.codenjoy.dojo.services.DebugService;
+import com.codenjoy.dojo.services.log.DebugService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;

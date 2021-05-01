@@ -22,7 +22,7 @@ package com.codenjoy.dojo.web.controller;
  * #L%
  */
 
-import com.codenjoy.dojo.services.DebugService;
+import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.properties.Messages;
 import lombok.extern.slf4j.Slf4j;

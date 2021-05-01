@@ -22,7 +22,6 @@ package com.codenjoy.dojo;
  * #L%
  */
 
-import com.codenjoy.dojo.config.AppProperties;
 import com.codenjoy.dojo.config.SQLiteFilesProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,7 +32,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 @SpringBootApplication
 @ServletComponentScan
-@EnableConfigurationProperties({AppProperties.class, SQLiteFilesProperties.class})
+@EnableConfigurationProperties({SQLiteFilesProperties.class})
 public class CodenjoyContestApplication extends SpringBootServletInitializer {
 
     @Override

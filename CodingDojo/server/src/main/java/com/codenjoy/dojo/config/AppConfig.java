@@ -22,18 +22,17 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.PlayerTransportImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-/**
- * @author Igor Petrov
- * Created at 3/6/2019
- */
 @Configuration
 public class AppConfig {
 
@@ -52,4 +51,10 @@ public class AppConfig {
         return new PlayerTransportImpl();
     }
 
+    @Bean
+    public DebugService debugService(@Value("${log.debug}") boolean active,
+                                     @Value("${log.filter}") String[] filter)
+    {
+        return new DebugService(active, Arrays.asList(filter));
+    }
 }

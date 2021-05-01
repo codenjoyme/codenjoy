@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.log;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,27 +22,22 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-public abstract class Suspendable {
+import org.slf4j.Logger;
 
-    protected boolean active;
+import java.util.function.Supplier;
 
-    public void pause() {
-        active = false;
-    }
+public interface Log extends Logger {
 
-    public void resume() {
-        active = true;
-    }
-
-    public boolean isWorking() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        if (active) {
-            resume();
-        } else {
-            pause();
+    default void debug(Supplier<String> msg) {
+        if (isDebugEnabled()) {
+            debug(msg.get());
         }
     }
+
+    default void debug(Supplier<String> msg, Throwable t) {
+        if (isDebugEnabled()) {
+            debug(msg.get(), t);
+        }
+    }
+
 }

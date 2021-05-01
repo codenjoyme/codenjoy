@@ -23,21 +23,22 @@ package com.codenjoy.dojo.expansion.services;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
+import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.services.PlayerScores;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Scores implements PlayerScores {
 
-    private static Logger logger = DLoggerFactory.getLogger(Scores.class);
+    private static final Logger log = LoggerFactory.getLogger(Hero.class);
 
     public final static String SCORE = "score";
     public static final String ROUNDS = "rounds";
 
     private volatile int score;
-    private JSONObject log;
+    private JSONObject scores;
 
     public Scores(Object startScore) {
         if (startScore instanceof Integer) {
@@ -46,12 +47,12 @@ public class Scores implements PlayerScores {
             JSONObject object = new JSONObject((String) startScore);
             this.score = object.getInt(SCORE);
         }
-        log = new JSONObject();
+        scores = new JSONObject();
         clearRounds();
     }
 
     private void clearRounds() {
-        log.put(ROUNDS, new JSONArray());
+        scores.put(ROUNDS, new JSONArray());
     }
 
     @Override
@@ -77,12 +78,12 @@ public class Scores implements PlayerScores {
 
         if (data instanceof Integer) {
             score = Integer.valueOf(data.toString());
-            log.put(SCORE, score);
+            scores.put(SCORE, score);
         } else if (data instanceof JSONObject) {
             JSONObject json = (JSONObject) data;
             score = Integer.valueOf(json.getInt(SCORE));
-            log.put(SCORE, score);
-            log.put(ROUNDS, json.getJSONArray(ROUNDS));
+            scores.put(SCORE, score);
+            scores.put(ROUNDS, json.getJSONArray(ROUNDS));
         } else {
             // do nothing, we don't know how to parse this format
         }
@@ -90,8 +91,8 @@ public class Scores implements PlayerScores {
 
     @Override
     public JSONObject getScore() {
-        log.put(SCORE, score);
-        return log;
+        scores.put(SCORE, score);
+        return scores;
     }
     @Override
     public void event(Object input) {
@@ -107,12 +108,12 @@ public class Scores implements PlayerScores {
         }
         this.score = Math.max(0, this.score);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Scores after event {} is {}", input, getScore());
+        if (log.isDebugEnabled()) {
+            log.debug("Scores after event {} is {}", input, getScore());
         }
     }
 
     private JSONArray rounds() {
-        return log.getJSONArray(ROUNDS);
+        return scores.getJSONArray(ROUNDS);
     }
 }

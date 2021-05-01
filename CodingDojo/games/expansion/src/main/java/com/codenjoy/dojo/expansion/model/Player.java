@@ -36,6 +36,7 @@ import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.Events;
 import org.json.JSONObject;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ import static java.util.stream.Collectors.toList;
 
 public class Player extends GamePlayer<Hero, IField> {
 
-    private static Logger logger = DLoggerFactory.getLogger(Player.class);
+    private static final Logger log = LoggerFactory.getLogger(Player.class);
 
     private String name;
     private Printer<PrinterData> printer;
@@ -64,8 +65,8 @@ public class Player extends GamePlayer<Hero, IField> {
     }
 
     public void event(Events event) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Player {} fired event {}", lg.id(), event);
+        if (log.isDebugEnabled()) {
+            log.debug("Player {} fired event {}", lg.id(), event);
         }
         super.event(event);
 
@@ -130,8 +131,8 @@ public class Player extends GamePlayer<Hero, IField> {
             JSONObject result = new JSONObject();
             result.put("lastAction", getCurrentAction());
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("getAdditionalData for game {} prepare {}", lg.id(), JsonUtils.toStringSorted(result));
+            if (log.isDebugEnabled()) {
+                log.debug("getAdditionalData for game {} prepare {}", lg.id(), JsonUtils.toStringSorted(result));
             }
 
             return result;

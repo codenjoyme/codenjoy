@@ -24,26 +24,25 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 
 import com.codenjoy.dojo.expansion.model.Elements;
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 
 public class Levels {
 
-    private static Logger logger = DLoggerFactory.getLogger(Levels.class);
+    private static final Logger log = LoggerFactory.getLogger(Levels.class);
 
     public static final int COUNT_LAYERS = 3;
 
@@ -114,7 +113,7 @@ public class Levels {
             // file not found
             return result;
         } catch (IOException e) {
-            logger.error("Error during loading file {}", filePath, e);
+            log.error("Error during loading file {}", filePath, e);
         }
         return result;
     }

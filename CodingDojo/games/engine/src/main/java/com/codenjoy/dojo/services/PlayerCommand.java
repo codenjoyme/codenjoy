@@ -23,14 +23,14 @@ package com.codenjoy.dojo.services;
  */
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class PlayerCommand {
-
-    private static Logger logger = DLoggerFactory.getLogger(PlayerCommand.class);
 
     public static final int MAX_COMMAND_LENGTH = 100;
     private static final String COMMAND = "(left|right|up|down|(act(\\((-?\\d*,?)+\\))?)|(message(\\('(.*)'\\))?))";
@@ -95,10 +95,10 @@ public class PlayerCommand {
                         joystick.message(p.replaceAll("\\\\n", "\n").replaceAll("\\\\r", "\r"));
                     }
                 } else {
-                    logger.warn(String.format("Unexpected command part '%s' in command '%s'", command, this.command));
+                    log.warn("Unexpected command part '{}' in command '{}'", command, this.command);
                 }
             } catch (Exception e) {
-                logger.error(String.format("Error during process command '%s'", this.command), e);
+                log.error(String.format("Error during process command '%s'", this.command), e);
             }
         }
     }

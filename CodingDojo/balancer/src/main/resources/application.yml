@@ -7,6 +7,17 @@ mvc:
 
 log:
   debug: false
+  filter: >
+    com.codenjoy
+logging:
+  level:
+    root: info
+    com:
+      codenjoy: info
+    org:
+      eclipse.jetty: info
+      springframework.mvc: info
+      reflections: error
 
 admin:
   login: admin@codenjoyme.com

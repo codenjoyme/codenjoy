@@ -27,18 +27,18 @@ import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameSettings;
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class GameLoggerImpl implements GameLogger {
 
-    private static Logger logger = DLoggerFactory.getLogger(GameLoggerImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(GameLoggerImpl.class);
 
     private BufferedWriter writer;
     private Expansion expansion;
@@ -63,7 +63,7 @@ public class GameLoggerImpl implements GameLogger {
             writer = new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8));
             write("Game started");
         } catch (Exception e) {
-            logger.error("Error printing logging game state", e);
+            log.error("Error printing logging game state", e);
         }
     }
 
@@ -108,10 +108,10 @@ public class GameLoggerImpl implements GameLogger {
                         replayName,
                         player.lg.id()));
             } catch (Exception e) {
-                logger.error("Error printing hero game state", e);
+                log.error("Error printing hero game state", e);
             }
         } catch (Exception e) {
-            logger.error("Error printing logging game state", e);
+            log.error("Error printing logging game state", e);
         }
     }
 
@@ -139,13 +139,13 @@ public class GameLoggerImpl implements GameLogger {
                             player.lg.id(),
                             command));
                 } catch (Exception e) {
-                    logger.error("Error printing hero game state", e);
+                    log.error("Error printing hero game state", e);
                 }
             });
             write(String.format("Board:'%s'", expansion.lg.printer()));
             write("--------------------------------------------------------------");
         } catch (Exception e) {
-            logger.error("Error printing logging game state", e);
+            log.error("Error printing logging game state", e);
         }
     }
 
@@ -164,7 +164,7 @@ public class GameLoggerImpl implements GameLogger {
             write("Game finished");
             writer.close();
         } catch (Exception e) {
-            logger.error("Error closing file for logging game", e);
+            log.error("Error closing file for logging game", e);
         }
     }
 
