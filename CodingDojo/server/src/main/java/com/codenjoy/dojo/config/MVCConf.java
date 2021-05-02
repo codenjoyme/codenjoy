@@ -46,10 +46,6 @@ import java.util.concurrent.TimeUnit;
 
 import static com.codenjoy.dojo.services.JarResourceHttpRequestHandler.PREFIX;
 
-/**
- * @author Igor Petrov
- * Created at 3/6/2019
- */
 @Configuration
 public class MVCConf implements WebMvcConfigurer {
 
@@ -85,13 +81,21 @@ public class MVCConf implements WebMvcConfigurer {
     @Bean
     public ResourceHttpRequestHandler resourceHttpRequestHandler() {
         return new JarResourceHttpRequestHandler(
-                CacheControl.maxAge(cachePeriod, TimeUnit.SECONDS)
-                        .noTransform()
-                        .mustRevalidate(),
+                getCache(),
                 "/resources/",
                 "classpath:/resources/",
                 "file:" + pluginsStatic,
                 PREFIX + pluginsResources);
+    }
+
+    private CacheControl getCache() {
+        if (cachePeriod == -1) {
+            return CacheControl.noCache();
+        }
+
+        return CacheControl.maxAge(cachePeriod, TimeUnit.SECONDS)
+                .noTransform()
+                .mustRevalidate();
     }
 
     @Bean
