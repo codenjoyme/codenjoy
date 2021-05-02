@@ -42,14 +42,14 @@ public class ChatService {
     private Chat chat;
     private TimeService time;
     private Registration registration;
-    private Map<String, String> playerNames = new ConcurrentHashMap<>();
+    private final Map<String, String> playerNames = new ConcurrentHashMap<>();
 
     public List<PMessage> getMessages(String room, int count,
                                       Integer afterId, Integer beforeId,
                                       boolean inclusive,
                                       String playerId)
     {
-        validator.checkPlayerInRoom(playerId, room);
+        validateIsChatAvailable(playerId, room);
 
         if (afterId != null && beforeId != null) {
             return wrap(chat.getMessagesBetween(room, afterId, beforeId, inclusive));
@@ -64,6 +64,13 @@ public class ChatService {
         }
 
         return wrap(chat.getMessages(room, count));
+    }
+
+    public void validateIsChatAvailable(String playerId, String room) {
+        // TODO каждый раз при загрузке страницы будет в базу идти запрос а не админ ли это? - дорого
+        if (!registration.isAdmin(playerId)) {
+            validator.checkPlayerInRoom(playerId, room);
+        }
     }
 
     private List<PMessage> wrap(List<Chat.Message> messages) {
@@ -91,7 +98,7 @@ public class ChatService {
     }
 
     public PMessage getMessage(int messageId, String room, String playerId) {
-        validator.checkPlayerInRoom(playerId, room);
+        validateIsChatAvailable(playerId, room);
 
         Chat.Message message = chat.getMessageById(messageId);
 
@@ -103,7 +110,7 @@ public class ChatService {
     }
 
     public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
-        validator.checkPlayerInRoom(playerId, room);
+        validateIsChatAvailable(playerId, room);
 
         Chat.Message message = Chat.Message.builder()
                 .room(room)
@@ -119,7 +126,7 @@ public class ChatService {
     }
 
     public boolean deleteMessage(int messageId, String room, String playerId) {
-        validator.checkPlayerInRoom(playerId, room);
+        validateIsChatAvailable(playerId, room);
 
         boolean deleted = chat.deleteMessage(messageId, playerId);
 
