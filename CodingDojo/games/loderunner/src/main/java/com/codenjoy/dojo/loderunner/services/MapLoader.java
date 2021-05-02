@@ -23,16 +23,17 @@ package com.codenjoy.dojo.loderunner.services;
  */
 
 import com.codenjoy.dojo.loderunner.services.levels.Big;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MapLoader {
 
-    protected static Logger log = Logger.getLogger(MapLoader.class.getName());
+    protected static final Logger log = LoggerFactory.getLogger(MapLoader.class);
 
     public static String loadMapFromFile(String path) {
         try {
@@ -44,7 +45,7 @@ public class MapLoader {
             }
             return map.toString();
         } catch (FileNotFoundException e) {
-            log.log(Level.WARNING, "Map loading error", e);
+            log.warn("Map loading error", e);
         }
         return Big.all().get(0);
     }
