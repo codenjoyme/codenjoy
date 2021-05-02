@@ -117,7 +117,7 @@ public class ChatTest {
         assertEquals(Integer.valueOf(5), chat.getLastMessageId("room1"));
         assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
         assertEquals(null, chat.getLastMessageId("room3"));
-        assertEquals("{room1=5, room2=4}",
+        assertEquals("{room2=4, room1=5}",
                 chat.getLastMessageIds().toString());
 
         // when then
@@ -125,7 +125,7 @@ public class ChatTest {
         assertEquals(Integer.valueOf(5), chat.getLastMessageId("room1"));
         assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
         assertEquals(Integer.valueOf(6), chat.getLastMessageId("room3"));
-        assertEquals("{room1=5, room2=4, room3=6}",
+        assertEquals("{room2=4, room1=5, room3=6}",
                 chat.getLastMessageIds().toString());
 
         // when then
@@ -133,7 +133,7 @@ public class ChatTest {
         assertEquals(Integer.valueOf(5), chat.getLastMessageId("room1"));
         assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
         assertEquals(null, chat.getLastMessageId("room3"));
-        assertEquals("{room1=5, room2=4}",
+        assertEquals("{room2=4, room1=5}",
                 chat.getLastMessageIds().toString());
 
         // when then
