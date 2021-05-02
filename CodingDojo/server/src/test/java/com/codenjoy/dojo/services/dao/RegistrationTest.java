@@ -109,6 +109,20 @@ public class RegistrationTest {
     }
 
     @Test
+    public void shouldIsAdmin() {
+        // given
+        registration.register("id1", "email1", "name1", "pass1", "someData1",
+                ADMIN.roles());
+
+        registration.register("id2", "email2", "name2", "pass2", "someData2",
+                USER.roles());
+
+        // when then
+        assertEquals(true, registration.isAdmin("id1"));
+        assertEquals(false, registration.isAdmin("id2"));
+    }
+
+    @Test
     public void shouldGetUserByCode_notExistent() {
         // when
         try {

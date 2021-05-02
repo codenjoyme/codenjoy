@@ -333,6 +333,14 @@ public class Registration {
                 new Object[]{name, email, id});
     }
 
+    public boolean isAdmin(String id) {
+        return pool.select("SELECT count(*) AS total " +
+                "FROM users " +
+                "WHERE id = '" + id + "' " +
+                "AND roles LIKE '%" + ROLE_ADMIN + "%';",
+                rs -> rs.next() ? rs.getInt("total") > 0 : false);
+    }
+
     @Data
     @ToString(of = { "id", "email", "readableName", "approved", "code", "data" })
     @EqualsAndHashCode(callSuper = true)
