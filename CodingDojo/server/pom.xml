@@ -1075,6 +1075,7 @@
                                 <jsInclude>register.js</jsInclude>
                                 <jsInclude>admin.js</jsInclude>
                                 <jsInclude>help.js</jsInclude>
+                                <jsInclude>error.js</jsInclude>
                                 <jsInclude>rules.js</jsInclude>
                                 <jsInclude>board.js</jsInclude>
                                 <jsInclude>board-only.js</jsInclude>
