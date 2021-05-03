@@ -23,7 +23,6 @@ package com.codenjoy.dojo.cucumber.page;
  */
 
 
-import com.codenjoy.dojo.cucumber.page.Server;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -31,13 +30,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+import java.util.List;
+
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
+import static java.util.stream.Collectors.toList;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
@@ -103,5 +104,19 @@ public class WebDriverWrapper {
         } catch (NoSuchElementException e) {
             return false;
         }
+    }
+
+    public List<String> options(String selector) {
+        return new Select(element(selector)).getOptions().stream()
+                .map(option -> option.getText())
+                .collect(toList());
+    }
+
+    public List<WebElement> elementsBy(By by) {
+        return driver.findElements(by);
+    }
+
+    public WebElement elementBy(By by) {
+        return driver.findElement(by);
     }
 }

@@ -34,7 +34,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @RequiredArgsConstructor
 public class BoardPage {
 
-    public static final String URL = "/board/player/<PLAYER_ID>?code=<CODE>&game=<GAME>";
+    public static final String URL = "/board/player/<PLAYER_ID>?code=<CODE>";
 
     private final Page page;
     private final WebDriverWrapper web;
@@ -45,5 +45,9 @@ public class BoardPage {
 
     public void assertOnPage() {
         page.assertPage("board");
+    }
+
+    public void assertPlayersOnLeaderboard(String players) {
+        // TODO implement me
     }
 }

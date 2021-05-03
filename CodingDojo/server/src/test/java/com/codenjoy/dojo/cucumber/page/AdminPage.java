@@ -22,6 +22,7 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import com.codenjoy.dojo.cucumber.page.admin.ActiveGames;
 import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
@@ -32,24 +33,33 @@ import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.function.BiFunction;
+
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static org.junit.Assert.assertEquals;
 
 @Component
 @RequiredArgsConstructor
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class AdminPage {
+public class AdminPage implements CleanUp {
 
     public static final String URL = "/admin?room=";
+    public static final BiFunction<String, String, String> CREATE_ROOM_URL =
+            (room, game) -> String.format("/admin?room=%s&game=%s", room, game);
 
-    private final Page page;
-    private final WebDriverWrapper web;
+    // application services
     private final AutoSaver autoSaver;
     private final DebugService debugService;
     private final TimerService timerService;
     private final ActionLogger actionLogger;
     private final PlayerService playerService;
 
+    // page objects
+    private final Page page;
+    private final WebDriverWrapper web;
+    private final ActiveGames activeGames;
+
+    @Override
     public void cleanUp() {
         actionLogger.pause();
         autoSaver.resume();
@@ -108,12 +118,24 @@ public class AdminPage {
     }
 
     public void selectRoom(String room) {
-        web.element("#game-" + room + "-room-0").click();
+        activeGames.selectRoom(room);
     }
 
-    public void assertRoom(String room) {
-        assertEquals(room, page.pageSetting("game"));
-        assertEquals(room, page.pageSetting("room"));
+    public void assertGameAndRoom(String game, String room) {
+        page.assertGame(game);
+        page.assertRoom(room);
         page.assertUrl(URL + room);
+    }
+
+    public void assertRoomsAvailable(String expected) {
+        assertEquals(expected, activeGames.getRooms().toString());
+    }
+
+    public void createNewRoomForGame(String room, String game) {
+        page.open(CREATE_ROOM_URL.apply(room, game));
+    }
+
+    public void assertPlayersInRooms(String expected) {
+        assertEquals(expected, activeGames.getPlayersInRooms().toString());
     }
 }

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.cucumber.definitions;
+package com.codenjoy.dojo.cucumber;
 
 /*-
  * #%L
@@ -32,7 +32,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class StepDefinitions {
+import static org.junit.Assert.assertEquals;
+
+public class StepDefinitions implements CleanUp {
 
     @Autowired
     private WebDriverWrapper web;
@@ -59,9 +61,10 @@ public class StepDefinitions {
     private WebsocketClients clients;
 
     @Before
+    @Override
     public void cleanUp() {
-        registration.cleanUp();
         admin.cleanUp();
+        registration.cleanUp();
         clients.cleanUp();
     }
 
@@ -81,11 +84,11 @@ public class StepDefinitions {
         login.adminOpen();
     }
 
-    @When("Try to login as {string} with {string} password in game {string}")
-    public void login(String email, String password, String game) {
+    @When("Try to login as {string} with {string} password in room {string}")
+    public void login(String email, String password, String room) {
         login.email(email);
         login.password(password);
-        login.game(game);
+        login.game(room);
         login.submit();
     }
 
@@ -114,11 +117,11 @@ public class StepDefinitions {
     @When("Try to register with: name {string}, email {string}, " +
             "password {string}, city {string}, " +
             "tech skills {string}, company {string}, " +
-            "experience {string}, game {string}")
+            "experience {string}, room {string}")
     public void tryToRegister(String name, String email,
                               String password, String country,
                               String techSkills, String company,
-                              String experience, String game)
+                              String experience, String room)
     {
         registration.name(name);
         registration.email(email);
@@ -128,7 +131,7 @@ public class StepDefinitions {
         registration.tech(techSkills);
         registration.company(company);
         registration.experience(experience);
-        registration.game(game);
+        registration.room(room);
         registration.submit();
     }
 
@@ -207,10 +210,11 @@ public class StepDefinitions {
         page.assertUrl(url);
     }
 
-    @Then("Board page opened with url {string}")
-    public void assertBoardPageOpened(String url) {
+    @Then("Board page opened with url {string} in room {string}")
+    public void assertBoardPageOpened(String url, String room) {
         board.assertOnPage();
         page.assertUrl(url);
+        page.assertRoom(room);
     }
 
     @Given("Login to Admin page")
@@ -280,9 +284,9 @@ public class StepDefinitions {
         admin.selectRoom(room);
     }
 
-    @Then("Check game room is {string}")
-    public void assertGameIs(String room) {
-        admin.assertRoom(room);
+    @Then("Check game is {string} and room is {string}")
+    public void assertGameIs(String game, String room) {
+        admin.assertGameAndRoom(game, room);
     }
 
     @Then("Websocket client {string} connected successfully to the {string}")
@@ -301,5 +305,40 @@ public class StepDefinitions {
     @Then("Websocket {string} send {string} and got nothing")
     public void websocketClientGotNothing(String name, String command) {
         clients.assertRequestReceivedNothing(name, command);
+    }
+
+    @When("Open page with url {string}")
+    public void openPageWithUrl(String url) {
+        page.open(url);
+    }
+
+    @Then("There is list of rooms {string} on the login form")
+    public void thereIsListOfRoomsOnLoginForm(String rooms) {
+        login.assertRoomsAvailable(rooms);
+    }
+
+    @Then("There is list of rooms {string} on the register form")
+    public void thereIsListOfRoomsOnRegisterForm(String rooms) {
+        registration.assertRoomsAvailable(rooms);
+    }
+
+    @Then("There is list of rooms {string} on the admin page")
+    public void thereIsListOfRoomsOnAdminPage(String rooms) {
+        admin.assertRoomsAvailable(rooms);
+    }
+
+    @When("Create new room {string} for game {string}")
+    public void createNewRoomForGame(String room, String game) {
+        admin.createNewRoomForGame(room, game);
+    }
+
+    @Then("There are players {string} on the leaderboard")
+    public void thereArePlayersOnLeaderboard(String players) {
+        board.assertPlayersOnLeaderboard(players);
+    }
+
+    @Then("There are players in rooms {string} on the admin page")
+    public void thereArePlayersOnTheRoomsOnAdminPage(String expected) {
+        admin.assertPlayersInRooms(expected);
     }
 }

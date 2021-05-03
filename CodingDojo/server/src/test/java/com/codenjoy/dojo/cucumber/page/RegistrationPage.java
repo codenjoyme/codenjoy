@@ -22,11 +22,14 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +42,7 @@ import static org.junit.Assert.assertEquals;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class RegistrationPage {
+public class RegistrationPage implements CleanUp {
 
     public static final String SUBMIT_BUTTON = "#submit-button";
     public static final String READABLE_NAME_INPUT = "#readableName input";
@@ -50,15 +53,22 @@ public class RegistrationPage {
     public static final String TECH_INPUT = "#data2 input";
     public static final String COMPANY_INPUT = "#data3 input";
     public static final String EXPERIENCE_INPUT = "#data4 input";
-    public static final String GAME_SELECT = "#game select";
+    public static final String ROOM_SELECT = "#room select";
     public static final String ERROR_MESSAGE = "#error-message";
 
     private final Page page;
     private final WebDriverWrapper web;
     private final Registration registration;
+    private final PlayerService playerService;
+    private final GameService gameService;
+    private final SaveService saveService;
 
+    @Override
     public void cleanUp() {
         registration.removeAll();
+        playerService.removeAll();
+        gameService.removeAll();
+        saveService.removeAllSaves();
     }
 
     public void assertUserInDatabase(String user) {
@@ -110,8 +120,8 @@ public class RegistrationPage {
         web.text(EXPERIENCE_INPUT, experience);
     }
 
-    public void game(String game) {
-        web.select(GAME_SELECT, game);
+    public void room(String room) {
+        web.select(ROOM_SELECT, room);
     }
 
     public void open() {
@@ -131,7 +141,11 @@ public class RegistrationPage {
         assertEquals(false, web.exists(TECH_INPUT));
         assertEquals(false, web.exists(COMPANY_INPUT));
         assertEquals(false, web.exists(EXPERIENCE_INPUT));
-        assertEquals(false, web.exists(GAME_SELECT));
+        assertEquals(false, web.exists(ROOM_SELECT));
         assertEquals(false, web.exists(SUBMIT_BUTTON));
+    }
+
+    public void assertRoomsAvailable(String rooms) {
+        assertEquals(rooms, web.options(ROOM_SELECT).toString());
     }
 }

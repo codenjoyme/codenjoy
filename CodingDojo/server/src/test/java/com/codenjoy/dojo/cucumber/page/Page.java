@@ -90,4 +90,16 @@ public class Page {
     public void assertLogoutLink() {
         assertEquals("Logout", logLink().getText());
     }
+
+    public void open(String url) {
+        web.open(url);
+    }
+
+    public void assertGame(String game) {
+        assertEquals(game, pageSetting("game"));
+    }
+
+    public void assertRoom(String room) {
+        assertEquals(room, pageSetting("room"));
+    }
 }

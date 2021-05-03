@@ -27,8 +27,8 @@ import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
 
 // TODO подумать как иметь возможность включать на локали, но выключать в maven/travis
-//@RunWith(Cucumber.class)
-//@CucumberOptions(plugin = {"pretty", "html:target/cucumber.html", "junit:target/junit-report.xml"},
-//        features = "src/test/resources/cucumber")
+@RunWith(Cucumber.class)
+@CucumberOptions(plugin = {"pretty", "html:target/cucumber.html", "junit:target/junit-report.xml"},
+        features = "src/test/resources/cucumber")
 public class RunAllCucumberTests {
 }

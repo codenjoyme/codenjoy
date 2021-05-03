@@ -49,13 +49,14 @@ import static org.mockito.Mockito.*;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class WebsocketClients {
+public class WebsocketClients implements CleanUp {
 
     private final Server server;
     private final GameService gameService;
 
     private Map<String, WebSocketRunner> runners = new HashMap<>();
 
+    @Override
     public void cleanUp() {
         runners.values()
                 .forEach(WebSocketRunner::close);
