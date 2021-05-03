@@ -91,6 +91,15 @@ label.error {
     padding-right: 20px;
 }
 
+.admin-table .bold-room-true {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.admin-table .bold-room-false {
+    /* do nothing */
+}
+
 span.pow {
     vertical-align: 7px;
     font-size: 10px;

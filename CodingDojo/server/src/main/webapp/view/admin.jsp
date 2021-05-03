@@ -24,6 +24,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<%@ page trimDirectiveWhitespaces="true" %>
+
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <c:set var="page" scope="request" value="admin"/>
@@ -75,24 +77,23 @@
                 </td>
             </tr>
             <c:forEach items="${gameRooms}" var="gameItem" varStatus="status">
-                <tr>
+                <tr game="${gameItem.game}">
                     <td class="rightStep">
                         <form:checkbox id="enable-games-${gameItem.game}" path="games[${status.index}]"/>
                         <label class="check-label" for="enable-games-${gameItem.game}"></label>
                         <span>${gameItem.game}</span>
                     </td>
                     <td class="rightStep">
-                        <a id="game-${gameItem.game}" href="${ctx}/admin?game=${gameItem.game}">game</a>
+                        <a id="game-${gameItem.game}"
+                           href="${ctx}/admin?game=${gameItem.game}">game</a>
                     </td>
                     <td class="rightStep">
                         <c:forEach items="${gameItem.rooms}" var="roomItem" varStatus="status2">
-                            <c:if test="${roomItem == room}">
-                                <b style="font-size:18px">
-                            </c:if>
-                            <a id="game-${gameItem.game}-room-${status2.index}" href="${ctx}/admin?room=${roomItem}">${roomItem}<span class="pow">${playersCount.get(roomItem)}</span></a>&nbsp;
-                            <c:if test="${roomItem == room}">
-                                </b>
-                            </c:if>
+                            <a class="bold-room-${roomItem == room}"
+                               room="${roomItem}"
+                               href="${ctx}/admin?room=${roomItem}">
+                                    ${roomItem}<span class="pow">${playersCount.get(roomItem)}</span>
+                            </a>&nbsp;
                         </c:forEach>
                     </td>
                 </tr>
