@@ -253,7 +253,8 @@ function initChat(contextPath) {
 
     function listenNewMessages() {
         $('body').bind('board-updated', function(event, data) {
-            if (setup.playerId == '' || !data[setup.playerId]) {
+            var players = Object.keys(data);
+            if (players.length == 0) {
                 return;
             }
 
@@ -268,7 +269,7 @@ function initChat(contextPath) {
                 return;
             }
 
-            var realLastId = data[setup.playerId].lastChatMessage;
+            var realLastId = data[players[0]].lastChatMessage;
             var lastLoadedId = getLastMessageId();
             if (!lastLoadedId) {
                 loadChatMessages(null, null, realLastId, true);
