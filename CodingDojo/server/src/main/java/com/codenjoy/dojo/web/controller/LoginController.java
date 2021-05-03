@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.room.RoomService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +41,7 @@ public class LoginController {
     public static final String ADMIN_URI =  URI + ADMIN;
 
     private PlayerService playerService;
-    private RoomsAliaser rooms;
+    private RoomService roomService;
 
     @GetMapping
     public String login(Model model) {
@@ -56,7 +57,8 @@ public class LoginController {
 
     private void populateModel(Model model, boolean isAdmin) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("games", rooms.alises());
+        // TODO #4FS тут проверить
+        model.addAttribute("rooms", roomService.rooms());
         model.addAttribute("adminLogin", isAdmin);
     }
 

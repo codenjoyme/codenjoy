@@ -54,7 +54,7 @@ function initHotkeys() {
                 + setup.playerId + '?code='
                 + setup.code + gameParam('&') + roomParam('&'));
         } else if (adminKey && ev.keyCode == 66) { // ... + B (Board)
-            window.open(contextPath + '/board/game/' + game);
+            window.open(contextPath + '/board/room/' + room);
         } else if (adminKey && ev.keyCode == 72) { // ... + H (Help)
             window.open(contextPath + '/help');
         } else if (adminKey && ev.keyCode == 85) { // ... + U (rUles)

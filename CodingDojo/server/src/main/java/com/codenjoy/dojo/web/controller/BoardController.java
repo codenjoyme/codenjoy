@@ -26,8 +26,8 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -56,6 +56,7 @@ public class BoardController {
     private final Validator validator;
     private final ConfigProperties properties;
     private final RegistrationService registrationService;
+    private final RoomService roomService;
 
     @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
@@ -64,7 +65,7 @@ public class BoardController {
     {
         validator.checkPlayerId(id, CANT_BE_NULL);
 
-        return boardPlayer(model, id, null, justBoard, (String) model.get("game"));
+        return boardPlayer(model, id, null, justBoard);
     }
 
     @GetMapping(value = "/player/{player}", params = {"code", "remove"})
@@ -84,12 +85,10 @@ public class BoardController {
     public String boardPlayer(ModelMap model,
                               @PathVariable("player") String id,
                               @RequestParam("code") String code,
-                              @RequestParam(name = "only", required = false) Boolean justBoard,
-                              @RequestParam(name = "game", required = false, defaultValue = "") String game)
+                              @RequestParam(name = "only", required = false) Boolean justBoard)
     {
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
-        validator.checkGame(game, CAN_BE_NULL); // TODO а зачем тут вообще game?
 
         Player player = playerService.get(id);
         if (player == NullPlayer.INSTANCE) {
@@ -101,23 +100,6 @@ public class BoardController {
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
         return justBoard ? "board-only" : "board";
-    }
-
-    @GetMapping("/rejoining/{game}")
-    public String rejoinGame(ModelMap model, @PathVariable("game") String game,
-                             HttpServletRequest request,
-                             @AuthenticationPrincipal Registration.User user)
-    {
-        validator.checkGame(game, CANT_BE_NULL);
-
-        if (user == null) {
-            return "redirect:/login?" + "game" + "=" + game;
-        }
-
-        // TODO ROOM а надо ли тут этот метод вообще, ниже есть более универсальный? 
-        // TODO ROOM так как есть rest методы то может вообще убрать отсюда этих двоих?
-        String room = game;
-        return rejoinGame(model, game, room, request, user);
     }
 
     @GetMapping("/rejoining/{game}/room/{room}")
@@ -149,7 +131,6 @@ public class BoardController {
         model.addAttribute("game", game);
         model.addAttribute("room", room);
         model.addAttribute("allPlayersScreen", false);
-        model.addAttribute("game", game);
         model.addAttribute("gameOnly", gameOnly);
         model.addAttribute("playerId", playerId);
         model.addAttribute("readableName", readableName);
@@ -182,36 +163,37 @@ public class BoardController {
 
     @GetMapping("/")
     public String boardAll() {
-        GameType gameType = playerService.getAnyGameWithPlayers();
-        if (gameType == NullGameType.INSTANCE) {
+        // TODO #4FS тут проверить
+        String room = playerService.getAnyRoomWithPlayers();
+        if (room == null) {
             return "redirect:/register";
         }
-        return "redirect:/board/game/" + gameType.name();
+        return "redirect:/board/room/" + room;
     }
 
-    @GetMapping("/game/{game}")
-    public String boardAllGames(ModelMap model,
-                                @PathVariable("game") String game,
+    @GetMapping("/room/{room}")
+    public String boardAllRoomGames(ModelMap model,
+                                @PathVariable("room") String room,
                                 @RequestParam(value = "code", required = false) String code,
                                 @AuthenticationPrincipal Registration.User user)
     {
-        // TODO возможно тут CAN_BE_NULL, иначе проверка (game == null) никогда не true
-        validator.checkGame(game, CANT_BE_NULL);
+        // TODO возможно тут CAN_BE_NULL, иначе проверка (room == null) никогда не true
+        validator.checkRoom(room, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
-        if (game == null) {
+        // TODO #4FS тут проверить
+        String game = roomService.game(room);
+        if (room == null || game == null) {
             return "redirect:/board" + code(code);
         }
 
-        String room = game; // TODO закончить с room
-
-        Player player = playerService.getRandom(game);
+        Player player = playerService.getRandomInRoom(room);
         if (player == NullPlayer.INSTANCE) {
             // TODO а это тут вообще надо?
-            return "redirect:/register?" + "game" + "=" + game;
+            return "redirect:/register?" + "room" + "=" + room;
         }
-        GameType gameType = player.getGameType(); // TODO а тут точно сеттинги румы а не игры?
-        if (gameType.getMultiplayerType(gameType.getSettings()) == MultiplayerType.MULTIPLE) {
+        GameType gameType = player.getGameType();
+        if (gameType.getMultiplayerType(gameType.getSettings()).isMultiple()) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
@@ -230,7 +212,7 @@ public class BoardController {
         String id = registration.getIdByCode(code);
         Player player = playerService.get(id);
         if (player == NullPlayer.INSTANCE) {
-            player = playerService.getRandom(null);
+            player = playerService.getRandomInRoom(null);
         }
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register";

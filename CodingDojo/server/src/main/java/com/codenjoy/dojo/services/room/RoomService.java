@@ -109,15 +109,15 @@ public class RoomService {
         rooms.clear();
     }
 
-    public List<String> names() {
+    public List<String> rooms() {
         return allSorted()
-                .map(roomState -> roomState.getName())
+                .map(RoomState::getRoom)
                 .collect(toList());
     }
 
     private Stream<RoomState> allSorted() {
         return rooms.values().stream()
-                .sorted(Comparator.comparing(o -> o.getType().name() + o.getName()));
+                .sorted(Comparator.comparing(o -> o.getGame() + o.getRoom()));
     }
 
     public String game(String room) {
@@ -127,10 +127,18 @@ public class RoomService {
                 .orElse(null);
     }
 
-    public List<GameRooms> gameRooms() {
+    public List<String> gameRooms(String game) { // TODO #4FS тут проверить
         return rooms.values().stream()
-                .collect(groupingBy(roomState -> roomState.getType().name(),
-                        mapping(roomState -> roomState.getName(), toList())))
+                .filter(state -> state.getGame().equals(game))
+                .map(RoomState::getRoom)
+                .collect(toList());
+
+    }
+
+    public List<GameRooms> gamesRooms() {
+        return rooms.values().stream()
+                .collect(groupingBy(RoomState::getGame,
+                        mapping(RoomState::getRoom, toList())))
                 .entrySet().stream()
                 .sorted(Comparator.comparing(Map.Entry::getKey))
                 .map(entry -> new GameRooms(entry.getKey(), entry.getValue()))
@@ -156,5 +164,20 @@ public class RoomService {
         return state(room)
                 .map(RoomState::getTick)
                 .orElse(-1);
+    }
+
+    public void setOpenedGames(List<String> games) { // TODO #4FS тут проверить
+        rooms.values().stream()
+                .forEach(roomState -> {
+                    boolean opened = games.contains(roomState.getGame());
+                    roomState.setOpened(opened);
+                });
+    }
+
+    public List<String> getOpenedGames() { // TODO #4FS тут проверить
+        return rooms.values().stream()
+                .filter(RoomState::isOpened)
+                .map(RoomState::getRoom)
+                .collect(toList());
     }
 }

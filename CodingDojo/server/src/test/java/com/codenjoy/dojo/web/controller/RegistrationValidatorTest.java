@@ -48,8 +48,8 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Igor Petrov
@@ -84,18 +84,26 @@ public class RegistrationValidatorTest {
 
     @Before
     public void setUp() {
+        reset(commonValidator, registration);
+
         errors = makeErrors();
         player = new Player(){{
             setEmail("someuser@sample.org");
             setReadableName("Readable Name");
             setPassword("12345");
             setPasswordConfirmation("12345");
-            setGame("dummy");
+            setGame("game");
             setRoom("room");
         }};
-        roomService.removeAll();
-        roomService.create("room", mock(GameType.class));
+        setupRoomService("game", "room");
         playerService.openRegistration();
+    }
+
+    private void setupRoomService(String game, String room) {
+        roomService.removeAll();
+        GameType gameType = mock(GameType.class);
+        when(gameType.name()).thenReturn(game);
+        roomService.create(room, gameType);
     }
 
     @Test
@@ -211,15 +219,27 @@ public class RegistrationValidatorTest {
     @Test
     public void shouldValidateGameName() {
         // given
-        String invalidGameName = "invalidGame";
-        when(commonValidator.isGameName(invalidGameName, Validator.CANT_BE_NULL)).thenReturn(false);
-        player.setGame(invalidGameName);
+        when(commonValidator.isGameName("game", Validator.CANT_BE_NULL)).thenReturn(false);
 
         // when
         validator.validate(player, errors);
 
         // then
-        assertError(errors, "game", "registration.game.invalid");
+        assertError(errors, "room", "registration.game.invalid");
+    }
+
+    @Test
+    public void shouldValidateRoomName() {
+        // given
+        String invalidRoomName = "invalidRoom";
+        when(commonValidator.isRoomName(invalidRoomName, Validator.CANT_BE_NULL)).thenReturn(false);
+        player.setRoom(invalidRoomName);
+
+        // when
+        validator.validate(player, errors);
+
+        // then
+        assertError(errors, "room", "registration.room.invalid");
     }
 
     private void assertError(Errors errors, String field, String expectedCode) {
@@ -234,6 +254,6 @@ public class RegistrationValidatorTest {
     }
 
     private static Errors makeErrors() {
-        return new MapBindingResult(new HashMap<>(), "dummy");
+        return new MapBindingResult(new HashMap<>(), "game");
     }
 }

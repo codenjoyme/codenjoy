@@ -17,7 +17,7 @@ rest-sender:
   pool-size: 100
 
 mvc:
-  cache-period: 259200
+  cache-period: -1 # 259200
   screen-servlet-path: /screen-ws/*
   control-servlet-path: /ws/*
 

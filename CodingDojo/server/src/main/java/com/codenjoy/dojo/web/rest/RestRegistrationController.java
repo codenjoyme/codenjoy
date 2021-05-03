@@ -58,12 +58,22 @@ public class RestRegistrationController {
         return registration.checkUser(id, code) != null;
     }
 
-    // TODO test me
+    // TODO #4FS test me
     @GetMapping("/game/{game}/players")
     public List<PlayerInfo> getGamePlayers(@PathVariable("game") String game) {
         validator.checkGame(game, CANT_BE_NULL);
 
         return playerService.getAll(game).stream()
+                .map(PlayerInfo::new)
+                .collect(toList());
+    }
+
+    // TODO #4FS test me
+    @GetMapping("/room/{room}/players")
+    public List<PlayerInfo> getRoomPlayers(@PathVariable("room") String room) {
+        validator.checkRoom(room, CANT_BE_NULL);
+
+        return playerService.getAllInRoom(room).stream()
                 .map(PlayerInfo::new)
                 .collect(toList());
     }

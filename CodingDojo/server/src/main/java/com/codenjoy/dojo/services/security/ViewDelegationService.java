@@ -60,10 +60,4 @@ public class ViewDelegationService {
                 : env.getProperty(key);
         return StringUtils.hasText(property) ? property : defaultValue;
     }
-
-    public String buildBoardParam(String game) {
-        return StringUtils.hasText(game)
-                ? "&game=" + game
-                : "";
-    }
 }

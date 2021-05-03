@@ -50,4 +50,6 @@ public interface GameService {
     boolean exists(String game);
 
     String getDefaultProgress(GameType gameType);
+
+    void removeAll();
 }

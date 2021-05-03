@@ -51,7 +51,7 @@ public class SemifinalService implements Tickable {
     protected PlayerGames playerGames;
 
     public void clean() {
-        for (String room : roomService.names()) {
+        for (String room : roomService.rooms()) {
             clean(room);
         }
     }
@@ -86,7 +86,7 @@ public class SemifinalService implements Tickable {
 
             // получаем мапу по комнатам, где значениями являются сортированные
             // по очкам списки PlayerGame
-            Predicate<PlayerGame> withRoom = withRoom(state.getName());
+            Predicate<PlayerGame> withRoom = withRoom(state.getRoom());
             List<PlayerGame> games =
                     playerGames.getAll(withRoom).stream()
                             .sorted(byScore())

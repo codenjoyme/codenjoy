@@ -42,8 +42,8 @@ public interface PlayerService extends Tickable {
     void updateAll(List<? extends Player> players);
     void removeAll();
     void removeAll(String room);
-    Player getRandom(String game);
-    GameType getAnyGameWithPlayers();
+    Player getRandomInRoom(String game);
+    String getAnyRoomWithPlayers();
     Map<String, Integer> getRoomCounts();
 
     void cleanAllScores();

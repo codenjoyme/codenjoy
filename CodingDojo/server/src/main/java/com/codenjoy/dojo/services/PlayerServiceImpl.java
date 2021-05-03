@@ -34,10 +34,6 @@ import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
@@ -61,8 +57,6 @@ import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.codenjoy.dojo.services.PlayerGames.exclude;
 import static com.codenjoy.dojo.services.PlayerGames.withRoom;
@@ -778,16 +772,16 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player getRandom(String game) {
+    public Player getRandomInRoom(String room) {
         lock.readLock().lock();
         try {
             if (playerGames.isEmpty()) return NullPlayer.INSTANCE;
 
-            if (game == null) {
+            if (room == null) {
                 return playerGames.iterator().next().getPlayer();
             }
 
-            Iterator<Player> iterator = playerGames.getPlayersByGame(game).iterator();
+            Iterator<Player> iterator = playerGames.getPlayersByRoom(room).iterator();
             if (!iterator.hasNext()) return NullPlayer.INSTANCE;
             return iterator.next();
         } finally {
@@ -796,12 +790,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public GameType getAnyGameWithPlayers() {
+    public String getAnyRoomWithPlayers() {
         lock.readLock().lock();
         try {
-            if (playerGames.isEmpty()) return NullGameType.INSTANCE;
+            if (playerGames.isEmpty()) return null;
 
-            return playerGames.iterator().next().getGameType();
+            return playerGames.iterator().next().getRoom();
         } finally {
             lock.readLock().unlock();
         }
@@ -812,7 +806,7 @@ public class PlayerServiceImpl implements PlayerService {
         lock.readLock().lock();
         try {
             List<Player> players = playerGames.players();
-            return roomService.names().stream()
+            return roomService.rooms().stream()
                     .map(room -> new HashMap.SimpleEntry<>(room, count(players, room)))
                     .collect(toMap(entry -> entry.getKey(),
                             entry -> entry.getValue(),

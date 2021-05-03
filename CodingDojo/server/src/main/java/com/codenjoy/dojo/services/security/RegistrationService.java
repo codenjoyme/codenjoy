@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.web.controller.RoomsAliaser;
 import com.codenjoy.dojo.web.controller.Validator;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -44,6 +43,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
@@ -61,7 +61,6 @@ public class RegistrationService {
     private LinkService linkService;
     private Registration registration;
     private Validator validator;
-    private RoomsAliaser rooms;
     private PlayerService playerService;
     private RoomService roomService;
     private ConfigProperties properties;
@@ -81,6 +80,7 @@ public class RegistrationService {
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkEmail(email, CANT_BE_NULL);
         validator.checkGame(game, CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
 
         String code;
         boolean registered = registration.registered(id);
@@ -95,7 +95,7 @@ public class RegistrationService {
             registration.updateNameAndEmail(id, name, email);
         } else {
             if (!registered) {
-                if (!playerService.isRegistrationOpened(player.getRoom())) {
+                if (!playerService.isRegistrationOpened(room)) {
                     return openRegistrationForm(request, model, id, email, name);
                 }
                 Registration.User user = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles());
@@ -187,11 +187,37 @@ public class RegistrationService {
             validator.checkGame(game, CAN_BE_NULL);
         }
 
+        // TODO #4FS тут проверить
+        String room = request.getParameter("room");
+        if (!model.containsAttribute("bad_room")) {
+            validator.checkRoom(room, CAN_BE_NULL);
+        }
+
         Player player = new Player();
         player.setEmail(email);
         player.setId(id);
         player.setReadableName(name);
-        player.setGame(rooms.getAlias(game));
+
+        // TODO #4FS тут проверить
+        // если задали в параметрах запроса комнату, пробуем ее достать
+        if (!StringUtils.isEmpty(room)) {
+            if (roomService.exists(room)) {
+                player.setRoom(room);
+                player.setGame(roomService.game(room));
+            }
+        }
+
+        // TODO #4FS тут проверить
+        // если не получилось достать комнату но задали в параметрах запроса игру,
+        // пробуем достать первую комнату по игре, если она есть вообще
+        if (StringUtils.isEmpty(player.getRoom()) && !StringUtils.isEmpty(game)) {
+            List<String> rooms = roomService.gameRooms(game);
+            if (!rooms.isEmpty()) {
+                player.setRoom(rooms.get(0));
+                player.setRoom(game);
+            }
+        }
+
         if (!model.containsAttribute("player")) {
             model.addAttribute("player", player);
         }
@@ -212,14 +238,14 @@ public class RegistrationService {
         if (player == NullPlayer.INSTANCE) {
             return "login";
         }
-        return getBoardUrl(code, player.getId(), game);
+        return getBoardUrl(code, player.getId());
     }
 
-    public String getBoardUrl(String code, String id, String game) {
+    public String getBoardUrl(String code, String id) {
         validator.checkPlayerId(id, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
-        return "board/player/" + id + "?code=" + code + viewDelegationService.buildBoardParam(game);
+        return "board/player/" + id + "?code=" + code;
     }
 
     private String getIp(HttpServletRequest request) {
@@ -235,7 +261,8 @@ public class RegistrationService {
 
     private String getRegister(Model model) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("games", rooms.alises());
+        // TODO #4FS тут проверить
+        model.addAttribute("rooms", roomService.rooms());
         return "register";
     }
 }

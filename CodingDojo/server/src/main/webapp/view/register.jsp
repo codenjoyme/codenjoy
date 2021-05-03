@@ -142,16 +142,16 @@ License along with this program.  If not, see
                     </div>
 
                     <c:if test="${not adminLogin}">
-                        <div id="game" class="field valid" hidden>
-                            <form:select id="gameSelect" items="${games}" path="game"/>
-                            <form:errors path="game" cssClass="error" />
+                        <div id="room" class="field valid" hidden>
+                            <form:select id="roomSelect" items="${rooms}" path="room"/>
+                            <form:errors path="room" cssClass="error" />
                         </div>
 
-                        <div id="gameType" class="field valid" hidden>
-                            <select placeholder="Select your game" name="game">
-                                <!--option value="Type1">Type1</option-->
-                                <!--option value="Type2">Type2</option-->
-                                <!--option value="Type3">Type3</option-->
+                        <div id="gameMode" class="field valid" hidden>
+                            <select placeholder="Select your game mode" name="gameMode">
+                                <!--option value="Mode1">Mode1</option-->
+                                <!--option value="Mode2">Mode2</option-->
+                                <!--option value="Mode3">Mode3</option-->
                             </select>
                         </div>
                     </c:if>

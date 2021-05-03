@@ -64,14 +64,12 @@ public class ScreenResponseHandler implements ResponseHandler {
                                            GetScreenJSONRequest request)
     {
         Stream<Map.Entry<Player, PlayerData>> stream = data.entrySet().stream()
-                .filter(entry -> request.isMyGame(entry.getKey()))
+                .filter(entry -> request.isMyRoom(entry.getKey()))
                 .filter(entry -> request.isAllPlayers() || request.isFor(entry.getKey()));
         if (request.isAllPlayers()) {
             stream = stream.filter(distinctByKey(entry -> entry.getValue().getGroup().toString()));
         }
-        return stream
-                .collect(toMap(entry -> entry.getKey(),
-                        entry -> entry.getValue()));
+        return stream.collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {

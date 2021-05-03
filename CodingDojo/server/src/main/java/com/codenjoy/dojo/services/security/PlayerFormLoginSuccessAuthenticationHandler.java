@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.security;
  */
 
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.web.controller.AdminController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,7 @@ import java.io.IOException;
 public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final RegistrationService registrationService;
+    private final RoomService roomService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -48,11 +50,17 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthen
                                         Authentication authentication) throws IOException
     {
         Registration.User principal = (Registration.User) authentication.getPrincipal();
-        String game = request.getParameter("game");
-        String room = game; // TODO ROOM тут надо получить room как-то
 
-        if (game == null) {
+        if (request.getParameter("admin").equals("true")) {
             getRedirectStrategy().sendRedirect(request, response, AdminController.URI);
+            return;
+        }
+
+        // TODO #4FS тут проверить
+        String room = request.getParameter("room");
+        String game = roomService.game(room);
+        if (game == null) {
+            getRedirectStrategy().sendRedirect(request, response, "/login?failed=true");
             return;
         }
 

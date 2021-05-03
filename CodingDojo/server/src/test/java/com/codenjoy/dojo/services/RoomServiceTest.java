@@ -194,7 +194,7 @@ public class RoomServiceTest {
         service.create("room", game1);
 
         // when then
-        assertEquals("RoomState(name=room, " +
+        assertEquals("RoomState(room=room, " +
                         "type=RoomGameType{type=GameType[first], " +
                         "settings=First[Parameter 1=15, Parameter 2=true]}, " +
                         "active=true, " +
@@ -334,7 +334,7 @@ public class RoomServiceTest {
         service.create("room3", game2);
 
         // when then
-        assertEquals("[room1, room2, room3, room4]", service.names().toString());
+        assertEquals("[room1, room2, room3, room4]", service.rooms().toString());
     }
 
     @Test
@@ -349,7 +349,7 @@ public class RoomServiceTest {
         service.removeAll();
 
         // then
-        assertEquals("[]", service.names().toString());
+        assertEquals("[]", service.rooms().toString());
     }
 
     @Test
@@ -364,10 +364,10 @@ public class RoomServiceTest {
         Collection<RoomState> all = service.all();
 
         // then
-        assertEquals("[RoomState(name=room1, type=RoomGameType{type=GameType[first], settings=First[Parameter 1=15, Parameter 2=true]}, active=true, opened=true, tick=0), " +
-                "RoomState(name=room2, type=RoomGameType{type=GameType[first], settings=First[Parameter 1=15, Parameter 2=true]}, active=true, opened=true, tick=0), " +
-                "RoomState(name=room3, type=RoomGameType{type=GameType[second], settings=Second[Parameter 3=43, Parameter 4=true]}, active=true, opened=true, tick=0), " +
-                "RoomState(name=room4, type=RoomGameType{type=GameType[second], settings=Second[Parameter 3=43, Parameter 4=true]}, active=true, opened=true, tick=0)]", all.toString());
+        assertEquals("[RoomState(room=room1, type=RoomGameType{type=GameType[first], settings=First[Parameter 1=15, Parameter 2=true]}, active=true, opened=true, tick=0), " +
+                "RoomState(room=room2, type=RoomGameType{type=GameType[first], settings=First[Parameter 1=15, Parameter 2=true]}, active=true, opened=true, tick=0), " +
+                "RoomState(room=room3, type=RoomGameType{type=GameType[second], settings=Second[Parameter 3=43, Parameter 4=true]}, active=true, opened=true, tick=0), " +
+                "RoomState(room=room4, type=RoomGameType{type=GameType[second], settings=Second[Parameter 3=43, Parameter 4=true]}, active=true, opened=true, tick=0)]", all.toString());
     }
 
     @Test
@@ -412,7 +412,7 @@ public class RoomServiceTest {
         // when then
         assertEquals("[GameRooms(game=first, rooms=[room1, room2]), " +
                 "GameRooms(game=second, rooms=[room3, room4])]",
-                service.gameRooms().toString());
+                service.gamesRooms().toString());
     }
 
     @Test

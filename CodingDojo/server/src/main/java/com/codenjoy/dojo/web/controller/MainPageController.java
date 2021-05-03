@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -58,10 +59,10 @@ public class MainPageController {
 
     private PlayerService playerService;
     private Registration registration;
+    private RoomService roomSevice;
     private GameService gameService;
     private Validator validator;
     private ConfigProperties properties;
-    private RoomsAliaser rooms;
     private RegistrationService registrationService;
 
     @GetMapping(HELP_URI)
@@ -94,15 +95,16 @@ public class MainPageController {
             return "redirect:login";
         }
 
-        List<String> games = gameService.getGames();
-        // игра одна
-        if (games.size() == 1) {
+        // TODO #4FS тут проверить
+        List<String> rooms = roomSevice.rooms();
+        // комната одна
+        if (rooms.size() == 1) {
             if (user == null) {
-                // юзер неавторизирован - показываем все борды в этой игре
-                return "redirect:board/game/" + games.get(0);
+                // юзер неавторизирован - показываем все борды в этой комнате
+                return "redirect:board/room/" + rooms.get(0);
             }
             // юзер авторизирован - показываем борду юзера
-            return "redirect:" + registrationService.getBoardUrl(user.getCode(), user.getId(), null);
+            return "redirect:" + registrationService.getBoardUrl(user.getCode(), user.getId());
         }
 
         // игр несколько - грузим страничку с возможносью подглядеть за любой игрой
@@ -124,7 +126,8 @@ public class MainPageController {
         request.setAttribute("registered", registered);
         request.setAttribute("code", code);
         model.addAttribute("game", registered ? player.getGame() : StringUtils.EMPTY);
-        model.addAttribute("games", rooms.all());
+        // TODO #4FS тут проверить
+        model.addAttribute("gamesRooms", roomSevice.gamesRooms());
         return "main";
     }
 

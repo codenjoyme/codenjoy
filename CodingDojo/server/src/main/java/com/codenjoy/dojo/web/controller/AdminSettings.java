@@ -36,7 +36,7 @@ import java.util.List;
 public class AdminSettings {
 
     private List<PlayerInfo> players;
-    private List<Object> games;
+    private List<Object> games;  // // TODO #4FS тут boolean
     private List<Object> parameters;
     private String game;
     private String room;

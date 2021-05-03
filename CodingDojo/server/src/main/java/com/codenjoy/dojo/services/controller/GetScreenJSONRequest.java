@@ -45,7 +45,7 @@ class GetScreenJSONRequest {
     }
 
     private List<String> getPlayers() {
-        return new LinkedList<String>() {{
+        return new LinkedList<>() {{
             request.getJSONArray("players")
                     .forEach(it -> add((String) it));
         }};
@@ -55,11 +55,11 @@ class GetScreenJSONRequest {
         return getPlayers().contains(player.getId());
     }
 
-    public String getGame() {
-        return request.getString("game");
+    public String getRoom() {
+        return request.getString("room");
     }
 
-    public boolean isMyGame(Player player) {
-        return player.getGame().equals(getGame());
+    public boolean isMyRoom(Player player) {
+        return player.getRoom().equals(getRoom());
     }
 }

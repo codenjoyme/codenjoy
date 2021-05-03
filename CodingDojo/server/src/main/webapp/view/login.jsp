@@ -107,19 +107,22 @@ License along with this program.  If not, see
                     <div id="password-md5" hidden>
                         <input type="hidden" name="password"/>
                     </div>
+                    <div id="admin-login" hidden>
+                        <input type="hidden" name="admin" value="${adminLogin}"/>
+                    </div>
                     <c:if test="${!adminLogin}">
-                        <div id="game" class="field valid" hidden>
-                            <select name="game">
-                                <c:forEach items="${games}" var="item" >
+                        <div id="room" class="field valid" hidden>
+                            <select name="room">
+                                <c:forEach items="${rooms}" var="item" >
                                     <option value="${item}">${item}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        <div id="gameType" class="field valid" hidden>
-                            <select placeholder="Select your game" name="game">
-                                <!--option value="Type1">Type1</option-->
-                                <!--option value="Type2">Type2</option-->
-                                <!--option value="Type3">Type3</option-->
+                        <div id="gameMode" class="field valid" hidden>
+                            <select placeholder="Select your game mode" name="gameMode">
+                                <!--option value="Mode1">Mode1</option-->
+                                <!--option value="Mode2">Mode2</option-->
+                                <!--option value="Mode3">Mode3</option-->
                             </select>
                         </div>
                     </c:if>

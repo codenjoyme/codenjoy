@@ -943,7 +943,7 @@ public class PlayerServiceImplTest {
         createPlayer(KATYA, "game1", "room2");
         createPlayer(OLIA, "game3", "room3");
 
-        when(roomService.names()).thenReturn(Arrays.asList(
+        when(roomService.rooms()).thenReturn(Arrays.asList(
                 "room1", "room2", "room3", "room4"));
 
         // when
@@ -963,14 +963,14 @@ public class PlayerServiceImplTest {
         createPlayer(OLIA, "game3", "room3");
         gameService.getGameType("game4", "room4");
 
-        when(roomService.names()).thenReturn(Arrays.asList(
+        when(roomService.rooms()).thenReturn(Arrays.asList(
                 "room1", "room2", "room3", "room4"));
 
         // when
-        GameType gameType = playerService.getAnyGameWithPlayers();
+        String room = playerService.getAnyRoomWithPlayers();
 
         // then
-        assertEquals("game1", gameType.name());
+        assertEquals("room1", room);
     }
 
     private void assertPlayers(String expected) {
@@ -1745,7 +1745,7 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        assertEquals(VASYA, playerService.getRandom("game").getId());
+        assertEquals(VASYA, playerService.getRandomInRoom("room").getId());
     }
 
     @Test

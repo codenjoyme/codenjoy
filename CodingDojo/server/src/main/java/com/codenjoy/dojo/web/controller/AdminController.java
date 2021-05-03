@@ -48,7 +48,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import static com.codenjoy.dojo.services.round.RoundSettingsImpl.ROUNDS;
 import static com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl.SEMIFINAL;
@@ -74,7 +73,6 @@ public class AdminController {
     private final AutoSaver autoSaver;
     private final DebugService debugService;
     private final Registration registration;
-    private final RoomsAliaser rooms;
     private final ViewDelegationService viewDelegationService;
     private final SemifinalService semifinal;
     private final RoomService roomService;
@@ -393,18 +391,19 @@ public class AdminController {
     }
 
     private void setEnable(List<Parameter> games) {
-        List<String> toRemove = new LinkedList<>();
+        List<String> opened = new LinkedList<>();
         List<String> allGames = gameService.getGames();
         if (games.size() != allGames.size()) {
-            throw new IllegalStateException("Список игр к активации не полный");
+            throw new IllegalStateException("Список игр к активации регистрации не полный");
         }
         for (int i = 0; i < allGames.size(); i++) {
-            if (games.get(i) == null) {
-                toRemove.add(allGames.get(i));
+            if (games.get(i) != null) {
+                opened.add(allGames.get(i));
             }
         }
 
-        rooms.enableGames(toRemove);
+        // TODO #4FS тут проверить
+        roomService.setOpenedGames(opened);
     }
 
     public void updateParameters(String game, String room, List<Object> updated, List<Exception> errors) {
@@ -549,7 +548,7 @@ public class AdminController {
         AdminSettings settings = getAdminSettings(parameters, room);
         model.addAttribute("adminSettings", settings);
         List<PlayerInfo> saves = saveService.getSaves(room);
-        model.addAttribute("gameRooms", roomService.gameRooms());
+        model.addAttribute("gameRooms", roomService.gamesRooms());
         model.addAttribute("playersCount", playerService.getRoomCounts());
         settings.setPlayers(preparePlayers(model, room, saves));
 
@@ -570,7 +569,8 @@ public class AdminController {
                 .map(Parameter::getValue)
                 .collect(toList()));
 
-        Set<String> enabled = rooms.game();
+        // TODO #4FS тут проверить
+        List<String> enabled = roomService.getOpenedGames();
         result.setGames(gameService.getGames().stream()
                 .map(name -> enabled.contains(name))
                 .collect(toList()));

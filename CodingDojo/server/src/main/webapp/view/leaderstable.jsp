@@ -28,10 +28,10 @@
         <th width="5%">
             <c:choose>
                 <c:when test="${code != null}">
-                    <a href="${ctx}/board/game/${game}?code=${code}">#</a>
+                    <a href="${ctx}/board/room/${room}?code=${code}">#</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="${ctx}/board/game/${game}">#</a>
+                    <a href="${ctx}/board/room/${room}">#</a>
                 </c:otherwise>
             </c:choose>
         </th>

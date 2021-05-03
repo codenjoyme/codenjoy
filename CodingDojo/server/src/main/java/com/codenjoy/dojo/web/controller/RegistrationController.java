@@ -23,10 +23,10 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -47,7 +47,7 @@ public class RegistrationController {
     public static final String URI = "/register";
 
     private PlayerService playerService;
-    private RoomsAliaser rooms;
+    private RoomService roomService;
     private RegistrationValidator registrationValidator;
     private RegistrationService registrationService;
 
@@ -75,7 +75,8 @@ public class RegistrationController {
     private void populateCommonRegistrationModel(Model model, boolean isAdminLogin) {
         model.addAttribute("adminLogin", isAdminLogin);
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("games", rooms.alises());
+        // TODO #4FS тут проверить
+        model.addAttribute("rooms", roomService.rooms());
     }
 
     @PostMapping()
@@ -86,9 +87,10 @@ public class RegistrationController {
             return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());
         }
 
-        String game = rooms.getGameName(player.getGame());
-        String room = game; // TODO ROOM взять room с формы регистрации, либо если не установлено взять как тут
-        
+        // TODO #4FS тут проверить
+        String room = player.getRoom();
+        String game = roomService.game(room);
+        player.setRoom(room);
         player.setGame(game);
 
         if (player.getId() == null) {

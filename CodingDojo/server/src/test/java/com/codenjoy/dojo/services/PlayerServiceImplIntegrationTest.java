@@ -198,18 +198,18 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals(true, runners.containsKey("game2-super-ai"));
 
         // взяли игру с плеерами
-        assertEquals("game1", service.getAnyGameWithPlayers().name());
+        assertEquals("room1", service.getAnyRoomWithPlayers());
 
         // и рендомных прееров
-        assertEquals("game1-super-ai", service.getRandom("game1").toString());
-        assertEquals("game2-super-ai", service.getRandom("game2").toString());
+        assertEquals("game1-super-ai", service.getRandomInRoom("room1").toString());
+        assertEquals("game2-super-ai", service.getRandomInRoom("room2").toString());
 
         // несложно понять что берется просто первый в очереди
         verifyNoMoreInteractions(runners.get("game2-super-ai"));
         service.remove("game2-super-ai");
         verify(runners.get("game2-super-ai"), times(1)).close();
         assertEquals("player4",
-                service.getRandom("game2").toString());
+                service.getRandomInRoom("room2").toString());
         runners.remove("game2-super-ai");
 
         // закрыли регистрацию

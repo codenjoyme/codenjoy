@@ -32,10 +32,33 @@ import lombok.ToString;
 @ToString
 public class RoomState {
 
-    private String name;
+    /**
+     * Имя/id комнаты, ее alias.
+     */
+    private String room;
+
+    /**
+     * Тип игры в комнате. Важно понимать, что у каждой комнаты свой клон GameType
+     * Settings которого изменяются независимо от остальных.
+     */
     private GameType type;
+
+    /**
+     * Говорит находится ли комната на паузе. Будучи на паузе комната не тикается,
+     * а все участники не получаются обновлени борды.
+     */
     private boolean active;
+
+    /**
+     * Открыта ли комната для регистрации. Если регистрация в комнате закрыта -
+     * ни один новый участник не может заджойниться в нее.
+     */
     private boolean opened;
+
+    /**
+     * Номер тика, используется в SemifinalSettings для подсчета времени оставшегося для
+     * очередного полуфинала.
+     */
     private int tick;
 
     public void resetTick() {
@@ -44,5 +67,9 @@ public class RoomState {
 
     public void tick() {
         tick++;
+    }
+
+    public String getGame() {
+        return type.name();
     }
 }

@@ -76,8 +76,14 @@ public class GameServiceImpl implements GameService {
 
     @PostConstruct
     public void init() {
+        removeAll();
+    }
+
+    @Override
+    public void removeAll() {
         // TODO сделать перезагрузку этого всего контента по запросу админа, но только для тех игрушек, что обновились
         // TODO так же надо будет для новозагруженной игры всех юзеров перезапустить
+        roomService.removeAll();
         for (Class<? extends GameType> clazz : allGames()) {
             GameType gameType = loadGameType(clazz);
             String name = gameType.name();
@@ -135,7 +141,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public List<String> getRooms() {
-        return new LinkedList<>(roomService.names());
+        return new LinkedList<>(roomService.rooms());
     }
 
     @Override

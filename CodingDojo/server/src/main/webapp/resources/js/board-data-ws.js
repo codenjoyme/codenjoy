@@ -27,7 +27,7 @@ var getWSProtocol = function() {
     }
 }
 
-function initBoards(players, allPlayersScreen, game, playerId, contextPath){
+function initBoards(players, allPlayersScreen, room, playerId, contextPath){
     var constructUrl = function() {
         var link = document.createElement('a');
         link.setAttribute('href', window.location.href);
@@ -86,7 +86,7 @@ function initBoards(players, allPlayersScreen, game, playerId, contextPath){
             'name':'getScreen',
             'allPlayersScreen' : allPlayersScreen,
             'players' : ids,
-            'game' : game
+            'room' : room
         }
 
         socket.send(JSON.stringify(request));

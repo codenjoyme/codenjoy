@@ -25,6 +25,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.room.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -45,9 +46,9 @@ public class RegistrationValidator implements Validator {
     private int minPasswordLen;
 
     private final com.codenjoy.dojo.web.controller.Validator validator;
-    private final RoomsAliaser rooms;
     private final Registration registration;
     private final PlayerService playerService;
+    private final RoomService roomService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -62,10 +63,15 @@ public class RegistrationValidator implements Validator {
 
         Player player = (Player) target;
 
+        // TODO #4FS тут проверить
         String room = player.getRoom();
-        if (StringUtils.isEmpty(room)) {
-            // TODO сделать так, чтобы на форме регистрации/логина задавалась roomName
-            room = player.getGame();
+        if (!validator.isRoomName(room, CANT_BE_NULL)) {
+            errors.rejectValue("room", "registration.room.invalid", new Object[]{ room }, null);
+        }
+
+        String game = roomService.game(room);
+        if (!validator.isGameName(game, CANT_BE_NULL)) {
+            errors.rejectValue("room", "registration.game.invalid", new Object[]{ game }, null);
         }
 
         if (!playerService.isRegistrationOpened(room)) {
@@ -107,11 +113,6 @@ public class RegistrationValidator implements Validator {
 
         if (!checkPasswordConfirmation(password, player.getPasswordConfirmation())) {
             errors.rejectValue("passwordConfirmation", "registration.password.invalidConfirmation");
-        }
-
-        String game = rooms.getGameName(player.getGame());
-        if (!validator.isGameName(game, CANT_BE_NULL)) {
-            errors.rejectValue("game", "registration.game.invalid", new Object[]{ game }, null);
         }
     }
 

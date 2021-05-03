@@ -65,7 +65,7 @@ public class ScreenResponseHandlerTest {
         // when
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':true, " +
-                        "'players':[], 'game':'game'}");
+                        "'players':[], 'room':'room'}");
 
         // then
         Function function = verifySetFilterFor();
@@ -143,7 +143,7 @@ public class ScreenResponseHandlerTest {
         // when
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':true, " +
-                        "'players':[], 'game':'game'}");
+                        "'players':[], 'room':'room'}");
 
         // then
         Function function = verifySetFilterFor();
@@ -251,7 +251,7 @@ public class ScreenResponseHandlerTest {
         // when
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':false, " +
-                        "'players':['player3'], 'game':'other_game'}");
+                        "'players':['player3'], 'room':'other_room'}");
 
         // then
         Function function = verifySetFilterFor();
@@ -300,7 +300,7 @@ public class ScreenResponseHandlerTest {
         // when
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':false, " +
-                        "'players':['player2'], 'game':'game'}");
+                        "'players':['player2'], 'room':'room'}");
 
         // then
         Function function = verifySetFilterFor();
@@ -349,41 +349,45 @@ public class ScreenResponseHandlerTest {
 
         Player player1 = new Player("player1");
         player1.setGame("game");
+        player1.setRoom("room");
         map.put(player1, new PlayerData(10, "some_board1", "game",
                 134, "some_info1",
-                new LinkedHashMap<String, Object>(){{ put("player1", 100); put("player2", 200); }},
-                new LinkedHashMap<String, HeroData>(){{ put("player1", new HeroDataImpl(1, pt(10, 5), true)); }},
-                new LinkedHashMap<String, String>(){{ put("player1", "Player1 Name1"); }},
+                new LinkedHashMap<>(){{ put("player1", 100); put("player2", 200); }},
+                new LinkedHashMap<>(){{ put("player1", new HeroDataImpl(1, pt(10, 5), true)); }},
+                new LinkedHashMap<>(){{ put("player1", "Player1 Name1"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
                 1));
 
         Player player2 = new Player("player2");
         player2.setGame("game");
+        player2.setRoom("room");
         map.put(player2, new PlayerData(12, "some_board2", "game",
                 546, "some_info2",
-                new LinkedHashMap<String, Object>(){{ put("player1", 100); put("player2", 200); }},
-                new LinkedHashMap<String, HeroData>(){{ put("player2", new HeroDataImpl(2, pt(12, 7), true)); }},
-                new LinkedHashMap<String, String>(){{ put("player2", "Player2 Name2"); }},
+                new LinkedHashMap<>(){{ put("player1", 100); put("player2", 200); }},
+                new LinkedHashMap<>(){{ put("player2", new HeroDataImpl(2, pt(12, 7), true)); }},
+                new LinkedHashMap<>(){{ put("player2", "Player2 Name2"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
                 2));
 
         Player player4 = new Player("player4");
         player4.setGame("game");
+        player4.setRoom("room");
         map.put(player4, new PlayerData(45, "some_board4", "game",
                 765, "some_info4",
-                new LinkedHashMap<String, Object>(){{ put("player4", 400); }},
-                new LinkedHashMap<String, HeroData>(){{ put("player4", new HeroDataImpl(4, pt(14, 9), false)); }},
-                new LinkedHashMap<String, String>(){{ put("player4", "Player4 Name4"); }},
+                new LinkedHashMap<>(){{ put("player4", 400); }},
+                new LinkedHashMap<>(){{ put("player4", new HeroDataImpl(4, pt(14, 9), false)); }},
+                new LinkedHashMap<>(){{ put("player4", "Player4 Name4"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player4")); }},
                 4));
 
         Player player3 = new Player("player3");
         player3.setGame("other_game");
+        player3.setRoom("other_room");
         map.put(player3, new PlayerData(14, "some_board3", "other_game",
                 235, "some_info3",
-                new LinkedHashMap<String, Object>(){{ put("player3", 300); }},
-                new LinkedHashMap<String, HeroData>(){{ put("player3", new HeroDataImpl(3, pt(13, 8), false)); }},
-                new LinkedHashMap<String, String>(){{ put("player3", "Player3 Name3"); }},
+                new LinkedHashMap<>(){{ put("player3", 300); }},
+                new LinkedHashMap<>(){{ put("player3", new HeroDataImpl(3, pt(13, 8), false)); }},
+                new LinkedHashMap<>(){{ put("player3", "Player3 Name3"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player3")); }},
                 3));
 

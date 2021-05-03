@@ -68,7 +68,7 @@ function initBoardPage(setup, onLoad) {
 function initBoardComponents(setup) {
     if (setup.loadBoardData) {
         initBoards(setup.players, setup.allPlayersScreen,
-            setup.game, setup.playerId, setup.contextPath);
+            setup.room, setup.playerId, setup.contextPath);
     }
 
     if (setup.drawCanvases) {

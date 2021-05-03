@@ -51,9 +51,22 @@
         <div>Check game board</div>
         <div>
             <ul>
-            <c:forEach items="${games}" var="game">
-                <li>
-                    <div>${game.value}: <a class="gameView" game="${game.key}" href="${ctx}/board/game/${game.key}?viewOnly=true">View</a> | <a id="rejoin-${game.key}" href="${ctx}/board/rejoining/${game.key}">Join</a></div>
+            <c:forEach items="${gamesRooms}" var="gameRooms">
+                <li>${gameRooms.game}:
+                    <ul>
+                    <c:forEach items="${gameRooms.rooms}" var="room">
+                        <li>
+                            <div>${room}:
+                                <a class="gameView"
+                                   room="${room}"
+                                   game="${gameRooms.game}"
+                                   href="${ctx}/board/room/${room}?viewOnly=true">View</a> |
+                                <a id="rejoin-${room}"
+                                   href="${ctx}/board/rejoining/${gameRooms.game}/room/${room}">Join</a>
+                            </div>
+                        </li>
+                    </c:forEach>
+                    </ul>
                 </li>
             </c:forEach>
             </ul>

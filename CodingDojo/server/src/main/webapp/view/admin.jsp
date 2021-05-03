@@ -502,7 +502,7 @@
                         <a href="${ctx}/admin/player/gameOverAll?room=${room}#savePlayersGame">GameOverAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/board/game/${game}">ViewGameAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/board/room/${room}">ViewGameAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">PlayerLogAll</td>
                     <td>
@@ -542,7 +542,7 @@
                                         <td>UDLRA</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${ctx}/board/game/${player.game}">${player.game}</a></td>
+                                <td><a href="${ctx}/board/room/${room}">${room}</a></td>
                                 <td><a href="${ctx}/admin/player/${player.id}/save?room=${room}#savePlayersGame">Save</a></td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
@@ -605,7 +605,7 @@
                                 <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
                                 <td>UDLRA</td>
-                                <td><a href="${ctx}/board/game/${player.game}">${player.game}</a></td>
+                                <td><a href="${ctx}/board/room/${room}">${room}</a></td>
                                 <td>Save</td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
