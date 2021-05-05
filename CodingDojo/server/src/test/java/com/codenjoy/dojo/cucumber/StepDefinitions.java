@@ -22,7 +22,6 @@ package com.codenjoy.dojo.cucumber;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
 import com.codenjoy.dojo.cucumber.page.*;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -30,35 +29,19 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 
-import static org.junit.Assert.assertEquals;
-
+@RequiredArgsConstructor
 public class StepDefinitions implements CleanUp {
 
-    @Autowired
-    private WebDriverWrapper web;
-
-    @Autowired
-    private LoginPage login;
-
-    @Autowired
-    private BoardPage board;
-
-    @Autowired
-    private RegistrationPage registration;
-
-    @Autowired
-    private ErrorPage error;
-
-    @Autowired
-    private Page page;
-
-    @Autowired
-    private AdminPage admin;
-
-    @Autowired
-    private WebsocketClients clients;
+    private final WebDriverWrapper web;
+    private final LoginPage login;
+    private final BoardPage board;
+    private final RegistrationPage registration;
+    private final ErrorPage error;
+    private final Page page;
+    private final AdminPage admin;
+    private final WebsocketClients clients;
 
     @Before
     @Override
