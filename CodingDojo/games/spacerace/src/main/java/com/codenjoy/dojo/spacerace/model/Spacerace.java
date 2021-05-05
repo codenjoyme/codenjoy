@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.spacerace.model;
 
+
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -26,33 +27,37 @@ import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.spacerace.model.flyingitems.BombController;
+import com.codenjoy.dojo.spacerace.model.flyingitems.FlyingItemController;
+import com.codenjoy.dojo.spacerace.model.flyingitems.GoldController;
+import com.codenjoy.dojo.spacerace.model.flyingitems.StoneController;
 import com.codenjoy.dojo.spacerace.services.Events;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Spacerace implements Field {
 
-    private static final int NEW_APPEAR_PERIOD = 3;
-    private static final int MAX_COUNT_BULLET_PACKS = 1;
     private final int size;
-    private GameSettings settings;
-    private List<Wall> walls;
-    private List<BulletPack> bulletPacks;
-    private List<Gold> gold;
-    private List<Bomb> bombs;
-    private List<Bullet> bullets;
-    private List<Explosion> explosions;
-    private List<Stone> stones;
-    private List<Player> players;
+    private final GameSettings settings;
+    private final List<Wall> walls;
+    private final List<BulletPack> bulletPacks;
+    private final List<Gold> gold;
+    private final List<Bomb> bombs;
+    private final List<Bullet> bullets;
+    private final List<Explosion> explosions;
+    private final List<Stone> stones;
+    private final List<Player> players;
+
+    private List<FlyingItemController<?>> flyingItemFactories;
+
     private Dice dice;
-    private boolean isNewStone = true;
-    private int countStone = 0;
-    private boolean isNewBomb = true;
-    private int countBomb = 0;
     private int currentBulletPacks = 0;
 
     public Spacerace(Level level, Dice dice, GameSettings settings) {
@@ -67,23 +72,40 @@ public class Spacerace implements Field {
         bullets = new LinkedList<>();
         stones = new LinkedList<>();
         explosions = new LinkedList<>();
+
+        flyingItemFactories = new LinkedList<>();
+        flyingItemFactories.add(new BombController(this,  bombs, explosions));
+        flyingItemFactories.add(new StoneController(this, stones, explosions ));
+        flyingItemFactories.add(new GoldController(this, gold, explosions));             
     }
 
     @Override
     public void tick() {
         explosions.clear();
-        createStone();
-        createBomb();
+        List<Integer> emptyFrontPoints = new ArrayList<>(size - 2);
+        for (int i = 0; i < size - 2; i++) {
+            emptyFrontPoints.add(i + 1);
+        }
+        for (FlyingItemController<?> factory : flyingItemFactories) {
+            factory.create(emptyFrontPoints);
+        }
+
         createBulletPack();
         tickHeroes();
         removeHeroDestroyedByBullet();
         tickBullets();
-        tickStones();
-        tickBombs();
+
+        for (FlyingItemController<?> factory : flyingItemFactories) {
+            factory.tick(bullets);
+        }
+
         removeHeroDestroyedByBullet();
-        removeStoneOutOfBoard();
         removeBulletOutOfBoard();
-        removeBombOutOfBoard();
+
+        for (FlyingItemController<?> factory : flyingItemFactories) {
+            factory.removeOutOfBoard();
+        }
+
         checkHeroesAlive();
     }
 
@@ -97,59 +119,14 @@ public class Spacerace implements Field {
         }
     }
 
-    private void tickBombs() {
-       removeBombDestroyedByBullet();
-        for (Bomb bomb : bombs) {
-            bomb.tick();
-        }
-        removeBombDestroyedByBullet();
-        heroExploytedByBomb();
-    }
-
-    private void heroExploytedByBomb() {
-        ifBombIsNear(players);
-    }
-
-    private void ifBombIsNear(List<Player> players) {
-        Collection<BombWave> badPlaces = getBombWaves();
-
-        for (Player player :  players) {
-            Hero hero = player.getHero();
-            for (BombWave wave : badPlaces) {
-                if (hero.itsMe(wave)) {
-                    heroDie(wave.getBomb(), player);
-                }
-            }
-        }
-    }
-
-    private Collection<BombWave> getBombWaves() {
-        Collection<BombWave> badPlaces = new LinkedList<>();
-        for (Bomb bomb : new ArrayList<>(bombs)) {  // TODO to use iterator.remove
-            for (int x = bomb.getX() - 1; x < bomb.getX() + 2; x++) {
-                for (int y = bomb.getY() - 1; y < bomb.getY() + 2; y++) {
-                    badPlaces.add(new BombWave(x, y, bomb));
-                }
-            }
-        }
-        return badPlaces;
-    }
-
-    private void heroDie(Point point, Player player) {
-        if(point instanceof Bomb){
-            bombExplosion(point);
-            bombs.remove(point);
-        } else if(point instanceof Stone){
-            stones.remove(point);
-        } else if(point instanceof Bullet) {
-            bullets.remove(point);
-            getPlayerFor(((Bullet)point).getOwner())
-                    .ifPresent(p -> p.event(Events.DESTROY_ENEMY));
-        }
+    private void heroDie(Bullet point, Player player) {
+        bullets.remove(point);
+        getPlayerFor(point.getOwner())
+                .ifPresent(p -> p.event(Events.DESTROY_ENEMY));
         player.getHero().die();
     }
 
-    private Optional<Player> getPlayerFor(Hero hero) {
+    public Optional<Player> getPlayerFor(Hero hero) {
         for (Player player : players) {
             if (player.getHero() == hero) {
                 return Optional.of(player);
@@ -158,41 +135,14 @@ public class Spacerace implements Field {
         return Optional.empty();
     }
 
-    private void bombExplosion(Point pt) {
-        for(int x = pt.getX() - 1; x < pt.getX() + 2; x++){
-            for(int y = pt.getY() - 1; y < pt.getY() + 2; y++){
-                if (y != size) {
-                    explosions.add(new Explosion(x, y));
-                }
-            }
-        }
-    }
 
-    private void createBomb() {
-        countBomb++;
-        if (countBomb == NEW_APPEAR_PERIOD) {
-            int count = 0;
-            while (count++ < 10000) {
-                int x = dice.next(size - 2);
-                if (x == -1) break;
-                if (stones.contains(pt(x + 1, size))) continue;
 
-                addBomb(x + 1);
-                countBomb = 0;
-                break;
-            }
-            if (count == 10000) {
-                throw new RuntimeException("Извините не нашли пустого места");
-            }
-        }
-    }
-
+    @SuppressWarnings("unlikely-arg-type")
     private void tickHeroes() {
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
-            if (bulletPacks.contains(hero)) {
-                bulletPacks.remove(hero);
+            if (bulletPacks.remove(hero)) {
                 currentBulletPacks--;
                 createBulletPack();
                 player.recharge();
@@ -201,8 +151,8 @@ public class Spacerace implements Field {
     }
 
     private void removeBulletOutOfBoard() {
-        for (Iterator <Bullet> bullet = bullets.iterator(); bullet.hasNext();){
-            if (bullet.next().isOutOf(size)){
+        for (Iterator<Bullet> bullet = bullets.iterator(); bullet.hasNext();) {
+            if (bullet.next().isOutOf(size)) {
                 bullet.remove();
             }
         }
@@ -214,65 +164,19 @@ public class Spacerace implements Field {
         }
     }
 
-    private void tickStones() {
-        removeStoneDestroyedByBullet();
-        for (Stone stone : stones) {
-            stone.tick();
-        }
-        removeStoneDestroyedByBullet();
-        heroKilledByStone();
-    }
-
-    private void heroKilledByStone() {
-        for (Stone stone : new ArrayList<>(stones)) { // TODO to use iterator.remove
-            for (Player player : players) {
-                if (stone.equals(player.getHero())) {// TODO Warning:(211, 27) 'equals()' between objects of
-                    heroDie(stone, player);          // inconvertible types 'Hero' and 'Stone'
-                }
-            }
-        }
-    }
-
-    private void removeStoneOutOfBoard() {
-        for (Iterator <Stone> stone = stones.iterator(); stone.hasNext();){
-            if (stone.next().isOutOf(size)){
-                stone.remove();
-            }
-        }
-    }
-
-    private void removeBombOutOfBoard() {
-        for (Iterator<Bomb> bomba = bombs.iterator(); bomba.hasNext();){
-            if (bomba.next().isOutOf(size)){
-                bomba.remove();
-            }
-        }
-    }
-
-    private void createStone() {
-        countStone++;
-        if (countStone == NEW_APPEAR_PERIOD) {
+    private void createBulletPack() {// TODO Паки создаюься по одному за тик, можно в цикле создать все сразу
+        if (currentBulletPacks < maxCountBulletPacks()) {
             int x = dice.next(size - 2);
-            if (x != -1) {
-                addStone(x + 1);
-            }
-            countStone = 0;
-        }
-    }
-
-    private void createBulletPack() {//TODO Паки создаюься по одному за тик, можно в цикле создать все сразу
-        if(currentBulletPacks < maxCountBulletPacks()) {
-            int x = dice.next(size - 2);
-            int y = dice.next(size/3) + size*2/3;
+            int y = dice.next(size / 3) + size * 2 / 3;
             if (x != -1 && y != -1) {
                 addBulletPack(x + 1, y);
-                    currentBulletPacks++;
-                }
+                currentBulletPacks++;
             }
+        }
     }
 
     private int maxCountBulletPacks() {
-        return (players.size() - 1)/ 3 + 1;
+        return (players.size() - 1) / 3 + 1;
     }
 
     private void addBulletPack(int x, int y) {
@@ -287,34 +191,6 @@ public class Spacerace implements Field {
                 if (hero.equals(bullet) && bullet.getOwner() != hero) {
                     heroDie(bullet, player);
                 }
-            }
-        }
-    }
-
-    private void removeStoneDestroyedByBullet() {
-        for (Bullet bullet : new ArrayList<>(bullets)) { // TODO to use iterator.remove
-            if (stones.contains(bullet)) {
-                explosions.add(new Explosion(bullet));
-                bullets.remove(bullet);
-                stones.remove(bullet);
-                fireWinScoresFor(bullet, Events.DESTROY_STONE);
-            }
-        }
-    }
-
-    private void fireWinScoresFor(Bullet bullet, Events event) {
-        Hero hero = bullet.getOwner();
-        getPlayerFor(hero).
-                ifPresent(p -> p.event(event));
-    }
-
-    private void removeBombDestroyedByBullet() {
-        for (Bullet bullet : new ArrayList<>(bullets)) { // TODO to use iterator.remove
-            if (bombs.contains(bullet)) {
-                bombs.remove(bullet);
-                bullets.remove(bullet);
-                bombExplosion(bullet);
-                fireWinScoresFor(bullet, Events.DESTROY_BOMB);
             }
         }
     }
@@ -340,11 +216,11 @@ public class Spacerace implements Field {
     @Override
     public boolean isFree(Point pt) {
         // TODO test me
-        return  !walls.contains(pt) &&
+        return !walls.contains(pt) &&
                 !bullets.contains(pt) &&
                 !stones.contains(pt) &&
                 !explosions.contains(pt) &&
-                !getBombWaves().contains(pt) &&
+                !BombController.getBombWaves(bombs).contains(pt) &&
                 !gold.contains(pt) &&
                 !getHeroes().contains(pt);
     }
@@ -357,10 +233,6 @@ public class Spacerace implements Field {
     @Override
     public BulletCharger getCharger() {
         return new BulletCharger(settings);
-    }
-
-    public List<Gold> getGold() {
-        return gold;
     }
 
     public List<Hero> getHeroes() {
@@ -393,10 +265,6 @@ public class Spacerace implements Field {
         return walls;
     }
 
-    public List<Bomb> getBombs() {
-        return bombs;
-    }
-
     @Override
     public BoardReader reader() {
         return new BoardReader() {
@@ -407,33 +275,44 @@ public class Spacerace implements Field {
                 return size;
             }
 
+            @SuppressWarnings("serial")
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<>(){{
-                    addAll(explosions);
-                    addAll(walls);
-                    addAll(getHeroes());
-                    addAll(getGold());
-                    addAll(bombs);
-                    addAll(stones);
-                    addAll(bullets);
-                    addAll(bulletPacks);
-                }};
+                return new LinkedList<>() {
+                    {
+                        addAll(explosions);
+                        addAll(walls);
+                        addAll(getHeroes());
+                        addAll(getGold());
+                        addAll(bombs);
+                        addAll(stones);
+                        addAll(bullets);
+                        addAll(bulletPacks);
+                    }
+                };
             }
         };
     }
 
-    public void addStone(int x) {
-        stones.add(new Stone(x, size));
-        isNewStone = false;
+    public int dice(int n) {
+        return dice.next(n);
+    }
+
+    public List<Bomb> getBombs() {
+        return bombs;
     }
 
     public List<Stone> getStones() {
         return stones;
     }
 
-    public void addBomb(int x) {
-        bombs.add(new Bomb(x, size));
-        isNewBomb = false;
+    public List<Gold> getGold() {
+        return gold;
     }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+
 }

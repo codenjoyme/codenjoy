@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.spacerace.model.flyingitems.BombController;
+import com.codenjoy.dojo.spacerace.model.flyingitems.StoneController;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
@@ -68,8 +70,8 @@ public class GameTest {
             when = when.thenReturn(i);
         }
     }
-
-    private void diceNew(int...ints) {
+    private void diceNew1(int...ints) {
+        System.out.println("-------new dice-------");
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
 
         if(ints.length == 0){ // we work just with nothing
@@ -77,15 +79,31 @@ public class GameTest {
         }
 
         if(ints.length == 1){ // we work just with stones
-            when = when.thenReturn(-1, -1, -1, -1, ints[0], -1);
+            when = when.thenReturn(-1, -1, -1, -1, -1, -1, ints[0], -1);
         }
 
         if(ints.length == 2){ // we work with stones and bombs
-            when = when.thenReturn(-1, -1, -1, -1, ints[0], ints[1], -1);
+            when = when.thenReturn(-1, -1, -1, -1, ints[0], -1,-1, ints[1], -1);
         }
 
         if(ints.length == 4){ // we work stones, bombs and bulletPacks
-            when = when.thenReturn(ints[2], ints[3], ints[0], ints[1], -1);
+            when = when.thenReturn(ints[0], ints[1], ints[2], ints[3]);
+        }
+    }
+
+    private void diceNew(int... ints) {
+        // System.out.println("-------new dice-------");
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+
+        if (ints.length == 0) { // we work just with nothing
+            when = when.thenReturn(-1);
+        } else {
+            Integer[] next = new Integer[ints.length];
+            for (int i = 1; i < next.length; i++) {
+                next[i - 1] = ints[i];
+            }
+            next[next.length - 1] = -1;
+            when = when.thenReturn(ints[0], next);
         }
     }
 
@@ -95,7 +113,15 @@ public class GameTest {
         LevelImpl level = new LevelImpl(board);
         Hero hero = level.getHero(charger).get(0);
 
-        game = new Spacerace(level, dice, settings);
+        Dice diceProxy = new Dice() {
+            @Override
+            public int next(int n) {
+                int next = dice.next(n);
+                // System.out.println("Dice: " + next);
+                return next;
+            }
+        };
+        game = new Spacerace(level, diceProxy, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
         game.newGame(player);
@@ -116,7 +142,13 @@ public class GameTest {
 
         charger = new BulletCharger(settings);
     }
+    private void newBulletPackForHeroWithGivenTimer(int i) {
+        SettingsReader settings = new GameSettings()
+                .integer(TICKS_TO_RECHARGE, i)
+                .integer(BULLETS_COUNT, 10);
 
+        charger = new BulletCharger(settings);
+    }
     @Test
     public void shouldNoBulletsAfterFireWithEmptyBulletCharger() {
 
@@ -129,7 +161,7 @@ public class GameTest {
                 "☼   ☼");
 
         //when
-        diceNew(-1, -1, -1, -1);
+        diceNew();
 
         hero.act();
         game.tick();
@@ -142,7 +174,7 @@ public class GameTest {
                 "☼   ☼");
 
         //when
-        diceNew(-1, -1, 1, 0);
+        diceNew(1, 0);
         game.tick();
 
         //Then
@@ -218,7 +250,63 @@ public class GameTest {
                 "☼   ☼");
     }
 
+    @Test
+    public void shouldRecargeByTimer() {
 
+        final int timeToRecharge = 15;
+        newBulletPackForHeroWithGivenTimer(timeToRecharge);
+        //Given
+        givenFl("☼   ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼   ☼");
+
+        //when
+        diceNew();
+
+        
+        for (int i = 0; i < timeToRecharge; i++) {
+            hero.act();
+            game.tick();
+            //Then
+            assertE("☼   ☼" +
+                    "☼   ☼" +
+                    "☼ ☺ ☼" +
+                    "☼   ☼" +
+                    "☼   ☼");
+        }
+
+        //then no bullets
+        assertE("☼   ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼   ☼");
+
+        //When
+        hero.act();
+        game.tick(); // a new bullet
+
+        //then
+        assertE("☼   ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼   ☼");
+
+        //When
+        hero.act();
+        game.tick(); // no new bullet
+
+        //then
+        assertE("☼ * ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼   ☼");
+
+    }
 
     // есть карта со мной
     @Test
@@ -303,9 +391,10 @@ public class GameTest {
                 "☼   ☼");
 
         //When
+        diceNew();
+        game.tick();
+        game.tick();
         diceNew(1);
-        game.tick();
-        game.tick();
         game.tick();
 
         //Then
@@ -315,11 +404,11 @@ public class GameTest {
                 "☼   ☼" +
                 "☼   ☼");
         //When
+        game.tick();
+        game.tick();
         diceNew(2);
         game.tick();
-        game.tick();
-        game.tick();
-
+        
         //Then
         assertE("☼  0☼" +
                 "☼   ☼" +
@@ -338,9 +427,10 @@ public class GameTest {
                 "☼ ☺ ☼");
 
         //When
+        diceNew();
+        game.tick();
+        game.tick();
         diceNew(0);
-        game.tick();
-        game.tick();
         game.tick();
 
         //Then
@@ -368,16 +458,22 @@ public class GameTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼ ☺ ☼");
-
+        diceNew();
+        game.tick();
+        game.tick();
         //When
         diceNew(1); // камень в первой колонке, мины нет, камень во второй колонке
         game.tick();
+        assertE("☼ 0 ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼");
         game.tick();
         game.tick();
-        diceNew(2);
+        diceNew(2); // камень во второй колонке
         game.tick();
-        game.tick();
-        game.tick();
+
 
         //Then
         assertE("☼  0☼" +
@@ -454,11 +550,12 @@ public class GameTest {
                 "☼   ☼" +
                 "☼ ☺ ☼");
         //When
-        diceNew(1);
+        diceNew();
         hero.recharge();
         hero.act();
         game.tick();
         game.tick();
+        diceNew(1);
         game.tick();
 
         //Then
@@ -490,7 +587,7 @@ public class GameTest {
                 "☼   ☼");
 
         //When
-        diceNew(1);
+        diceNew();
         hero.recharge();
         hero.act();
         game.tick();
@@ -513,6 +610,7 @@ public class GameTest {
                 "☼   ☼");
 
         //When
+        diceNew(1);
         game.tick();
 
         //Then
@@ -545,9 +643,11 @@ public class GameTest {
                 "☼   ☼");
 
         //When
-        diceNew(-1, 1); // камень не появляем, мину появляем, тоже на 3-м тике
+        diceNew(); // камень не появляем, мину появляем, тоже на 4-м тике
         game.tick();
         game.tick();
+        game.tick();
+        diceNew(1); 
         game.tick();
 
 
@@ -569,11 +669,12 @@ public class GameTest {
                 "☼  ☺☼");
 
         //when
-        diceNew(-1, 0);
+        diceNew();
         game.tick();
         game.tick();
         game.tick();
-
+        diceNew(0);
+        game.tick();
         //then
         assertE("☼♣  ☼" +
                 "☼   ☼" +
@@ -582,17 +683,18 @@ public class GameTest {
                 "☼  ☺☼");
 
         //when
-        diceNew(-1, 2);
         game.tick();
+        game.tick();      
         game.tick();
+        diceNew(2);
         game.tick();
 
         //then
         assertE("☼  ♣☼" +
                 "☼   ☼" +
                 "☼   ☼" +
-                "☼♣  ☼" +
-                "☼  ☺☼");
+                "☼   ☼" +
+                "☼♣ ☺☼");
     }
 
     @Test
@@ -603,17 +705,23 @@ public class GameTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼");
-
+        diceNew();
+        for (int i = 1; i < BombController.APPEAR_PERIOD * StoneController.APPEAR_PERIOD; i++) {
+            game.tick();
+            assertE("☼   ☼" +
+                    "☼   ☼" +
+                    "☼   ☼" +
+                    "☼ ☺ ☼" +
+                    "☼   ☼");
+        }
         //when
-        diceNew(0, 2);
-        game.tick();
-        game.tick();
+        diceNew(0, 1);
         game.tick();
         game.tick();
 
         //then
         assertE("☼   ☼" +
-                "☼0 ♣☼" +
+                "☼♣ 0☼" +
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼");
@@ -629,9 +737,11 @@ public class GameTest {
                 "☼☺  ☼");
 
         //When
-        diceNew(-1, 2);
+        diceNew();
         game.tick();
         game.tick();
+        game.tick();
+        diceNew(2);
         game.tick();
 
         //Then
@@ -676,13 +786,14 @@ public class GameTest {
                 "☼ ☺ ☼");
 
 
-        diceNew(-1, 1);
+        diceNew();
         hero.recharge();
+        game.tick();
         hero.act();
         game.tick();
         game.tick();
+        diceNew(1);
         game.tick();
-
 
         assertE("☼ ♣ ☼" +
                 "☼ * ☼" +
@@ -710,7 +821,8 @@ public class GameTest {
                 "☼   ☼");
 
 
-        diceNew(-1, 1);
+        diceNew();
+        game.tick();
         hero.recharge();
         hero.act();
         game.tick();
@@ -722,7 +834,7 @@ public class GameTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼");
-
+        diceNew(1);
         game.tick();
 
         assertE("☼xxx☼" +
@@ -750,13 +862,21 @@ public class GameTest {
                 "☼    ☼" +
                 "☼    ☼");
 
-        diceNew(1, 3);
-        game.tick();
-        game.tick();
+        diceNew();
+        for (int i = 1; i < BombController.APPEAR_PERIOD * StoneController.APPEAR_PERIOD; i++) {
+            game.tick();
+            assertE("☼    ☼" +
+                    "☼    ☼" +
+                    "☼ ☺  ☼" +
+                    "☼    ☼" +
+                    "☼    ☼" +
+                    "☼    ☼");
+        }
+        diceNew(1, 2);
         game.tick();
 
         // then
-        assertE("☼ 0 ♣☼" +
+        assertE("☼ ♣ 0☼" +
                 "☼    ☼" +
                 "☼ ☺  ☼" +
                 "☼    ☼" +
@@ -774,17 +894,19 @@ public class GameTest {
                 "☼    ☼" +
                 "☼  ☺ ☼");
 
-        diceNew(0, 2);
+        diceNew();
         hero.recharge();
         game.tick();
         game.tick();
+        game.tick();
+        diceNew(2);
         hero.act();
         game.tick();
         game.tick();
 
         // then
         assertE("☼    ☼" +
-                "☼0 ♣ ☼" +
+                "☼  ♣ ☼" +
                 "☼    ☼" +
                 "☼  * ☼" +
                 "☼    ☼" +
@@ -795,7 +917,7 @@ public class GameTest {
         // then
         assertE("☼    ☼" +
                 "☼ xxx☼" +
-                "☼0xxx☼" +
+                "☼ xxx☼" +
                 "☼ xxx☼" +
                 "☼    ☼" +
                 "☼  ☺ ☼");
@@ -812,15 +934,16 @@ public class GameTest {
                 "☼  ☺ ☼" +
                 "☼    ☼");
 
-        diceNew(0, 2);
+        diceNew();
         game.tick();
         game.tick();
         game.tick();
+        diceNew(2);
         game.tick();
-
+        game.tick();
         // then
         assertE("☼    ☼" +
-                "☼0 ♣ ☼" +
+                "☼  ♣ ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼  ☺ ☼" +
@@ -833,7 +956,7 @@ public class GameTest {
         assertE("☼    ☼" +
                 "☼    ☼" +
                 "☼ xxx☼" +
-                "☼0xxx☼" +
+                "☼ xxx☼" +
                 "☼ xxx☼" +
                 "☼    ☼");
 
@@ -844,7 +967,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
-                "☼0 + ☼" +
+                "☼  + ☼" +
                 "☼    ☼");
     }
 
@@ -858,15 +981,17 @@ public class GameTest {
                 "☼  ☺ ☼" +
                 "☼    ☼");
 
-        diceNew(0, 2);
+        diceNew();
         game.tick();
         game.tick();
+        game.tick();
+        diceNew(2);
         game.tick();
         game.tick();
 
         // then
         assertE("☼    ☼" +
-                "☼0 ♣ ☼" +
+                "☼  ♣ ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼  ☺ ☼" +
@@ -879,7 +1004,7 @@ public class GameTest {
         assertE("☼    ☼" +
                 "☼    ☼" +
                 "☼ xxx☼" +
-                "☼0xxx☼" +
+                "☼ xxx☼" +
                 "☼ xxx☼" +
                 "☼    ☼");
 
@@ -890,7 +1015,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
-                "☼0 + ☼" +
+                "☼  + ☼" +
                 "☼    ☼");
 
         game.tick();
@@ -901,7 +1026,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼  ☺ ☼" +
-                "☼0   ☼");
+                "☼    ☼");
     }
 
     @Test
@@ -914,16 +1039,18 @@ public class GameTest {
                 "☼  ☺ ☼" +
                 "☼    ☼");
 
-        diceNew(0, 3);
+        diceNew();
 
         game.tick();
         game.tick();
+        game.tick();
+        diceNew(3);
         game.tick();
         game.tick();
 
         // then
         assertE("☼    ☼" +
-                "☼0  ♣☼" +
+                "☼   ♣☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼  ☺ ☼" +
@@ -936,7 +1063,7 @@ public class GameTest {
         assertE("☼    ☼" +
                 "☼    ☼" +
                 "☼  xxx" +
-                "☼0 xxx" +
+                "☼  xxx" +
                 "☼  xxx" +
                 "☼    ☼");
 
@@ -947,7 +1074,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
-                "☼0 + ☼" +
+                "☼  + ☼" +
                 "☼    ☼");
         game.tick();
 
@@ -957,7 +1084,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼  ☺ ☼" +
-                "☼0   ☼");
+                "☼    ☼");
     }
 
     @Test
@@ -970,9 +1097,10 @@ public class GameTest {
                 "☼  ☺ ☼" +
                 "☼    ☼");
 
+        diceNew();
+        game.tick();
+        game.tick();
         diceNew(2);
-        game.tick();
-        game.tick();
         game.tick();
         game.tick();
 
@@ -1003,6 +1131,100 @@ public class GameTest {
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼  + ☼" +
+                "☼    ☼");
+    }
+    @Test
+    public void shouldNoJumpOverStone() {
+        // given
+        givenFl("☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  ☺ ☼" +
+                "☼    ☼");
+
+        diceNew();
+        game.tick();
+        game.tick();
+        diceNew(2);
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("☼    ☼" +
+                "☼  0 ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  ☺ ☼" +
+                "☼    ☼");
+
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  0 ☼" +
+                "☼  ☺ ☼" +
+                "☼    ☼");
+
+        hero.up();
+        game.tick();
+
+        // then
+        assertE("☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  + ☼" +
+                "☼    ☼" +
+                "☼    ☼");
+    }
+    @Test
+    public void shouldNoGoOnStone() {
+        // given
+        givenFl("☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  ☺ ☼" +
+                "☼    ☼");
+
+        diceNew();
+        game.tick();
+        game.tick();
+        diceNew(1);
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("☼    ☼" +
+                "☼ 0  ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  ☺ ☼" +
+                "☼    ☼");
+
+        game.tick();
+        game.tick();
+        game.tick();
+        // then
+        assertE("☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼ 0☺ ☼" +
+                "☼    ☼");
+
+        hero.left();
+        game.tick();
+
+        // then
+        assertE("☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼ +  ☼" +
                 "☼    ☼");
     }
 
@@ -1085,7 +1307,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼    ☼");
 
-        diceNew(-1, -1, 0, 1);
+        diceNew(0, 1, -1, -1);
         game.tick();
 
         // then
@@ -1109,7 +1331,7 @@ public class GameTest {
 
         hero.up();
         game.tick();
-        diceNew(-1, -1, 3, 0);
+        diceNew(-1, 3, 0);
         game.tick();
 
         // then
@@ -1131,7 +1353,7 @@ public class GameTest {
                 "☼   ☼");
 
         //when
-        diceNew(-1, -1, 0, 0);
+        diceNew(0, 0);
         game.tick();
 
         //Given

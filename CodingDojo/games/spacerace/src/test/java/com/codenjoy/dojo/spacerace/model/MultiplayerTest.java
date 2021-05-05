@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.BULLETS_COUNT;
 import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.TICKS_TO_RECHARGE;
@@ -109,14 +110,24 @@ public class MultiplayerTest {
         game3.newGame();
     }
 
-    private void diceOld(int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y);
-    }
-
     private void dice(int x, int y) {
         when(dice.next(anyInt())).thenReturn(x, y, x, y, x, y, -1);
     }
+    private void diceNew(int... ints) {
+        // System.out.println("-------new dice-------");
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
 
+        if (ints.length == 0) { // we work just with nothing
+            when = when.thenReturn(-1);
+        } else {
+            Integer[] next = new Integer[ints.length];
+            for (int i = 1; i < next.length; i++) {
+                next[i - 1] = ints[i];
+            }
+            next[next.length - 1] = -1;
+            when = when.thenReturn(ints[0], next);
+        }
+    }
     private void asrtFl1(String expected) {
         assertEquals(expected, game1.getBoardAsString());
     }
@@ -245,7 +256,7 @@ public class MultiplayerTest {
 
         assertTrue(game2.isGameOver());
 
-        dice(1, 0);
+        diceNew(1, 0);
         game2.newGame();
 
         field.tick();
@@ -303,6 +314,7 @@ public class MultiplayerTest {
         dice(1, 0);
         game2.newGame();
 
+        diceNew();
         field.tick();
 
         asrtFl1("☼   ☼\n" +
@@ -404,14 +416,13 @@ public class MultiplayerTest {
     // кол-во баллет паков 1
     @Test
     public void shodOneBulletPack() {
-
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺☻☻☼\n");
         dice(2, 1);
         field.tick();
-        dice(-1, -1);
-        field.tick();
-        dice(-1, -1);
-        field.tick();
-        dice(1, 1);
         field.tick();
 
         asrtFl1("☼  7☼\n" +
@@ -422,9 +433,9 @@ public class MultiplayerTest {
 
     }
 
-    // кол-во баллет паков 1
+    // кол-во баллет паков 2
     @Test
-    public void shodTwoBulletPacks() {
+    public void shouldTwoBulletPacks() {
         dice(1, 1);
         game4.newGame();
 
@@ -439,12 +450,11 @@ public class MultiplayerTest {
         dice(1, 1);
         field.tick();
 
-        dice(-1, -1);// не появляется камень и бомба
+        diceNew(-1, 1, 1, 1, 1, 1); // не появляется камень
         field.tick();
-        dice(-1, -1);
+        diceNew(-1, 1, 1, 1, 1, 1); // не появляется бомба
         field.tick();
-
-        dice(0, 1);// не появляется 3-й баллет пак
+        diceNew(-1, 1, 1, 1, 1, 1); // не появляется золото
         field.tick();
 
         asrtFl1("☼ 77☼\n" +

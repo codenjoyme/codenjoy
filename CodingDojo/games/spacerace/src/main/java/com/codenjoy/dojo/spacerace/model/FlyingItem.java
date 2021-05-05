@@ -4,7 +4,7 @@ package com.codenjoy.dojo.spacerace.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,22 +22,26 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.Tickable;
 
-public class BulletPack extends PointImpl implements State<Elements, Player>{
+public abstract class FlyingItem extends PointImpl implements State<Elements, Player>, Tickable {
+    private Direction direction;
 
-    public BulletPack(int x, int y) {
+    public FlyingItem(int x, int y) {
         super(x, y);
+        direction = Direction.DOWN;
     }
-
-    public BulletPack(Point point) {
-        super(point);
-    }
-
+    
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BULLET_PACK;
+    public void tick() {
+        if (direction != null) {
+            int newX = direction.changeX(x);
+            int newY = direction.changeY(y);
+            move(newX, newY);
+        }
     }
+
 }

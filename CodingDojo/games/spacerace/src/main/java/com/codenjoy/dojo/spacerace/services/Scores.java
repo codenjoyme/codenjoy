@@ -55,6 +55,8 @@ public class Scores implements PlayerScores {
             score += settings.integer(DESTROY_STONE_SCORE);
         } else if (event.equals(Events.DESTROY_ENEMY)) {
             score += settings.integer(DESTROY_ENEMY_SCORE);
+        } else if (event.equals(Events.GET_GOLD)) {
+            score += settings.integer(GET_GOLD_SCORE);
         } else if (event.equals(Events.LOOSE)) {
             score -= settings.integer(LOOSE_PENALTY);
         }

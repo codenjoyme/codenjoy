@@ -22,21 +22,13 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.*;
-
 /**
  * Артефакт Камень на поле
  */
-public class Stone extends PointImpl implements State<Elements, Player>, Tickable {
-    private Direction direction;
+public class Stone extends FlyingItem {
 
     public Stone(int x, int y) {
         super(x, y);
-        direction = Direction.DOWN;
-    }
-
-    public Stone(Point pt) {
-        super(pt);
     }
 
     @Override
@@ -44,14 +36,4 @@ public class Stone extends PointImpl implements State<Elements, Player>, Tickabl
         return Elements.STONE;
     }
 
-    @Override
-    public void tick() {
-        if (direction != null) {
-
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-            move(newX, newY);
-        }
-
-    }
 }

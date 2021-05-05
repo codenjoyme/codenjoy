@@ -23,17 +23,24 @@ package com.codenjoy.dojo.spacerace.model;
  */
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
 
-public class Gold extends PointImpl implements State<Elements, Player> {
+
+/**
+ * Артефакт Бонус на поле
+ */
+public class Gold extends FlyingItem {
 
     public Gold(Point point) {
-        super(point);
+        super(point.getX(), point.getY());
+    }
+
+    public Gold(int x, int y) {
+        super(x, y);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.GOLD;
     }
+
 }
