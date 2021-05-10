@@ -25,11 +25,10 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.GameServiceImpl;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerGames;
-import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.grpc.handler.UpdateHandler;
 import com.codenjoy.dojo.services.hash.Hash;
-import com.codenjoy.dojo.web.rest.pojo.PUser;
-import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +48,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 // TODO сделать удобным вовыд и расскомментить
 // import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
@@ -60,35 +61,53 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class RestRegistrationControllerIntegrationTest extends AbstractRestControllerTest {
-
-    PlayerDetailInfo playerDetailInfo = new PlayerDetailInfo();
-    @MockBean
-    private PlayerGames playerGames;
+public class RestDojoPlayerControllerTest extends AbstractRestControllerTest {
 
     @Autowired
-    private RestBoardController restBoardController;
+    @MockBean
+    private PlayerGames playerGames;
+    @Autowired
+    @MockBean
+    private UpdateHandler updateHandler;
+    @Autowired
+    private RestDojoPlayerController restDojoPlayerController;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
-        Registration.User register = registration.register("1", "dummy@email.com",
+        registration.register("1", "dummy@email.com",
                 "Name", Hash.md5("password"), "{}",
-                Collections.singleton("ROLE_USER"), "ghusername");
+                Collections.singleton("ROLE_USER"), "username");
 
-        PUser pUser = new PUser(register);
-        playerDetailInfo.setRegistration(pUser);
+        Player player = new Player();
+        player.setId("1");
+        player.setGitHubUsername("username");
+        gameSaver.saveGame(player, "{}", System.currentTimeMillis());
     }
 
     @Test
-    public void shouldCreatePlayer() {
-        String responsePlayerCode = post(HttpStatus.OK.value(),
-                "/rest/player/create",
-                mapToJson(playerDetailInfo));
-        assertEquals(responsePlayerCode,
-                registration.getUserById("1").get().getCode());
+    public void shouldUpdateScore() {
+        post(HttpStatus.OK.value(), "/rest/update/username/score", "60");
+        assertEquals("60", gameSaver.loadGame("1").getScore());
+        verify(updateHandler, times(1)).sendUpdate("username", 60);
     }
+
+
+    @Test
+    public void shouldUpdateGitHubUsername() {
+        String expected = "1";
+        assertEquals(expected, post("/rest/change/username/to/newusername"));
+        assertEquals("newusername",
+                registration.getUserById("1").get().getGitHubUsername());
+    }
+
+    @Test
+    public void shouldNotUpdateGitHubUsername() {
+        String expected = "0";
+        assertEquals(expected, post("/rest/change/non-existing/to/username"));
+    }
+
 
     @TestConfiguration
     public static class ContextConfiguration {
@@ -96,6 +115,5 @@ public class RestRegistrationControllerIntegrationTest extends AbstractRestContr
         public GameServiceImpl gameService() {
             return AbstractRestControllerTest.gameService();
         }
-
     }
 }
