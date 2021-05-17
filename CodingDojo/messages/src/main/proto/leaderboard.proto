@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package codenjoy;
+
+option java_package = "com.codenjoy.dojo";
+option java_multiple_files = true;
+
+message LeaderboardRequest{
+  string contestId = 1;
+}
+
+message LeaderboardResponse{
+  string contestId = 1;
+  repeated Participant participant = 2;
+}
+
+message Participant{
+  string id = 1;
+  string name = 2;
+  int64 score = 3;
+}
+
+message StopRequest{
+  string contestId = 1;
+}
+
+message StopResponse{
+
+}
+
+service LeaderboardService{
+  rpc getLeaderboard(LeaderboardRequest) returns (stream LeaderboardResponse);
+  rpc stopNotifications(StopRequest) returns (StopResponse);
+}

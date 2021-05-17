@@ -4,16 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-contest</artifactId>
     <version>1.1.1</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.18.RELEASE</version> <!-- do not update, higher is not working -->
-        <relativePath/>
+        <groupId>com.codenjoy</groupId>
+        <artifactId>codenjoy-parent</artifactId>
+        <version>1.1.1</version>
+
     </parent>
 
     <properties>
@@ -23,7 +22,7 @@
         <!-- please do not update these versions
              they are not in spring boot  -->
         <json.version>20180813</json.version> <!-- do not update -->
-        <dojo.version>1.0.0-SNAPSHOT</dojo.version>
+        <dojo.version>1.1.1</dojo.version>
         <commons-collections.version>4.4</commons-collections.version>
         <reflections.version>0.9.11</reflections.version> <!-- do not update -->
         <fest-reflect.version>1.4.1</fest-reflect.version>
@@ -58,10 +57,6 @@
         <repository>
             <id>codenjoy-releases</id>
             <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
-        </repository>
-        <repository>
-            <id>maven-central</id>
-            <url>http://central.maven.org/maven2/</url>
         </repository>
         <repository>
             <id>springframework-maven</id>
@@ -610,23 +605,23 @@
                 </dependency>
             </dependencies>
         </profile>
-<!-- this is your new game
-        <profile>
-            <id>yourgame</id>
-            <activation>
-                <property>
-                    <name>allGames</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>yourgame-engine</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
--->
+        <!-- this is your new game
+                <profile>
+                    <id>yourgame</id>
+                    <activation>
+                        <property>
+                            <name>allGames</name>
+                        </property>
+                    </activation>
+                    <dependencies>
+                        <dependency>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>yourgame-engine</artifactId>
+                            <version>${project.version}</version>
+                        </dependency>
+                    </dependencies>
+                </profile>
+        -->
     </profiles>
 
     <dependencies>
@@ -750,13 +745,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.dojo</groupId>
-            <artifactId>messages</artifactId>
+            <groupId>com.codenjoy</groupId>
+            <artifactId>common</artifactId>
             <version>${dojo.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.dojo</groupId>
-            <artifactId>common</artifactId>
+            <groupId>com.codenjoy</groupId>
+            <artifactId>messages</artifactId>
             <version>${dojo.version}</version>
         </dependency>
 
@@ -964,7 +959,7 @@
                     <include>license/**</include>
                 </includes>
             </resource>
-            </resources>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -988,6 +983,7 @@
                     <scmDirectory>${project.basedir}/../../</scmDirectory>
                     <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                     <shortRevisionLength>8</shortRevisionLength>
+                    <revisionOnScmFailure>UNKNOWN</revisionOnScmFailure>
                 </configuration>
                 <dependencies>
                     <dependency>
