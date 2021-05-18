@@ -12,15 +12,8 @@
         <groupId>com.codenjoy</groupId>
         <artifactId>codenjoy-parent</artifactId>
         <version>1.1.1</version>
-
     </parent>
 
-<!--    <parent>-->
-<!--        <groupId>org.springframework.boot</groupId>-->
-<!--        <artifactId>spring-boot-starter-parent</artifactId>-->
-<!--        <version>2.1.18.RELEASE</version> &lt;!&ndash; do not update, higher is not working &ndash;&gt;-->
-<!--        <relativePath/>-->
-<!--    </parent>-->
 
     <properties>
         <messages.version>1.1.1</messages.version>
