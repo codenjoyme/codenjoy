@@ -131,6 +131,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .headers()
                         .httpStrictTransportSecurity().maxAgeInSeconds(31536000)
                     .and()
+                        .xssProtection()
+                    .and()
                         .contentTypeOptions()
                     .and()
                         .contentSecurityPolicy(
