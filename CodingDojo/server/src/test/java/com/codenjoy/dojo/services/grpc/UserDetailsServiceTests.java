@@ -22,15 +22,23 @@ package com.codenjoy.dojo.services.grpc;
  * #L%
  */
 
+import com.codenjoy.dojo.User;
 import com.codenjoy.dojo.UserDetailsIdRequest;
 import com.codenjoy.dojo.UserDetailsResponse;
+import com.codenjoy.dojo.UserRequest;
+import com.codenjoy.dojo.UserResponse;
+import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.web.rest.RestBoardController;
+import com.codenjoy.dojo.web.rest.pojo.PScores;
 import io.grpc.stub.StreamObserver;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Collections;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,15 +49,30 @@ public class UserDetailsServiceTests {
 
     private static final String USER_ID = "id";
     private static final String EMAIL = "email";
+    private static final String CONTEST_ID = "kata";
+    private static final String ADMIN = "ROLE_ADMIN";
+    private static final String GITHUB = "github.com";
 
     private UserDetailsIdRequest request;
     private UserDetailsResponse response;
+
+    private UserRequest userRequest;
+    private UserResponse userResponse;
 
     @Mock
     private StreamObserver<UserDetailsResponse> streamObserver;
 
     @Mock
+    private StreamObserver<UserResponse> userResponseStreamObserver;
+
+    @Mock
+    private PlayerSave playerSave;
+
+    @Mock
     private Registration registration;
+
+    @Mock
+    private RestBoardController restBoardController;
 
     private UserDetailsService userDetailsService;
 
@@ -57,7 +80,11 @@ public class UserDetailsServiceTests {
     public void init() {
         this.request = UserDetailsIdRequest.newBuilder().setId(USER_ID).build();
         this.response = UserDetailsResponse.newBuilder().setId(USER_ID).setEmail(EMAIL).build();
-        this.userDetailsService = new UserDetailsService(registration);
+        this.userDetailsService = new UserDetailsService(registration, restBoardController);
+        this.userRequest = UserRequest.newBuilder().setContestId(CONTEST_ID).build();
+        this.userResponse = UserResponse.newBuilder()
+                .addUser(User.newBuilder().setId(USER_ID).setUsername(GITHUB).setName("Player").setRole(ADMIN).build())
+                .build();
     }
 
     @Test
@@ -68,5 +95,21 @@ public class UserDetailsServiceTests {
 
         verify(streamObserver, times(1)).onNext(response);
         verify(streamObserver, times(1)).onCompleted();
+    }
+
+    @Test
+    public void getUsersForContestTest() {
+        PScores pScores = new PScores(playerSave,"Player");
+        when(restBoardController.getPlayersScoresForRoom(CONTEST_ID)).thenReturn(Collections.singletonList(pScores));
+        when(playerSave.getId()).thenReturn(USER_ID);
+        when(registration.getGitHubUsernameById(USER_ID)).thenReturn(GITHUB);
+        when(registration.getRoleById(USER_ID)).thenReturn(ADMIN);
+
+        userDetailsService.getUsersForContest(userRequest, userResponseStreamObserver);
+
+        verify(restBoardController, times(1)).getPlayersScoresForRoom(CONTEST_ID);
+        verify(playerSave, times(3)).getId();
+        verify(userResponseStreamObserver, times(1)).onNext(userResponse);
+        verify(userResponseStreamObserver, times(1)).onCompleted();
     }
 }

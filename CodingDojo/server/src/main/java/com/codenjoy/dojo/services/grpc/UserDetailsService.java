@@ -23,23 +23,33 @@ package com.codenjoy.dojo.services.grpc;
  */
 
 
+import com.codenjoy.dojo.User;
 import com.codenjoy.dojo.UserDetailsIdRequest;
 import com.codenjoy.dojo.UserDetailsResponse;
 import com.codenjoy.dojo.UserDetailsServiceGrpc;
 import com.codenjoy.dojo.UserDetailsUsernameRequest;
+import com.codenjoy.dojo.UserRequest;
+import com.codenjoy.dojo.UserResponse;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.web.rest.RestBoardController;
+import com.codenjoy.dojo.web.rest.pojo.PScores;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServiceImplBase {
 
     private final Registration registration;
+    private final RestBoardController restBoardController;
 
     @Autowired
-    public UserDetailsService(Registration registration) {
+    public UserDetailsService(Registration registration, RestBoardController restBoardController) {
         this.registration = registration;
+        this.restBoardController = restBoardController;
     }
 
     @Override
@@ -58,6 +68,28 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
         String email = this.registration.getEmailById(id);
 
         responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).build());
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getUsersForContest(UserRequest request, StreamObserver<UserResponse> responseObserver) {
+        String contestId = request.getContestId();
+
+        List<PScores> users = restBoardController.getPlayersScoresForRoom(contestId);
+
+        UserResponse response = UserResponse.newBuilder().addAllUser(users.stream().map(user -> {
+            String id = user.getId();
+            String githubUsername = registration.getGitHubUsernameById(user.getId());
+            String name = user.getName();
+            String role = registration.getRoleById(user.getId());
+            return User.newBuilder().setId(id)
+                    .setUsername(githubUsername)
+                    .setName(name)
+                    .setRole(role).build();
+        }).collect(Collectors.toList()))
+        .build();
+
+        responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 }

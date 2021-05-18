@@ -696,6 +696,26 @@ public class RegistrationTest {
     }
 
     @Test
+    public void shouldGetRoleById_notExistent(){
+        String role = registration.getEmailById("bad_id");
+
+        // then
+        assertEquals(null, role);
+    }
+
+    @Test
+    public void shouldGetRoleById_existent() {
+        // given
+        String code = registration.register("id", "email", "name", "pass", "data", Collections.singleton("ROLE_ADMIN"), "username").getCode();
+
+        // when
+        String role = registration.getRoleById("id");
+
+        // then
+        assertEquals("ROLE_ADMIN", role);
+    }
+
+    @Test
     public void shouldEmailIsUsed_notExistent() {
         // when 
         boolean used = registration.emailIsUsed("bad_email");

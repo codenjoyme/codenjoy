@@ -215,6 +215,13 @@ public class Registration {
         );
     }
 
+    public String getRoleById(String id) {
+        return pool.select("SELECT roles FROM users WHERE id = ?;",
+                new Object[]{id},
+                rs -> rs.next() ? rs.getString("roles") : null
+        );
+    }
+
     public String getIdByName(String name) {
         return pool.select("SELECT id FROM users WHERE readable_name = ?;",
                 new Object[]{name},
