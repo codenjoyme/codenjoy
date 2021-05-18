@@ -1,12 +1,13 @@
-FROM openjdk:11
-
-ARG SPRING_PROFILES=sqlite
-ARG CODENJOY_CONTEXT=codenjoy-contest
+FROM maven:3.8.1-openjdk-11-slim AS codenjoy
 
 WORKDIR /usr/src/app
 COPY ./CodingDojo .
 
-RUN ./mvnw clean package -D allGames -D skipTests
+RUN mvn -f ./games/engine/pom.xml install
+RUN mvn -f ./games/kata/pom.xml install
+RUN mvn -f ./messages/pom.xml install
+RUN mvn -f ./common/pom.xml install
+RUN mvn -f ./server/pom.xml package -D skipTests -P kata
 
 EXPOSE 8080
-CMD ["java", "-jar", "./target/codenjoy-contest.war", "--spring.profiles.active=${SPRING_PROFILES}", "--context=/${CODENJOY_CONTEXT}"]
+CMD ["java", "-jar", "./server/target/codenjoy-contest.jar", "--spring.profiles.active=kata,postgres,debug", "--context=/codenjoy-contest"]
