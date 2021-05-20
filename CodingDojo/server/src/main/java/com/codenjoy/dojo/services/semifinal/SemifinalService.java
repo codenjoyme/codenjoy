@@ -66,7 +66,7 @@ public class SemifinalService implements Tickable {
             Settings settings = state.getType().getSettings();
 
             // TODO не все игры могут это реализовать, а надо чтобы все
-            if (!isSemifinalAllowed(settings)) continue;
+            if (!SemifinalSettings.is(settings)) continue;
             SemifinalSettings reader = (SemifinalSettings)settings;
 
             // если режим не включен - выходим
@@ -127,21 +127,17 @@ public class SemifinalService implements Tickable {
         return Comparator.comparingInt(game -> (Integer)game.getPlayer().getScore());
     }
 
-    public boolean isSemifinalAllowed(Settings settings) {
-        return settings instanceof SemifinalSettings;
-    }
-
     public boolean isRoundAllowed(Settings settings) {
         return settings instanceof RoundSettings;
     }
 
     public SemifinalSettingsImpl semifinalSettings(String room) {
         Settings settings = roomService.settings(room);
-        if (isSemifinalAllowed(settings)) {
-            return new SemifinalSettingsImpl((SemifinalSettings) settings);
+        if (SemifinalSettings.is(settings)) {
+            return new SemifinalSettingsImpl(settings);
         } else {
             // на админке будет пусто в этой области
-            return new SemifinalSettingsImpl(null);
+            return new SemifinalSettingsImpl((SemifinalSettings) null);
         }
     }
 
@@ -158,7 +154,7 @@ public class SemifinalService implements Tickable {
             return new RoundSettingsImpl((RoundSettings) settings);
         } else {
             // на админке будет пусто в этой области
-            return new RoundSettingsImpl(null);
+            return new RoundSettingsImpl((RoundSettings) null);
         }
     }
 

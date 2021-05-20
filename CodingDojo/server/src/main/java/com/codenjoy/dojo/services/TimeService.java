@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
+import java.util.function.Supplier;
 
 @Component
 public class TimeService {
@@ -33,4 +34,7 @@ public class TimeService {
         return Calendar.getInstance().getTimeInMillis();
     }
 
+    public Supplier<Long> future() {
+        return () -> now();
+    }
 }

@@ -54,6 +54,7 @@ import static org.mockito.Mockito.when;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(SQLiteProfile.NAME)
 public class PlayerControllerTest {
+
     private static String USER_NAME = "apofig@gmail.com";
     private static String CODE = Hash.getCode("apofig@gmail.com", "secureSoul");
 

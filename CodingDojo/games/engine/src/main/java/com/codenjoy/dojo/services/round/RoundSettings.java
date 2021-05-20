@@ -22,7 +22,10 @@ package com.codenjoy.dojo.services.round;
  * #L%
  */
 
+import com.codenjoy.dojo.services.incativity.InactivitySettings;
+import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
@@ -59,6 +62,14 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
 
     static boolean isRounds(List<Key> values) {
         return values.contains(ROUNDS_ENABLED);
+    }
+
+    // TODO AI765 test me
+    static boolean is(Settings settings) {
+        return settings instanceof RoundSettings
+                || allRoundsKeys().stream()
+                        .map(Key::key)
+                        .allMatch(settings::hasParameter);
     }
 
     static List<SettingsReader.Key> allRoundsKeys() {
@@ -158,6 +169,14 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
         setTimeBeforeStart(input.getTimeBeforeStart());
         setRoundsPerMatch(input.getRoundsPerMatch());
         setMinTicksForWin(input.getMinTicksForWin());
+        return this;
+    }
+
+    // TODO test me
+    default RoundSettings updateRounds(Settings input) {
+        allRoundsKeys().stream()
+                .map(Key::key)
+                .forEach(key -> getParameter(key).update(input.getParameter(key)));
         return this;
     }
 

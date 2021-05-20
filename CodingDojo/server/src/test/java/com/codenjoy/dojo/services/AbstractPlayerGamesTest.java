@@ -56,12 +56,14 @@ public class AbstractPlayerGamesTest {
     protected List<GamePlayer> gamePlayers = new LinkedList<>();
     protected List<GameField> fields = new LinkedList<>();
     protected RoomService roomService;
+    protected TimeService timeService;
     protected GameField fieldSaves = mock(GameField.class);
 
     @Before
     public void setUp() {
         playerGames = new PlayerGames();
         roomService = playerGames.roomService = new RoomService();
+        timeService = playerGames.timeService = mock(TimeService.class);
         when(fieldSaves.getSave()).thenReturn(null);
     }
 

@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.Chance;
+import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -42,8 +43,9 @@ import static com.codenjoy.dojo.services.settings.Chance.CHANCE_RESERVED;
 
 public class GameSettings extends SettingsImpl
         implements SettingsReader<GameSettings>,
-        RoundSettings<GameSettings>,
-                SemifinalSettings<GameSettings> {
+                RoundSettings<GameSettings>,
+                SemifinalSettings<GameSettings>,
+                InactivitySettings<GameSettings> {
 
     public enum Keys implements Key {
 
@@ -93,6 +95,7 @@ public class GameSettings extends SettingsImpl
     }
 
     public GameSettings() {
+        initInactivity();
         initRound();
         initSemifinal();
 

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.semifinal;
+package com.codenjoy.dojo.services.incativity;
 
 /*-
  * #%L
@@ -29,28 +29,28 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.List;
 
-public class SemifinalSettingsImpl extends SettingsImpl
-        implements SettingsReader<SemifinalSettingsImpl>,
-                SemifinalSettings<SemifinalSettingsImpl> {
+public class InactivitySettingsImpl extends SettingsImpl
+        implements SettingsReader<InactivitySettingsImpl>,
+                    InactivitySettings<InactivitySettingsImpl> {
 
-    public static final String SEMIFINAL = "[Semifinal]";
+    public static final String INACTIVITY = "[Inactivity]";
 
-    private SemifinalSettings settings;
+    private InactivitySettings settings;
 
     // используем себя как pojo bean
-    public SemifinalSettingsImpl() {
-        initSemifinal();
+    public InactivitySettingsImpl() {
+        initInactivity();
     }
 
     // используем то что пришли, а мы как декоратор
-    public SemifinalSettingsImpl(SemifinalSettings settings) {
+    public InactivitySettingsImpl(InactivitySettings settings) {
         this.settings = settings;
     }
 
     // копируем наши поля из другого settings объекта
-    public SemifinalSettingsImpl(Settings settings) {
+    public InactivitySettingsImpl(Settings settings) {
         this();
-        updateSemifinal(settings);
+        updateInactivity(settings);
     }
 
     @Override
@@ -78,6 +78,6 @@ public class SemifinalSettingsImpl extends SettingsImpl
 
     @Override
     public List<Key> allKeys() {
-        return SemifinalSettings.allSemifinalKeys();
+        return InactivitySettings.allInactivityKeys();
     }
 }

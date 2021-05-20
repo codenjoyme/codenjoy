@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.round;
  */
 
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -44,6 +45,12 @@ public class RoundSettingsImpl extends SettingsImpl
     // используем то что пришли, а мы как декоратор
     public RoundSettingsImpl(RoundSettings settings) {
         this.settings = settings;
+    }
+
+    // копируем наши поля из другого settings объекта
+    public RoundSettingsImpl(Settings settings) {
+        this();
+        updateRounds(settings);
     }
 
     @Override

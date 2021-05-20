@@ -22,7 +22,9 @@ package com.codenjoy.dojo.services.semifinal;
  * #L%
  */
 
+import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
@@ -60,8 +62,16 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
         return values.contains(SEMIFINAL_ENABLED);
     }
 
+    // TODO AI765 test me
+    static boolean is(Settings settings) {
+        return settings instanceof SemifinalSettings
+                || allSemifinalKeys().stream()
+                        .map(Key::key)
+                        .allMatch(settings::hasParameter);
+    }
+
     static List<SettingsReader.Key> allSemifinalKeys() {
-        return Arrays.asList(SemifinalSettings.Keys.values());
+        return Arrays.asList(Keys.values());
     }
 
     static Optional<? extends String> keyToName(List<Key> values, String value) {
@@ -155,6 +165,14 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
         setTimeout(input.getTimeout());
         setResetBoard(input.isResetBoard());
         setShuffleBoard(input.isShuffleBoard());
+        return this;
+    }
+
+    // TODO test me
+    default SemifinalSettings updateSemifinal(Settings input) {
+        allSemifinalKeys().stream()
+                .map(Key::key)
+                .forEach(key -> getParameter(key).update(input.getParameter(key)));
         return this;
     }
 

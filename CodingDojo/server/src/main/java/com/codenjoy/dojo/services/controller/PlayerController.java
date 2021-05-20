@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services.controller;
 import com.codenjoy.dojo.services.BoardGameState;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.springframework.stereotype.Component;
 
@@ -33,11 +34,13 @@ import org.springframework.stereotype.Component;
 public class PlayerController implements Controller<String, Joystick> {
 
     private final PlayerTransport transport;
+    private final TimeService timeService;
 
     // autowiring by name
-    public PlayerController(PlayerTransport controlPlayerTransport) {
+    public PlayerController(PlayerTransport controlPlayerTransport, TimeService timeService) {
         transport = controlPlayerTransport;
         transport.setDefaultFilter(Object::toString);
+        this.timeService = timeService;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class PlayerController implements Controller<String, Joystick> {
     @Override
     public void registerPlayerTransport(Player player, Joystick joystick) {
         transport.registerPlayerEndpoint(player.getId(),
-                new PlayerResponseHandler(player, joystick));
+                new PlayerResponseHandler(player, joystick, timeService.future()));
     }
 
     @Override
