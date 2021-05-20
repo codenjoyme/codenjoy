@@ -9,6 +9,13 @@
     <version>1.1.1</version>
     <packaging>pom</packaging>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.18.RELEASE</version> <!-- do not update, higher is not working -->
+        <relativePath/>
+    </parent>
+
     <distributionManagement>
         <repository>
             <id>codenjoy-releases</id>
@@ -25,5 +32,7 @@
         <module>server</module>
         <module>balancer</module>
         <module>utilities</module>
+        <module>messages</module>
+        <module>common</module>
     </modules>
 </project>

@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+
+  codenjoy:
+    #dockerhub repository name needs to be changed to organisation's repository
+    image: bexx1337/codenjoy
+    ports:
+      - 8080:8080 # codenjoy
+      - 9090:9090 # grpc port
+    network_mode: bridge
+    environment:
+      postgres.host: '172.20.0.1'
+      JAVA_TOOL_OPTIONS: '-Dspring.profiles.active=kata,postgres,debug
+                          -Dcontext=/codenjoy-contest'
+
+  postgresql:
+    image: postgres:13.2
+    ports:
+      - 5432:5432 # database port
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: codenjoy
+
+  notifications:
+    image: bexx1337/notifications
+    ports:
+      - 8090:8090 # notifications port
+    network_mode: bridge
+    environment:
+      codenjoy.host: '172.20.0.1'
+
+  gameserver:
+    image: bexx1337/code-execution
+    ports:
+      - 8081:8081 # code-execution
+      - 9091:9091 # grpc port
+      - 2375:2375 # docker port
+    network_mode: bridge
+    environment:
+      docker.file: 'app/docker/Dockerfile'
+      docker.host: 'host.docker.internal'
+      codenjoy.host: '172.20.0.1'

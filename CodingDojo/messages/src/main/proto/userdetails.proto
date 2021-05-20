@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package codenjoy;
+
+option java_package = "com.codenjoy.dojo";
+option java_multiple_files = true;
+
+message UserDetailsIdRequest{
+  string id = 1;
+}
+
+message UserDetailsUsernameRequest{
+  string username = 1;
+}
+
+message UserDetailsResponse{
+  string id = 1;
+  string email = 2;
+}
+
+service UserDetailsService{
+  rpc getUserDetailsById(UserDetailsIdRequest) returns (UserDetailsResponse);
+  rpc getUserDetailsByUsername(UserDetailsUsernameRequest) returns (UserDetailsResponse);
+}
