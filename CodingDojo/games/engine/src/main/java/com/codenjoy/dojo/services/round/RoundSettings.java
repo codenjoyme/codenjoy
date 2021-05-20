@@ -22,8 +22,6 @@ package com.codenjoy.dojo.services.round;
  * #L%
  */
 
-import com.codenjoy.dojo.services.incativity.InactivitySettings;
-import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -70,6 +68,16 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
                 || allRoundsKeys().stream()
                         .map(Key::key)
                         .allMatch(settings::hasParameter);
+    }
+
+    // TODO AI765 test me
+    static RoundSettingsImpl get(Settings settings) {
+        if (RoundSettings.is(settings)) {
+            return new RoundSettingsImpl(settings);
+        } else {
+            // на админке будет пусто в этой области
+            return new RoundSettingsImpl((RoundSettings) null);
+        }
     }
 
     static List<SettingsReader.Key> allRoundsKeys() {
@@ -172,7 +180,7 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
         return this;
     }
 
-    // TODO test me
+    // TODO AI765 test me
     default RoundSettings updateRounds(Settings input) {
         allRoundsKeys().stream()
                 .map(Key::key)

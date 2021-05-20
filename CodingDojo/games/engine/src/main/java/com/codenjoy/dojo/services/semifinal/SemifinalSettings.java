@@ -22,7 +22,6 @@ package com.codenjoy.dojo.services.semifinal;
  * #L%
  */
 
-import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -68,6 +67,16 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
                 || allSemifinalKeys().stream()
                         .map(Key::key)
                         .allMatch(settings::hasParameter);
+    }
+
+    // TODO AI765 test me
+    static SemifinalSettingsImpl get(Settings settings) {
+        if (SemifinalSettings.is(settings)) {
+            return new SemifinalSettingsImpl(settings);
+        } else {
+            // на админке будет пусто в этой области
+            return new SemifinalSettingsImpl((SemifinalSettings) null);
+        }
     }
 
     static List<SettingsReader.Key> allSemifinalKeys() {
@@ -168,7 +177,7 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
         return this;
     }
 
-    // TODO test me
+    // TODO AI765 test me
     default SemifinalSettings updateSemifinal(Settings input) {
         allSemifinalKeys().stream()
                 .map(Key::key)

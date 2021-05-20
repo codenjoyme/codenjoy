@@ -430,6 +430,31 @@
         </form:form>
     </c:if>
 
+    <c:if test="${not empty adminSettings.inactivity.parameters}">
+        <form:form modelAttribute="adminSettings" action="admin#inactivity" method="POST">
+            <table class="admin-table" id="inactivity">
+                <tr colspan="2">
+                    <td><b>Inactivity settings</b></td>
+                </tr>
+                <tr>
+                    <td>Enable semifinal</td>
+                    <td><form:checkbox path="inactivity.kickEnabled"/></td>
+                <tr>
+                <tr>
+                    <td>Ticks before recalculation</td>
+                    <td><form:input path="inactivity.inactivityTimeout"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="hidden" name="game" value="${game}"/>
+                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="submit" value="Save"/>
+                    </td>
+                </tr>
+            </table>
+        </form:form>
+    </c:if>
+
     <c:if test="${parameters.size() != 0}">
         <form:form modelAttribute="adminSettings" action="admin#gameSettings" method="POST">
             <table class="admin-table" id="gameSettings">

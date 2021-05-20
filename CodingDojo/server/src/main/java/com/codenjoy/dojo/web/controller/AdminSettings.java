@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.PlayerInfo;
+import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import lombok.Getter;
@@ -47,5 +48,6 @@ public class AdminSettings {
     private String progress;
     private SemifinalSettingsImpl semifinal;
     private RoundSettingsImpl rounds;
+    private InactivitySettingsImpl inactivity;
 
 }

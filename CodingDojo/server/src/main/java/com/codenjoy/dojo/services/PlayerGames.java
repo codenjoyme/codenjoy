@@ -334,7 +334,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         if (!InactivitySettings.is(settings)) return;
 
         InactivitySettings inactivity = InactivitySettings.get(settings);
-        if (!inactivity.isKickInactivePlayers()) return;
+        if (!inactivity.isKickEnabled()) return;
 
         int timeout = inactivity.getInactivityTimeout();
 

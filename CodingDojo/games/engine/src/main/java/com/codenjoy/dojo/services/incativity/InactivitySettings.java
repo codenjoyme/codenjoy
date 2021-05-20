@@ -38,7 +38,7 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
 
     public enum Keys implements SettingsReader.Key {
 
-        INACTIVITY_KICK_PLAYERS(INACTIVITY + " Kick inactive players"),
+        INACTIVITY_ENABLED(INACTIVITY + " Kick inactive players"),
         INACTIVITY_TIMEOUT(INACTIVITY + " Inactivity timeout ticks");
 
         private final String key;
@@ -57,6 +57,7 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
         return values.contains(INACTIVITY_TIMEOUT);
     }
 
+    // TODO AI765 test me
     static boolean is(Settings settings) {
         return settings instanceof InactivitySettings
                 || allInactivityKeys().stream()
@@ -64,8 +65,14 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
                         .allMatch(settings::hasParameter);
     }
 
-    static InactivitySettings get(Settings settings) {
-        return new InactivitySettingsImpl(settings);
+    // TODO AI765 test me
+    static InactivitySettingsImpl get(Settings settings) {
+        if (InactivitySettings.is(settings)) {
+            return new InactivitySettingsImpl(settings);
+        } else {
+            // на админке будет пусто в этой области
+            return new InactivitySettingsImpl((InactivitySettings) null);
+        }
     }
 
     static List<SettingsReader.Key> allInactivityKeys() {
@@ -87,14 +94,14 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
     }
 
     default void initInactivity() {
-        bool(INACTIVITY_KICK_PLAYERS, false);
-        integer(INACTIVITY_TIMEOUT, 5);
+        bool(INACTIVITY_ENABLED, false);
+        integer(INACTIVITY_TIMEOUT, 5*60);
     }
 
     // parameters getters
 
-    default Parameter<Boolean> kickInactivePlayers() {
-        return boolValue(INACTIVITY_KICK_PLAYERS);
+    default Parameter<Boolean> kickEnabled() {
+        return boolValue(INACTIVITY_ENABLED);
     }
 
     default Parameter<Integer> inactivityTimeout() {
@@ -109,18 +116,18 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
             return Arrays.asList();
         }
         return new LinkedList<>(){{
-            add(kickInactivePlayers());
+            add(kickEnabled());
             add(inactivityTimeout());
         }};
     }
 
     default InactivitySettings update(InactivitySettings input) {
-        setKickInactivePlayers(input.isKickInactivePlayers());
+        setKickEnabled(input.isKickEnabled());
         setInactivityTimeout(input.getInactivityTimeout());
         return this;
     }
 
-    // TODO test me
+    // TODO AI765 test me
     default InactivitySettings updateInactivity(Settings input) {
         allInactivityKeys().stream()
                 .map(Key::key)
@@ -130,8 +137,8 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
 
     // getters
 
-    default boolean isKickInactivePlayers() {
-        return kickInactivePlayers().getValue();
+    default boolean isKickEnabled() {
+        return kickEnabled().getValue();
     }
 
     default int getInactivityTimeout() {
@@ -140,8 +147,8 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
 
     // setters
 
-    default InactivitySettings setKickInactivePlayers(boolean input) {
-        kickInactivePlayers().update(input);
+    default InactivitySettings setKickEnabled(boolean input) {
+        kickEnabled().update(input);
         return this;
     }
 

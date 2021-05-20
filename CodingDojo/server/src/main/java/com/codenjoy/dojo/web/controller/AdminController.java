@@ -26,13 +26,18 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.incativity.InactivitySettings;
+import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.round.RoundSettings;
+import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
+import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -338,7 +343,8 @@ public class AdminController {
 
         if (settings.getSemifinal() != null) {
             try {
-                semifinal.semifinalSettings(room).update(settings.getSemifinal());
+                semifinalSettings(room)
+                        .update(settings.getSemifinal());
                 semifinal.clean(room);
             } catch (Exception e) {
                 // do nothing
@@ -347,7 +353,17 @@ public class AdminController {
 
         if (settings.getRounds() != null) {
             try {
-                semifinal.roundSettings(room).update(settings.getRounds());
+                roundSettings(room)
+                        .update(settings.getRounds());
+            } catch (Exception e) {
+                // do nothing
+            }
+        }
+
+        if (settings.getInactivity() != null) {
+            try {
+                inactivitySettings(room)
+                        .update(settings.getInactivity());
             } catch (Exception e) {
                 // do nothing
             }
@@ -388,6 +404,18 @@ public class AdminController {
 
         request.setAttribute("room", room);
         return getAdmin(room);
+    }
+
+    public SemifinalSettingsImpl semifinalSettings(String room) {
+        return semifinal.semifinalSettings(room);
+    }
+
+    private RoundSettingsImpl roundSettings(String room) {
+        return RoundSettings.get(roomService.settings(room));
+    }
+
+    private InactivitySettingsImpl inactivitySettings(String room) {
+        return InactivitySettings.get(roomService.settings(room));
     }
 
     private void setEnable(List<Parameter> games) {
@@ -559,9 +587,11 @@ public class AdminController {
         AdminSettings result = new AdminSettings();
 
         // сохраняем для отображения semifinal settings pojo
-        result.setSemifinal(semifinal.semifinalSettings(room));
+        result.setSemifinal(semifinalSettings(room));
         // сохраняем для отображения round settings pojo
-        result.setRounds(semifinal.roundSettings(room));
+        result.setRounds(roundSettings(room));
+        // сохраняем для отображения inactivity settings pojo
+        result.setInactivity(inactivitySettings(room));
         // удаляем semifinal и rounds параметры
         removeSemifinalAndRounds(parameters);
         // а теперь сохраняем отдельно ключики оставшихся параметров

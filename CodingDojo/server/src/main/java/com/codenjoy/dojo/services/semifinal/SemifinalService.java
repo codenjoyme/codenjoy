@@ -127,18 +127,9 @@ public class SemifinalService implements Tickable {
         return Comparator.comparingInt(game -> (Integer)game.getPlayer().getScore());
     }
 
-    public boolean isRoundAllowed(Settings settings) {
-        return settings instanceof RoundSettings;
-    }
-
     public SemifinalSettingsImpl semifinalSettings(String room) {
         Settings settings = roomService.settings(room);
-        if (SemifinalSettings.is(settings)) {
-            return new SemifinalSettingsImpl(settings);
-        } else {
-            // на админке будет пусто в этой области
-            return new SemifinalSettingsImpl((SemifinalSettings) null);
-        }
+        return SemifinalSettings.get(settings);
     }
 
     public SemifinalStatus getSemifinalStatus(String room) {
@@ -146,16 +137,6 @@ public class SemifinalService implements Tickable {
         SemifinalSettings settings = semifinalSettings(room);
         int countPlayers = playerGames.getPlayersByRoom(room).size();
         return new SemifinalStatus(current, countPlayers, settings);
-    }
-
-    public RoundSettingsImpl roundSettings(String room) { // TODO перенести бы их куда-то
-        Settings settings = roomService.settings(room);
-        if (isRoundAllowed(settings)) {
-            return new RoundSettingsImpl((RoundSettings) settings);
-        } else {
-            // на админке будет пусто в этой области
-            return new RoundSettingsImpl((RoundSettings) null);
-        }
     }
 
     public int getTime(String room) {

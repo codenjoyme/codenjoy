@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -39,7 +38,7 @@ import org.mockito.Mockito;
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PlayerGames.*;
-import static com.codenjoy.dojo.services.incativity.InactivitySettings.Keys.INACTIVITY_KICK_PLAYERS;
+import static com.codenjoy.dojo.services.incativity.InactivitySettings.Keys.INACTIVITY_ENABLED;
 import static com.codenjoy.dojo.services.incativity.InactivitySettings.Keys.INACTIVITY_TIMEOUT;
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
 import static java.util.stream.Collectors.toList;
@@ -2076,13 +2075,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         for (PlayerGame playerGame : playerGames.active()) {
             Settings settings = playerGame.getGameType().getSettings();
 
-            when(settings.hasParameter(INACTIVITY_KICK_PLAYERS.key()))
+            when(settings.hasParameter(INACTIVITY_ENABLED.key()))
                     .thenReturn(enabled);
             when(settings.hasParameter(INACTIVITY_TIMEOUT.key()))
                     .thenReturn(enabled);
 
-            when(settings.getParameter(INACTIVITY_KICK_PLAYERS.key()))
-                    .thenReturn(new CheckBox(INACTIVITY_KICK_PLAYERS.key()).type(Boolean.class).update(value));
+            when(settings.getParameter(INACTIVITY_ENABLED.key()))
+                    .thenReturn(new CheckBox(INACTIVITY_ENABLED.key()).type(Boolean.class).update(value));
             when(settings.getParameter(INACTIVITY_TIMEOUT.key()))
                     .thenReturn(new EditBox(INACTIVITY_TIMEOUT.key()).type(Integer.class).update(timeout));
         }
