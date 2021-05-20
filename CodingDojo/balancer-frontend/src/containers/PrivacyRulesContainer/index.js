@@ -22,14 +22,17 @@ const downloadClientUrl = appUrl + '/rules#client';
 const gameRulesUrl = appUrl + '/rules';
 const boardUrl = appUrl + '/board';
 const joinSlackUrl = process.env.REACT_APP_JOIN_CHAT_LINK;
+const orgName = process.env.REACT_APP_EVENT_ORG_NAME;
+const orgAddress = process.env.REACT_APP_EVENT_ORG_ADDRESS;
+const eventName = process.env.REACT_APP_EVENT_NAME;
 
 const PrivacyPolicyContainer = () => (
     <div className='container'>
         <div className='content'>
             <div className='title'>
-                ПРАВИЛА КОНКУРСУ “BOT CHALLENGE”,
+                ПРАВИЛА КОНКУРСУ “{ eventName }”,
                 <br />
-                організованого ТОВ «____»
+                організованого ТОВ "{ orgName }"
                 <br />
                 <div className='notation'>(тут і далі – Правила)</div>
             </div>
@@ -39,11 +42,11 @@ const PrivacyPolicyContainer = () => (
                     <ol>
                         <li>
                             Ці правила конкурсу включають у себе правила та умови
-                            участі в конкурсі BOT CHALLENGE (тут і далі - Конкурс).
+                            участі в конкурсі { eventName } (тут і далі - Конкурс).
                         </li>
                         <li>
-                            Організатором Конкурсу є компанія ТОВ «____»,
-                            розташована за адресою: м. Київ, вул. ____________ __, ______
+                            Організатором Конкурсу є компанія ТОВ "{ orgName }",
+                            розташована за адресою: { orgAddress }
                             (тут і далі - Організатор).
                         </li>
                         <li>
@@ -68,7 +71,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                         <li>
                             Конкурс проводиться з метою привернення уваги осіб
-                            зацікавлених в IT-галузі до діяльності  ТОВ «____»,
+                            зацікавлених в IT-галузі до діяльності  ТОВ "{ orgName }",
                             сприяння розвитку інновацій та впровадження сучасних
                             технологій.
                         </li>
@@ -161,11 +164,11 @@ const PrivacyPolicyContainer = () => (
                         </li>
                         <li>
                             У Конкурсі використовуються мови програмування Java,
-                            JavaScript, .Net/C#, Python, Go, але участь не вимагає від
+                            JavaScript, .Net/C#, Python, Go, Ruby але участь не вимагає від
                             Учасника експертних навичок володіння даними мовами
                             програмування. Організатор надає додаткові матеріали:
                             WebSocket клиєнти (заготовки для ботів) для мов Java,
-                            JavaScript, .Net/C#, Python, Go які можна завантажити з
+                            JavaScript, .Net/C#, Python, Go, Ruby які можна завантажити з
                             Сайту Конкурсу
                             &nbsp;
                             <a href={ downloadClientUrl }>
@@ -400,9 +403,9 @@ const PrivacyPolicyContainer = () => (
                             Фіналу, тобто до { registerEndDate } включно.
                         </li>
                         <li>
-                            Призи є матеріальними: ігрова консоль PlayStation 5 Pro 1TB 
-                            за перше місце, ігрова консоль Nintendo Switch Lite (Yellow)
-                            за друге місце; настільна гра Hobby World Fallout за третє місце
+                            Призи є матеріальними: ігрова консоль PlayStation 5  
+                            за перше місце, крісло-мішок PS 5 за друге місце;
+                            настільна гра "Цивілізація: Новий світанок" за третє місце
                             (тут і далі – Приз, Призи). Оскільки отримувачами Призів є
                             фізичні особи, вартість таких Призів, з урахуванням пп.
                             165.1.39 п.165.1 ст.165 ПКУ, є об’єктом оподаткування
@@ -410,11 +413,7 @@ const PrivacyPolicyContainer = () => (
                             оподатковується на загальних підставах. Сплату такого
                             податку бере на себе Організатор. Організатор надає призи
                             переможцям протягом трьох місяців з моменту оголошення
-                            Переможців Конкурсу. Зверніть увагу, що поставка ігрової
-                            консолі PlayStation 5 Pro 1TB в Україну на момент проведення
-                            Конкурсу може затримуватись, тому термін відправлення цього
-                            призу переможцю може також затримуватись зі сторони
-                            Організатора Конкурсу
+                            Переможців Конкурсу.
                         </li>
                         <li>
                             Передача Призів Переможцям Конкурсу є обов’язком

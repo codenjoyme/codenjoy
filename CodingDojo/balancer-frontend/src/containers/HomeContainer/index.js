@@ -28,13 +28,13 @@ const HomeContainer = () => (
             <div className={ Styles.subText }>Вигравай один із трьох призів</div>
             <div className={ Styles.prizeList }>
                 <img className={ Styles.prizeImage } src={ First } alt='PS5'
-                     title='Iгрова консоль PlayStation 5 Pro 1TB'/>
-                <img className={ Styles.prizeImage } src={ Second } alt='NintendoSwitchLite'
-                     title='Ігрова консоль Nintendo Switch Lite (Yellow)'/>
-                <img className={ Styles.prizeImage } src={ Third } alt='HobbyWorldFallout'
-                     title='Настільна гра Hobby World Fallout'/>
+                     title='Iгрова консоль PlayStation 5'/>
+                <img className={ Styles.prizeImage } src={ Second } alt='BagChairPS5'
+                     title='Крісло-мішок PS 5 '/>
+                <img className={ Styles.prizeImage } src={ Third } alt='Civilization'
+                     title='Настільна гра \"Цивілізація: Новий світанок\"'/>
             </div>
-            <Link to={ book.rules } className={ Styles.acceptButton }>
+            <Link to={ book.register } className={ Styles.acceptButton }>
                 Виклик прийнято
             </Link>
         </div>
@@ -86,9 +86,9 @@ const HomeContainer = () => (
                         </div>
                         <br/>
                         <ol>
-                            <li>Ігрова консоль PlayStation 5 Pro 1TB</li>
-                            <li>Ігрова консоль Nintendo Switch Lite (Yellow)</li>
-                            <li>Настільна гра Hobby World Fallout</li>
+                            <li>Ігрова консоль PlayStation 5</li>
+                            <li>Крісло-мішок PS 5</li>
+                            <li>Настільна гра "Цивілізація: Новий світанок"</li>
                         </ol>
                     </div>
                 </div>

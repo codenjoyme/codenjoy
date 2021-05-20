@@ -30,26 +30,35 @@
     color: rgb(65, 199, 220);
 }
 
+:root {
+    --lampSize: 17pxpx;
+    --marginLeft: 10px;
+}
+
 .exitedRoom {
+    font-size: var(--lampSize);
     cursor: pointer;
-    margin-left: 10px;
-    color: rgb(96, 94, 184);
+    margin-left: var(--marginLeft);
+    color: rgb(221, 98, 98);
 }
 
 .joinedRoom {
+    font-size: var(--lampSize);
     cursor: pointer;
-    margin-left: 10px;
-    color: rgb(251, 255, 0);
+    margin-left: var(--marginLeft);
+    color: rgb(61, 228, 10);
 }
 
 .actionInProgress {
-    margin-left: 10px;
+    font-size: var(--lampSize);
+    margin-left: var(--marginLeft);
     color: rgb(196, 197, 183);
 }
 
 .exitedRoomRequest {
+    font-size: var(--lampSize);
     animation: exitPulse 1s infinite;
-    margin-left: 10px;
+    margin-left: var(--marginLeft);
     color: rgb(196, 197, 183);
 }
 
@@ -57,7 +66,6 @@
     0% {
         color: rgb(196, 197, 183);
     }
-
     100% {
         color: rgb(96, 94, 184);
     }
@@ -73,7 +81,6 @@
     0% {
         color: rgb(196, 197, 183);
     }
-
     100% {
         color: rgb(251, 255, 0);
     }

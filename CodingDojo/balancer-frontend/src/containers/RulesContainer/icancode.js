@@ -19,6 +19,7 @@ import Styles from './styles.module.css';
 const endDate = process.env.REACT_APP_EVENT_END_DATE;
 const dayTimeStart = process.env.REACT_APP_EVENT_START_TIME;
 const dayTimeEnd = process.env.REACT_APP_EVENT_FINAL_TIME;
+const eventName = process.env.REACT_APP_EVENT_NAME;
 const BOARD_EXAMPLE =
 `Board:
   01234567890123456789\t01234567890123456789\t   01234567890123456789
@@ -63,10 +64,11 @@ class RulesContainer extends Component {
     render() {
         const {  server, code, id, settings  } = this.props;
         const loggedIn = [ server, code, id ].every(Boolean);
+        const localhostConnectionUrl = getGameConnectionString('127.0.0.1:8080', '12345678901234567890', 'anyidyouwant');
         const connectionUrl = loggedIn
             ? getGameConnectionString(server, code, id)
-            : void 0;
-        const localhostConnectionUrl = getGameConnectionString('127.0.0.1:8080', '12345678901234567890', 'anyidyouwant');
+            : localhostConnectionUrl;
+
         const privacyRulesUrl = process.env.REACT_APP_EVENT_LINK + '/privacyRules';
         const settingsLink = process.env.REACT_APP_API_SERVER + '/codenjoy-balancer/rest/game/settings/get';
         const privacyRulesDetailsUrl = privacyRulesUrl + '#details3';
@@ -81,7 +83,7 @@ class RulesContainer extends Component {
             <div className='container'>
                 <div className={ mask }
                      style={{ backgroundImage: `url("${Game.dark}")` }}>
-                    Bot Challenge - як грати?
+                    { eventName } - як грати?
                 </div>
                 <div className='content'>
                     <h2 className='title'>Регламент проведення фіналу:</h2>
