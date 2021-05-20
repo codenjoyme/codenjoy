@@ -57,13 +57,13 @@ public class Chance<T extends CharElements> {
             settings.integer(CHANCE_RESERVED, DEFAULT_RESERVED_VALUE);
         }
 
-        settings.integerValue(CHANCE_RESERVED).onChange(value -> run());
+        settings.integerValue(CHANCE_RESERVED).onChange((old, updated) -> run());
     }
 
     public Chance<T> put(SettingsReader.Key name, T el) {
         Parameter<Integer> param = settings.integerValue(name);
         add(el, param);
-        param.onChange(value -> run());
+        param.onChange((old, updated) -> run());
         return this;
     }
 

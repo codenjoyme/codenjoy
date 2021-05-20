@@ -22,17 +22,23 @@ package com.codenjoy.dojo.services.settings;
  * #L%
  */
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public abstract class Updatable<T> {
 
     protected T value;
     protected boolean changed = false;
-    private Consumer<T> onChange;
+    private BiConsumer<T, T> onChange;
 
     protected T get() {
         return value;
     }
+
+    protected T getOrDefault() {
+        return (value == null) ? def() : value;
+    }
+
+    protected abstract T def();
 
     public void justSet(T value) {
         changed = ((this.value == null && value != null) || (this.value != null && !this.value.equals(value)));
@@ -40,13 +46,14 @@ public abstract class Updatable<T> {
     }
 
     protected void set(T value) {
+        T old = getOrDefault();
         justSet(value);
         if (onChange != null) {
-            onChange.accept(value);
+            onChange.accept(old, value);
         }
     }
 
-    public Parameter onChange(Consumer consumer) {
+    public Parameter onChange(BiConsumer consumer) {
         this.onChange = consumer;
         return (Parameter<T>) this;
     }

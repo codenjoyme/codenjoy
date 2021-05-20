@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.settings;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -33,7 +34,7 @@ public class ConsumerSupplierParameter<T> implements Parameter<T> {
 
     private Consumer<T> set;
     private Supplier<T> get;
-    private Consumer<T> consumer;
+    private BiConsumer<T, T> consumer;
 
     public ConsumerSupplierParameter(Consumer<T> set, Supplier<T> get) {
         this.set = set;
@@ -73,9 +74,10 @@ public class ConsumerSupplierParameter<T> implements Parameter<T> {
 
     @Override
     public Parameter<T> update(Object value) {
-        this.set.accept((T)value);
+        T old = get.get();
+        set.accept((T)value);
         if (consumer != null) {
-            consumer.accept((T)value);
+            consumer.accept(old, (T)value);
         }
         return this;
     }
@@ -96,7 +98,7 @@ public class ConsumerSupplierParameter<T> implements Parameter<T> {
     }
 
     @Override
-    public Parameter<T> onChange(Consumer<T> consumer) {
+    public Parameter<T> onChange(BiConsumer<T, T> consumer) {
         this.consumer = consumer;
         return this;
     }

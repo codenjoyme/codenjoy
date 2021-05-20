@@ -29,19 +29,20 @@ import com.codenjoy.dojo.a2048.model.generator.CornerGenerator;
 import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.model.generator.RandomGenerator;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.settings.*;
+import com.codenjoy.dojo.services.settings.EditBox;
+import com.codenjoy.dojo.services.settings.SelectBox;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jetty.server.RequestLog;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.*;
+import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_EXISTS;
+import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_NOT_EXISTS;
 import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
 import static java.util.stream.Collectors.toList;
 
@@ -126,17 +127,17 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
                 BREAKS_NOT_EXISTS.key())
                 .onChange(rebuildMap());
 
-        rebuildMap().accept(null);
+        rebuildMap().accept(null, null);
     }
 
-    private Consumer<String> updateSize() {
+    private BiConsumer<String, String> updateSize() {
         // TODO вот тут конечно не очень хорошо
-        return map -> parameter(SIZE, EditBox.class)
-                .justSet((int)Math.sqrt(map.length()));
+        return (old, updated) -> parameter(SIZE, EditBox.class)
+                .justSet((int)Math.sqrt(updated.length()));
     }
 
-    private Consumer<Integer> rebuildMap() {
-        return value -> string(LEVEL_MAP, buildMap(integer(SIZE)));
+    private BiConsumer<Integer, Integer> rebuildMap() {
+        return (old, updated) -> string(LEVEL_MAP, buildMap(integer(SIZE)));
     }
 
     private String buildMap(int size) {

@@ -40,7 +40,7 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
     @Override
     public T getValue() {
-        return (get() == null) ? def : get();
+        return getOrDefault();
     }
 
     @Override
@@ -155,4 +155,8 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
                 get());
     }
 
+    @Override
+    protected T def() {
+        return def;
+    }
 }
