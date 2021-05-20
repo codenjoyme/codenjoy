@@ -98,6 +98,10 @@ public class Board extends AbstractBoard<Elements> {
         return get(BULLET);
     }
 
+    public List<Point> getRiver() {
+        return get(RIVER);
+    }
+
     public boolean isGameOver() {
         return get(TANK_UP,
                 TANK_DOWN,
