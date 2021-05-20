@@ -1,5 +1,5 @@
 database:
-  host: localhost
+  host: ${postgres.host}
   port: 5432
   name: 'codenjoy'
   user: 'postgres'
