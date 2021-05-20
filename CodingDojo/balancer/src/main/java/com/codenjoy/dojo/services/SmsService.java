@@ -47,7 +47,13 @@ public class SmsService {
     public void sendSmsTo(String phone, String code, SmsType smsType) {
         String smsContent = buildMessage(code, smsType);
         if (log.isDebugEnabled()) {
-            log.debug(String.format("SMS to %s:\n%s", phone, smsContent));
+            log.debug(String.format(
+                    "SMS enabled: %b\n" +
+                    "SMS to %s:\n" +
+                    "%s",
+                    smsProperties.isEnabled(),
+                    phone,
+                    smsContent));
         }
 
         if (smsProperties.isEnabled()) {
