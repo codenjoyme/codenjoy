@@ -531,7 +531,7 @@ public class GameTest {
         game.tick();
 
         assertPrize(hero(0), "[PRIZE_NO_SLIDING]");
-        events.verifyAllEvents("listener(0) => [CATCH_PRIZE[5]]\n");
+        events.verifyAllEvents("[CATCH_PRIZE[5]]");
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -2756,8 +2756,8 @@ public class GameTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_YOUR_TANK]\n" +
-                        "listener(1) => [KILL_OTHER_HERO_TANK[1]]\n" +
-                        "listener(2) => [KILL_OTHER_HERO_TANK[1]]\n");
+                "listener(1) => [KILL_OTHER_HERO_TANK[1]]\n" +
+                "listener(2) => [KILL_OTHER_HERO_TANK[1]]\n");
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -7941,7 +7941,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         assertPrize(hero(0), "[PRIZE_BREAKING_WALLS]");
-        events.verifyAllEvents("listener(0) => [CATCH_PRIZE[2]]\n");
+        events.verifyAllEvents("[CATCH_PRIZE[2]]");
 
         hero(0).act();
         game.tick();
