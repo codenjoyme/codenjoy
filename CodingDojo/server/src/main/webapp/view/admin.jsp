@@ -437,11 +437,11 @@
                     <td><b>Inactivity settings</b></td>
                 </tr>
                 <tr>
-                    <td>Enable semifinal</td>
+                    <td>Enable kick unactive players</td>
                     <td><form:checkbox path="inactivity.kickEnabled"/></td>
                 <tr>
                 <tr>
-                    <td>Ticks before recalculation</td>
+                    <td>Unactive ticks before kick</td>
                     <td><form:input path="inactivity.inactivityTimeout"/></td>
                 </tr>
                 <tr>
