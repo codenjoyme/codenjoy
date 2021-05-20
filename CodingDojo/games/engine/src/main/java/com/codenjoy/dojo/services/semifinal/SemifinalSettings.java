@@ -63,6 +63,8 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
 
     // TODO AI765 test me
     static boolean is(Settings settings) {
+        if (settings == null) return false;
+
         return settings instanceof SemifinalSettings
                 || allSemifinalKeys().stream()
                         .map(Key::key)
@@ -181,7 +183,7 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
     default SemifinalSettings updateSemifinal(Settings input) {
         allSemifinalKeys().stream()
                 .map(Key::key)
-                .forEach(key -> getParameter(key).update(input.getParameter(key)));
+                .forEach(key -> getParameter(key).update(input.getParameter(key).getValue()));
         return this;
     }
 

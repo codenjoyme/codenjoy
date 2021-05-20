@@ -64,6 +64,8 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
 
     // TODO AI765 test me
     static boolean is(Settings settings) {
+        if (settings == null) return false;
+
         return settings instanceof RoundSettings
                 || allRoundsKeys().stream()
                         .map(Key::key)
@@ -184,7 +186,7 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
     default RoundSettings updateRounds(Settings input) {
         allRoundsKeys().stream()
                 .map(Key::key)
-                .forEach(key -> getParameter(key).update(input.getParameter(key)));
+                .forEach(key -> getParameter(key).update(input.getParameter(key).getValue()));
         return this;
     }
 

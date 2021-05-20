@@ -59,6 +59,8 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
 
     // TODO AI765 test me
     static boolean is(Settings settings) {
+        if (settings == null) return false;
+
         return settings instanceof InactivitySettings
                 || allInactivityKeys().stream()
                         .map(Key::key)
