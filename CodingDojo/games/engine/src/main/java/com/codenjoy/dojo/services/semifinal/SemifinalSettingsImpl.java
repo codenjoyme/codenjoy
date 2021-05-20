@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.semifinal;
  * #L%
  */
 
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -32,13 +33,44 @@ public class SemifinalSettingsImpl extends SettingsImpl
         implements SettingsReader<SemifinalSettingsImpl>,
                 SemifinalSettings<SemifinalSettingsImpl> {
 
+    private SemifinalSettings settings;
+
     public SemifinalSettingsImpl() {
         initSemifinal();
     }
 
     public SemifinalSettingsImpl(Settings settings) {
-        this();
-        updateSemifinal(settings);
+        if (settings == null || settings instanceof SemifinalSettings) {
+            // используем как декоратор
+            this.settings = (SemifinalSettings) settings;
+        } else {
+            // инициализируем и копируем
+            initSemifinal();
+            updateSemifinal(settings);
+        }
+    }
+
+    @Override
+    public Parameter<?> getParameter(String name) {
+        if (settings != null) {
+            return settings.getParameter(name);
+        } else {
+            return super.getParameter(name);
+        }
+    }
+
+    @Override
+    public List<Parameter> getParameters() {
+        if (settings != null) {
+            return settings.getParameters();
+        } else {
+            return super.getParameters();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return (settings != null) ? settings.toString() : super.toString();
     }
 
     @Override
