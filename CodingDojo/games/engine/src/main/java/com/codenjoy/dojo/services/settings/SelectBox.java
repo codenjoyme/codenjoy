@@ -151,4 +151,9 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
         result.changed = changed;
         return result;
     }
+
+    @Override
+    protected Integer def() {
+        return def;
+    }
 }

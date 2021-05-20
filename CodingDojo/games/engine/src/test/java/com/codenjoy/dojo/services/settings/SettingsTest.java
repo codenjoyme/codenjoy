@@ -29,7 +29,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -444,24 +444,29 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldCallOnChangeListener_whenChangeSomething() {
+    public void shouldCallOnChangeListener_whenChangeSomething_withoutDefaultValue() {
         // given
-        Consumer<Integer> editListener = mock(Consumer.class);
-        Consumer<Integer> selectListener = mock(Consumer.class);
-        Consumer<Boolean> checkListener = mock(Consumer.class);
+        BiConsumer<Integer, Integer> editListener = mock(BiConsumer.class);
+        BiConsumer<Integer, Integer> selectListener = mock(BiConsumer.class);
+        BiConsumer<Boolean, Boolean> checkListener = mock(BiConsumer.class);
 
         Parameter<Integer> edit = settings.addEditBox("edit")
                 .type(Integer.class)
                 .onChange(editListener);
 
+        assertEquals(null, edit.getValue());
+
         Parameter<String> select = settings.addSelect("select",
                 Arrays.asList("option1", "option2", "option3"))
-                // TODO тут что-то с типами не то, переместив эту строчку ниже type(String.class) не будет компилится
-                .onChange(selectListener)
-                .type(String.class);
+                .type(String.class)
+                .onChange(selectListener);
+
+        assertEquals(null, select.getValue());
 
         Parameter<Boolean> check = settings.addCheckBox("check")
                 .onChange(checkListener);
+
+        assertEquals(null, check.getValue());
 
         assertEquals(false, edit.changed());
         assertEquals(false, select.changed());
@@ -478,7 +483,7 @@ public class SettingsTest {
         assertEquals(false, check.changed());
         assertEquals(true, settings.changed());
 
-        verify(editListener).accept(1);
+        verify(editListener).accept(null, 1);
         verifyNoMoreInteractions(editListener, selectListener, checkListener);
 
         // when then
@@ -497,7 +502,7 @@ public class SettingsTest {
         assertEquals(false, check.changed());
         assertEquals(true, settings.changed());
 
-        verify(selectListener).accept(0);
+        verify(selectListener).accept(null, 0);
         verifyNoMoreInteractions(editListener, selectListener, checkListener);
 
         // when then
@@ -516,7 +521,204 @@ public class SettingsTest {
         assertEquals(true, check.changed());
         assertEquals(true, settings.changed());
 
-        verify(checkListener).accept(true);
+        verify(checkListener).accept(null, true);
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        settings.changesReacted();
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+    }
+
+    @Test
+    public void shouldCallOnChangeListener_whenChangeSomething_withDefaultValue() {
+        // given
+        BiConsumer<Integer, Integer> editListener = mock(BiConsumer.class);
+        BiConsumer<Integer, Integer> selectListener = mock(BiConsumer.class);
+        BiConsumer<Boolean, Boolean> checkListener = mock(BiConsumer.class);
+
+        Parameter<Integer> edit = settings.addEditBox("edit")
+                .type(Integer.class)
+                .def(12)
+                .onChange(editListener);
+
+        assertEquals(12, edit.getValue().intValue());
+
+        Parameter<String> select = settings.addSelect("select",
+                Arrays.asList("option1", "option2", "option3"))
+                .type(String.class)
+                .def("option2")
+                .onChange(selectListener);
+
+        assertEquals("option2", select.getValue());
+
+        Parameter<Boolean> check = settings.addCheckBox("check")
+                .def(true)
+                .onChange(checkListener);
+
+        assertEquals(true, check.getValue().booleanValue());
+
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        edit.update(1);
+
+        assertEquals(true, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(true, settings.changed());
+
+        verify(editListener).accept(12, 1);
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        settings.changesReacted();
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        select.update("option1");
+        assertEquals(false, edit.changed());
+        assertEquals(true, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(true, settings.changed());
+
+        verify(selectListener).accept(1, 0);
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        settings.changesReacted();
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        check.update(false);
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(true, check.changed());
+        assertEquals(true, settings.changed());
+
+        verify(checkListener).accept(true, false);
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        settings.changesReacted();
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+    }
+
+    @Test
+    public void shouldCallOnChangeListener_whenChangeSomething_withDefaultAndUpdatedValue() {
+        // given
+        BiConsumer<Integer, Integer> editListener = mock(BiConsumer.class);
+        BiConsumer<Integer, Integer> selectListener = mock(BiConsumer.class);
+        BiConsumer<Boolean, Boolean> checkListener = mock(BiConsumer.class);
+
+        Parameter<Integer> edit = settings.addEditBox("edit")
+                .type(Integer.class)
+                .def(12)
+                .update(24)
+                .onChange(editListener);
+
+        assertEquals(24, edit.getValue().intValue());
+
+        Parameter<String> select = settings.addSelect("select",
+                Arrays.asList("option1", "option2", "option3"))
+                .type(String.class)
+                .def("option2")
+                .update("option3")
+                .onChange(selectListener);
+
+        assertEquals("option3", select.getValue());
+
+        Parameter<Boolean> check = settings.addCheckBox("check")
+                .def(true)
+                .update(false)
+                .onChange(checkListener);
+
+        assertEquals(false, check.getValue().booleanValue());
+
+        assertEquals(true, edit.changed());
+        assertEquals(true, select.changed());
+        assertEquals(true, check.changed());
+        assertEquals(true, settings.changed());
+
+        settings.changesReacted();
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        edit.update(1);
+
+        assertEquals(true, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(true, settings.changed());
+
+        verify(editListener).accept(24, 1);
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        settings.changesReacted();
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        select.update("option1");
+        assertEquals(false, edit.changed());
+        assertEquals(true, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(true, settings.changed());
+
+        verify(selectListener).accept(2, 0);
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        settings.changesReacted();
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        verifyNoMoreInteractions(editListener, selectListener, checkListener);
+
+        // when then
+        check.update(true);
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(true, check.changed());
+        assertEquals(true, settings.changed());
+
+        verify(checkListener).accept(false, true);
         verifyNoMoreInteractions(editListener, selectListener, checkListener);
 
         // when then
@@ -532,9 +734,9 @@ public class SettingsTest {
     @Test
     public void shouldNotCallOnChangeListener_whenChangeSomething_byJustSetMethod() {
         // given
-        Consumer<Integer> editListener = mock(Consumer.class);
-        Consumer<Integer> selectListener = mock(Consumer.class);
-        Consumer<Boolean> checkListener = mock(Consumer.class);
+        BiConsumer<Integer, Integer> editListener = mock(BiConsumer.class);
+        BiConsumer<Integer, Integer> selectListener = mock(BiConsumer.class);
+        BiConsumer<Boolean, Boolean> checkListener = mock(BiConsumer.class);
 
         Parameter<Integer> edit = settings.addEditBox("edit")
                 .type(Integer.class)

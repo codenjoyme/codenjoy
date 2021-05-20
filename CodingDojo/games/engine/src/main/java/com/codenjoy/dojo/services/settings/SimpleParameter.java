@@ -25,14 +25,14 @@ package com.codenjoy.dojo.services.settings;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class SimpleParameter<T> implements Parameter<T> {
 
     private String name;
     private T value;
-    private Consumer<T> consumer;
+    private BiConsumer<T, T> consumer;
 
     public SimpleParameter(T value) {
         this.value = value;
@@ -89,7 +89,7 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     @Override
-    public Parameter<T> onChange(Consumer<T> consumer) {
+    public Parameter<T> onChange(BiConsumer<T, T> consumer) {
         this.consumer = consumer;
         return this;
     }
