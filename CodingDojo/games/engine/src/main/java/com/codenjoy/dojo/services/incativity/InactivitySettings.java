@@ -70,7 +70,7 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
     // TODO AI765 test me
     static InactivitySettingsImpl get(Settings settings) {
         if (InactivitySettings.is(settings)) {
-            return new InactivitySettingsImpl(settings);
+            return new InactivitySettingsImpl((InactivitySettings) settings);
         } else {
             // на админке будет пусто в этой области
             return new InactivitySettingsImpl((InactivitySettings) null);

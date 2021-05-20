@@ -74,7 +74,7 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
     // TODO AI765 test me
     static SemifinalSettingsImpl get(Settings settings) {
         if (SemifinalSettings.is(settings)) {
-            return new SemifinalSettingsImpl(settings);
+            return new SemifinalSettingsImpl((SemifinalSettings) settings);
         } else {
             // на админке будет пусто в этой области
             return new SemifinalSettingsImpl((SemifinalSettings) null);

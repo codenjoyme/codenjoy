@@ -75,7 +75,7 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
     // TODO AI765 test me
     static RoundSettingsImpl get(Settings settings) {
         if (RoundSettings.is(settings)) {
-            return new RoundSettingsImpl(settings);
+            return new RoundSettingsImpl((RoundSettings) settings);
         } else {
             // на админке будет пусто в этой области
             return new RoundSettingsImpl((RoundSettings) null);
