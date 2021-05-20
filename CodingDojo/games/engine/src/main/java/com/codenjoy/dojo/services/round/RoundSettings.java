@@ -36,6 +36,8 @@ import static com.codenjoy.dojo.services.round.RoundSettingsImpl.ROUNDS;
 
 public interface RoundSettings<T extends SettingsReader> extends SettingsReader<T> {
 
+    String ROUNDS = "[Rounds]";
+
     public enum Keys implements SettingsReader.Key {
 
         ROUNDS_ENABLED(ROUNDS + " Enabled"),
@@ -75,11 +77,10 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
     // TODO AI765 test me
     static RoundSettingsImpl get(Settings settings) {
         if (RoundSettings.is(settings)) {
-            return new RoundSettingsImpl((RoundSettings) settings);
-        } else {
-            // на админке будет пусто в этой области
-            return new RoundSettingsImpl((RoundSettings) null);
+            return new RoundSettingsImpl(settings);
         }
+
+        return new RoundSettingsImpl(null);
     }
 
     static List<SettingsReader.Key> allRoundsKeys() {
@@ -184,9 +185,11 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
 
     // TODO AI765 test me
     default RoundSettings updateRounds(Settings input) {
-        allRoundsKeys().stream()
-                .map(Key::key)
-                .forEach(key -> getParameter(key).update(input.getParameter(key).getValue()));
+        if (input != null) {
+            allRoundsKeys().stream()
+                    .map(Key::key)
+                    .forEach(key -> getParameter(key).update(input.getParameter(key).getValue()));
+        }
         return this;
     }
 

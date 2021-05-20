@@ -36,6 +36,8 @@ import static com.codenjoy.dojo.services.incativity.InactivitySettingsImpl.INACT
 
 public interface InactivitySettings<T extends SettingsReader> extends SettingsReader<T> {
 
+    String INACTIVITY = "[Inactivity]";
+
     public enum Keys implements SettingsReader.Key {
 
         INACTIVITY_ENABLED(INACTIVITY + " Kick inactive players"),
@@ -70,11 +72,10 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
     // TODO AI765 test me
     static InactivitySettingsImpl get(Settings settings) {
         if (InactivitySettings.is(settings)) {
-            return new InactivitySettingsImpl((InactivitySettings) settings);
-        } else {
-            // на админке будет пусто в этой области
-            return new InactivitySettingsImpl((InactivitySettings) null);
+            return new InactivitySettingsImpl(settings);
         }
+
+        return new InactivitySettingsImpl(null);
     }
 
     static List<SettingsReader.Key> allInactivityKeys() {
@@ -131,9 +132,11 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
 
     // TODO AI765 test me
     default InactivitySettings updateInactivity(Settings input) {
-        allInactivityKeys().stream()
-                .map(Key::key)
-                .forEach(key -> getParameter(key).update(input.getParameter(key).getValue()));
+        if (input != null) {
+            allInactivityKeys().stream()
+                    .map(Key::key)
+                    .forEach(key -> getParameter(key).update(input.getParameter(key).getValue()));
+        }
         return this;
     }
 

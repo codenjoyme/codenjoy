@@ -32,9 +32,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.codenjoy.dojo.services.semifinal.SemifinalSettings.Keys.*;
-import static com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl.SEMIFINAL;
 
 public interface SemifinalSettings<T extends SettingsReader> extends SettingsReader<T> {
+
+    String SEMIFINAL = "[Semifinal]";
 
     public enum Keys implements Key {
         
@@ -74,11 +75,10 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
     // TODO AI765 test me
     static SemifinalSettingsImpl get(Settings settings) {
         if (SemifinalSettings.is(settings)) {
-            return new SemifinalSettingsImpl((SemifinalSettings) settings);
-        } else {
-            // на админке будет пусто в этой области
-            return new SemifinalSettingsImpl((SemifinalSettings) null);
+            return new SemifinalSettingsImpl(settings);
         }
+
+        return new SemifinalSettingsImpl(null);
     }
 
     static List<SettingsReader.Key> allSemifinalKeys() {
@@ -181,9 +181,11 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
 
     // TODO AI765 test me
     default SemifinalSettings updateSemifinal(Settings input) {
-        allSemifinalKeys().stream()
-                .map(Key::key)
-                .forEach(key -> getParameter(key).update(input.getParameter(key).getValue()));
+        if (input != null) {
+            allSemifinalKeys().stream()
+                    .map(Key::key)
+                    .forEach(key -> getParameter(key).update(input.getParameter(key).getValue()));
+        }
         return this;
     }
 
