@@ -152,7 +152,9 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     public void kill(Bullet bullet) {
-        setAlive(false);
+        if (isAlive()) {
+            die();
+        }
     }
 
     public void removeBullets() {
