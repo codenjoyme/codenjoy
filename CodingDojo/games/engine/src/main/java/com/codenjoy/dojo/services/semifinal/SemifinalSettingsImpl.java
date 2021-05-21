@@ -39,7 +39,6 @@ public class SemifinalSettingsImpl extends SettingsImpl
         initSemifinal();
     }
 
-    // TODO AI765 test me
     public SemifinalSettingsImpl(Settings settings) {
         if (settings == null || settings instanceof SemifinalSettings) {
             // используем как декоратор
