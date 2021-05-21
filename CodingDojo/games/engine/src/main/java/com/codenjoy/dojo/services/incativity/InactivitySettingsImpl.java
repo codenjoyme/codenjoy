@@ -39,7 +39,6 @@ public class InactivitySettingsImpl extends SettingsImpl
         initInactivity();
     }
 
-    // TODO AI765 test me
     public InactivitySettingsImpl(Settings settings) {
         if (settings == null || settings instanceof InactivitySettings) {
             // используем как декоратор

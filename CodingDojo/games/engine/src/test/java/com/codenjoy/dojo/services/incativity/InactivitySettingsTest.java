@@ -63,9 +63,34 @@ public class InactivitySettingsTest {
     }
 
     @Test
+    public void testGet_caseInactivityInstance() {
+        // given when
+        SettingsImpl settings = new SomeInactivitySettings();
+
+        // then
+        assertEquals("Some[[Inactivity] Kick inactive players=false, " +
+                        "[Inactivity] Inactivity timeout ticks=300, " +
+                        "Parameter 1=15, " +
+                        "Parameter 2=true, " +
+                        "Parameter 3=0.5, " +
+                        "Parameter 4=string]",
+                InactivitySettings.get(settings).toString());
+    }
+
+    @Test
     public void testGet_caseNotInactivityInstance() {
         // given when
         SettingsImpl settings = new SomeRoundSettings();
+
+        // then
+        assertEquals("SettingsImpl(map={})",
+                InactivitySettings.get(settings).toString());
+    }
+
+    @Test
+    public void testGet_caseNull() {
+        // given when
+        SettingsImpl settings = null;
 
         // then
         assertEquals("SettingsImpl(map={})",
