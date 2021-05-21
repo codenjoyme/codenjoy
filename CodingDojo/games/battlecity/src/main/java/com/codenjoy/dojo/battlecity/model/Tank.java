@@ -284,7 +284,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     private void gunType() {
         if (prizes.contains(PRIZE_BREAKING_WALLS)) {
-            gun.machineGun();
+            gun.reset();
         }
     }
 
