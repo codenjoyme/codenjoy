@@ -64,7 +64,6 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
         return values.contains(ROUNDS_ENABLED);
     }
 
-    // TODO AI765 test me
     static boolean is(Settings settings) {
         if (settings == null) return false;
 
@@ -157,7 +156,7 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
     // update methods
 
     // TODO test me
-    default List<Parameter> getRoundsParams() {
+    default List<Parameter> getRoundParams() {
         if (getParameters().isEmpty()) {
             return Arrays.asList();
         }
