@@ -112,6 +112,8 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
         if (sliding.active(this)) {
             direction = sliding.affect(direction);
+        } else {
+            sliding.reset(direction);
         }
 
         moving(direction.change(this));
