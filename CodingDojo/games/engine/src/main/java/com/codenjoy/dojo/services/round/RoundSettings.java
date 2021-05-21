@@ -181,7 +181,6 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
         return this;
     }
 
-    // TODO AI765 test me
     default RoundSettings updateRound(Settings input) {
         if (input != null) {
             allRoundsKeys().stream()

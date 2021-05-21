@@ -68,7 +68,6 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
                         .allMatch(settings::hasParameter);
     }
 
-    // TODO AI765 test me
     static InactivitySettingsImpl get(Settings settings) {
         if (InactivitySettings.is(settings)) {
             return new InactivitySettingsImpl(settings);
@@ -129,7 +128,6 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
         return this;
     }
 
-    // TODO AI765 test me
     default InactivitySettings updateInactivity(Settings input) {
         if (input != null) {
             allInactivityKeys().stream()

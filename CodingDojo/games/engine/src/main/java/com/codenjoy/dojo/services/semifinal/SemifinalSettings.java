@@ -177,7 +177,6 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
         return this;
     }
 
-    // TODO AI765 test me
     default SemifinalSettings updateSemifinal(Settings input) {
         if (input != null) {
             allSemifinalKeys().stream()
