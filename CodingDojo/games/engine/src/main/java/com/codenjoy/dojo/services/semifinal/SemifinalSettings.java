@@ -71,7 +71,6 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
                         .allMatch(settings::hasParameter);
     }
 
-    // TODO AI765 test me
     static SemifinalSettingsImpl get(Settings settings) {
         if (SemifinalSettings.is(settings)) {
             return new SemifinalSettingsImpl(settings);
