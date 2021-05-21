@@ -71,6 +71,7 @@ public class AdminController {
     public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
 
     private final TimerService timerService;
+    private final TimeService timeService;
     private final PlayerService playerService;
     private final SaveService saveService;
     private final GameService gameService;
@@ -362,8 +363,18 @@ public class AdminController {
 
         if (settings.getInactivity() != null) {
             try {
-                inactivitySettings(room)
-                        .update(settings.getInactivity());
+                // TODO AI765 test me
+                InactivitySettingsImpl actual = inactivitySettings(room);
+                boolean changed = actual
+                        .update(settings.getInactivity())
+                        .getInactivityParams().stream()
+                        .anyMatch(parameter -> ((Parameter) parameter).changed());
+                actual.changesReacted();
+                if (changed) {
+                    playerService.getAllInRoom(room).stream()
+                            .filter(not(Player::hasAi))
+                            .forEach(player -> player.setLastResponse(timeService.now()));
+                }
             } catch (Exception e) {
                 // do nothing
             }
