@@ -50,9 +50,9 @@ public class InactivitySettingsTest {
         SettingsImpl settings = givenAllPropertiesCopied();
 
         // then
-        assertEquals("SettingsImpl(map={[Inactivity] Kick inactive players=[[Inactivity] Kick inactive players:Boolean = def[false] val[false]], " +
+        assertEquals("SettingsImpl(map={[Inactivity] Kick inactive players=[[Inactivity] Kick inactive players:Boolean = def[false] val[false]], \n" +
                 "[Inactivity] Inactivity timeout ticks=[[Inactivity] Inactivity timeout ticks:Integer = multiline[false] def[300] val[300]]})",
-                InactivitySettings.get(settings).toString());
+                InactivitySettings.get(settings).toString().replace(", [Inactivity]", ", \n[Inactivity]"));
     }
 
     private SettingsImpl givenAllPropertiesCopied() {
@@ -68,13 +68,13 @@ public class InactivitySettingsTest {
         SettingsImpl settings = new SomeInactivitySettings();
 
         // then
-        assertEquals("Some[[Inactivity] Kick inactive players=false, " +
-                        "[Inactivity] Inactivity timeout ticks=300, " +
-                        "Parameter 1=15, " +
-                        "Parameter 2=true, " +
-                        "Parameter 3=0.5, " +
+        assertEquals("Some[[Inactivity] Kick inactive players=false, \n" +
+                        "[Inactivity] Inactivity timeout ticks=300, \n" +
+                        "Parameter 1=15, \n" +
+                        "Parameter 2=true, \n" +
+                        "Parameter 3=0.5, \n" +
                         "Parameter 4=string]",
-                InactivitySettings.get(settings).toString());
+                InactivitySettings.get(settings).toString().replace(", ", ", \n"));
     }
 
     @Test

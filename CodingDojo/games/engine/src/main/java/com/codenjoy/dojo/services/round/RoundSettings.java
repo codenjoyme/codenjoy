@@ -73,7 +73,6 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
                         .allMatch(settings::hasParameter);
     }
 
-    // TODO AI765 test me
     static RoundSettingsImpl get(Settings settings) {
         if (RoundSettings.is(settings)) {
             return new RoundSettingsImpl(settings);

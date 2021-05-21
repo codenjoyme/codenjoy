@@ -39,7 +39,6 @@ public class RoundSettingsImpl extends SettingsImpl
         initRound();
     }
 
-    // TODO AI765 test me
     public RoundSettingsImpl(Settings settings) {
         if (settings == null || settings instanceof RoundSettings) {
             // используем как декоратор

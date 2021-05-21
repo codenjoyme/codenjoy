@@ -72,17 +72,17 @@ public class SemifinalSettingsTest {
         SettingsImpl settings = new SomeSemifinalSettings();
 
         // then
-        assertEquals("Some[[Semifinal] Enabled=false, " +
-                        "[Semifinal] Timeout=900, " +
-                        "[Semifinal] Percentage=true, " +
-                        "[Semifinal] Limit=50, " +
-                        "[Semifinal] Reset board=true, " +
-                        "[Semifinal] Shuffle board=true, " +
-                        "Parameter 1=15, " +
-                        "Parameter 2=true, " +
-                        "Parameter 3=0.5, " +
+        assertEquals("Some[[Semifinal] Enabled=false, \n" +
+                        "[Semifinal] Timeout=900, \n" +
+                        "[Semifinal] Percentage=true, \n" +
+                        "[Semifinal] Limit=50, \n" +
+                        "[Semifinal] Reset board=true, \n" +
+                        "[Semifinal] Shuffle board=true, \n" +
+                        "Parameter 1=15, \n" +
+                        "Parameter 2=true, \n" +
+                        "Parameter 3=0.5, \n" +
                         "Parameter 4=string]",
-                SemifinalSettings.get(settings).toString());
+                SemifinalSettings.get(settings).toString().replace(", ", ", \n"));
     }
 
     @Test
