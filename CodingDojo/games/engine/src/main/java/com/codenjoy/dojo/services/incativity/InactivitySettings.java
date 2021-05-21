@@ -59,7 +59,6 @@ public interface InactivitySettings<T extends SettingsReader> extends SettingsRe
         return values.contains(INACTIVITY_TIMEOUT);
     }
 
-    // TODO AI765 test me
     static boolean is(Settings settings) {
         if (settings == null) return false;
 

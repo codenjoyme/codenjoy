@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.services.semifinal;
 
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SomeRoundSettings;
 import com.codenjoy.dojo.services.settings.SomeSemifinalSettings;
 import org.junit.Test;
 
