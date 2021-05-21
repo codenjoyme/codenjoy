@@ -2093,13 +2093,14 @@ public class PlayerServiceImplTest {
         // given
         Player player1 = createPlayer(VASYA);
         Player player2 = createPlayer(PETYA);
+        long now = Calendar.getInstance().getTimeInMillis();
 
         // when
         List<PlayerInfo> infos = new LinkedList<>(){{
-            add(new PlayerInfo(player1){{
+            add(new PlayerInfo(player1, now){{
                 setData("{\"some\":\"data1\"}");
             }});
-            add(new PlayerInfo(player2){{
+            add(new PlayerInfo(player2, now){{
                 setData("{\"some\":\"data2\"}");
             }});
         }};
@@ -2121,13 +2122,14 @@ public class PlayerServiceImplTest {
         // given
         Player player1 = createPlayer(VASYA);
         Player player2 = createPlayer(PETYA);
+        long now = Calendar.getInstance().getTimeInMillis();
 
         // when
         List<PlayerInfo> infos = new LinkedList<>(){{
-            add(new PlayerInfo(player1){{
+            add(new PlayerInfo(player1, now){{
                 setData("{\"some\":\"data1\"}");
             }});
-            add(new PlayerInfo(player2){{
+            add(new PlayerInfo(player2, now){{
                 setData(gameFields.getLast().getSave().toString()); // same
             }});
         }};
@@ -2145,19 +2147,20 @@ public class PlayerServiceImplTest {
         Player player2 = createPlayer(PETYA);
         Player player3 = createPlayer(KATYA);
         Player player4 = createPlayer(OLIA);
+        long now = Calendar.getInstance().getTimeInMillis();
 
         // when
         List<PlayerInfo> infos = new LinkedList<>(){{
-            add(new PlayerInfo(player1){{
+            add(new PlayerInfo(player1, now){{
                 setData("{\"some\":\"data1\"}");
             }});
-            add(new PlayerInfo(player2){{
+            add(new PlayerInfo(player2, now){{
                 setData(""); // empty
             }});
-            add(new PlayerInfo(player3){{
+            add(new PlayerInfo(player3, now){{
                 setData(null); // null
             }});
-            add(new PlayerInfo(player4){{
+            add(new PlayerInfo(player4, now){{
                 setData("null"); // "null"
             }});
         }};
