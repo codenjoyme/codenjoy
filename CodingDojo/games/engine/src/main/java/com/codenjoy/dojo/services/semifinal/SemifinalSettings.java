@@ -62,7 +62,6 @@ public interface SemifinalSettings<T extends SettingsReader> extends SettingsRea
         return values.contains(SEMIFINAL_ENABLED);
     }
 
-    // TODO AI765 test me
     static boolean is(Settings settings) {
         if (settings == null) return false;
 
