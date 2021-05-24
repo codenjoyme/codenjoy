@@ -31,7 +31,6 @@ import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS
 public class Gun implements Tickable {
 
     private boolean canFire;
-    private boolean machineGun;
     private int ticks;
     private int shootThrough;
     private GameSettings settings;
@@ -48,20 +47,15 @@ public class Gun implements Tickable {
     public void reset() {
         ticks = 0;
         canFire = true;
-        machineGun = false;
+        shootThrough = ticksPerShoot();
     }
 
     @Override
     public void tick() {
-        selectMode();
-
         if (!canFire) {
             ticks++;
         }
-        if (shootThrough <= 0) {
-            canFire = true;
-            machineGun = false;
-        } else if (ticks == shootThrough) {
+        if (ticks >= shootThrough) {
             reset();
         }
     }
@@ -70,18 +64,5 @@ public class Gun implements Tickable {
         boolean result = canFire;
         canFire = false;
         return result;
-    }
-
-
-    public void machineGun() {
-        machineGun = true;
-    }
-
-    private void selectMode() {
-        if (machineGun) {
-            shootThrough = 0;
-        } else {
-            shootThrough = ticksPerShoot();
-        }
     }
 }

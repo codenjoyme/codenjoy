@@ -112,6 +112,8 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
         if (sliding.active(this)) {
             direction = sliding.affect(direction);
+        } else {
+            sliding.reset(direction);
         }
 
         moving(direction.change(this));
@@ -152,7 +154,9 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     public void kill(Bullet bullet) {
-        setAlive(false);
+        if (isAlive()) {
+            die();
+        }
     }
 
     public void removeBullets() {
@@ -280,7 +284,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     private void gunType() {
         if (prizes.contains(PRIZE_BREAKING_WALLS)) {
-            gun.machineGun();
+            gun.reset();
         }
     }
 

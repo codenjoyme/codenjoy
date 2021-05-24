@@ -28,7 +28,6 @@ import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
@@ -89,7 +88,7 @@ public class AiGenerator {
         return findFreePosition(field.size() - 2, field.size());
     }
 
-    private Tank tank(Point pt) {
+    private AITank tank(Point pt) {
         if (isPrizeTankTurn() && canDrop()) {
             return new AITankPrize(pt, Direction.DOWN, dice);
         } else {
@@ -104,16 +103,16 @@ public class AiGenerator {
         return spawn % settings.integer(SPAWN_AI_PRIZE) == 0;
     }
 
-    public Tank drop(Point pt) {
-        Tank tank = checkDropPt(pt);
+    public AITank drop(Point pt) {
+        AITank tank = checkDropPt(pt);
         tank.init(field);
         field.addAi(tank);
         newSpawn();
         return tank;
     }
 
-    private Tank checkDropPt(Point pt) {
-        Tank tank;
+    private AITank checkDropPt(Point pt) {
+        AITank tank;
         if (field.isRiver(pt)) {
             tank = tank(freePosition());
         } else {
