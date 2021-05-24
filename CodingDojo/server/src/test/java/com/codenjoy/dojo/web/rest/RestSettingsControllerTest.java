@@ -22,23 +22,12 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Arrays;
 
@@ -46,27 +35,13 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.web.rest.RestSettingsController.GENERAL;
 import static com.codenjoy.dojo.web.rest.RestSettingsController.SETTINGS;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class,
-        properties = "spring.main.allow-bean-definition-overriding=true")
-@RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestSettingsControllerTest.ContextConfiguration.class)
-@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
-@WebAppConfiguration
 public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
     public static final String NO_ROOM_NAME = null;
 
     private Settings first;
     private Settings second;
-
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return AbstractRestControllerTest.gameService();
-        }
-    }
 
     @Autowired
     private GameService gameService;

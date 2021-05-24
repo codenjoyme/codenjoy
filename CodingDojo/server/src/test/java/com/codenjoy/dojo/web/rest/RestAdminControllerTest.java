@@ -22,50 +22,29 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.mocks.FirstSemifinalGameType;
 import com.codenjoy.dojo.services.mocks.SecondSemifinalGameType;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
-import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.verification.VerificationMode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class,
-        properties = "spring.main.allow-bean-definition-overriding=true")
-@RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestAdminControllerTest.ContextConfiguration.class)
-@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
-@WebAppConfiguration
 public class RestAdminControllerTest extends AbstractRestControllerTest {
-
-    private static Map<String, SemifinalSettings> saved;
 
     @TestConfiguration
     public static class ContextConfiguration {
