@@ -227,7 +227,6 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
             return null;
         }
 
-        // TODO AI765R test me
         if (tank == this && settings().bool(SHOW_MY_TANK_UNDER_TREE)) {
             if (tree != null) {
                 return null;
