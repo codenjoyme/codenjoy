@@ -1,4 +1,5 @@
 /repo
+/logs
 **/.idea
 **/.vs
 **/bin
