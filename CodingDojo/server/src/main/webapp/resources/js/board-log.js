@@ -44,6 +44,7 @@ pages.boardLog = function() {
     setup.contextPath = getSettings('contextPath');
     setup.code = null;
     setup.allPlayersScreen = false;
+    setup.isDrawOnlyChanges = false;
 
     initBoardPage(setup, initBoardLogComponents);
     initHotkeys();
@@ -122,7 +123,13 @@ function initLogs(game, boardSize, alphabet, playerId) {
         info.scores = {};
         info.scores[playerId] = tick.score;
         info.boardSize = boardSize;
-        info.board = tick.board;
+        try {
+            // много'layer'ный json надо из строки превратить в object
+            info.board = JSON.parse(tick.board);
+        } catch (e) {
+            // а тут классическая строка 1-layer'ная борда
+            info.board = tick.board;
+        }
         info.info = "";
         info.readableNames = {};
         info.readableNames[playerId] = playerId;

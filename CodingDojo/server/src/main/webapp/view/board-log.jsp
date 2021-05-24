@@ -52,8 +52,8 @@
         }
     </style>
 
-    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
     <script src="${ctx}/resources/js/all.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
 </head>
 <body style="display:none;">
     <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}"></div>
