@@ -139,7 +139,7 @@ public class Battlecity extends RoundField<Player> implements Field {
                 int index = bullets.indexOf(tank);
                 if (index != -1) {
                     Bullet bullet = bullets.get(index);
-                    if (bullet.getTick() != 0) { // TODO AI765R test me
+                    if (bullet.getTick() != 0) {
                         affect(bullet);
                     }
                 }
