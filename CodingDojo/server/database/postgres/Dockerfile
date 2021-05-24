@@ -1,4 +1,4 @@
 FROM postgres:10
-ENV POSTGRES_USER codenjoyadmin
-ENV POSTGRES_PASSWORD codenjoypwd
 ENV POSTGRES_DB codenjoy
+ENV POSTGRES_USER codenjoy
+ENV POSTGRES_PASSWORD securePostgresDBPassword
