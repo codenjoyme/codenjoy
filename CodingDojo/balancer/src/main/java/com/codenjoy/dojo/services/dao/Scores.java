@@ -227,7 +227,7 @@ public class Scores {
         return DAY_FORMATTER2.format(date);
     }
 
-    // TODO AI765 test me
+    // TODO AI765R test me
     public long getEarliestHourTime(long time) {
         Date date = new Date(time);
 

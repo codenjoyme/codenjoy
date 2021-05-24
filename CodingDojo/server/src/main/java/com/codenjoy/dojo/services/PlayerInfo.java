@@ -56,7 +56,7 @@ public class PlayerInfo extends Player {
         setScore(player.getScore());
         setRoom(player.getRoom());
         setReadableName(player.getReadableName());
-        ticksInactive = (int)((now - player.getLastResponse()) / 1000); // TODO AI765 test me
+        ticksInactive = (int)((now - player.getLastResponse()) / 1000); // TODO AI765A test me
     }
 
     public PlayerInfo(String id, String code, String url, String game) {

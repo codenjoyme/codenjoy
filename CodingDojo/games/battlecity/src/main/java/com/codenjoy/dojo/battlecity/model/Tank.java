@@ -227,7 +227,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
             return null;
         }
 
-        // TODO AI765 test me
+        // TODO AI765R test me
         if (tank == this && settings().bool(SHOW_MY_TANK_UNDER_TREE)) {
             if (tree != null) {
                 return null;
@@ -258,7 +258,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
         if (!gun.tryToFire()) return;
 
-        // TODO AI765 test me
+        // TODO AI765R test me
         Direction bulletDirection = sliding.active(this) && !sliding.lastSlipperiness()
                 ? sliding.getBefore()
                 : direction;

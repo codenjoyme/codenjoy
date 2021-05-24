@@ -363,7 +363,7 @@ public class AdminController {
 
         if (settings.getInactivity() != null) {
             try {
-                // TODO AI765 test me
+                // TODO AI765A test me
                 InactivitySettingsImpl actual = inactivitySettings(room);
                 boolean changed = actual
                         .update(settings.getInactivity())
