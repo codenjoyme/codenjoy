@@ -437,8 +437,8 @@ public class GameTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        // LEFT -> UP [sliding]
-        hero(0).left();
+        // RIGHT -> UP [sliding]
+        hero(0).right();
         hero(0).act();
         game.tick();
 
@@ -454,8 +454,8 @@ public class GameTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        // LEFT -> UP [sliding]
-        hero(0).left();
+        // RIGHT -> UP [sliding]
+        hero(0).right();
         hero(0).act();
         game.tick();
 
