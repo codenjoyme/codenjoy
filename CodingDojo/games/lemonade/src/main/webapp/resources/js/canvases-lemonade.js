@@ -26,7 +26,7 @@ var sprites = [];
 function initCanvasesGame(contextPath, players, allPlayersScreen,
                 singleBoardGame, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel,
-                sprites, alphabet, spriteElements,
+                sprites, alphabet, spritesAlphabet, spriteElements,
                 drawBoard)
 {
     loadSprites(contextPath, spriteElements);

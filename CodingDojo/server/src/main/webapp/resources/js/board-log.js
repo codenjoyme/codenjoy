@@ -45,6 +45,7 @@ pages.boardLog = function() {
     setup.code = null;
     setup.allPlayersScreen = false;
     setup.isDrawOnlyChanges = false;
+    setup.isPrintBoardToConsole = true;
 
     initBoardPage(setup, initBoardLogComponents);
     initHotkeys();
@@ -59,8 +60,8 @@ function initBoardLogComponents(setup) {
         setup.multiplayerType, setup.boardSize,
         setup.game, setup.enablePlayerInfo,
         setup.enablePlayerInfoLevel,
-        setup.sprites, setup.alphabet, setup.spriteElements,
-        setup.drawBoard,
+        setup.sprites, setup.alphabet, setup.spritesAlphabet,
+        setup.spriteElements, setup.drawBoard,
         function() {
             initLogs(setup.game, setup.boardSize, setup.alphabet, setup.playerId);
 
