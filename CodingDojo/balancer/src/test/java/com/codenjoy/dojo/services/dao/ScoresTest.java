@@ -789,4 +789,38 @@ public class ScoresTest {
                 service.getFinalists("2019-01-28", "2019-02-01", finalistsCount, exclude).toString());
     }
 
+    @Test
+    public void getEarliestHourTime() {
+        // GIVEN
+        String day = "2019-01-27";
+
+        long time1 = day(day).plus(Calendar.MINUTE, 15).get();
+        service.saveScores(time1, new LinkedList<>() {{
+            add(new PlayerInfo("stiven.pupkin.id", "1000"));
+            add(new PlayerInfo("eva.pupkina.id", "2000"));
+            add(new PlayerInfo("bob.marley.id", "3000"));
+        }});
+
+        long time2 = day(day).plus(Calendar.MINUTE, 30).get();
+        service.saveScores(time2, new LinkedList<>() {{
+            add(new PlayerInfo("stiven.pupkin.id", "1001"));
+            add(new PlayerInfo("eva.pupkina.id", "2001"));
+            add(new PlayerInfo("bob.marley.id", "3001"));
+            add(new PlayerInfo("apofig.id", "4001"));
+        }});
+
+        long time3 = day(day).plus(Calendar.MINUTE, 45).get();
+        service.saveScores(time3, new LinkedList<>() {{
+            add(new PlayerInfo("stiven.pupkin.id", "1002"));
+            add(new PlayerInfo("eva.pupkina.id", "2002"));
+            add(new PlayerInfo("bob.marley.id", "3002"));
+            add(new PlayerInfo("apofig.id", "4002"));
+        }});
+
+        // WHEN
+        long earliestHourTime = service.getEarliestHourTime(day(day).get());
+
+        // THEN
+        assertEquals(time1, earliestHourTime);
+    }
 }

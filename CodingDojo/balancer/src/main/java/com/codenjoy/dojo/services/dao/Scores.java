@@ -49,7 +49,7 @@ public class Scores {
     @Autowired protected ConfigProperties config;
 
     private static final String DAY_FORMAT = "yyyy-MM-dd";
-    private static final String DAY_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm";
+    private static final String DAY_TIME_FORMAT = "yyyy-MM-dd'T'HH";
     private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern(DAY_FORMAT);
     public static final SimpleDateFormat DAY_FORMATTER2 = new SimpleDateFormat(DAY_FORMAT);
     private static final SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat(DAY_TIME_FORMAT);
@@ -227,7 +227,6 @@ public class Scores {
         return DAY_FORMATTER2.format(date);
     }
 
-    // TODO AI765R test me
     public long getEarliestHourTime(long time) {
         Date date = new Date(time);
 
