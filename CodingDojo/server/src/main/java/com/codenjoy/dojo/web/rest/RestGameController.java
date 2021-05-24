@@ -129,6 +129,16 @@ public class RestGameController {
         return gameService.getSpritesValues().get(name);
     }
 
+    @GetMapping("/{name}/sprites/values/alphabet")
+    public String spritesValuesAlphabet(@PathVariable("name") String name) {
+        if (!exists(name)) {
+            return null;
+        }
+
+        return spritesValues(name).stream()
+                .reduce("", (all, el) -> all + el);
+    }
+
     @GetMapping("/{name}/sprites/url")
     public String spritesUrl(@PathVariable("name") String name) {
         if (!exists(name) || !isGraphic(name)) {

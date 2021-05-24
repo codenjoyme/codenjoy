@@ -24,7 +24,7 @@
 function initCanvasesGame(contextPath, players, allPlayersScreen,
                 singleBoardGame, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel,
-                sprites, alphabet, spriteElements,
+                sprites, alphabet, spritesAlphabet, spriteElements,
                 drawBoard)
 {
     var plotSize = {width: 30, height: 20};

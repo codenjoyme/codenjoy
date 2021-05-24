@@ -34,6 +34,7 @@ public class PPlayerWantsToPlay {
     private boolean registered;
     private List<String> sprites;
     private String alphabet;
+    private String spritesAlphabet;
     private List<PlayerInfo> players;
 
     public PPlayerWantsToPlay(String context,
@@ -41,6 +42,7 @@ public class PPlayerWantsToPlay {
                               boolean registered,
                               List<String> sprites,
                               String alphabet,
+                              String spritesAlphabet,
                               List<PlayerInfo> players)
     {
         this.context = context;
@@ -48,6 +50,7 @@ public class PPlayerWantsToPlay {
         this.registered = registered;
         this.sprites = sprites;
         this.alphabet = alphabet;
+        this.spritesAlphabet = spritesAlphabet;
         this.players = players;
     }
 
@@ -59,6 +62,7 @@ public class PPlayerWantsToPlay {
                 ", registered=" + registered +
                 ", sprites=" + sprites +
                 ", alphabet='" + alphabet + '\'' +
+                ", spritesAlphabet='" + spritesAlphabet + '\'' +
                 ", players=" + players +
                 '}';
     }

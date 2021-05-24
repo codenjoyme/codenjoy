@@ -24,7 +24,7 @@ var currentBoardSize = null;
 function initCanvases(contextPath, players, allPlayersScreen,
                 multiplayerType, boardSize, game,
                 enablePlayerInfo, enablePlayerInfoLevel,
-                sprites, alphabet, spriteElements,
+                sprites, alphabet, spritesAlphabet, spriteElements,
                 drawBoard, onLoad)
 {
     var canvases = {};
@@ -269,10 +269,45 @@ function initCanvases(contextPath, players, allPlayersScreen,
             canvas.clear();
         }
 
+        var logLayers = function(layers) {
+            if (!setup.isPrintBoardToConsole) return;
+
+            var parseLayer = function(layer) {
+                var result = [];
+                var line = '';
+                for (var ch = 0; ch < layer.length; ch++) {
+                    var color = layer[ch];
+                    line += spritesAlphabet[alphabet.indexOf(color)];
+                    if (ch % boardSize == boardSize - 1) {
+                        result.push(line);
+                        line = '';
+                    }
+                }
+                return result;
+            }
+
+            var all = [];
+            for (var index in layers) {
+                all.push(parseLayer(layers[index]))
+            }
+
+            var result = '';
+            for (var line in all[0]) {
+                for (var layer in layers) {
+                    result += all[layer][line] + ' ';
+                }
+                result += '\n';
+            }
+
+            console.log(result);
+
+        }
+
         var drawLayers = function(onDrawItem) {
             var onlyChanges = setup.isDrawOnlyChanges;
 
             var layers = getLayers(getBoard());
+            logLayers(layers);
 
             var prevBoard = getPrevBoard();
             var prevLayers = null;

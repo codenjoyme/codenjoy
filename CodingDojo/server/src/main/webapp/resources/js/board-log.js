@@ -44,6 +44,8 @@ pages.boardLog = function() {
     setup.contextPath = getSettings('contextPath');
     setup.code = null;
     setup.allPlayersScreen = false;
+    setup.isDrawOnlyChanges = false;
+    setup.isPrintBoardToConsole = true;
 
     initBoardPage(setup, initBoardLogComponents);
     initHotkeys();
@@ -58,8 +60,8 @@ function initBoardLogComponents(setup) {
         setup.multiplayerType, setup.boardSize,
         setup.game, setup.enablePlayerInfo,
         setup.enablePlayerInfoLevel,
-        setup.sprites, setup.alphabet, setup.spriteElements,
-        setup.drawBoard,
+        setup.sprites, setup.alphabet, setup.spritesAlphabet,
+        setup.spriteElements, setup.drawBoard,
         function() {
             initLogs(setup.game, setup.boardSize, setup.alphabet, setup.playerId);
 
@@ -122,7 +124,13 @@ function initLogs(game, boardSize, alphabet, playerId) {
         info.scores = {};
         info.scores[playerId] = tick.score;
         info.boardSize = boardSize;
-        info.board = tick.board;
+        try {
+            // много'layer'ный json надо из строки превратить в object
+            info.board = JSON.parse(tick.board);
+        } catch (e) {
+            // а тут классическая строка 1-layer'ная борда
+            info.board = tick.board;
+        }
         info.info = "";
         info.readableNames = {};
         info.readableNames[playerId] = playerId;
