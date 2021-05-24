@@ -228,9 +228,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
         }
 
         if (tank == this && settings().bool(SHOW_MY_TANK_UNDER_TREE)) {
-            if (tree != null) {
-                return null;
-            }
+            return null;
         }
 
         return Elements.TREE;
