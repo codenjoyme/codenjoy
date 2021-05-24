@@ -299,6 +299,17 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
+    public void shouldSpritesValuesAlphabet() {
+        assertEquals(" ☼☺", service.spritesValuesAlphabet("first"));
+        assertEquals(" RGB", service.spritesValuesAlphabet("second"));
+        assertEquals(null, service.spritesValuesAlphabet("non-exists"));
+
+        assertEquals(" ☼☺", get("/rest/game/first/sprites/values/alphabet"));
+        assertEquals(" RGB", get("/rest/game/second/sprites/values/alphabet"));
+        assertEquals("", get("/rest/game/non-exists/sprites/values/alphabet"));
+    }
+
+    @Test
     public void shouldSpritesUrl() {
         assertEquals("/codenjoy-contest/resources/sprite/first/*.png", service.spritesUrl("first"));
         assertEquals("/codenjoy-contest/resources/sprite/second/*.png", service.spritesUrl("second"));

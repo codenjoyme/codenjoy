@@ -54,6 +54,10 @@ setup.isDrawByOrder = false;
  * false если растягиваем.
  */
 setup.isFillOrStrechBackground = true;
+/**
+ * Печатать ли пришедшую борду с каждым тиком в консоль аль нет
+ */
+setup.isPrintBoardToConsole = false;
 setup.canvasCursor = 'auto';
 setup.loadBoardData = true;
 setup.drawCanvases = true;

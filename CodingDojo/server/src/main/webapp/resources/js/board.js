@@ -46,6 +46,7 @@ function initBoardPage(setup, onLoad) {
         setup.isGraphicOrTextGame = gameData.sprites.length > 0;
         setup.spriteElements = gameData.sprites;
         setup.alphabet = gameData.alphabet;
+        setup.spritesAlphabet = gameData.spritesAlphabet;
         setup.setupSprites();
 
         var players = gameData.players;
@@ -77,15 +78,15 @@ function initBoardComponents(setup) {
                 setup.multiplayerType, setup.boardSize,
                 setup.game, setup.enablePlayerInfo,
                 setup.enablePlayerInfoLevel,
-                setup.sprites, setup.alphabet, setup.spriteElements,
-                setup.drawBoard);
+                setup.sprites, setup.alphabet, setup.spritesAlphabet,
+                setup.spriteElements, setup.drawBoard);
         } else if (setup.isGraphicOrTextGame) {
             initCanvases(setup.contextPath, setup.players, setup.allPlayersScreen,
                 setup.multiplayerType, setup.boardSize,
                 setup.game, setup.enablePlayerInfo,
                 setup.enablePlayerInfoLevel,
-                setup.sprites, setup.alphabet, setup.spriteElements,
-                setup.drawBoard);
+                setup.sprites, setup.alphabet, setup.spritesAlphabet,
+                setup.spriteElements, setup.drawBoard);
         } else {
             initCanvasesText(setup.contextPath, setup.players, setup.allPlayersScreen,
                 setup.multiplayerType, setup.boardSize,

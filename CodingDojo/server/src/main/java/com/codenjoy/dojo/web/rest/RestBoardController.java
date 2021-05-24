@@ -136,11 +136,12 @@ public class RestBoardController {
         boolean registered = registration.checkUser(id, code) != null;
         List<String> sprites = gameController.spritesNames(game);
         String alphabet = gameController.spritesAlphabet();
+        String spritesAlphabet = gameController.spritesValuesAlphabet(game);
         // TODO #4FS тут проверить
         List<PlayerInfo> players = registrationController.getRoomPlayers(room);
 
         return new PPlayerWantsToPlay(context, gameType,
-                registered, sprites, alphabet, players);
+                registered, sprites, alphabet, spritesAlphabet, players);
     }
 
     // TODO test me
