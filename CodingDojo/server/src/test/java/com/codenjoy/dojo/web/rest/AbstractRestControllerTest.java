@@ -22,8 +22,9 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
+import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.sample.services.GameRunner;
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
@@ -44,13 +45,21 @@ import org.json.SortedJSONArray;
 import org.json.SortedJSONObject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.TestPropertySourceUtils;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -66,19 +75,25 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.reset;
 
+@SpringBootTest(classes = CodenjoyContestApplication.class,
+        properties = "spring.main.allow-bean-definition-overriding=true")
+@RunWith(SpringRunner.class)
+@ActiveProfiles(SQLiteProfile.NAME)
+@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
+@WebAppConfiguration
 public abstract class AbstractRestControllerTest {
 
-    public static GameServiceImpl gameService() {
-        return gameService(FirstGameType.class, SecondGameType.class);
-    }
-
-    public static GameServiceImpl gameService(Class<? extends GameType>... games) {
-        return new GameServiceImpl(){
-            @Override
-            public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                return Arrays.asList(games);
-            }
-        };
+    @TestConfiguration
+    public static class ContextConfiguration {
+        @Bean("gameService")
+        public GameServiceImpl gameService() {
+            return new GameServiceImpl(){
+                @Override
+                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
+                    return Arrays.asList(FirstGameType.class, SecondGameType.class);
+                }
+            };
+        }
     }
 
     public static class PropertyOverrideContextInitializer
