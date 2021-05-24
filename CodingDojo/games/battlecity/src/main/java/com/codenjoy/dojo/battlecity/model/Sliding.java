@@ -42,7 +42,7 @@ public class Sliding {
         this.settings = settings;
     }
 
-    public Direction getBefore() {
+    public Direction getPreviousDirection() {
         return before;
     }
 

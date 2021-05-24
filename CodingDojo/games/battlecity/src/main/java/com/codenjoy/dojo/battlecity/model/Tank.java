@@ -249,10 +249,10 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
         if (!gun.tryToFire()) return;
 
-        // TODO AI765R test me
-        Direction bulletDirection = sliding.active(this) && !sliding.lastSlipperiness()
-                ? sliding.getBefore()
-                : direction;
+        Direction bulletDirection = this.direction;
+        if (sliding.active(this) && !sliding.lastSlipperiness()) {
+            bulletDirection = sliding.getPreviousDirection();
+        }
         Bullet bullet = new Bullet(field, bulletDirection, copy(), this, b -> Tank.this.bullets.remove(b));
 
         if (!bullets.contains(bullet)) {
