@@ -94,18 +94,18 @@ public class ScoresTest {
 
         List<PlayerScore> scores = service.getScores(day, time);
 
-        assertEquals("[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
-                        "PlayerScore{id='eva.pupkina.id', name='null', score=2000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
-                        "PlayerScore{id='bob.marley.id', name='null', score=3000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]",
+        assertEquals("[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
+                        "PlayerScore{id='eva.pupkina.id', name='null', score=2000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
+                        "PlayerScore{id='bob.marley.id', name='null', score=3000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]",
                 scores.toString());
 
         // when
         service.setWinnerFlag(scores, true);
 
         // then
-        assertEquals("[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=true}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=true}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=true}]",
+        assertEquals("[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=true}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=true}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=true}]",
                 service.getScores(day, time).toString());
     }
 
@@ -128,9 +128,9 @@ public class ScoresTest {
         assertEquals(last, time);
 
         assertEquals(service.getScores(day, last).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]");
     }
 
     @Test
@@ -160,14 +160,14 @@ public class ScoresTest {
         assertEquals(last, time3);
 
         assertEquals(service.getScores(day, last).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1002, day='2019-01-27', time='2019-01-27T00:00:12.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2002, day='2019-01-27', time='2019-01-27T00:00:12.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3002, day='2019-01-27', time='2019-01-27T00:00:12.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1002, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:12.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2002, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:12.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3002, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:12.000+0200', server='null', winner=false}]");
 
         // кокретное инфо дня
         assertEquals(service.getScores(day, time1).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]");
     }
 
     @Test
@@ -198,16 +198,16 @@ public class ScoresTest {
         assertEquals(last, time2);
 
         assertEquals(service.getScores(day, last).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1001, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2001, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3001, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='apofig.id', name='null', score=4001, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1001, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2001, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3001, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='apofig.id', name='null', score=4001, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}]");
 
         // конкретное инфо дня
         assertEquals(service.getScores(day, time1).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]");
     }
 
     @Test
@@ -251,38 +251,38 @@ public class ScoresTest {
         assertEquals(last1, time2);
 
         assertEquals(service.getScores(day1, last1).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1222, day='2019-01-27', time='2019-01-27T20:00:00.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2333, day='2019-01-27', time='2019-01-27T20:00:00.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3444, day='2019-01-27', time='2019-01-27T20:00:00.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1222, lastHourScore=-, day='2019-01-27', time='2019-01-27T20:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2333, lastHourScore=-, day='2019-01-27', time='2019-01-27T20:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3444, lastHourScore=-, day='2019-01-27', time='2019-01-27T20:00:00.000+0200', server='null', winner=false}]");
 
         // конкретное инфо прошлого дня
         assertEquals(service.getScores(day1, time1).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3000, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3000, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:10.000+0200', server='null', winner=false}]");
 
         // последнее инфо сегодняшнего дня
         long last2 = service.getLastTimeOf(day2);
         assertEquals(last2, time4);
 
-        String lastInfoOfDay2 = "[PlayerScore{id='stiven.pupkin.id', name='null', score=1003, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2003, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3003, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}]";
+        String lastInfoOfDay2 = "[PlayerScore{id='stiven.pupkin.id', name='null', score=1003, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2003, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3003, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}]";
 
         assertEquals(service.getScores(day2, last2).toString(),
                 lastInfoOfDay2);
 
         // конкретное инфо сегодняшнего дня
         assertEquals(service.getScores(day2, time3).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1002, day='2019-01-28', time='2019-01-28T00:00:10.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2002, day='2019-01-28', time='2019-01-28T00:00:10.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3002, day='2019-01-28', time='2019-01-28T00:00:10.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1002, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:10.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2002, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:10.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3002, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:10.000+0200', server='null', winner=false}]");
 
         // а что если для текущего момента, но запрос сделали прошлого дня
         // возьмет последние данные за прошлый день
         assertEquals(service.getScores(day1, last2).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1111, day='2019-01-27', time='2019-01-27T19:00:00.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2222, day='2019-01-27', time='2019-01-27T19:00:00.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1111, lastHourScore=-, day='2019-01-27', time='2019-01-27T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2222, lastHourScore=-, day='2019-01-27', time='2019-01-27T19:00:00.000+0200', server='null', winner=false}]");
     }
 
     @Test
@@ -361,16 +361,16 @@ public class ScoresTest {
         assertEquals(last1, time2);
 
         assertEquals(service.getScores(day1, last1).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1001, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3001, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1001, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3001, lastHourScore=-, day='2019-01-27', time='2019-01-27T00:00:11.000+0200', server='null', winner=false}]");
 
         // последнее инфо последнего дня
         long last2 = service.getLastTimeOf(day2);
         assertEquals(last2, time4);
 
         assertEquals(service.getScores(day2, last2).toString(),
-                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1003, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3003, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}]");
+                "[PlayerScore{id='stiven.pupkin.id', name='null', score=1003, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3003, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}]");
     }
 
     private static class ChangeCalendar {
@@ -502,11 +502,11 @@ public class ScoresTest {
         }});
 
         // when then
-        String expected = "PlayerScore{id='zanefig.id', name='null', score=5002, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3002, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='nunafig.id', name='null', score=6003, day='2019-01-29', time='2019-01-29T19:00:00.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='eva.pupkina.id', name='null', score=2003, day='2019-01-29', time='2019-01-29T19:00:00.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='stiven.pupkin.id', name='null', score=1004, day='2019-01-30', time='2019-01-30T19:00:00.000+0200', server='null', winner=false}";
+        String expected = "PlayerScore{id='zanefig.id', name='null', score=5002, lastHourScore=-, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3002, lastHourScore=-, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='nunafig.id', name='null', score=6003, lastHourScore=-, day='2019-01-29', time='2019-01-29T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2003, lastHourScore=-, day='2019-01-29', time='2019-01-29T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='stiven.pupkin.id', name='null', score=1004, lastHourScore=-, day='2019-01-30', time='2019-01-30T19:00:00.000+0200', server='null', winner=false}";
 
         List<String> exclude = Arrays.asList("apofig.id");
         int finalistsCount = 2;
@@ -533,8 +533,8 @@ public class ScoresTest {
             add(new PlayerInfo("rerere2.id", "0"));              // -  не войдет потому что 0 у него
         }});
 
-        expected += ", PlayerScore{id='kukufig.id', name='null', score=7006, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}" +
-                    ", PlayerScore{id='rerere.id', name='null', score=1, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}";
+        expected += ", PlayerScore{id='kukufig.id', name='null', score=7006, lastHourScore=-, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}" +
+                    ", PlayerScore{id='rerere.id', name='null', score=1, lastHourScore=-, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}";
         assertEquals("[" + expected + "]",
                 service.getFinalists("2019-01-28", "2019-01-31", finalistsCount, exclude).toString());
 
@@ -619,8 +619,8 @@ public class ScoresTest {
         }});
 
         // when then
-        String expected = "PlayerScore{id='zanefig.id', name='null', score=5002, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='bob.marley.id', name='null', score=3002, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}";
+        String expected = "PlayerScore{id='zanefig.id', name='null', score=5002, lastHourScore=-, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3002, lastHourScore=-, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}";
 
         List<String> exclude = Arrays.asList("apofig.id");
         int finalistsCount = 2;
@@ -647,8 +647,8 @@ public class ScoresTest {
             add(new PlayerInfo("rerere2.id", "0"));              // -  не войдет потому что 0 у него
         }});
 
-        expected += ", PlayerScore{id='kukufig.id', name='null', score=7006, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}" +
-                ", PlayerScore{id='nunafig.id', name='null', score=6006, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}";
+        expected += ", PlayerScore{id='kukufig.id', name='null', score=7006, lastHourScore=-, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}" +
+                ", PlayerScore{id='nunafig.id', name='null', score=6006, lastHourScore=-, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}";
         assertEquals("[" + expected + "]",
                 service.getFinalists("2019-01-28", "2019-01-31", finalistsCount, exclude).toString());
 
@@ -734,8 +734,8 @@ public class ScoresTest {
 
         // when then
         String expected =
-                "PlayerScore{id='nunafig.id', name='null', score=6004, day='2019-01-30', time='2019-01-30T19:00:00.000+0200', server='null', winner=false}, " +
-                "PlayerScore{id='zanefig.id', name='null', score=5004, day='2019-01-30', time='2019-01-30T19:00:00.000+0200', server='null', winner=false}";
+                "PlayerScore{id='nunafig.id', name='null', score=6004, lastHourScore=-, day='2019-01-30', time='2019-01-30T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='zanefig.id', name='null', score=5004, lastHourScore=-, day='2019-01-30', time='2019-01-30T19:00:00.000+0200', server='null', winner=false}";
 
         List<String> exclude = Arrays.asList("apofig.id");
         int finalistsCount = 2;
@@ -762,8 +762,8 @@ public class ScoresTest {
             add(new PlayerInfo("rerere2.id", "0"));              // -  не войдет потому что 0 у него
         }});
 
-        expected += ", PlayerScore{id='kukufig.id', name='null', score=7006, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}" +
-                ", PlayerScore{id='bob.marley.id', name='null', score=3006, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}";
+        expected += ", PlayerScore{id='kukufig.id', name='null', score=7006, lastHourScore=-, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}" +
+                ", PlayerScore{id='bob.marley.id', name='null', score=3006, lastHourScore=-, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}";
         assertEquals("[" + expected + "]",
                 service.getFinalists("2019-01-28", "2019-01-31", finalistsCount, exclude).toString());
 
