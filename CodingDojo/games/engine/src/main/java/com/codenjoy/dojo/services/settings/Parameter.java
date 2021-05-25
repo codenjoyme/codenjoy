@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.settings;
 
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
@@ -72,7 +72,7 @@ public interface Parameter<T> extends Cloneable {
      */
     void select(int index);
 
-    Parameter<T> onChange(Consumer<T> consumer);
+    Parameter<T> onChange(BiConsumer<T, T> consumer);
 
     boolean changed();
 

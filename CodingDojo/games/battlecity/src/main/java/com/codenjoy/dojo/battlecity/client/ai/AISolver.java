@@ -68,11 +68,14 @@ public class AISolver implements Solver<Board> {
     public DeikstraFindWay.Possible withBarriersAndBullets(Board board) {
         List<Point> barriers = board.getBarriers();
         List<Point> bullets = board.getBullets();
+        List<Point> river = board.getRiver();
 
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) {
-                return !barriers.contains(point);
+                if (barriers.contains(point)) return false;
+                if (river.contains(point)) return false;
+                return true;
             }
 
             @Override
@@ -94,7 +97,7 @@ public class AISolver implements Solver<Board> {
     }
 
     private String act(String command) {
-        return ((command.equals("")?"":command + ", ") + "ACT");
+        return ((command.equals("") ? "" : command + ", ") + "ACT");
     }
 
     public List<Direction> getDirections(Board board) {

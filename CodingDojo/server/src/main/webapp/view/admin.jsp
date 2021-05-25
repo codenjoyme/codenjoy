@@ -430,6 +430,31 @@
         </form:form>
     </c:if>
 
+    <c:if test="${not empty adminSettings.inactivity.parameters}">
+        <form:form modelAttribute="adminSettings" action="admin#inactivity" method="POST">
+            <table class="admin-table" id="inactivity">
+                <tr colspan="2">
+                    <td><b>Inactivity settings</b></td>
+                </tr>
+                <tr>
+                    <td>Enable kick unactive players</td>
+                    <td><form:checkbox path="inactivity.kickEnabled"/></td>
+                <tr>
+                <tr>
+                    <td>Unactive ticks before kick</td>
+                    <td><form:input path="inactivity.inactivityTimeout"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="hidden" name="game" value="${game}"/>
+                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="submit" value="Save"/>
+                    </td>
+                </tr>
+            </table>
+        </form:form>
+    </c:if>
+
     <c:if test="${parameters.size() != 0}">
         <form:form modelAttribute="adminSettings" action="admin#gameSettings" method="POST">
             <table class="admin-table" id="gameSettings">
@@ -477,15 +502,16 @@
                     <td><b>Registered Players</b></td>
                 </tr>
                 <tr>
-                    <td class="header">PlayerId</td>
-                    <td class="header">Code</td>
-                    <td class="header">PlayerName</td>
-                    <td class="header">Email</td>
-                    <td class="header">RoomName</td>
-                    <td class="header">Score</td>
-                    <td class="header">IP</td>
-                    <td class="header">Joystick</td>
-                    <td class="header">GameName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td class="header">PlayerId&nbsp;&nbsp;</td>
+                    <td class="header">Code&nbsp;&nbsp;</td>
+                    <td class="header">PlayerName&nbsp;&nbsp;</td>
+                    <td class="header">Email&nbsp;&nbsp;</td>
+                    <td class="header">RoomName&nbsp;&nbsp;</td>
+                    <td class="header">Score&nbsp;&nbsp;</td>
+                    <td class="header">IP&nbsp;&nbsp;</td>
+                    <td class="header">Inactive&nbsp;&nbsp;</td>
+                    <td class="header">Joystick&nbsp;&nbsp;</td>
+                    <td class="header">GameName&nbsp;&nbsp;</td>
                     <td>
                         <a href="${ctx}/admin/player/saveAll?room=${room}#savePlayersGame">SaveAll</a>&nbsp;&nbsp;
                     </td>
@@ -528,6 +554,7 @@
                                 <td><form:input class="input-room"     path="players[${status.index}].room"/></td>
                                 <td><form:input class="input-score"    path="players[${status.index}].score"/></td>
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
+                                <td>&nbsp;<span>${player.ticksInactive}</span>&nbsp;</td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
                                         <td class="joystick">
@@ -604,6 +631,7 @@
                                 <td><input type="text" readonly="true" class="input-room"     value="${player.room}"/></td>
                                 <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
+                                <td>&nbsp;<span></span>&nbsp;</td>
                                 <td>UDLRA</td>
                                 <td><a href="${ctx}/board/room/${room}">${room}</a></td>
                                 <td>Save</td>

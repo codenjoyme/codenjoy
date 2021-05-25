@@ -35,6 +35,7 @@ public class PlayerInfo extends Player {
     private boolean active;
     private boolean hidden;
     private boolean aiPlayer;
+    private int ticksInactive;
 
     protected PlayerInfo(String id, String readableName, String code, String url, String room, String game, Object scoreValue, boolean saved) {
         setId(id);
@@ -49,12 +50,13 @@ public class PlayerInfo extends Player {
         hidden = false;
     }
 
-    public PlayerInfo(Player player) {
+    public PlayerInfo(Player player, long now) {
         this(player.getId(), player.getCode(), player.getCallbackUrl(), player.getGame());
         aiPlayer = player.hasAi();
         setScore(player.getScore());
         setRoom(player.getRoom());
         setReadableName(player.getReadableName());
+        setLastResponse(now, player.getLastResponse());
     }
 
     public PlayerInfo(String id, String code, String url, String game) {
@@ -66,10 +68,16 @@ public class PlayerInfo extends Player {
         active = true;
     }
 
-    public PlayerInfo(PlayerSave save, String readableName, String code) {
+    public PlayerInfo(PlayerSave save, String readableName, String code, long now) {
         this(save.getId(), readableName, code,
                 save.getCallbackUrl(), save.getRoom(),
                 save.getGame(), save.getScore(), true);
+
+        setLastResponse(now, now);
     }
 
+    private void setLastResponse(long now, long lastResponse) {
+        setLastResponse(lastResponse);
+        ticksInactive = (int)((now - lastResponse) / 1000);
+    }
 }

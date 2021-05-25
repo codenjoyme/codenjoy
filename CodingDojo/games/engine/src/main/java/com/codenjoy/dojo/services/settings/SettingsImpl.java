@@ -35,7 +35,7 @@ import static java.util.stream.Collectors.toList;
 @ToString
 public class SettingsImpl implements Settings {
 
-    private Map<String, Parameter<?>> map = new LinkedHashMap<>();
+    protected Map<String, Parameter<?>> map = new LinkedHashMap<>();
 
     @Override
     public List<Parameter> getParameters() {

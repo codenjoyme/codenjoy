@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.round;
  */
 
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -32,18 +33,21 @@ public class RoundSettingsImpl extends SettingsImpl
         implements SettingsReader<RoundSettingsImpl>,
                 RoundSettings<RoundSettingsImpl> {
 
-    public static final String ROUNDS = "[Rounds]";
-
     private RoundSettings settings;
 
-    // используем себя как pojo bean
     public RoundSettingsImpl() {
         initRound();
     }
 
-    // используем то что пришли, а мы как декоратор
-    public RoundSettingsImpl(RoundSettings settings) {
-        this.settings = settings;
+    public RoundSettingsImpl(Settings settings) {
+        if (settings == null || settings instanceof RoundSettings) {
+            // используем как декоратор
+            this.settings = (RoundSettings) settings;
+        } else {
+            // инициализируем и копируем
+            initRound();
+            updateRound(settings);
+        }
     }
 
     @Override

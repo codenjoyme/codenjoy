@@ -139,7 +139,9 @@ public class Battlecity extends RoundField<Player> implements Field {
                 int index = bullets.indexOf(tank);
                 if (index != -1) {
                     Bullet bullet = bullets.get(index);
-                    affect(bullet);
+                    if (bullet.getTick() != 0) {
+                        affect(bullet);
+                    }
                 }
             }
         }
@@ -206,7 +208,10 @@ public class Battlecity extends RoundField<Player> implements Field {
         }
 
         for (Bullet bullet2 : bullets().toArray(new Bullet[0])) {
-            if (bullet != bullet2 && bullet.equals(bullet2)) {
+            if (bullet != bullet2
+                    && bullet.equals(bullet2)
+                    && bullet2.getTick() != 0)
+            {
                 bullet.boom();
                 bullet2.boom();
                 return;
@@ -262,12 +267,6 @@ public class Battlecity extends RoundField<Player> implements Field {
     }
 
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
-        Player died = null;
-        boolean aiDied = ais.contains(diedTank);
-        if (!aiDied) {
-             died = player(diedTank);
-        }
-
         Tank killerTank = killedBullet.getOwner();
         Player killer = null;
         if (!ais.contains(killerTank)) {
@@ -275,16 +274,12 @@ public class Battlecity extends RoundField<Player> implements Field {
         }
 
         if (killer != null) {
-            if (aiDied) {
+            if (ais.contains(diedTank)) {
                 killer.event(Events.KILL_OTHER_AI_TANK);
             } else {
                 killer.killHero();
                 killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.score()));
             }
-        }
-
-        if (died != null) {
-            died.getHero().die();
         }
     }
 

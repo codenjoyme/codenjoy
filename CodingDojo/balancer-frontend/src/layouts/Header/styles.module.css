@@ -8,6 +8,25 @@
     color: white;
 }
 
+.logoContainer.logo {
+    width: auto;
+    margin-right: 30px;
+}
+
+.logoContainer.logo:last-child {
+    margin-right: 0;
+}
+
+.logoContainer.logo1 img {
+    width: auto;
+    height: 35px;
+}
+
+.logoContainer.logo2 img {
+    width: auto;
+    height: 25px;
+}
+
 .logoContainer,
 .logoContainer:active,
 .logoContainer:focus,
@@ -82,6 +101,20 @@
 
 .logout {
     cursor: pointer;
+}
+
+@media all and (max-width: 1500px) {
+    .logoContainer.logo {
+        margin-right: 30px;
+    }
+
+    .logoContainer.logo1 img {
+        height: 22px;
+    }
+
+    .logoContainer.logo2 img {
+        height: 13px;
+    }
 }
 
 @media all and (max-width: 1090px) {

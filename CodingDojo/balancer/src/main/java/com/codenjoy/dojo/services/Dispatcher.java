@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.entity.server.Disqualified;
 import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.web.rest.dto.settings.AbstractSettings;
-import com.codenjoy.dojo.web.rest.dto.settings.ICanCodeGameSettings;
+import com.codenjoy.dojo.web.rest.dto.settings.BattleCityGameSettings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,12 +39,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 
 import javax.annotation.PostConstruct;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @Component
@@ -56,6 +57,8 @@ public class Dispatcher {
     @Autowired GameServers gameServers;
     @Autowired GameServer game;
     @Autowired TimerService timer;
+
+    private static SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     private volatile long lastTime;
 
@@ -69,6 +72,10 @@ public class Dispatcher {
     public void postConstruct() {
         // в случае если сегодня сервер потушен был
         lastTime = scores.getLastTime(now());
+    }
+
+    public void setLastTime(long lastTime) {
+        this.lastTime = lastTime;
     }
 
     public Player registerNew(Player player) {
@@ -111,18 +118,18 @@ public class Dispatcher {
     public Map<String, Boolean> removeFromEveryGameServer(String id) {
         // удалить с других серверов если там есть что
         return gameServers.stream()
-                .filter(s -> game.existsOnServer(s, id))
-                .collect(Collectors.toMap(
-                            s -> s,
-                            s -> game.remove(s, id)));
+                .filter(server -> game.existsOnServer(server, id))
+                .collect(toMap(
+                            server -> server,
+                            server -> game.remove(server, id)));
     }
 
     public Map<String, Boolean> existsOnGameServers(String id) {
         // удалить с других серверов если там есть что
         return gameServers.stream()
-                .collect(Collectors.toMap(
-                        s -> s,
-                        s -> game.existsOnServer(s, id)));
+                .collect(toMap(
+                            server -> server,
+                            server -> game.existsOnServer(server, id)));
     }
 
     public Player registerOnServer(Player player, String score, String save) {
@@ -262,11 +269,58 @@ public class Dispatcher {
             return cached;
         }
 
-        List<PlayerScore> list = scores.getScores(day, getNow());
+        long now = getNow();
+
+        List<PlayerScore> list = scores.getScores(day, now);
         List<PlayerScore> result = prepareScoresForClient(list);
+
+        addStartHourScores(result, day, now);
 
         currentScores.put(day, result);
         return result;
+    }
+
+    private void addStartHourScores(List<PlayerScore> list, String day, long now) {
+        long hour = startOfHour(now);
+        long earliest = scores.getEarliestHourTime(hour);
+        if (earliest == 0) {
+            log.info("Dispatcher->updateScore: Does't have scores for time {}", new Date(hour).toString());
+            return;
+        }
+
+        List<PlayerScore> startHourScores = getPlayerScores(day, earliest);
+        Map<String, PlayerScore> scoresMap = startHourScores.stream()
+                .collect(toMap(score -> score.getId(), score -> score));
+
+        list.forEach(score -> {
+            if (scoresMap.containsKey(score.getId())) {
+                PlayerScore startHourScore = scoresMap.get(score.getId());
+                if (score.getScore() >= startHourScore.getScore()) {
+                    score.setLastHourScore(Integer.toString(score.getScore() - startHourScore.getScore()));
+                }
+            }
+        });
+    }
+
+    private List<PlayerScore> getPlayerScores(String day, long time) {
+        String key = DAY_TIME_FORMATTER.format(new Date(time));
+
+        if (currentScores.containsKey(key)) {
+            return currentScores.get(key);
+        }
+
+        List<PlayerScore> result = scores.getScores(day, time);
+        currentScores.put(key, result);
+        return result;
+    }
+
+    private long startOfHour(long now) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(now);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTimeInMillis();
     }
 
     // иначе (если юзать только lastTime) в момент, когда берем сегодня утром getScores
@@ -340,7 +394,7 @@ public class Dispatcher {
     public List<AbstractSettings> getGameSettings() {
         // TODO move it to .env settings
         return gameServers.stream()
-                .map(server -> new ICanCodeGameSettings(game.getGameSettings(server)))
+                .map(server -> new BattleCityGameSettings(game.getGameSettings(server)))
                 .collect(toList());
     }
 

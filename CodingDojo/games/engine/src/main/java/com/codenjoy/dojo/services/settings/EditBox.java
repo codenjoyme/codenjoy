@@ -46,7 +46,7 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
     @Override
     public T getValue() {
-        return (get() == null) ? def : get();
+        return getOrDefault();
     }
 
     @Override
@@ -152,5 +152,10 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     public void reset() {
         set(def);
         changesReacted();
+    }
+
+    @Override
+    protected T def() {
+        return def;
     }
 }

@@ -49,8 +49,10 @@ public class Scores {
     @Autowired protected ConfigProperties config;
 
     private static final String DAY_FORMAT = "yyyy-MM-dd";
+    private static final String DAY_TIME_FORMAT = "yyyy-MM-dd'T'HH";
     private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern(DAY_FORMAT);
     public static final SimpleDateFormat DAY_FORMATTER2 = new SimpleDateFormat(DAY_FORMAT);
+    private static final SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat(DAY_TIME_FORMAT);
 
     public Scores(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
@@ -225,6 +227,14 @@ public class Scores {
         return DAY_FORMATTER2.format(date);
     }
 
+    public long getEarliestHourTime(long time) {
+        Date date = new Date(time);
+
+        return pool.select("SELECT time FROM scores WHERE time LIKE ? ORDER BY time ASC LIMIT 1;",
+                new Object[]{ DAY_TIME_FORMATTER.format(date) + "%"},
+                rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
+    }
+
     public long getLastTimeOfPast(String day) {
         return pool.select("SELECT time FROM scores WHERE day = ? AND time LIKE ? ORDER BY time ASC LIMIT 1;",
                 new Object[]{day, day + "T" + config.getGame().getFinalTime() + "%"},
@@ -243,7 +253,7 @@ public class Scores {
         return last.before(date);
     }
 
-    public Date getDate(String day) {
+    public static Date getDate(String day) {
         try {
             return DAY_FORMATTER2.parse(day);
         } catch (ParseException e) {

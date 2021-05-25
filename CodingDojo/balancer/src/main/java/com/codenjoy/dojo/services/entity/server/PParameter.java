@@ -29,6 +29,7 @@ import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -58,6 +59,7 @@ public class PParameter {
                 .map(it -> (it == null) ? null : it.toString())
                 .collect(toList());
     }
+
 
     public Parameter build() {
         return new Parameter() {
@@ -120,7 +122,7 @@ public class PParameter {
             }
 
             @Override
-            public Parameter onChange(Consumer consumer) {
+            public Parameter onChange(BiConsumer consumer) {
                 return this; // do nothing
             }
 

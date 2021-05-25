@@ -70,10 +70,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
+import static com.codenjoy.dojo.services.AdminServiceTest.assertPlayersLastResponse;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static com.codenjoy.dojo.utils.JsonUtils.clean;
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.toList;
 import static org.fest.reflect.core.Reflection.field;
 import static org.junit.Assert.*;
@@ -531,6 +535,27 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void shouldSetLastResponse_whenCreatePlayer() {
+        // given
+        setupTimeService(this.timeService);
+
+        // when
+        createPlayer(VASYA, "game1", "room1");
+        createPlayer(PETYA, "game1", "room1");
+        createPlayer(KATYA, "game1", "room2");
+        createPlayer(OLIA, "game2", "room3");
+
+        // then
+        assertPlayersLastResponse(players,
+                "[vasya: 1000], [petya: 2000], [katya: 3000], [olia: 4000]");
+    }
+
+    public static void setupTimeService(TimeService timeService) {
+        AtomicLong time = new AtomicLong(1);
+        when(timeService.now()).thenAnswer(inv -> time.getAndIncrement() * 1000L);
+    }
+
+    @Test
     public void shouldSendAdditionalInfoToAllPlayers() {
         // given
         createPlayer(VASYA, "game", "room1");
@@ -550,23 +575,33 @@ public class PlayerServiceImplTest {
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
         assertEquals(
-                "{petya=PlayerData[" +
-                    "BoardSize:15, Board:'DCBA', Game:'game', " +
-                    "Score:234, Info:'', " +
-                    "Scores:'{petya=234}', " +
-                    "Coordinates:'{petya=HeroDataImpl(level=0, coordinate=[3,4], isMultiplayer=false, additionalData=null)}', " +
-                    "ReadableNames:'{petya=readable_petya}', " +
-                    "Group:[petya], " +
-                    "LastChatMessage:106558567], " +
-                "vasya=PlayerData[" +
-                    "BoardSize:15, Board:'ABCD', Game:'game', " +
-                    "Score:123, Info:'', " +
-                    "Scores:'{vasya=123}', " +
-                    "Coordinates:'{vasya=HeroDataImpl(level=0, coordinate=[1,2], isMultiplayer=false, additionalData=null)}', " +
-                    "ReadableNames:'{vasya=readable_vasya}', " +
-                    "Group:[vasya], " +
+                "{petya=PlayerData[BoardSize:15, \n" +
+                    "Board:'DCBA', \n" +
+                    "Game:'game', \n" +
+                    "Score:234, \n" +
+                    "Info:'', \n" +
+                    "Scores:'{petya=234}', \n" +
+                    "Coordinates:'{petya=HeroDataImpl(level=0, \n" +
+                        "coordinate=[3,4], \n" +
+                        "isMultiplayer=false, \n" +
+                        "additionalData=null)}', \n" +
+                    "ReadableNames:'{petya=readable_petya}', \n" +
+                    "Group:[petya], \n" +
+                    "LastChatMessage:106558567], \n" +
+                "vasya=PlayerData[BoardSize:15, \n" +
+                    "Board:'ABCD', \n" +
+                    "Game:'game', \n" +
+                    "Score:123, \n" +
+                    "Info:'', \n" +
+                    "Scores:'{vasya=123}', \n" +
+                    "Coordinates:'{vasya=HeroDataImpl(level=0, \n" +
+                        "coordinate=[1,2], \n" +
+                        "isMultiplayer=false, \n" +
+                        "additionalData=null)}', \n" +
+                    "ReadableNames:'{vasya=readable_vasya}', \n" +
+                    "Group:[vasya], \n" +
                     "LastChatMessage:111979568]}",
-                data.toString().replaceAll("\"", "'"));
+                clean(split(data, ", \n")));
     }
 
     @Test
@@ -2093,13 +2128,14 @@ public class PlayerServiceImplTest {
         // given
         Player player1 = createPlayer(VASYA);
         Player player2 = createPlayer(PETYA);
+        long now = Calendar.getInstance().getTimeInMillis();
 
         // when
         List<PlayerInfo> infos = new LinkedList<>(){{
-            add(new PlayerInfo(player1){{
+            add(new PlayerInfo(player1, now){{
                 setData("{\"some\":\"data1\"}");
             }});
-            add(new PlayerInfo(player2){{
+            add(new PlayerInfo(player2, now){{
                 setData("{\"some\":\"data2\"}");
             }});
         }};
@@ -2121,13 +2157,14 @@ public class PlayerServiceImplTest {
         // given
         Player player1 = createPlayer(VASYA);
         Player player2 = createPlayer(PETYA);
+        long now = Calendar.getInstance().getTimeInMillis();
 
         // when
         List<PlayerInfo> infos = new LinkedList<>(){{
-            add(new PlayerInfo(player1){{
+            add(new PlayerInfo(player1, now){{
                 setData("{\"some\":\"data1\"}");
             }});
-            add(new PlayerInfo(player2){{
+            add(new PlayerInfo(player2, now){{
                 setData(gameFields.getLast().getSave().toString()); // same
             }});
         }};
@@ -2145,19 +2182,20 @@ public class PlayerServiceImplTest {
         Player player2 = createPlayer(PETYA);
         Player player3 = createPlayer(KATYA);
         Player player4 = createPlayer(OLIA);
+        long now = Calendar.getInstance().getTimeInMillis();
 
         // when
         List<PlayerInfo> infos = new LinkedList<>(){{
-            add(new PlayerInfo(player1){{
+            add(new PlayerInfo(player1, now){{
                 setData("{\"some\":\"data1\"}");
             }});
-            add(new PlayerInfo(player2){{
+            add(new PlayerInfo(player2, now){{
                 setData(""); // empty
             }});
-            add(new PlayerInfo(player3){{
+            add(new PlayerInfo(player3, now){{
                 setData(null); // null
             }});
-            add(new PlayerInfo(player4){{
+            add(new PlayerInfo(player4, now){{
                 setData("null"); // "null"
             }});
         }};

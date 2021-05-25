@@ -30,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.codenjoy.dojo.utils.TestUtils.split;
+
 @Slf4j
 public class Profiler {
 
@@ -77,7 +79,7 @@ public class Profiler {
 
     @Override
     public String toString() {
-        return phasesAll.toString().replace("), ", "), \n");
+        return split(phasesAll, "), \n");
     }
 
     public void print() {

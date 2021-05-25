@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.sampletext.services.GameSettings.Keys.QUESTIONS;
+import static com.codenjoy.dojo.utils.JsonUtils.clean;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -70,7 +71,7 @@ public class GameTest {
     }
 
     private void thenHistory(String expected) {
-        assertEquals(expected, player.history().toString().replace('\"', '\''));
+        assertEquals(expected, clean(player.history().toString()));
     }
 
     @Test

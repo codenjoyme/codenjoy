@@ -93,7 +93,7 @@ public class RoomService {
     }
 
     public Settings settings(String room) {
-        return (Settings) state(room)
+        return state(room)
                 .map(RoomState::getType)
                 .map(GameType::getSettings)
                 .orElse(null);

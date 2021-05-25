@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.settings;
  * #L%
  */
 
+import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import org.json.JSONObject;
@@ -53,6 +54,7 @@ public interface SettingsReader<T extends SettingsReader> {
         return Key.keyToName(values, value)
                 .or(() -> RoundSettings.keyToName(RoundSettings.allRoundsKeys(), value))
                 .or(() -> SemifinalSettings.keyToName(SemifinalSettings.allSemifinalKeys(), value))
+                .or(() -> InactivitySettings.keyToName(InactivitySettings.allInactivityKeys(), value))
                 .orElseThrow(() -> new IllegalArgumentException("Parameter not found: " + value));
     }
 
@@ -60,6 +62,7 @@ public interface SettingsReader<T extends SettingsReader> {
         return Key.nameToKey(values, value)
                 .or(() -> RoundSettings.nameToKey(RoundSettings.allRoundsKeys(), value))
                 .or(() -> SemifinalSettings.nameToKey(SemifinalSettings.allSemifinalKeys(), value))
+                .or(() -> InactivitySettings.nameToKey(InactivitySettings.allInactivityKeys(), value))
                 .orElseThrow(() -> new IllegalArgumentException("Parameter not found: " + value));
     }
 

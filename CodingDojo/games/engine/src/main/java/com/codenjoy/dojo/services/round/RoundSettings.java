@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.round;
  */
 
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
@@ -34,6 +35,8 @@ import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.services.round.RoundSettingsImpl.ROUNDS;
 
 public interface RoundSettings<T extends SettingsReader> extends SettingsReader<T> {
+
+    String ROUNDS = "[Rounds]";
 
     public enum Keys implements SettingsReader.Key {
 
@@ -59,6 +62,23 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
 
     static boolean isRounds(List<Key> values) {
         return values.contains(ROUNDS_ENABLED);
+    }
+
+    static boolean is(Settings settings) {
+        if (settings == null) return false;
+
+        return settings instanceof RoundSettings
+                || allRoundsKeys().stream()
+                        .map(Key::key)
+                        .allMatch(settings::hasParameter);
+    }
+
+    static RoundSettingsImpl get(Settings settings) {
+        if (RoundSettings.is(settings)) {
+            return new RoundSettingsImpl(settings);
+        }
+
+        return new RoundSettingsImpl(null);
     }
 
     static List<SettingsReader.Key> allRoundsKeys() {
@@ -135,7 +155,7 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
     // update methods
 
     // TODO test me
-    default List<Parameter> getRoundsParams() {
+    default List<Parameter> getRoundParams() {
         if (getParameters().isEmpty()) {
             return Arrays.asList();
         }
@@ -158,6 +178,15 @@ public interface RoundSettings<T extends SettingsReader> extends SettingsReader<
         setTimeBeforeStart(input.getTimeBeforeStart());
         setRoundsPerMatch(input.getRoundsPerMatch());
         setMinTicksForWin(input.getMinTicksForWin());
+        return this;
+    }
+
+    default RoundSettings updateRound(Settings input) {
+        if (input != null) {
+            allRoundsKeys().stream()
+                    .map(Key::key)
+                    .forEach(key -> getParameter(key).update(input.getParameter(key).getValue()));
+        }
         return this;
     }
 

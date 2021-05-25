@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -59,6 +59,7 @@ public class Player implements ScreenRecipient, Closeable {
     private GameType gameType;
     private InformationCollector eventListener;
     private Closeable ai;
+    private long lastResponse;
 
     public Player(String id) {
         this.id = id;
@@ -108,7 +109,7 @@ public class Player implements ScreenRecipient, Closeable {
     public int hashCode() {
         return (id + code).hashCode();
     }
-    
+
     public String getNotNullReadableName() {
         return StringUtils.isEmpty(readableName) ? id : readableName;
     }
@@ -158,8 +159,15 @@ public class Player implements ScreenRecipient, Closeable {
     }
 
     public void dropPassword() {
-        this.password = null;
-        this.passwordConfirmation = null;
+        password = null;
+        passwordConfirmation = null;
     }
 
+    public long getLastResponse() {
+        return lastResponse;
+    }
+
+    public void setLastResponse(long time) {
+        lastResponse = time;
+    }
 }

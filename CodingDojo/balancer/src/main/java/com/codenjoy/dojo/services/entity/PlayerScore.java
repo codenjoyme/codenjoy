@@ -36,6 +36,7 @@ public class PlayerScore {
     private String time;
     private String server;
     private boolean winner;
+    private String lastHourScore;
 
     public PlayerScore() {
         // do nothing
@@ -47,6 +48,7 @@ public class PlayerScore {
         this.day = day;
         this.time = time;
         this.winner = isWinner;
+        this.lastHourScore = "-";
     }
 
     @Override
@@ -55,6 +57,7 @@ public class PlayerScore {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", score=" + score +
+                ", lastHourScore=" + lastHourScore +
                 ", day='" + day + '\'' +
                 ", time='" + time + '\'' +
                 ", server='" + server + '\'' +

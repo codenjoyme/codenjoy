@@ -21,19 +21,34 @@ import styles from '../common/styles.module.css';
 
 const { formWrap, title, submit, backgroundSection, systemError, checkBoxText } = styles;
 
+// errors
+const errorNeededValue = "Обов'язкове поле!";
+const errorWrongFormat = 'Невірний формат';
+const errorToSmall = 'Замало символів!';
+const errorToBig = 'Забагато символів!';
+const errorEnglishLetters = 'Тільки англійські літери!';
+const errorPasswordNotEqual = 'Паролі мають співпадати!';
+
 const requiredShortString = Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required');
+    .min(2, errorToSmall)
+    .max(50, errorToBig)
+    .required(errorNeededValue);
 const optionalString = Yup.string().nullable(true);
+
+const requiredEnglishShortString = requiredShortString
+    .matches(/^[a-zA-Z -]+$/, errorEnglishLetters);
+
+const requiredPhoneString = requiredShortString
+    .matches(/^\d{10}$/, errorWrongFormat);
+
 
 const RegisterSchema = Yup.object().shape({
     password:  requiredShortString,
-    phone:     requiredShortString,
+    phone:     requiredPhoneString,
     updates:   Yup.boolean().oneOf([ true ]),
-    firstName: requiredShortString,
-    lastName:  requiredShortString,
-    city:      requiredShortString,
+    firstName: requiredEnglishShortString,
+    lastName:  requiredEnglishShortString,
+    city:      requiredEnglishShortString,
     skills:    requiredShortString,
     others:    Yup.string().when('skills', {
         is:        'other',
@@ -43,11 +58,11 @@ const RegisterSchema = Yup.object().shape({
     terms: Yup.boolean().oneOf([ true ]),
 
     email: Yup.string()
-        .email('Invalid email')
-        .required('Required'),
+        .email(errorWrongFormat)
+        .required(errorNeededValue),
     passwordConfirm: Yup.string()
-        .oneOf([ Yup.ref('password'), null ], 'Passwords should be equal')
-        .required('Password confirm is required'),
+        .oneOf([ Yup.ref('password'), null ], errorPasswordNotEqual)
+        .required(errorNeededValue),
 });
 
 const OTHER_VALUE = 'other';
@@ -172,10 +187,6 @@ class LoginForm extends Component {
                                 <Field
                                     type='email'
                                     name='email'
-                                    errors={ _.get(
-                                        registerErrors,
-                                        'errorMsg',
-                                    ) }
                                     placeholder='Електронна пошта*'
                                     component={ CustomInputComponent }
                                 />
@@ -184,10 +195,6 @@ class LoginForm extends Component {
                                       name='phone'
                                       placeholder='Номер телефону*'
                                       component={ PhoneInput }
-                                      errors={ _.get(
-                                          registerErrors,
-                                          'errorMsg',
-                                      ) }
                                   />
                                 <Field
                                     type='password'

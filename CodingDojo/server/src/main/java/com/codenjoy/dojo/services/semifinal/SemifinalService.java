@@ -66,7 +66,7 @@ public class SemifinalService implements Tickable {
             Settings settings = state.getType().getSettings();
 
             // TODO не все игры могут это реализовать, а надо чтобы все
-            if (!isSemifinalAllowed(settings)) continue;
+            if (!SemifinalSettings.is(settings)) continue;
             SemifinalSettings reader = (SemifinalSettings)settings;
 
             // если режим не включен - выходим
@@ -127,22 +127,9 @@ public class SemifinalService implements Tickable {
         return Comparator.comparingInt(game -> (Integer)game.getPlayer().getScore());
     }
 
-    public boolean isSemifinalAllowed(Settings settings) {
-        return settings instanceof SemifinalSettings;
-    }
-
-    public boolean isRoundAllowed(Settings settings) {
-        return settings instanceof RoundSettings;
-    }
-
     public SemifinalSettingsImpl semifinalSettings(String room) {
         Settings settings = roomService.settings(room);
-        if (isSemifinalAllowed(settings)) {
-            return new SemifinalSettingsImpl((SemifinalSettings) settings);
-        } else {
-            // на админке будет пусто в этой области
-            return new SemifinalSettingsImpl(null);
-        }
+        return SemifinalSettings.get(settings);
     }
 
     public SemifinalStatus getSemifinalStatus(String room) {
@@ -150,16 +137,6 @@ public class SemifinalService implements Tickable {
         SemifinalSettings settings = semifinalSettings(room);
         int countPlayers = playerGames.getPlayersByRoom(room).size();
         return new SemifinalStatus(current, countPlayers, settings);
-    }
-
-    public RoundSettingsImpl roundSettings(String room) { // TODO перенести бы их куда-то
-        Settings settings = roomService.settings(room);
-        if (isRoundAllowed(settings)) {
-            return new RoundSettingsImpl((RoundSettings) settings);
-        } else {
-            // на админке будет пусто в этой области
-            return new RoundSettingsImpl(null);
-        }
     }
 
     public int getTime(String room) {

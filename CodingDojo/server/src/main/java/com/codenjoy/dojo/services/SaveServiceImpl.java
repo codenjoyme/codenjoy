@@ -153,9 +153,11 @@ public class SaveServiceImpl implements SaveService {
         Map<String, Registration.User> users = registration.getUsers(ids).stream()
                 .collect(toMap(user -> user.getId(), user -> user));
 
+        long now = time.now();
+
         Map<String, PlayerInfo> map = new HashMap<>();
         for (Player player : active) {
-            PlayerInfo info = new PlayerInfo(player);
+            PlayerInfo info = new PlayerInfo(player, now);
             setDataFromRegistration(info, users, player.getId());
             setSaveFromField(info, playerGames.get(player.getId()));
 
@@ -171,7 +173,7 @@ public class SaveServiceImpl implements SaveService {
                 info.setSaved(true);
             } else {
                 PlayerSave save = saver.loadGame(id);
-                PlayerInfo info = new PlayerInfo(save, null, null);
+                PlayerInfo info = new PlayerInfo(save, null, null, now);
                 setDataFromRegistration(info, users, id);
 
                 map.put(id, info);

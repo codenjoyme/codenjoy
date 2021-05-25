@@ -57,6 +57,7 @@ public class PlayerServiceImplIntegrationTest {
     private ConfigProperties config;
     private ActionLogger actionLogger;
     private AutoSaver autoSaver;
+    private TimeService time;
     private Chat chat;
     private GameSaver saver;
     private GameService gameService;
@@ -95,6 +96,9 @@ public class PlayerServiceImplIntegrationTest {
 
                 PlayerServiceImplIntegrationTest.this.chat
                         = this.chat = mock(Chat.class);
+
+                PlayerServiceImplIntegrationTest.this.time
+                        = this.time = mock(TimeService.class);
 
                 PlayerServiceImplIntegrationTest.this.actionLogger
                         = this.actionLogger = mock(ActionLogger.class);
@@ -142,6 +146,7 @@ public class PlayerServiceImplIntegrationTest {
         when(roomService.isOpened(anyString())).thenReturn(true);
 
         when(chat.getLastMessageIds()).thenReturn(new HashMap<>());
+        when(time.now()).thenReturn(123L);
 
         // первый плеер зарегался (у него сейвов нет)
         when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);

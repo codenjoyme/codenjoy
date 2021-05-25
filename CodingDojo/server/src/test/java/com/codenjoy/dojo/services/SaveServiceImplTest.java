@@ -38,8 +38,9 @@ import org.mockito.stubbing.Stubber;
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PlayerSave.NULL;
+import static com.codenjoy.dojo.services.PlayerServiceImplTest.setupTimeService;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -50,7 +51,7 @@ public class SaveServiceImplTest {
     private PlayerService playerService;
     private PlayerGames playerGames;
     private GameSaver saver;
-    private TimeService time;
+    private TimeService timeService;
 
     private List<Registration.User> users;
     private List<Player> players;
@@ -64,7 +65,7 @@ public class SaveServiceImplTest {
             this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
-            this.time = SaveServiceImplTest.this.time = spy(TimeService.class);
+            this.time = SaveServiceImplTest.this.timeService = spy(TimeService.class);
         }};
 
         users = new LinkedList<>();
@@ -104,6 +105,8 @@ public class SaveServiceImplTest {
         when(player.getEmail()).thenReturn(null);        // берется из registration
         when(player.getReadableName()).thenReturn(null); // берется из registration
         when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
+        long now = timeService.now();
+        when(player.getLastResponse()).thenReturn(now);
         when(playerService.get(id)).thenReturn(player);
         players.add(player);
 
@@ -266,6 +269,8 @@ public class SaveServiceImplTest {
     @Test
     public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName() {
         // given
+        setupTimeService(timeService);
+
         Player activeSavedPlayer = createPlayer("activeSaved"); // check sorting order (activeSaved > active)
         Player activePlayer = createPlayer("active");
         scores(activeSavedPlayer, 10);
@@ -291,55 +296,75 @@ public class SaveServiceImplTest {
         List<PlayerInfo> games = saveService.getSaves();
 
         // then
-        assertEquals(3, games.size());
+        assertPlayerInfo(games,
+                "[{\n" +
+                "  'active':true,\n" +
+                "  'aiPlayer':true,\n" +
+                "  'callbackUrl':'http://active:1234',\n" +
+                "  'code':'code_active',\n" +
+                "  'data':'{\\'data\\':2}',\n" +
+                "  'email':'active@email.com',\n" +
+                "  'game':'game room',\n" +
+                "  'gameOnly':'game room',\n" +
+                "  'hidden':false,\n" +
+                "  'id':'active',\n" +
+                "  'lastResponse':2000,\n" +
+                "  'notNullReadableName':'readable_active',\n" +
+                "  'readableName':'readable_active',\n" +
+                "  'room':'room',\n" +
+                "  'saved':false,\n" +
+                "  'score':11,\n" +
+                "  'ticksInactive':1\n" +
+                "}, {\n" +
+                "  'active':true,\n" +
+                "  'aiPlayer':true,\n" +
+                "  'callbackUrl':'http://activeSaved:1234',\n" +
+                "  'code':'code_activeSaved',\n" +
+                "  'data':'{\\'data\\':1}',\n" +
+                "  'email':'activeSaved@email.com',\n" +
+                "  'game':'game room',\n" +
+                "  'gameOnly':'game room',\n" +
+                "  'hidden':false,\n" +
+                "  'id':'activeSaved',\n" +
+                "  'lastResponse':1000,\n" +
+                "  'notNullReadableName':'readable_activeSaved',\n" +
+                "  'readableName':'readable_activeSaved',\n" +
+                "  'room':'room',\n" +
+                "  'saved':true,\n" +
+                "  'score':10,\n" +
+                "  'ticksInactive':2\n" +
+                "}, {\n" +
+                "  'active':false,\n" +
+                "  'aiPlayer':false,\n" +
+                "  'callbackUrl':'http://saved:1234',\n" +
+                "  'code':'code_saved',\n" +
+                "  'email':'saved@email.com',\n" +
+                "  'game':'saved game room',\n" +
+                "  'gameOnly':'saved game room',\n" +
+                "  'hidden':false,\n" +
+                "  'id':'saved',\n" +
+                "  'lastResponse':3000,\n" +
+                "  'notNullReadableName':'readable_saved',\n" +
+                "  'readableName':'readable_saved',\n" +
+                "  'room':'room',\n" +
+                "  'saved':true,\n" +
+                "  'score':15,\n" +
+                "  'ticksInactive':0\n" +
+                "}]");
+    }
 
-        PlayerInfo active = games.get(0);
-        PlayerInfo activeSaved = games.get(1);
-        PlayerInfo saved = games.get(2);
-
-        assertEquals("active", active.getId());
-        assertEquals("code_active", active.getCode());
-        assertEquals("readable_active", active.getReadableName());
-        assertEquals("active@email.com", active.getEmail());
-        assertEquals("http://active:1234", active.getCallbackUrl());
-        assertEquals("game room", active.getGame());
-        assertEquals("{\"data\":2}", active.getData());
-        assertEquals(11, active.getScore());
-        assertEquals("room", active.getRoom());
-        assertEquals(true, active.isAiPlayer());
-        assertTrue(active.isActive());
-        assertFalse(active.isSaved());
-
-        assertEquals("activeSaved", activeSaved.getId());
-        assertEquals("code_activeSaved", activeSaved.getCode());
-        assertEquals("readable_activeSaved", activeSaved.getReadableName());
-        assertEquals("activeSaved@email.com", activeSaved.getEmail());
-        assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
-        assertEquals("game room", activeSaved.getGame());
-        assertEquals("{\"data\":1}", activeSaved.getData());
-        assertEquals(10, activeSaved.getScore());
-        assertEquals("room", activeSaved.getRoom());
-        assertEquals(true, activeSaved.isAiPlayer());
-        assertTrue(activeSaved.isActive());
-        assertTrue(activeSaved.isSaved());
-
-        assertEquals("saved", saved.getId());
-        assertEquals("code_saved", saved.getCode());
-        assertEquals("readable_saved", saved.getReadableName());
-        assertEquals("saved@email.com", saved.getEmail());
-        assertEquals("http://saved:1234", saved.getCallbackUrl());
-        assertEquals("saved game room", saved.getGame());
-        assertNull(saved.getData());
-        assertEquals(15, saved.getScore());
-        assertEquals("room", saved.getRoom());
-        assertEquals(false, saved.isAiPlayer());
-        assertFalse(saved.isActive());
-        assertTrue(saved.isSaved());
+    private void assertPlayerInfo(List<PlayerInfo> games, String expected) {
+        assertEquals(expected,
+                games.stream()
+                        .map(info -> JsonUtils.prettyPrint(info))
+                        .collect(toList()).toString());
     }
 
     @Test
     public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName_byRoomName() {
         // given
+        setupTimeService(timeService);
+
         Player activeSavedPlayer = createPlayer("activeSaved", "room"); // check sorting order (activeSaved > active)
         Player activePlayer = createPlayer("active", "room");
         Player activeSavedPlayerInOtherRoom = createPlayer("activeSavedInOtherRoom", "otherRoom");
@@ -384,99 +409,123 @@ public class SaveServiceImplTest {
         List<PlayerInfo> games = saveService.getSaves("room");
 
         // then
-        assertEquals(3, games.size());
-
-        PlayerInfo active = games.get(0);
-        PlayerInfo activeSaved = games.get(1);
-        PlayerInfo saved = games.get(2);
-
-        assertEquals("active", active.getId());
-        assertEquals("code_active", active.getCode());
-        assertEquals("readable_active", active.getReadableName());
-        assertEquals("active@email.com", active.getEmail());
-        assertEquals("http://active:1234", active.getCallbackUrl());
-        assertEquals("game room", active.getGame());
-        assertEquals("{\"data\":2}", active.getData());
-        assertEquals(11, active.getScore());
-        assertEquals("room", active.getRoom());
-        assertEquals(true, active.isAiPlayer());
-        assertTrue(active.isActive());
-        assertFalse(active.isSaved());
-
-        assertEquals("activeSaved", activeSaved.getId());
-        assertEquals("code_activeSaved", activeSaved.getCode());
-        assertEquals("readable_activeSaved", activeSaved.getReadableName());
-        assertEquals("activeSaved@email.com", activeSaved.getEmail());
-        assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
-        assertEquals("game room", activeSaved.getGame());
-        assertEquals("{\"data\":1}", activeSaved.getData());
-        assertEquals(10, activeSaved.getScore());
-        assertEquals("room", activeSaved.getRoom());
-        assertEquals(true, activeSaved.isAiPlayer());
-        assertTrue(activeSaved.isActive());
-        assertTrue(activeSaved.isSaved());
-
-        assertEquals("saved", saved.getId());
-        assertEquals("code_saved", saved.getCode());
-        assertEquals("readable_saved", saved.getReadableName());
-        assertEquals("saved@email.com", saved.getEmail());
-        assertEquals("http://saved:1234", saved.getCallbackUrl());
-        assertEquals("saved game room", saved.getGame());
-        assertNull(saved.getData());
-        assertEquals(15, saved.getScore());
-        assertEquals("room", saved.getRoom());
-        assertEquals(false, saved.isAiPlayer());
-        assertFalse(saved.isActive());
-        assertTrue(saved.isSaved());
+        // then
+        assertPlayerInfo(games,
+                "[{\n" +
+                "  'active':true,\n" +
+                "  'aiPlayer':true,\n" +
+                "  'callbackUrl':'http://active:1234',\n" +
+                "  'code':'code_active',\n" +
+                "  'data':'{\\'data\\':2}',\n" +
+                "  'email':'active@email.com',\n" +
+                "  'game':'game room',\n" +
+                "  'gameOnly':'game room',\n" +
+                "  'hidden':false,\n" +
+                "  'id':'active',\n" +
+                "  'lastResponse':2000,\n" +
+                "  'notNullReadableName':'readable_active',\n" +
+                "  'readableName':'readable_active',\n" +
+                "  'room':'room',\n" +
+                "  'saved':false,\n" +
+                "  'score':11,\n" +
+                "  'ticksInactive':3\n" +
+                "}, {\n" +
+                "  'active':true,\n" +
+                "  'aiPlayer':true,\n" +
+                "  'callbackUrl':'http://activeSaved:1234',\n" +
+                "  'code':'code_activeSaved',\n" +
+                "  'data':'{\\'data\\':1}',\n" +
+                "  'email':'activeSaved@email.com',\n" +
+                "  'game':'game room',\n" +
+                "  'gameOnly':'game room',\n" +
+                "  'hidden':false,\n" +
+                "  'id':'activeSaved',\n" +
+                "  'lastResponse':1000,\n" +
+                "  'notNullReadableName':'readable_activeSaved',\n" +
+                "  'readableName':'readable_activeSaved',\n" +
+                "  'room':'room',\n" +
+                "  'saved':true,\n" +
+                "  'score':10,\n" +
+                "  'ticksInactive':4\n" +
+                "}, {\n" +
+                "  'active':false,\n" +
+                "  'aiPlayer':false,\n" +
+                "  'callbackUrl':'http://saved:1234',\n" +
+                "  'code':'code_saved',\n" +
+                "  'email':'saved@email.com',\n" +
+                "  'game':'saved game room',\n" +
+                "  'gameOnly':'saved game room',\n" +
+                "  'hidden':false,\n" +
+                "  'id':'saved',\n" +
+                "  'lastResponse':5000,\n" +
+                "  'notNullReadableName':'readable_saved',\n" +
+                "  'readableName':'readable_saved',\n" +
+                "  'room':'room',\n" +
+                "  'saved':true,\n" +
+                "  'score':15,\n" +
+                "  'ticksInactive':0\n" +
+                "}]");
 
         // when
         games = saveService.getSaves("otherRoom");
 
         // then
-        assertEquals(3, games.size());
-
-        active = games.get(0);
-        activeSaved = games.get(1);
-        saved = games.get(2);
-
-        assertEquals("activeInOtherRoom", active.getId());
-        assertEquals("code_activeInOtherRoom", active.getCode());
-        assertEquals("readable_activeInOtherRoom", active.getReadableName());
-        assertEquals("activeInOtherRoom@email.com", active.getEmail());
-        assertEquals("http://activeInOtherRoom:1234", active.getCallbackUrl());
-        assertEquals("game otherRoom", active.getGame());
-        assertEquals("{\"data\":4}", active.getData());
-        assertEquals(13, active.getScore());
-        assertEquals("otherRoom", active.getRoom());
-        assertEquals(true, active.isAiPlayer());
-        assertTrue(active.isActive());
-        assertFalse(active.isSaved());
-
-        assertEquals("activeSavedInOtherRoom", activeSaved.getId());
-        assertEquals("code_activeSavedInOtherRoom", activeSaved.getCode());
-        assertEquals("readable_activeSavedInOtherRoom", activeSaved.getReadableName());
-        assertEquals("activeSavedInOtherRoom@email.com", activeSaved.getEmail());
-        assertEquals("http://activeSavedInOtherRoom:1234", activeSaved.getCallbackUrl());
-        assertEquals("game otherRoom", activeSaved.getGame());
-        assertEquals("{\"data\":3}", activeSaved.getData());
-        assertEquals(12, activeSaved.getScore());
-        assertEquals("otherRoom", activeSaved.getRoom());
-        assertEquals(true, activeSaved.isAiPlayer());
-        assertTrue(activeSaved.isActive());
-        assertTrue(activeSaved.isSaved());
-
-        assertEquals("savedInOtherRoom", saved.getId());
-        assertEquals("code_savedInOtherRoom", saved.getCode());
-        assertEquals("readable_savedInOtherRoom", saved.getReadableName());
-        assertEquals("savedInOtherRoom@email.com", saved.getEmail());
-        assertEquals("http://savedInOtherRoom:2345", saved.getCallbackUrl());
-        assertEquals("saved game otherRoom", saved.getGame());
-        assertNull(saved.getData());
-        assertEquals(26, saved.getScore());
-        assertEquals("otherRoom", saved.getRoom());
-        assertEquals(false, saved.isAiPlayer());
-        assertFalse(saved.isActive());
-        assertTrue(saved.isSaved());
+        // then
+        assertPlayerInfo(games,
+                "[{\n" +
+                "  'active':true,\n" +
+                "  'aiPlayer':true,\n" +
+                "  'callbackUrl':'http://activeInOtherRoom:1234',\n" +
+                "  'code':'code_activeInOtherRoom',\n" +
+                "  'data':'{\\'data\\':4}',\n" +
+                "  'email':'activeInOtherRoom@email.com',\n" +
+                "  'game':'game otherRoom',\n" +
+                "  'gameOnly':'game otherRoom',\n" +
+                "  'hidden':false,\n" +
+                "  'id':'activeInOtherRoom',\n" +
+                "  'lastResponse':4000,\n" +
+                "  'notNullReadableName':'readable_activeInOtherRoom',\n" +
+                "  'readableName':'readable_activeInOtherRoom',\n" +
+                "  'room':'otherRoom',\n" +
+                "  'saved':false,\n" +
+                "  'score':13,\n" +
+                "  'ticksInactive':2\n" +
+                "}, {\n" +
+                "  'active':true,\n" +
+                "  'aiPlayer':true,\n" +
+                "  'callbackUrl':'http://activeSavedInOtherRoom:1234',\n" +
+                "  'code':'code_activeSavedInOtherRoom',\n" +
+                "  'data':'{\\'data\\':3}',\n" +
+                "  'email':'activeSavedInOtherRoom@email.com',\n" +
+                "  'game':'game otherRoom',\n" +
+                "  'gameOnly':'game otherRoom',\n" +
+                "  'hidden':false,\n" +
+                "  'id':'activeSavedInOtherRoom',\n" +
+                "  'lastResponse':3000,\n" +
+                "  'notNullReadableName':'readable_activeSavedInOtherRoom',\n" +
+                "  'readableName':'readable_activeSavedInOtherRoom',\n" +
+                "  'room':'otherRoom',\n" +
+                "  'saved':true,\n" +
+                "  'score':12,\n" +
+                "  'ticksInactive':3\n" +
+                "}, {\n" +
+                "  'active':false,\n" +
+                "  'aiPlayer':false,\n" +
+                "  'callbackUrl':'http://savedInOtherRoom:2345',\n" +
+                "  'code':'code_savedInOtherRoom',\n" +
+                "  'email':'savedInOtherRoom@email.com',\n" +
+                "  'game':'saved game otherRoom',\n" +
+                "  'gameOnly':'saved game otherRoom',\n" +
+                "  'hidden':false,\n" +
+                "  'id':'savedInOtherRoom',\n" +
+                "  'lastResponse':6000,\n" +
+                "  'notNullReadableName':'readable_savedInOtherRoom',\n" +
+                "  'readableName':'readable_savedInOtherRoom',\n" +
+                "  'room':'otherRoom',\n" +
+                "  'saved':true,\n" +
+                "  'score':26,\n" +
+                "  'ticksInactive':0\n" +
+                "}]");
     }
 
     private void createUser(String id) {

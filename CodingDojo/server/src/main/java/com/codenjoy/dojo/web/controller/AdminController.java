@@ -26,13 +26,18 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.incativity.InactivitySettings;
+import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.round.RoundSettings;
+import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
+import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -66,6 +71,7 @@ public class AdminController {
     public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
 
     private final TimerService timerService;
+    private final TimeService timeService;
     private final PlayerService playerService;
     private final SaveService saveService;
     private final GameService gameService;
@@ -77,6 +83,7 @@ public class AdminController {
     private final SemifinalService semifinal;
     private final RoomService roomService;
 
+    private final AdminService adminService;
 
     // TODO ROOM а этот метод вообще зачем?
     @GetMapping(params = {"player", "data"})
@@ -338,7 +345,8 @@ public class AdminController {
 
         if (settings.getSemifinal() != null) {
             try {
-                semifinal.semifinalSettings(room).update(settings.getSemifinal());
+                semifinalSettings(room)
+                        .update(settings.getSemifinal());
                 semifinal.clean(room);
             } catch (Exception e) {
                 // do nothing
@@ -347,7 +355,16 @@ public class AdminController {
 
         if (settings.getRounds() != null) {
             try {
-                semifinal.roundSettings(room).update(settings.getRounds());
+                roundSettings(room)
+                        .update(settings.getRounds());
+            } catch (Exception e) {
+                // do nothing
+            }
+        }
+
+        if (settings.getInactivity() != null) {
+            try {
+                adminService.updateInactivity(room, settings.getInactivity());
             } catch (Exception e) {
                 // do nothing
             }
@@ -388,6 +405,14 @@ public class AdminController {
 
         request.setAttribute("room", room);
         return getAdmin(room);
+    }
+
+    public SemifinalSettingsImpl semifinalSettings(String room) {
+        return semifinal.semifinalSettings(room);
+    }
+
+    private RoundSettingsImpl roundSettings(String room) {
+        return RoundSettings.get(roomService.settings(room));
     }
 
     private void setEnable(List<Parameter> games) {
@@ -559,9 +584,11 @@ public class AdminController {
         AdminSettings result = new AdminSettings();
 
         // сохраняем для отображения semifinal settings pojo
-        result.setSemifinal(semifinal.semifinalSettings(room));
+        result.setSemifinal(semifinalSettings(room));
         // сохраняем для отображения round settings pojo
-        result.setRounds(semifinal.roundSettings(room));
+        result.setRounds(roundSettings(room));
+        // сохраняем для отображения inactivity settings pojo
+        result.setInactivity(adminService.inactivitySettings(room));
         // удаляем semifinal и rounds параметры
         removeSemifinalAndRounds(parameters);
         // а теперь сохраняем отдельно ключики оставшихся параметров

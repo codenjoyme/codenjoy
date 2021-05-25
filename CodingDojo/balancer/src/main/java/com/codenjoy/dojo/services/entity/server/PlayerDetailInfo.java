@@ -22,10 +22,7 @@ package com.codenjoy.dojo.services.entity.server;
  * #L%
  */
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -36,8 +33,8 @@ public class PlayerDetailInfo {
     private String id;
     private String readableName;
     private String callbackUrl;
-    private String gameType;
-    private String roomName;
+    private String game;
+    private String room;
     private String score;
     private String save;
     private User registration;
@@ -48,7 +45,8 @@ public class PlayerDetailInfo {
                 "id='" + id + '\'' +
                 ", readableName='" + readableName + '\'' +
                 ", callbackUrl='" + callbackUrl + '\'' +
-                ", gameType='" + gameType + '\'' +
+                ", gameType='" + game + '\'' +
+                ", roomName='" + room + '\'' +
                 ", score='" + score + '\'' +
                 ", save='" + save + '\'' +
                 ", registration=" + registration +

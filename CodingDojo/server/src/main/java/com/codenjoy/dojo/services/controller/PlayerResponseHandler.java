@@ -32,17 +32,21 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
 
+import java.util.function.Supplier;
+
 @Slf4j
 @AllArgsConstructor
 public class PlayerResponseHandler implements ResponseHandler {
 
     private Player player;
     private Joystick joystick;
+    private Supplier<Long> time;
 
     @Override
     public void onResponse(PlayerSocket socket, String message) {
         log.debug("Received response: {} from player: {}", message, player.getId());
         new PlayerCommand(joystick, message).execute();
+        player.setLastResponse(time.get());
     }
 
     @Override

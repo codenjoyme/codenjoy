@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.incativity.InactivitySettings;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.google.common.collect.Multimap;
 import lombok.experimental.FieldNameConstants;
@@ -60,6 +62,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     @Autowired
     protected RoomService roomService;
+
+    @Autowired
+    protected TimeService timeService;
 
     public void onAdd(Consumer<PlayerGame> consumer) {
         this.onAdd = consumer;
@@ -278,11 +283,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
         for (PlayerGame playerGame : active) {
+            Player player = playerGame.getPlayer();
             Game game = playerGame.getGame();
             String room = playerGame.getRoom();
 
             GameType gameType = playerGame.getGameType();
-            MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
+            Settings settings = gameType.getSettings();
+            MultiplayerType type = gameType.getMultiplayerType(settings);
             if (game.isGameOver()) {
                 quiet(() -> {
                     JSONObject level = game.getSave();
@@ -304,6 +311,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                     game.newGame();
                 });
             }
+            tryKickInactivePlayers(settings, player);
         }
 
         // собираем все уникальные борды
@@ -320,6 +328,21 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
+    }
+
+    private void tryKickInactivePlayers(Settings settings, Player player) {
+        if (!InactivitySettings.is(settings)) return;
+
+        InactivitySettings inactivity = InactivitySettings.get(settings);
+        if (!inactivity.isKickEnabled()) return;
+
+        int timeout = inactivity.getInactivityTimeout();
+
+        long now = timeService.now();
+        long delta = now - player.getLastResponse();
+        if (delta >= 1000L * timeout) {
+            quiet(() -> removeCurrent(player));
+        }
     }
 
     // перевод текущего игрока в новую комнату

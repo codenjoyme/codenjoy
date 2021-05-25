@@ -29,7 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -107,7 +107,7 @@ public final class NullParameter<T> implements Parameter<T> {
     }
 
     @Override
-    public Parameter<T> onChange(Consumer<T> consumer) {
+    public Parameter<T> onChange(BiConsumer<T, T> consumer) {
         warn();
         return INSTANCE.get();
     }

@@ -32,7 +32,7 @@ import static com.codenjoy.dojo.services.settings.SomeGameSettings.Keys.*;
 
 public class SomeSemifinalRoundSettings extends SettingsImpl
         implements SemifinalSettings<SomeSemifinalRoundSettings>,
-        RoundSettings<SomeSemifinalRoundSettings> {
+                RoundSettings<SomeSemifinalRoundSettings> {
 
     public enum Keys implements Key {
 
@@ -55,7 +55,7 @@ public class SomeSemifinalRoundSettings extends SettingsImpl
 
     @Override
     public List<Key> allKeys() {
-        return Arrays.asList(SomeSemifinalRoundSettings.Keys.values());
+        return Arrays.asList(Keys.values());
     }
 
     public SomeSemifinalRoundSettings() {

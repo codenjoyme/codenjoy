@@ -112,6 +112,8 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
         if (sliding.active(this)) {
             direction = sliding.affect(direction);
+        } else {
+            sliding.reset(direction);
         }
 
         moving(direction.change(this));
@@ -152,7 +154,9 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     public void kill(Bullet bullet) {
-        setAlive(false);
+        if (isAlive()) {
+            die();
+        }
     }
 
     public void removeBullets() {
@@ -224,9 +228,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
         }
 
         if (tank == this && settings().bool(SHOW_MY_TANK_UNDER_TREE)) {
-            if (tree != null) {
-                return null;
-            }
+            return null;
         }
 
         return Elements.TREE;
@@ -247,8 +249,11 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
         if (!gun.tryToFire()) return;
 
-        Bullet bullet = new Bullet(field, direction, copy(), this,
-                b -> Tank.this.bullets.remove(b));
+        Direction bulletDirection = this.direction;
+        if (sliding.active(this) && !sliding.lastSlipperiness()) {
+            bulletDirection = sliding.getPreviousDirection();
+        }
+        Bullet bullet = new Bullet(field, bulletDirection, copy(), this, b -> Tank.this.bullets.remove(b));
 
         if (!bullets.contains(bullet)) {
             bullets.add(bullet);
@@ -270,7 +275,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
 
     private void gunType() {
         if (prizes.contains(PRIZE_BREAKING_WALLS)) {
-            gun.machineGun();
+            gun.reset();
         }
     }
 

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.multiplayer;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.utils.JsonUtils.clean;
 import static org.junit.Assert.*;
 
 public class LevelProgressTest {
@@ -509,7 +510,7 @@ public class LevelProgressTest {
     }
 
     void assertJson(String expected) {
-        assertEquals(expected, json.toString().replace('"', '\''));
+        assertEquals(expected, clean(json.toString()));
     }
 
     @Test

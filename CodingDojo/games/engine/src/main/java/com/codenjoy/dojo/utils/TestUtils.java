@@ -113,7 +113,7 @@ public class TestUtils {
             }
         }
 
-        return map.toString().replace("], [", "],\n[");
+        return split(map, "], \n[");
     }
 
     public static AbstractBoard getBoard(Function<Character, CharElements> elements) {
@@ -264,6 +264,11 @@ public class TestUtils {
             TESTING = new MockitoJunitTesting();
         }
         TESTING.assertEquals(o1, o2);
+    }
+
+    public static String split(Object object, String split) {
+        return object.toString()
+                .replace(split.replace("\n", ""), split);
     }
 
 }
