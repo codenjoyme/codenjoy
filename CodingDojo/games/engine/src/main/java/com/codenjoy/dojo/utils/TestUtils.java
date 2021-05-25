@@ -266,4 +266,9 @@ public class TestUtils {
         TESTING.assertEquals(o1, o2);
     }
 
+    public static String split(Object object, String split) {
+        return object.toString()
+                .replace(split.replace("\n", ""), split);
+    }
+
 }

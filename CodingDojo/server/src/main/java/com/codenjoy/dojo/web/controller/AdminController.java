@@ -83,6 +83,7 @@ public class AdminController {
     private final SemifinalService semifinal;
     private final RoomService roomService;
 
+    private final AdminService adminService;
 
     // TODO ROOM а этот метод вообще зачем?
     @GetMapping(params = {"player", "data"})
@@ -363,18 +364,7 @@ public class AdminController {
 
         if (settings.getInactivity() != null) {
             try {
-                // TODO AI765A test me
-                InactivitySettingsImpl actual = inactivitySettings(room);
-                boolean changed = actual
-                        .update(settings.getInactivity())
-                        .getInactivityParams().stream()
-                        .anyMatch(parameter -> ((Parameter) parameter).changed());
-                actual.changesReacted();
-                if (changed) {
-                    playerService.getAllInRoom(room).stream()
-                            .filter(not(Player::hasAi))
-                            .forEach(player -> player.setLastResponse(timeService.now()));
-                }
+                adminService.updateInactivity(room, settings.getInactivity());
             } catch (Exception e) {
                 // do nothing
             }
@@ -423,10 +413,6 @@ public class AdminController {
 
     private RoundSettingsImpl roundSettings(String room) {
         return RoundSettings.get(roomService.settings(room));
-    }
-
-    private InactivitySettingsImpl inactivitySettings(String room) {
-        return InactivitySettings.get(roomService.settings(room));
     }
 
     private void setEnable(List<Parameter> games) {
@@ -602,7 +588,7 @@ public class AdminController {
         // сохраняем для отображения round settings pojo
         result.setRounds(roundSettings(room));
         // сохраняем для отображения inactivity settings pojo
-        result.setInactivity(inactivitySettings(room));
+        result.setInactivity(adminService.inactivitySettings(room));
         // удаляем semifinal и rounds параметры
         removeSemifinalAndRounds(parameters);
         // а теперь сохраняем отдельно ключики оставшихся параметров
