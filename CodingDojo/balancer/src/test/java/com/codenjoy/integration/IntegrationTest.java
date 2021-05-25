@@ -877,7 +877,7 @@ public class IntegrationTest {
     @Test
     public void receiveScoresFromDispatcher_withLastHourScoreValues() {
         // GIVEN
-        String day = Scores.DAY_FORMATTER2.format(Calendar.getInstance().getTime());
+        String day = "2021-05-25";
 
         clean();
 
@@ -913,6 +913,8 @@ public class IntegrationTest {
                 new PlayerInfo("stiven.pupkin.id", "8000"),
                 new PlayerInfo("eva.pupkina.id", "6554"),
                 new PlayerInfo("bob.marley.id", "7544")));
+
+        dispatcher.setLastTime(time3);
 
         // WHEN
         List<PlayerScore> scores = dispatcher.getScores(day);

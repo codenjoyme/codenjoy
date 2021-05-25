@@ -74,6 +74,10 @@ public class Dispatcher {
         lastTime = scores.getLastTime(now());
     }
 
+    public void setLastTime(long lastTime) {
+        this.lastTime = lastTime;
+    }
+
     public Player registerNew(Player player) {
         String server = gameServers.getNextServer();
         player.setServer(server);
