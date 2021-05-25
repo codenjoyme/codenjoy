@@ -39,6 +39,7 @@ import java.util.*;
 import static com.codenjoy.dojo.services.TestUtils.assertUsersEqual;
 import static com.codenjoy.dojo.services.security.GameAuthorities.ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthorities.USER;
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -481,7 +482,7 @@ public class RegistrationTest {
                         "Registration.User(email=email3, id=id3, readableName=name3, approved=0, code=8196566518765037475, data=someData3), \n" +
                         "Registration.User(email=email4, id=admin4, readableName=name4, approved=0, code=1050143549617564675, data=someData4), \n" +
                         "Registration.User(email=email5, id=admin5, readableName=name5, approved=0, code=8742437141300845912, data=someData5)]",
-                users.toString().replace(", Registration", ", \nRegistration"));
+                split(users, ", \nRegistration"));
     }
 
     @Test
@@ -500,7 +501,7 @@ public class RegistrationTest {
         assertEquals("[Registration.User(email=email1, id=id1, readableName=name1, approved=0, code=4877982059660098880, data=someData1), \n" +
                         "Registration.User(email=email3, id=id3, readableName=name3, approved=0, code=8196566518765037475, data=someData3), \n" +
                         "Registration.User(email=email5, id=admin5, readableName=name5, approved=0, code=8742437141300845912, data=someData5)]",
-                users.toString().replace(", Registration", ", \nRegistration"));
+                split(users, ", \nRegistration"));
     }
 
     @Test
