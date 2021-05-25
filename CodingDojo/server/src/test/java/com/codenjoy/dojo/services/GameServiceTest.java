@@ -168,7 +168,7 @@ public class GameServiceTest {
             }
         }
 
-        assertEquals(errors.toString().replace(',', '\n'), 
+        assertEquals(com.codenjoy.dojo.utils.TestUtils.split(errors, "\n,"),
                 true, errors.isEmpty());
     }
 
