@@ -74,6 +74,8 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static com.codenjoy.dojo.utils.JsonUtils.clean;
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.toList;
 import static org.fest.reflect.core.Reflection.field;
 import static org.junit.Assert.*;
@@ -550,23 +552,33 @@ public class PlayerServiceImplTest {
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
         assertEquals(
-                "{petya=PlayerData[" +
-                    "BoardSize:15, Board:'DCBA', Game:'game', " +
-                    "Score:234, Info:'', " +
-                    "Scores:'{petya=234}', " +
-                    "Coordinates:'{petya=HeroDataImpl(level=0, coordinate=[3,4], isMultiplayer=false, additionalData=null)}', " +
-                    "ReadableNames:'{petya=readable_petya}', " +
-                    "Group:[petya], " +
-                    "LastChatMessage:106558567], " +
-                "vasya=PlayerData[" +
-                    "BoardSize:15, Board:'ABCD', Game:'game', " +
-                    "Score:123, Info:'', " +
-                    "Scores:'{vasya=123}', " +
-                    "Coordinates:'{vasya=HeroDataImpl(level=0, coordinate=[1,2], isMultiplayer=false, additionalData=null)}', " +
-                    "ReadableNames:'{vasya=readable_vasya}', " +
-                    "Group:[vasya], " +
+                "{petya=PlayerData[BoardSize:15, \n" +
+                    "Board:'DCBA', \n" +
+                    "Game:'game', \n" +
+                    "Score:234, \n" +
+                    "Info:'', \n" +
+                    "Scores:'{petya=234}', \n" +
+                    "Coordinates:'{petya=HeroDataImpl(level=0, \n" +
+                        "coordinate=[3,4], \n" +
+                        "isMultiplayer=false, \n" +
+                        "additionalData=null)}', \n" +
+                    "ReadableNames:'{petya=readable_petya}', \n" +
+                    "Group:[petya], \n" +
+                    "LastChatMessage:106558567], \n" +
+                "vasya=PlayerData[BoardSize:15, \n" +
+                    "Board:'ABCD', \n" +
+                    "Game:'game', \n" +
+                    "Score:123, \n" +
+                    "Info:'', \n" +
+                    "Scores:'{vasya=123}', \n" +
+                    "Coordinates:'{vasya=HeroDataImpl(level=0, \n" +
+                        "coordinate=[1,2], \n" +
+                        "isMultiplayer=false, \n" +
+                        "additionalData=null)}', \n" +
+                    "ReadableNames:'{vasya=readable_vasya}', \n" +
+                    "Group:[vasya], \n" +
                     "LastChatMessage:111979568]}",
-                data.toString().replaceAll("\"", "'"));
+                clean(split(data, ", \n")));
     }
 
     @Test
