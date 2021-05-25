@@ -47,6 +47,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.codenjoy.dojo.utils.JsonUtils.clean;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -227,13 +228,13 @@ public class GameServiceImpl implements GameService {
      * @return Вовзращает сейв для этой игры по умолчанию с прогрессом
      * (если он предусмотрен) на первом уровне.
      */
-    @Override // TODO test me
+    @Override
     public String getDefaultProgress(GameType gameType) {
         try {
             // TODO почему-то на проде тут NPE
             MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
             JSONObject save = type.progress().saveTo(new JSONObject());
-            return save.toString().replace('"', '\'');
+            return clean(save.toString());
         } catch (Exception e) {
             log.error("Something wrong while getDefaultProgress", e);
             return "{}";

@@ -352,4 +352,12 @@ public class GameServiceTest {
                 .reduce("", (out, string) -> out.concat(string + "\n"));
     }
 
+    @Test
+    public void shouldGetDefaultProgress() {
+        assertEquals("{'levelProgress':{'total':1,'current':1,'lastPassed':0}}",
+                service.getDefaultProgress(service.getGameType("first")));
+
+        assertEquals("{'levelProgress':{'total':10,'current':1,'lastPassed':0}}",
+                service.getDefaultProgress(service.getGameType("second")));
+    }
 }
