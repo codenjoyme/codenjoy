@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.dao.GameServer;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
+import com.codenjoy.dojo.services.entity.PlayerScore;
+import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.httpclient.SmsGatewayClient;
 import com.codenjoy.dojo.services.log.DebugService;
@@ -38,6 +40,7 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.fest.util.Lists;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -65,13 +68,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
+import java.util.List;
 
+import static com.codenjoy.utils.DateUtils.day;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest(classes = BalancerApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
@@ -97,8 +102,11 @@ public class IntegrationTest {
     @SpyBean
     private Players players;
 
-    @SpyBean
+    @Autowired
     private Scores scores;
+
+    @Autowired
+    private Dispatcher dispatcher;
 
     @SpyBean
     private GameServers gameServers;
@@ -866,10 +874,60 @@ public class IntegrationTest {
         verify(players).remove(playerId);
     }
 
+    @Test
+    public void receiveScoresFromDispatcher_withLastHourScoreValues() {
+        // GIVEN
+        String day = Scores.DAY_FORMATTER2.format(Calendar.getInstance().getTime());
+
+        clean();
+
+        Player stiven = new Player();
+        stiven.setId("stiven.pupkin.id");
+        stiven.setServer("test");
+        players.create(stiven);
+
+        Player eva = new Player();
+        eva.setId("eva.pupkina.id");
+        eva.setServer("test");
+        players.create(eva);
+
+        Player bob = new Player();
+        bob.setId("bob.marley.id");
+        bob.setServer("test");
+        players.create(bob);
+
+        long time1 = day(day).plus(Calendar.MINUTE, 30).get();
+        scores.saveScores(time1, Lists.newArrayList(
+                new PlayerInfo("stiven.pupkin.id", "1000"),
+                new PlayerInfo("eva.pupkina.id", "2000"),
+                new PlayerInfo("bob.marley.id", "3000")));
+
+        long time2 = day(day).plus(Calendar.MINUTE, 60).get();
+        scores.saveScores(time2, Lists.newArrayList(
+                new PlayerInfo("stiven.pupkin.id", "5000"),
+                new PlayerInfo("eva.pupkina.id", "3434"),
+                new PlayerInfo("bob.marley.id", "3667")));
+
+        long time3 = day(day).plus(Calendar.MINUTE, 90).get();
+        scores.saveScores(time3, Lists.newArrayList(
+                new PlayerInfo("stiven.pupkin.id", "8000"),
+                new PlayerInfo("eva.pupkina.id", "6554"),
+                new PlayerInfo("bob.marley.id", "7544")));
+
+        // WHEN
+        List<PlayerScore> scores = dispatcher.getScores(day);
+
+        // THEN
+        assertEquals("[PlayerScore{id='stiven.pupkin.id', name='null null', score=8000, lastHourScore=3000, day='2021-05-25', time='2021-05-25T01:30:00.000+0300', server='test', winner=false}, " +
+                        "PlayerScore{id='eva.pupkina.id', name='null null', score=6554, lastHourScore=3120, day='2021-05-25', time='2021-05-25T01:30:00.000+0300', server='test', winner=false}, " +
+                        "PlayerScore{id='bob.marley.id', name='null null', score=7544, lastHourScore=3877, day='2021-05-25', time='2021-05-25T01:30:00.000+0300', server='test', winner=false}]",
+                scores.toString());
+    }
+
     private void resetMocks() {
         verifyNoMoreInteractions(game, authenticator);
 
-        reset(game, sms, players, scores, config,
+        reset(game, sms, players, config,
                 gameServers,
                 gateway, debug,
                 passwordEncoder, authenticator);

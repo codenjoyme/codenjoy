@@ -270,7 +270,6 @@ public class Dispatcher {
         List<PlayerScore> list = scores.getScores(day, now);
         List<PlayerScore> result = prepareScoresForClient(list);
 
-        // TODO AI765R test me
         addStartHourScores(result, day, now);
 
         currentScores.put(day, result);
