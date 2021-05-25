@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
+import static com.codenjoy.dojo.utils.JsonUtils.clean;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -71,7 +72,7 @@ public class GameTest {
     }
 
     private void thenHistory(String expected) {
-        assertEquals(expected, player.getHistoryJson().toString().replace('\"', '\''));
+        assertEquals(expected, clean(player.getHistoryJson().toString()));
     }
 
     @Test
