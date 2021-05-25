@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.settings.SomeRoundSettings;
 import com.codenjoy.dojo.services.settings.SomeSemifinalSettings;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static org.junit.Assert.assertEquals;
 
 public class SemifinalSettingsTest {
@@ -78,7 +79,7 @@ public class SemifinalSettingsTest {
                         "[Semifinal] Limit=[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], \n" +
                         "[Semifinal] Reset board=[[Semifinal] Reset board:Boolean = def[true] val[true]], \n" +
                         "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[true]]})",
-                SemifinalSettings.get(settings).toString().replace(", [Semifinal]", ", \n[Semifinal]"));
+                split(SemifinalSettings.get(settings), ", \n[Semifinal]"));
     }
 
     private SettingsImpl givenAllPropertiesCopied() {
@@ -104,7 +105,7 @@ public class SemifinalSettingsTest {
                         "Parameter 2=true, \n" +
                         "Parameter 3=0.5, \n" +
                         "Parameter 4=string]",
-                SemifinalSettings.get(settings).toString().replace(", ", ", \n"));
+                split(SemifinalSettings.get(settings), ", \n"));
     }
 
     @Test
