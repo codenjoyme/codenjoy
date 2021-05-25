@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.settings.SomeInactivitySettings;
 import com.codenjoy.dojo.services.settings.SomeRoundSettings;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static org.junit.Assert.*;
 
 public class InactivitySettingsTest {
@@ -74,7 +75,7 @@ public class InactivitySettingsTest {
         // then
         assertEquals("SettingsImpl(map={[Inactivity] Kick inactive players=[[Inactivity] Kick inactive players:Boolean = def[false] val[false]], \n" +
                 "[Inactivity] Inactivity timeout ticks=[[Inactivity] Inactivity timeout ticks:Integer = multiline[false] def[300] val[300]]})",
-                InactivitySettings.get(settings).toString().replace(", [Inactivity]", ", \n[Inactivity]"));
+                split(InactivitySettings.get(settings), ", \n[Inactivity]"));
     }
 
     private SettingsImpl givenAllPropertiesCopied() {
@@ -96,7 +97,7 @@ public class InactivitySettingsTest {
                         "Parameter 2=true, \n" +
                         "Parameter 3=0.5, \n" +
                         "Parameter 4=string]",
-                InactivitySettings.get(settings).toString().replace(", ", ", \n"));
+                split(InactivitySettings.get(settings), ", \n"));
     }
 
     @Test
