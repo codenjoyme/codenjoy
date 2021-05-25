@@ -113,7 +113,7 @@ public class TestUtils {
             }
         }
 
-        return map.toString().replace("], [", "],\n[");
+        return split(map, "], \n[");
     }
 
     public static AbstractBoard getBoard(Function<Character, CharElements> elements) {
