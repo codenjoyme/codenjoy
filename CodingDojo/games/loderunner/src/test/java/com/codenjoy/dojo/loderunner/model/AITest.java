@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static com.codenjoy.dojo.loderunner.model.GameTest.getLevel;
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -90,7 +91,7 @@ public class AITest {
             }
         }
 
-        assertEquals(expected, result.toString().replace("], [", "],\n["));
+        assertEquals(expected, split(result, "], \n["));
     }
 
     private void assertD(String expected) {
@@ -115,11 +116,11 @@ public class AITest {
                 "☼###☼" +
                 "☼☼☼☼☼",
 
-                "{[1,2]=[RIGHT],\n" +
-                "[1,3]=[DOWN],\n" +
-                "[2,2]=[LEFT, RIGHT],\n" +
-                "[2,3]=[DOWN],\n" +
-                "[3,2]=[LEFT],\n" +
+                "{[1,2]=[RIGHT], \n" +
+                "[1,3]=[DOWN], \n" +
+                "[2,2]=[LEFT, RIGHT], \n" +
+                "[2,3]=[DOWN], \n" +
+                "[3,2]=[LEFT], \n" +
                 "[3,3]=[DOWN]}");
     }
 
@@ -131,11 +132,11 @@ public class AITest {
                 "☼###☼" +
                 "☼☼☼☼☼",
 
-                "{[1,2]=[RIGHT],\n" +
-                "[1,3]=[DOWN],\n" +
-                "[2,2]=[LEFT, RIGHT],\n" +
-                "[2,3]=[DOWN],\n" +
-                "[3,2]=[LEFT, UP],\n" +
+                "{[1,2]=[RIGHT], \n" +
+                "[1,3]=[DOWN], \n" +
+                "[2,2]=[LEFT, RIGHT], \n" +
+                "[2,3]=[DOWN], \n" +
+                "[3,2]=[LEFT, UP], \n" +
                 "[3,3]=[LEFT, DOWN]}");
     }
 
@@ -147,13 +148,13 @@ public class AITest {
                 "☼#  ☼" +
                 "☼☼☼☼☼",
 
-                "{[1,2]=[RIGHT],\n" +
-                "[1,3]=[DOWN],\n" +
-                "[2,1]=[RIGHT],\n" +
-                "[2,2]=[LEFT, RIGHT, DOWN],\n" +
-                "[2,3]=[DOWN],\n" +
-                "[3,1]=[LEFT],\n" +
-                "[3,2]=[LEFT, DOWN],\n" +
+                "{[1,2]=[RIGHT], \n" +
+                "[1,3]=[DOWN], \n" +
+                "[2,1]=[RIGHT], \n" +
+                "[2,2]=[LEFT, RIGHT, DOWN], \n" +
+                "[2,3]=[DOWN], \n" +
+                "[3,1]=[LEFT], \n" +
+                "[3,2]=[LEFT, DOWN], \n" +
                 "[3,3]=[DOWN]}");
     }
 
@@ -165,13 +166,13 @@ public class AITest {
                 "☼#  ☼" +
                 "☼☼☼☼☼",
 
-                "{[1,2]=[RIGHT],\n" +
-                "[1,3]=[DOWN],\n" +
-                "[2,1]=[RIGHT],\n" +
-                "[2,2]=[LEFT, RIGHT, UP, DOWN],\n" +
-                "[2,3]=[LEFT, RIGHT, DOWN],\n" +
-                "[3,1]=[LEFT],\n" +
-                "[3,2]=[LEFT, UP, DOWN],\n" +
+                "{[1,2]=[RIGHT], \n" +
+                "[1,3]=[DOWN], \n" +
+                "[2,1]=[RIGHT], \n" +
+                "[2,2]=[LEFT, RIGHT, UP, DOWN], \n" +
+                "[2,3]=[LEFT, RIGHT, DOWN], \n" +
+                "[3,1]=[LEFT], \n" +
+                "[3,2]=[LEFT, UP, DOWN], \n" +
                 "[3,3]=[LEFT, DOWN]}");
     }
 
@@ -182,21 +183,21 @@ public class AITest {
                 "H  H" +
                 "H  H",
 
-                "{[0,0]=[RIGHT, UP],\n" +
-                "[0,1]=[RIGHT, UP, DOWN],\n" +
-                "[0,2]=[RIGHT, DOWN],\n" +
-                "[0,3]=[DOWN],\n" +
-                "[1,0]=[LEFT, RIGHT],\n" +
-                "[1,1]=[DOWN],\n" +
-                "[1,2]=[LEFT, RIGHT, DOWN],\n" +
-                "[1,3]=[DOWN],\n" +
-                "[2,0]=[LEFT, RIGHT],\n" +
-                "[2,1]=[DOWN],\n" +
-                "[2,2]=[DOWN],\n" +
-                "[2,3]=[DOWN],\n" +
-                "[3,0]=[LEFT, UP],\n" +
-                "[3,1]=[LEFT, UP, DOWN],\n" +
-                "[3,2]=[LEFT, UP, DOWN],\n" +
+                "{[0,0]=[RIGHT, UP], \n" +
+                "[0,1]=[RIGHT, UP, DOWN], \n" +
+                "[0,2]=[RIGHT, DOWN], \n" +
+                "[0,3]=[DOWN], \n" +
+                "[1,0]=[LEFT, RIGHT], \n" +
+                "[1,1]=[DOWN], \n" +
+                "[1,2]=[LEFT, RIGHT, DOWN], \n" +
+                "[1,3]=[DOWN], \n" +
+                "[2,0]=[LEFT, RIGHT], \n" +
+                "[2,1]=[DOWN], \n" +
+                "[2,2]=[DOWN], \n" +
+                "[2,3]=[DOWN], \n" +
+                "[3,0]=[LEFT, UP], \n" +
+                "[3,1]=[LEFT, UP, DOWN], \n" +
+                "[3,2]=[LEFT, UP, DOWN], \n" +
                 "[3,3]=[LEFT, DOWN]}");
     }
 
@@ -208,14 +209,14 @@ public class AITest {
                 "☼  H☼" +
                 "☼☼☼☼☼",
 
-                "{[1,1]=[RIGHT],\n" +
-                "[1,2]=[RIGHT, DOWN],\n" +
-                "[1,3]=[DOWN],\n" +
-                "[2,1]=[LEFT, RIGHT],\n" +
-                "[2,2]=[LEFT, RIGHT, DOWN],\n" +
-                "[2,3]=[DOWN],\n" +
-                "[3,1]=[LEFT, UP],\n" +
-                "[3,2]=[LEFT, UP, DOWN],\n" +
+                "{[1,1]=[RIGHT], \n" +
+                "[1,2]=[RIGHT, DOWN], \n" +
+                "[1,3]=[DOWN], \n" +
+                "[2,1]=[LEFT, RIGHT], \n" +
+                "[2,2]=[LEFT, RIGHT, DOWN], \n" +
+                "[2,3]=[DOWN], \n" +
+                "[3,1]=[LEFT, UP], \n" +
+                "[3,2]=[LEFT, UP, DOWN], \n" +
                 "[3,3]=[LEFT, DOWN]}");
     }
 
@@ -229,23 +230,23 @@ public class AITest {
                 "☼#####☼" +
                 "☼☼☼☼☼☼☼",
 
-                "{[1,2]=[RIGHT],\n" +
-                "[1,4]=[RIGHT],\n" +
-                "[1,5]=[DOWN],\n" +
-                "[2,2]=[LEFT, RIGHT],\n" +
-                "[2,3]=[DOWN],\n" +
-                "[2,4]=[LEFT, RIGHT, DOWN],\n" +
-                "[2,5]=[DOWN],\n" +
-                "[3,2]=[LEFT, RIGHT],\n" +
-                "[3,3]=[DOWN],\n" +
-                "[3,4]=[LEFT, RIGHT, DOWN],\n" +
-                "[3,5]=[DOWN],\n" +
-                "[4,2]=[LEFT, RIGHT],\n" +
-                "[4,4]=[LEFT, RIGHT],\n" +
-                "[4,5]=[DOWN],\n" +
-                "[5,2]=[LEFT, UP],\n" +
-                "[5,3]=[UP, DOWN],\n" +
-                "[5,4]=[LEFT, DOWN],\n" +
+                "{[1,2]=[RIGHT], \n" +
+                "[1,4]=[RIGHT], \n" +
+                "[1,5]=[DOWN], \n" +
+                "[2,2]=[LEFT, RIGHT], \n" +
+                "[2,3]=[DOWN], \n" +
+                "[2,4]=[LEFT, RIGHT, DOWN], \n" +
+                "[2,5]=[DOWN], \n" +
+                "[3,2]=[LEFT, RIGHT], \n" +
+                "[3,3]=[DOWN], \n" +
+                "[3,4]=[LEFT, RIGHT, DOWN], \n" +
+                "[3,5]=[DOWN], \n" +
+                "[4,2]=[LEFT, RIGHT], \n" +
+                "[4,4]=[LEFT, RIGHT], \n" +
+                "[4,5]=[DOWN], \n" +
+                "[5,2]=[LEFT, UP], \n" +
+                "[5,3]=[UP, DOWN], \n" +
+                "[5,4]=[LEFT, DOWN], \n" +
                 "[5,5]=[DOWN]}");
 
     }
@@ -260,24 +261,24 @@ public class AITest {
                 "☼#####☼" +
                 "☼☼☼☼☼☼☼",
 
-                "{[1,2]=[RIGHT],\n" +
-                "[1,4]=[RIGHT],\n" +
-                "[1,5]=[DOWN],\n" +
-                "[2,2]=[LEFT, RIGHT],\n" +
-                "[2,3]=[DOWN],\n" +
-                "[2,4]=[LEFT, RIGHT, DOWN],\n" +
-                "[2,5]=[DOWN],\n" +
-                "[3,2]=[LEFT, RIGHT],\n" +
-                "[3,3]=[DOWN],\n" +
-                "[3,4]=[LEFT, RIGHT, DOWN],\n" +
-                "[3,5]=[DOWN],\n" +
-                "[4,2]=[LEFT, RIGHT],\n" +
-                "[4,3]=[DOWN],\n" +
-                "[4,4]=[LEFT, RIGHT, DOWN],\n" +
-                "[4,5]=[DOWN],\n" +
-                "[5,2]=[LEFT, UP],\n" +
-                "[5,3]=[LEFT, UP, DOWN],\n" +
-                "[5,4]=[LEFT, UP, DOWN],\n" +
+                "{[1,2]=[RIGHT], \n" +
+                "[1,4]=[RIGHT], \n" +
+                "[1,5]=[DOWN], \n" +
+                "[2,2]=[LEFT, RIGHT], \n" +
+                "[2,3]=[DOWN], \n" +
+                "[2,4]=[LEFT, RIGHT, DOWN], \n" +
+                "[2,5]=[DOWN], \n" +
+                "[3,2]=[LEFT, RIGHT], \n" +
+                "[3,3]=[DOWN], \n" +
+                "[3,4]=[LEFT, RIGHT, DOWN], \n" +
+                "[3,5]=[DOWN], \n" +
+                "[4,2]=[LEFT, RIGHT], \n" +
+                "[4,3]=[DOWN], \n" +
+                "[4,4]=[LEFT, RIGHT, DOWN], \n" +
+                "[4,5]=[DOWN], \n" +
+                "[5,2]=[LEFT, UP], \n" +
+                "[5,3]=[LEFT, UP, DOWN], \n" +
+                "[5,4]=[LEFT, UP, DOWN], \n" +
                 "[5,5]=[LEFT, DOWN]}");
     }
 
