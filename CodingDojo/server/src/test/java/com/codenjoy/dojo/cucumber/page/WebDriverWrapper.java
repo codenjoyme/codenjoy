@@ -50,7 +50,7 @@ public class WebDriverWrapper {
 
     @PostConstruct
     public void init() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe");
+        // don't forget to specify `webdriver.chrome.driver` system property
         driver = new ChromeDriver();
         System.out.println("Started here: " + server.endpoint());
     }

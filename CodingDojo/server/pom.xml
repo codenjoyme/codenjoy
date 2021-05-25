@@ -1103,6 +1103,18 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                <!-- cucumber tests excluded from the default build lifecycle
+                     but you still can force maven to run these tests
+                     (e.g. `mvn surefire:test -Dtest=RunAllCucumberTests -Dwebdriver.chrome.driver=...`) -->
+                    <excludes>
+                        <exclude>**/cucumber/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>${maven-source-plugin.version}</version>
                 <executions>
