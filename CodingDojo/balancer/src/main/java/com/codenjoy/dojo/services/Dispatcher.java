@@ -74,6 +74,10 @@ public class Dispatcher {
         lastTime = scores.getLastTime(now());
     }
 
+    public void setLastTime(long lastTime) {
+        this.lastTime = lastTime;
+    }
+
     public Player registerNew(Player player) {
         String server = gameServers.getNextServer();
         player.setServer(server);
@@ -270,7 +274,6 @@ public class Dispatcher {
         List<PlayerScore> list = scores.getScores(day, now);
         List<PlayerScore> result = prepareScoresForClient(list);
 
-        // TODO AI765R test me
         addStartHourScores(result, day, now);
 
         currentScores.put(day, result);
