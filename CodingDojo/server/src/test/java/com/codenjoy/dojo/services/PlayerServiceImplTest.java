@@ -70,8 +70,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
+import static com.codenjoy.dojo.services.AdminServiceTest.assertPlayersLastResponse;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
@@ -530,6 +532,23 @@ public class PlayerServiceImplTest {
         // then
         verify(playerController).requestControl(playerCaptor.capture(), boardCaptor.capture());
         assertEquals("1234", boardCaptor.getValue());
+    }
+
+    @Test
+    public void shouldSetLastResponse_whenCreatePlayer() {
+        // given
+        AtomicLong time = new AtomicLong(1000L);
+        when(timeService.now()).thenAnswer(inv -> time.getAndIncrement());
+
+        // when
+        createPlayer(VASYA, "game1", "room1");
+        createPlayer(PETYA, "game1", "room1");
+        createPlayer(KATYA, "game1", "room2");
+        createPlayer(OLIA, "game2", "room3");
+
+        // then
+        assertPlayersLastResponse(players,
+                "[vasya: 1000], [petya: 1001], [katya: 1002], [olia: 1003]");
     }
 
     @Test
