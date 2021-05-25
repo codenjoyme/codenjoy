@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InformationCollector implements EventListener, ChangeLevelListener, Information {
 
@@ -92,7 +93,8 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         if (result.isEmpty()) {
             return null;
         }
-        return result.toString().replace("[", "").replace("]", "");
+        return result.stream()
+                .collect(Collectors.joining(", "));
     }
 
     public Deque<String> all() {

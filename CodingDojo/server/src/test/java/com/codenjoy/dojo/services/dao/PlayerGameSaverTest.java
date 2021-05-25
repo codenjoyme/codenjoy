@@ -34,8 +34,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -191,17 +191,15 @@ public class PlayerGameSaverTest {
 
         // when then
         String expected =
-                "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), " +
-                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'}), " +
+                "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'}), \n" +
                 "PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})]";
-        assertEquals(expected,
-                saver.loadAll(Arrays.asList("vasia", "katia", "maria")).toString());
-        assertEquals(expected,
-                saver.loadAll(Arrays.asList("maria", "vasia", "katia")).toString());
+        assertLoadAll(expected, "vasia", "katia", "maria");
+        assertLoadAll(expected, "maria", "vasia", "katia");
 
-        assertEquals("[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), " +
-                        "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'})]",
-                saver.loadAll(Arrays.asList("katia", "maria")).toString());
+        expected = "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'})]";
+        assertLoadAll(expected, "katia", "maria");
     }
 
     @Test
@@ -225,17 +223,15 @@ public class PlayerGameSaverTest {
         saver.saveGame(player3, "{'key':'updated_value3'}", now2);
 
         // when then
-        String expected = "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), " +
-                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'updated_value3'}), " +
+        String expected = "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'updated_value3'}), \n" +
                 "PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'updated_value1'})]";
-        assertEquals(expected,
-                saver.loadAll(Arrays.asList("vasia", "katia", "maria")).toString());
-        assertEquals(expected,
-                saver.loadAll(Arrays.asList("maria", "vasia", "katia")).toString());
+        assertLoadAll(expected, "vasia", "katia", "maria");
+        assertLoadAll(expected, "maria", "vasia", "katia");
 
-        assertEquals("[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), " +
-                        "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'updated_value3'})]",
-                saver.loadAll(Arrays.asList("katia", "maria")).toString());
+        expected = "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'updated_value3'})]";
+        assertLoadAll(expected, "katia", "maria");
     }
 
     @Test
@@ -264,17 +260,20 @@ public class PlayerGameSaverTest {
 
         // when then
         String expected =
-                "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), " +
-                "PlayerSave(id=maria, callbackUrl=http://127.33.33.5:9999, room=room, game=game, score=300, save={'key':'updated_value3'}), " +
+                "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, callbackUrl=http://127.33.33.5:9999, room=room, game=game, score=300, save={'key':'updated_value3'}), \n" +
                 "PlayerSave(id=vasia, callbackUrl=http://127.22.22.1:8888, room=otherRoom, game=game, score=100, save={'key':'updated_value1'})]";
-        assertEquals(expected,
-                saver.loadAll(Arrays.asList("vasia", "katia", "maria")).toString());
-        assertEquals(expected,
-                saver.loadAll(Arrays.asList("maria", "vasia", "katia")).toString());
+        assertLoadAll(expected, "vasia", "katia", "maria");
+        assertLoadAll(expected, "maria", "vasia", "katia");
 
-        assertEquals("[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), " +
-                        "PlayerSave(id=maria, callbackUrl=http://127.33.33.5:9999, room=room, game=game, score=300, save={'key':'updated_value3'})]",
-                saver.loadAll(Arrays.asList("katia", "maria")).toString());
+        expected = "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, callbackUrl=http://127.33.33.5:9999, room=room, game=game, score=300, save={'key':'updated_value3'})]";
+        assertLoadAll(expected, "katia", "maria");
+    }
+
+    public void assertLoadAll(String expected, String... strings) {
+        assertEquals(expected,
+                split(saver.loadAll(Arrays.asList(strings)), ", \nPlayerSave("));
     }
 
     @Test

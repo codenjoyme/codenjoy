@@ -56,7 +56,7 @@ public class PlayerInfo extends Player {
         setScore(player.getScore());
         setRoom(player.getRoom());
         setReadableName(player.getReadableName());
-        ticksInactive = (int)((now - player.getLastResponse()) / 1000); // TODO AI765A test me
+        setLastResponse(now, player.getLastResponse());
     }
 
     public PlayerInfo(String id, String code, String url, String game) {
@@ -68,10 +68,16 @@ public class PlayerInfo extends Player {
         active = true;
     }
 
-    public PlayerInfo(PlayerSave save, String readableName, String code) {
+    public PlayerInfo(PlayerSave save, String readableName, String code, long now) {
         this(save.getId(), readableName, code,
                 save.getCallbackUrl(), save.getRoom(),
                 save.getGame(), save.getScore(), true);
+
+        setLastResponse(now, now);
     }
 
+    private void setLastResponse(long now, long lastResponse) {
+        setLastResponse(lastResponse);
+        ticksInactive = (int)((now - lastResponse) / 1000);
+    }
 }

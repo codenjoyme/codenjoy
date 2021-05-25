@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.settings.SomeRoundSettings;
 import com.codenjoy.dojo.services.settings.SomeSemifinalSettings;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static org.junit.Assert.assertEquals;
 
 public class RoundSettingsTest {
@@ -85,7 +86,7 @@ public class RoundSettingsTest {
                         "[Rounds] Time before start Round=[[Rounds] Time before start Round:Integer = multiline[false] def[5] val[5]], \n" +
                         "[Rounds] Rounds per Match=[[Rounds] Rounds per Match:Integer = multiline[false] def[1] val[1]], \n" +
                         "[Rounds] Min ticks for win=[[Rounds] Min ticks for win:Integer = multiline[false] def[1] val[1]]})",
-                RoundSettings.get(settings).toString().replace(", [Rounds]", ", \n[Rounds]"));
+                split(RoundSettings.get(settings), ", \n[Rounds]"));
     }
 
     private SettingsImpl givenAllPropertiesCopied() {
@@ -112,7 +113,7 @@ public class RoundSettingsTest {
                         "Parameter 2=true, \n" +
                         "Parameter 3=0.5, \n" +
                         "Parameter 4=string]",
-                RoundSettings.get(settings).toString().replace(", ", ", \n"));
+                split(RoundSettings.get(settings), ", \n"));
     }
 
     @Test

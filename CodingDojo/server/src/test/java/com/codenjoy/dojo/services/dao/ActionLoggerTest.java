@@ -39,6 +39,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -221,7 +222,7 @@ public class ActionLoggerTest {
     }
 
     public void assertAllLogs(String expected) {
-        assertEquals(expected, logger.getAll().toString().replace(", BoardLog", ", \nBoardLog"));
+        assertEquals(expected, split(logger.getAll(), ", \nBoardLog"));
     }
 
     @Test

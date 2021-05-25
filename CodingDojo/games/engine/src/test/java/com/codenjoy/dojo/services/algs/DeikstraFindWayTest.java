@@ -275,16 +275,16 @@ public class DeikstraFindWayTest {
                 "XXXXXXX\n";
 
         assertP(board,
-                "{[1,4]=[RIGHT],\n" +
-                "[1,5]=[RIGHT, DOWN],\n" +
-                "[2,2]=[RIGHT],\n" +
-                "[2,3]=[DOWN],\n" +
-                "[2,4]=[DOWN],\n" +
-                "[2,5]=[DOWN],\n" +
-                "[3,2]=[RIGHT],\n" +
-                "[4,2]=[UP],\n" +
-                "[4,3]=[UP],\n" +
-                "[4,4]=[UP],\n" +
+                "{[1,4]=[RIGHT], \n" +
+                "[1,5]=[RIGHT, DOWN], \n" +
+                "[2,2]=[RIGHT], \n" +
+                "[2,3]=[DOWN], \n" +
+                "[2,4]=[DOWN], \n" +
+                "[2,5]=[DOWN], \n" +
+                "[3,2]=[RIGHT], \n" +
+                "[4,2]=[UP], \n" +
+                "[4,3]=[UP], \n" +
+                "[4,4]=[UP], \n" +
                 "[4,5]=[LEFT]}");
 
         asrtWay(board,
@@ -307,7 +307,7 @@ public class DeikstraFindWayTest {
                 "XXXXX\n";
 
         assertP(board,
-                "{[1,2]=[RIGHT],\n" +
+                "{[1,2]=[RIGHT], \n" +
                 "[2,2]=[RIGHT]}");
 
         asrtWay(board,
@@ -328,7 +328,7 @@ public class DeikstraFindWayTest {
                 "XXXXX\n";
 
         assertP(board,
-                "{[2,2]=[LEFT],\n" +
+                "{[2,2]=[LEFT], \n" +
                 "[3,2]=[LEFT]}");
 
         asrtWay(board,
@@ -349,7 +349,7 @@ public class DeikstraFindWayTest {
                 "XXXXX\n";
 
         assertP(board,
-                "{[2,1]=[UP],\n" +
+                "{[2,1]=[UP], \n" +
                 "[2,2]=[UP]}");
 
         asrtWay(board,
@@ -370,7 +370,7 @@ public class DeikstraFindWayTest {
                 "XXXXX\n";
 
         assertP(board,
-                "{[2,2]=[DOWN],\n" +
+                "{[2,2]=[DOWN], \n" +
                 "[2,3]=[DOWN]}");
 
         asrtWay(board,

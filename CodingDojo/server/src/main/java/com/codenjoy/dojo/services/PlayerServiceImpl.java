@@ -312,7 +312,7 @@ public class PlayerServiceImpl implements PlayerService {
             player = new Player(name, callbackUrl,
                     gameType, playerScores, listener);
             player.setEventListener(listener);
-            player.setLastResponse(time.now()); // TODO AI765A test me
+            player.setLastResponse(time.now());
 
             player.setGameType(gameType);
             PlayerGame playerGame = playerGames.add(player, room, save);

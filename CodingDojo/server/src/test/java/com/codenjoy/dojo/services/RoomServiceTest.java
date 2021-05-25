@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
+import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -364,10 +365,11 @@ public class RoomServiceTest {
         Collection<RoomState> all = service.all();
 
         // then
-        assertEquals("[RoomState(room=room1, type=RoomGameType{type=GameType[first], settings=First[Parameter 1=15, Parameter 2=true]}, active=true, opened=true, tick=0), " +
-                "RoomState(room=room2, type=RoomGameType{type=GameType[first], settings=First[Parameter 1=15, Parameter 2=true]}, active=true, opened=true, tick=0), " +
-                "RoomState(room=room3, type=RoomGameType{type=GameType[second], settings=Second[Parameter 3=43, Parameter 4=true]}, active=true, opened=true, tick=0), " +
-                "RoomState(room=room4, type=RoomGameType{type=GameType[second], settings=Second[Parameter 3=43, Parameter 4=true]}, active=true, opened=true, tick=0)]", all.toString());
+        assertEquals("[RoomState(room=room1, type=RoomGameType{type=GameType[first], settings=First[Parameter 1=15, Parameter 2=true]}, active=true, opened=true, tick=0), \n" +
+                "RoomState(room=room2, type=RoomGameType{type=GameType[first], settings=First[Parameter 1=15, Parameter 2=true]}, active=true, opened=true, tick=0), \n" +
+                "RoomState(room=room3, type=RoomGameType{type=GameType[second], settings=Second[Parameter 3=43, Parameter 4=true]}, active=true, opened=true, tick=0), \n" +
+                "RoomState(room=room4, type=RoomGameType{type=GameType[second], settings=Second[Parameter 3=43, Parameter 4=true]}, active=true, opened=true, tick=0)]",
+                split(all, ", \nRoomState("));
     }
 
     @Test
@@ -410,9 +412,9 @@ public class RoomServiceTest {
         service.create("room2", game1);
 
         // when then
-        assertEquals("[GameRooms(game=first, rooms=[room1, room2]), " +
+        assertEquals("[GameRooms(game=first, rooms=[room1, room2]), \n" +
                 "GameRooms(game=second, rooms=[room3, room4])]",
-                service.gamesRooms().toString());
+                split(service.gamesRooms(), ", \nGameRooms("));
     }
 
     @Test
