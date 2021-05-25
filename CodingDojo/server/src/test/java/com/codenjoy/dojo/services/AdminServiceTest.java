@@ -17,12 +17,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
+import static com.codenjoy.dojo.services.PlayerServiceImplTest.setupTimeService;
 import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.joining;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
@@ -79,8 +78,7 @@ public class AdminServiceTest {
         roomService.create("room2", new FirstInactivityGameType());
         roomService.create("room3", new SecondSemifinalGameType());
 
-        AtomicLong time = new AtomicLong(1000L);
-        when(timeService.now()).thenAnswer(inv -> time.getAndIncrement());
+        setupTimeService(timeService);
 
         List<Player> players = new LinkedList<>();
         players.add(playerService.register("player1", "first", "room1", "ip1"));
@@ -89,7 +87,7 @@ public class AdminServiceTest {
         players.add(playerService.register("player4", "second", "room3", "ip4"));  // another game
 
         assertPlayersLastResponse(playerService.getAll(),
-                "[player1: 1000], [player2: 1001], [player3: 1002], [player4: 1003]");
+                "[player1: 1000], [player2: 2000], [player3: 3000], [player4: 4000]");
 
         // when
         adminService.updateInactivity("room1",
@@ -99,7 +97,7 @@ public class AdminServiceTest {
 
         // then
         assertPlayersLastResponse(playerService.getAll(),
-                "[player1: 1004], [player2: 1005], [player3: 1002], [player4: 1003]");
+                "[player1: 5000], [player2: 6000], [player3: 3000], [player4: 4000]");
     }
 
     public static void assertPlayersLastResponse(List<Player> players, String expected) {

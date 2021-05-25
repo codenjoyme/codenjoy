@@ -537,8 +537,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSetLastResponse_whenCreatePlayer() {
         // given
-        AtomicLong time = new AtomicLong(1000L);
-        when(timeService.now()).thenAnswer(inv -> time.getAndIncrement());
+        setupTimeService(this.timeService);
 
         // when
         createPlayer(VASYA, "game1", "room1");
@@ -548,7 +547,12 @@ public class PlayerServiceImplTest {
 
         // then
         assertPlayersLastResponse(players,
-                "[vasya: 1000], [petya: 1001], [katya: 1002], [olia: 1003]");
+                "[vasya: 1000], [petya: 2000], [katya: 3000], [olia: 4000]");
+    }
+
+    public static void setupTimeService(TimeService timeService) {
+        AtomicLong time = new AtomicLong(1);
+        when(timeService.now()).thenAnswer(inv -> time.getAndIncrement() * 1000L);
     }
 
     @Test
