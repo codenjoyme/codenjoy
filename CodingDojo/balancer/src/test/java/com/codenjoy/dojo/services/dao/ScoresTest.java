@@ -35,6 +35,7 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static com.codenjoy.utils.DateUtils.day;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -371,31 +372,6 @@ public class ScoresTest {
         assertEquals(service.getScores(day2, last2).toString(),
                 "[PlayerScore{id='stiven.pupkin.id', name='null', score=1003, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}, " +
                 "PlayerScore{id='bob.marley.id', name='null', score=3003, lastHourScore=-, day='2019-01-28', time='2019-01-28T00:00:11.000+0200', server='null', winner=false}]");
-    }
-
-    private static class ChangeCalendar {
-
-        private Calendar calendar;
-
-        public ChangeCalendar(Calendar calendar) {
-            this.calendar = calendar;
-        }
-
-        public ChangeCalendar plus(int field, int amount) {
-            calendar.add(field, amount);
-            return this;
-        }
-
-        public long get() {
-            return calendar.getTimeInMillis();
-        }
-    }
-
-    private ChangeCalendar day(String day) {
-        Date date = service.getDate(day);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return new ChangeCalendar(calendar);
     }
 
     @Test

@@ -253,7 +253,7 @@ public class Scores {
         return last.before(date);
     }
 
-    public Date getDate(String day) {
+    public static Date getDate(String day) {
         try {
             return DAY_FORMATTER2.parse(day);
         } catch (ParseException e) {
