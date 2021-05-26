@@ -254,7 +254,7 @@ function initRegistration(waitApprove, contextPath) {
     function loadGameModeSelect(key, selector, def) {
         var value = localStorage.getItem(key);
         var select = $(selector).find('select');
-        if (!!value && !$(selector).attr('hidden')) {
+        if (!!value && value != 'undefined' && !$(selector).attr('hidden')) {
             select.val(value);
         } else {
             if (!!def) {
