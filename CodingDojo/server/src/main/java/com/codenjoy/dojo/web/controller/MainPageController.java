@@ -127,7 +127,7 @@ public class MainPageController {
         request.setAttribute("code", code);
         model.addAttribute("game", registered ? player.getGame() : StringUtils.EMPTY);
         // TODO #4FS тут проверить
-        model.addAttribute("gamesRooms", roomSevice.gamesRooms());
+        model.addAttribute("gamesRooms", roomSevice.openedGamesRooms());
         return "main";
     }
 

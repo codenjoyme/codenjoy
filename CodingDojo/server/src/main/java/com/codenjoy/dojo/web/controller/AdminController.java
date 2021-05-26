@@ -26,8 +26,6 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.incativity.InactivitySettings;
-import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.room.RoomService;
@@ -573,7 +571,7 @@ public class AdminController {
         AdminSettings settings = getAdminSettings(parameters, room);
         model.addAttribute("adminSettings", settings);
         List<PlayerInfo> saves = saveService.getSaves(room);
-        model.addAttribute("gameRooms", roomService.gamesRooms());
+        model.addAttribute("gamesRooms", roomService.gamesRooms());
         model.addAttribute("playersCount", playerService.getRoomCounts());
         settings.setPlayers(preparePlayers(model, room, saves));
 
@@ -597,7 +595,7 @@ public class AdminController {
                 .collect(toList()));
 
         // TODO #4FS тут проверить
-        List<String> enabled = roomService.getOpenedGames();
+        List<String> enabled = roomService.openedGames();
         result.setGames(gameService.getGames().stream()
                 .map(name -> enabled.contains(name))
                 .collect(toList()));

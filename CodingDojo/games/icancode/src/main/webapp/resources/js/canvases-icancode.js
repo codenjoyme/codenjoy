@@ -23,7 +23,6 @@
 var setup = setup || {};
 
 const PARAM_GAME_MODE = 'gameMode';
-const STORAGE_GAME_TYPE = 'gameType';
 
 const SPRITES_EKIDS = 'ekids';
 const SPRITES_ROBOT = 'robot';
@@ -56,11 +55,11 @@ setup.setupSprites = function() {
 
     if (!setup.gameMode) {
         // check KEYS constants in register.js
-        setup.gameMode = localStorage.getItem(STORAGE_GAME_TYPE);
+        setup.gameMode = localStorage.getItem(PARAM_GAME_MODE);
 
         // TODO почему-то сторится в сторадж строчка "undefined"
         if (setup.gameMode == 'undefined') {
-            localStorage.removeItem(STORAGE_GAME_TYPE);
+            localStorage.removeItem(PARAM_GAME_MODE);
             setup.gameMode = null;
         }
     }
