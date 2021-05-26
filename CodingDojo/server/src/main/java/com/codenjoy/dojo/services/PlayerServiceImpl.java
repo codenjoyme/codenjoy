@@ -89,6 +89,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected ConfigProperties config;
     @Autowired protected RoomService roomService;
     @Autowired protected SemifinalService semifinal;
+    @Autowired protected InactivityService inactivity;
     @Autowired protected SimpleProfiler profiler;
     @Autowired protected TimeService time;
     @Autowired protected WhatsNextService whatsNext;
@@ -342,6 +343,7 @@ public class PlayerServiceImpl implements PlayerService {
             sendScreenUpdates();
             requestControls();
 
+            inactivity.tick();
             semifinal.tick();
 
             profiler.end();
