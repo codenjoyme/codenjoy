@@ -21,11 +21,6 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Build Java packages
-        run: mvn -B install -s $GITHUB_WORKSPACE/settings.xml
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
       - name: Build docker images
         run: |
           docker build -t dojobanica/codenjoy codenjoy
