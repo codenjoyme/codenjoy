@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.grpc;
  */
 
 
+
 import com.codenjoy.dojo.User;
 import com.codenjoy.dojo.UserDetailsIdRequest;
 import com.codenjoy.dojo.UserDetailsResponse;
