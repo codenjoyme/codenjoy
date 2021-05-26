@@ -18,7 +18,23 @@ message UserDetailsResponse{
   string email = 2;
 }
 
+message UserRequest{
+  string contestId = 1;
+}
+
+message UserResponse{
+  repeated User user = 1;
+}
+
+message User{
+  string id = 1;
+  string username = 2;
+  string name = 3;
+  string role = 4;
+}
+
 service UserDetailsService{
   rpc getUserDetailsById(UserDetailsIdRequest) returns (UserDetailsResponse);
   rpc getUserDetailsByUsername(UserDetailsUsernameRequest) returns (UserDetailsResponse);
+  rpc getUsersForContest(UserRequest) returns (UserResponse);
 }
