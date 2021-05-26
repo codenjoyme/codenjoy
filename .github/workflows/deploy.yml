@@ -23,7 +23,7 @@ jobs:
 
       - name: Build docker images
         run: |
-          docker build -t dojobanica/codenjoy codenjoy
+          docker build -t dojobanica/codenjoy -f Dockerfile
 
       - name: Docker login
         run: docker login -u dojobanica -p ${{ secrets.DOCKER_TOKEN }}
