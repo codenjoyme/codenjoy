@@ -292,7 +292,8 @@ function initRegistration(waitApprove, contextPath) {
             var isVisible = (select.find('option').length > 0 && !!data.showGames);
             display('#gameMode', isVisible);
 
-            loadGameModeSelect(KEYS.room.mode, '#gameMode', data.defaultGame);
+            var defaultGame = (!!data.defaultGame) ? data.defaultGame : select.find(':first-child').val();
+            loadGameModeSelect(KEYS.room.mode, '#gameMode', defaultGame);
         });
         loadInput(KEYS.userData.email, '#email');
         loadInput(KEYS.userData.readableName, '#readableName');
