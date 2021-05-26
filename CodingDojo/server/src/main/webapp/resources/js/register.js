@@ -251,7 +251,7 @@ function initRegistration(waitApprove, contextPath) {
         onSelect(select.val());
     }
 
-    function loadGameTypeSelect(key, selector, def) {
+    function loadGameModeSelect(key, selector, def) {
         var value = localStorage.getItem(key);
         var select = $(selector).find('select');
         if (!!value && !$(selector).attr('hidden')) {
@@ -263,7 +263,7 @@ function initRegistration(waitApprove, contextPath) {
         }
     }
 
-    function fillGameTypes(selector, room, gameModes) {
+    function fillGameModes(selector, room, gameModes) {
         var select = $(selector).find('select');
         select.children().remove();
 
@@ -287,12 +287,12 @@ function initRegistration(waitApprove, contextPath) {
 
     function fillFormFromLocalStorage(data) {
         loadGameNameSelect(KEYS.room.name, '#room', function(room) {
-            var select = fillGameTypes('#gameMode', room, data.gameModes);
+            var select = fillGameModes('#gameMode', room, data.gameModes);
 
             var isVisible = (select.find('option').length > 0 && !!data.showGames);
             display('#gameMode', isVisible);
 
-            loadGameTypeSelect(KEYS.room.mode, '#gameMode', data.defaultGame);
+            loadGameModeSelect(KEYS.room.mode, '#gameMode', data.defaultGame);
         });
         loadInput(KEYS.userData.email, '#email');
         loadInput(KEYS.userData.readableName, '#readableName');

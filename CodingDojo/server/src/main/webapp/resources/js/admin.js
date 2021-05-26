@@ -31,7 +31,7 @@ function defaultRegistrationSettings() {
         showData3: true,
         showData4: true,
         defaultGame: null,
-        gameTypes: {
+        gameModes: {
             icancode: [   // TODO вынести это как-то в настройки игры icancode
                 {'name' : 'JavaScript', 'title':'JavaScript (browser version)'},
                 {'name' : 'Contest',    'title':'Java | Kotlin | .Net | JavaScript'},
@@ -100,12 +100,12 @@ pages.admin = function() {
         var select = $('#default-game');
         select.children().remove();
 
-        var allTypes = defaultRegistrationSettings().gameTypes;
-        for (var game in allTypes) {
-            var gameTypes = allTypes[game];
-            for (var index in gameTypes) {
-                var name = gameTypes[index].name;
-                var title = gameTypes[index].title;
+        var allModes = defaultRegistrationSettings().gameModes;
+        for (var game in allModes) {
+            var gameModes = allModes[game];
+            for (var index in gameModes) {
+                var name = gameModes[index].name;
+                var title = gameModes[index].title;
                 select.append('<option value="' + name + '">' + title + '</option>');
             }
         }
