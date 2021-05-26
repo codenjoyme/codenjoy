@@ -110,7 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             RestSettingsController.URI + "/**",
 
             // all players board
-            BoardController.URI + "/game/**",
+            BoardController.URI + "/room/**",
             BoardController.URI + "/player/*",
             "/rest/player/*/*/wantsToPlay/**",
             "/screen-ws/**"
