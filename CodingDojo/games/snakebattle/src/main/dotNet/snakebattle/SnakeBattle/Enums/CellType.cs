@@ -44,7 +44,7 @@ namespace SnakeBattle.Enums
         [Description("æ")] EnemyTailEndUp,
         [Description("ö")] EnemyTailEndRight,
         [Description("*")] EnemyTailInactive,
-        [Description("—")] EnemyBodyHorizontal,
+        [Description("─")] EnemyBodyHorizontal,
         [Description("|")] EnemyBodyVertical,
         [Description("┐")] EnemyBodyLeftDown,
         [Description("┘")] EnemyBodyLeftUp,
