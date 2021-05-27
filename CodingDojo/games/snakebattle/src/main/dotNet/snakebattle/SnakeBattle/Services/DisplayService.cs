@@ -17,7 +17,8 @@ namespace SnakeBattle.Services
             Console.SetCursorPosition(0, 0);
             Console.WriteLine(FormatBoardString(board));
 
-            Console.WriteLine("Decision: " + botCommand);
+            Console.WriteLine($"Decision: {botCommand}.");
+            Console.WriteLine("Press 'X' to exit.");
             Console.SetCursorPosition(0, 0);
         }
 

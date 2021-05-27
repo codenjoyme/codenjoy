@@ -259,8 +259,3 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-
-# Other
-/.vs/slnx.sqlite
-/run_vs-2019-MY.bat
-/UI/.vscode

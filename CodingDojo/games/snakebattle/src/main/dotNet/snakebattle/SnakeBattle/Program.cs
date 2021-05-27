@@ -1,31 +1,35 @@
 using System;
-using SnakeBattle.Services;
-using SnakeBattle.Utilities;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SnakeBattle.Builders;
+using SnakeBattle.Interfaces.Services;
 
 namespace SnakeBattle
 {
     internal class Program
     {
-        private const string ServerUrl = "http://localhost:8080/codenjoy-contest/board/player/0?code=000000000000";
-
         private static void Main(string[] args)
         {
-            Console.SetWindowSize(Console.LargestWindowWidth - 3, Console.LargestWindowHeight - 3);
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-            var solver = new Solver();
-            var displayService = new DisplayService();
-            var boardStringParser = new BoardStringParser();
+            var serverUrl = config.GetSection("ServerUrl").Value;
 
-            using var snakeBattleClient = new SnakeBattleClient(
-                ServerUrl,
-                solver,
-                displayService,
-                boardStringParser
-            );
-            
-            snakeBattleClient.Connect();
+            var serviceProvider = ServiceProviderBuilder.Build();
 
-            Console.ReadKey();
+            var snakeBattleClient = serviceProvider.GetRequiredService<ISnakeBattleClient>();
+
+            snakeBattleClient.ConnectAsync(serverUrl);
+
+            while (true)
+            {
+                var consoleKeyInfo = Console.ReadKey(true);
+                if (consoleKeyInfo.Key == ConsoleKey.X)
+                {
+                    break;
+                }
+            }
         }
     }
 }

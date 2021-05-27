@@ -1,28 +1,24 @@
 using System;
-using System.Linq;
-using System.Security.Authentication;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using SnakeBattle.Exceptions;
 using SnakeBattle.Interfaces;
 using SnakeBattle.Interfaces.Services;
 using SnakeBattle.Interfaces.Utilities;
-using WebSocketSharp;
 
 namespace SnakeBattle.Services
 {
     public class SnakeBattleClient : IDisposable, ISnakeBattleClient
     {
         private const string ResponsePrefix = "board=";
-        private const int MaxRetriesCount = 3;
-        private const int RetriesTimeoutInMilliseconds = 10000;
         private readonly IBoardStringParser _boardStringParser;
+        private readonly ClientWebSocket _clientWebSocket;
         private readonly IDisplayService _displayService;
-        private readonly WebSocket _gameServer;
         private readonly ISolver _solver;
-        private int _retriesCount;
 
         public SnakeBattleClient(
-            string serverUrl,
             ISolver solver,
             IDisplayService displayService,
             IBoardStringParser boardStringParser
@@ -32,57 +28,56 @@ namespace SnakeBattle.Services
             _displayService = displayService;
             _boardStringParser = boardStringParser;
 
-            _gameServer = new WebSocket(MakeWebSocketUrl(serverUrl))
-            {
-                SslConfiguration = {EnabledSslProtocols = SslProtocols.Tls12}
-            };
-            _gameServer.OnMessage += GameServerOnMessage;
-            _gameServer.OnClose += async (_, closeEventArgs) =>
-            {
-                await ReconnectAsync(closeEventArgs.WasClean, closeEventArgs.Code);
-            };
+            _clientWebSocket = new ClientWebSocket();
         }
 
         public void Dispose()
         {
-            if (_gameServer.ReadyState == WebSocketState.Open)
-            {
-                _gameServer.Close();
-            }
-
-            ((IDisposable) _gameServer)?.Dispose();
+            _clientWebSocket.Dispose();
         }
 
-        public void Connect()
+        public async Task ConnectAsync(string serverUrl)
         {
-            _gameServer.Connect();
+            var webSocketUrl = MakeWebSocketUrl(serverUrl);
+            await _clientWebSocket.ConnectAsync(new Uri(webSocketUrl), CancellationToken.None);
+            await ListenAsync();
         }
 
-        private void GameServerOnMessage(object sender, MessageEventArgs messageEventArgs)
+        private async Task HandleMessageAsync(string message)
         {
-            var message = messageEventArgs.Data;
-            if (!IsMessageValid(message))
-            {
-                throw new SnakeBattleClientException($"Server send invalid message: {message}");
-            }
-
-            var boardString = message.Substring(ResponsePrefix.Length);
+            var boardString = message[ResponsePrefix.Length..];
             var board = _boardStringParser.Parse(boardString);
             var botCommand = _solver.Decide(board).ToString().ToUpper();
 
             _displayService.Render(boardString, botCommand);
 
-            ((WebSocket) sender).Send(botCommand);
-        }
-
-        private static bool IsAllowedToReconnect(ushort code)
-        {
-            return new ushort[] {1006, 1011}.Contains(code);
+            await SendAsync(botCommand);
         }
 
         private static bool IsMessageValid(string response)
         {
             return response.StartsWith(ResponsePrefix);
+        }
+
+        private async Task ListenAsync()
+        {
+            var buffer = new ArraySegment<byte>(new byte[10240]);
+            while (true)
+            {
+                var result = await _clientWebSocket.ReceiveAsync(buffer, CancellationToken.None);
+                if (result.MessageType == WebSocketMessageType.Close)
+                {
+                    break;
+                }
+
+                var message = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
+                if (!IsMessageValid(message))
+                {
+                    throw new SnakeBattleClientException($"Server send invalid message: {message}");
+                }
+
+                await HandleMessageAsync(message);
+            }
         }
 
         private static string MakeWebSocketUrl(string serverUrl)
@@ -93,25 +88,10 @@ namespace SnakeBattle.Services
                 .Replace("?code=", "&code=");
         }
 
-        private async Task ReconnectAsync(bool wasClean, ushort code)
+        private async Task SendAsync(string str)
         {
-            if (!wasClean && !_gameServer.IsAlive && IsAllowedToReconnect(code))
-            {
-                if (_retriesCount < MaxRetriesCount)
-                {
-                    Console.WriteLine($"Trying to reconnect, attempt {_retriesCount + 1} of {MaxRetriesCount}...");
-                    await Task.Delay(RetriesTimeoutInMilliseconds);
-
-                    _retriesCount++;
-                    _gameServer.Connect();
-                }
-                else
-                {
-                    Console.WriteLine(
-                        "Could not reconnect to the server, please try again later. Press any key to exit..."
-                    );
-                }
-            }
+            var bytesToSend = new ArraySegment<byte>(Encoding.UTF8.GetBytes(str));
+            await _clientWebSocket.SendAsync(bytesToSend, WebSocketMessageType.Text, true, CancellationToken.None);
         }
     }
 }

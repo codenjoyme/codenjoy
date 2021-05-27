@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace SnakeBattle.Interfaces.Services
 {
     public interface ISnakeBattleClient
     {
-        void Connect();
+        Task ConnectAsync(string serverUrl);
     }
 }

@@ -3,15 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattle.Enums;
-using SnakeBattle.Interfaces.Models;
+using SnakeBattle.Interfaces.Services;
+using SnakeBattle.Models;
 
-namespace SnakeBattle.Models
+namespace SnakeBattle.Services
 {
-    public class Board : IBoard
+    public class BoardNavigator : IBoardNavigator
     {
         private readonly IEnumerable<Cell> _cells;
 
-        public Board(IEnumerable<Cell> cells)
+        public BoardNavigator(IEnumerable<Cell> cells)
         {
             _cells = cells;
         }
@@ -20,22 +21,22 @@ namespace SnakeBattle.Models
         {
             var matchCount = 0;
 
-            if (GetCellToTheTop(cell)?.Type == cellType)
+            if (GetCellToTheTopOf(cell)?.Type == cellType)
             {
                 matchCount++;
             }
 
-            if (GetCellToTheRight(cell)?.Type == cellType)
+            if (GetCellToTheRightOf(cell)?.Type == cellType)
             {
                 matchCount++;
             }
 
-            if (GetCellToTheBottom(cell)?.Type == cellType)
+            if (GetCellToTheBottomOf(cell)?.Type == cellType)
             {
                 matchCount++;
             }
 
-            if (GetCellToTheLeft(cell)?.Type == cellType)
+            if (GetCellToTheLeftOf(cell)?.Type == cellType)
             {
                 matchCount++;
             }
@@ -78,28 +79,33 @@ namespace SnakeBattle.Models
             return foundCell;
         }
 
-        public Cell? GetCellToTheLeft(Cell baseCell)
+        public IEnumerable<Cell> GetCells()
+        {
+            return _cells;
+        }
+
+        public Cell? GetCellToTheLeftOf(Cell baseCell)
         {
             var cell = GetCell(baseCell.CoordinateX - 1, baseCell.CoordinateY);
 
             return cell;
         }
 
-        public Cell? GetCellToTheRight(Cell baseCell)
+        public Cell? GetCellToTheRightOf(Cell baseCell)
         {
             var cell = GetCell(baseCell.CoordinateX + 1, baseCell.CoordinateY);
 
             return cell;
         }
 
-        public Cell? GetCellToTheTop(Cell baseCell)
+        public Cell? GetCellToTheTopOf(Cell baseCell)
         {
             var cell = GetCell(baseCell.CoordinateX, baseCell.CoordinateY - 1);
 
             return cell;
         }
 
-        public Cell? GetCellToTheBottom(Cell baseCell)
+        public Cell? GetCellToTheBottomOf(Cell baseCell)
         {
             var cell = GetCell(baseCell.CoordinateX, baseCell.CoordinateY + 1);
 
@@ -180,6 +186,45 @@ namespace SnakeBattle.Models
             return foundCell!;
         }
 
+        public IEnumerable<Cell> GetApples()
+        {
+            var cells = GetCells(CellType.Apple);
+
+            return cells;
+        }
+
+        public IEnumerable<Cell> GetGold()
+        {
+            var cells = GetCells(CellType.Gold);
+
+            return cells;
+        }
+
+        public IEnumerable<Cell> GetFlyingPills()
+        {
+            var cells = GetCells(CellType.FlyingPill);
+
+            return cells;
+        }
+
+        public IEnumerable<Cell> GetFuryPills()
+        {
+            var cells = GetCells(CellType.FuryPill);
+
+            return cells;
+        }
+
+        public bool IsPlayerAlive()
+        {
+            var cell = GetCell(new[]
+            {
+                CellType.HeadDead,
+                CellType.HeadSleep
+            });
+
+            return cell != null;
+        }
+
         public bool IsCellTypeAtPoint(CellType cellTypeToCheck, int coordinateX, int coordinateY)
         {
             var cell = GetCell(coordinateX, coordinateY);
@@ -192,7 +237,7 @@ namespace SnakeBattle.Models
             return cell.Type == cellTypeToCheck;
         }
 
-        public bool IsNear(Cell cell, CellType cellType)
+        public bool IsCellTypeNear(Cell cell, CellType cellType)
         {
             var count = CountNear(cell, cellType);
 
