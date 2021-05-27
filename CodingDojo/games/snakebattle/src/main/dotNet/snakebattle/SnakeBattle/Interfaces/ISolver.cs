@@ -1,10 +1,10 @@
 ﻿using SnakeBattle.Enums;
-using SnakeBattle.Interfaces.Models;
+using SnakeBattle.Interfaces.Services;
 
 namespace SnakeBattle.Interfaces
 {
     public interface ISolver
     {
-        PlayerCommand Decide(IBoard board);
+        PlayerCommand Decide(IBoardNavigator boardNavigator);
     }
 }

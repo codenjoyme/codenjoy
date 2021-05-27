@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using SnakeBattle.Enums;
+using SnakeBattle.Exceptions;
 using SnakeBattle.Interfaces.Utilities;
 using SnakeBattle.Models;
+using SnakeBattle.Services;
 
 namespace SnakeBattle.Utilities
 {
@@ -26,9 +28,14 @@ namespace SnakeBattle.Utilities
             }
         }
 
-        public Board Parse(string boardString)
+        public BoardNavigator Parse(string boardString)
         {
-            var boardSize = (int) Math.Sqrt(boardString.Length);
+            var boardSizeRaw = Math.Sqrt(boardString.Length);
+            var boardSize = (int) boardSizeRaw;
+            if (boardSizeRaw % 1 != 0)
+            {
+                throw new BoardStringParserException("Board size is not square");
+            }
 
             var cells = new List<Cell>();
             for (var y = 0; y < boardSize; y++)
@@ -49,7 +56,7 @@ namespace SnakeBattle.Utilities
                 }
             }
 
-            var board = new Board(cells);
+            var board = new BoardNavigator(cells);
 
             return board;
         }

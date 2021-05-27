@@ -1,9 +1,9 @@
-﻿using SnakeBattle.Models;
+﻿using SnakeBattle.Services;
 
 namespace SnakeBattle.Interfaces.Utilities
 {
     public interface IBoardStringParser
     {
-        Board Parse(string boardString);
+        BoardNavigator Parse(string boardString);
     }
 }
