@@ -93,7 +93,7 @@ logging:
       reflections: error
 github:
   host:
-    name: localhost
+    name: ${gameserver.host}
     port: 8081
 grpc:
   server:
@@ -102,4 +102,4 @@ grpc:
     pool.size: 5
 events:
   eventsServers:
-    kata: localhost:9091
+    kata: ${gameserver.host}:9091
