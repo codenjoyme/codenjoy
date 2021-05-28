@@ -34,7 +34,7 @@ import lombok.SneakyThrows;
 import org.fest.reflect.core.Reflection;
 import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -51,7 +51,8 @@ import static org.mockito.Mockito.*;
 @RequiredArgsConstructor
 public class WebsocketClients implements CleanUp {
 
-    private final Server server;
+    @Value("${server.path}")
+    private String serverPath;
     private final GameService gameService;
 
     private Map<String, WebSocketRunner> runners = new HashMap<>();
@@ -66,7 +67,7 @@ public class WebsocketClients implements CleanUp {
         Solver solver = mock(Solver.class);
         answer(solver, "");
         WebSocketRunner runner = WebSocketRunner.runClient(null,
-                server.endpoint() + url,
+                serverPath + url,
                 solver,
                 board(game));
         runners.put(name, runner);

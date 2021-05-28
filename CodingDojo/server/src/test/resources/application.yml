@@ -3,6 +3,7 @@ server:
   ip: 127.0.0.1
   port: 8080
   xFrameAllowedHosts: example.com,localhost:3000
+  path: http://${server.ip}:${local.server.port}${server.servlet.context-path}
 
 plugins:
   enable: false
