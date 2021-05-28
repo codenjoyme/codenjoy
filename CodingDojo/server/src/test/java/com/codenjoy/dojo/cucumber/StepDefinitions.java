@@ -24,7 +24,6 @@ package com.codenjoy.dojo.cucumber;
 
 import com.codenjoy.dojo.cucumber.page.*;
 import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -32,7 +31,7 @@ import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class StepDefinitions implements CleanUp {
+public class StepDefinitions {
 
     private final WebDriverWrapper web;
     private final LoginPage login;
@@ -43,17 +42,11 @@ public class StepDefinitions implements CleanUp {
     private final AdminPage admin;
     private final WebsocketClients clients;
 
-    @Before
-    @Override
-    public void cleanUp() {
-        admin.cleanUp();
-        registration.cleanUp();
-        clients.cleanUp();
-    }
-
     @After
     public void tearDown() {
-        cleanUp();
+        admin.close();
+        registration.close();
+        clients.close();
         web.closeBrowser();
     }
 

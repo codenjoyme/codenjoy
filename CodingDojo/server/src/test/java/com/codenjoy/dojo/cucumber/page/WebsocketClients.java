@@ -22,10 +22,7 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
-import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.client.ClientBoard;
-import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.client.*;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.mocks.FakeGameType;
@@ -49,7 +46,7 @@ import static org.mockito.Mockito.*;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class WebsocketClients implements CleanUp {
+public class WebsocketClients implements Closeable {
 
     @Value("${server.path}")
     private String serverPath;
@@ -58,7 +55,7 @@ public class WebsocketClients implements CleanUp {
     private Map<String, WebSocketRunner> runners = new HashMap<>();
 
     @Override
-    public void cleanUp() {
+    public void close() {
         runners.values()
                 .forEach(WebSocketRunner::close);
     }

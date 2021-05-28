@@ -22,6 +22,7 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.cucumber.page.admin.ActiveGames;
 import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.PlayerService;
@@ -41,7 +42,7 @@ import static org.junit.Assert.assertEquals;
 @Component
 @RequiredArgsConstructor
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class AdminPage implements CleanUp {
+public class AdminPage implements Closeable {
 
     public static final String URL = "/admin?room=";
     public static final BiFunction<String, String, String> CREATE_ROOM_URL =
@@ -60,7 +61,7 @@ public class AdminPage implements CleanUp {
     private final ActiveGames activeGames;
 
     @Override
-    public void cleanUp() {
+    public void close() {
         actionLogger.pause();
         autoSaver.resume();
         debugService.pause();
