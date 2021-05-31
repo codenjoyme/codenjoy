@@ -59,6 +59,10 @@ public class WebDriverWrapper {
         log.info("Started here: {}", serverPath);
     }
 
+    public void refresh() {
+        driver.navigate().refresh();
+    }
+
     public void open(String url) {
         driver.get(serverPath + url);
     }

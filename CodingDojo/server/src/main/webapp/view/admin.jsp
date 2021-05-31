@@ -554,7 +554,7 @@
                                 <td><form:input class="input-room"     path="players[${status.index}].room"/></td>
                                 <td><form:input class="input-score"    path="players[${status.index}].score"/></td>
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
-                                <td>&nbsp;<span>${player.ticksInactive}</span>&nbsp;</td>
+                                <td>&nbsp;<span class="span-ticksInactive">${player.ticksInactive}</span>&nbsp;</td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
                                         <td class="joystick">
@@ -631,7 +631,7 @@
                                 <td><input type="text" readonly="true" class="input-room"     value="${player.room}"/></td>
                                 <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
-                                <td>&nbsp;<span></span>&nbsp;</td>
+                                <td>&nbsp;<span class="span-ticksInactive"></span>&nbsp;</td>
                                 <td>UDLRA</td>
                                 <td><a href="${ctx}/board/room/${room}">${room}</a></td>
                                 <td>Save</td>

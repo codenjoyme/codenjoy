@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.mocks.FakeGameType;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.fest.reflect.core.Reflection;
 import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.base.MockitoAssertionError;
@@ -36,13 +37,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
@@ -52,7 +53,7 @@ public class WebsocketClients implements Closeable {
     private String serverPath;
     private final GameService gameService;
 
-    private Map<String, WebSocketRunner> runners = new HashMap<>();
+    private static Map<String, WebSocketRunner> runners = new HashMap<>();
 
     @Override
     public void close() {
@@ -60,7 +61,7 @@ public class WebsocketClients implements Closeable {
                 .forEach(WebSocketRunner::close);
     }
 
-    public void assertConnected(String game, String name, String url) {
+    public void registerWebSocketClient(String game, String name, String url) {
         Solver solver = mock(Solver.class);
         answer(solver, "");
         WebSocketRunner runner = WebSocketRunner.runClient(null,
@@ -70,31 +71,62 @@ public class WebsocketClients implements Closeable {
         runners.put(name, runner);
     }
 
+    public void refreshAllRunnersSessions() {
+        runners.values().forEach(this::refreshRunnerSession);
+    }
+
+    public void refreshRunnerSession(String name) {
+        WebSocketRunner runner = runners.get(name);
+        if (runner != null) {
+            refreshRunnerSession(runner);
+        } else {
+            log.warn("runner `{}` cannot be refreshed: not found", name);
+        }
+    }
+
+    private void refreshRunnerSession(WebSocketRunner runner) {
+        try {
+            runner.tryToConnect();
+        } catch (Exception e) {
+            log.warn("unable to refresh runner session", e);
+        }
+    }
+
+    public void shutDownRunnerSession(String name) {
+        WebSocketRunner runner = runners.get(name);
+        if (runner != null) {
+            runner.close();
+        }
+    }
+
     private ClientBoard board(String game) {
         GameType gameType = gameService.getGameType(game);
         Class boardClass = gameType.getBoard();
 
-        ClientBoard board = (ClientBoard) Reflection.constructor()
-                .withParameterTypes(FakeGameType.class)
-                .in(boardClass)
-                .newInstance(gameType);
+        ClientBoard board;
+        if (gameType instanceof FakeGameType) {
+            board = (ClientBoard) Reflection.constructor()
+                    .withParameterTypes(FakeGameType.class)
+                    .in(boardClass)
+                    .newInstance(gameType);
+        } else {
+            board = (ClientBoard) Reflection.constructor()
+                    .in(boardClass)
+                    .newInstance();
+        }
 
         return board;
     }
 
     @SneakyThrows
     public void assertRequestReceived(String name, String command, String board) {
-        assertRequestReceived(name, command,
-                values -> {
-                    assertEquals(1, values.size());
-                    assertEquals(board, values.getLast());
-                });
+        Deque<String> values = sendRequest(name, command);
+        assertEquals(1, values.size());
+        assertEquals(board, values.getLast());
     }
 
     @SneakyThrows
-    public void assertRequestReceived(String name, String command,
-                                      Consumer<Deque<String>> onReceived)
-    {
+    public Deque<String> sendRequest(String name, String command) {
         WebSocketRunner runner = runners.get(name);
         Solver solver = runner.solver();
 
@@ -106,10 +138,10 @@ public class WebsocketClients implements Closeable {
                 .map(board -> ((AbstractBoard) board).boardAsString())
                 .collect(Collectors.toCollection(LinkedList::new));
 
-        onReceived.accept(values);
-
         reset(solver);
         answer(solver, "");
+
+        return values;
     }
 
     private List<ClientBoard> getRequests(Solver solver, int ticks) throws InterruptedException {
@@ -137,7 +169,7 @@ public class WebsocketClients implements Closeable {
 
     @SneakyThrows
     public void assertRequestReceivedNothing(String name, String command) {
-        assertRequestReceived(name, command,
-                values -> assertEquals(0, values.size()));
+        Deque<String> values = sendRequest(name, command);
+        assertEquals(0, values.size());
     }
 }

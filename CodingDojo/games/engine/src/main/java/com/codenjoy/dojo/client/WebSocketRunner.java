@@ -25,9 +25,7 @@ package com.codenjoy.dojo.client;
 
 import lombok.SneakyThrows;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.websocket.api.RemoteEndpoint;
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.UpgradeException;
+import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
@@ -189,9 +187,12 @@ public class WebSocketRunner implements Closeable {
             print("Opened connection " + session.toString());
         }
 
+        // TODO [RK#2]: When a client logouts then server socket catches the event `PlayerSocket.onWebSocketClose()`
+        //              but client socket doesn't catch the event `ClientSocket.onClose()`.
+        //              In such case we don't know on a client side that server doesn't interact with us.
         @OnWebSocketClose
         public void onClose(int closeCode, String message) {
-            if (onClose != null) {
+            if (closeCode != StatusCode.NORMAL && onClose != null) {
                 onClose.run();
             }
             print("Closed with message: '" + message + "' and code: " + closeCode);
@@ -268,7 +269,7 @@ public class WebSocketRunner implements Closeable {
         sleep(TIMEOUT);
     }
 
-    private void tryToConnect() throws Exception {
+    public void tryToConnect() throws Exception {
         print(String.format("Connecting to '%s'...", uri));
 
         if (session != null) {

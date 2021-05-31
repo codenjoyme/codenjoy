@@ -24,11 +24,15 @@ package com.codenjoy.dojo.cucumber;
 
 import com.codenjoy.dojo.cucumber.page.*;
 import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
+import org.openqa.selenium.WebElement;
+
+import static org.junit.Assert.assertEquals;
 
 @RequiredArgsConstructor
 public class StepDefinitions {
@@ -41,6 +45,13 @@ public class StepDefinitions {
     private final Page page;
     private final AdminPage admin;
     private final WebsocketClients clients;
+
+    @Before
+    public void cleanUp() {
+        admin.close();
+        registration.close();
+        clients.close();
+    }
 
     @After
     public void tearDown() {
@@ -195,9 +206,14 @@ public class StepDefinitions {
 
     @Given("Login to Admin page")
     public void loginToAdminPage() {
-        loginAs("admin@codenjoyme.com", "admin");
-        admin.open();
-        assertAdminPageOpened(AdminPage.URL + "first");
+        loginToAdminPage("first");
+    }
+
+    @Given("Login to Admin page in game {string}")
+    public void loginToAdminPage(String game) {
+        loginAs("admin@codenjoyme.com", "admin", game);
+        admin.open(game);
+        assertAdminPageOpened(AdminPage.URL + game);
     }
 
     @Then("Registration is active")
@@ -269,13 +285,21 @@ public class StepDefinitions {
     public void assertClientConnected(String name, String url) {
         String game = page.pageSetting("game");
         url = page.injectSettings(url);
-        clients.assertConnected(game, name, url);
+        clients.registerWebSocketClient(game, name, url);
     }
 
+    @Then("Websocket {string} send {string}")
+    public void websocketClientSend(String name, String command) {
+        clients.sendRequest(name, command);
+    }
+
+    // TODO [RK#4]: Emphasise that client override running solver to return different command.
+    //              messages are being sent on the background when a session is opened.
     @Then("Websocket {string} send {string} and got {string}")
-    public void websocketClientSend(String name, String command, String board) {
+    public void websocketClientSendAndGot(String name, String command, String board) {
         board = board.replaceAll("\\\\n", "\n");
         clients.assertRequestReceived(name, command, board);
+        page.refresh();
     }
 
     @Then("Websocket {string} send {string} and got nothing")
@@ -316,5 +340,57 @@ public class StepDefinitions {
     @Then("There are players in rooms {string} on the admin page")
     public void thereArePlayersOnTheRoomsOnAdminPage(String expected) {
         admin.assertPlayersInRooms(expected);
+    }
+
+    @When("Click load all players")
+    public void clickLoadAllPlayers() {
+        admin.loadAllHRef().click();
+        clients.refreshAllRunnersSessions();
+    }
+
+    @When("Click inactivity kick checkbox")
+    public void clickInactivityKickCheckbox() {
+        admin.inactivityKickCheckbox().click();
+    }
+
+    @And("Set inactivity ticks parameter to {int}")
+    public void setInactivityTicksParameterTo(int ticks) {
+        WebElement input = admin.inactivityTicksInput();
+        input.clear();
+        input.sendKeys(String.valueOf(ticks));
+    }
+
+    @And("Press inactivity settings save button")
+    public void pressInactivitySettingsSaveButton() {
+        admin.inactivitySaveButton().click();
+    }
+
+    @Then("Inactivity parameters [kick={string}, ticks={int}]")
+    public void assertInactivitySettings(String kick, int ticks) {
+        assertEquals(Boolean.valueOf(kick), admin.inactivityKickCheckbox().isEnabled());
+        assertEquals(String.valueOf(ticks), admin.inactivityTicksInput().getAttribute("value"));
+    }
+
+    @And("All players inactivity ticks are reset")
+    public void assertAllPlayersInactivityTicksReset() {
+        admin.playerInactiveTicks().forEach(ticks -> assertEquals("0", ticks.getText()));
+    }
+
+    @Then("Wait for {int} seconds")
+    public void waitForSeconds(int seconds) throws InterruptedException {
+        for (int i = 0; i < seconds; i++) {
+            Thread.sleep(1000);
+            page.refresh();
+        }
+    }
+
+    @And("Shutdown {string} websocket runner")
+    public void shutdownClientWebsocketRunner(String player) {
+        clients.shutDownRunnerSession(player);
+    }
+
+    @Then("Player {string} is kicked {string}")
+    public void playerUserMailComIsKickedTrue(String email, String isKicked) {
+        assertEquals(Boolean.valueOf(isKicked), !admin.playerInactiveTicks(email).isDisplayed());
     }
 }

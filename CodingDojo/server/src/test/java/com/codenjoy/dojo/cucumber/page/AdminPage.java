@@ -10,12 +10,12 @@ package com.codenjoy.dojo.cucumber.page;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -30,10 +30,12 @@ import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.log.DebugService;
 import lombok.RequiredArgsConstructor;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
@@ -74,6 +76,10 @@ public class AdminPage implements Closeable {
         web.open("/admin");
     }
 
+    public void open(String room) {
+        web.open(URL + room);
+    }
+
     public void assertOnPage() {
         page.assertPage("admin");
     }
@@ -104,6 +110,36 @@ public class AdminPage implements Closeable {
 
     public WebElement pauseResumeGameLink() {
         return web.element("#pauseGame td a");
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement loadAllHRef() {
+        return web.elementBy(By.xpath("//a[@href='/codenjoy-contest/admin/player/loadAll?room=sample#savePlayersGame']"));
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement inactivityKickCheckbox() {
+        return web.elementBy(By.xpath("//input[@name='inactivity.kickEnabled']"));
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement inactivityTicksInput() {
+        return web.elementBy(By.xpath("//input[@name='inactivity.inactivityTimeout']"));
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement inactivitySaveButton() {
+        return web.elementBy(By.xpath("//table[@id='inactivity']//input[@value='Save']"));
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public List<WebElement> playerInactiveTicks() {
+        return web.elementsBy(By.xpath("//span[@class='span-ticksInactive']"));
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement playerInactiveTicks(String value) {
+        return web.elementBy(By.xpath("//span[@class='span-ticksInactive'][preceding::td//input[@value='" + value + "']]"));
     }
 
     public void assertGameIsActive(boolean active) {
