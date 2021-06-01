@@ -367,7 +367,7 @@ public class StepDefinitions {
 
     @Then("Inactivity parameters [kick={string}, ticks={int}]")
     public void assertInactivitySettings(String kick, int ticks) {
-        String messageFormat = "kick: %s, ticks: %d\n";
+        String messageFormat = "kick: %s, ticks: %s\n";
         String expected = String.format(messageFormat,
                 kick,
                 ticks);
