@@ -383,8 +383,8 @@ public class StepDefinitions {
     }
 
     @Then("Wait for {int} seconds")
-    public void waitForSeconds(int seconds) throws InterruptedException {
-        for (int i = 0; i < seconds; i++) {
+    public void waitForSeconds(int secondsToWait) throws InterruptedException {
+        for (int second = 1; second <= secondsToWait; second++) {
             Thread.sleep(1000);
             page.refresh();
         }
