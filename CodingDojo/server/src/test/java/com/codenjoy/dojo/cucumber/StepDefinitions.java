@@ -367,8 +367,14 @@ public class StepDefinitions {
 
     @Then("Inactivity parameters [kick={string}, ticks={int}]")
     public void assertInactivitySettings(String kick, int ticks) {
-        assertEquals(Boolean.valueOf(kick), admin.inactivityKickCheckbox().isEnabled());
-        assertEquals(String.valueOf(ticks), admin.inactivityTicksInput().getAttribute("value"));
+        String messageFormat = "kick: %s, ticks: %d\n";
+        String expected = String.format(messageFormat,
+                kick,
+                ticks);
+        String actual = String.format(messageFormat,
+                admin.inactivityKickCheckbox().isEnabled(),
+                admin.inactivityTicksInput().getAttribute("value"));
+        assertEquals(expected, actual);
     }
 
     @And("All players inactivity ticks are reset")
