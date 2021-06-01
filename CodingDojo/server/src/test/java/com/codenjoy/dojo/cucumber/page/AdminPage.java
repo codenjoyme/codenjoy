@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.log.DebugService;
 import lombok.RequiredArgsConstructor;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -40,6 +39,7 @@ import java.util.function.BiFunction;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static org.junit.Assert.assertEquals;
+import static org.openqa.selenium.By.xpath;
 
 @Component
 @RequiredArgsConstructor
@@ -114,32 +114,32 @@ public class AdminPage implements Closeable {
 
     // TODO [RK#1]: prefer using css selector to xpath
     public WebElement loadAllHRef() {
-        return web.elementBy(By.xpath("//a[@href='/codenjoy-contest/admin/player/loadAll?room=sample#savePlayersGame']"));
+        return web.elementBy(xpath("//a[@href='/codenjoy-contest/admin/player/loadAll?room=sample#savePlayersGame']"));
     }
 
     // TODO [RK#1]: prefer using css selector to xpath
     public WebElement inactivityKickCheckbox() {
-        return web.elementBy(By.xpath("//input[@name='inactivity.kickEnabled']"));
+        return web.elementBy(xpath("//input[@name='inactivity.kickEnabled']"));
     }
 
     // TODO [RK#1]: prefer using css selector to xpath
     public WebElement inactivityTicksInput() {
-        return web.elementBy(By.xpath("//input[@name='inactivity.inactivityTimeout']"));
+        return web.elementBy(xpath("//input[@name='inactivity.inactivityTimeout']"));
     }
 
     // TODO [RK#1]: prefer using css selector to xpath
     public WebElement inactivitySaveButton() {
-        return web.elementBy(By.xpath("//table[@id='inactivity']//input[@value='Save']"));
+        return web.elementBy(xpath("//table[@id='inactivity']//input[@value='Save']"));
     }
 
     // TODO [RK#1]: prefer using css selector to xpath
     public List<WebElement> playerInactiveTicks() {
-        return web.elementsBy(By.xpath("//span[@class='span-ticksInactive']"));
+        return web.elementsBy(xpath("//span[@class='span-ticksInactive']"));
     }
 
     // TODO [RK#1]: prefer using css selector to xpath
     public WebElement playerInactiveTicks(String value) {
-        return web.elementBy(By.xpath("//span[@class='span-ticksInactive'][preceding::td//input[@value='" + value + "']]"));
+        return web.elementBy(xpath("//span[@class='span-ticksInactive'][preceding::td//input[@value='" + value + "']]"));
     }
 
     public void assertGameIsActive(boolean active) {
