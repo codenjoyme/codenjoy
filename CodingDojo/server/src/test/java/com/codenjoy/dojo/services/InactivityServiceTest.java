@@ -38,7 +38,7 @@ import static org.mockito.Mockito.*;
 
 public class InactivityServiceTest extends AbstractPlayerGamesTest {
 
-    InactivityService inactivity;
+    private InactivityService inactivity;
 
     @Before
     public void setUp() {
@@ -48,7 +48,7 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
         inactivity = new InactivityService(playerGames, timeService);
     }
 
-    void gavenPlayers(int timeout, long now) {
+    private void gavenPlayers(int timeout, long now) {
         createPlayer("player1", "room", "game", MULTIPLE)
                 .setLastResponse(Long.MAX_VALUE);
 
@@ -62,14 +62,14 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
                 .setLastResponse(minus(now, Calendar.SECOND, timeout / 2));
     }
 
-    long minus(long time, int field, int amount) {
+    private long minus(long time, int field, int amount) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
         calendar.add(field, -1 * amount);
         return calendar.getTimeInMillis();
     }
 
-    void setupInactivitySettings(int timeout, boolean enabled, boolean value) {
+    private void setupInactivitySettings(int timeout, boolean enabled, boolean value) {
         if (playerGames.active().isEmpty()) {
             fail("There are no active players");
         }
