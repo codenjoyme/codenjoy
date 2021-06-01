@@ -77,11 +77,11 @@ public class WebsocketClients implements Closeable {
 
     public void refreshRunnerSession(String name) {
         WebSocketRunner runner = runners.get(name);
-        if (runner != null) {
-            refreshRunnerSession(runner);
-        } else {
+        if (runner == null) {
             log.warn("runner `{}` cannot be refreshed: not found", name);
+            return;
         }
+        refreshRunnerSession(runner);
     }
 
     private void refreshRunnerSession(WebSocketRunner runner) {
