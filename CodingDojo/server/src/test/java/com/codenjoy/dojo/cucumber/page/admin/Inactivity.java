@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 import static com.codenjoy.dojo.cucumber.utils.PageUtils.xpath;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
+import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
@@ -64,5 +65,9 @@ public class Inactivity {
             put("kickEnabled", kickEnabled());
             put("timeout", timeout());
         }}.toString();
+    }
+
+    public void assertPlayerKicked(String email, boolean isKicked) {
+        assertEquals(isKicked, !playerInactiveTicks(email).isDisplayed());
     }
 }

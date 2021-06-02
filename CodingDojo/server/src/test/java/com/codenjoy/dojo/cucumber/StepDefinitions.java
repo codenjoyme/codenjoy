@@ -394,7 +394,7 @@ public class StepDefinitions {
     }
 
     @Then("Player {string} is kicked {bool}")
-    public void playerUserMailComIsKickedTrue(String email, boolean isKicked) {
-        assertEquals(isKicked, !admin.inactivity().playerInactiveTicks(email).isDisplayed());
+    public void playerIsKicked(String email, boolean isKicked) {
+        admin.inactivity().assertPlayerKicked(email, isKicked);
     }
 }
