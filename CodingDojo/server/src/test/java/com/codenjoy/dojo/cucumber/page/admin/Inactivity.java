@@ -2,6 +2,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
 
 import com.codenjoy.dojo.cucumber.page.Page;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
+import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -61,10 +62,10 @@ public class Inactivity {
 
     @Override
     public String toString() {
-        return new LinkedHashMap<String, Object>(){{
-            put("kickEnabled", kickEnabled());
-            put("timeout", timeout());
-        }}.toString();
+        return new ImmutableMap.Builder<String, Object>()
+            .put("kickEnabled", kickEnabled())
+            .put("timeout", timeout())
+            .build().toString();
     }
 
     public void assertPlayerKicked(String email, boolean isKicked) {
