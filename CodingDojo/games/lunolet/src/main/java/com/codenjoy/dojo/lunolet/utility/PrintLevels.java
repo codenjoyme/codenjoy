@@ -27,18 +27,23 @@ import com.codenjoy.dojo.lunolet.model.Level;
 import com.codenjoy.dojo.lunolet.model.LevelManager;
 
 import java.awt.geom.Point2D;
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class PrintLevels {
 
-    public static void main(String[] args) {
-        try {
-            PrintWriter writer = new PrintWriter("src\\main\\webapp\\resources\\help\\lunolet-levels.html", "UTF-8");
+    private static final String FILE_ABSOLUTE_PATH = String.join(File.separator,
+            System.getProperty("user.dir"),
+            "src", "main", "webapp", "resources", "help", "lunolet-levels.html");
+
+    public static void main(String[] args) throws IOException {
+        try (PrintWriter writer = new PrintWriter(FILE_ABSOLUTE_PATH, UTF_8)) {
             writer.println("<html>");
             writer.println("<head>");
             writer.println("    <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">");
@@ -77,11 +82,6 @@ public class PrintLevels {
             writer.println("</div>");
             writer.println("</body>");
             writer.println("</html>");
-            writer.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
     }
 
