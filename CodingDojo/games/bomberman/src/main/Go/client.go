@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"regexp"
 	"strings"
 	"sync"
 
@@ -47,14 +48,6 @@ type Game interface {
 	Show() string
 	CommonAPI
 }
-
-const (
-	gamePath          = "/codenjoy-contest/ws"
-	gameQueryTemplate = "user=%s&code=%s&gameName=bomberman"
-)
-
-// It's var for testing purposes
-var gameProtocol = "wss"
 
 func (b *board) Show() string {
 	repr := strings.Builder{}
@@ -112,35 +105,29 @@ func getConnection(u url.URL) (*websocket.Conn, error) {
 // createURL creates valid connection URL from raw url copied from browser url input in the game window
 // example browserURL: "https://codenjoy.com/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman"
 func createURL(browserURL string) (url.URL, error) {
-	// get host name
-	mutatedUrl := strings.Replace(browserURL, "https://", "", 1)
-	urlParts := strings.Split(mutatedUrl, "/")
-	if len(urlParts) != 5 {
-		return url.URL{}, errors.New("Invalid URL, can't get host name, url: " + browserURL)
+	r := regexp.MustCompile("(http|https)://(.*)/codenjoy-contest/board/player/(\\w*)\\?code=(\\d*)(&game=bomberman)?")
+	params := r.FindStringSubmatch(browserURL)
+	if params == nil {
+		return url.URL{}, errors.New("Invalid URL, url: " + browserURL)
 	}
-	host := urlParts[0]
 
-	// get player id
-	mutatedUrl = strings.Replace(mutatedUrl, host+"/codenjoy-contest/board/player/", "", 1)
-	urlParts = strings.Split(mutatedUrl, "?")
-	if len(urlParts) != 2 {
-		return url.URL{}, errors.New("Invalid URL, can't get player ID, url: " + browserURL)
+	var gameProtocol string
+	protocol := params[1]
+	if strings.EqualFold(protocol, "http") {
+		gameProtocol = "ws"
+	} else {
+		gameProtocol = "wss"
 	}
-	player := urlParts[0]
 
-	// get game code
-	mutatedUrl = strings.Replace(mutatedUrl, player+"?code=", "", 1)
-	urlParts = strings.Split(mutatedUrl, "&")
-	if len(urlParts) != 2 {
-		return url.URL{}, errors.New("Invalid URL, can't get game code, url: " + browserURL)
-	}
-	code := urlParts[0]
+	host := params[2]
+	player := params[3]
+	code := params[4]
 
 	u := url.URL{
 		Scheme:   gameProtocol,
 		Host:     host,
-		Path:     gamePath,
-		RawQuery: fmt.Sprintf(gameQueryTemplate, player, code),
+		Path:     "/codenjoy-contest/ws",
+		RawQuery: fmt.Sprintf("user=%s&code=%s&game=bomberman", player, code),
 	}
 	return u, nil
 }

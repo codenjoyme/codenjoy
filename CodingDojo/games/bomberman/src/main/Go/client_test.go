@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,7 +23,6 @@ package bomberman
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -84,29 +83,29 @@ func Test_createURL(t *testing.T) {
 	tests := []tstruct{
 		{
 			name:       "Success, user input",
-			browserUrl: "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman",
+			browserUrl: "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&game=bomberman",
 			expectedURL: url.URL{
-				Scheme:   gameProtocol,
+				Scheme:   "wss",
 				Host:     "dojorena.io",
-				Path:     gamePath,
-				RawQuery: fmt.Sprintf(gameQueryTemplate, "793wdxskw521spo4mn1y", "531459153668826800"),
+				Path:     "/codenjoy-contest/ws",
+				RawQuery: "user=793wdxskw521spo4mn1y&code=531459153668826800&game=bomberman",
 			},
 			expectedError: nil,
 		}, {
 			name:          "Invalid host",
-			browserUrl:    "dojorena.iocodenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman",
+			browserUrl:    "dojorena.iocodenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&game=bomberman",
 			expectedURL:   url.URL{},
-			expectedError: errors.New("Invalid URL, can't get host name, url: " + "dojorena.iocodenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman"),
+			expectedError: errors.New("Invalid URL, url: " + "dojorena.iocodenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&game=bomberman"),
 		}, {
 			name:          "Invalid player ID",
-			browserUrl:    "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1ycode=531459153668826800&gameName=bomberman",
+			browserUrl:    "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1ycode=531459153668826800&game=bomberman",
 			expectedURL:   url.URL{},
-			expectedError: errors.New("Invalid URL, can't get player ID, url: " + "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1ycode=531459153668826800&gameName=bomberman"),
+			expectedError: errors.New("Invalid URL, url: " + "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1ycode=531459153668826800&game=bomberman"),
 		}, {
 			name:          "Invalid game code",
-			browserUrl:    "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800gameName=bomberman",
+			browserUrl:    "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800game=bomberman",
 			expectedURL:   url.URL{},
-			expectedError: errors.New("Invalid URL, can't get game code, url: " + "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800gameName=bomberman"),
+			expectedError: errors.New("Invalid URL, url: " + "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800game=bomberman"),
 		},
 	}
 
@@ -320,7 +319,7 @@ func Test_StartGame(t *testing.T) {
 	tests := []tstruct{
 		{
 			name:                "Successful board update",
-			browserUrl:          "https://{serverHostname}/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman",
+			browserUrl:          "https://{serverHostname}/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&game=bomberman",
 			async:               true,
 			server:              workingServer,
 			boardRepresentation: testValidStructuredBoard,
@@ -328,10 +327,10 @@ func Test_StartGame(t *testing.T) {
 			name:       "Invalid URL",
 			browserUrl: "",
 			async:      false,
-			panicValue: "Failed to create valid game url, err:  Invalid URL, can't get host name, url: \n",
+			panicValue: "Failed to create valid game url, err:  Invalid URL, url: \n",
 		}, {
 			name:       "Can't create connection",
-			browserUrl: "https://127.0.0.1/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman",
+			browserUrl: "https://127.0.0.1/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&game=bomberman",
 			async:      false,
 			panicValue: "Failed to create connection to game, err:  dial tcp 127.0.0.1:80: connect: connection refused\n",
 		},
@@ -340,7 +339,6 @@ func Test_StartGame(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.server != nil {
-				gameProtocol = "ws"
 				// Start mock server
 				server := httptest.NewServer(http.HandlerFunc(tt.server(testValidMsg)))
 				defer server.Close()
