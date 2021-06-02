@@ -22,6 +22,8 @@
 
 package bomberman
 
+import "math"
+
 type CommonAPI interface {
 	GetBomberman() Point
 	GetOtherBombermans() []Point
@@ -153,7 +155,7 @@ func (b *board) GetAt(p Point) Element {
 }
 
 func (b *board) boardSize() int {
-	return BoardSize
+	return int(math.Sqrt(float64(len(b.boardContent))))
 }
 
 func (b *board) GetBarriers() []Point {

@@ -51,9 +51,9 @@ type Game interface {
 
 func (b *board) Show() string {
 	repr := strings.Builder{}
-	for i := 0; i < BoardSize; i++ {
-		for j := 0; j < BoardSize; j++ {
-			repr.Write([]byte(fmt.Sprintf("%c", b.boardContent[i*33+j])))
+	for i := 0; i < b.boardSize(); i++ {
+		for j := 0; j < b.boardSize(); j++ {
+			repr.Write([]byte(fmt.Sprintf("%c", b.boardContent[i*b.boardSize()+j])))
 		}
 		repr.Write([]byte("\n"))
 	}
@@ -87,7 +87,7 @@ func (b *board) getAction() Action {
 
 func updateBoard(msg string, b *board) error {
 	boardContent := strings.Replace(msg, "board=", "", 1)
-	if len([]rune(boardContent)) != BoardSize*BoardSize {
+	if len([]rune(boardContent)) == 0 {
 		return errors.New("Invalid input, board size is not valid, input msg: " + msg)
 	}
 	b.rawBoard = boardContent
