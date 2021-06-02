@@ -129,7 +129,8 @@ Scenario: Admin can turn on / turn off kick for inactive players
   Then Websocket client 'client2' connected successfully to the '/board/player/<PLAYER_ID>?code=<CODE>'
   When Click logout
 
-  Given Login to Admin page in game 'sample'
+  Given Login to Admin page
+  When Select game room 'sample'
   When Click load all players
 
   When Set inactivity kick enabled checkbox to true
@@ -140,12 +141,12 @@ Scenario: Admin can turn on / turn off kick for inactive players
   And All players inactivity ticks are reset
 
   When Websocket 'client1' send 'ACT'
-  # I am waiting for 3 seconds to ensure that `client1` keeps on sending commands
+  # Waiting for 3 seconds to ensure that `client1` keeps on sending commands
   Then Wait for 3 seconds
   And Shutdown 'client1' websocket runner
 
   When Websocket 'client2' send 'ACT'
-  # I am waiting for 15 seconds to ensure that `client2` keeps on sending commands.
+  # Waiting for 15 seconds to ensure that `client2` keeps on sending commands.
   # In the same time `client1` increments inactivity ticks to the specified max.
   Then Wait for 15 seconds
   And Shutdown 'client2' websocket runner

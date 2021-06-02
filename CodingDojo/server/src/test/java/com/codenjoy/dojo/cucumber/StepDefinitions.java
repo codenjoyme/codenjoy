@@ -213,14 +213,12 @@ public class StepDefinitions {
 
     @Given("Login to Admin page")
     public void loginToAdminPage() {
-        loginToAdminPage("first");
-    }
-
-    @Given("Login to Admin page in game {string}")
-    public void loginToAdminPage(String game) {
-        loginAs("admin@codenjoyme.com", "admin", game);
-        admin.open(game);
-        assertAdminPageOpened(AdminPage.URL + game);
+        login.adminOpen();
+        login.email("admin@codenjoyme.com");
+        login.password("admin");
+        login.submit();
+        admin.assertOnPage();
+        assertAdminPageOpened(AdminPage.URL + "first");
     }
 
     @Then("Registration is active")
