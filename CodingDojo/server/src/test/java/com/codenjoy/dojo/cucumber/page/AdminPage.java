@@ -53,8 +53,8 @@ public class AdminPage implements Closeable {
     public static final By INACTIVITY_KICK_CHECKBOX = xpath("//input[@name='inactivity.kickEnabled']");
     public static final By INACTIVITY_TICKS_INPUT = xpath("//input[@name='inactivity.inactivityTimeout']");
     public static final By INACTIVITY_SAVE_BUTTON = xpath("//table[@id='inactivity']//input[@value='Save']");
-    public static final By PLAYER_INACTIVE_TICKS = xpath("//span[@class='span-ticksInactive']");
-    public static final Function<String, By> PLAYER_INACTIVE_TICKS_VALUE = value -> xpath("//span[@class='span-ticksInactive'][preceding::td//input[@value='%s']]", value);
+    public static final By PLAYER_INACTIVE_TICKS = xpath("//span[@class='input-ticks-inactive']");
+    public static final Function<String, By> PLAYER_INACTIVE_TICKS_VALUE = value -> xpath("//span[@class='input-ticks-inactive'][preceding::td//input[@value='%s']]", value);
 
     public static final String URL = "/admin?room=";
     public static final BiFunction<String, String, String> CREATE_ROOM_URL =
