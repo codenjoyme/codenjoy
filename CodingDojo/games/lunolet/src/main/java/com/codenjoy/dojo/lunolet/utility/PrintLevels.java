@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lunolet.utility;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,7 +27,6 @@ import com.codenjoy.dojo.lunolet.model.Level;
 import com.codenjoy.dojo.lunolet.model.LevelManager;
 
 import java.awt.geom.Point2D;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
@@ -38,12 +37,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class PrintLevels {
 
-    private static final String FILE_ABSOLUTE_PATH = String.join(File.separator,
-            System.getProperty("user.dir"),
-            "src", "main", "webapp", "resources", "help", "lunolet-levels.html");
-
     public static void main(String[] args) throws IOException {
-        try (PrintWriter writer = new PrintWriter(FILE_ABSOLUTE_PATH, UTF_8)) {
+        try (PrintWriter writer = new PrintWriter("src/main/webapp/resources/help/lunolet-levels.html", UTF_8)) {
             writer.println("<html>");
             writer.println("<head>");
             writer.println("    <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">");
