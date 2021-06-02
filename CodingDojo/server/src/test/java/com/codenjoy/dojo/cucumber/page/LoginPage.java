@@ -36,6 +36,7 @@ public class LoginPage {
 
     public static final String PASSWORD_INPUT = "#password input";
     public static final String GAME_SELECT = "#game select";
+    public static final String ROOM_SELECT = "#room select";
     public static final String SUBMIT_BUTTON = "#submit-button";
     public static final String REGISTER_BUTTON = "#register-button";
     public static final String ERROR_MESSAGE = "#error-message";
@@ -85,6 +86,6 @@ public class LoginPage {
     }
 
     public void assertRoomsAvailable(String rooms) {
-        assertEquals(rooms, web.options(GAME_SELECT).toString());
+        assertEquals(rooms, web.options(ROOM_SELECT).toString());
     }
 }

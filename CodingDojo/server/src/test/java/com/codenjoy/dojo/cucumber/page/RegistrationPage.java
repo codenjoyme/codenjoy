@@ -53,6 +53,7 @@ public class RegistrationPage implements Closeable {
     public static final String TECH_INPUT = "#data2 input";
     public static final String COMPANY_INPUT = "#data3 input";
     public static final String EXPERIENCE_INPUT = "#data4 input";
+    public static final String GAME_SELECT = "#game select";
     public static final String ROOM_SELECT = "#room select";
     public static final String ERROR_MESSAGE = "#error-message";
 
@@ -120,8 +121,12 @@ public class RegistrationPage implements Closeable {
         web.text(EXPERIENCE_INPUT, experience);
     }
 
+    public void game(String game) {
+        web.select(GAME_SELECT, game);
+    }
+
     public void room(String room) {
-        web.select(ROOM_SELECT, room);
+        web.select(GAME_SELECT, room);
     }
 
     public void open() {
@@ -141,6 +146,7 @@ public class RegistrationPage implements Closeable {
         assertEquals(false, web.exists(TECH_INPUT));
         assertEquals(false, web.exists(COMPANY_INPUT));
         assertEquals(false, web.exists(EXPERIENCE_INPUT));
+        assertEquals(false, web.exists(GAME_SELECT));
         assertEquals(false, web.exists(ROOM_SELECT));
         assertEquals(false, web.exists(SUBMIT_BUTTON));
     }

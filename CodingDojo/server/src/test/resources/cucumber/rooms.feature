@@ -21,7 +21,7 @@ Scenario: The user can choose which room to play in when registering and logging
   When Click logout
 
   Given Open registration page
-  When Try to register with: name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', room 'first2'
+  When Try to register with: name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'first', room 'first2'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first2'
   Then There are players '[Stiven Pupkin]' on the leaderboard
 
@@ -31,7 +31,7 @@ Scenario: The user can choose which room to play in when registering and logging
   When Click logout
 
   Given Open registration page
-  When Try to register with: name 'Eva Pupkina', email 'user2@mail.com', password 'password2', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', room 'first2'
+  When Try to register with: name 'Eva Pupkina', email 'user2@mail.com', password 'password2', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'first', room 'first2'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first2'
   Then There are players '[Stiven Pupkin, Eva Pupkina]' on the leaderboard
 
@@ -41,7 +41,7 @@ Scenario: The user can choose which room to play in when registering and logging
   When Click logout
 
   Given Open registration page
-  When Try to register with: name 'Bob Pupkin', email 'user3@mail.com', password 'password3', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', room 'first'
+  When Try to register with: name 'Bob Pupkin', email 'user3@mail.com', password 'password3', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'first', room 'first'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
   Then There are players '[Bob Pupkin]' on the leaderboard
 

@@ -31,7 +31,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
-import org.openqa.selenium.WebElement;
 
 import static org.junit.Assert.assertEquals;
 
@@ -110,11 +109,12 @@ public class StepDefinitions {
     @When("Try to register with: name {string}, email {string}, " +
             "password {string}, city {string}, " +
             "tech skills {string}, company {string}, " +
-            "experience {string}, room {string}")
+            "experience {string}, game {string}, room {string}")
     public void tryToRegister(String name, String email,
                               String password, String country,
                               String techSkills, String company,
-                              String experience, String room)
+                              String experience, String game,
+                              String room)
     {
         registration.name(name);
         registration.email(email);
@@ -124,6 +124,7 @@ public class StepDefinitions {
         registration.tech(techSkills);
         registration.company(company);
         registration.experience(experience);
+        registration.game(game);
         registration.room(room);
         registration.submit();
     }

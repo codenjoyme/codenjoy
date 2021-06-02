@@ -122,7 +122,9 @@ public class WebDriverWrapper {
 
     public List<String> options(String css) {
         return new Select(element(css)).getOptions().stream()
-                .map(option -> option.getText())
+                // option.getText() returns '' for hidden select/options
+                .map(option -> option.getAttribute("value"))
+                .sorted()
                 .collect(toList());
     }
 

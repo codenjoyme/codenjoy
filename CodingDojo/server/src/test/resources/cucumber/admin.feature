@@ -42,7 +42,7 @@ Scenario: Admin can close/open registration
   When Click logout
 
   When Open registration page
-  And Try to register with: name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', room 'first'
+  And Try to register with: name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'first', room 'first'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
   Then User registered in database as 'Registration.User(email=user1@mail.com, id=<PLAYER_ID>, readableName=Stiven Pupkin, approved=1, code=<CODE>, data=Moon|Java|Home|10 years)'
 
