@@ -86,10 +86,11 @@ func (b *board) getAction() Action {
 }
 
 func updateBoard(msg string, b *board) error {
-	boardContent := strings.Replace(msg, "board=", "", 1)
-	if len([]rune(boardContent)) == 0 {
-		return errors.New("Invalid input, board size is not valid, input msg: " + msg)
+	r := regexp.MustCompile("board=.*")
+	if !r.MatchString(msg) {
+		return errors.New("Invalid input, input msg: " + msg)
 	}
+	boardContent := strings.Replace(msg, "board=", "", 1)
 	b.rawBoard = boardContent
 	b.boardContent = []rune(boardContent)
 	//b.Show() // Use this to display game board in console output

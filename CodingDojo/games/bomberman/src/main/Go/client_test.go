@@ -146,13 +146,13 @@ func Test_updateBoard(t *testing.T) {
 			msg:         "Invalid message",
 			board:       &board{},
 			resBoard:    &board{},
-			expectedErr: errors.New("Invalid input, board size is not valid, input msg: " + "Invalid message"),
+			expectedErr: errors.New("Invalid input, input msg: " + "Invalid message"),
 		}, {
 			name:        "Empty message",
 			msg:         "",
 			board:       &board{},
 			resBoard:    &board{},
-			expectedErr: errors.New("Invalid input, board size is not valid, input msg: "),
+			expectedErr: errors.New("Invalid input, input msg: "),
 		},
 	}
 
