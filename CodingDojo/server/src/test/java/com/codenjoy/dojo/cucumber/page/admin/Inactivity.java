@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.Function;
 
@@ -55,5 +56,13 @@ public class Inactivity {
 
     public void submit() {
         web.elementBy(SAVE_BUTTON).click();
+    }
+
+    @Override
+    public String toString() {
+        return new LinkedHashMap<String, Object>(){{
+            put("kickEnabled", kickEnabled());
+            put("timeout", timeout());
+        }}.toString();
     }
 }

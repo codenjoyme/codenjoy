@@ -136,7 +136,7 @@ Scenario: Admin can turn on / turn off kick for inactive players
   And Set inactivity timeout parameter to 10
   And Press inactivity settings save button
 
-  Then Inactivity parameters [kick='true', ticks=10]
+  Then Inactivity parameters '{kickEnabled=true, timeout=10}'
   And All players inactivity ticks are reset
 
   When Websocket 'client1' send 'ACT'

@@ -37,7 +37,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import static com.codenjoy.dojo.cucumber.utils.PageUtils.xpath;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
