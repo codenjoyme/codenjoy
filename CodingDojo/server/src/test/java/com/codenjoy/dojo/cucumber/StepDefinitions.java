@@ -351,19 +351,19 @@ public class StepDefinitions {
 
     @When("Click inactivity kick checkbox")
     public void clickInactivityKickCheckbox() {
-        admin.inactivityKickCheckbox().click();
+        admin.inactivity().kickEnabledCheckbox().click();
     }
 
     @And("Set inactivity ticks parameter to {int}")
     public void setInactivityTicksParameterTo(int ticks) {
-        WebElement input = admin.inactivityTicksInput();
+        WebElement input = admin.inactivity().timeoutInput();
         input.clear();
         input.sendKeys(String.valueOf(ticks));
     }
 
     @And("Press inactivity settings save button")
     public void pressInactivitySettingsSaveButton() {
-        admin.inactivitySaveButton().click();
+        admin.inactivity().saveButton().click();
     }
 
     @Then("Inactivity parameters [kick={string}, ticks={int}]")
@@ -371,14 +371,14 @@ public class StepDefinitions {
         String messageFormat = "kick: %s, ticks: %s\n";
         String expected = String.format(messageFormat, kick, ticks);
         String actual = String.format(messageFormat,
-                admin.inactivityKickCheckbox().isEnabled(),
-                admin.inactivityTicksInput().getAttribute("value"));
+                admin.inactivity().kickEnabledCheckbox().isEnabled(),
+                admin.inactivity().timeoutInput().getAttribute("value"));
         assertEquals(expected, actual);
     }
 
     @And("All players inactivity ticks are reset")
     public void assertAllPlayersInactivityTicksReset() {
-        admin.playerInactiveTicks()
+        admin.inactivity().playersInactiveTicks()
                 .forEach(ticks -> assertEquals("0", ticks.getText()));
     }
 
@@ -402,6 +402,6 @@ public class StepDefinitions {
 
     @Then("Player {string} is kicked {bool}")
     public void playerUserMailComIsKickedTrue(String email, boolean isKicked) {
-        assertEquals(isKicked, !admin.playerInactiveTicks(email).isDisplayed());
+        assertEquals(isKicked, !admin.inactivity().playerInactiveTicks(email).isDisplayed());
     }
 }

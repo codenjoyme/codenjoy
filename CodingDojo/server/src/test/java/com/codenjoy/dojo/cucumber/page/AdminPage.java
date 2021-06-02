@@ -24,6 +24,7 @@ package com.codenjoy.dojo.cucumber.page;
 
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.cucumber.page.admin.ActiveGames;
+import com.codenjoy.dojo.cucumber.page.admin.Inactivity;
 import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
@@ -35,7 +36,6 @@ import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -50,11 +50,6 @@ public class AdminPage implements Closeable {
 
     // TODO [RK#1]: prefer using css selector to xpath
     public static final Function<String, By> LOAD_ALL_LINK = room -> xpath("//a[@href='/codenjoy-contest/admin/player/loadAll?room=%s#savePlayersGame']", room);
-    public static final By INACTIVITY_KICK_ENABLED = xpath("//input[@name='inactivity.kickEnabled']");
-    public static final By INACTIVITY_TIMEOUT_INPUT = xpath("//input[@name='inactivity.inactivityTimeout']");
-    public static final By INACTIVITY_SAVE_BUTTON = xpath("//table[@id='inactivity']//input[@value='Save']");
-    public static final By PLAYER_INACTIVE_TICKS = xpath("//span[@class='input-ticks-inactive']");
-    public static final Function<String, By> PLAYER_INACTIVE_TICK = email -> xpath("//tr[@player='%s']//span[@class='input-ticks-inactive']", email);
 
     public static final String URL = "/admin?room=";
     public static final BiFunction<String, String, String> CREATE_ROOM_URL =
@@ -71,6 +66,7 @@ public class AdminPage implements Closeable {
     private final Page page;
     private final WebDriverWrapper web;
     private final ActiveGames activeGames;
+    private final Inactivity inactivity;
 
     @Override
     public void close() {
@@ -126,26 +122,6 @@ public class AdminPage implements Closeable {
         return web.elementBy(LOAD_ALL_LINK.apply("sample"));
     }
 
-    public WebElement inactivityKickCheckbox() {
-        return web.elementBy(INACTIVITY_KICK_ENABLED);
-    }
-
-    public WebElement inactivityTicksInput() {
-        return web.elementBy(INACTIVITY_TIMEOUT_INPUT);
-    }
-
-    public WebElement inactivitySaveButton() {
-        return web.elementBy(INACTIVITY_SAVE_BUTTON);
-    }
-
-    public List<WebElement> playerInactiveTicks() {
-        return web.elementsBy(PLAYER_INACTIVE_TICKS);
-    }
-
-    public WebElement playerInactiveTicks(String value) {
-        return web.elementBy(PLAYER_INACTIVE_TICK.apply(value));
-    }
-
     public void assertGameIsActive(boolean active) {
         String status = pauseResumeGameStatus().getText();
         String linkText = pauseResumeGameLink().getText();
@@ -178,5 +154,9 @@ public class AdminPage implements Closeable {
 
     public void assertPlayersInRooms(String expected) {
         assertEquals(expected, activeGames.getPlayersInRooms().toString());
+    }
+
+    public Inactivity inactivity() {
+        return inactivity;
     }
 }
