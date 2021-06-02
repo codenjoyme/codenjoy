@@ -60,18 +60,18 @@ public class WebDriverWrapper {
     }
 
     private static String determineChromeWebDriverLocation() {
-        String windowsDriver = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe";
-        String macOsXDriver = "/Applications/chromedriver";
-        String unixOsDriver = "/usr/local/bin/chromedriver";
+        String windowsLocation = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe";
+        String macOsXLocation = "/Applications/chromedriver";
+        String unixOsLocation = "/usr/local/bin/chromedriver";
 
-        if (new File(windowsDriver).exists()) {
-            return windowsDriver;
+        if (new File(windowsLocation).exists()) {
+            return windowsLocation;
         }
-        if (new File(macOsXDriver).exists()) {
-            return macOsXDriver;
+        if (new File(macOsXLocation).exists()) {
+            return macOsXLocation;
         }
-        if (new File(unixOsDriver).exists()) {
-            return unixOsDriver;
+        if (new File(unixOsLocation).exists()) {
+            return unixOsLocation;
         }
 
         throw new IllegalStateException("unable to determine a location of `webdriver.chrome.driver`");
