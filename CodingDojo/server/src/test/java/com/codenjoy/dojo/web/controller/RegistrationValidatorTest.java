@@ -225,7 +225,7 @@ public class RegistrationValidatorTest {
         validator.validate(player, errors);
 
         // then
-        assertError(errors, "room", "registration.game.invalid");
+        assertError(errors, "game", "registration.game.invalid");
     }
 
     @Test
