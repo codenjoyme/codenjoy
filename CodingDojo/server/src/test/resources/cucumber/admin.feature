@@ -132,8 +132,8 @@ Scenario: Admin can turn on / turn off kick for inactive players
   Given Login to Admin page in game 'sample'
   When Click load all players
 
-  When Click inactivity kick checkbox
-  And Set inactivity ticks parameter to 10
+  When Set inactivity kick enabled checkbox to true
+  And Set inactivity timeout parameter to 10
   And Press inactivity settings save button
 
   Then Inactivity parameters [kick='true', ticks=10]

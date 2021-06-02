@@ -62,6 +62,11 @@ public class StepDefinitions {
         web.closeBrowser();
     }
 
+    @ParameterType(value = "true|True|TRUE|false|False|FALSE")
+    public Boolean bool(String value) {
+        return Boolean.valueOf(value);
+    }
+
     @When("Open login page")
     public void loginPage() {
         login.open();
@@ -349,30 +354,28 @@ public class StepDefinitions {
         clients.refreshAllRunnersSessions();
     }
 
-    @When("Click inactivity kick checkbox")
-    public void clickInactivityKickCheckbox() {
-        admin.inactivity().kickEnabledCheckbox().click();
+    @When("Set inactivity kick enabled checkbox to {bool}")
+    public void playerUserMailComIsKickedTrue(boolean enabled) {
+        admin.inactivity().kickEnabled(enabled);
     }
 
-    @And("Set inactivity ticks parameter to {int}")
-    public void setInactivityTicksParameterTo(int ticks) {
-        WebElement input = admin.inactivity().timeoutInput();
-        input.clear();
-        input.sendKeys(String.valueOf(ticks));
+    @And("Set inactivity timeout parameter to {int}")
+    public void setInactivityTimeoutParameterTo(int ticks) {
+        admin.inactivity().timeout(ticks);
     }
 
     @And("Press inactivity settings save button")
     public void pressInactivitySettingsSaveButton() {
-        admin.inactivity().saveButton().click();
+        admin.inactivity().submit();
     }
 
     @Then("Inactivity parameters [kick={string}, ticks={int}]")
     public void assertInactivitySettings(String kick, int ticks) {
-        String messageFormat = "kick: %s, ticks: %s\n";
-        String expected = String.format(messageFormat, kick, ticks);
-        String actual = String.format(messageFormat,
-                admin.inactivity().kickEnabledCheckbox().isEnabled(),
-                admin.inactivity().timeoutInput().getAttribute("value"));
+        String message = "kick: %s, ticks: %s\n";
+        String expected = String.format(message, kick, ticks);
+        String actual = String.format(message,
+                admin.inactivity().kickEnabled(),
+                admin.inactivity().timeout());
         assertEquals(expected, actual);
     }
 
@@ -393,11 +396,6 @@ public class StepDefinitions {
     @And("Shutdown {string} websocket runner")
     public void shutdownClientWebsocketRunner(String player) {
         clients.shutDownRunnerSession(player);
-    }
-
-    @ParameterType(value = "true|True|TRUE|false|False|FALSE")
-    public Boolean bool(String value) {
-        return Boolean.valueOf(value);
     }
 
     @Then("Player {string} is kicked {bool}")

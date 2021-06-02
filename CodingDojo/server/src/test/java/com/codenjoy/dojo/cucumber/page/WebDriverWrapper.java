@@ -67,17 +67,17 @@ public class WebDriverWrapper {
         driver.get(serverPath + url);
     }
 
-    public WebElement element(String selector) {
-        return driver.findElement(By.cssSelector(selector));
+    public WebElement element(String css) {
+        return driver.findElement(By.cssSelector(css));
     }
 
-    public void select(String selector, String text) {
-        new Select(element(selector))
+    public void select(String css, String text) {
+        new Select(element(css))
                 .selectByVisibleText(text);
     }
 
-    public void click(String selector) {
-        element(selector).click();
+    public void click(String css) {
+        element(css).click();
     }
 
     public String url() {
@@ -90,31 +90,38 @@ public class WebDriverWrapper {
         }
     }
 
-    public void text(String selector, String text) {
-        WebElement element = element(selector);
+    public void text(String css, String text) {
+        text(element(css), text);
+    }
+
+    public void text(By by, String text) {
+        text(elementBy(by), text);
+    }
+
+    private void text(WebElement element, String text) {
         element.clear();
         element.sendKeys(text);
     }
 
-    public String get(String selector, String attribute) {
-        return element(selector).getAttribute(attribute);
+    public String get(String css, String attribute) {
+        return element(css).getAttribute(attribute);
     }
 
     public void closeBrowser() {
         driver.close();
     }
 
-    public boolean exists(String selector) {
+    public boolean exists(String css) {
         try {
-            element(selector);
+            element(css);
             return true;
         } catch (NoSuchElementException e) {
             return false;
         }
     }
 
-    public List<String> options(String selector) {
-        return new Select(element(selector)).getOptions().stream()
+    public List<String> options(String css) {
+        return new Select(element(css)).getOptions().stream()
                 .map(option -> option.getText())
                 .collect(toList());
     }
@@ -125,5 +132,12 @@ public class WebDriverWrapper {
 
     public WebElement elementBy(By by) {
         return driver.findElement(by);
+    }
+
+    public void setChecked(By by, boolean enabled) {
+        WebElement checkbox = elementBy(by);
+        if (enabled ^ checkbox.isSelected()) {
+            checkbox.click();
+        }
     }
 }

@@ -29,23 +29,31 @@ public class Inactivity {
     private final Page page;
     private final WebDriverWrapper web;
 
-    public WebElement kickEnabledCheckbox() {
-        return web.elementBy(KICK_ENABLED);
-    }
-
-    public WebElement timeoutInput() {
-        return web.elementBy(TIMEOUT_INPUT);
-    }
-
-    public WebElement saveButton() {
-        return web.elementBy(SAVE_BUTTON);
-    }
-
     public List<WebElement> playersInactiveTicks() {
         return web.elementsBy(PLAYER_INACTIVE_TICKS);
     }
 
     public WebElement playerInactiveTicks(String email) {
         return web.elementBy(PLAYER_INACTIVE_TICK.apply(email));
+    }
+
+    public void kickEnabled(boolean enabled) {
+        web.setChecked(KICK_ENABLED, enabled);
+    }
+
+    public boolean kickEnabled() {
+        return web.elementBy(KICK_ENABLED).isEnabled();
+    }
+
+    public String timeout() {
+        return web.elementBy(TIMEOUT_INPUT).getAttribute("value");
+    }
+
+    public void timeout(int ticks) {
+        web.text(TIMEOUT_INPUT, String.valueOf(ticks));
+    }
+
+    public void submit() {
+        web.elementBy(SAVE_BUTTON).click();
     }
 }
