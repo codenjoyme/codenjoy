@@ -345,7 +345,7 @@ public class StepDefinitions {
 
     @When("Click load all players")
     public void clickLoadAllPlayers() {
-        admin.loadAllHRef().click();
+        admin.clickLoadAll();
         clients.refreshAllRunnersSessions();
     }
 

@@ -48,8 +48,7 @@ import static org.junit.Assert.assertEquals;
 @Scope(SCOPE_CUCUMBER_GLUE)
 public class AdminPage implements Closeable {
 
-    // TODO [RK#1]: prefer using css selector to xpath
-    public static final Function<String, By> LOAD_ALL_LINK = room -> xpath("//a[@href='/codenjoy-contest/admin/player/loadAll?room=%s#savePlayersGame']", room);
+    public static final By LOAD_ALL_LINK = xpath("//a[text() = 'LoadAll']");
 
     public static final String URL = "/admin?room=";
     public static final BiFunction<String, String, String> CREATE_ROOM_URL =
@@ -118,8 +117,8 @@ public class AdminPage implements Closeable {
         return web.element("#pauseGame td a");
     }
 
-    public WebElement loadAllHRef() {
-        return web.elementBy(LOAD_ALL_LINK.apply("sample"));
+    public WebElement loadAllLink() {
+        return web.elementBy(LOAD_ALL_LINK);
     }
 
     public void assertGameIsActive(boolean active) {
@@ -158,5 +157,9 @@ public class AdminPage implements Closeable {
 
     public Inactivity inactivity() {
         return inactivity;
+    }
+
+    public void clickLoadAll() {
+        loadAllLink().click();
     }
 }
