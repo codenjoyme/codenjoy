@@ -311,7 +311,7 @@ func Test_StartGame(t *testing.T) {
 				if len(msg) != 0 {
 					switch Action(msg) {
 					case ACT:
-						response = strings.Replace(response, string(BOMBERMAN), string(BOMB_BOMBERMAN), 1)
+						response = strings.Replace(response, string(HERO), string(BOMB_HERO), 1)
 					}
 				}
 				if err != nil {
@@ -368,7 +368,7 @@ func Test_StartGame(t *testing.T) {
 				<-c.Read
 				c.Write <- struct{}{}
 				c.Done <- struct{}{}
-				assert.NotEqual(t, tt.boardRepresentation, game.Show()) // bomberman changed to bomb
+				assert.NotEqual(t, tt.boardRepresentation, game.Show()) // hero changed to bomb
 			} else {
 				assert.PanicsWithValue(t, tt.panicValue, func() { StartGame(tt.browserUrl) })
 			}

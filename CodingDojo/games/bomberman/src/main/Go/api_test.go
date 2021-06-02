@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -29,7 +29,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_GetBomberman(t *testing.T) {
+func Test_GetHero(t *testing.T) {
 	type tstruct struct {
 		name          string
 		board         *board
@@ -48,12 +48,12 @@ func Test_GetBomberman(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expectedPoint, tt.board.GetBomberman())
+			assert.Equal(t, tt.expectedPoint, tt.board.GetHero())
 		})
 	}
 }
 
-func Test_GetOtherBombermans(t *testing.T) {
+func Test_GetOtherHeroes(t *testing.T) {
 	type tstruct struct {
 		name           string
 		board          *board
@@ -72,12 +72,12 @@ func Test_GetOtherBombermans(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expectedPoints, tt.board.GetOtherBombermans())
+			assert.Equal(t, tt.expectedPoints, tt.board.GetOtherHeroes())
 		})
 	}
 }
 
-func Test_IsMyBombermanDead(t *testing.T) {
+func Test_IsMyHeroDead(t *testing.T) {
 	type tstruct struct {
 		name   string
 		board  *board
@@ -94,7 +94,7 @@ func Test_IsMyBombermanDead(t *testing.T) {
 		}, {
 			name: "Dead",
 			board: &board{
-				boardContent: []rune(strings.Replace(testValidBoard, string(BOMBERMAN), string(DEAD_BOMBERMAN), 1)),
+				boardContent: []rune(strings.Replace(testValidBoard, string(HERO), string(DEAD_HERO), 1)),
 			},
 			isDead: true,
 		},
@@ -102,7 +102,7 @@ func Test_IsMyBombermanDead(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.isDead, tt.board.IsMyBombermanDead())
+			assert.Equal(t, tt.isDead, tt.board.IsMyHeroDead())
 		})
 	}
 }
@@ -126,12 +126,12 @@ func Test_IsAt(t *testing.T) {
 			element: WALL,
 			result:  true,
 		}, {
-			name: "Other bomberman",
+			name: "Other hero",
 			board: &board{
 				boardContent: []rune(testValidBoard),
 			},
 			point:   Point{1, 24},
-			element: OTHER_BOMBERMAN,
+			element: OTHER_HERO,
 			result:  true,
 		}, {
 			name: "Wrong wall",
@@ -183,7 +183,7 @@ func Test_IsAtAny(t *testing.T) {
 				boardContent: []rune(testValidBoard),
 			},
 			point:    Point{20, 1},
-			elements: []Element{BOMBERMAN, BOMB_BOMBERMAN, DEAD_BOMBERMAN, OTHER_BOMBERMAN},
+			elements: []Element{HERO, BOMB_HERO, DEAD_HERO, OTHER_HERO},
 			result:   true,
 		},
 	}
@@ -214,7 +214,7 @@ func Test_IsNear(t *testing.T) {
 			element: WALL,
 			result:  true,
 		}, {
-			name: "Other bomberman",
+			name: "Other hero",
 			board: &board{
 				boardContent: []rune(testValidBoard),
 			},
@@ -241,21 +241,21 @@ func Test_IsBarrierAt(t *testing.T) {
 
 	tests := []tstruct{
 		{
-			name: "Destroyable wall under the bomberman",
+			name: "Destroyable wall under the hero",
 			board: &board{
 				boardContent: []rune(testValidBoard),
 			},
 			point:  Point{1, 27},
 			result: true,
 		}, {
-			name: "None above the bomberman",
+			name: "None above the hero",
 			board: &board{
 				boardContent: []rune(testValidBoard),
 			},
 			point:  Point{1, 29},
 			result: false,
 		}, {
-			name: "Wall to the right of bomberman",
+			name: "Wall to the right of hero",
 			board: &board{
 				boardContent: []rune(testValidBoard),
 			},
@@ -290,7 +290,7 @@ func Test_CountNear(t *testing.T) {
 			element: WALL,
 			count:   2,
 		}, {
-			name: "Other bomberman",
+			name: "Other hero",
 			board: &board{
 				boardContent: []rune(testValidBoard),
 			},
@@ -331,12 +331,12 @@ func Test_GetAt(t *testing.T) {
 			point:   Point{1, 27},
 			element: DESTROYABLE_WALL,
 		}, {
-			name: "Bomberman",
+			name: "Hero",
 			board: &board{
 				boardContent: []rune(testValidBoard),
 			},
 			point:   Point{1, 28},
-			element: BOMBERMAN,
+			element: HERO,
 		},
 	}
 

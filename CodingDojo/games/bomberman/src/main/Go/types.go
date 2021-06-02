@@ -22,19 +22,19 @@
 package bomberman
 
 const (
-	BOMBERMAN      = '☺' // this is what he usually looks like
-	BOMB_BOMBERMAN = '☻' // this is if he is sitting on own bomb
-	DEAD_BOMBERMAN = 'Ѡ' // oops your Bomberman is dead (don`t worry he will appear somewhere in next move)
+	HERO      = '☺' // this is what he usually looks like
+	BOMB_HERO = '☻' // this is if he is sitting on own bomb
+	DEAD_HERO = 'Ѡ' // oops your Hero is dead (don`t worry he will appear somewhere in next move)
 	// you`re getting -200 for each death
 
-	/// this is other players Bombermans
-	OTHER_BOMBERMAN      = '♥' // this is what other Bombermans looks like
-	OTHER_BOMB_BOMBERMAN = '♠' // this is if player just set the bomb
-	OTHER_DEAD_BOMBERMAN = '♣' // enemy corpse (it will disappear shortly right on the next move)
+	/// this is other players Heroes
+	OTHER_HERO      = '♥' // this is what other Heroes looks like
+	OTHER_BOMB_HERO = '♠' // this is if player just set the bomb
+	OTHER_DEAD_HERO = '♣' // enemy corpse (it will disappear shortly right on the next move)
 	// if you`ve done it you`ll get +1000
 
 	/// the bombs
-	BOMB_TIMER_5 = '5' // after bomberman set the bomb the timer starts (5 tacts)
+	BOMB_TIMER_5 = '5' // after hero set the bomb the timer starts (5 tacts)
 	BOMB_TIMER_4 = '4' // this will blow up after 4 tacts
 	BOMB_TIMER_3 = '3' // this after 3
 	BOMB_TIMER_2 = '2' // two
@@ -49,7 +49,7 @@ const (
 
 	/// meatchoppers
 	MEAT_CHOPPER = '&' // this guys runs over the board randomly and gets in the way all the time
-	// if it will touch bomberman - it will die
+	// if it will touch hero - it will die
 	DEAD_MEAT_CHOPPER = 'x' // you`d better kill this piece of ... meat you`ll get +100 point for it
 	// this is chopper corpse
 
@@ -60,7 +60,7 @@ const (
 	BOMB_IMMUNE                = 'i' // Do not die after bomb blast (own bombs and others as well). Temporary.
 
 	/// a void
-	NONE = ' ' // this is the only place where you can move your Bomberman
+	NONE = ' ' // this is the only place where you can move your Hero
 
 	BLAST_SIZE = 3 // Blast size
 )

@@ -60,7 +60,7 @@ func (b *board) Show() string {
 	return repr.String()
 }
 
-// Move allows client to manipulate bomberman, client should
+// Move allows client to manipulate hero, client should
 // assign new action every second or STOP action will be used as a default
 func (b *board) Move(move Action) {
 	if move.IsValid() {

@@ -25,9 +25,9 @@ package bomberman
 import "math"
 
 type CommonAPI interface {
-	GetBomberman() Point
-	GetOtherBombermans() []Point
-	IsMyBombermanDead() bool
+	GetHero() Point
+	GetOtherHeroes() []Point
+	IsMyHeroDead() bool
 	IsAt(point Point, element Element) bool
 	IsAtAny(point Point, element []Element) bool // boolean isAt(Point point, Collection<Element> elements)
 	IsNear(point Point, element Element) bool
@@ -82,13 +82,13 @@ func (b *board) pointToIndex(p Point) int {
 	return index
 }
 
-func (b *board) GetBomberman() Point {
-	index := findOne(b.boardContent, BOMBERMAN)
+func (b *board) GetHero() Point {
+	index := findOne(b.boardContent, HERO)
 	return b.indexToPoint(index)
 }
 
-func (b *board) GetOtherBombermans() []Point {
-	indexes := findAll(b.boardContent, OTHER_BOMBERMAN)
+func (b *board) GetOtherHeroes() []Point {
+	indexes := findAll(b.boardContent, OTHER_HERO)
 	others := []Point{}
 	for _, i := range indexes {
 		others = append(others, b.indexToPoint(i))
@@ -96,8 +96,8 @@ func (b *board) GetOtherBombermans() []Point {
 	return others
 }
 
-func (b *board) IsMyBombermanDead() bool {
-	index := findOne(b.boardContent, DEAD_BOMBERMAN)
+func (b *board) IsMyHeroDead() bool {
+	index := findOne(b.boardContent, DEAD_HERO)
 	return index != -1
 }
 
@@ -127,7 +127,7 @@ func (b *board) IsNear(p Point, element Element) bool {
 
 func (b *board) IsBarrierAt(point Point) bool {
 	return b.IsAtAny(point, []Element{
-		BOMBERMAN, BOMB_BOMBERMAN, OTHER_BOMBERMAN, OTHER_BOMB_BOMBERMAN,
+		HERO, BOMB_HERO, OTHER_HERO, OTHER_BOMB_HERO,
 		BOMB_TIMER_5, BOMB_TIMER_4, BOMB_TIMER_3, BOMB_TIMER_2, BOMB_TIMER_1,
 		WALL, DESTROYABLE_WALL, MEAT_CHOPPER,
 	})
@@ -160,7 +160,7 @@ func (b *board) boardSize() int {
 
 func (b *board) GetBarriers() []Point {
 	points := []Point{}
-	barrierElements := []rune{BOMB_BOMBERMAN, OTHER_BOMBERMAN, OTHER_BOMB_BOMBERMAN, OTHER_DEAD_BOMBERMAN,
+	barrierElements := []rune{BOMB_HERO, OTHER_HERO, OTHER_BOMB_HERO, OTHER_DEAD_HERO,
 		BOMB_TIMER_5, BOMB_TIMER_4, BOMB_TIMER_3, BOMB_TIMER_2, BOMB_TIMER_1, BOOM,
 		WALL, DESTROYABLE_WALL, DESTROYED_WALL, MEAT_CHOPPER, DEAD_MEAT_CHOPPER}
 
@@ -202,7 +202,7 @@ func (b *board) GetDestroyableWalls() []Point {
 
 func (b *board) GetBombs() []Point {
 	points := []Point{}
-	barrierElements := []rune{BOMB_BOMBERMAN, OTHER_BOMB_BOMBERMAN,
+	barrierElements := []rune{BOMB_HERO, OTHER_BOMB_HERO,
 		BOMB_TIMER_5, BOMB_TIMER_4, BOMB_TIMER_3, BOMB_TIMER_2, BOMB_TIMER_1}
 
 	for _, barier := range barrierElements {
@@ -229,7 +229,7 @@ func (b *board) GetPerks() []Point {
 
 func (b *board) GetFutureBlasts() []Point {
 	bombs := []Point{}
-	barrierElements := []rune{BOMB_BOMBERMAN, OTHER_BOMB_BOMBERMAN,
+	barrierElements := []rune{BOMB_HERO, OTHER_BOMB_HERO,
 		BOMB_TIMER_5, BOMB_TIMER_4, BOMB_TIMER_3, BOMB_TIMER_2, BOMB_TIMER_1}
 
 	// Get all bombs
