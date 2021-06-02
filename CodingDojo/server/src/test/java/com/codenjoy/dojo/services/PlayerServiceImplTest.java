@@ -67,6 +67,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
@@ -87,6 +88,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
 @ActiveProfiles(SQLiteProfile.NAME)
+@TestPropertySource(properties = {"game.ai=true"})
 public class PlayerServiceImplTest {
 
     public static final String VASYA = "vasya";

@@ -10,18 +10,19 @@ package com.codenjoy.dojo.cucumber.page;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.cucumber.page.admin.ActiveGames;
 import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.PlayerService;
@@ -29,10 +30,12 @@ import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.log.DebugService;
 import lombok.RequiredArgsConstructor;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
@@ -41,7 +44,15 @@ import static org.junit.Assert.assertEquals;
 @Component
 @RequiredArgsConstructor
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class AdminPage implements CleanUp {
+public class AdminPage implements Closeable {
+
+    public static final String LOAD_ALL_HREF_XPATH = "//a[@href='/codenjoy-contest/admin/player/loadAll?room=sample#savePlayersGame']";
+    public static final String INACTIVITY_KICK_CHECKBOX_XPATH = "//input[@name='inactivity.kickEnabled']";
+    public static final String INACTIVITY_TICKS_INPUT_XPATH = "//input[@name='inactivity.inactivityTimeout']";
+    public static final String INACTIVITY_SAVE_BUTTON_XPATH = "//table[@id='inactivity']//input[@value='Save']";
+    public static final String PLAYER_INACTIVE_TICKS_XPATH = "//span[@class='span-ticksInactive']";
+
+    public static final String PLAYER_INACTIVE_TICKS_XPATH_FORMAT = "//span[@class='span-ticksInactive'][preceding::td//input[@value='%s']]";
 
     public static final String URL = "/admin?room=";
     public static final BiFunction<String, String, String> CREATE_ROOM_URL =
@@ -60,7 +71,7 @@ public class AdminPage implements CleanUp {
     private final ActiveGames activeGames;
 
     @Override
-    public void cleanUp() {
+    public void close() {
         actionLogger.pause();
         autoSaver.resume();
         debugService.pause();
@@ -71,6 +82,10 @@ public class AdminPage implements CleanUp {
 
     public void open() {
         web.open("/admin");
+    }
+
+    public void open(String room) {
+        web.open(URL + room);
     }
 
     public void assertOnPage() {
@@ -103,6 +118,42 @@ public class AdminPage implements CleanUp {
 
     public WebElement pauseResumeGameLink() {
         return web.element("#pauseGame td a");
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement loadAllHRef() {
+        By xpath = By.xpath(LOAD_ALL_HREF_XPATH);
+        return web.elementBy(xpath);
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement inactivityKickCheckbox() {
+        By xpath = By.xpath(INACTIVITY_KICK_CHECKBOX_XPATH);
+        return web.elementBy(xpath);
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement inactivityTicksInput() {
+        By xpath = By.xpath(INACTIVITY_TICKS_INPUT_XPATH);
+        return web.elementBy(xpath);
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement inactivitySaveButton() {
+        By xpath = By.xpath(INACTIVITY_SAVE_BUTTON_XPATH);
+        return web.elementBy(xpath);
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public List<WebElement> playerInactiveTicks() {
+        By xpath = By.xpath(PLAYER_INACTIVE_TICKS_XPATH);
+        return web.elementsBy(xpath);
+    }
+
+    // TODO [RK#1]: prefer using css selector to xpath
+    public WebElement playerInactiveTicks(String value) {
+        By xpath = By.xpath(String.format(PLAYER_INACTIVE_TICKS_XPATH_FORMAT, value));
+        return web.elementBy(xpath);
     }
 
     public void assertGameIsActive(boolean active) {

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.cucumber.page;
+package com.codenjoy.dojo.cucumber.utils;
 
 /*-
  * #%L
@@ -22,6 +22,14 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
-public interface CleanUp {
-    void cleanUp();
+import lombok.experimental.UtilityClass;
+import org.openqa.selenium.By;
+
+@UtilityClass
+public class PageUtils {
+
+    public static By xpath(String url, String... parameters) {
+        return By.xpath(String.format(url, parameters));
+    }
+
 }

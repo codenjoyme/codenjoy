@@ -24,12 +24,14 @@ package com.codenjoy.dojo.cucumber.page;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -40,23 +42,29 @@ import java.util.List;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
 public class WebDriverWrapper {
 
+    @Value("${server.path}")
+    private String serverPath;
     private WebDriver driver;
-    private final Server server;
 
     @PostConstruct
     public void init() {
         System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe");
         driver = new ChromeDriver();
-        System.out.println("Started here: " + server.endpoint());
+        log.info("Started here: {}", serverPath);
+    }
+
+    public void refresh() {
+        driver.navigate().refresh();
     }
 
     public void open(String url) {
-        driver.get(server.endpoint() + url);
+        driver.get(serverPath + url);
     }
 
     public WebElement element(String selector) {
@@ -74,10 +82,9 @@ public class WebDriverWrapper {
 
     public String url() {
         String absoluteUrl = driver.getCurrentUrl();
-        String endpoint = server.endpoint();
-        int position = absoluteUrl.indexOf(endpoint);
+        int position = absoluteUrl.indexOf(serverPath);
         if (position == 0) {
-            return absoluteUrl.substring(endpoint.length());
+            return absoluteUrl.substring(serverPath.length());
         } else {
             return absoluteUrl;
         }

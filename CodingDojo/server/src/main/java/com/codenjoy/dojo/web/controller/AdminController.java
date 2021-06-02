@@ -52,6 +52,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.incativity.InactivitySettings.INACTIVITY;
 import static com.codenjoy.dojo.services.round.RoundSettingsImpl.ROUNDS;
 import static com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl.SEMIFINAL;
 import static java.util.function.Predicate.not;
@@ -432,7 +433,7 @@ public class AdminController {
     public void updateParameters(String game, String room, List<Object> updated, List<Exception> errors) {
         Settings gameSettings = gameService.getGameType(game, room).getSettings();
         List<Parameter> actual = gameSettings.getParameters();
-        removeSemifinalAndRounds(actual);
+        removeSemifinalAndRoundsAndInactivity(actual);
         for (int index = 0; index < actual.size(); index++) {
             try {
                 Parameter parameter = actual.get(index);
@@ -445,9 +446,13 @@ public class AdminController {
         }
     }
 
-    public void removeSemifinalAndRounds(List<Parameter> params) {
+    // I don't think it's the best solution
+    // Had troubles struggling with this removing
+    // TODO: consider not removing but filtering
+    public void removeSemifinalAndRoundsAndInactivity(List<Parameter> params) {
         params.removeIf(p -> p.getName().startsWith(SEMIFINAL)
-                            || p.getName().startsWith(ROUNDS));
+                            || p.getName().startsWith(ROUNDS)
+                            || p.getName().startsWith(INACTIVITY));
     }
 
     public void generateNewPlayers(String game, String room, String mask, int count) {
@@ -588,7 +593,7 @@ public class AdminController {
         // сохраняем для отображения inactivity settings pojo
         result.setInactivity(adminService.inactivitySettings(room));
         // удаляем semifinal и rounds параметры
-        removeSemifinalAndRounds(parameters);
+        removeSemifinalAndRoundsAndInactivity(parameters);
         // а теперь сохраняем отдельно ключики оставшихся параметров
         result.setParameters(parameters.stream()
                 .map(Parameter::getValue)

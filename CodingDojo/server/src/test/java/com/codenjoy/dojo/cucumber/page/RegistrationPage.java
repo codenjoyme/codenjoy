@@ -22,12 +22,12 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
-import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertEquals;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class RegistrationPage implements CleanUp {
+public class RegistrationPage implements Closeable {
 
     public static final String SUBMIT_BUTTON = "#submit-button";
     public static final String READABLE_NAME_INPUT = "#readableName input";
@@ -64,7 +64,7 @@ public class RegistrationPage implements CleanUp {
     private final SaveService saveService;
 
     @Override
-    public void cleanUp() {
+    public void close() {
         registration.removeAll();
         playerService.removeAll();
         gameService.removeAll();
