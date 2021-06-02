@@ -554,7 +554,7 @@
                                 <td><form:input class="input-room"     path="players[${status.index}].room"/></td>
                                 <td><form:input class="input-score"    path="players[${status.index}].score"/></td>
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
-                                <td>&nbsp;<span class="input-ticksInactive">${player.ticksInactive}</span>&nbsp;</td>
+                                <td>&nbsp;<span class="input-ticks-inactive">${player.ticksInactive}</span>&nbsp;</td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
                                         <td class="joystick">
