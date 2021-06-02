@@ -19,7 +19,7 @@ func main() {
 		case <-c.Read:
 			// Make your move
 
-			game.Move(bomberman.UP)
+			game.Move(bomberman.MoveFire(bomberman.UP))
 			c.Write <- struct{}{}
 		}
 	}

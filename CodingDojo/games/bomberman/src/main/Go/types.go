@@ -65,32 +65,57 @@ const (
 	BLAST_SIZE = 3 // Blast size
 )
 
-type Action string
+type Direction int
 
 const (
-	UP    Action = "UP"
-	DOWN  Action = "DOWN"
-	RIGHT Action = "RIGHT"
-	LEFT  Action = "LEFT"
-	ACT   Action = "ACT"
-	STOP  Action = "STOP"
-	// Combinations
-	UPA    Action = "UP,ACT"
-	DOWNA  Action = "DOWN,ACT"
-	RIGHTA Action = "RIGHT,ACT"
-	LEFTA  Action = "LEFT,ACT"
-	// Vice versa, order matters
-	AUP    Action = "ACT,UP"
-	ADOWN  Action = "ACT,DOWN"
-	ARIGHT Action = "ACT,RIGHT"
-	ALEFT  Action = "ACT,LEFT"
+	UP Direction = iota
+	DOWN
+	RIGHT
+	LEFT
 )
+
+func (d Direction) String() string {
+	return [...]string{"UP", "DOWN", "RIGHT", "LEFT"}[d]
+}
 
 func (m Action) IsValid() bool {
 	switch m {
-	case UP, DOWN, RIGHT, LEFT, ACT, STOP, UPA, DOWNA, RIGHTA, LEFTA, AUP, ADOWN, ARIGHT, ALEFT:
+	case "UP", "DOWN", "RIGHT", "LEFT", "ACT", "STOP", "UP,ACT", "DOWN,ACT", "RIGHT,ACT", "LEFT,ACT", "ACT,UP", "ACT,DOWN", "ACT,RIGHT", "ACT,LEFT":
 		return true
 	default:
 		return false
 	}
+}
+
+type Action string
+
+const (
+	ACT  = "ACT"
+	STOP = "STOP"
+
+	NOTHING = ""
+)
+
+func Act() Action {
+	return ACT
+}
+
+func Move(d Direction) Action {
+	return Action(d.String())
+}
+
+func MoveFire(d Direction) Action {
+	return Action(d.String() + "," + ACT)
+}
+
+func FireMove(d Direction) Action {
+	return Action(ACT + "," + d.String())
+}
+
+func Stop() Action {
+	return STOP
+}
+
+func DoNothing() Action {
+	return NOTHING
 }

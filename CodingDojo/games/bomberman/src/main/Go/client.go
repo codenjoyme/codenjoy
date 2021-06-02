@@ -34,7 +34,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var stopPtr = STOP
+var stopPtr = Stop()
 
 type board struct {
 	rawBoard     string // to avoid transformation from
