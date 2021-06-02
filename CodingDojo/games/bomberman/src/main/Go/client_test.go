@@ -395,7 +395,7 @@ func Test_Move(t *testing.T) {
 		}, {
 			name:        "List of moves",
 			board:       &board{},
-			moves:       []Action{UP, DOWN, ACT},
+			moves:       []Action{Move(UP), Move(DOWN), ACT},
 			command:     ACT,
 			expectedErr: nil,
 		}, {
