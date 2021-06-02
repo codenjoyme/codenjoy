@@ -102,10 +102,15 @@ func Test_createURL(t *testing.T) {
 			expectedURL:   url.URL{},
 			expectedError: errors.New("Invalid URL, url: " + "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1ycode=531459153668826800&game=bomberman"),
 		}, {
-			name:          "Invalid game code",
-			browserUrl:    "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800game=bomberman",
-			expectedURL:   url.URL{},
-			expectedError: errors.New("Invalid URL, url: " + "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800game=bomberman"),
+			name:       "Invalid game code",
+			browserUrl: "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800game=bomberman",
+			expectedURL: url.URL{
+				Scheme:   "wss",
+				Host:     "dojorena.io",
+				Path:     "/codenjoy-contest/ws",
+				RawQuery: "user=793wdxskw521spo4mn1y&code=531459153668826800&game=bomberman",
+			},
+			expectedError: nil,
 		},
 	}
 
