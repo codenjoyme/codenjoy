@@ -101,6 +101,21 @@ Run Balancer from sources
 - [How to launch the balancer server from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/balancer#run-balancer-from-sources)
 - [How to launch the balancer frontend from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/balancer-frontend#available-scripts)
 
+Remote debug Codenjoy server
+--------------------------------
+By default, the run goal runs your application in a forked process. If you need to debug it, you should add the necessary JVM arguments to enable remote debugging
+
+`mvn clean spring-boot:run "-Dspring-boot.run.jvmArguments=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005  
+-DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,yourgame,debug -Dcontext=/codenjoy-contest -Dserver.port=8080" -Pyourgame`
+
+You should have such a log message that ensures the server can process a remote debug connection
+> [INFO] --- spring-boot-maven-plugin:2.1.18.RELEASE:run (default-cli) @ codenjoy-contest ---\
+> [INFO] Attaching agents: []\
+> Listening for transport dt_socket at address: 5005
+
+Then you can launch **Remote JVM Debug** with the following command line arguments\
+`-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005`
+
 Develop a game
 --------------
 To find out more on how to create a game, [read here](https://github.com/codenjoyme/codenjoy-game#create-your-own-codenjoy-game)
