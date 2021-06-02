@@ -150,5 +150,5 @@ Scenario: Admin can turn on / turn off kick for inactive players
   Then Wait for 15 seconds
   And Shutdown 'client2' websocket runner
 
-  Then Player 'user1@mail.com' is kicked 'true'
-  And Player 'user2@mail.com' is kicked 'false'
+  Then Player 'user1@mail.com' is kicked true
+  And Player 'user2@mail.com' is kicked false

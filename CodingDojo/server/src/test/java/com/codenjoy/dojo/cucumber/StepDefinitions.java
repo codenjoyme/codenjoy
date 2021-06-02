@@ -25,6 +25,7 @@ package com.codenjoy.dojo.cucumber;
 import com.codenjoy.dojo.cucumber.page.*;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -368,9 +369,7 @@ public class StepDefinitions {
     @Then("Inactivity parameters [kick={string}, ticks={int}]")
     public void assertInactivitySettings(String kick, int ticks) {
         String messageFormat = "kick: %s, ticks: %s\n";
-        String expected = String.format(messageFormat,
-                kick,
-                ticks);
+        String expected = String.format(messageFormat, kick, ticks);
         String actual = String.format(messageFormat,
                 admin.inactivityKickCheckbox().isEnabled(),
                 admin.inactivityTicksInput().getAttribute("value"));
@@ -379,7 +378,8 @@ public class StepDefinitions {
 
     @And("All players inactivity ticks are reset")
     public void assertAllPlayersInactivityTicksReset() {
-        admin.playerInactiveTicks().forEach(ticks -> assertEquals("0", ticks.getText()));
+        admin.playerInactiveTicks()
+                .forEach(ticks -> assertEquals("0", ticks.getText()));
     }
 
     @Then("Wait for {int} seconds")
@@ -395,8 +395,13 @@ public class StepDefinitions {
         clients.shutDownRunnerSession(player);
     }
 
-    @Then("Player {string} is kicked {string}")
-    public void playerUserMailComIsKickedTrue(String email, String isKicked) {
-        assertEquals(Boolean.valueOf(isKicked), !admin.playerInactiveTicks(email).isDisplayed());
+    @ParameterType(value = "true|True|TRUE|false|False|FALSE")
+    public Boolean bool(String value) {
+        return Boolean.valueOf(value);
+    }
+
+    @Then("Player {string} is kicked {bool}")
+    public void playerUserMailComIsKickedTrue(String email, boolean isKicked) {
+        assertEquals(isKicked, !admin.playerInactiveTicks(email).isDisplayed());
     }
 }
