@@ -542,7 +542,7 @@
                             <tr style="display:none;">
                         </c:when>
                         <c:otherwise>
-                            <tr style="">
+                            <tr style="" player="${player.email}">
                         </c:otherwise>
                     </c:choose>
                         <c:choose>

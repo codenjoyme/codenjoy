@@ -49,12 +49,12 @@ import static org.junit.Assert.assertEquals;
 public class AdminPage implements Closeable {
 
     // TODO [RK#1]: prefer using css selector to xpath
-    public static final Function<String, By> LOAD_ALL_HREF = room -> xpath("//a[@href='/codenjoy-contest/admin/player/loadAll?room=%s#savePlayersGame']", room);
-    public static final By INACTIVITY_KICK_CHECKBOX = xpath("//input[@name='inactivity.kickEnabled']");
-    public static final By INACTIVITY_TICKS_INPUT = xpath("//input[@name='inactivity.inactivityTimeout']");
+    public static final Function<String, By> LOAD_ALL_LINK = room -> xpath("//a[@href='/codenjoy-contest/admin/player/loadAll?room=%s#savePlayersGame']", room);
+    public static final By INACTIVITY_KICK_ENABLED = xpath("//input[@name='inactivity.kickEnabled']");
+    public static final By INACTIVITY_TIMEOUT_INPUT = xpath("//input[@name='inactivity.inactivityTimeout']");
     public static final By INACTIVITY_SAVE_BUTTON = xpath("//table[@id='inactivity']//input[@value='Save']");
     public static final By PLAYER_INACTIVE_TICKS = xpath("//span[@class='input-ticks-inactive']");
-    public static final Function<String, By> PLAYER_INACTIVE_TICKS_VALUE = value -> xpath("//span[@class='input-ticks-inactive'][preceding::td//input[@value='%s']]", value);
+    public static final Function<String, By> PLAYER_INACTIVE_TICK = email -> xpath("//tr[@player='%s']//span[@class='input-ticks-inactive']", email);
 
     public static final String URL = "/admin?room=";
     public static final BiFunction<String, String, String> CREATE_ROOM_URL =
@@ -123,15 +123,15 @@ public class AdminPage implements Closeable {
     }
 
     public WebElement loadAllHRef() {
-        return web.elementBy(LOAD_ALL_HREF.apply("sample"));
+        return web.elementBy(LOAD_ALL_LINK.apply("sample"));
     }
 
     public WebElement inactivityKickCheckbox() {
-        return web.elementBy(INACTIVITY_KICK_CHECKBOX);
+        return web.elementBy(INACTIVITY_KICK_ENABLED);
     }
 
     public WebElement inactivityTicksInput() {
-        return web.elementBy(INACTIVITY_TICKS_INPUT);
+        return web.elementBy(INACTIVITY_TIMEOUT_INPUT);
     }
 
     public WebElement inactivitySaveButton() {
@@ -143,7 +143,7 @@ public class AdminPage implements Closeable {
     }
 
     public WebElement playerInactiveTicks(String value) {
-        return web.elementBy(PLAYER_INACTIVE_TICKS_VALUE.apply(value));
+        return web.elementBy(PLAYER_INACTIVE_TICK.apply(value));
     }
 
     public void assertGameIsActive(boolean active) {
