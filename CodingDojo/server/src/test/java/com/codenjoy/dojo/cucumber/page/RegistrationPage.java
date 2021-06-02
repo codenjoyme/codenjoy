@@ -126,7 +126,7 @@ public class RegistrationPage implements Closeable {
     }
 
     public void room(String room) {
-        web.select(GAME_SELECT, room);
+        web.select(ROOM_SELECT, room);
     }
 
     public void open() {
