@@ -12,7 +12,7 @@
 	url = https://github.com/codenjoyme/codenjoy-excitebike.git
 [submodule "CodingDojo/games/selfdefense"]
 	path = CodingDojo/games/selfdefense
-	url = https://github.com/codenjoyme/codenjoy-selfdefense
+	url = https://github.com/codenjoyme/codenjoy-selfdefense.git
 [submodule "CodingDojo/games/japanese"]
 	path = CodingDojo/games/japanese
 	url = https://github.com/codenjoyme/codenjoy-japanese.git
