@@ -48,13 +48,17 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class WebDriverWrapper {
 
+    public static final String CHROME_WEB_DRIVER = "webdriver.chrome.driver";
+
     @Value("${server.path}")
     private String serverPath;
     private WebDriver driver;
 
     @PostConstruct
     public void init() {
-        System.setProperty("webdriver.chrome.driver", determineChromeWebDriverLocation());
+        if (System.getProperty(CHROME_WEB_DRIVER) == null) {
+            System.setProperty(CHROME_WEB_DRIVER, determineChromeWebDriverLocation());
+        }
         driver = new ChromeDriver();
         log.info("Started here: {}", serverPath);
     }
