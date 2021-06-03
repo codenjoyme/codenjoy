@@ -36,7 +36,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-
+import java.io.File;
 import java.util.List;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
@@ -48,15 +48,37 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class WebDriverWrapper {
 
+    public static final String CHROME_WEB_DRIVER = "webdriver.chrome.driver";
+
     @Value("${server.path}")
     private String serverPath;
     private WebDriver driver;
 
     @PostConstruct
     public void init() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe");
+        if (System.getProperty(CHROME_WEB_DRIVER) == null) {
+            System.setProperty(CHROME_WEB_DRIVER, determineChromeWebDriverLocation());
+        }
         driver = new ChromeDriver();
         log.info("Started here: {}", serverPath);
+    }
+
+    private static String determineChromeWebDriverLocation() {
+        String windowsLocation = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe";
+        String macOsXLocation = "/Applications/chromedriver";
+        String unixOsLocation = "/usr/local/bin/chromedriver";
+
+        if (new File(windowsLocation).exists()) {
+            return windowsLocation;
+        }
+        if (new File(macOsXLocation).exists()) {
+            return macOsXLocation;
+        }
+        if (new File(unixOsLocation).exists()) {
+            return unixOsLocation;
+        }
+
+        throw new IllegalStateException("unable to determine a location of `webdriver.chrome.driver`");
     }
 
     public void refresh() {
