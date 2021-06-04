@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.fifteen.client.ai;
+package com.codenjoy.dojo.fifteen.services.ai;
 
 /*-
  * #%L
@@ -24,7 +24,7 @@ package com.codenjoy.dojo.fifteen.client.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.fifteen.client.Board;
+import com.codenjoy.dojo.games.fifteen.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
