@@ -35,7 +35,7 @@ import com.codenjoy.dojo.utils.LevelUtils;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.battlecity.model.Elements.*;
+import static com.codenjoy.dojo.games.battlecity.Element.*;
 import static com.codenjoy.dojo.services.Direction.*;
 
 public class LevelImpl implements Level {

@@ -22,7 +22,7 @@ package com.codenjoy.dojo.battlecity.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -69,13 +69,13 @@ public class AITankPrize extends AITank {
     }
 
     @Override
-    public Elements subState() {
+    public Element subState() {
         if (ticks % changeEveryTicks() == 0 && !wounded) {
-            return Elements.AI_TANK_PRIZE;
+            return Element.AI_TANK_PRIZE;
         }
 
         if (wounded) {
-            return Elements.BANG;
+            return Element.BANG;
         }
         return null;
     }

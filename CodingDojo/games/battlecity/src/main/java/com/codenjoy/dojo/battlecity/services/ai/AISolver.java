@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.client.ai;
+package com.codenjoy.dojo.battlecity.services.ai;
 
 /*-
  * #%L
@@ -23,8 +23,8 @@ package com.codenjoy.dojo.battlecity.client.ai;
  */
 
 
-import com.codenjoy.dojo.battlecity.client.Board;
-import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.games.battlecity.Board;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -104,14 +104,14 @@ public class AISolver implements Solver<Board> {
         int size = board.size();
         Point from = board.getMe();
         List<Point> to = board.get(
-                Elements.AI_TANK_DOWN,
-                Elements.AI_TANK_LEFT,
-                Elements.AI_TANK_RIGHT,
-                Elements.AI_TANK_UP,
-                Elements.OTHER_TANK_DOWN,
-                Elements.OTHER_TANK_LEFT,
-                Elements.OTHER_TANK_RIGHT,
-                Elements.OTHER_TANK_UP);
+                Element.AI_TANK_DOWN,
+                Element.AI_TANK_LEFT,
+                Element.AI_TANK_RIGHT,
+                Element.AI_TANK_UP,
+                Element.OTHER_TANK_DOWN,
+                Element.OTHER_TANK_LEFT,
+                Element.OTHER_TANK_RIGHT,
+                Element.OTHER_TANK_UP);
 
         // TODO #768 этот подход должен быть идентичным
         // way.getPossibleWays(size, withBarriers(board));

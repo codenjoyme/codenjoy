@@ -22,7 +22,7 @@ package com.codenjoy.dojo.battlecity.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.services.Dice;
@@ -105,32 +105,32 @@ public class AITank extends Tank {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        Elements tree = player.getHero().treeState(this, alsoAtPoint);
+    public Element state(Player player, Object... alsoAtPoint) {
+        Element tree = player.getHero().treeState(this, alsoAtPoint);
         if (tree != null) {
             return tree;
         }
 
         if (!isAlive()) {
-            return Elements.BANG;
+            return Element.BANG;
         }
 
-        Elements sub = subState();
+        Element sub = subState();
         if (sub != null) {
             return sub;
         }
 
         switch (direction) {
-            case LEFT:  return Elements.AI_TANK_LEFT;
-            case RIGHT: return Elements.AI_TANK_RIGHT;
-            case UP:    return Elements.AI_TANK_UP;
-            case DOWN:  return Elements.AI_TANK_DOWN;
+            case LEFT:  return Element.AI_TANK_LEFT;
+            case RIGHT: return Element.AI_TANK_RIGHT;
+            case UP:    return Element.AI_TANK_UP;
+            case DOWN:  return Element.AI_TANK_DOWN;
             default: throw new RuntimeException(
                     "Неправильное состояние танка!");
         }
     }
 
-    protected Elements subState() {
+    protected Element subState() {
         return null;
     }
 

@@ -23,10 +23,10 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
-import com.codenjoy.dojo.battlecity.client.Board;
-import com.codenjoy.dojo.battlecity.client.ai.AISolver;
+import com.codenjoy.dojo.games.battlecity.Board;
+import com.codenjoy.dojo.battlecity.services.ai.AISolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
-import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.client.ClientBoard;
@@ -82,7 +82,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override
