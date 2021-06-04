@@ -23,6 +23,7 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
+import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.LevelUtils;
 
@@ -49,14 +50,14 @@ public class LevelImpl implements Level {
     public List<Number> numbers() {
         return LevelUtils.getObjects(xy, map,
                 (pt, el) -> new Number(el.number(), pt),
-                Elements.valuesExcept(Elements.NONE));
+                Element.valuesExcept(Element.NONE));
     }
 
     @Override
     public List<Number> breaks() {
         return LevelUtils.getObjects(xy, map,
                 (pt, el) -> new Number(el.number(), pt),
-                Elements._x);
+                Element._x);
     }
 
 }

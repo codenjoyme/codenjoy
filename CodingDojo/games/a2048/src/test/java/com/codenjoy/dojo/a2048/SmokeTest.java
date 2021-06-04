@@ -23,21 +23,18 @@ package com.codenjoy.dojo.a2048;
  */
 
 
-import com.codenjoy.dojo.a2048.client.Board;
-import com.codenjoy.dojo.a2048.client.ai.AISolver;
+import com.codenjoy.dojo.a2048.services.ai.AISolver;
 import com.codenjoy.dojo.a2048.services.GameRunner;
 import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.games.a2048.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.SIZE;
-import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 

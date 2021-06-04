@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.a2048.client.ai;
+package com.codenjoy.dojo.a2048.services.ai;
 
 /*-
  * #%L
@@ -23,7 +23,8 @@ package com.codenjoy.dojo.a2048.client.ai;
  */
 
 
-import com.codenjoy.dojo.a2048.client.Board;
+import com.codenjoy.dojo.a2048.services.ai.AISolver;
+import com.codenjoy.dojo.games.a2048.Board;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;

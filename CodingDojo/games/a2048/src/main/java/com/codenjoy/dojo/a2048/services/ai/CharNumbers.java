@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.a2048.client.ai;
+package com.codenjoy.dojo.a2048.services.ai;
 
 /*-
  * #%L
@@ -23,8 +23,8 @@ package com.codenjoy.dojo.a2048.client.ai;
  */
 
 
-import com.codenjoy.dojo.a2048.model.Elements;
 import com.codenjoy.dojo.a2048.model.Numbers;
+import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.Direction;
 
 public class CharNumbers {
@@ -48,7 +48,7 @@ public class CharNumbers {
         if (number == ' ') {
             return 0;
         }
-        Elements elements = Elements.valueOf(number);
+        Element elements = Element.valueOf(number);
         return elements.number();
     }
 
@@ -59,7 +59,7 @@ public class CharNumbers {
         if (number == -1) {
             return 'x';
         }
-        Elements elements = Elements.valueOf(number);
+        Element elements = Element.valueOf(number);
         return elements.ch();
     }
 
