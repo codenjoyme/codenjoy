@@ -63,7 +63,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
     @Test
     public void shouldStop_whenBombermanDie() {
         // given
-        when(board.isMyBombermanDead()).thenReturn(true);
+        when(board.isGameOver()).thenReturn(true);
         
         // when 
         Direction direction = processor.next(board);

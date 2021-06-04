@@ -85,7 +85,7 @@ public class AIPerksHunterSolver implements Solver<Board> {
 
     @Override
     public String get(Board board) {
-        if (board.isMyBombermanDead()) return Direction.STOP.toString();
+        if (board.isGameOver()) return Direction.STOP.toString();
         List<Direction> result = getDirections(board);
         if (result.isEmpty()) return Direction.ACT.toString();
         return result.get(0).toString();
