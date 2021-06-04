@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.client.ai;
+package com.codenjoy.dojo.bomberman.services.ai;
 
 /*-
  * #%L
@@ -23,15 +23,12 @@ package com.codenjoy.dojo.bomberman.client.ai;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.model.Elements;
-import com.codenjoy.dojo.client.Closeable;
+import com.codenjoy.dojo.games.bomberman.Board;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.RandomDice;
 
 public class AI3Solver implements Solver<Board> {
     private Dice dice;
@@ -52,7 +49,7 @@ public class AI3Solver implements Solver<Board> {
             toX = direction.changeX(bomberman.getX());
             toY = direction.changeY(bomberman.getY());
 
-        } while (board.isAt(toX, toY, Elements.WALL) || board.isAt(toX, toY, Elements.DESTROYABLE_WALL));
+        } while (board.isAt(toX, toY, Element.WALL) || board.isAt(toX, toY, Element.DESTROYABLE_WALL));
 
         String command = direction.toString();
         if (!command.equalsIgnoreCase("act") && !command.equalsIgnoreCase("stop")) {

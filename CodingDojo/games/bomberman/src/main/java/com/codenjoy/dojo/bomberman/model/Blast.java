@@ -23,12 +23,13 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.BOOM;
+import static com.codenjoy.dojo.games.bomberman.Element.BOOM;
 
-public class Blast extends PointImpl implements State<Elements, Player> {
+public class Blast extends PointImpl implements State<Element, Player> {
 
     private Hero hero;
 
@@ -46,7 +47,7 @@ public class Blast extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return BOOM;
     }
 }

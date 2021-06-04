@@ -22,12 +22,12 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 
 public class BombBlastRadiusIncrease extends Perk {
 
     public BombBlastRadiusIncrease(int value, int timeout) {
-        super(Elements.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
+        super(Element.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
     }
 
     /**

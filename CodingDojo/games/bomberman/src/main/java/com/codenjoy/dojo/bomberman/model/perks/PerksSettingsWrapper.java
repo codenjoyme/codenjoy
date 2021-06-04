@@ -22,7 +22,7 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 
@@ -43,7 +43,7 @@ public class PerksSettingsWrapper {
         this.settings = settings;
     }
 
-    public PerksSettingsWrapper put(Elements perk, int value, int timeout) {
+    public PerksSettingsWrapper put(Element perk, int value, int timeout) {
         enable(perk);
         switch (perk) {
             case BOMB_BLAST_RADIUS_INCREASE : {
@@ -70,27 +70,27 @@ public class PerksSettingsWrapper {
         return this;
     }
 
-    private void enable(Elements perk) {
-        Set<Elements> perks = new LinkedHashSet(enabled());
+    private void enable(Element perk) {
+        Set<Element> perks = new LinkedHashSet(enabled());
         perks.add(perk);
         enabled(perks);
     }
 
-    private void enabled(Set<Elements> perks) {
+    private void enabled(Set<Element> perks) {
         String chars = perks.stream()
                 .map(element -> String.valueOf(element.ch()))
                 .reduce("", String::concat);
         settings.string(DEFAULT_PERKS, chars);
     }
 
-    private List<Elements> enabled() {
+    private List<Element> enabled() {
         return settings.string(DEFAULT_PERKS)
                 .chars()
-                .mapToObj(ch -> Elements.valueOf((char)ch))
+                .mapToObj(ch -> Element.valueOf((char)ch))
                 .collect(toList());
     }
 
-    public PerkSettings get(Elements perk) {
+    public PerkSettings get(Element perk) {
         int value;
         int timeout;
         switch (perk) {
@@ -145,17 +145,17 @@ public class PerksSettingsWrapper {
      * Всего у нас 100 шансов. Кидаем кубик, если он выпадает больше заявленнго dropRatio=20%
      * то рисуется стена. Иначе мы определяем какой индекс перка выпал
      */
-    public Elements nextPerkDrop(Dice dice) {
+    public Element nextPerkDrop(Dice dice) {
         // нет перков - стенка
         int total = enabled().size();
         if (total == 0) {
-            return Elements.DESTROYED_WALL;
+            return Element.DESTROYED_WALL;
         }
 
         // dropRatio - вероятность выпадения любого перка
         int random = dice.next(MAX_PERCENTS);
         if (random >= dropRatio()) {
-            return Elements.DESTROYED_WALL;
+            return Element.DESTROYED_WALL;
         }
 
         // считаем какой перк победил

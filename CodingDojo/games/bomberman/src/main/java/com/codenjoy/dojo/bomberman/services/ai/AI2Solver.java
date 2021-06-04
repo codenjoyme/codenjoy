@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.client.ai;
+package com.codenjoy.dojo.bomberman.services.ai;
 
 /*-
  * #%L
@@ -23,8 +23,8 @@ package com.codenjoy.dojo.bomberman.client.ai;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Board;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Point;
 
@@ -37,7 +37,7 @@ public class AI2Solver implements Solver<Board> {
     private final Solver solver;
 
     static class HistoryPoint implements Iterable<HistoryPoint> {
-        private List<Elements> near = new LinkedList<Elements>();
+        private List<Element> near = new LinkedList<Element>();
         private String command = null;
 
         private HistoryPoint prev = null;
@@ -56,7 +56,7 @@ public class AI2Solver implements Solver<Board> {
             last.near = getNearBomberman(board);
         }
 
-        private List<Elements> getNearBomberman(Board board) {
+        private List<Element> getNearBomberman(Board board) {
             Point bomberman = board.getBomberman();
             return board.getNear(bomberman.getX(), bomberman.getY());
         }
@@ -74,7 +74,7 @@ public class AI2Solver implements Solver<Board> {
         }
 
         public String getFor(String oldDirection, Board board) {
-            List<Elements> near = getNearBomberman(board);
+            List<Element> near = getNearBomberman(board);
 
             List<HistoryPoint> equalsPoint = new LinkedList<HistoryPoint>();
             for (HistoryPoint point : this) {
@@ -151,7 +151,7 @@ public class AI2Solver implements Solver<Board> {
         }
 
         private boolean noKillWay() {
-            return next != null && !next.near.contains(Elements.DEAD_BOMBERMAN);
+            return next != null && !next.near.contains(Element.DEAD_BOMBERMAN);
         }
 
         @Override
@@ -181,7 +181,7 @@ public class AI2Solver implements Solver<Board> {
             StringBuilder result = new StringBuilder();
 
             int count = 0;
-            for (Elements el : near) {
+            for (Element el : near) {
                 result.append(el.ch());
                 count ++;
                 if (count % 3 == 0) {
@@ -194,12 +194,12 @@ public class AI2Solver implements Solver<Board> {
             return result.toString();
         }
 
-        public boolean itsMe(List<Elements> elements) {
+        public boolean itsMe(List<Element> elements) {
             return near.equals(elements);
         }
 
         public boolean isDie() {
-            return near.contains(Elements.DEAD_BOMBERMAN);
+            return near.contains(Element.DEAD_BOMBERMAN);
         }
     }
 

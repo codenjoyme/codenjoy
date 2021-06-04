@@ -23,16 +23,17 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.DEAD_MEAT_CHOPPER;
-import static com.codenjoy.dojo.bomberman.model.Elements.MEAT_CHOPPER;
+import static com.codenjoy.dojo.games.bomberman.Element.DEAD_MEAT_CHOPPER;
+import static com.codenjoy.dojo.games.bomberman.Element.MEAT_CHOPPER;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class MeatChopper extends Wall implements State<Elements, Player>, Tickable {
+public class MeatChopper extends Wall implements State<Element, Player>, Tickable {
 
     public static final int MAX = 100;
 
@@ -70,7 +71,7 @@ public class MeatChopper extends Wall implements State<Elements, Player>, Tickab
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         Blast blast = filterOne(alsoAtPoint, Blast.class);
         if (blast != null) {
             return DEAD_MEAT_CHOPPER;

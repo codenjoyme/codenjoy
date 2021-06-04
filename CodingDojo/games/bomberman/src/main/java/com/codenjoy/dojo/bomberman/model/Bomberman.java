@@ -26,6 +26,7 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.bomberman.model.perks.*;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.bomberman.services.GameSettings;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -132,7 +133,7 @@ public class Bomberman extends RoundField<Player> implements Field {
             if (!owner.isActiveAndAlive()) {
                 if (bomb.isOnRemote()) {
                     bomb.activateRemote();
-                    owner.getPerk(Elements.BOMB_REMOTE_CONTROL).decrease();
+                    owner.getPerk(Element.BOMB_REMOTE_CONTROL).decrease();
                 }
             }
         }
@@ -364,7 +365,7 @@ public class Bomberman extends RoundField<Player> implements Field {
             for (Player player : aliveActive()) {
                 Hero prey = player.getHero();
                 if (prey.itsMe(blast)) {
-                    Perk immune = prey.getPerk(Elements.BOMB_IMMUNE);
+                    Perk immune = prey.getPerk(Element.BOMB_IMMUNE);
                     if (immune == null) {
                         deathMatch.put(hunter, prey);
                     }
@@ -403,7 +404,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private boolean dropPerk(Point pt, Dice dice) {
-        Elements element = settings.perksSettings().nextPerkDrop(dice);
+        Element element = settings.perksSettings().nextPerkDrop(dice);
         PerkSettings perk = settings.perksSettings().get(element);
 
         switch (element) {

@@ -23,14 +23,15 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.WALL;
+import static com.codenjoy.dojo.games.bomberman.Element.WALL;
 
-public class Wall extends PointImpl implements State<Elements, Player>, Tickable {
+public class Wall extends PointImpl implements State<Element, Player>, Tickable {
 
     public Wall(int x, int y) {
         super(x, y);
@@ -49,7 +50,7 @@ public class Wall extends PointImpl implements State<Elements, Player>, Tickable
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return WALL;
     }
 

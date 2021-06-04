@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.client.ai;
+package com.codenjoy.dojo.bomberman.services.ai;
 
 /*-
  * #%L
@@ -23,14 +23,13 @@ package com.codenjoy.dojo.bomberman.client.ai;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Board;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -73,10 +72,10 @@ public class AIPerksHunterSolver implements Solver<Board> {
         int size = board.size();
         Point from = board.getBomberman();
         List<Point> to = board.get(
-                Elements.BOMB_BLAST_RADIUS_INCREASE,
-                Elements.BOMB_COUNT_INCREASE,
-                Elements.BOMB_IMMUNE,
-                Elements.BOMB_REMOTE_CONTROL);
+                Element.BOMB_BLAST_RADIUS_INCREASE,
+                Element.BOMB_COUNT_INCREASE,
+                Element.BOMB_IMMUNE,
+                Element.BOMB_REMOTE_CONTROL);
         if (to.isEmpty()) {
             return Arrays.asList();
         }

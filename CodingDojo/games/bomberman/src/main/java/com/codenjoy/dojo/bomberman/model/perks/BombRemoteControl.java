@@ -22,12 +22,12 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 
 public class BombRemoteControl extends Perk {
 
     public BombRemoteControl(int value, int timeout) {
-        super(Elements.BOMB_REMOTE_CONTROL, value, timeout);
+        super(Element.BOMB_REMOTE_CONTROL, value, timeout);
     }
 
     @Override

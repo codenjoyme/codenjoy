@@ -22,7 +22,7 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.bomberman.model.Player;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
@@ -30,10 +30,10 @@ import com.codenjoy.dojo.services.Tickable;
 
 import java.util.Objects;
 
-public abstract class Perk extends PointImpl implements Tickable, State<Elements, Player> {
+public abstract class Perk extends PointImpl implements Tickable, State<Element, Player> {
 
     private final String name;
-    private final Elements element;
+    private final Element element;
     private int value;
 
     /**
@@ -52,7 +52,7 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
      * */
     private int pickTimeout;
 
-    public Perk(Elements element, int value, int timeout) {
+    public Perk(Element element, int value, int timeout) {
         this.element = element;
         this.name = element.name();
         this.value = value;
@@ -60,7 +60,7 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
         this.timer = timeout;
     }
 
-    public Perk(String name, Elements element, int value, int timeout, int pickTimeout) {
+    public Perk(String name, Element element, int value, int timeout, int pickTimeout) {
         this.name = name;
         this.element = element;
         this.value = value;
@@ -71,9 +71,9 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
     /**
      * This is for trigger like perks, e.g. nuke button.
      *
-     * @see Perk#Perk(Elements, int, int)
+     * @see Perk#Perk(Element, int, int)
      */
-    public Perk(Elements element, int timeout) {
+    public Perk(Element element, int timeout) {
         this(element, 0, timeout);
     }
 
@@ -90,8 +90,8 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return isActive() ? this.element : Elements.NONE;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return isActive() ? this.element : Element.NONE;
     }
 
     @Override
@@ -113,7 +113,7 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
         return name;
     }
 
-    public Elements getElement() {
+    public Element getElement() {
         return element;
     }
 

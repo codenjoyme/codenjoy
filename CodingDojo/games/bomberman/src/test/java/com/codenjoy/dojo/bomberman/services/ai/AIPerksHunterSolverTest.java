@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.client.ai;
+package com.codenjoy.dojo.bomberman.services.ai;
 
 /*-
  * #%L
@@ -22,8 +22,8 @@ package com.codenjoy.dojo.bomberman.client.ai;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Board;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
@@ -121,15 +121,15 @@ public class AIPerksHunterSolverTest {
     private void asrtWay(String expected) {
         Board board = new Board() {
             @Override
-            public Elements valueOf(char ch) {
-                return Elements.valueOf(ch);
+            public Element valueOf(char ch) {
+                return Element.valueOf(ch);
             }
         };
 
         assertEquals(expected,
                 TestUtils.printWay(expected,
-                        Elements.BOMBERMAN, Elements.BOMB_BLAST_RADIUS_INCREASE,
-                        Elements.NONE, Elements.DEAD_MEAT_CHOPPER,
+                        Element.BOMBERMAN, Element.BOMB_BLAST_RADIUS_INCREASE,
+                        Element.NONE, Element.DEAD_MEAT_CHOPPER,
                         board,
                         b -> AIPerksHunterSolver.possible((Board) b)));
     }

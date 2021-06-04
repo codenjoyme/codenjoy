@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import org.junit.Before;
@@ -1050,7 +1051,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 0, 0);
         givenBoard(1);
 
-        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        perks.put(Element.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
         perks.dropRatio(20); // 20%
         perks.pickTimeout(50);
 

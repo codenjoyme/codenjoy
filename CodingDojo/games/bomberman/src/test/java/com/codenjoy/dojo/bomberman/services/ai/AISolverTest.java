@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.client.ai;
+package com.codenjoy.dojo.bomberman.services.ai;
 
 /*-
  * #%L
@@ -23,7 +23,7 @@ package com.codenjoy.dojo.bomberman.client.ai;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.Board;
+import com.codenjoy.dojo.games.bomberman.Board;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;

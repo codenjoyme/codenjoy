@@ -22,7 +22,7 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.client.Encoding;
 import com.codenjoy.dojo.services.Direction;
 import com.google.common.primitives.Chars;
@@ -190,7 +190,7 @@ public class RuleReader {
     }
 
     private String invert(String chars) {
-        return Arrays.stream(Elements.values())
+        return Arrays.stream(Element.values())
                 .map(el -> el.ch())
                 .filter(ch -> chars.indexOf(ch) == -1)
                 .collect(asString());
@@ -239,7 +239,7 @@ public class RuleReader {
     }
 
     private boolean isValidPatternSymbols(Pattern pattern) {
-        List<Character> allow = Arrays.stream(Elements.values())
+        List<Character> allow = Arrays.stream(Element.values())
                 .map(e -> e.ch())
                 .collect(toList());
         allow.add(Board.ANY_CHAR);

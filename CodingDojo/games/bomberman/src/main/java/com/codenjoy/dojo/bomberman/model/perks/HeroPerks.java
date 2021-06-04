@@ -22,7 +22,7 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.Tickable;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class HeroPerks implements Tickable {
         }
     }
 
-    public Perk getPerk(Elements element) {
+    public Perk getPerk(Element element) {
         return perks.get(element.name());
     }
 

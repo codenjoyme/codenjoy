@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.client.ai;
+package com.codenjoy.dojo.bomberman.services.ai;
 
 /*-
  * #%L
@@ -23,10 +23,9 @@ package com.codenjoy.dojo.bomberman.client.ai;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Board;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,10 +47,10 @@ public class AISolver implements Solver<Board> {
         this.board = board;
         Point bomberman = board.getBomberman();
 
-        boolean nearDestroyableWall = board.isNear(bomberman.getX(), bomberman.getY(), Elements.DESTROYABLE_WALL);
-        boolean nearBomberman = board.isNear(bomberman.getX(), bomberman.getY(), Elements.OTHER_BOMBERMAN);
-        boolean nearMeatchopper = board.isNear(bomberman.getX(), bomberman.getY(), Elements.MEAT_CHOPPER);
-        boolean bombNotDropped = !board.isAt(bomberman.getX(), bomberman.getY(), Elements.BOMB_BOMBERMAN);
+        boolean nearDestroyableWall = board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROYABLE_WALL);
+        boolean nearBomberman = board.isNear(bomberman.getX(), bomberman.getY(), Element.OTHER_BOMBERMAN);
+        boolean nearMeatchopper = board.isNear(bomberman.getX(), bomberman.getY(), Element.MEAT_CHOPPER);
+        boolean bombNotDropped = !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN);
 
         bomb = null;
         if ((nearDestroyableWall || nearBomberman || nearMeatchopper) && bombNotDropped) {
@@ -90,17 +89,17 @@ public class AISolver implements Solver<Board> {
             boolean bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
             boolean barrierAtWay = board.isBarrierAt(newX, newY);
             boolean blastAtWay = board.getFutureBlasts().contains(pt(newX, newY));
-            boolean meatChopperNearWay = board.isNear(newX, newY, Elements.MEAT_CHOPPER);
+            boolean meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
 
-            if (blastAtWay && board.countNear(pt.getX(), pt.getY(), Elements.NONE) == 1 &&
-                    !board.isAt(pt.getX(), pt.getY(), Elements.BOMB_BOMBERMAN)) {
+            if (blastAtWay && board.countNear(pt.getX(), pt.getY(), Element.NONE) == 1 &&
+                    !board.isAt(pt.getX(), pt.getY(), Element.BOMB_BOMBERMAN)) {
                 return Direction.STOP;
             }
 
             again = bombAtWay || barrierAtWay || meatChopperNearWay;
 
             // TODO продолжить но с тестами
-            boolean deadEndAtWay = board.countNear(newX, newY, Elements.NONE) == 0 && bomb != null;
+            boolean deadEndAtWay = board.countNear(newX, newY, Element.NONE) == 0 && bomb != null;
             if (deadEndAtWay) {
                 bomb = null;
             }
@@ -119,7 +118,7 @@ public class AISolver implements Solver<Board> {
             result = Direction.valueOf(dice.next(4));
         } while (count++ < 10 &&
                 ((result.inverted() == direction && bomb == null) ||
-                        !board.isAt(result.changeX(pt.getX()), result.changeY(pt.getY()), Elements.NONE)));
+                        !board.isAt(result.changeX(pt.getX()), result.changeY(pt.getY()), Element.NONE)));
         if (count > 10) {
             return null;
         }
