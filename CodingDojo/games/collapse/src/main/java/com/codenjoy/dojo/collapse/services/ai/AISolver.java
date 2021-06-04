@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.collapse.client;
+package com.codenjoy.dojo.collapse.services.ai;
 
 /*-
  * #%L
@@ -23,14 +23,29 @@ package com.codenjoy.dojo.collapse.client;
  */
 
 
-import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.collapse.model.Elements;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.collapse.Board;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 
-public class Board extends AbstractBoard<Elements> {
+public class AISolver implements Solver<Board> {
 
-    @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
+    private Board board;
+    private Dice dice;
+
+    public AISolver(Dice dice) {
+        this.dice = dice;
     }
 
+    @Override
+    public String get(Board board) {
+        this.board = board;
+
+        Point pt = PointImpl.random(dice, board.size());
+        Direction direction = Direction.random(dice);
+
+        return String.format("ACT(%s,%s),%s", pt.getX(), pt.getY(), direction);
+    }
 }

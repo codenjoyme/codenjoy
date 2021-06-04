@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.collapse.client;
+package com.codenjoy.dojo.collapse.services.ai;
 
 /*-
  * #%L
@@ -23,6 +23,8 @@ package com.codenjoy.dojo.collapse.client;
  */
 
 
+import com.codenjoy.dojo.games.collapse.Board;
+import com.codenjoy.dojo.games.collapse.YourSolver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
@@ -34,7 +36,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SolverTest {
+public class AISolverTest {
 
     private Dice dice;
     private Solver ai;
