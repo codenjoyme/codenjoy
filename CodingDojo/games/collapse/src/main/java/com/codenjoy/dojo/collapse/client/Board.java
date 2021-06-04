@@ -1,5 +1,8 @@
 package com.codenjoy.dojo.collapse.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -32,5 +35,29 @@ public class Board extends AbstractBoard<Elements> {
     public Elements valueOf(char ch) {
         return Elements.valueOf(ch);
     }
+   
+    public List<ElementPoint> findAll(Elements element) {
+        List<ElementPoint>  result = new ArrayList<>();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Elements elementAt = getAt(0, x, y);
+                if (elementAt == element) {
+                    result.add(new ElementPoint(x, y, elementAt));
+                }
+            }
+        }
+        return result;
+    };
+
+    public List<ElementPoint> findAllExtended() {
+        List<ElementPoint>  result = new ArrayList<>();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Elements element = getAt(0, x, y);
+                result.add(new ElementPoint(x, y, element));
+            }
+        }
+        return result;
+    };
 
 }

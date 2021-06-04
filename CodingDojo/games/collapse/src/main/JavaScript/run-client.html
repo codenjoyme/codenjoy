@@ -1,0 +1,142 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2018 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+	<head>
+		<meta charset="utf8">
+		<script src="BrowserNodeStub.js"></script>
+		<script src="Configuration.js" ></script>
+		<script src="Direction.js" ></script>
+		<script src="Element.js" ></script>
+		<script src="Point.js" ></script>
+		<script src="Board.js" ></script>
+		<script src="Solver.js" ></script>
+		<script src="Api.js" ></script>
+		<script src="BrowserRuner.js"></script>
+    <style>
+      .container {
+        margin: 5;
+        
+      }
+      .header{
+        font-weight: bold;
+      }
+      td {
+        border: none 0px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 20px;
+        height: 20px;  
+        margin: -1px;
+        padding: 0px;
+      }
+
+      .BORDER {
+         background-image: url('./images/border.png'); 
+      }  
+      .ONE {
+         background-image: url('./images/one.png'); 
+      }  
+      .TWO {
+         background-image: url('./images/two.png'); 
+      }  
+      .THREE {
+         background-image: url('./images/three.png'); 
+      }  
+      .FOUR {
+         background-image: url('./images/four.png'); 
+      }  
+      .FIVE {
+         background-image: url('./images/five.png'); 
+      }  
+      .SIX {
+         background-image: url('./images/six.png'); 
+      }  
+      .SEVEN {
+         background-image: url('./images/seven.png'); 
+      }  
+      .EIGHT {
+         background-image: url('./images/eight.png'); 
+      }  
+      .NONE {
+         background-image: url('./images/none.png'); 
+      }  
+      #header,#game-elements,#log {
+        display: block;
+        width: fit-content;
+      }
+      #field-as-view, #controls-group{
+        position: relative;
+
+        min-height: 150px;
+        display: inline-block;
+        padding: 5px;
+      }
+
+      #field-as-view {
+        float:right;
+
+      }
+      #controls {
+        border: solid 2px lightgray;
+        padding: 10px;
+      }
+
+    </style>
+	</head>
+	<body>
+    <div id="header" class="container">game: <span class="header">Collapse</span></div>
+    <div id="game-elements" class="container">
+      <div id="controls-group">
+        <div id="field-as-log" class="container">
+          <span class="header">Input:</span><br />
+          <textarea id="board" style="line-height: 8px; vertical-align:top;"></textarea>
+        </div>
+        <div id="last-move" class="container">
+          <span class="header">Last answer: </span><span id="lastmove">--</span>
+        </div>
+        <div id="controls" class="container">
+          <input type="checkbox" id="log-enabled" checked="1" onchange='setLogging();'>Enable Log</input>
+          <br />
+          <input type="checkbox" id="log-autoscroll" checked="1" onchange='setScrolling();'>Autoscroll</input>
+          <br />
+          <input type="button" id="clear-log" value="Clear log" onclick="clearLog();"></input>
+        </div>
+        <div id="log" class="container">
+          <span class="header">Log:</span><br />
+          <textarea id="log-area" rows="60" cols="40"
+            style="width: 100%; line-height: 10px; font-family: 'Courier New', Courier, monospace;"></textarea>
+        </div>
+      </div>
+      <div id="field-as-view" class="container">
+        <span class="header">Field</span><br />
+        <div id="board-table">
+          <table id="table-game">
+    
+          </table>
+        </div>
+      </div>
+    </div>
+    
+
+				
+	</body>
+</html>

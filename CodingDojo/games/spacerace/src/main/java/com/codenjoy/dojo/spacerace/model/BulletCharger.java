@@ -22,7 +22,6 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -34,9 +33,9 @@ public class BulletCharger implements Tickable {
     private int timer = 0;
     private int bullets = 0;
     private boolean toRecharge = false;
-    private SettingsReader settings;
+    private SettingsReader<?> settings;
 
-    public BulletCharger(SettingsReader settings) {
+    public BulletCharger(SettingsReader<?> settings) {
         this.settings = settings;
     }
 
@@ -47,19 +46,27 @@ public class BulletCharger implements Tickable {
     @Override
     public void tick() {
         if (toRecharge) {
-            recharge();
+            rechargeFull();
             toRecharge = false;
         }
-        // if (timer == 0) { // TODO доделать, если нам понадобится перезарядка
-        // по времени
-        // recharge();
-        // }
-        // timer--;
+        int ticksToRecharge = ticksToRecharge();
+        if (ticksToRecharge > 0) {
+            timer++;
+            if (timer > ticksToRecharge) {
+                rechargeOne();
+                timer = 0;
+            }
+        }
     }
 
-    private void recharge() {
-        timer = ticksToRecharge();
-        bullets = bulletsCount();
+    private void rechargeFull() {
+        bullets = maxBulletsCount();
+    }
+
+    private void rechargeOne() {
+        if (bullets < maxBulletsCount()) {
+            bullets++;
+        }
     }
 
     public boolean canShoot() {
@@ -74,7 +81,7 @@ public class BulletCharger implements Tickable {
         return settings.integer(TICKS_TO_RECHARGE);
     }
 
-    public int bulletsCount() {
+    public int maxBulletsCount() {
         return settings.integer(BULLETS_COUNT);
     }
 }

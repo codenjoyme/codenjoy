@@ -41,6 +41,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         DESTROY_BOMB_SCORE("Destroy bomb score"),
         DESTROY_STONE_SCORE("Destroy stone score"),
         DESTROY_ENEMY_SCORE("Destroy enemy score"),
+        GET_GOLD_SCORE("Get gold score"),
         LOSE_PENALTY("Lose penalty"),
         LEVEL_MAP("Level map");
 
@@ -68,6 +69,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         integer(DESTROY_BOMB_SCORE, 30);
         integer(DESTROY_STONE_SCORE, 10);
         integer(DESTROY_ENEMY_SCORE, 500);
+        integer(GET_GOLD_SCORE, 3);
         integer(LOSE_PENALTY, 100);
 
         multiline(LEVEL_MAP,
@@ -75,7 +77,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
                 "☼                            ☼" +
                 "☼                            ☼" +
                 "☼                            ☼" +
-                "☼                            ☼" +
+                "☼          $                 ☼" +
                 "☼                            ☼" +
                 "☼                            ☼" +
                 "☼                            ☼" +

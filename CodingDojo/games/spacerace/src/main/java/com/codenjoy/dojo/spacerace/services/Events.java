@@ -23,5 +23,5 @@ package com.codenjoy.dojo.spacerace.services;
  */
 
 public enum Events {
-    DESTROY_ENEMY, DESTROY_BOMB, DESTROY_STONE, LOSE, RECHARGE
+    DESTROY_ENEMY, DESTROY_BOMB, DESTROY_STONE, LOSE, RECHARGE, GET_GOLD
 }
