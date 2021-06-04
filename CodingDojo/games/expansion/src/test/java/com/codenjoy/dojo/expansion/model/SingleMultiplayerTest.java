@@ -26,8 +26,7 @@ package com.codenjoy.dojo.expansion.model;
 import com.codenjoy.dojo.expansion.services.Events;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 public class SingleMultiplayerTest extends AbstractMultiplayerTest {

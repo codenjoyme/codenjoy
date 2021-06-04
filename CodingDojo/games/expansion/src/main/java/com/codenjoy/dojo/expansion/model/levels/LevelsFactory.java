@@ -25,9 +25,6 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 import java.util.List;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-01.
- */
 public interface LevelsFactory {
     List<Level> get();
 }

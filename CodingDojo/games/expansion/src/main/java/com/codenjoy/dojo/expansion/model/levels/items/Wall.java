@@ -23,14 +23,11 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 
-/**
- * Артефакт Стена на поле
- */
 public class Wall extends BaseItem {
 
-    public Wall(Elements el) {
+    public Wall(Element el) {
         super(el);
         impassable();
     }

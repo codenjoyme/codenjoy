@@ -27,9 +27,6 @@ import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
 
 import java.util.List;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-12.
- */
 public interface Attack {
     boolean calculate(List<HeroForces> forces);
 }

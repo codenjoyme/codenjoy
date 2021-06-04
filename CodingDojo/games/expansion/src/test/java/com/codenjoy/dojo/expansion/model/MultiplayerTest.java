@@ -29,7 +29,7 @@ import com.codenjoy.dojo.expansion.services.Events;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class MultiplayerTest extends AbstractMultiplayerTest {
 

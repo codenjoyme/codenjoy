@@ -23,15 +23,12 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 
-/**
- * Created by Mikhail_Udalyi on 10.06.2016.
- */
 public class Air extends BaseItem {
 
     public Air() {
-        super(Elements.EMPTY);
+        super(Element.EMPTY);
     }
 
 }

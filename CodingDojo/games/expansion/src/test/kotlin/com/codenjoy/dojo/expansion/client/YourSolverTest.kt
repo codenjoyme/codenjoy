@@ -25,14 +25,17 @@ package com.codenjoy.dojo.expansion.client
 
 import com.codenjoy.dojo.client.Solver
 import com.codenjoy.dojo.services.QDirection
-import com.codenjoy.dojo.expansion.model.Forces
-import com.codenjoy.dojo.expansion.model.ForcesMoves
+import com.codenjoy.dojo.games.expansion.Forces
+import com.codenjoy.dojo.games.expansion.ForcesMoves
+import com.codenjoy.dojo.games.expansion.Board
+import com.codenjoy.dojo.games.expansion.Command
 import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 
 import com.codenjoy.dojo.services.PointImpl.pt
-import com.codenjoy.dojo.expansion.client.Command.*
+import com.codenjoy.dojo.games.expansion.Command.*
+import com.codenjoy.dojo.games.expansion.YourSolver
 import junit.framework.Assert.assertEquals
 
 class YourSolverTest {

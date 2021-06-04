@@ -23,17 +23,14 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.IField;
 
-/**
- * Created by Mikhail_Udalyi on 05.07.2016.
- */
 public class FieldItem extends BaseItem {
 
     protected IField field;
 
-    public FieldItem(Elements element) {
+    public FieldItem(Element element) {
         super(element);
     }
 

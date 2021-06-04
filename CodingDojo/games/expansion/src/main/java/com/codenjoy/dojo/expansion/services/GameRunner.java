@@ -25,9 +25,9 @@ package com.codenjoy.dojo.expansion.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.expansion.client.Board;
-import com.codenjoy.dojo.expansion.client.ai.AISolver;
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Board;
+import com.codenjoy.dojo.expansion.client.AISolver;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.Ticker;
@@ -140,7 +140,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

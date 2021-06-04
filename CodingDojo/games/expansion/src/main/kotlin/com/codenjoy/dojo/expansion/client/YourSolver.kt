@@ -24,34 +24,35 @@ package com.codenjoy.dojo.expansion.client
 
 
 import com.codenjoy.dojo.services.QDirection
-import com.codenjoy.dojo.expansion.model.Forces
-import com.codenjoy.dojo.expansion.model.ForcesMoves
+import com.codenjoy.dojo.games.expansion.Forces
+import com.codenjoy.dojo.games.expansion.ForcesMoves
+import com.codenjoy.dojo.games.expansion.AbstractSolver
+import com.codenjoy.dojo.games.expansion.Board
+import com.codenjoy.dojo.games.expansion.Command
 import com.codenjoy.dojo.services.Dice
+import com.codenjoy.dojo.services.PointImpl.pt
 import com.codenjoy.dojo.services.RandomDice
 
 /**
- * Your AI
+ * Author: your name
+ *
+ * This is your AI algorithm for the game.
+ * Implement it at your own discretion.
+ * Pay attention to {@see YourSolverTest} - there is
+ * a test framework for you.
  */
 class YourKotlinSolver(dice: Dice) : AbstractSolver() {
 
     override fun whatToDo(board: Board): Command {
         with(board) {
-            if (!board.isMeAlive) return Command.doNothing()
+            if (!isGameOver) return Command.doNothing()
 
-            var goals = board.gold
-            if (goals.isEmpty()) {
-                goals = board.exits
-            }
-            val from = board.myForces[0].region;
-            val shortestWay = board.getShortestWay(from, goals)
-            if (shortestWay.isEmpty()) {
-                return Command.doNothing()
-            }
-            val nextStep = QDirection.get(shortestWay[0])
+            // TODO your code here
 
-            return Command.increase(Forces(from, 10))
-                    .move(ForcesMoves(from, 5, nextStep))
-                    .build()
+            return Command
+                    .increase(Forces(pt(12, 13), 10))
+                    .move(ForcesMoves(pt(14, 15), 5, QDirection.DOWN))
+                    .build();
         }
     }
 

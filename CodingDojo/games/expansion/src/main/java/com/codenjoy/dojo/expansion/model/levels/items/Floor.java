@@ -23,14 +23,11 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 
-/**
- * Created by Mikhail_Udalyi on 09.06.2016.
- */
 public class Floor extends BaseItem {
 
-    public Floor(Elements el) {
+    public Floor(Element el) {
         super(el);
     }
 }

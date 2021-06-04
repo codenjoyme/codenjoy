@@ -29,9 +29,6 @@ import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
 
 import java.util.List;
 
-/**
- * Created by Mikhail_Udalyi on 08.06.2016.
- */
 public interface Cell extends Point {
 
     void captureBy(HeroForces income);

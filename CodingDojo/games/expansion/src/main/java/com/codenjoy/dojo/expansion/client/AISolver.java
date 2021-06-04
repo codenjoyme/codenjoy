@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.expansion.client.ai;
+package com.codenjoy.dojo.expansion.client;
 
 /*-
  * #%L
@@ -23,11 +23,11 @@ package com.codenjoy.dojo.expansion.client.ai;
  */
 
 
-import com.codenjoy.dojo.expansion.client.AbstractSolver;
-import com.codenjoy.dojo.expansion.client.Board;
-import com.codenjoy.dojo.expansion.client.Command;
-import com.codenjoy.dojo.expansion.model.Forces;
-import com.codenjoy.dojo.expansion.model.ForcesMoves;
+import com.codenjoy.dojo.games.expansion.AbstractSolver;
+import com.codenjoy.dojo.games.expansion.Board;
+import com.codenjoy.dojo.games.expansion.Command;
+import com.codenjoy.dojo.games.expansion.Forces;
+import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -65,16 +65,38 @@ public class AISolver extends AbstractSolver {
         System.out.println("----------------");
     }
 
+    public static DeikstraFindWay.Possible possible(Board board) {
+        List<Point> barriers = board.barriers();
+
+        return new DeikstraFindWay.Possible() {
+            @Override
+            public boolean possible(Point point) {
+                return !barriers.contains(point);
+            }
+        };
+    }
+
+    /**
+     * @param to Destination point.
+     * @return Shortest path (list of directions where to move) from any location to coordinates specified.
+     */
+    public static List<Direction> getShortestWay(Board board, Point from, List<Point> to) {
+        DeikstraFindWay.Possible map = possible(board);
+        DeikstraFindWay findWay = new DeikstraFindWay();
+        List<Direction> shortestWay = findWay.getShortestWay(board.size(), from, to, map);
+        return shortestWay;
+    }
+
     /**
      * @param board use it for find elements on board
-     * @return what hero should d o in this tick (for this board)
+     * @return what hero should do in this tick (for this board)
      */
     @Override
     public Command whatToDo(Board board) {
 //        calc();
-        if (!board.isMeAlive()) return Command.doNothing();
+        if (board.isGameOver()) return Command.doNothing();
 
-        DeikstraFindWay.Possible map = board.possible();
+        DeikstraFindWay.Possible map = possible(board);
         DeikstraFindWay findWay = new DeikstraFindWay(true);
 
         Point point = null;
