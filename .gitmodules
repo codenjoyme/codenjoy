@@ -28,3 +28,6 @@
 [submodule "CodingDojo/games/chess"]
 	path = CodingDojo/games/chess
 	url = https://github.com/codenjoyme/codenjoy-chess.git
+[submodule "CodingDojo/games/engine"]
+	path = CodingDojo/games/engine
+	url = git@github.com:codenjoyme/codenjoy-engine.git
