@@ -21,6 +21,7 @@
     </distributionManagement>
 
     <modules>
+        <module>clients/java</module>
         <module>games</module>
         <module>server</module>
         <module>balancer</module>

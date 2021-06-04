@@ -167,7 +167,7 @@ public class WatsNextServiceTest {
                 "+----------------\n");
     }
 
-    @Test(timeout = 20000)
+    @Test(timeout = 30000)
     public void shouldMethodIsFast() {
         // about 8.8 sec
         for (int i = 0; i < 100000; i++) {
