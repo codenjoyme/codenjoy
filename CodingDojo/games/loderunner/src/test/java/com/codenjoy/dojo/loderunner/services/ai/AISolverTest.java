@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.client.ai;
+package com.codenjoy.dojo.loderunner.services.ai;
 
 /*-
  * #%L
@@ -23,7 +23,7 @@ package com.codenjoy.dojo.loderunner.client.ai;
  */
 
 
-import com.codenjoy.dojo.loderunner.client.Board;
+import com.codenjoy.dojo.games.loderunner.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;

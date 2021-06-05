@@ -25,9 +25,11 @@ package com.codenjoy.dojo.loderunner.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.loderunner.client.Board;
-import com.codenjoy.dojo.loderunner.client.ai.AISolver;
-import com.codenjoy.dojo.loderunner.model.*;
+import com.codenjoy.dojo.games.loderunner.Board;
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.Loderunner;
+import com.codenjoy.dojo.loderunner.model.Player;
+import com.codenjoy.dojo.loderunner.services.ai.AISolver;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
@@ -70,7 +72,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

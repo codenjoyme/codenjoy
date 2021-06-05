@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.items;
 
 /*-
  * #%L
@@ -23,14 +23,20 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.Player;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-import java.util.List;
+public class Pipe extends PointImpl implements State<Element, Player> {
 
-public interface EnemyAI {
+    public Pipe(Point point) {
+        super(point);
+    }
 
-    Direction getDirection(Field field, Point from, List<Point> to);
-
-    Point getReached();
+    @Override
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.PIPE;
+    }
 }

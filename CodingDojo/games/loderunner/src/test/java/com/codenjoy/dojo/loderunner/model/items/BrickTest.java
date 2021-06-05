@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.items;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.games.loderunner.Element;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -34,20 +35,20 @@ public class BrickTest {
     public void test() {
         Brick brick = new Brick(pt(0, 0));
 
-        assertEquals(Elements.BRICK, brick.state(null));
+        assertEquals(Element.BRICK, brick.state(null));
 
         brick.drill(null);
         brick.tick();
 
-        assertEquals(Elements.DRILL_PIT, brick.state(null));
+        assertEquals(Element.DRILL_PIT, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.NONE, brick.state(null));
+        assertEquals(Element.NONE, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.NONE, brick.state(null));
+        assertEquals(Element.NONE, brick.state(null));
 
         brick.tick();
         brick.tick();
@@ -55,26 +56,26 @@ public class BrickTest {
         brick.tick();
         brick.tick();
 
-        assertEquals(Elements.NONE, brick.state(null));
+        assertEquals(Element.NONE, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.PIT_FILL_4, brick.state(null));
+        assertEquals(Element.PIT_FILL_4, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.PIT_FILL_3, brick.state(null));
+        assertEquals(Element.PIT_FILL_3, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.PIT_FILL_2, brick.state(null));
+        assertEquals(Element.PIT_FILL_2, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.PIT_FILL_1, brick.state(null));
+        assertEquals(Element.PIT_FILL_1, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.BRICK, brick.state(null));
+        assertEquals(Element.BRICK, brick.state(null));
     }
 }

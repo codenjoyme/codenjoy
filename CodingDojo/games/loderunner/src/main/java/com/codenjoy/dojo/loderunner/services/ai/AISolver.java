@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.client.ai;
+package com.codenjoy.dojo.loderunner.services.ai;
 
 /*-
  * #%L
@@ -24,8 +24,8 @@ package com.codenjoy.dojo.loderunner.client.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.loderunner.client.Board;
-import com.codenjoy.dojo.loderunner.model.Elements;
+import com.codenjoy.dojo.games.loderunner.Board;
+import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -85,9 +85,9 @@ public class AISolver implements Solver<Board> {
             return Arrays.asList();
         }
         List<Point> to = board.get(
-                Elements.YELLOW_GOLD,
-                Elements.GREEN_GOLD,
-                Elements.RED_GOLD);
+                Element.YELLOW_GOLD,
+                Element.GREEN_GOLD,
+                Element.RED_GOLD);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }

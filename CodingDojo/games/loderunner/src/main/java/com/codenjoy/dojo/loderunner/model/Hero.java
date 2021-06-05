@@ -23,24 +23,26 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.Pill.PillType;
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.items.Ladder;
+import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.Pipe;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.StateUtils;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.codenjoy.dojo.loderunner.model.Elements.*;
+import static com.codenjoy.dojo.games.loderunner.Element.*;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_TICKS;
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
 
     protected Direction direction;
     private Map<PillType, Integer> pills = new HashMap<>();
@@ -220,15 +222,15 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (StateUtils.itsMe(player, this, alsoAtPoint, player.getHero())) {
             Hero hero = player.getHero();
-            Elements state = hero.state(alsoAtPoint);
+            Element state = hero.state(alsoAtPoint);
             return hero.isShadow()
                     ? state.shadow()
                     : state;
         } else {
-            Elements state = state(alsoAtPoint);
+            Element state = state(alsoAtPoint);
             state = state.otherHero();
             return isShadow()
                     ? state.shadow()
@@ -236,7 +238,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         }
     }
 
-    private Elements state(Object[] alsoAtPoint) {
+    private Element state(Object[] alsoAtPoint) {
         Ladder ladder = filterOne(alsoAtPoint, Ladder.class);
         Pipe pipe = filterOne(alsoAtPoint, Pipe.class);
 

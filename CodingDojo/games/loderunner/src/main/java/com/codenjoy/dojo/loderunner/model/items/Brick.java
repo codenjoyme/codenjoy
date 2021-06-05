@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.items;
 
 /*-
  * #%L
@@ -23,12 +23,15 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.Hero;
+import com.codenjoy.dojo.loderunner.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-public class Brick extends PointImpl implements Tickable, State<Elements, Player> {
+public class Brick extends PointImpl implements Tickable, State<Element, Player> {
 
     // TODO move to settings
     public static int DRILL_TIMER = 13;
@@ -62,19 +65,19 @@ public class Brick extends PointImpl implements Tickable, State<Elements, Player
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (drill == 1) {
-            return Elements.DRILL_PIT;
+            return Element.DRILL_PIT;
         } else if (drill > 1) {
             switch (Brick.DRILL_TIMER - drill) {
-                case 1 : return Elements.PIT_FILL_1;
-                case 2 : return Elements.PIT_FILL_2;
-                case 3 : return Elements.PIT_FILL_3;
-                case 4 : return Elements.PIT_FILL_4;
-                default: return Elements.NONE;
+                case 1 : return Element.PIT_FILL_1;
+                case 2 : return Element.PIT_FILL_2;
+                case 3 : return Element.PIT_FILL_3;
+                case 4 : return Element.PIT_FILL_4;
+                default: return Element.NONE;
             }
         } else {
-            return Elements.BRICK;
+            return Element.BRICK;
         }
     }
 

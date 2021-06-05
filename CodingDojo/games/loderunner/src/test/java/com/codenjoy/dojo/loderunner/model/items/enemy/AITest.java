@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.items.enemy;
 
 /*-
  * #%L
@@ -23,8 +23,12 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.games.loderunner.Board;
 import com.codenjoy.dojo.loderunner.TestSettings;
-import com.codenjoy.dojo.loderunner.client.Board;
+import com.codenjoy.dojo.loderunner.model.Hero;
+import com.codenjoy.dojo.loderunner.model.Loderunner;
+import com.codenjoy.dojo.loderunner.model.Player;
+import com.codenjoy.dojo.loderunner.model.levels.LevelImpl;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;

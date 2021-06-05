@@ -23,8 +23,8 @@ package com.codenjoy.dojo.loderunner.services;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.Level;
-import com.codenjoy.dojo.loderunner.model.LevelImpl;
+import com.codenjoy.dojo.loderunner.model.levels.Level;
+import com.codenjoy.dojo.loderunner.model.levels.LevelImpl;
 import com.codenjoy.dojo.loderunner.services.levels.Big;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;

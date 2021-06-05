@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.items;
 
 /*-
  * #%L
@@ -22,18 +22,20 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class RedGold extends PointImpl implements State<Elements, Player> {
+public class RedGold extends PointImpl implements State<Element, Player> {
 
     public RedGold(Point point) {
         super(point);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.RED_GOLD;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.RED_GOLD;
     }
 }

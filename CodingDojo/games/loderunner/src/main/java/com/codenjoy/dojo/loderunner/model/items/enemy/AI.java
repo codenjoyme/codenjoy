@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.items.enemy;
 
 /*-
  * #%L
@@ -23,13 +23,15 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Field;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-import static com.codenjoy.dojo.services.Direction.*;
+import static com.codenjoy.dojo.services.Direction.DOWN;
 
 public class AI implements EnemyAI {
 

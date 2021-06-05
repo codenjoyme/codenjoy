@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.levels;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2019 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,26 +22,38 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
 
-public class Pill extends PointImpl implements State<Elements, Player> {
+import com.codenjoy.dojo.loderunner.model.Hero;
+import com.codenjoy.dojo.loderunner.model.items.*;
+import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
+import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyAI;
 
-    private PillType pillType;
+import java.util.List;
 
-    public Pill(Point pt, PillType pillType) {
-        super(pt);
-        this.pillType = pillType;
-    }
+public interface Level {
+    int getSize();
 
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.SHADOW_PILL;
-    }
+    List<Brick> getBricks();
 
-    enum PillType {
-        SHADOW_PILL,
-        SPEED_PILL  // TODO закончить тут
-    }
+    List<Border> getBorders();
+
+    List<Hero> getHeroes();
+
+    List<YellowGold> getYellowGold();
+
+    List<GreenGold> getGreenGold();
+
+    List<RedGold> getRedGold();
+
+    List<Ladder> getLadder();
+
+    List<Pipe> getPipe();
+
+    List<Enemy> getEnemies();
+
+    List<Pill> getPills();
+
+    List<Portal> getPortals();
+
+    EnemyAI getAi();
 }

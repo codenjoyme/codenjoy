@@ -25,10 +25,10 @@ package com.codenjoy.dojo.loderunner;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.loderunner.client.Board;
-import com.codenjoy.dojo.loderunner.client.ai.AISolver;
+import com.codenjoy.dojo.games.loderunner.Board;
 import com.codenjoy.dojo.loderunner.services.GameRunner;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
+import com.codenjoy.dojo.loderunner.services.ai.AISolver;
 import com.codenjoy.dojo.loderunner.services.levels.Big;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
@@ -38,7 +38,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static java.util.stream.Collectors.toList;
 

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.items.enemy;
 
 /*-
  * #%L
@@ -23,6 +23,11 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.Field;
+import com.codenjoy.dojo.loderunner.model.Fieldable;
+import com.codenjoy.dojo.loderunner.model.Hero;
+import com.codenjoy.dojo.loderunner.model.Player;
 import com.codenjoy.dojo.services.*;
 
 import java.util.Arrays;
@@ -31,7 +36,7 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
-public class Enemy extends PointImpl implements Tickable, Fieldable, State<Elements, Player> {
+public class Enemy extends PointImpl implements Tickable, Fieldable, State<Element, Player> {
 
     private Direction direction;
     private EnemyAI ai;
@@ -152,24 +157,24 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (field.isBrick(this)) {
-            return Elements.ENEMY_PIT;
+            return Element.ENEMY_PIT;
         }
 
         if (field.isLadder(this)) {
-            return Elements.ENEMY_LADDER;
+            return Element.ENEMY_LADDER;
         }
 
         if (field.isPipe(this)) {
             return isLeftTurn()
-                    ? Elements.ENEMY_PIPE_LEFT
-                    : Elements.ENEMY_PIPE_RIGHT;
+                    ? Element.ENEMY_PIPE_LEFT
+                    : Element.ENEMY_PIPE_RIGHT;
         }
 
         return isLeftTurn()
-                ? Elements.ENEMY_LEFT
-                : Elements.ENEMY_RIGHT;
+                ? Element.ENEMY_LEFT
+                : Element.ENEMY_RIGHT;
     }
 
     public boolean isLeftTurn() {

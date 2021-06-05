@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.items.enemy;
 
 /*-
  * #%L
@@ -23,32 +23,15 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Field;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+
 import java.util.List;
 
-public interface Level {
-    int getSize();
+public interface EnemyAI {
 
-    List<Brick> getBricks();
+    Direction getDirection(Field field, Point from, List<Point> to);
 
-    List<Border> getBorders();
-
-    List<Hero> getHeroes();
-
-    List<YellowGold> getYellowGold();
-
-    List<GreenGold> getGreenGold();
-
-    List<RedGold> getRedGold();
-
-    List<Ladder> getLadder();
-
-    List<Pipe> getPipe();
-
-    List<Enemy> getEnemies();
-
-    List<Pill> getPills();
-
-    List<Portal> getPortals();
-
-    EnemyAI getAi();
+    Point getReached();
 }

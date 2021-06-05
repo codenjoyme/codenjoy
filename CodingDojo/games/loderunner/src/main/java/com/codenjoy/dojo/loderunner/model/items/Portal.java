@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.loderunner.client.ai;
+package com.codenjoy.dojo.loderunner.model.items;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,20 @@ package com.codenjoy.dojo.loderunner.client.ai;
  * #L%
  */
 
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.Player;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.loderunner.client.Board;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
+public class Portal extends PointImpl implements State<Element, Player> {
 
-public class DummyAISolver implements Solver<Board> {
-
-    private Dice dice;
-
-    public DummyAISolver(Dice dice) {
-        this.dice = dice;
+    public Portal(Point point) {
+        super(point);
     }
 
     @Override
-    public String get(final Board board) {
-        if (board.isGameOver()) return "";
-        return Direction.random(dice).toString();
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.PORTAL;
     }
 }

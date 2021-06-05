@@ -24,7 +24,9 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.TestSettings;
-import com.codenjoy.dojo.loderunner.model.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.Brick;
+import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.levels.LevelImpl;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;

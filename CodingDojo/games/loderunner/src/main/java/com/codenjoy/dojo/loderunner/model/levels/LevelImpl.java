@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.levels;
 
 /*-
  * #%L
@@ -23,7 +23,13 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.Pill.PillType;
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.Hero;
+import com.codenjoy.dojo.loderunner.model.items.*;
+import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.enemy.AI;
+import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
+import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyAI;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
@@ -33,7 +39,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.codenjoy.dojo.loderunner.model.Elements.*;
+import static com.codenjoy.dojo.games.loderunner.Element.*;
 
 public class LevelImpl implements Level {
 
@@ -56,12 +62,12 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHeroes() {
-        EnumSet<Elements> left = EnumSet.of(
+        EnumSet<Element> left = EnumSet.of(
                 HERO_DRILL_LEFT, HERO_LEFT, HERO_FALL_LEFT, HERO_PIPE_LEFT,
                 HERO_SHADOW_DRILL_LEFT,
                 HERO_SHADOW_LEFT, HERO_SHADOW_FALL_LEFT, HERO_SHADOW_PIPE_LEFT);
 
-        EnumSet<Elements> right = EnumSet.of(
+        EnumSet<Element> right = EnumSet.of(
                 HERO_DRILL_RIGHT, HERO_RIGHT, HERO_FALL_RIGHT, HERO_PIPE_RIGHT,
                 HERO_SHADOW_DRILL_RIGHT,
                 HERO_SHADOW_RIGHT, HERO_SHADOW_FALL_RIGHT, HERO_SHADOW_PIPE_RIGHT);

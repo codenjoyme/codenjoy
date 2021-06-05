@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.model.items;
 
 /*-
  * #%L
@@ -23,18 +23,20 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Border extends PointImpl implements State<Elements, Player> {
+public class Ladder extends PointImpl implements State<Element, Player> {
 
-    public Border(Point pt) {
-        super(pt);
+    public Ladder(Point point) {
+        super(point);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.UNDESTROYABLE_WALL;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.LADDER;
     }
 }
