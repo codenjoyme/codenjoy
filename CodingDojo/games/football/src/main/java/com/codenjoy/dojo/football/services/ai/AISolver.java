@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.football.client.ai;
+package com.codenjoy.dojo.football.services.ai;
 
 /*-
  * #%L
@@ -24,7 +24,7 @@ package com.codenjoy.dojo.football.client.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.football.client.Board;
+import com.codenjoy.dojo.games.football.Board;
 import com.codenjoy.dojo.football.model.Actions;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;

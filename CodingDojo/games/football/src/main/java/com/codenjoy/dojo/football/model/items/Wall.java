@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.football.model;
+package com.codenjoy.dojo.football.model.items;
 
 /*-
  * #%L
@@ -22,25 +22,20 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
-import java.util.List;
+import com.codenjoy.dojo.games.football.Element;
+import com.codenjoy.dojo.football.model.Player;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-import com.codenjoy.dojo.football.model.elements.Ball;
-import com.codenjoy.dojo.football.model.elements.Goal;
-import com.codenjoy.dojo.football.model.elements.Hero;
-import com.codenjoy.dojo.football.model.elements.Wall;
+public class Wall extends PointImpl implements State<Element, Player> {
 
-public interface Level {
+    public Wall(Point point) {
+        super(point);
+    }
 
-    int getSize();
-
-    List<Wall> getWalls();
-
-    List<Hero> getHero();
-
-    List<Ball> getBalls();
-
-    List<Goal> getTopGoals();
-
-    List<Goal> getBottomGoals();
-
+    @Override
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.WALL;
+    }
 }

@@ -23,8 +23,8 @@ package com.codenjoy.dojo.football.services;
  */
 
 
-import com.codenjoy.dojo.football.model.Level;
-import com.codenjoy.dojo.football.model.LevelImpl;
+import com.codenjoy.dojo.football.model.levels.Level;
+import com.codenjoy.dojo.football.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 

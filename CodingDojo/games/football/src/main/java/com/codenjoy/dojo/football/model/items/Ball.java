@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.football.model.elements;
+package com.codenjoy.dojo.football.model.items;
 
 /*-
  * #%L
@@ -22,7 +22,7 @@ package com.codenjoy.dojo.football.model.elements;
  * #L%
  */
 
-import com.codenjoy.dojo.football.model.Elements;
+import com.codenjoy.dojo.games.football.Element;
 import com.codenjoy.dojo.football.model.Field;
 import com.codenjoy.dojo.football.model.Player;
 import com.codenjoy.dojo.services.Direction;
@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-public class Ball extends PointImpl implements State<Elements, Player>, Tickable {
+public class Ball extends PointImpl implements State<Element, Player>, Tickable {
 
     private static final int DEFAULT_IMPULSE = 3; //после удара игрока мяч летит сам 3 такта
     private static final int MAX_POWER = 3;       //после удара игрока мяч летит сразу на 3 клетки
@@ -49,11 +49,11 @@ public class Ball extends PointImpl implements State<Elements, Player>, Tickable
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if(isBallMoving()) {
-            return Elements.BALL;
+            return Element.BALL;
         } else {
-            return Elements.STOPPED_BALL;
+            return Element.STOPPED_BALL;
         }
     }
 

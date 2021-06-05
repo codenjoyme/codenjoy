@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.football.model.elements;
+package com.codenjoy.dojo.football.model.items;
 
 /*-
  * #%L
@@ -23,7 +23,7 @@ package com.codenjoy.dojo.football.model.elements;
  */
 
 import com.codenjoy.dojo.football.model.Actions;
-import com.codenjoy.dojo.football.model.Elements;
+import com.codenjoy.dojo.games.football.Element;
 import com.codenjoy.dojo.football.model.Field;
 import com.codenjoy.dojo.football.model.Player;
 import com.codenjoy.dojo.services.Direction;
@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import org.apache.commons.lang3.StringUtils;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
     private Ball ball;
     private Direction direction;
@@ -142,25 +142,25 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         Hero playersHero = player.getHero();
         if (playersHero == this) {
             if (isWithBall()) {
-                return Elements.HERO_W_BALL;
+                return Element.HERO_W_BALL;
             } else {
-                return Elements.HERO;
+                return Element.HERO;
             }
         } else if (StringUtils.equals(playersHero.getTeam(), team)) {
             if (!isWithBall()) {
-                return Elements.TEAM_MEMBER;
+                return Element.TEAM_MEMBER;
             } else {
-                return Elements.TEAM_MEMBER_W_BALL;
+                return Element.TEAM_MEMBER_W_BALL;
             }
         } else {//if (playersHero.getTeam() != team){
             if (!isWithBall()) {
-                return Elements.ENEMY;
+                return Element.ENEMY;
             } else {
-                return Elements.ENEMY_W_BALL;
+                return Element.ENEMY_W_BALL;
             }
         }
     }

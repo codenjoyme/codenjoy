@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.football.model;
+package com.codenjoy.dojo.football.model.levels;
 
 /*-
  * #%L
@@ -22,16 +22,16 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
-import com.codenjoy.dojo.football.model.elements.Ball;
-import com.codenjoy.dojo.football.model.elements.Goal;
-import com.codenjoy.dojo.football.model.elements.Hero;
-import com.codenjoy.dojo.football.model.elements.Wall;
+import com.codenjoy.dojo.football.model.items.Ball;
+import com.codenjoy.dojo.football.model.items.Goal;
+import com.codenjoy.dojo.football.model.items.Hero;
+import com.codenjoy.dojo.football.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.football.model.Elements.*;
+import static com.codenjoy.dojo.games.football.Element.*;
 
 public class LevelImpl implements Level {
 

@@ -22,7 +22,7 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
-import com.codenjoy.dojo.football.model.elements.Ball;
+import com.codenjoy.dojo.football.model.items.Ball;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
