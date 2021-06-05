@@ -403,14 +403,14 @@
                                     <zip destfile="${client.sources}"
                                          basedir="${java.client}"
                                          includes="
-                                               src/main/${dojo.package}/client/*.java,
-                                               src/main/${dojo.package}/games/${module.name}/*.java,
-                                               src/main/${dojo.package}/services/*.java,
+                                               src/main/${dojo.package}/client/**,
+                                               src/main/${dojo.package}/games/${module.name}/**,
+                                               src/main/${dojo.package}/services/**,
                                                src/main/${dojo.package}/*.java,
                                                src/main/java/org/json/*.java,
-                                               src/test/${dojo.package}/client/*.java,
-                                               src/test/${dojo.package}/games/${module.name}/*.java,
-                                               src/test/${dojo.package}/services/*.java,
+                                               src/test/${dojo.package}/client/**,
+                                               src/test/${dojo.package}/games/${module.name}/**,
+                                               src/test/${dojo.package}/services/**,
                                                src/test/${dojo.package}/*.java,
                                                README.*,
                                                mvnw,
