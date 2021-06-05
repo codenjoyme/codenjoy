@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.Hero;
 
-public class Apple extends EateablePoint implements com.codenjoy.dojo.snake.model.artifacts.Element, State<Element, Object> {
+public class Apple extends EateablePoint implements Affectable, State<Element, Object> {
 
     public Apple(Point pt) {
         super(pt);

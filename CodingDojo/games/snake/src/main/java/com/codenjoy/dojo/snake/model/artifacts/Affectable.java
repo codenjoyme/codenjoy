@@ -25,7 +25,7 @@ package com.codenjoy.dojo.snake.model.artifacts;
 
 import com.codenjoy.dojo.snake.model.Hero;
 
-public interface Element {
+public interface Affectable {
 
     void affect(Hero snake);
 

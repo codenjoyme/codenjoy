@@ -24,7 +24,6 @@ package com.codenjoy.dojo.reversi.services.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.reversi.client.AbstractSolverTest;
 import org.junit.Test;
 
 public class AISolverTest extends AbstractSolverTest {

@@ -38,11 +38,11 @@ public class Cell extends PointImpl implements State<Element, Player> {
 
     @Override
     public String toString() {
-        return String.format("pt%s=%s", super.toString(), color.ch);
+        return String.format("pt%s=%s", super.toString(), color.ch());
     }
 
     public char getColor() {
-        return color.ch;
+        return color.ch();
     }
 
     @Override

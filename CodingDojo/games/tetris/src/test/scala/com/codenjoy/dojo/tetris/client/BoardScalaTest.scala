@@ -22,7 +22,7 @@ package com.codenjoy.dojo.tetris.client
  * #L%
  */
 
-import com.codenjoy.dojo.games.tetris.{Board, BoardTest, Element}
+import com.codenjoy.dojo.games.tetris.{Board, Element}
 import com.codenjoy.dojo.services.Point
 import com.codenjoy.dojo.services.PointImpl.pt
 import org.json.JSONObject
@@ -31,14 +31,14 @@ import org.junit.Test
 
 object BoardScalaTest {
   def getBoard(glass: String, figureType: String, point: Point, futureFigures: Array[String]): Board = {
-    val result: JSONObject = BoardTest.getJson(glass, figureType, point, futureFigures)
+    val result: JSONObject = Board.getJson(glass, figureType, point, futureFigures)
     new BoardScala().forString(result.toString).asInstanceOf[Board]
   }
 }
 
 class BoardScalaTest {
   @Test def test() {
-    val board: Board = BoardTest.getBoard(
+    val board: Board = Board.getBoard(
       "......." +
       "......I" +
       "..LL..I" +

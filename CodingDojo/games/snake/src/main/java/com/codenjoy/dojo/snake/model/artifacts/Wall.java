@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.Hero;
 
-public class Wall extends PointImpl implements com.codenjoy.dojo.snake.model.artifacts.Element, State<Element, Object> {
+public class Wall extends PointImpl implements Affectable, State<Element, Object> {
 
     public Wall(Point point) {
         super(point);

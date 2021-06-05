@@ -77,7 +77,7 @@ public class Snake implements Field {
     }
 
     @Override
-    public Element getAt(Point point) {
+    public Affectable getAt(Point point) {
         if (stone.itsMe(point)) {
             return stone; 
         }

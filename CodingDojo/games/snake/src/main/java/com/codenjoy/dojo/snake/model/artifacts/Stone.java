@@ -29,7 +29,7 @@ import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.Hero;
 
 
-public class Stone extends EateablePoint implements com.codenjoy.dojo.snake.model.artifacts.Element, State<Element, Object> {
+public class Stone extends EateablePoint implements Affectable, State<Element, Object> {
 
     public Stone(Point pt) {
         super(pt);

@@ -45,7 +45,7 @@ public class ElementsTest {
     public void testNumber() {
         assertEquals("['I':2, 'J':3, 'L':4, 'O':1, 'S':5, 'T':7, 'Z':6, '.':0]",
                 Arrays.stream(Element.values())
-                        .map(el -> String.format("'%s':%s", el.ch, el.index()))
+                        .map(el -> String.format("'%s':%s", el.ch(), el.index()))
                         .collect(toList())
                         .toString());
     }

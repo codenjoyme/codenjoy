@@ -79,7 +79,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Ability> getAbility() {
-        List<Ability> result = new LinkedList<Ability>();
+        List<Ability> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Element.SUPER_WEAPON)) {
             result.add(new Ability(pt, Ability.Type.WEAPON));
@@ -92,7 +92,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<Wall>();
+        List<Wall> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Element.WALL)) {
             result.add(new Wall(pt));
@@ -102,9 +102,9 @@ public class LevelImpl implements Level {
     }
 
     private List<Point> getPointsOf(Element element) {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
+            if (map.charAt(index) == element.ch()) {
                 result.add(xy.getXY(index));
             }
         }

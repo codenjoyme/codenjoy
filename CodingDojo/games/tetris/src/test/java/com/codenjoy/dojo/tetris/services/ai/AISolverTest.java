@@ -24,10 +24,10 @@ package com.codenjoy.dojo.tetris.services.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.games.tetris.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.tetris.client.BoardTest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -221,7 +221,7 @@ public class AISolverTest {
                          Point point, String[] futureFigures,
                          String expected)
     {
-        String actual = ai.get(BoardTest.getBoard(glass, figureType, point, futureFigures));
+        String actual = ai.get(Board.getBoard(glass, figureType, point, futureFigures));
         assertEquals(expected, actual);
     }
 
