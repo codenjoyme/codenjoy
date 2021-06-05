@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.hex.model;
+package com.codenjoy.dojo.hex.model.items;
 
 /*-
  * #%L
@@ -23,18 +23,20 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.games.hex.Element;
+import com.codenjoy.dojo.hex.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Wall extends PointImpl implements State<Elements, Player> {
+public class Wall extends PointImpl implements State<Element, Player> {
 
     public Wall(Point xy) {
         super(xy);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.WALL;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.WALL;
     }
 }

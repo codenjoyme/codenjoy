@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.hex.model;
+package com.codenjoy.dojo.hex.model.levels;
 
 /*-
  * #%L
@@ -22,6 +22,9 @@ package com.codenjoy.dojo.hex.model;
  * #L%
  */
 
+
+import com.codenjoy.dojo.hex.model.Hero;
+import com.codenjoy.dojo.hex.model.items.Wall;
 
 import java.util.List;
 

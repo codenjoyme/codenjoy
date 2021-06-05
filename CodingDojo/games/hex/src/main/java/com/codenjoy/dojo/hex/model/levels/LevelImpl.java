@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.hex.model;
+package com.codenjoy.dojo.hex.model.levels;
 
 /*-
  * #%L
@@ -23,12 +23,14 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.hex.model.Hero;
+import com.codenjoy.dojo.hex.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.hex.model.Elements.*;
+import static com.codenjoy.dojo.games.hex.Element.*;
 
 public class LevelImpl implements Level {
 

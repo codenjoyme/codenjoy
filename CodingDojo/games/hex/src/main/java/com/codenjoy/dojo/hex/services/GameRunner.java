@@ -25,12 +25,12 @@ package com.codenjoy.dojo.hex.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.hex.client.Board;
-import com.codenjoy.dojo.hex.client.ai.AISolver;
+import com.codenjoy.dojo.games.hex.Board;
+import com.codenjoy.dojo.games.hex.Element;
+import com.codenjoy.dojo.hex.services.ai.AISolver;
 import com.codenjoy.dojo.hex.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -69,7 +69,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

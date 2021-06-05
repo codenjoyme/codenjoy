@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.hex.client;
+package com.codenjoy.dojo.hex.services.ai;
 
 /*-
  * #%L
@@ -23,23 +23,22 @@ package com.codenjoy.dojo.hex.client;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.hex.model.Elements;
+import com.codenjoy.dojo.games.hex.Board;
+import com.codenjoy.dojo.games.hex.Element;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.RandomDice;
 
-/**
- * User: your name
- */
-public class YourSolver implements Solver<Board> {
+import java.util.List;
 
+public class AISolver implements Solver<Board> {
+
+    public static final int MAX = 100;
     private Dice dice;
     private Board board;
 
-    public YourSolver(Dice dice) {
+    public AISolver(Dice dice) {
         this.dice = dice;
     }
 
@@ -48,22 +47,31 @@ public class YourSolver implements Solver<Board> {
         this.board = board;
         if (board.isGameOver()) return "";
 
-        Point point = board.get(Elements.MY_HERO).get(0);
+        Point to;
+        Direction direction;
+        boolean jump;
+        Point from;
+        List<Point> points = board.get(Element.MY_HERO);
+        int count = 0;
+        do {
+            if (board.isGameOver()) return "";
 
-        boolean jump = false;
-        return command(point.getX(), point.getY(), Direction.UP, jump);
+            direction = Direction.random(dice);
+            from = points.get(dice.next(points.size()));
+
+            jump = dice.next(2) == 0;
+            to = direction.change(from);
+            if (jump) {
+                to = direction.change(to);
+            }
+        } while (board.isBarrierAt(to.getX(), to.getY()) && count++ < MAX);
+        if (count >= MAX) return "";
+
+        return command(from.getX(), from.getY(),
+                direction, jump);
     }
 
     private String command(int x, int y, Direction direction, boolean jump) {
         return Direction.ACT.toString() + "(" + x + "," + y + ((jump)?",1":"")  + ")," + direction.toString();
-    }
-
-    public static void main(String[] args) {
-        WebSocketRunner.runClient(args,
-                // paste here board page url from browser after registration
-                // or put it as command line parameter
-                "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789",
-                new YourSolver(new RandomDice()),
-                new Board());
     }
 }
