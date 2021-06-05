@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.items.perks.*;
 
@@ -30,12 +31,12 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.codenjoy.dojo.icancode.model.Elements.*;
+import static com.codenjoy.dojo.games.icancode.Element.*;
 
 public class ElementsMapper {
 
-    public static Map<Elements, Function<Elements, ? extends BaseItem>> map =
-            new EnumMap<>(Elements.class)
+    public static Map<Element, Function<Element, ? extends BaseItem>> map =
+            new EnumMap<>(Element.class)
     {{
         put(EMPTY, el -> new Air());
         put(FLOOR, el -> new Floor());
@@ -100,8 +101,8 @@ public class ElementsMapper {
         put(BACKGROUND, Wall::new);
     }};
 
-    public static BaseItem get(Elements element) {
-        Function<Elements, ? extends BaseItem> result = map.get(element);
+    public static BaseItem get(Element element) {
+        Function<Element, ? extends BaseItem> result = map.get(element);
         if (result == null) {
             throw new IllegalArgumentException("Please add element class: " + element.getClass());
         }

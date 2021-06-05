@@ -23,8 +23,8 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.BaseItem;
-import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.items.perks.Perk;
 
@@ -33,11 +33,11 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 public class Floor extends BaseItem {
 
     public Floor() {
-        super(Elements.FLOOR);
+        super(Element.FLOOR);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         Perk perk = filterOne(alsoAtPoint, Perk.class);
         if (perk != null) {
             return perk.state(player, alsoAtPoint);

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client.ai.finder;
+package com.codenjoy.dojo.icancode.services.ai.finder;
 
 /*-
  * #%L
@@ -23,12 +23,9 @@ package com.codenjoy.dojo.icancode.client.ai.finder;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Board;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.icancode.client.Board;
 
-/**
- * Created by Mikhail_Udalyi on 10.10.2016.
- */
 public class PathGrid implements IPathGrid {
 
     private boolean[][] grid = null;

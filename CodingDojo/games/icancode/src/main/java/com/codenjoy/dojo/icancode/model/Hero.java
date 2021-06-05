@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.gun.Gun;
 import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
 import com.codenjoy.dojo.icancode.model.items.*;
@@ -42,7 +43,7 @@ import java.util.List;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.CHEATS;
 import static java.util.stream.Collectors.toList;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
     private boolean alive;
     private boolean win;
@@ -75,7 +76,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public Hero() {
-        item = new HeroItem(Elements.ROBO);
+        item = new HeroItem(Element.ROBO);
         item.init(this);
         resetState();
     }
@@ -128,8 +129,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        Elements state = state();
+    public Element state(Player player, Object... alsoAtPoint) {
+        Element state = state();
         if (StateUtils.itsMe(player, this, alsoAtPoint, player.getHero().item)) {
             return state;
         } else {
@@ -137,17 +138,17 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    public Elements state() {
+    public Element state() {
         if (flying) {
-            return Elements.ROBO_FLYING;
+            return Element.ROBO_FLYING;
         }
         if (laser) {
-            return Elements.ROBO_LASER;
+            return Element.ROBO_LASER;
         }
         if (hole) {
-            return Elements.ROBO_FALLING;
+            return Element.ROBO_FALLING;
         }
-        return Elements.ROBO;
+        return Element.ROBO;
     }
 
     @Override

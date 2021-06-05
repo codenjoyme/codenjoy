@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client.ai;
+package com.codenjoy.dojo.icancode.services.ai;
 
 /*-
  * #%L
@@ -23,10 +23,10 @@ package com.codenjoy.dojo.icancode.client.ai;
  */
 
 
-import com.codenjoy.dojo.icancode.client.Board;
-import com.codenjoy.dojo.icancode.client.ai.finder.CrudePathFinder;
-import com.codenjoy.dojo.icancode.client.ai.finder.PathFinder;
-import com.codenjoy.dojo.icancode.client.ai.finder.PathGrid;
+import com.codenjoy.dojo.games.icancode.Board;
+import com.codenjoy.dojo.icancode.services.ai.finder.CrudePathFinder;
+import com.codenjoy.dojo.icancode.services.ai.finder.PathFinder;
+import com.codenjoy.dojo.icancode.services.ai.finder.PathGrid;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 

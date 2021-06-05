@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client.ai;
+package com.codenjoy.dojo.icancode.services.ai;
 
 /*-
  * #%L
@@ -23,18 +23,19 @@ package com.codenjoy.dojo.icancode.client.ai;
  */
 
 
+import com.codenjoy.dojo.games.icancode.AbstractSolver;
+import com.codenjoy.dojo.games.icancode.Board;
+import com.codenjoy.dojo.games.icancode.Command;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
-import com.codenjoy.dojo.icancode.client.AbstractSolver;
-import com.codenjoy.dojo.icancode.client.Board;
-import com.codenjoy.dojo.icancode.client.Command;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.icancode.client.Command.*;
-import static com.codenjoy.dojo.icancode.model.Elements.*;
+import static com.codenjoy.dojo.games.icancode.Command.doNothing;
+import static com.codenjoy.dojo.games.icancode.Command.go;
+import static com.codenjoy.dojo.games.icancode.Element.*;
 
 public class AISolver extends AbstractSolver {
 

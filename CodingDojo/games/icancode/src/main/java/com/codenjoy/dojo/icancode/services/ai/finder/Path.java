@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client;
+package com.codenjoy.dojo.icancode.services.ai.finder;
 
 /*-
  * #%L
@@ -23,18 +23,42 @@ package com.codenjoy.dojo.icancode.client;
  */
 
 
-/**
- * Created by Oleksandr_Baglai on 2016-10-15.
- */
-public class SolverRunner {
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Path extends LinkedList {
+
+    public Path() {
+        super();
+    }
+
+    public Path(List list) {
+        super(list);
+    }
+
+    public int[] getArray() {
+        int[] ret = new int[super.size()];
+        int i = 0;
+        for (Iterator iter = super.iterator(); iter.hasNext(); i++) {
+            ret[i] = ((Integer) iter.next()).intValue();
+        }
+        return ret;
+    }
+
+    public void add(int direction) {
+        super.add(direction);
+    }
+
+    public String toString() {
+        return super.toString();
+    }
 
     public static void main(String[] args) {
-        if (args == null || args.length == 0 || args[0].equals("java")) {
-            System.out.println("Running Java client");
-            YourSolver.main(args);
-        } else {
-            System.out.println("Running Kotlin client");
-            YourSolverKt.main(args);
+        Path p = new Path();
+        for (int i = 0; i < 10; i++) {
+            p.add(i);
         }
+        System.out.println(p);
     }
 }

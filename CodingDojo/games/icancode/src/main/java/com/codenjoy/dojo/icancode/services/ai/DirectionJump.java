@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client.ai.finder;
+package com.codenjoy.dojo.icancode.services.ai;
 
 /*-
  * #%L
@@ -23,22 +23,14 @@ package com.codenjoy.dojo.icancode.client.ai.finder;
  */
 
 
-/**
- * Created by Mikhail_Udalyi on 07.10.2016.
- */
-public interface IPathGrid {
+import com.codenjoy.dojo.services.Direction;
 
-    //True means it is a barrer
-    public boolean getGrid(int x, int y);
+public class DirectionJump {
+    Direction direction;
+    boolean jump;
 
-    public void setGrid(int x, int y, boolean yes);
-
-    public int getWidth();
-
-    public int getHeight();
-
-    public PathGrid copy();
-
-    public String toString();
-
+    public DirectionJump(Direction direction, boolean jump) {
+        this.direction = direction;
+        this.jump = jump;
+    }
 }

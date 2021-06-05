@@ -22,11 +22,11 @@ package com.codenjoy.dojo.icancode.model.items.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 
 public class DeathRayPerk extends TimeoutPerk {
 
     public DeathRayPerk() {
-        super(Elements.DEATH_RAY_PERK);
+        super(Element.DEATH_RAY_PERK);
     }
 }

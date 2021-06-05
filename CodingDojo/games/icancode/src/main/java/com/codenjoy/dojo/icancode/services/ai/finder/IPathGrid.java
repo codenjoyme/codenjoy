@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client.ai;
+package com.codenjoy.dojo.icancode.services.ai.finder;
 
 /*-
  * #%L
@@ -23,17 +23,19 @@ package com.codenjoy.dojo.icancode.client.ai;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
+public interface IPathGrid {
 
-/**
- * Created by indigo on 2016-10-12.
- */
-public class DirectionJump {
-    Direction direction;
-    boolean jump;
+    //True means it is a barrer
+    public boolean getGrid(int x, int y);
 
-    public DirectionJump(Direction direction, boolean jump) {
-        this.direction = direction;
-        this.jump = jump;
-    }
+    public void setGrid(int x, int y, boolean yes);
+
+    public int getWidth();
+
+    public int getHeight();
+
+    public PathGrid copy();
+
+    public String toString();
+
 }

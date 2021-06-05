@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.icancode.model.items.perks;
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.Customizable;
 import com.codenjoy.dojo.icancode.model.items.RenewableItem;
 import com.codenjoy.dojo.icancode.services.GameSettings;
@@ -10,7 +10,7 @@ public abstract class Perk extends RenewableItem implements Tickable, Customizab
 
     protected GameSettings settings;
 
-    public Perk(Elements element) {
+    public Perk(Element element) {
         super(element);
     }
 

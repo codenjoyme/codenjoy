@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client.ai.finder;
+package com.codenjoy.dojo.icancode.services.ai.finder;
 
 /*-
  * #%L
@@ -26,9 +26,6 @@ package com.codenjoy.dojo.icancode.client.ai.finder;
 import java.awt.*;
 import java.util.Stack;
 
-/**
- * Created by Mikhail_Udalyi on 10.10.2016.
- */
 public class CrudePathFinder extends PathFinder {
     private boolean bDEBUG = false;
 
