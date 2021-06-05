@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sampletext.client.ai;
+package com.codenjoy.dojo.sampletext.services.ai;
 
 /*-
  * #%L
@@ -27,12 +27,6 @@ import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.AbstractTextSolver;
 import com.codenjoy.dojo.services.Dice;
 
-/**
- * User: your name
- * Это твой алгоритм AI для игры. Реализуй его на свое усмотрение.
- * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
- * фреймворк для тебя.
- */
 public class AISolver extends AbstractTextSolver {
 
     private Dice dice;

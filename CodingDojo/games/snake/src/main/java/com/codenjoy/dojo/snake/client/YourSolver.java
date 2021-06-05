@@ -30,7 +30,12 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
 
 /**
- * User: your name
+ * Author: your name
+ *
+ * This is your AI algorithm for the game.
+ * Implement it at your own discretion.
+ * Pay attention to {@see YourSolverTest} - there is
+ * a test framework for you.
  */
 public class YourSolver implements Solver<Board> {
 
@@ -46,16 +51,8 @@ public class YourSolver implements Solver<Board> {
         this.board = board;
         System.out.println(board.toString());
 
+        // TODO your code here
+
         return Direction.UP.toString();
     }
-
-    public static void main(String[] args) {
-        WebSocketRunner.runClient(args,
-                // paste here board page url from browser after registration
-                // or put it as command line parameter
-                "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789",
-                new YourSolver(new RandomDice()),
-                new Board());
-    }
-
 }
