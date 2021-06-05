@@ -22,6 +22,7 @@ package com.codenjoy.dojo.lemonade.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.lemonade.WeatherForecast;
 import org.json.JSONObject;
 
 public class Question {

@@ -30,13 +30,11 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
-import static javassist.CtMethod.ConstParameter.integer;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;

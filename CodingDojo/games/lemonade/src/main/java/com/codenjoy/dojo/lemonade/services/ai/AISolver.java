@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.lemonade.client.ai;
+package com.codenjoy.dojo.lemonade.services.ai;
 
 /*-
  * #%L
@@ -25,8 +25,8 @@ package com.codenjoy.dojo.lemonade.client.ai;
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.lemonade.client.Board;
-import com.codenjoy.dojo.lemonade.model.WeatherForecast;
+import com.codenjoy.dojo.games.lemonade.Board;
+import com.codenjoy.dojo.games.lemonade.WeatherForecast;
 import com.codenjoy.dojo.services.Dice;
 
 public class AISolver implements Solver<Board> {

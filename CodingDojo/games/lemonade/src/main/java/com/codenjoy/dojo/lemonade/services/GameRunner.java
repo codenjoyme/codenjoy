@@ -25,10 +25,14 @@ package com.codenjoy.dojo.lemonade.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.lemonade.client.Board;
-import com.codenjoy.dojo.lemonade.client.ai.AISolver;
-import com.codenjoy.dojo.lemonade.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.games.lemonade.Board;
+import com.codenjoy.dojo.games.lemonade.WeatherForecast;
+import com.codenjoy.dojo.lemonade.model.Lemonade;
+import com.codenjoy.dojo.lemonade.model.Player;
+import com.codenjoy.dojo.lemonade.services.ai.AISolver;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
