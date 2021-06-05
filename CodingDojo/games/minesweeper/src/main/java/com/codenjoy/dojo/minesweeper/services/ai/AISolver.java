@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai;
+package com.codenjoy.dojo.minesweeper.services.ai;
 
 /*-
  * #%L
@@ -24,10 +24,10 @@ package com.codenjoy.dojo.minesweeper.client.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.minesweeper.client.Board;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.Cell;
-import com.codenjoy.dojo.minesweeper.client.ai.logic.Field;
-import com.codenjoy.dojo.minesweeper.model.Elements;
+import com.codenjoy.dojo.games.minesweeper.Board;
+import com.codenjoy.dojo.games.minesweeper.Element;
+import com.codenjoy.dojo.minesweeper.services.ai.logic.Cell;
+import com.codenjoy.dojo.minesweeper.services.ai.logic.Field;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -38,15 +38,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static com.codenjoy.dojo.minesweeper.client.ai.logic.Action.*;
-import static com.codenjoy.dojo.minesweeper.model.Elements.*;
+import static com.codenjoy.dojo.games.minesweeper.Element.*;
+import static com.codenjoy.dojo.minesweeper.services.ai.logic.Action.MARK;
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AISolver implements Solver<Board> {
 
     private Point me;
-    private Elements underMe;
+    private Element underMe;
     private Direction where;
     private Dice dice;
 
@@ -170,7 +170,7 @@ public class AISolver implements Solver<Board> {
         return result;
     }
 
-    private Elements convert(Elements element) {
+    private Element convert(Element element) {
         if (element == DETECTOR) {
             if (underMe == null || underMe == HIDDEN) {
                 return element;

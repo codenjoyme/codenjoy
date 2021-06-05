@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.model;
+package com.codenjoy.dojo.minesweeper.model.items;
 
 /*-
  * #%L
@@ -23,22 +23,23 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.games.minesweeper.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Wall extends PointImpl implements State<Elements, Object> {
+public class Flag extends PointImpl implements State<Element, Object> {
 
-    public Wall(int x, int y) {
-        super(x, y);
-    }
-
-    public Wall(Point point) {
+    public Flag(Point point) {
         super(point);
     }
 
+    public Flag(int x, int y) {
+        super(x, y);
+    }
+
     @Override
-    public Elements state(Object player, Object... alsoAtPoint) {
-        return Elements.BORDER;
+    public Element state(Object player, Object... alsoAtPoint) {
+        return Element.FLAG;
     }
 }

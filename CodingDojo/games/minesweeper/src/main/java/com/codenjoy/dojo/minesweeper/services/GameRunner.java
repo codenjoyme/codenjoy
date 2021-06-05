@@ -25,15 +25,14 @@ package com.codenjoy.dojo.minesweeper.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.minesweeper.client.Board;
-import com.codenjoy.dojo.minesweeper.client.ai.AISolver;
-import com.codenjoy.dojo.minesweeper.model.Elements;
+import com.codenjoy.dojo.games.minesweeper.Board;
+import com.codenjoy.dojo.games.minesweeper.Element;
 import com.codenjoy.dojo.minesweeper.model.Minesweeper;
 import com.codenjoy.dojo.minesweeper.model.Player;
 import com.codenjoy.dojo.minesweeper.model.RandomMinesGenerator;
+import com.codenjoy.dojo.minesweeper.services.ai.AISolver;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -72,7 +71,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

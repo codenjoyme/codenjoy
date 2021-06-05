@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai.logic;
+package com.codenjoy.dojo.minesweeper.services.ai.logic;
 
 /*-
  * #%L
@@ -22,20 +22,20 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
  * #L%
  */
 
-import com.codenjoy.dojo.minesweeper.model.Elements;
+import com.codenjoy.dojo.games.minesweeper.Element;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.minesweeper.client.ai.logic.Action.*;
-import static com.codenjoy.dojo.minesweeper.model.Elements.*;
+import static com.codenjoy.dojo.games.minesweeper.Element.DETECTOR;
+import static com.codenjoy.dojo.games.minesweeper.Element.NONE;
 import static java.util.stream.Collectors.toList;
 
 public class Group {
 
     private List<Cell> list;
-    private Elements element;
+    private Element element;
 
-    public Group(List<Cell> cells, Elements element) {
+    public Group(List<Cell> cells, Element element) {
         this.element = element;
 
         list = cells.stream()
@@ -56,11 +56,11 @@ public class Group {
 
     private Action action() {
         if (element == NONE || element == DETECTOR) {
-            return GO;
+            return Action.GO;
         } else if (size() == element.value()) {
-            return MARK;
+            return Action.MARK;
         } else {
-            return NOTHING;
+            return Action.NOTHING;
         }
     }
 }

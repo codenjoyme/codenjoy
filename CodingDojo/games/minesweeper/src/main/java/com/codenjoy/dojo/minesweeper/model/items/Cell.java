@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.model;
+package com.codenjoy.dojo.minesweeper.model.items;
 
 /*-
  * #%L
@@ -23,11 +23,13 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.games.minesweeper.Element;
+import com.codenjoy.dojo.minesweeper.model.Field;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Cell extends PointImpl implements State<Elements, Object> {
+public class Cell extends PointImpl implements State<Element, Object> {
 
     private Field board;
 
@@ -41,16 +43,16 @@ public class Cell extends PointImpl implements State<Elements, Object> {
     }
 
     @Override
-    public Elements state(Object player, Object... alsoAtPoint) {
+    public Element state(Object player, Object... alsoAtPoint) {
         if (board.walkAt(this) || board.isGameOver()) {
             int minesNear = board.minesNear(this);
             if (minesNear == 0) {
-                return Elements.NONE;
+                return Element.NONE;
             } else {
-                return Elements.get(minesNear);
+                return Element.get(minesNear);
             }
         }
 
-        return Elements.HIDDEN;
+        return Element.HIDDEN;
     }
 }

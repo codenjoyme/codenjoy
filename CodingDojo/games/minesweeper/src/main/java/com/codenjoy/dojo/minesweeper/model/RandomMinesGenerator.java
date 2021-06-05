@@ -23,17 +23,13 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.minesweeper.model.items.Mine;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: oleksii.morozov
- * Date: 10/18/12
- * Time: 6:54 PM
- */
 public class RandomMinesGenerator implements MinesGenerator {
     public static int SAFE_AREA_X_0 = 1;
     public static int SAFE_AREA_X_1 = 3;

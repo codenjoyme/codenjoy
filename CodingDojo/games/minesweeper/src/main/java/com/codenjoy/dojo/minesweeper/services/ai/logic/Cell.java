@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai.logic;
+package com.codenjoy.dojo.minesweeper.services.ai.logic;
 
 /*-
  * #%L
@@ -22,19 +22,19 @@ package com.codenjoy.dojo.minesweeper.client.ai.logic;
  * #L%
  */
 
-import com.codenjoy.dojo.minesweeper.model.Elements;
+import com.codenjoy.dojo.games.minesweeper.Element;
 import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codenjoy.dojo.minesweeper.model.Elements.*;
+import static com.codenjoy.dojo.games.minesweeper.Element.HIDDEN;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
 public class Cell extends PointImpl {
 
-    private Elements element;
+    private Element element;
     private boolean valued;
     private List<Cell> neighbours;
     private Action action;
@@ -48,7 +48,7 @@ public class Cell extends PointImpl {
         neighbours.add(cell);
     }
 
-    public void set(Elements element) {
+    public void set(Element element) {
         valued = (element != HIDDEN);
         if (valued) {
             this.element = element;
@@ -88,7 +88,7 @@ public class Cell extends PointImpl {
         return valued;
     }
 
-    public Elements element() {
+    public Element element() {
         return element;
     }
 

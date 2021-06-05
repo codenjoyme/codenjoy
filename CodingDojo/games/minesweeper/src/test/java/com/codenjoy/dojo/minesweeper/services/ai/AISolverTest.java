@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai;
+package com.codenjoy.dojo.minesweeper.services.ai;
 
 /*-
  * #%L
@@ -23,7 +23,8 @@ package com.codenjoy.dojo.minesweeper.client.ai;
  */
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.minesweeper.client.Board;
+import com.codenjoy.dojo.games.minesweeper.Board;
+import com.codenjoy.dojo.minesweeper.services.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import org.junit.Before;

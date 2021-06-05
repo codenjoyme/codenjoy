@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client.ai.logic;
+package com.codenjoy.dojo.minesweeper.services.ai.logic;
 
 /*-
  * #%L

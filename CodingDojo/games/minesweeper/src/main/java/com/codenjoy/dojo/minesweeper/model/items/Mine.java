@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.client;
+package com.codenjoy.dojo.minesweeper.model.items;
 
 /*-
  * #%L
@@ -23,34 +23,36 @@ package com.codenjoy.dojo.minesweeper.client;
  */
 
 
-import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.minesweeper.model.Elements;
+import com.codenjoy.dojo.games.minesweeper.Element;
+import com.codenjoy.dojo.minesweeper.model.Field;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-import static com.codenjoy.dojo.minesweeper.model.Elements.*;
+public class Mine extends PointImpl implements State<Element, Object> {
 
-public class Board extends AbstractBoard<Elements> {
+    private Field board;
 
-    @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
+    public Mine(Point point) {
+        super(point);
+    }
+
+    public Mine(int x, int y) {
+        super(x, y);
     }
 
     @Override
-    protected int inversionY(int y) {
-        return size - 1 - y;
+    public Element state(Object player, Object... alsoAtPoint) {
+        if (!board.isGameOver()) return null;
+
+        if (board.isFlag(this)) {
+            return Element.DESTROYED_BOMB;
+        } else {
+            return Element.HERE_IS_BOMB;
+        }
     }
 
-    public Point getMe() {
-        return get(DETECTOR).get(0);
+    public void init(Field board) {
+        this.board = board;
     }
-
-    public boolean isGameOver() {
-        return !get(BANG).isEmpty();
-    }
-
-    public boolean isWin() {
-        return !(isGameOver() || get(DESTROYED_BOMB).isEmpty());
-    }
-
 }

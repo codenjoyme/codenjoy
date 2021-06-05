@@ -23,6 +23,7 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.minesweeper.model.items.Mine;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -33,7 +34,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
