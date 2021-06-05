@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import com.codenjoy.dojo.games.lunolet.VesselState;
 import com.codenjoy.dojo.lunolet.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Assert;

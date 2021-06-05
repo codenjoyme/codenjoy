@@ -25,8 +25,9 @@ package com.codenjoy.dojo.lunolet.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.lunolet.client.Board;
-import com.codenjoy.dojo.lunolet.client.ai.AISolver;
+import com.codenjoy.dojo.games.lunolet.Board;
+import com.codenjoy.dojo.games.lunolet.Element;
+import com.codenjoy.dojo.lunolet.services.ai.AISolver;
 import com.codenjoy.dojo.lunolet.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
@@ -69,7 +70,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override
@@ -94,7 +95,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PrinterFactory getPrinterFactory() {
-        return (PrinterFactory<Elements, Player>) (reader, player)
+        return (PrinterFactory<Element, Player>) (reader, player)
                 -> new LunoletPrinter(player);
     }
 }

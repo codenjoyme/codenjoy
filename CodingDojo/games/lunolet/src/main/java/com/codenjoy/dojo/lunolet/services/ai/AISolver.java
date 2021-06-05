@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.lunolet.client.ai;
+package com.codenjoy.dojo.lunolet.services.ai;
 
 /*-
  * #%L
@@ -24,8 +24,8 @@ package com.codenjoy.dojo.lunolet.client.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.lunolet.client.Board;
-import com.codenjoy.dojo.lunolet.model.VesselState;
+import com.codenjoy.dojo.games.lunolet.Board;
+import com.codenjoy.dojo.games.lunolet.VesselState;
 import com.codenjoy.dojo.lunolet.utility.PrintLevels;
 
 import java.awt.geom.Point2D;
