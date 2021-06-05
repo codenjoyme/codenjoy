@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.quake2d.model;
+package com.codenjoy.dojo.sokoban.client;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2016 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,27 +22,22 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
+
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum Elements implements CharElements {
+public enum Element implements CharElements {
 
     NONE(' '),             // например это пустое место, куда можно перейти герою
+    NONSE('`'),            // TODO добавить описание
     WALL('☼'),             // а это стенка, через которую я хочу чтобы проходить нельзя было
-    HERO('☺'),             // а это мой герой
-    SUPER_OTHER_HERO('Š'), // это герои других игроков
-    BULLET('*'),           // а это наша пуля
-    OTHER_HERO('☻'),       // это герои других игроков
-    DEAD_HERO('X'),        // а это временное явление - трупик моего героя, которое пропадет в следующем такте
-    SUPER_DEFENCE('#'),    // доп защита
-    HEALTH_PACKAGE('+'),   // доп защита
-    SUPER_WEAPON('~'),     // доп атака
-    ROBOT('!');            // робот
-//    GOLD('$'),           // это то, за чем будет охота
-//    BOMB('x');           // а это бомба, на которой можно подорваться
+    HERO('☺'),             // hero worker
+    BOX('■'),              // this is a box
+    MARK_TO_WIN('X'),      // this is a feild where a hero should move boxes
+    BOX_ON_THE_MARK('*');  // this is a feild includes box overlaped mark
 
     final char ch;
 
-    Elements(char ch) {
+    Element(char ch) {
         this.ch = ch;
     }
 
@@ -56,8 +51,8 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    public static Element valueOf(char ch) {
+        for (Element el : Element.values()) {
             if (el.ch == ch) {
                 return el;
             }

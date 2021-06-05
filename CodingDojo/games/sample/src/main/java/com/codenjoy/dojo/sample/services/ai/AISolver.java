@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.sample.model.Elements.GOLD;
+import static com.codenjoy.dojo.sample.client.Element.GOLD;
 
 /**
  * Это алгоритм твоего бота. Он будет запускаться в игру с первым

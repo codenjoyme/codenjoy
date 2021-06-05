@@ -25,21 +25,20 @@ package com.codenjoy.dojo.sudoku.client;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.sudoku.model.Elements;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Board extends AbstractBoard<Elements> {
+public class Board extends AbstractBoard<Element> {
 
     @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
+    public Element valueOf(char ch) {
+        return Element.valueOf(ch);
     }
 
-    public List<Point> get(Elements... elements) {
+    public List<Point> get(Element... elements) {
         List<Point> result = super.get(elements);
         Collections.sort(result);
         return result;

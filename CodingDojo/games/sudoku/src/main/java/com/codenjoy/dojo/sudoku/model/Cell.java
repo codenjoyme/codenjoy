@@ -26,8 +26,9 @@ package com.codenjoy.dojo.sudoku.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.sudoku.client.Element;
 
-public class Cell extends PointImpl implements State<Elements, Player> {
+public class Cell extends PointImpl implements State<Element, Player> {
     private int number;
     private boolean visible;
 
@@ -51,14 +52,14 @@ public class Cell extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (visible) {
-            return Elements.valueOf(number);
+            return Element.valueOf(number);
         } else {
             if (alsoAtPoint[1] != null) {
-                return Elements.valueOf(((Cell) alsoAtPoint[1]).getNumber());
+                return Element.valueOf(((Cell) alsoAtPoint[1]).getNumber());
             } else {
-                return Elements.NONE;
+                return Element.NONE;
             }
         }
     }

@@ -32,7 +32,7 @@ import com.codenjoy.dojo.snakebattle.client.Board;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.snakebattle.model.Elements.*;
+import static com.codenjoy.dojo.snakebattle.client.Element.*;
 
 public class AISolver implements Solver<Board> {
 

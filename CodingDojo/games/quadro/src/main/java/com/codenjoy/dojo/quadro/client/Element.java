@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.pong.model;
+package com.codenjoy.dojo.quadro.client;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2016 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,20 +22,18 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
+
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum Elements implements CharElements {
+public enum Element implements CharElements {
 
-    NONE(' '),
-    VERTICAL_WALL('|'),
-    HORIZONTAL_WALL('-'),
-    BALL('o'),
-    PANEL('#'),
-    HERO('H');
+    NONE(' '),        // пустое поле
+    YELLOW('o'),      // желтая фишка (ходит первым)
+    RED('x');         // красная фишка
 
     final char ch;
 
-    Elements(char ch) {
+    Element(char ch) {
         this.ch = ch;
     }
 
@@ -49,13 +47,12 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    public static Element valueOf(char ch) {
+        for (Element el : Element.values()) {
             if (el.ch == ch) {
                 return el;
             }
         }
         throw new IllegalArgumentException("No such element for " + ch);
     }
-
 }

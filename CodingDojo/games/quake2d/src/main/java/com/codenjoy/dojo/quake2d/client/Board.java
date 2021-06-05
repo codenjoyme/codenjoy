@@ -23,17 +23,15 @@ package com.codenjoy.dojo.quake2d.client;
  */
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.quake2d.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
-import static com.codenjoy.dojo.quake2d.model.Elements.*;
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.quake2d.client.Element.*;
 
-public class Board extends AbstractBoard<Elements> {
+public class Board extends AbstractBoard<Element> {
 
     @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
+    public Element valueOf(char ch) {
+        return Element.valueOf(ch);
     }
 
     public boolean isBarrierAt(int x, int y) {

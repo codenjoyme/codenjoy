@@ -23,7 +23,6 @@ package com.codenjoy.dojo.sudoku.client;
  */
 
 
-import com.codenjoy.dojo.sudoku.model.Elements;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -74,16 +73,16 @@ public class BoardTest {
 
     @Test
     public void shouldGetElements() {
-        assertElementAt(Elements.ONE, "[[5,2], [6,10], [11,6]]");
-        assertElementAt(Elements.TWO, "[[6,7], [9,9]]");
-        assertElementAt(Elements.THREE, "[[2,1], [7,6], [11,5]]");
-        assertElementAt(Elements.FOUR, "[[1,6], [5,10]]");
-        assertElementAt(Elements.FIVE, "[[1,1], [7,2], [11,10]]");
-        assertElementAt(Elements.SIX, "[[1,2], [2,9], [6,5], [10,3], [11,7]]");
-        assertElementAt(Elements.SEVEN, "[[1,7], [6,1], [10,11]]");
-        assertElementAt(Elements.EIGHT, "[[1,5], [3,3], [5,6], [6,11], [10,9]]");
-        assertElementAt(Elements.NINE, "[[2,3], [6,2], [7,10], [11,11]]");
-        assertElementAt(Elements.NONE, "[[1,3], [1,9], [1,10], [1,11], [2,2], " +
+        assertElementAt(Element.ONE, "[[5,2], [6,10], [11,6]]");
+        assertElementAt(Element.TWO, "[[6,7], [9,9]]");
+        assertElementAt(Element.THREE, "[[2,1], [7,6], [11,5]]");
+        assertElementAt(Element.FOUR, "[[1,6], [5,10]]");
+        assertElementAt(Element.FIVE, "[[1,1], [7,2], [11,10]]");
+        assertElementAt(Element.SIX, "[[1,2], [2,9], [6,5], [10,3], [11,7]]");
+        assertElementAt(Element.SEVEN, "[[1,7], [6,1], [10,11]]");
+        assertElementAt(Element.EIGHT, "[[1,5], [3,3], [5,6], [6,11], [10,9]]");
+        assertElementAt(Element.NINE, "[[2,3], [6,2], [7,10], [11,11]]");
+        assertElementAt(Element.NONE, "[[1,3], [1,9], [1,10], [1,11], [2,2], " +
                 "[2,5], [2,6], [2,7], [2,10], [2,11], [3,1], [3,2], [3,5], " +
                 "[3,6], [3,7], [3,9], [3,10], [3,11], [5,1], [5,3], [5,5], " +
                 "[5,7], [5,9], [5,11], [6,3], [6,6], [6,9], [7,1], [7,3], " +
@@ -92,7 +91,7 @@ public class BoardTest {
                 "[10,7], [10,10], [11,1], [11,2], [11,3], [11,9]]");
     }
 
-    private void assertElementAt(Elements element, String expected) {
+    private void assertElementAt(Element element, String expected) {
         assertEquals(expected, board.get(element).toString());
     }
 
@@ -127,8 +126,8 @@ public class BoardTest {
 
     @Test
     public void shouldIsAt() {
-        assertFalse(board.isAt(2, 9, Elements.FIVE));
-        assertTrue(board.isAt(2, 9, Elements.SIX));
+        assertFalse(board.isAt(2, 9, Element.FIVE));
+        assertTrue(board.isAt(2, 9, Element.SIX));
     }
 
     @Test

@@ -26,8 +26,7 @@ package com.codenjoy.dojo.snake.services.ai;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.client.Board;
-import com.codenjoy.dojo.snake.model.Elements;
-import com.codenjoy.dojo.snake.services.ai.AISolver;
+import com.codenjoy.dojo.snake.client.Element;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -463,10 +462,10 @@ public class AISolverTest {
 
             // в ходе пережвижения тело за собой надо тащить если оно есть
             for (Point tail : snake) {
-                board.set(tail.getX(), tail.getY(), Elements.NONE.ch());
+                board.set(tail.getX(), tail.getY(), Element.NONE.ch());
             }
-            board.set(from.getX(), from.getY(), Elements.HEAD_UP.ch());
-            board.set(snake.get(0).getX(), snake.get(0).getY(), Elements.TAIL_VERTICAL.ch());
+            board.set(from.getX(), from.getY(), Element.HEAD_UP.ch());
+            board.set(snake.get(0).getX(), snake.get(0).getY(), Element.TAIL_VERTICAL.ch());
             snake = board.getSnake();
 
             allBarriers = merge(snake, barriers);

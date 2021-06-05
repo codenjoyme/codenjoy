@@ -25,7 +25,7 @@ package com.codenjoy.dojo.quake2d.services.ai;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.quake2d.client.Board;
-import com.codenjoy.dojo.quake2d.model.Elements;
+import com.codenjoy.dojo.quake2d.client.Element;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
@@ -85,16 +85,16 @@ public class AISolver implements Solver<Board> {
 //        Elements elementOfPriority;
         Point from = board.getMe();
 
-        List<Point> to_OtherHero = board.get(Elements.OTHER_HERO);
-        List<Point> to_Abilities = board.get(Elements.SUPER_WEAPON);
-        to_Abilities.addAll(board.get(Elements.SUPER_DEFENCE));
-        to_Abilities.addAll(board.get(Elements.HEALTH_PACKAGE));
-        List<Point> to_Walls = board.get(Elements.WALL);
-        List<Point> to_SuperOtherHero = board.get(Elements.SUPER_OTHER_HERO);
+        List<Point> to_OtherHero = board.get(Element.OTHER_HERO);
+        List<Point> to_Abilities = board.get(Element.SUPER_WEAPON);
+        to_Abilities.addAll(board.get(Element.SUPER_DEFENCE));
+        to_Abilities.addAll(board.get(Element.HEALTH_PACKAGE));
+        List<Point> to_Walls = board.get(Element.WALL);
+        List<Point> to_SuperOtherHero = board.get(Element.SUPER_OTHER_HERO);
         to_OtherHero.addAll(to_SuperOtherHero);
 //        List<Point> to_Bullet = board.get(Elements.BULLET);
 
-        Map<Elements, Integer> variantsWays = getDestinationToObject(board, size, from);
+        Map<Element, Integer> variantsWays = getDestinationToObject(board, size, from);
         Point superHero = (to_SuperOtherHero.size() == 0) ? null : to_SuperOtherHero.get(0);//isAnyHeroWithAbility();
         Point unUsedAbility = (to_Abilities.size() == 0) ? null : to_Abilities.get(0);
         DeikstraFindWay.Possible map = possible(board);
@@ -128,12 +128,12 @@ public class AISolver implements Solver<Board> {
 //        return null;
 //    }
 
-    private Map<Elements, Integer> getDestinationToObject(Board board, int pSize, Point pFrom) {
-        Elements[] analyzeElements = {Elements.OTHER_HERO, Elements.SUPER_WEAPON, Elements.SUPER_DEFENCE,
-                                      Elements.HEALTH_PACKAGE, Elements.BULLET};
-        Map<Elements, Integer> variantsWays = new HashMap<>(analyzeElements.length);
+    private Map<Element, Integer> getDestinationToObject(Board board, int pSize, Point pFrom) {
+        Element[] analyzeElements = {Element.OTHER_HERO, Element.SUPER_WEAPON, Element.SUPER_DEFENCE,
+                                      Element.HEALTH_PACKAGE, Element.BULLET};
+        Map<Element, Integer> variantsWays = new HashMap<>(analyzeElements.length);
         DeikstraFindWay.Possible map = possible(board);
-        for (Elements elem : analyzeElements){
+        for (Element elem : analyzeElements){
             int destination = way.getShortestWay(pSize, pFrom, board.get(elem), map).size();
             variantsWays.put(elem, (destination == 0) ? null : destination);
         }

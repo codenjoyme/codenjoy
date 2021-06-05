@@ -36,6 +36,7 @@ import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.tetris.client.Board;
+import com.codenjoy.dojo.tetris.client.Element;
 import com.codenjoy.dojo.tetris.services.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
@@ -89,7 +90,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

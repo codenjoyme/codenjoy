@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.moebius.model;
+package com.codenjoy.dojo.moebius.client;
 
 /*-
  * #%L
@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.Point;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public enum Elements implements CharElements {
+public enum Element implements CharElements {
 
     LEFT_UP('╝', pt(-1, 0), pt(0, 1)),
     UP_RIGHT('╚', pt(0, 1), pt(1, 0)),
@@ -44,7 +44,7 @@ public enum Elements implements CharElements {
     private final Point from;
     private final Point to;
 
-    Elements(char ch, Point from, Point to) {
+    Element(char ch, Point from, Point to) {
         this.ch = ch;
         this.from = from;
         this.to = to;
@@ -60,8 +60,8 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    public static Element valueOf(char ch) {
+        for (Element el : Element.values()) {
             if (el.ch == ch) {
                 return el;
             }
@@ -69,8 +69,8 @@ public enum Elements implements CharElements {
         throw new IllegalArgumentException("No such element for " + ch);
     }
 
-    public static Elements random(Dice dice) {
-        return Elements.values()[dice.next(Elements.values().length - 1)];
+    public static Element random(Dice dice) {
+        return Element.values()[dice.next(Element.values().length - 1)];
     }
 
     public Point from() {

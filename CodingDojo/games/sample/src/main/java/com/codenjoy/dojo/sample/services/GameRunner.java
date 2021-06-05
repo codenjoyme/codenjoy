@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sample.services;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.sample.client.Board;
+import com.codenjoy.dojo.sample.client.Element;
 import com.codenjoy.dojo.sample.services.ai.AISolver;
 import com.codenjoy.dojo.sample.model.*;
 import com.codenjoy.dojo.services.*;
@@ -69,7 +70,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

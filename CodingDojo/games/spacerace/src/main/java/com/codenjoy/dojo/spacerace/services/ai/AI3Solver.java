@@ -26,9 +26,8 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.spacerace.client.Board;
-import com.codenjoy.dojo.spacerace.model.Elements;
+import com.codenjoy.dojo.spacerace.client.Element;
 
 import java.util.List;
 
@@ -99,7 +98,7 @@ public class AI3Solver implements Solver<Board> {
     }
 
     private Direction findDirectionToBulletPack(Board board, Point me, Direction result) {
-        List<Point> boxes = board.get(Elements.BULLET_PACK);
+        List<Point> boxes = board.get(Element.BULLET_PACK);
         if (boxes.size() != 0) {
             Point box = boxes.get(0);
             if (box != null) {

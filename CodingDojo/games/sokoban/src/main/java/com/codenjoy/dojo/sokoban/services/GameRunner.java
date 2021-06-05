@@ -37,7 +37,7 @@ import com.codenjoy.dojo.sokoban.client.Board;
 import com.codenjoy.dojo.sokoban.services.ai.AISolver;
 import com.codenjoy.dojo.sokoban.model.Player;
 import com.codenjoy.dojo.sokoban.model.Sokoban;
-import com.codenjoy.dojo.sokoban.model.items.Elements;
+import com.codenjoy.dojo.sokoban.client.Element;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -71,7 +71,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

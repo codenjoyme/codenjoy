@@ -26,6 +26,7 @@ package com.codenjoy.dojo.moebius.services;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.moebius.client.Board;
+import com.codenjoy.dojo.moebius.client.Element;
 import com.codenjoy.dojo.moebius.services.ai.AISolver;
 import com.codenjoy.dojo.moebius.model.*;
 import com.codenjoy.dojo.services.*;
@@ -66,7 +67,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

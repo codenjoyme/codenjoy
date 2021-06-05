@@ -25,6 +25,7 @@ package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.snake.client.Element;
 import com.codenjoy.dojo.snake.model.artifacts.*;
 import com.codenjoy.dojo.snake.services.GameSettings;
 

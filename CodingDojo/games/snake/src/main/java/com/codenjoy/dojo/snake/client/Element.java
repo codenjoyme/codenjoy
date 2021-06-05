@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.startandjump.model;
+package com.codenjoy.dojo.snake.client;
 
 /*-
  * #%L
@@ -25,28 +25,35 @@ package com.codenjoy.dojo.startandjump.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
-/**
- * Тут указана легенда всех возможных объектов на поле и их состояний.
- * Важно помнить, что для каждой енумной константы надо создать спрайт в папке \src\main\webapp\resources\sprite.
- */
-public enum Elements implements CharElements {
+public enum Element implements CharElements {
 
-    NONE(' '),       // пустое поле
-    WALL('#'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
-    PLATFORM('='),   // а это МОЯ ПЛАТФОРМА
-    HERO('☺'),       // а это мой герой
-    BLACK_HERO('☻');       // а это очень мертвый труп
+    BAD_APPLE('☻'),
+    GOOD_APPLE('☺'),
 
+    BREAK('☼'),
+
+    HEAD_DOWN('▼'),
+    HEAD_LEFT('◄'),
+    HEAD_RIGHT('►'),
+    HEAD_UP('▲'),
+
+    TAIL_END_DOWN('╙'),
+    TAIL_END_LEFT('╘'),
+    TAIL_END_UP('╓'),
+    TAIL_END_RIGHT('╕'),
+    TAIL_HORIZONTAL('═'),
+    TAIL_VERTICAL('║'),
+    TAIL_LEFT_DOWN('╗'),
+    TAIL_LEFT_UP('╝'),
+    TAIL_RIGHT_DOWN('╔'),
+    TAIL_RIGHT_UP('╚'),
+
+    NONE(' ');
 
     final char ch;
 
-    Elements(char ch) {
+    Element(char ch) {
         this.ch = ch;
-    }
-
-    @Override
-    public char ch() {
-        return ch;
     }
 
     @Override
@@ -54,13 +61,17 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    @Override
+    public char ch() {
+        return ch;
+    }
+
+    public static Element valueOf(char ch) {
+        for (Element el : Element.values()) {
             if (el.ch == ch) {
                 return el;
             }
         }
         throw new IllegalArgumentException("No such element for " + ch);
     }
-
 }

@@ -23,13 +23,12 @@ package com.codenjoy.dojo.tetris.services.ai;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.AbstractJsonSolver;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.tetris.client.Board;
+import com.codenjoy.dojo.tetris.client.Element;
 import com.codenjoy.dojo.tetris.model.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -57,7 +56,7 @@ public class AISolver extends AbstractJsonSolver<Board> {
         size = board.getGlass().size();
         Glass glass = new GlassImpl(size, size, () -> 0);
 
-        Elements current = board.getCurrentFigureType();
+        Element current = board.getCurrentFigureType();
         if (current == null) {
             return "";
         }

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.moebius.model;
  */
 
 
+import com.codenjoy.dojo.moebius.client.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
@@ -30,7 +31,7 @@ public interface Field extends GameField<Player> {
 
     boolean isFree(Point pt);
 
-    void setLine(Point pt, Elements element);
+    void setLine(Point pt, Element element);
 
     boolean removeLine(Point pt);
 

@@ -23,19 +23,18 @@ package com.codenjoy.dojo.pong.client;
  */
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.pong.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.pong.model.Elements.BALL;
-import static com.codenjoy.dojo.pong.model.Elements.HERO;
+import static com.codenjoy.dojo.pong.client.Element.BALL;
+import static com.codenjoy.dojo.pong.client.Element.HERO;
 
-public class Board extends AbstractBoard<Elements> {
+public class Board extends AbstractBoard<Element> {
 
     @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
+    public Element valueOf(char ch) {
+        return Element.valueOf(ch);
     }
 
     public List<Point> getMe() {

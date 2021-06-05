@@ -26,13 +26,13 @@ package com.codenjoy.dojo.snakebattle.model.objects;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.snakebattle.model.Elements;
+import com.codenjoy.dojo.snakebattle.client.Element;
 import com.codenjoy.dojo.snakebattle.model.Player;
 
 /**
  * Артефакт "Яблоко" на поле (удлинняет змейку)
  */
-public class Apple extends PointImpl implements State<Elements, Player> {
+public class Apple extends PointImpl implements State<Element, Player> {
 
     public Apple(Point point) {
         super(point);
@@ -43,7 +43,7 @@ public class Apple extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.APPLE;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.APPLE;
     }
 }

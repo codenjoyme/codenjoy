@@ -22,6 +22,7 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
+import com.codenjoy.dojo.quake2d.client.Element;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.LevelUtils;
@@ -48,7 +49,7 @@ public class LevelImpl implements Level {
     public List<Hero> getHero() {
         List<Hero> result = new LinkedList<>();
 
-        for (Point pt : getPointsOf(Elements.HERO)) {
+        for (Point pt : getPointsOf(Element.HERO)) {
             result.add(new Hero(pt));
         }
 
@@ -59,7 +60,7 @@ public class LevelImpl implements Level {
     public List<Robot> getRobots(Field field) {
         List<Robot> result = new LinkedList<>();
 
-        for (Point pt : getPointsOf(Elements.ROBOT)) {
+        for (Point pt : getPointsOf(Element.ROBOT)) {
             result.add(new Robot(field, pt.getX(), pt.getY()));
         }
 
@@ -69,7 +70,7 @@ public class LevelImpl implements Level {
     public List<Hero> getOtherHero() {
         List<Hero> result = new LinkedList<>();
 
-        for (Point pt : getPointsOf(Elements.OTHER_HERO)) {
+        for (Point pt : getPointsOf(Element.OTHER_HERO)) {
             result.add(new Hero(pt));
         }
 
@@ -80,10 +81,10 @@ public class LevelImpl implements Level {
     public List<Ability> getAbility() {
         List<Ability> result = new LinkedList<Ability>();
 
-        for (Point pt : getPointsOf(Elements.SUPER_WEAPON)) {
+        for (Point pt : getPointsOf(Element.SUPER_WEAPON)) {
             result.add(new Ability(pt, Ability.Type.WEAPON));
         }
-        for (Point pt : getPointsOf(Elements.SUPER_DEFENCE)) {
+        for (Point pt : getPointsOf(Element.SUPER_DEFENCE)) {
              result.add(new  Ability(pt, Ability.Type.DEFENCE));
         }
         return result;
@@ -93,14 +94,14 @@ public class LevelImpl implements Level {
     public List<Wall> getWalls() {
         List<Wall> result = new LinkedList<Wall>();
 
-        for (Point pt : getPointsOf(Elements.WALL)) {
+        for (Point pt : getPointsOf(Element.WALL)) {
             result.add(new Wall(pt));
         }
 
         return result;
     }
 
-    private List<Point> getPointsOf(Elements element) {
+    private List<Point> getPointsOf(Element element) {
         List<Point> result = new LinkedList<Point>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == element.ch) {

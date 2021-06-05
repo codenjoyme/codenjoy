@@ -26,10 +26,10 @@ package com.codenjoy.dojo.snake.model.artifacts;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.snake.model.Elements;
+import com.codenjoy.dojo.snake.client.Element;
 import com.codenjoy.dojo.snake.model.Hero;
 
-public class Wall extends PointImpl implements Element, State<Elements, Object> {
+public class Wall extends PointImpl implements com.codenjoy.dojo.snake.model.artifacts.Element, State<Element, Object> {
 
     public Wall(Point point) {
         super(point);
@@ -45,7 +45,7 @@ public class Wall extends PointImpl implements Element, State<Elements, Object> 
     }
 
     @Override
-    public Elements state(Object player, Object... alsoAtPoint) {
-        return Elements.BREAK;
+    public Element state(Object player, Object... alsoAtPoint) {
+        return Element.BREAK;
     }
 }

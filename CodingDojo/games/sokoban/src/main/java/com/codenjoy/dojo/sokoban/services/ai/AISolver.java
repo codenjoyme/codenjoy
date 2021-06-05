@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.sokoban.client.Board;
-import com.codenjoy.dojo.sokoban.model.items.Elements;
+import com.codenjoy.dojo.sokoban.client.Element;
 
 import java.util.List;
 
@@ -78,7 +78,7 @@ public class AISolver implements Solver<Board> {
         int size = board.size();
 
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.BOX);
+        List<Point> to = board.get(Element.BOX);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }

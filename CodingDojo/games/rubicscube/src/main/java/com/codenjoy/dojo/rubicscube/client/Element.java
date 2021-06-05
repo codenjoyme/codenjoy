@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.rubicscube.model;
+package com.codenjoy.dojo.rubicscube.client;
 
 /*-
  * #%L
@@ -25,7 +25,7 @@ package com.codenjoy.dojo.rubicscube.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum Elements implements CharElements {
+public enum Element implements CharElements {
 
     NONE(' '),     // это то, на что не стоит обращать внимание
     RED('R'),      // а дальше идут цвета
@@ -37,7 +37,7 @@ public enum Elements implements CharElements {
 
     final char ch;
 
-    Elements(char ch) {
+    Element(char ch) {
         this.ch = ch;
     }
 
@@ -51,8 +51,8 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    public static Element valueOf(char ch) {
+        for (Element el : Element.values()) {
             if (el.ch == ch) {
                 return el;
             }

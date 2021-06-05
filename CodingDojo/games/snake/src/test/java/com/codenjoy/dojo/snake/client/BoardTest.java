@@ -24,7 +24,6 @@ package com.codenjoy.dojo.snake.client;
 
 
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.snake.model.Elements;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -50,30 +49,30 @@ public class BoardTest {
         assertEquals(false, board.isGameOver());
         assertEquals("[[1,1]]", board.getStones().toString());
 
-        assertTrue(board.isAt(0, 3, Elements.BREAK));
-        assertTrue(board.isAt(0, 2, Elements.BREAK));
-        assertTrue(board.isAt(0, 1, Elements.BREAK));
-        assertTrue(board.isAt(0, 0, Elements.BREAK));
+        assertTrue(board.isAt(0, 3, Element.BREAK));
+        assertTrue(board.isAt(0, 2, Element.BREAK));
+        assertTrue(board.isAt(0, 1, Element.BREAK));
+        assertTrue(board.isAt(0, 0, Element.BREAK));
 
-        assertTrue(board.isAt(3, 3, Elements.BREAK));
-        assertTrue(board.isAt(3, 2, Elements.BREAK));
-        assertTrue(board.isAt(3, 1, Elements.BREAK));
-        assertTrue(board.isAt(3, 0, Elements.BREAK));
+        assertTrue(board.isAt(3, 3, Element.BREAK));
+        assertTrue(board.isAt(3, 2, Element.BREAK));
+        assertTrue(board.isAt(3, 1, Element.BREAK));
+        assertTrue(board.isAt(3, 0, Element.BREAK));
 
-        assertTrue(board.isAt(0, 3, Elements.BREAK));
-        assertTrue(board.isAt(1, 3, Elements.BREAK));
-        assertTrue(board.isAt(2, 3, Elements.BREAK));
-        assertTrue(board.isAt(3, 3, Elements.BREAK));
+        assertTrue(board.isAt(0, 3, Element.BREAK));
+        assertTrue(board.isAt(1, 3, Element.BREAK));
+        assertTrue(board.isAt(2, 3, Element.BREAK));
+        assertTrue(board.isAt(3, 3, Element.BREAK));
 
-        assertTrue(board.isAt(0, 0, Elements.BREAK));
-        assertTrue(board.isAt(1, 0, Elements.BREAK));
-        assertTrue(board.isAt(2, 0, Elements.BREAK));
-        assertTrue(board.isAt(3, 0, Elements.BREAK));
+        assertTrue(board.isAt(0, 0, Element.BREAK));
+        assertTrue(board.isAt(1, 0, Element.BREAK));
+        assertTrue(board.isAt(2, 0, Element.BREAK));
+        assertTrue(board.isAt(3, 0, Element.BREAK));
 
-        assertTrue(board.isAt(1, 2, Elements.GOOD_APPLE));
-        assertTrue(board.isAt(1, 1, Elements.BAD_APPLE));
-        assertTrue(board.isAt(2, 2, Elements.HEAD_UP));
-        assertTrue(board.isAt(2, 1, Elements.TAIL_END_DOWN));
+        assertTrue(board.isAt(1, 2, Element.GOOD_APPLE));
+        assertTrue(board.isAt(1, 1, Element.BAD_APPLE));
+        assertTrue(board.isAt(2, 2, Element.HEAD_UP));
+        assertTrue(board.isAt(2, 1, Element.TAIL_END_DOWN));
 
         assertEquals(Direction.UP, board.getSnakeDirection());
 

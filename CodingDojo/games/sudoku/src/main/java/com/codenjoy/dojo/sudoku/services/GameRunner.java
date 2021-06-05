@@ -36,7 +36,7 @@ import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.sudoku.client.Board;
 import com.codenjoy.dojo.sudoku.services.ai.AISolver;
-import com.codenjoy.dojo.sudoku.model.Elements;
+import com.codenjoy.dojo.sudoku.client.Element;
 import com.codenjoy.dojo.sudoku.model.Player;
 import com.codenjoy.dojo.sudoku.model.Sudoku;
 import com.codenjoy.dojo.sudoku.model.level.Level;
@@ -80,7 +80,7 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

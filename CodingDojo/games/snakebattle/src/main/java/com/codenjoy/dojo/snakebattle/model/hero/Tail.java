@@ -27,15 +27,15 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.snakebattle.model.Elements;
+import com.codenjoy.dojo.snakebattle.client.Element;
 import com.codenjoy.dojo.snakebattle.model.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.snakebattle.model.Elements.*;
+import static com.codenjoy.dojo.snakebattle.client.Element.*;
 
-public class Tail extends PointImpl implements State<Elements, Object> {
+public class Tail extends PointImpl implements State<Element, Object> {
 
     private Hero snake;
 
@@ -49,14 +49,14 @@ public class Tail extends PointImpl implements State<Elements, Object> {
         this.snake = snake;
     }
 
-    private Elements getTail(TailDirection direction, boolean itIsMyHero) {
+    private Element getTail(TailDirection direction, boolean itIsMyHero) {
         if (itIsMyHero)
             return getMyTail(direction);
         else
             return getEnemyTail(direction);
     }
 
-    private Elements getMyTail(TailDirection direction) {
+    private Element getMyTail(TailDirection direction) {
         switch (direction) {
             case VERTICAL_DOWN:
                 return TAIL_END_DOWN;
@@ -71,7 +71,7 @@ public class Tail extends PointImpl implements State<Elements, Object> {
         }
     }
 
-    private Elements getEnemyTail(TailDirection direction) {
+    private Element getEnemyTail(TailDirection direction) {
         switch (direction) {
             case VERTICAL_DOWN:
                 return ENEMY_TAIL_END_DOWN;
@@ -86,14 +86,14 @@ public class Tail extends PointImpl implements State<Elements, Object> {
         }
     }
 
-    private Elements getHead(Direction direction, boolean itIsMyHero) {
+    private Element getHead(Direction direction, boolean itIsMyHero) {
         if (itIsMyHero)
             return getMyHead(direction);
         else
             return getEnemyHead(direction);
     }
 
-    private Elements getMyHead(Direction direction) {
+    private Element getMyHead(Direction direction) {
         switch (direction) {
             case DOWN:
                 return HEAD_DOWN;
@@ -108,7 +108,7 @@ public class Tail extends PointImpl implements State<Elements, Object> {
         }
     }
 
-    private Elements getEnemyHead(Direction direction) {
+    private Element getEnemyHead(Direction direction) {
         switch (direction) {
             case DOWN:
                 return ENEMY_HEAD_DOWN;
@@ -123,14 +123,14 @@ public class Tail extends PointImpl implements State<Elements, Object> {
         }
     }
 
-    private Elements getBody(BodyDirection bodyDirection, boolean itIsMyHero) {
+    private Element getBody(BodyDirection bodyDirection, boolean itIsMyHero) {
         if (itIsMyHero)
             return getMyBody(bodyDirection);
         else
             return getEnemyBody(bodyDirection);
     }
 
-    private Elements getMyBody(BodyDirection bodyDirection) {
+    private Element getMyBody(BodyDirection bodyDirection) {
         switch (bodyDirection) {
             case HORIZONTAL:
                 return BODY_HORIZONTAL;
@@ -149,7 +149,7 @@ public class Tail extends PointImpl implements State<Elements, Object> {
         }
     }
 
-    private Elements getEnemyBody(BodyDirection bodyDirection) {
+    private Element getEnemyBody(BodyDirection bodyDirection) {
         switch (bodyDirection) {
             case HORIZONTAL:
                 return ENEMY_BODY_HORIZONTAL;
@@ -169,13 +169,13 @@ public class Tail extends PointImpl implements State<Elements, Object> {
     }
 
     @Override
-    public Elements state(Object player, Object... alsoAtPoint) {
+    public Element state(Object player, Object... alsoAtPoint) {
         Hero hero = ((Player) player).getHero();
 
         return snakePart(hero, Arrays.asList(alsoAtPoint));
     }
 
-    private Elements snakePart(Hero hero, List<Object> alsoAtPoint) {
+    private Element snakePart(Hero hero, List<Object> alsoAtPoint) {
         Tail higher = getHigher(alsoAtPoint);
         Hero snake = higher.snake;
         boolean itsMe = hero.equals(snake);

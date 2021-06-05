@@ -25,11 +25,11 @@ package com.codenjoy.dojo.snake.model.artifacts;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.snake.model.Elements;
+import com.codenjoy.dojo.snake.client.Element;
 import com.codenjoy.dojo.snake.model.Hero;
 
 
-public class Stone extends EateablePoint implements Element, State<Elements, Object> {
+public class Stone extends EateablePoint implements com.codenjoy.dojo.snake.model.artifacts.Element, State<Element, Object> {
 
     public Stone(Point pt) {
         super(pt);
@@ -46,7 +46,7 @@ public class Stone extends EateablePoint implements Element, State<Elements, Obj
     }
 
     @Override
-    public Elements state(Object player, Object... alsoAtPoint) {
-        return Elements.BAD_APPLE;
+    public Element state(Object player, Object... alsoAtPoint) {
+        return Element.BAD_APPLE;
     }
 }

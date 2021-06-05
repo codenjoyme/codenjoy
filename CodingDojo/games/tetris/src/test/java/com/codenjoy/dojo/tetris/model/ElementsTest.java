@@ -22,6 +22,7 @@ package com.codenjoy.dojo.tetris.model;
  * #L%
  */
 
+import com.codenjoy.dojo.tetris.client.Element;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -34,16 +35,16 @@ public class ElementsTest {
     @Test
     public void testValuesExcept() {
         assertEquals("[I, J, L, O, S, T, Z, .]",
-                Arrays.toString(Elements.valuesExcept()));
+                Arrays.toString(Element.valuesExcept()));
 
         assertEquals("[I, J, L, O, S, T, Z]",
-                Arrays.toString(Elements.valuesExcept(Elements.NONE)));
+                Arrays.toString(Element.valuesExcept(Element.NONE)));
     }
 
     @Test
     public void testNumber() {
         assertEquals("['I':2, 'J':3, 'L':4, 'O':1, 'S':5, 'T':7, 'Z':6, '.':0]",
-                Arrays.stream(Elements.values())
+                Arrays.stream(Element.values())
                         .map(el -> String.format("'%s':%s", el.ch, el.index()))
                         .collect(toList())
                         .toString());

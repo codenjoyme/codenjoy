@@ -24,15 +24,14 @@ package com.codenjoy.dojo.moebius.client;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.moebius.model.Elements;
 
-import static com.codenjoy.dojo.moebius.model.Elements.EMPTY;
+import static com.codenjoy.dojo.moebius.client.Element.EMPTY;
 
-public class Board extends AbstractBoard<Elements> {
+public class Board extends AbstractBoard<Element> {
 
     @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
+    public Element valueOf(char ch) {
+        return Element.valueOf(ch);
     }
 
     public boolean isGameOver() {

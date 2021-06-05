@@ -29,9 +29,8 @@ import com.codenjoy.dojo.sudoku.model.Wall;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.codenjoy.dojo.sudoku.model.Elements.*;
+import static com.codenjoy.dojo.sudoku.client.Element.*;
 import static java.util.stream.Collectors.toList;
 
 public class LevelImpl implements Level {

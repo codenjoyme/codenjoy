@@ -35,7 +35,7 @@ import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snake.client.Board;
 import com.codenjoy.dojo.snake.services.ai.AISolver;
-import com.codenjoy.dojo.snake.model.Elements;
+import com.codenjoy.dojo.snake.client.Element;
 import com.codenjoy.dojo.snake.model.Player;
 import com.codenjoy.dojo.snake.model.Snake;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
@@ -78,7 +78,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

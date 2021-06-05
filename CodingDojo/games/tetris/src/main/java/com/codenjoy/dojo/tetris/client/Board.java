@@ -25,7 +25,6 @@ package com.codenjoy.dojo.tetris.client;
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.tetris.model.Elements;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -47,7 +46,7 @@ public class Board extends AbstractTextBoard {
         return pt(x, y);
     }
 
-    public Elements getCurrentFigureType() {
+    public Element getCurrentFigureType() {
         if (!getJson().has("currentFigureType")) {
             return null;
         }
@@ -55,8 +54,8 @@ public class Board extends AbstractTextBoard {
         return getElement(figureType);
     }
 
-    public List<Elements> getFutureFigures() {
-        List<Elements> result = new LinkedList<>();
+    public List<Element> getFutureFigures() {
+        List<Element> result = new LinkedList<>();
         for (Object figure : getJson().getJSONArray("futureFigures")) {
             result.add(getElement((String)figure));
         }
@@ -72,8 +71,8 @@ public class Board extends AbstractTextBoard {
         return (GlassBoard) new GlassBoard().forString(glassString);
     }
 
-    private Elements getElement(String figureType) {
+    private Element getElement(String figureType) {
         char ch = figureType.charAt(0);
-        return Elements.valueOf(ch);
+        return Element.valueOf(ch);
     }
 }

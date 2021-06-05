@@ -26,7 +26,7 @@ package com.codenjoy.dojo.snakebattle.model.level;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.snakebattle.model.Elements;
+import com.codenjoy.dojo.snakebattle.client.Element;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.*;
-import static com.codenjoy.dojo.snakebattle.model.Elements.*;
+import static com.codenjoy.dojo.snakebattle.client.Element.*;
 
 public class LevelImpl implements Level {
 
@@ -81,7 +81,7 @@ public class LevelImpl implements Level {
         Hero hero = new Hero(direction);
         hero.init(field);
 
-        Elements headElement = getAt(head);
+        Element headElement = getAt(head);
         if (Arrays.asList(HEAD_FLY, ENEMY_HEAD_FLY).contains(headElement)) {
             direction = getHeadDirectionWithMod(head);
             hero.setDirection(direction);
@@ -108,54 +108,54 @@ public class LevelImpl implements Level {
     }
 
     private Direction getHeadDirectionWithMod(Point head) {
-        Elements atLeft = getAt(LEFT.change(head));
-        if (Arrays.asList(Elements.BODY_HORIZONTAL,
-                Elements.BODY_RIGHT_DOWN,
-                Elements.BODY_RIGHT_UP,
-                Elements.TAIL_END_LEFT,
-                Elements.ENEMY_BODY_HORIZONTAL,
-                Elements.ENEMY_BODY_RIGHT_DOWN,
-                Elements.ENEMY_BODY_RIGHT_UP,
-                Elements.ENEMY_TAIL_END_LEFT).contains(atLeft))
+        Element atLeft = getAt(LEFT.change(head));
+        if (Arrays.asList(Element.BODY_HORIZONTAL,
+                Element.BODY_RIGHT_DOWN,
+                Element.BODY_RIGHT_UP,
+                Element.TAIL_END_LEFT,
+                Element.ENEMY_BODY_HORIZONTAL,
+                Element.ENEMY_BODY_RIGHT_DOWN,
+                Element.ENEMY_BODY_RIGHT_UP,
+                Element.ENEMY_TAIL_END_LEFT).contains(atLeft))
         {
             return RIGHT;
         }
 
-        Elements atRight = getAt(RIGHT.change(head));
-        if (Arrays.asList(Elements.BODY_HORIZONTAL,
-                Elements.BODY_LEFT_DOWN,
-                Elements.BODY_LEFT_UP,
-                Elements.TAIL_END_RIGHT,
-                Elements.ENEMY_BODY_HORIZONTAL,
-                Elements.ENEMY_BODY_LEFT_DOWN,
-                Elements.ENEMY_BODY_LEFT_UP,
-                Elements.ENEMY_TAIL_END_RIGHT).contains(atRight))
+        Element atRight = getAt(RIGHT.change(head));
+        if (Arrays.asList(Element.BODY_HORIZONTAL,
+                Element.BODY_LEFT_DOWN,
+                Element.BODY_LEFT_UP,
+                Element.TAIL_END_RIGHT,
+                Element.ENEMY_BODY_HORIZONTAL,
+                Element.ENEMY_BODY_LEFT_DOWN,
+                Element.ENEMY_BODY_LEFT_UP,
+                Element.ENEMY_TAIL_END_RIGHT).contains(atRight))
         {
             return LEFT;
         }
 
-        Elements atDown = getAt(DOWN.change(head));
-        if (Arrays.asList(Elements.BODY_VERTICAL,
-                Elements.BODY_LEFT_UP,
-                Elements.BODY_RIGHT_UP,
-                Elements.TAIL_END_DOWN,
-                Elements.ENEMY_BODY_VERTICAL,
-                Elements.ENEMY_BODY_LEFT_UP,
-                Elements.ENEMY_BODY_RIGHT_UP,
-                Elements.ENEMY_TAIL_END_DOWN).contains(atDown))
+        Element atDown = getAt(DOWN.change(head));
+        if (Arrays.asList(Element.BODY_VERTICAL,
+                Element.BODY_LEFT_UP,
+                Element.BODY_RIGHT_UP,
+                Element.TAIL_END_DOWN,
+                Element.ENEMY_BODY_VERTICAL,
+                Element.ENEMY_BODY_LEFT_UP,
+                Element.ENEMY_BODY_RIGHT_UP,
+                Element.ENEMY_TAIL_END_DOWN).contains(atDown))
         {
             return UP;
         }
 
-        Elements atUp = getAt(UP.change(head));
-        if (Arrays.asList(Elements.BODY_VERTICAL,
-                Elements.BODY_LEFT_DOWN,
-                Elements.BODY_RIGHT_DOWN,
-                Elements.TAIL_END_UP,
-                Elements.ENEMY_BODY_VERTICAL,
-                Elements.ENEMY_BODY_LEFT_DOWN,
-                Elements.ENEMY_BODY_RIGHT_DOWN,
-                Elements.ENEMY_TAIL_END_UP).contains(atUp))
+        Element atUp = getAt(UP.change(head));
+        if (Arrays.asList(Element.BODY_VERTICAL,
+                Element.BODY_LEFT_DOWN,
+                Element.BODY_RIGHT_DOWN,
+                Element.TAIL_END_UP,
+                Element.ENEMY_BODY_VERTICAL,
+                Element.ENEMY_BODY_LEFT_DOWN,
+                Element.ENEMY_BODY_RIGHT_DOWN,
+                Element.ENEMY_TAIL_END_UP).contains(atUp))
         {
             return DOWN;
         }
@@ -271,7 +271,7 @@ public class LevelImpl implements Level {
                 START_FLOOR);
     }
 
-    private Elements getAt(Point pt) {
-        return Elements.valueOf(map.charAt(xy.getLength(pt.getX(), pt.getY())));
+    private Element getAt(Point pt) {
+        return Element.valueOf(map.charAt(xy.getLength(pt.getX(), pt.getY())));
     }
 }

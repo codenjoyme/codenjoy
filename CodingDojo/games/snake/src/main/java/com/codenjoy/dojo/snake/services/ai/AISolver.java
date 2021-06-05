@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.snake.client.Board;
-import com.codenjoy.dojo.snake.model.Elements;
+import com.codenjoy.dojo.snake.client.Element;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,8 +55,8 @@ public class AISolver implements Solver<Board> {
                 Point to = where.change(from);
 
                 if (board.isAt(to.getX(), to.getY(),
-                        Elements.HEAD_DOWN, Elements.HEAD_LEFT,
-                        Elements.HEAD_UP, Elements.HEAD_RIGHT)) return false;
+                        Element.HEAD_DOWN, Element.HEAD_LEFT,
+                        Element.HEAD_UP, Element.HEAD_RIGHT)) return false;
 
                 return true;
             }
@@ -69,14 +69,14 @@ public class AISolver implements Solver<Board> {
     }
 
     private boolean isBarrierAt(int x, int y) {
-        return board.isAt(x, y, Elements.BREAK, Elements.BAD_APPLE,
+        return board.isAt(x, y, Element.BREAK, Element.BAD_APPLE,
 //                Elements.HEAD_DOWN, Elements.HEAD_LEFT,
 //                Elements.HEAD_UP, Elements.HEAD_RIGHT,
-                Elements.TAIL_END_DOWN, Elements.TAIL_END_LEFT,
-                Elements.TAIL_END_UP, Elements.TAIL_END_RIGHT,
-                Elements.TAIL_HORIZONTAL, Elements.TAIL_VERTICAL,
-                Elements.TAIL_LEFT_DOWN, Elements.TAIL_LEFT_UP,
-                Elements.TAIL_RIGHT_DOWN, Elements.TAIL_RIGHT_UP);
+                Element.TAIL_END_DOWN, Element.TAIL_END_LEFT,
+                Element.TAIL_END_UP, Element.TAIL_END_RIGHT,
+                Element.TAIL_HORIZONTAL, Element.TAIL_VERTICAL,
+                Element.TAIL_LEFT_DOWN, Element.TAIL_LEFT_UP,
+                Element.TAIL_RIGHT_DOWN, Element.TAIL_RIGHT_UP);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class AISolver implements Solver<Board> {
         possible = possible(board);
 
         Point from = board.getHead();
-        List<Point> to = board.get(Elements.GOOD_APPLE);
+        List<Point> to = board.get(Element.GOOD_APPLE);
         List<Direction> way = getWay(from, to);
 
         if (way.isEmpty()) {

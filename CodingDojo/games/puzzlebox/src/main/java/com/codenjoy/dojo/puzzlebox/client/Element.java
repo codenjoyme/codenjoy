@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.sokoban.model.items;
+package com.codenjoy.dojo.puzzlebox.client;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -25,19 +25,20 @@ package com.codenjoy.dojo.sokoban.model.items;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum Elements implements CharElements {
+public enum Element implements CharElements {
 
-    NONE(' '),             // например это пустое место, куда можно перейти герою
-    NONSE('`'),            // TODO добавить описание
-    WALL('☼'),             // а это стенка, через которую я хочу чтобы проходить нельзя было
-    HERO('☺'),             // hero worker
-    BOX('■'),              // this is a box
-    MARK_TO_WIN('X'),      // this is a feild where a hero should move boxes
-    BOX_ON_THE_MARK('*');  // this is a feild includes box overlaped mark
+    // TODO
+    NONE(' '),       // например это пустое место, куда можно перейти герою
+    WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
+    HERO('☺'),       // а это мой герой
+    BOX('#'),        // то снаряд
+    CURBOX('1'),
+    FILEDBOX('@'),
+    TARGET('0');
 
     final char ch;
 
-    Elements(char ch) {
+    Element(char ch) {
         this.ch = ch;
     }
 
@@ -51,8 +52,8 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    public static Element valueOf(char ch) {
+        for (Element el : Element.values()) {
             if (el.ch == ch) {
                 return el;
             }

@@ -26,20 +26,20 @@ package com.codenjoy.dojo.snakebattle.model.objects;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.snakebattle.model.Elements;
+import com.codenjoy.dojo.snakebattle.client.Element;
 import com.codenjoy.dojo.snakebattle.model.Player;
 
 /**
  * Артефакт Стена на поле
  */
-public class Wall extends PointImpl implements State<Elements, Player> {
+public class Wall extends PointImpl implements State<Element, Player> {
 
     public Wall(Point point) {
         super(point);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.WALL;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.WALL;
     }
 }

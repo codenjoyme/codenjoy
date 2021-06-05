@@ -24,14 +24,7 @@ package com.codenjoy.dojo.spacerace.client;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.RandomDice;
-import com.codenjoy.dojo.spacerace.model.Elements;
-
-import java.util.List;
 
 /**
  * Author: your name

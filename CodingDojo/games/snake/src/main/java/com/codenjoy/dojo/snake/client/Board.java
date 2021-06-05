@@ -26,19 +26,18 @@ package com.codenjoy.dojo.snake.client;
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.snake.model.Elements;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.*;
-import static com.codenjoy.dojo.snake.model.Elements.*;
+import static com.codenjoy.dojo.snake.client.Element.*;
 
-public class Board extends AbstractBoard<Elements> {
+public class Board extends AbstractBoard<Element> {
 
     @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
+    public Element valueOf(char ch) {
+        return Element.valueOf(ch);
     }
 
     public List<Point> getApples() {
@@ -127,10 +126,10 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> getStones() {
-        return get(Elements.BAD_APPLE);
+        return get(Element.BAD_APPLE);
     }
 
     public List<Point> getWalls() {
-        return get(Elements.BREAK);
+        return get(Element.BREAK);
     }
 }

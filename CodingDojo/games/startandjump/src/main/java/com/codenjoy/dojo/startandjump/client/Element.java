@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.spacerace.model;
+package com.codenjoy.dojo.startandjump.client;
 
 /*-
  * #%L
@@ -22,29 +22,25 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
+
 import com.codenjoy.dojo.services.printer.CharElements;
 
 /**
  * Тут указана легенда всех возможных объектов на поле и их состояний.
  * Важно помнить, что для каждой енумной константы надо создать спрайт в папке \src\main\webapp\resources\sprite.
  */
-public enum Elements implements CharElements {
+public enum Element implements CharElements {
 
-    NONE(' '),       // например это пустое место, куда можно перейти герою
-    EXPLOSION('x'),     // взрыв
-    WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
+    NONE(' '),       // пустое поле
+    WALL('#'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
+    PLATFORM('='),   // а это МОЯ ПЛАТФОРМА
     HERO('☺'),       // а это мой герой
-    OTHER_HERO('☻'), // это герои других игроков
-    DEAD_HERO('+'),  // а это временное явление - трупик моего героя, которое пропадет в следующем такте
-    GOLD('$'),       // это то, за чем будет охота
-    BOMB('♣'),       // а это бомба, на которой можно подорваться
-    STONE('0'),      // а это камень
-    BULLET_PACK('7'), // а это лежит магазин патронов
-    BULLET('*');     // а это пуля
+    BLACK_HERO('☻');       // а это очень мертвый труп
+
 
     final char ch;
 
-    Elements(char ch) {
+    Element(char ch) {
         this.ch = ch;
     }
 
@@ -58,8 +54,8 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    public static Element valueOf(char ch) {
+        for (Element el : Element.values()) {
             if (el.ch == ch) {
                 return el;
             }

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.model;
+package com.codenjoy.dojo.reversi.client;
 
 /*-
  * #%L
@@ -25,39 +25,23 @@ package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum Elements implements CharElements {
-    BAD_APPLE('☻'),
-    GOOD_APPLE('☺'),
+public enum Element implements CharElements {
 
-    BREAK('☼'),
+    NONE(' '),          // пустое место для фишки
+    BREAK('☼'),         // препятствие на котором ставить фишку нельзя
 
-    HEAD_DOWN('▼'),
-    HEAD_LEFT('◄'),
-    HEAD_RIGHT('►'),
-    HEAD_UP('▲'),
+    WHITE('o'),         // белые фишки, ходят черные
+    WHITE_STOP('.'),    // белые фишки, не мой (белых) ход сейчас
+    WHITE_TURN('O'),    // белые фишки, ходят белые
 
-    TAIL_END_DOWN('╙'),
-    TAIL_END_LEFT('╘'),
-    TAIL_END_UP('╓'),
-    TAIL_END_RIGHT('╕'),
-    TAIL_HORIZONTAL('═'),
-    TAIL_VERTICAL('║'),
-    TAIL_LEFT_DOWN('╗'),
-    TAIL_LEFT_UP('╝'),
-    TAIL_RIGHT_DOWN('╔'),
-    TAIL_RIGHT_UP('╚'),
-
-    NONE(' ');
+    BLACK('x'),         // черные фишки, ходят белые
+    BLACK_STOP('+'),    // черные фишки, не мой (черных) ход сейчас
+    BLACK_TURN('X');    // черные фишки, ходят черные
 
     final char ch;
 
-    Elements(char ch) {
+    Element(char ch) {
         this.ch = ch;
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(ch);
     }
 
     @Override
@@ -65,12 +49,18 @@ public enum Elements implements CharElements {
         return ch;
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    @Override
+    public String toString() {
+        return String.valueOf(ch);
+    }
+
+    public static Element valueOf(char ch) {
+        for (Element el : Element.values()) {
             if (el.ch == ch) {
                 return el;
             }
         }
         throw new IllegalArgumentException("No such element for " + ch);
     }
+
 }

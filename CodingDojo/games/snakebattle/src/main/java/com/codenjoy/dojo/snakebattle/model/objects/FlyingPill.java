@@ -26,13 +26,13 @@ package com.codenjoy.dojo.snakebattle.model.objects;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.snakebattle.model.Elements;
+import com.codenjoy.dojo.snakebattle.client.Element;
 import com.codenjoy.dojo.snakebattle.model.Player;
 
 /**
  * Артефакт "Пилюля полёта" на поле (позволяет преодолевать любые препядствия)
  */
-public class FlyingPill extends PointImpl implements State<Elements, Player> {
+public class FlyingPill extends PointImpl implements State<Element, Player> {
 
     public FlyingPill(Point point) {
         super(point);
@@ -43,7 +43,7 @@ public class FlyingPill extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.FLYING_PILL;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.FLYING_PILL;
     }
 }

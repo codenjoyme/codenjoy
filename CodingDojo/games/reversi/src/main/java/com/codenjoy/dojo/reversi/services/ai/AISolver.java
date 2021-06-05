@@ -25,7 +25,7 @@ package com.codenjoy.dojo.reversi.services.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.reversi.client.Board;
-import com.codenjoy.dojo.reversi.model.Elements;
+import com.codenjoy.dojo.reversi.client.Element;
 import com.codenjoy.dojo.reversi.model.Flipper;
 import com.codenjoy.dojo.reversi.model.GetChip;
 import com.codenjoy.dojo.reversi.model.items.Chip;
@@ -52,7 +52,7 @@ public class AISolver implements Solver<Board> {
                 if (point.isOutOf(board.size())) {
                     return Chip.NULL; // TODO почему?
                 }
-                Elements element = board.getAt(point.getX(), point.getY());
+                Element element = board.getAt(point.getX(), point.getY());
                 switch (element) {
                     case BLACK: return new Chip(false, point, this);
                     case BLACK_TURN: return new Chip(false, point, this);
@@ -69,7 +69,7 @@ public class AISolver implements Solver<Board> {
 
             @Override
             public List<Point> freeSpaces() {
-                return board.get(Elements.NONE);
+                return board.get(Element.NONE);
             }
         });
 
