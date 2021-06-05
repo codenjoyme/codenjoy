@@ -25,7 +25,8 @@ package com.codenjoy.dojo.kata.services.events;
 
 import org.junit.Test;
 
-import static com.codenjoy.dojo.kata.services.events.Scores.*;
+import static com.codenjoy.dojo.kata.services.events.Scores.A;
+import static com.codenjoy.dojo.kata.services.events.Scores.D;
 import static org.junit.Assert.assertEquals;
 
 public class PassTestEventTest {

@@ -23,13 +23,9 @@ package com.codenjoy.dojo.kata.services;
  */
 
 
-import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.kata.services.GameSettings.Keys.*;
 

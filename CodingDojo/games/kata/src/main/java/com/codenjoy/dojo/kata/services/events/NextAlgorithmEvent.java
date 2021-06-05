@@ -23,8 +23,6 @@ package com.codenjoy.dojo.kata.services.events;
  */
 
 
-import com.codenjoy.dojo.services.settings.Parameter;
-
 import java.text.DecimalFormat;
 
 public class NextAlgorithmEvent {
