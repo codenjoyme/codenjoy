@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client.ai;
+package com.codenjoy.dojo.icancode.services.ai;
 
 /*-
  * #%L
@@ -23,9 +23,10 @@ package com.codenjoy.dojo.icancode.client.ai;
  */
 
 
+import com.codenjoy.dojo.icancode.services.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.icancode.client.Board;
+import com.codenjoy.dojo.games.icancode.Board;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

@@ -28,12 +28,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by Oleksandr_Baglai on 2017-08-05.
- */
 public class CodeSaver { // TODO test me
 
     public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss-SSS");

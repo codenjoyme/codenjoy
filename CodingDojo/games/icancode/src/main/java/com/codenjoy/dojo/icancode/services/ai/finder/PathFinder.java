@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client.ai.finder;
+package com.codenjoy.dojo.icancode.services.ai.finder;
 
 /*-
  * #%L
@@ -22,10 +22,6 @@ package com.codenjoy.dojo.icancode.client.ai.finder;
  * #L%
  */
 
-
-/**
- * Created by Mikhail_Udalyi on 07.10.2016.
- */
 public abstract class PathFinder {
     int distance = Integer.MAX_VALUE;
 

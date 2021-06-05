@@ -48,7 +48,7 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
+import static com.codenjoy.dojo.games.icancode.Element.Layers.*;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.icancode.services.LevelsTest.VIEW_SIZE_TESTING;
 import static com.codenjoy.dojo.utils.TestUtils.injectN;
