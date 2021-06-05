@@ -26,7 +26,7 @@ package com.codenjoy.dojo.snakebattle.model.level;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.snakebattle.client.Element;
+import com.codenjoy.dojo.games.snakebattle.Element;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.*;
-import static com.codenjoy.dojo.snakebattle.client.Element.*;
+import static com.codenjoy.dojo.games.snakebattle.Element.*;
 
 public class LevelImpl implements Level {
 

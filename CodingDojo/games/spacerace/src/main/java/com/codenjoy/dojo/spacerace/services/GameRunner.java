@@ -32,8 +32,8 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.spacerace.client.Board;
-import com.codenjoy.dojo.spacerace.client.Element;
+import com.codenjoy.dojo.games.spacerace.Board;
+import com.codenjoy.dojo.games.spacerace.Element;
 import com.codenjoy.dojo.spacerace.services.ai.AISolver;
 import com.codenjoy.dojo.spacerace.model.*;
 

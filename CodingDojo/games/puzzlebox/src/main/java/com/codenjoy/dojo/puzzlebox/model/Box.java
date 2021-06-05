@@ -22,7 +22,7 @@ package com.codenjoy.dojo.puzzlebox.model;
  * #L%
  */
 
-import com.codenjoy.dojo.puzzlebox.client.Element;
+import com.codenjoy.dojo.games.puzzlebox.Element;
 import com.codenjoy.dojo.services.*;
 
 public class Box extends PointImpl implements Joystick, Tickable, State<Element, Player> {

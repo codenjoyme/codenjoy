@@ -28,7 +28,7 @@ import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.puzzlebox.client.Element.*;
+import static com.codenjoy.dojo.games.puzzlebox.Element.*;
 
 public class LevelImpl implements Level {
 

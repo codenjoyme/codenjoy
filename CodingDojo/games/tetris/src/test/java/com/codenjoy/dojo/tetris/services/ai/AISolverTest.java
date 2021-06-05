@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.tetris.client.BoardTest;
-import com.codenjoy.dojo.tetris.services.ai.AISolver;
 import org.junit.Before;
 import org.junit.Test;
 

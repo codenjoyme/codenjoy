@@ -25,8 +25,8 @@ package com.codenjoy.dojo.snake.services.ai;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.snake.client.Board;
-import com.codenjoy.dojo.snake.client.Element;
+import com.codenjoy.dojo.games.snake.Board;
+import com.codenjoy.dojo.games.snake.Element;
 import org.junit.Test;
 
 import java.util.Arrays;

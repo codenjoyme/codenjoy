@@ -28,8 +28,8 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
-import com.codenjoy.dojo.sokoban.client.Board;
-import com.codenjoy.dojo.sokoban.client.Element;
+import com.codenjoy.dojo.games.sokoban.Board;
+import com.codenjoy.dojo.games.sokoban.Element;
 
 import java.util.List;
 

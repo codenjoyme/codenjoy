@@ -25,8 +25,7 @@ package com.codenjoy.dojo.sudoku.services.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.RandomDice;
-import com.codenjoy.dojo.sudoku.client.Board;
-import com.codenjoy.dojo.sudoku.services.ai.AISolver;
+import com.codenjoy.dojo.games.sudoku.Board;
 import org.junit.Before;
 import org.junit.Test;
 

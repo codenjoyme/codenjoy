@@ -22,12 +22,12 @@ package com.codenjoy.dojo.sudoku.model;
  * #L%
  */
 
-import com.codenjoy.dojo.sudoku.client.Element;
+import com.codenjoy.dojo.games.sudoku.Element;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.sudoku.client.Element.*;
+import static com.codenjoy.dojo.games.sudoku.Element.*;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 

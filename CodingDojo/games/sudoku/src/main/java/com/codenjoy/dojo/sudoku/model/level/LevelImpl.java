@@ -30,7 +30,7 @@ import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.sudoku.client.Element.*;
+import static com.codenjoy.dojo.games.sudoku.Element.*;
 import static java.util.stream.Collectors.toList;
 
 public class LevelImpl implements Level {

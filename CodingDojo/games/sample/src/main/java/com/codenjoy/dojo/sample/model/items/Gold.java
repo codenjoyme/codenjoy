@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sample.model.items;
  */
 
 
-import com.codenjoy.dojo.sample.client.Element;
+import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;

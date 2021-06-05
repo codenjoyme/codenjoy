@@ -24,9 +24,9 @@ package com.codenjoy.dojo.rubicscube.services.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.rubicscube.client.Board;
-import com.codenjoy.dojo.rubicscube.client.Face;
-import com.codenjoy.dojo.rubicscube.client.Rotate;
+import com.codenjoy.dojo.games.rubicscube.Board;
+import com.codenjoy.dojo.games.rubicscube.Face;
+import com.codenjoy.dojo.games.rubicscube.Rotate;
 import com.codenjoy.dojo.services.Dice;
 
 public class AISolver implements Solver<Board> {

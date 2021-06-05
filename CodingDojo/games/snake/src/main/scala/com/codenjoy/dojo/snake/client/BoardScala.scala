@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.snake.client
 
+import com.codenjoy.dojo.games.snake.Board
+
 /**
   * Класс, обрабатывающий строковое представление доски.
   * Содержит ряд унаследованных методов {@see Board},

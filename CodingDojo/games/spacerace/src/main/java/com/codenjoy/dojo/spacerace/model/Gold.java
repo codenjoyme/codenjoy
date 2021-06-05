@@ -25,7 +25,7 @@ package com.codenjoy.dojo.spacerace.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.spacerace.client.Element;
+import com.codenjoy.dojo.games.spacerace.Element;
 
 public class Gold extends PointImpl implements State<Element, Player> {
 

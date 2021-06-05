@@ -24,7 +24,7 @@ package com.codenjoy.dojo.moebius;
 
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.moebius.client.Board;
+import com.codenjoy.dojo.games.moebius.Board;
 import com.codenjoy.dojo.moebius.services.ai.AISolver;
 import com.codenjoy.dojo.moebius.services.GameRunner;
 import com.codenjoy.dojo.moebius.services.GameSettings;

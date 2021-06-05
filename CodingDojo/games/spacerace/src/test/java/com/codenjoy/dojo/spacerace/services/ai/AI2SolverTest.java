@@ -25,8 +25,7 @@ package com.codenjoy.dojo.spacerace.services.ai;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.spacerace.client.Board;
-import com.codenjoy.dojo.spacerace.services.ai.AI2Solver;
+import com.codenjoy.dojo.games.spacerace.Board;
 import org.junit.Before;
 import org.junit.Test;
 

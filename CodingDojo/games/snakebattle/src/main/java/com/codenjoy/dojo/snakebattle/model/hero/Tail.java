@@ -27,13 +27,13 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.snakebattle.client.Element;
+import com.codenjoy.dojo.games.snakebattle.Element;
 import com.codenjoy.dojo.snakebattle.model.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.snakebattle.client.Element.*;
+import static com.codenjoy.dojo.games.snakebattle.Element.*;
 
 public class Tail extends PointImpl implements State<Element, Object> {
 

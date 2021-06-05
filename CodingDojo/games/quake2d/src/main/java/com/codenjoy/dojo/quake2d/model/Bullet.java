@@ -23,7 +23,7 @@ package com.codenjoy.dojo.quake2d.model;
  */
 
 
-import com.codenjoy.dojo.quake2d.client.Element;
+import com.codenjoy.dojo.games.quake2d.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;

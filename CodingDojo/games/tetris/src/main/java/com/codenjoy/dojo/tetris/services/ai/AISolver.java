@@ -27,8 +27,8 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.AbstractJsonSolver;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.tetris.client.Board;
-import com.codenjoy.dojo.tetris.client.Element;
+import com.codenjoy.dojo.games.tetris.Board;
+import com.codenjoy.dojo.games.tetris.Element;
 import com.codenjoy.dojo.tetris.model.*;
 import org.apache.commons.lang3.StringUtils;
 

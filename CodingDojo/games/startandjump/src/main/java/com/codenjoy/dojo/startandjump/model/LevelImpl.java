@@ -24,7 +24,7 @@ package com.codenjoy.dojo.startandjump.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.startandjump.client.Element;
+import com.codenjoy.dojo.games.startandjump.Element;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;

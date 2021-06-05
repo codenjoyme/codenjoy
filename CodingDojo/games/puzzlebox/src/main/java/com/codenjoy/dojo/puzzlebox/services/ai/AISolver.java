@@ -24,7 +24,7 @@ package com.codenjoy.dojo.puzzlebox.services.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.puzzlebox.client.Board;
+import com.codenjoy.dojo.games.puzzlebox.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 

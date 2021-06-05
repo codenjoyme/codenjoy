@@ -25,7 +25,7 @@ package com.codenjoy.dojo.snake.model.artifacts;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.snake.client.Element;
+import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.Hero;
 
 

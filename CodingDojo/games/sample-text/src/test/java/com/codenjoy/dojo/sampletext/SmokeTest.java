@@ -24,7 +24,7 @@ package com.codenjoy.dojo.sampletext;
 
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.sampletext.client.Board;
+import com.codenjoy.dojo.games.sampletext.Board;
 import com.codenjoy.dojo.sampletext.services.ai.AISolver;
 import com.codenjoy.dojo.sampletext.services.GameRunner;
 import com.codenjoy.dojo.sampletext.services.GameSettings;

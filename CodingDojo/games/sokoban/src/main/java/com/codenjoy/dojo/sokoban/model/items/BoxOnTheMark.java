@@ -25,7 +25,7 @@ package com.codenjoy.dojo.sokoban.model.items;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.sokoban.client.Element;
+import com.codenjoy.dojo.games.sokoban.Element;
 import com.codenjoy.dojo.sokoban.model.Player;
 
 public class BoxOnTheMark extends PointImpl implements State<Element, Player> {

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.sample.services.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.sample.client.Board;
+import com.codenjoy.dojo.games.sample.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.sample.client.Element.GOLD;
+import static com.codenjoy.dojo.games.sample.Element.GOLD;
 
 /**
  * Это алгоритм твоего бота. Он будет запускаться в игру с первым

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.spacerace.model;
  */
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.spacerace.client.Element;
+import com.codenjoy.dojo.games.spacerace.Element;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;

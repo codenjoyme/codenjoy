@@ -24,8 +24,8 @@ package com.codenjoy.dojo.reversi.services.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.reversi.client.Board;
-import com.codenjoy.dojo.reversi.client.Element;
+import com.codenjoy.dojo.games.reversi.Board;
+import com.codenjoy.dojo.games.reversi.Element;
 import com.codenjoy.dojo.reversi.model.Flipper;
 import com.codenjoy.dojo.reversi.model.GetChip;
 import com.codenjoy.dojo.reversi.model.items.Chip;

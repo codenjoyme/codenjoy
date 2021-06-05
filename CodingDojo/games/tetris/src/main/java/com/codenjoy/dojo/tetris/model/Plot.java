@@ -25,7 +25,7 @@ package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.tetris.client.Element;
+import com.codenjoy.dojo.games.tetris.Element;
 
 /**
  * User: serhiy.zelenin

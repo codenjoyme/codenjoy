@@ -23,7 +23,7 @@ package com.codenjoy.dojo.puzzlebox.model;
  */
 
 
-import com.codenjoy.dojo.puzzlebox.client.Element;
+import com.codenjoy.dojo.games.puzzlebox.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;

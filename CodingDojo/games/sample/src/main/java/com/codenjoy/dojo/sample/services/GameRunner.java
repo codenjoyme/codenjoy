@@ -25,8 +25,8 @@ package com.codenjoy.dojo.sample.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.sample.client.Board;
-import com.codenjoy.dojo.sample.client.Element;
+import com.codenjoy.dojo.games.sample.Board;
+import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.services.ai.AISolver;
 import com.codenjoy.dojo.sample.model.*;
 import com.codenjoy.dojo.services.*;

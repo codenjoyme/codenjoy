@@ -32,7 +32,7 @@ import com.codenjoy.dojo.utils.LevelUtils;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.codenjoy.dojo.quadro.client.Element.*;
+import static com.codenjoy.dojo.games.quadro.Element.*;
 
 public class LevelImpl implements Level {
 

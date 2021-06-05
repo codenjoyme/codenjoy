@@ -33,9 +33,9 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.snakebattle.client.Board;
+import com.codenjoy.dojo.games.snakebattle.Board;
 import com.codenjoy.dojo.snakebattle.services.ai.AISolver;
-import com.codenjoy.dojo.snakebattle.client.Element;
+import com.codenjoy.dojo.games.snakebattle.Element;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 

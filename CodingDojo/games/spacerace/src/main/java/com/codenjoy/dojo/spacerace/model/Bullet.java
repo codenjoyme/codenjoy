@@ -23,7 +23,7 @@ package com.codenjoy.dojo.spacerace.model;
  */
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.spacerace.client.Element;
+import com.codenjoy.dojo.games.spacerace.Element;
 
 /**
  * Артефакт пуля на поле

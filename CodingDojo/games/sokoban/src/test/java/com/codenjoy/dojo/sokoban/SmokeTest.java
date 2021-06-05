@@ -25,7 +25,7 @@ package com.codenjoy.dojo.sokoban;
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.sokoban.client.Board;
+import com.codenjoy.dojo.games.sokoban.Board;
 import com.codenjoy.dojo.sokoban.services.ai.AISolver;
 import com.codenjoy.dojo.sokoban.services.GameRunner;
 import com.codenjoy.dojo.sokoban.services.GameSettings;

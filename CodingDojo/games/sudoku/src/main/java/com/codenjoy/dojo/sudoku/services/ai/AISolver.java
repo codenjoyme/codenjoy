@@ -26,7 +26,7 @@ package com.codenjoy.dojo.sudoku.services.ai;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.sudoku.client.Board;
+import com.codenjoy.dojo.games.sudoku.Board;
 
 import java.util.*;
 

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.moebius.model;
  */
 
 
-import com.codenjoy.dojo.moebius.client.Element;
+import com.codenjoy.dojo.games.moebius.Element;
 import com.codenjoy.dojo.moebius.services.Events;
 import com.codenjoy.dojo.moebius.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;

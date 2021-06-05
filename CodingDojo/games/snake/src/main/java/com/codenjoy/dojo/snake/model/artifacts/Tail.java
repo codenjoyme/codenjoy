@@ -27,10 +27,10 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.snake.model.BodyDirection;
-import com.codenjoy.dojo.snake.client.Element;
+import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.Hero;
 
-import static com.codenjoy.dojo.snake.client.Element.*;
+import static com.codenjoy.dojo.games.snake.Element.*;
 
 public class Tail extends PointImpl implements State<Element, Object> {
 

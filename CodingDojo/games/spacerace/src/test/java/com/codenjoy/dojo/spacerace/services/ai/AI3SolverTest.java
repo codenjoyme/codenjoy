@@ -27,7 +27,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.codenjoy.dojo.spacerace.services.ai.AI3Solver;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,7 +34,7 @@ import org.junit.Test;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.spacerace.client.Board;
+import com.codenjoy.dojo.games.spacerace.Board;
 
 public class AI3SolverTest {
 

@@ -24,8 +24,8 @@ package com.codenjoy.dojo.quake2d.services.ai;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.quake2d.client.Board;
-import com.codenjoy.dojo.quake2d.client.Element;
+import com.codenjoy.dojo.games.quake2d.Board;
+import com.codenjoy.dojo.games.quake2d.Element;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 

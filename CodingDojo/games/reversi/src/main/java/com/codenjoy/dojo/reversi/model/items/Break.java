@@ -23,7 +23,7 @@ package com.codenjoy.dojo.reversi.model.items;
  */
 
 
-import com.codenjoy.dojo.reversi.client.Element;
+import com.codenjoy.dojo.games.reversi.Element;
 import com.codenjoy.dojo.reversi.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;

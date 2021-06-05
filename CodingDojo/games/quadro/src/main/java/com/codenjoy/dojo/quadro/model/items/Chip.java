@@ -23,7 +23,7 @@ package com.codenjoy.dojo.quadro.model.items;
  */
 
 
-import com.codenjoy.dojo.quadro.client.Element;
+import com.codenjoy.dojo.games.quadro.Element;
 import com.codenjoy.dojo.quadro.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;

@@ -27,14 +27,13 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.snakebattle.client.Board;
+import com.codenjoy.dojo.games.snakebattle.Board;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.TestGameSettings;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
-import com.codenjoy.dojo.snakebattle.services.ai.AISolver;
 import org.junit.Before;
 import org.junit.Test;
 

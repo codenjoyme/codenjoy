@@ -26,8 +26,8 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.spacerace.client.Board;
-import com.codenjoy.dojo.spacerace.client.Element;
+import com.codenjoy.dojo.games.spacerace.Board;
+import com.codenjoy.dojo.games.spacerace.Element;
 
 import java.util.List;
 

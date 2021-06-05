@@ -22,7 +22,7 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
-import com.codenjoy.dojo.pong.client.Element;
+import com.codenjoy.dojo.games.pong.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;

@@ -22,6 +22,7 @@ package com.codenjoy.dojo.tetris.client
  * #L%
  */
 
+import com.codenjoy.dojo.games.tetris.{Board, BoardTest, Element}
 import com.codenjoy.dojo.services.Point
 import com.codenjoy.dojo.services.PointImpl.pt
 import org.json.JSONObject

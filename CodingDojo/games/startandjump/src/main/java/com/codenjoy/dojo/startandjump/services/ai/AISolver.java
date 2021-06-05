@@ -25,7 +25,7 @@ package com.codenjoy.dojo.startandjump.services.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.startandjump.client.Board;
+import com.codenjoy.dojo.games.startandjump.Board;
 
 public class AISolver implements Solver<Board> {
 

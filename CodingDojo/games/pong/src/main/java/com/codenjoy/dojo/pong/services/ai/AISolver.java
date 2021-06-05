@@ -23,7 +23,7 @@ package com.codenjoy.dojo.pong.services.ai;
  */
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.pong.client.Board;
+import com.codenjoy.dojo.games.pong.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;

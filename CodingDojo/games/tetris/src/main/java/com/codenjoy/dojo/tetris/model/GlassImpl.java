@@ -24,7 +24,7 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.tetris.client.Element;
+import com.codenjoy.dojo.games.tetris.Element;
 import com.codenjoy.dojo.tetris.services.Events;
 
 import java.math.BigInteger;

@@ -25,8 +25,8 @@ package com.codenjoy.dojo.puzzlebox.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.puzzlebox.client.Board;
-import com.codenjoy.dojo.puzzlebox.client.Element;
+import com.codenjoy.dojo.games.puzzlebox.Board;
+import com.codenjoy.dojo.games.puzzlebox.Element;
 import com.codenjoy.dojo.puzzlebox.services.ai.AISolver;
 import com.codenjoy.dojo.puzzlebox.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;

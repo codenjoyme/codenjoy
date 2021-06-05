@@ -23,7 +23,7 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
-import com.codenjoy.dojo.reversi.client.Element;
+import com.codenjoy.dojo.games.reversi.Element;
 import com.codenjoy.dojo.reversi.model.items.Break;
 import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.LengthToXY;
@@ -32,7 +32,7 @@ import com.codenjoy.dojo.utils.LevelUtils;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.codenjoy.dojo.reversi.client.Element.*;
+import static com.codenjoy.dojo.games.reversi.Element.*;
 
 public class LevelImpl implements Level {
 

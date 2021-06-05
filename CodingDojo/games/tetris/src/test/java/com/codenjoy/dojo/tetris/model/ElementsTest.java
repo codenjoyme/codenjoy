@@ -22,7 +22,7 @@ package com.codenjoy.dojo.tetris.model;
  * #L%
  */
 
-import com.codenjoy.dojo.tetris.client.Element;
+import com.codenjoy.dojo.games.tetris.Element;
 import org.junit.Test;
 
 import java.util.Arrays;

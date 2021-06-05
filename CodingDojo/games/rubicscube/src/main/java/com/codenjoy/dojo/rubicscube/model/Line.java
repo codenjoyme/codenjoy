@@ -22,7 +22,7 @@ package com.codenjoy.dojo.rubicscube.model;
  * #L%
  */
 
-import com.codenjoy.dojo.rubicscube.client.Element;
+import com.codenjoy.dojo.games.rubicscube.Element;
 
 public class Line {
 

@@ -26,7 +26,7 @@ package com.codenjoy.dojo.snakebattle.model.objects;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.snakebattle.client.Element;
+import com.codenjoy.dojo.games.snakebattle.Element;
 import com.codenjoy.dojo.snakebattle.model.Player;
 
 /**

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.quadro.services.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.quadro.client.Board;
+import com.codenjoy.dojo.games.quadro.Board;
 import com.codenjoy.dojo.services.Dice;
 
 public class AISolver implements Solver<Board> {
