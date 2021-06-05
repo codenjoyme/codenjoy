@@ -33,11 +33,10 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.spacerace.client.Board;
-import com.codenjoy.dojo.spacerace.client.ai.AISolver;
+import com.codenjoy.dojo.spacerace.services.ai.AISolver;
 import com.codenjoy.dojo.spacerace.model.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.*;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 

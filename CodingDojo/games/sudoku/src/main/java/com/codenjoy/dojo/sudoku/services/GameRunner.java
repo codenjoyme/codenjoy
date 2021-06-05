@@ -35,7 +35,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.sudoku.client.Board;
-import com.codenjoy.dojo.sudoku.client.ai.AISolver;
+import com.codenjoy.dojo.sudoku.services.ai.AISolver;
 import com.codenjoy.dojo.sudoku.model.Elements;
 import com.codenjoy.dojo.sudoku.model.Player;
 import com.codenjoy.dojo.sudoku.model.Sudoku;

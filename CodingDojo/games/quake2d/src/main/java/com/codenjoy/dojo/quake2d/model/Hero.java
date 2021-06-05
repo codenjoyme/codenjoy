@@ -22,7 +22,7 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
-import com.codenjoy.dojo.quake2d.client.ai.AISolver;
+import com.codenjoy.dojo.quake2d.services.ai.AISolver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;

@@ -26,7 +26,7 @@ package com.codenjoy.dojo.sudoku;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.sudoku.client.Board;
-import com.codenjoy.dojo.sudoku.client.ai.AISolver;
+import com.codenjoy.dojo.sudoku.services.ai.AISolver;
 import com.codenjoy.dojo.sudoku.services.GameRunner;
 import com.codenjoy.dojo.sudoku.services.GameSettings;
 import com.codenjoy.dojo.utils.Smoke;

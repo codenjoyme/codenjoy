@@ -26,7 +26,7 @@ package com.codenjoy.dojo.moebius.services;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.moebius.client.Board;
-import com.codenjoy.dojo.moebius.client.ai.AISolver;
+import com.codenjoy.dojo.moebius.services.ai.AISolver;
 import com.codenjoy.dojo.moebius.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;

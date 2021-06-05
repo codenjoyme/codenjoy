@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.sokoban.client.Board;
-import com.codenjoy.dojo.sokoban.client.ai.AISolver;
+import com.codenjoy.dojo.sokoban.services.ai.AISolver;
 import com.codenjoy.dojo.sokoban.model.Player;
 import com.codenjoy.dojo.sokoban.model.Sokoban;
 import com.codenjoy.dojo.sokoban.model.items.Elements;

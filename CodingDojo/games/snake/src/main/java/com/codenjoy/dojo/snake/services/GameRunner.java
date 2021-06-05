@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snake.client.Board;
-import com.codenjoy.dojo.snake.client.ai.AISolver;
+import com.codenjoy.dojo.snake.services.ai.AISolver;
 import com.codenjoy.dojo.snake.model.Elements;
 import com.codenjoy.dojo.snake.model.Player;
 import com.codenjoy.dojo.snake.model.Snake;

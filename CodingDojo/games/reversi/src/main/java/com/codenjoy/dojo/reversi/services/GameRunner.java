@@ -26,7 +26,7 @@ package com.codenjoy.dojo.reversi.services;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.reversi.client.Board;
-import com.codenjoy.dojo.reversi.client.ai.AISolver;
+import com.codenjoy.dojo.reversi.services.ai.AISolver;
 import com.codenjoy.dojo.reversi.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;

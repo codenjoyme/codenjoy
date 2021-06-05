@@ -26,7 +26,7 @@ package com.codenjoy.dojo.pong;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.pong.client.Board;
 import com.codenjoy.dojo.pong.client.YourSolver;
-import com.codenjoy.dojo.pong.client.ai.AISolver;
+import com.codenjoy.dojo.pong.services.ai.AISolver;
 import com.codenjoy.dojo.pong.services.GameRunner;
 import com.codenjoy.dojo.pong.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
