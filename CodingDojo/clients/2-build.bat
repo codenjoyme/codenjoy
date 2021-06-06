@@ -12,19 +12,12 @@ IF "%DEBUG%"=="true" (
 )
 
 IF "%LANGUAGE%"=="java" (
-    cd %JAVA_CLIENT_HOME%
-    call 1-build.bat
-    cd %ROOT%
+    call :java
 )
 
 IF "%LANGUAGE%"=="pseudo" (
-    cd %JAVA_CLIENT_HOME%
-    call 1-build.bat
-    cd %ROOT%
-
-    cd %PSEUDO_CLIENT_HOME%
-    call 1-build.bat
-    cd %ROOT%
+    call :java
+    call :pseudo
 )
 
 echo off
@@ -37,3 +30,17 @@ echo on
 
 echo Press any key to exit
 pause >nul
+
+goto :eof
+
+:java
+    cd %JAVA_CLIENT_HOME%
+    call 1-build.bat
+    cd %ROOT%
+goto :eof
+
+:pseudo
+    cd %PSEUDO_CLIENT_HOME%
+    call 1-build.bat
+    cd %ROOT%
+goto :eof
