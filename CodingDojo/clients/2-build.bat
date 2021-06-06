@@ -7,9 +7,6 @@ echo        !                   Now we are building clients...                  
 echo        +-------------------------------------------------------------------------+
 echo [0m
 echo on
-IF "%DEBUG%"=="true" (
-    pause >nul
-)
 
 IF "%LANGUAGE%"=="java" (
     call :java
@@ -28,8 +25,7 @@ echo        +-------------------------------------+
 echo [0m
 echo on
 
-echo Press any key to exit
-pause >nul
+call :ask
 
 goto :eof
 
@@ -43,4 +39,9 @@ goto :eof
     cd %PSEUDO_CLIENT_HOME%
     call 1-build.bat
     cd %ROOT%
+goto :eof
+
+:ask
+    echo Press any key to continue
+    pause >nul
 goto :eof

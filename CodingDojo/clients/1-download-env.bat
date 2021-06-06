@@ -1,5 +1,13 @@
 call 0-settings.bat
 
+echo off
+echo [44;93m
+echo        +-------------------------------------------------------------------------+
+echo        !                   Now we are downloading stuff...                       !
+echo        +-------------------------------------------------------------------------+
+echo [0m
+echo on
+
 IF "%LANGUAGE%"=="java" (
     call :jdk
 )
@@ -16,8 +24,7 @@ echo        +-------------------------------------+
 echo [0m
 echo on
 
-echo Press any key to exit
-pause >nul
+call :ask
 
 goto :eof
 
@@ -35,4 +42,9 @@ goto :eof
     %TOOLS%\7z x -y -o%ROOT% %TOOLS%\jdk.zip
     rename jdk-11.0.11+9 .jdk
     cd %ROOT%
+goto :eof
+
+:ask
+    echo Press any key to continue
+    pause >nul
 goto :eof

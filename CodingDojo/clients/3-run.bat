@@ -7,13 +7,16 @@ echo        !                   Now we are building clients...                  
 echo        +-------------------------------------------------------------------------+
 echo [0m
 echo on
-IF "%DEBUG%"=="true" (
-    pause >nul
-)
 
 cd %LANGUAGE%
 call 2-run.bat
 cd %ROOT%
 
-echo Press any key to exit
-pause >nul
+call :ask
+
+goto :eof
+
+:ask
+    echo Press any key to continue
+    pause >nul
+goto :eof
