@@ -1,9 +1,10 @@
 set GAME_TO_RUN=bomberman
 set BOARD_URL=http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000
+set LANGUAGE=pseudo
 
 set ROOT=%CD%
-set JAVA_HOME=%ROOT%\jdk8
-set M2_HOME=%ROOT%\maven
+set TOOLS=%ROOT%\.tools
+set JAVA_HOME=%ROOT%\.jdk
 
 set JAVA_CLIENT_HOME=%ROOT%\java
 
