@@ -34,3 +34,6 @@
 [submodule "CodingDojo/clients/java"]
 	path = CodingDojo/clients/java
 	url = git@github.com:codenjoyme/codenjoy-java-client.git
+[submodule "CodingDojo/clients/pseudo"]
+	path = CodingDojo/clients/pseudo
+	url = git@github.com:codenjoyme/codenjoy-pseudo-client.git
