@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
 
 public class GuiPlotColorDecoderTest {
 
-    enum Elements implements CharElements {
+    enum Element implements CharElement {
         ONE('1'),
         TWO('2'),
         THREE('3'),
@@ -44,7 +44,7 @@ public class GuiPlotColorDecoderTest {
 
         private char ch;
 
-        Elements(char ch) {
+        Element(char ch) {
             this.ch = ch;
         }
 
@@ -62,7 +62,7 @@ public class GuiPlotColorDecoderTest {
     @Test
     public void shouldEncode() {
         // given
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element.values());
 
         // when then
         assertEquals("ABCD", decoder.encodeForBrowser("1234"));
@@ -73,16 +73,16 @@ public class GuiPlotColorDecoderTest {
     public void shouldToString() {
         // given when then
         assertEquals("[1234 -> ABCD]",
-                new GuiPlotColorDecoder(Elements.values()).toString());
+                new GuiPlotColorDecoder(Element.values()).toString());
 
         assertEquals("[SHG -> ABC]",
-                new GuiPlotColorDecoder(Elements1.values()).toString());
+                new GuiPlotColorDecoder(Element1.values()).toString());
 
         assertEquals("[SH -> AB]",
-                new GuiPlotColorDecoder(Elements2.values()).toString());
+                new GuiPlotColorDecoder(Element2.values()).toString());
     }
 
-    public enum Elements1 implements CharElements {
+    public enum Element1 implements CharElement {
         STONE,
         HERO,
         GOLD;
@@ -98,7 +98,7 @@ public class GuiPlotColorDecoderTest {
         }
     }
 
-    public enum Elements2 implements CharElements {
+    public enum Element2 implements CharElement {
         SPACE,
         HERO;
 
@@ -117,10 +117,10 @@ public class GuiPlotColorDecoderTest {
     public void shouldWorkWithAllSymbols() {
         // given
         GameType game1 = mock(GameType.class);
-        when(game1.getPlots()).thenReturn(Elements1.values());
+        when(game1.getPlots()).thenReturn(Element1.values());
 
         GameType game2 = mock(GameType.class);
-        when(game2.getPlots()).thenReturn(Elements2.values());
+        when(game2.getPlots()).thenReturn(Element2.values());
 
         // when then
         assertEncode(game1, "ABC");
@@ -128,7 +128,7 @@ public class GuiPlotColorDecoderTest {
     }
 
     private void assertEncode(GameType game, String expected) {
-        CharElements[] plots = game.getPlots();
+        CharElement[] plots = game.getPlots();
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(plots);
 
         String plotsString = "";
@@ -142,7 +142,7 @@ public class GuiPlotColorDecoderTest {
     @Test
     public void shouldEncodeJsonWithLayers() {
         // given
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element.values());
 
         // when then
         assertEncode(decoder, "{'key1':'value1','key2':'value2','layers':['ABCD','DCBA','DCAB','DABC']}",
@@ -166,7 +166,7 @@ public class GuiPlotColorDecoderTest {
     @Test
     public void shouldEncodeJsonWithoutLayersAndBoard() {
         // given
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element.values());
 
         // when then
         assertEncode(decoder, "{'key1':'value1','key2':'value2','key3':['1234','4321','4312','4123']}",
@@ -185,7 +185,7 @@ public class GuiPlotColorDecoderTest {
     @Test
     public void shouldEncodeUnexpectedObject() {
         // given
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element.values());
 
         try {
             // when
@@ -200,7 +200,7 @@ public class GuiPlotColorDecoderTest {
     @Test
     public void shouldNotEnumSymbol() {
         // given
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element.values());
 
         try {
             // when
@@ -215,7 +215,7 @@ public class GuiPlotColorDecoderTest {
     @Test
     public void shouldRemoveNSymbolsFromLayers() {
         // given
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element.values());
 
         // when then
         assertEquals(fix("ABCD"),
@@ -232,7 +232,7 @@ public class GuiPlotColorDecoderTest {
     @Test
     public void shouldEncodeForClient_removeN() {
         // given
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements3.values());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element3.values());
 
         // when then
         assertEquals("1234", decoder.encodeForClient("12\n34"));
@@ -242,7 +242,7 @@ public class GuiPlotColorDecoderTest {
                 decoder.encodeForClient(new JSONObject("{'layers':['1234'\n,'4123']}")));
     }
 
-    public enum Elements3 implements CharElements {
+    public enum Element3 implements CharElement {
 
         NONE(' '),
 
@@ -330,7 +330,7 @@ public class GuiPlotColorDecoderTest {
             return ch;
         }
 
-        Elements3(char ch) {
+        Element3(char ch) {
             this.ch = ch;
         }
 
@@ -344,7 +344,7 @@ public class GuiPlotColorDecoderTest {
     @Test
     public void performanceTest() {
         // given
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements3.values());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Element3.values());
         String map =
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼                             ~~~~~~~~~           ~~~~~~~☼" +

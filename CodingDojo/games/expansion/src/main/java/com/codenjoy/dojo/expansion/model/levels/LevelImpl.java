@@ -128,7 +128,7 @@ public class LevelImpl implements Level {
 
     private BaseItem getBaseItem(Element element) {
         return constructor().withParameterTypes(Element.class)
-                            .in(ElementsMapper.getItsClass(element))
+                            .in(ElementMapper.getItsClass(element))
                             .newInstance(element);
     }
 

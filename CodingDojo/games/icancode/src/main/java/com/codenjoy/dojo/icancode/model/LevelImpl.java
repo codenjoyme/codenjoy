@@ -80,7 +80,7 @@ public class LevelImpl implements Level {
     }
 
     private BaseItem create(Element element, GameSettings settings) {
-        BaseItem item = ElementsMapper.get(element);
+        BaseItem item = ElementMapper.get(element);
         if (Customizable.class.isAssignableFrom(item.getClass())) {
             ((Customizable)item).init(settings);
         }

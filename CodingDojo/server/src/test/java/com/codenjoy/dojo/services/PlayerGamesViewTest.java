@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -724,14 +724,14 @@ public class PlayerGamesViewTest {
         return "user" + (players.size() + 1);
     }
 
-    enum Elements1 implements CharElements {
+    enum Element1 implements CharElement {
         A('a'),
         B('b'),
         C('c');
 
         private final char ch;
 
-        Elements1(char ch) {
+        Element1(char ch) {
             this.ch = ch;
         }
 
@@ -741,7 +741,7 @@ public class PlayerGamesViewTest {
         }
     }
 
-    enum Elements2 implements CharElements {
+    enum Element2 implements CharElement {
         ONE('1'),
         TWO('2'),
         THREE('3'),
@@ -749,7 +749,7 @@ public class PlayerGamesViewTest {
 
         private final char ch;
 
-        Elements2(char ch) {
+        Element2(char ch) {
             this.ch = ch;
         }
 
@@ -763,10 +763,10 @@ public class PlayerGamesViewTest {
     public void shouldGetDecoders() {
         // given
         GameType gameType1 = addNewGameType("game1", 1234, inv -> mock(GameField.class));
-        when(gameType1.getPlots()).thenReturn(Elements1.values());
+        when(gameType1.getPlots()).thenReturn(Element1.values());
 
         GameType gameType2 = addNewGameType("game2", 1234, inv -> mock(GameField.class));
-        when(gameType2.getPlots()).thenReturn(Elements2.values());
+        when(gameType2.getPlots()).thenReturn(Element2.values());
 
         addNewPlayer(gameType1, 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType2, 234, getHeroData(11, pt(3, 4), "data2"));

@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.battlecity.model;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2020 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,31 +22,17 @@ package com.codenjoy.dojo.tetris.model;
  * #L%
  */
 
-import com.codenjoy.dojo.games.tetris.Element;
+import com.codenjoy.dojo.games.battlecity.Element;
 import org.junit.Test;
 
-import java.util.Arrays;
-
-import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
-public class ElementsTest {
+public class ElementTest {
 
     @Test
-    public void testValuesExcept() {
-        assertEquals("[I, J, L, O, S, T, Z, .]",
-                Arrays.toString(Element.valuesExcept()));
-
-        assertEquals("[I, J, L, O, S, T, Z]",
-                Arrays.toString(Element.valuesExcept(Element.NONE)));
+    public void getWalls() {
+        assertEquals("[╬, ╩, ╦, ╠, ╣, ╨, ╥, ╞, ╡, │, ─, ┌, ┐, └, ┘,  ]",
+                Element.getWalls().toString());
     }
 
-    @Test
-    public void testNumber() {
-        assertEquals("['I':2, 'J':3, 'L':4, 'O':1, 'S':5, 'T':7, 'Z':6, '.':0]",
-                Arrays.stream(Element.values())
-                        .map(el -> String.format("'%s':%s", el.ch(), el.index()))
-                        .collect(toList())
-                        .toString());
-    }
 }

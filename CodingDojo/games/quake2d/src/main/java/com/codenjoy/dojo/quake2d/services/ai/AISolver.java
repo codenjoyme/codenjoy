@@ -82,7 +82,7 @@ public class AISolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
         int priority;
-//        Elements elementOfPriority;
+//        Element elementOfPriority;
         Point from = board.getMe();
 
         List<Point> to_OtherHero = board.get(Element.OTHER_HERO);
@@ -92,7 +92,7 @@ public class AISolver implements Solver<Board> {
         List<Point> to_Walls = board.get(Element.WALL);
         List<Point> to_SuperOtherHero = board.get(Element.SUPER_OTHER_HERO);
         to_OtherHero.addAll(to_SuperOtherHero);
-//        List<Point> to_Bullet = board.get(Elements.BULLET);
+//        List<Point> to_Bullet = board.get(Element.BULLET);
 
         Map<Element, Integer> variantsWays = getDestinationToObject(board, size, from);
         Point superHero = (to_SuperOtherHero.size() == 0) ? null : to_SuperOtherHero.get(0);//isAnyHeroWithAbility();
@@ -129,11 +129,11 @@ public class AISolver implements Solver<Board> {
 //    }
 
     private Map<Element, Integer> getDestinationToObject(Board board, int pSize, Point pFrom) {
-        Element[] analyzeElements = {Element.OTHER_HERO, Element.SUPER_WEAPON, Element.SUPER_DEFENCE,
+        Element[] analyze = {Element.OTHER_HERO, Element.SUPER_WEAPON, Element.SUPER_DEFENCE,
                                       Element.HEALTH_PACKAGE, Element.BULLET};
-        Map<Element, Integer> variantsWays = new HashMap<>(analyzeElements.length);
+        Map<Element, Integer> variantsWays = new HashMap<>(analyze.length);
         DeikstraFindWay.Possible map = possible(board);
-        for (Element elem : analyzeElements){
+        for (Element elem : analyze){
             int destination = way.getShortestWay(pSize, pFrom, board.get(elem), map).size();
             variantsWays.put(elem, (destination == 0) ? null : destination);
         }

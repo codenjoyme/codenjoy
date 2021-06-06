@@ -70,8 +70,8 @@ public class AISolver implements Solver<Board> {
 
     private boolean isBarrierAt(int x, int y) {
         return board.isAt(x, y, Element.BREAK, Element.BAD_APPLE,
-//                Elements.HEAD_DOWN, Elements.HEAD_LEFT,
-//                Elements.HEAD_UP, Elements.HEAD_RIGHT,
+//                Element.HEAD_DOWN, Element.HEAD_LEFT,
+//                Element.HEAD_UP, Element.HEAD_RIGHT,
                 Element.TAIL_END_DOWN, Element.TAIL_END_LEFT,
                 Element.TAIL_END_UP, Element.TAIL_END_RIGHT,
                 Element.TAIL_HORIZONTAL, Element.TAIL_VERTICAL,

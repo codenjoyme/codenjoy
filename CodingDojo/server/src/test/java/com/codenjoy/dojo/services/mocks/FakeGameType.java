@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.*;
 import org.mockito.Mockito;
 
@@ -113,15 +113,15 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     @Override
     public abstract String name();
 
-    public class ClientBoard extends AbstractBoard<CharElements> {
+    public class ClientBoard extends AbstractBoard<CharElement> {
 
         @Override
-        public CharElements valueOf(char ch) {
+        public CharElement valueOf(char ch) {
             return FakeGameType.this.valueOf(ch);
         }
     }
 
-    public CharElements valueOf(char ch) {
+    public CharElement valueOf(char ch) {
         return Arrays.stream(getPlots())
                 .filter(el -> el.ch() == ch)
                 .findFirst()
@@ -129,7 +129,7 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     }
 
     @Override
-    public abstract CharElements[] getPlots();
+    public abstract CharElement[] getPlots();
 
     @Override
     public Class<? extends Solver> getAI() {
@@ -144,7 +144,7 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     @Override
     public abstract MultiplayerType getMultiplayerType(Settings settings);
 
-    class Hero extends PlayerHero implements NoDirectionJoystick, State<CharElements, Player> {
+    class Hero extends PlayerHero implements NoDirectionJoystick, State<CharElement, Player> {
 
         public Hero() {
             super(heroAt());
@@ -166,14 +166,14 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         }
 
         @Override
-        public CharElements state(Player player, Object... alsoAtPoint) {
+        public CharElement state(Player player, Object... alsoAtPoint) {
             return getHeroElement();
         }
     }
 
     public abstract Point heroAt();
 
-    public abstract CharElements getHeroElement();
+    public abstract CharElement getHeroElement();
 
     class Player extends GamePlayer {
 

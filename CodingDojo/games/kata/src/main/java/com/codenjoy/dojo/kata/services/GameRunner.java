@@ -38,7 +38,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -74,8 +74,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public CharElements[] getPlots() {
-        return new CharElements[0];
+    public CharElement[] getPlots() {
+        return new CharElement[0];
     }
 
 

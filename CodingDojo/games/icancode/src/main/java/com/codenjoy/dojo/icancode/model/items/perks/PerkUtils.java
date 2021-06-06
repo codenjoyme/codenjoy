@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.icancode.model.items.perks;
 
 import com.codenjoy.dojo.games.icancode.Element;
-import com.codenjoy.dojo.icancode.model.ElementsMapper;
+import com.codenjoy.dojo.icancode.model.ElementMapper;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +25,7 @@ public class PerkUtils {
     private static Optional<Perk> random(Dice dice, GameSettings settings, Element... perks) {
         int index = dice.next(perks.length);
         Element element = perks[index];
-        Perk perk = (Perk)ElementsMapper.get(element);
+        Perk perk = (Perk) ElementMapper.get(element);
         perk.init(settings);
         return Optional.ofNullable(perk);
     }
@@ -50,7 +50,7 @@ public class PerkUtils {
         }
         return perks.chars()
                 .mapToObj(ch -> Element.valueOf((char)ch))
-                .map(element -> (Perk)ElementsMapper.get(element))
+                .map(element -> (Perk) ElementMapper.get(element))
                 .collect(toList());
     }
 }

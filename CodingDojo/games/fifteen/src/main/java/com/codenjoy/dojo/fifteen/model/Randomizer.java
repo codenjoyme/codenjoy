@@ -48,22 +48,22 @@ public class Randomizer {
     public String getRandomMap(Dice dice) {
         this.dice = dice;
 
-        String randomElements = getRandomElements();
+        String random = getRandomElements();
 
         return String.format(TEMPLATE,
-                randomElements.substring(0, 4),
-                randomElements.substring(4, 8),
-                randomElements.substring(8, 12),
-                randomElements.substring(12, 16));
+                random.substring(0, 4),
+                random.substring(4, 8),
+                random.substring(8, 12),
+                random.substring(12, 16));
     }
 
     private String getRandomElements() {
         StringBuilder result = new StringBuilder();
 
-        List<Element> randomElements = getRandomList();
+        List<Element> random = getRandomList();
 
-        for (int i = 0; i < randomElements.size(); i++) {
-            result.append(randomElements.get(i));
+        for (int i = 0; i < random.size(); i++) {
+            result.append(random.get(i));
         }
 
         return result.toString();

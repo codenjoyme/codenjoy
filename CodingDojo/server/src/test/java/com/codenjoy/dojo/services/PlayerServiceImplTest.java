@@ -44,7 +44,7 @@ import com.codenjoy.dojo.services.nullobj.NullJoystick;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.GraphicPrinter;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.room.RoomService;
@@ -267,7 +267,7 @@ public class PlayerServiceImplTest {
                     return gamePlayer;
                 });
 
-        when(gameType.getPlots()).thenReturn(Elements.values());
+        when(gameType.getPlots()).thenReturn(Element.values());
 
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(printer));
 
@@ -305,12 +305,12 @@ public class PlayerServiceImplTest {
         return new APlayerHero(x, y);
     }
 
-    enum Elements implements CharElements {
+    enum Element implements CharElement {
         A('1'), B('2'), C('3'), D('4');
 
         private final char ch;
 
-        Elements(char c) {
+        Element(char c) {
             this.ch = c;
         }
 
