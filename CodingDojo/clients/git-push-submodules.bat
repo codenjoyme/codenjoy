@@ -1,2 +1,9 @@
 git flow feature publish
-git submodule foreach git push origin master
+
+cd java
+git push origin master
+
+cd ../pseudo
+git push origin master
+
+cd ..
