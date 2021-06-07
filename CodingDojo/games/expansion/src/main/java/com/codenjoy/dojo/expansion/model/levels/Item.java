@@ -23,17 +23,14 @@ package com.codenjoy.dojo.expansion.model.levels;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.expansion.model.levels.items.FeatureItem;
 
 import java.util.List;
 
-/**
- * Created by Mikhail_Udalyi on 01.07.2016.
- */
-public interface Item extends State<Elements, Player> {
+public interface Item extends State<Element, Player> {
     void action(Item item, boolean comeInOrLeave);
 
     Cell getCell();

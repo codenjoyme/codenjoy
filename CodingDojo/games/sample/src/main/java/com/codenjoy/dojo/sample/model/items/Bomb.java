@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sample.model.items;
  */
 
 
-import com.codenjoy.dojo.sample.model.Elements;
+import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -32,14 +32,14 @@ import com.codenjoy.dojo.services.State;
 /**
  * Артефакт: Бомба на поле
  */
-public class Bomb extends PointImpl implements State<Elements, Player> {
+public class Bomb extends PointImpl implements State<Element, Player> {
 
     public Bomb(Point point) {
         super(point);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BOMB;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BOMB;
     }
 }

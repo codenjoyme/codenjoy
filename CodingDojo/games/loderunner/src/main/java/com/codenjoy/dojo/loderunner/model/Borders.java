@@ -22,6 +22,7 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
+import com.codenjoy.dojo.loderunner.model.items.Border;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;

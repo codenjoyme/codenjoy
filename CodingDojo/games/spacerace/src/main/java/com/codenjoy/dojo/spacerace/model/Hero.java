@@ -24,8 +24,9 @@ package com.codenjoy.dojo.spacerace.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.games.spacerace.Element;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
     private boolean alive;
     private Direction direction;
@@ -126,15 +127,15 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         alive = false;
     }
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (!isAlive()) {
-            return Elements.DEAD_HERO;
+            return Element.DEAD_HERO;
         }
 
         if (this == player.getHero()) {
-            return Elements.HERO;
+            return Element.HERO;
         } else {
-            return Elements.OTHER_HERO;
+            return Element.OTHER_HERO;
         }
     }
 

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.artifacts.*;
 import com.codenjoy.dojo.snake.services.GameSettings;
 
@@ -76,7 +77,7 @@ public class Snake implements Field {
     }
 
     @Override
-    public Element getAt(Point point) {
+    public Affectable getAt(Point point) {
         if (stone.itsMe(point)) {
             return stone; 
         }

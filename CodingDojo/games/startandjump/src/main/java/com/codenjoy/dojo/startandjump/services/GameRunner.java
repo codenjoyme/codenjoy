@@ -34,9 +34,9 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.startandjump.client.Board;
-import com.codenjoy.dojo.startandjump.client.ai.AISolver;
-import com.codenjoy.dojo.startandjump.model.Elements;
+import com.codenjoy.dojo.games.startandjump.Board;
+import com.codenjoy.dojo.startandjump.services.ai.AISolver;
+import com.codenjoy.dojo.games.startandjump.Element;
 import com.codenjoy.dojo.startandjump.model.Player;
 import com.codenjoy.dojo.startandjump.model.StartAndJump;
 
@@ -71,7 +71,7 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

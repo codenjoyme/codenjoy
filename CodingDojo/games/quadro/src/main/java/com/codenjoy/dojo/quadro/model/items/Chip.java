@@ -23,7 +23,7 @@ package com.codenjoy.dojo.quadro.model.items;
  */
 
 
-import com.codenjoy.dojo.quadro.model.Elements;
+import com.codenjoy.dojo.games.quadro.Element;
 import com.codenjoy.dojo.quadro.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.State;
 /**
  * Артефакт: Фишка на поле
  */
-public class Chip extends PointImpl implements State<Elements, Player> {
+public class Chip extends PointImpl implements State<Element, Player> {
 
     public static final Chip NULL = new Chip(false, pt(-1, -1)) {
         @Override
@@ -54,11 +54,11 @@ public class Chip extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (color) {
-            return Elements.YELLOW;
+            return Element.YELLOW;
         } else {
-            return Elements.RED;
+            return Element.RED;
         }
     }
 

@@ -23,11 +23,12 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-public class Bomb extends PointImpl implements Tickable, State<Elements, Player> {
+public class Bomb extends PointImpl implements Tickable, State<Element, Player> {
 
     protected int timer = 5;
     protected int power;
@@ -93,20 +94,20 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         switch (timer) {
             case 1:
-                return Elements.BOMB_TIMER_1;
+                return Element.BOMB_TIMER_1;
             case 2:
-                return Elements.BOMB_TIMER_2;
+                return Element.BOMB_TIMER_2;
             case 3:
-                return Elements.BOMB_TIMER_3;
+                return Element.BOMB_TIMER_3;
             case 4:
-                return Elements.BOMB_TIMER_4;
+                return Element.BOMB_TIMER_4;
             case 5:
-                return Elements.BOMB_TIMER_5;
+                return Element.BOMB_TIMER_5;
             default:
-                return Elements.BOOM;
+                return Element.BOOM;
         }
     }
 }

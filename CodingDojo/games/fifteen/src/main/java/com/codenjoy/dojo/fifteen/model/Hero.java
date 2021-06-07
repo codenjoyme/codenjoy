@@ -22,6 +22,7 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.fifteen.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -32,7 +33,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player>, DirectionJoystick {
+public class Hero extends PlayerHero<Field> implements State<Element, Player>, DirectionJoystick {
 
     private List<Digit> digits;
     private int moveCount;
@@ -116,8 +117,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.HERO;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.HERO;
     }
 
     public Bonus pullBonus() {

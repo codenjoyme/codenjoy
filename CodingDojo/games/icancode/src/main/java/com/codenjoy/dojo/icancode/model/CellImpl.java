@@ -34,8 +34,8 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
+import static com.codenjoy.dojo.games.icancode.Element.Layers.LAYER2;
+import static com.codenjoy.dojo.games.icancode.Element.Layers.LAYER3;
 
 public class CellImpl extends PointImpl implements Cell {
 

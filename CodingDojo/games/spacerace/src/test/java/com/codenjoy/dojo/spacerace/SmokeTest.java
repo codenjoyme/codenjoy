@@ -25,10 +25,10 @@ package com.codenjoy.dojo.spacerace;
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.spacerace.client.Board;
-import com.codenjoy.dojo.spacerace.client.ai.AI2Solver;
-import com.codenjoy.dojo.spacerace.client.ai.AI3Solver;
-import com.codenjoy.dojo.spacerace.client.ai.AISolver;
+import com.codenjoy.dojo.games.spacerace.Board;
+import com.codenjoy.dojo.spacerace.services.ai.AI2Solver;
+import com.codenjoy.dojo.spacerace.services.ai.AI3Solver;
+import com.codenjoy.dojo.spacerace.services.ai.AISolver;
 import com.codenjoy.dojo.spacerace.services.GameRunner;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
 import com.codenjoy.dojo.utils.Smoke;

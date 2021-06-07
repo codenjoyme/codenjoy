@@ -24,6 +24,7 @@ package com.codenjoy.dojo.startandjump.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.games.startandjump.Element;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
@@ -47,20 +48,20 @@ public class LevelImpl implements Level {
     public List<Hero> getHero() {
         return LevelUtils.getObjects(xy, map,
                 Hero::new,
-                Elements.HERO);
+                Element.HERO);
     }
 
     @Override
     public List<Wall> getWalls() {
         return LevelUtils.getObjects(xy, map,
                 Wall::new,
-                Elements.WALL);
+                Element.WALL);
     }
 
     @Override
     public List<Platform> getPlatforms() {
         return LevelUtils.getObjects(xy, map,
                 pt -> new Platform(pt),
-                Elements.PLATFORM);
+                Element.PLATFORM);
     }
 }

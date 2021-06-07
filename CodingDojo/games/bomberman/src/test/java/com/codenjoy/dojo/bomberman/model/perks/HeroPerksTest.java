@@ -22,11 +22,10 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -36,7 +35,7 @@ public class HeroPerksTest {
     public void shouldIncreaseTimer_whenAddBombBlastIncreaseTwice() {
         HeroPerks hp = new HeroPerks();
         BombBlastRadiusIncrease bip = new BombBlastRadiusIncrease(2, 5);
-        Elements e = Elements.BOMB_BLAST_RADIUS_INCREASE;
+        Element e = Element.BOMB_BLAST_RADIUS_INCREASE;
 
         hp.add(bip);
         hp.tick();

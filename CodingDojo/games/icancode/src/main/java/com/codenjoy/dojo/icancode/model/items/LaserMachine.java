@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.FieldItem;
 import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.services.Direction;
@@ -35,13 +35,13 @@ public class LaserMachine extends FieldItem implements Tickable {
     private final Direction direction;
     private int timer;
 
-    public LaserMachine(Elements element) {
+    public LaserMachine(Element element) {
         super(element, IMPASSABLE);
         timer = 0;
         this.direction = getDirection(element);
     }
 
-    private Direction getDirection(Elements element) {
+    private Direction getDirection(Element element) {
         switch (element) {
             case LASER_MACHINE_CHARGING_LEFT:
                 return Direction.LEFT;
@@ -56,23 +56,23 @@ public class LaserMachine extends FieldItem implements Tickable {
         }
     }
 
-    private Elements getChargedElement(Direction direction) {
+    private Element getChargedElement(Direction direction) {
         switch (direction) {
             case LEFT:
-                return Elements.LASER_MACHINE_READY_LEFT;
+                return Element.LASER_MACHINE_READY_LEFT;
             case RIGHT:
-                return Elements.LASER_MACHINE_READY_RIGHT;
+                return Element.LASER_MACHINE_READY_RIGHT;
             case UP:
-                return Elements.LASER_MACHINE_READY_UP;
+                return Element.LASER_MACHINE_READY_UP;
             case DOWN:
-                return Elements.LASER_MACHINE_READY_DOWN;
+                return Element.LASER_MACHINE_READY_DOWN;
             default:
                 throw new IllegalStateException("Unexpected direction: " + direction);
         }
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (timer == CHARGED) {
             return getChargedElement(direction);
         } else {

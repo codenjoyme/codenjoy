@@ -24,9 +24,9 @@ package com.codenjoy.dojo.football.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.football.client.Board;
-import com.codenjoy.dojo.football.client.ai.AISolver;
-import com.codenjoy.dojo.football.model.Elements;
+import com.codenjoy.dojo.games.football.Board;
+import com.codenjoy.dojo.football.services.ai.AISolver;
+import com.codenjoy.dojo.games.football.Element;
 import com.codenjoy.dojo.football.model.Football;
 import com.codenjoy.dojo.football.model.Player;
 import com.codenjoy.dojo.services.AbstractGameType;
@@ -70,7 +70,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

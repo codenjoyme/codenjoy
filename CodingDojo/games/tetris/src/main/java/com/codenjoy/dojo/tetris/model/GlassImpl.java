@@ -24,6 +24,7 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.games.tetris.Element;
 import com.codenjoy.dojo.tetris.services.Events;
 
 import java.math.BigInteger;
@@ -204,8 +205,8 @@ public class GlassImpl implements Glass {
         return plots;
     }
 
-    private Elements findColor(long colorNumber) {
-        return Elements.values()[(int) colorNumber];
+    private Element findColor(long colorNumber) {
+        return Element.values()[(int) colorNumber];
     }
 
     @Override

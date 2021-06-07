@@ -23,16 +23,12 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.levels.Item;
-
-/**
- * Created by Mikhail_Udalyi on 08.06.2016.
- */
 
 public class Exit extends BaseItem {
 
-    public Exit(Elements el) {
+    public Exit(Element el) {
         super(el);
     }
 

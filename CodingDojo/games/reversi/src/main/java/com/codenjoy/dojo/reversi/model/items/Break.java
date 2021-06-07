@@ -23,25 +23,21 @@ package com.codenjoy.dojo.reversi.model.items;
  */
 
 
-import com.codenjoy.dojo.reversi.model.Elements;
-import com.codenjoy.dojo.reversi.model.Field;
+import com.codenjoy.dojo.games.reversi.Element;
 import com.codenjoy.dojo.reversi.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.State;
 
-import java.util.function.Consumer;
-
-public class Break extends PointImpl implements State<Elements, Player> {
+public class Break extends PointImpl implements State<Element, Player> {
 
     public Break(Point point) {
         super(point);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BREAK;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BREAK;
     }
 
 }

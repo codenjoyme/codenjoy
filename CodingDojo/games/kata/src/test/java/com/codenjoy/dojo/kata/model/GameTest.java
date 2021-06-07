@@ -23,6 +23,7 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.games.kata.Element;
 import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
@@ -826,7 +827,7 @@ public class GameTest {
         assertWaitAfter(level - 1);
 
         // when
-        hero.message(Elements.START_NEXT_LEVEL);
+        hero.message(Element.START_NEXT_LEVEL);
         game.tick();
 
         // then
@@ -847,7 +848,7 @@ public class GameTest {
 
         // when
         // try to NextLevel
-        hero.message(Elements.START_NEXT_LEVEL);
+        hero.message(Element.START_NEXT_LEVEL);
         game.tick();
 
         // then
@@ -884,7 +885,7 @@ public class GameTest {
 
         // when
         // try to skip
-        hero.message(Elements.SKIP_THIS_LEVEL);
+        hero.message(Element.SKIP_THIS_LEVEL);
         game.tick();
 
         // then
@@ -893,7 +894,7 @@ public class GameTest {
 
         // when
         // start next
-        hero.message(Elements.START_NEXT_LEVEL);
+        hero.message(Element.START_NEXT_LEVEL);
         game.tick();
 
         // then
@@ -901,7 +902,7 @@ public class GameTest {
 
         // when
         // try to skip
-        hero.message(Elements.SKIP_THIS_LEVEL);
+        hero.message(Element.SKIP_THIS_LEVEL);
         game.tick();
 
         // then
@@ -925,14 +926,14 @@ public class GameTest {
         assertStillOnLevel(0);
 
         // when
-        hero.message(Elements.SKIP_THIS_LEVEL);
+        hero.message(Element.SKIP_THIS_LEVEL);
         game.tick();
 
         // then
         assertGoToNextLevel(1);
 
         // when
-        hero.message(Elements.SKIP_THIS_LEVEL);
+        hero.message(Element.SKIP_THIS_LEVEL);
         game.tick();
 
         // then

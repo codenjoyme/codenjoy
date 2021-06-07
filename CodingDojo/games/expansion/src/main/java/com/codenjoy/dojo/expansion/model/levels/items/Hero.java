@@ -23,10 +23,12 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.client.Command;
+import com.codenjoy.dojo.games.expansion.Command;
 import com.codenjoy.dojo.expansion.model.*;
 import com.codenjoy.dojo.expansion.services.CodeSaver;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.Forces;
+import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;

@@ -24,9 +24,9 @@ package com.codenjoy.dojo.rubicscube.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.rubicscube.client.Board;
-import com.codenjoy.dojo.rubicscube.client.ai.AISolver;
-import com.codenjoy.dojo.rubicscube.model.Elements;
+import com.codenjoy.dojo.games.rubicscube.Board;
+import com.codenjoy.dojo.rubicscube.services.ai.AISolver;
+import com.codenjoy.dojo.games.rubicscube.Element;
 import com.codenjoy.dojo.rubicscube.model.Player;
 import com.codenjoy.dojo.rubicscube.model.RandomCommand;
 import com.codenjoy.dojo.rubicscube.model.RubicsCube;
@@ -68,7 +68,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

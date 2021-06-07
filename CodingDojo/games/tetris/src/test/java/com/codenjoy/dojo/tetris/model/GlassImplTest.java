@@ -24,6 +24,7 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.games.tetris.Element;
 import com.codenjoy.dojo.tetris.services.Events;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -206,7 +207,7 @@ public class GlassImplTest {
         glass.figureAt(point, 1, 1);
 
         Plot plot = glass.currentFigure().get(0);
-        assertContainsPlot(1, 1, Elements.BLUE, plot);
+        assertContainsPlot(1, 1, Element.BLUE, plot);
     }
 
     @Test
@@ -214,7 +215,7 @@ public class GlassImplTest {
         glass.figureAt(createLine(Type.Z, "#"), 1, 1);
 
         Plot plot = glass.currentFigure().get(0);
-        assertContainsPlot(1, 1, Elements.RED, plot);
+        assertContainsPlot(1, 1, Element.RED, plot);
     }
 
     @Test
@@ -222,9 +223,9 @@ public class GlassImplTest {
         glass.figureAt(new FigureImpl(1, 0, "###"), 1, 1);
 
         List<Plot> plots = glass.currentFigure();
-        TestUtils.assertContainsPlot(1 - 1, 1, Elements.BLUE, plots);
-        TestUtils.assertContainsPlot(1, 1, Elements.BLUE, plots);
-        TestUtils.assertContainsPlot(1 + 1, 1, Elements.BLUE, plots);
+        TestUtils.assertContainsPlot(1 - 1, 1, Element.BLUE, plots);
+        TestUtils.assertContainsPlot(1, 1, Element.BLUE, plots);
+        TestUtils.assertContainsPlot(1 + 1, 1, Element.BLUE, plots);
     }
 
     @Test
@@ -232,9 +233,9 @@ public class GlassImplTest {
         glass.figureAt(new FigureImpl(0, 1, "#", "#", "#"), 1, 3);
 
         List<Plot> plots = glass.currentFigure();
-        TestUtils.assertContainsPlot(1, 3 + 1, Elements.BLUE, plots);
-        TestUtils.assertContainsPlot(1, 3, Elements.BLUE, plots);
-        TestUtils.assertContainsPlot(1, 3 - 1, Elements.BLUE, plots);
+        TestUtils.assertContainsPlot(1, 3 + 1, Element.BLUE, plots);
+        TestUtils.assertContainsPlot(1, 3, Element.BLUE, plots);
+        TestUtils.assertContainsPlot(1, 3 - 1, Element.BLUE, plots);
     }
 
     @Test
@@ -243,7 +244,7 @@ public class GlassImplTest {
 
         List<Plot> plots = glass.currentFigure();
         assertEquals(1, plots.size());
-        TestUtils.assertContainsPlot(1, 0, Elements.BLUE, plots);
+        TestUtils.assertContainsPlot(1, 0, Element.BLUE, plots);
     }
 
     @Test
@@ -252,7 +253,7 @@ public class GlassImplTest {
 
         List<Plot> plots = glass.currentFigure();
         assertEquals(1, plots.size());
-        TestUtils.assertContainsPlot(1 + 1, 0, Elements.BLUE, plots);
+        TestUtils.assertContainsPlot(1 + 1, 0, Element.BLUE, plots);
     }
 
     @Test
@@ -265,7 +266,7 @@ public class GlassImplTest {
         glass.drop(point, 0, HEIGHT);
 
         List<Plot> plots = glass.dropped();
-        TestUtils.assertContainsPlot(0, 0, Elements.BLUE, plots);
+        TestUtils.assertContainsPlot(0, 0, Element.BLUE, plots);
     }
 
     @Test
@@ -273,10 +274,10 @@ public class GlassImplTest {
         glass.drop(new FigureImpl(1, 1, "##", "##"), 3, HEIGHT);
 
         List<Plot> plots = glass.dropped();
-        TestUtils.assertContainsPlot(3 - 1, 1, Elements.BLUE, plots);
-        TestUtils.assertContainsPlot(3, 1, Elements.BLUE, plots);
-        TestUtils.assertContainsPlot(3 - 1, 0, Elements.BLUE, plots);
-        TestUtils.assertContainsPlot(3, 0, Elements.BLUE, plots);
+        TestUtils.assertContainsPlot(3 - 1, 1, Element.BLUE, plots);
+        TestUtils.assertContainsPlot(3, 1, Element.BLUE, plots);
+        TestUtils.assertContainsPlot(3 - 1, 0, Element.BLUE, plots);
+        TestUtils.assertContainsPlot(3, 0, Element.BLUE, plots);
     }
 
 
@@ -414,7 +415,7 @@ public class GlassImplTest {
     public void shouldStoreColorsWhenRedFigure() {
         glass.drop(createLine(Type.Z, "#"), CENTER_X, TOP_Y);
 
-        assertEquals(Elements.RED, glass.dropped().get(0).getColor());
+        assertEquals(Element.RED, glass.dropped().get(0).getColor());
     }
 
     @Test
@@ -463,7 +464,7 @@ public class GlassImplTest {
         }
     }
 
-    private void assertContainsPlot(final int x, final int y, final Elements color, Plot... plots) {
+    private void assertContainsPlot(final int x, final int y, final Element color, Plot... plots) {
         TestUtils.assertContainsPlot(x, y, color, Arrays.asList(plots));
     }
 }

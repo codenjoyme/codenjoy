@@ -23,7 +23,9 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.Brick;
+import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.round.RoundGameField;
 

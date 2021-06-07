@@ -23,10 +23,9 @@ package com.codenjoy.dojo.spacerace.model;
  */
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.games.spacerace.Element;
 import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class LevelImpl implements Level {
@@ -48,20 +47,20 @@ public class LevelImpl implements Level {
     public List<Hero> getHero(BulletCharger charger) {
         return LevelUtils.getObjects(xy, map,
                 pt -> new Hero(pt, charger),
-                Elements.HERO);
+                Element.HERO);
     }
 
     @Override
     public List<Gold> getGold() {
         return LevelUtils.getObjects(xy, map,
                 Gold::new,
-                Elements.GOLD);
+                Element.GOLD);
     }
 
     @Override
     public List<Wall> getWalls() {
         return LevelUtils.getObjects(xy, map,
                 Wall::new,
-                Elements.WALL);
+                Element.WALL);
     }
 }

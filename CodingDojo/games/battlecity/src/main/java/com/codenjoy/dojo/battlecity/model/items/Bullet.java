@@ -24,6 +24,7 @@ package com.codenjoy.dojo.battlecity.model.items;
 
 
 import com.codenjoy.dojo.battlecity.model.*;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.MovingObject;
 import com.codenjoy.dojo.services.Point;
@@ -33,7 +34,7 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class Bullet extends MovingObject implements State<Elements, Player> {
+public class Bullet extends MovingObject implements State<Element, Player> {
 
     private final Field field;
     private Tank owner;
@@ -90,16 +91,16 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         Tree tree = filterOne(alsoAtPoint, Tree.class);
         if (tree != null) {
-            return Elements.TREE;
+            return Element.TREE;
         }
 
         if (destroyed()) {
-            return Elements.BANG;
+            return Element.BANG;
         } else {
-            return Elements.BULLET;
+            return Element.BULLET;
         }
     }
 

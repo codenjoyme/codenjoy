@@ -23,8 +23,7 @@ package com.codenjoy.dojo.bomberman.model.perks;
  */
 
 import com.codenjoy.dojo.bomberman.TestGameSettings;
-import com.codenjoy.dojo.bomberman.model.Elements;
-import com.codenjoy.dojo.bomberman.services.GameSettings;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +32,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.games.bomberman.Element.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -44,7 +43,7 @@ public class PerksSettingsWrapperTest {
 
     @Mock Dice dice;
 
-    private static final Elements NO_PERK = Elements.DESTROYED_WALL;
+    private static final Element NO_PERK = Element.DESTROYED_WALL;
     private PerksSettingsWrapper settings;
 
     @Before
@@ -269,11 +268,11 @@ public class PerksSettingsWrapperTest {
         assertPerk(101, NO_PERK);
     }
 
-    private void assertPerk(int random, Elements perk) {
+    private void assertPerk(int random, Element perk) {
         assertEquals(perk, dice(random));
     }
 
-    private Elements dice(int value) {
+    private Element dice(int value) {
         Mockito.when(dice.next(percentage)).thenReturn(value);
         return settings.nextPerkDrop(dice);
     }

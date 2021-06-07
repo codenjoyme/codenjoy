@@ -24,8 +24,8 @@ package com.codenjoy.dojo.fifteen;
 
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.fifteen.client.Board;
-import com.codenjoy.dojo.fifteen.client.ai.AISolver;
+import com.codenjoy.dojo.games.fifteen.Board;
+import com.codenjoy.dojo.fifteen.services.ai.AISolver;
 import com.codenjoy.dojo.fifteen.services.GameRunner;
 import com.codenjoy.dojo.fifteen.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;

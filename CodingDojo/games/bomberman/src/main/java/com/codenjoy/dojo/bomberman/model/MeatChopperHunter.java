@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
@@ -30,7 +31,7 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.games.bomberman.Element.*;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class MeatChopperHunter extends MeatChopper {
@@ -97,7 +98,7 @@ public class MeatChopperHunter extends MeatChopper {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (alive) {
             DestroyWall wall = filterOne(alsoAtPoint, DestroyWall.class);
             if (wall != null) {
@@ -118,6 +119,6 @@ public class MeatChopperHunter extends MeatChopper {
             return bomb.state(player, alsoAtPoint);
         }
 
-        return Elements.MEAT_CHOPPER;
+        return Element.MEAT_CHOPPER;
     }
 }

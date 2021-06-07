@@ -23,13 +23,14 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
+import com.codenjoy.dojo.games.collapse.Element;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.collapse.model.Elements.BORDER;
-import static com.codenjoy.dojo.collapse.model.Elements.NONE;
+import static com.codenjoy.dojo.games.collapse.Element.BORDER;
+import static com.codenjoy.dojo.games.collapse.Element.NONE;
 
 public class LevelImpl implements Level {
 
@@ -50,7 +51,7 @@ public class LevelImpl implements Level {
     public List<Cell> getCells() {
         return LevelUtils.getObjects(xy, map,
                 (pt, el) -> new Cell(pt, el.number()),
-                Elements.valuesExcept(NONE, BORDER));
+                Element.valuesExcept(NONE, BORDER));
     }
 
     @Override

@@ -30,7 +30,7 @@ import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.LevelUtils;
 
-import static com.codenjoy.dojo.sample.model.Elements.*;
+import static com.codenjoy.dojo.games.sample.Element.*;
 import static com.codenjoy.dojo.utils.LevelUtils.*;
 
 import java.util.List;

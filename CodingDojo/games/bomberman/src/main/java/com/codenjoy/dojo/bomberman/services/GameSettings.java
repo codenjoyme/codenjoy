@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
@@ -108,10 +109,10 @@ public class GameSettings extends SettingsImpl
                     .dropRatio(20) // Set value to 0% = perks is disabled.
                     .pickTimeout(30);
         int timeout = 30;
-        perks.put(Elements.BOMB_REMOTE_CONTROL, 3, 1);
-        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 2, timeout);
-        perks.put(Elements.BOMB_IMMUNE, 0, timeout);
-        perks.put(Elements.BOMB_COUNT_INCREASE, 4, timeout);
+        perks.put(Element.BOMB_REMOTE_CONTROL, 3, 1);
+        perks.put(Element.BOMB_BLAST_RADIUS_INCREASE, 2, timeout);
+        perks.put(Element.BOMB_IMMUNE, 0, timeout);
+        perks.put(Element.BOMB_COUNT_INCREASE, 4, timeout);
     }
 
     public Level getLevel() {

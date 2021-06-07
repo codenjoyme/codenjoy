@@ -22,10 +22,10 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.Point;
 
-public class Board extends com.codenjoy.dojo.bomberman.client.Board {
+public class Board extends com.codenjoy.dojo.games.bomberman.Board {
 
     @Override
     public String toString() {
@@ -37,7 +37,7 @@ public class Board extends com.codenjoy.dojo.bomberman.client.Board {
         Point meAtMap = getBomberman();
         Board part = (Board)new Board(){
             @Override
-            public Elements valueOf(char ch) {
+            public Element valueOf(char ch) {
                 try {
                     return super.valueOf(ch);
                 } catch (IllegalArgumentException e) {
@@ -51,7 +51,7 @@ public class Board extends com.codenjoy.dojo.bomberman.client.Board {
 
         for (int dx = 0; dx < part.size; dx++) {
             for (int dy = 0; dy < part.size; dy++) {
-                Elements real = this.getAt(corner.getX() + dx, corner.getY() + dy);
+                Element real = this.getAt(corner.getX() + dx, corner.getY() + dy);
                 Character mask = part.field(dx, dy).get(0);
 
                 if (mask == ANY_CHAR){

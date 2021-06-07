@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import com.codenjoy.dojo.games.lunolet.VesselState;
 import com.codenjoy.dojo.lunolet.services.Events;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 

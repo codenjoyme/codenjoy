@@ -22,8 +22,8 @@ package com.codenjoy.dojo.tetris.client
  * #L%
  */
 
-import com.codenjoy.dojo.services.{Dice, Direction, Point}
 import com.codenjoy.dojo.services.PointImpl.pt
+import com.codenjoy.dojo.services.{Dice, Direction, Point}
 import org.junit.Assert.assertEquals
 import org.junit.{Before, Test}
 import org.mockito.ArgumentMatchers.anyInt
@@ -41,16 +41,16 @@ class SolverScalaTest {
   @Test def should() {
     asertAI(
       "......." +
-      "......I" +
-      "..LL..I" +
-      "...LI.I" +
-      ".SSLI.I" +
-      "SSOOIOO" +
-      "..OOIOO",
+        "......I" +
+        "..LL..I" +
+        "...LI.I" +
+        ".SSLI.I" +
+        "SSOOIOO" +
+        "..OOIOO",
       "T",
       pt(1, 2),
       Array[String]("I", "O", "L", "Z"),
-      Direction.DOWN)
+      Direction.UP)
   }
 
   private def asertAI(glass: String, figureType: String, point: Point, futureFigures: Array[String], expected: Direction) {

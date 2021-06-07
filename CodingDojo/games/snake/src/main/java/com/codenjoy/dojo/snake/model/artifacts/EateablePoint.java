@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.Hero;
 
-public class EateablePoint extends PointImpl implements Element {
+public class EateablePoint extends PointImpl implements Affectable {
 
     private Runnable doItOnEat;
 

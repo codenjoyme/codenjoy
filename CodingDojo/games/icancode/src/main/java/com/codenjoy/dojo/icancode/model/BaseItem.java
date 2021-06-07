@@ -23,6 +23,8 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Element;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -34,14 +36,14 @@ public abstract class BaseItem implements Item {
 
     private Cell cell;
     private boolean passable;
-    private Elements element;
+    private Element element;
 
-    public BaseItem(Elements element) {
+    public BaseItem(Element element) {
         this.element = element;
         this.passable = PASSABLE;
     }
 
-    public BaseItem(Elements element, boolean passable) {
+    public BaseItem(Element element, boolean passable) {
         this.element = element;
         this.passable = passable;
     }
@@ -76,7 +78,7 @@ public abstract class BaseItem implements Item {
         return Optional.empty();
     }
 
-    public Elements getState() {
+    public Element getState() {
         return element;
     }
 
@@ -100,7 +102,7 @@ public abstract class BaseItem implements Item {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return element;
     }
 

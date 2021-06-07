@@ -23,6 +23,8 @@ package com.codenjoy.dojo.rubicscube.model;
  */
 
 
+import com.codenjoy.dojo.games.rubicscube.Element;
+
 import java.util.Arrays;
 
 /**
@@ -31,9 +33,9 @@ import java.util.Arrays;
  * Time: 4:49
  */
 public class FaceValue {
-    private Elements[][] colors = new Elements[3][3];
+    private Element[][] colors = new Element[3][3];
 
-    public FaceValue(Elements fill) {
+    public FaceValue(Element fill) {
         for (int line = 0; line < 3; line ++) {
             Arrays.fill(colors[line], fill);
         }
@@ -88,7 +90,7 @@ public class FaceValue {
         colors = newFace.colors;
     }
 
-    public Elements get(Neighbor neighborFace) {
+    public Element get(Neighbor neighborFace) {
         switch (neighborFace) {
             case UP: return colors[0][1];
             case LEFT: return colors[1][0];
@@ -99,7 +101,7 @@ public class FaceValue {
     }
 
     public boolean isSolved() { // TODO test me
-        Elements prev = colors[0][0];
+        Element prev = colors[0][0];
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 if (prev != colors[x][y]) {

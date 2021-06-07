@@ -23,10 +23,10 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.client.ai.AISolver;
+import com.codenjoy.dojo.games.bomberman.Board;
+import com.codenjoy.dojo.bomberman.services.ai.AISolver;
 import com.codenjoy.dojo.bomberman.model.Bomberman;
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.bomberman.model.Player;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
@@ -74,7 +74,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

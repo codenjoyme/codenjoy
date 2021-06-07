@@ -23,10 +23,10 @@ package com.codenjoy.dojo.bomberman;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.client.ai.AIPerksHunterSolver;
-import com.codenjoy.dojo.bomberman.client.ai.AISolver;
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Board;
+import com.codenjoy.dojo.bomberman.services.ai.AIPerksHunterSolver;
+import com.codenjoy.dojo.bomberman.services.ai.AISolver;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
 import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
@@ -65,10 +65,10 @@ public class SmokeTest {
                         settings.perksSettings()
                                 .dropRatio(20)
                                 .pickTimeout(5)
-                                .put(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 10)
-                                .put(Elements.BOMB_COUNT_INCREASE, 5, 3)
-                                .put(Elements.BOMB_REMOTE_CONTROL, 5, 10)
-                                .put(Elements.BOMB_IMMUNE, 5, 10);
+                                .put(Element.BOMB_BLAST_RADIUS_INCREASE, 5, 10)
+                                .put(Element.BOMB_COUNT_INCREASE, 5, 3)
+                                .put(Element.BOMB_REMOTE_CONTROL, 5, 10)
+                                .put(Element.BOMB_IMMUNE, 5, 10);
 
                         return settings;
                     }

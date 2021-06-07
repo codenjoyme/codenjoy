@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.icancode.model.items.perks;
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.ElementsMapper;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -17,21 +17,21 @@ import static java.util.stream.Collectors.toList;
 public class PerkUtils {
 
     public static Optional<Perk> random(Dice dice, boolean contest, GameSettings settings) {
-        List<Elements> all = new LinkedList<>(Elements.perks());
+        List<Element> all = new LinkedList<>(Element.perks());
         defaultFor(contest, settings).forEach(perk -> all.remove(perk.getState()));
-        return random(dice, settings, all.toArray(new Elements[]{}));
+        return random(dice, settings, all.toArray(new Element[]{}));
     }
 
-    private static Optional<Perk> random(Dice dice, GameSettings settings, Elements... perks) {
+    private static Optional<Perk> random(Dice dice, GameSettings settings, Element... perks) {
         int index = dice.next(perks.length);
-        Elements element = perks[index];
+        Element element = perks[index];
         Perk perk = (Perk)ElementsMapper.get(element);
         perk.init(settings);
         return Optional.ofNullable(perk);
     }
 
-    public static boolean isPerk(Elements element) {
-        return Elements.perks().contains(element);
+    public static boolean isPerk(Element element) {
+        return Element.perks().contains(element);
     }
 
     public static List<Perk> defaultFor(boolean contest, GameSettings settings) {
@@ -49,7 +49,7 @@ public class PerkUtils {
             return Arrays.asList();
         }
         return perks.chars()
-                .mapToObj(ch -> Elements.valueOf((char)ch))
+                .mapToObj(ch -> Element.valueOf((char)ch))
                 .map(element -> (Perk)ElementsMapper.get(element))
                 .collect(toList());
     }

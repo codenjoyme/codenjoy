@@ -23,11 +23,10 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TimerTest {
 

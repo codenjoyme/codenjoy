@@ -23,6 +23,7 @@ package com.codenjoy.dojo.fifteen.model;
  */
 
 
+import com.codenjoy.dojo.games.fifteen.Element;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.HashMap;
@@ -31,48 +32,48 @@ import java.util.Map;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class DigitHandler {
-    public static final Elements[] DIGITS =
+    public static final Element[] DIGITS =
             {
-                    Elements.A,
-                    Elements.B,
-                    Elements.C,
-                    Elements.D,
-                    Elements.E,
-                    Elements.F,
-                    Elements.G,
-                    Elements.H,
-                    Elements.I,
-                    Elements.J,
-                    Elements.K,
-                    Elements.L,
-                    Elements.M,
-                    Elements.N,
-                    Elements.O
+                    Element.A,
+                    Element.B,
+                    Element.C,
+                    Element.D,
+                    Element.E,
+                    Element.F,
+                    Element.G,
+                    Element.H,
+                    Element.I,
+                    Element.J,
+                    Element.K,
+                    Element.L,
+                    Element.M,
+                    Element.N,
+                    Element.O
             };
 
-    private static final Map<Elements, Point> CORRECT_POSITION = new HashMap<>();
+    private static final Map<Element, Point> CORRECT_POSITION = new HashMap<>();
 
     static {
-        CORRECT_POSITION.put(Elements.A, pt(1, 4));
-        CORRECT_POSITION.put(Elements.B, pt(2, 4));
-        CORRECT_POSITION.put(Elements.C, pt(3, 4));
-        CORRECT_POSITION.put(Elements.D, pt(4, 4));
-        CORRECT_POSITION.put(Elements.E, pt(1, 3));
-        CORRECT_POSITION.put(Elements.F, pt(2, 3));
-        CORRECT_POSITION.put(Elements.G, pt(3, 3));
-        CORRECT_POSITION.put(Elements.H, pt(4, 3));
-        CORRECT_POSITION.put(Elements.I, pt(1, 2));
-        CORRECT_POSITION.put(Elements.J, pt(2, 2));
-        CORRECT_POSITION.put(Elements.K, pt(3, 2));
-        CORRECT_POSITION.put(Elements.L, pt(4, 2));
-        CORRECT_POSITION.put(Elements.M, pt(1, 1));
-        CORRECT_POSITION.put(Elements.N, pt(2, 1));
-        CORRECT_POSITION.put(Elements.O, pt(3, 1));
+        CORRECT_POSITION.put(Element.A, pt(1, 4));
+        CORRECT_POSITION.put(Element.B, pt(2, 4));
+        CORRECT_POSITION.put(Element.C, pt(3, 4));
+        CORRECT_POSITION.put(Element.D, pt(4, 4));
+        CORRECT_POSITION.put(Element.E, pt(1, 3));
+        CORRECT_POSITION.put(Element.F, pt(2, 3));
+        CORRECT_POSITION.put(Element.G, pt(3, 3));
+        CORRECT_POSITION.put(Element.H, pt(4, 3));
+        CORRECT_POSITION.put(Element.I, pt(1, 2));
+        CORRECT_POSITION.put(Element.J, pt(2, 2));
+        CORRECT_POSITION.put(Element.K, pt(3, 2));
+        CORRECT_POSITION.put(Element.L, pt(4, 2));
+        CORRECT_POSITION.put(Element.M, pt(1, 1));
+        CORRECT_POSITION.put(Element.N, pt(2, 1));
+        CORRECT_POSITION.put(Element.O, pt(3, 1));
     }
 
 
     public boolean isRightPosition(Digit digit) {
-        Elements element = digit.state(null);
+        Element element = digit.state(null);
         return digit.itsMe(CORRECT_POSITION.get(element));
     }
 }

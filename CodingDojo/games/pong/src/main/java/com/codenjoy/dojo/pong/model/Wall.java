@@ -22,11 +22,12 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.pong.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Wall extends PointImpl implements State<Elements, Player>, Barrier {
+public class Wall extends PointImpl implements State<Element, Player>, Barrier {
 
     BarrierOrientation orientation;
 
@@ -36,14 +37,14 @@ public class Wall extends PointImpl implements State<Elements, Player>, Barrier 
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         switch (orientation) {
             case VERTICAL:
-                return Elements.VERTICAL_WALL;
+                return Element.VERTICAL_WALL;
             case HORIZONTAL:
-                return Elements.HORIZONTAL_WALL;
+                return Element.HORIZONTAL_WALL;
             default:
-                return Elements.HORIZONTAL_WALL;
+                return Element.HORIZONTAL_WALL;
         }
     }
 

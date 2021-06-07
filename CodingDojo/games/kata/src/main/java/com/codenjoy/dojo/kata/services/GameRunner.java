@@ -25,15 +25,15 @@ package com.codenjoy.dojo.kata.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.kata.client.Board;
-import com.codenjoy.dojo.kata.client.ai.AISolver;
+import com.codenjoy.dojo.games.kata.Board;
 import com.codenjoy.dojo.kata.model.Kata;
 import com.codenjoy.dojo.kata.model.Player;
-import com.codenjoy.dojo.kata.model.levels.Level;
-import com.codenjoy.dojo.kata.model.levels.LevelsLoader;
 import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.kata.services.ai.AISolver;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -43,8 +43,6 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
-
-import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 

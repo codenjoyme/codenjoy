@@ -29,7 +29,7 @@ import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.sokoban.model.items.Elements.*;
+import static com.codenjoy.dojo.games.sokoban.Element.*;
 
 public class LevelImpl implements Level {
 

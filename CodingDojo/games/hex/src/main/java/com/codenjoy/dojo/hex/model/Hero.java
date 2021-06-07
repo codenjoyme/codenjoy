@@ -23,23 +23,24 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.games.hex.Element;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
+public class Hero extends PlayerHero<Field> implements State<Element, Player>, NoActJoystick {
 
     private Direction direction;
     private boolean jump;
     private Player player;
-    private Elements element; // TODO надо раобраться мы храним или елемент или плеер
+    private Element element; // TODO надо раобраться мы храним или елемент или плеер
 
-    public Hero(Point xy, Elements element) {
+    public Hero(Point xy, Element element) {
         super(xy);
         this.element = element;
     }
 
-    public Hero(int x, int y, Elements element) {
+    public Hero(int x, int y, Element element) {
         super(x, y);
         this.element = element;
     }
@@ -97,9 +98,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (player == this.player) {
-            return Elements.MY_HERO;
+            return Element.MY_HERO;
         } else {
             return this.player.getElement();
         }
@@ -114,7 +115,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
         }
     }
 
-    public Elements getElement() {
+    public Element getElement() {
         return element;
     }
 

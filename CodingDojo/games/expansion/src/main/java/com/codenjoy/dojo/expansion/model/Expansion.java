@@ -29,6 +29,8 @@ import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
 import com.codenjoy.dojo.expansion.services.Events;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.Forces;
+import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;

@@ -145,7 +145,7 @@ public class FigureImpl implements Figure, Cloneable {
     @Override
     public String toString() {
         return String.format("'%s' WH(%s:%s) LR(%s,%s) TB(%s,%s)",
-                type.getColor().ch,
+                type.getColor().ch(),
                 width(), height(),
                 left(), right(),
                 top(), bottom());

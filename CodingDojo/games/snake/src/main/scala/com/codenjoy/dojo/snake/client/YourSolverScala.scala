@@ -4,9 +4,13 @@ import com.codenjoy.dojo.client.{Solver, WebSocketRunner}
 import com.codenjoy.dojo.services.{Dice, Direction, RandomDice}
 
 /**
-  * User: your name
-  * Это твой алгоритм AI для игры. Реализуй его на свое усмотрение.
-  */
+ * Author: your name
+ *
+ * This is your AI algorithm for the game.
+ * Implement it at your own discretion.
+ * Pay attention to {@see YourSolverTest} - there is
+ * a test framework for you.
+ */
 object YourSolverScala {
   def main(args: Array[String]): Unit = {
     WebSocketRunner.runClient(// paste here board page url from browser after registration
@@ -24,6 +28,8 @@ class YourSolverScala(var dice: Dice) extends Solver[BoardScala] {
     * @return направление, куда следует двигаться змейке
     */
   override def get(board: BoardScala): String = {
-    return Direction.UP.toString
+    // TODO your code here
+
+    Direction.UP.toString
   }
 }

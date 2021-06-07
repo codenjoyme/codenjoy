@@ -23,7 +23,10 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.*;
+import com.codenjoy.dojo.games.icancode.Element;
+import com.codenjoy.dojo.icancode.model.Hero;
+import com.codenjoy.dojo.icancode.model.Item;
+import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.items.perks.Perk;
 
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
@@ -31,11 +34,11 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 public class Gold extends RenewableItem {
 
     public Gold() {
-        super(Elements.GOLD);
+        super(Element.GOLD);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         Perk perk = filterOne(alsoAtPoint, Perk.class);
         if (perk != null) {
             return perk.state(player, alsoAtPoint);

@@ -25,8 +25,8 @@ package com.codenjoy.dojo.startandjump;
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.startandjump.client.Board;
-import com.codenjoy.dojo.startandjump.client.ai.AISolver;
+import com.codenjoy.dojo.games.startandjump.Board;
+import com.codenjoy.dojo.startandjump.services.ai.AISolver;
 import com.codenjoy.dojo.startandjump.services.GameRunner;
 import com.codenjoy.dojo.startandjump.services.GameSettings;
 import com.codenjoy.dojo.utils.Smoke;

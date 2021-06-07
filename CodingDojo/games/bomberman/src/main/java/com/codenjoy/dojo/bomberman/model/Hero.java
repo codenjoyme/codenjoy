@@ -27,17 +27,18 @@ import com.codenjoy.dojo.bomberman.model.perks.HeroPerks;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
 import com.codenjoy.dojo.bomberman.services.Events;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.games.bomberman.Element.*;
 import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 import static com.codenjoy.dojo.services.StateUtils.filter;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
 
     private Level level;
     private boolean bomb;
@@ -168,7 +169,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         Bomb bomb = filterOne(alsoAtPoint, Bomb.class);
         List<Hero> heroes = filter(alsoAtPoint, Hero.class);
         MeatChopper meat = filterOne(alsoAtPoint, MeatChopper.class);
@@ -232,7 +233,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         perks.add(perk);
     }
 
-    public Perk getPerk(Elements element) {
+    public Perk getPerk(Element element) {
         return perks.getPerk(element);
     }
 

@@ -23,22 +23,18 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
-
-/**
- * Created by Mikhail_Udalyi on 08.06.2016.
- */
+import com.codenjoy.dojo.games.expansion.Element;
 
 public class Start extends BaseItem {
 
     private Hero owner;
 
-    public Start(Elements el) {
+    public Start(Element el) {
         super(el);
     }
 
-    public Elements element() {
-        return Elements.getForce(index());
+    public Element element() {
+        return Element.getForce(index());
     }
 
     public int index() {

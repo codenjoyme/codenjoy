@@ -28,9 +28,6 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-22.
- */
 public interface LoggerReader {
     Map<String, JSONObject> getAllLastActions(int tick);
 

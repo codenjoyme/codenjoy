@@ -22,7 +22,7 @@ package com.codenjoy.dojo.bomberman.services;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.bomberman.model.perks.PerkSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -49,7 +49,7 @@ public class GameSettingsTest {
 
     public LinkedHashMap<String, PerkSettings> allPerkSettings(PerksSettingsWrapper perksSettings) {
         return new LinkedHashMap<>() {{
-            Elements.perks().forEach(it -> put(it.name(), perksSettings.get(it)));
+            Element.perks().forEach(it -> put(it.name(), perksSettings.get(it)));
         }};
     }
 

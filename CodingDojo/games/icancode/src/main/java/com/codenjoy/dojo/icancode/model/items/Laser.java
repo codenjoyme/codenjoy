@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.*;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -38,7 +39,7 @@ public class Laser extends FieldItem implements Tickable {
     private boolean deathRay;
     private boolean die;
 
-    public Laser(Elements element) {
+    public Laser(Element element) {
         super(element);
         this.direction = getDirection(element);
         die = false;
@@ -51,21 +52,21 @@ public class Laser extends FieldItem implements Tickable {
         this.field = field;
     }
 
-    private static Elements getElement(Direction direction) {
+    private static Element getElement(Direction direction) {
         switch (direction) {
             case LEFT:
-                return Elements.LASER_LEFT;
+                return Element.LASER_LEFT;
             case RIGHT:
-                return Elements.LASER_RIGHT;
+                return Element.LASER_RIGHT;
             case DOWN:
-                return Elements.LASER_DOWN;
+                return Element.LASER_DOWN;
             case UP:
-                return Elements.LASER_UP;
+                return Element.LASER_UP;
         }
         throw new IllegalStateException("Unexpected direction: " + direction);
     }
 
-    private static Direction getDirection(Elements element) {
+    private static Direction getDirection(Element element) {
         switch (element) {
             case LASER_LEFT:
                 return Direction.LEFT;

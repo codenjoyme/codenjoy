@@ -28,9 +28,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by oleksandr.baglai on 24.06.2016.
- */
 public class LevelsTest {
 
     public static final int LEVEL_SIZE = 16;

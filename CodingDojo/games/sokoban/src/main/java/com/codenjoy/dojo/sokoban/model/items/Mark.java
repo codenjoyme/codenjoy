@@ -25,10 +25,11 @@ package com.codenjoy.dojo.sokoban.model.items;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.games.sokoban.Element;
 import com.codenjoy.dojo.sokoban.model.Field;
 import com.codenjoy.dojo.sokoban.model.Player;
 
-public class Mark extends PointEnriched<Field> implements State<Elements, Player> {
+public class Mark extends PointEnriched<Field> implements State<Element, Player> {
 
     private boolean isFilled;
 
@@ -50,8 +51,8 @@ public class Mark extends PointEnriched<Field> implements State<Elements, Player
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.MARK_TO_WIN;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.MARK_TO_WIN;
     }
 
 

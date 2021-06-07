@@ -22,12 +22,12 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 
 public class BombImmune extends Perk {
 
     public BombImmune(int timeout) {
-        super(Elements.BOMB_IMMUNE, 0, timeout);
+        super(Element.BOMB_IMMUNE, 0, timeout);
     }
 
 

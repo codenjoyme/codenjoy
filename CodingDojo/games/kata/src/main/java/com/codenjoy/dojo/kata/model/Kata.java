@@ -26,7 +26,6 @@ package com.codenjoy.dojo.kata.model;
 import com.codenjoy.dojo.kata.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -22,12 +22,12 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 
 public class BombCountIncrease extends Perk {
 
     public BombCountIncrease(int value, int timeout) {
-        super(Elements.BOMB_COUNT_INCREASE, value, timeout);
+        super(Element.BOMB_COUNT_INCREASE, value, timeout);
     }
 
     /**

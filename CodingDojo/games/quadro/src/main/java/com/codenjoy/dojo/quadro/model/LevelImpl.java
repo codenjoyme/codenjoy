@@ -27,17 +27,12 @@ import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.quadro.model.items.RedChip;
 import com.codenjoy.dojo.quadro.model.items.YellowChip;
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
-import static com.codenjoy.dojo.quadro.model.Elements.*;
+import static com.codenjoy.dojo.games.quadro.Element.*;
 
 public class LevelImpl implements Level {
 

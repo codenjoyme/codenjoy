@@ -22,13 +22,14 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
-import com.codenjoy.dojo.quake2d.client.ai.AISolver;
+import com.codenjoy.dojo.games.quake2d.Element;
+import com.codenjoy.dojo.quake2d.services.ai.AISolver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
     public static final int ABILITY_LIFE_TIME = 10;
     public static final int START_HEALTH = 100;
@@ -135,17 +136,17 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (!isAlive()) {
-            return Elements.DEAD_HERO;
+            return Element.DEAD_HERO;
         }
 
         if (this == player.getHero()) {
-            return Elements.HERO;
+            return Element.HERO;
         } else if (this.getAbility() != null){
-            return Elements.SUPER_OTHER_HERO;
+            return Element.SUPER_OTHER_HERO;
         } else {
-            return Elements.OTHER_HERO;
+            return Element.OTHER_HERO;
         }
     }
 

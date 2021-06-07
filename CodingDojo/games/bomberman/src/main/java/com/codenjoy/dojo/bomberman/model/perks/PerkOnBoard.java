@@ -22,14 +22,14 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.bomberman.model.Player;
 import com.codenjoy.dojo.bomberman.model.Wall;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-public class PerkOnBoard extends Wall implements State<Elements, Player>, Tickable {
+public class PerkOnBoard extends Wall implements State<Element, Player>, Tickable {
 
     private final Perk perk;
 
@@ -44,8 +44,8 @@ public class PerkOnBoard extends Wall implements State<Elements, Player>, Tickab
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return perk != null ? this.perk.state(player, alsoAtPoint) : Elements.NONE;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return perk != null ? this.perk.state(player, alsoAtPoint) : Element.NONE;
     }
 
     public Perk getPerk() {

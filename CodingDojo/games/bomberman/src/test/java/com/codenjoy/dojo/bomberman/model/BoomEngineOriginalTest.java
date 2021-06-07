@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.games.bomberman.Element;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
@@ -380,15 +381,15 @@ public class BoomEngineOriginalTest {
                 return SIZE;
             }
 
-            class B extends PointImpl implements State<Elements, Object> {
+            class B extends PointImpl implements State<Element, Object> {
 
                 public B(Point point) {
                     super(point);
                 }
 
                 @Override
-                public Elements state(Object player, Object... alsoAtPoint) {
-                    return Elements.BOMB_BOMBERMAN;
+                public Element state(Object player, Object... alsoAtPoint) {
+                    return Element.BOMB_BOMBERMAN;
                 }
             }
 

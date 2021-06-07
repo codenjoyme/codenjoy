@@ -23,6 +23,7 @@ package com.codenjoy.dojo.moebius.model;
  */
 
 
+import com.codenjoy.dojo.games.moebius.Element;
 import com.codenjoy.dojo.moebius.services.Events;
 import com.codenjoy.dojo.moebius.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
@@ -67,7 +68,7 @@ public class Moebius implements Field {
 
         Optional<Point> pt = freeRandom();
         if (pt.isPresent()) {
-            setLine(pt.get(), Elements.random(dice));
+            setLine(pt.get(), Element.random(dice));
         } else {
             player.event(new Events(Events.Event.GAME_OVER));
             player.getHero().die();
@@ -144,7 +145,7 @@ public class Moebius implements Field {
     }
 
     @Override
-    public void setLine(Point pt, Elements element) {
+    public void setLine(Point pt, Element element) {
         if (!lines.contains(pt)) {
             lines.add(new Line(pt, element));
         }

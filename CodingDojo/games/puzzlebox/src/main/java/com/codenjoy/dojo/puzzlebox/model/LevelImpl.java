@@ -24,13 +24,11 @@ package com.codenjoy.dojo.puzzlebox.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.puzzlebox.model.Elements.*;
+import static com.codenjoy.dojo.games.puzzlebox.Element.*;
 
 public class LevelImpl implements Level {
 

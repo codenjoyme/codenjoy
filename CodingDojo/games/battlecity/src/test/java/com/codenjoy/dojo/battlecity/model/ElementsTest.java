@@ -22,6 +22,7 @@ package com.codenjoy.dojo.battlecity.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.battlecity.Element;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -31,7 +32,7 @@ public class ElementsTest {
     @Test
     public void getWalls() {
         assertEquals("[╬, ╩, ╦, ╠, ╣, ╨, ╥, ╞, ╡, │, ─, ┌, ┐, └, ┘,  ]",
-                Elements.getWalls().toString());
+                Element.getWalls().toString());
     }
 
 }

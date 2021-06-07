@@ -23,11 +23,12 @@ package com.codenjoy.dojo.spacerace.model;
  */
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.games.spacerace.Element;
 
 /**
  * Артефакт пуля на поле
  */
-public class Bullet extends PointImpl implements Tickable, State<Elements, Player> {
+public class Bullet extends PointImpl implements Tickable, State<Element, Player> {
 
     private Direction direction;
     private Hero hero;
@@ -44,8 +45,8 @@ public class Bullet extends PointImpl implements Tickable, State<Elements, Playe
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BULLET;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BULLET;
     }
 
     @Override

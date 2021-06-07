@@ -23,56 +23,53 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-/**
- * Created by indigo on 2016-09-22.
- */
 public class ElementsMapper {
 
-    public static Map<Elements, Class<? extends BaseItem>> map =
-            new EnumMap<Elements, Class<? extends BaseItem>>(Elements.class)
+    public static Map<Element, Class<? extends BaseItem>> map =
+            new EnumMap<Element, Class<? extends BaseItem>>(Element.class)
     {{
-        put(Elements.EMPTY, None.class);
-        put(Elements.FLOOR, Floor.class);
+        put(Element.EMPTY, None.class);
+        put(Element.FLOOR, Floor.class);
 
-        put(Elements.ANGLE_IN_LEFT, Wall.class);
-        put(Elements.WALL_FRONT, Wall.class);
-        put(Elements.ANGLE_IN_RIGHT, Wall.class);
-        put(Elements.WALL_RIGHT, Wall.class);
-        put(Elements.ANGLE_BACK_RIGHT, Wall.class);
-        put(Elements.WALL_BACK, Wall.class);
-        put(Elements.ANGLE_BACK_LEFT, Wall.class);
-        put(Elements.WALL_LEFT, Wall.class);
-        put(Elements.WALL_BACK_ANGLE_LEFT, Wall.class);
-        put(Elements.WALL_BACK_ANGLE_RIGHT, Wall.class);
-        put(Elements.ANGLE_OUT_RIGHT, Wall.class);
-        put(Elements.ANGLE_OUT_LEFT, Wall.class);
-        put(Elements.SPACE, Wall.class);
+        put(Element.ANGLE_IN_LEFT, Wall.class);
+        put(Element.WALL_FRONT, Wall.class);
+        put(Element.ANGLE_IN_RIGHT, Wall.class);
+        put(Element.WALL_RIGHT, Wall.class);
+        put(Element.ANGLE_BACK_RIGHT, Wall.class);
+        put(Element.WALL_BACK, Wall.class);
+        put(Element.ANGLE_BACK_LEFT, Wall.class);
+        put(Element.WALL_LEFT, Wall.class);
+        put(Element.WALL_BACK_ANGLE_LEFT, Wall.class);
+        put(Element.WALL_BACK_ANGLE_RIGHT, Wall.class);
+        put(Element.ANGLE_OUT_RIGHT, Wall.class);
+        put(Element.ANGLE_OUT_LEFT, Wall.class);
+        put(Element.SPACE, Wall.class);
 
-        put(Elements.BASE1, Start.class);
-        put(Elements.BASE2, Start.class);
-        put(Elements.BASE3, Start.class);
-        put(Elements.BASE4, Start.class);
+        put(Element.BASE1, Start.class);
+        put(Element.BASE2, Start.class);
+        put(Element.BASE3, Start.class);
+        put(Element.BASE4, Start.class);
 
-        put(Elements.EXIT, Exit.class);
-        put(Elements.HOLE, Hole.class);
-        put(Elements.BREAK, Box.class);
-        put(Elements.GOLD, Gold.class);
+        put(Element.EXIT, Exit.class);
+        put(Element.HOLE, Hole.class);
+        put(Element.BREAK, Box.class);
+        put(Element.GOLD, Gold.class);
 
-        put(Elements.FORCE1, HeroForces.class);
-        put(Elements.FORCE2, HeroForces.class);
-        put(Elements.FORCE3, HeroForces.class);
-        put(Elements.FORCE4, HeroForces.class);
+        put(Element.FORCE1, HeroForces.class);
+        put(Element.FORCE2, HeroForces.class);
+        put(Element.FORCE3, HeroForces.class);
+        put(Element.FORCE4, HeroForces.class);
 
-        put(Elements.FOG, Wall.class);
-        put(Elements.BACKGROUND, Wall.class);
+        put(Element.FOG, Wall.class);
+        put(Element.BACKGROUND, Wall.class);
     }};
 
-    public static Class<? extends BaseItem> getItsClass(Elements element) {
+    public static Class<? extends BaseItem> getItsClass(Element element) {
         Class<? extends BaseItem> result = map.get(element);
         if (result == null) {
             throw new IllegalArgumentException(

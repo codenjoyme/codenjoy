@@ -35,9 +35,6 @@ import java.util.List;
 
 import static com.codenjoy.dojo.expansion.model.levels.items.FeatureItem.IMPASSABLE;
 
-/**
- * Created by Mikhail_Udalyi on 08.06.2016.
- */
 public class CellImpl extends PointImpl implements Cell {
 
     private List<Item> items = new ArrayList<>();

@@ -38,10 +38,14 @@
         <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
         <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+        <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
-        <client.sources>${user.resources}/${module.name}-servers.zip</client.sources>
-        <client.java.package>java/com/codenjoy/dojo/${module.name}</client.java.package>
+        <client.sources.file>${module.name}-servers.zip</client.sources.file>
+        <client.sources>${user.resources}/${client.sources.file}</client.sources>
+        <dojo.package>java/com/codenjoy/dojo</dojo.package>
+        <java.client.file>resources/user/java-client.zip</java.client.file>
+        <java.client>${project.build.directory}/java-client</java.client>
     </properties>
 
     <repositories>
@@ -337,7 +341,7 @@
                             <fileset>
                                 <directory>${user.resources}</directory>
                                 <includes>
-                                    <include>**/${module.name}-servers.zip</include>
+                                    <include>**/${client.sources.file}</include>
                                 </includes>
                                 <followSymlinks>false</followSymlinks>
                             </fileset>
@@ -356,6 +360,33 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>unpack</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>${project.groupId}</groupId>
+                                        <artifactId>java-client</artifactId>
+                                        <version>${project.version}</version>
+                                        <type>jar</type>
+                                        <outputDirectory>${java.client}</outputDirectory>
+                                        <overWrite>true</overWrite>
+                                        <includes>${java.client.file}</includes>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>${maven-antrun.version}</version>
                     <executions>
@@ -366,18 +397,26 @@
                             </goals>
                             <configuration>
                                 <target>
+                                    <unzip src="${java.client}/${java.client.file}"
+                                           dest="${java.client}"/>
+
                                     <zip destfile="${client.sources}"
-                                         basedir="."
-                                         includes="src/main/${client.java.package}/client/*.java,
-                                               src/main/${client.java.package}/model/elements/*.java,
-                                               src/main/${client.java.package}/model/Elements.java,
-                                               src/test/${client.java.package}/client/*.java,
+                                         basedir="${java.client}"
+                                         includes="
+                                               src/main/${dojo.package}/client/**,
+                                               src/main/${dojo.package}/games/${module.name}/**,
+                                               src/main/${dojo.package}/services/**,
+                                               src/main/${dojo.package}/*.java,
+                                               src/main/java/org/json/*.java,
+                                               src/test/${dojo.package}/client/**,
+                                               src/test/${dojo.package}/games/${module.name}/**,
+                                               src/test/${dojo.package}/services/**,
+                                               src/test/${dojo.package}/*.java,
                                                README.*,
+                                               mvnw,
+                                               mvnw.cmd,
                                                src/license/**,
-                                               **/pom.xml"
-                                         excludes="src/main/${client.java.package}/client/ai/*,
-                                               src/test/${client.java.package}/client/ai/*,
-                                               **/target/**"
+                                               pom.xml"
                                          update="true"/>
 
                                     <zip destfile="${client.sources}"
@@ -400,7 +439,8 @@
                                         <zipfileset dir="./target/stuff/" prefix="src/main/resources"/>
                                     </zip>
 
-                                    <copy file="${client.sources}" todir="target/classes/resources/user"/>
+                                    <copy file="${client.sources}"
+                                          todir="target/classes/resources/user"/>
                                 </target>
                             </configuration>
                         </execution>

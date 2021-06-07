@@ -26,6 +26,8 @@ package com.codenjoy.dojo.expansion.model;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.Forces;
+import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;

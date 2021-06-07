@@ -25,9 +25,9 @@ package com.codenjoy.dojo.spacerace.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.games.spacerace.Element;
 
-public class BulletPack extends PointImpl implements State<Elements, Player>{
+public class BulletPack extends PointImpl implements State<Element, Player>{
 
     public BulletPack(int x, int y) {
         super(x, y);
@@ -38,7 +38,7 @@ public class BulletPack extends PointImpl implements State<Elements, Player>{
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BULLET_PACK;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BULLET_PACK;
     }
 }

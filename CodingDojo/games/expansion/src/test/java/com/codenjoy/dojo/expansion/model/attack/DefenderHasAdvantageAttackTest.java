@@ -23,7 +23,7 @@ package com.codenjoy.dojo.expansion.model.attack;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
 import com.codenjoy.dojo.expansion.services.GameSettings;
@@ -46,7 +46,7 @@ public class DefenderHasAdvantageAttackTest {
         private int startCount;
         private int decrease;
 
-        public Forces(int count, Elements element) {
+        public Forces(int count, Element element) {
             this.count = count;
             this.startCount = count;
             this.element = element;
@@ -56,7 +56,7 @@ public class DefenderHasAdvantageAttackTest {
         public static Forces get(String code) {
             int count = Integer.valueOf(code.substring(0, code.length() - 1));
             char ch = code.charAt(code.length() - 1);
-            Elements element = Elements.valueOf(ch);
+            Element element = Element.valueOf(ch);
             return new Forces(count, element);
         }
 

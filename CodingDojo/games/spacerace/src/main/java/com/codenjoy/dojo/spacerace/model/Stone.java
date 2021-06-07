@@ -23,11 +23,12 @@ package com.codenjoy.dojo.spacerace.model;
  */
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.games.spacerace.Element;
 
 /**
  * Артефакт Камень на поле
  */
-public class Stone extends PointImpl implements State<Elements, Player>, Tickable {
+public class Stone extends PointImpl implements State<Element, Player>, Tickable {
     private Direction direction;
 
     public Stone(int x, int y) {
@@ -40,8 +41,8 @@ public class Stone extends PointImpl implements State<Elements, Player>, Tickabl
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.STONE;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.STONE;
     }
 
     @Override

@@ -22,12 +22,13 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.pong.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-public class Ball extends PointImpl implements Tickable, State<Elements, Player> {
+public class Ball extends PointImpl implements Tickable, State<Element, Player> {
 
     private Field field;
     private BallDirection direction;
@@ -38,8 +39,8 @@ public class Ball extends PointImpl implements Tickable, State<Elements, Player>
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BALL;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BALL;
     }
 
     @Override

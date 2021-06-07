@@ -23,7 +23,7 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.Dice;
@@ -37,7 +37,7 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.battlecity.model.Elements.*;
+import static com.codenjoy.dojo.games.battlecity.Element.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.settings.Chance.CHANCE_RESERVED;
 
@@ -167,8 +167,8 @@ public class GameSettings extends SettingsImpl
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    public Chance<Elements> chance(Dice dice) {
-        return new Chance<Elements>(dice, this)
+    public Chance<Element> chance(Dice dice) {
+        return new Chance<Element>(dice, this)
             .put(CHANCE_IMMORTALITY, PRIZE_IMMORTALITY)
             .put(CHANCE_BREAKING_WALLS, PRIZE_BREAKING_WALLS)
             .put(CHANCE_WALKING_ON_WATER, PRIZE_WALKING_ON_WATER)

@@ -24,8 +24,9 @@ package com.codenjoy.dojo.quake2d.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.quake2d.client.Board;
-import com.codenjoy.dojo.quake2d.client.ai.AISolver;
+import com.codenjoy.dojo.games.quake2d.Board;
+import com.codenjoy.dojo.games.quake2d.Element;
+import com.codenjoy.dojo.quake2d.services.ai.AISolver;
 import com.codenjoy.dojo.quake2d.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -65,7 +66,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

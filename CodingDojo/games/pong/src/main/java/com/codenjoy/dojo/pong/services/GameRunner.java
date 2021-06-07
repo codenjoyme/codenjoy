@@ -24,8 +24,9 @@ package com.codenjoy.dojo.pong.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.pong.client.Board;
-import com.codenjoy.dojo.pong.client.ai.AISolver;
+import com.codenjoy.dojo.games.pong.Board;
+import com.codenjoy.dojo.games.pong.Element;
+import com.codenjoy.dojo.pong.services.ai.AISolver;
 import com.codenjoy.dojo.pong.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -65,7 +66,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElements[] getPlots() {
-        return Elements.values();
+        return Element.values();
     }
 
     @Override

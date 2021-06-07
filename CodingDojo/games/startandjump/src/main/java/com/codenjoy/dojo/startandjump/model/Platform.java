@@ -24,8 +24,9 @@ package com.codenjoy.dojo.startandjump.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.games.startandjump.Element;
 
-public class Platform extends PointImpl implements Tickable, State<Elements, Player> {
+public class Platform extends PointImpl implements Tickable, State<Element, Player> {
 
     private Direction direction;
 
@@ -38,8 +39,8 @@ public class Platform extends PointImpl implements Tickable, State<Elements, Pla
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.PLATFORM;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.PLATFORM;
     }
 
     @Override

@@ -23,14 +23,16 @@ package com.codenjoy.dojo.tetris.client
  */
 
 import com.codenjoy.dojo.client.{AbstractJsonSolver, WebSocketRunner}
-import com.codenjoy.dojo.services.{Dice, RandomDice}
+import com.codenjoy.dojo.services.{Dice, Direction, RandomDice}
 
 /**
-  * User: your name
-  * Это твой алгоритм AI для игры. Реализуй его на свое усмотрение.
-  * Обрати внимание на {@see ScalaSolverTest} - там приготовлен тестовый
-  * фреймворк для тебя.
-  */
+ * Author: your name
+ *
+ * This is your AI algorithm for the game.
+ * Implement it at your own discretion.
+ * Pay attention to {@see YourSolverTest} - there is
+ * a test framework for you.
+ */
 object YourSolverScala {
 
   def main(args: Array[String]) {
@@ -42,5 +44,11 @@ object YourSolverScala {
 }
 
 class YourSolverScala(var dice: Dice) extends AbstractJsonSolver[BoardScala] {
-  def getAnswer(board: BoardScala) = "DOWN"
+
+  override def getAnswer(board: BoardScala): String = {
+
+    // TODO your code here
+
+    Direction.UP.toString
+  }
 }

@@ -25,22 +25,23 @@ package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.games.tetris.Element;
 
 /**
  * User: serhiy.zelenin
  * Date: 5/9/12
  * Time: 6:55 PM
  */
-public class Plot extends PointImpl implements State<Elements, Player> {
+public class Plot extends PointImpl implements State<Element, Player> {
 
-    private Elements color;
+    private Element color;
 
-    public Plot(int x, int y, Elements color) {
+    public Plot(int x, int y, Element color) {
         super(x, y);
         this.color = color;
     }
 
-    public Elements getColor() {
+    public Element getColor() {
         return color;
     }
 
@@ -54,7 +55,7 @@ public class Plot extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return color;
     }
 }

@@ -23,8 +23,8 @@ package com.codenjoy.dojo.battlecity;
  */
 
 
-import com.codenjoy.dojo.battlecity.client.Board;
-import com.codenjoy.dojo.battlecity.client.ai.AISolver;
+import com.codenjoy.dojo.games.battlecity.Board;
+import com.codenjoy.dojo.battlecity.services.ai.AISolver;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.client.local.LocalGameRunner;

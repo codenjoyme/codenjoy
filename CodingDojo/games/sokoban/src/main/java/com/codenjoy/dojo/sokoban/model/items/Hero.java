@@ -28,10 +28,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.games.sokoban.Element;
 import com.codenjoy.dojo.sokoban.model.Field;
 import com.codenjoy.dojo.sokoban.model.Player;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
+public class Hero extends PlayerHero<Field> implements State<Element, Player>, NoActJoystick {
 
     private boolean alive;
     private Direction direction;
@@ -111,7 +112,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.HERO;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.HERO;
     }
 }

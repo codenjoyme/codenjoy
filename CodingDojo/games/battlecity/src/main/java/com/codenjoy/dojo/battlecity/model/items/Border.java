@@ -23,13 +23,13 @@ package com.codenjoy.dojo.battlecity.model.items;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Border extends PointImpl implements State<Elements, Player> {
+public class Border extends PointImpl implements State<Element, Player> {
 
     public Border(int x, int y) {
         super(x, y);
@@ -40,7 +40,7 @@ public class Border extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BATTLE_WALL;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BATTLE_WALL;
     }
 }

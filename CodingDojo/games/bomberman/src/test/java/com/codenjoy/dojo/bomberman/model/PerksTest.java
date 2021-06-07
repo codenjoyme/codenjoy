@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 import com.codenjoy.dojo.bomberman.model.perks.*;
+import com.codenjoy.dojo.games.bomberman.Element;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.CATCH_PERK_SCORE;
@@ -37,7 +38,7 @@ public class PerksTest extends AbstractGameTest {
     public void shouldPerkBeDropped_whenWallIsDestroyed() {
         // given
         givenBoardWithDestroyWalls(6);
-        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
+        perks.put(Element.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
         perks.dropRatio(20); // 20%
         dice(dice, 10, 30); // must drop 1 perk
 
@@ -82,7 +83,7 @@ public class PerksTest extends AbstractGameTest {
         // given
         givenBoardWithDestroyWalls(6);
 
-        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        perks.put(Element.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
         perks.dropRatio(20); // 20%
 
         dice(dice, 10); // must drop 2 perks
@@ -146,7 +147,7 @@ public class PerksTest extends AbstractGameTest {
         // given
         givenBoardWithDestroyWalls(6);
 
-        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        perks.put(Element.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
         perks.dropRatio(20); // 20%
         perks.pickTimeout(50);
 
@@ -233,7 +234,7 @@ public class PerksTest extends AbstractGameTest {
         // given
         givenBoardWithDestroyWalls(6);
 
-        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        perks.put(Element.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
         perks.dropRatio(20); // 20%
         perks.pickTimeout(5);
 
@@ -751,7 +752,7 @@ public class PerksTest extends AbstractGameTest {
         int timeout = 3; // время работы перка
 
         int value = 4;   // показатель его влияния, в тесте не интересно
-        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
+        perks.put(Element.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
         perks.dropRatio(20);
 
         player.getHero().addPerk(new BombBlastRadiusIncrease(value, timeout));

@@ -25,11 +25,9 @@ package com.codenjoy.dojo.icancode;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.icancode.client.Board;
-import com.codenjoy.dojo.icancode.client.ai.AISolver;
+import com.codenjoy.dojo.games.icancode.Board;
+import com.codenjoy.dojo.icancode.services.ai.AISolver;
 import com.codenjoy.dojo.icancode.model.Level;
-import com.codenjoy.dojo.icancode.model.items.Zombie;
-import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.icancode.services.Levels;

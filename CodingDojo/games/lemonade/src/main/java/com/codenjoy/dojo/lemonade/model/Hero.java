@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
+import com.codenjoy.dojo.games.lemonade.WeatherForecast;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;

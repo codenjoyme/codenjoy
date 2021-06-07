@@ -22,28 +22,30 @@ package com.codenjoy.dojo.rubicscube.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.rubicscube.Element;
+
 public class Line {
 
     public static final int SIZE = 3;
 
-    private Elements[] line = new Elements[SIZE];
+    private Element[] line = new Element[SIZE];
 
     public Line(String line) {
         for (int index = 0; index < SIZE; index++) {
-            this.line[index] = Elements.valueOf(line.charAt(index));
+            this.line[index] = Element.valueOf(line.charAt(index));
         }
     }
 
-    public Line(Elements[] newLine) {
+    public Line(Element[] newLine) {
         this.line = newLine;
     }
 
-    public Elements get(int index) {
+    public Element get(int index) {
         return line[index];
     }
 
     public Line invert() {
-        Elements[] newLine = new Elements[SIZE];
+        Element[] newLine = new Element[SIZE];
         for (int index = 0; index < SIZE; index++) {
             newLine[SIZE - 1 - index] = line[index];
         }

@@ -23,29 +23,30 @@ package com.codenjoy.dojo.rubicscube.model;
  */
 
 
+import com.codenjoy.dojo.games.rubicscube.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Cell extends PointImpl implements State<Elements, Player> {
-    private Elements color;
+public class Cell extends PointImpl implements State<Element, Player> {
+    private Element color;
 
-    public Cell(Point point, Elements color) {
+    public Cell(Point point, Element color) {
         super(point);
         this.color = color;
     }
 
     @Override
     public String toString() {
-        return String.format("pt%s=%s", super.toString(), color.ch);
+        return String.format("pt%s=%s", super.toString(), color.ch());
     }
 
     public char getColor() {
-        return color.ch;
+        return color.ch();
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.valueOf(this.getColor());
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.valueOf(this.getColor());
     }
 }

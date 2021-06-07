@@ -24,8 +24,8 @@ package com.codenjoy.dojo.minesweeper;
 
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.minesweeper.client.Board;
-import com.codenjoy.dojo.minesweeper.client.ai.AISolver;
+import com.codenjoy.dojo.games.minesweeper.Board;
+import com.codenjoy.dojo.minesweeper.services.ai.AISolver;
 import com.codenjoy.dojo.minesweeper.services.Events;
 import com.codenjoy.dojo.minesweeper.services.GameRunner;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;

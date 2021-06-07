@@ -26,13 +26,9 @@ package com.codenjoy.dojo.expansion.services;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 05.06.13
- * Time: 20:35
- */
+
 public class ScoresTest {
     private Scores scores;
 

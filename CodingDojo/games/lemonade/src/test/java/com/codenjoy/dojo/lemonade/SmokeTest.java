@@ -24,17 +24,15 @@ package com.codenjoy.dojo.lemonade;
 
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.lemonade.client.Board;
-import com.codenjoy.dojo.lemonade.client.ai.AISolver;
+import com.codenjoy.dojo.games.lemonade.Board;
 import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.lemonade.services.GameSettings;
+import com.codenjoy.dojo.lemonade.services.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
 import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
