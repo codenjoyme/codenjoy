@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.client.simple;
+package com.codenjoy.dojo.a2048.model;
 
 /*-
  * #%L
@@ -22,33 +22,23 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.games.a2048.Element;
+import org.junit.Test;
 
-import java.util.List;
+import java.util.Arrays;
 
-public class RuleChild implements Rule {
+import static org.junit.Assert.assertEquals;
 
-    private Pattern pattern;
-    private List<Direction> directions;
+public class ElementTest {
 
-    public RuleChild(Pattern pattern, List<Direction> directions) {
-        this.pattern = pattern;
-        this.directions = directions;
+    @Test
+    public void testValuesExcept() {
+        assertEquals("[x, 2, 4, 8, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S,  ]",
+                Arrays.toString(Element.valuesExcept()));
+
+        assertEquals("[2, 4, 8, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S]",
+                Arrays.toString(Element.valuesExcept(Element.NONE, Element._x)));
+
     }
 
-    @Override
-    public List<Direction> directions(Board board) {
-        return directions;
-    }
-
-    @Override
-    public Rule findFor(Board board) {
-        return board.isNearMe(pattern) ? this : null;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("[%s \n >>> %s]", pattern, directions);
-    }
 }

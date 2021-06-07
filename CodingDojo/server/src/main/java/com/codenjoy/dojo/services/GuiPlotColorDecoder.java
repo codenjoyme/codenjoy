@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.multiplayer.types.LevelsType;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import lombok.AllArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,7 +36,7 @@ import java.util.stream.Collector;
 public class GuiPlotColorDecoder {
 
     public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private CharElements[] values;
+    private CharElement[] values;
 
     private char getGuiChar(char ch) {
         return GUI.charAt(getIndex(ch));
@@ -98,7 +98,7 @@ public class GuiPlotColorDecoder {
 
     private String getValues() {
         return Arrays.stream(values)
-                .map(CharElements::ch)
+                .map(CharElement::ch)
                 .collect(asString());
     }
 

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sudoku.model;
+package com.codenjoy.dojo.tetris.model;
 
 /*-
  * #%L
@@ -22,34 +22,31 @@ package com.codenjoy.dojo.sudoku.model;
  * #L%
  */
 
-import com.codenjoy.dojo.games.sudoku.Element;
+import com.codenjoy.dojo.games.tetris.Element;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.games.sudoku.Element.*;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
-public class ElementsTest {
+public class ElementTest {
 
     @Test
     public void testValuesExcept() {
-        assertEquals("[ , ☼, *, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        assertEquals("[I, J, L, O, S, T, Z, .]",
                 Arrays.toString(Element.valuesExcept()));
 
-        assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9]",
-                Arrays.toString(Element.valuesExcept(BORDER, NONE, HIDDEN)));
+        assertEquals("[I, J, L, O, S, T, Z]",
+                Arrays.toString(Element.valuesExcept(Element.NONE)));
     }
 
     @Test
     public void testNumber() {
-        assertEquals("[' ':0, '☼':-1, '*':-1, '1':1, '2':2, '3':3, " +
-                        "'4':4, '5':5, '6':6, '7':7, '8':8, '9':9]",
+        assertEquals("['I':2, 'J':3, 'L':4, 'O':1, 'S':5, 'T':7, 'Z':6, '.':0]",
                 Arrays.stream(Element.values())
-                        .map(el -> String.format("'%s':%s", el.ch(), el.value()))
+                        .map(el -> String.format("'%s':%s", el.ch(), el.index()))
                         .collect(toList())
                         .toString());
     }
-
 }

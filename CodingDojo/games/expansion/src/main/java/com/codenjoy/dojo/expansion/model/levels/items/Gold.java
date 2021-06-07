@@ -49,7 +49,7 @@ public class Gold extends BaseItem {
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
 //        if (picked) {
-//            return Elements.FLOOR;
+//            return Element.FLOOR;
 //        } else {
             return super.state(player, alsoAtPoint);
 //        }

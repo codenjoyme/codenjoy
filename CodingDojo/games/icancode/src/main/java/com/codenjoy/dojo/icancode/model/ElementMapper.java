@@ -33,7 +33,7 @@ import java.util.function.Function;
 
 import static com.codenjoy.dojo.games.icancode.Element.*;
 
-public class ElementsMapper {
+public class ElementMapper {
 
     public static Map<Element, Function<Element, ? extends BaseItem>> map =
             new EnumMap<>(Element.class)

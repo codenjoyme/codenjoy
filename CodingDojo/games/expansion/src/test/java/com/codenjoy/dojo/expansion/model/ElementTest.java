@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class ElementsTest {
+public class ElementTest {
 
     @Test
     public void testGetForce() {

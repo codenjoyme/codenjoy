@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.bomberman.client.simple;
+package com.codenjoy.dojo.battlecity.model;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2020 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,33 +22,17 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.games.battlecity.Element;
+import org.junit.Test;
 
-import java.util.List;
+import static org.junit.Assert.*;
 
-public class RuleNode implements Rule {
+public class ElementTest {
 
-    private Pattern pattern;
-    private Rules rules;
-
-    public RuleNode(Pattern pattern, Rules rules) {
-        this.pattern = pattern;
-        this.rules = rules;
+    @Test
+    public void getWalls() {
+        assertEquals("[╬, ╩, ╦, ╠, ╣, ╨, ╥, ╞, ╡, │, ─, ┌, ┐, └, ┘,  ]",
+                Element.getWalls().toString());
     }
 
-    @Override
-    public List<Direction> directions(Board board) {
-        return rules.process(board);
-    }
-
-    @Override
-    public Rule findFor(Board board) {
-        return rules.findFor(board)
-                .orElse(null);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("[%s > %s]", pattern, rules.toString());
-    }
 }

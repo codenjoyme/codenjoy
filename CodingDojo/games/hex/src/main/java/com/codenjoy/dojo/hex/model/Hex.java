@@ -256,7 +256,7 @@ public class Hex implements Field {
                 .map(Player::getElement)
                 .collect(toList());
 
-        List<Element> free = Element.heroesElements().stream()
+        List<Element> free = Element.heroes().stream()
                 .filter(el -> !busy.contains(el))
                 .collect(toList());
 

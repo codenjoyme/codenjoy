@@ -28,10 +28,10 @@ import com.codenjoy.dojo.games.expansion.Element;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class ElementsMapper {
+public class ElementMapper {
 
     public static Map<Element, Class<? extends BaseItem>> map =
-            new EnumMap<Element, Class<? extends BaseItem>>(Element.class)
+            new EnumMap<>(Element.class)
     {{
         put(Element.EMPTY, None.class);
         put(Element.FLOOR, Floor.class);
@@ -75,7 +75,7 @@ public class ElementsMapper {
             throw new IllegalArgumentException(
                     String.format("Please add element '%s' in class: %s",
                     element.ch(),
-                    ElementsMapper.class)
+                    ElementMapper.class)
             );
         }
         return result;

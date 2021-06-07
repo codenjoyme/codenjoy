@@ -35,7 +35,7 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.football.services.GameSettings.Keys.NUMBER_OF_PLAYERS;
@@ -69,7 +69,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public CharElements[] getPlots() {
+    public CharElement[] getPlots() {
         return Element.values();
     }
 
