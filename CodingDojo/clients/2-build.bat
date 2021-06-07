@@ -46,7 +46,7 @@ goto :eof
 goto :eof
 
 :node
-    cd %JAVASCPIPT_CLIENT_HOME%
+    cd %JAVASCRIPT_CLIENT_HOME%
     call 1-build.bat
     cd %ROOT%
 goto :eof
