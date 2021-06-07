@@ -40,3 +40,6 @@
 [submodule "CodingDojo/clients/ruby"]
 	path = CodingDojo/clients/ruby
 	url = git@github.com:codenjoyme/codenjoy-ruby-client.git
+[submodule "CodingDojo/clients/java"]
+	path = CodingDojo/clients/java
+	url = https://github.com/codenjoyme/codenjoy-java-client.git
