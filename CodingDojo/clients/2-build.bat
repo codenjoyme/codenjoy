@@ -17,6 +17,10 @@ IF "%LANGUAGE%"=="pseudo" (
     call :pseudo
 )
 
+IF "%LANGUAGE%"=="java-script" (
+    call :node
+)
+
 echo off
 echo [44;93m
 echo        +-------------------------------------+
@@ -37,6 +41,12 @@ goto :eof
 
 :pseudo
     cd %PSEUDO_CLIENT_HOME%
+    call 1-build.bat
+    cd %ROOT%
+goto :eof
+
+:node
+    cd %JAVASCRIPT_CLIENT_HOME%
     call 1-build.bat
     cd %ROOT%
 goto :eof
