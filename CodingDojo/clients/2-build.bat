@@ -21,6 +21,10 @@ IF "%LANGUAGE%"=="java-script" (
     call :node
 )
 
+IF "%LANGUAGE%"=="go" (
+    call :go
+)
+
 echo off
 echo [44;93m
 echo        +-------------------------------------+
@@ -47,6 +51,12 @@ goto :eof
 
 :node
     cd %JAVASCRIPT_CLIENT_HOME%
+    call 1-build.bat
+    cd %ROOT%
+goto :eof
+
+:go
+    cd %GO_CLIENT_HOME%
     call 1-build.bat
     cd %ROOT%
 goto :eof
