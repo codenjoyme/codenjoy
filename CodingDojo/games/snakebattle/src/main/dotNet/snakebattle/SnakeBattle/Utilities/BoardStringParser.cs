@@ -23,8 +23,8 @@ namespace SnakeBattle.Utilities
             foreach (var cellType in values)
             {
                 var fieldInfo = cellType.GetType().GetField(cellType.ToString());
-                var descriptionAttribute = fieldInfo!.GetCustomAttribute<DescriptionAttribute>();
-                _fromStringToType[descriptionAttribute!.Description[0]] = cellType;
+                var descriptionAttribute = fieldInfo.GetCustomAttribute<DescriptionAttribute>();
+                _fromStringToType[descriptionAttribute.Description[0]] = cellType;
             }
         }
 

@@ -1,9 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
 
         <IsPackable>false</IsPackable>
+
+        <TargetFrameworks>net472;net5.0;netcoreapp3.1</TargetFrameworks>
+
     </PropertyGroup>
 
     <ItemGroup>

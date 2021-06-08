@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using System.Linq;
 using System.Threading;
@@ -19,7 +18,7 @@ namespace SnakeBattle.Services
         private readonly GameConfiguration _gameConfiguration;
         private readonly ILogger<SnakeBattleClient> _logger;
         private readonly ISolver _solver;
-        private WebSocket? _webSocket;
+        private WebSocket _webSocket;
 
         public SnakeBattleClient(
             ISolver solver,
@@ -67,7 +66,7 @@ namespace SnakeBattle.Services
             _webSocket?.Send(message);
         }
 
-        private void WebSocketOnClosed(object? sender, EventArgs e)
+        private void WebSocketOnClosed(object sender, EventArgs e)
         {
             _logger.LogWarning("Client disconnected.");
             _displayService.ShowError("Client disconnected.");
@@ -76,7 +75,7 @@ namespace SnakeBattle.Services
             _webSocket?.Open();
         }
 
-        private void WebSocketOnMessageReceived(object? sender, MessageReceivedEventArgs eventArgs)
+        private void WebSocketOnMessageReceived(object sender, MessageReceivedEventArgs eventArgs)
         {
             var boardString = eventArgs.Message.Substring(ResponsePrefix.Length);
             var board = _boardStringParser.Parse(boardString);
