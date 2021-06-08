@@ -20,6 +20,10 @@ IF "%LANGUAGE%"=="java-script" (
     call :node
 )
 
+IF "%LANGUAGE%"=="go" (
+    call :go
+)
+
 echo off
 echo [44;93m
 echo        +-------------------------------------+
@@ -45,7 +49,7 @@ goto :eof
     cd %ROOT%
     rd /S /Q %JAVA_HOME%
     powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers.Add([System.Net.HttpRequestHeader]::Cookie, 'oraclelicense=accept-securebackup-cookie'); $client.DownloadFile('%ARCH_JDK%','%TOOLS%\jdk.zip') }"
-    %TOOLS%\7z x -y -o%TOOLS%\.. %TOOLS%\jdk.zip
+    %ARCH% x -y -o%TOOLS%\.. %TOOLS%\jdk.zip
     rename %TOOLS%\..\%ARCH_JDK_FOLDER% .jdk
     cd %ROOT%
 goto :eof
@@ -62,8 +66,24 @@ goto :eof
     cd %ROOT%
     rd /S /Q %NODE_HOME%
     powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers.Add([System.Net.HttpRequestHeader]::Cookie, 'oraclelicense=accept-securebackup-cookie'); $client.DownloadFile('%ARCH_NODE%','%TOOLS%\node.zip') }"
-    %TOOLS%\7z x -y -o%TOOLS%\.. %TOOLS%\node.zip
+    %ARCH% x -y -o%TOOLS%\.. %TOOLS%\node.zip
     rename %TOOLS%\..\%ARCH_NODE_FOLDER% .node
+    cd %ROOT%
+goto :eof
+
+:go
+    echo off
+    echo [44;93m
+    echo        +-------------------------------------+
+    echo        !            Installing Go            !
+    echo        +-------------------------------------+
+    echo [0m
+    echo on
+
+    cd %ROOT%
+    rd /S /Q %TOOLS%\..\.golang
+    powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers.Add([System.Net.HttpRequestHeader]::Cookie, 'oraclelicense=accept-securebackup-cookie'); $client.DownloadFile('%ARCH_GO%','%TOOLS%\go.zip') }"
+    %ARCH% x -y -o%TOOLS%\..\.golang %TOOLS%\go.zip
     cd %ROOT%
 goto :eof
 
