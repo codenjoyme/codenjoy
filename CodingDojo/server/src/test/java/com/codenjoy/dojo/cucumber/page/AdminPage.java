@@ -10,38 +10,44 @@ package com.codenjoy.dojo.cucumber.page;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.cucumber.page.admin.ActiveGames;
+import com.codenjoy.dojo.cucumber.page.admin.Inactivity;
 import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.log.DebugService;
 import lombok.RequiredArgsConstructor;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.function.BiFunction;
 
+import static com.codenjoy.dojo.cucumber.utils.PageUtils.xpath;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static org.junit.Assert.assertEquals;
 
 @Component
 @RequiredArgsConstructor
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class AdminPage implements CleanUp {
+public class AdminPage implements Closeable {
+
+    public static final By LOAD_ALL_LINK = xpath("//a[text() = 'LoadAll']");
 
     public static final String URL = "/admin?room=";
     public static final BiFunction<String, String, String> CREATE_ROOM_URL =
@@ -58,9 +64,10 @@ public class AdminPage implements CleanUp {
     private final Page page;
     private final WebDriverWrapper web;
     private final ActiveGames activeGames;
+    private final Inactivity inactivity;
 
     @Override
-    public void cleanUp() {
+    public void close() {
         actionLogger.pause();
         autoSaver.resume();
         debugService.pause();
@@ -71,6 +78,10 @@ public class AdminPage implements CleanUp {
 
     public void open() {
         web.open("/admin");
+    }
+
+    public void open(String room) {
+        web.open(URL + room);
     }
 
     public void assertOnPage() {
@@ -105,6 +116,10 @@ public class AdminPage implements CleanUp {
         return web.element("#pauseGame td a");
     }
 
+    public WebElement loadAllLink() {
+        return web.elementBy(LOAD_ALL_LINK);
+    }
+
     public void assertGameIsActive(boolean active) {
         String status = pauseResumeGameStatus().getText();
         String linkText = pauseResumeGameLink().getText();
@@ -137,5 +152,13 @@ public class AdminPage implements CleanUp {
 
     public void assertPlayersInRooms(String expected) {
         assertEquals(expected, activeGames.getPlayersInRooms().toString());
+    }
+
+    public Inactivity inactivity() {
+        return inactivity;
+    }
+
+    public void clickLoadAll() {
+        loadAllLink().click();
     }
 }

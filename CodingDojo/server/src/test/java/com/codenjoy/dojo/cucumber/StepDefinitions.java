@@ -25,14 +25,17 @@ package com.codenjoy.dojo.cucumber;
 import com.codenjoy.dojo.cucumber.page.*;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
 
+import static org.junit.Assert.assertEquals;
+
 @RequiredArgsConstructor
-public class StepDefinitions implements CleanUp {
+public class StepDefinitions {
 
     private final WebDriverWrapper web;
     private final LoginPage login;
@@ -44,17 +47,23 @@ public class StepDefinitions implements CleanUp {
     private final WebsocketClients clients;
 
     @Before
-    @Override
     public void cleanUp() {
-        admin.cleanUp();
-        registration.cleanUp();
-        clients.cleanUp();
+        admin.close();
+        registration.close();
+        clients.close();
     }
 
     @After
     public void tearDown() {
-        cleanUp();
+        admin.close();
+        registration.close();
+        clients.close();
         web.closeBrowser();
+    }
+
+    @ParameterType(value = "true|True|TRUE|false|False|FALSE")
+    public Boolean bool(String value) {
+        return Boolean.valueOf(value);
     }
 
     @When("Open login page")
@@ -100,11 +109,12 @@ public class StepDefinitions implements CleanUp {
     @When("Try to register with: name {string}, email {string}, " +
             "password {string}, city {string}, " +
             "tech skills {string}, company {string}, " +
-            "experience {string}, room {string}")
+            "experience {string}, game {string}, room {string}")
     public void tryToRegister(String name, String email,
                               String password, String country,
                               String techSkills, String company,
-                              String experience, String room)
+                              String experience, String game,
+                              String room)
     {
         registration.name(name);
         registration.email(email);
@@ -114,6 +124,7 @@ public class StepDefinitions implements CleanUp {
         registration.tech(techSkills);
         registration.company(company);
         registration.experience(experience);
+        registration.game(game);
         registration.room(room);
         registration.submit();
     }
@@ -202,8 +213,11 @@ public class StepDefinitions implements CleanUp {
 
     @Given("Login to Admin page")
     public void loginToAdminPage() {
-        loginAs("admin@codenjoyme.com", "admin");
-        admin.open();
+        login.adminOpen();
+        login.email("admin@codenjoyme.com");
+        login.password("admin");
+        login.submit();
+        admin.assertOnPage();
         assertAdminPageOpened(AdminPage.URL + "first");
     }
 
@@ -276,13 +290,21 @@ public class StepDefinitions implements CleanUp {
     public void assertClientConnected(String name, String url) {
         String game = page.pageSetting("game");
         url = page.injectSettings(url);
-        clients.assertConnected(game, name, url);
+        clients.registerWebSocketClient(game, name, url);
     }
 
+    @Then("Websocket {string} send {string}")
+    public void websocketClientSend(String name, String command) {
+        clients.sendRequest(name, command);
+    }
+
+    // TODO [RK#4]: Emphasise that client override running solver to return different command.
+    //              messages are being sent on the background when a session is opened.
     @Then("Websocket {string} send {string} and got {string}")
-    public void websocketClientSend(String name, String command, String board) {
+    public void websocketClientSendAndGot(String name, String command, String board) {
         board = board.replaceAll("\\\\n", "\n");
         clients.assertRequestReceived(name, command, board);
+        page.refresh();
     }
 
     @Then("Websocket {string} send {string} and got nothing")
@@ -323,5 +345,55 @@ public class StepDefinitions implements CleanUp {
     @Then("There are players in rooms {string} on the admin page")
     public void thereArePlayersOnTheRoomsOnAdminPage(String expected) {
         admin.assertPlayersInRooms(expected);
+    }
+
+    @When("Click load all players")
+    public void clickLoadAllPlayers() {
+        admin.clickLoadAll();
+        clients.refreshAllRunnersSessions();
+    }
+
+    @When("Set inactivity kick enabled checkbox to {bool}")
+    public void playerUserMailComIsKickedTrue(boolean enabled) {
+        admin.inactivity().kickEnabled(enabled);
+    }
+
+    @And("Set inactivity timeout parameter to {int}")
+    public void setInactivityTimeoutParameterTo(int ticks) {
+        admin.inactivity().timeout(ticks);
+    }
+
+    @And("Press inactivity settings save button")
+    public void pressInactivitySettingsSaveButton() {
+        admin.inactivity().submit();
+    }
+
+    @Then("Inactivity parameters {string}")
+    public void assertInactivitySettings(String expected) {
+        assertEquals(expected, admin.inactivity().toString());
+    }
+
+    @And("All players inactivity ticks are reset")
+    public void assertAllPlayersInactivityTicksReset() {
+        admin.inactivity().playersInactiveTicks()
+                .forEach(ticks -> assertEquals("0", ticks.getText()));
+    }
+
+    @Then("Wait for {int} seconds")
+    public void waitForSeconds(int secondsToWait) throws InterruptedException {
+        for (int second = 1; second <= secondsToWait; second++) {
+            Thread.sleep(1000);
+            page.refresh();
+        }
+    }
+
+    @And("Shutdown {string} websocket runner")
+    public void shutdownClientWebsocketRunner(String player) {
+        clients.shutDownRunnerSession(player);
+    }
+
+    @Then("Player {string} is kicked {bool}")
+    public void playerIsKicked(String email, boolean isKicked) {
+        admin.inactivity().assertPlayerKicked(email, isKicked);
     }
 }

@@ -221,6 +221,14 @@ public class AbstractPlayerGamesTest {
         }
     }
 
+    protected void assertPlayers(String expected, List<PlayerGame> list) {
+        assertEquals(expected,
+                list.stream()
+                        .map(it -> it.getPlayer().getId())
+                        .collect(toList())
+                        .toString());
+    }
+
     public void assertRooms(String expected) {
         assertEquals(expected, getRooms().toString());
     }

@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.codenjoy.dojo.cucumber.page.PageUtils.xpath;
+import static com.codenjoy.dojo.cucumber.utils.PageUtils.xpath;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;

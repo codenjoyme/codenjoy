@@ -71,6 +71,10 @@ setup.isDrawOnlyChanges = false;
 
 // ========================== leaderboard page ==========================
 
+var initLeaderboardLink = function() {
+    var room = getSettings('room')
+    $('#leaderboard-link').attr('href', setup.contextPath + '/board/room/' + room);
+}
 var initHelpLink = function() {
     if (setup.gameMode == MODE_EKIDS) {
         $('#help-link').hide();
@@ -147,6 +151,7 @@ if (setup.onlyLeaderBoard) {
             function() {
                 if (this.hasOwnProperty('boardPageLoad')) {
                     boardPageLoad();
+                    initLeaderboardLink();
                     initHelpLink();
                     initAdditionalLink();
                     initLoginLogoutLink();

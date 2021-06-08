@@ -24,14 +24,14 @@ pages = pages || {};
 
 function defaultRegistrationSettings() {
     return {
-        showGames: true,
         showNames: true,
         showData1: true,
         showData2: true,
         showData3: true,
         showData4: true,
-        defaultGame: null,
-        gameTypes: {
+        showGameModes: true,
+        defaultGameMode: null,
+        gameModes: {
             icancode: [   // TODO вынести это как-то в настройки игры icancode
                 {'name' : 'JavaScript', 'title':'JavaScript (browser version)'},
                 {'name' : 'Contest',    'title':'Java | Kotlin | .Net | JavaScript'},
@@ -71,13 +71,13 @@ pages.admin = function() {
     var getRegSettings = function() {
         var result = defaultRegistrationSettings();
 
-        result.showGames = $('#show-games').prop('checked');
+        result.showGameModes = $('#show-game-modes').prop('checked');
         result.showNames = $('#show-names').prop('checked');
         result.showData1 = $('#show-data1').prop('checked');
         result.showData2 = $('#show-data2').prop('checked');
         result.showData3 = $('#show-data3').prop('checked');
         result.showData4 = $('#show-data4').prop('checked');
-        result.defaultGame = $('#default-game').find('option:selected').val();
+        result.defaultGameMode = $('#default-game-mode').find('option:selected').val();
 
         return result;
     }
@@ -86,31 +86,31 @@ pages.admin = function() {
         if ($.isEmptyObject(data)) {
             data = defaultRegistrationSettings();
         }
-        if (!data.defaultGame) {
-            data.defaultGame = $("#default-game option:first").val();
+        if (!data.defaultGameMode) {
+            data.defaultGameMode = $("#default-game-mode option:first").val();
         }
 
-        $('#show-games').prop('checked', data.showGames);
+        $('#show-game-modes').prop('checked', data.showGameModes);
         $('#show-names').prop('checked', data.showNames);
         $('#show-data1').prop('checked', data.showData1);
         $('#show-data2').prop('checked', data.showData2);
         $('#show-data3').prop('checked', data.showData3);
         $('#show-data4').prop('checked', data.showData4);
 
-        var select = $('#default-game');
+        var select = $('#default-game-mode');
         select.children().remove();
 
-        var allTypes = defaultRegistrationSettings().gameTypes;
-        for (var game in allTypes) {
-            var gameTypes = allTypes[game];
-            for (var index in gameTypes) {
-                var name = gameTypes[index].name;
-                var title = gameTypes[index].title;
+        var allModes = defaultRegistrationSettings().gameModes;
+        for (var game in allModes) {
+            var gameModes = allModes[game];
+            for (var index in gameModes) {
+                var name = gameModes[index].name;
+                var title = gameModes[index].title;
                 select.append('<option value="' + name + '">' + title + '</option>');
             }
         }
 
-        select.val(data.defaultGame);
+        select.val(data.defaultGameMode);
     }
 
     $('#registration-save-button').click(function() {

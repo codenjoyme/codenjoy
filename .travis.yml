@@ -7,7 +7,7 @@ before_install:
   - export PATH=`pwd`/apache-maven-3.6.3/bin:$PATH
   - mvn -v
 script:
-        - cd CodingDojo && mvn clean install
+        - cd CodingDojo && mvn clean install "-Dmaven.test.excludes=**/PerformanceTest.java, **/cucumber/*.java"
 cache:
   directories:
   - .autoconf

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.room.GamesRooms;
 import com.codenjoy.dojo.services.room.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +53,11 @@ public class RegistrationValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.isAssignableFrom(Player.class);
+        return clazz.isAssignableFrom(Player.class)
+                // TODO разобраться откуда тут это возникло
+                //      стало слетать после добавления
+                //       model.addAttribute("gamesRooms", roomService.gamesRooms());
+                || clazz.equals(GamesRooms.class);
     }
 
     @Override
@@ -71,7 +76,7 @@ public class RegistrationValidator implements Validator {
 
         String game = roomService.game(room);
         if (!validator.isGameName(game, CANT_BE_NULL)) {
-            errors.rejectValue("room", "registration.game.invalid", new Object[]{ game }, null);
+            errors.rejectValue("game", "registration.game.invalid", new Object[]{ game }, null);
         }
 
         if (!playerService.isRegistrationOpened(room)) {

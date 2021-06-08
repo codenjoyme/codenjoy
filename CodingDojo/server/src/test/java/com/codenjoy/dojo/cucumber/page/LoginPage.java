@@ -35,6 +35,7 @@ import static org.junit.Assert.assertEquals;
 public class LoginPage {
 
     public static final String PASSWORD_INPUT = "#password input";
+    public static final String GAME_SELECT = "#game select";
     public static final String ROOM_SELECT = "#room select";
     public static final String SUBMIT_BUTTON = "#submit-button";
     public static final String REGISTER_BUTTON = "#register-button";
@@ -53,7 +54,7 @@ public class LoginPage {
     }
 
     public void game(String game) {
-        web.select(ROOM_SELECT, game);
+        web.select(GAME_SELECT, game);
     }
 
     public void submit() {
@@ -79,7 +80,7 @@ public class LoginPage {
     public void assertFormHidden() {
         assertEquals(false, web.exists(EMAIL_INPUT));
         assertEquals(false, web.exists(PASSWORD_INPUT));
-        assertEquals(false, web.exists(ROOM_SELECT));
+        assertEquals(false, web.exists(GAME_SELECT));
         assertEquals(false, web.exists(SUBMIT_BUTTON));
         assertEquals(false, web.exists(REGISTER_BUTTON));
     }

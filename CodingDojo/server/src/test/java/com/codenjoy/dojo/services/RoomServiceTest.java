@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.room.GamesRooms;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.room.RoomState;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -411,10 +412,198 @@ public class RoomServiceTest {
         service.create("room1", game1);
         service.create("room2", game1);
 
-        // when then
+        // when
+        GamesRooms gamesRooms = service.gamesRooms();
+
+        // then
         assertEquals("[GameRooms(game=first, rooms=[room1, room2]), \n" +
                 "GameRooms(game=second, rooms=[room3, room4])]",
-                split(service.gamesRooms(), ", \nGameRooms("));
+                split(gamesRooms, ", \nGameRooms("));
+
+        assertEquals("[first, second]",
+                gamesRooms.getGames().toString());
+
+        assertEquals("[room1, room2, room3, room4]",
+                gamesRooms.getRooms().toString());
+
+        assertEquals("[room1, room2]",
+                gamesRooms.getRooms("first").toString());
+
+        assertEquals("[room3, room4]",
+                gamesRooms.getRooms("second").toString());
+    }
+
+    @Test
+    public void shouldGetOpenedGameRooms_doNotShowClosed() {
+        // given
+        service.create("room3", game2);
+        service.create("room4", game2);
+        service.create("room1", game1);
+        service.create("room2", game1);
+
+        // when
+        service.setOpened("room1", false);
+        GamesRooms gamesRooms = service.openedGamesRooms();
+
+        // then
+        assertEquals("[GameRooms(game=first, rooms=[room2]), \n" +
+                        "GameRooms(game=second, rooms=[room3, room4])]",
+                split(gamesRooms, ", \nGameRooms("));
+
+        assertEquals("[first, second]",
+                gamesRooms.getGames().toString());
+
+        assertEquals("[room2, room3, room4]",
+                gamesRooms.getRooms().toString());
+
+        assertEquals("[room2]",
+                gamesRooms.getRooms("first").toString());
+
+        assertEquals("[room3, room4]",
+                gamesRooms.getRooms("second").toString());
+
+        // when
+        service.setOpened("room2", false);
+        gamesRooms = service.openedGamesRooms();
+
+        // then
+        assertEquals("[GameRooms(game=second, rooms=[room3, room4])]",
+                split(gamesRooms, ", \nGameRooms("));
+
+        assertEquals("[second]",
+                gamesRooms.getGames().toString());
+
+        assertEquals("[room3, room4]",
+                gamesRooms.getRooms().toString());
+
+        assertEquals("[]",
+                gamesRooms.getRooms("first").toString());
+
+        assertEquals("[room3, room4]",
+                gamesRooms.getRooms("second").toString());
+
+        // when
+        service.setOpened("room3", false);
+        gamesRooms = service.openedGamesRooms();
+
+        // then
+        assertEquals("[GameRooms(game=second, rooms=[room4])]",
+                split(gamesRooms, ", \nGameRooms("));
+
+        assertEquals("[second]",
+                gamesRooms.getGames().toString());
+
+        assertEquals("[room4]",
+                gamesRooms.getRooms().toString());
+
+        assertEquals("[]",
+                gamesRooms.getRooms("first").toString());
+
+        assertEquals("[room4]",
+                gamesRooms.getRooms("second").toString());
+
+        // when
+        service.setOpened("room4", false);
+        gamesRooms = service.openedGamesRooms();
+
+        // then
+        assertEquals("[]",
+                split(gamesRooms, ", \nGameRooms("));
+
+        assertEquals("[]",
+                gamesRooms.getGames().toString());
+
+        assertEquals("[]",
+                gamesRooms.getRooms().toString());
+
+        assertEquals("[]",
+                gamesRooms.getRooms("first").toString());
+
+        assertEquals("[]",
+                gamesRooms.getRooms("second").toString());
+
+        // when
+        service.setOpened("room1", true);
+        gamesRooms = service.openedGamesRooms();
+
+        // then
+        assertEquals("[GameRooms(game=first, rooms=[room1])]",
+                split(gamesRooms, ", \nGameRooms("));
+
+        assertEquals("[first]",
+                gamesRooms.getGames().toString());
+
+        assertEquals("[room1]",
+                gamesRooms.getRooms().toString());
+
+        assertEquals("[room1]",
+                gamesRooms.getRooms("first").toString());
+
+        assertEquals("[]",
+                gamesRooms.getRooms("second").toString());
+
+        // when
+        service.setOpened("room3", true);
+        gamesRooms = service.openedGamesRooms();
+
+        // then
+        assertEquals("[GameRooms(game=first, rooms=[room1]), \n" +
+                        "GameRooms(game=second, rooms=[room3])]",
+                split(gamesRooms, ", \nGameRooms("));
+
+        assertEquals("[first, second]",
+                gamesRooms.getGames().toString());
+
+        assertEquals("[room1, room3]",
+                gamesRooms.getRooms().toString());
+
+        assertEquals("[room1]",
+                gamesRooms.getRooms("first").toString());
+
+        assertEquals("[room3]",
+                gamesRooms.getRooms("second").toString());
+
+        // when
+        service.setOpened("room2", true);
+        gamesRooms = service.openedGamesRooms();
+
+        // then
+        assertEquals("[GameRooms(game=first, rooms=[room1, room2]), \n" +
+                        "GameRooms(game=second, rooms=[room3])]",
+                split(gamesRooms, ", \nGameRooms("));
+
+        assertEquals("[first, second]",
+                gamesRooms.getGames().toString());
+
+        assertEquals("[room1, room2, room3]",
+                gamesRooms.getRooms().toString());
+
+        assertEquals("[room1, room2]",
+                gamesRooms.getRooms("first").toString());
+
+        assertEquals("[room3]",
+                gamesRooms.getRooms("second").toString());
+
+        // when
+        service.setOpened("room4", true);
+        gamesRooms = service.openedGamesRooms();
+
+        // then
+        assertEquals("[GameRooms(game=first, rooms=[room1, room2]), \n" +
+                        "GameRooms(game=second, rooms=[room3, room4])]",
+                split(gamesRooms, ", \nGameRooms("));
+
+        assertEquals("[first, second]",
+                gamesRooms.getGames().toString());
+
+        assertEquals("[room1, room2, room3, room4]",
+                gamesRooms.getRooms().toString());
+
+        assertEquals("[room1, room2]",
+                gamesRooms.getRooms("first").toString());
+
+        assertEquals("[room3, room4]",
+                gamesRooms.getRooms("second").toString());
     }
 
     @Test

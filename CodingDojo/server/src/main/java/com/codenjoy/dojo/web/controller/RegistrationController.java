@@ -24,7 +24,6 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.RegistrationService;
@@ -46,21 +45,21 @@ public class RegistrationController {
     private static final String ADMIN = "/admin";
     public static final String URI = "/register";
 
-    private PlayerService playerService;
     private RoomService roomService;
-    private RegistrationValidator registrationValidator;
+    private RegistrationValidator validator;
     private RegistrationService registrationService;
 
     @InitBinder
-    private void initBinder(WebDataBinder webDataBinder) {
-        webDataBinder.setValidator(registrationValidator);
+    private void initBinder(WebDataBinder binder) {
+        binder.setValidator(validator);
     }
 
     @GetMapping
     public String register(HttpServletRequest request, Model model,
                            @RequestParam(name = "id", required = false) String id,
                            @RequestParam(name = "email", required = false) String email,
-                           @RequestParam(name = "readableName", required = false) String name) {
+                           @RequestParam(name = "readableName", required = false) String name)
+    {
         return registrationService.openRegistrationForm(request, model, id, email, name, false);
     }
 
@@ -68,21 +67,18 @@ public class RegistrationController {
     public String registerAdmin(HttpServletRequest request, Model model,
                                 @RequestParam(name = "id", required = false) String id,
                                 @RequestParam(name = "email", required = false) String email,
-                                @RequestParam(name = "readableName", required = false) String name) {
+                                @RequestParam(name = "readableName", required = false) String name)
+    {
         return registrationService.openRegistrationForm(request, model, id, email, name, true);
     }
 
-    private void populateCommonRegistrationModel(Model model, boolean isAdminLogin) {
-        model.addAttribute("adminLogin", isAdminLogin);
-        model.addAttribute("opened", playerService.isRegistrationOpened());
-        // TODO #4FS тут проверить
-        model.addAttribute("rooms", roomService.rooms());
-    }
-
     @PostMapping()
-    public String registerByName(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
+    public String registerByName(@Valid Player player,
+                                 BindingResult result,
+                                 HttpServletRequest request,
+                                 Model model)
+    {
         if (result.hasErrors()) {
-            populateCommonRegistrationModel(model, false);
             player.dropPassword();
             return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());
         }
