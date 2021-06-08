@@ -47,7 +47,7 @@ namespace SnakeBattle.Builders
                 var gameConfiguration = new GameConfiguration
                 {
                     ServerUrl = configuration["ServerUrl"],
-                    IgnoreRoundExceptions = bool.Parse(configuration["IgnoreRoundException"])
+                    IgnoreRoundExceptions = bool.Parse(configuration["IgnoreSolverExceptions"])
                 };
 
                 return gameConfiguration;
