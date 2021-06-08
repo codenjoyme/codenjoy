@@ -11,13 +11,34 @@ namespace SnakeBattle.Services
             Console.OutputEncoding = Encoding.UTF8;
         }
 
-        public void Render(string board, string botCommand)
+        public void RenderBoard(string board, string botCommand)
         {
             Console.Clear();
             Console.SetCursorPosition(0, 0);
             Console.WriteLine(FormatBoardString(board));
 
             Console.WriteLine($"Decision: {botCommand}.");
+            Console.WriteLine("Press 'X' to exit.");
+            Console.SetCursorPosition(0, 0);
+        }
+
+        public void ShowError(string message)
+        {
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+
+            Console.WriteLine($"Error: {message}.");
+            Console.WriteLine("Press 'X' to exit.");
+            Console.SetCursorPosition(0, 0);
+        }
+
+        public void ShowError(Exception message)
+        {
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+
+            Console.WriteLine($"Exception: {message.Message}.");
+            Console.WriteLine($"StackTrace: {message.StackTrace}.");
             Console.WriteLine("Press 'X' to exit.");
             Console.SetCursorPosition(0, 0);
         }

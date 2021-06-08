@@ -3,14 +3,37 @@ using SnakeBattle.Enums;
 
 namespace SnakeBattle.Models
 {
-    public class Cell
+    public class Cell : IEquatable<Cell>
     {
-        public CellType Type { get; init; }
-        public int CoordinateX { get; init; }
-        public int CoordinateY { get; init; }
-
-        private bool Equals(Cell other)
+        /// <summary>
+        ///     Model represents one cell on board.
+        /// </summary>
+        /// <param name="type">Type of cell</param>
+        /// <param name="coordinateX">Horizontal position (column)</param>
+        /// <param name="coordinateY">Vertical position (row)</param>
+        public Cell(CellType type, int coordinateX, int coordinateY)
         {
+            Type = type;
+            CoordinateX = coordinateX;
+            CoordinateY = coordinateY;
+        }
+
+        public CellType Type { get; }
+        public int CoordinateX { get; }
+        public int CoordinateY { get; }
+
+        public bool Equals(Cell other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return Type == other.Type && CoordinateX == other.CoordinateX && CoordinateY == other.CoordinateY;
         }
 
@@ -36,7 +59,13 @@ namespace SnakeBattle.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine((int) Type, CoordinateX, CoordinateY);
+            unchecked
+            {
+                var hashCode = (int) Type;
+                hashCode = (hashCode * 397) ^ CoordinateX;
+                hashCode = (hashCode * 397) ^ CoordinateY;
+                return hashCode;
+            }
         }
 
         public static bool operator ==(Cell a, Cell b)

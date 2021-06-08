@@ -1,7 +1,11 @@
+using System;
+
 namespace SnakeBattle.Interfaces.Services
 {
     public interface IDisplayService
     {
-        void Render(string board, string botCommand);
+        void RenderBoard(string board, string playerCommands);
+        void ShowError(string message);
+        void ShowError(Exception message);
     }
 }
