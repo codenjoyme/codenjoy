@@ -31,6 +31,9 @@
 [submodule "CodingDojo/games/engine"]
 	path = CodingDojo/games/engine
 	url = https://github.com/codenjoyme/codenjoy-engine.git
+[submodule "CodingDojo/clients/java"]
+	path = CodingDojo/clients/java
+	url = https://github.com/codenjoyme/codenjoy-java-client.git	
 [submodule "CodingDojo/clients/java-script"]
 	path = CodingDojo/clients/java-script
 	url = https://github.com/codenjoyme/codenjoy-javascript-client.git
