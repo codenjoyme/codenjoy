@@ -22,12 +22,12 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
-import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertEquals;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class RegistrationPage implements CleanUp {
+public class RegistrationPage implements Closeable {
 
     public static final String SUBMIT_BUTTON = "#submit-button";
     public static final String READABLE_NAME_INPUT = "#readableName input";
@@ -53,6 +53,7 @@ public class RegistrationPage implements CleanUp {
     public static final String TECH_INPUT = "#data2 input";
     public static final String COMPANY_INPUT = "#data3 input";
     public static final String EXPERIENCE_INPUT = "#data4 input";
+    public static final String GAME_SELECT = "#game select";
     public static final String ROOM_SELECT = "#room select";
     public static final String ERROR_MESSAGE = "#error-message";
 
@@ -64,7 +65,7 @@ public class RegistrationPage implements CleanUp {
     private final SaveService saveService;
 
     @Override
-    public void cleanUp() {
+    public void close() {
         registration.removeAll();
         playerService.removeAll();
         gameService.removeAll();
@@ -120,6 +121,10 @@ public class RegistrationPage implements CleanUp {
         web.text(EXPERIENCE_INPUT, experience);
     }
 
+    public void game(String game) {
+        web.select(GAME_SELECT, game);
+    }
+
     public void room(String room) {
         web.select(ROOM_SELECT, room);
     }
@@ -141,6 +146,7 @@ public class RegistrationPage implements CleanUp {
         assertEquals(false, web.exists(TECH_INPUT));
         assertEquals(false, web.exists(COMPANY_INPUT));
         assertEquals(false, web.exists(EXPERIENCE_INPUT));
+        assertEquals(false, web.exists(GAME_SELECT));
         assertEquals(false, web.exists(ROOM_SELECT));
         assertEquals(false, web.exists(SUBMIT_BUTTON));
     }

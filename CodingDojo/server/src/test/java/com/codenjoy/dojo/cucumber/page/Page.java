@@ -42,6 +42,10 @@ public class Page {
 
     private final WebDriverWrapper web;
 
+    public void refresh() {
+        web.refresh();
+    }
+
     public String injectSettings(String data) {
         data = replace(data, "<PLAYER_ID>", PLAYER_ID);
         data = replace(data, "<CODE>", CODE);

@@ -42,7 +42,7 @@ Scenario: Admin can close/open registration
   When Click logout
 
   When Open registration page
-  And Try to register with: name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', room 'first'
+  And Try to register with: name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'first', room 'first'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
   Then User registered in database as 'Registration.User(email=user1@mail.com, id=<PLAYER_ID>, readableName=Stiven Pupkin, approved=1, code=<CODE>, data=Moon|Java|Home|10 years)'
 
@@ -111,6 +111,45 @@ Scenario: When game room is paused then is no communication with websocket clien
   When Login as 'user1@mail.com' 'password1' in game 'first'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
   Then Websocket client 'client1' connected successfully to the '/board/player/<PLAYER_ID>?code=<CODE>'
+  # TODO [RK#3]: Consider separation for two clauses
+  #              (e.g. @When `clause1 and clause2` ->  @When `clause1` @And `clause2`).
   Then Websocket 'client1' send 'ACT' and got '      \n      \n      \n      \n ☺    \n      \n'
   Then Websocket 'client1' send 'ACT' and got '      \n      \n      \n      \n ☺    \n      \n'
   Then Websocket 'client1' send 'ACT' and got '      \n      \n      \n      \n ☺    \n      \n'
+
+Scenario: Admin can turn on / turn off kick for inactive players
+  Given User registered with name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years'
+  Given User registered with name 'Eva Pupkina', email 'user2@mail.com', password 'password2', city 'Moon', tech skills 'Java', company 'Home', experience '10 years'
+
+  When Login as 'user1@mail.com' 'password1' in game 'sample'
+  Then Websocket client 'client1' connected successfully to the '/board/player/<PLAYER_ID>?code=<CODE>'
+  When Click logout
+
+  When Login as 'user2@mail.com' 'password2' in game 'sample'
+  Then Websocket client 'client2' connected successfully to the '/board/player/<PLAYER_ID>?code=<CODE>'
+  When Click logout
+
+  Given Login to Admin page
+  When Select game room 'sample'
+  When Click load all players
+
+  When Set inactivity kick enabled checkbox to true
+  And Set inactivity timeout parameter to 10
+  And Press inactivity settings save button
+
+  Then Inactivity parameters '{kickEnabled=true, timeout=10}'
+  And All players inactivity ticks are reset
+
+  When Websocket 'client1' send 'ACT'
+  # Waiting for 3 seconds to ensure that `client1` keeps on sending commands
+  Then Wait for 3 seconds
+  And Shutdown 'client1' websocket runner
+
+  When Websocket 'client2' send 'ACT'
+  # Waiting for 15 seconds to ensure that `client2` keeps on sending commands.
+  # In the same time `client1` increments inactivity ticks to the specified max.
+  Then Wait for 15 seconds
+  And Shutdown 'client2' websocket runner
+
+  Then Player 'user1@mail.com' is kicked true
+  And Player 'user2@mail.com' is kicked false

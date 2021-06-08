@@ -262,7 +262,7 @@ public class RegistrationService {
     private String getRegister(Model model) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         // TODO #4FS тут проверить
-        model.addAttribute("rooms", roomService.rooms());
+        model.addAttribute("gamesRooms", roomService.openedGamesRooms());
         return "register";
     }
 }

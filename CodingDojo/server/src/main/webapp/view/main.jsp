@@ -51,7 +51,7 @@
         <div>Check game board</div>
         <div>
             <ul>
-            <c:forEach items="${gamesRooms}" var="gameRooms">
+            <c:forEach items="${gamesRooms.all}" var="gameRooms">
                 <li>${gameRooms.game}:
                     <ul>
                     <c:forEach items="${gameRooms.rooms}" var="room">

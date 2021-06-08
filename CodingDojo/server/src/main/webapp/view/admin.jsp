@@ -76,19 +76,19 @@
                     <b>Active games for participants</b>
                 </td>
             </tr>
-            <c:forEach items="${gameRooms}" var="gameItem" varStatus="status">
-                <tr game="${gameItem.game}">
+            <c:forEach items="${gamesRooms.all}" var="gameRooms" varStatus="status">
+                <tr game="${gameRooms.game}">
                     <td class="rightStep">
-                        <form:checkbox id="enable-games-${gameItem.game}" path="games[${status.index}]"/>
-                        <label class="check-label" for="enable-games-${gameItem.game}"></label>
-                        <span>${gameItem.game}</span>
+                        <form:checkbox id="enable-games-${gameRooms.game}" path="games[${status.index}]"/>
+                        <label class="check-label" for="enable-games-${gameRooms.game}"></label>
+                        <span>${gameRooms.game}</span>
                     </td>
                     <td class="rightStep">
-                        <a id="game-${gameItem.game}"
-                           href="${ctx}/admin?game=${gameItem.game}">game</a>
+                        <a id="game-${gameRooms.game}"
+                           href="${ctx}/admin?game=${gameRooms.game}">game</a>
                     </td>
                     <td class="rightStep">
-                        <c:forEach items="${gameItem.rooms}" var="roomItem" varStatus="status2">
+                        <c:forEach items="${gameRooms.rooms}" var="roomItem" varStatus="status2">
                             <a class="bold-room-${roomItem == room}"
                                room="${roomItem}"
                                href="${ctx}/admin?room=${roomItem}">
@@ -259,9 +259,9 @@
         </tr>
         <tr>
             <td>
-                <input id="show-games" type="checkbox">
-                <label class="check-label" for="show-games"></label>
-                <span>Show GamesList on registration</span>
+                <input id="show-game-modes" type="checkbox">
+                <label class="check-label" for="show-game-modes"></label>
+                <span>Show games modes on registration/login</span>
             </td>
         </tr>
         <tr>
@@ -301,8 +301,8 @@
         </tr>
         <tr>
             <td>
-                <span class="white">Default game</span>
-                <select placeholder="Select default game" id="default-game">
+                <span class="white">Default game mode</span>
+                <select placeholder="Select default game mode" id="default-game-mode">
                     <!--option value="Type1">Type1</option-->
                     <!--option value="Type2">Type2</option-->
                     <!--option value="Type3">Type3</option-->
@@ -437,11 +437,11 @@
                     <td><b>Inactivity settings</b></td>
                 </tr>
                 <tr>
-                    <td>Enable kick unactive players</td>
+                    <td>Enable kick inactive players</td>
                     <td><form:checkbox path="inactivity.kickEnabled"/></td>
                 <tr>
                 <tr>
-                    <td>Unactive ticks before kick</td>
+                    <td>Inactive ticks before kick</td>
                     <td><form:input path="inactivity.inactivityTimeout"/></td>
                 </tr>
                 <tr>
@@ -542,7 +542,7 @@
                             <tr style="display:none;">
                         </c:when>
                         <c:otherwise>
-                            <tr style="">
+                            <tr style="" player="${player.email}">
                         </c:otherwise>
                     </c:choose>
                         <c:choose>
@@ -554,7 +554,7 @@
                                 <td><form:input class="input-room"     path="players[${status.index}].room"/></td>
                                 <td><form:input class="input-score"    path="players[${status.index}].score"/></td>
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
-                                <td>&nbsp;<span>${player.ticksInactive}</span>&nbsp;</td>
+                                <td>&nbsp;<span class="input-ticks-inactive">${player.ticksInactive}</span>&nbsp;</td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
                                         <td class="joystick">
@@ -631,7 +631,7 @@
                                 <td><input type="text" readonly="true" class="input-room"     value="${player.room}"/></td>
                                 <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
-                                <td>&nbsp;<span></span>&nbsp;</td>
+                                <td>&nbsp;<span class="input-ticks-inactive"></span>&nbsp;</td>
                                 <td>UDLRA</td>
                                 <td><a href="${ctx}/board/room/${room}">${room}</a></td>
                                 <td>Save</td>

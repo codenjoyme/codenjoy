@@ -127,22 +127,44 @@ public class RoomService {
                 .orElse(null);
     }
 
+    /**
+     * @return Возвращает все комнаты конкретной игры
+     * независимо от того открыта ли регистрация для комнат или нет.
+     */
     public List<String> gameRooms(String game) { // TODO #4FS тут проверить
         return rooms.values().stream()
                 .filter(state -> state.getGame().equals(game))
                 .map(RoomState::getRoom)
                 .collect(toList());
-
     }
 
-    public List<GameRooms> gamesRooms() {
-        return rooms.values().stream()
+    /**
+     * @return Возвращает все игры и их комнаты
+     */
+    public GamesRooms gamesRooms() {
+        return gamesRooms(false);
+    }
+
+    /**
+     * @return Возвращает открытые для регистрации игры и их комнаты
+     */
+    public GamesRooms openedGamesRooms() {
+        return gamesRooms(true);
+    }
+
+    /**
+     * @param onlyOpened true если нужны только открытые для регистрации игры
+     * @return Возвращает открытые (или все) для регистрации игры и их комнаты
+     */
+    private GamesRooms gamesRooms(boolean onlyOpened) {
+        return new GamesRooms(rooms.values().stream()
+                .filter(roomState -> !onlyOpened || roomState.isOpened())
                 .collect(groupingBy(RoomState::getGame,
                         mapping(RoomState::getRoom, toList())))
                 .entrySet().stream()
                 .sorted(Comparator.comparing(Map.Entry::getKey))
                 .map(entry -> new GameRooms(entry.getKey(), entry.getValue()))
-                .collect(toList());
+                .collect(toList()));
     }
 
     public void resetTick(String room) {
@@ -174,7 +196,7 @@ public class RoomService {
                 });
     }
 
-    public List<String> getOpenedGames() { // TODO #4FS тут проверить
+    public List<String> openedGames() { // TODO #4FS тут проверить
         return rooms.values().stream()
                 .filter(RoomState::isOpened)
                 .map(RoomState::getRoom)

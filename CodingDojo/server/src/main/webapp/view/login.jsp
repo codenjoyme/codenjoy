@@ -111,10 +111,19 @@ License along with this program.  If not, see
                         <input type="hidden" name="admin" value="${adminLogin}"/>
                     </div>
                     <c:if test="${!adminLogin}">
+                        <div id="game" class="field valid" hidden>
+                            <select name="game">
+                                <c:forEach items="${gamesRooms.games}" var="game" >
+                                    <option value="${game}">${game}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
                         <div id="room" class="field valid" hidden>
                             <select name="room">
-                                <c:forEach items="${rooms}" var="item" >
-                                    <option value="${item}">${item}</option>
+                                <c:forEach items="${gamesRooms.all}" var="gameRooms" >
+                                    <c:forEach items="${gameRooms.rooms}" var="room" >
+                                        <option value="${room}" game="${gameRooms.game}">${room}</option>
+                                    </c:forEach>
                                 </c:forEach>
                             </select>
                         </div>

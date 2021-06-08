@@ -146,9 +146,24 @@ License along with this program.  If not, see
                         <span class="icon fa"></span>
                     </div>
 
-                    <c:if test="${not adminLogin}">
+                    <c:if test="${!adminLogin}">
+                        <div id="game" class="field valid" hidden>
+                            <form:select id="gameSelect" path="game">
+                                <c:forEach items="${gamesRooms.games}" var="game" >
+                                    <option value="${game}">${game}</option>
+                                </c:forEach>
+                            </form:select>
+                            <form:errors path="game" cssClass="error" />
+                        </div>
+
                         <div id="room" class="field valid" hidden>
-                            <form:select id="roomSelect" items="${rooms}" path="room"/>
+                            <form:select id="roomSelect" path="room">
+                                <c:forEach items="${gamesRooms.all}" var="gameRooms" >
+                                    <c:forEach items="${gameRooms.rooms}" var="room" >
+                                        <option value="${room}" game="${gameRooms.game}">${room}</option>
+                                    </c:forEach>
+                                </c:forEach>
+                            </form:select>
                             <form:errors path="room" cssClass="error" />
                         </div>
 
