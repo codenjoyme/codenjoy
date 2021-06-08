@@ -14,6 +14,9 @@ git push origin master
 cd ../ruby
 git push origin master
 
+cd ../go
+git push origin master
+
 cd ..
 
 git config --global --unset  credential.helper
