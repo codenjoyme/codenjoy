@@ -12,7 +12,7 @@
 	url = https://github.com/codenjoyme/codenjoy-excitebike.git
 [submodule "CodingDojo/games/selfdefense"]
 	path = CodingDojo/games/selfdefense
-	url = https://github.com/codenjoyme/codenjoy-selfdefense
+	url = https://github.com/codenjoyme/codenjoy-selfdefense.git
 [submodule "CodingDojo/games/japanese"]
 	path = CodingDojo/games/japanese
 	url = https://github.com/codenjoyme/codenjoy-japanese.git
@@ -30,19 +30,19 @@
 	url = https://github.com/codenjoyme/codenjoy-chess.git
 [submodule "CodingDojo/games/engine"]
 	path = CodingDojo/games/engine
-	url = git@github.com:codenjoyme/codenjoy-engine.git
-[submodule "CodingDojo/clients/java"]
-	path = CodingDojo/clients/java
-	url = git@github.com:codenjoyme/codenjoy-java-client.git
-[submodule "CodingDojo/clients/pseudo"]
-	path = CodingDojo/clients/pseudo
-	url = git@github.com:codenjoyme/codenjoy-pseudo-client.git
+	url = https://github.com/codenjoyme/codenjoy-engine.git
 [submodule "CodingDojo/clients/java-script"]
 	path = CodingDojo/clients/java-script
-	url = git@github.com:codenjoyme/codenjoy-javascript-client.git
+	url = https://github.com/codenjoyme/codenjoy-javascript-client.git
+[submodule "CodingDojo/clients/pseudo"]
+	path = CodingDojo/clients/pseudo
+	url = https://github.com/codenjoyme/codenjoy-pseudo-client.git
 [submodule "CodingDojo/clients/ruby"]
 	path = CodingDojo/clients/ruby
-	url = git@github.com:codenjoyme/codenjoy-ruby-client.git
+	url = https://github.com/codenjoyme/codenjoy-ruby-client.git
+[submodule "CodingDojo/games/engine"]
+	path = CodingDojo/games/engine
+	url = https://github.com/codenjoyme/codenjoy-engine.git
 [submodule "CodingDojo/clients/go"]
 	path = CodingDojo/clients/go
 	url = https://github.com/codenjoyme/codenjoy-go-client.git
