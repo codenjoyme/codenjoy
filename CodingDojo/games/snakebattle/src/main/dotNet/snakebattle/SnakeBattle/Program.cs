@@ -1,6 +1,6 @@
 using System;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SnakeBattle.Builders;
 using SnakeBattle.Interfaces.Services;
 
@@ -10,17 +10,22 @@ namespace SnakeBattle
     {
         private static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            var serverUrl = config.GetSection("ServerUrl").Value;
-
             var serviceProvider = ServiceProviderBuilder.Build();
-
-            var snakeBattleClient = serviceProvider.GetRequiredService<ISnakeBattleClient>();
-
-            snakeBattleClient.ConnectAsync(serverUrl);
+            
+            try
+            {
+                var snakeBattleClient = serviceProvider.GetRequiredService<ISnakeBattleClient>();
+                snakeBattleClient.Connect();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                
+                var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+                logger.LogCritical(exception, "Critical error during game client work");
+                
+                throw;
+            }
 
             while (true)
             {

@@ -23,8 +23,8 @@ namespace SnakeBattle.Utilities
             foreach (var cellType in values)
             {
                 var fieldInfo = cellType.GetType().GetField(cellType.ToString());
-                var descriptionAttribute = fieldInfo.GetCustomAttribute<DescriptionAttribute>();
-                _fromStringToType[descriptionAttribute.Description[0]] = cellType;
+                var descriptionAttribute = fieldInfo!.GetCustomAttribute<DescriptionAttribute>();
+                _fromStringToType[descriptionAttribute!.Description[0]] = cellType;
             }
         }
 
@@ -38,19 +38,18 @@ namespace SnakeBattle.Utilities
             }
 
             var cells = new List<Cell>();
-            for (var y = 0; y < boardSize; y++)
+            for (var coordinateY = 0; coordinateY < boardSize; coordinateY++)
             {
-                for (var x = 0; x < boardSize; x++)
+                for (var coordinateX = 0; coordinateX < boardSize; coordinateX++)
                 {
-                    var cellChar = boardString[y * boardSize + x];
-                    var cell = new Cell
-                    {
-                        CoordinateX = x,
-                        CoordinateY = y,
-                        Type = _fromStringToType.ContainsKey(cellChar)
+                    var cellChar = boardString[coordinateY * boardSize + coordinateX];
+                    var cell = new Cell(
+                        _fromStringToType.ContainsKey(cellChar)
                             ? _fromStringToType[cellChar]
-                            : CellType.Unknown
-                    };
+                            : CellType.Unknown,
+                        coordinateX,
+                        coordinateY
+                    );
 
                     cells.Add(cell);
                 }
