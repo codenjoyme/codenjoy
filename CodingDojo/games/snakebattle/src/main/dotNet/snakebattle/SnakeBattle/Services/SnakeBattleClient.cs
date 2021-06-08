@@ -40,6 +40,8 @@ namespace SnakeBattle.Services
         {
             var webSocketUrl = MakeWebSocketUrl(_gameConfiguration.ServerUrl);
 
+            _logger.LogInformation($"Connecting to web socket: {webSocketUrl}");
+            
             _webSocket = new WebSocket(webSocketUrl)
             {
                 AutoSendPingInterval = 30,
@@ -67,7 +69,8 @@ namespace SnakeBattle.Services
 
         private void WebSocketOnClosed(object? sender, EventArgs e)
         {
-            _displayService.ShowError("Disconnected.");
+            _logger.LogWarning("Client disconnected.");
+            _displayService.ShowError("Client disconnected.");
             Thread.Sleep(1000);
             _displayService.ShowError("Connecting...");
             _webSocket?.Open();
@@ -89,6 +92,7 @@ namespace SnakeBattle.Services
             }
             catch (Exception exception)
             {
+                _logger.LogError($"Error solving round: {exception}");
                 _displayService.ShowError(exception);
 
                 if (!_gameConfiguration.IgnoreRoundExceptions)
