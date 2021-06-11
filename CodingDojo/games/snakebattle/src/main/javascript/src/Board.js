@@ -15,7 +15,6 @@
      * @param {int} coordinateX
      * @param {int} coordinateY
      * @return {Cell}
-     * @constructor
      */
     GetCellByCoordinates(coordinateX, coordinateY) {
         return this.cells.find(cellToCheck =>
@@ -89,7 +88,6 @@
     /**
      * @param {Cell} cell
      * @return {Cell}
-     * @constructor
      */
     GetCellToTheTopOf(cell) {
         return this.GetCellByCoordinates(cell.coordinateX, cell.coordinateY - 1);
@@ -98,7 +96,6 @@
     /**
      * @param {Cell} cell
      * @return {Cell}
-     * @constructor
      */
     GetCellToTheRightOf(cell) {
         return this.GetCellByCoordinates(cell.coordinateX + 1, cell.coordinateY);
@@ -108,7 +105,6 @@
     /**
      * @param {Cell} cell
      * @return {Cell}
-     * @constructor
      */
     GetCellToTheBottomOf(cell) {
         return this.GetCellByCoordinates(cell.coordinateX, cell.coordinateY + 1);
@@ -117,7 +113,6 @@
     /**
      * @param {Cell} cell
      * @return {Cell}
-     * @constructor
      */
     GetCellToTheLeftOf(cell) {
         return this.GetCellByCoordinates(cell.coordinateX - 1, cell.coordinateY);
@@ -128,7 +123,6 @@
      * @param {Cell} cell
      * @param {string} cellType
      * @return {number}
-     * @constructor
      */
     CountNear(cell, cellType) {
         let matchCount = 0;

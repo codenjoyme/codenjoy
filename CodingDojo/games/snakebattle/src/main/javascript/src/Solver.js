@@ -14,7 +14,6 @@ class Solver {
     /**
      * 
      * @return {string}
-     * @constructor
      */
     Random() {
         let keys = Object.keys(PlayerCommand);

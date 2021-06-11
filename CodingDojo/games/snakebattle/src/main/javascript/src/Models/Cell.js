@@ -19,7 +19,6 @@
     /**
      * @param {Cell} otherCell
      * @return {boolean}
-     * @constructor
      */
     IsEqualToCell(otherCell){
         if(otherCell.type !== this.type){
