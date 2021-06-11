@@ -27,12 +27,7 @@ namespace SnakeBattle.Tests.Services
         public void GetCellByCoordinatesReturnsCorrectCell()
         {
             // Arrange
-            var expectedCell = new Cell
-            {
-                Type = CellType.Stone,
-                CoordinateX = 7,
-                CoordinateY = 1
-            };
+            var expectedCell = new Cell(CellType.Stone, 7, 1);
 
             // Act
             var actualCell = _boardNavigator.GetCell(7, 1);
@@ -45,12 +40,8 @@ namespace SnakeBattle.Tests.Services
         public void GetCellsByTypeReturnsCorrectCell()
         {
             // Arrange
-            var expectedCell = new Cell
-            {
-                Type = CellType.Apple,
-                CoordinateX = 11,
-                CoordinateY = 1
-            };
+            var expectedCell = new Cell(CellType.Apple, 11, 1);
+
 
             // Act
             var actualCell = _boardNavigator.GetCell(CellType.Apple);

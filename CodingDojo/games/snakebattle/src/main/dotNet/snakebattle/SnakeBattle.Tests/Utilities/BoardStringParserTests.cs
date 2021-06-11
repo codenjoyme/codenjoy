@@ -29,60 +29,17 @@ namespace SnakeBattle.Tests.Utilities
 
             var expectedCells = new List<Cell>
             {
-                new()
-                {
-                    Type = CellType.Stone,
-                    CoordinateX = 0,
-                    CoordinateY = 0
-                },
-                new()
-                {
-                    Type = CellType.Apple,
-                    CoordinateX = 1,
-                    CoordinateY = 0
-                },
-                new()
-                {
-                    Type = CellType.StartFloor,
-                    CoordinateX = 2,
-                    CoordinateY = 0
-                },
-                new()
-                {
-                    Type = CellType.TailInactive,
-                    CoordinateX = 0,
-                    CoordinateY = 1
-                },
-                new()
-                {
-                    Type = CellType.HeadSleep,
-                    CoordinateX = 1,
-                    CoordinateY = 1
-                },
-                new()
-                {
-                    Type = CellType.EnemyTailInactive,
-                    CoordinateX = 2,
-                    CoordinateY = 1
-                },
-                new()
-                {
-                    Type = CellType.EnemyHeadSleep,
-                    CoordinateX = 0,
-                    CoordinateY = 2
-                },
-                new()
-                {
-                    Type = CellType.Stone,
-                    CoordinateX = 1,
-                    CoordinateY = 2
-                },
-                new()
-                {
-                    Type = CellType.Stone,
-                    CoordinateX = 2,
-                    CoordinateY = 2
-                }
+                new Cell(CellType.Stone, 0, 0),
+                new Cell(CellType.Apple, 1, 0),
+                new Cell(CellType.StartFloor, 2, 0),
+
+                new Cell(CellType.TailInactive, 0, 1),
+                new Cell(CellType.HeadSleep, 1, 1),
+                new Cell(CellType.EnemyTailInactive, 2, 1),
+
+                new Cell(CellType.EnemyHeadSleep, 0, 2),
+                new Cell(CellType.Stone, 1, 2),
+                new Cell(CellType.Stone, 2, 2)
             };
 
             // Act

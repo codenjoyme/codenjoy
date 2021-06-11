@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattle.Enums;
@@ -45,7 +44,7 @@ namespace SnakeBattle.Services
         }
 
         /// <inheritdoc />
-        public Cell? GetCell(int coordinateX, int coordinateY)
+        public Cell GetCell(int coordinateX, int coordinateY)
         {
             var foundCell = _cells
                 .FirstOrDefault(cell => cell.CoordinateX == coordinateX && cell.CoordinateY == coordinateY);
@@ -53,7 +52,7 @@ namespace SnakeBattle.Services
             return foundCell;
         }
 
-        public Cell? GetCell(CellType cellType)
+        public Cell GetCell(CellType cellType)
         {
             var foundCell = _cells
                 .FirstOrDefault(cell => cell.Type == cellType);
@@ -61,7 +60,7 @@ namespace SnakeBattle.Services
             return foundCell;
         }
 
-        public Cell? GetCell(IEnumerable<CellType> cellTypes)
+        public Cell GetCell(IEnumerable<CellType> cellTypes)
         {
             var foundCell = _cells
                 .FirstOrDefault(cellToCheck =>
@@ -71,7 +70,7 @@ namespace SnakeBattle.Services
             return foundCell;
         }
 
-        public Cell? GetCell(Func<Cell, bool> predicate)
+        public Cell GetCell(Func<Cell, bool> predicate)
         {
             var foundCell = _cells
                 .FirstOrDefault(predicate);
@@ -84,28 +83,28 @@ namespace SnakeBattle.Services
             return _cells;
         }
 
-        public Cell? GetCellToTheLeftOf(Cell baseCell)
+        public Cell GetCellToTheLeftOf(Cell baseCell)
         {
             var cell = GetCell(baseCell.CoordinateX - 1, baseCell.CoordinateY);
 
             return cell;
         }
 
-        public Cell? GetCellToTheRightOf(Cell baseCell)
+        public Cell GetCellToTheRightOf(Cell baseCell)
         {
             var cell = GetCell(baseCell.CoordinateX + 1, baseCell.CoordinateY);
 
             return cell;
         }
 
-        public Cell? GetCellToTheTopOf(Cell baseCell)
+        public Cell GetCellToTheTopOf(Cell baseCell)
         {
             var cell = GetCell(baseCell.CoordinateX, baseCell.CoordinateY - 1);
 
             return cell;
         }
 
-        public Cell? GetCellToTheBottomOf(Cell baseCell)
+        public Cell GetCellToTheBottomOf(Cell baseCell)
         {
             var cell = GetCell(baseCell.CoordinateX, baseCell.CoordinateY + 1);
 
@@ -169,7 +168,7 @@ namespace SnakeBattle.Services
                 CellType.HeadDead
             });
 
-            return foundCell!;
+            return foundCell;
         }
 
         public Cell GetPlayerTail()
@@ -183,7 +182,7 @@ namespace SnakeBattle.Services
                 CellType.TailInactive
             });
 
-            return foundCell!;
+            return foundCell;
         }
 
         public IEnumerable<Cell> GetApples()
