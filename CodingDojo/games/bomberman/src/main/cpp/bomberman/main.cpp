@@ -26,8 +26,8 @@
 #include "YourDirectionSolver.h"
 
 /////////////////////////////////////////////
-// Change your name from "_bot_" to your one;
-char* yourName = "_bot_";
+// Paste a proper name e.g. "0&code=000000000000";
+char* yourName = "{playerId}&code={code}";
 /////////////////////////////////////////////
 // This is switcher between our and your bot.
 // Good luck !!!

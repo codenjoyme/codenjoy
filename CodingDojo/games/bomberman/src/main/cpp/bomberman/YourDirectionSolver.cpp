@@ -24,5 +24,5 @@
 
 String YourDirectionSolver::get(Board board)
 {
-	return L"";
+	return L"ACT";
 }
