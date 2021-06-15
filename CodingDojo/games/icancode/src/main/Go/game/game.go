@@ -85,7 +85,7 @@ func (g game) GetBoard() *Board {
 	return g.brd
 }
 
-// Move allows client to manipulate bomberman, client should
+// Move allows client to manipulate hero, client should
 // assign new action every second or STOP action will be used as a default
 func (g game) SetNextAction(move action.Action) {
 	g.brd.m.Lock()

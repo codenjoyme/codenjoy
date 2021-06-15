@@ -53,7 +53,7 @@ const parseBoard = function(message) {
   return parameters[1];
 }
 // you can get this code after registration on the server with your email
-let url = "https://dojorena.io/codenjoy-contest/board/player/dojorena108?code=5753375427823728155";
+let url = "https://codenjoy.com/codenjoy-contest/board/player/dojorena108?code=5753375427823728155";
 
 url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");

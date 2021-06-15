@@ -24,7 +24,7 @@ using A2048.Api;
 namespace Demo
 {
     /// <summary>
-    /// This is BombermanAI client demo.
+    /// This is AI client demo.
     /// </summary>
     internal class YourSolver : AbstractSolver
     {

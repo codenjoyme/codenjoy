@@ -78,7 +78,7 @@ public class YourSolverChecker implements Solver<Board> {
         WebSocketRunner.runClient(args,
                 // paste here board page url from browser after registration
                 // or put it as command line parameter
-                "https://dojorena.io/codenjoy-contest/board/player/dojorena5?code=953820862434373766",
+                "https://codenjoy.com/codenjoy-contest/board/player/dojorena5?code=953820862434373766",
                 new YourSolverChecker(new RandomDice()),
                 new Board());
     }
