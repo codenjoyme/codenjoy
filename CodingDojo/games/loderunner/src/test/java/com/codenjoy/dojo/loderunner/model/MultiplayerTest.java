@@ -2408,9 +2408,9 @@ public class MultiplayerTest {
         field.tick();
     }
 
-    // TODO тут дублирование с bomberman, может продумать единую архитектуру
+    // TODO тут дублирование с mollymage, может продумать единую архитектуру
     //      тестов работающую и для rounds и реализовать во всех играх начиная
-    //      с bomberman, loderunnes, snakebattle и battlecity
+    //      с mollymage, loderunnes, snakebattle и battlecity
     protected void removeAllDied() {
         players.forEach(player -> {
             if (!player.isAlive()) {
