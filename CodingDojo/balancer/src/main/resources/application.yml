@@ -31,7 +31,7 @@ sender:
     pool.size: 100
 
 game:
-  type: bomberman
+  type: mollymage
   servers: localhost:8080
   schema: http
   basic-auth-user: admin@codenjoyme.com

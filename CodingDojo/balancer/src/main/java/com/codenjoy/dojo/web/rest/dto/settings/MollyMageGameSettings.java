@@ -27,22 +27,22 @@ import com.codenjoy.dojo.services.entity.server.PParameters;
 
 import java.util.List;
 
-public class BombermanGameSettings extends AbstractSettings {
+public class MollyMageGameSettings extends AbstractSettings {
 
     public static final String GAME_IS_MULTIPLE_OR_DISPOSABLE = "[Game] Is multiple or disposable";
     public static final String GAME_PLAYERS_PER_ROOM_FOR_DISPOSABLE = "[Game] Players per room for disposable";
     public static final String SCORE_KILL_WALL_SCORE = "[Score] Kill wall score";
-    public static final String SCORE_KILL_MEAT_CHOPPER_SCORE = "[Score] Kill meat chopper score";
+    public static final String SCORE_KILL_GHOST_SCORE = "[Score] Kill ghost score";
     public static final String SCORE_KILL_OTHER_HERO_SCORE = "[Score] Kill other hero score";
     public static final String SCORE_CATCH_PERK_SCORE = "[Score] Catch perk score";
-    public static final String SCORE_YOUR_HEROES_DEATH_PENALTY = "[Score] Your hero's death penalty";
+    public static final String SCORE_YOUR_HERO_DEATH_PENALTY = "[Score] Your hero's death penalty";
     public static final String SCORE_ROUNDS_WIN_ROUND_SCORE = "[Score][Rounds] Win round score";
-    public static final String LEVEL_BOMBS_COUNT = "[Level] Bombs count";
-    public static final String LEVEL_BIG_BADABOOM = "[Level] Blast activate bomb";
-    public static final String LEVEL_BOMB_POWER = "[Level] Bomb power";
+    public static final String LEVEL_POTIONS_COUNT = "[Level] Potions count";
+    public static final String LEVEL_BIG_BADABOOM = "[Level] Blast activate potion";
+    public static final String LEVEL_POTION_POWER = "[Level] Potion power";
     public static final String LEVEL_BOARD_SIZE = "[Level] Board size";
-    public static final String LEVEL_DESTROY_WALL_COUNT = "[Level] Destroy wall count";
-    public static final String LEVEL_MEAT_CHOPPERS_COUNT = "[Level] Meat choppers count";
+    public static final String LEVEL_TREASURE_BOXES_COUNT = "[Level] Treasure boxes count";
+    public static final String LEVEL_GHOSTS_COUNT = "[Level] Ghosts count";
     public static final String ROUNDS_TIME_PER_ROUND = "[Rounds] Time per Round";
     public static final String ROUNDS_TIME_FOR_WINNER = "[Rounds] Time for Winner";
     public static final String ROUNDS_TIME_BEFORE_START_ROUND = "[Rounds] Time before start Round";
@@ -50,12 +50,12 @@ public class BombermanGameSettings extends AbstractSettings {
     public static final String ROUNDS_MIN_TICKS_FOR_WIN = "[Rounds] Min ticks for win";
     public static final String PERKS_PERKS_DROP_RATIO_IN = "[Perks] Perks drop ratio in %";
     public static final String PERKS_PERKS_PICK_TIMEOUT = "[Perks] Perks pick timeout";
-    public static final String PERKS_BOMB_BLAST_RADIUS_INCREASE = "[Perks] Bomb blast radius increase";
-    public static final String PERKS_BOMB_COUNT_INCREASE = "[Perks] Bomb count increase";
-    public static final String PERKS_BOMB_COUNT_EFFECT_TIMEOUT = "[Perks] Bomb count effect timeout";
-    public static final String PERKS_BOMB_IMMUNE_EFFECT_TIMEOUT = "[Perks] Bomb immune effect timeout";
-    public static final String PERKS_NUMBER_OF_BOMB_REMOTE_CONTROLS = "[Perks] Number of Bomb remote controls (how many times player can use it)";
-    public static final String PERKS_BOMB_BLAST_RADIUS_INCREASE_EFFECT_TIMEOUT = "[Perks] Bomb blast radius increase effect timeout";
+    public static final String PERKS_POTION_BLAST_RADIUS_INCREASE = "[Perks] Potion blast radius increase";
+    public static final String PERKS_POTION_COUNT_INCREASE = "[Perks] Potion count increase";
+    public static final String PERKS_POTION_COUNT_EFFECT_TIMEOUT = "[Perks] Potion count effect timeout";
+    public static final String PERKS_POTION_IMMUNE_EFFECT_TIMEOUT = "[Perks] Potion immune effect timeout";
+    public static final String PERKS_NUMBER_OF_POTION_REMOTE_CONTROLS = "[Perks] Number of Potion remote controls (how many times player can use it)";
+    public static final String PERKS_POTION_BLAST_RADIUS_INCREASE_EFFECT_TIMEOUT = "[Perks] Potion blast radius increase effect timeout";
     public static final String GAME_ROUNDS_ENABLED = "[Game][Rounds] Enabled";
     public static final String SEMIFINAL_TIMEOUT = "Semifinal timeout";
     public static final String SEMIFINAL_PERCENTAGE = "Semifinal percentage";
@@ -64,7 +64,7 @@ public class BombermanGameSettings extends AbstractSettings {
     public static final String SEMIFINAL_RESET_BOARD = "Semifinal reset board";
     public static final String SEMIFINAL_SHUFFLE_BOARD = "Semifinal shuffle board";
 
-    public BombermanGameSettings(PParameters parameters) {
+    public MollyMageGameSettings(PParameters parameters) {
         super(parameters);
     }
 
@@ -84,8 +84,8 @@ public class BombermanGameSettings extends AbstractSettings {
         return getInteger(SCORE_KILL_WALL_SCORE);
     }
 
-    public Integer getKillMeatChopperScore() {
-        return getInteger(SCORE_KILL_MEAT_CHOPPER_SCORE);
+    public Integer getKillGhostScore() {
+        return getInteger(SCORE_KILL_GHOST_SCORE);
     }
 
     public Integer getKillOtherHeroScore() {
@@ -96,32 +96,32 @@ public class BombermanGameSettings extends AbstractSettings {
         return getInteger(SCORE_CATCH_PERK_SCORE);
     }
 
-    public Integer getYourHeroesDeathPenalty() {
-        return getInteger(SCORE_YOUR_HEROES_DEATH_PENALTY);
+    public Integer getYourHeroDeathPenalty() {
+        return getInteger(SCORE_YOUR_HERO_DEATH_PENALTY);
     }
 
     public Integer getWinRoundScore() {
         return getInteger(SCORE_ROUNDS_WIN_ROUND_SCORE);
     }
 
-    public Integer getBombsCount() {
-        return getInteger(LEVEL_BOMBS_COUNT);
+    public Integer getPotionsCount() {
+        return getInteger(LEVEL_POTIONS_COUNT);
     }
 
-    public Integer getBombPower() {
-        return getInteger(LEVEL_BOMB_POWER);
+    public Integer getPotionPower() {
+        return getInteger(LEVEL_POTION_POWER);
     }
 
     public Integer getBoardSize() {
         return getInteger(LEVEL_BOARD_SIZE);
     }
 
-    public Integer getDestroyWallCount() {
-        return getInteger(LEVEL_DESTROY_WALL_COUNT);
+    public Integer getTreasureBoxesCount() {
+        return getInteger(LEVEL_TREASURE_BOXES_COUNT);
     }
 
-    public Integer getMeetChoppersCount() {
-        return getInteger(LEVEL_MEAT_CHOPPERS_COUNT);
+    public Integer getGhostsCount() {
+        return getInteger(LEVEL_GHOSTS_COUNT);
     }
 
     public Integer getTimePerRound() {
@@ -152,28 +152,28 @@ public class BombermanGameSettings extends AbstractSettings {
         return getInteger(PERKS_PERKS_PICK_TIMEOUT);
     }
 
-    public Integer getPerksBombBlastRadiusIncrease() {
-        return getInteger(PERKS_BOMB_BLAST_RADIUS_INCREASE);
+    public Integer getPerksPotionBlastRadiusIncrease() {
+        return getInteger(PERKS_POTION_BLAST_RADIUS_INCREASE);
     }
 
-    public Integer getPerksBombCountIncrease() {
-        return getInteger(PERKS_BOMB_COUNT_INCREASE);
+    public Integer getPerksPotionCountIncrease() {
+        return getInteger(PERKS_POTION_COUNT_INCREASE);
     }
 
-    public Integer getPerksBombCountEffectTimeout() {
-        return getInteger(PERKS_BOMB_COUNT_EFFECT_TIMEOUT);
+    public Integer getPerksPotionCountEffectTimeout() {
+        return getInteger(PERKS_POTION_COUNT_EFFECT_TIMEOUT);
     }
 
-    public Integer getPerksBombImmuneEffectTimeout() {
-        return getInteger(PERKS_BOMB_IMMUNE_EFFECT_TIMEOUT);
+    public Integer getPerksPotionImmuneEffectTimeout() {
+        return getInteger(PERKS_POTION_IMMUNE_EFFECT_TIMEOUT);
     }
 
-    public Integer getPerksNumberOfBombRemoteControl() {
-        return getInteger(PERKS_NUMBER_OF_BOMB_REMOTE_CONTROLS);
+    public Integer getPerksNumberOfPotionRemoteControl() {
+        return getInteger(PERKS_NUMBER_OF_POTION_REMOTE_CONTROLS);
     }
 
-    public Integer getPerksBombBlastRadiusIncreaseEffectTimeout() {
-        return getInteger(PERKS_BOMB_BLAST_RADIUS_INCREASE_EFFECT_TIMEOUT);
+    public Integer getPerksPotionBlastRadiusIncreaseEffectTimeout() {
+        return getInteger(PERKS_POTION_BLAST_RADIUS_INCREASE_EFFECT_TIMEOUT);
     }
 
     public Boolean isRoundsEnabled() {
@@ -220,8 +220,8 @@ public class BombermanGameSettings extends AbstractSettings {
         add(SCORE_KILL_WALL_SCORE, input);
     }
 
-    public void setKillMeatChopperScore(Integer input) {
-        add(SCORE_KILL_MEAT_CHOPPER_SCORE, input);
+    public void setKillGhostScore(Integer input) {
+        add(SCORE_KILL_GHOST_SCORE, input);
     }
 
     public void setKillOtherHeroScore(Integer input) {
@@ -232,32 +232,32 @@ public class BombermanGameSettings extends AbstractSettings {
         add(SCORE_CATCH_PERK_SCORE, input);
     }
 
-    public void setYourHeroesDeathPenalty(Integer input) {
-        add(SCORE_YOUR_HEROES_DEATH_PENALTY, input);
+    public void setYourHeroDeathPenalty(Integer input) {
+        add(SCORE_YOUR_HERO_DEATH_PENALTY, input);
     }
 
     public void setWinRoundScore(Integer input) {
         add(SCORE_ROUNDS_WIN_ROUND_SCORE, input);
     }
 
-    public void setBombsCount(Integer input) {
-        add(LEVEL_BOMBS_COUNT, input);
+    public void setPotionsCount(Integer input) {
+        add(LEVEL_POTIONS_COUNT, input);
     }
 
-    public void setBombPower(Integer input) {
-        add(LEVEL_BOMB_POWER, input);
+    public void setPotionPower(Integer input) {
+        add(LEVEL_POTION_POWER, input);
     }
 
     public void setBoardSize(Integer input) {
         add(LEVEL_BOARD_SIZE, input);
     }
 
-    public void setDestroyWallCount(Integer input) {
-        add(LEVEL_DESTROY_WALL_COUNT, input);
+    public void setTreasureBoxesCount(Integer input) {
+        add(LEVEL_TREASURE_BOXES_COUNT, input);
     }
 
-    public void setMeetChoppersCount(Integer input) {
-        add(LEVEL_MEAT_CHOPPERS_COUNT, input);
+    public void setGhostsCount(Integer input) {
+        add(LEVEL_GHOSTS_COUNT, input);
     }
 
     public void setTimePerRound(Integer input) {
@@ -288,28 +288,28 @@ public class BombermanGameSettings extends AbstractSettings {
         add(PERKS_PERKS_PICK_TIMEOUT, input);
     }
 
-    public void setPerksBombBlastRadiusIncrease(Integer input) {
-        add(PERKS_BOMB_BLAST_RADIUS_INCREASE, input);
+    public void setPerksPotionBlastRadiusIncrease(Integer input) {
+        add(PERKS_POTION_BLAST_RADIUS_INCREASE, input);
     }
 
-    public void setPerksBombCountIncrease(Integer input) {
-        add(PERKS_BOMB_COUNT_INCREASE, input);
+    public void setPerksPotionCountIncrease(Integer input) {
+        add(PERKS_POTION_COUNT_INCREASE, input);
     }
 
-    public void setPerksBombCountEffectTimeout(Integer input) {
-        add(PERKS_BOMB_COUNT_EFFECT_TIMEOUT, input);
+    public void setPerksPotionCountEffectTimeout(Integer input) {
+        add(PERKS_POTION_COUNT_EFFECT_TIMEOUT, input);
     }
 
-    public void setPerksBombImmuneEffectTimeout(Integer input) {
-        add(PERKS_BOMB_IMMUNE_EFFECT_TIMEOUT, input);
+    public void setPerksPotionImmuneEffectTimeout(Integer input) {
+        add(PERKS_POTION_IMMUNE_EFFECT_TIMEOUT, input);
     }
 
-    public void setPerksNumberOfBombRemoteControl(Integer input) {
-        add(PERKS_NUMBER_OF_BOMB_REMOTE_CONTROLS, input);
+    public void setPerksNumberOfPotionRemoteControl(Integer input) {
+        add(PERKS_NUMBER_OF_POTION_REMOTE_CONTROLS, input);
     }
 
-    public void setPerksBombBlastRadiusIncreaseEffectTimeout(Integer input) {
-        add(PERKS_BOMB_BLAST_RADIUS_INCREASE_EFFECT_TIMEOUT, input);
+    public void setPerksPotionBlastRadiusIncreaseEffectTimeout(Integer input) {
+        add(PERKS_POTION_BLAST_RADIUS_INCREASE_EFFECT_TIMEOUT, input);
     }
 
     public void setRoundsEnabled(Boolean input) {
@@ -350,16 +350,16 @@ public class BombermanGameSettings extends AbstractSettings {
         update(parameters, LEVEL_BIG_BADABOOM);
         update(parameters, GAME_PLAYERS_PER_ROOM_FOR_DISPOSABLE);
         update(parameters, SCORE_KILL_WALL_SCORE);
-        update(parameters, SCORE_KILL_MEAT_CHOPPER_SCORE);
+        update(parameters, SCORE_KILL_GHOST_SCORE);
         update(parameters, SCORE_KILL_OTHER_HERO_SCORE);
         update(parameters, SCORE_CATCH_PERK_SCORE);
-        update(parameters, SCORE_YOUR_HEROES_DEATH_PENALTY);
+        update(parameters, SCORE_YOUR_HERO_DEATH_PENALTY);
         update(parameters, SCORE_ROUNDS_WIN_ROUND_SCORE);
-        update(parameters, LEVEL_BOMBS_COUNT);
-        update(parameters, LEVEL_BOMB_POWER);
+        update(parameters, LEVEL_POTIONS_COUNT);
+        update(parameters, LEVEL_POTION_POWER);
         update(parameters, LEVEL_BOARD_SIZE);
-        update(parameters, LEVEL_DESTROY_WALL_COUNT);
-        update(parameters, LEVEL_MEAT_CHOPPERS_COUNT);
+        update(parameters, LEVEL_TREASURE_BOXES_COUNT);
+        update(parameters, LEVEL_GHOSTS_COUNT);
         update(parameters, ROUNDS_TIME_PER_ROUND);
         update(parameters, ROUNDS_TIME_FOR_WINNER);
         update(parameters, ROUNDS_TIME_BEFORE_START_ROUND);
@@ -367,12 +367,12 @@ public class BombermanGameSettings extends AbstractSettings {
         update(parameters, ROUNDS_MIN_TICKS_FOR_WIN);
         update(parameters, PERKS_PERKS_DROP_RATIO_IN);
         update(parameters, PERKS_PERKS_PICK_TIMEOUT);
-        update(parameters, PERKS_BOMB_BLAST_RADIUS_INCREASE);
-        update(parameters, PERKS_BOMB_COUNT_INCREASE);
-        update(parameters, PERKS_BOMB_COUNT_EFFECT_TIMEOUT);
-        update(parameters, PERKS_BOMB_IMMUNE_EFFECT_TIMEOUT);
-        update(parameters, PERKS_NUMBER_OF_BOMB_REMOTE_CONTROLS);
-        update(parameters, PERKS_BOMB_BLAST_RADIUS_INCREASE_EFFECT_TIMEOUT);
+        update(parameters, PERKS_POTION_BLAST_RADIUS_INCREASE);
+        update(parameters, PERKS_POTION_COUNT_INCREASE);
+        update(parameters, PERKS_POTION_COUNT_EFFECT_TIMEOUT);
+        update(parameters, PERKS_POTION_IMMUNE_EFFECT_TIMEOUT);
+        update(parameters, PERKS_NUMBER_OF_POTION_REMOTE_CONTROLS);
+        update(parameters, PERKS_POTION_BLAST_RADIUS_INCREASE_EFFECT_TIMEOUT);
         update(parameters, GAME_ROUNDS_ENABLED);
         update(parameters, SEMIFINAL_TIMEOUT);
         update(parameters, SEMIFINAL_PERCENTAGE);
