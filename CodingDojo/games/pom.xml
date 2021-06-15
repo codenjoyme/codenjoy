@@ -373,7 +373,7 @@
                                 <artifactItems>
                                     <artifactItem>
                                         <groupId>${project.groupId}</groupId>
-                                        <artifactId>java-client</artifactId>
+                                        <artifactId>client-java</artifactId>
                                         <version>${project.version}</version>
                                         <type>jar</type>
                                         <outputDirectory>${java.client}</outputDirectory>
