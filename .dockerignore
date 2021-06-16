@@ -21,7 +21,7 @@
 /CodingDojo/expansion-repo
 /CodingDojo/icancode-builder
 /CodingDojo/expansion-builder
-/CodingDojo/bomberman-builder
+/CodingDojo/mollymage-builder
 /CodingDojo/expansion-bots
 /CodingDojo/expansion-clients
 /CodingDojo/balancer-frontend
@@ -37,5 +37,5 @@
 /CodingDojo/portable/windows-cmd/tools
 /CodingDojo/games/a2048/src/main/dotNet/A2048/packages
 /CodingDojo/games/loderunner/src/main/dotNet/Loderunner/packages
-/CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages
+/CodingDojo/games/mollymage/src/main/dotNet/MollyMage/packages
 /CodingDojo/portable/linux-docker-all
