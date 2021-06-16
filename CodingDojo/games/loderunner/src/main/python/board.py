@@ -27,7 +27,7 @@ from point import Point
 from element import Element
 
 class Board:
-    """ Class describes the Board field for Bomberman game."""
+    """ Class describes the Board field for the game."""
     def __init__(self, board_string):
         self._string = board_string.replace('\n', '')
         self._len = len(self._string)  # the length of the string
@@ -104,10 +104,6 @@ class Board:
         """ Return the list of barriers Points."""
         points = set()
         points.update(self.get_walls())
-        points.update(self.get_bombs())
-        points.update(self.get_destroy_walls())
-        points.update(self.get_meat_choppers())
-        points.update(self.get_other_bombermans())
         return list(points)
         
     def get_walls(self):

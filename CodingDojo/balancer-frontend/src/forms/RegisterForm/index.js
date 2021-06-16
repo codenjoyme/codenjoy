@@ -14,7 +14,7 @@ import { PrivacyPolicyModal } from '../../components';
 import { CustomInputComponent } from '../common/customInput';
 import { CustomCheckboxComponent } from '../common/customCheckbox';
 import { CustomSelectComponent } from '../common/customSelect';
-import errorImg from '../common/Bomb_server_Error.jpg';
+import errorImg from '../common/Server_Error.jpg';
 import { PhoneInput } from 'forms/common/phoneInput';
 // own
 import styles from '../common/styles.module.css';

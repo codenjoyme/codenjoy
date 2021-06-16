@@ -1,6 +1,6 @@
-if "%GAME_TO_RUN%"=="" ( set GAME_TO_RUN=bomberman)
+if "%GAME_TO_RUN%"=="" ( set GAME_TO_RUN=mollymage)
 if "%BOARD_URL%"==""  ( set BOARD_URL=http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000)
-if "%LANGUAGE%"==""   ( set LANGUAGE=java)
+if "%LANGUAGE%"==""   ( set LANGUAGE=pseudo)
 
 if "%ROOT%"==""       ( set ROOT=%CD%)
 
@@ -26,7 +26,7 @@ if "%TOOLS_UPDATE%"=="true" ( set GIT=%GIT_HOME%\cmd\git)
 if "%JAVA_CLIENT_HOME%"==""       ( set JAVA_CLIENT_HOME=%ROOT%\java)
 if "%PSEUDO_CLIENT_HOME%"==""     ( set PSEUDO_CLIENT_HOME=%ROOT%\pseudo)
 if "%PSEUDO_RULES%"==""           ( set PSEUDO_RULES=%PSEUDO_CLIENT_HOME%\rules)
-if "%PSEUDO_HERO_ELEMENTS%"==""   ( set PSEUDO_HERO_ELEMENTS=BOMBERMAN,BOMB_BOMBERMAN,DEAD_BOMBERMAN)
+if "%PSEUDO_HERO_ELEMENTS%"==""   ( set PSEUDO_HERO_ELEMENTS=HERO,POTION_HERO,DEAD_HERO)
 if "%JAVASCRIPT_CLIENT_HOME%"=="" ( set JAVASCRIPT_CLIENT_HOME=%ROOT%\java-script)
 if "%GO_CLIENT_HOME%"==""         ( set GO_CLIENT_HOME=%ROOT%\go)
 

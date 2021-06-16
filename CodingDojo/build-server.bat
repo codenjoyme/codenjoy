@@ -2,8 +2,8 @@ set ROOT=%CD%
 
 IF "%GAMES_TO_RUN%"=="" (
 	rem set GAMES_TO_RUN=all
-	set GAMES_TO_RUN=bomberman
-	rem set GAMES_TO_RUN=tetris,snake,bomberman
+	set GAMES_TO_RUN=mollymage
+	rem set GAMES_TO_RUN=tetris,snake,mollymage
 )
 
 echo Building server with [%GAMES_TO_RUN%]

@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	browserURL := "https://epam-botchallenge.com/codenjoy-contest/board/player/{player-id}?code={code}&gameName=bomberman"
+	browserURL := "https://codenjoy.com/codenjoy-contest/board/player/{player-id}?code={code}&gameName=battlecity"
         game, c := api.StartGame(browserURL)
 	b := game.GetBoard()
 	s := solver.New()

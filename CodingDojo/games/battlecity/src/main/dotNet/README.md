@@ -1,5 +1,5 @@
 For C#:
-- on page {serverHost}/codenjoy-contest/help, or now for bomberman link is: https://dojorena.io/codenjoy-contest/resources/help/battlecity.html
+- on page {serverHost}/codenjoy-contest/help, or now for battlecity link is: https://codenjoy.com/codenjoy-contest/resources/help/battlecity.html
     + you can read game instructions
         * serverHost = server_host_ip:8080 server ip inside your LAN
 		* serverHost = dojorena.io if you play on https://dojorena.io/codenjoy-contest

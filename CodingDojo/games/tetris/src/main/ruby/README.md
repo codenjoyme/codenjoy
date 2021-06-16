@@ -6,7 +6,7 @@
 2. Read game instructions 
 3. Install WebSocket gem (Ruby and `bundler` gem should be installed):
 ```
-cd codenjoy/CodingDojo/games/bomberman/src/main/Ruby/
+cd codenjoy/CodingDojo/games/tetris/src/main/Ruby/
 bundle install
 ```
 4. Run your client:

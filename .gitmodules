@@ -46,3 +46,6 @@
 [submodule "CodingDojo/clients/go"]
 	path = CodingDojo/clients/go
 	url = https://github.com/codenjoyme/codenjoy-go-client.git
+[submodule "CodingDojo/games/mollymage"]
+	path = CodingDojo/games/mollymage
+	url = https://github.com/codenjoyme/codenjoy-mollymage.git

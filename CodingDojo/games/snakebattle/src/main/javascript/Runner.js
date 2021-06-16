@@ -305,26 +305,26 @@ var Board = function (board) {
     var xyl = new LengthToXY(size);
 
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
-    var getBomberman = function () {
+    var getHero = function () {
         var result = [];
-        result = result.concat(findAll(Element.BOMBERMAN));
-        result = result.concat(findAll(Element.BOMB_BOMBERMAN));
-        result = result.concat(findAll(Element.DEAD_BOMBERMAN));
+        result = result.concat(findAll(Element.HERO));
+        result = result.concat(findAll(Element.POTION_HERO));
+        result = result.concat(findAll(Element.DEAD_HERO));
         return result[0];
     };
 
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
-    var getOtherBombermans = function () {
+    var getOtherHeroes = function () {
         var result = [];
-        result = result.concat(findAll(Element.OTHER_BOMBERMAN));
-        result = result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
-        result = result.concat(findAll(Element.OTHER_DEAD_BOMBERMAN));
+        result = result.concat(findAll(Element.OTHER_HERO));
+        result = result.concat(findAll(Element.OTHER_POTION_HERO));
+        result = result.concat(findAll(Element.OTHER_DEAD_HERO));
         return result;
     };
 
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
-    var isMyBombermanDead = function () {
-        return board.indexOf(Element.DEAD_BOMBERMAN) != -1;
+    var isMyHeroDead = function () {
+        return board.indexOf(Element.DEAD_HERO) != -1;
     };
 
     var isAt = function (x, y, element) {
@@ -352,11 +352,11 @@ var Board = function (board) {
 
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
     var getBarriers = function () {
-        var all = getMeatChoppers();
+        var all = getGhosts();
         all = all.concat(getWalls());
         all = all.concat(getBombs());
-        all = all.concat(getDestroyWalls());
-        all = all.concat(getOtherBombermans());
+        all = all.concat(getTreasureBoxes());
+        all = all.concat(getOtherHeroes());
         all = all.concat(getFutureBlasts());
         return removeDuplicates(all);
     };
@@ -364,26 +364,26 @@ var Board = function (board) {
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
     var toString = function () {
         return util.format("%s\n" +
-            "Bomberman at: %s\n" +
-            "Other bombermans at: %s\n" +
-            "Meat choppers at: %s\n" +
-            "Destroy walls at: %s\n" +
-            "Bombs at: %s\n" +
+            "Hero at: %s\n" +
+            "Other heroes at: %s\n" +
+            "Ghosts at: %s\n" +
+            "Treasure boxes at: %s\n" +
+            "Potions as: %s\n" +
             "Blasts: %s\n" +
             "Expected blasts at: %s",
             boardAsString(),
-            getBomberman(),
-            printArray(getOtherBombermans()),
-            printArray(getMeatChoppers()),
-            printArray(getDestroyWalls()),
+            getHero(),
+            printArray(getOtherHeroes()),
+            printArray(getGhosts()),
+            printArray(getTreasureBoxes()),
             printArray(getBombs()),
             printArray(getBlasts()),
             printArray(getFutureBlasts()));
     };
 
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
-    var getMeatChoppers = function () {
-        return findAll(Element.MEAT_CHOPPER);
+    var getGhosts = function () {
+        return findAll(Element.GHOST);
     };
 
     var findAll = function (element) {
@@ -403,20 +403,20 @@ var Board = function (board) {
     };
 
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
-    var getDestroyWalls = function () {
-        return findAll(Element.DESTROYABLE_WALL);
+    var getTreasureBoxes = function () {
+        return findAll(Element.TREASURE_BOX);
     };
 
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
     var getBombs = function () {
         var result = [];
-        result = result.concat(findAll(Element.BOMB_TIMER_1));
-        result = result.concat(findAll(Element.BOMB_TIMER_2));
-        result = result.concat(findAll(Element.BOMB_TIMER_3));
-        result = result.concat(findAll(Element.BOMB_TIMER_4));
-        result = result.concat(findAll(Element.BOMB_TIMER_5));
-        result = result.concat(findAll(Element.BOMB_BOMBERMAN));
-        result = result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
+        result = result.concat(findAll(Element.POTION_TIMER_1));
+        result = result.concat(findAll(Element.POTION_TIMER_2));
+        result = result.concat(findAll(Element.POTION_TIMER_3));
+        result = result.concat(findAll(Element.POTION_TIMER_4));
+        result = result.concat(findAll(Element.POTION_TIMER_5));
+        result = result.concat(findAll(Element.POTION_HERO));
+        result = result.concat(findAll(Element.OTHER_POTION_HERO));
         return result;
     };
 
@@ -487,17 +487,17 @@ var Board = function (board) {
     // TODO:BATTLE исправить метод на аналогичный для snakebattle
     return {
         size: boardSize,
-        getBomberman: getBomberman,
-        getOtherBombermans: getOtherBombermans,
-        isMyBombermanDead: isMyBombermanDead,
+        getHero: getHero,
+        getOtherHeroes: getOtherHeroes,
+        isMyHeroDead: isMyHeroDead,
         isAt: isAt,
         boardAsString: boardAsString,
         getBarriers: getBarriers,
         toString: toString,
-        getMeatChoppers: getMeatChoppers,
+        getGhosts: getGhosts,
         findAll: findAll,
         getWalls: getWalls,
-        getDestroyWalls: getDestroyWalls,
+        getTreasureBoxes: getTreasureBoxes,
         getBombs: getBombs,
         getBlasts: getBlasts,
         getFutureBlasts: getFutureBlasts,
@@ -522,7 +522,7 @@ var DirectionSolver = function (board) {
          * @return next hero action
          */
         get: function () {
-            var bomberman = board.getBomberman();
+            var hero = board.getHero();
 
             // TODO your code here
 

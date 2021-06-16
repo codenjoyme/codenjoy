@@ -60,7 +60,7 @@
         <module>sample</module>
         <module>sample-text</module>
         <module>a2048</module>
-        <module>bomberman</module>
+        <module>mollymage</module>
         <module>battlecity</module>
         <module>chess</module>
         <module>collapse</module>
@@ -373,7 +373,7 @@
                                 <artifactItems>
                                     <artifactItem>
                                         <groupId>${project.groupId}</groupId>
-                                        <artifactId>java-client</artifactId>
+                                        <artifactId>client-java</artifactId>
                                         <version>${project.version}</version>
                                         <type>jar</type>
                                         <outputDirectory>${java.client}</outputDirectory>

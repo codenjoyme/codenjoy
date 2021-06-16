@@ -47,18 +47,18 @@ class DirectionSolver:
     def find_direction(self):
         """ This is an example of direction solver subroutine."""
         _direction = Direction('NULL').to_string()
-        if self._board.is_my_bomberman_dead():
-            print("Bomberman is dead. Sending 'NULL' command...")
+        if self._board.is_my_hero_dead():
+            print("Hero is dead. Sending 'NULL' command...")
             return _direction
-        # here's how we find the current Point of our bomberman
-        _bm = self._board.get_bomberman()
+        # here's how we find the current Point of our hero
+        _bm = self._board.get_hero()
         _bm_x, _bm_y = _bm.get_x(), _bm.get_y()
-        # Let's check whether our bomberman is not surrounded by walls
+        # Let's check whether our hero is not surrounded by walls
         if 4 == self._board.count_near(_bm_x, _bm_y, Element('DESTROY_WALL')):
             print("It seems like walls surround you. Self-destroying.")
             return Direction('ACT').to_string()  # Let's drop a bomb then
         #print(self._board.to_string())
-        print("Found your Bomberman at {}".format(_bm))
+        print("Found your Hero at {}".format(_bm))
         # here's how we get the list of barriers Points
         _barriers = self._board.get_barriers()
         _deadline = time() + 30

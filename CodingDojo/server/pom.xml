@@ -130,7 +130,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>bomberman</id>
+            <id>mollymage</id>
             <activation>
                 <property>
                     <name>allGames</name>
@@ -139,7 +139,7 @@
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>bomberman-engine</artifactId>
+                    <artifactId>mollymage-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
