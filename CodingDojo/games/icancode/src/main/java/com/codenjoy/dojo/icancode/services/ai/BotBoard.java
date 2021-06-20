@@ -39,6 +39,13 @@ public class BotBoard extends Board {
 
     private PathFinder finder;
 
+    public BotBoard() {
+    }
+
+    public BotBoard(Board board) {
+        super(board);
+    }
+
     public List<Direction> findPath(Point start, Point finish) {
         finder = new CrudePathFinder(1000);
 

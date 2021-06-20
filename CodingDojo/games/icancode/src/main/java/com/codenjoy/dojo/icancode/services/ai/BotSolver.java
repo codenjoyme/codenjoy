@@ -48,7 +48,7 @@ public class BotSolver extends AbstractSolver {
 
     @Override
     public Command whatToDo(Board board) {
-        this.board = (BotBoard) new BotBoard().forString(board.getLayersString().toArray(new String[0]));
+        this.board = new BotBoard(board);
 
         DirectionJump result = programm();
         previousCommand = result;
