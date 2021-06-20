@@ -52,7 +52,7 @@ public class AISolver extends AbstractJsonSolver<Board> {
 
     @Override
     public String getAnswer(Board board) {
-        String glassString = board.getGlass().getLayersString().get(0);
+        String glassString = board.getGlass().boardAsString(0);
         size = board.getGlass().size();
         Glass glass = new GlassImpl(size, size, () -> 0);
 
