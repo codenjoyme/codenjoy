@@ -21,33 +21,14 @@
  */
 
 
-var Api = function(WSocket, Configuration, Direction, Element, Point, Board, Solver) {
+var Api = function(WSocket, configuration, Direction, Element, Point, Board, Solver, logger) {
 
-    var url = Configuration().connectionString;
-    var isNeedToLog = Configuration().isAdditionalLoggingEnabled;
-    var connectionTimeout = Configuration().connectionTimeout;
-
-    var log = function (string) {
-        if (isNeedToLog) {
-            console.log(string);
-            if (additionalLogging) {
-                printLogOnTextArea(string);
-            }
-        }
-    };
-
-    var additionalLogging = false;
-    try{
-        if (!!printBoardOnTextArea){
-            additionalLogging = true;
-        }
-    } catch (e) {
-        log('No additional browser logging');
-    }
+    var url = configuration.connectionString;
+    var reconnectionTimeout = configuration.reConnectionTimeout;
 
     var ws;
 
-    var solver = new Solver(Direction, Element);
+    var solver = new Solver(Direction, Element, logger);
 
     function connect() {
         url = url.replace("http", "ws");
@@ -56,19 +37,19 @@ var Api = function(WSocket, Configuration, Direction, Element, Point, Board, Sol
 
         ws = new WSocket(url);
 
-        log('Opening...');
+        logger.log('Opening...');
 
         ws.on('open', function () {
-            log('Web socket client opened ' + url);
+            logger.log('Web socket client opened ' + url);
         });
 
         ws.on('close', function () {
-            log('Web socket client closed');
+            logger.log('Web socket client closed');
 
             setTimeout(function () {
-                log('Try to reconnect...');
+                logger.log('Try to reconnect...');
                 connect();
-            }, connectionTimeout);
+            }, reconnectionTimeout);
         });
 
         ws.on('message', function (message) {
@@ -80,31 +61,21 @@ var Api = function(WSocket, Configuration, Direction, Element, Point, Board, Sol
         });
     }
 
-    function isBrowser(){
-      return typeof window !== "undefined"
-    }
-
     var processBoard = function (boardString) {
         var board = new Board(boardString, Element, Point);
-        if (additionalLogging) {
-            printBoardOnTextArea(board.toString());
-        }
-
-        var logMessage = board + "\n\n";
+        logger.logBoard(board);
 
         if(!solver) {
-            logMessage('recreate Solver');
-            solver =  new Solver(Direction, Element);
+            logger.log('recreate Solver');
+            solver =  new Solver(Direction, Element, logger);
         }
-        if(isBrowser()) drawBoard(board);
-        var command = solver.get(board);
+        try{
+            var command = solver.get(board);
+        }catch(ex){
+           logger.log("error: " + ex)
+        }
+        logger.logCommand(command);
         var answer = command ? command.toString(): " ";
-        if(isBrowser())printAnswer(answer);
-        logMessage += "Answer: " + answer + "\n";
-        logMessage += "-----------------------------------\n";
-
-        log(logMessage);
-
         return answer;
     };
 

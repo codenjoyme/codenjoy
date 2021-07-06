@@ -21,9 +21,10 @@
  */
 // Tune you application here
 
-const connectionString = "http://localhost:8080/codenjoy-contest/board/player/w697usxnqn6s92hdp9sq?code=345398043395919424&game=spacerace";
-const isAdditionalLoggingEnabled = true;
-const connectionTimeout = 1000; // mS
+const connectionString = 
+   "http://localhost:8080/codenjoy-contest/board/player/w697usxnqn6s92hdp9sq?code=345398043395919424&game=spacerace";
+const reConnectionTimeout = 1000; // mS
+const isUiEnabled = true;
 
 
 
@@ -31,8 +32,8 @@ const connectionTimeout = 1000; // mS
 const Configuration = function(){
     return {
         connectionString: connectionString,
-        isAdditionalLoggingEnabled: isAdditionalLoggingEnabled,
-        connectionTimeout: connectionTimeout
+        reConnectionTimeout: reConnectionTimeout,
+        isUiEnabled: isUiEnabled
     };
 };
 

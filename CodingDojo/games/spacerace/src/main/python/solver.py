@@ -29,17 +29,43 @@ from elements import Elements
 from direction import Direction
 
 
+def filterMap(map, filterFunction):
+    result = {}
+    for k, v in map.items():
+        if filterFunction(k,v):
+            result[k] = v
+    return result
+
 class Solver:
     """ This class should contain the movement generation algorithm."""
 
-    def __init__(self):
+    def __init__(self, logger):
         ''' initialize globals here '''
-
+        self.logger = logger
+        
     def get(self, board: Board):
         """ The method that should be implemented."""
-        _command = Direction.STOP.withAct()
-        return _command
 
+        # board examples
+        self.logger.log("Board size: " + str(board.size))
+        allExtend = board.get_all_extend()
+        otherHerroes = filterMap(allExtend, lambda k, v: v == Elements.OTHER_HERO)
+        otherHeroesString = ", ".join(map(lambda p: "[x: {}, y: {}]".format(p.x, p.x), otherHerroes.keys()))
+        self.logger.log("Other heroes on coordinates: ", otherHeroesString)
+        bombsAndStones = board.find_all(Elements.BOMB, Elements.STONE)
+        self.logger.log("Bombs and stones number: " + str(len(bombsAndStones)))
+        me = board.find_all(Elements.HERO)
+        if len(me) > 0:
+            me=me[0]
+            self.logger.log("Me on coordinates: [x: {}, y: {} ]".format(me.x, me.y))
+            meIfMoveLeft = Direction.LEFT.change(me) # point left to the hero
+
+        # direction examples
+        movements = [Direction.LEFT, Direction.RIGHT, Direction.DOWN, Direction.UP]
+        action = choice(movements)
+        if choice([True, False]):
+            action = action.withAct() 
+        return action;                                                        
 
 if __name__ == '__main__':
     raise RuntimeError("This module is not intended to be ran from CLI")

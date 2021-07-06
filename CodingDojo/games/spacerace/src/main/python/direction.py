@@ -38,6 +38,9 @@ class Direction(Enum):
         self.dx = dx
         self.dy = dy
         self.isAct = isAct 
+    
+    def is_act(self):
+        return self.isAct
  
     def to_string(self):
         if self == Direction.SUICUDE: return "ACT(0)"
@@ -49,9 +52,6 @@ class Direction(Enum):
     
     def get_dy(self):
         return self.dy
-
-    def f(self, x):
-        return x + self.dx
 
     def change_x(self, x: int):
         return x + self.dx
@@ -82,11 +82,18 @@ class Command:
     def __init__(self, direction: Direction, isAct: bool):
         self.direction = direction
         self.isAct = isAct
+    
+    @property
+    def id(self):
+        return self.direction.id
+
+    def is_act(self):
+        return self.isAct
 
     def __eq__(self, other):
         if isinstance(other, Command):
             return self.direction == other.direction and self.isAct == other.isAct
-
+   
     def to_string(self):
         if self.direction in [Direction.SUICUDE, Direction.ACT]: return self.direction.to_string()
         return self.direction.to_string() + str((", " + Direction.ACT.to_string()) if self.isAct else "") 

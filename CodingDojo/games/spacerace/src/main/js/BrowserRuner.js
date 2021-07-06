@@ -21,8 +21,6 @@
  */
 
 
-
-
-var WSocket = require('ws');
-var api = new Api(WSocket, Configuration, Direction, Element, Point, Board, Solver);
+const WSocket = require("ws");
+var api = new Api(WSocket, configuration, Direction, Element, Point, Board, Solver, logger);
 api.start();

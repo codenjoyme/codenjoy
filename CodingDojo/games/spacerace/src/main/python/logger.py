@@ -23,12 +23,12 @@
 ###
 
 class Logger:
-    def log(*args):
+    def log(self, *args):
         for arg in args:
             print(arg)
 
-    def logBoard(board):
+    def log_board(self,board):
         print(board.to_string())
 
-    def logCommand(command):
+    def log_command(self, command):
         print(command.to_string())

@@ -4,10 +4,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceRace", "SpaceRace\SpaceRace.csproj", "{EF90FD1E-2DB5-4E31-92F7-20E6C2186203}"
+	ProjectSection(ProjectDependencies) = postProject
+		{003C7FA7-95DF-4DF2-B05C-6ADDCA22F798} = {003C7FA7-95DF-4DF2-B05C-6ADDCA22F798}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceRace.Api", "SpaceRace.Api\SpaceRace.Api.csproj", "{466DF49B-C4AF-40B4-8A9B-13922187EBA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceRace.ApiTests", "SpaceRace.ApiTests\SpaceRace.ApiTests.csproj", "{B23C3291-F014-41C4-B9BF-8EBE5CFF48F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceRace.UnitTests", "SpaceRace.ApiTests\SpaceRace.UnitTests.csproj", "{B23C3291-F014-41C4-B9BF-8EBE5CFF48F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceRace.UI", "Spacerace.UI\SpaceRace.UI.csproj", "{A6F5C262-D2B6-4DF0-AF0A-F4F65BCF5874}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceRace.UI.Tests", "SpaceRace.UI.Tests\SpaceRace.UI.Tests.csproj", "{93A19F9F-0C18-4072-B083-3903D0EF5577}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceRace.Player", "SpaceRace.Player\SpaceRace.Player.csproj", "{003C7FA7-95DF-4DF2-B05C-6ADDCA22F798}"
+	ProjectSection(ProjectDependencies) = postProject
+		{466DF49B-C4AF-40B4-8A9B-13922187EBA2} = {466DF49B-C4AF-40B4-8A9B-13922187EBA2}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D3D5E4C4-2A0E-4F44-B3EE-A963DCFF91F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +41,25 @@ Global
 		{B23C3291-F014-41C4-B9BF-8EBE5CFF48F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B23C3291-F014-41C4-B9BF-8EBE5CFF48F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B23C3291-F014-41C4-B9BF-8EBE5CFF48F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6F5C262-D2B6-4DF0-AF0A-F4F65BCF5874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6F5C262-D2B6-4DF0-AF0A-F4F65BCF5874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6F5C262-D2B6-4DF0-AF0A-F4F65BCF5874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6F5C262-D2B6-4DF0-AF0A-F4F65BCF5874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93A19F9F-0C18-4072-B083-3903D0EF5577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93A19F9F-0C18-4072-B083-3903D0EF5577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93A19F9F-0C18-4072-B083-3903D0EF5577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93A19F9F-0C18-4072-B083-3903D0EF5577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{003C7FA7-95DF-4DF2-B05C-6ADDCA22F798}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{003C7FA7-95DF-4DF2-B05C-6ADDCA22F798}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{003C7FA7-95DF-4DF2-B05C-6ADDCA22F798}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{003C7FA7-95DF-4DF2-B05C-6ADDCA22F798}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B23C3291-F014-41C4-B9BF-8EBE5CFF48F5} = {D3D5E4C4-2A0E-4F44-B3EE-A963DCFF91F6}
+		{93A19F9F-0C18-4072-B083-3903D0EF5577} = {D3D5E4C4-2A0E-4F44-B3EE-A963DCFF91F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C717F30D-CA3F-4347-9C90-5197D2AAFC58}

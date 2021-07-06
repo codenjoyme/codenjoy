@@ -23,6 +23,7 @@ namespace SpaceRace.Api.Interfaces
 {
     public interface IDirection
     {
+        Actions Action { get; }
         bool IsAct { get; }
         IDirection WithAct();
         Point Change(Point point);

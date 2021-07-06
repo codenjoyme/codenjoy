@@ -33,5 +33,9 @@ class Configuration:
     def connectionTimeout(self):
         return 1000  # mS
 
+    @property
+    def is_ui_enabled(self):
+        return True
+
 if __name__ == '__main__':
     raise RuntimeError("This module is not designed to be ran from CLI")        

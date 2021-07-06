@@ -1,4 +1,5 @@
 /*-
+/*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
@@ -29,6 +30,7 @@ var Element = {
     EXPLOSION:'x',
     BULLET:'*',
     WALL: '☼',
+    GOLD: '$',
 
     /// a void
     NONE: ' '                 

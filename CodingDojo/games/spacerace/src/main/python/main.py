@@ -23,15 +23,18 @@
 ###
 import time
 from api import Api
-
+from logger import Logger
+from composite_logger import CompositeLogger
+from cancel_token import CancellationToken
 from configuration import Configuration
-
-
 
 def main():
     conf = Configuration()
-    api = Api(conf.connectionString)
-    while True:
+    cancelation_token = CancellationToken()
+    conf.is_ui_enabled
+    logger =  CompositeLogger(cancelation_token) if conf.is_ui_enabled else Logger()
+    api = Api(conf.connectionString, logger, cancelation_token)
+    while not cancelation_token.cancelled:
         api.connect()
         time.sleep(conf.connectionTimeout / 1000)
 

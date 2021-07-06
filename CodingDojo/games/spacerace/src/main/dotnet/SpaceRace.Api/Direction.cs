@@ -37,6 +37,8 @@ namespace SpaceRace.Api
         private readonly int _dx;
         private readonly int _dy;
 
+        public Actions Action => _action;
+        
         public bool IsAct { get; }
 
         public Direction(Actions action, int dx = 0, int dy = 0, bool isAct = false)

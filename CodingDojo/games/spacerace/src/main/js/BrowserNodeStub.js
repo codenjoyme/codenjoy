@@ -20,104 +20,20 @@
  * #L%
  */
 
-var module;
-
-var isLogging=true;
-var isScrolling=true;
+var configuration = Configuration();
+var logger = BrowserLogger(Element, configuration.isUiEnabled)
 
 function setLogging(){
-    isLogging=!isLogging;
+    logger.setIsLogging(!logger.getIsLogging());
 }
 
 function setScrolling(){
-    isScrolling = ! isScrolling;
+    logger.setIsScrolling(!logger.getIsScrolling());
 }
 
 function clearLog() {
     var textarea = document.getElementById("log-area");
     textarea.value="";
-}
-
-var ElementsForUI = {
-    HERO: '☺',
-    OTHER_HERO:'☻',
-    DEAD_HERO:'+',
-    BULLET_PACK: '7',
-    STONE: '0',
-    BOMB: '♣',
-    EXPLOSION:'x',
-    BULLET:'*',
-    WALL: '☼',
-
-    /// a void
-    NONE: ' '                  
-};
-
-
-var classNames = function(){
-    var results = [];
-    var keys = Object.keys(ElementsForUI);
-    for(k in keys){
-        var key = keys[k];
-        results[ElementsForUI[key]] = key;
-    }
-    return results;
-  }();
-  
-  function getClassNameByElement(element){
-     return classNames[element];
-  }
-
-  function printAnswer(answer){
-      var span=document.getElementById('lastmove');
-      span.innerHTML = answer;
-  }
-  
-  var drawBoard=function(board){
-      var table = document.createElement('table');
-      table.id = "table-game";
-      for (var y = board.size() - 1; y >=0; y--) {
-          var row = document.createElement('tr');
-          for (var x = 0; x < board.size(); x++) {
-              var cell = document.createElement('td');
-              cell.className = getClassNameByElement(board.getAt(x,y));
-              row.appendChild(cell);
-          }
-          table.appendChild(row);
-      }
-      var tableDiv = document.getElementById('board-table');
-      var tableItself = document.getElementById('table-game');
-  
-      tableItself ?
-          tableDiv.replaceChild(table, tableItself) :
-          tableDiv.appendChild(table);
-  }
-  
-var printBoardOnTextArea = function(data) {
-    var textarea = document.getElementById("board");
-    if (!textarea) return;
-    var size = data.split('\n')[0].length;
-    textarea.cols = size;
-    textarea.rows = size + 1;
-    textarea.value = data;
-}
-
-var cache = [];
-
-var printLogOnTextArea = function(data) {
-    if(!isLogging) return;
-    var textarea = document.getElementById("log-area");
-    if (!textarea) return;
-    var val = textarea.value;
-    if(val) {
-        textarea.value = val + '\n' + data;
-    } else {
-        textarea.value = data;
-    }
-
-    if(isScrolling) {
-        textarea.scrollTop = textarea.scrollHeight;
-    }
 }
 
 var require = function(string) {

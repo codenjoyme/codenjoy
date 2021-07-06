@@ -1,5 +1,4 @@
-﻿using SpaceRace.Api;
-/*-
+﻿/*-
 * #%L
 * Codenjoy - it's a dojo-like platform from developers to developers.
 * %%
@@ -20,12 +19,14 @@
 * <http://www.gnu.org/licenses/gpl-3.0.html>.
 * #L%
 */
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using AutoFixture;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpaceRace.Api;
 using SpaceRace.Api.Interfaces;
 
-namespace SpaceRace.Api.Tests
+namespace SpaceRace.UnitTests
 {
     [TestClass()]
     public class DirectionTests

@@ -22,10 +22,21 @@
 <html>
 	<head>
 		<meta charset="utf8">
-		<script src="BrowserNodeStub.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+      var module = undefined;
+      var init = function(){
+         logger.init();
+         document.getElementById("log-enabled").checked = logger.getIsLogging();
+         document.getElementById("log-autoscroll").checked = logger.getIsScrolling();
+      }
+    //]]> 
+    </script> 
+		<script src="BrowserLogger.js"></script>
 		<script src="Configuration.js" ></script>
 		<script src="Direction.js" ></script>
 		<script src="Element.js" ></script>
+		<script src="BrowserNodeStub.js"></script>
 		<script src="Point.js" ></script>
 		<script src="Board.js" ></script>
 		<script src="Solver.js" ></script>
@@ -34,6 +45,7 @@
     <style>
       .container {
         margin: 5;
+        min-width: 200px;
         
       }
       .header{
@@ -50,6 +62,9 @@
         height: 20px;  
         margin: -1px;
         padding: 0px;
+      }
+      .row-item{
+        	display: inline-block;
       }
 
       .WALL {
@@ -79,9 +94,48 @@
       .HERO {
          background-image: url('./images/hero.png'); 
       }  
+      .GOLD {
+         background-image: url('./images/gold.png'); 
+      }
       .NONE {
          background-image: url('./images/none.png'); 
-      }  
+      } 
+
+      #left.inactive{
+         background-image: url('./images/left_inactive.png'); 
+      }
+      #left.active{
+         background-image: url('./images/left_active.png'); 
+      }
+
+      #right.inactive{
+         background-image: url('./images/right_inactive.png'); 
+      }
+      #right.active{
+         background-image: url('./images/right_active.png'); 
+      }
+
+      #up.inactive{
+         background-image: url('./images/up_inactive.png'); 
+      }
+      #up.active{
+         background-image: url('./images/up_active.png'); 
+      }
+
+      #down.inactive{
+         background-image: url('./images/down_inactive.png'); 
+      }
+      #down.active{
+         background-image: url('./images/down_active.png'); 
+      }
+
+      #act.inactive{
+         background-image: url('./images/act_inactive.png'); 
+      }
+      #act.active{
+         background-image: url('./images/act_active.png'); 
+      }
+
       #header,#game-elements,#log {
         display: block;
         width: fit-content;
@@ -103,19 +157,15 @@
         padding: 10px;
       }
 
+      #board-table{
+        min-height: 500;
+      }
+
     </style>
 	</head>
-	<body>
-    <div id="header" class="container">game: <span class="header">Collapse</span></div>
+	<body onload="init()">
     <div id="game-elements" class="container">
       <div id="controls-group">
-        <div id="field-as-log" class="container">
-          <span class="header">Input:</span><br />
-          <textarea id="board" style="line-height: 8px; vertical-align:top;"></textarea>
-        </div>
-        <div id="last-move" class="container">
-          <span class="header">Last answer: </span><span id="lastmove">--</span>
-        </div>
         <div id="controls" class="container">
           <input type="checkbox" id="log-enabled" checked="1" onchange='setLogging();'>Enable Log</input>
           <br />
@@ -130,16 +180,31 @@
         </div>
       </div>
       <div id="field-as-view" class="container">
-        <span class="header">Field</span><br />
+        <div id="header" class="container">game: <span class="header">SpaceRace</span> | decision make time: <span id="dmt" class="header">000ms</span></div>
+        <hr/>
         <div id="board-table">
           <table id="table-game">
     
           </table>
         </div>
+        <div id="control-panel" class="row">
+          <span class="row-item">
+            <table id="buttons-view">
+              <tr align="center"><td/><td id="up" class="inactive" width="24px" height ="24px"/> </tr>
+              <tr align="center">
+                <td id="left" class="inactive" width="24px" height ="24px" />
+                <td id="act" class="inactive" width="24px" height ="24px" /> 
+                <td id="right" class="inactive" width="24px" height ="24px" /> 
+              </tr>
+              <tr align="center"><td/><td id="down" class="inactive" width="24px" height ="24px" /></tr>
+            </table>
+          </span>
+          <span class="row-item">
+            <textarea id="log-area-local" rows="8" cols="60"
+              style="width: 100%; line-height: 10px; font-family: 'Courier New', Courier, monospace;"></textarea>
+          </span> 
+        </div>
       </div>
     </div>
-    
-
-				
 	</body>
 </html>

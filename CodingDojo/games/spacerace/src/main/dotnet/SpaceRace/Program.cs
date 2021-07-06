@@ -21,30 +21,71 @@
  */
 using System;
 using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 using SpaceRace.Api;
+using SpaceRace.Api.Interfaces;
+using SpaceRace.Player;
+using SpaceRace.UI;
 
 namespace SpaceRace
 {
     class Program
     {
+        private static void ShowForm(object obj)
+        {
+            var form = obj as UiForm;
+            if (obj != null)
+            {
+                Application.Run(form);
+            }
+        }
+
         static void Main(string[] args)
         {
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            
             // creating and starting a bot instance
             Console.OutputEncoding = Encoding.Unicode;
-            
-            var logger = new Logger();
+
+            var cts = new CancellationTokenSource();
+            UiForm form = Configuration.IsUiEnabled
+                ? new UiForm(cts)
+                : null;
+            var logger = Configuration.IsUiEnabled 
+                ? new CompositeLogger(form, new Logger()) as IApiLogger
+                : new Logger() as IApiLogger;
+
+           
+            if (form != null)
+            {
+                var uiThread = new Thread(ShowForm);
+                uiThread.Start(form);
+            }
+
             var bot = new Solver(logger);
             using var api = new Api.Api(
                 Configuration.ConnectionString, 
                 Configuration.ReconnectionIntervalMS, 
                 bot,
-                logger);
+                logger,
+                cts);
 
             // waiting for any key
-            Console.ReadKey();
+            if (Configuration.IsUiEnabled)
+            {
+                cts.Token.WaitHandle.WaitOne();
+            }
+            else
+            {
+                Console.ReadKey();
+                // on any key - asking AI client to stop.
+            }
 
-            // on any key - asking AI client to stop.
             api.Stop();
+            form?.ShutDown();
         }
     }
 }

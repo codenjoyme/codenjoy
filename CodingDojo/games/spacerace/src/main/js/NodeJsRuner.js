@@ -28,13 +28,12 @@ var Point = require("./Point.js");
 var Board = require("./Board.js");
 var Solver = require("./Solver.js");
 var Api = require("./Api.js");
-
-var printLogOnTextArea = false;
-
-function drawBoard(board){};
+var ConsoleLogger = require("./ConsoleLogger.js");
 
 var WSocket = require('ws');
-var api = new Api(WSocket, Configuration, Direction, Element, Point, Board, Solver);
-console.log("initialized");
+var logger = ConsoleLogger();
+var configuration = Configuration();
+var api = new Api(WSocket, configuration, Direction, Element, Point, Board, Solver, logger);
+logger.log("initialized");
 api.start();
-console.log("started");
+logger.log("started");

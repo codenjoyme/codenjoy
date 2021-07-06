@@ -21,55 +21,66 @@
 # <http://www.gnu.org/licenses/gpl-3.0.html>.
 # #L%
 
-
-import websocket
 from logger import Logger
+from cancel_token.cancel_token import CancellationToken
+import websocket
 from board import Board
 from solver import Solver
 from elements import Elements
-from configuration import Configuration
-from callbackhelper import CallBack
-
+from safe_callback import safe_callback
 
 class Api:
-
-    def __init__(self, serviceUrl: str):
+    def __init__(self, serviceUrl: str, logger, cancelation_token: CancellationToken):
+        self.token = cancelation_token
         self.url = serviceUrl.replace("http", "ws").replace(
             "board/player/", "ws?user=").replace("?code=", "&code=")
-        self.solver = Solver()
+        self.logger = logger
+        self.solver = Solver(logger)
+        
+    @safe_callback()
+    def onOpen(self, ws):
+        self.logger.log("Web socket client opened {}".format(self.url))
 
-    def onOpen(self):
-        Logger.log("Web socket client opened {}".format(self.url))
+    @safe_callback()
+    def onClose(self, ws, reason, arg):
+        self.logger.log("Web socket client closed")
 
-    def onClose(self):
-        Logger.log("Web socket client closed")
-
+    @safe_callback()
     def onError(self, ws, error):
-        Logger.log("Error:", error)
-        ws.close()
+        try:
+            self.logger.log("Error:", error)
+            ws.close()
+        except:
+            pass    
 
+    @safe_callback()
     def onMessage(self, ws, message):
         try:
+            if self.token.cancelled:
+                ws.close()
+                return
             boardString = str(message).replace("board=","")
             board = Board(boardString, Elements.getByChar, Elements.WALL)
-            Logger.logBoard(board)
+            self.logger.log_board(board)
             answer = self.solver.get(board)
-            Logger.logCommand(answer)
+            self.logger.log_command(answer)
             ws.send(answer.to_string())
  
         except Exception as error:
-            Logger.log("Error occured:", error)    
+            self.logger.log("Error occured:", error)
+            ws.send("")
 
         except:
-            Logger.log("Undefined error")
+            self.logger.log("Undefined error")
+            ws.send("")
 
     def connect(self):
-        Logger.log('Opening...')
+        self.logger.log('Opening...')
         ws = websocket.WebSocketApp(self.url,
 
-                                    on_open    = CallBack(self, Api.onOpen),
-                                    on_close   = CallBack(self, Api.onClose),
-                                    on_error   = CallBack(self, Api.onError),
-                                    on_message = CallBack(self, Api.onMessage)
+                                    on_open    = self.onOpen,
+                                    on_close   = self.onClose,
+                                    on_error   = self.onError,
+                                    on_message = self.onMessage
             )
         ws.run_forever()

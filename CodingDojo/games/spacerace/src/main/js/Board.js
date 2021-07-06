@@ -62,7 +62,7 @@ var LengthToXY = function (boardSize) {
     };
 };
 
-var Board = function (board, Element, pointClass) {
+var Board = function (board, Element, pointClass, NeighbourType) {
     Point = pointClass;
 
     var contains = function (a, obj) {
@@ -91,16 +91,6 @@ var Board = function (board, Element, pointClass) {
         return board.charAt(xyl.getLength(x, y));
     };
 
-    var isNear = function (x, y, element) {
-        if (pt(x, y).isOutOf(size)) {
-            return false;
-        }
-        return isAt(x + 1, y, element) ||
-            isAt(x - 1, y, element) ||
-            isAt(x, y + 1, element) ||
-            isAt(x, y - 1, element);
-    };
-
     var boardSize = function () {
         return Math.sqrt(board.length);
     };
@@ -112,7 +102,7 @@ var Board = function (board, Element, pointClass) {
         return isAt(x, y, Element.BORDER);
     };
 
-    var findAll = function (element) {
+    var findAll = function (element_s) {
         var result = [];
         for (var i = 0; i < size * size; i++) {
             var point = xyl.getXY(i);
@@ -125,12 +115,16 @@ var Board = function (board, Element, pointClass) {
         return result;
     };
 
+    var extendView = undefined;
     var findAllExtended = function () {
+        if(extendView) return extendView;
+
         var result = [];
         for (var i = 0; i < size * size; i++) {
             var point = xyl.getXYExtended(i, board.charAt(i));
             result.push(point);
         }
+        extendView = result;
         return result;
     };
 
@@ -148,15 +142,12 @@ var Board = function (board, Element, pointClass) {
     };
 
     return {
-        size: boardSize, // public int size();
-
-        get: findAll,  // public List<Point> get(Element... elements);
-        getAllExtended: findAllExtended,
-        isAt: isAt,    // public boolean isAt(int x, int y, Element ... elements);
+        size: boardSize(), // public int size;
+        getAllExtended: findAllExtended, // returns list of points where element field is initialized
+        findAll: findAll,  // public List<Point> get(Element... elements);
         getAt: getAt,  // public Element getAt(int x, int y);
+        isAt: isAt,    // public boolean isAt(int x, int y, Element ... elements);
         getBarriers: getBorders, // public List<Point> getBarriers();
-        getWalls: getBorders, // public List<Point> getWalls();
-        isNear: isNear, //public boolean isNear(int x, int y, Element element);
         isBarrierAt: isBarrierAt, // public boolean isBarrierAt(int x, int y);
 
         toString: toString

@@ -24,9 +24,6 @@
 
 from math import sqrt
 from point import Point
-from elements import Elements
-from neighbour_type import NeighbourType
-
 
 class Board:
 
@@ -37,6 +34,7 @@ class Board:
         self._size = int(sqrt(self._len))  # size of the board 
         self._createElement = createElementFunction
         self._barierElements = barierElements
+        self._extended = None
 
     @property
     def size(self):
@@ -44,12 +42,15 @@ class Board:
         return self._size
 
     def get_all_extend(self):
-        result = []
-        for i, c in enumerate(self._string):
-            point = self._strpos2pt(i)
-            element = self._createElement(c)
-            result.append((point, element))
-        return dict(result)
+        ''' Returns dictionary where key - point, value - element'''
+        if self._extended is None:
+            result = []
+            for i, c in enumerate(self._string):
+                point = self._strpos2pt(i)
+                element = self._createElement(c)
+                result.append((point, element))
+            self._extended = dict(result)
+        return self._extended    
 
     def find_all(self, *elements):
         """ Returns the list of points for the given element type."""
@@ -61,55 +62,25 @@ class Board:
         return _points
 
     def get_at(self, x, y):
-        """ Return an Element object at coordinates x,y."""
+        """ Returns an Element object at coordinates x,y."""
         if not self._is_valid_point(Point(x, y)):
             return self._barierElements[0]
         return self._createElement(self._string[self._xy2strpos(x, y)])
 
     def is_at(self, x, y, *elements):
-        """ Return True if Element is at x,y coordinates."""
+        """ Returns True if Element is at x,y coordinates."""
         return self.get_at(x, y) in elements
 
     def get_barriers(self):
-        """ Return the list of barriers Points."""
+        """ Returns the list of barriers Points."""
         return self.find_all(*self._barierElements)
 
     def is_barrier_at(self, x, y):
-        """ Return true if barrier is at x,y."""
+        """ Returns true if barrier is at x,y."""
         return Point(x, y) in self.get_barriers()
-
-    def is_near(self, x, y, neighbour_types , *elements):
-        _is_near = False
-        if self._is_valid_point(Point(x, y)):
-            _is_near = (((NeighbourType.DIAMOND in neighbour_types) 
-                    and (self.is_at(x + 1, y, *elements) or
-                        self.is_at(x - 1, y, *elements) or
-                        self.is_at(x, 1 + y, *elements) or
-                        self.is_at(x, 1 - y, *elements))) or
-                    ((NeighbourType.CROSS in neighbour_types) 
-                    and (self.is_at(x + 1, y + 1, *elements) or
-                        self.is_at(x - 1, y + 1, *elements) or
-                        self.is_at(x + 1, y - 1, *elements) or
-                        self.is_at(x - 1, 1 - y, *elements))))    
-
-        return _is_near
-
-    def count_near(self, x, y, neighbour_types, *elements):
-        """ Counts the number*elementsoccurrences of elem nearby """
-        _near_count = 0
-        if self._is_valid_point(Point(x, y)):
-            if NeighbourType.DIAMOND in neighbour_types:
-                for _x, _y in ((x + 1, y), (x - 1, y), (x, 1 + y), (x, y - 1)):
-                    if self.is_at(_x, _y, *elements):
-                        _near_count += 1
-            if NeighbourType.CROSS in neighbour_types:
-                for _x, _y in ((x + 1, y + 1), (x - 1, y + 1), (x + 1, y - 1), (x - 1, y -1)):
-                    if self.is_at(_x, _y, *elements):
-                        _near_count += 1
-
-        return _near_count 
-
+   
     def to_string(self):
+        ''' Returns str representation of board '''
         return ("Board:\n{brd}\n".format(brd=self._line_by_line()))
 
     def _is_valid_point(self, point):

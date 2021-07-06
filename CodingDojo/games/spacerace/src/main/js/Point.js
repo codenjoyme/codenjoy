@@ -64,7 +64,7 @@ var Point = function (x, y, element) {
             return new Point(x, y - delta, element);
         },
 
-        change(direction) {
+        createAt(direction) {
             if(direction.isAction) return new Point(x, y, element);
             switch (direction.getIndex()) {
                 case 0:
