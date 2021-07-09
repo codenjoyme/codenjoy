@@ -22,8 +22,14 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_MAX_TEAMS_PER_ROOM;
 
 public class GameRoom {
 
@@ -31,7 +37,7 @@ public class GameRoom {
     private final int count;
     private int wasCount;
     private final boolean disposable;
-    private List<GamePlayer> players = new LinkedList<>();
+    private Multimap<Integer, GamePlayer> playersByTeam = HashMultimap.create();
 
     public GameRoom(GameField field, int count, boolean disposable) {
         this.field = field;
@@ -40,23 +46,37 @@ public class GameRoom {
     }
 
     public GameField join(GamePlayer player) {
-        if (!players.contains(player)) {
+        if (!containsPlayer(player)) {
             wasCount++;
-            players.add(player);
+            playersByTeam.put(player.getTeamId(), player);
         }
         return field;
+    }
+
+    public boolean isAvailable(GamePlayer player) {
+        if (!isFree()) {
+            return false;
+        }
+        Integer maxTeams = player.settings.integer(ROUNDS_MAX_TEAMS_PER_ROOM);
+        if (!containsTeam(player.getTeamId()) && countTeams() >= maxTeams) {
+            return false;
+        }
+        if (countMembers(player.getTeamId()) >= count / maxTeams) {
+            return false;
+        }
+        return true;
     }
 
     public boolean isFree() {
         if (disposable) {
             return wasCount < count;
         } else {
-            return players.size() < count;
+            return countPlayers() < count;
         }
     }
 
     public boolean isEmpty() {
-        return players.isEmpty();
+        return playersByTeam.isEmpty();
     }
 
     public boolean isStuffed() {
@@ -67,8 +87,24 @@ public class GameRoom {
         }
     }
 
-    public boolean contains(GamePlayer player) {
-        return players.contains(player);
+    public boolean containsPlayer(GamePlayer player) {
+        return playersByTeam.containsValue(player);
+    }
+
+    public boolean containsTeam(Integer teamId) {
+        return playersByTeam.containsKey(teamId);
+    }
+
+    public int countTeams() {
+        return playersByTeam.size();
+    }
+
+    public int countPlayers() {
+        return playersByTeam.values().size();
+    }
+
+    public int countMembers(Integer teamId) {
+        return playersByTeam.get(teamId).size();
     }
 
     public boolean isFor(GameField input) {
@@ -78,8 +114,8 @@ public class GameRoom {
         return field.equals(input);
     }
 
-    public List<GamePlayer> players() {
-        return players;
+    public Collection<GamePlayer> players() {
+        return playersByTeam.values();
     }
 
     /**
@@ -88,6 +124,8 @@ public class GameRoom {
      *         т.к. им тут оставаться нет смысла
      */
     public List<GamePlayer> remove(GamePlayer player) {
+        Collection<GamePlayer> players = playersByTeam.get(player.getTeamId());
+
         List<GamePlayer> removed = new LinkedList<>();
 
         players.remove(player);

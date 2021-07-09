@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.multiplayer;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,7 +26,6 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -45,7 +44,7 @@ public class Spreader {
         room = type.getRoom(room, level);
         GameRoom gameRoom = null;
         if (type.shouldTryFindUnfilled(level)) {
-            gameRoom = findUnfilled(room);
+            gameRoom = findUnfilled(player, room);
         }
 
         if (gameRoom == null) {
@@ -60,19 +59,11 @@ public class Spreader {
         rooms.get(room).add(gameRoom);
     }
 
-    private GameRoom findUnfilled(String room) {
-        Collection<GameRoom> rooms = rooms(room);
-        if (rooms.isEmpty()) {
-            return null;
-        }
-        return rooms.stream()
-                .filter(GameRoom::isFree)
+    private GameRoom findUnfilled(GamePlayer player, String room) {
+        return rooms.get(room).stream()
+                .filter(r -> r.isAvailable(player))
                 .findFirst()
                 .orElse(null);
-    }
-
-    private Collection<GameRoom> rooms(String room) {
-        return rooms.get(room);
     }
 
     /**
@@ -104,8 +95,8 @@ public class Spreader {
 
     private List<GameRoom> roomsFor(GamePlayer player) {
         return rooms.values().stream()
-                    .filter(room -> room.contains(player))
-                    .collect(toList());
+                .filter(room -> room.containsPlayer(player))
+                .collect(toList());
     }
 
     private List<GameRoom> roomsFor(GameField field) {
