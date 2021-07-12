@@ -23,7 +23,6 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.PlayerGame;
 import com.codenjoy.dojo.services.PlayerGames;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
@@ -38,7 +37,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.mapping;
@@ -52,8 +50,6 @@ import static java.util.stream.Collectors.toList;
 public class RestTeamController {
 
     private final PlayerGames playerGames;
-    private final GameSaver gameSaver;
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -88,65 +84,5 @@ public class RestTeamController {
                                 () -> log.warn("playerId {} has not been found", playerId));
             }
         }
-    }
-
-    @PutMapping("/random")
-    public void distributePlayersRandomly(@RequestParam Integer teamCapacity,
-                                          @RequestBody List<String> playersIds) {
-        List<TeamPlayers> teamPlayersToDistribute = new ArrayList<>();
-
-        int newTeamsAmount = playersIds.size() / teamCapacity;
-        if (playersIds.size() % teamCapacity != 0) {
-            newTeamsAmount += 1;
-        }
-
-        Set<Integer> teamIds = getTeamsPlayersInfo().stream()
-                .map(TeamPlayers::getTeamId)
-                .collect(Collectors.toSet());
-
-        for (int i = 0; i < newTeamsAmount; i++) {
-            int newTeamId = 0;
-            do {
-                newTeamId++;
-            } while (teamIds.contains(newTeamId));
-            List<String> players = playersIds.subList(i * newTeamsAmount, newTeamsAmount);
-            teamPlayersToDistribute.add(new TeamPlayers(newTeamId, players));
-        }
-        distributePlayersByTeam(teamPlayersToDistribute);
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class TeamScore {
-
-        private TeamPlayers teamPlayers;
-        private long score;
-
-        public Integer getTeamId() {
-            return teamPlayers.getTeamId();
-        }
-    }
-
-    @GetMapping("/score")
-    public List<TeamScore> calculateAllTeamsScores() {
-        List<TeamScore> teamsScores = new ArrayList<>();
-        for (TeamPlayers teamsPlayer : getTeamsPlayersInfo()) {
-            Integer teamId = teamsPlayer.getTeamId();
-            List<String> playersIds = teamsPlayer.playersIds;
-            long score = gameSaver.loadAll(playersIds).stream()
-                    .filter(ps -> ps.getScore() instanceof Number)
-                    .mapToLong(ps -> (long) ps.getScore())
-                    .sum();
-            teamsScores.add(new TeamScore(new TeamPlayers(teamId, playersIds), score));
-        }
-        return teamsScores;
-    }
-
-    @GetMapping("/score/{teamId}")
-    public TeamScore calculateTeamScores(@PathVariable int teamId) {
-        return calculateAllTeamsScores().stream()
-                .filter(teamScore -> teamScore.getTeamId() == teamId)
-                .findFirst().orElseThrow();
     }
 }
