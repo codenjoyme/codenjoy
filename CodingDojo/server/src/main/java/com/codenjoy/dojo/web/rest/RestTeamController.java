@@ -43,7 +43,7 @@ import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-@RequestMapping("/team")
+@RequestMapping("/rest/team")
 @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
 @Slf4j
 @RequiredArgsConstructor
