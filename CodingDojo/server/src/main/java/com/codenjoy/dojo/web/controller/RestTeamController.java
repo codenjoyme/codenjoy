@@ -49,7 +49,7 @@ import static java.util.stream.Collectors.toList;
 @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
 @Slf4j
 @RequiredArgsConstructor
-public class TeamController {
+public class RestTeamController {
 
     private final PlayerGames playerGames;
     private final GameSaver gameSaver;
