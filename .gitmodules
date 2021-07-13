@@ -49,3 +49,6 @@
 [submodule "CodingDojo/games/mollymage"]
 	path = CodingDojo/games/mollymage
 	url = https://github.com/codenjoyme/codenjoy-mollymage.git
+[submodule "CodingDojo/clients/php"]
+	path = CodingDojo/clients/php
+	url = https://github.com/codenjoyme/codenjoy-php-client.git
