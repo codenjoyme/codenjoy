@@ -58,7 +58,7 @@ public class TeamService {
             Integer teamId = team.getTeamId();
             for (String playerId : team.getPlayers()) {
                 playerGames.stream()
-                        .filter(pg -> pg.getPlayerId().equals(playerId))
+                        .filter(pg -> playerId.equals(pg.getPlayerId()))
                         .map(PlayerGame::getGame)
                         .map(Game::getPlayer)
                         .findFirst()
