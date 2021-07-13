@@ -22,9 +22,7 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.PlayerGame;
-import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.TeamService;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/rest/team")
@@ -48,33 +40,17 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class RestTeamController {
 
-    private final PlayerGames playerGames;
+    private final TeamService teamService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<PTeam> getTeamInfo() {
-        List<PTeam> teams = new ArrayList<>();
-        Map<Integer, List<String>> playersByTeam = playerGames.stream()
-                .collect(Collectors.groupingBy(
-                        pg -> pg.getGame().getPlayer().getTeamId(),
-                        mapping(PlayerGame::getPlayerId, toList())));
-        playersByTeam.forEach((t, p) -> teams.add(new PTeam(t, p)));
-        return teams;
+        return teamService.getTeamInfo();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void distributePlayersByTeam(@RequestBody List<PTeam> teams) {
-        for (PTeam team : teams) {
-            Integer teamId = team.getTeamId();
-            for (String playerId : team.getPlayers()) {
-                playerGames.stream()
-                        .filter(pg -> pg.getPlayerId().equals(playerId))
-                        .map(PlayerGame::getGame)
-                        .map(Game::getPlayer)
-                        .findFirst()
-                        .ifPresentOrElse(gamePlayer -> gamePlayer.setTeamId(teamId),
-                                () -> log.warn("playerId {} has not been found", playerId));
-            }
-        }
+        teamService.distributePlayersByTeam(teams);
     }
 }
