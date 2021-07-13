@@ -33,6 +33,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PTeam {
 
-    private Integer teamId;
+    private String room;
+    private int teamId;
     private List<String> players;
 }

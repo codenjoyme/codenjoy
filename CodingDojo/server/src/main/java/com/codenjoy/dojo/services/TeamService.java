@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.mapping;
@@ -45,19 +46,27 @@ public class TeamService {
 
     public List<PTeam> getTeamInfo() {
         List<PTeam> teams = new ArrayList<>();
-        Map<Integer, List<String>> playersByTeam = playerGames.stream()
+        Map<Integer, List<PlayerGame>> playersByTeam = playerGames.all().stream()
                 .collect(Collectors.groupingBy(
                         pg -> pg.getGame().getPlayer().getTeamId(),
-                        mapping(PlayerGame::getPlayerId, toList())));
-        playersByTeam.forEach((t, p) -> teams.add(new PTeam(t, p)));
+                        mapping(Function.identity(), toList())));
+        for (Map.Entry<Integer, List<PlayerGame>> entry : playersByTeam.entrySet()) {
+            Integer teamId = entry.getKey();
+            Map<String, List<String>> playersByRoom = entry.getValue().stream()
+                    .collect(Collectors.groupingBy(PlayerGame::getRoom,
+                            mapping(PlayerGame::getPlayerId, toList())));
+            playersByRoom.forEach((room, players) -> teams.add(new PTeam(room, teamId, players)));
+        }
         return teams;
     }
 
     public void distributePlayersByTeam(@RequestBody List<PTeam> teams) {
         for (PTeam team : teams) {
-            Integer teamId = team.getTeamId();
+            String room = team.getRoom();
+            int teamId = team.getTeamId();
             for (String playerId : team.getPlayers()) {
                 playerGames.stream()
+                        .filter(pg -> room.equals(team.getRoom()))
                         .filter(pg -> playerId.equals(pg.getPlayerId()))
                         .map(PlayerGame::getGame)
                         .map(Game::getPlayer)

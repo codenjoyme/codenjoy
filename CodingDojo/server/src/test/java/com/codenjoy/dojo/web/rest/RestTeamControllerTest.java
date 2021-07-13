@@ -41,9 +41,9 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     @Test
     public void getTeamInfo() {
         String expected = "" +
-                "[{\"teamId\":0,\"players\":[\"player1\",\"player2\"]}," +
-                "{\"teamId\":1,\"players\":[\"player3\"]}," +
-                "{\"teamId\":2,\"players\":[\"player4\",\"player5\",\"player6\"]}]";
+                "[{\"room\":\"validRoom\",\"teamId\":0,\"players\":[\"player1\",\"player2\"]}," +
+                "{\"room\":\"validRoom\",\"teamId\":1,\"players\":[\"player3\"]}," +
+                "{\"room\":\"validRoom\",\"teamId\":2,\"players\":[\"player4\",\"player5\",\"player6\"]}]";
         assertEquals(expected, get("/rest/team"));
     }
 
@@ -52,6 +52,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         post(202, "/rest/team",
                 "[\n" +
                         "    {\n" +
+                        "        \"room\": \"validRoom\",\n" +
                         "        \"teamId\": 10,\n" +
                         "        \"players\": [\n" +
                         "            \"player1\",\n" +
@@ -60,6 +61,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
                         "        ]\n" +
                         "    },\n" +
                         "    {\n" +
+                        "        \"room\": \"validRoom\",\n" +
                         "        \"teamId\": 20,\n" +
                         "        \"players\": [\n" +
                         "            \"player2\",\n" +
@@ -68,14 +70,22 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
                         "        ]\n" +
                         "    }\n" +
                         "]");
-        String expected = "[10: player1][10: player3][10: player5][20: player2][20: player4][20: player6]";
+        String expected = "" +
+                "[room `validRoom`, teamId `10`: player1]" +
+                "[room `validRoom`, teamId `10`: player3]" +
+                "[room `validRoom`, teamId `10`: player5]" +
+                "[room `validRoom`, teamId `20`: player2]" +
+                "[room `validRoom`, teamId `20`: player4]" +
+                "[room `validRoom`, teamId `20`: player6]";
         assertEquals(expected, playerGamesString());
     }
 
     private String playerGamesString() {
         return playerGames.all().stream()
-                .map(pg -> String.format("[%d: %s]",
-                        pg.getGame().getPlayer().getTeamId(), pg.getPlayerId()))
+                .map(pg -> String.format("[room `%s`, teamId `%d`: %s]",
+                        pg.getRoom(),
+                        pg.getGame().getPlayer().getTeamId(),
+                        pg.getPlayerId()))
                 .sorted()
                 .reduce(String::concat)
                 .orElse(StringUtils.EMPTY);
