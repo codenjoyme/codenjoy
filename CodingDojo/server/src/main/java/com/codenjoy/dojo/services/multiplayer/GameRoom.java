@@ -22,9 +22,6 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +34,7 @@ public class GameRoom {
     private final int count;
     private int wasCount;
     private final boolean disposable;
-    private Multimap<Integer, GamePlayer> playersByTeam = HashMultimap.create();
+    private List<GamePlayer> players = new LinkedList<>();
 
     public GameRoom(GameField field, int count, boolean disposable) {
         this.field = field;
@@ -48,7 +45,7 @@ public class GameRoom {
     public GameField join(GamePlayer player) {
         if (!containsPlayer(player)) {
             wasCount++;
-            playersByTeam.put(player.getTeamId(), player);
+            players.add(player);
         }
         return field;
     }
@@ -76,7 +73,7 @@ public class GameRoom {
     }
 
     public boolean isEmpty() {
-        return playersByTeam.isEmpty();
+        return players.isEmpty();
     }
 
     public boolean isStuffed() {
@@ -88,23 +85,30 @@ public class GameRoom {
     }
 
     public boolean containsPlayer(GamePlayer player) {
-        return playersByTeam.containsValue(player);
+        return players.contains(player);
     }
 
-    public boolean containsTeam(Integer teamId) {
-        return playersByTeam.containsKey(teamId);
+    public boolean containsTeam(int teamId) {
+        return players.stream()
+                .anyMatch(p -> p.getTeamId() == teamId);
     }
 
-    public int countTeams() {
-        return playersByTeam.size();
+    public long countTeams() {
+        return players.stream()
+                .map(GamePlayer::getTeamId)
+                .distinct()
+                .count();
     }
 
-    public int countPlayers() {
-        return playersByTeam.values().size();
+    public long countPlayers() {
+        return players.size();
     }
 
-    public int countMembers(Integer teamId) {
-        return playersByTeam.get(teamId).size();
+    public long countMembers(int teamId) {
+        return players.stream()
+                .filter(p -> p.getTeamId() == teamId)
+                .distinct()
+                .count();
     }
 
     public boolean isFor(GameField input) {
@@ -115,7 +119,7 @@ public class GameRoom {
     }
 
     public Collection<GamePlayer> players() {
-        return playersByTeam.values();
+        return players;
     }
 
     /**
@@ -124,8 +128,6 @@ public class GameRoom {
      *         т.к. им тут оставаться нет смысла
      */
     public List<GamePlayer> remove(GamePlayer player) {
-        Collection<GamePlayer> players = playersByTeam.get(player.getTeamId());
-
         List<GamePlayer> removed = new LinkedList<>();
 
         players.remove(player);
