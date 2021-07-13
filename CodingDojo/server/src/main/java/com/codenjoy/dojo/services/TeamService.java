@@ -51,12 +51,13 @@ public class TeamService {
                         pg -> pg.getGame().getPlayer().getTeamId(),
                         mapping(Function.identity(), toList())));
         for (Map.Entry<Integer, List<PlayerGame>> entry : playersByTeam.entrySet()) {
-            Integer teamId = entry.getKey();
+            int teamId = entry.getKey();
             Map<String, List<String>> playersByRoom = entry.getValue().stream()
                     .collect(Collectors.groupingBy(PlayerGame::getRoom,
                             mapping(PlayerGame::getPlayerId, toList())));
             playersByRoom.forEach((room, players) -> teams.add(new PTeam(room, teamId, players)));
         }
+        teams.sort(PTeam::compareTo);
         return teams;
     }
 

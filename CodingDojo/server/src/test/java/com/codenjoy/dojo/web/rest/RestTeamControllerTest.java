@@ -23,27 +23,29 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         roomService.removeAll();
         registration.removeAll();
 
-        register(0, "player1");
-        register(0, "player2");
-        register(1, "player3");
-        register(2, "player4");
-        register(2, "player5");
-        register(2, "player6");
+        register("room1", 0, "player1");
+        register("room1", 0, "player2");
+        register("room1", 1, "player3");
+        register("room1", 2, "player4");
+        register("room1", 2, "player5");
+        register("room1", 2, "player6");
+        register("room2", 1, "player7");
 
         asAdmin();
     }
 
-    private void register(int teamId, String id) {
-        PlayerGame registeredPlayer = register(id, "ip", "validRoom", "first");
+    private void register(String room, int teamId, String id) {
+        PlayerGame registeredPlayer = register(id, "ip", room, "first");
         registeredPlayer.getGame().getPlayer().setTeamId(teamId);
     }
 
     @Test
     public void getTeamInfo() {
         String expected = "" +
-                "[{\"room\":\"validRoom\",\"teamId\":0,\"players\":[\"player1\",\"player2\"]}," +
-                "{\"room\":\"validRoom\",\"teamId\":1,\"players\":[\"player3\"]}," +
-                "{\"room\":\"validRoom\",\"teamId\":2,\"players\":[\"player4\",\"player5\",\"player6\"]}]";
+                "[{\"room\":\"room1\",\"teamId\":0,\"players\":[\"player1\",\"player2\"]}," +
+                "{\"room\":\"room1\",\"teamId\":1,\"players\":[\"player3\"]}," +
+                "{\"room\":\"room1\",\"teamId\":2,\"players\":[\"player4\",\"player5\",\"player6\"]}," +
+                "{\"room\":\"room2\",\"teamId\":1,\"players\":[\"player7\"]}]";
         assertEquals(expected, get("/rest/team"));
     }
 
@@ -71,12 +73,13 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
                         "    }\n" +
                         "]");
         String expected = "" +
-                "[room `validRoom`, teamId `10`: player1]" +
-                "[room `validRoom`, teamId `10`: player3]" +
-                "[room `validRoom`, teamId `10`: player5]" +
-                "[room `validRoom`, teamId `20`: player2]" +
-                "[room `validRoom`, teamId `20`: player4]" +
-                "[room `validRoom`, teamId `20`: player6]";
+                "[room `room1`, teamId `10`: player1]" +
+                "[room `room1`, teamId `10`: player3]" +
+                "[room `room1`, teamId `10`: player5]" +
+                "[room `room1`, teamId `20`: player2]" +
+                "[room `room1`, teamId `20`: player4]" +
+                "[room `room1`, teamId `20`: player6]" +
+                "[room `room2`, teamId `1`: player7]";
         assertEquals(expected, playerGamesString());
     }
 
