@@ -19,6 +19,8 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     @Before
     public void setUp() {
         super.setUp();
+        playerService.removeAll();
+        roomService.removeAll();
         registration.removeAll();
 
         register(0, "player1");
