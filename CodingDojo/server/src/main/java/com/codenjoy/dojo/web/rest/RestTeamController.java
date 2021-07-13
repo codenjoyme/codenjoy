@@ -26,11 +26,10 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.PlayerGame;
 import com.codenjoy.dojo.services.PlayerGames;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,31 +49,24 @@ import static java.util.stream.Collectors.toList;
 public class RestTeamController {
 
     private final PlayerGames playerGames;
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class TeamPlayers {
-
-        private Integer teamId;
-        private List<String> playersIds;
-    }
 
     @GetMapping
-    public List<TeamPlayers> getTeamsPlayersInfo() {
-        List<TeamPlayers> teamsPlayers = new ArrayList<>();
+    public List<PTeam> getTeamInfo() {
+        List<PTeam> teams = new ArrayList<>();
         Map<Integer, List<String>> playersByTeam = playerGames.stream()
                 .collect(Collectors.groupingBy(
                         pg -> pg.getGame().getPlayer().getTeamId(),
                         mapping(PlayerGame::getPlayerId, toList())));
-        playersByTeam.forEach((t, ps) -> teamsPlayers.add(new TeamPlayers(t, ps)));
-        return teamsPlayers;
+        playersByTeam.forEach((t, p) -> teams.add(new PTeam(t, p)));
+        return teams;
     }
 
-    @PutMapping
-    public void distributePlayersByTeam(@RequestBody List<TeamPlayers> teamsPlayers) {
-        for (TeamPlayers teamPlayers : teamsPlayers) {
-            Integer teamId = teamPlayers.getTeamId();
-            for (String playerId : teamPlayers.getPlayersIds()) {
+    @PostMapping
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void distributePlayersByTeam(@RequestBody List<PTeam> teams) {
+        for (PTeam team : teams) {
+            Integer teamId = team.getTeamId();
+            for (String playerId : team.getPlayers()) {
                 playerGames.stream()
                         .filter(pg -> pg.getPlayerId().equals(playerId))
                         .map(PlayerGame::getGame)
