@@ -27,18 +27,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PTeam implements Comparable<PTeam> {
+public class PTeam {
 
-    private String room;
     private int teamId;
     private List<String> players;
 
-    @Override
-    public int compareTo(PTeam that) {
-        return this.toString().compareTo(that.toString());
+    public PTeam(Map.Entry<Integer, List<String>> entry) {
+        this(entry.getKey(), entry.getValue());
     }
 }

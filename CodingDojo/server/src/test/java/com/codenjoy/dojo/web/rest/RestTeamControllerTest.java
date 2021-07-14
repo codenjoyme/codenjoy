@@ -1,5 +1,27 @@
 package com.codenjoy.dojo.web.rest;
 
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 - 2021 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import com.codenjoy.dojo.services.PlayerGame;
 import com.codenjoy.dojo.services.PlayerGames;
 import org.apache.commons.lang3.StringUtils;
@@ -42,19 +64,17 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     @Test
     public void getTeamInfo() {
         String expected = "" +
-                "[{\"room\":\"room1\",\"teamId\":0,\"players\":[\"player1\",\"player2\"]}," +
-                "{\"room\":\"room1\",\"teamId\":1,\"players\":[\"player3\"]}," +
-                "{\"room\":\"room1\",\"teamId\":2,\"players\":[\"player4\",\"player5\",\"player6\"]}," +
-                "{\"room\":\"room2\",\"teamId\":1,\"players\":[\"player7\"]}]";
-        assertEquals(expected, get("/rest/team"));
+                "[{\"teamId\":0,\"players\":[\"player1\",\"player2\"]}," +
+                "{\"teamId\":1,\"players\":[\"player3\"]}," +
+                "{\"teamId\":2,\"players\":[\"player4\",\"player5\",\"player6\"]}]";
+        assertEquals(expected, get("/rest/team/room/room1"));
     }
 
     @Test
     public void distributePlayersByTeam() {
-        post(202, "/rest/team",
-                "[\n" +
+        post(202, "/rest/team/room/room1",
+                        "[\n" +
                         "    {\n" +
-                        "        \"room\": \"validRoom\",\n" +
                         "        \"teamId\": 10,\n" +
                         "        \"players\": [\n" +
                         "            \"player1\",\n" +
@@ -63,7 +83,6 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
                         "        ]\n" +
                         "    },\n" +
                         "    {\n" +
-                        "        \"room\": \"validRoom\",\n" +
                         "        \"teamId\": 20,\n" +
                         "        \"players\": [\n" +
                         "            \"player2\",\n" +

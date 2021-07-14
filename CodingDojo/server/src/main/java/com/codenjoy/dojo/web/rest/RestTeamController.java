@@ -42,15 +42,16 @@ public class RestTeamController {
 
     private final TeamService teamService;
 
-    @GetMapping
+    @GetMapping("/room/{room}")
     @ResponseStatus(HttpStatus.OK)
-    public List<PTeam> getTeamInfo() {
-        return teamService.getTeamInfo();
+    public List<PTeam> getTeamInfo(@PathVariable("room") String room) {
+        return teamService.getTeamInfo(room);
     }
 
-    @PostMapping
+    @PostMapping("/room/{room}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void distributePlayersByTeam(@RequestBody List<PTeam> teams) {
-        teamService.distributePlayersByTeam(teams);
+    public void distributePlayersByTeam(@PathVariable("room") String room,
+                                        @RequestBody List<PTeam> teams) {
+        teamService.distributePlayersByTeam(room, teams);
     }
 }

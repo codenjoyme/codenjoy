@@ -22,16 +22,13 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.mapping;
@@ -44,36 +41,27 @@ public class TeamService {
 
     private final PlayerGames playerGames;
 
-    public List<PTeam> getTeamInfo() {
-        List<PTeam> teams = new ArrayList<>();
-        Map<Integer, List<PlayerGame>> playersByTeam = playerGames.all().stream()
+    public List<PTeam> getTeamInfo(String room) {
+        return playerGames.all().stream()
+                .filter(pg -> pg.getRoom().equals(room))
                 .collect(Collectors.groupingBy(
-                        pg -> pg.getGame().getPlayer().getTeamId(),
-                        mapping(Function.identity(), toList())));
-        for (Map.Entry<Integer, List<PlayerGame>> entry : playersByTeam.entrySet()) {
-            int teamId = entry.getKey();
-            Map<String, List<String>> playersByRoom = entry.getValue().stream()
-                    .collect(Collectors.groupingBy(PlayerGame::getRoom,
-                            mapping(PlayerGame::getPlayerId, toList())));
-            playersByRoom.forEach((room, players) -> teams.add(new PTeam(room, teamId, players)));
-        }
-        teams.sort(PTeam::compareTo);
-        return teams;
+                        PlayerGame::getPlayerTeamId,
+                        mapping(PlayerGame::getPlayerId, toList())))
+                .entrySet().stream()
+                .map(PTeam::new)
+                .collect(toList());
     }
 
-    public void distributePlayersByTeam(@RequestBody List<PTeam> teams) {
+    public void distributePlayersByTeam(String room, List<PTeam> teams) {
         for (PTeam team : teams) {
-            String room = team.getRoom();
-            int teamId = team.getTeamId();
             for (String playerId : team.getPlayers()) {
-                playerGames.stream()
-                        .filter(pg -> room.equals(team.getRoom()))
-                        .filter(pg -> playerId.equals(pg.getPlayerId()))
-                        .map(PlayerGame::getGame)
-                        .map(Game::getPlayer)
-                        .findFirst()
-                        .ifPresentOrElse(gamePlayer -> gamePlayer.setTeamId(teamId),
-                                () -> log.warn("playerId {} has not been found", playerId));
+                PlayerGame game = playerGames.get(playerId);
+                if (game == NullPlayerGame.INSTANCE) {
+                    log.warn("playerId {} has not been found", playerId);
+                }
+                if (room.equals(game.getRoom())) {
+                    game.getGame().getPlayer().setTeamId(team.getTeamId());
+                }
             }
         }
     }
