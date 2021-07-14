@@ -52,3 +52,6 @@
 [submodule "CodingDojo/clients/php"]
 	path = CodingDojo/clients/php
 	url = https://github.com/codenjoyme/codenjoy-php-client.git
+[submodule "CodingDojo/clients/python"]
+	path = CodingDojo/clients/python
+	url = https://github.com/codenjoyme/codenjoy-python-client.git
