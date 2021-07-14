@@ -55,7 +55,8 @@ public class GameRoom {
             return false;
         }
         if (player.settings != null
-                && player.settings.hasParameter(ROUNDS_MAX_TEAMS_PER_ROOM.key())) {
+                && player.settings.hasParameter(ROUNDS_MAX_TEAMS_PER_ROOM.key()))
+        {
             int maxTeams = player.settings.integer(ROUNDS_MAX_TEAMS_PER_ROOM);
             if (!containsTeam(player.getTeamId()) && countTeams() >= maxTeams) {
                 return false;
@@ -131,7 +132,7 @@ public class GameRoom {
     /**
      * @param player Игрок который закончил играть в этой room и будет удален
      * @return Все игроки этой комнаты, которых так же надо пристроить в новой room,
-     *         т.к. им тут оставаться нет смысла
+     * т.к. им тут оставаться нет смысла
      */
     public List<GamePlayer> remove(GamePlayer player) {
         List<GamePlayer> removed = new LinkedList<>();
