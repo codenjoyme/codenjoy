@@ -54,19 +54,18 @@ public class GameRoom {
         if (!isFree()) {
             return false;
         }
-        if (player.settings != null
-                && player.settings.hasParameter(ROUNDS_MAX_TEAMS_PER_ROOM.key()))
-        {
-            int maxTeams = player.settings.integer(ROUNDS_MAX_TEAMS_PER_ROOM);
-            if (!containsTeam(player.getTeamId()) && countTeams() >= maxTeams) {
-                return false;
-            }
-            if (wasCount + 1 == count) {
-                return true;
-            }
-            if (countTeams() > 1 && countMembers(player.getTeamId()) >= count / maxTeams) {
-                return false;
-            }
+        if (player.settings == null || !player.settings.hasParameter(ROUNDS_MAX_TEAMS_PER_ROOM.key())) {
+            return true;
+        }
+        int maxTeams = player.settings.integer(ROUNDS_MAX_TEAMS_PER_ROOM);
+        if (!containsTeam(player.getTeamId()) && countTeams() >= maxTeams) {
+            return false;
+        }
+        if (wasCount + 1 == count) {
+            return true;
+        }
+        if (countTeams() > 1 && countMembers(player.getTeamId()) >= count / maxTeams) {
+            return false;
         }
         return true;
     }
