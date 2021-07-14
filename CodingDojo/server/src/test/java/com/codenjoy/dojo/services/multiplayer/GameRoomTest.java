@@ -78,6 +78,7 @@ public class GameRoomTest {
         room.join(newGamePlayer(0));
         room.join(newGamePlayer(0));
         room.join(newGamePlayer(1));
+        room.join(newGamePlayer(1));
         assertEquals(false, room.isAvailable(newGamePlayer(0)));
         assertEquals(true, room.isAvailable(newGamePlayer(1)));
     }

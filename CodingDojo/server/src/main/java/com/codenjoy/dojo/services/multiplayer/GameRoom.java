@@ -61,7 +61,7 @@ public class GameRoom {
         if (!containsTeam(player.getTeamId()) && countTeams() >= maxTeams) {
             return false;
         }
-        if (wasCount + 1 == count) {
+        if (count % 2 != 0 && wasCount + 1 == count) {
             return true;
         }
         if (countTeams() > 1 && countMembers(player.getTeamId()) >= count / maxTeams) {
