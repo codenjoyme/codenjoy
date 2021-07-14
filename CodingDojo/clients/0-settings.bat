@@ -1,7 +1,7 @@
 @echo off 
 if "%GAME_TO_RUN%"=="" ( set GAME_TO_RUN=mollymage)
 if "%BOARD_URL%"==""  ( set BOARD_URL=http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000)
-if "%LANGUAGE%"==""   ( set LANGUAGE=php)
+if "%LANGUAGE%"==""   ( set LANGUAGE=python)
 
 if "%ROOT%"==""       ( set ROOT=%CD%)
 
@@ -32,6 +32,8 @@ if "%JAVASCRIPT_CLIENT_HOME%"=="" ( set JAVASCRIPT_CLIENT_HOME=%ROOT%\java-scrip
 if "%GO_CLIENT_HOME%"==""         ( set GO_CLIENT_HOME=%ROOT%\go)
 if "%PHP_CLIENT_HOME%"==""        ( set PHP_CLIENT_HOME=%ROOT%\php)
 if "%PHP_HOME%"==""               ( set PHP_HOME=%PHP_CLIENT_HOME%\.php)
+if "%PYTHON_CLIENT_HOME%"==""     ( set PYTHON_CLIENT_HOME=%ROOT%\python)
+if "%PYTHON_HOME%"==""            ( set PYTHON_HOME=%PYTHON_CLIENT_HOME%\.python)
 
 
 if "%ARCH_GIT%"==""          ( set ARCH_GIT=https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-64-bit.zip)
@@ -43,3 +45,4 @@ if "%ARCH_GO%"==""           ( set ARCH_GO=https://golang.org/dl/go1.16.5.window
 if "%ARCH_GO_FOLDER%"==""    ( set ARCH_GO_FOLDER=go)
 if "%ARCH_PHP%"==""          ( set ARCH_PHP=https://windows.php.net/downloads/releases/php-8.0.8-nts-Win32-vs16-x64.zip)
 if "%ARCH_PHP_COMPOSER%"=="" ( set ARCH_PHP_COMPOSER=https://getcomposer.org/download/latest-2.x/composer.phar)
+if "%ARCH_PYTHON%"==""       ( set ARCH_PYTHON=https://www.python.org/ftp/python/3.9.6/python-3.9.6-embed-amd64.zip)

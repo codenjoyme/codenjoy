@@ -29,6 +29,11 @@ IF "%LANGUAGE%"=="php" (
     call :php
 )
 
+IF "%LANGUAGE%"=="python" (
+    call :python
+)
+
+
 echo off
 echo [44;93m
 echo        +-------------------------------------+
@@ -131,6 +136,38 @@ goto :eof
 
     cd %ROOT%
 goto :eof
+
+:python
+    @echo off
+    echo [44;93m
+    echo        +-------------------------------------+
+    echo        !          Installing PYTHON          !
+    echo        +-------------------------------------+
+    echo [0m
+    echo on
+
+    cd %ROOT%
+    rd /S /Q %PYTHON_HOME%
+    @echo off
+    echo [44;93m
+    echo        +-------------------------------------+
+    echo        !      Downloading Python.zip         !
+    echo        +-------------------------------------+
+    echo [0m
+    echo on
+
+    IF EXIST %TOOLS%\python.zip (
+        ECHO python.zip already loaded
+    ) ELSE (
+    powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers['User-Agent']='PoweShell script';  $client.DownloadFile('%ARCH_PYTHON%','%TOOLS%\python.zip') }"
+    )
+    %ARCH% x -y %TOOLS%\python.zip -o%PYTHON_HOME% 
+rem    check is need to copy settings for python
+rem    xcopy /y %TOOLS%\php.ini %PHP_HOME%\
+
+    cd %ROOT%
+goto :eof
+
 
 :ask
     @echo off

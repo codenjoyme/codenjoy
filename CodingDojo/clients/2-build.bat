@@ -29,6 +29,10 @@ IF "%LANGUAGE%"=="php" (
     call :php
 )
 
+IF "%LANGUAGE%"=="python" (
+    call :python
+)
+                
 echo off
 echo [44;93m
 echo        +-------------------------------------+
@@ -70,6 +74,13 @@ goto :eof
     call 1-build.bat
     cd %ROOT%
 goto :eof
+
+:python
+    cd %PYTHON_CLIENT_HOME%
+    call 1-build.bat
+    cd %ROOT%
+goto :eof
+
 
 
 :ask
