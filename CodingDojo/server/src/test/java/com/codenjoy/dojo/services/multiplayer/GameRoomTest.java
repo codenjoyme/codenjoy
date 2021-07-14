@@ -15,9 +15,7 @@ public class GameRoomTest {
     }
 
     private GamePlayer newGamePlayer(int teamId) {
-        GamePlayer player = new GamePlayer(event -> {
-        }, new RoundSettingsImpl()) {
-        };
+        GamePlayer player = new GamePlayer(event -> {}, new RoundSettingsImpl()) {};
         player.setTeamId(teamId);
         return player;
     }
@@ -34,17 +32,13 @@ public class GameRoomTest {
     @Test
     public void isAvailable_gameSettingsNotProvided() {
         GameRoom room = new GameRoom(NullGameField.INSTANCE, 2, true);
-        assertEquals(true, room.isAvailable(new GamePlayer(event -> {
-        }, null) {
-        }));
+        assertEquals(true, room.isAvailable(new GamePlayer(event -> {}, null) {}));
     }
 
     @Test
     public void isAvailable_gameSettingsNotHaveMaxTeamPerRoomParameter() {
         GameRoom room = new GameRoom(NullGameField.INSTANCE, 2, true);
-        assertEquals(true, room.isAvailable(new GamePlayer(event -> {
-        }, new GameSettings()) {
-        }));
+        assertEquals(true, room.isAvailable(new GamePlayer(event -> {}, new GameSettings()) {}));
     }
 
     @Test
