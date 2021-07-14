@@ -162,8 +162,6 @@ goto :eof
     powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers['User-Agent']='PoweShell script';  $client.DownloadFile('%ARCH_PYTHON%','%TOOLS%\python.zip') }"
     )
     %ARCH% x -y %TOOLS%\python.zip -o%PYTHON_HOME% 
-rem    check is need to copy settings for python
-rem    xcopy /y %TOOLS%\php.ini %PHP_HOME%\
 
     cd %ROOT%
 goto :eof
