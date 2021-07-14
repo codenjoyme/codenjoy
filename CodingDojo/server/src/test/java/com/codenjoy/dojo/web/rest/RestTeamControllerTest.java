@@ -72,15 +72,13 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
                         "        ]\n" +
                         "    }\n" +
                         "]");
-        String expected = "" +
-                "[room `room1`, teamId `10`: player1]" +
+        assertEquals("[room `room1`, teamId `10`: player1]" +
                 "[room `room1`, teamId `10`: player3]" +
                 "[room `room1`, teamId `10`: player5]" +
                 "[room `room1`, teamId `20`: player2]" +
                 "[room `room1`, teamId `20`: player4]" +
                 "[room `room1`, teamId `20`: player6]" +
-                "[room `room2`, teamId `1`: player7]";
-        assertEquals(expected, playerGamesString());
+                "[room `room2`, teamId `1`: player7]", playerGamesString());
     }
 
     private String playerGamesString() {
