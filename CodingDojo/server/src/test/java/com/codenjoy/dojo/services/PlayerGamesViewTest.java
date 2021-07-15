@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -278,9 +278,9 @@ public class PlayerGamesViewTest {
 
         // then
         assertEquals("{user1=[user1, user2, user3, user4], " + // all together
-                "user2=[user1, user2, user3, user4], " +
-                "user3=[user1, user2, user3, user4], " +
-                "user4=[user1, user2, user3, user4]}",
+                        "user2=[user1, user2, user3, user4], " +
+                        "user3=[user1, user2, user3, user4], " +
+                        "user4=[user1, user2, user3, user4]}",
                 sortKeys(map).toString());
     }
 
@@ -294,9 +294,9 @@ public class PlayerGamesViewTest {
 
         // then
         assertEquals("{user1=[user1, user2], " + // group 1
-                "user2=[user1, user2], " +
-                "user3=[user3, user4], " +       // group 2
-                "user4=[user3, user4]}",
+                        "user2=[user1, user2], " +
+                        "user3=[user3, user4], " +       // group 2
+                        "user4=[user3, user4]}",
                 sortKeys(map).toString());
     }
 
@@ -408,21 +408,25 @@ public class PlayerGamesViewTest {
         assertEquals("[\n" +
                         "  {\n" +
                         "    'score':123,\n" +
+                        "    'teamId':0,\n" +
                         "    'name':'readable_user1',\n" +
                         "    'id':'user1'\n" +
                         "  },\n" +
                         "  {\n" +
                         "    'score':234,\n" +
+                        "    'teamId':0,\n" +
                         "    'name':'readable_user2',\n" +
                         "    'id':'user2'\n" +
                         "  },\n" +
                         "  {\n" +
                         "    'score':345,\n" +
+                        "    'teamId':0,\n" +
                         "    'name':'readable_user3',\n" +
                         "    'id':'user3'\n" +
                         "  },\n" +
                         "  {\n" +
                         "    'score':456,\n" +
+                        "    'teamId':0,\n" +
                         "    'name':'readable_user4',\n" +
                         "    'id':'user4'\n" +
                         "  }\n" +
@@ -452,11 +456,10 @@ public class PlayerGamesViewTest {
         List<PScoresOf> scores = playerGamesView.getScoresForGame("game1");
 
         // then
-        assertEquals("[" +
-                        "{'score':1123,'name':'readable_user1','id':'user1'}," +
-                        "{'score':1234,'name':'readable_user2','id':'user2'}," +
-                        "{'score':1345,'name':'readable_user3','id':'user3'}," +
-                        "{'score':1456,'name':'readable_user4','id':'user4'}]",
+        assertEquals("[{'score':1123,'teamId':0,'name':'readable_user1','id':'user1'}," +
+                        "{'score':1234,'teamId':0,'name':'readable_user2','id':'user2'}," +
+                        "{'score':1345,'teamId':0,'name':'readable_user3','id':'user3'}," +
+                        "{'score':1456,'teamId':0,'name':'readable_user4','id':'user4'}]",
                 JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
     }
 
@@ -484,10 +487,10 @@ public class PlayerGamesViewTest {
         List<PScoresOf> scores = playerGamesView.getScoresForRoom("room1");
 
         // then
-        assertEquals("[{'score':123,'name':'readable_user1','id':'user1'}," +
-                        "{'score':234,'name':'readable_user2','id':'user2'}," +
-                        "{'score':345,'name':'readable_user3','id':'user3'}," +
-                        "{'score':456,'name':'readable_user4','id':'user4'}]",
+        assertEquals("[{'score':123,'teamId':0,'name':'readable_user1','id':'user1'}," +
+                        "{'score':234,'teamId':0,'name':'readable_user2','id':'user2'}," +
+                        "{'score':345,'teamId':0,'name':'readable_user3','id':'user3'}," +
+                        "{'score':456,'teamId':0,'name':'readable_user4','id':'user4'}]",
                 JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
     }
 

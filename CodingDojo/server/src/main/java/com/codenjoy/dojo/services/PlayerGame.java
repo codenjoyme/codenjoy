@@ -149,6 +149,10 @@ public class PlayerGame implements Tickable {
         return getPlayer().getId();
     }
 
+    public int getPlayerTeamId() {
+        return getGame().getPlayer().getTeamId();
+    }
+
     public String popLastCommand() {
         return joystick.popLastCommands();
     }

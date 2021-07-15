@@ -25,6 +25,9 @@ import none from './images/sprite/none.png';
 import other_potion_hero from './images/sprite/other_potion_hero.png';
 import other_hero from './images/sprite/other_hero.png';
 import other_dead_hero from './images/sprite/other_dead_hero.png';
+import enemy_potion_hero from './images/sprite/enemy_potion_hero.png';
+import enemy_hero from './images/sprite/enemy_hero.png';
+import enemy_dead_hero from './images/sprite/enemy_dead_hero.png';
 import wall from './images/sprite/wall.png';
 
 //own
@@ -61,6 +64,22 @@ export default [
         image:       other_dead_hero,
         title:       `OTHER_DEAD_HERO ('♣')`,
         description: `Так виглядає мертва Моллі супротивника.
+Якщо це ви її підірвали - ви отримаєте бонусні бали.`
+    },
+    {
+        image:       enemy_hero,
+        title:       `ENEMY_HERO ('♡')`,
+        description: `Моллі ворога.`,
+    },
+    {
+        image:       other_potion_hero,
+        title:       `ENEMY_POTION_HERO ('♤')`,
+        description: `Моллі ворога, яка сидить на зіллі що має вибухнути.`
+    },
+    {
+        image:       other_dead_hero,
+        title:       `ENEMY_DEAD_HERO ('♧')`,
+        description: `Так виглядає мертва Моллі ворога.
 Якщо це ви її підірвали - ви отримаєте бонусні бали.`
     },
     {

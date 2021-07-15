@@ -39,6 +39,10 @@ public class PScoresOf {
         return playerGame.getPlayer().getReadableName();
     }
 
+    public int getTeamId() {
+        return playerGame.getGame().getPlayer().getTeamId();
+    }
+
     public int getScore() {
         Object score = playerGame.getPlayer().getScore();
         if (score instanceof JSONObject) {
