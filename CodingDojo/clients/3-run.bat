@@ -3,7 +3,7 @@ call 0-settings.bat
 echo off
 echo [44;93m
 echo        +-------------------------------------------------------------------------+
-echo        !                   Now we are building clients...                        !
+echo        !                   Now we are running clients...                        !
 echo        +-------------------------------------------------------------------------+
 echo [0m
 echo on
