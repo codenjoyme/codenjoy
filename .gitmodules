@@ -55,3 +55,9 @@
 [submodule "CodingDojo/clients/python"]
 	path = CodingDojo/clients/python
 	url = https://github.com/codenjoyme/codenjoy-python-client.git
+[submodule "CodingDojo/clients/cpp"]
+	path = CodingDojo/clients/cpp
+	url = https://github.com/codenjoyme/codenjoy-cpp-client.git
+[submodule "CodingDojo/clients/scala"]
+	path = CodingDojo/clients/scala
+	url = https://github.com/codenjoyme/codenjoy-scala-client.git
