@@ -108,30 +108,17 @@ goto :eof
 
     cd %ROOT%
     rd /S /Q %PHP_HOME%
-    @echo off
-    echo [44;93m
-    echo        +-------------------------------------+
-    echo        !        Downloading PHP.zip          !
-    echo        +-------------------------------------+
-    echo [0m
-    echo on
-
     IF EXIST %TOOLS%\php.zip (
-        ECHO php.zip already loaded
-    ) ELSE (
-    powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers['User-Agent']='PoweShell script';  $client.DownloadFile('%ARCH_PHP%','%TOOLS%\php.zip') }"
+	@echo Delete previouse downloaded file. 
+	del %TOOLS%\php.zip
     )
+    @echo Downloading PHP.zip      
+    powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers['User-Agent']='PoweShell script';  $client.DownloadFile('%ARCH_PHP%','%TOOLS%\php.zip') }"
+
     %ARCH% x -y %TOOLS%\php.zip -o%PHP_HOME% 
     xcopy /y %TOOLS%\php.ini %PHP_HOME%\
 
-    @echo off
-    echo [44;93m
-    echo        +-------------------------------------+
-    echo        !      Downloading composer.phar      !
-    echo        +-------------------------------------+
-    echo [0m
-    echo on
-
+    @echo Downloading composer.phar  
     powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers['User-Agent']='PoweShell script';  $client.DownloadFile('%ARCH_PHP_COMPOSER%','%PHP_CLIENT_HOME%\composer.phar') }"
 
     cd %ROOT%
@@ -148,19 +135,12 @@ goto :eof
 
     cd %ROOT%
     rd /S /Q %PYTHON_HOME%
-    @echo off
-    echo [44;93m
-    echo        +-------------------------------------+
-    echo        !      Downloading Python.zip         !
-    echo        +-------------------------------------+
-    echo [0m
-    echo on
-
     IF EXIST %TOOLS%\python.zip (
-        ECHO python.zip already loaded
-    ) ELSE (
-    powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers['User-Agent']='PoweShell script';  $client.DownloadFile('%ARCH_PYTHON%','%TOOLS%\python.zip') }"
+	@echo Delete previouse downloaded file. 
+	del %TOOLS%\python.zip
     )
+    @echo Downloading Python.zip      
+    powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; $client=New-Object System.Net.WebClient; $client.Headers['User-Agent']='PoweShell script';  $client.DownloadFile('%ARCH_PYTHON%','%TOOLS%\python.zip') }"
     %ARCH% x -y %TOOLS%\python.zip -o%PYTHON_HOME% 
 
     cd %ROOT%
