@@ -70,12 +70,15 @@ goto :eof
 goto :eof
 
 :php
+    SET PATH=%PHP_HOME%;%PATH%
+    @echo %PATH%
     cd %PHP_CLIENT_HOME%
     call 1-build.bat
     cd %ROOT%
 goto :eof
 
 :python
+    SET PATH=%PYTHON_HOME%;%PATH%
     cd %PYTHON_CLIENT_HOME%
     call 1-build.bat
     cd %ROOT%
