@@ -1538,7 +1538,7 @@ public class PlayerServiceImplTest {
         // clear saved scores
         ArgumentCaptor<Player> player = ArgumentCaptor.forClass(Player.class);
         ArgumentCaptor<String> save = ArgumentCaptor.forClass(String.class);
-        verify(saver, times(3)).saveGame(player.capture(), save.capture(), eq(time));
+        verify(saver, times(3)).saveGame(player.capture(), eq(0), save.capture(), eq(time));
         List<Player> players = player.getAllValues();
         List<String> saves = save.getAllValues();
 
@@ -1571,7 +1571,7 @@ public class PlayerServiceImplTest {
         ArgumentCaptor<List<PlayerGame>> playerGames = ArgumentCaptor.forClass(List.class);
         verify(saver, times(1)).saveGames(playerGames.capture(), eq(time));
         if (!playerGames.getAllValues().isEmpty()) {
-            assertEquals("[Save[time:100, id:vasya, url:http://vasya:1234, " +
+            assertEquals("[Save[time:100, id:vasya, teamId:0, url:http://vasya:1234, " +
                             "game:game, room:room, score:0, save:{\"save\":\"field1\"}]]",
                     playerGames.getValue().stream()
                             .map(pg -> new PlayerGameSaver.Save(pg, String.valueOf(time)))
@@ -1638,7 +1638,7 @@ public class PlayerServiceImplTest {
         // clear saved scores
         ArgumentCaptor<Player> player = ArgumentCaptor.forClass(Player.class);
         ArgumentCaptor<String> save = ArgumentCaptor.forClass(String.class);
-        verify(saver, times(1)).saveGame(player.capture(), save.capture(), eq(time));
+        verify(saver, times(1)).saveGame(player.capture(), eq(0), save.capture(), eq(time));
         List<Player> players = player.getAllValues();
         List<String> saves = save.getAllValues();
 
@@ -1741,7 +1741,7 @@ public class PlayerServiceImplTest {
         // clear saved scores
         ArgumentCaptor<Player> player = ArgumentCaptor.forClass(Player.class);
         ArgumentCaptor<String> save = ArgumentCaptor.forClass(String.class);
-        verify(saver, times(1)).saveGame(player.capture(), save.capture(), eq(time));
+        verify(saver, times(1)).saveGame(player.capture(), eq(0), save.capture(), eq(time));
         List<Player> players = player.getAllValues();
         List<String> saves = save.getAllValues();
 
@@ -1760,7 +1760,7 @@ public class PlayerServiceImplTest {
         ArgumentCaptor<List<PlayerGame>> playerGames = ArgumentCaptor.forClass(List.class);
         verify(saver, times(1)).saveGames(playerGames.capture(), eq(time));
         if (!playerGames.getAllValues().isEmpty()) {
-            assertEquals("[Save[time:100, id:vasya, url:http://vasya:1234, " +
+            assertEquals("[Save[time:100, id:vasya, teamId:0, url:http://vasya:1234, " +
                             "game:game1, room:room1, score:0, save:{\"save\":\"field1\"}]]",
                     playerGames.getValue().stream()
                             .map(pg -> new PlayerGameSaver.Save(pg, String.valueOf(time)))

@@ -86,7 +86,7 @@ public class SaveServiceImplTest {
         long time = saveService.save("vasia");
 
         // then
-        verify(saver).saveGame(player, "{\"key\":\"value\"}", time);
+        verify(saver).saveGame(player, 0, "{\"key\":\"value\"}", time);
     }
 
     private Player createPlayer(String id) {
@@ -136,7 +136,7 @@ public class SaveServiceImplTest {
         saveService.save("cocacola");
 
         // then
-        verify(saver, never()).saveGame(any(Player.class), any(String.class), anyLong());
+        verify(saver, never()).saveGame(any(Player.class), eq(0), any(String.class), anyLong());
     }
 
     @Test
@@ -208,7 +208,8 @@ public class SaveServiceImplTest {
                 "'id':'vasia'," +
                 "'room':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(actual));
+                "'score':0," +
+                "'teamId':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
@@ -234,7 +235,8 @@ public class SaveServiceImplTest {
                 "'id':'vasia'," +
                 "'room':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(actual));
+                "'score':0," +
+                "'teamId':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
@@ -262,7 +264,8 @@ public class SaveServiceImplTest {
                 "'id':'vasia'," +
                 "'room':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(actual));
+                "'score':0," +
+                "'teamId':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
