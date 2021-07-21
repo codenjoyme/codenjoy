@@ -95,111 +95,111 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
 
     @Test
     public void get_logout_join_post() {
-        givenPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        playerService.remove("c");
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "d"));
+        playerService.remove("player3");
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
 
-        saveService.load("c");
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        saveService.load("player3");
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        post(new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
-        assertTeamPlayers(new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
     }
 
     @Test
     public void get_logout_post() {
-        givenPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        playerService.remove("c");
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "d"));
+        playerService.remove("player3");
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
 
-        post(new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
-        assertTeamPlayers(new PTeam(3, "a", "b"), new PTeam(4, "d"));
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
     }
 
     @Test
     public void get_post_logout_join() {
-        givenPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        post(new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
-        assertTeamPlayers(new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
 
-        playerService.remove("c");
-        assertTeamPlayers(new PTeam(3, "a", "b"), new PTeam(4, "d"));
+        playerService.remove("player3");
+        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
 
-        saveService.load("c");
-        assertTeamPlayers(new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
+        saveService.load("player3");
+        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
     }
 
     @Test
     public void logout_get_post_join() {
-        givenPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        playerService.remove("c");
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "d"));
+        playerService.remove("player3");
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
 
-        get(new PTeam(1, "a", "b"), new PTeam(2, "d"));
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "d"));
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
 
-        post(new PTeam(3, "a", "b"), new PTeam(4, "d"));
-        assertTeamPlayers(new PTeam(3, "a", "b"), new PTeam(4, "d"));
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
+        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
 
-        saveService.load("c");
-        assertTeamPlayers(new PTeam(2, "c"), new PTeam(3, "a", "b"), new PTeam(4, "d"));
+        saveService.load("player3");
+        assertTeamPlayers(new PTeam(2, "player3"), new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
     }
 
     @Test
     public void get_join_post() {
-        givenPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
         register("e", ip, room, game);
-        assertTeamPlayers(new PTeam(0, "e"), new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        assertTeamPlayers(new PTeam(0, "e"), new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        post(new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
-        assertTeamPlayers(new PTeam(0, "e"), new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers(new PTeam(0, "e"), new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
     }
 
     @Test
     public void get_post_join() {
-        givenPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        post(new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
-        assertTeamPlayers(new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
 
         register("e", ip, room, game);
-        assertTeamPlayers(new PTeam(0, "e"), new PTeam(3, "a", "b"), new PTeam(4, "c", "d"));
+        assertTeamPlayers(new PTeam(0, "e"), new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
     }
 
     @Test
     public void logout_get_join_post() {
-        givenPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        playerService.remove("c");
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "d"));
+        playerService.remove("player3");
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
 
-        get(new PTeam(1, "a", "b"), new PTeam(2, "d"));
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "d"));
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
 
-        saveService.load("c");
-        assertTeamPlayers(new PTeam(1, "a", "b"), new PTeam(2, "c", "d"));
+        saveService.load("player3");
+        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        post(new PTeam(3, "a", "b"), new PTeam(4, "d"));
-        assertTeamPlayers(new PTeam(2, "c"), new PTeam(3, "a", "b"), new PTeam(4, "d"));
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
+        assertTeamPlayers(new PTeam(2, "player3"), new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
     }
 }
