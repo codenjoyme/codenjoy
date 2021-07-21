@@ -24,21 +24,24 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
+import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.utils.TestUtils.split;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class PlayerGameSaverTest {
 
@@ -394,5 +397,19 @@ public class PlayerGameSaverTest {
                 saver.loadGame("katia").toString());
         assertEquals(PlayerSave.NULL,
                 saver.loadGame("maria"));
+    }
+
+    @Test
+    public void saveGameWithDefaultTeamId_ifNoProvided() {
+        ConnectionThreadPoolFactory factory = mock(ConnectionThreadPoolFactory.class);
+        when(factory.create(any())).thenReturn(mock(CrudConnectionThreadPool.class));
+
+        ArgumentCaptor<Integer> captor = ArgumentCaptor.forClass(Integer.class);
+        PlayerGameSaver saver = spy(new PlayerGameSaver(factory));
+
+        saver.saveGame(Player.ANONYMOUS, "", 0L);
+        verify(saver).saveGame(eq(Player.ANONYMOUS), captor.capture(), eq(""), eq(0L));
+
+        assertEquals((Integer) DEFAULT_TEAM_ID, captor.getValue());
     }
 }
