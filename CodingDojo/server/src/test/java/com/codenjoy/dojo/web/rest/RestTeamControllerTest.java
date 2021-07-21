@@ -38,6 +38,7 @@ import java.util.Arrays;
 import static com.codenjoy.dojo.utils.JsonUtils.toStringSorted;
 import static org.junit.Assert.assertEquals;
 
+// an issue with the doc that illustrate test cases
 // https://github.com/codenjoyme/codenjoy/issues/162
 @Import(RestTeamControllerTest.ContextConfiguration.class)
 public class RestTeamControllerTest extends AbstractRestControllerTest {
