@@ -34,8 +34,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import java.util.Arrays;
+import java.util.TreeMap;
 
 import static com.codenjoy.dojo.utils.JsonUtils.toStringSorted;
+import static java.util.stream.Collectors.*;
 import static org.junit.Assert.assertEquals;
 
 // an issue with the doc that illustrate test cases
@@ -73,14 +75,20 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         teamService.distributePlayersByTeam(room, Arrays.asList(teams));
     }
 
-    private void assertTeamPlayers(PTeam... teams) {
-        for (PTeam team : teams) {
-            int teamId = team.getTeamId();
-            for (String playerId : team.getPlayers()) {
-                PlayerGame playerGame = playerGames.get(playerId);
-                assertEquals(teamId, playerGame.getPlayerTeamId());
-            }
-        }
+    private void assertTeamPlayers(String teamPlayers) {
+        String actual = playerGames.all().stream()
+                .collect(groupingBy(PlayerGame::getPlayerTeamId, TreeMap::new, toSet()))
+                .entrySet().stream()
+                .map(e -> {
+                    Integer teamId = e.getKey();
+                    String players = e.getValue().stream()
+                            .map(PlayerGame::getPlayerId)
+                            .sorted()
+                            .collect(joining(","));
+                    return String.format("[%d: %s]", teamId, players);
+                })
+                .collect(joining());
+        assertEquals(teamPlayers, actual);
     }
 
     private void get(PTeam... teams) {
@@ -98,16 +106,16 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
         playerService.remove("player3");
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player4]");
 
         saveService.load("player3");
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
     }
 
     @Test
@@ -115,13 +123,13 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
         playerService.remove("player3");
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player4]");
     }
 
     @Test
@@ -129,16 +137,16 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
 
         playerService.remove("player3");
-        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player4]");
 
         saveService.load("player3");
-        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
     }
 
     @Test
@@ -146,16 +154,16 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
         playerService.remove("player3");
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player4]");
 
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
-        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player4]");
 
         saveService.load("player3");
-        assertTeamPlayers(new PTeam(2, "player3"), new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
+        assertTeamPlayers("[2: player3][3: player1,player2][4: player4]");
     }
 
     @Test
@@ -163,13 +171,13 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
-        register("e", ip, room, game);
-        assertTeamPlayers(new PTeam(0, "e"), new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        register("player5", ip, room, game);
+        assertTeamPlayers("[0: player5][1: player1,player2][2: player3,player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers(new PTeam(0, "e"), new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[0: player5][3: player1,player2][4: player3,player4]");
     }
 
     @Test
@@ -177,13 +185,13 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
 
-        register("e", ip, room, game);
-        assertTeamPlayers(new PTeam(0, "e"), new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        register("player5", ip, room, game);
+        assertTeamPlayers("[0: player5][3: player1,player2][4: player3,player4]");
     }
 
     @Test
@@ -191,15 +199,15 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
         playerService.remove("player3");
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player4]");
 
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player4]");
 
         saveService.load("player3");
-        assertTeamPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
-        assertTeamPlayers(new PTeam(2, "player3"), new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
+        assertTeamPlayers("[2: player3][3: player1,player2][4: player4]");
     }
 }
