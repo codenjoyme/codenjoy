@@ -48,6 +48,7 @@ public class MollyMageGameSettings extends AbstractSettings {
     public static final String ROUNDS_TIME_BEFORE_START_ROUND = "[Rounds] Time before start Round";
     public static final String ROUNDS_ROUNDS_PER_MATCH = "[Rounds] Rounds per Match";
     public static final String ROUNDS_MIN_TICKS_FOR_WIN = "[Rounds] Min ticks for win";
+    public static final String PERK_WHOLE_TEAM_GET = "[Perks] All teammates get perk";
     public static final String PERKS_PERKS_DROP_RATIO_IN = "[Perks] Perks drop ratio in %";
     public static final String PERKS_PERKS_PICK_TIMEOUT = "[Perks] Perks pick timeout";
     public static final String PERKS_POTION_BLAST_RADIUS_INCREASE = "[Perks] Potion blast radius increase";
@@ -142,6 +143,10 @@ public class MollyMageGameSettings extends AbstractSettings {
 
     public Integer getMinTicksForWin() {
         return getInteger(ROUNDS_MIN_TICKS_FOR_WIN);
+    }
+
+    public Boolean isPerkWholeTeamGet() {
+        return getBoolean(PERK_WHOLE_TEAM_GET);
     }
 
     public Integer getPerksDropRatio() {
@@ -280,6 +285,10 @@ public class MollyMageGameSettings extends AbstractSettings {
         add(ROUNDS_MIN_TICKS_FOR_WIN, input);
     }
 
+    public void setPerkWholeTeamGet(Boolean input) {
+        add(PERK_WHOLE_TEAM_GET, input);
+    }
+
     public void setPerksDropRatio(Integer input) {
         add(PERKS_PERKS_DROP_RATIO_IN, input);
     }
@@ -365,6 +374,7 @@ public class MollyMageGameSettings extends AbstractSettings {
         update(parameters, ROUNDS_TIME_BEFORE_START_ROUND);
         update(parameters, ROUNDS_ROUNDS_PER_MATCH);
         update(parameters, ROUNDS_MIN_TICKS_FOR_WIN);
+        update(parameters, PERK_WHOLE_TEAM_GET);
         update(parameters, PERKS_PERKS_DROP_RATIO_IN);
         update(parameters, PERKS_PERKS_PICK_TIMEOUT);
         update(parameters, PERKS_POTION_BLAST_RADIUS_INCREASE);
