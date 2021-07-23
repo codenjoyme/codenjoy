@@ -31,9 +31,9 @@ if "%PSEUDO_HERO_ELEMENTS%"==""   ( set PSEUDO_HERO_ELEMENTS=HERO,POTION_HERO,DE
 if "%JAVASCRIPT_CLIENT_HOME%"=="" ( set JAVASCRIPT_CLIENT_HOME=%ROOT%\java-script)
 if "%GO_CLIENT_HOME%"==""         ( set GO_CLIENT_HOME=%ROOT%\go)
 if "%PHP_CLIENT_HOME%"==""        ( set PHP_CLIENT_HOME=%ROOT%\php)
-if "%PHP_HOME%"==""               ( set PHP_HOME=%PHP_CLIENT_HOME%\.php)
+if "%PHP_HOME%"==""               ( set PHP_HOME=%ROOT%\.php)
 if "%PYTHON_CLIENT_HOME%"==""     ( set PYTHON_CLIENT_HOME=%ROOT%\python)
-if "%PYTHON_HOME%"==""            ( set PYTHON_HOME=%PYTHON_CLIENT_HOME%\.python)
+if "%PYTHON_HOME%"==""            ( set PYTHON_HOME=%ROOT%\.python)
 
 
 if "%ARCH_GIT%"==""          ( set ARCH_GIT=https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-64-bit.zip)
