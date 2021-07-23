@@ -355,8 +355,8 @@
                     <td><form:input path="rounds.playersPerRoom"/></td>
                 </tr>
                 <tr>
-                    <td>Max amount of teams per room</td>
-                    <td><form:input path="rounds.maxTeamsPerRoom"/></td>
+                    <td>Teams per room</td>
+                    <td><form:input path="rounds.teamsPerRoom"/></td>
                 </tr>
                 <tr>
                     <td>Time per Round</td>

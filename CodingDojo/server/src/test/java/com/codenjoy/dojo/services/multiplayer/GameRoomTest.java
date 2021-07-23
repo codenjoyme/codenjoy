@@ -24,83 +24,134 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.mocks.GameSettings;
 import com.codenjoy.dojo.services.nullobj.NullGameField;
+import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
 import static org.junit.Assert.assertEquals;
 
 public class GameRoomTest {
 
-    private GamePlayer newGamePlayer() {
-        return newGamePlayer(DEFAULT_TEAM_ID);
+    private int playersPerRoom = 2;
+    private int teamsPerRoom = 1;
+
+    private GamePlayer newPlayer() {
+        return newPlayer(DEFAULT_TEAM_ID);
     }
 
-    private GamePlayer newGamePlayer(int teamId) {
-        GamePlayer player = new GamePlayer(event -> {}, new RoundSettingsImpl()) {};
+    private GamePlayer newPlayer(int teamId) {
+        GamePlayer player = new GamePlayer(event -> {}, settings()) {};
         player.setTeamId(teamId);
         return player;
     }
 
+    private RoundSettings settings() {
+        RoundSettingsImpl settings = new RoundSettingsImpl();
+        settings.getParameter(ROUNDS_PLAYERS_PER_ROOM.key()).update(playersPerRoom);
+        settings.getParameter(ROUNDS_TEAMS_PER_ROOM.key()).update(teamsPerRoom);
+        return settings;
+    }
+
+    private GameRoom createRoom() {
+        return new GameRoom(NullGameField.INSTANCE, playersPerRoom, true);
+    }
+
     @Test
     public void isAvailable_noCapacity() {
-        GameRoom room = new GameRoom(NullGameField.INSTANCE, 2, true);
-        room.join(newGamePlayer());
-        room.join(newGamePlayer());
+        // given
+        GameRoom room = createRoom();
 
-        assertEquals(false, room.isAvailable(newGamePlayer()));
+        // when
+        room.join(newPlayer());
+        room.join(newPlayer());
+
+        // then
+        assertEquals(false, room.isAvailable(newPlayer()));
     }
 
     @Test
     public void isAvailable_gameSettingsNotProvided() {
-        GameRoom room = new GameRoom(NullGameField.INSTANCE, 2, true);
-        assertEquals(true, room.isAvailable(new GamePlayer(event -> {}, null) {}));
+        // given
+        GameRoom room = createRoom();
+        GamePlayer player = new GamePlayer(event -> {}, null) {};
+
+        // then
+        assertEquals(true, room.isAvailable(player));
     }
 
     @Test
     public void isAvailable_gameSettingsNotHaveMaxTeamPerRoomParameter() {
-        GameRoom room = new GameRoom(NullGameField.INSTANCE, 2, true);
-        assertEquals(true, room.isAvailable(new GamePlayer(event -> {}, new GameSettings()) {}));
+        // given
+        GameRoom room = createRoom();
+        GamePlayer player = new GamePlayer(event -> {}, new GameSettings()) {};
+
+        // then
+        assertEquals(true, room.isAvailable(player));
+    }
+
+    @Test
+    public void isAvailable_oneTeamPerRoom() {
+        // given
+        GameRoom room = createRoom();
+
+        // then
+        assertEquals(true, room.isAvailable(newPlayer()));
     }
 
     @Test
     public void isAvailable_reachMaxTeamsCount() {
-        GameRoom room = new GameRoom(NullGameField.INSTANCE, 3, true);
-        room.join(newGamePlayer(0));
-        room.join(newGamePlayer(1));
-        assertEquals(false, room.isAvailable(newGamePlayer(2)));
+        // given
+        playersPerRoom = 3;
+        teamsPerRoom = 2;
+        GameRoom room = createRoom();
+
+        // when
+        room.join(newPlayer(0));
+        room.join(newPlayer(1));
+
+        // then
+        assertEquals(false, room.isAvailable(newPlayer(2)));
     }
 
     @Test
-    public void isAvailable_reachMaxTeamMembers() {
-        GameRoom room = new GameRoom(NullGameField.INSTANCE, 6, true);
-        room.join(newGamePlayer(0));
-        room.join(newGamePlayer(0));
-        room.join(newGamePlayer(0));
-        room.join(newGamePlayer(1));
-        room.join(newGamePlayer(1));
-        assertEquals(false, room.isAvailable(newGamePlayer(0)));
-        assertEquals(true, room.isAvailable(newGamePlayer(1)));
+    public void isAvailable_reachMaxTeamMembersCount_evenCapacity() {
+        // given
+        playersPerRoom = 6;
+        teamsPerRoom = 2;
+        GameRoom room = createRoom();
+
+        // when
+        room.join(newPlayer(0));
+        room.join(newPlayer(0));
+        room.join(newPlayer(0));
+        room.join(newPlayer(1));
+        room.join(newPlayer(1));
+
+        // then
+        assertEquals(false, room.isAvailable(newPlayer(0)));
+        assertEquals(true, room.isAvailable(newPlayer(1)));
     }
 
     @Test
-    public void isAvailable_oneDefaultTeam() {
-        GameRoom room = new GameRoom(NullGameField.INSTANCE, 4, true);
-        room.join(newGamePlayer(0));
-        room.join(newGamePlayer(0));
-        assertEquals(true, room.isAvailable(newGamePlayer(0)));
-    }
+    public void isAvailable_reachMaxTeamMembersCount_unEvenCapacity() {
+        // given
+        playersPerRoom = 7;
+        teamsPerRoom = 2;
+        GameRoom room = createRoom();
 
-    @Test
-    public void isAvailable_unEvenCapacity() {
-        GameRoom room = new GameRoom(NullGameField.INSTANCE, 7, true);
-        room.join(newGamePlayer(0));
-        room.join(newGamePlayer(0));
-        room.join(newGamePlayer(0));
-        room.join(newGamePlayer(1));
-        room.join(newGamePlayer(1));
-        room.join(newGamePlayer(1));
-        assertEquals(true, room.isAvailable(newGamePlayer(0)));
-        assertEquals(true, room.isAvailable(newGamePlayer(1)));
+        // when
+        room.join(newPlayer(0));
+        room.join(newPlayer(0));
+        room.join(newPlayer(0));
+        room.join(newPlayer(1));
+        room.join(newPlayer(1));
+        room.join(newPlayer(1));
+
+        // then
+        assertEquals(true, room.isAvailable(newPlayer(0)));
+        assertEquals(true, room.isAvailable(newPlayer(1)));
     }
 }
