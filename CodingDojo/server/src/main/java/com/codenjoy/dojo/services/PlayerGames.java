@@ -179,7 +179,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private Single buildSingle(Player player, PlayerSave save, GameType gameType) {
         GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
                 player.getId(), gameType.getSettings());
-        if (save != null) {
+        if (save != null && save != PlayerSave.NULL) {
             gamePlayer.setTeamId(save.getTeamId());
         }
 
