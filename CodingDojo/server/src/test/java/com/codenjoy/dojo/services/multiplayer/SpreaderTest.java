@@ -123,7 +123,7 @@ public class SpreaderTest {
         return spreader.rooms().values().stream()
                 .map(room -> room.players().stream()
                         .map(player -> String.valueOf(player.getTeamId()))
-                        .collect(Collectors.joining()))
+                        .collect(Collectors.joining("-")))
                 .collect(Collectors.joining(" | "));
     }
 }
