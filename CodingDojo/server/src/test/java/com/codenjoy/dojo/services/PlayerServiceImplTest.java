@@ -2302,6 +2302,20 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void testCleanSavedScore_passTeamIdFromSave() {
+        // given
+        int teamId = 3;
+        PlayerSave playerSave = new PlayerSave("player", teamId, "url", "game", "room", 0, "{}");
+        when(saver.loadGame("player")).thenReturn(playerSave);
+
+        // when
+        playerService.cleanSavedScore(0L, "player");
+
+        // then
+        verify(saver).saveGame(new Player(playerSave), teamId, null, 0L);
+    }
+
+    @Test
     public void testRegister_passTeamIdFromSave() {
         // given
         playerService = spy(playerService);
