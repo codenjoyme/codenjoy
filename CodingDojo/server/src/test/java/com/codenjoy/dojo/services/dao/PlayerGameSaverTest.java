@@ -24,24 +24,21 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
-import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.utils.TestUtils.split;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PlayerGameSaverTest {
 
@@ -400,16 +397,31 @@ public class PlayerGameSaverTest {
     }
 
     @Test
-    public void saveGameWithDefaultTeamId_ifNoProvided() {
-        ConnectionThreadPoolFactory factory = mock(ConnectionThreadPoolFactory.class);
-        when(factory.create(any())).thenReturn(mock(CrudConnectionThreadPool.class));
+    public void saveGame_withProvideTeamId() {
+        // given
+        int teamId = 3;
+        Player player = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        player.setRoom("room");
 
-        ArgumentCaptor<Integer> captor = ArgumentCaptor.forClass(Integer.class);
-        PlayerGameSaver saver = spy(new PlayerGameSaver(factory));
+        // when
+        saver.saveGame(player, teamId, "{'key':'value2'}", System.currentTimeMillis());
 
-        saver.saveGame(Player.ANONYMOUS, "", 0L);
-        verify(saver).saveGame(eq(Player.ANONYMOUS), captor.capture(), eq(""), eq(0L));
+        // then
+        assertEquals("PlayerSave(id=katia, teamId=3, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
+                saver.loadGame("katia").toString());
+    }
 
-        assertEquals((Integer) DEFAULT_TEAM_ID, captor.getValue());
+    @Test
+    public void saveGame_withNoProvidedTeamId_useDefault() {
+        // given
+        Player player = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        player.setRoom("room");
+
+        // when
+        saver.saveGame(player, "{'key':'value'}", System.currentTimeMillis());
+
+        // then
+        assertEquals("PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value'})",
+                saver.loadGame("katia").toString());
     }
 }
