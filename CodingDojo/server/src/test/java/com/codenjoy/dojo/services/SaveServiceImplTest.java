@@ -797,4 +797,21 @@ public class SaveServiceImplTest {
         verify(saver).delete("third");
         verifyNoMoreInteractions(saver, playerService);
     }
+
+    @Test
+    public void testSaveGame_passTeamIdFromPlayerGame() {
+        // given
+        setupTimeService(timeService);
+
+        int teamId = 3;
+        Player player = createPlayer("player");
+        PlayerGame playerGame = playerGames.get(player.getId());
+        when(playerGame.getPlayerTeamId()).thenReturn(teamId);
+
+        // when
+        saveService.save(player.getId());
+
+        // then
+        verify(saver).saveGame(player, teamId, "{}", 2000L);
+    }
 }
