@@ -75,7 +75,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         teamService.distributePlayersByTeam(room, Arrays.asList(teams));
     }
 
-    private void assertTeamPlayers(String teamPlayers) {
+    private void assertTeamPlayers(String expected) {
         String actual = playerGames.all().stream()
                 .collect(groupingBy(PlayerGame::getPlayerTeamId, TreeMap::new, toSet()))
                 .entrySet().stream()
@@ -88,7 +88,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
                     return String.format("[%d: %s]", teamId, players);
                 })
                 .collect(joining());
-        assertEquals(teamPlayers, actual);
+        assertEquals(expected, actual);
     }
 
     private void get(PTeam... teams) {
