@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_MAX_TEAMS_PER_ROOM;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
 
 public class GameRoom {
 
@@ -52,21 +52,39 @@ public class GameRoom {
 
     public boolean isAvailable(GamePlayer player) {
         if (!isFree()) {
+            // we have no free space
+            // forbid a new player
             return false;
         }
-        if (player.settings == null || !player.settings.hasParameter(ROUNDS_MAX_TEAMS_PER_ROOM.key())) {
+        if (player.settings == null || !player.settings.hasParameter(ROUNDS_TEAMS_PER_ROOM.key())) {
+            // somehow we don't have mandatory settings
+            // that we need for further checks
+            // let's allow the player
             return true;
         }
-        int maxTeams = player.settings.integer(ROUNDS_MAX_TEAMS_PER_ROOM);
-        if (!containsTeam(player.getTeamId()) && countTeams() >= maxTeams) {
-            return false;
-        }
-        if (count % 2 != 0 && wasCount + 1 == count) {
+        int teams = player.settings.integer(ROUNDS_TEAMS_PER_ROOM);
+        if (teams == 1) {
+            // it's not a team-vs-team game type
+            // as we have free space
+            // let's allow the player
             return true;
         }
-        if (countTeams() > 1 && countMembers(player.getTeamId()) >= count / maxTeams) {
+        if (!containsTeam(player.getTeamId()) && countTeams() >= teams) {
+            // it's a team-vs-team game type
+            // but the player team cannot be added
+            // this room contains max amount of teams
+            // forbid a new player
             return false;
         }
+        if (countMembers(player.getTeamId()) >= (count / teams) + (count % teams)) {
+            // we count player team members
+            // it reaches the max value
+            // even with the idea of disbalance
+            // forbid a new player
+            return false;
+        }
+        // there are no more checks
+        // let's allow the player
         return true;
     }
 
