@@ -76,6 +76,7 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.AdminServiceTest.assertPlayersLastResponse;
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
 import static com.codenjoy.dojo.utils.TestUtils.split;
@@ -2298,5 +2299,59 @@ public class PlayerServiceImplTest {
         Player player = playerGame.getPlayer();
         assertEquals(VASYA_AI, player.getId());
         assertNotNull(VASYA, player.getAi());
+    }
+
+    @Test
+    public void testRegister_passTeamIdFromSave() {
+        // given
+        playerService = spy(playerService);
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+
+        int teamId = 3;
+        PlayerSave playerSave = new PlayerSave("player", teamId, "url", "game", "room", 0, "{}");
+        when(saver.loadGame("player")).thenReturn(playerSave);
+
+        // when
+        playerService.register("player", "game", "room", "ip");
+        verify(playerService).register(captor.capture());
+
+        // then
+        assertEquals(1, playerGames.all().size());
+        assertEquals(teamId, captor.getValue().getTeamId());
+    }
+
+    @Test
+    public void testRegister_passDefaultTeamIdFromSave() {
+        // given
+        playerService = spy(playerService);
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+
+        PlayerSave playerSave = new PlayerSave("player", "url", "game", "room", 0, "{}");
+        when(saver.loadGame("player")).thenReturn(playerSave);
+
+        // when
+        playerService.register("player", "game", "room", "ip");
+        verify(playerService).register(captor.capture());
+
+        // then
+        assertEquals(1, playerGames.all().size());
+        assertEquals(DEFAULT_TEAM_ID, captor.getValue().getTeamId());
+    }
+
+    @Test
+    public void testRegister_passDefaultTeamIdFromNullSave() {
+        // given
+        playerService = spy(playerService);
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+
+        when(saver.loadGame("player")).thenReturn(PlayerSave.NULL);
+
+        // when
+        playerService.register("player", "game", "room", "ip");
+        verify(playerService).register(captor.capture());
+
+        // then
+        assertEquals(1, playerGames.all().size());
+        assertEquals(DEFAULT_TEAM_ID, captor.getValue().getTeamId());
     }
 }
