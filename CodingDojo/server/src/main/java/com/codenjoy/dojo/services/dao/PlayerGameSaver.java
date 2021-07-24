@@ -35,14 +35,15 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class PlayerGameSaver implements GameSaver {
 
     public static final String INSERT_SAVES_QUERY = "INSERT INTO saves " +
-                    "(time, player_id, callback_url, room_name, game_name, score, save) " +
-                    "VALUES (?,?,?,?,?,?,?);";
+                    "(time, player_id, team_id, callback_url, room_name, game_name, score, save) " +
+                    "VALUES (?,?,?,?,?,?,?,?);";
 
     public static final String INSERT_SAVES_PLAYERS_QUERY = "INSERT INTO saves_players " +
                     "(player_id, room_name) " +
@@ -61,6 +62,7 @@ public class PlayerGameSaver implements GameSaver {
                 "CREATE TABLE IF NOT EXISTS saves (" +
                         "time varchar(255), " +
                         "player_id varchar(255), " +
+                        "team_id integer, " +
                         "callback_url varchar(255)," +
                         "room_name varchar(255)," +
                         "game_name varchar(255)," +
@@ -71,6 +73,7 @@ public class PlayerGameSaver implements GameSaver {
                         "player_id varchar(255), " +
                         "room_name varchar(255));");
         pool.createIndex("saves", true, true, "time", "player_id");
+        pool.createIndex("saves", false, true, "team_id");
         pool.createIndex("saves", false, true, "room_name");
         pool.createIndex("saves", false, true, "player_id");
         pool.createIndex("saves_players", true, true, "player_id", "room_name");
@@ -83,11 +86,13 @@ public class PlayerGameSaver implements GameSaver {
     public static class Save {
 
         private Player player;
+        private int teamId;
         private String time;
         private String save;
 
         public Save(PlayerGame playerGame, String time) {
             player = playerGame.getPlayer();
+            teamId = playerGame.getPlayerTeamId();
             this.time = time;
 
             // осторожно! внутри есть блокировка, потому делаем это в конструкторе
@@ -120,6 +125,10 @@ public class PlayerGameSaver implements GameSaver {
             return player.getId();
         }
 
+        public int getTeamId() {
+            return teamId;
+        }
+
         public String getTime() {
             return time;
         }
@@ -127,10 +136,11 @@ public class PlayerGameSaver implements GameSaver {
         @Override
         public String toString() {
             return String.format(
-                    "Save[time:%s, id:%s, url:%s, game:%s, " +
+                    "Save[time:%s, id:%s, teamId:%d, url:%s, game:%s, " +
                     "room:%s, score:%s, save:%s]",
                     getTime(),
                     getId(),
+                    getTeamId(),
                     getCallbackUrl(),
                     getGame(),
                     getRoom(),
@@ -154,11 +164,12 @@ public class PlayerGameSaver implements GameSaver {
                 (stmt, save) -> {
                     stmt.setObject(1, save.getTime());
                     stmt.setObject(2, save.getId());
-                    stmt.setObject(3, save.getCallbackUrl());
-                    stmt.setObject(4, save.getRoom());
-                    stmt.setObject(5, save.getGame());
-                    stmt.setObject(6, save.getScore());
-                    stmt.setObject(7, save.getSave());
+                    stmt.setInt(3, save.getTeamId());
+                    stmt.setObject(4, save.getCallbackUrl());
+                    stmt.setObject(5, save.getRoom());
+                    stmt.setObject(6, save.getGame());
+                    stmt.setObject(7, save.getScore());
+                    stmt.setObject(8, save.getSave());
                     return true;
                 });
 
@@ -174,13 +185,18 @@ public class PlayerGameSaver implements GameSaver {
                 });
     }
 
-    @Override
     public void saveGame(Player player, String save, long time) {
+        saveGame(player, DEFAULT_TEAM_ID, save, time);
+    }
+
+    @Override
+    public void saveGame(Player player, int teamId, String save, long time) {
         // TODO надо тут еще транзакцию навешать на эти два запроса
         pool.update(INSERT_SAVES_QUERY,
                 new Object[]{
                         JDBCTimeUtils.toString(new Date(time)),
                         player.getId(),
+                        teamId,
                         player.getCallbackUrl(),
                         player.getRoom(),
                         player.getGame(),
@@ -218,6 +234,7 @@ public class PlayerGameSaver implements GameSaver {
     public PlayerSave extractPlayerSave(ResultSet rs) throws SQLException {
         return new PlayerSave(
                 rs.getString("player_id"),
+                rs.getInt("team_id"),
                 rs.getString("callback_url"),
                 rs.getString("game_name"),
                 rs.getString("room_name"),

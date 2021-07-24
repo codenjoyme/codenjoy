@@ -76,6 +76,7 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.AdminServiceTest.assertPlayersLastResponse;
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
 import static com.codenjoy.dojo.utils.TestUtils.split;
@@ -1538,7 +1539,7 @@ public class PlayerServiceImplTest {
         // clear saved scores
         ArgumentCaptor<Player> player = ArgumentCaptor.forClass(Player.class);
         ArgumentCaptor<String> save = ArgumentCaptor.forClass(String.class);
-        verify(saver, times(3)).saveGame(player.capture(), save.capture(), eq(time));
+        verify(saver, times(3)).saveGame(player.capture(), eq(0), save.capture(), eq(time));
         List<Player> players = player.getAllValues();
         List<String> saves = save.getAllValues();
 
@@ -1571,7 +1572,7 @@ public class PlayerServiceImplTest {
         ArgumentCaptor<List<PlayerGame>> playerGames = ArgumentCaptor.forClass(List.class);
         verify(saver, times(1)).saveGames(playerGames.capture(), eq(time));
         if (!playerGames.getAllValues().isEmpty()) {
-            assertEquals("[Save[time:100, id:vasya, url:http://vasya:1234, " +
+            assertEquals("[Save[time:100, id:vasya, teamId:0, url:http://vasya:1234, " +
                             "game:game, room:room, score:0, save:{\"save\":\"field1\"}]]",
                     playerGames.getValue().stream()
                             .map(pg -> new PlayerGameSaver.Save(pg, String.valueOf(time)))
@@ -1638,7 +1639,7 @@ public class PlayerServiceImplTest {
         // clear saved scores
         ArgumentCaptor<Player> player = ArgumentCaptor.forClass(Player.class);
         ArgumentCaptor<String> save = ArgumentCaptor.forClass(String.class);
-        verify(saver, times(1)).saveGame(player.capture(), save.capture(), eq(time));
+        verify(saver, times(1)).saveGame(player.capture(), eq(0), save.capture(), eq(time));
         List<Player> players = player.getAllValues();
         List<String> saves = save.getAllValues();
 
@@ -1741,7 +1742,7 @@ public class PlayerServiceImplTest {
         // clear saved scores
         ArgumentCaptor<Player> player = ArgumentCaptor.forClass(Player.class);
         ArgumentCaptor<String> save = ArgumentCaptor.forClass(String.class);
-        verify(saver, times(1)).saveGame(player.capture(), save.capture(), eq(time));
+        verify(saver, times(1)).saveGame(player.capture(), eq(0), save.capture(), eq(time));
         List<Player> players = player.getAllValues();
         List<String> saves = save.getAllValues();
 
@@ -1760,7 +1761,7 @@ public class PlayerServiceImplTest {
         ArgumentCaptor<List<PlayerGame>> playerGames = ArgumentCaptor.forClass(List.class);
         verify(saver, times(1)).saveGames(playerGames.capture(), eq(time));
         if (!playerGames.getAllValues().isEmpty()) {
-            assertEquals("[Save[time:100, id:vasya, url:http://vasya:1234, " +
+            assertEquals("[Save[time:100, id:vasya, teamId:0, url:http://vasya:1234, " +
                             "game:game1, room:room1, score:0, save:{\"save\":\"field1\"}]]",
                     playerGames.getValue().stream()
                             .map(pg -> new PlayerGameSaver.Save(pg, String.valueOf(time)))
@@ -2298,5 +2299,73 @@ public class PlayerServiceImplTest {
         Player player = playerGame.getPlayer();
         assertEquals(VASYA_AI, player.getId());
         assertNotNull(VASYA, player.getAi());
+    }
+
+    @Test
+    public void testCleanSavedScore_passTeamIdFromSave() {
+        // given
+        int teamId = 3;
+        PlayerSave playerSave = new PlayerSave("player", teamId, "url", "game", "room", 0, "{}");
+        when(saver.loadGame("player")).thenReturn(playerSave);
+
+        // when
+        playerService.cleanSavedScore(0L, "player");
+
+        // then
+        verify(saver).saveGame(new Player(playerSave), teamId, null, 0L);
+    }
+
+    @Test
+    public void testRegister_passTeamIdFromSave() {
+        // given
+        playerService = spy(playerService);
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+
+        int teamId = 3;
+        PlayerSave playerSave = new PlayerSave("player", teamId, "url", "game", "room", 0, "{}");
+        when(saver.loadGame("player")).thenReturn(playerSave);
+
+        // when
+        playerService.register("player", "game", "room", "ip");
+        verify(playerService).register(captor.capture());
+
+        // then
+        assertEquals(1, playerGames.all().size());
+        assertEquals(teamId, captor.getValue().getTeamId());
+    }
+
+    @Test
+    public void testRegister_passDefaultTeamIdFromSave() {
+        // given
+        playerService = spy(playerService);
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+
+        PlayerSave playerSave = new PlayerSave("player", "url", "game", "room", 0, "{}");
+        when(saver.loadGame("player")).thenReturn(playerSave);
+
+        // when
+        playerService.register("player", "game", "room", "ip");
+        verify(playerService).register(captor.capture());
+
+        // then
+        assertEquals(1, playerGames.all().size());
+        assertEquals(DEFAULT_TEAM_ID, captor.getValue().getTeamId());
+    }
+
+    @Test
+    public void testRegister_passDefaultTeamIdFromNullSave() {
+        // given
+        playerService = spy(playerService);
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+
+        when(saver.loadGame("player")).thenReturn(PlayerSave.NULL);
+
+        // when
+        playerService.register("player", "game", "room", "ip");
+        verify(playerService).register(captor.capture());
+
+        // then
+        assertEquals(1, playerGames.all().size());
+        assertEquals(DEFAULT_TEAM_ID, captor.getValue().getTeamId());
     }
 }

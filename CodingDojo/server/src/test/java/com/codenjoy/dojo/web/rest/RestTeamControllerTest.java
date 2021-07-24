@@ -24,19 +24,37 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.PlayerGame;
 import com.codenjoy.dojo.services.PlayerGames;
-import org.apache.commons.lang3.StringUtils;
+import com.codenjoy.dojo.services.SaveService;
+import com.codenjoy.dojo.services.TeamService;
+import com.codenjoy.dojo.web.rest.pojo.PTeam;
+import org.json.JSONArray;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
+import java.util.Arrays;
+import java.util.TreeMap;
+
+import static com.codenjoy.dojo.utils.JsonUtils.toStringSorted;
+import static java.util.stream.Collectors.*;
 import static org.junit.Assert.assertEquals;
 
+// an issue with the doc that illustrate test cases
+// https://github.com/codenjoyme/codenjoy/issues/162
 @Import(RestTeamControllerTest.ContextConfiguration.class)
 public class RestTeamControllerTest extends AbstractRestControllerTest {
 
     @Autowired
+    private TeamService teamService;
+    @Autowired
     private PlayerGames playerGames;
+    @Autowired
+    private SaveService saveService;
+
+    private static String ip = "ip";
+    private static String game = "first";
+    private static String room = "test";
 
     @Before
     public void setUp() {
@@ -45,69 +63,151 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         roomService.removeAll();
         registration.removeAll();
 
-        register("room1", 0, "player1");
-        register("room1", 0, "player2");
-        register("room1", 1, "player3");
-        register("room1", 2, "player4");
-        register("room1", 2, "player5");
-        register("room1", 2, "player6");
-        register("room2", 1, "player7");
-
         asAdmin();
     }
 
-    private void register(String room, int teamId, String id) {
-        PlayerGame registeredPlayer = register(id, "ip", room, "first");
-        registeredPlayer.getGame().getPlayer().setTeamId(teamId);
+    private void givenPlayers(PTeam... teams) {
+        for (PTeam team : teams) {
+            for (String playerId : team.getPlayers()) {
+                register(playerId, ip, room, game);
+            }
+        }
+        teamService.distributePlayersByTeam(room, Arrays.asList(teams));
+    }
+
+    private void assertTeamPlayers(String expected) {
+        String actual = playerGames.all().stream()
+                .collect(groupingBy(PlayerGame::getPlayerTeamId, TreeMap::new, toSet()))
+                .entrySet().stream()
+                .map(e -> {
+                    Integer teamId = e.getKey();
+                    String players = e.getValue().stream()
+                            .map(PlayerGame::getPlayerId)
+                            .sorted()
+                            .collect(joining(","));
+                    return String.format("[%d: %s]", teamId, players);
+                })
+                .collect(joining());
+        assertEquals(expected, actual);
+    }
+
+    private void get(PTeam... teams) {
+        String expected = new JSONArray(Arrays.asList(teams)).toString();
+        String actual = new JSONArray(get("/rest/team/room/test")).toString();
+        assertEquals(expected, actual);
+    }
+
+    private void post(PTeam... teams) {
+        post(202, "/rest/team/room/test", toStringSorted(Arrays.asList(teams)));
     }
 
     @Test
-    public void getTeamInfo() {
-        String expected = "" +
-                "[{\"teamId\":0,\"players\":[\"player1\",\"player2\"]}," +
-                "{\"teamId\":1,\"players\":[\"player3\"]}," +
-                "{\"teamId\":2,\"players\":[\"player4\",\"player5\",\"player6\"]}]";
-        assertEquals(expected, get("/rest/team/room/room1"));
+    public void get_logout_join_post() {
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+
+        playerService.remove("player3");
+        assertTeamPlayers("[1: player1,player2][2: player4]");
+
+        saveService.load("player3");
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
     }
 
     @Test
-    public void distributePlayersByTeam() {
-        post(202, "/rest/team/room/room1",
-                        "[\n" +
-                        "    {\n" +
-                        "        \"teamId\": 10,\n" +
-                        "        \"players\": [\n" +
-                        "            \"player1\",\n" +
-                        "            \"player3\",\n" +
-                        "            \"player5\"\n" +
-                        "        ]\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "        \"teamId\": 20,\n" +
-                        "        \"players\": [\n" +
-                        "            \"player2\",\n" +
-                        "            \"player4\",\n" +
-                        "            \"player6\"" +
-                        "        ]\n" +
-                        "    }\n" +
-                        "]");
-        assertEquals("[room `room1`, teamId `10`: player1]" +
-                "[room `room1`, teamId `10`: player3]" +
-                "[room `room1`, teamId `10`: player5]" +
-                "[room `room1`, teamId `20`: player2]" +
-                "[room `room1`, teamId `20`: player4]" +
-                "[room `room1`, teamId `20`: player6]" +
-                "[room `room2`, teamId `1`: player7]", playerGamesString());
+    public void get_logout_post() {
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+
+        playerService.remove("player3");
+        assertTeamPlayers("[1: player1,player2][2: player4]");
+
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player4]");
     }
 
-    private String playerGamesString() {
-        return playerGames.all().stream()
-                .map(pg -> String.format("[room `%s`, teamId `%d`: %s]",
-                        pg.getRoom(),
-                        pg.getGame().getPlayer().getTeamId(),
-                        pg.getPlayerId()))
-                .sorted()
-                .reduce(String::concat)
-                .orElse(StringUtils.EMPTY);
+    @Test
+    public void get_post_logout_join() {
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
+
+        playerService.remove("player3");
+        assertTeamPlayers("[3: player1,player2][4: player4]");
+
+        saveService.load("player3");
+        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
+    }
+
+    @Test
+    public void logout_get_post_join() {
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+
+        playerService.remove("player3");
+        assertTeamPlayers("[1: player1,player2][2: player4]");
+
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player4]");
+
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player4]");
+
+        saveService.load("player3");
+        assertTeamPlayers("[2: player3][3: player1,player2][4: player4]");
+    }
+
+    @Test
+    public void get_join_post() {
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+
+        register("player5", ip, room, game);
+        assertTeamPlayers("[0: player5][1: player1,player2][2: player3,player4]");
+
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[0: player5][3: player1,player2][4: player3,player4]");
+    }
+
+    @Test
+    public void get_post_join() {
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
+        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
+
+        register("player5", ip, room, game);
+        assertTeamPlayers("[0: player5][3: player1,player2][4: player3,player4]");
+    }
+
+    @Test
+    public void logout_get_join_post() {
+        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+
+        playerService.remove("player3");
+        assertTeamPlayers("[1: player1,player2][2: player4]");
+
+        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
+        assertTeamPlayers("[1: player1,player2][2: player4]");
+
+        saveService.load("player3");
+        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+
+        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
+        assertTeamPlayers("[2: player3][3: player1,player2][4: player4]");
     }
 }
