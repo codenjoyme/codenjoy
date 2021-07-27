@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -38,8 +39,7 @@ import org.mockito.Mockito;
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PlayerGames.*;
-import static com.codenjoy.dojo.services.incativity.InactivitySettings.Keys.INACTIVITY_ENABLED;
-import static com.codenjoy.dojo.services.incativity.InactivitySettings.Keys.INACTIVITY_TIMEOUT;
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
@@ -2058,5 +2058,46 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when then
         assertEquals("[room1, room3]", playerGames.getRooms(ACTIVE).toString());
         assertEquals("[room1, room2, room3]", playerGames.getRooms(ALL).toString());
+    }
+
+    @Test
+    public void testAdd_gamePlayerGetTeamIdFromSave() {
+        // given
+        Player player = new Player("player", "url", new FirstGameType(), null, null);
+        int teamId = 3;
+        PlayerSave playerSave = new PlayerSave("player", teamId, "url", "game", "room", 0, "{}");
+
+        // when
+        playerGames.add(player, "room", playerSave);
+
+        // then
+        assertEquals(1, playerGames.all().size());
+        assertEquals(teamId, playerGames.all().iterator().next().getPlayerTeamId());
+    }
+
+    @Test
+    public void testAdd_gamePlayerDefaultTeamIdBecauseNullSave() {
+        // given
+        Player player = new Player("player", "url", new FirstGameType(), null, null);
+
+        // when
+        playerGames.add(player, "room", PlayerSave.NULL);
+
+        // then
+        assertEquals(1, playerGames.all().size());
+        assertEquals(DEFAULT_TEAM_ID, playerGames.all().iterator().next().getPlayerTeamId());
+    }
+
+    @Test
+    public void testAdd_gamePlayerDefaultTeamIdBecauseNoSave() {
+        // given
+        Player player = new Player("player", "url", new FirstGameType(), null, null);
+
+        // when
+        playerGames.add(player, "room", null);
+
+        // then
+        assertEquals(1, playerGames.all().size());
+        assertEquals(DEFAULT_TEAM_ID, playerGames.all().iterator().next().getPlayerTeamId());
     }
 }

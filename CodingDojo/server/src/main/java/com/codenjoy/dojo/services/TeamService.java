@@ -40,6 +40,7 @@ import static java.util.stream.Collectors.toList;
 public class TeamService {
 
     private final PlayerGames playerGames;
+    private final SaveService saveService;
 
     public List<PTeam> getTeamInfo(String room) {
         return playerGames.all().stream()
@@ -64,5 +65,6 @@ public class TeamService {
                 }
             }
         }
+        saveService.saveAll();
     }
 }

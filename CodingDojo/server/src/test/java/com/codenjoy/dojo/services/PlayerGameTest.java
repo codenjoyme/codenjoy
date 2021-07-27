@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.nullobj.*;
 import org.junit.Before;
@@ -34,6 +35,7 @@ import org.mockito.InOrder;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
@@ -250,5 +252,19 @@ public class PlayerGameTest {
         verify(game.getProgress()).reset();
         verify(player).clearScore();
         verify(game).clearScore();
+    }
+
+    @Test
+    public void testGetPlayerTeamId() {
+        GamePlayer gamePlayer = mock(GamePlayer.class);
+        when(game.getPlayer()).thenReturn(gamePlayer);
+        when(gamePlayer.getTeamId()).thenReturn(1);
+
+        assertEquals(1, playerGame.getPlayerTeamId());
+    }
+
+    @Test
+    public void testGetPlayerTeamId_defaultTeamId() {
+        assertEquals(DEFAULT_TEAM_ID, playerGame.getPlayerTeamId());
     }
 }

@@ -133,9 +133,9 @@ public class PlayerServiceImpl implements PlayerService {
             {
                 save.setCallbackUrl(ip);
             } else {
-                save = new PlayerSave(id, ip, game, room, 0, null);
+                save = new PlayerSave(id, save.getTeamId(), ip, game, room, 0, null);
             }
-            Player player = register(new PlayerSave(id, ip, game, room, save.getScore(), save.getSave()));
+            Player player = register(new PlayerSave(id, save.getTeamId(), ip, game, room, save.getScore(), save.getSave()));
 
             return player;
         } finally {
@@ -740,7 +740,7 @@ public class PlayerServiceImpl implements PlayerService {
         String save = gameService.getDefaultProgress(type);
         Player player = new Player(playerSave);
         player.setScore(0);
-        saver.saveGame(player, save, now);
+        saver.saveGame(player, playerSave.getTeamId(), save, now);
     }
 
     @Override

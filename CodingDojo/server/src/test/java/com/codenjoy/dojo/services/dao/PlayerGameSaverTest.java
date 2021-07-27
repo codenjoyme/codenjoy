@@ -150,9 +150,9 @@ public class PlayerGameSaverTest {
         // then
         assertEquals("[katia, vasia]", saver.getSavedList().toString());
 
-        assertEquals("PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
+        assertEquals("PlayerSave(id=vasia, teamId=0, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
                 saver.loadGame("vasia").toString());
-        assertEquals("PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
+        assertEquals("PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
                 saver.loadGame("katia").toString());
     }
 
@@ -176,11 +176,11 @@ public class PlayerGameSaverTest {
         assertEquals("[katia, vasia]", saver.getSavedList("room").toString());
         assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
 
-        assertEquals("PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
+        assertEquals("PlayerSave(id=vasia, teamId=0, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
                 saver.loadGame("vasia").toString());
-        assertEquals("PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
+        assertEquals("PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
                 saver.loadGame("katia").toString());
-        assertEquals("PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'})",
+        assertEquals("PlayerSave(id=maria, teamId=0, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'})",
                 saver.loadGame("maria").toString());
     }
 
@@ -191,14 +191,14 @@ public class PlayerGameSaverTest {
 
         // when then
         String expected =
-                "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
-                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'}), \n" +
-                "PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})]";
+                "[PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, teamId=0, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'}), \n" +
+                "PlayerSave(id=vasia, teamId=0, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})]";
         assertLoadAll(expected, "vasia", "katia", "maria");
         assertLoadAll(expected, "maria", "vasia", "katia");
 
-        expected = "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
-                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'})]";
+        expected = "[PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, teamId=0, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'})]";
         assertLoadAll(expected, "katia", "maria");
     }
 
@@ -223,14 +223,14 @@ public class PlayerGameSaverTest {
         saver.saveGame(player3, "{'key':'updated_value3'}", now2);
 
         // when then
-        String expected = "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
-                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'updated_value3'}), \n" +
-                "PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'updated_value1'})]";
+        String expected = "[PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, teamId=0, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'updated_value3'}), \n" +
+                "PlayerSave(id=vasia, teamId=0, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'updated_value1'})]";
         assertLoadAll(expected, "vasia", "katia", "maria");
         assertLoadAll(expected, "maria", "vasia", "katia");
 
-        expected = "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
-                "PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'updated_value3'})]";
+        expected = "[PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, teamId=0, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'updated_value3'})]";
         assertLoadAll(expected, "katia", "maria");
     }
 
@@ -260,14 +260,14 @@ public class PlayerGameSaverTest {
 
         // when then
         String expected =
-                "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
-                "PlayerSave(id=maria, callbackUrl=http://127.33.33.5:9999, room=room, game=game, score=300, save={'key':'updated_value3'}), \n" +
-                "PlayerSave(id=vasia, callbackUrl=http://127.22.22.1:8888, room=otherRoom, game=game, score=100, save={'key':'updated_value1'})]";
+                "[PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, teamId=0, callbackUrl=http://127.33.33.5:9999, room=room, game=game, score=300, save={'key':'updated_value3'}), \n" +
+                "PlayerSave(id=vasia, teamId=0, callbackUrl=http://127.22.22.1:8888, room=otherRoom, game=game, score=100, save={'key':'updated_value1'})]";
         assertLoadAll(expected, "vasia", "katia", "maria");
         assertLoadAll(expected, "maria", "vasia", "katia");
 
-        expected = "[PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
-                "PlayerSave(id=maria, callbackUrl=http://127.33.33.5:9999, room=room, game=game, score=300, save={'key':'updated_value3'})]";
+        expected = "[PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'}), \n" +
+                "PlayerSave(id=maria, teamId=0, callbackUrl=http://127.33.33.5:9999, room=room, game=game, score=300, save={'key':'updated_value3'})]";
         assertLoadAll(expected, "katia", "maria");
     }
 
@@ -304,11 +304,11 @@ public class PlayerGameSaverTest {
         assertEquals("[katia, vasia]", saver.getSavedList("room").toString());
         assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
 
-        assertEquals("PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={\"key\":\"value1\"})",
+        assertEquals("PlayerSave(id=vasia, teamId=0, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={\"key\":\"value1\"})",
                 saver.loadGame("vasia").toString());
-        assertEquals("PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={\"key\":\"value2\"})",
+        assertEquals("PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={\"key\":\"value2\"})",
                 saver.loadGame("katia").toString());
-        assertEquals("PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={\"key\":\"value3\"})",
+        assertEquals("PlayerSave(id=maria, teamId=0, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={\"key\":\"value3\"})",
                 saver.loadGame("maria").toString());
 
         assertEquals("room", player1.getRoom());
@@ -331,9 +331,9 @@ public class PlayerGameSaverTest {
         assertEquals("[katia, vasia]", saver.getSavedList("room").toString());
         assertEquals("[]", saver.getSavedList("otherRoom").toString());
 
-        assertEquals("PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
+        assertEquals("PlayerSave(id=vasia, teamId=0, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
                 saver.loadGame("vasia").toString());
-        assertEquals("PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
+        assertEquals("PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
                 saver.loadGame("katia").toString());
         assertEquals(PlayerSave.NULL,
                 saver.loadGame("maria"));
@@ -374,11 +374,11 @@ public class PlayerGameSaverTest {
         assertEquals("[katia, vasia]", saver.getSavedList("room").toString());
         assertEquals("[maria]", saver.getSavedList("otherRoom").toString());
 
-        assertEquals("PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
+        assertEquals("PlayerSave(id=vasia, teamId=0, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
                 saver.loadGame("vasia").toString());
-        assertEquals("PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
+        assertEquals("PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
                 saver.loadGame("katia").toString());
-        assertEquals("PlayerSave(id=maria, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'})",
+        assertEquals("PlayerSave(id=maria, teamId=0, callbackUrl=http://127.0.0.5:9999, room=otherRoom, game=game, score=30, save={'key':'value3'})",
                 saver.loadGame("maria").toString());
 
         // when
@@ -388,11 +388,40 @@ public class PlayerGameSaverTest {
         assertEquals("[katia, vasia]", saver.getSavedList("room").toString());
         assertEquals("[]", saver.getSavedList("otherRoom").toString());
 
-        assertEquals("PlayerSave(id=vasia, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
+        assertEquals("PlayerSave(id=vasia, teamId=0, callbackUrl=http://127.0.0.1:8888, room=room, game=game, score=10, save={'key':'value1'})",
                 saver.loadGame("vasia").toString());
-        assertEquals("PlayerSave(id=katia, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
+        assertEquals("PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
                 saver.loadGame("katia").toString());
         assertEquals(PlayerSave.NULL,
                 saver.loadGame("maria"));
+    }
+
+    @Test
+    public void saveGame_withProvideTeamId() {
+        // given
+        int teamId = 3;
+        Player player = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        player.setRoom("room");
+
+        // when
+        saver.saveGame(player, teamId, "{'key':'value2'}", System.currentTimeMillis());
+
+        // then
+        assertEquals("PlayerSave(id=katia, teamId=3, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value2'})",
+                saver.loadGame("katia").toString());
+    }
+
+    @Test
+    public void saveGame_withNoProvidedTeamId_useDefault() {
+        // given
+        Player player = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        player.setRoom("room");
+
+        // when
+        saver.saveGame(player, "{'key':'value'}", System.currentTimeMillis());
+
+        // then
+        assertEquals("PlayerSave(id=katia, teamId=0, callbackUrl=http://127.0.0.3:7777, room=room, game=game, score=20, save={'key':'value'})",
+                saver.loadGame("katia").toString());
     }
 }
