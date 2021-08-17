@@ -91,14 +91,6 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <configuration>
-                    <targetClasses>
-                        <param>com.codenjoy.dojo.sampletext.*</param>
-                    </targetClasses>
-                    <targetTests>
-                        <param>com.codenjoy.dojo.sampletext.*</param>
-                    </targetTests>
-                </configuration>
             </plugin>
         </plugins>
     </build>

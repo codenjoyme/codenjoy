@@ -479,6 +479,12 @@
                     <artifactId>pitest-maven</artifactId>
                     <version>${pitest.version}</version>
                     <configuration>
+                        <targetClasses>
+                            <param>com.codenjoy.dojo.${module.name}.*</param>
+                        </targetClasses>
+                        <targetTests>
+                            <param>com.codenjoy.dojo.${module.name}.*</param>
+                        </targetTests>
                         <reportsDirectory>${project.basedir}/pitest/</reportsDirectory>
                     </configuration>
                     <executions>
