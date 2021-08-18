@@ -245,6 +245,22 @@ public class AbstractPlayerGamesTest {
         return result.asMap();
     }
 
+    public void assertTeams(String expected) {
+        assertEquals(expected, getTeams().toString());
+    }
+
+    public Map<Integer, Collection<String>> getTeams() {
+        Multimap<Integer, String> result = TreeMultimap.create();
+
+        for (PlayerGame playerGame : playerGames) {
+            int teamId = playerGame.getTeamId();
+            String name = playerGame.getPlayer().getId();
+
+            result.get(teamId).add(name);
+        }
+        return result.asMap();
+    }
+
     public void assertRoomsNames(String expected) {
         assertEquals(expected, getRoomNames().toString());
     }

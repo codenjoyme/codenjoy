@@ -61,7 +61,7 @@ public class TeamService {
                     log.warn("playerId {} has not been found", playerId);
                 }
                 if (room.equals(game.getRoom())) {
-                    game.getGame().getPlayer().setTeamId(team.getTeamId());
+                    game.setTeamId(team.getTeamId());
                 }
             }
         }

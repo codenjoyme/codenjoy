@@ -72,7 +72,6 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
         assertEquals("true", get("/rest/room/validRoom/player/validPlayer/joined"));
     }
 
-
     // проверяем что если закрыта регистрация в комнате этой, то зарегаться не получится
     @Test
     public void shouldJoinJoinedAndLeave_whenRegistrationIsClosed() {

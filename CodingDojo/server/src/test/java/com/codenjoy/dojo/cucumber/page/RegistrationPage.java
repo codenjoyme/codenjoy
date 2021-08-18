@@ -44,6 +44,7 @@ import static org.junit.Assert.assertEquals;
 @RequiredArgsConstructor
 public class RegistrationPage implements Closeable {
 
+    // selectors
     public static final String SUBMIT_BUTTON = "#submit-button";
     public static final String READABLE_NAME_INPUT = "#readableName input";
     public static final String PASSWORD_INPUT = "#password input";
@@ -57,8 +58,11 @@ public class RegistrationPage implements Closeable {
     public static final String ROOM_SELECT = "#room select";
     public static final String ERROR_MESSAGE = "#error-message";
 
+    // page objects
     private final Page page;
     private final WebDriverWrapper web;
+
+    // application services
     private final Registration registration;
     private final PlayerService playerService;
     private final GameService gameService;

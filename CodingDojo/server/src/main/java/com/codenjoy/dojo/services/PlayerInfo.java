@@ -37,12 +37,13 @@ public class PlayerInfo extends Player {
     private boolean aiPlayer;
     private int ticksInactive;
 
-    protected PlayerInfo(String id, String readableName, String code, String url, String room, String game, Object scoreValue, boolean saved) {
+    protected PlayerInfo(String id, String readableName, String code, String url, String room, int teamId, String game, Object scoreValue, boolean saved) {
         setId(id);
         setReadableName(readableName);
         setCode(code);
         setCallbackUrl(url);
         setGame(game);
+        setTeamId(teamId);
         setRoom(room);
         setScore(scoreValue);
         this.saved = saved;
@@ -55,6 +56,7 @@ public class PlayerInfo extends Player {
         aiPlayer = player.hasAi();
         setScore(player.getScore());
         setRoom(player.getRoom());
+        setTeamId(player.getTeamId());
         setReadableName(player.getReadableName());
         setLastResponse(now, player.getLastResponse());
     }
@@ -71,6 +73,7 @@ public class PlayerInfo extends Player {
     public PlayerInfo(PlayerSave save, String readableName, String code, long now) {
         this(save.getId(), readableName, code,
                 save.getCallbackUrl(), save.getRoom(),
+                save.getTeamId(),
                 save.getGame(), save.getScore(), true);
 
         setLastResponse(now, now);

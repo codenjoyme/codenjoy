@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
@@ -150,6 +151,102 @@ public class PlayerGamesViewTest {
                 "    'user2':234,\n" +
                 "    'user3':345,\n" +
                 "    'user4':456\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user1':0,\n" +
+                "    'user2':0,\n" +
+                "    'user3':0,\n" +
+                "    'user4':0\n" +
+                "  }\n" +
+                "}";
+
+        assertEquals(expectedGroup, prettyPrint(dataMap.get("user1")));
+    }
+
+    @Test
+    public void testGetGamesDataMap_usersInSameGroup_butDifferentTeams() {
+        // given
+        testGetGamesDataMap_usersInSameGroup();
+
+        playerGames.setTeam("user1", 1);
+        playerGames.setTeam("user2", 2);
+        playerGames.setTeam("user3", 1);
+        playerGames.setTeam("user4", 2);
+
+        // when
+        Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
+
+        // then
+        String expectedGroup = "{\n" +
+                "  'boardSize':1234,\n" +
+                "  'coordinates':{\n" +
+                "    'user1':{\n" +
+                "      'additionalData':'data1',\n" +
+                "      'coordinate':{\n" +
+                "        'x':1,\n" +
+                "        'y':2\n" +
+                "      },\n" +
+                "      'level':10,\n" +
+                "      'multiplayer':false\n" +
+                "    },\n" +
+                "    'user2':{\n" +
+                "      'additionalData':'data2',\n" +
+                "      'coordinate':{\n" +
+                "        'x':3,\n" +
+                "        'y':4\n" +
+                "      },\n" +
+                "      'level':11,\n" +
+                "      'multiplayer':false\n" +
+                "    },\n" +
+                "    'user3':{\n" +
+                "      'additionalData':{\n" +
+                "        'key':'value'\n" +
+                "      },\n" +
+                "      'coordinate':{\n" +
+                "        'x':5,\n" +
+                "        'y':6\n" +
+                "      },\n" +
+                "      'level':12,\n" +
+                "      'multiplayer':false\n" +
+                "    },\n" +
+                "    'user4':{\n" +
+                "      'additionalData':[\n" +
+                "        'data3, data4'\n" +
+                "      ],\n" +
+                "      'coordinate':{\n" +
+                "        'x':7,\n" +
+                "        'y':8\n" +
+                "      },\n" +
+                "      'level':13,\n" +
+                "      'multiplayer':false\n" +
+                "    }\n" +
+                "  },\n" +
+                "  'decoder':{\n" +
+                "    \n" +
+                "  },\n" +
+                "  'group':[\n" +
+                "    'user1',\n" +
+                "    'user2',\n" +
+                "    'user3',\n" +
+                "    'user4'\n" +
+                "  ],\n" +
+                "  'readableNames':{\n" +
+                "    'user1':'readable_user1',\n" +
+                "    'user2':'readable_user2',\n" +
+                "    'user3':'readable_user3',\n" +
+                "    'user4':'readable_user4'\n" +
+                "  },\n" +
+                "  'scores':{\n" +
+                "    'user1':123,\n" +
+                "    'user2':234,\n" +
+                "    'user3':345,\n" +
+                "    'user4':456\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user1':1,\n" +
+                "    'user2':2,\n" +
+                "    'user3':1,\n" +
+                "    'user4':2\n" +
                 "  }\n" +
                 "}";
 
@@ -211,6 +308,10 @@ public class PlayerGamesViewTest {
                 "  'scores':{\n" +
                 "    'user1':123,\n" +
                 "    'user2':234\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user1':0,\n" +
+                "    'user2':0\n" +
                 "  }\n" +
                 "}";
 
@@ -257,6 +358,10 @@ public class PlayerGamesViewTest {
                 "  'scores':{\n" +
                 "    'user3':345,\n" +
                 "    'user4':456\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user3':0,\n" +
+                "    'user4':0\n" +
                 "  }\n" +
                 "}";
 
@@ -560,6 +665,9 @@ public class PlayerGamesViewTest {
                 "  },\n" +
                 "  'scores':{\n" +
                 "    'user1':123\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user1':0\n" +
                 "  }\n" +
                 "}";
 
@@ -589,6 +697,9 @@ public class PlayerGamesViewTest {
                 "  },\n" +
                 "  'scores':{\n" +
                 "    'user2':234\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user2':0\n" +
                 "  }\n" +
                 "}";
 
@@ -620,6 +731,9 @@ public class PlayerGamesViewTest {
                 "  },\n" +
                 "  'scores':{\n" +
                 "    'user3':345\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user3':0\n" +
                 "  }\n" +
                 "}";
 
@@ -651,6 +765,9 @@ public class PlayerGamesViewTest {
                 "  },\n" +
                 "  'scores':{\n" +
                 "    'user4':456\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user4':0\n" +
                 "  }\n" +
                 "}";
 
@@ -705,7 +822,7 @@ public class PlayerGamesViewTest {
         playerScores.add(gameScore);
         when(gameScore.getScore()).thenReturn(scores);
 
-        GamePlayer gamePlayer = mock(GamePlayer.class);
+        GamePlayer gamePlayer = TestUtils.newPlayer(GamePlayer.DEFAULT_TEAM_ID, mock(SettingsReader.class));
         when(gamePlayer.getHeroData()).thenReturn(heroData);
         gamePlayers.add(gamePlayer);
         heroesData.add(heroData);

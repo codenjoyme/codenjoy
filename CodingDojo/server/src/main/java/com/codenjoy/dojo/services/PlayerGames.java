@@ -430,6 +430,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         playerGame.fireOnLevelChanged();
     }
 
+    public void setTeam(String playerId, int teamId) {
+        PlayerGame playerGame = get(playerId);
+
+        playerGame.setTeamId(teamId);
+
+        JSONObject save = playerGame.getGame().getSave();
+        String room = playerGame.getRoom();
+        Game game = playerGame.getGame();
+        reload(game, room, save);
+    }
+
     public void changeRoom(String playerId, String gameName, String newRoom) {
         if (Validator.isEmpty(newRoom) || Validator.isEmpty(gameName)) {
             return;

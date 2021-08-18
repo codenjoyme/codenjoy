@@ -139,12 +139,17 @@ public class PlayerGame implements Tickable {
     }
 
     /*
-     * Так случилось, что room содержится в двух местах,
-     * а потому надо держать в консистентности данные  
+     * Так случилось, что room/teamId содержатся в двух местах,
+     * а потому надо держать в консистентности данные.
      */
     public Player getPlayer() {
-        if (player != null) {
+        if (player != null && player != NullPlayer.INSTANCE) {
             player.setRoom(room);
+            // TODO почему-то тут лочилось при работе с админки или мне показалось?
+            GamePlayer gamePlayer = LockedGame.unwrap(game).getPlayer();
+            if (gamePlayer != null) { // TODO это только в тестах встречается, доразбираться!
+                player.setTeamId(gamePlayer.getTeamId());
+            }
         }
         return player;
     }
@@ -174,5 +179,14 @@ public class PlayerGame implements Tickable {
         Game game = getGame();
         Player player = getPlayer();
         player.getEventListener().levelChanged(game.getProgress());
+    }
+
+    public void setTeamId(int teamId) {
+        game.getPlayer().setTeamId(teamId);
+        getPlayer();
+    }
+
+    public int getTeamId() {
+        return game.getPlayer().getTeamId();
     }
 }

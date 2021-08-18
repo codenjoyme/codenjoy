@@ -410,6 +410,7 @@ public class PlayerServiceImpl implements PlayerService {
                 Object score = player.getScore();
                 String message = player.getMessage();
                 Map<String, Object> scores = gameData.getScores();
+                Map<String, Object> teams = gameData.getTeams(); // TODO test me
                 List<String> group = gameData.getGroup();
                 Map<String, HeroData> coordinates = gameData.getCoordinates();
                 Map<String, String> readableNames = gameData.getReadableNames();
@@ -419,6 +420,7 @@ public class PlayerServiceImpl implements PlayerService {
                         score,
                         message,
                         scores,
+                        teams,
                         coordinates,
                         readableNames,
                         group,
@@ -579,6 +581,11 @@ public class PlayerServiceImpl implements PlayerService {
                         input.getId(),
                         new JSONObject(newSave));
             }
+        }
+
+        boolean updateTeam = playerGame.getTeamId() != input.getTeamId();
+        if (updateTeam) {
+            playerGames.setTeam(updated.getId(), input.getTeamId());
         }
     }
 

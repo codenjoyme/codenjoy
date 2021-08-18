@@ -63,6 +63,7 @@ import static java.util.stream.Collectors.toList;
 @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
 @Slf4j
 @RequiredArgsConstructor
+// TODO move all business logic to the AdminService
 public class AdminController {
 
     public static final String URI = "/admin";

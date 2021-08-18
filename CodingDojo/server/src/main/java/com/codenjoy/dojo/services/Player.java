@@ -51,6 +51,7 @@ public class Player implements ScreenRecipient, Closeable {
     private String callbackUrl;
     private String game;
     private String room;
+    private int teamId;
     private String password;
     private String passwordConfirmation;
     private PlayerScores scores;

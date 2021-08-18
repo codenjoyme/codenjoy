@@ -276,6 +276,10 @@ public class SaveServiceImplTest {
 
         Player activeSavedPlayer = createPlayer("activeSaved"); // check sorting order (activeSaved > active)
         Player activePlayer = createPlayer("active");
+
+        teamId(activeSavedPlayer, 1);
+        teamId(activePlayer, 2);
+
         scores(activeSavedPlayer, 10);
         scores(activePlayer, 11);
 
@@ -317,6 +321,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':false,\n" +
                 "  'score':11,\n" +
+                "  'teamId':2,\n" +
                 "  'ticksInactive':1\n" +
                 "}, {\n" +
                 "  'active':true,\n" +
@@ -335,6 +340,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':true,\n" +
                 "  'score':10,\n" +
+                "  'teamId':1,\n" +
                 "  'ticksInactive':2\n" +
                 "}, {\n" +
                 "  'active':false,\n" +
@@ -352,6 +358,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':true,\n" +
                 "  'score':15,\n" +
+                "  'teamId':0,\n" +
                 "  'ticksInactive':0\n" +
                 "}]");
     }
@@ -372,6 +379,13 @@ public class SaveServiceImplTest {
         Player activePlayer = createPlayer("active", "room");
         Player activeSavedPlayerInOtherRoom = createPlayer("activeSavedInOtherRoom", "otherRoom");
         Player activePlayerInOtherRoom = createPlayer("activeInOtherRoom", "otherRoom");
+
+
+        teamId(activeSavedPlayer, 1);
+        teamId(activePlayer, 2);
+        teamId(activeSavedPlayerInOtherRoom, 3);
+        teamId(activePlayerInOtherRoom, 4);
+
         scores(activeSavedPlayer, 10);
         scores(activePlayer, 11);
         scores(activeSavedPlayerInOtherRoom, 12);
@@ -431,6 +445,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':false,\n" +
                 "  'score':11,\n" +
+                "  'teamId':2,\n" +
                 "  'ticksInactive':3\n" +
                 "}, {\n" +
                 "  'active':true,\n" +
@@ -449,6 +464,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':true,\n" +
                 "  'score':10,\n" +
+                "  'teamId':1,\n" +
                 "  'ticksInactive':4\n" +
                 "}, {\n" +
                 "  'active':false,\n" +
@@ -466,6 +482,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':true,\n" +
                 "  'score':15,\n" +
+                "  'teamId':0,\n" +
                 "  'ticksInactive':0\n" +
                 "}]");
 
@@ -492,6 +509,7 @@ public class SaveServiceImplTest {
                 "  'room':'otherRoom',\n" +
                 "  'saved':false,\n" +
                 "  'score':13,\n" +
+                "  'teamId':4,\n" +
                 "  'ticksInactive':2\n" +
                 "}, {\n" +
                 "  'active':true,\n" +
@@ -510,6 +528,7 @@ public class SaveServiceImplTest {
                 "  'room':'otherRoom',\n" +
                 "  'saved':true,\n" +
                 "  'score':12,\n" +
+                "  'teamId':3,\n" +
                 "  'ticksInactive':3\n" +
                 "}, {\n" +
                 "  'active':false,\n" +
@@ -527,6 +546,7 @@ public class SaveServiceImplTest {
                 "  'room':'otherRoom',\n" +
                 "  'saved':true,\n" +
                 "  'score':26,\n" +
+                "  'teamId':0,\n" +
                 "  'ticksInactive':0\n" +
                 "}]");
     }
@@ -552,6 +572,10 @@ public class SaveServiceImplTest {
             result.removeIf(it -> !argument.contains(it.getId()));
             return result;
         });
+    }
+
+    private void teamId(Player player, int teamId) {
+        when(player.getTeamId()).thenReturn(teamId);
     }
 
     private void scores(Player player, Object score) {

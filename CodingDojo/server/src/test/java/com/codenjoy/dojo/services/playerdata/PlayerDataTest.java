@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.playerdata;
  */
 
 
-import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import org.junit.Test;
 
@@ -39,9 +38,10 @@ public class PlayerDataTest {
     @Test
     public void shouldSavePlayerData(){
         PlayerData data = new PlayerData(13, "board", "game", 55, "+100",
-                new LinkedHashMap<String, Object>(){{ put("user@mail.com", 12); }},
-                new LinkedHashMap<String, HeroData>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
-                new LinkedHashMap<String, String>(){{ put("user@mail.com", "User Muser"); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", 12); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", 1); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", "User Muser"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
                 1);
 
@@ -60,9 +60,10 @@ public class PlayerDataTest {
     @Test
     public void shouldSavePlayerData_nullChatId(){
         PlayerData data = new PlayerData(13, "board", "game", 55, "+100",
-                new LinkedHashMap<String, Object>(){{ put("user@mail.com", 12); }},
-                new LinkedHashMap<String, HeroData>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
-                new LinkedHashMap<String, String>(){{ put("user@mail.com", "User Muser"); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", 12); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", 1); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", "User Muser"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
                 null);
 
@@ -72,9 +73,10 @@ public class PlayerDataTest {
     @Test
     public void shouldCollectData() {
         PlayerData data = new PlayerData(15, "board", "game", 10, "info",
-                new LinkedHashMap<String, Object>(){{ put("user@mail.com", 12); }},
-                new LinkedHashMap<String, HeroData>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
-                new LinkedHashMap<String, String>(){{ put("user@mail.com", "User Muser"); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", 12); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", 11); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", "User Muser"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
                 2);
 
@@ -82,6 +84,7 @@ public class PlayerDataTest {
                 "Board:'board', " +
                 "Game:'game', " +
                 "Score:10, " +
+                "Teams:{user@mail.com=11}, " +
                 "Info:'info', " +
                 "Scores:'{user@mail.com=12}', " +
                 "Coordinates:'{user@mail.com=HeroDataImpl(level=1, coordinate=[10,5], isMultiplayer=true, additionalData=null)}', " +
@@ -94,9 +97,10 @@ public class PlayerDataTest {
     @Test
     public void shouldEmptyInfoIfNull(){
         PlayerData data = new PlayerData(15, "board", "game", 10, null,
-                new LinkedHashMap<String, Object>(){{ put("user@mail.com", 12); }},
-                new LinkedHashMap<String, HeroData>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
-                new LinkedHashMap<String, String>(){{ put("user@mail.com", "User Muser"); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", 12); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", 1); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
+                new LinkedHashMap<>(){{ put("user@mail.com", "User Muser"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
                 1);
 

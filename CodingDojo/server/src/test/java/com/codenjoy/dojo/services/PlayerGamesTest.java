@@ -1302,6 +1302,36 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     @Test
+    public void testSetTeamId() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+
+        assertTeams("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.setTeam("player1", 1);
+        playerGames.setTeam("player2", 2);
+
+        // then
+        assertTeams("{0=[player3], 1=[player1], 2=[player2]}");
+
+        // when
+        playerGames.setTeam("player1", 2);
+
+        // then
+        assertTeams("{0=[player3], 2=[player1, player2]}");
+
+        // when
+        playerGames.setTeam("player3", 2);
+
+        // then
+        assertTeams("{2=[player1, player2, player3]}");
+    }
+
+    @Test
     public void testChangeRoom_doNothing_whenTryToChangeGame() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;

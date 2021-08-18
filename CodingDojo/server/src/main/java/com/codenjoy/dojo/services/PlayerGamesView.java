@@ -47,6 +47,7 @@ public class PlayerGamesView {
         Map<String, GuiPlotColorDecoder> decoders = getDecoders();
         Map<String, List<String>> groupsMap = getGroupsMap();
         Map<String, Object> scores = getScores();
+        Map<String, Object> teams = getTeams();
         Map<String, HeroData> coordinates = getCoordinates();
         Map<String, String> readableNames = getReadableNames();
 
@@ -62,6 +63,7 @@ public class PlayerGamesView {
                                     gameType.getBoardSize(gameType.getSettings()).getValue(),
                                     decoders.get(gameType.name()),
                                     filterByGroup(scores, group),
+                                    filterByGroup(teams, group),
                                     group,
                                     filterByGroup(coordinates, group),
                                     filterByGroup(readableNames, group));
@@ -123,6 +125,12 @@ public class PlayerGamesView {
         return service.all().stream()
                 .collect(toMap(pg -> pg.getPlayer().getId(),
                         pg -> pg.getPlayer().getScore()));
+    }
+
+    public Map<String, Object> getTeams() {
+        return service.all().stream()
+                .collect(toMap(pg -> pg.getPlayer().getId(),
+                        pg -> pg.getPlayer().getTeamId()));
     }
 
     public List<PScoresOf> getScoresForGame(String game) {

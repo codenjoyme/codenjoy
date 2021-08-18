@@ -24,13 +24,16 @@ package com.codenjoy.dojo.cucumber.page;
 
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static org.junit.Assert.assertEquals;
 
+// Please use this manual for xpath
+// http://www.zvon.org/xxl/XPathTutorial/Output_rus/example1.html
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
@@ -40,7 +43,9 @@ public class Page {
     public static final String GAME = "game";
     public static final String PLAYER_ID = "playerId";
 
+    // page objects
     private final WebDriverWrapper web;
+    private final Storage storage;
 
     public void refresh() {
         web.refresh();
@@ -50,6 +55,9 @@ public class Page {
         data = replace(data, "<PLAYER_ID>", PLAYER_ID);
         data = replace(data, "<CODE>", CODE);
         data = replace(data, "<GAME>", GAME);
+        for (Map.Entry<String, String> entry : storage.all()) {
+            data = data.replaceAll(String.format("<%s>", entry.getKey()), entry.getValue());
+        }
         return data;
     }
 
@@ -74,7 +82,11 @@ public class Page {
     }
 
     public void assertUrl(String url) {
-        assertEquals(injectSettings(url), web.url());
+        assertEquals(injectSettings(url), url());
+    }
+
+    public String url() {
+        return web.url();
     }
 
     public void logout() {
@@ -96,7 +108,7 @@ public class Page {
     }
 
     public void open(String url) {
-        web.open(url);
+        web.open(injectSettings(url));
     }
 
     public void assertGame(String game) {

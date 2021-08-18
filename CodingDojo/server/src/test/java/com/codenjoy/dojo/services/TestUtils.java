@@ -28,11 +28,13 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import lombok.experimental.UtilityClass;
 import org.junit.Assert;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -49,6 +51,12 @@ public class TestUtils {
         public PrinterFactory printerFactory;
     }
 
+    public static GamePlayer newPlayer(int teamId, SettingsReader settings) {
+        GamePlayer player = spy(new GamePlayer(event -> {}, settings) {});
+        player.setTeamId(teamId);
+        return player;
+    }
+
     public static Env getPlayerGame(PlayerGames playerGames,
                                     Player player,
                                     String room,
@@ -58,7 +66,7 @@ public class TestUtils {
                                     Printer printer) 
     {
         Joystick joystick = mock(Joystick.class);
-        GamePlayer gamePlayer = mock(GamePlayer.class);
+        GamePlayer gamePlayer = newPlayer(DEFAULT_TEAM_ID, mock(SettingsReader.class));
         when(gamePlayer.getJoystick()).thenReturn(joystick);
 
         GameType gameType = player.getGameType();

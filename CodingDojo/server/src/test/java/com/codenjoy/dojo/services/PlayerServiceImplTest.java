@@ -49,6 +49,7 @@ import com.codenjoy.dojo.services.printer.GraphicPrinter;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
 import lombok.SneakyThrows;
@@ -81,6 +82,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
 import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static org.fest.reflect.core.Reflection.field;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -259,7 +261,7 @@ public class PlayerServiceImplTest {
                     Joystick joystick = mock(Joystick.class);
                     joysticks.add(joystick);
 
-                    GamePlayer gamePlayer = mock(GamePlayer.class);
+                    GamePlayer gamePlayer = TestUtils.newPlayer(DEFAULT_TEAM_ID, mock(SettingsReader.class));
                     gamePlayers.add(gamePlayer);
 
                     when(gamePlayer.getJoystick()).thenReturn(joystick);
@@ -567,8 +569,12 @@ public class PlayerServiceImplTest {
         when(printer.print(any(), any()))
                 .thenReturn("1234")
                 .thenReturn("4321");
+
         when(playerScores(0).getScore()).thenReturn(123);
         when(playerScores(1).getScore()).thenReturn(234);
+
+        when(gamePlayers.get(0).getTeamId()).thenReturn(1);
+        when(gamePlayers.get(1).getTeamId()).thenReturn(2);
 
         // when
         playerService.tick();
@@ -582,6 +588,7 @@ public class PlayerServiceImplTest {
                     "Board:'DCBA', \n" +
                     "Game:'game', \n" +
                     "Score:234, \n" +
+                    "Teams:{petya=2}, \n" +
                     "Info:'', \n" +
                     "Scores:'{petya=234}', \n" +
                     "Coordinates:'{petya=HeroDataImpl(level=0, \n" +
@@ -595,6 +602,7 @@ public class PlayerServiceImplTest {
                     "Board:'ABCD', \n" +
                     "Game:'game', \n" +
                     "Score:123, \n" +
+                    "Teams:{vasya=1}, \n" +
                     "Info:'', \n" +
                     "Scores:'{vasya=123}', \n" +
                     "Coordinates:'{vasya=HeroDataImpl(level=0, \n" +
@@ -1823,6 +1831,37 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void shouldUpdateAll_changeTeamId() {
+        // given
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        assertPlayersTeams("{vasya=0, petya=0}");
+
+        // when
+        List<PlayerInfo> infos = new LinkedList<>();
+        infos.add(new PlayerInfo(VASYA, null, null, null,
+                null, 2, "game", null, false));
+        infos.add(new PlayerInfo(PETYA, null, null, null,
+                null, 1, "game", null, false));
+        playerService.updateAll(infos);
+
+        // then
+        assertPlayersTeams("{vasya=2, petya=1}");
+
+        // when
+        infos = new LinkedList<>();
+        infos.add(new PlayerInfo(VASYA, null, null, null,
+                null, 3, "game", null, false));
+        infos.add(new PlayerInfo(PETYA, null, null, null,
+                null, 3, "game", null, false));
+        playerService.updateAll(infos);
+
+        // then
+        assertPlayersTeams("{vasya=3, petya=3}");
+    }
+
+    @Test
     public void shouldUpdate_mainCase() {
         // given
         createPlayer(VASYA);
@@ -1843,6 +1882,45 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void shouldUpdate_changeTeamId() {
+        // given
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        assertPlayersTeams("{vasya=0, petya=0}");
+
+        // when
+        playerService.update(new PlayerInfo(VASYA, null, null, null,
+                null, 1, "game", null, false));
+
+        // then
+        assertPlayersTeams("{vasya=1, petya=0}");
+
+        // when
+        playerService.update(new PlayerInfo(PETYA, null, null, null,
+                null, 2, "game", null, false));
+
+        // then
+        assertPlayersTeams("{vasya=1, petya=2}");
+
+        // when
+        playerService.update(new PlayerInfo(VASYA, null, null, null,
+                null, 2, "game", null, false));
+
+        // then
+        assertPlayersTeams("{vasya=2, petya=2}");
+    }
+
+    private void assertPlayersTeams(String expected) {
+        assertEquals(expected,
+                playerService.getAll().stream()
+                        .collect(toMap(Player::getId, Player::getTeamId,
+                                (value1, value2) -> value2,
+                                LinkedHashMap::new))
+                        .toString());
+    }
+
+    @Test
     public void shouldUpdate_changeRoom_caseNewRoom_sameGame_chooseGame() {
         // given
         createPlayer(VASYA, "game", "room");
@@ -1856,7 +1934,7 @@ public class PlayerServiceImplTest {
 
         // when
         playerService.update(new PlayerInfo(VASYA, null, null, null,
-                "otherRoom", "game", null, true));
+                "otherRoom", DEFAULT_TEAM_ID, "game", null, true));
 
         // then
         assertEquals("[vasya, petya]",
@@ -1884,7 +1962,7 @@ public class PlayerServiceImplTest {
         // when
         String game = null; // мы не установили игру
         playerService.update(new PlayerInfo(VASYA, null, null, null,
-                "otherRoom", game, null, true));
+                "otherRoom", DEFAULT_TEAM_ID, game, null, true));
 
         // then
         assertEquals("[vasya, petya]",
@@ -1915,7 +1993,7 @@ public class PlayerServiceImplTest {
 
         // when
         playerService.update(new PlayerInfo(VASYA, null, null, null,
-                "otherRoom", "game", null, true));
+                "otherRoom", DEFAULT_TEAM_ID, "game", null, true));
 
         // then
         assertEquals("[vasya, petya, olia]",
@@ -1947,7 +2025,7 @@ public class PlayerServiceImplTest {
         // when
         String game = null; // мы не установили игру
         playerService.update(new PlayerInfo(VASYA, null, null, null,
-                "otherRoom", game, null, true));
+                "otherRoom", DEFAULT_TEAM_ID, game, null, true));
 
         // then
         assertEquals("[vasya, petya, olia]",
@@ -1974,7 +2052,7 @@ public class PlayerServiceImplTest {
 
         // when
         playerService.update(new PlayerInfo(VASYA, null, null, null,
-                "otherRoom", "otherGame", null, true));
+                "otherRoom", DEFAULT_TEAM_ID, "otherGame", null, true));
 
         // then
         assertEquals("[petya]",
@@ -2011,7 +2089,7 @@ public class PlayerServiceImplTest {
 
         // when
         playerService.update(new PlayerInfo(VASYA, null, null, null,
-                "otherRoom", "otherGame", null, true));
+                "otherRoom", DEFAULT_TEAM_ID, "otherGame", null, true));
 
         // then
         assertEquals("[petya]",

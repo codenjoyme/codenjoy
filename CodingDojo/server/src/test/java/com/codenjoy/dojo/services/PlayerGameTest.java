@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.nullobj.*;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -52,9 +53,16 @@ public class PlayerGameTest {
         gameType = PlayerTest.mockGameType("game");
         player = new Player("player", "url", gameType,
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
-        game = mock(Game.class);
 
+        setupGamePlayer();
         playerGame = new PlayerGame(player, game, "room");
+    }
+
+    private void setupGamePlayer() {
+        Game mockGame = mock(Game.class);
+        game = new LockedGame(new ReentrantReadWriteLock()).wrap(mockGame);
+        GamePlayer gamePlayer = TestUtils.newPlayer(DEFAULT_TEAM_ID, mock(SettingsReader.class));
+        when(mockGame.getPlayer()).thenReturn(gamePlayer);
     }
 
     @Test
@@ -195,7 +203,7 @@ public class PlayerGameTest {
         playerGame.remove(onRemove);
 
         // then
-        verify(game).close();
+        verify(LockedGame.unwrap(game)).close();
         assertEquals(true, removed[0]);
     }
 
@@ -234,12 +242,28 @@ public class PlayerGameTest {
     }
 
     @Test
+    public void testSetPlayerId_alsoUpdatePlayer() {
+        // given
+        assertEquals(DEFAULT_TEAM_ID, playerGame.getTeamId());
+        assertEquals(DEFAULT_TEAM_ID, playerGame.getPlayer().getTeamId());
+
+        // when
+        playerGame.setTeamId(12);
+
+        // then
+        assertEquals(12, playerGame.getTeamId());
+        assertEquals(12, playerGame.getPlayer().getTeamId());
+    }
+
+    @Test
     public void testClearScores() {
         // given
         gameType = PlayerTest.mockGameType("game");
         player = spy(new Player("player", "url", gameType,
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE));
-        game = mock(Game.class);
+
+        setupGamePlayer();
+
         LevelProgress progress = mock(LevelProgress.class);
         when(game.getProgress()).thenReturn(progress);
 
@@ -251,7 +275,7 @@ public class PlayerGameTest {
         // then
         verify(game.getProgress()).reset();
         verify(player).clearScore();
-        verify(game).clearScore();
+        verify(LockedGame.unwrap(game)).clearScore();
     }
 
     @Test
