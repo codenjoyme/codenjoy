@@ -60,7 +60,9 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return super.getSettings();
+                        GameSettings settings = super.getSettings();
+                        settings.setRoundsEnabled(true);
+                        return settings;
                     }
                 },
                 Stream.generate(solver)
