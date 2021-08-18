@@ -47,6 +47,7 @@
         <dojo.package>java/com/codenjoy/dojo</dojo.package>
         <java.client.file>resources/user/java-client.zip</java.client.file>
         <java.client>${project.build.directory}/java-client</java.client>
+        <markdown-page-generator.version>2.3.1</markdown-page-generator.version>
     </properties>
 
     <repositories>
@@ -471,6 +472,24 @@
                                 <goal>update-file-header</goal>
                             </goals>
                             <phase>process-sources</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.ruleoftech</groupId>
+                    <artifactId>markdown-page-generator-plugin</artifactId>
+                    <version>${markdown-page-generator.version}</version>
+                    <configuration>
+                        <inputDirectory>${basedir}/src/main/webapp/resources/help</inputDirectory>
+                        <inputEncoding>UTF-8</inputEncoding>
+                        <outputEncoding>UTF-8</outputEncoding>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
                         </execution>
                     </executions>
                 </plugin>
