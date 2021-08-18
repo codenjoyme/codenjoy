@@ -24,6 +24,7 @@
 /CodingDojo/games/**/libs
 /CodingDojo/games/**/README.txt
 /CodingDojo/games/**/webapp/resources/user/*.zip
+/CodingDojo/games/**/pitest
 /CodingDojo/*-portable
 /CodingDojo/stuff
 /CodingDojo/.run

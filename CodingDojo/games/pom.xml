@@ -26,6 +26,7 @@
         <fest-assert.version>1.4</fest-assert.version>
         <junit.version>4.13.1</junit.version>
         <mockito.version>3.7.7</mockito.version>
+        <pitest.version>1.6.4</pitest.version>
 
         <!-- Maven -->
         <maven-compiler.version>3.8.1</maven-compiler.version>
@@ -470,6 +471,29 @@
                                 <goal>update-file-header</goal>
                             </goals>
                             <phase>process-sources</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-maven</artifactId>
+                    <version>${pitest.version}</version>
+                    <configuration>
+                        <targetClasses>
+                            <param>com.codenjoy.dojo.${module.name}.*</param>
+                        </targetClasses>
+                        <targetTests>
+                            <param>com.codenjoy.dojo.${module.name}.*</param>
+                        </targetTests>
+                        <reportsDirectory>${project.basedir}/pitest/</reportsDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>pitest</id>
+                            <goals>
+                                <goal>mutationCoverage</goal>
+                            </goals>
+                            <phase>test</phase>
                         </execution>
                     </executions>
                 </plugin>
