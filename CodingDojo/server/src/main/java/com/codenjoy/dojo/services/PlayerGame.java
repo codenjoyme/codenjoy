@@ -185,8 +185,4 @@ public class PlayerGame implements Tickable {
         game.getPlayer().setTeamId(teamId);
         getPlayer();
     }
-
-    public int getTeamId() {
-        return game.getPlayer().getTeamId();
-    }
 }

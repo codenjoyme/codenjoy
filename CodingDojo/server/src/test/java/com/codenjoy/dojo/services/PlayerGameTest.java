@@ -244,14 +244,14 @@ public class PlayerGameTest {
     @Test
     public void testSetPlayerId_alsoUpdatePlayer() {
         // given
-        assertEquals(DEFAULT_TEAM_ID, playerGame.getTeamId());
+        assertEquals(DEFAULT_TEAM_ID, playerGame.getPlayerTeamId());
         assertEquals(DEFAULT_TEAM_ID, playerGame.getPlayer().getTeamId());
 
         // when
         playerGame.setTeamId(12);
 
         // then
-        assertEquals(12, playerGame.getTeamId());
+        assertEquals(12, playerGame.getPlayerTeamId());
         assertEquals(12, playerGame.getPlayer().getTeamId());
     }
 

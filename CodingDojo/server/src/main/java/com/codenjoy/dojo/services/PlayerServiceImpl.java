@@ -583,7 +583,7 @@ public class PlayerServiceImpl implements PlayerService {
             }
         }
 
-        boolean updateTeam = playerGame.getTeamId() != input.getTeamId();
+        boolean updateTeam = playerGame.getPlayerTeamId() != input.getTeamId();
         if (updateTeam) {
             playerGames.setTeam(updated.getId(), input.getTeamId());
         }

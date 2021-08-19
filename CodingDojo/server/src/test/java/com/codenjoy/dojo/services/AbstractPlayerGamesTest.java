@@ -253,7 +253,7 @@ public class AbstractPlayerGamesTest {
         Multimap<Integer, String> result = TreeMultimap.create();
 
         for (PlayerGame playerGame : playerGames) {
-            int teamId = playerGame.getTeamId();
+            int teamId = playerGame.getPlayerTeamId();
             String name = playerGame.getPlayer().getId();
 
             result.get(teamId).add(name);
