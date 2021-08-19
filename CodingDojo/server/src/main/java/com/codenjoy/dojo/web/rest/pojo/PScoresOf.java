@@ -40,7 +40,7 @@ public class PScoresOf {
     }
 
     public int getTeamId() {
-        return playerGame.getGame().getPlayer().getTeamId();
+        return playerGame.getPlayerTeamId();
     }
 
     public int getScore() {
