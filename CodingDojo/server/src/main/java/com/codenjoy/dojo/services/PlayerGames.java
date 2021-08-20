@@ -308,13 +308,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         getGameTypes().forEach(GameType::quietTick);
     }
 
-    // перевод текущего игрока в новую комнату
-    // без обслуживания оставшихся на той же карте
-    public void reloadCurrent(String id) {
-        reload(id, Sweeper.off());
-    }
-
-    private void reload(String id, Sweeper sweeper) {
+    public void reload(String id, Sweeper sweeper) {
         PlayerGame playerGame = get(id);
         Game game = playerGame.getGame();
         String room = playerGame.getRoom();
@@ -353,7 +347,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
 
         games.forEach(pg -> spreader.remove(pg.getGame().getPlayer(), Sweeper.off()));
-        games.forEach(pg -> reloadCurrent(pg.getPlayerId()));
+        games.forEach(pg -> reload(pg.getPlayerId(), Sweeper.off()));
     }
 
     private PlayerGame getPlayerGame(Game game) {
