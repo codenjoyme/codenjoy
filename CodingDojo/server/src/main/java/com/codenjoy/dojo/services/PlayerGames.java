@@ -327,12 +327,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         play(game, room, gameType, save);
     }
 
-    // перевод текущего игрока в новую комнату
-    // с обслуживанием оставшеихся на той же карте
-    public void reload(String id) {
-        reload(id, Sweeper.on().lastAlone());
-    }
-
     // переводим всех игроков на новые борды
     // при этом если надо перемешиваем их
     public void reloadAll(boolean shuffle) {
@@ -405,7 +399,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         playerGame.setTeamId(teamId);
 
-        reload(id);
+        reload(id, Sweeper.on().lastAlone());
     }
 
     public void changeRoom(String id, String gameName, String newRoom) {
@@ -417,7 +411,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             return;
         }
         playerGame.setRoom(newRoom);
-        reload(id);
+        reload(id, Sweeper.on().lastAlone());
     }
 
     public PlayerGame get(int index) {

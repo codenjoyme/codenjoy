@@ -813,7 +813,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2]}");
 
         // when
-        playerGames.reload("player1");
+        playerGames.reload("player1", Sweeper.on().lastAlone());
 
         // then
         // created new field for player3

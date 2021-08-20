@@ -63,7 +63,7 @@ public class TeamService {
                 if (room.equals(game.getRoom())) {
                     game.setTeamId(team.getTeamId());
                     // TODO #3d4w надо подумать и поменять всех участников комнаты что там остались
-                    playerGames.reload(id);
+                    playerGames.reload(id, Sweeper.on().lastAlone());
                 }
             }
         }
