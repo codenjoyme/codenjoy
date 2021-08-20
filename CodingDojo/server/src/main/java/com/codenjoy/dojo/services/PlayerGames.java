@@ -264,7 +264,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
         for (PlayerGame playerGame : active) {
             Game game = playerGame.getGame();
-            String room = playerGame.getRoom();
+            String id = playerGame.getPlayerId();
 
             GameType gameType = playerGame.getGameType();
             Settings settings = gameType.getSettings();
@@ -276,14 +276,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                     if (type.isLevels() && game.isWin()) {
                         level = LevelProgress.goNext(level);
                         if (level != null) {
-                            reload(game, room, level, Sweeper.on().lastAlone());
+                            reload(id, level, Sweeper.on().lastAlone());
                             playerGame.fireOnLevelChanged();
                             return;
                         }
                     }
 
                     if (type.isDisposable() && game.shouldLeave()) {
-                        reload(game, room, level, Sweeper.on().lastAlone());
+                        reload(id, level, Sweeper.on().lastAlone());
                         return;
                     }
 
@@ -309,16 +309,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public void reload(String id, Sweeper sweeper) {
+        reload(id, null, sweeper);
+    }
+
+    private void reload(String id, JSONObject save, Sweeper sweeper) {
         PlayerGame playerGame = get(id);
         Game game = playerGame.getGame();
         String room = playerGame.getRoom();
-        JSONObject save = game.getSave();
-        reload(game, room, save, sweeper);
-    }
+        if (save == null) {
+            save = game.getSave();
+        }
 
-    private void reload(Game game, String room, JSONObject save, Sweeper sweeper) {
-        PlayerGame playerGame = getPlayerGame(game);
-        playerGame.setRoom(room);
         GameType gameType = playerGame.getGameType();
         MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
@@ -371,13 +372,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public void changeLevel(String id, int level) {
         PlayerGame playerGame = get(id);
-        String room = playerGame.getRoom();
         Game game = playerGame.getGame();
         JSONObject save = game.getSave();
         LevelProgress progress = new LevelProgress(save);
         if (progress.canChange(level)) {
             progress.change(level);
-            reload(game, room, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
+            reload(id, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
             playerGame.fireOnLevelChanged();
         }
     }
@@ -387,9 +387,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             return;
         }
         PlayerGame playerGame = get(id);
-        String room = playerGame.getRoom();
-        Game game = playerGame.getGame();
-        reload(game, room, save, Sweeper.on().lastAlone());
+        reload(id, save, Sweeper.on().lastAlone());
         playerGame.fireOnLevelChanged();
     }
 
