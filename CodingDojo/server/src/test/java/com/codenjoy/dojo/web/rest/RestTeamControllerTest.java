@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,14 +23,10 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.Deals;
-import com.codenjoy.dojo.services.SaveService;
-import com.codenjoy.dojo.services.TeamService;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.json.JSONArray;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import java.util.Arrays;
@@ -59,7 +55,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         asAdmin();
     }
 
-    private void givenPlayers(PTeam... teams) {
+    private void givenPl(PTeam... teams) {
         for (PTeam team : teams) {
             for (String playerId : team.getPlayers()) {
                 register(playerId, ip, room, game);
@@ -68,139 +64,215 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         teamService.distributePlayersByTeam(room, Arrays.asList(teams));
     }
 
-    private void assertTeamPlayers(String expected) {
+    private void asrtTms(String expected) {
         String actual = deals.all().stream()
                 .collect(groupingBy(Deal::getTeamId, TreeMap::new, toSet()))
                 .entrySet().stream()
-                .map(e -> {
-                    Integer teamId = e.getKey();
-                    String players = e.getValue().stream()
+                .map(entry -> {
+                    Integer teamId = entry.getKey();
+                    String players = entry.getValue().stream()
                             .map(Deal::getPlayerId)
                             .sorted()
                             .collect(joining(","));
-                    return String.format("[%d: %s]", teamId, players);
+                    return String.format("[%d: %s]\n", teamId, players);
                 })
                 .collect(joining());
         assertEquals(expected, actual);
     }
 
-    private void get(PTeam... teams) {
+    private void callGet(PTeam... teams) {
         String expected = new JSONArray(Arrays.asList(teams)).toString();
         String actual = new JSONArray(get("/rest/team/room/test")).toString();
         assertEquals(expected, actual);
     }
 
-    private void post(PTeam... teams) {
+    private void callPost(PTeam... teams) {
         post(202, "/rest/team/room/test", toStringSorted(Arrays.asList(teams)));
     }
 
     @Test
     public void get_logout_join_post() {
-        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        givenPl(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+        callGet(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
+
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player3,player4]\n");
 
         players.remove("player3");
-        assertTeamPlayers("[1: player1,player2][2: player4]");
+
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player4]\n");
 
         saves.load("player3");
-        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
-        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player3,player4]\n");
+
+        callPost(new PTeam(3, "player1", "player2"),
+                new PTeam(4, "player3", "player4"));
+
+        asrtTms("[3: player1,player2]\n" +
+                "[4: player3,player4]\n");
     }
 
     @Test
     public void get_logout_post() {
-        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        givenPl(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+        callGet(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
+
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player3,player4]\n");
 
         players.remove("player3");
-        assertTeamPlayers("[1: player1,player2][2: player4]");
 
-        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers("[3: player1,player2][4: player4]");
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player4]\n");
+
+        callPost(new PTeam(3, "player1", "player2"),
+                new PTeam(4, "player3", "player4"));
+
+        asrtTms("[3: player1,player2]\n" +
+                "[4: player4]\n");
     }
 
     @Test
     public void get_post_logout_join() {
-        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        givenPl(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+        callGet(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
 
-        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player3,player4]\n");
+
+        callPost(new PTeam(3, "player1", "player2"),
+                new PTeam(4, "player3", "player4"));
+
+        asrtTms("[3: player1,player2]\n" +
+                "[4: player3,player4]\n");
 
         players.remove("player3");
-        assertTeamPlayers("[3: player1,player2][4: player4]");
+
+        asrtTms("[3: player1,player2]\n" +
+                "[4: player4]\n");
 
         saves.load("player3");
-        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
+
+        asrtTms("[3: player1,player2]\n" +
+                "[4: player3,player4]\n");
     }
 
     @Test
     public void logout_get_post_join() {
-        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        givenPl(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
 
         players.remove("player3");
-        assertTeamPlayers("[1: player1,player2][2: player4]");
 
-        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
-        assertTeamPlayers("[1: player1,player2][2: player4]");
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player4]\n");
 
-        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
-        assertTeamPlayers("[3: player1,player2][4: player4]");
+        callGet(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player4"));
+
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player4]\n");
+
+        callPost(new PTeam(3, "player1", "player2"),
+                new PTeam(4, "player4"));
+
+        asrtTms("[3: player1,player2]\n" +
+                "[4: player4]\n");
 
         saves.load("player3");
-        assertTeamPlayers("[2: player3][3: player1,player2][4: player4]");
+
+        asrtTms("[2: player3]\n" +
+                "[3: player1,player2]\n" +
+                "[4: player4]\n");
     }
 
     @Test
     public void get_join_post() {
-        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        givenPl(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+        callGet(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
+
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player3,player4]\n");
 
         register("player5", ip, room, game);
-        assertTeamPlayers("[0: player5][1: player1,player2][2: player3,player4]");
 
-        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers("[0: player5][3: player1,player2][4: player3,player4]");
+        asrtTms("[0: player5]\n" +
+                "[1: player1,player2]\n" +
+                "[2: player3,player4]\n");
+
+        callPost(new PTeam(3, "player1", "player2"),
+                new PTeam(4, "player3", "player4"));
+
+        asrtTms("[0: player5]\n" +
+                "[3: player1,player2]\n" +
+                "[4: player3,player4]\n");
     }
 
     @Test
     public void get_post_join() {
-        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        givenPl(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
 
-        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
-        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
+        callGet(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
 
-        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
-        assertTeamPlayers("[3: player1,player2][4: player3,player4]");
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player3,player4]\n");
+
+        callPost(new PTeam(3, "player1", "player2"),
+                new PTeam(4, "player3", "player4"));
+
+        asrtTms("[3: player1,player2]\n" +
+                "[4: player3,player4]\n");
 
         register("player5", ip, room, game);
-        assertTeamPlayers("[0: player5][3: player1,player2][4: player3,player4]");
+
+        asrtTms("[0: player5]\n" +
+                "[3: player1,player2]\n" +
+                "[4: player3,player4]\n");
     }
 
     @Test
     public void logout_get_join_post() {
-        givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
+        givenPl(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player3", "player4"));
 
         players.remove("player3");
-        assertTeamPlayers("[1: player1,player2][2: player4]");
 
-        get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
-        assertTeamPlayers("[1: player1,player2][2: player4]");
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player4]\n");
+
+        callGet(new PTeam(1, "player1", "player2"),
+                new PTeam(2, "player4"));
+
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player4]\n");
 
         saves.load("player3");
-        assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
-        post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
-        assertTeamPlayers("[2: player3][3: player1,player2][4: player4]");
+        asrtTms("[1: player1,player2]\n" +
+                "[2: player3,player4]\n");
+
+        callPost(new PTeam(3, "player1", "player2"),
+                new PTeam(4, "player4"));
+
+        asrtTms("[2: player3]\n" +
+                "[3: player1,player2]\n" +
+                "[4: player4]\n");
     }
 }
