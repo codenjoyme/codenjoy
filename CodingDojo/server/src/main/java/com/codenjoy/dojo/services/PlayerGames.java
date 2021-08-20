@@ -95,8 +95,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         List<PlayerGame> alone = removeGame(game, sweeper);
 
         if (sweeper.isResetOther()) {
-            alone.forEach(gp -> play(gp.getGame(), gp.getRoom(),
-                    gp.getGameType(), gp.getGame().getSave()));
+            alone.forEach(pg -> play(pg, pg.getGame().getSave()));
         }
     }
 
@@ -116,7 +115,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return get(pg -> Objects.equals(player, pg.getGame().getPlayer()));
     }
 
-    private void play(Game game, String room, GameType gameType, JSONObject save) {
+    private void play(PlayerGame playerGame, JSONObject save) {
+        Game game = playerGame.getGame();
+        String room = playerGame.getRoom();
+        GameType gameType = playerGame.getGameType();
+
         game.close();
 
         MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
@@ -142,26 +145,26 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public PlayerGame add(Player player, String room, PlayerSave save) {
-        GameType gameType = player.getGameType();
-
-        Single single = buildSingle(player, save, gameType);
+        Single single = buildSingle(player, save);
 
         Game game = new LockedGame(lock).wrap(single);
 
-        play(game, room, gameType, parseSave(save));
-
         PlayerGame playerGame = new PlayerGame(player, game, room);
+        all.add(playerGame);
+
+        play(playerGame, parseSave(save));
+
         if (onAdd != null) {
             onAdd.accept(playerGame);
         }
-        all.add(playerGame);
         return playerGame;
     }
 
-    private Single buildSingle(Player player, PlayerSave save, GameType gameType) {
+    private Single buildSingle(Player player, PlayerSave save) {
         if (save != null && save != PlayerSave.NULL) {
             player.setTeamId(save.getTeamId());
         }
+        GameType gameType = player.getGameType();
         GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
                 player.getTeamId(), player.getId(), gameType.getSettings());
         return new Single(gamePlayer,
@@ -310,17 +313,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private void reload(String id, JSONObject save, Sweeper sweeper) {
         PlayerGame playerGame = get(id);
-        Game game = playerGame.getGame();
-        String room = playerGame.getRoom();
         if (save == null) {
-            save = game.getSave();
+            save = playerGame.getGame().getSave();
         }
-
-        GameType gameType = playerGame.getGameType();
 
         removeInRoom(playerGame, sweeper);
 
-        play(game, room, gameType, save);
+        play(playerGame, save);
     }
 
     // переводим всех игроков на новые борды
