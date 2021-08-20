@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.google.common.collect.Multimap;
 import lombok.experimental.FieldNameConstants;
@@ -126,6 +125,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         int roomSize = type.loadProgress(game, save);
         LevelProgress progress = game.getProgress();
         int level = progress.getCurrent();
+
         GameField field = spreader.fieldFor(game.getPlayer(),
                 room,
                 type,
@@ -263,9 +263,7 @@ public class Deals implements Iterable<Deal>, Tickable {
             Game game = deal.getGame();
             String id = deal.getPlayerId();
 
-            GameType gameType = deal.getGameType();
-            Settings settings = gameType.getSettings();
-            MultiplayerType type = gameType.getMultiplayerType(settings);
+            MultiplayerType type = deal.getType();
             if (game.isGameOver()) {
                 quiet(() -> {
 
