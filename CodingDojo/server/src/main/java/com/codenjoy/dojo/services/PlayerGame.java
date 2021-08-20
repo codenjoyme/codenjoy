@@ -45,7 +45,6 @@ public class PlayerGame implements Tickable {
     
     private Player player;
     private Game game;
-    private String room;
     private LazyJoystick joystick;
 
     public PlayerGame(Player player, Game game, String room) {
@@ -72,7 +71,7 @@ public class PlayerGame implements Tickable {
         if (this == NullPlayerGame.INSTANCE && (o != NullPlayer.INSTANCE && o != NullPlayerGame.INSTANCE)) return false;
 
         if (o instanceof String) {
-            return o.equals(room);
+            return o.equals(player.getRoom());
         }
         
         if (o instanceof Player) {
@@ -120,7 +119,7 @@ public class PlayerGame implements Tickable {
     public String toString() {
         return String.format("PlayerGame[player=%s, room=%s, game=%s]",
                 player,
-                room,
+                player.getRoom(),
                 game.getClass().getSimpleName());
     }
 
@@ -132,37 +131,9 @@ public class PlayerGame implements Tickable {
     public GameType getGameType() {
         return player.getGameType();
     }
-    
-    public void setRoom(String room) {
-        this.room = room;
-        getPlayer();
-    }
-
-    /*
-     * Так случилось, что room/teamId содержатся в двух местах,
-     * а потому надо держать в консистентности данные.
-     */
-    public Player getPlayer() {
-        if (player != null && player != NullPlayer.INSTANCE) {
-            player.setRoom(room);
-            // TODO почему-то тут лочилось при работе с админки или мне показалось?
-            GamePlayer gamePlayer = LockedGame.unwrap(game).getPlayer();
-            if (gamePlayer != null) { // TODO это только в тестах встречается, доразбираться!
-                player.setTeamId(gamePlayer.getTeamId());
-            }
-        }
-        return player;
-    }
 
     public String getPlayerId() {
         return getPlayer().getId();
-    }
-
-    public int getPlayerTeamId() {
-        return Optional.ofNullable(getGame())
-                .map(Game::getPlayer)
-                .map(GamePlayer::getTeamId)
-                .orElse(DEFAULT_TEAM_ID);
     }
 
     public String popLastCommand() {
@@ -181,8 +152,27 @@ public class PlayerGame implements Tickable {
         player.getEventListener().levelChanged(game.getProgress());
     }
 
+    public String getRoom() {
+        return Optional.ofNullable(player)
+                .map(Player::getRoom)
+                .orElse(null);
+    }
+
+    public void setRoom(String room) {
+        if (player != null) {
+            player.setRoom(room);
+        }
+    }
+
+    public int getTeamId() {
+        return Optional.ofNullable(getPlayer())
+                .map(Player::getTeamId)
+                .orElse(DEFAULT_TEAM_ID);
+    }
+
     public void setTeamId(int teamId) {
-        game.getPlayer().setTeamId(teamId);
-        getPlayer();
+        if (player != null) {
+            player.setTeamId(teamId);
+        }
     }
 }

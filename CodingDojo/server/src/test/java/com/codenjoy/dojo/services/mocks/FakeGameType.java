@@ -201,8 +201,8 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     };
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, Settings settings) {
-        return Mockito.spy(new Player(listener, settings));
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, Settings settings) {
+        return Mockito.spy(new Player(listener, settings)).inTeam(teamId);
     }
 
     @Override

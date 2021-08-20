@@ -830,7 +830,7 @@ public class SaveServiceImplTest {
         int teamId = 3;
         Player player = createPlayer("player");
         PlayerGame playerGame = playerGames.get(player.getId());
-        when(playerGame.getPlayerTeamId()).thenReturn(teamId);
+        when(playerGame.getTeamId()).thenReturn(teamId);
 
         // when
         saveService.save(player.getId());

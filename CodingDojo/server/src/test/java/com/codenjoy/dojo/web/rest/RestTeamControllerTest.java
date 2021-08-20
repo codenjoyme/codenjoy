@@ -77,7 +77,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
 
     private void assertTeamPlayers(String expected) {
         String actual = playerGames.all().stream()
-                .collect(groupingBy(PlayerGame::getPlayerTeamId, TreeMap::new, toSet()))
+                .collect(groupingBy(PlayerGame::getTeamId, TreeMap::new, toSet()))
                 .entrySet().stream()
                 .map(e -> {
                     Integer teamId = e.getKey();

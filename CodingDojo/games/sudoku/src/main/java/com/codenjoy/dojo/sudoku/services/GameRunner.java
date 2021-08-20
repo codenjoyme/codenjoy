@@ -99,7 +99,7 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener, settings);
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
+        return new Player(listener, settings).inTeam(teamId);
     }
 }

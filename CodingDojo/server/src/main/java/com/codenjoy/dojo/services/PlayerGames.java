@@ -177,12 +177,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private Single buildSingle(Player player, PlayerSave save, GameType gameType) {
-        GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
-                player.getId(), gameType.getSettings());
         if (save != null && save != PlayerSave.NULL) {
-            gamePlayer.setTeamId(save.getTeamId());
+            player.setTeamId(save.getTeamId());
         }
-
+        GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
+                player.getTeamId(), player.getId(), gameType.getSettings());
         return new Single(gamePlayer,
                 gameType.getPrinterFactory(),
                 gameType.getMultiplayerType(gameType.getSettings()));
@@ -247,7 +246,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public static Predicate<PlayerGame> withRoom(String room) {
-        return pg -> pg.getRoom().equals(room);
+        return pg -> pg.getRoom() != null && pg.getRoom().equals(room);
     }
 
     public static Predicate<PlayerGame> exclude(List<String> ids) {
@@ -358,6 +357,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         reload(game, room, save, true);
     }
 
+    // перевод текущего игрока в новую комнату
+    // с обслуживанием последнего оставшегося на той же карте
+    public void reload(PlayerGame playerGame) {
+        Game game = playerGame.getGame();
+        String room = playerGame.getRoom();
+        reload(game, room, game.getSave(), true);
+    }
+
     // переводим всех игроков на новые борды
     // при этом если надо перемешиваем их
     public void reloadAll(boolean shuffle) {
@@ -430,15 +437,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         playerGame.fireOnLevelChanged();
     }
 
+    // TODO #3d4w убери меня
     public void setTeam(String playerId, int teamId) {
         PlayerGame playerGame = get(playerId);
 
         playerGame.setTeamId(teamId);
 
-        JSONObject save = playerGame.getGame().getSave();
-        String room = playerGame.getRoom();
-        Game game = playerGame.getGame();
-        reload(game, room, save);
+        reload(playerGame);
     }
 
     public void changeRoom(String playerId, String gameName, String newRoom) {
@@ -449,9 +454,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         if (!playerGame.getPlayer().getGame().equals(gameName)) {
             return;
         }
-        JSONObject save = playerGame.getGame().getSave();
-        Game game = playerGame.getGame();
-        reload(game, newRoom, save);
+        playerGame.setRoom(newRoom);
+        reload(playerGame);
     }
 
     public PlayerGame get(int index) {

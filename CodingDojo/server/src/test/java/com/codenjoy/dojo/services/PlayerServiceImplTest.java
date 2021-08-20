@@ -253,15 +253,17 @@ public class PlayerServiceImplTest {
             return field;
         });
 
-        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
+        when(gameType.createPlayer(any(EventListener.class), anyInt(), anyString(), any()))
                 .thenAnswer(inv -> {
-                    String id = inv.getArgument(1);
+                    int teamId = inv.getArgument(1);
+
+                    String id = inv.getArgument(2);
                     ids.add(id);
 
                     Joystick joystick = mock(Joystick.class);
                     joysticks.add(joystick);
 
-                    GamePlayer gamePlayer = TestUtils.newPlayer(DEFAULT_TEAM_ID, mock(SettingsReader.class));
+                    GamePlayer gamePlayer = TestUtils.newPlayer(teamId, mock(SettingsReader.class));
                     gamePlayers.add(gamePlayer);
 
                     when(gamePlayer.getJoystick()).thenReturn(joystick);
@@ -573,8 +575,8 @@ public class PlayerServiceImplTest {
         when(playerScores(0).getScore()).thenReturn(123);
         when(playerScores(1).getScore()).thenReturn(234);
 
-        when(gamePlayers.get(0).getTeamId()).thenReturn(1);
-        when(gamePlayers.get(1).getTeamId()).thenReturn(2);
+        players.get(0).setTeamId(1);
+        players.get(1).setTeamId(2);
 
         // when
         playerService.tick();

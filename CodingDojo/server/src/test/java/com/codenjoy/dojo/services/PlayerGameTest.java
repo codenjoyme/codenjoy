@@ -59,10 +59,8 @@ public class PlayerGameTest {
     }
 
     private void setupGamePlayer() {
-        Game mockGame = mock(Game.class);
-        game = new LockedGame(new ReentrantReadWriteLock()).wrap(mockGame);
-        GamePlayer gamePlayer = TestUtils.newPlayer(DEFAULT_TEAM_ID, mock(SettingsReader.class));
-        when(mockGame.getPlayer()).thenReturn(gamePlayer);
+        game = mock(Game.class);
+        when(game.getPlayer()).thenReturn(mock(GamePlayer.class));
     }
 
     @Test
@@ -244,14 +242,14 @@ public class PlayerGameTest {
     @Test
     public void testSetPlayerId_alsoUpdatePlayer() {
         // given
-        assertEquals(DEFAULT_TEAM_ID, playerGame.getPlayerTeamId());
+        assertEquals(DEFAULT_TEAM_ID, playerGame.getTeamId());
         assertEquals(DEFAULT_TEAM_ID, playerGame.getPlayer().getTeamId());
 
         // when
         playerGame.setTeamId(12);
 
         // then
-        assertEquals(12, playerGame.getPlayerTeamId());
+        assertEquals(12, playerGame.getTeamId());
         assertEquals(12, playerGame.getPlayer().getTeamId());
     }
 
@@ -280,15 +278,15 @@ public class PlayerGameTest {
 
     @Test
     public void testGetPlayerTeamId() {
-        GamePlayer gamePlayer = mock(GamePlayer.class);
-        when(game.getPlayer()).thenReturn(gamePlayer);
-        when(gamePlayer.getTeamId()).thenReturn(1);
+        assertEquals(DEFAULT_TEAM_ID, playerGame.getTeamId());
 
-        assertEquals(1, playerGame.getPlayerTeamId());
+        player.setTeamId(12);
+
+        assertEquals(12, playerGame.getTeamId());
     }
 
     @Test
     public void testGetPlayerTeamId_defaultTeamId() {
-        assertEquals(DEFAULT_TEAM_ID, playerGame.getPlayerTeamId());
+        assertEquals(DEFAULT_TEAM_ID, playerGame.getTeamId());
     }
 }

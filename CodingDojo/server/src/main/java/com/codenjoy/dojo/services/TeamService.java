@@ -46,7 +46,7 @@ public class TeamService {
         return playerGames.all().stream()
                 .filter(pg -> pg.getRoom().equals(room))
                 .collect(Collectors.groupingBy(
-                        PlayerGame::getPlayerTeamId,
+                        PlayerGame::getTeamId,
                         mapping(PlayerGame::getPlayerId, toList())))
                 .entrySet().stream()
                 .map(PTeam::new)
@@ -55,13 +55,15 @@ public class TeamService {
 
     public void distributePlayersByTeam(String room, List<PTeam> teams) {
         for (PTeam team : teams) {
-            for (String playerId : team.getPlayers()) {
-                PlayerGame game = playerGames.get(playerId);
+            for (String id : team.getPlayers()) {
+                PlayerGame game = playerGames.get(id);
                 if (game == NullPlayerGame.INSTANCE) {
-                    log.warn("playerId {} has not been found", playerId);
+                    log.warn("Player with id '{}' has not been found", id);
                 }
                 if (room.equals(game.getRoom())) {
                     game.setTeamId(team.getTeamId());
+                    // TODO #3d4w надо подумать и поменять всех участников комнаты что там остались
+                    playerGames.reload(game);
                 }
             }
         }

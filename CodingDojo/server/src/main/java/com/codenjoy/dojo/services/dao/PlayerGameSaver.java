@@ -92,7 +92,7 @@ public class PlayerGameSaver implements GameSaver {
 
         public Save(PlayerGame playerGame, String time) {
             player = playerGame.getPlayer();
-            teamId = playerGame.getPlayerTeamId();
+            teamId = playerGame.getTeamId();
             this.time = time;
 
             // осторожно! внутри есть блокировка, потому делаем это в конструкторе

@@ -93,7 +93,7 @@ public class PlayerGamesMultiplayerTest {
         when(result.name()).thenReturn(game);
         when(result.getPrinterFactory()).thenReturn(printerFactory);
         when(result.createGame(anyInt(), any())).thenAnswer(inv -> createGameField());
-        when(result.createPlayer(any(EventListener.class), anyString(), any())).thenAnswer(inv -> createGamePlayer());
+        when(result.createPlayer(any(EventListener.class), anyInt(), anyString(), any())).thenAnswer(inv -> createGamePlayer());
         return result;
     }
 

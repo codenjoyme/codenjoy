@@ -113,7 +113,7 @@ public class SpreaderTest {
         List<GamePlayer> players = new ArrayList<>();
         for (int i = 0; i < playersCount; i++) {
             GamePlayer player = new GamePlayer(event -> {}, settings) {};
-            player.setTeamId(teamIterator.next());
+            player.inTeam(teamIterator.next());
             players.add(player);
         }
         return players;

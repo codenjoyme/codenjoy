@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.*;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -2102,7 +2101,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertEquals(1, playerGames.all().size());
-        assertEquals(teamId, playerGames.all().iterator().next().getPlayerTeamId());
+        assertEquals(teamId, playerGames.all().iterator().next().getTeamId());
     }
 
     @Test
@@ -2115,7 +2114,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertEquals(1, playerGames.all().size());
-        assertEquals(DEFAULT_TEAM_ID, playerGames.all().iterator().next().getPlayerTeamId());
+        assertEquals(DEFAULT_TEAM_ID, playerGames.all().iterator().next().getTeamId());
     }
 
     @Test
@@ -2128,6 +2127,6 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertEquals(1, playerGames.all().size());
-        assertEquals(DEFAULT_TEAM_ID, playerGames.all().iterator().next().getPlayerTeamId());
+        assertEquals(DEFAULT_TEAM_ID, playerGames.all().iterator().next().getTeamId());
     }
 }

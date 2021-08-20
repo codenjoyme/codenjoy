@@ -52,8 +52,8 @@ public class TestUtils {
     }
 
     public static GamePlayer newPlayer(int teamId, SettingsReader settings) {
-        GamePlayer player = spy(new GamePlayer(event -> {}, settings) {});
-        player.setTeamId(teamId);
+        // TODO #3d4w чаще всего тут достаточно было мока
+        GamePlayer player = spy(new GamePlayer(event -> {}, settings) {}.inTeam(teamId));
         return player;
     }
 
@@ -89,7 +89,7 @@ public class TestUtils {
         when(gameType.getPrinterFactory()).thenReturn(printerFactory);
         when(printerFactory.getPrinter(any(BoardReader.class), any()))
                 .thenAnswer(inv1 -> printer);
-        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
+        when(gameType.createPlayer(any(EventListener.class), anyInt(), anyString(), any()))
                 .thenAnswer(inv -> gamePlayer);
 
         PlayerGame playerGame = playerGames.add(player, room, save);

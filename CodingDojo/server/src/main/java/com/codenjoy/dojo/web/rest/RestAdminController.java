@@ -213,9 +213,7 @@ public class RestAdminController {
         validator.checkNotEmpty("score", score);
         validator.checkPlayerInRoom(id, room);
 
-        Player player = playerService.get(id);
-        player.setRoom(null);
-        player.setData(null);
+        Player player = new Player(id);
         player.setScore(score);
         playerService.update(player);
     }

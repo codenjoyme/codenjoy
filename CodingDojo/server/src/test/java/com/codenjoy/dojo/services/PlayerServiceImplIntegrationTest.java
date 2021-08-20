@@ -347,7 +347,7 @@ public class PlayerServiceImplIntegrationTest {
             when(field.reader()).thenAnswer(inv2 -> mock(BoardReader.class));
             return field;
         });
-        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
+        when(gameType.createPlayer(any(EventListener.class), anyInt(), anyString(), any()))
                 .thenAnswer(inv -> mock(GamePlayer.class));
         when(gameType.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
         when(gameType.getAI()).thenReturn(AISolverStub.class);

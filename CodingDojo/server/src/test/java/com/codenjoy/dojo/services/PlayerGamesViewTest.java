@@ -806,7 +806,7 @@ public class PlayerGamesViewTest {
         when(result.name()).thenReturn(game);
         when(result.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
         when(result.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
-        when(result.createPlayer(any(EventListener.class), anyString(), any()))
+        when(result.createPlayer(any(EventListener.class), anyInt(), anyString(), any()))
                 .thenAnswer(inv -> gamePlayers.get(gamePlayers.size() - 1));
         when(result.createGame(anyInt(), any())).thenAnswer(fieldSupplier);
         gameTypes.add(result);

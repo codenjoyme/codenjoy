@@ -89,7 +89,7 @@ public class SaveServiceImpl implements SaveService {
 
     private void saveGame(PlayerGame playerGame, long time) {
         Player player = playerGame.getPlayer();
-        int teamId = playerGame.getPlayerTeamId();
+        int teamId = playerGame.getTeamId();
         String save = playerGame.getGame().getSave().toString();
         saver.saveGame(player, teamId, save, time);
     }

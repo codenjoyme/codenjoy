@@ -44,6 +44,7 @@ import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.whatsnext.WhatsNextService;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.fest.reflect.core.Reflection;
@@ -93,6 +94,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected SimpleProfiler profiler;
     @Autowired protected TimeService time;
     @Autowired protected WhatsNextService whatsNext;
+    @Autowired protected TeamService team;
 
     @Value("${game.ai}")
     protected boolean isAiNeeded;
@@ -314,6 +316,7 @@ public class PlayerServiceImpl implements PlayerService {
                     gameType, playerScores, listener);
             player.setEventListener(listener);
             player.setLastResponse(time.now());
+            player.setRoom(room);
 
             player.setGameType(gameType);
             PlayerGame playerGame = playerGames.add(player, room, save);
@@ -583,9 +586,11 @@ public class PlayerServiceImpl implements PlayerService {
             }
         }
 
-        boolean updateTeam = playerGame.getPlayerTeamId() != input.getTeamId();
+        boolean updateTeam = playerGame.getTeamId() != input.getTeamId();
         if (updateTeam) {
-            playerGames.setTeam(updated.getId(), input.getTeamId());
+            // TODO #3d4w этот метод используется для апдейта так же всех юзеров, и тогда получается, что я обновляю их по очереди каждого независимо
+            team.distributePlayersByTeam(playerGame.getRoom(),
+                    Arrays.asList(new PTeam(input.getTeamId(), playerGame.getPlayerId())));
         }
     }
 
