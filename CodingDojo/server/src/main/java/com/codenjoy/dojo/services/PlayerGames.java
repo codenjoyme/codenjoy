@@ -197,10 +197,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private List<PlayerGame> removeGame(Game game, Predicate<List<GamePlayer>> shouldLeave) {
-        if (!spreader.contains(game.getPlayer())) {
-            return Arrays.asList();
-        }
-
         List<GamePlayer> alone = spreader.remove(game.getPlayer(), shouldLeave);
 
         return alone.stream()
