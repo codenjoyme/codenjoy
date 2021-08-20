@@ -214,7 +214,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public void clear() {
-        players().forEach(this::remove);
+        players().forEach(player -> remove(player, Sweeper.off()));
     }
 
     public List<PlayerGame> getAll(Predicate<PlayerGame> predicate) {
