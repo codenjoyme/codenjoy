@@ -212,9 +212,9 @@ public class Deals implements Iterable<Deal>, Tickable {
         players().forEach(player -> remove(player.getId(), Sweeper.off()));
     }
 
-    public List<Deal> getAll(Predicate<Deal> predicate) {
+    public List<Deal> getAll(Predicate<Deal> filter) {
         return all.stream()
-                .filter(predicate)
+                .filter(filter)
                 .collect(toList());
     }
 
@@ -320,8 +320,8 @@ public class Deals implements Iterable<Deal>, Tickable {
         reloadAll(shuffle, withAll());
     }
 
-    public void reloadAll(boolean shuffle, Predicate<Deal> predicate) {
-        List<Deal> games = getAll(predicate);
+    public void reloadAll(boolean shuffle, Predicate<Deal> filter) {
+        List<Deal> games = getAll(filter);
 
         if (shuffle) {
             Collections.shuffle(games);
