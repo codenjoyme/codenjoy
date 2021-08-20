@@ -101,7 +101,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         GameType gameType = game.getGameType();
         MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
-        removeInRoom(game.getGame(), isAlone(type), resetOther && type.shouldReloadAlone());
+        removeInRoom(game.getGame(), isAlone(type), resetOther);
 
         game.remove(onRemove);
         game.getGame().on(null);
@@ -336,13 +336,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         reload(game, room, game.getSave(), !RELOAD_ALONE);
     }
 
-    private void reload(Game game, String room, JSONObject save, boolean reloadAlone) {
+    private void reload(Game game, String room, JSONObject save, boolean resetOther) {
         PlayerGame playerGame = getPlayerGame(game);
         playerGame.setRoom(room);
         GameType gameType = playerGame.getGameType();
         MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
-        removeInRoom(game, isAlone(type), reloadAlone && type.shouldReloadAlone());
+        removeInRoom(game, isAlone(type), resetOther);
 
         play(game, room, gameType, save);
     }
