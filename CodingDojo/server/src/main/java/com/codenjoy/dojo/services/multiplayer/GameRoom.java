@@ -22,6 +22,8 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Sweeper;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -153,12 +155,12 @@ public class GameRoom {
      * @return Все игроки этой комнаты, которых так же надо пристроить в новой room,
      * т.к. им тут оставаться нет смысла
      */
-    public List<GamePlayer> remove(GamePlayer player, Predicate<List<GamePlayer>> shouldLeave) {
+    public List<GamePlayer> remove(GamePlayer player, Sweeper sweeper) {
         List<GamePlayer> removed = new LinkedList<>();
 
         players.remove(player);
 
-        if (shouldLeave.test(players)) {
+        if (sweeper.getApplicants().test(players)) {
             GamePlayer last = players.iterator().next();
             if (!last.wantToStay()) {
                 removed.add(last);

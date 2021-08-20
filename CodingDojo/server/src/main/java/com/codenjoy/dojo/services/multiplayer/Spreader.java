@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Sweeper;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
@@ -72,11 +73,11 @@ public class Spreader {
      * @return Все игроки, что так же покинут эту борду в случае если им
      * оставаться на борде не имеет смысла
      */
-    public List<GamePlayer> remove(GamePlayer player, Predicate<List<GamePlayer>> shouldLeave) {
+    public List<GamePlayer> remove(GamePlayer player, Sweeper sweeper) {
         List<GameRoom> rooms = roomsFor(player);
 
         List<GamePlayer> removed = rooms.stream()
-                .flatMap(room -> room.remove(player, shouldLeave).stream())
+                .flatMap(room -> room.remove(player, sweeper).stream())
                 .collect(toList());
 
         rooms.forEach(this::removeIfEmpty);

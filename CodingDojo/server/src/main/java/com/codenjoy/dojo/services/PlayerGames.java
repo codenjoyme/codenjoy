@@ -100,7 +100,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private void removeInRoom(Game game, Sweeper sweeper) {
-        List<PlayerGame> alone = removeGame(game, sweeper.getApplicants());
+        List<PlayerGame> alone = removeGame(game, sweeper);
 
         if (sweeper.isResetOther()) {
             alone.forEach(gp -> play(gp.getGame(), gp.getRoom(),
@@ -184,8 +184,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return new JSONObject(save.getSave());
     }
 
-    private List<PlayerGame> removeGame(Game game, Predicate<List<GamePlayer>> shouldLeave) {
-        List<GamePlayer> alone = spreader.remove(game.getPlayer(), shouldLeave);
+    private List<PlayerGame> removeGame(Game game, Sweeper sweeper) {
+        List<GamePlayer> alone = spreader.remove(game.getPlayer(), sweeper);
 
         return alone.stream()
                 .map(this::get)
@@ -360,7 +360,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             Collections.shuffle(games);
         }
 
-        games.forEach(pg -> spreader.remove(pg.getGame().getPlayer(), players -> !RELOAD_ALONE));
+        games.forEach(pg -> spreader.remove(pg.getGame().getPlayer(), Sweeper.off()));
         games.forEach(pg -> reloadCurrent(pg));
     }
 
