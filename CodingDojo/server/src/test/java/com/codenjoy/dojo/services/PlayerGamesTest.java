@@ -813,7 +813,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2]}");
 
         // when
-        playerGames.reload(playerGames.get(0));
+        playerGames.reload("player1");
 
         // then
         // created new field for player3
