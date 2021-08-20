@@ -386,9 +386,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         if (save == null) {
             return;
         }
-        PlayerGame playerGame = get(id);
         reload(id, save, Sweeper.on().lastAlone());
-        playerGame.fireOnLevelChanged();
+        get(id).fireOnLevelChanged();
     }
 
     // TODO #3d4w убери меня
