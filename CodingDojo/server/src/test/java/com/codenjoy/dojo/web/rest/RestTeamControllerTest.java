@@ -45,13 +45,6 @@ import static org.junit.Assert.assertEquals;
 @Import(RestTeamControllerTest.ContextConfiguration.class)
 public class RestTeamControllerTest extends AbstractRestControllerTest {
 
-    @Autowired
-    private TeamService teamService;
-    @Autowired
-    private Deals deals;
-    @Autowired
-    private SaveService saveService;
-
     private static String ip = "ip";
     private static String game = "first";
     private static String room = "test";
@@ -59,8 +52,8 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     @Before
     public void setUp() {
         super.setUp();
-        playerService.removeAll();
-        roomService.removeAll();
+        players.removeAll();
+        rooms.removeAll();
         registration.removeAll();
 
         asAdmin();
@@ -108,10 +101,10 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
         assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
-        playerService.remove("player3");
+        players.remove("player3");
         assertTeamPlayers("[1: player1,player2][2: player4]");
 
-        saveService.load("player3");
+        saves.load("player3");
         assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
@@ -125,7 +118,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
         assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
-        playerService.remove("player3");
+        players.remove("player3");
         assertTeamPlayers("[1: player1,player2][2: player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
@@ -142,10 +135,10 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player3", "player4"));
         assertTeamPlayers("[3: player1,player2][4: player3,player4]");
 
-        playerService.remove("player3");
+        players.remove("player3");
         assertTeamPlayers("[3: player1,player2][4: player4]");
 
-        saveService.load("player3");
+        saves.load("player3");
         assertTeamPlayers("[3: player1,player2][4: player3,player4]");
     }
 
@@ -153,7 +146,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     public void logout_get_post_join() {
         givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        playerService.remove("player3");
+        players.remove("player3");
         assertTeamPlayers("[1: player1,player2][2: player4]");
 
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
@@ -162,7 +155,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));
         assertTeamPlayers("[3: player1,player2][4: player4]");
 
-        saveService.load("player3");
+        saves.load("player3");
         assertTeamPlayers("[2: player3][3: player1,player2][4: player4]");
     }
 
@@ -198,13 +191,13 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     public void logout_get_join_post() {
         givenPlayers(new PTeam(1, "player1", "player2"), new PTeam(2, "player3", "player4"));
 
-        playerService.remove("player3");
+        players.remove("player3");
         assertTeamPlayers("[1: player1,player2][2: player4]");
 
         get(new PTeam(1, "player1", "player2"), new PTeam(2, "player4"));
         assertTeamPlayers("[1: player1,player2][2: player4]");
 
-        saveService.load("player3");
+        saves.load("player3");
         assertTeamPlayers("[1: player1,player2][2: player3,player4]");
 
         post(new PTeam(3, "player1", "player2"), new PTeam(4, "player4"));

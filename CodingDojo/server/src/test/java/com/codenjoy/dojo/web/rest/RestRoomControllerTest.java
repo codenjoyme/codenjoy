@@ -40,9 +40,9 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     public void setUp() {
         super.setUp();
 
-        playerService.removeAll();
+        players.removeAll();
         registration.removeAll();
-        roomService.removeAll();
+        rooms.removeAll();
     }
 
     // проверяем что для залогиненого пользователя все методы сервиса отрабатывают
@@ -84,7 +84,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
         assertEquals("true", get("/rest/room/validRoom/player/validPlayer/joined"));
 
         // when
-        roomService.setOpened("validRoom", false);
+        rooms.setOpened("validRoom", false);
         assertEquals("true", get("/rest/room/validRoom/leave"));
 
         // then
@@ -100,7 +100,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
         assertEquals("false", get("/rest/room/validRoom/player/validPlayer/joined"));
 
         // when
-        roomService.setOpened("validRoom", true);
+        rooms.setOpened("validRoom", true);
 
         // then
         // могу зайти
@@ -123,7 +123,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
         assertEquals("true", get("/rest/room/validRoom/player/validPlayer/joined"));
 
         // when
-        roomService.setOpened("validRoom", false);
+        rooms.setOpened("validRoom", false);
         assertEquals("true", get("/rest/room/validRoom/leave"));
 
         // then

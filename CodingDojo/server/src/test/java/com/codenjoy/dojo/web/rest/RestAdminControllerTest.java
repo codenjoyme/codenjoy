@@ -22,10 +22,11 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.GameServiceImpl;
+import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.mocks.FirstSemifinalGameType;
 import com.codenjoy.dojo.services.mocks.SecondSemifinalGameType;
-import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -56,21 +57,11 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                     return Arrays.asList(FirstSemifinalGameType.class, SecondSemifinalGameType.class);
                 }
             };
-
         }
     }
 
     @Autowired
     private RestAdminController service;
-
-    @Autowired
-    private DealsView dealsView;
-
-    @Autowired
-    private SaveService saveService;
-
-    @Autowired
-    private RoomService roomService;
 
     @Before
     public void setUp() {
@@ -80,9 +71,9 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         asAdmin();
 
-        playerService.removeAll();
-        saveService.removeAllSaves();
-        roomService.removeAll(); // тут чистятся все сеттинги
+        players.removeAll();
+        saves.removeAllSaves();
+        rooms.removeAll(); // тут чистятся все сеттинги
     }
 
     @Test
@@ -192,7 +183,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(true, service.isRoomRegistrationOpened("name"));
         assertEquals("true", get("/rest/admin/room/name/registration/open"));
 
-        assertEquals(true, playerService.isRegistrationOpened("name"));
+        assertEquals(true, players.isRegistrationOpened("name"));
 
         // when
         service.setRoomRegistrationOpened("name", false);
@@ -201,7 +192,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(false, service.isRoomRegistrationOpened("name"));
         assertEquals("false", get("/rest/admin/room/name/registration/open"));
 
-        assertEquals(false, playerService.isRegistrationOpened("name"));
+        assertEquals(false, players.isRegistrationOpened("name"));
 
         // when
         register("player2", "ip2", "name", "first"); // not created
@@ -216,7 +207,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(true, service.isRoomRegistrationOpened("name"));
         assertEquals("true", get("/rest/admin/room/name/registration/open"));
 
-        assertEquals(true, playerService.isRegistrationOpened("name"));
+        assertEquals(true, players.isRegistrationOpened("name"));
 
         // when
         register("player2", "ip2", "name", "first");
@@ -242,8 +233,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(true, service.isRoomRegistrationOpened("name1"));
         assertEquals("true", get("/rest/admin/room/name2/registration/open"));
 
-        assertEquals(true, playerService.isRegistrationOpened("name1"));
-        assertEquals(true, playerService.isRegistrationOpened("name2"));
+        assertEquals(true, players.isRegistrationOpened("name1"));
+        assertEquals(true, players.isRegistrationOpened("name2"));
 
         // when
         service.setRoomRegistrationOpened("name1", false);
@@ -252,8 +243,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(false, service.isRoomRegistrationOpened("name1"));
         assertEquals("true", get("/rest/admin/room/name2/registration/open"));
 
-        assertEquals(false, playerService.isRegistrationOpened("name1"));
-        assertEquals(true, playerService.isRegistrationOpened("name2"));
+        assertEquals(false, players.isRegistrationOpened("name1"));
+        assertEquals(true, players.isRegistrationOpened("name2"));
 
         // when
         register("player4", "ip4", "name1", "first"); // not created
@@ -270,8 +261,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(true, service.isRoomRegistrationOpened("name1"));
         assertEquals("true", get("/rest/admin/room/name2/registration/open"));
 
-        assertEquals(true, playerService.isRegistrationOpened("name1"));
-        assertEquals(true, playerService.isRegistrationOpened("name2"));
+        assertEquals(true, players.isRegistrationOpened("name1"));
+        assertEquals(true, players.isRegistrationOpened("name2"));
 
         // when
         register("player6", "ip6", "name1", "first");
