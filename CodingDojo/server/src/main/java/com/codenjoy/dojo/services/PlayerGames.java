@@ -43,7 +43,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
-import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -277,14 +276,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                     if (type.isLevels() && game.isWin()) {
                         level = LevelProgress.goNext(level);
                         if (level != null) {
-                            reload(game, room, level);
+                            reload(game, room, level, Sweeper.on().lastAlone());
                             playerGame.fireOnLevelChanged();
                             return;
                         }
                     }
 
                     if (type.isDisposable() && game.shouldLeave()) {
-                        reload(game, room, level);
+                        reload(game, room, level, Sweeper.on().lastAlone());
                         return;
                     }
 
@@ -326,10 +325,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         removeInRoom(game, sweeper.of(type));
 
         play(game, room, gameType, save);
-    }
-
-    private void reload(Game game, String room, JSONObject save) {
-        reload(game, room, save, Sweeper.on().lastAlone());
     }
 
     // перевод текущего игрока в новую комнату
@@ -390,7 +385,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         LevelProgress progress = new LevelProgress(save);
         if (progress.canChange(level)) {
             progress.change(level);
-            reload(game, room, progress.saveTo(new JSONObject()));
+            reload(game, room, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
             playerGame.fireOnLevelChanged();
         }
     }
@@ -402,7 +397,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         PlayerGame playerGame = get(playerId);
         String room = playerGame.getRoom();
         Game game = playerGame.getGame();
-        reload(game, room, save);
+        reload(game, room, save, Sweeper.on().lastAlone());
         playerGame.fireOnLevelChanged();
     }
 
