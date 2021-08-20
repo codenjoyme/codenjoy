@@ -724,11 +724,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.remove(player2);
 
         // then
-        // created new field for player3   // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
-        assertRooms("{1=[player3]}");
-        assertEquals(2, fields.size());
-
-        verify(fields.get(1), times(ONCE)).newGame(gamePlayers.get(2));
+        // still same field for player3, because MULTIPLE is !REMOVE_ALONE
+        assertRooms("{0=[player3]}");
+        assertEquals(1, fields.size());
     }
 
     @Test
@@ -1386,11 +1384,37 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.changeRoom("player3", "game", "otherRoom");
 
         // then
-        assertRooms("{1=[player1, player3], " +
-                "2=[player2]}"); // второй покинул alone комнату и зашел в новую
+        assertRooms("{0=[player2], " +   // второй остался в cвоей MULTIPLE потому что она !RELOAD_ALONE
+                "1=[player1, player3]}");
 
         assertRoomsNames("{otherRoom=[[player1, player3]], " +
                 "room=[[player2]]}");
+    }
+
+    @Test
+    public void testChangeRoom_removeMultipleRoomAfterLastPlayer() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+
+        assertRooms("{0=[player1]}");
+
+        // when
+        // поки даем текущую комнату room
+        playerGames.changeRoom("player1", "game", "otherRoom");
+
+        // then
+        assertRooms("{1=[player1]}");
+        assertRoomsNames("{otherRoom=[[player1]]}");
+
+        // when
+        // вернулись назад в room
+        playerGames.changeRoom("player1", "game", "room");
+
+        // then
+        assertRooms("{2=[player1]}"); // но комната обновилась
+        assertRoomsNames("{room=[[player1]]}");
+
     }
 
     @Test
@@ -1440,12 +1464,12 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.changeRoom("player1", "game", "otherRoom");
 
         // then
-        //  второй игрок при этом остается один в комнате и потому сперва покидает ее заходя на новую
+        // второй игрок остается в своей старой MULTIPLE комнате, потому что она !REMOVE_ALONE
         // а тот, кто самовольно перешел так же размещается в своей новой комнате
-        assertRooms("{1=[player2], 2=[player1]}");
+        assertRooms("{0=[player2], 1=[player1]}");
 
-        assertSave("player1", "{\"fiedData\":3}");
-        assertSave("player2", "{\"fiedData\":2}");
+        assertSave("player1", "{\"fiedData\":2}");
+        assertSave("player2", "{\"fiedData\":1}");
     }
 
     @Test

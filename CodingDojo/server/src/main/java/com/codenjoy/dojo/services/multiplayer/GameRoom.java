@@ -158,7 +158,7 @@ public class GameRoom {
 
         players.remove(player);
 
-        if (shouldLeave.test(players)) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
+        if (shouldLeave.test(players)) {
             GamePlayer last = players.iterator().next();
             if (!last.wantToStay()) {
                 removed.add(last);
