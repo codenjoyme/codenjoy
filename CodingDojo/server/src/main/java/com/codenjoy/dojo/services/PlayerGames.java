@@ -311,10 +311,15 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // перевод текущего игрока в новую комнату
     // без обслуживания оставшихся на той же карте
     public void reloadCurrent(String id) {
+        reload(id, Sweeper.off());
+    }
+
+    private void reload(String id, Sweeper sweeper) {
         PlayerGame playerGame = get(id);
         Game game = playerGame.getGame();
         String room = playerGame.getRoom();
-        reload(game, room, game.getSave(), Sweeper.off());
+        JSONObject save = game.getSave();
+        reload(game, room, save, sweeper);
     }
 
     private void reload(Game game, String room, JSONObject save, Sweeper sweeper) {
@@ -331,10 +336,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // перевод текущего игрока в новую комнату
     // с обслуживанием оставшеихся на той же карте
     public void reload(String id) {
-        PlayerGame playerGame = get(id);
-        Game game = playerGame.getGame();
-        String room = playerGame.getRoom();
-        reload(game, room, game.getSave(), Sweeper.on().lastAlone());
+        reload(id, Sweeper.on().lastAlone());
     }
 
     // переводим всех игроков на новые борды
