@@ -44,7 +44,7 @@ import static org.mockito.Mockito.*;
 public class TestUtils {
 
     public static class Env {
-        public PlayerGame playerGame;
+        public Deal deal;
         public Joystick joystick;
         public GamePlayer gamePlayer;
         public GameType gameType;
@@ -57,13 +57,13 @@ public class TestUtils {
         return player;
     }
 
-    public static Env getPlayerGame(PlayerGames playerGames,
-                                    Player player,
-                                    String room,
-                                    Answer<Object> getGame,
-                                    MultiplayerType type, 
-                                    PlayerSave save, 
-                                    Printer printer) 
+    public static Env getDeal(Deals deals,
+                              Player player,
+                              String room,
+                              Answer<Object> getGame,
+                              MultiplayerType type,
+                              PlayerSave save,
+                              Printer printer)
     {
         Joystick joystick = mock(Joystick.class);
         GamePlayer gamePlayer = newPlayer(DEFAULT_TEAM_ID, mock(SettingsReader.class));
@@ -92,12 +92,12 @@ public class TestUtils {
         when(gameType.createPlayer(any(EventListener.class), anyInt(), anyString(), any()))
                 .thenAnswer(inv -> gamePlayer);
 
-        PlayerGame playerGame = playerGames.add(player, room, save);
+        Deal deal = deals.add(player, room, save);
         Env result = new Env();
         result.gamePlayer = gamePlayer;
         result.gameType = gameType;
         result.joystick = joystick;
-        result.playerGame = playerGame;
+        result.deal = deal;
         result.printerFactory = printerFactory;
         return result;
     }

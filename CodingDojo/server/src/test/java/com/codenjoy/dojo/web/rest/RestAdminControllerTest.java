@@ -64,7 +64,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     private RestAdminController service;
 
     @Autowired
-    private PlayerGamesView playerGamesView;
+    private DealsView dealsView;
 
     @Autowired
     private SaveService saveService;
@@ -120,8 +120,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
     public void assertPlayersInActiveRooms(String expected) {
         assertEquals(expected,
-                playerGames.active().stream()
-                    .map(pg -> pg.getPlayer().getId() + "->" + pg.getRoom())
+                deals.active().stream()
+                    .map(deal -> deal.getPlayer().getId() + "->" + deal.getRoom())
                     .collect(toList())
                     .toString());
     }
@@ -334,7 +334,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     }
 
     private void assertScores(String expected) {
-        assertEquals(expected, playerGamesView.getScores().toString());
+        assertEquals(expected, dealsView.getScores().toString());
     }
 
     @Test
@@ -371,21 +371,21 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldReloadAllPlayersInRoom() {
         // given
-        PlayerGame playerGame1 = register("player1", "ip1", "room1", "first");
-        PlayerGame playerGame2 = register("player2", "ip2", "room1", "first");
+        Deal deal1 = register("player1", "ip1", "room1", "first");
+        Deal deal2 = register("player2", "ip2", "room1", "first");
 
-        PlayerGame playerGame3 = register("player3", "ip3", "room2", "first");
+        Deal deal3 = register("player3", "ip3", "room2", "first");
 
-        PlayerGame playerGame4 = register("player4", "ip4", "room3", "second");
+        Deal deal4 = register("player4", "ip4", "room3", "second");
 
         // when
         assertEquals("", get("/rest/admin/room/room1/player/reload"));
 
         // then
-        verifyNewGame(playerGame1, atLeastOnce());
-        verifyNewGame(playerGame2, atLeastOnce());
-        verifyNewGame(playerGame3, never());
-        verifyNewGame(playerGame4, never());
+        verifyNewGame(deal1, atLeastOnce());
+        verifyNewGame(deal2, atLeastOnce());
+        verifyNewGame(deal3, never());
+        verifyNewGame(deal4, never());
     }
 
     @Test
@@ -437,7 +437,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     }
 
     private void assertRooms(String expected) {
-        assertEquals(expected, playerGamesView.getGroupsByRooms().toString());
+        assertEquals(expected, dealsView.getGroupsByRooms().toString());
     }
 
     @Test
@@ -474,8 +474,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                 "/rest/admin/room/otherRoom/gameOver/validPlayer");
     }
 
-    private void verifyNewGame(PlayerGame playerGame, VerificationMode mode) {
-        verify(playerGame.getField(), mode).newGame(playerGame.getGame().getPlayer());
+    private void verifyNewGame(Deal deal, VerificationMode mode) {
+        verify(deal.getField(), mode).newGame(deal.getGame().getPlayer());
     }
 
     @Test

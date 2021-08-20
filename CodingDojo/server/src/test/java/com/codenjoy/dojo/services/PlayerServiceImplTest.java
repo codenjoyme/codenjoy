@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.controller.PlayerController;
 import com.codenjoy.dojo.services.controller.ScreenController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.dao.PlayerGameSaver;
+import com.codenjoy.dojo.services.dao.DealSaver;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
@@ -147,13 +147,13 @@ public class PlayerServiceImplTest {
     private TimeService timeService;
 
     @SpyBean
-    private PlayerGames playerGames;
+    private Deals deals;
 
     @MockBean
     protected RoomService roomService;
 
     @SpyBean
-    private PlayerGamesView playerGamesView;
+    private DealsView dealsView;
 
     @Autowired
     private PlayerServiceImpl playerService;
@@ -176,8 +176,8 @@ public class PlayerServiceImplTest {
 
     @Before
     public void setUp() {
-        Mockito.reset(actionLogger, autoSaver, gameService, playerController, playerGames);
-        playerGames.clear();
+        Mockito.reset(actionLogger, autoSaver, gameService, playerController, deals);
+        deals.clear();
 
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
         playerCaptor = ArgumentCaptor.forClass(Player.class);
@@ -216,7 +216,7 @@ public class PlayerServiceImplTest {
             return "readable_" + id;
         }).when(registration).getNameById(anyString());
 
-        playerGames.clear();
+        deals.clear();
         Mockito.reset(playerController, screenController, actionLogger);
         playerService.openRegistration();
 
@@ -681,7 +681,7 @@ public class PlayerServiceImplTest {
         //then
         assertEquals(NullPlayer.INSTANCE, playerService.get(VASYA));
         assertCreated(playerService.get(PETYA));
-        assertEquals(1, playerGames.size());
+        assertEquals(1, deals.size());
     }
 
     @Test
@@ -762,7 +762,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldCreatePlayerFromSavedPlayerGame_whenPlayerNotRegisterYet() {
+    public void shouldCreatePlayerFromSavedDeal_whenPlayerNotRegisterYet() {
         // given
         PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 100, null);
 
@@ -781,7 +781,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldUpdatePlayerFromSavedPlayerGame_whenPlayerAlreadyRegistered_whenOtherGameType() {
+    public void shouldUpdatePlayerFromSavedDeal_whenPlayerAlreadyRegistered_whenOtherGameType() {
         // given
         Player registered = createPlayer(VASYA, "game", "room");
         assertEquals(VASYA_URL, registered.getCallbackUrl());
@@ -803,7 +803,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldNotUpdatePlayerFromSavedPlayerGame_whenPlayerAlreadyRegistered_whenSameGameType() {
+    public void shouldNotUpdatePlayerFromSavedDeal_whenPlayerAlreadyRegistered_whenSameGameType() {
         // given
         Player registeredPlayer = createPlayer(VASYA, "game", "room");
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
@@ -1087,16 +1087,16 @@ public class PlayerServiceImplTest {
     }
 
     private void setNewGames(Game... games) {
-        List<PlayerGame> list = getPlayerGames();
+        List<Deal> list = getDeals();
         for (int index = 0; index < list.size(); index++) {
-            PlayerGame playerGame = list.get(index);
+            Deal deal = list.get(index);
 
-            field("game").ofType(Game.class).in(playerGame).set(games[index]);
+            field("game").ofType(Game.class).in(deal).set(games[index]);
         }
     }
 
-    private List<PlayerGame> getPlayerGames() {
-        return field(PlayerGames.Fields.all).ofType(List.class).in(playerGames).get();
+    private List<Deal> getDeals() {
+        return field(Deals.Fields.all).ofType(List.class).in(deals).get();
     }
 
     @Test
@@ -1149,7 +1149,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldContinueTicks_whenExceptionInPlayerGameTick() {
+    public void shouldContinueTicks_whenExceptionInDealTick() {
         // given
         createPlayer(VASYA);
 
@@ -1158,9 +1158,9 @@ public class PlayerServiceImplTest {
 
         setup(game1);
 
-        List list = Reflection.field(PlayerGames.Fields.all).ofType(List.class).in(playerGames).get();
-        PlayerGame playerGame = (PlayerGame)list.remove(0);
-        PlayerGame spy = spy(playerGame);
+        List list = Reflection.field(Deals.Fields.all).ofType(List.class).in(deals).get();
+        Deal deal = (Deal)list.remove(0);
+        Deal spy = spy(deal);
         list.add(spy);
 
         doThrow(new RuntimeException()).when(spy).tick();
@@ -1502,8 +1502,8 @@ public class PlayerServiceImplTest {
         verify(gameField(VASYA), once()).clearScore();
         verify(gameField(PETYA), once()).clearScore();
 
-        verify(playerGames.get(VASYA).getGame().getProgress(), once()).reset();
-        verify(playerGames.get(PETYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(VASYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(PETYA).getGame().getProgress(), once()).reset();
 
         verify(semifinal, once()).clean();
     }
@@ -1540,9 +1540,9 @@ public class PlayerServiceImplTest {
         verify(gameField(PETYA), once()).clearScore();
         verify(gameField(OLIA), once()).clearScore();
 
-        verify(playerGames.get(VASYA).getGame().getProgress(), once()).reset();
-        verify(playerGames.get(PETYA).getGame().getProgress(), once()).reset();
-        verify(playerGames.get(OLIA).getGame().getProgress(), once()).reset();
+        verify(deals.get(VASYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(PETYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(OLIA).getGame().getProgress(), once()).reset();
 
         verify(semifinal, once()).clean();
 
@@ -1579,13 +1579,13 @@ public class PlayerServiceImplTest {
         assertEquals("[{'data':'value1'}, {'data':'value2'}, {'data':'value3'}]", saves.toString());
 
         // another way to clear saved scores for rest active players without save
-        ArgumentCaptor<List<PlayerGame>> playerGames = ArgumentCaptor.forClass(List.class);
-        verify(saver, times(1)).saveGames(playerGames.capture(), eq(time));
-        if (!playerGames.getAllValues().isEmpty()) {
+        ArgumentCaptor<List<Deal>> deals = ArgumentCaptor.forClass(List.class);
+        verify(saver, times(1)).saveGames(deals.capture(), eq(time));
+        if (!deals.getAllValues().isEmpty()) {
             assertEquals("[Save[time:100, id:vasya, teamId:0, url:http://vasya:1234, " +
                             "game:game, room:room, score:0, save:{\"save\":\"field1\"}]]",
-                    playerGames.getValue().stream()
-                            .map(pg -> new PlayerGameSaver.Save(pg, String.valueOf(time)))
+                    deals.getValue().stream()
+                            .map(deal -> new DealSaver.Save(deal, String.valueOf(time)))
                             .collect(toList())
                             .toString());
 
@@ -1608,8 +1608,8 @@ public class PlayerServiceImplTest {
         verify(gameField(VASYA), once()).clearScore();
         verify(gameField(PETYA), never()).clearScore();
 
-        verify(playerGames.get(VASYA).getGame().getProgress(), once()).reset();
-        verify(playerGames.get(PETYA).getGame().getProgress(), never()).reset();
+        verify(deals.get(VASYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(PETYA).getGame().getProgress(), never()).reset();
 
         verify(semifinal, never()).clean();
     }
@@ -1641,8 +1641,8 @@ public class PlayerServiceImplTest {
         verify(gameField(VASYA), once()).clearScore();
         verify(gameField(PETYA), never()).clearScore();
 
-        verify(playerGames.get(VASYA).getGame().getProgress(), once()).reset();
-        verify(playerGames.get(PETYA).getGame().getProgress(), never()).reset();
+        verify(deals.get(VASYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(PETYA).getGame().getProgress(), never()).reset();
 
         verify(semifinal, never()).clean();
 
@@ -1665,12 +1665,12 @@ public class PlayerServiceImplTest {
         assertEquals("[{'data':'value1'}]", saves.toString());
 
         // another way to clear saved scores for rest active players without save
-        ArgumentCaptor<List<PlayerGame>> playerGames = ArgumentCaptor.forClass(List.class);
-        verify(saver, times(0)).saveGames(playerGames.capture(), eq(time));
-        if (!playerGames.getAllValues().isEmpty()) {
+        ArgumentCaptor<List<Deal>> deals = ArgumentCaptor.forClass(List.class);
+        verify(saver, times(0)).saveGames(deals.capture(), eq(time));
+        if (!deals.getAllValues().isEmpty()) {
             assertEquals("[]",
-                    playerGames.getValue().stream()
-                            .map(pg -> new PlayerGameSaver.Save(pg, String.valueOf(time)))
+                    deals.getValue().stream()
+                            .map(deal -> new DealSaver.Save(deal, String.valueOf(time)))
                             .collect(toList())
                             .toString());
         }
@@ -1698,10 +1698,10 @@ public class PlayerServiceImplTest {
         verify(gameField(KATYA), never()).clearScore();
         verify(gameField(OLIA), never()).clearScore();
 
-        verify(playerGames.get(VASYA).getGame().getProgress(), once()).reset();
-        verify(playerGames.get(PETYA).getGame().getProgress(), once()).reset();
-        verify(playerGames.get(KATYA).getGame().getProgress(), never()).reset();
-        verify(playerGames.get(OLIA).getGame().getProgress(), never()).reset();
+        verify(deals.get(VASYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(PETYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(KATYA).getGame().getProgress(), never()).reset();
+        verify(deals.get(OLIA).getGame().getProgress(), never()).reset();
 
         verify(semifinal, once()).clean("room1");
     }
@@ -1742,10 +1742,10 @@ public class PlayerServiceImplTest {
         verify(gameField(KATYA), never()).clearScore();
         verify(gameField(OLIA), never()).clearScore();
 
-        verify(playerGames.get(VASYA).getGame().getProgress(), once()).reset();
-        verify(playerGames.get(PETYA).getGame().getProgress(), once()).reset();
-        verify(playerGames.get(KATYA).getGame().getProgress(), never()).reset();
-        verify(playerGames.get(OLIA).getGame().getProgress(), never()).reset();
+        verify(deals.get(VASYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(PETYA).getGame().getProgress(), once()).reset();
+        verify(deals.get(KATYA).getGame().getProgress(), never()).reset();
+        verify(deals.get(OLIA).getGame().getProgress(), never()).reset();
 
         verify(semifinal, once()).clean("room1");
 
@@ -1768,13 +1768,13 @@ public class PlayerServiceImplTest {
         assertEquals("[{'data':'value1'}]", saves.toString());
 
         // another way to clear saved scores for rest active players without save
-        ArgumentCaptor<List<PlayerGame>> playerGames = ArgumentCaptor.forClass(List.class);
-        verify(saver, times(1)).saveGames(playerGames.capture(), eq(time));
-        if (!playerGames.getAllValues().isEmpty()) {
+        ArgumentCaptor<List<Deal>> deals = ArgumentCaptor.forClass(List.class);
+        verify(saver, times(1)).saveGames(deals.capture(), eq(time));
+        if (!deals.getAllValues().isEmpty()) {
             assertEquals("[Save[time:100, id:vasya, teamId:0, url:http://vasya:1234, " +
                             "game:game1, room:room1, score:0, save:{\"save\":\"field1\"}]]",
-                    playerGames.getValue().stream()
-                            .map(pg -> new PlayerGameSaver.Save(pg, String.valueOf(time)))
+                    deals.getValue().stream()
+                            .map(deal -> new DealSaver.Save(deal, String.valueOf(time)))
                             .collect(toList())
                             .toString());
         }
@@ -2231,7 +2231,7 @@ public class PlayerServiceImplTest {
 
     private void assertSaveLoaded(Player player, String save) {
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
-        verify(playerGames).setLevel(eq(player.getId()), captor.capture());
+        verify(deals).setLevel(eq(player.getId()), captor.capture());
         assertEquals(save, captor.getAllValues().toString());
     }
 
@@ -2292,7 +2292,7 @@ public class PlayerServiceImplTest {
     }
 
     private void assertSaveNotLoaded(Player player) {
-        verify(playerGames, never()).setLevel(eq(player.getId()), any(JSONObject.class));
+        verify(deals, never()).setLevel(eq(player.getId()), any(JSONObject.class));
     }
 
     @Test
@@ -2304,7 +2304,7 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         // then
-        verify(actionLogger).log(playerGames);
+        verify(actionLogger).log(deals);
 //        verifyNoMoreInteractions(actionLogger);
     }
 
@@ -2350,9 +2350,9 @@ public class PlayerServiceImplTest {
         verify(gameType("room"), times(2)).getAI();
         verify(gameType("room"), times(2)).getBoard();
 
-        PlayerGame playerGame = playerGames.get(VASYA);
-        assertEquals(game, playerGame.getPlayer().getGame());
-        Player player = playerGame.getPlayer();
+        Deal deal = deals.get(VASYA);
+        assertEquals(game, deal.getPlayer().getGame());
+        Player player = deal.getPlayer();
         assertEquals(VASYA, player.getId());
         assertNotNull(VASYA, player.getAi());
     }
@@ -2374,9 +2374,9 @@ public class PlayerServiceImplTest {
         verify(gameType("room")).getAI();
         verify(gameType("room")).getBoard();
 
-        PlayerGame playerGame = playerGames.get(VASYA_AI);
-        assertEquals("game", playerGame.getPlayer().getGame());
-        Player player = playerGame.getPlayer();
+        Deal deal = deals.get(VASYA_AI);
+        assertEquals("game", deal.getPlayer().getGame());
+        Player player = deal.getPlayer();
         assertEquals(VASYA_AI, player.getId());
         assertNotNull(VASYA, player.getAi());
     }
@@ -2410,7 +2410,7 @@ public class PlayerServiceImplTest {
         verify(playerService).register(captor.capture());
 
         // then
-        assertEquals(1, playerGames.all().size());
+        assertEquals(1, deals.all().size());
         assertEquals(teamId, captor.getValue().getTeamId());
     }
 
@@ -2428,7 +2428,7 @@ public class PlayerServiceImplTest {
         verify(playerService).register(captor.capture());
 
         // then
-        assertEquals(1, playerGames.all().size());
+        assertEquals(1, deals.all().size());
         assertEquals(DEFAULT_TEAM_ID, captor.getValue().getTeamId());
     }
 
@@ -2445,7 +2445,7 @@ public class PlayerServiceImplTest {
         verify(playerService).register(captor.capture());
 
         // then
-        assertEquals(1, playerGames.all().size());
+        assertEquals(1, deals.all().size());
         assertEquals(DEFAULT_TEAM_ID, captor.getValue().getTeamId());
     }
 }

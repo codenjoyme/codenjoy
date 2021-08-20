@@ -22,8 +22,8 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerGame;
-import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.Deals;
 import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.TeamService;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
@@ -48,7 +48,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     @Autowired
     private TeamService teamService;
     @Autowired
-    private PlayerGames playerGames;
+    private Deals deals;
     @Autowired
     private SaveService saveService;
 
@@ -76,13 +76,13 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     }
 
     private void assertTeamPlayers(String expected) {
-        String actual = playerGames.all().stream()
-                .collect(groupingBy(PlayerGame::getTeamId, TreeMap::new, toSet()))
+        String actual = deals.all().stream()
+                .collect(groupingBy(Deal::getTeamId, TreeMap::new, toSet()))
                 .entrySet().stream()
                 .map(e -> {
                     Integer teamId = e.getKey();
                     String players = e.getValue().stream()
-                            .map(PlayerGame::getPlayerId)
+                            .map(Deal::getPlayerId)
                             .sorted()
                             .collect(joining(","));
                     return String.format("[%d: %s]", teamId, players);

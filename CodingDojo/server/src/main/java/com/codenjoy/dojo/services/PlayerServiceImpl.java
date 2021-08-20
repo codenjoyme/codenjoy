@@ -35,7 +35,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
@@ -59,8 +59,8 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
-import static com.codenjoy.dojo.services.PlayerGames.exclude;
-import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+import static com.codenjoy.dojo.services.Deals.exclude;
+import static com.codenjoy.dojo.services.Deals.withRoom;
 import static java.util.stream.Collectors.*;
 
 @Component("playerService")
@@ -70,8 +70,8 @@ public class PlayerServiceImpl implements PlayerService {
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<>();
 
-    @Autowired protected PlayerGames playerGames;
-    @Autowired private PlayerGamesView playerGamesView;
+    @Autowired protected Deals deals;
+    @Autowired private DealsView dealsView;
 
     @Autowired
     @Qualifier("playerController")
@@ -101,15 +101,15 @@ public class PlayerServiceImpl implements PlayerService {
 
     @PostConstruct
     public void init() {
-        playerGames.init(lock);
-        playerGames.onAdd(playerGame -> {
-            Player player = playerGame.getPlayer();
-            Joystick joystick = playerGame.getJoystick();
+        deals.init(lock);
+        deals.onAdd(deal -> {
+            Player player = deal.getPlayer();
+            Joystick joystick = deal.getJoystick();
             playerController.registerPlayerTransport(player, joystick);
             screenController.registerPlayerTransport(player, null);
         });
-        playerGames.onRemove(playerGame -> {
-            Player player = playerGame.getPlayer();
+        deals.onRemove(deal -> {
+            Player player = deal.getPlayer();
             playerController.unregisterPlayerTransport(player);
             screenController.unregisterPlayerTransport(player);
         });
@@ -149,8 +149,8 @@ public class PlayerServiceImpl implements PlayerService {
     public void reloadAI(String id) {
         lock.writeLock().lock();
         try {
-            PlayerGame playerGame = playerGames.get(id);
-            registerAI(id, playerGame.getGameType().name(), playerGame.getRoom()); // TODO ROOM test me
+            Deal deal = deals.get(id);
+            registerAI(id, deal.getGameType().name(), deal.getRoom()); // TODO ROOM test me
         } finally {
             lock.writeLock().unlock();
         }
@@ -188,9 +188,9 @@ public class PlayerServiceImpl implements PlayerService {
 
         // если в эту игру ai еще не играет
         String aiId = game + WebSocketRunner.BOT_ID_SUFFIX;
-        PlayerGame playerGame = playerGames.get(aiId);
+        Deal deal = deals.get(aiId);
 
-        if (playerGame instanceof NullPlayerGame) {
+        if (deal instanceof NullDeal) {
             registerAI(aiId, game, room);
         }
     }
@@ -301,13 +301,13 @@ public class PlayerServiceImpl implements PlayerService {
 
         GameType gameType = gameService.getGameType(game, room);
         Player player = getPlayer(name);
-        PlayerGame oldPlayerGame = playerGames.get(name);
+        Deal oldDeal = deals.get(name);
 
         boolean newPlayer = (player instanceof NullPlayer) 
                 || !game.equals(player.getGame())
-                || !room.equals(oldPlayerGame.getRoom()); // TODO ROOM test me
+                || !room.equals(oldDeal.getRoom()); // TODO ROOM test me
         if (newPlayer) {
-            playerGames.remove(player.getId(), Sweeper.on().lastAlone());
+            deals.remove(player.getId(), Sweeper.on().lastAlone());
 
             PlayerScores playerScores = gameType.getPlayerScores(save.getScore(), gameType.getSettings());
             InformationCollector listener = new InformationCollector(playerScores);
@@ -319,14 +319,14 @@ public class PlayerServiceImpl implements PlayerService {
             player.setRoom(room);
 
             player.setGameType(gameType);
-            PlayerGame playerGame = playerGames.add(player, room, save);
+            Deal deal = deals.add(player, room, save);
 
-            player = playerGame.getPlayer();
+            player = deal.getPlayer();
 
             // TODO N+1 проблема во время загрузки приложения
             player.setReadableName(registration.getNameById(player.getId()));
 
-            log.debug("Player {} starting new game {}", name, playerGame.getGame());
+            log.debug("Player {} starting new game {}", name, deal.getGame());
         } else {
           // do nothing
         }
@@ -339,10 +339,10 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             profiler.start("PSI.tick()");
 
-            actionLogger.log(playerGames);
+            actionLogger.log(deals);
             autoSaver.tick();
 
-            playerGames.tick();
+            deals.tick();
             sendScreenUpdates();
             requestControls();
 
@@ -361,8 +361,8 @@ public class PlayerServiceImpl implements PlayerService {
     private void requestControls() {
         int requested = 0;
 
-        for (PlayerGame playerGame : playerGames.active()) {
-            Player player = playerGame.getPlayer();
+        for (Deal deal : deals.active()) {
+            Player player = deal.getPlayer();
             try {
                 String board = cacheBoards.get(player);
                 // TODO в конце концов если if (pair == null || pair.noSockets()) то ничего не отправляется, и зря гоняли но вроде как из кеша берем, так что проблем быть не должно
@@ -386,15 +386,15 @@ public class PlayerServiceImpl implements PlayerService {
         Map<ScreenRecipient, ScreenData> map = new HashMap<>();
         cacheBoards.clear();
 
-        Map<String, GameData> gameDataMap = playerGamesView.getGamesDataMap();
+        Map<String, GameData> gameDataMap = dealsView.getGamesDataMap();
         Map<String, Integer> lastChatIds = chat.getLastMessageIds();
-        for (PlayerGame playerGame : playerGames) {
-            Game game = playerGame.getGame();
-            Player player = playerGame.getPlayer();
+        for (Deal deal : deals) {
+            Game game = deal.getGame();
+            Player player = deal.getPlayer();
             try {
                 Integer lastChatMessage = lastChatIds.get(player.getRoom());
 
-                String gameType = playerGame.getGameType().name();
+                String gameType = deal.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
@@ -452,7 +452,7 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getAll() {
         lock.readLock().lock();
         try {
-            return Collections.unmodifiableList(playerGames.players());
+            return Collections.unmodifiableList(deals.players());
         } finally {
             lock.readLock().unlock();
         }
@@ -462,7 +462,7 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getAll(String game) {
         lock.readLock().lock();
         try {
-            return playerGames.getPlayersByGame(game);
+            return deals.getPlayersByGame(game);
         } finally {
             lock.readLock().unlock();
         }
@@ -472,7 +472,7 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getAllInRoom(String room) {
         lock.readLock().lock();
         try {
-            return playerGames.getPlayersByRoom(room);
+            return deals.getPlayersByRoom(room);
         } finally {
             lock.readLock().unlock();
         }
@@ -487,7 +487,7 @@ public class PlayerServiceImpl implements PlayerService {
             log.debug("Unregistered user {} from game {}",
                     player.getId(), player.getGame());
 
-            playerGames.remove(player.getId(), Sweeper.on().lastAlone());
+            deals.remove(player.getId(), Sweeper.on().lastAlone());
         } finally {
             lock.writeLock().unlock();
         }
@@ -509,12 +509,12 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    private PlayerGame found(Player player) {
-        PlayerGame playerGame = playerGames.get(player.getId());
-        if (playerGame == NullPlayerGame.INSTANCE) {
+    private Deal found(Player player) {
+        Deal deal = deals.get(player.getId());
+        if (deal == NullDeal.INSTANCE) {
             throw new IllegalArgumentException("Player not found by id: " + player.getId());
         }
-        return playerGame;
+        return deal;
     }
 
     @Override
@@ -527,8 +527,8 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    private void updatePlayer(PlayerGame playerGame, Player input) {
-        Player updated = playerGame.getPlayer();
+    private void updatePlayer(Deal deal, Player input) {
+        Player updated = deal.getPlayer();
 
         boolean updateCallbackUrl = StringUtils.isNotEmpty(input.getCallbackUrl());
         if (updateCallbackUrl) {
@@ -547,7 +547,7 @@ public class PlayerServiceImpl implements PlayerService {
             registration.updateEmail(input.getId(), input.getEmail());
         }
 
-        boolean updateId = !playerGame.getPlayer().getId().equals(input.getId());
+        boolean updateId = !deal.getPlayer().getId().equals(input.getId());
         if (updateId) {
             updated.setId(input.getId());
             registration.updateId(input.getReadableName(), input.getId());
@@ -563,7 +563,7 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         boolean updateRoomName = input.getRoom() != null
-                && !playerGame.getRoom().equals(input.getRoom());
+                && !deal.getRoom().equals(input.getRoom());
         if (updateRoomName) {
             String id = input.getId();
             String callbackUrl = updated.getCallbackUrl();
@@ -573,24 +573,24 @@ public class PlayerServiceImpl implements PlayerService {
             changeRoom(id, game, newGame, newRoom, callbackUrl);
         }
         
-        Game game = playerGame.getGame();
+        Game game = deal.getGame();
         boolean saveExists = game != null && (game.getSave() != null || updateRoomName);
         if (saveExists) {
             String oldSave = game.getSave().toString();
             String newSave = input.getData();
             boolean updateSave = !PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave);
             if (updateSave) {
-                playerGames.setLevel(
+                deals.setLevel(
                         input.getId(),
                         new JSONObject(newSave));
             }
         }
 
-        boolean updateTeam = playerGame.getTeamId() != input.getTeamId();
+        boolean updateTeam = deal.getTeamId() != input.getTeamId();
         if (updateTeam) {
             // TODO #3d4w этот метод используется для апдейта так же всех юзеров, и тогда получается, что я обновляю их по очереди каждого независимо
-            team.distributePlayersByTeam(playerGame.getRoom(),
-                    Arrays.asList(new PTeam(input.getTeamId(), playerGame.getPlayerId())));
+            team.distributePlayersByTeam(deal.getRoom(),
+                    Arrays.asList(new PTeam(input.getTeamId(), deal.getPlayerId())));
         }
     }
 
@@ -604,7 +604,7 @@ public class PlayerServiceImpl implements PlayerService {
         if (changeRoom) {
             // меняем комнату
             gameService.getGameType(game, newRoom);     // тут создастся новая комната
-            playerGames.changeRoom(id, game, newRoom);
+            deals.changeRoom(id, game, newRoom);
         } else {
             // меняем игру
             remove(id);
@@ -616,8 +616,8 @@ public class PlayerServiceImpl implements PlayerService {
     public void loadSaveForAll(String room, String newSave) {
         lock.writeLock().lock();
         try {
-            List<Player> players = playerGames.getPlayersByRoom(room);
-            players.forEach(player -> playerGames.setLevel(
+            List<Player> players = deals.getPlayersByRoom(room);
+            players.forEach(player -> deals.setLevel(
                     player.getId(),
                     new JSONObject(newSave)));
         } finally {
@@ -646,14 +646,14 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private Player getPlayer(String id) {
-        return playerGames.get(id).getPlayer();
+        return deals.get(id).getPlayer();
     }
 
     @Override
     public void removeAll() {
         lock.writeLock().lock();
         try {
-            playerGames.clear();
+            deals.clear();
         } finally {
             lock.writeLock().unlock();
         }
@@ -663,11 +663,11 @@ public class PlayerServiceImpl implements PlayerService {
     public void removeAll(String room) {
         lock.writeLock().lock();
         try {
-            playerGames.getAll(withRoom(room))
+            deals.getAll(withRoom(room))
                     .stream()
-                    .map(pg -> pg.getPlayer())
+                    .map(deal -> deal.getPlayer())
             // TODO тут раньше сносились все комнаты напрямую, но spreader не трогали, и тесты не тестируют это
-                    .forEach(player -> playerGames.remove(player.getId(), Sweeper.off()));
+                    .forEach(player -> deals.remove(player.getId(), Sweeper.off()));
         } finally {
             lock.writeLock().unlock();
         }
@@ -677,7 +677,7 @@ public class PlayerServiceImpl implements PlayerService {
     public Joystick getJoystick(String id) {
         lock.writeLock().lock();
         try {
-            return playerGames.get(id).getGame().getJoystick();
+            return deals.get(id).getGame().getJoystick();
         } finally {
             lock.writeLock().unlock();
         }
@@ -710,8 +710,8 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             semifinal.clean();
 
-            List<PlayerGame> active = playerGames.all();
-            active.forEach(PlayerGame::clearScore);
+            List<Deal> active = deals.all();
+            active.forEach(Deal::clearScore);
 
             List<String> saved = saver.getSavedList();
             clearAllSavedScores(active, saved);
@@ -726,8 +726,8 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             semifinal.clean(room);
 
-            List<PlayerGame> active = playerGames.getAll(withRoom(room));
-            active.forEach(PlayerGame::clearScore);
+            List<Deal> active = deals.getAll(withRoom(room));
+            active.forEach(Deal::clearScore);
 
             List<String> saved = saver.getSavedList(room);
             clearAllSavedScores(active, saved);
@@ -736,11 +736,11 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    public void clearAllSavedScores(List<PlayerGame> active, List<String> saved) {
+    public void clearAllSavedScores(List<Deal> active, List<String> saved) {
         long now = time.now();
         saved.forEach(id -> cleanSavedScore(now, id));
 
-        List<PlayerGame> notSaved = active.stream()
+        List<Deal> notSaved = active.stream()
                 .filter(exclude(saved))
                 .collect(toList());
         saver.saveGames(notSaved, now);
@@ -759,7 +759,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void cleanScores(String id) {
         lock.writeLock().lock();
         try {
-            playerGames.get(id).clearScore();
+            deals.get(id).clearScore();
             cleanSavedScore(time.now(), id);
         } finally {
             lock.writeLock().unlock();
@@ -770,7 +770,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void reloadAllRooms() {
         lock.writeLock().lock();
         try {
-            playerGames.reloadAll(true);
+            deals.reloadAll(true);
         } finally {
             lock.writeLock().unlock();
         }
@@ -780,7 +780,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void reloadAllRooms(String room) {
         lock.writeLock().lock();
         try {
-            playerGames.reloadAll(true, withRoom(room));
+            deals.reloadAll(true, withRoom(room));
         } finally {
             lock.writeLock().unlock();
         }
@@ -790,13 +790,13 @@ public class PlayerServiceImpl implements PlayerService {
     public Player getRandomInRoom(String room) {
         lock.readLock().lock();
         try {
-            if (playerGames.isEmpty()) return NullPlayer.INSTANCE;
+            if (deals.isEmpty()) return NullPlayer.INSTANCE;
 
             if (room == null) {
-                return playerGames.iterator().next().getPlayer();
+                return deals.iterator().next().getPlayer();
             }
 
-            Iterator<Player> iterator = playerGames.getPlayersByRoom(room).iterator();
+            Iterator<Player> iterator = deals.getPlayersByRoom(room).iterator();
             if (!iterator.hasNext()) return NullPlayer.INSTANCE;
             return iterator.next();
         } finally {
@@ -808,9 +808,9 @@ public class PlayerServiceImpl implements PlayerService {
     public String getAnyRoomWithPlayers() {
         lock.readLock().lock();
         try {
-            if (playerGames.isEmpty()) return null;
+            if (deals.isEmpty()) return null;
 
-            return playerGames.iterator().next().getRoom();
+            return deals.iterator().next().getRoom();
         } finally {
             lock.readLock().unlock();
         }
@@ -820,7 +820,7 @@ public class PlayerServiceImpl implements PlayerService {
     public Map<String, Integer> getRoomCounts() {
         lock.readLock().lock();
         try {
-            List<Player> players = playerGames.players();
+            List<Player> players = deals.players();
             return roomService.rooms().stream()
                     .map(room -> new HashMap.SimpleEntry<>(room, count(players, room)))
                     .collect(toMap(entry -> entry.getKey(),

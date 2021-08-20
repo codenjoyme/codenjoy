@@ -49,7 +49,7 @@ public class SaveServiceImplTest {
     private Registration registration;
     private SaveServiceImpl saveService;
     private PlayerService playerService;
-    private PlayerGames playerGames;
+    private Deals deals;
     private GameSaver saver;
     private TimeService timeService;
 
@@ -61,7 +61,7 @@ public class SaveServiceImplTest {
     @Before
     public void setUp() {
         saveService = new SaveServiceImpl(){{
-            this.playerGames = SaveServiceImplTest.this.playerGames = new PlayerGames();
+            this.deals = SaveServiceImplTest.this.deals = new Deals();
             this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
@@ -116,8 +116,8 @@ public class SaveServiceImplTest {
             return field;
         };
 
-        TestUtils.Env env = TestUtils.getPlayerGame(
-                playerGames,
+        TestUtils.Env env = TestUtils.getDeal(
+                deals,
                 player,
                 room,
                 answerCreateGame,
@@ -125,9 +125,9 @@ public class SaveServiceImplTest {
                 null,
                 parameters -> "board"
         );
-        PlayerGame playerGame = env.playerGame;
+        Deal deal = env.deal;
 
-        return playerGame.getPlayer();
+        return deal.getPlayer();
     }
 
     @Test
@@ -601,10 +601,10 @@ public class SaveServiceImplTest {
     public void assertSaveAll(long time, String expected) {
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
         verify(saver).saveGames(captor.capture(), eq(time));
-        List<PlayerGame> playerGames = captor.getValue();
+        List<Deal> deals = captor.getValue();
         assertEquals(expected,
-                playerGames.stream()
-                        .map(PlayerGame::getPlayer)
+                deals.stream()
+                        .map(Deal::getPlayer)
                         .map(Player::getId)
                         .collect(toList())
                         .toString());
@@ -823,14 +823,14 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void testSaveGame_passTeamIdFromPlayerGame() {
+    public void testSaveGame_passTeamIdFromDeal() {
         // given
         setupTimeService(timeService);
 
         int teamId = 3;
         Player player = createPlayer("player");
-        PlayerGame playerGame = playerGames.get(player.getId());
-        when(playerGame.getTeamId()).thenReturn(teamId);
+        Deal deal = deals.get(player.getId());
+        when(deal.getTeamId()).thenReturn(teamId);
 
         // when
         saveService.save(player.getId());

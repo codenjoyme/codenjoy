@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,15 +39,15 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class TeamService {
 
-    private final PlayerGames playerGames;
+    private final Deals deals;
     private final SaveService saveService;
 
     public List<PTeam> getTeamInfo(String room) {
-        return playerGames.all().stream()
-                .filter(pg -> pg.getRoom().equals(room))
+        return deals.all().stream()
+                .filter(deal -> deal.getRoom().equals(room))
                 .collect(Collectors.groupingBy(
-                        PlayerGame::getTeamId,
-                        mapping(PlayerGame::getPlayerId, toList())))
+                        Deal::getTeamId,
+                        mapping(Deal::getPlayerId, toList())))
                 .entrySet().stream()
                 .map(PTeam::new)
                 .collect(toList());
@@ -56,14 +56,14 @@ public class TeamService {
     public void distributePlayersByTeam(String room, List<PTeam> teams) {
         for (PTeam team : teams) {
             for (String id : team.getPlayers()) {
-                PlayerGame game = playerGames.get(id);
-                if (game == NullPlayerGame.INSTANCE) {
+                Deal game = deals.get(id);
+                if (game == NullDeal.INSTANCE) {
                     log.warn("Player with id '{}' has not been found", id);
                 }
                 if (room.equals(game.getRoom())) {
                     game.setTeamId(team.getTeamId());
                     // TODO #3d4w надо подумать и поменять всех участников комнаты что там остались
-                    playerGames.reload(id, Sweeper.on().lastAlone());
+                    deals.reload(id, Sweeper.on().lastAlone());
                 }
             }
         }

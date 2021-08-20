@@ -33,12 +33,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class InactivityService implements Tickable {
 
-    private final PlayerGames playerGames;
+    private final Deals deals;
     private final TimeService timeService;
 
     @Override
     public void tick() {
-        for (PlayerGame game : playerGames.active()) {
+        for (Deal game : deals.active()) {
             GameType gameType = game.getGameType();
             Settings settings = gameType.getSettings();
             Player player = game.getPlayer();
@@ -60,7 +60,7 @@ public class InactivityService implements Tickable {
 
     private void removePlayer(Player player) {
         try {
-            playerGames.remove(player.getId(), Sweeper.off());
+            deals.remove(player.getId(), Sweeper.off());
         } catch (Exception e) {
             String message = String.format("Unable to remove player %s", player);
             log.warn(message, e);

@@ -34,7 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+import static com.codenjoy.dojo.services.Deals.withRoom;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -44,7 +44,7 @@ public class SemifinalService implements Tickable {
     protected RoomService roomService;
 
     @Autowired
-    protected PlayerGames playerGames;
+    protected Deals deals;
 
     public void clean() {
         for (String room : roomService.rooms()) {
@@ -78,13 +78,13 @@ public class SemifinalService implements Tickable {
             state.resetTick();
 
             // если не с кем работать - выходим
-            if (playerGames.isEmpty()) continue; // TODO потестить
+            if (deals.isEmpty()) continue; // TODO потестить
 
             // получаем мапу по комнатам, где значениями являются сортированные
-            // по очкам списки PlayerGame
-            Predicate<PlayerGame> withRoom = withRoom(state.getRoom());
-            List<PlayerGame> games =
-                    playerGames.getAll(withRoom).stream()
+            // по очкам списки Deal
+            Predicate<Deal> withRoom = withRoom(state.getRoom());
+            List<Deal> games =
+                    deals.getAll(withRoom).stream()
                             .sorted(byScore())
                             .collect(toList());
 
@@ -106,20 +106,20 @@ public class SemifinalService implements Tickable {
             }
 
             // готовим список для удаления
-            List<PlayerGame> toRemove = new LinkedList<>();
+            List<Deal> toRemove = new LinkedList<>();
             toRemove.addAll(games.subList(0, index));
 
             // собственно удаление
-            toRemove.forEach(game -> playerGames.remove(game.getPlayer().getId(), Sweeper.off()));
+            toRemove.forEach(game -> deals.remove(game.getPlayer().getId(), Sweeper.off()));
 
             // если после удаления надо перегруппировать участников по бордам
             if (reader.isResetBoard()) {
-                playerGames.reloadAll(reader.isShuffleBoard(), withRoom);
+                deals.reloadAll(reader.isShuffleBoard(), withRoom);
             }
         }
     }
 
-    private Comparator<PlayerGame> byScore() {
+    private Comparator<Deal> byScore() {
         return Comparator.comparingInt(game -> (Integer)game.getPlayer().getScore());
     }
 
@@ -131,7 +131,7 @@ public class SemifinalService implements Tickable {
     public SemifinalStatus getSemifinalStatus(String room) {
         int current = roomService.getTick(room);
         SemifinalSettings settings = semifinalSettings(room);
-        int countPlayers = playerGames.getPlayersByRoom(room).size();
+        int countPlayers = deals.getPlayersByRoom(room).size();
         return new SemifinalStatus(current, countPlayers, settings);
     }
 

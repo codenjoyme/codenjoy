@@ -36,16 +36,16 @@ import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.MULTIPLE;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class InactivityServiceTest extends AbstractPlayerGamesTest {
+public class InactivityServiceTest extends AbstractDealsTest {
 
     private InactivityService inactivity;
 
     @Before
     public void setUp() {
         super.setUp();
-        playerGames = spy(playerGames);
+        deals = spy(deals);
         timeService = spy(timeService);
-        inactivity = new InactivityService(playerGames, timeService);
+        inactivity = new InactivityService(deals, timeService);
     }
 
     private void gavenPlayers(int timeout, long now) {
@@ -70,11 +70,11 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
     }
 
     private void setupInactivitySettings(int timeout, boolean enabled, boolean value) {
-        if (playerGames.active().isEmpty()) {
+        if (deals.active().isEmpty()) {
             fail("There are no active players");
         }
-        for (PlayerGame playerGame : playerGames.active()) {
-            Settings settings = playerGame.getGameType().getSettings();
+        for (Deal deal : deals.active()) {
+            Settings settings = deal.getGameType().getSettings();
 
             when(settings.hasParameter(INACTIVITY_ENABLED.key()))
                     .thenReturn(enabled);
@@ -99,18 +99,18 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
 
         setupInactivitySettings(timeout, true, true);
 
-        assertPlayers("[player1, player2, player3, player4]", playerGames.active());
+        assertPlayers("[player1, player2, player3, player4]", deals.active());
 
         // when
         inactivity.tick();
 
         // then
-        verify(playerGames, never()).remove(eq(players.get(0).getId()), any(Sweeper.class));
-        verify(playerGames).remove(eq(players.get(1).getId()), any(Sweeper.class));
-        verify(playerGames).remove(eq(players.get(2).getId()), any(Sweeper.class));
-        verify(playerGames, never()).remove(eq(players.get(3).getId()), any(Sweeper.class));
+        verify(deals, never()).remove(eq(players.get(0).getId()), any(Sweeper.class));
+        verify(deals).remove(eq(players.get(1).getId()), any(Sweeper.class));
+        verify(deals).remove(eq(players.get(2).getId()), any(Sweeper.class));
+        verify(deals, never()).remove(eq(players.get(3).getId()), any(Sweeper.class));
 
-        assertPlayers("[player1, player4]", playerGames.active());
+        assertPlayers("[player1, player4]", deals.active());
     }
 
     @Test
@@ -124,15 +124,15 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
 
         setupInactivitySettings(timeout, false, false);
 
-        assertPlayers("[player1, player2, player3, player4]", playerGames.active());
+        assertPlayers("[player1, player2, player3, player4]", deals.active());
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
-        verify(playerGames, never()).remove(any(String.class), any(Sweeper.class));
+        verify(deals, never()).remove(any(String.class), any(Sweeper.class));
 
-        assertPlayers("[player1, player2, player3, player4]", playerGames.active());
+        assertPlayers("[player1, player2, player3, player4]", deals.active());
     }
 
     @Test
@@ -146,14 +146,14 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
 
         setupInactivitySettings(timeout, true, false);
 
-        assertPlayers("[player1, player2, player3, player4]", playerGames.active());
+        assertPlayers("[player1, player2, player3, player4]", deals.active());
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
-        verify(playerGames, never()).remove(any(String.class), any(Sweeper.class));
+        verify(deals, never()).remove(any(String.class), any(Sweeper.class));
 
-        assertPlayers("[player1, player2, player3, player4]", playerGames.active());
+        assertPlayers("[player1, player2, player3, player4]", deals.active());
     }
 }

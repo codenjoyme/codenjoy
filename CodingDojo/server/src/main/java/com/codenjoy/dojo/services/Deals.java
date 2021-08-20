@@ -25,7 +25,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
@@ -47,15 +47,15 @@ import static java.util.stream.Collectors.toList;
 
 @Component
 @FieldNameConstants
-public class PlayerGames implements Iterable<PlayerGame>, Tickable {
+public class Deals implements Iterable<Deal>, Tickable {
 
     public static final boolean ALL = true;
     public static final boolean ACTIVE = !ALL;
 
-    private List<PlayerGame> all = new LinkedList<>();
+    private List<Deal> all = new LinkedList<>();
 
-    private Consumer<PlayerGame> onAdd;
-    private Consumer<PlayerGame> onRemove;
+    private Consumer<Deal> onAdd;
+    private Consumer<Deal> onRemove;
     private ReadWriteLock lock = new ReentrantReadWriteLock();
     private Spreader spreader = new Spreader();
 
@@ -65,11 +65,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     @Autowired
     protected TimeService timeService;
 
-    public void onAdd(Consumer<PlayerGame> consumer) {
+    public void onAdd(Consumer<Deal> consumer) {
         this.onAdd = consumer;
     }
 
-    public void onRemove(Consumer<PlayerGame> consumer) {
+    public void onRemove(Consumer<Deal> consumer) {
         this.onRemove = consumer;
     }
 
@@ -80,45 +80,45 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public void remove(String id, Sweeper sweeper) {
         int index = all.indexOf(new Player(id));
         if (index == -1) return;
-        PlayerGame playerGame = all.remove(index);
+        Deal deal = all.remove(index);
 
-        removeInRoom(playerGame, sweeper);
+        removeInRoom(deal, sweeper);
 
-        playerGame.remove(onRemove);
-        playerGame.getGame().on(null);
+        deal.remove(onRemove);
+        deal.getGame().on(null);
     }
 
-    private void removeInRoom(PlayerGame playerGame, Sweeper sweeper) {
-        sweeper.of(playerGame.getType());
+    private void removeInRoom(Deal deal, Sweeper sweeper) {
+        sweeper.of(deal.getType());
 
-        Game game = playerGame.getGame();
-        List<PlayerGame> alone = removeGame(game, sweeper);
+        Game game = deal.getGame();
+        List<Deal> alone = removeGame(game, sweeper);
 
         if (sweeper.isResetOther()) {
-            alone.forEach(pg -> play(pg, pg.getGame().getSave()));
+            alone.forEach(otherDeal -> play(otherDeal, otherDeal.getGame().getSave()));
         }
     }
 
     // TODO по хорошему тут тоже надо optional
-    public PlayerGame get(String id) {
-        return get(pg -> Objects.equals(id, pg.getPlayerId()))
-                .orElse(NullPlayerGame.INSTANCE);
+    public Deal get(String id) {
+        return get(deal -> Objects.equals(id, deal.getPlayerId()))
+                .orElse(NullDeal.INSTANCE);
     }
 
-    public Optional<PlayerGame> get(Predicate<PlayerGame> filter) {
+    public Optional<Deal> get(Predicate<Deal> filter) {
         return all.stream()
                 .filter(filter)
                 .findFirst();
     }
 
-    public Optional<PlayerGame> get(GamePlayer player) {
-        return get(pg -> Objects.equals(player, pg.getGame().getPlayer()));
+    public Optional<Deal> get(GamePlayer player) {
+        return get(deal -> Objects.equals(player, deal.getGame().getPlayer()));
     }
 
-    private void play(PlayerGame playerGame, JSONObject save) {
-        Game game = playerGame.getGame();
-        String room = playerGame.getRoom();
-        GameType gameType = playerGame.getGameType();
+    private void play(Deal deal, JSONObject save) {
+        Game game = deal.getGame();
+        String room = deal.getRoom();
+        GameType gameType = deal.getGameType();
 
         game.close();
 
@@ -144,20 +144,20 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
     }
 
-    public PlayerGame add(Player player, String room, PlayerSave save) {
+    public Deal add(Player player, String room, PlayerSave save) {
         Single single = buildSingle(player, save);
 
         Game game = new LockedGame(lock).wrap(single);
 
-        PlayerGame playerGame = new PlayerGame(player, game, room);
-        all.add(playerGame);
+        Deal deal = new Deal(player, game, room);
+        all.add(deal);
 
-        play(playerGame, parseSave(save));
+        play(deal, parseSave(save));
 
         if (onAdd != null) {
-            onAdd.accept(playerGame);
+            onAdd.accept(deal);
         }
-        return playerGame;
+        return deal;
     }
 
     private Single buildSingle(Player player, PlayerSave save) {
@@ -179,7 +179,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return new JSONObject(save.getSave());
     }
 
-    private List<PlayerGame> removeGame(Game game, Sweeper sweeper) {
+    private List<Deal> removeGame(Game game, Sweeper sweeper) {
         List<GamePlayer> alone = spreader.remove(game.getPlayer(), sweeper);
 
         return alone.stream()
@@ -194,13 +194,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     @Override
-    public Iterator<PlayerGame> iterator() {
+    public Iterator<Deal> iterator() {
         return all.iterator();
     }
 
     public List<Player> players() {
         return all.stream()
-                .map(PlayerGame::getPlayer)
+                .map(Deal::getPlayer)
                 .collect(toList());
     }
 
@@ -212,30 +212,30 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         players().forEach(player -> remove(player.getId(), Sweeper.off()));
     }
 
-    public List<PlayerGame> getAll(Predicate<PlayerGame> predicate) {
+    public List<Deal> getAll(Predicate<Deal> predicate) {
         return all.stream()
                 .filter(predicate)
                 .collect(toList());
     }
 
-    public static Predicate<PlayerGame> withType(String gameType) {
-        return pg -> pg.getPlayer().getGame().equals(gameType);
+    public static Predicate<Deal> withType(String gameType) {
+        return deal -> deal.getPlayer().getGame().equals(gameType);
     }
 
-    public static Predicate<PlayerGame> withAll() {
-        return pg -> ALL;
+    public static Predicate<Deal> withAll() {
+        return deal -> ALL;
     }
 
-    public static Predicate<PlayerGame> withRoom(String room) {
-        return pg -> pg.getRoom() != null && pg.getRoom().equals(room);
+    public static Predicate<Deal> withRoom(String room) {
+        return deal -> deal.getRoom() != null && deal.getRoom().equals(room);
     }
 
-    public static Predicate<PlayerGame> exclude(List<String> ids) {
-        return pg -> !ids.contains(pg.getPlayerId());
+    public static Predicate<Deal> exclude(List<String> ids) {
+        return deal -> !ids.contains(deal.getPlayerId());
     }
 
-    public Predicate<PlayerGame> withActive() {
-        return playerGame -> roomService.isActive(playerGame.getRoom());
+    public Predicate<Deal> withActive() {
+        return deal -> roomService.isActive(deal.getRoom());
     }
 
     /**
@@ -243,7 +243,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
      */
     public List<GameType> getGameTypes() {
         return all.stream()
-                .map(PlayerGame::getGameType)
+                .map(Deal::getGameType)
                 .map(RoomGameType::unwrap)
                 .filter(distinctByKey(GameType::name))
                 .collect(toList());
@@ -251,19 +251,19 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     @Override
     public void tick() {
-        List<PlayerGame> active = active();
+        List<Deal> active = active();
 
         // по всем джойстикам отправили сообщения играм
-        active.forEach(PlayerGame::quietTick);
+        active.forEach(Deal::quietTick);
 
         // если в TRAINING кто-то isWin то мы его относим на следующий уровень
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
-        for (PlayerGame playerGame : active) {
-            Game game = playerGame.getGame();
-            String id = playerGame.getPlayerId();
+        for (Deal deal : active) {
+            Game game = deal.getGame();
+            String id = deal.getPlayerId();
 
-            GameType gameType = playerGame.getGameType();
+            GameType gameType = deal.getGameType();
             Settings settings = gameType.getSettings();
             MultiplayerType type = gameType.getMultiplayerType(settings);
             if (game.isGameOver()) {
@@ -291,8 +291,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         //      недокомплектованные пользователями
         //      а так же котмнаты которых активны
         active.stream()
-                .filter(playerGame -> playerGame.getField() != null) // TODO разобраться почему так случается при переключении уровней icancode
-                .map(PlayerGame::getField)
+                .filter(deal -> deal.getField() != null) // TODO разобраться почему так случается при переключении уровней icancode
+                .map(Deal::getField)
                 .distinct()
                 .filter(spreader::isRoomStaffed)
                 .forEach(GameField::quietTick);
@@ -306,14 +306,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private void reload(String id, JSONObject save, Sweeper sweeper) {
-        PlayerGame playerGame = get(id);
+        Deal deal = get(id);
         if (save == null) {
-            save = playerGame.getGame().getSave();
+            save = deal.getGame().getSave();
         }
 
-        removeInRoom(playerGame, sweeper);
+        removeInRoom(deal, sweeper);
 
-        play(playerGame, save);
+        play(deal, save);
     }
 
     // переводим всех игроков на новые борды
@@ -322,15 +322,15 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         reloadAll(shuffle, withAll());
     }
 
-    public void reloadAll(boolean shuffle, Predicate<PlayerGame> predicate) {
-        List<PlayerGame> games = getAll(predicate);
+    public void reloadAll(boolean shuffle, Predicate<Deal> predicate) {
+        List<Deal> games = getAll(predicate);
 
         if (shuffle) {
             Collections.shuffle(games);
         }
 
-        games.forEach(pg -> spreader.remove(pg.getGame().getPlayer(), Sweeper.off()));
-        games.forEach(pg -> reload(pg.getPlayerId(), Sweeper.off()));
+        games.forEach(deal -> spreader.remove(deal.getGame().getPlayer(), Sweeper.off()));
+        games.forEach(deal -> reload(deal.getPlayerId(), Sweeper.off()));
     }
 
     private void quiet(Runnable runnable) {
@@ -339,27 +339,27 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public List<Player> getPlayersByGame(String game) {
         return all.stream()
-                .map(playerGame -> playerGame.getPlayer())
+                .map(deal -> deal.getPlayer())
                 .filter(player -> player.getGame().equals(game))
                 .collect(toList());
     }
 
     public List<Player> getPlayersByRoom(String room) {
         return all.stream()
-                .map(playerGame -> playerGame.getPlayer())
+                .map(deal -> deal.getPlayer())
                 .filter(player -> player.getRoom().equals(room))
                 .collect(toList());
     }
 
     public void changeLevel(String id, int level) {
-        PlayerGame playerGame = get(id);
-        Game game = playerGame.getGame();
+        Deal deal = get(id);
+        Game game = deal.getGame();
         JSONObject save = game.getSave();
         LevelProgress progress = new LevelProgress(save);
         if (progress.canChange(level)) {
             progress.change(level);
             reload(id, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
-            playerGame.fireOnLevelChanged();
+            deal.fireOnLevelChanged();
         }
     }
 
@@ -374,9 +374,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     // TODO #3d4w убери меня
     public void setTeam(String id, int teamId) {
-        PlayerGame playerGame = get(id);
+        Deal deal = get(id);
 
-        playerGame.setTeamId(teamId);
+        deal.setTeamId(teamId);
 
         reload(id, Sweeper.on().lastAlone());
     }
@@ -385,30 +385,30 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         if (Validator.isEmpty(newRoom) || Validator.isEmpty(gameName)) {
             return;
         }
-        PlayerGame playerGame = get(id);
-        if (!playerGame.getPlayer().getGame().equals(gameName)) {
+        Deal deal = get(id);
+        if (!deal.getPlayer().getGame().equals(gameName)) {
             return;
         }
-        playerGame.setRoom(newRoom);
+        deal.setRoom(newRoom);
         reload(id, Sweeper.on().lastAlone());
     }
 
-    public PlayerGame get(int index) {
+    public Deal get(int index) {
         return all.get(index);
     }
 
-    public List<PlayerGame> all() {
+    public List<Deal> all() {
         return all;
     }
 
     /**
      * @return Отдает только те игры, для которых комната не находится на паузе
      */
-    public List<PlayerGame> active() {
+    public List<Deal> active() {
         return getAll(withActive());
     }
 
-    public Stream<PlayerGame> stream() {
+    public Stream<Deal> stream() {
         return all.stream();
     }
 
@@ -422,8 +422,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
      */
     public List<String> getRooms(boolean isAll) {
         return all.stream()
-                .filter(((Predicate<PlayerGame>) pg -> isAll).or(withActive()))
-                .map(PlayerGame::getRoom)
+                .filter(((Predicate<Deal>) deal -> isAll).or(withActive()))
+                .map(Deal::getRoom)
                 .distinct()
                 .collect(toList());
     }

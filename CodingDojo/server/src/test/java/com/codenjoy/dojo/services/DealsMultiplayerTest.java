@@ -48,9 +48,9 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class PlayerGamesMultiplayerTest {
+public class DealsMultiplayerTest {
 
-    private PlayerGames playerGames;
+    private Deals deals;
     private PrinterFactory printerFactory;
 
     private GameType single;
@@ -69,11 +69,11 @@ public class PlayerGamesMultiplayerTest {
 
     @Before
     public void setup() {
-        playerGames = new PlayerGames();
+        deals = new Deals();
 
-        playerGames.roomService = mock(RoomService.class);
+        deals.roomService = mock(RoomService.class);
         // по умолчанию все комнаты активны
-        when(playerGames.roomService.isActive(anyString())).thenReturn(true);
+        when(deals.roomService.isActive(anyString())).thenReturn(true);
 
         printerFactory = mock(PrinterFactory.class);
 
@@ -128,14 +128,14 @@ public class PlayerGamesMultiplayerTest {
         Player player = new Player("player" + index);
         player.setEventListener(mock(InformationCollector.class));
         players.add(player);
-        PlayerGame playerGame = playerWantsToPlay(gameType, player, null);
-        getFileds.add(() -> playerGame.getGame().getField());
+        Deal deal = playerWantsToPlay(gameType, player, null);
+        getFileds.add(() -> deal.getGame().getField());
     }
 
-    private PlayerGame playerWantsToPlay(GameType gameType, Player player, Object data) {
+    private Deal playerWantsToPlay(GameType gameType, Player player, Object data) {
         player.setGameType(gameType);
         String room = gameType.name();
-        return playerGames.add(player, room, null);
+        return deals.add(player, room, null);
     }
 
     private static class GroupsAsserter {
@@ -226,7 +226,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         verifyAllFieldsTicks(times(1));
@@ -247,7 +247,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertEquals(5, getFileds.size());
@@ -275,7 +275,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertEquals(5, getFileds.size());
@@ -302,7 +302,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         verifyAllFieldsTicks(times(1));
@@ -324,7 +324,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertEquals(7, getFileds.size());
@@ -353,7 +353,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertEquals(5, getFileds.size());
@@ -383,7 +383,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertEquals(4, getFileds.size());
@@ -399,7 +399,7 @@ public class PlayerGamesMultiplayerTest {
         nextLevel(1);
         nextLevel(2);
         nextLevel(3);
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertGroup(0)     // все там же - первый уровень single
@@ -421,7 +421,7 @@ public class PlayerGamesMultiplayerTest {
         nextLevel(1);
         nextLevel(2);
         nextLevel(3);
-        playerGames.tick();
+        deals.tick();
 
         // then
         // then
@@ -444,7 +444,7 @@ public class PlayerGamesMultiplayerTest {
         nextLevel(1);
         nextLevel(2);
 //        nextLevel(3); // этот не и дет дальше
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertGroup(0)        // все там же - первый уровень single
@@ -478,7 +478,7 @@ public class PlayerGamesMultiplayerTest {
 
         // when
         nextLevel(3);
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertGroup(0)        // все там же - первый уровень single
@@ -515,7 +515,7 @@ public class PlayerGamesMultiplayerTest {
         nextLevel(5);
 //        nextLevel(5); // этот не и дет дальше
 
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertGroup(5)                       // завис на предпоследнем
@@ -541,7 +541,7 @@ public class PlayerGamesMultiplayerTest {
         // when
         nextLevel(5);
 
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertGroup(0, 1, 2, 3, 4, 5)        // все дошли до конца
@@ -575,7 +575,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         verifyAllFieldsTicks(times(1));
@@ -1086,19 +1086,19 @@ public class PlayerGamesMultiplayerTest {
     }
 
     private void remove(int index) {
-        playerGames.remove(players.get(index).getId(), Sweeper.on().lastAlone());
+        deals.remove(players.get(index).getId(), Sweeper.on().lastAlone());
     }
 
     private void nextLevel(int index) {
         String name = players.get(index).getId();
-        PlayerGame playerGame = playerGames.get(name);
+        Deal deal = deals.get(name);
 
-        LevelProgress progress = playerGame.getGame().getProgress();
+        LevelProgress progress = deal.getGame().getProgress();
         progress.change(progress.getCurrent() + 1, progress.getCurrent());
 
         JSONObject save = new JSONObject();
         progress.saveTo(save);
-        playerGames.setLevel(name, save);
+        deals.setLevel(name, save);
     }
 
     @Test

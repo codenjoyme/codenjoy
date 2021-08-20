@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
@@ -131,7 +131,7 @@ public abstract class AbstractRestControllerTest {
     protected Registration registration;
 
     @Autowired
-    protected PlayerGames playerGames;
+    protected Deals deals;
 
     @Autowired
     protected ConfigProperties config;
@@ -200,23 +200,23 @@ public abstract class AbstractRestControllerTest {
         login(null);
     }
 
-    protected PlayerGame register(String id, String ip, String room, String game) {
+    protected Deal register(String id, String ip, String room, String game) {
         String password = Hash.md5(id);
         String readableName = id + "-name";
         registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles());
         playerService.register(id, game, room, ip);
-        PlayerGame playerGame = playerGames.get(id);
-        if (playerGame == NullPlayerGame.INSTANCE) {
+        Deal deal = deals.get(id);
+        if (deal == NullDeal.INSTANCE) {
             registration.remove(id); // удаляем если не можем создать
         } else {
-            resetMocks(playerGame);
+            resetMocks(deal);
         }
-        return playerGame;
+        return deal;
     }
 
-    private void resetMocks(PlayerGame playerGame) {
-        reset(playerGame.getField());
-        reset(playerGame.getGame().getPlayer());
+    private void resetMocks(Deal deal) {
+        reset(deal.getField());
+        reset(deal.getGame().getPlayer());
     }
 
     @SneakyThrows

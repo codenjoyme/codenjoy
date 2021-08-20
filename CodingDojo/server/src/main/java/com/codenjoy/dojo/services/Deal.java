@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import lombok.Getter;
 
 import java.util.Optional;
@@ -41,13 +41,13 @@ import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
  * А так же джойстик которым он играет - Joystick. 
  */
 @Getter
-public class PlayerGame implements Tickable {
+public class Deal implements Tickable {
     
     private Player player;
     private Game game;
     private LazyJoystick joystick;
 
-    public PlayerGame(Player player, Game game, String room) {
+    public Deal(Player player, Game game, String room) {
         this.player = player;
         this.game = game;
         setRoom(room);
@@ -55,20 +55,20 @@ public class PlayerGame implements Tickable {
     }
 
     // only for searching
-    public static PlayerGame by(Game game) {
-        return new PlayerGame(null, game, null);
+    public static Deal by(Game game) {
+        return new Deal(null, game, null);
     }
 
     /**
      * Есть необходимость искать по разным компонентам этого объекта, 
      * а потому o - может принимать разные типы
      * @param o если String - это room,
-     *          может быть так же Player, PlayerGame, GameField
+     *          может быть так же Player, Deal, GameField
      */
     @Override
     public boolean equals(Object o) {
         if (o == null) return false;
-        if (this == NullPlayerGame.INSTANCE && (o != NullPlayer.INSTANCE && o != NullPlayerGame.INSTANCE)) return false;
+        if (this == NullDeal.INSTANCE && (o != NullPlayer.INSTANCE && o != NullDeal.INSTANCE)) return false;
 
         if (o instanceof String) {
             return o.equals(player.getRoom());
@@ -80,13 +80,13 @@ public class PlayerGame implements Tickable {
             return p.equals(player);
         }
 
-        if (o instanceof PlayerGame) {
-            PlayerGame pg = (PlayerGame)o;
+        if (o instanceof Deal) {
+            Deal deal = (Deal)o;
 
-            if (player == null || pg.getPlayer() == null) {
-                return LockedGame.equals(pg.game, game);
+            if (player == null || deal.getPlayer() == null) {
+                return LockedGame.equals(deal.game, game);
             }
-            return player.equals(pg.player);
+            return player.equals(deal.player);
         }
 
         if (o instanceof GameField) {
@@ -103,7 +103,7 @@ public class PlayerGame implements Tickable {
         return player.hashCode();
     }
 
-    public void remove(Consumer<PlayerGame> onRemove) {
+    public void remove(Consumer<Deal> onRemove) {
         if (onRemove != null) {
             onRemove.accept(this);
         }
@@ -117,7 +117,7 @@ public class PlayerGame implements Tickable {
 
     @Override
     public String toString() {
-        return String.format("PlayerGame[player=%s, room=%s, game=%s]",
+        return String.format("Deal[player=%s, room=%s, game=%s]",
                 player,
                 player.getRoom(),
                 game.getClass().getSimpleName());
