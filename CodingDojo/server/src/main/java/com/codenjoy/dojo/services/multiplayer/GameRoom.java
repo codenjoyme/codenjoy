@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.multiplayer;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
 
@@ -148,15 +149,16 @@ public class GameRoom {
 
     /**
      * @param player Игрок который закончил играть в этой room и будет удален
+     * @param shouldLeave готовить ли оставшихся в комнате к удалению (если явно не указано wantToStay)
      * @return Все игроки этой комнаты, которых так же надо пристроить в новой room,
      * т.к. им тут оставаться нет смысла
      */
-    public List<GamePlayer> remove(GamePlayer player) {
+    public List<GamePlayer> remove(GamePlayer player, Predicate<List<GamePlayer>> shouldLeave) {
         List<GamePlayer> removed = new LinkedList<>();
 
         players.remove(player);
 
-        if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
+        if (shouldLeave.test(players)) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
             GamePlayer last = players.iterator().next();
             if (!last.wantToStay()) {
                 removed.add(last);

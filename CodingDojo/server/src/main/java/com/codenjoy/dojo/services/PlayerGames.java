@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.google.common.collect.Multimap;
@@ -94,25 +93,27 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         remove(player, true);
     }
 
-    private void remove(Player player, boolean reloadAlone) {
+    private void remove(Player player, boolean resetOther) {
         int index = all.indexOf(player);
         if (index == -1) return;
         PlayerGame game = all.remove(index);
         GameType gameType = game.getGameType();
         MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
-        if (reloadAlone) {
-            removeWithResetAlone(game.getGame(), type.shouldReloadAlone());
-        }
+        removeInRoom(game.getGame(), isAlone(type), resetOther && type.shouldReloadAlone());
 
         game.remove(onRemove);
         game.getGame().on(null);
     }
 
-    private void removeWithResetAlone(Game game, boolean reloadAlone) {
-        List<PlayerGame> alone = removeAndLeaveAlone(game);
+    private Predicate<List<GamePlayer>> isAlone(MultiplayerType type) {
+        return players -> type.shouldReloadAlone() && players.size() == 1;
+    }
 
-        if (reloadAlone) {
+    private void removeInRoom(Game game, Predicate<List<GamePlayer>> shouldLeave, boolean resetOther) {
+        List<PlayerGame> alone = removeGame(game, shouldLeave);
+
+        if (resetOther) {
             alone.forEach(gp -> play(gp.getGame(), gp.getRoom(),
                     gp.getGameType(), gp.getGame().getSave()));
         }
@@ -194,12 +195,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return new JSONObject(save.getSave());
     }
 
-    private List<PlayerGame> removeAndLeaveAlone(Game game) {
+    private List<PlayerGame> removeGame(Game game, Predicate<List<GamePlayer>> shouldLeave) {
         if (!spreader.contains(game.getPlayer())) {
             return Arrays.asList();
         }
 
-        List<GamePlayer> alone = spreader.remove(game.getPlayer());
+        List<GamePlayer> alone = spreader.remove(game.getPlayer(), shouldLeave);
 
         return alone.stream()
                 .map(this::get)
@@ -344,9 +345,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         GameType gameType = playerGame.getGameType();
         MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
-        if (reloadAlone) {
-            removeWithResetAlone(game, type.shouldReloadAlone());
-        }
+        removeInRoom(game, isAlone(type), reloadAlone && type.shouldReloadAlone());
 
         play(game, room, gameType, save);
     }
@@ -378,7 +377,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             Collections.shuffle(games);
         }
 
-        games.forEach(pg -> spreader.remove(pg.getGame().getPlayer()));
+        games.forEach(pg -> spreader.remove(pg.getGame().getPlayer(), players -> false));
         games.forEach(pg -> reloadCurrent(pg));
     }
 

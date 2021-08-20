@@ -27,6 +27,7 @@ import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
@@ -71,11 +72,11 @@ public class Spreader {
      * @return Все игроки, что так же покинут эту борду в случае если им
      * оставаться на борде не имеет смысла
      */
-    public List<GamePlayer> remove(GamePlayer player) {
+    public List<GamePlayer> remove(GamePlayer player, Predicate<List<GamePlayer>> shouldLeave) {
         List<GameRoom> rooms = roomsFor(player);
 
         List<GamePlayer> removed = rooms.stream()
-                .flatMap(room -> room.remove(player).stream())
+                .flatMap(room -> room.remove(player, shouldLeave).stream())
                 .collect(toList());
 
         rooms.forEach(this::removeIfEmpty);

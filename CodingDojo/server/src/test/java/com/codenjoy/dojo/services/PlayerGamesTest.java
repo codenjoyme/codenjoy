@@ -724,7 +724,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.remove(player2);
 
         // then
-        // created new field for player3
+        // created new field for player3   // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
         assertRooms("{1=[player3]}");
         assertEquals(2, fields.size());
 
@@ -1666,7 +1666,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "2=[player5], 3=[player1]}");
 
         assertRoomsNames("{otherRoom[1]=[[player1]], " +
-                "room[1]=[[player3, player4], [player5]]}");
+                "room[1]=[[player2], [player3, player4], [player5]]}");
     }
 
     @Test
