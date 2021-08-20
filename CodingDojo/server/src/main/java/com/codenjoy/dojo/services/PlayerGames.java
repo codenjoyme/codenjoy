@@ -310,7 +310,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     // перевод текущего игрока в новую комнату
     // без обслуживания оставшихся на той же карте
-    public void reloadCurrent(PlayerGame playerGame) {
+    public void reloadCurrent(String id) {
+        PlayerGame playerGame = get(id);
         Game game = playerGame.getGame();
         String room = playerGame.getRoom();
         reload(game, room, game.getSave(), Sweeper.off());
@@ -349,7 +350,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
 
         games.forEach(pg -> spreader.remove(pg.getGame().getPlayer(), Sweeper.off()));
-        games.forEach(pg -> reloadCurrent(pg));
+        games.forEach(pg -> reloadCurrent(pg.getPlayerId()));
     }
 
     private PlayerGame getPlayerGame(Game game) {

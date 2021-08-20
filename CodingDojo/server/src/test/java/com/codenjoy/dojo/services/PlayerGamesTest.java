@@ -834,7 +834,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         PlayerGame playerGame = playerGames.get(0);
-        playerGames.reloadCurrent(playerGame);
+        playerGames.reloadCurrent("player1");
 
         // then
         assertRooms("{0=[player2], 1=[player1]}");
