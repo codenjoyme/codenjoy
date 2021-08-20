@@ -274,10 +274,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
                     if (type.isLevels() && game.isWin()) {
                         JSONObject level = game.getSave();
-                        level = LevelProgress.goNext(level);
-                        if (level != null) {
-                            reload(id, level, Sweeper.on().lastAlone());
-                            playerGame.fireOnLevelChanged();
+                        if (setLevel(id, LevelProgress.goNext(level))) {
                             return;
                         }
                     }
@@ -382,12 +379,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
     }
 
-    public void setLevel(String id, JSONObject save) {
+    public boolean setLevel(String id, JSONObject save) {
         if (save == null) {
-            return;
+            return false;
         }
         reload(id, save, Sweeper.on().lastAlone());
         get(id).fireOnLevelChanged();
+        return true;
     }
 
     // TODO #3d4w убери меня
