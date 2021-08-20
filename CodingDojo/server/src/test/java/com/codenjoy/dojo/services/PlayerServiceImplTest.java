@@ -177,7 +177,7 @@ public class PlayerServiceImplTest {
     @Before
     public void setUp() {
         Mockito.reset(actionLogger, autoSaver, gameService, playerController, playerGames);
-        playerGames.clean();
+        playerGames.clear();
 
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
         playerCaptor = ArgumentCaptor.forClass(Player.class);

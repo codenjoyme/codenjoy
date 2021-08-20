@@ -375,12 +375,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         ((Tickable)() -> runnable.run()).quietTick();
     }
 
-    // for testing only
-    void clean() {
-        new LinkedList<>(all)
-                .forEach(pg -> remove(pg.getPlayer()));
-    }
-
     public List<Player> getPlayersByGame(String game) {
         return all.stream()
                 .map(playerGame -> playerGame.getPlayer())
