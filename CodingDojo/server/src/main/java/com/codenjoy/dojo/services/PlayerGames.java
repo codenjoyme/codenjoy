@@ -83,7 +83,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // используется там, где после серии удалений мы обязуемся сами
     // навести порядок с теми игроками, кто остался на карте
     public void removeCurrent(Player player) {
-        remove(player, !RELOAD_ALONE);
+        remove(player, Sweeper.off());
     }
 
     // удаление текущего игрока
@@ -91,30 +91,26 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // исползуется в случае одиночных удалений, когда надо сразу же
     // позаботиться о тех игроках, кто остался на карте
     public void remove(Player player) {
-        remove(player, RELOAD_ALONE);
+        remove(player, Sweeper.on().lastAlone());
     }
 
-    private void remove(Player player, boolean resetOther) {
+    public void remove(Player player, Sweeper sweeper) {
         int index = all.indexOf(player);
         if (index == -1) return;
         PlayerGame game = all.remove(index);
         GameType gameType = game.getGameType();
         MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
-        removeInRoom(game.getGame(), isAlone(type), resetOther);
+        removeInRoom(game.getGame(), sweeper.of(type));
 
         game.remove(onRemove);
         game.getGame().on(null);
     }
 
-    private Predicate<List<GamePlayer>> isAlone(MultiplayerType type) {
-        return players -> type.shouldReloadAlone() && players.size() == 1;
-    }
+    private void removeInRoom(Game game, Sweeper sweeper) {
+        List<PlayerGame> alone = removeGame(game, sweeper.getApplicants());
 
-    private void removeInRoom(Game game, Predicate<List<GamePlayer>> shouldLeave, boolean resetOther) {
-        List<PlayerGame> alone = removeGame(game, shouldLeave);
-
-        if (resetOther) {
+        if (sweeper.isResetOther()) {
             alone.forEach(gp -> play(gp.getGame(), gp.getRoom(),
                     gp.getGameType(), gp.getGame().getSave()));
         }
@@ -333,22 +329,22 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public void reloadCurrent(PlayerGame playerGame) {
         Game game = playerGame.getGame();
         String room = playerGame.getRoom();
-        reload(game, room, game.getSave(), !RELOAD_ALONE);
+        reload(game, room, game.getSave(), Sweeper.off());
     }
 
-    private void reload(Game game, String room, JSONObject save, boolean resetOther) {
+    private void reload(Game game, String room, JSONObject save, Sweeper sweeper) {
         PlayerGame playerGame = getPlayerGame(game);
         playerGame.setRoom(room);
         GameType gameType = playerGame.getGameType();
         MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
-        removeInRoom(game, isAlone(type), resetOther);
+        removeInRoom(game, sweeper.of(type));
 
         play(game, room, gameType, save);
     }
 
     private void reload(Game game, String room, JSONObject save) {
-        reload(game, room, save, RELOAD_ALONE);
+        reload(game, room, save, Sweeper.on().lastAlone());
     }
 
     // перевод текущего игрока в новую комнату
@@ -356,7 +352,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public void reload(PlayerGame playerGame) {
         Game game = playerGame.getGame();
         String room = playerGame.getRoom();
-        reload(game, room, game.getSave(), RELOAD_ALONE);
+        reload(game, room, game.getSave(), Sweeper.on().lastAlone());
     }
 
     // переводим всех игроков на новые борды
