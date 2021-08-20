@@ -63,7 +63,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.onRemove(pg -> removed = pg);
 
         // when
-        playerGames.remove(player);
+        playerGames.remove(player, Sweeper.off());
 
         // then
         assertEquals(true, playerGames.isEmpty());
@@ -705,7 +705,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void testResetAloneUsersField_whenRemove() {
+    public void testResetAloneUsersField_whenRemove_multiple() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
         Player player1 = createPlayer("player1", type);
@@ -715,13 +715,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.remove(player1);
+        playerGames.remove(player1, Sweeper.on().lastAlone());
 
         // then
         assertEquals(1, fields.size());
 
         // when
-        playerGames.remove(player2);
+        playerGames.remove(player2, Sweeper.on().lastAlone());
 
         // then
         // still same field for player3, because MULTIPLE is !REMOVE_ALONE
@@ -730,7 +730,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void testDontResetAloneUsersField_whenRemoveCurrent() {
+    public void testDontResetAloneUsersField_whenRemoveCurrent_multiple() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
         Player player1 = createPlayer("player1", type);
@@ -749,6 +749,56 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.remove(player2, Sweeper.off());
 
         // then
+        assertRooms("{0=[player3]}");
+        assertEquals(1, fields.size());
+    }
+
+    @Test
+    public void testResetAloneUsersField_whenRemove_triple() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+
+        assertRooms("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.remove(player1, Sweeper.on().lastAlone());
+
+        // then
+        assertEquals(1, fields.size());
+
+        // when
+        playerGames.remove(player2, Sweeper.on().lastAlone());
+
+        // then
+        // new field for player3, because TRIPLE is REMOVE_ALONE
+        assertRooms("{1=[player3]}");
+        assertEquals(2, fields.size());
+    }
+
+    @Test
+    public void testDontResetAloneUsersField_whenRemoveCurrent_triple() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+
+        assertRooms("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.remove(player1, Sweeper.off());
+
+        // then
+        assertEquals(1, fields.size());
+
+        // when
+        playerGames.remove(player2, Sweeper.off());
+
+        // then
+        // same field because Sweeper.off()
         assertRooms("{0=[player3]}");
         assertEquals(1, fields.size());
     }

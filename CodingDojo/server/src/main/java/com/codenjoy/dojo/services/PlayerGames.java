@@ -78,14 +78,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         this.lock = lock;
     }
 
-    // удаление текущего игрока
-    // с обслуживанием оставшихся на той же карте
-    // исползуется в случае одиночных удалений, когда надо сразу же
-    // позаботиться о тех игроках, кто остался на карте
-    public void remove(Player player) {
-        remove(player, Sweeper.on().lastAlone());
-    }
-
     public void remove(Player player, Sweeper sweeper) {
         int index = all.indexOf(player);
         if (index == -1) return;

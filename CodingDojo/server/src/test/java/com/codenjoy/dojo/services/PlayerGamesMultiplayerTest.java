@@ -1086,7 +1086,7 @@ public class PlayerGamesMultiplayerTest {
     }
 
     private void remove(int index) {
-        playerGames.remove(players.get(index));
+        playerGames.remove(players.get(index), Sweeper.on().lastAlone());
     }
 
     private void nextLevel(int index) {
