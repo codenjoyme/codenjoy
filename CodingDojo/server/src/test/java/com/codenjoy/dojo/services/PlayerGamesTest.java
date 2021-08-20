@@ -740,13 +740,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.removeCurrent(player1);
+        playerGames.remove(player1, Sweeper.off());
 
         // then
         assertEquals(1, fields.size());
 
         // when
-        playerGames.removeCurrent(player2);
+        playerGames.remove(player2, Sweeper.off());
 
         // then
         assertRooms("{0=[player3]}");

@@ -105,10 +105,10 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
         inactivity.tick();
 
         // then
-        verify(playerGames, never()).removeCurrent(players.get(0));
-        verify(playerGames).removeCurrent(players.get(1));
-        verify(playerGames).removeCurrent(players.get(2));
-        verify(playerGames, never()).removeCurrent(players.get(3));
+        verify(playerGames, never()).remove(eq(players.get(0)), any(Sweeper.class));
+        verify(playerGames).remove(eq(players.get(1)), any(Sweeper.class));
+        verify(playerGames).remove(eq(players.get(2)), any(Sweeper.class));
+        verify(playerGames, never()).remove(eq(players.get(3)), any(Sweeper.class));
 
         assertPlayers("[player1, player4]", playerGames.active());
     }
@@ -130,7 +130,7 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        verify(playerGames, never()).removeCurrent(any(Player.class));
+        verify(playerGames, never()).remove(any(Player.class), any(Sweeper.class));
 
         assertPlayers("[player1, player2, player3, player4]", playerGames.active());
     }
@@ -152,7 +152,7 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        verify(playerGames, never()).removeCurrent(any(Player.class));
+        verify(playerGames, never()).remove(any(Player.class), any(Sweeper.class));
 
         assertPlayers("[player1, player2, player3, player4]", playerGames.active());
     }

@@ -22,13 +22,9 @@ package com.codenjoy.dojo.services.semifinal;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerGame;
-import com.codenjoy.dojo.services.PlayerGames;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.room.RoomState;
-import com.codenjoy.dojo.services.round.RoundSettings;
-import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -114,7 +110,7 @@ public class SemifinalService implements Tickable {
             toRemove.addAll(games.subList(0, index));
 
             // собственно удаление
-            toRemove.forEach(game -> playerGames.removeCurrent(game.getPlayer()));
+            toRemove.forEach(game -> playerGames.remove(game.getPlayer(), Sweeper.off()));
 
             // если после удаления надо перегруппировать участников по бордам
             if (reader.isResetBoard()) {
