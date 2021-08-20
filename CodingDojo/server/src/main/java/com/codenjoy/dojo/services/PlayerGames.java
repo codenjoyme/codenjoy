@@ -43,6 +43,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -78,19 +79,19 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     // удаление текущего игрока
-    // без обслуживания последнего оставшегося на той же карте
-    // используется там, где после серии удалений мы обязуемся
-    // навести порядок с одиночками на картах
+    // без обслуживания оставшихся на той же карте
+    // используется там, где после серии удалений мы обязуемся сами
+    // навести порядок с теми игроками, кто остался на карте
     public void removeCurrent(Player player) {
-        remove(player, false);
+        remove(player, !RELOAD_ALONE);
     }
 
     // удаление текущего игрока
-    // с обслуживанием последнего оставшегося на той же карте
+    // с обслуживанием оставшихся на той же карте
     // исползуется в случае одиночных удалений, когда надо сразу же
-    // позаботиться о возможном последнем игроке на карте
+    // позаботиться о тех игроках, кто остался на карте
     public void remove(Player player) {
-        remove(player, true);
+        remove(player, RELOAD_ALONE);
     }
 
     private void remove(Player player, boolean resetOther) {
@@ -243,7 +244,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public static Predicate<PlayerGame> withAll() {
-        return pg -> true;
+        return pg -> ALL;
     }
 
     public static Predicate<PlayerGame> withRoom(String room) {
@@ -332,11 +333,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     // перевод текущего игрока в новую комнату
-    // без обслуживания последнего оставшегося на той же карте
+    // без обслуживания оставшихся на той же карте
     public void reloadCurrent(PlayerGame playerGame) {
         Game game = playerGame.getGame();
         String room = playerGame.getRoom();
-        reload(game, room, game.getSave(), false);
+        reload(game, room, game.getSave(), !RELOAD_ALONE);
     }
 
     private void reload(Game game, String room, JSONObject save, boolean reloadAlone) {
@@ -350,18 +351,16 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         play(game, room, gameType, save);
     }
 
-    // перевод текущего игрока в новую комнату
-    // с обслуживанием последнего оставшегося на той же карте
-    public void reload(Game game, String room, JSONObject save) {
-        reload(game, room, save, true);
+    private void reload(Game game, String room, JSONObject save) {
+        reload(game, room, save, RELOAD_ALONE);
     }
 
     // перевод текущего игрока в новую комнату
-    // с обслуживанием последнего оставшегося на той же карте
+    // с обслуживанием оставшеихся на той же карте
     public void reload(PlayerGame playerGame) {
         Game game = playerGame.getGame();
         String room = playerGame.getRoom();
-        reload(game, room, game.getSave(), true);
+        reload(game, room, game.getSave(), RELOAD_ALONE);
     }
 
     // переводим всех игроков на новые борды
@@ -377,7 +376,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             Collections.shuffle(games);
         }
 
-        games.forEach(pg -> spreader.remove(pg.getGame().getPlayer(), players -> false));
+        games.forEach(pg -> spreader.remove(pg.getGame().getPlayer(), players -> !RELOAD_ALONE));
         games.forEach(pg -> reloadCurrent(pg));
     }
 
