@@ -43,8 +43,7 @@ public class TeamService {
     private final SaveService saveService;
 
     public List<PTeam> getTeamInfo(String room) {
-        return deals.all().stream()
-                .filter(deal -> deal.getRoom().equals(room))
+        return deals.getAll(Deals.withRoom(room)).stream()
                 .collect(Collectors.groupingBy(
                         Deal::getTeamId,
                         mapping(Deal::getPlayerId, toList())))
