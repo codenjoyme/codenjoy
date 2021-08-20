@@ -77,8 +77,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         this.lock = lock;
     }
 
-    public void remove(String playerId, Sweeper sweeper) {
-        int index = all.indexOf(new Player(playerId));
+    public void remove(String id, Sweeper sweeper) {
+        int index = all.indexOf(new Player(id));
         if (index == -1) return;
         PlayerGame game = all.remove(index);
 
@@ -378,8 +378,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 .collect(toList());
     }
 
-    public void changeLevel(String playerId, int level) {
-        PlayerGame playerGame = get(playerId);
+    public void changeLevel(String id, int level) {
+        PlayerGame playerGame = get(id);
         String room = playerGame.getRoom();
         Game game = playerGame.getGame();
         JSONObject save = game.getSave();
@@ -391,11 +391,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
     }
 
-    public void setLevel(String playerId, JSONObject save) {
+    public void setLevel(String id, JSONObject save) {
         if (save == null) {
             return;
         }
-        PlayerGame playerGame = get(playerId);
+        PlayerGame playerGame = get(id);
         String room = playerGame.getRoom();
         Game game = playerGame.getGame();
         reload(game, room, save, Sweeper.on().lastAlone());
@@ -403,19 +403,19 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     // TODO #3d4w убери меня
-    public void setTeam(String playerId, int teamId) {
-        PlayerGame playerGame = get(playerId);
+    public void setTeam(String id, int teamId) {
+        PlayerGame playerGame = get(id);
 
         playerGame.setTeamId(teamId);
 
         reload(playerGame);
     }
 
-    public void changeRoom(String playerId, String gameName, String newRoom) {
+    public void changeRoom(String id, String gameName, String newRoom) {
         if (Validator.isEmpty(newRoom) || Validator.isEmpty(gameName)) {
             return;
         }
-        PlayerGame playerGame = get(playerId);
+        PlayerGame playerGame = get(id);
         if (!playerGame.getPlayer().getGame().equals(gameName)) {
             return;
         }
