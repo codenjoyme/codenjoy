@@ -271,9 +271,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             MultiplayerType type = gameType.getMultiplayerType(settings);
             if (game.isGameOver()) {
                 quiet(() -> {
-                    JSONObject level = game.getSave();
 
                     if (type.isLevels() && game.isWin()) {
+                        JSONObject level = game.getSave();
                         level = LevelProgress.goNext(level);
                         if (level != null) {
                             reload(id, level, Sweeper.on().lastAlone());
@@ -283,7 +283,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                     }
 
                     if (type.isDisposable() && game.shouldLeave()) {
-                        reload(id, level, Sweeper.on().lastAlone());
+                        reload(id, Sweeper.on().lastAlone());
                         return;
                     }
 
