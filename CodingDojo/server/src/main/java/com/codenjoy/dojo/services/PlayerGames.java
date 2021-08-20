@@ -42,7 +42,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.codenjoy.dojo.services.PlayerGame.by;
+import static com.codenjoy.dojo.services.controller.ScreenResponseHandler.distinctByKey;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -242,17 +242,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
      * @return Возвращает уникальные (недублирующиеся) GameType в которые сейчас играют.
      */
     public List<GameType> getGameTypes() {
-        Map<String, GameType> result = new LinkedHashMap<>();
-
-        for (PlayerGame playerGame : all) {
-            GameType gameType = playerGame.getGameType();
-            gameType = RoomGameType.unwrap(gameType);
-            if (!result.containsKey(gameType.name())) {
-                result.put(gameType.name(), gameType);
-            }
-        }
-
-        return new ArrayList<>(result.values());
+        return all.stream()
+                .map(PlayerGame::getGameType)
+                .map(RoomGameType::unwrap)
+                .filter(distinctByKey(GameType::name))
+                .collect(toList());
     }
 
     @Override
