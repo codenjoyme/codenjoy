@@ -60,7 +60,7 @@ public class InactivityService implements Tickable {
 
     private void removePlayer(Player player) {
         try {
-            playerGames.remove(player, Sweeper.off());
+            playerGames.remove(player.getId(), Sweeper.off());
         } catch (Exception e) {
             String message = String.format("Unable to remove player %s", player);
             log.warn(message, e);

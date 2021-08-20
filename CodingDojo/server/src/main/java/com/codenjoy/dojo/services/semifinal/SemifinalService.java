@@ -110,7 +110,7 @@ public class SemifinalService implements Tickable {
             toRemove.addAll(games.subList(0, index));
 
             // собственно удаление
-            toRemove.forEach(game -> playerGames.remove(game.getPlayer(), Sweeper.off()));
+            toRemove.forEach(game -> playerGames.remove(game.getPlayer().getId(), Sweeper.off()));
 
             // если после удаления надо перегруппировать участников по бордам
             if (reader.isResetBoard()) {

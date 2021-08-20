@@ -63,7 +63,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.onRemove(pg -> removed = pg);
 
         // when
-        playerGames.remove(player, Sweeper.off());
+        playerGames.remove(player.getId(), Sweeper.off());
 
         // then
         assertEquals(true, playerGames.isEmpty());
@@ -715,13 +715,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.remove(player1, Sweeper.on().lastAlone());
+        playerGames.remove(player1.getId(), Sweeper.on().lastAlone());
 
         // then
         assertEquals(1, fields.size());
 
         // when
-        playerGames.remove(player2, Sweeper.on().lastAlone());
+        playerGames.remove(player2.getId(), Sweeper.on().lastAlone());
 
         // then
         // still same field for player3, because MULTIPLE is !REMOVE_ALONE
@@ -740,13 +740,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.remove(player1, Sweeper.off());
+        playerGames.remove(player1.getId(), Sweeper.off());
 
         // then
         assertEquals(1, fields.size());
 
         // when
-        playerGames.remove(player2, Sweeper.off());
+        playerGames.remove(player2.getId(), Sweeper.off());
 
         // then
         assertRooms("{0=[player3]}");
@@ -764,13 +764,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.remove(player1, Sweeper.on().lastAlone());
+        playerGames.remove(player1.getId(), Sweeper.on().lastAlone());
 
         // then
         assertEquals(1, fields.size());
 
         // when
-        playerGames.remove(player2, Sweeper.on().lastAlone());
+        playerGames.remove(player2.getId(), Sweeper.on().lastAlone());
 
         // then
         // new field for player3, because TRIPLE is REMOVE_ALONE
@@ -789,13 +789,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.remove(player1, Sweeper.off());
+        playerGames.remove(player1.getId(), Sweeper.off());
 
         // then
         assertEquals(1, fields.size());
 
         // when
-        playerGames.remove(player2, Sweeper.off());
+        playerGames.remove(player2.getId(), Sweeper.off());
 
         // then
         // same field because Sweeper.off()

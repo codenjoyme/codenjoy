@@ -307,7 +307,7 @@ public class PlayerServiceImpl implements PlayerService {
                 || !game.equals(player.getGame())
                 || !room.equals(oldPlayerGame.getRoom()); // TODO ROOM test me
         if (newPlayer) {
-            playerGames.remove(player, Sweeper.on().lastAlone());
+            playerGames.remove(player.getId(), Sweeper.on().lastAlone());
 
             PlayerScores playerScores = gameType.getPlayerScores(save.getScore(), gameType.getSettings());
             InformationCollector listener = new InformationCollector(playerScores);
@@ -487,7 +487,7 @@ public class PlayerServiceImpl implements PlayerService {
             log.debug("Unregistered user {} from game {}",
                     player.getId(), player.getGame());
 
-            playerGames.remove(player, Sweeper.on().lastAlone());
+            playerGames.remove(player.getId(), Sweeper.on().lastAlone());
         } finally {
             lock.writeLock().unlock();
         }
@@ -667,7 +667,7 @@ public class PlayerServiceImpl implements PlayerService {
                     .stream()
                     .map(pg -> pg.getPlayer())
             // TODO тут раньше сносились все комнаты напрямую, но spreader не трогали, и тесты не тестируют это
-                    .forEach(player -> playerGames.remove(player, Sweeper.off()));
+                    .forEach(player -> playerGames.remove(player.getId(), Sweeper.off()));
         } finally {
             lock.writeLock().unlock();
         }

@@ -78,10 +78,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         this.lock = lock;
     }
 
-    public void remove(Player player, Sweeper sweeper) {
-        int index = all.indexOf(player);
+    public void remove(String playerId, Sweeper sweeper) {
+        int index = all.indexOf(new Player(playerId));
         if (index == -1) return;
         PlayerGame game = all.remove(index);
+
         GameType gameType = game.getGameType();
         MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
@@ -206,7 +207,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public void clear() {
-        players().forEach(player -> remove(player, Sweeper.off()));
+        players().forEach(player -> remove(player.getId(), Sweeper.off()));
     }
 
     public List<PlayerGame> getAll(Predicate<PlayerGame> predicate) {

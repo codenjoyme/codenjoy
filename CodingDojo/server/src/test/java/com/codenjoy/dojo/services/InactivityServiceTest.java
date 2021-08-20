@@ -105,10 +105,10 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
         inactivity.tick();
 
         // then
-        verify(playerGames, never()).remove(eq(players.get(0)), any(Sweeper.class));
-        verify(playerGames).remove(eq(players.get(1)), any(Sweeper.class));
-        verify(playerGames).remove(eq(players.get(2)), any(Sweeper.class));
-        verify(playerGames, never()).remove(eq(players.get(3)), any(Sweeper.class));
+        verify(playerGames, never()).remove(eq(players.get(0).getId()), any(Sweeper.class));
+        verify(playerGames).remove(eq(players.get(1).getId()), any(Sweeper.class));
+        verify(playerGames).remove(eq(players.get(2).getId()), any(Sweeper.class));
+        verify(playerGames, never()).remove(eq(players.get(3).getId()), any(Sweeper.class));
 
         assertPlayers("[player1, player4]", playerGames.active());
     }
@@ -130,7 +130,7 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        verify(playerGames, never()).remove(any(Player.class), any(Sweeper.class));
+        verify(playerGames, never()).remove(any(String.class), any(Sweeper.class));
 
         assertPlayers("[player1, player2, player3, player4]", playerGames.active());
     }
@@ -152,7 +152,7 @@ public class InactivityServiceTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        verify(playerGames, never()).remove(any(Player.class), any(Sweeper.class));
+        verify(playerGames, never()).remove(any(String.class), any(Sweeper.class));
 
         assertPlayers("[player1, player2, player3, player4]", playerGames.active());
     }
