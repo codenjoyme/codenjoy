@@ -80,18 +80,18 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public void remove(String id, Sweeper sweeper) {
         int index = all.indexOf(new Player(id));
         if (index == -1) return;
-        PlayerGame game = all.remove(index);
+        PlayerGame playerGame = all.remove(index);
 
-        GameType gameType = game.getGameType();
-        MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
+        removeInRoom(playerGame, sweeper);
 
-        removeInRoom(game.getGame(), sweeper.of(type));
-
-        game.remove(onRemove);
-        game.getGame().on(null);
+        playerGame.remove(onRemove);
+        playerGame.getGame().on(null);
     }
 
-    private void removeInRoom(Game game, Sweeper sweeper) {
+    private void removeInRoom(PlayerGame playerGame, Sweeper sweeper) {
+        sweeper.of(playerGame.getType());
+
+        Game game = playerGame.getGame();
         List<PlayerGame> alone = removeGame(game, sweeper);
 
         if (sweeper.isResetOther()) {
@@ -317,9 +317,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
 
         GameType gameType = playerGame.getGameType();
-        MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
-        removeInRoom(game, sweeper.of(type));
+        removeInRoom(playerGame, sweeper);
 
         play(game, room, gameType, save);
     }

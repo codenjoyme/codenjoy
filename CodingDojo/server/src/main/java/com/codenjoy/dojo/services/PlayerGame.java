@@ -25,7 +25,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import lombok.Getter;
@@ -174,5 +174,10 @@ public class PlayerGame implements Tickable {
         if (player != null) {
             player.setTeamId(teamId);
         }
+    }
+
+    public MultiplayerType getType() {
+        GameType gameType = getGameType();
+        return gameType.getMultiplayerType(gameType.getSettings());
     }
 }
