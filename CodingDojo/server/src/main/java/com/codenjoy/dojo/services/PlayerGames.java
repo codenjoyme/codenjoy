@@ -341,13 +341,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         games.forEach(pg -> reload(pg.getPlayerId(), Sweeper.off()));
     }
 
-    private PlayerGame getPlayerGame(Game game) {
-        return all.stream()
-                .filter(pg -> pg.equals(by(game)))
-                .findFirst()
-                .orElseThrow(IllegalStateException::new);
-    }
-
     private void quiet(Runnable runnable) {
         ((Tickable)() -> runnable.run()).quietTick();
     }
