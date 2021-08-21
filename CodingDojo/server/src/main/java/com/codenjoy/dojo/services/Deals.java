@@ -371,8 +371,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         return true;
     }
 
-    // TODO #3d4w убери меня
-    public void setTeam(String id, int teamId) {
+    protected void setTeam(String id, int teamId) {
         Deal deal = get(id);
 
         deal.setTeamId(teamId);
