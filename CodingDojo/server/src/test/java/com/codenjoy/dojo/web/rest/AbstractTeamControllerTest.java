@@ -113,6 +113,10 @@ public class AbstractTeamControllerTest extends AbstractRestControllerTest  {
     }
 
     public void asrtFld(String expected) {
+        assertEquals(expected, getFieldAndTeamInfo());
+    }
+
+    public String getFieldAndTeamInfo() {
         Collection<GameRoom> rooms = deals.rooms().get(room);
 
         Map<String, Integer> playersTeams = deals.all().stream().
@@ -130,8 +134,7 @@ public class AbstractTeamControllerTest extends AbstractRestControllerTest  {
                     return String.format("[f%s: %s]", type.fields().indexOf(field), players);
                 })
                 .collect(joining("\n"));
-
-        assertEquals(expected, actual);
+        return actual;
     }
 
     public void callGet(PTeam... teams) {
