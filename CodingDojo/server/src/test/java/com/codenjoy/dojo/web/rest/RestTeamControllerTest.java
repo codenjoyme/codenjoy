@@ -100,10 +100,7 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         // все кто был в комнате, а потом тот кому меняем команду
         callPost(new PTeam(1, "player1"));
 
-        asrtFld("[f0: ]\n" +
-                "[f1: ]\n" +
-                "[f2: ]\n" +
-                "[f3: ]\n" +
+        asrtFld("[f3: ]\n" +
                 "[f4: player3(t1)]\n" +
                 "[f5: player2(t1)]\n" +
                 "[f6: player4(t1)]\n" +

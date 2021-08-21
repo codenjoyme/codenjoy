@@ -120,7 +120,7 @@ public class AbstractTeamControllerTest extends AbstractRestControllerTest  {
                 collect(toMap(deal -> deal.getPlayerId(),
                         deal -> deal.getTeamId()));
 
-        String actual = type.fields().stream()
+        List<String> lines = type.fields().stream()
                 .map(field -> {
                     String players = rooms.stream()
                             .filter(room -> room.field() == field)
@@ -130,8 +130,26 @@ public class AbstractTeamControllerTest extends AbstractRestControllerTest  {
                             .collect(joining(", "));
                     return String.format("[f%s: %s]", type.fields().indexOf(field), players);
                 })
-                .collect(joining("\n"));
-        return actual;
+                .collect(toList());
+
+        removeFirstNulls(lines);
+
+        return lines.stream().collect(joining("\n"));
+    }
+
+    private void removeFirstNulls(List<String> lines) {
+        final String EMPTY = ": ]";
+
+        for (int index = 0; index < lines.size() - 1; index++) {
+            if (lines.get(index).contains(EMPTY)
+                    && lines.get(index + 1).contains(EMPTY))
+            {
+                lines.remove(index);
+                index--;
+            } else {
+                break;
+            }
+        }
     }
 
     public void callGet(PTeam... teams) {

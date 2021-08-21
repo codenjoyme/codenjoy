@@ -46,13 +46,13 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
     @Test
     public void test() {
         // given
-        int players = 4;
-        int teams = 2;
+        int playersPerRoom = 4;
+        int teamsPerRoom = 2;
         int playersCount = 10;
         int ticks = 100;
         int teamsCount = 5;
 
-        setupSettings(players, teams);
+        setupSettings(playersPerRoom, teamsPerRoom);
         registerPlayers(playersCount);
 
         // when
