@@ -121,7 +121,7 @@ public class Deals implements Iterable<Deal>, Tickable {
 
         game.close();
 
-        MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
+        MultiplayerType type = deal.getType();
         int roomSize = type.loadProgress(game, save);
         LevelProgress progress = game.getProgress();
         int level = progress.getCurrent();
@@ -213,9 +213,9 @@ public class Deals implements Iterable<Deal>, Tickable {
         spreader.rooms().clear(); // могут быть комнаты потеряшки, их надо удалить так же
     }
 
-    public List<Deal> getAll(Predicate<Deal> filter) {
+    public List<Deal> getAll(Predicate<Deal> predicate) {
         return all.stream()
-                .filter(filter)
+                .filter(predicate)
                 .collect(toList());
     }
 
