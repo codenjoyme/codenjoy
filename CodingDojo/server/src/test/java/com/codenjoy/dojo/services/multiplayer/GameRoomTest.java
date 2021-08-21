@@ -22,7 +22,6 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
-import com.codenjoy.dojo.services.TestUtils;
 import com.codenjoy.dojo.services.mocks.GameSettings;
 import com.codenjoy.dojo.services.nullobj.NullGameField;
 import com.codenjoy.dojo.services.round.RoundSettings;
@@ -44,7 +43,7 @@ public class GameRoomTest {
     }
 
     private GamePlayer newPlayer(int teamId) {
-        return TestUtils.newPlayer(teamId, settings());
+        return new GamePlayer(event -> {}, settings()) {}.inTeam(teamId);
     }
 
     private RoundSettings settings() {

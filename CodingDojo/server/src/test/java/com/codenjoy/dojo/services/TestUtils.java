@@ -51,12 +51,6 @@ public class TestUtils {
         public PrinterFactory printerFactory;
     }
 
-    public static GamePlayer newPlayer(int teamId, SettingsReader settings) {
-        // TODO #3d4w чаще всего тут достаточно было мока
-        GamePlayer player = spy(new GamePlayer(event -> {}, settings) {}.inTeam(teamId));
-        return player;
-    }
-
     public static Env getDeal(Deals deals,
                               Player player,
                               String room,
@@ -66,7 +60,7 @@ public class TestUtils {
                               Printer printer)
     {
         Joystick joystick = mock(Joystick.class);
-        GamePlayer gamePlayer = newPlayer(DEFAULT_TEAM_ID, mock(SettingsReader.class));
+        GamePlayer gamePlayer = mock(GamePlayer.class);
         when(gamePlayer.getJoystick()).thenReturn(joystick);
 
         GameType gameType = player.getGameType();

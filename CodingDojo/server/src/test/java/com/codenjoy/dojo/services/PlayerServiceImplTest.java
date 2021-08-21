@@ -263,7 +263,7 @@ public class PlayerServiceImplTest {
                     Joystick joystick = mock(Joystick.class);
                     joysticks.add(joystick);
 
-                    GamePlayer gamePlayer = TestUtils.newPlayer(teamId, mock(SettingsReader.class));
+                    GamePlayer gamePlayer = mock(GamePlayer.class);
                     gamePlayers.add(gamePlayer);
 
                     when(gamePlayer.getJoystick()).thenReturn(joystick);

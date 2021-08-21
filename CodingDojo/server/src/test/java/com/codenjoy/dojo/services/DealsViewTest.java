@@ -822,7 +822,7 @@ public class DealsViewTest {
         playerScores.add(gameScore);
         when(gameScore.getScore()).thenReturn(scores);
 
-        GamePlayer gamePlayer = TestUtils.newPlayer(GamePlayer.DEFAULT_TEAM_ID, mock(SettingsReader.class));
+        GamePlayer gamePlayer = mock(GamePlayer.class);
         when(gamePlayer.getHeroData()).thenReturn(heroData);
         gamePlayers.add(gamePlayer);
         heroesData.add(heroData);
