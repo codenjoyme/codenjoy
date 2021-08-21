@@ -33,6 +33,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
+
 @Import(RestTeamControllerApprovalsTest.ContextConfiguration.class)
 public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest {
 
@@ -108,6 +110,12 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
     @Test
     public void test12() {
         play(35, 7, 10, 5, TICKS);
+    }
+
+    @Test
+    public void test13_MULTIPLE() {
+        settings.bool(ROUNDS_ENABLED, false);
+        play(10, 3, Integer.MAX_VALUE, 4, TICKS);
     }
 
     private void play(int playersCount, int teamsCount, int playersPerRoom, int teamsPerRoom, int ticks) {

@@ -63,12 +63,12 @@ public class ThirdGameSettings extends SettingsImpl
         init();
         initRound();
 
-        bool(ROUNDS_ENABLED, true);
         playersAndTeamsPerRoom(4, 2);
     }
 
     public SettingsReader playersAndTeamsPerRoom(int players, int teams) {
-        return integer(ROUNDS_PLAYERS_PER_ROOM, players)
+        return bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, players)
                 .integer(ROUNDS_TEAMS_PER_ROOM, teams);
     }
 

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
 
 public class ThirdGameType extends FakeGameType {
@@ -80,9 +81,14 @@ public class ThirdGameType extends FakeGameType {
 
     @Override
     public MultiplayerType getMultiplayerType(Settings settings) {
-        return MultiplayerType.TEAM.apply(
-                ((SettingsReader)settings).integer(ROUNDS_PLAYERS_PER_ROOM),
-                MultiplayerType.DISPOSABLE);
+        SettingsReader reader = (SettingsReader) settings;
+        if (reader.bool(ROUNDS_ENABLED)) {
+            return MultiplayerType.TEAM.apply(
+                    reader.integer(ROUNDS_PLAYERS_PER_ROOM),
+                    MultiplayerType.DISPOSABLE);
+        } else {
+            return MultiplayerType.MULTIPLE;
+        }
     }
 
     @Override
