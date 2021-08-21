@@ -3,10 +3,7 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.SecondGameType;
-import com.codenjoy.dojo.services.mocks.ThirdGameSettings;
-import com.codenjoy.dojo.services.mocks.ThirdGameType;
+import com.codenjoy.dojo.services.mocks.*;
 import com.codenjoy.dojo.services.multiplayer.GameRoom;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.json.JSONArray;
@@ -105,10 +102,10 @@ public class AbstractTeamControllerTest extends AbstractRestControllerTest  {
                     String players = entry.getValue().stream()
                             .map(Deal::getPlayerId)
                             .sorted()
-                            .collect(joining(","));
-                    return String.format("[%d: %s]\n", teamId, players);
+                            .collect(joining(", "));
+                    return String.format("[%d: %s]", teamId, players);
                 })
-                .collect(joining());
+                .collect(joining("\n"));
         assertEquals(expected, actual);
     }
 

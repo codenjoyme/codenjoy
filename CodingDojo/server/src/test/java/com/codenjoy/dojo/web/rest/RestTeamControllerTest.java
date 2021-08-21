@@ -137,24 +137,24 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         callGet(new PTeam(1, "player1", "player2"),
                 new PTeam(2, "player3", "player4"));
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player3,player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player3, player4]");
 
         players.remove("player3");
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player4]");
 
         saves.load("player3");
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player3,player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player3, player4]");
 
         callPost(new PTeam(3, "player1", "player2"),
                 new PTeam(4, "player3", "player4"));
 
-        asrtTms("[3: player1,player2]\n" +
-                "[4: player3,player4]\n");
+        asrtTms("[3: player1, player2]\n" +
+                "[4: player3, player4]");
     }
 
     @Test
@@ -165,19 +165,19 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         callGet(new PTeam(1, "player1", "player2"),
                 new PTeam(2, "player3", "player4"));
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player3,player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player3, player4]");
 
         players.remove("player3");
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player4]");
 
         callPost(new PTeam(3, "player1", "player2"),
                 new PTeam(4, "player3", "player4"));
 
-        asrtTms("[3: player1,player2]\n" +
-                "[4: player4]\n");
+        asrtTms("[3: player1, player2]\n" +
+                "[4: player4]");
     }
 
     @Test
@@ -188,24 +188,24 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         callGet(new PTeam(1, "player1", "player2"),
                 new PTeam(2, "player3", "player4"));
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player3,player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player3, player4]");
 
         callPost(new PTeam(3, "player1", "player2"),
                 new PTeam(4, "player3", "player4"));
 
-        asrtTms("[3: player1,player2]\n" +
-                "[4: player3,player4]\n");
+        asrtTms("[3: player1, player2]\n" +
+                "[4: player3, player4]");
 
         players.remove("player3");
 
-        asrtTms("[3: player1,player2]\n" +
-                "[4: player4]\n");
+        asrtTms("[3: player1, player2]\n" +
+                "[4: player4]");
 
         saves.load("player3");
 
-        asrtTms("[3: player1,player2]\n" +
-                "[4: player3,player4]\n");
+        asrtTms("[3: player1, player2]\n" +
+                "[4: player3, player4]");
     }
 
     @Test
@@ -215,26 +215,26 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
 
         players.remove("player3");
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player4]");
 
         callGet(new PTeam(1, "player1", "player2"),
                 new PTeam(2, "player4"));
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player4]");
 
         callPost(new PTeam(3, "player1", "player2"),
                 new PTeam(4, "player4"));
 
-        asrtTms("[3: player1,player2]\n" +
-                "[4: player4]\n");
+        asrtTms("[3: player1, player2]\n" +
+                "[4: player4]");
 
         saves.load("player3");
 
         asrtTms("[2: player3]\n" +
-                "[3: player1,player2]\n" +
-                "[4: player4]\n");
+                "[3: player1, player2]\n" +
+                "[4: player4]");
     }
 
     @Test
@@ -245,21 +245,21 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         callGet(new PTeam(1, "player1", "player2"),
                 new PTeam(2, "player3", "player4"));
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player3,player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player3, player4]");
 
         register("player5", ip, room, game);
 
         asrtTms("[0: player5]\n" +
-                "[1: player1,player2]\n" +
-                "[2: player3,player4]\n");
+                "[1: player1, player2]\n" +
+                "[2: player3, player4]");
 
         callPost(new PTeam(3, "player1", "player2"),
                 new PTeam(4, "player3", "player4"));
 
         asrtTms("[0: player5]\n" +
-                "[3: player1,player2]\n" +
-                "[4: player3,player4]\n");
+                "[3: player1, player2]\n" +
+                "[4: player3, player4]");
     }
 
     @Test
@@ -270,20 +270,20 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         callGet(new PTeam(1, "player1", "player2"),
                 new PTeam(2, "player3", "player4"));
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player3,player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player3, player4]");
 
         callPost(new PTeam(3, "player1", "player2"),
                 new PTeam(4, "player3", "player4"));
 
-        asrtTms("[3: player1,player2]\n" +
-                "[4: player3,player4]\n");
+        asrtTms("[3: player1, player2]\n" +
+                "[4: player3, player4]");
 
         register("player5", ip, room, game);
 
         asrtTms("[0: player5]\n" +
-                "[3: player1,player2]\n" +
-                "[4: player3,player4]\n");
+                "[3: player1, player2]\n" +
+                "[4: player3, player4]");
     }
 
     @Test
@@ -293,25 +293,25 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
 
         players.remove("player3");
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player4]");
 
         callGet(new PTeam(1, "player1", "player2"),
                 new PTeam(2, "player4"));
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player4]");
 
         saves.load("player3");
 
-        asrtTms("[1: player1,player2]\n" +
-                "[2: player3,player4]\n");
+        asrtTms("[1: player1, player2]\n" +
+                "[2: player3, player4]");
 
         callPost(new PTeam(3, "player1", "player2"),
                 new PTeam(4, "player4"));
 
         asrtTms("[2: player3]\n" +
-                "[3: player1,player2]\n" +
-                "[4: player4]\n");
+                "[3: player1, player2]\n" +
+                "[4: player4]");
     }
 }
