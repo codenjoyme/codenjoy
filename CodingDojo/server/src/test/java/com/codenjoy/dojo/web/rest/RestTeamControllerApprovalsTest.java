@@ -36,7 +36,9 @@ import java.util.function.Consumer;
 @Import(RestTeamControllerApprovalsTest.ContextConfiguration.class)
 public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest {
 
-    private Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
+    public static final int TICKS = 20;
+
+    private Dice dice = LocalGameRunner.getDice("435874345435874365843564398", TICKS, 200);
     private List<String> messages = new LinkedList<>();
     private Consumer<String> out = message -> {
         messages.add(message);
@@ -50,62 +52,62 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
 
     @Test
     public void test1() {
-        play(10, 5, 4, 2, 100);
+        play(10, 5, 4, 2, TICKS);
     }
 
     @Test
     public void test2() {
-        play(10, 6, 3, 3, 100);
+        play(10, 6, 3, 3, TICKS);
     }
 
     @Test
     public void test3() {
-        play(20, 10, 2, 2, 100);
+        play(20, 10, 2, 2, TICKS);
     }
 
     @Test
     public void test4() {
-        play(36, 5, 6, 2, 100);
+        play(36, 5, 6, 2, TICKS);
     }
 
     @Test
     public void test5() {
-        play(12, 2, 4, 2, 100);
+        play(12, 2, 4, 2, TICKS);
     }
 
     @Test
     public void test6() {
-        play(18, 4, 3, 3, 100);
+        play(18, 4, 3, 3, TICKS);
     }
 
     @Test
     public void test7() {
-        play(22, 5, 6, 3, 100);
+        play(22, 5, 6, 3, TICKS);
     }
 
     @Test
     public void test8() {
-        play(36, 6, 6, 6, 100);
+        play(36, 6, 6, 6, TICKS);
     }
 
     @Test
     public void test9() {
-        play(15, 3, 3, 3, 100);
+        play(15, 3, 3, 3, TICKS);
     }
 
     @Test
     public void test10() {
-        play(15, 2, 2, 2, 100);
+        play(15, 2, 2, 2, TICKS);
     }
 
     @Test
     public void test11() {
-        play(15, 4, 4, 4, 100);
+        play(15, 4, 4, 4, TICKS);
     }
 
     @Test
     public void test12() {
-        play(35, 7, 10, 5, 100);
+        play(35, 7, 10, 5, TICKS);
     }
 
     private void play(int playersCount, int teamsCount, int playersPerRoom, int teamsPerRoom, int ticks) {
@@ -123,7 +125,7 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
     }
 
     private String name(int playersCount, int teamsCount, int playersPerRoom, int teamsPerRoom) {
-        return String.format("%s-players(%s from %s)-teams(%s from %s).data",
+        return String.format("approvals/%s-players(%s from %s)-teams(%s from %s).data",
                 getClass().getSimpleName(),
                 playersPerRoom, playersCount,
                 teamsPerRoom, teamsCount);
