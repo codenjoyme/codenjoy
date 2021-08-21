@@ -144,16 +144,21 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     private void asrtFld(String expected) {
         Collection<GameRoom> rooms = deals.rooms().get(room);
 
+        Map<String, Integer> playersTeams = deals.all().stream().
+                collect(toMap(deal -> deal.getPlayerId(),
+                        deal -> deal.getTeamId()));
+
         String actual = type.fields().stream()
                 .map(field -> {
                     String players = rooms.stream()
                             .filter(room -> room.field() == field)
                             .flatMap(room -> room.players().stream())
                             .map(gamePlayer -> deals.get(gamePlayer).get().getPlayerId())
-                            .collect(joining(","));
-                    return String.format("[%s: %s]\n", type.fields().indexOf(field), players);
+                            .map(id -> String.format("%s(t%s)", id, playersTeams.get(id)))
+                            .collect(joining(", "));
+                    return String.format("[f%s: %s]", type.fields().indexOf(field), players);
                 })
-                .collect(joining());
+                .collect(joining("\n"));
 
         assertEquals(expected, actual);
     }
@@ -176,75 +181,58 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         // when then
         register("player1", ip, room, game);
 
-        asrtTms("[0: player1]\n");
-
-        asrtFld("[0: player1]\n");
+        asrtFld("[f0: player1(t0)]");
 
         // when then
         register("player2", ip, room, game);
 
-        asrtTms("[0: player1,player2]\n");
-
-        asrtFld("[0: player1]\n" +
-                "[1: player2]\n");
+        asrtFld("[f0: player1(t0)]\n" +
+                "[f1: player2(t0)]");
 
         // when then
         register("player3", ip, room, game);
 
-        asrtTms("[0: player1,player2,player3]\n");
-
-        asrtFld("[0: player1]\n" +
-                "[1: player2]\n" +
-                "[2: player3]\n");
+        asrtFld("[f0: player1(t0)]\n" +
+                "[f1: player2(t0)]\n" +
+                "[f2: player3(t0)]");
 
         // when then
         register("player4", ip, room, game);
 
-        asrtTms("[0: player1,player2,player3,player4]\n");
-
-        asrtFld("[0: player1]\n" +
-                "[1: player2]\n" +
-                "[2: player3]\n" +
-                "[3: player4]\n");
+        asrtFld("[f0: player1(t0)]\n" +
+                "[f1: player2(t0)]\n" +
+                "[f2: player3(t0)]\n" +
+                "[f3: player4(t0)]");
 
         // when then
         // 4 уйдет к 1 (там свободно) и его комната пустая самоудалится
         callPost(new PTeam(1, "player4"));
 
-        asrtTms("[0: player1,player2,player3]\n" +
-                "[1: player4]\n");
-
-        asrtFld("[0: player1,player4]\n" +
-                "[1: player2]\n" +
-                "[2: player3]\n" +
-                "[3: ]\n");
+        asrtFld("[f0: player1(t0), player4(t1)]\n" +
+                "[f1: player2(t0)]\n" +
+                "[f2: player3(t0)]\n" +
+                "[f3: ]");
 
         // when then
         // 3 уйдет ко 2 (там свободно) и его комната пустая самоудалится
         callPost(new PTeam(1, "player3"));
 
-        asrtTms("[0: player1,player2]\n" +
-                "[1: player3,player4]\n");
-
-        asrtFld("[0: player1,player4]\n" +
-                "[1: player2,player3]\n" +
-                "[2: ]\n" +
-                "[3: ]\n");
+        asrtFld("[f0: player1(t0),player4(t1)]\n" +
+                "[f1: player2(t0),player3(t1)]\n" +
+                "[f2: ]\n" +
+                "[f3: ]");
 
         // when then
         // 2 уйдет в новую комнату и потащит за собой 3
         // 3 перейдет в новую комнату, т.к. вернуться к 2 не может потому что они одной команды
         callPost(new PTeam(1, "player2"));
 
-        asrtTms("[0: player1]\n" +
-                "[1: player2,player3,player4]\n");
-
-        asrtFld("[0: player1,player4]\n" +
-                "[1: ]\n" +
-                "[2: ]\n" +
-                "[3: ]\n" +
-                "[4: player3]\n" +
-                "[5: player2]\n");
+        asrtFld("[f0: player1(t0),player4(t1)]\n" +
+                "[f1: ]\n" +
+                "[f2: ]\n" +
+                "[f3: ]\n" +
+                "[f4: player3(t1)]\n" +
+                "[f5: player2(t1)]");
     }
 
     @Test
@@ -252,24 +240,18 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         givenPl(new PTeam(1, "player1", "player2", "player3", "player4"),
                 new PTeam(2, "player5", "player6", "player7", "player8"));
 
-        asrtTms("[1: player1,player2,player3,player4]\n" +
-                "[2: player5,player6,player7,player8]\n");
-
-        asrtFld("[0: player5,player1,player2,player6]\n" +
-                "[1: player7,player3,player4,player8]\n");
+        asrtFld("[f0: player5(t2),player1(t1),player2(t1),player6(t2)]\n" +
+                "[f1: player7(t2),player3(t1),player4(t1),player8(t2)]");
 
         // when
         callPost(new PTeam(2, "player4"));
 
         // then
-        asrtTms("[1: player1,player2,player3]\n" +
-                "[2: player4,player5,player6,player7,player8]\n");
-
         // тут явно видно, что все вышли из 1й комнаты
-        asrtFld("[0: player5,player1,player2,player6]\n" +
-                "[1: ]\n" +
-                "[2: player7,player3,player8]\n" +
-                "[3: player4]\n");
+        asrtFld("[f0: player5(t2),player1(t1),player2(t1),player6(t2)]\n" +
+                "[f1: ]\n" +
+                "[f2: player7(t2),player3(t1),player8(t2)]\n" +
+                "[f3: player4(t2)]");
     }
 
     @Test
