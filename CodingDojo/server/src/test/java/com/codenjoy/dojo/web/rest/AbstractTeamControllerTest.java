@@ -18,7 +18,7 @@ import static com.codenjoy.dojo.utils.JsonUtils.toStringSorted;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.joining;
 
-public class AbstractTeamControllerTest extends AbstractRestControllerTest  {
+public abstract class AbstractTeamControllerTest extends AbstractRestControllerTest  {
 
     public static final String game = "third";
     public static final String ip = "ip";
