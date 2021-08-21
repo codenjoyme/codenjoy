@@ -27,9 +27,9 @@ import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.mocks.ThirdGameSettings;
 import com.codenjoy.dojo.services.mocks.ThirdGameType;
 import com.codenjoy.dojo.services.multiplayer.GameRoom;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.json.JSONArray;
 import org.junit.Before;
@@ -56,7 +56,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
     private static final String ip = "ip";
     private static final String room = "test";
 
-    private SettingsReader settings;
+    private ThirdGameSettings settings;
     private ThirdGameType type;
 
     @TestConfiguration
@@ -90,13 +90,16 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
 
         // this is how we get the room settings
         type = (ThirdGameType) games.getGameType(game);
-        settings = (SettingsReader) rooms.create(room, type).getSettings();
+        settings = (ThirdGameSettings) rooms.create(room, type).getSettings();
 
         // We want to remember every field ever created,
         // in order to count the indices. So there we want to delete it.
         type.clear();
 
         asAdmin();
+
+        // for all tests
+        settings.playersAndTeamsPerRoom(4, 2);
     }
 
     private void givenPl(PTeam... teams) {
@@ -168,8 +171,7 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
 
     @Test
     public void checkingFieldCreationProcess_twoTeams_twoPlayersPerRoom() {
-        settings.integer(ROUNDS_PLAYERS_PER_ROOM, 2)
-                .integer(ROUNDS_TEAMS_PER_ROOM, 2);
+        settings.playersAndTeamsPerRoom(2, 2);
 
         // when then
         register("player1", ip, room, game);

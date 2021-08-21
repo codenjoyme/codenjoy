@@ -29,8 +29,6 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER3;
-import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER4;
 import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER5;
 import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER6;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
@@ -66,8 +64,12 @@ public class ThirdGameSettings extends SettingsImpl
         initRound();
 
         bool(ROUNDS_ENABLED, true);
-        integer(ROUNDS_PLAYERS_PER_ROOM, 4);
-        integer(ROUNDS_TEAMS_PER_ROOM, 2);
+        playersAndTeamsPerRoom(4, 2);
+    }
+
+    public SettingsReader playersAndTeamsPerRoom(int players, int teams) {
+        return integer(ROUNDS_PLAYERS_PER_ROOM, players)
+                .integer(ROUNDS_TEAMS_PER_ROOM, teams);
     }
 
     public void init() {
