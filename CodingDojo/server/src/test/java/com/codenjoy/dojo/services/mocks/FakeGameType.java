@@ -34,19 +34,37 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.*;
+import lombok.Setter;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class FakeGameType extends AbstractGameType<Settings> {
+
+    @Setter
+    private Consumer<Field> onCreateField;
+
+    // We want to remember every field ever created,
+    // in order to count the indices.
+    private List<Field> fields = new LinkedList<>();
 
     @Override
     public PlayerScores getPlayerScores(Object score, Settings settings) {
         return new FakePlayerScores(score);
     }
 
-    class Field implements GameField<Player> {
+    public void clear() {
+        fields.clear();
+    }
+
+    public List<Field> fields() {
+        return fields;
+    }
+
+    public class Field implements GameField<Player> {
 
         private Player player;
         private Settings settings;
@@ -104,7 +122,9 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
 
     @Override
     public GameField createGame(int levelNumber, Settings settings) {
-        return Mockito.spy(new Field(settings));
+        Field field = Mockito.spy(new Field(settings));
+        fields.add(field);
+        return field;
     }
 
     @Override

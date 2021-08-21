@@ -55,14 +55,13 @@ public class TeamService {
     public void distributePlayersByTeam(String room, List<PTeam> teams) {
         for (PTeam team : teams) {
             for (String id : team.getPlayers()) {
-                Deal game = deals.get(id);
-                if (game == NullDeal.INSTANCE) {
+                Deal deal = deals.get(id);
+                if (deal == NullDeal.INSTANCE) {
                     log.warn("Player with id '{}' has not been found", id);
                 }
-                if (room.equals(game.getRoom())) {
-                    game.setTeamId(team.getTeamId());
-                    // TODO #3d4w надо подумать и поменять всех участников комнаты что там остались
-                    deals.reload(id, Sweeper.on().lastAlone());
+                if (room.equals(deal.getRoom())) {
+                    deal.setTeamId(team.getTeamId());
+                    deals.reload(id, Sweeper.on().allRemaining());
                 }
             }
         }

@@ -23,34 +23,78 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.GameServiceImpl;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.mocks.FirstGameType;
+import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.mocks.ThirdGameType;
+import com.codenjoy.dojo.services.multiplayer.GameRoom;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.json.JSONArray;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-import java.util.Arrays;
-import java.util.TreeMap;
+import java.util.*;
 
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.utils.JsonUtils.toStringSorted;
 import static java.util.stream.Collectors.*;
-import static org.junit.Assert.assertEquals;
 
-// an issue with the doc that illustrate test cases
+// an issue with the doc that illustrate some of test cases
+// with name like "get_logout_join_post"
 // https://github.com/codenjoyme/codenjoy/issues/162
 @Import(RestTeamControllerTest.ContextConfiguration.class)
 public class RestTeamControllerTest extends AbstractRestControllerTest {
 
-    private static String ip = "ip";
-    private static String game = "first";
-    private static String room = "test";
+    private static final String game = "third";
+    private static final String ip = "ip";
+    private static final String room = "test";
+
+    private SettingsReader settings;
+    private ThirdGameType type;
+
+    @TestConfiguration
+    public static class ContextConfiguration {
+        @Bean("gameService")
+        public GameServiceImpl gameService() {
+            return new GameServiceImpl(){
+                @Override
+                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
+                    return Arrays.asList(
+                            FirstGameType.class,
+                            SecondGameType.class,
+                            ThirdGameType.class);
+                }
+            };
+        }
+    }
 
     @Before
     public void setUp() {
         super.setUp();
+
         players.removeAll();
         rooms.removeAll();
         registration.removeAll();
+
+        // when changing teams, the current state is
+        // saved to the database (there is a TeamId).
+        // It should also be deleted between test runs.
+        saves.removeAllSaves();
+
+        // this is how we get the room settings
+        type = (ThirdGameType) games.getGameType(game);
+        settings = (SettingsReader) rooms.create(room, type).getSettings();
+
+        // We want to remember every field ever created,
+        // in order to count the indices. So there we want to delete it.
+        type.clear();
 
         asAdmin();
     }
@@ -62,6 +106,20 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
             }
         }
         teamService.distributePlayersByTeam(room, Arrays.asList(teams));
+        removeDeadFields();
+    }
+
+    /**
+     * Reset uninformative indexes that
+     * could have been created during the
+     * registration process, changing commands.
+     */
+    private void removeDeadFields() {
+        type.fields().clear();
+        type.fields().addAll((List)deals.rooms().values().stream()
+                .map(room -> room.field())
+                .distinct()
+                .collect(toList()));
     }
 
     private void asrtTms(String expected) {
@@ -80,14 +138,136 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         assertEquals(expected, actual);
     }
 
+    private void asrtFld(String expected) {
+        Collection<GameRoom> rooms = deals.rooms().get(room);
+
+        String actual = type.fields().stream()
+                .map(field -> {
+                    String players = rooms.stream()
+                            .filter(room -> room.field() == field)
+                            .flatMap(room -> room.players().stream())
+                            .map(gamePlayer -> deals.get(gamePlayer).get().getPlayerId())
+                            .collect(joining(","));
+                    return String.format("[%s: %s]\n", type.fields().indexOf(field), players);
+                })
+                .collect(joining());
+
+        assertEquals(expected, actual);
+    }
+
     private void callGet(PTeam... teams) {
         String expected = new JSONArray(Arrays.asList(teams)).toString();
-        String actual = new JSONArray(get("/rest/team/room/test")).toString();
+        String actual = new JSONArray(get("/rest/team/room/" + room)).toString();
         assertEquals(expected, actual);
     }
 
     private void callPost(PTeam... teams) {
-        post(202, "/rest/team/room/test", toStringSorted(Arrays.asList(teams)));
+        post(202, "/rest/team/room/" + room,
+                toStringSorted(Arrays.asList(teams)));
+    }
+
+    @Test
+    public void checkingFieldCreationProcess_twoTeams_twoPlayersPerRoom() {
+        settings.integer(ROUNDS_PLAYERS_PER_ROOM, 2)
+                .integer(ROUNDS_TEAMS_PER_ROOM, 2);
+
+        // when then
+        register("player1", ip, room, game);
+
+        asrtTms("[0: player1]\n");
+
+        asrtFld("[0: player1]\n");
+
+        // when then
+        register("player2", ip, room, game);
+
+        asrtTms("[0: player1,player2]\n");
+
+        asrtFld("[0: player1]\n" +
+                "[1: player2]\n");
+
+        // when then
+        register("player3", ip, room, game);
+
+        asrtTms("[0: player1,player2,player3]\n");
+
+        asrtFld("[0: player1]\n" +
+                "[1: player2]\n" +
+                "[2: player3]\n");
+
+        // when then
+        register("player4", ip, room, game);
+
+        asrtTms("[0: player1,player2,player3,player4]\n");
+
+        asrtFld("[0: player1]\n" +
+                "[1: player2]\n" +
+                "[2: player3]\n" +
+                "[3: player4]\n");
+
+        // when then
+        // 4 уйдет к 1 (там свободно) и его комната пустая самоудалится
+        callPost(new PTeam(1, "player4"));
+
+        asrtTms("[0: player1,player2,player3]\n" +
+                "[1: player4]\n");
+
+        asrtFld("[0: player1,player4]\n" +
+                "[1: player2]\n" +
+                "[2: player3]\n" +
+                "[3: ]\n");
+
+        // when then
+        // 3 уйдет ко 2 (там свободно) и его комната пустая самоудалится
+        callPost(new PTeam(1, "player3"));
+
+        asrtTms("[0: player1,player2]\n" +
+                "[1: player3,player4]\n");
+
+        asrtFld("[0: player1,player4]\n" +
+                "[1: player2,player3]\n" +
+                "[2: ]\n" +
+                "[3: ]\n");
+
+        // when then
+        // 2 уйдет в новую комнату и потащит за собой 3
+        // 3 перейдет в новую комнату, т.к. вернуться к 2 не может потому что они одной команды
+        callPost(new PTeam(1, "player2"));
+
+        asrtTms("[0: player1]\n" +
+                "[1: player2,player3,player4]\n");
+
+        asrtFld("[0: player1,player4]\n" +
+                "[1: ]\n" +
+                "[2: ]\n" +
+                "[3: ]\n" +
+                "[4: player3]\n" +
+                "[5: player2]\n");
+    }
+
+    @Test
+    public void whenTeamOfOnePlayerChanges_itIsNecessaryToResetAllOtherPlayersOnTheField() {
+        givenPl(new PTeam(1, "player1", "player2", "player3", "player4"),
+                new PTeam(2, "player5", "player6", "player7", "player8"));
+
+        asrtTms("[1: player1,player2,player3,player4]\n" +
+                "[2: player5,player6,player7,player8]\n");
+
+        asrtFld("[0: player5,player1,player2,player6]\n" +
+                "[1: player7,player3,player4,player8]\n");
+
+        // when
+        callPost(new PTeam(2, "player4"));
+
+        // then
+        asrtTms("[1: player1,player2,player3]\n" +
+                "[2: player4,player5,player6,player7,player8]\n");
+
+        // тут явно видно, что все вышли из 1й комнаты
+        asrtFld("[0: player5,player1,player2,player6]\n" +
+                "[1: ]\n" +
+                "[2: player7,player3,player8]\n" +
+                "[3: player4]\n");
     }
 
     @Test

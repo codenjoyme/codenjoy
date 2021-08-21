@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
 
@@ -17,7 +17,7 @@ public class Sweeper {
 
     private MultiplayerType type;
     private final boolean resetOther;
-    private Predicate<List<GamePlayer>> applicants;
+    private BiPredicate<GamePlayer, List<GamePlayer>> applicants;
 
     /**
      * Любая работа с юзером в комнате (удаление или перезапуск) происходит
@@ -40,7 +40,7 @@ public class Sweeper {
      * Никто из оставшихся на поле не будет обрабатываться.
      */
     public Sweeper noOne() {
-        applicants = gamePlayers -> false;
+        applicants = (player, players) -> false;
         return this;
     }
 
@@ -49,7 +49,7 @@ public class Sweeper {
      * если на то будет воля MultiplayerType.
      */
     public Sweeper lastAlone() {
-        applicants = players -> type.shouldReloadAlone() && players.size() == 1;
+        applicants = (player, players) -> type.shouldReloadAlone() && players.size() == 1;
         return this;
     }
 
@@ -58,7 +58,7 @@ public class Sweeper {
      * MultiplayerType.
      */
     public Sweeper allRemaining() {
-        applicants = players -> true;
+        applicants = (player, players) -> true;
         return this;
     }
 

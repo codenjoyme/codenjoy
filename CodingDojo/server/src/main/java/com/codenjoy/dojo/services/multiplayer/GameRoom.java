@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Sweeper;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
 
@@ -151,24 +150,31 @@ public class GameRoom {
 
     /**
      * @param player Игрок который закончил играть в этой room и будет удален
-     * @param shouldLeave готовить ли оставшихся в комнате к удалению (если явно не указано wantToStay)
+     * @param sweeper поможет сообщить готовить ли некоторых оставшихся
+     *        в комнате к удалению (если явно не указано wantToStay)
      * @return Все игроки этой комнаты, которых так же надо пристроить в новой room,
-     * т.к. им тут оставаться нет смысла
+     *         т.к. им тут оставаться нет смысла
      */
     public List<GamePlayer> remove(GamePlayer player, Sweeper sweeper) {
         List<GamePlayer> removed = new LinkedList<>();
 
         players.remove(player);
 
-        if (sweeper.getApplicants().test(players)) {
-            GamePlayer last = players.iterator().next();
-            if (!last.wantToStay()) {
-                removed.add(last);
-                players.remove(last);
+        players.forEach(last -> {
+            if (sweeper.getApplicants().test(last, players)) {
+                if (!last.wantToStay()) {
+                    removed.add(last);
+                }
             }
-        }
+        });
+
+        players.removeAll(removed);
 
         return removed;
+    }
+
+    public GameField field() {
+        return field;
     }
 
 }

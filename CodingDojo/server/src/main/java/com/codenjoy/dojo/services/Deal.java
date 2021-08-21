@@ -174,6 +174,9 @@ public class Deal implements Tickable {
         if (player != null) {
             player.setTeamId(teamId);
         }
+        if (game != null && game.getPlayer() != null) {
+            game.getPlayer().inTeam(teamId);
+        }
     }
 
     public MultiplayerType getType() {
