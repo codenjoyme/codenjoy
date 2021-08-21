@@ -217,8 +217,8 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         // 3 уйдет ко 2 (там свободно) и его комната пустая самоудалится
         callPost(new PTeam(1, "player3"));
 
-        asrtFld("[f0: player1(t0),player4(t1)]\n" +
-                "[f1: player2(t0),player3(t1)]\n" +
+        asrtFld("[f0: player1(t0), player4(t1)]\n" +
+                "[f1: player2(t0), player3(t1)]\n" +
                 "[f2: ]\n" +
                 "[f3: ]");
 
@@ -227,12 +227,29 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         // 3 перейдет в новую комнату, т.к. вернуться к 2 не может потому что они одной команды
         callPost(new PTeam(1, "player2"));
 
-        asrtFld("[f0: player1(t0),player4(t1)]\n" +
+        asrtFld("[f0: player1(t0), player4(t1)]\n" +
                 "[f1: ]\n" +
                 "[f2: ]\n" +
                 "[f3: ]\n" +
                 "[f4: player3(t1)]\n" +
                 "[f5: player2(t1)]");
+
+        // when then
+        // 1 уйдет так же в свою отдельную комнату, потому что два других
+        // ребят 2 и 3 ждут кого-то из другой команды.
+        // А вот 4й сам не останется в пустой комнате
+        // и проследует в свою комнату. Причем вначале обрабатываются
+        // все кто был в комнате, а потом тот кому меняем команду
+        callPost(new PTeam(1, "player1"));
+
+        asrtFld("[f0: ]\n" +
+                "[f1: ]\n" +
+                "[f2: ]\n" +
+                "[f3: ]\n" +
+                "[f4: player3(t1)]\n" +
+                "[f5: player2(t1)]\n" +
+                "[f6: player4(t1)]\n" +
+                "[f7: player1(t1)]");
     }
 
     @Test
@@ -240,17 +257,17 @@ public class RestTeamControllerTest extends AbstractRestControllerTest {
         givenPl(new PTeam(1, "player1", "player2", "player3", "player4"),
                 new PTeam(2, "player5", "player6", "player7", "player8"));
 
-        asrtFld("[f0: player5(t2),player1(t1),player2(t1),player6(t2)]\n" +
-                "[f1: player7(t2),player3(t1),player4(t1),player8(t2)]");
+        asrtFld("[f0: player5(t2), player1(t1), player2(t1), player6(t2)]\n" +
+                "[f1: player7(t2), player3(t1), player4(t1), player8(t2)]");
 
         // when
         callPost(new PTeam(2, "player4"));
 
         // then
         // тут явно видно, что все вышли из 1й комнаты
-        asrtFld("[f0: player5(t2),player1(t1),player2(t1),player6(t2)]\n" +
+        asrtFld("[f0: player5(t2), player1(t1), player2(t1), player6(t2)]\n" +
                 "[f1: ]\n" +
-                "[f2: player7(t2),player3(t1),player8(t2)]\n" +
+                "[f2: player7(t2), player3(t1), player8(t2)]\n" +
                 "[f3: player4(t2)]");
     }
 
