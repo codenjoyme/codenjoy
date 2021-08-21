@@ -108,6 +108,56 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
     }
 
     @Test
+    public void checkingFieldCreationProcess_caseTwoPlayersPerRequest_twoTeams_twoPlayersPerRoom() {
+        settings.playersAndTeamsPerRoom(2, 2);
+
+        // when then
+        register("player1", ip, room, game);
+        register("player2", ip, room, game);
+        register("player3", ip, room, game);
+        register("player4", ip, room, game);
+
+        asrtFld("[f0: player1(t0)]\n" +
+                "[f1: player2(t0)]\n" +
+                "[f2: player3(t0)]\n" +
+                "[f3: player4(t0)]");
+
+        // when then
+        //
+        // 4 уйдет к 1 (там свободно) и его комната пустая самоудалится
+        //
+        // 3 уйдет ко 2 (там свободно) и его комната пустая самоудалится
+        callPost(new PTeam(1, "player4"),
+                new PTeam(1, "player3"));
+
+        asrtFld("[f0: player1(t0), player4(t1)]\n" +
+                "[f1: player2(t0), player3(t1)]\n" +
+                "[f2: ]\n" +
+                "[f3: ]");
+
+        // when then
+        //
+        // 2 уйдет в новую комнату и потащит за собой 3
+        // 3 перейдет в новую комнату, т.к. вернуться к 2 не может потому что они одной команды
+        //
+        // 1 уйдет так же в свою отдельную комнату, потому что два других
+        // ребят 2 и 3 ждут кого-то из другой команды.
+        // А вот 4й сам не останется в пустой комнате
+        // и проследует в свою комнату. Причем вначале обрабатываются
+        // все кто был в комнате, а потом тот кому меняем команду
+        callPost(new PTeam(1, "player2"),
+                new PTeam(1, "player1"));
+
+        asrtFld("[f3: ]\n" +
+                "[f4: player3(t1)]\n" +
+                "[f5: player2(t1)]\n" +
+                "[f6: player4(t1)]\n" +
+                "[f7: player1(t1)]");
+
+        // результат такой же если бы сделали запросы по очереди
+    }
+
+    @Test
     public void whenTeamOfOnePlayerChanges_itIsNecessaryToResetAllOtherPlayersOnTheField() {
         givenPl(new PTeam(1, "player1", "player2", "player3", "player4"),
                 new PTeam(2, "player5", "player6", "player7", "player8"));
