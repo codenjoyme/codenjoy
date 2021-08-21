@@ -39,6 +39,7 @@ import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED
 public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest {
 
     public static final int TICKS = 20;
+    public static final int INDEX_FROM_1 = 1;
 
     private Dice dice = LocalGameRunner.getDice("435874345435874365843564398", TICKS, 200);
     private List<String> messages = new LinkedList<>();
@@ -140,8 +141,8 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
     }
 
     private void changeTeam(int playersCount, int teamsCount) {
-        int teamId = random(teamsCount);
-        int playerId = random(playersCount);
+        int teamId = random(teamsCount);                    // t0 ... tN-1
+        int playerId = random(playersCount) + INDEX_FROM_1; // p1 ... pN
         callPost(new PTeam(teamId, "p" + playerId));
         out.accept(String.format("changeTeam(p%s -> t%s)", playerId, teamId));
 
@@ -150,7 +151,7 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
     }
 
     private int random(int max) {
-        return dice.next(max) + 1;
+        return dice.next(max);
     }
 
     private void printSeparator() {
@@ -164,7 +165,7 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
 
     private void registerPlayers(int playersCount) {
         for (int index = 0; index < playersCount; index++) {
-            int id = index + 1;
+            int id = index + INDEX_FROM_1;
             register("p" + id, ip, room, game);
             out.accept(String.format("register(p%s)", id));
 
