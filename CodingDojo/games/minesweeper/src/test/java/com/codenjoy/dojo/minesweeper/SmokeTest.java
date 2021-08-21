@@ -31,6 +31,7 @@ import com.codenjoy.dojo.minesweeper.services.GameRunner;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -49,7 +50,7 @@ public class SmokeTest {
         // about 5 sec
         int ticks = 1000;
 
-        Smoke.recheck = actual -> {
+        TestUtils.recheck = actual -> {
             // мы ни разу не проиграли и всегда правильно отгадывали где мины
             assertFalse(actual.contains(Events.KILL_ON_MINE.name()));
             assertFalse(actual.contains(Events.FORGET_CHARGE.name()));
