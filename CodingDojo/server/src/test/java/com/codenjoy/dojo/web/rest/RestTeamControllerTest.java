@@ -158,6 +158,54 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
     }
 
     @Test
+    public void doNotEnterTheRoomWithThePlayerWhoIsPlanningToChangeTheTeam() {
+        settings.playersAndTeamsPerRoom(4, 2);
+
+        // when then
+        register("player1", ip, room, game);
+        register("player2", ip, room, game);
+        register("player3", ip, room, game);
+        register("player4", ip, room, game);
+        register("player5", ip, room, game);
+        register("player6", ip, room, game);
+        register("player7", ip, room, game);
+        register("player8", ip, room, game);
+
+        asrtFld("[f0: player1(t0), player2(t0)]\n" +
+                "[f1: player3(t0), player4(t0)]\n" +
+                "[f2: player5(t0), player6(t0)]\n" +
+                "[f3: player7(t0), player8(t0)]");
+
+        callPost(new PTeam(1, "player3"),
+                new PTeam(1, "player4"),
+                new PTeam(2, "player5"),
+                new PTeam(2, "player6"),
+                new PTeam(3, "player7"),
+                new PTeam(3, "player8"));
+
+        // TODO #3d4w как-то много тут комнат пересобирается, пока меняется команда игрок за игроком
+        asrtFld("[f0: player1(t0), player2(t0), player3(t1), player4(t1)]\n" +
+                "[f1: ]\n" +
+                "[f2: ]\n" +
+                "[f3: ]\n" +
+                "[f4: ]\n" +
+                "[f5: ]\n" +
+                "[f6: ]\n" +
+                "[f7: player7(t3), player5(t2), player6(t2), player8(t3)]");
+
+        // when then
+        callPost(new PTeam(1, "player1"),
+                new PTeam(1, "player7"),
+                new PTeam(3, "player3"),
+                new PTeam(1, "player5"));
+
+        asrtFld("[f9: ]\n" +
+                "[f10: player8(t3), player2(t0), player3(t3)]\n" +
+                "[f11: player4(t1), player1(t1), player6(t2)]\n" +
+                "[f12: player7(t1), player5(t1)]");
+    }
+
+    @Test
     public void whenTeamOfOnePlayerChanges_itIsNecessaryToResetAllOtherPlayersOnTheField() {
         givenPl(new PTeam(1, "player1", "player2", "player3", "player4"),
                 new PTeam(2, "player5", "player6", "player7", "player8"));
