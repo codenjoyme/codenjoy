@@ -106,10 +106,10 @@ public class InactivityServiceTest extends AbstractDealsTest {
         inactivity.tick();
 
         // then
-        verify(deals, never()).remove(eq(players.get(0).getId()), any(Sweeper.class));
-        verify(deals).remove(eq(players.get(1).getId()), any(Sweeper.class));
-        verify(deals).remove(eq(players.get(2).getId()), any(Sweeper.class));
-        verify(deals, never()).remove(eq(players.get(3).getId()), any(Sweeper.class));
+        verify(deals, never()).remove(any(Sweeper.class), eq(players.get(0).getId()));
+        verify(deals).remove(any(Sweeper.class), eq(players.get(1).getId()));
+        verify(deals).remove(any(Sweeper.class), eq(players.get(2).getId()));
+        verify(deals, never()).remove(any(Sweeper.class), eq(players.get(3).getId()));
 
         assertPlayers("[player1, player4]", deals.active());
     }
@@ -131,7 +131,7 @@ public class InactivityServiceTest extends AbstractDealsTest {
         deals.tick();
 
         // then
-        verify(deals, never()).remove(any(String.class), any(Sweeper.class));
+        verify(deals, never()).remove(any(Sweeper.class), any(String.class));
 
         assertPlayers("[player1, player2, player3, player4]", deals.active());
     }
@@ -153,7 +153,7 @@ public class InactivityServiceTest extends AbstractDealsTest {
         deals.tick();
 
         // then
-        verify(deals, never()).remove(any(String.class), any(Sweeper.class));
+        verify(deals, never()).remove(any(Sweeper.class), any(String.class));
 
         assertPlayers("[player1, player2, player3, player4]", deals.active());
     }
