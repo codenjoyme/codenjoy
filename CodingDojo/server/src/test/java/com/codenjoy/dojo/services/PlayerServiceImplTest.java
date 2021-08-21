@@ -918,6 +918,15 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void shouldAlsoCleanedSpreader() {
+        // given
+        shouldInformGame_whenUnregisterPlayer();
+
+        // then
+        assertEquals(0, deals.rooms().size());
+    }
+
+    @Test
     public void shouldRemoveAll() {
         // given
         createPlayer(VASYA);

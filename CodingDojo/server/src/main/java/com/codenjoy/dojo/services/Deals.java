@@ -210,6 +210,7 @@ public class Deals implements Iterable<Deal>, Tickable {
 
     public void clear() {
         players().forEach(player -> remove(player.getId(), Sweeper.off()));
+        spreader.rooms().clear(); // могут быть комнаты потеряшки, их надо удалить так же
     }
 
     public List<Deal> getAll(Predicate<Deal> filter) {
