@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.incativity.InactivitySettings;
+import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.settings.Settings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

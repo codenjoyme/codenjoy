@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import org.json.JSONObject;

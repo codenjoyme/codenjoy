@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.playerdata.PlayerData;

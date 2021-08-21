@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.Settings;

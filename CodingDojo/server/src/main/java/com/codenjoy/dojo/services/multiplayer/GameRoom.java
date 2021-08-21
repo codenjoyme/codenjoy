@@ -22,8 +22,6 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Sweeper;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;

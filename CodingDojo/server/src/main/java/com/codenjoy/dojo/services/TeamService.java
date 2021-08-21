@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import lombok.RequiredArgsConstructor;

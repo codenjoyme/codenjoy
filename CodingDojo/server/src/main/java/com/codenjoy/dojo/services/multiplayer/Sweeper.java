@@ -1,8 +1,5 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.multiplayer;
 
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

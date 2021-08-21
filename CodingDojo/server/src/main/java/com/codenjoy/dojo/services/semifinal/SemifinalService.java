@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.semifinal;
  */
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.room.RoomState;
 import com.codenjoy.dojo.services.settings.Settings;
