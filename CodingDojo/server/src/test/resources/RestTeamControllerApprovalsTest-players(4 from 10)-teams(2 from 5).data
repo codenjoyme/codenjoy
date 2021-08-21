@@ -1,4 +1,6 @@
 ------------------------------
+settings.playersCount   = 10
+settings.teamsCount     = 5
 settings.playersPerRoom = 4
 settings.teamsPerRoom   = 2
 ------------------------------

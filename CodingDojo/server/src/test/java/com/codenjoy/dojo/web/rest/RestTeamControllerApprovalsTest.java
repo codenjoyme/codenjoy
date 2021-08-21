@@ -40,19 +40,77 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
     private List<String> messages = new LinkedList<>();
     private Consumer<String> out = message -> {
         messages.add(message);
-        System.out.println(message);
+        // System.out.println(message);
     };
 
-    @Test
-    public void test() {
-        // given
-        int playersPerRoom = 4;
-        int teamsPerRoom = 2;
-        int playersCount = 10;
-        int ticks = 100;
-        int teamsCount = 5;
+    // play(Pc,Tc,PpR,TpR, 100);
+    //      Pc/Tc>PpR/TpR     - числа участников в каждой команде должно хватить на укомплектацию борды
+    //          Tc >  TpR
+    //            PpR%TpR=0   - на поле все команды должны быть равноправны по количеству
 
-        setupSettings(playersPerRoom, teamsPerRoom);
+    @Test
+    public void test1() {
+        play(10, 5, 4, 2, 100);
+    }
+
+    @Test
+    public void test2() {
+        play(10, 6, 3, 3, 100);
+    }
+
+    @Test
+    public void test3() {
+        play(20, 10, 2, 2, 100);
+    }
+
+    @Test
+    public void test4() {
+        play(36, 5, 6, 2, 100);
+    }
+
+    @Test
+    public void test5() {
+        play(12, 2, 4, 2, 100);
+    }
+
+    @Test
+    public void test6() {
+        play(18, 4, 3, 3, 100);
+    }
+
+    @Test
+    public void test7() {
+        play(22, 5, 6, 3, 100);
+    }
+
+    @Test
+    public void test8() {
+        play(36, 6, 6, 6, 100);
+    }
+
+    @Test
+    public void test9() {
+        play(15, 3, 3, 3, 100);
+    }
+
+    @Test
+    public void test10() {
+        play(15, 2, 2, 2, 100);
+    }
+
+    @Test
+    public void test11() {
+        play(15, 4, 4, 4, 100);
+    }
+
+    @Test
+    public void test12() {
+        play(35, 7, 10, 5, 100);
+    }
+
+    private void play(int playersCount, int teamsCount, int playersPerRoom, int teamsPerRoom, int ticks) {
+        // given
+        setupSettings(playersCount, teamsCount, playersPerRoom, teamsPerRoom);
         registerPlayers(playersCount);
 
         // when
@@ -61,7 +119,14 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
         }
 
         // then
-        TestUtils.assertSmokeFile(this.getClass().getSimpleName() + ".data", messages);
+        TestUtils.assertSmokeFile(name(playersCount, teamsCount, playersPerRoom, teamsPerRoom), messages);
+    }
+
+    private String name(int playersCount, int teamsCount, int playersPerRoom, int teamsPerRoom) {
+        return String.format("%s-players(%s from %s)-teams(%s from %s).data",
+                getClass().getSimpleName(),
+                playersPerRoom, playersCount,
+                teamsPerRoom, teamsCount);
     }
 
     private void changeTeam(int playersCount, int teamsCount) {
@@ -98,11 +163,13 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
         }
     }
 
-    private void setupSettings(int players, int teams) {
+    private void setupSettings(int playersCount, int teamsCount, int playersPerRoom, int teamsPerRoom) {
         printSeparator();
-        settings.playersAndTeamsPerRoom(players, teams);
-        out.accept("settings.playersPerRoom = " + players);
-        out.accept("settings.teamsPerRoom   = " + teams);
+        settings.playersAndTeamsPerRoom(playersPerRoom, teamsPerRoom);
+        out.accept("settings.playersCount   = " + playersCount);
+        out.accept("settings.teamsCount     = " + teamsCount);
+        out.accept("settings.playersPerRoom = " + playersPerRoom);
+        out.accept("settings.teamsPerRoom   = " + teamsPerRoom);
         printSeparator();
     }
 }
