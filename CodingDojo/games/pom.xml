@@ -47,7 +47,7 @@
         <dojo.package>java/com/codenjoy/dojo</dojo.package>
         <java.client.file>resources/user/java-client.zip</java.client.file>
         <java.client>${project.build.directory}/java-client</java.client>
-        <markdown-page-generator.version>2.3.1</markdown-page-generator.version>
+        <markdown-page-generator.version>2.3.1-codenjoy</markdown-page-generator.version>
     </properties>
 
     <repositories>

@@ -43,6 +43,6 @@ if "%ARCH_NODE%"==""         ( set ARCH_NODE=https://nodejs.org/dist/v14.17.0/no
 if "%ARCH_NODE_FOLDER%"==""  ( set ARCH_NODE_FOLDER=node-v14.17.0-win-x64)
 if "%ARCH_GO%"==""           ( set ARCH_GO=https://golang.org/dl/go1.16.5.windows-amd64.zip)
 if "%ARCH_GO_FOLDER%"==""    ( set ARCH_GO_FOLDER=go)
-if "%ARCH_PHP%"==""          ( set ARCH_PHP=https://windows.php.net/downloads/releases/php-8.0.8-nts-Win32-vs16-x64.zip)
+if "%ARCH_PHP%"==""          ( set ARCH_PHP=https://windows.php.net/downloads/releases/archives/php-8.0.8-nts-Win32-vs16-x64.zip)
 if "%ARCH_PHP_COMPOSER%"=="" ( set ARCH_PHP_COMPOSER=https://getcomposer.org/download/latest-2.x/composer.phar)
 if "%ARCH_PYTHON%"==""       ( set ARCH_PYTHON=https://www.python.org/ftp/python/3.9.6/python-3.9.6-embed-amd64.zip)

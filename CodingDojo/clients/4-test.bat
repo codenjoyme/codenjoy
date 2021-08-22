@@ -8,11 +8,28 @@ echo        +-------------------------------------------------------------------
 echo [0m
 echo on
 
+IF "%LANGUAGE%"=="php" (
+    call :php
+)
+
+IF "%LANGUAGE%"=="python" (
+    call :python
+)
+
+
 cd %LANGUAGE%
 call 3-test.bat
 cd %ROOT%
 
 call :ask
+
+:php
+    SET PATH=%PHP_HOME%;%PATH%
+goto :eof
+
+:python
+    SET PATH=%PYTHON_HOME%;%PATH%
+goto :eof
 
 goto :eof
 
