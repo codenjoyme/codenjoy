@@ -66,6 +66,7 @@ public class PlayerSave {
     public PlayerSave(Player save) {
         this.id = save.getId();
         this.game = save.getGame();
+        this.teamId = save.getTeamId();
         this.callbackUrl = save.getCallbackUrl();
         this.score = save.getScore();
         this.save = save.getData();

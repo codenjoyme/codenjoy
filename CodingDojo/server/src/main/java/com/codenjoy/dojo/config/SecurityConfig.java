@@ -119,6 +119,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${server.xFrameAllowedHosts}")
     private List<String> hosts = new ArrayList<>();
 
+    @Value("${registration.password.encode-strength}")
+    private int encodeStrength;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         securityHeaders(http, hosts);
@@ -174,7 +177,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(encodeStrength);
     }
 
     @DefaultAuth

@@ -45,6 +45,13 @@ public class LockedGame implements Game {
         this.joystick = new LockedJoystick(lock);
     }
 
+    public static Game unwrap(Game game) {
+        if (game instanceof LockedGame) {
+            game = ((LockedGame)game).getWrapped();
+        }
+        return game;
+    }
+
     public Game wrap(Game game) {
         this.game = game;
         return this;
@@ -220,12 +227,6 @@ public class LockedGame implements Game {
     }
 
     public static boolean equals(Game game1, Game game2) {
-        if (game1 instanceof LockedGame) {
-            game1 = ((LockedGame)game1).getWrapped();
-        }
-        if (game2 instanceof LockedGame) {
-            game2 = ((LockedGame)game2).getWrapped();
-        }
-        return game1 == game2;
+        return unwrap(game1) == unwrap(game2);
     }
 }

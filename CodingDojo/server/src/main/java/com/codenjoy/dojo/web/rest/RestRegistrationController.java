@@ -44,7 +44,7 @@ public class RestRegistrationController {
 
     private Registration registration;
     private PlayerService playerService;
-    private PlayerGames playerGames;
+    private Deals deals;
     private SaveService saveService;
     private Validator validator;
 
@@ -100,7 +100,7 @@ public class RestRegistrationController {
             PlayerSave save = player.buildPlayerSave();
             playerService.register(save);
 
-            playerGames.setLevel(player.getId(),
+            deals.setLevel(player.getId(),
                     new JSONObject(player.getSave()));
         }
 

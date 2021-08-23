@@ -52,6 +52,7 @@ public class LockedGameTest {
 
         // then
         assertSame(game, ((LockedGame)lockedGame).getWrapped());
+        assertSame(game, LockedGame.unwrap(lockedGame));
     }
 
     @Test

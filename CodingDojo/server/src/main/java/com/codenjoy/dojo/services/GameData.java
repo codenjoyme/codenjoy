@@ -37,6 +37,7 @@ public class GameData {
     private int boardSize;
     private GuiPlotColorDecoder decoder;
     private Map<String, Object> scores;
+    private Map<String, Object> teams;
     private List<String> group;
     private Map<String, HeroData> coordinates;
     private Map<String, String> readableNames;

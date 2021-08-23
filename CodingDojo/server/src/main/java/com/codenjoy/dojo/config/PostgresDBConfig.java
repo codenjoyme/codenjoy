@@ -61,8 +61,8 @@ public class PostgresDBConfig {
     }
 
     @Bean
-    public PlayerGameSaver playerGameSaver() {
-        return new PlayerGameSaver(connectionThreadPollFactory());
+    public DealSaver dealSaver() {
+        return new DealSaver(connectionThreadPollFactory());
     }
 
     @Bean

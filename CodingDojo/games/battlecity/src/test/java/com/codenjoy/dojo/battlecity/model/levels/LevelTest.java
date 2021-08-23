@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -44,7 +45,8 @@ public class LevelTest {
     public void test() {
         GameRunner runner = new GameRunner();
         GameSettings settings = runner.getSettings();
-        GamePlayer player = runner.createPlayer(mock(EventListener.class), "id", settings);
+        GamePlayer player = runner.createPlayer(mock(EventListener.class),
+                DEFAULT_TEAM_ID, "id", settings);
         GameField game = runner.createGame(0, settings);
         player.newHero(game);
 

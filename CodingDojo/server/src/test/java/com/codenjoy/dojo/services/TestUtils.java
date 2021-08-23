@@ -28,11 +28,13 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import lombok.experimental.UtilityClass;
 import org.junit.Assert;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,20 +44,20 @@ import static org.mockito.Mockito.*;
 public class TestUtils {
 
     public static class Env {
-        public PlayerGame playerGame;
+        public Deal deal;
         public Joystick joystick;
         public GamePlayer gamePlayer;
         public GameType gameType;
         public PrinterFactory printerFactory;
     }
 
-    public static Env getPlayerGame(PlayerGames playerGames,
-                                    Player player,
-                                    String room,
-                                    Answer<Object> getGame,
-                                    MultiplayerType type, 
-                                    PlayerSave save, 
-                                    Printer printer) 
+    public static Env getDeal(Deals deals,
+                              Player player,
+                              String room,
+                              Answer<Object> getGame,
+                              MultiplayerType type,
+                              PlayerSave save,
+                              Printer printer)
     {
         Joystick joystick = mock(Joystick.class);
         GamePlayer gamePlayer = mock(GamePlayer.class);
@@ -81,15 +83,15 @@ public class TestUtils {
         when(gameType.getPrinterFactory()).thenReturn(printerFactory);
         when(printerFactory.getPrinter(any(BoardReader.class), any()))
                 .thenAnswer(inv1 -> printer);
-        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
+        when(gameType.createPlayer(any(EventListener.class), anyInt(), anyString(), any()))
                 .thenAnswer(inv -> gamePlayer);
 
-        PlayerGame playerGame = playerGames.add(player, room, save);
+        Deal deal = deals.add(player, room, save);
         Env result = new Env();
         result.gamePlayer = gamePlayer;
         result.gameType = gameType;
         result.joystick = joystick;
-        result.playerGame = playerGame;
+        result.deal = deal;
         result.printerFactory = printerFactory;
         return result;
     }

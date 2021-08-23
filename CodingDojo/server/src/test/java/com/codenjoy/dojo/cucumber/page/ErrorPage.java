@@ -40,8 +40,11 @@ import static org.junit.Assert.assertEquals;
 @RequiredArgsConstructor
 public class ErrorPage {
 
+    // page objects
     private final Page page;
     private final WebDriverWrapper web;
+
+    // application services
     private final ErrorTicketService tickets;
 
     public WebElement errorMessage() {

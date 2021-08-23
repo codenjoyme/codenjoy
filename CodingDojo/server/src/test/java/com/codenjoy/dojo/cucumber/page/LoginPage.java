@@ -34,6 +34,7 @@ import static org.junit.Assert.assertEquals;
 @RequiredArgsConstructor
 public class LoginPage {
 
+    // selectors
     public static final String PASSWORD_INPUT = "#password input";
     public static final String GAME_SELECT = "#game select";
     public static final String ROOM_SELECT = "#room select";
@@ -42,6 +43,7 @@ public class LoginPage {
     public static final String ERROR_MESSAGE = "#error-message";
     public static final String EMAIL_INPUT = "#email input";
 
+    // page objects
     private final Page page;
     private final WebDriverWrapper web;
 
