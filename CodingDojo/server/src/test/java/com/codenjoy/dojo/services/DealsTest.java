@@ -316,19 +316,6 @@ public class DealsTest extends AbstractDealsTest {
     }
 
     @Test
-    public void testGetByGamePlayer() {
-        // given
-        Player player = createPlayer();
-
-        // when
-        Deal deal = deals.get(gamePlayers.get(0)).get();
-
-        // then
-        assertEquals(gamePlayers.get(0), deal.getGame().getPlayer());
-        assertEquals(fields.get(0), deal.getField());
-    }
-
-    @Test
     public void shouldNewGame_whenGameOver_caseAnyMultiplayerType() {
         // given
         createPlayer();

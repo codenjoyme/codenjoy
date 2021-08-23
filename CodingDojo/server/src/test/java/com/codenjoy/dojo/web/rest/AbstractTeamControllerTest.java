@@ -146,8 +146,8 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
                 .map(field -> {
                     String players = rooms.stream()
                             .filter(room -> room.field() == field)
-                            .flatMap(room -> room.players().stream())
-                            .map(gamePlayer -> deals.get(gamePlayer).get().getPlayerId())
+                            .flatMap(room -> room.deals().stream())
+                            .map(Deal::getPlayerId)
                             .map(id -> String.format("%s(t%s)", id, playersTeams.get(id)))
                             .collect(joining(", "));
                     return String.format("[f%s: %s]", type.fields().indexOf(field), players);

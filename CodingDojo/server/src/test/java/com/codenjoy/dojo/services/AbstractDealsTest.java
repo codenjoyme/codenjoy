@@ -275,13 +275,9 @@ public class AbstractDealsTest {
     }
 
     private List<String> players(GameRoom room) {
-        return room.players().stream()
-                .map(this::name)
+        return room.deals().stream()
+                .map(Deal::getPlayerId)
                 .collect(toList());
-    }
-
-    private String name(GamePlayer player) {
-        return deals.get(gamePlayers.indexOf(player)).getPlayer().getId();
     }
 
 }

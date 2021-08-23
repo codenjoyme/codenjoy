@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Deal;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +37,7 @@ public class Sweeper {
 
     private MultiplayerType type;
     private final boolean resetOther;
-    private BiPredicate<GamePlayer, List<GamePlayer>> applicants;
+    private BiPredicate<Deal, List<Deal>> applicants;
 
     /**
      * Любая работа с юзером в комнате (удаление или перезапуск) происходит

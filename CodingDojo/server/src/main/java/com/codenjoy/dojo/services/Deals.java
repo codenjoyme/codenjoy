@@ -90,8 +90,7 @@ public class Deals implements Iterable<Deal>, Tickable {
     private void removeInRoom(Deal deal, Sweeper sweeper) {
         sweeper.of(deal.getType());
 
-        Game game = deal.getGame();
-        List<Deal> alone = removeGame(game, sweeper);
+        List<Deal> alone = spreader.remove(deal, sweeper);
 
         if (sweeper.isResetOther()) {
             alone.forEach(otherDeal -> play(otherDeal, otherDeal.getGame().getSave()));
@@ -110,10 +109,6 @@ public class Deals implements Iterable<Deal>, Tickable {
                 .findFirst();
     }
 
-    public Optional<Deal> get(GamePlayer player) {
-        return get(deal -> Objects.equals(player, deal.getGame().getPlayer()));
-    }
-
     private void play(Deal deal, JSONObject save) {
         Game game = deal.getGame();
         String room = deal.getRoom();
@@ -126,7 +121,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         LevelProgress progress = game.getProgress();
         int level = progress.getCurrent();
 
-        GameField field = spreader.fieldFor(game.getPlayer(),
+        GameField field = spreader.fieldFor(deal,
                 room,
                 type,
                 roomSize,
@@ -177,16 +172,6 @@ public class Deals implements Iterable<Deal>, Tickable {
             return new JSONObject();
         }
         return new JSONObject(save.getSave());
-    }
-
-    private List<Deal> removeGame(Game game, Sweeper sweeper) {
-        List<GamePlayer> alone = spreader.remove(game.getPlayer(), sweeper);
-
-        return alone.stream()
-                .map(this::get)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(toList());
     }
 
     public boolean isEmpty() {
@@ -328,24 +313,24 @@ public class Deals implements Iterable<Deal>, Tickable {
             Collections.shuffle(games);
         }
 
-        games.forEach(deal -> spreader.remove(deal.getGame().getPlayer(), Sweeper.off()));
+        games.forEach(deal -> spreader.remove(deal, Sweeper.off()));
         games.forEach(deal -> reload(deal.getPlayerId(), Sweeper.off()));
     }
 
     private void quiet(Runnable runnable) {
-        ((Tickable)() -> runnable.run()).quietTick();
+        ((Tickable) runnable::run).quietTick();
     }
 
     public List<Player> getPlayersByGame(String game) {
         return all.stream()
-                .map(deal -> deal.getPlayer())
+                .map(Deal::getPlayer)
                 .filter(player -> player.getGame().equals(game))
                 .collect(toList());
     }
 
     public List<Player> getPlayersByRoom(String room) {
         return all.stream()
-                .map(deal -> deal.getPlayer())
+                .map(Deal::getPlayer)
                 .filter(player -> player.getRoom().equals(room))
                 .collect(toList());
     }
