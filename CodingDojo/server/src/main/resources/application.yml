@@ -40,6 +40,7 @@ registration:
   password:
     min-length: 8
     autogen-length: 8
+    encode-strength: 6
 
 page:
   main:

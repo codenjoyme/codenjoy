@@ -45,9 +45,9 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class AbstractPlayerGamesTest {
+public class AbstractDealsTest {
 
-    protected PlayerGames playerGames;
+    protected Deals deals;
     protected List<GameType> gameTypes = new LinkedList<>();
     protected Map<Player, Closeable> ais = new HashMap<>();
     protected List<Joystick> joysticks = new LinkedList<>();
@@ -61,9 +61,9 @@ public class AbstractPlayerGamesTest {
 
     @Before
     public void setUp() {
-        playerGames = new PlayerGames();
-        roomService = playerGames.roomService = new RoomService();
-        timeService = playerGames.timeService = mock(TimeService.class);
+        deals = new Deals();
+        roomService = deals.roomService = new RoomService();
+        timeService = deals.timeService = mock(TimeService.class);
         when(fieldSaves.getSave()).thenReturn(null);
     }
 
@@ -98,9 +98,9 @@ public class AbstractPlayerGamesTest {
         return createPlayer(name, game, room, type, save, "board");
     }
 
-    protected void verifyRemove(PlayerGame playerGame, GameField field) {
-        verify(field).remove(playerGame.getGame().getPlayer());
-        verify(ais.get(playerGame.getPlayer())).close();
+    protected void verifyRemove(Deal deal, GameField field) {
+        verify(field).remove(deal.getGame().getPlayer());
+        verify(ais.get(deal.getPlayer())).close();
     }
 
     protected Player createPlayerWithScore(int score, String playerName, MultiplayerType type) {
@@ -155,11 +155,11 @@ public class AbstractPlayerGamesTest {
         ais.put(player, ai);
         player.setAi(ai);
 
-        playerGames.onAdd(pg -> lazyJoysticks.add(pg.getJoystick()));
+        deals.onAdd(deal -> lazyJoysticks.add(deal.getJoystick()));
 
         TestUtils.Env env =
-                TestUtils.getPlayerGame(
-                        playerGames,
+                TestUtils.getDeal(
+                        deals,
                         player,
                         room,
                         inv -> {
@@ -221,7 +221,7 @@ public class AbstractPlayerGamesTest {
         }
     }
 
-    protected void assertPlayers(String expected, List<PlayerGame> list) {
+    protected void assertPlayers(String expected, List<Deal> list) {
         assertEquals(expected,
                 list.stream()
                         .map(it -> it.getPlayer().getId())
@@ -236,11 +236,27 @@ public class AbstractPlayerGamesTest {
     public Map<Integer, Collection<String>> getRooms() {
         Multimap<Integer, String> result = TreeMultimap.create();
 
-        for (PlayerGame playerGame : playerGames) {
-            int index = fields.indexOf(playerGame.getField());
-            String name = playerGame.getPlayer().getId();
+        for (Deal deal : deals) {
+            int index = fields.indexOf(deal.getField());
+            String name = deal.getPlayer().getId();
 
             result.get(index).add(name);
+        }
+        return result.asMap();
+    }
+
+    public void assertTeams(String expected) {
+        assertEquals(expected, getTeams().toString());
+    }
+
+    public Map<Integer, Collection<String>> getTeams() {
+        Multimap<Integer, String> result = TreeMultimap.create();
+
+        for (Deal deal : deals) {
+            int teamId = deal.getTeamId();
+            String name = deal.getPlayer().getId();
+
+            result.get(teamId).add(name);
         }
         return result.asMap();
     }
@@ -252,20 +268,16 @@ public class AbstractPlayerGamesTest {
     public Map<String, Collection<List<String>>> getRoomNames() {
         Multimap<String, List<String>> result = HashMultimap.create();
 
-        playerGames.rooms().forEach(
+        deals.rooms().forEach(
                 (key, value) -> result.get(key).add(players(value)));
 
         return result.asMap();
     }
 
     private List<String> players(GameRoom room) {
-        return room.players().stream()
-                .map(this::name)
+        return room.deals().stream()
+                .map(Deal::getPlayerId)
                 .collect(toList());
-    }
-
-    private String name(GamePlayer player) {
-        return playerGames.get(gamePlayers.indexOf(player)).getPlayer().getId();
     }
 
 }

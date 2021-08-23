@@ -158,6 +158,7 @@ pages.admin = function() {
             setup('readableName');
             setup('email');
             setup('room');
+            setup('teamId');
             setup('score');
             setup('callbackUrl');
             setup('data');

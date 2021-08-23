@@ -39,6 +39,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -113,7 +114,8 @@ public class AbstractSingleplayerTest {
         if (current == null || current.freeBases() == 0) {
             current = (Expansion) gameRunner.createGame(0, settings);
         }
-        Player player = (Player) gameRunner.createPlayer(listener, "", settings);
+        Player player = (Player) gameRunner.createPlayer(listener,
+                DEFAULT_TEAM_ID, "", settings);
         Single game = new Single(player, gameRunner.getPrinterFactory());
         game.on(current);
         game.newGame();

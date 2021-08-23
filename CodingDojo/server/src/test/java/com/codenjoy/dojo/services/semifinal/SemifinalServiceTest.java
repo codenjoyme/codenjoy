@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services.semifinal;
  */
 
 
-import com.codenjoy.dojo.services.AbstractPlayerGamesTest;
+import com.codenjoy.dojo.services.AbstractDealsTest;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.mockito.Mockito.*;
 
-public class SemifinalServiceTest extends AbstractPlayerGamesTest {
+public class SemifinalServiceTest extends AbstractDealsTest {
 
     private SemifinalService semifinal;
     private int timeout;
@@ -54,7 +54,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
         timeout = 3;
         semifinal = new SemifinalService();
         semifinal.roomService = roomService;
-        semifinal.playerGames = playerGames;
+        semifinal.deals = deals;
         semifinal.clean();
         roomService.removeAll();
     }
@@ -822,11 +822,11 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
                 .setResetBoard(true);
 
         assertEquals(2, fields.size());
-        assertEquals(fields.get(0), playerGames.get("player1").getField());
-        assertEquals(fields.get(0), playerGames.get("player2").getField());
+        assertEquals(fields.get(0), deals.get("player1").getField());
+        assertEquals(fields.get(0), deals.get("player2").getField());
 
-        assertEquals(fields.get(1), playerGames.get("player3").getField());
-        assertEquals(fields.get(1), playerGames.get("player4").getField());
+        assertEquals(fields.get(1), deals.get("player3").getField());
+        assertEquals(fields.get(1), deals.get("player4").getField());
 
         assertRooms("{0=[player1, player2], " +
                 "1=[player3, player4]}");
@@ -1091,10 +1091,10 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
         assertActive(player1, player2);
 
         verify(player1.getScores(), never()).clear();
-        verify(playerGames.get(0).getGame().getField(), never()).clearScore();
+        verify(deals.get(0).getGame().getField(), never()).clearScore();
 
         verify(player2.getScores(), never()).clear();
-        verify(playerGames.get(1).getGame().getField(), never()).clearScore();
+        verify(deals.get(1).getGame().getField(), never()).clearScore();
     }
 
     private void assertActive(Player...players) {
@@ -1103,7 +1103,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
                         .map(Player::getId)
                         .collect(toList())
                         .toString(),
-                playerGames.players().toString());
+                deals.players().toString());
     }
 
     private void ticksTillTimeout() {

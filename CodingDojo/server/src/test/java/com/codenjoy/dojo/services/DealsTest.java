@@ -27,9 +27,9 @@ import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.multiplayer.Sweeper;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.*;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -38,49 +38,49 @@ import org.mockito.Mockito;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.services.PlayerGames.*;
+import static com.codenjoy.dojo.services.Deals.*;
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class PlayerGamesTest extends AbstractPlayerGamesTest {
+public class DealsTest extends AbstractDealsTest {
 
     private static final int NEVER = 0;
     public static final int ONCE = 1;
 
-    private PlayerGame removed;
+    private Deal removed;
 
     @Test
     public void testRemove() {
         // given
         Player player = createPlayer();
 
-        assertEquals(false, playerGames.isEmpty());
-        assertEquals(1, playerGames.size());
-        PlayerGame playerGame = playerGames.get(player.getId());
-        GameField field = playerGame.getGame().getField();
-        playerGames.onRemove(pg -> removed = pg);
+        assertEquals(false, deals.isEmpty());
+        assertEquals(1, deals.size());
+        Deal deal = deals.get(player.getId());
+        GameField field = deal.getGame().getField();
+        deals.onRemove(otherDeal -> removed = otherDeal);
 
         // when
-        playerGames.remove(player);
+        deals.remove(player.getId(), Sweeper.off());
 
         // then
-        assertEquals(true, playerGames.isEmpty());
-        assertEquals(0, playerGames.size());
+        assertEquals(true, deals.isEmpty());
+        assertEquals(0, deals.size());
 
-        verifyRemove(playerGame, field);
-        assertEquals(removed, playerGame);
+        verifyRemove(deal, field);
+        assertEquals(removed, deal);
     }
 
     @Test
     public void testGet_notExists() {
         // when
-        PlayerGame playerGame = playerGames.get("bla");
+        Deal deal = deals.get("bla");
 
         // then
-        assertEquals(NullPlayerGame.INSTANCE, playerGame);
+        assertEquals(NullDeal.INSTANCE, deal);
     }
 
     @Test
@@ -89,11 +89,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player = createPlayer();
 
         // when
-        PlayerGame playerGame = playerGames.get(player.getId());
+        Deal deal = deals.get(player.getId());
 
         // then
-        assertEquals(player, playerGame.getPlayer());
-        assertEquals(fields.get(0), playerGame.getGame().getField());
+        assertEquals(player, deal.getPlayer());
+        assertEquals(fields.get(0), deal.getGame().getField());
     }
 
     @Test
@@ -102,10 +102,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player = createPlayer();
 
         // when
-        PlayerGame playerGame = playerGames.get(0);
+        Deal deal = deals.get(0);
 
         // then
-        assertEquals(player, playerGame.getPlayer());
+        assertEquals(player, deal.getPlayer());
     }
 
     @Test
@@ -117,16 +117,16 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player otherPlayer = createPlayer();
 
         // then
-        assertEquals(false, playerGames.isEmpty());
-        assertEquals(2, playerGames.size());
+        assertEquals(false, deals.isEmpty());
+        assertEquals(2, deals.size());
 
-        PlayerGame playerGame = playerGames.get(otherPlayer.getId());
+        Deal deal = deals.get(otherPlayer.getId());
 
         // TODO интересная бага, время от времени при запуске всех тестов parent проекта этот ассерт слетает потому что == не то же самое что equals. Интересный квест почему. Не критично, просто любопытно
-        // System.out.println("==> " + (otherPlayer == playerGame.getPlayer()));
-        // System.out.println("eq> " + (otherPlayer.equals(playerGame.getPlayer())));
-        // assertSame(otherPlayer, playerGame.getPlayer());
-        assertEquals(otherPlayer, playerGame.getPlayer());
+        // System.out.println("==> " + (otherPlayer == deal.getPlayer()));
+        // System.out.println("eq> " + (otherPlayer.equals(deal.getPlayer())));
+        // assertSame(otherPlayer, deal.getPlayer());
+        assertEquals(otherPlayer, deal.getPlayer());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player otherPlayer = createPlayer();
 
         // when
-        Iterator<PlayerGame> iterator = playerGames.iterator();
+        Iterator<Deal> iterator = deals.iterator();
 
         // then
         assertEquals(true,iterator.hasNext());
@@ -155,7 +155,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player otherPlayer = createPlayer();
 
         // when
-        List<Player> players = playerGames.players();
+        List<Player> players = deals.players();
 
         // then
         assertEquals(player, players.get(0));
@@ -171,7 +171,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player thirdPlayer = createPlayer("room2", "game2");
 
         // when
-        List<Player> result = playerGames.getPlayersByGame("game");
+        List<Player> result = deals.getPlayersByGame("game");
 
         // then
         assertEquals(2, result.size());
@@ -179,7 +179,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertEquals(secondPlayer, result.get(1));
 
         // when
-        List<Player> result2 = playerGames.getPlayersByGame("game2");
+        List<Player> result2 = deals.getPlayersByGame("game2");
 
         // then
         assertEquals(1, result2.size());
@@ -194,7 +194,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player thirdPlayer = createPlayer("room2", "game2");
 
         // when
-        List<Player> result = playerGames.getPlayersByRoom("room1");
+        List<Player> result = deals.getPlayersByRoom("room1");
 
         // then
         assertEquals(2, result.size());
@@ -202,7 +202,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertEquals(secondPlayer, result.get(1));
 
         // when
-        List<Player> result2 = playerGames.getPlayersByRoom("room2");
+        List<Player> result2 = deals.getPlayersByRoom("room2");
 
         // then
         assertEquals(1, result2.size());
@@ -216,26 +216,26 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player2 = createPlayer();
         Player player3 = createPlayer();
 
-        PlayerGame playerGame1 = playerGames.get(player.getId());
-        GameField field1 = playerGame1.getGame().getField();
+        Deal deal1 = deals.get(player.getId());
+        GameField field1 = deal1.getGame().getField();
 
-        PlayerGame playerGame2 = playerGames.get(player2.getId());
-        GameField field2 = playerGame2.getGame().getField();
+        Deal deal2 = deals.get(player2.getId());
+        GameField field2 = deal2.getGame().getField();
 
-        PlayerGame playerGame3 = playerGames.get(player3.getId());
-        GameField field3 = playerGame3.getGame().getField();
+        Deal deal3 = deals.get(player3.getId());
+        GameField field3 = deal3.getGame().getField();
 
-        assertEquals(3, playerGames.size());
+        assertEquals(3, deals.size());
 
         // when
-        playerGames.clear();
+        deals.clear();
 
         // then
-        assertEquals(0, playerGames.size());
+        assertEquals(0, deals.size());
 
-        verifyRemove(playerGame1, field1);
-        verifyRemove(playerGame2, field2);
-        verifyRemove(playerGame3, field3);
+        verifyRemove(deal1, field1);
+        verifyRemove(deal2, field2);
+        verifyRemove(deal3, field3);
     }
 
     @Test
@@ -243,10 +243,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         Player player = createPlayer("room", "game");
         Player player2 = createPlayer("room2", "game2");
-        playerGames.add(player2, "room2", null);
+        deals.add(player2, "room2", null);
 
         // when
-        List<GameType> gameTypes = playerGames.getGameTypes();
+        List<GameType> gameTypes = deals.getGameTypes();
 
         // then
         assertEquals(2, gameTypes.size());
@@ -263,7 +263,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         verifyNoMoreInteractions(joysticks.get(0));
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         verify(joysticks.get(0)).right();
@@ -289,7 +289,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         verifyNoMoreInteractions(joysticks.get(2));
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         verify(joysticks.get(0)).right();
@@ -305,7 +305,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("room2", "game2"); // второй игрок к уже существующей room2/game2
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertEquals(2, gameTypes.size());
@@ -313,19 +313,6 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         order.verify(gameTypes.get(0)).quietTick();
         order.verify(gameTypes.get(1)).quietTick();
-    }
-
-    @Test
-    public void testGetByGamePlayer() {
-        // given
-        Player player = createPlayer();
-
-        // when
-        PlayerGame playerGame = playerGames.get(gamePlayers.get(0)).get();
-
-        // then
-        assertEquals(gamePlayers.get(0), playerGame.getGame().getPlayer());
-        assertEquals(fields.get(0), playerGame.getField());
     }
 
     @Test
@@ -337,7 +324,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerIsNotAlive(index);
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         verifyNewGameCreated(0);
@@ -367,7 +354,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerIsNotAlive(2);
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         verifyNewGameCreated(0);
@@ -378,7 +365,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         givenActive("room2", true);
         resetAllFields();
 
-        playerGames.tick();
+        deals.tick();
 
         // then
         verifyNewGameCreated(0);
@@ -398,7 +385,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         resetAllFields();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertEquals(3, fields.size()); // only 3 fields created
@@ -423,7 +410,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         resetAllFields();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertEquals(2, fields.size()); // only 2 fields created
@@ -444,7 +431,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         resetAllFields();
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         verifyFieldTicked(0);
@@ -455,7 +442,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         givenActive("room2", true);
         resetAllFields();
 
-        playerGames.tick();
+        deals.tick();
 
         // then
         verifyFieldTicked(0);
@@ -488,7 +475,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerIsNotAlive(0);
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         verifyNewGameCreated(0);
@@ -509,7 +496,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // win + gameOver > next level
-        playerGames.tick();
+        deals.tick();
 
         // then
         String progress1 = "{'current':2,'passed':1,'total':3,'valid':true}";
@@ -523,7 +510,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // win + gameOver > next (last) level
-        playerGames.tick();
+        deals.tick();
 
         // then
         String progress2 = "{'current':3,'passed':2,'total':3,'valid':true}";
@@ -537,7 +524,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // win + gameOver > this is last level - no changes
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
@@ -568,7 +555,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertProgress("player", same);
 
         // when
-        playerGames.changeLevel("player", 2);
+        deals.changeLevel("player", 2);
 
         // then
         assertProgress("player", same);
@@ -591,7 +578,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // change decrease - create new field
-        playerGames.changeLevel("player", 2);
+        deals.changeLevel("player", 2);
 
         // then
         String progress = "{'current':2,'passed':2,'total':3,'valid':true}";
@@ -619,7 +606,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // change increase - don't create new field
-        playerGames.setLevel("player", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
+        deals.setLevel("player", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
 
         // then
         assertProgress("player", "{'current':1,'passed':1,'total':2,'valid':true}");
@@ -643,7 +630,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // change decrease - create new field
-        playerGames.setLevel("player", new JSONObject("{'levelProgress':{'current':2,'lastPassed':2,'total':3}}"));
+        deals.setLevel("player", new JSONObject("{'levelProgress':{'current':2,'lastPassed':2,'total':3}}"));
 
         // then
         String progress = "{'current':2,'passed':2,'total':3,'valid':true}";
@@ -668,7 +655,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
 
         // when
-        playerGames.setLevel("player", new JSONObject("{}"));
+        deals.setLevel("player", new JSONObject("{}"));
 
         // then
         String progress = "{'current':1,'passed':0,'total':3,'valid':true}";
@@ -694,7 +681,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertProgress("player", same);
 
         // when
-        playerGames.setLevel("player", null);
+        deals.setLevel("player", null);
 
         // then
         assertProgress("player", same);
@@ -706,7 +693,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void testResetAloneUsersField_whenRemove() {
+    public void testResetAloneUsersField_whenRemove_multiple() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
         Player player1 = createPlayer("player1", type);
@@ -716,24 +703,22 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.remove(player1);
+        deals.remove(player1.getId(), Sweeper.on().lastAlone());
 
         // then
         assertEquals(1, fields.size());
 
         // when
-        playerGames.remove(player2);
+        deals.remove(player2.getId(), Sweeper.on().lastAlone());
 
         // then
-        // created new field for player3
-        assertRooms("{1=[player3]}");
-        assertEquals(2, fields.size());
-
-        verify(fields.get(1), times(ONCE)).newGame(gamePlayers.get(2));
+        // still same field for player3, because MULTIPLE is !REMOVE_ALONE
+        assertRooms("{0=[player3]}");
+        assertEquals(1, fields.size());
     }
 
     @Test
-    public void testDontResetAloneUsersField_whenRemoveCurrent() {
+    public void testDontResetAloneUsersField_whenRemoveCurrent_multiple() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
         Player player1 = createPlayer("player1", type);
@@ -743,15 +728,65 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.removeCurrent(player1);
+        deals.remove(player1.getId(), Sweeper.off());
 
         // then
         assertEquals(1, fields.size());
 
         // when
-        playerGames.removeCurrent(player2);
+        deals.remove(player2.getId(), Sweeper.off());
 
         // then
+        assertRooms("{0=[player3]}");
+        assertEquals(1, fields.size());
+    }
+
+    @Test
+    public void testResetAloneUsersField_whenRemove_triple() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+
+        assertRooms("{0=[player1, player2, player3]}");
+
+        // when
+        deals.remove(player1.getId(), Sweeper.on().lastAlone());
+
+        // then
+        assertEquals(1, fields.size());
+
+        // when
+        deals.remove(player2.getId(), Sweeper.on().lastAlone());
+
+        // then
+        // new field for player3, because TRIPLE is REMOVE_ALONE
+        assertRooms("{1=[player3]}");
+        assertEquals(2, fields.size());
+    }
+
+    @Test
+    public void testDontResetAloneUsersField_whenRemoveCurrent_triple() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+
+        assertRooms("{0=[player1, player2, player3]}");
+
+        // when
+        deals.remove(player1.getId(), Sweeper.off());
+
+        // then
+        assertEquals(1, fields.size());
+
+        // when
+        deals.remove(player2.getId(), Sweeper.off());
+
+        // then
+        // same field because Sweeper.off()
         assertRooms("{0=[player3]}");
         assertEquals(1, fields.size());
     }
@@ -766,8 +801,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2]}");
 
         // when
-        Game game = playerGames.get(0).getGame();
-        playerGames.reload(game, "room", game.getSave());
+        deals.reload("player1", Sweeper.on().lastAlone());
 
         // then
         // created new field for player3
@@ -787,8 +821,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2]}");
 
         // when
-        PlayerGame playerGame = playerGames.get(0);
-        playerGames.reloadCurrent(playerGame);
+        deals.reload("player1", Sweeper.off());
 
         // then
         assertRooms("{0=[player2], 1=[player1]}");
@@ -809,7 +842,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player4, player5]}");
 
         // when
-        playerGames.reloadAll(true);
+        deals.reloadAll(true);
 
         // then
         Map<Integer, Collection<String>> rooms = getRooms();
@@ -835,7 +868,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player4, player5]}");
 
         // when
-        playerGames.reloadAll(false);
+        deals.reloadAll(false);
 
         // then
         assertRooms("{2=[player1, player2, player3], " +
@@ -858,7 +891,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player4, player5]}");
 
         // when
-        playerGames.reloadAll(false);
+        deals.reloadAll(false);
 
         // then
         assertRooms("{2=[player1, player2, player3], " +
@@ -883,7 +916,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "2=[player5, player6]}");
 
         // when
-        playerGames.reloadAll(false, withRoom("room1"));
+        deals.reloadAll(false, withRoom("room1"));
 
         // then
         assertRooms("{2=[player5, player6], " + // didn't touch because room2
@@ -909,7 +942,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "2=[player5, player6]}");
 
         // when
-        playerGames.reloadAll(false, withType("game1"));
+        deals.reloadAll(false, withType("game1"));
 
         // then
         assertRooms("{2=[player5, player6], " +  // didn't touch because game2
@@ -1051,7 +1084,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     private void verifyPlayerEventListenerLevelChanged(String playerId, String expected) {
         ArgumentCaptor<LevelProgress> captor = ArgumentCaptor.forClass(LevelProgress.class);
-        Player player = playerGames.get(playerId).getPlayer();
+        Player player = deals.get(playerId).getPlayer();
         if (expected == null) {
             verifyNoMoreInteractions(player.getEventListener());
         } else {
@@ -1121,7 +1154,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     private void assertSave(String playerName, String expected) {
-        assertEquals(expected, playerGames.get(playerName).getGame().getSave().toString());
+        assertEquals(expected, deals.get(playerName).getGame().getSave().toString());
     }
 
     @Test
@@ -1157,7 +1190,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     private void assertBoard(String playerName, String expected) {
         assertEquals(expected,
-                playerGames.get(playerName).getGame().getBoardAsString().toString());
+                deals.get(playerName).getGame().getBoardAsString().toString());
     }
 
     @Test
@@ -1198,7 +1231,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         createPlayer("player2", MultiplayerType.TRAINING.apply(3));
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertProgress("player1", "{'current':3,'passed':2,'total':3,'valid':true}");
@@ -1212,7 +1245,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", MultiplayerType.TRAINING.apply(3));
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertProgress("player1", "{'current':1,'passed':0,'total':3,'valid':true}");
@@ -1226,7 +1259,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", MultiplayerType.SINGLE);
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertProgress("player1", "{'current':1,'passed':0,'total':1,'valid':true}");
@@ -1235,7 +1268,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     private void assertProgress(String player, String expected) {
         assertEquals(expected,
-                playerGames.get(player)
+                deals.get(player)
                         .getGame().getProgress().toString());
     }
 
@@ -1247,7 +1280,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", MultiplayerType.TRAINING.apply(5));
 
         // when
-        playerGames.tick();
+        deals.tick();
 
         // then
         assertProgress("player1", "{'current':1,'passed':0,'total':3,'valid':true}");
@@ -1270,17 +1303,17 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // shouldLeave + gameOver > remove player3 from board and crate on new board
-        playerGames.tick();
+        deals.tick();
 
         // then
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
         verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(2));
 
-        assertEquals(3, playerGames.size());
-        assertEquals(fields.get(0), playerGames.get("player1").getField());
-        assertEquals(fields.get(0), playerGames.get("player2").getField());
-        assertEquals(fields.get(1), playerGames.get("player3").getField());
+        assertEquals(3, deals.size());
+        assertEquals(fields.get(0), deals.get("player1").getField());
+        assertEquals(fields.get(0), deals.get("player2").getField());
+        assertEquals(fields.get(1), deals.get("player3").getField());
 
         // when
         // add another player
@@ -1289,16 +1322,46 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertEquals(2, fields.size());
-        assertEquals(5, playerGames.size());
+        assertEquals(5, deals.size());
 
         // это старая борда, там осталось 2 юзера, но она была заполенна в прошлом тремя и места там нет
-        assertEquals(fields.get(0), playerGames.get("player1").getField());
-        assertEquals(fields.get(0), playerGames.get("player2").getField());
+        assertEquals(fields.get(0), deals.get("player1").getField());
+        assertEquals(fields.get(0), deals.get("player2").getField());
 
         // а это новая и она наполняется новыми юзерами
-        assertEquals(fields.get(1), playerGames.get("player3").getField());
-        assertEquals(fields.get(1), playerGames.get("player4").getField());
-        assertEquals(fields.get(1), playerGames.get("player5").getField());
+        assertEquals(fields.get(1), deals.get("player3").getField());
+        assertEquals(fields.get(1), deals.get("player4").getField());
+        assertEquals(fields.get(1), deals.get("player5").getField());
+    }
+
+    @Test
+    public void testSetTeamId() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+
+        assertTeams("{0=[player1, player2, player3]}");
+
+        // when
+        deals.setTeam("player1", 1);
+        deals.setTeam("player2", 2);
+
+        // then
+        assertTeams("{0=[player3], 1=[player1], 2=[player2]}");
+
+        // when
+        deals.setTeam("player1", 2);
+
+        // then
+        assertTeams("{0=[player3], 2=[player1, player2]}");
+
+        // when
+        deals.setTeam("player3", 2);
+
+        // then
+        assertTeams("{2=[player1, player2, player3]}");
     }
 
     @Test
@@ -1313,7 +1376,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         String changed = "otherGame";
-        playerGames.changeRoom("player1", changed, "otherRoom");
+        deals.changeRoom("player1", changed, "otherRoom");
 
         // then
         assertRooms("{0=[player1, player2, player3]}");
@@ -1332,7 +1395,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
 
         // then
         assertRooms("{0=[player2, player3], " +
@@ -1353,15 +1416,41 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.changeRoom("player1", "game", "otherRoom");
-        playerGames.changeRoom("player3", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player3", "game", "otherRoom");
 
         // then
-        assertRooms("{1=[player1, player3], " +
-                "2=[player2]}"); // второй покинул alone комнату и зашел в новую
+        assertRooms("{0=[player2], " +   // второй остался в cвоей MULTIPLE потому что она !RELOAD_ALONE
+                "1=[player1, player3]}");
 
         assertRoomsNames("{otherRoom=[[player1, player3]], " +
                 "room=[[player2]]}");
+    }
+
+    @Test
+    public void testChangeRoom_removeMultipleRoomAfterLastPlayer() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+
+        assertRooms("{0=[player1]}");
+
+        // when
+        // поки даем текущую комнату room
+        deals.changeRoom("player1", "game", "otherRoom");
+
+        // then
+        assertRooms("{1=[player1]}");
+        assertRoomsNames("{otherRoom=[[player1]]}");
+
+        // when
+        // вернулись назад в room
+        deals.changeRoom("player1", "game", "room");
+
+        // then
+        assertRooms("{2=[player1]}"); // но комната обновилась
+        assertRoomsNames("{room=[[player1]]}");
+
     }
 
     @Test
@@ -1375,10 +1464,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3]}");
 
         // when
-        playerGames.changeRoom("player1", "game", null);
-        playerGames.changeRoom("player1", "game", "");
-        playerGames.changeRoom("player1", null, "otherRoom");
-        playerGames.changeRoom("player1", "", "otherRoom");
+        deals.changeRoom("player1", "game", null);
+        deals.changeRoom("player1", "game", "");
+        deals.changeRoom("player1", null, "otherRoom");
+        deals.changeRoom("player1", "", "otherRoom");
 
         // then
         assertRooms("{0=[player1, player2, player3]}");
@@ -1408,15 +1497,15 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // потом один покидает комнату и переходит в другую
-        playerGames.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
 
         // then
-        //  второй игрок при этом остается один в комнате и потому сперва покидает ее заходя на новую
+        // второй игрок остается в своей старой MULTIPLE комнате, потому что она !REMOVE_ALONE
         // а тот, кто самовольно перешел так же размещается в своей новой комнате
-        assertRooms("{1=[player2], 2=[player1]}");
+        assertRooms("{0=[player2], 1=[player1]}");
 
-        assertSave("player1", "{\"fiedData\":3}");
-        assertSave("player2", "{\"fiedData\":2}");
+        assertSave("player1", "{\"fiedData\":2}");
+        assertSave("player2", "{\"fiedData\":1}");
     }
 
     @Test
@@ -1434,8 +1523,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room=[[player1, player2], [player3, player4]]}");
 
         // when
-        playerGames.changeRoom("player1", "game", "otherRoom");
-        playerGames.changeRoom("player2", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player2", "game", "otherRoom");
 
         // then
         assertRooms("{1=[player3, player4], " +
@@ -1462,8 +1551,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "game", "otherRoom");
-        playerGames.changeRoom("player2", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player2", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1497,8 +1586,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "game", "otherRoom");
-        playerGames.changeRoom("player2", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player2", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1529,8 +1618,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "game", "otherRoom");
-        playerGames.changeRoom("player2", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player2", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1564,8 +1653,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "game", "otherRoom");
-        playerGames.changeRoom("player2", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player2", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1596,7 +1685,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1627,7 +1716,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
-        playerGames.changeRoom("player1", "game", "otherRoom");
+        deals.changeRoom("player1", "game", "otherRoom");
 
         // then
         // player1 покинул комнату и попал в отдельный мир otherRoom
@@ -1637,7 +1726,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "2=[player5], 3=[player1]}");
 
         assertRoomsNames("{otherRoom[1]=[[player1]], " +
-                "room[1]=[[player3, player4], [player5]]}");
+                "room[1]=[[player2], [player3, player4], [player5]]}");
     }
 
     @Test
@@ -1658,7 +1747,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player1 переходит на новый уровень
         // при этом остальные игроки остаются где были
-        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+        deals.setLevel("player1", new JSONObject("{'levelProgress':" +
                 "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
@@ -1672,7 +1761,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // player1 возвращается обратно
         // и так как уровень не DISPOSABLE то игрок вернулся назад
         // в первую свободную комнату (свою же)
-        playerGames.changeLevel("player1", 1);
+        deals.changeLevel("player1", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
@@ -1699,7 +1788,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player1 переходит на новый уровень
         // при этом остальные игроки остаются где были
-        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+        deals.setLevel("player1", new JSONObject("{'levelProgress':" +
                 "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
@@ -1713,7 +1802,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // player1 возвращается обратно
         // и так как уровень не DISPOSABLE то игрок вернулся назад
         // в первую свободную комнату (свою же)
-        playerGames.changeLevel("player1", 1);
+        deals.changeLevel("player1", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
@@ -1742,7 +1831,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player6 переходит на новый уровень
         // при этом остальные остаются на месте
-        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+        deals.setLevel("player6", new JSONObject("{'levelProgress':" +
                 "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
@@ -1756,7 +1845,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player6 возвращается обратно
         // и так как уровень не DISPOSABLE его старая комната может его принять назад
-        playerGames.changeLevel("player6", 1);
+        deals.changeLevel("player6", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
@@ -1786,7 +1875,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player6 переходит на новый уровень
         // при этом остальные остаются на месте
-        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+        deals.setLevel("player6", new JSONObject("{'levelProgress':" +
                 "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
@@ -1800,7 +1889,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player6 возвращается обратно
         // и так как уровень не DISPOSABLE его старая комната может его принять назад
-        playerGames.changeLevel("player6", 1);
+        deals.changeLevel("player6", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
@@ -1828,7 +1917,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player1 переходит на новый уровень
         // при этом остальные игроки остаются где были
-        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+        deals.setLevel("player1", new JSONObject("{'levelProgress':" +
                 "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
@@ -1841,7 +1930,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player1 возвращается обратно
         // и так как уровень DISPOSABLE то игрок попадает в новую комнату к player4 и player5
-        playerGames.changeLevel("player1", 1);
+        deals.changeLevel("player1", 1);
 
         // then
         assertRooms("{0=[player2, player3], " +
@@ -1868,7 +1957,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player1 переходит на новый уровень
         // при этом остальные игроки остаются где были
-        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+        deals.setLevel("player1", new JSONObject("{'levelProgress':" +
                 "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
@@ -1881,7 +1970,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player1 возвращается обратно
         // и так как уровень DISPOSABLE то игрок попадает в новую комнату к player4 и player5
-        playerGames.changeLevel("player1", 1);
+        deals.changeLevel("player1", 1);
 
         // then
         assertRooms("{0=[player2, player3], " +
@@ -1910,7 +1999,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player6 переходит на новый уровень
         // при этом остальные остаются на месте
-        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+        deals.setLevel("player6", new JSONObject("{'levelProgress':" +
                 "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
@@ -1925,7 +2014,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // player6 возвращается обратно
         // и так как уровень DISPOSABLE его старая комната не может его принять назад
         // и он отправляется в новую
-        playerGames.changeLevel("player6", 1);
+        deals.changeLevel("player6", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
@@ -1957,7 +2046,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when
         // player6 переходит на новый уровень
         // при этом остальные остаются на месте
-        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+        deals.setLevel("player6", new JSONObject("{'levelProgress':" +
                 "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
@@ -1972,7 +2061,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // player6 возвращается обратно
         // и так как уровень DISPOSABLE его старая комната не может его принять назад
         // и он отправляется в новую
-        playerGames.changeLevel("player6", 1);
+        deals.changeLevel("player6", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
@@ -1994,9 +2083,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player4", "room3", "game3", type);
 
         // when then
-        assertPlayers("[player1, player2]", playerGames.getAll(withType("game1")));
-        assertPlayers("[player3]", playerGames.getAll(withType("game2")));
-        assertPlayers("[player4]", playerGames.getAll(withType("game3")));
+        assertPlayers("[player1, player2]", deals.getAll(withType("game1")));
+        assertPlayers("[player3]", deals.getAll(withType("game2")));
+        assertPlayers("[player4]", deals.getAll(withType("game3")));
     }
 
     @Test
@@ -2009,7 +2098,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player4", "room3", "game3", type);
 
         // when then
-        assertPlayers("[player1, player2, player3, player4]", playerGames.getAll(withAll()));
+        assertPlayers("[player1, player2, player3, player4]", deals.getAll(withAll()));
     }
 
     @Test
@@ -2022,8 +2111,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player4", "room2", "game2", type);
 
         // when then
-        assertPlayers("[player1, player2]", playerGames.getAll(withRoom("room1")));
-        assertPlayers("[player3, player4]", playerGames.getAll(withRoom("room2")));
+        assertPlayers("[player1, player2]", deals.getAll(withRoom("room1")));
+        assertPlayers("[player3, player4]", deals.getAll(withRoom("room2")));
     }
 
     @Test
@@ -2039,8 +2128,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         givenActive("room2", false);
 
         // when then
-        assertPlayers("[player1, player2, player5]", playerGames.getAll(playerGames.withActive()));
-        assertPlayers("[player1, player2, player5]", playerGames.active());
+        assertPlayers("[player1, player2, player5]", deals.getAll(deals.withActive()));
+        assertPlayers("[player1, player2, player5]", deals.active());
     }
 
     @Test
@@ -2056,8 +2145,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         givenActive("room2", false);
 
         // when then
-        assertEquals("[room1, room3]", playerGames.getRooms(ACTIVE).toString());
-        assertEquals("[room1, room2, room3]", playerGames.getRooms(ALL).toString());
+        assertEquals("[room1, room3]", deals.getRooms(ACTIVE).toString());
+        assertEquals("[room1, room2, room3]", deals.getRooms(ALL).toString());
     }
 
     @Test
@@ -2068,11 +2157,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         PlayerSave playerSave = new PlayerSave("player", teamId, "url", "game", "room", 0, "{}");
 
         // when
-        playerGames.add(player, "room", playerSave);
+        deals.add(player, "room", playerSave);
 
         // then
-        assertEquals(1, playerGames.all().size());
-        assertEquals(teamId, playerGames.all().iterator().next().getPlayerTeamId());
+        assertEquals(1, deals.all().size());
+        assertEquals(teamId, deals.all().iterator().next().getTeamId());
     }
 
     @Test
@@ -2081,11 +2170,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player = new Player("player", "url", new FirstGameType(), null, null);
 
         // when
-        playerGames.add(player, "room", PlayerSave.NULL);
+        deals.add(player, "room", PlayerSave.NULL);
 
         // then
-        assertEquals(1, playerGames.all().size());
-        assertEquals(DEFAULT_TEAM_ID, playerGames.all().iterator().next().getPlayerTeamId());
+        assertEquals(1, deals.all().size());
+        assertEquals(DEFAULT_TEAM_ID, deals.all().iterator().next().getTeamId());
     }
 
     @Test
@@ -2094,10 +2183,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player = new Player("player", "url", new FirstGameType(), null, null);
 
         // when
-        playerGames.add(player, "room", null);
+        deals.add(player, "room", null);
 
         // then
-        assertEquals(1, playerGames.all().size());
-        assertEquals(DEFAULT_TEAM_ID, playerGames.all().iterator().next().getPlayerTeamId());
+        assertEquals(1, deals.all().size());
+        assertEquals(DEFAULT_TEAM_ID, deals.all().iterator().next().getTeamId());
     }
 }

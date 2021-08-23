@@ -42,6 +42,7 @@ public class PlayerData implements ScreenData {
     private Object score;
     private String info;
     private Map<String, Object> scores;
+    private Map<String, Object> teams;
     private Map<String, HeroData> coordinates;
     private Map<String, String> readableNames;
     private List<String> group;
@@ -58,6 +59,7 @@ public class PlayerData implements ScreenData {
                         "Board:'%s', " +
                         "Game:'%s', " +
                         "Score:%s, " +
+                        "Teams:%s, " +
                         "Info:'%s', " +
                         "Scores:'%s', " +
                         "Coordinates:'%s', " +
@@ -68,6 +70,7 @@ public class PlayerData implements ScreenData {
                 board,
                 game,
                 score,
+                teams,
                 getInfo(),
                 scores,
                 coordinates,

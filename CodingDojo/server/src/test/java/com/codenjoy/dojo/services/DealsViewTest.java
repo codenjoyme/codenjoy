@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
@@ -50,10 +51,10 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PlayerGamesViewTest {
+public class DealsViewTest {
 
-    private PlayerGamesView playerGamesView;
-    private PlayerGames playerGames;
+    private DealsView dealsView;
+    private Deals deals;
     private List<Player> players;
     private List<Game> games;
     private List<Controller> controllers;
@@ -64,9 +65,9 @@ public class PlayerGamesViewTest {
 
     @Before
     public void setup() {
-        playerGames = new PlayerGames();
-        playerGamesView = new PlayerGamesView();
-        playerGamesView.service = playerGames;
+        deals = new Deals();
+        dealsView = new DealsView();
+        dealsView.service = deals;
 
         players = new LinkedList<>();
         games = new LinkedList<>();
@@ -83,7 +84,7 @@ public class PlayerGamesViewTest {
         givenUsersInSameGroup();
 
         // when
-        Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
+        Map<String, GameData> dataMap = dealsView.getGamesDataMap();
 
         // then
         String expectedGroup = "{\n" +
@@ -150,6 +151,102 @@ public class PlayerGamesViewTest {
                 "    'user2':234,\n" +
                 "    'user3':345,\n" +
                 "    'user4':456\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user1':0,\n" +
+                "    'user2':0,\n" +
+                "    'user3':0,\n" +
+                "    'user4':0\n" +
+                "  }\n" +
+                "}";
+
+        assertEquals(expectedGroup, prettyPrint(dataMap.get("user1")));
+    }
+
+    @Test
+    public void testGetGamesDataMap_usersInSameGroup_butDifferentTeams() {
+        // given
+        testGetGamesDataMap_usersInSameGroup();
+
+        deals.setTeam("user1", 1);
+        deals.setTeam("user2", 2);
+        deals.setTeam("user3", 1);
+        deals.setTeam("user4", 2);
+
+        // when
+        Map<String, GameData> dataMap = dealsView.getGamesDataMap();
+
+        // then
+        String expectedGroup = "{\n" +
+                "  'boardSize':1234,\n" +
+                "  'coordinates':{\n" +
+                "    'user1':{\n" +
+                "      'additionalData':'data1',\n" +
+                "      'coordinate':{\n" +
+                "        'x':1,\n" +
+                "        'y':2\n" +
+                "      },\n" +
+                "      'level':10,\n" +
+                "      'multiplayer':false\n" +
+                "    },\n" +
+                "    'user2':{\n" +
+                "      'additionalData':'data2',\n" +
+                "      'coordinate':{\n" +
+                "        'x':3,\n" +
+                "        'y':4\n" +
+                "      },\n" +
+                "      'level':11,\n" +
+                "      'multiplayer':false\n" +
+                "    },\n" +
+                "    'user3':{\n" +
+                "      'additionalData':{\n" +
+                "        'key':'value'\n" +
+                "      },\n" +
+                "      'coordinate':{\n" +
+                "        'x':5,\n" +
+                "        'y':6\n" +
+                "      },\n" +
+                "      'level':12,\n" +
+                "      'multiplayer':false\n" +
+                "    },\n" +
+                "    'user4':{\n" +
+                "      'additionalData':[\n" +
+                "        'data3, data4'\n" +
+                "      ],\n" +
+                "      'coordinate':{\n" +
+                "        'x':7,\n" +
+                "        'y':8\n" +
+                "      },\n" +
+                "      'level':13,\n" +
+                "      'multiplayer':false\n" +
+                "    }\n" +
+                "  },\n" +
+                "  'decoder':{\n" +
+                "    \n" +
+                "  },\n" +
+                "  'group':[\n" +
+                "    'user1',\n" +
+                "    'user2',\n" +
+                "    'user3',\n" +
+                "    'user4'\n" +
+                "  ],\n" +
+                "  'readableNames':{\n" +
+                "    'user1':'readable_user1',\n" +
+                "    'user2':'readable_user2',\n" +
+                "    'user3':'readable_user3',\n" +
+                "    'user4':'readable_user4'\n" +
+                "  },\n" +
+                "  'scores':{\n" +
+                "    'user1':123,\n" +
+                "    'user2':234,\n" +
+                "    'user3':345,\n" +
+                "    'user4':456\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user1':1,\n" +
+                "    'user2':2,\n" +
+                "    'user3':1,\n" +
+                "    'user4':2\n" +
                 "  }\n" +
                 "}";
 
@@ -172,7 +269,7 @@ public class PlayerGamesViewTest {
         givenUsersInSeveralGroups_inOneGeneralGameRoom();
 
         // when
-        Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
+        Map<String, GameData> dataMap = dealsView.getGamesDataMap();
 
         // then
         String expectedGroup1 = "{\n" +
@@ -211,6 +308,10 @@ public class PlayerGamesViewTest {
                 "  'scores':{\n" +
                 "    'user1':123,\n" +
                 "    'user2':234\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user1':0,\n" +
+                "    'user2':0\n" +
                 "  }\n" +
                 "}";
 
@@ -257,6 +358,10 @@ public class PlayerGamesViewTest {
                 "  'scores':{\n" +
                 "    'user3':345,\n" +
                 "    'user4':456\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user3':0,\n" +
+                "    'user4':0\n" +
                 "  }\n" +
                 "}";
 
@@ -274,7 +379,7 @@ public class PlayerGamesViewTest {
         givenUsersInSameGroup();
 
         // when
-        Map<String, List<String>> map = playerGamesView.getGroupsMap();
+        Map<String, List<String>> map = dealsView.getGroupsMap();
 
         // then
         assertEquals("{user1=[user1, user2, user3, user4], " + // all together
@@ -290,7 +395,7 @@ public class PlayerGamesViewTest {
         givenUsersInSeveralGroups_inOneGeneralGameRoom();
 
         // when
-        Map<String, List<String>> map = playerGamesView.getGroupsMap();
+        Map<String, List<String>> map = dealsView.getGroupsMap();
 
         // then
         assertEquals("{user1=[user1, user2], " + // group 1
@@ -306,7 +411,7 @@ public class PlayerGamesViewTest {
         givenUsersInSameGroup();
 
         // when
-        List<List<String>> groups = playerGamesView.getGroupsByField();
+        List<List<String>> groups = dealsView.getGroupsByField();
 
         // then
         assertEquals("[[user1, user2, user3, user4]]", // all together
@@ -319,7 +424,7 @@ public class PlayerGamesViewTest {
         givenUsersInSeveralGroups_inOneGeneralGameRoom();
 
         // when
-        List<List<String>> groups = playerGamesView.getGroupsByField();
+        List<List<String>> groups = dealsView.getGroupsByField();
 
         // then
         groups.forEach(list -> Collections.sort(list));
@@ -370,7 +475,7 @@ public class PlayerGamesViewTest {
         givenUsersInSeveralGroups_withDifferentRooms();
 
         // when
-        List<List<String>> groups = playerGamesView.getGroupsByRooms();
+        List<List<String>> groups = dealsView.getGroupsByRooms();
 
         // then
         assertEquals("[[user1, user2], " +   // group 1
@@ -384,7 +489,7 @@ public class PlayerGamesViewTest {
         givenUsersInSeveralGroups_inOneGeneralGameRoom();
 
         // when
-        List<List<String>> groups = playerGamesView.getGroupsByRooms();
+        List<List<String>> groups = dealsView.getGroupsByRooms();
 
         // then
         assertEquals("[[user1, user2, user3, user4]]", // all together
@@ -402,7 +507,7 @@ public class PlayerGamesViewTest {
         addNewPlayer(gameType2, 789, getHeroData(24, pt(8, 7), "data9"));
 
         // when
-        List<PScoresOf> scores = playerGamesView.getScoresForGame("game1");
+        List<PScoresOf> scores = dealsView.getScoresForGame("game1");
 
         // then
         assertEquals("[\n" +
@@ -453,7 +558,7 @@ public class PlayerGamesViewTest {
         }
 
         // when
-        List<PScoresOf> scores = playerGamesView.getScoresForGame("game1");
+        List<PScoresOf> scores = dealsView.getScoresForGame("game1");
 
         // then
         assertEquals("[{'score':1123,'teamId':0,'name':'readable_user1','id':'user1'}," +
@@ -484,7 +589,7 @@ public class PlayerGamesViewTest {
         addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"));
 
         // when
-        List<PScoresOf> scores = playerGamesView.getScoresForRoom("room1");
+        List<PScoresOf> scores = dealsView.getScoresForRoom("room1");
 
         // then
         assertEquals("[{'score':123,'teamId':0,'name':'readable_user1','id':'user1'}," +
@@ -514,7 +619,7 @@ public class PlayerGamesViewTest {
         addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"));
 
         // when
-        Map<String, Object> scores = playerGamesView.getScores();
+        Map<String, Object> scores = dealsView.getScores();
 
         // then
         assertEquals("{user1=123, user2=234, user3=345, user4=456, user5=678, user6=789}",
@@ -533,7 +638,7 @@ public class PlayerGamesViewTest {
         addNewPlayer(gameType, 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
 
         // when
-        Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
+        Map<String, GameData> dataMap = dealsView.getGamesDataMap();
 
         // then
         String expectedGroup1 = "{\n" +
@@ -560,6 +665,9 @@ public class PlayerGamesViewTest {
                 "  },\n" +
                 "  'scores':{\n" +
                 "    'user1':123\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user1':0\n" +
                 "  }\n" +
                 "}";
 
@@ -589,6 +697,9 @@ public class PlayerGamesViewTest {
                 "  },\n" +
                 "  'scores':{\n" +
                 "    'user2':234\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user2':0\n" +
                 "  }\n" +
                 "}";
 
@@ -620,6 +731,9 @@ public class PlayerGamesViewTest {
                 "  },\n" +
                 "  'scores':{\n" +
                 "    'user3':345\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user3':0\n" +
                 "  }\n" +
                 "}";
 
@@ -651,6 +765,9 @@ public class PlayerGamesViewTest {
                 "  },\n" +
                 "  'scores':{\n" +
                 "    'user4':456\n" +
+                "  },\n" +
+                "  'teams':{\n" +
+                "    'user4':0\n" +
                 "  }\n" +
                 "}";
 
@@ -663,7 +780,7 @@ public class PlayerGamesViewTest {
         givenUsersInSameGroup();
 
         // when
-        Map<String, String> names = playerGamesView.getReadableNames();
+        Map<String, String> names = dealsView.getReadableNames();
 
         // then
         assertEquals("{user1=readable_user1, user2=readable_user2, " +
@@ -689,18 +806,18 @@ public class PlayerGamesViewTest {
         when(result.name()).thenReturn(game);
         when(result.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
         when(result.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
-        when(result.createPlayer(any(EventListener.class), anyString(), any()))
+        when(result.createPlayer(any(EventListener.class), anyInt(), anyString(), any()))
                 .thenAnswer(inv -> gamePlayers.get(gamePlayers.size() - 1));
         when(result.createGame(anyInt(), any())).thenAnswer(fieldSupplier);
         gameTypes.add(result);
         return result;
     }
 
-    private PlayerGame addNewPlayer(GameType gameType, int scores, HeroData heroData) {
+    private Deal addNewPlayer(GameType gameType, int scores, HeroData heroData) {
         return addNewPlayer(gameType, gameType.name(), scores, heroData);
     }
 
-    private PlayerGame addNewPlayer(GameType gameType, String room, int scores, HeroData heroData) {
+    private Deal addNewPlayer(GameType gameType, String room, int scores, HeroData heroData) {
         PlayerScores gameScore = mock(PlayerScores.class);
         playerScores.add(gameScore);
         when(gameScore.getScore()).thenReturn(scores);
@@ -718,9 +835,9 @@ public class PlayerGamesViewTest {
 
         Controller controller = mock(Controller.class);
         controllers.add(controller);
-        PlayerGame playerGame = playerGames.add(player, room, null);
-        games.add(playerGame.getGame());
-        return playerGame;
+        Deal deal = deals.add(player, room, null);
+        games.add(deal.getGame());
+        return deal;
     }
 
     private String getNextName() {
@@ -777,6 +894,6 @@ public class PlayerGamesViewTest {
         // when then
         assertEquals("{game1=[abc -> ABC], " +
                         "game2=[1234 -> ABCD]}",
-                playerGamesView.getDecoders().toString());
+                dealsView.getDecoders().toString());
     }
 }

@@ -40,14 +40,14 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PlayerGameSaverTest {
+public class DealSaverTest {
 
-    private PlayerGameSaver saver;
+    private DealSaver saver;
 
     @Before
     public void removeAll() {
         String dbFile = "target/saves.db" + new Random().nextInt();
-        saver = new PlayerGameSaver(
+        saver = new DealSaver(
                 new SqliteConnectionThreadPoolFactory(false, dbFile,
                         new ContextPathGetter() {
                             @Override
@@ -63,7 +63,7 @@ public class PlayerGameSaverTest {
     }
 
     @Test
-    public void shouldSaveLoadPlayerGame() {
+    public void shouldSaveLoadDeal() {
         // given
         PlayerScores scores = getScores(10);
         Information info = getInfo("Some info");
@@ -293,12 +293,12 @@ public class PlayerGameSaverTest {
         // when
         long now = System.currentTimeMillis();
 
-        List<PlayerGame> playerGames = Arrays.asList(
-                new PlayerGame(player1, game, "room"),
-                new PlayerGame(player2, game, "room"),
-                new PlayerGame(player3, game, "otherRoom")
+        List<Deal> deals = Arrays.asList(
+                new Deal(player1, game, "room"),
+                new Deal(player2, game, "room"),
+                new Deal(player3, game, "otherRoom")
         );
-        saver.saveGames(playerGames, now);
+        saver.saveGames(deals, now);
 
         // then
         assertEquals("[katia, vasia]", saver.getSavedList("room").toString());

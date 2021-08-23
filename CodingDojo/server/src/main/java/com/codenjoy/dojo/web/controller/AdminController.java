@@ -63,6 +63,7 @@ import static java.util.stream.Collectors.toList;
 @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
 @Slf4j
 @RequiredArgsConstructor
+// TODO move all business logic to the AdminService
 public class AdminController {
 
     public static final String URI = "/admin";
@@ -86,9 +87,9 @@ public class AdminController {
 
     // TODO ROOM а этот метод вообще зачем?
     @GetMapping(params = {"player", "data"})
-    public String loadPlayerGameFromSave(@RequestParam("player") String id,
-                                         @RequestParam("data") String save,
-                                         HttpServletRequest request)
+    public String loadDealFromSave(@RequestParam("player") String id,
+                                   @RequestParam("data") String save,
+                                   HttpServletRequest request)
     {
         saveService.load(id, getGameName(request), getGameRoom(request), save);
         return "redirect:/board/player/" + id;
@@ -108,8 +109,8 @@ public class AdminController {
     // ----------------
 
     @GetMapping("/player/{player}/save")
-    public String savePlayerGame(@PathVariable("player") String id,
-                                 HttpServletRequest request)
+    public String saveDeal(@PathVariable("player") String id,
+                           HttpServletRequest request)
     {
         saveService.save(id);
         return getAdmin(request);
@@ -125,8 +126,8 @@ public class AdminController {
     // ----------------
 
     @GetMapping("/player/{player}/load")
-    public String loadPlayerGame(@PathVariable("player") String id,
-                                 HttpServletRequest request)
+    public String loadDeal(@PathVariable("player") String id,
+                           HttpServletRequest request)
     {
         saveService.load(id);
         return getAdmin(request);

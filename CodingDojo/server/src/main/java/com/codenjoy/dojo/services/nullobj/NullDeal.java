@@ -23,14 +23,14 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 
-import com.codenjoy.dojo.services.PlayerGame;
+import com.codenjoy.dojo.services.Deal;
 import org.apache.commons.lang3.StringUtils;
 
-public final class NullPlayerGame extends PlayerGame {
+public final class NullDeal extends Deal {
 
-    public static final PlayerGame INSTANCE = new NullPlayerGame();
+    public static final Deal INSTANCE = new NullDeal();
 
-    private NullPlayerGame() {
+    private NullDeal() {
         super(NullPlayer.INSTANCE, NullGame.INSTANCE, StringUtils.EMPTY);
     }
 }

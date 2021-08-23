@@ -51,7 +51,7 @@ public class ActionLoggerTest {
     private ActionLogger logger;
     private ExecutorService executor;
     private RoomService roomService;
-    private PlayerGames playerGames;
+    private Deals deals;
     private long time;
 
     @Before
@@ -80,7 +80,7 @@ public class ActionLoggerTest {
         logger.setTicks(1);
         time = 100;
 
-        playerGames = new PlayerGames(){{
+        deals = new Deals(){{
             ActionLoggerTest.this.roomService = this.roomService = mock(RoomService.class);
         }};
         allRoomsAreActive();
@@ -100,7 +100,7 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(playerGames);
+        log(deals);
         waitFor();
 
         // then
@@ -117,8 +117,8 @@ public class ActionLoggerTest {
     }
 
     @SneakyThrows
-    private void log(PlayerGames playerGames) {
-        logger.log(playerGames);
+    private void log(Deals deals) {
+        logger.log(deals);
     }
 
     /**
@@ -139,7 +139,7 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(playerGames);
+        log(deals);
         waitFor();
 
         // then
@@ -147,16 +147,16 @@ public class ActionLoggerTest {
     }
 
     private void givenPlayers() {
-        addPlayer(playerGames, "player1Board", 123, "player1", "room1", "game1");
-        addPlayer(playerGames, "player2Board", 234, "player2", "room2", "game2");
+        addPlayer(deals, "player1Board", 123, "player1", "room1", "game1");
+        addPlayer(deals, "player2Board", 234, "player2", "room2", "game2");
     }
 
-    private void addPlayer(PlayerGames playerGames, String board, int scoreValue, String id, String room, String game) {
+    private void addPlayer(Deals deals, String board, int scoreValue, String id, String room, String game) {
         PlayerScores score = getScore(scoreValue);
         Player player = new Player(id, "127.0.0.1", PlayerTest.mockGameType(game), score, null);
         player.setEventListener(mock(InformationCollector.class));
 
-        TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player, room,
+        TestUtils.Env env = TestUtils.getDeal(deals, player, room,
                 inv -> {
                     GameField field = mock(GameField.class);
                     when(field.reader()).thenReturn(mock(BoardReader.class));
@@ -184,7 +184,7 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(playerGames);
+        log(deals);
         waitFor();
 
         // then
@@ -198,10 +198,10 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(playerGames); // time = 101
-        log(playerGames); // time = 102
-        log(playerGames); // time = 103
-        log(playerGames); // time = 104
+        log(deals); // time = 101
+        log(deals); // time = 102
+        log(deals); // time = 103
+        log(deals); // time = 104
         waitFor();
 
         // then
@@ -232,17 +232,17 @@ public class ActionLoggerTest {
         givenPlayers();
 
         // when
-        log(playerGames); // time = 101
-        log(playerGames); // time = 102
-        log(playerGames); // time = 103
-        log(playerGames); // time = 104
-        log(playerGames); // time = 105
-        log(playerGames); // time = 106
-        log(playerGames); // time = 107
-        log(playerGames); // time = 108
-        log(playerGames); // time = 109
-        log(playerGames); // time = 110
-        log(playerGames); // time = 111
+        log(deals); // time = 101
+        log(deals); // time = 102
+        log(deals); // time = 103
+        log(deals); // time = 104
+        log(deals); // time = 105
+        log(deals); // time = 106
+        log(deals); // time = 107
+        log(deals); // time = 108
+        log(deals); // time = 109
+        log(deals); // time = 110
+        log(deals); // time = 111
         waitFor();
 
         // then

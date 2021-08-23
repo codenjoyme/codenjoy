@@ -64,7 +64,7 @@ public class PlayerServiceImplIntegrationTest {
     private Controller screenController;
     private RoomService roomService;
     private Controller playerController;
-    private PlayerGames playerGames;
+    private Deals deals;
     private Registration registration;
     private Map<String, GameType> gameTypes = new HashMap<>();
     private Map<String, WebSocketRunner> runners = new HashMap<>();
@@ -73,8 +73,8 @@ public class PlayerServiceImplIntegrationTest {
     public void setup() {
         service = new PlayerServiceImpl() {
             {
-                PlayerServiceImplIntegrationTest.this.playerGames
-                        = this.playerGames = new PlayerGames();
+                PlayerServiceImplIntegrationTest.this.deals
+                        = this.deals = new Deals();
 
                 PlayerServiceImplIntegrationTest.this.playerController
                         = this.playerController = mock(Controller.class);
@@ -347,7 +347,7 @@ public class PlayerServiceImplIntegrationTest {
             when(field.reader()).thenAnswer(inv2 -> mock(BoardReader.class));
             return field;
         });
-        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
+        when(gameType.createPlayer(any(EventListener.class), anyInt(), anyString(), any()))
                 .thenAnswer(inv -> mock(GamePlayer.class));
         when(gameType.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
         when(gameType.getAI()).thenReturn(AISolverStub.class);

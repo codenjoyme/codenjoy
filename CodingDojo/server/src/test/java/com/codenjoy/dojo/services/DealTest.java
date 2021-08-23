@@ -40,11 +40,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
-public class PlayerGameTest {
+public class DealTest {
 
     private Player player;
     private Game game;
-    private PlayerGame playerGame;
+    private Deal deal;
     private GameType gameType;
 
     @Before
@@ -52,22 +52,27 @@ public class PlayerGameTest {
         gameType = PlayerTest.mockGameType("game");
         player = new Player("player", "url", gameType,
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
-        game = mock(Game.class);
 
-        playerGame = new PlayerGame(player, game, "room");
+        setupGamePlayer();
+        deal = new Deal(player, game, "room");
+    }
+
+    private void setupGamePlayer() {
+        game = mock(Game.class);
+        when(game.getPlayer()).thenReturn(mock(GamePlayer.class));
     }
 
     @Test
     public void testWorkWithJoystick() {
         // given
-        Joystick joystick = playerGame.getJoystick();
+        Joystick joystick = deal.getJoystick();
         Joystick real = mock(Joystick.class);
         when(game.getJoystick()).thenReturn(real);
 
         // when
         joystick.act(1, 2, 3);
         joystick.down();
-        playerGame.tick();
+        deal.tick();
 
         // then
         InOrder inOrder = inOrder(real);
@@ -82,33 +87,33 @@ public class PlayerGameTest {
         when(game.getField()).thenReturn(field);
 
         // when then
-        assertSame(field, playerGame.getField());
+        assertSame(field, deal.getField());
     }
 
     @Test
     public void getGetGameType() {
         // when then
-        assertSame(gameType, playerGame.getGameType());
+        assertSame(gameType, deal.getGameType());
     }
 
     @Test
     public void testEquals_null() {
         // when then
-        assertEquals(false, playerGame.equals(null));
+        assertEquals(false, deal.equals(null));
     }
 
     @Test
     public void testEquals_withOtherObject() {
         // when then
-        assertEquals(false, playerGame.equals(new Object()));
+        assertEquals(false, deal.equals(new Object()));
     }
 
     @Test
     public void testEquals_nullInstance() {
         // when then
-        assertEquals(false, playerGame.equals(NullPlayerGame.INSTANCE));
-        assertEquals(true, NullPlayerGame.INSTANCE.equals(NullPlayerGame.INSTANCE));
-        assertEquals(true, NullPlayerGame.INSTANCE.equals(NullPlayer.INSTANCE));
+        assertEquals(false, deal.equals(NullDeal.INSTANCE));
+        assertEquals(true, NullDeal.INSTANCE.equals(NullDeal.INSTANCE));
+        assertEquals(true, NullDeal.INSTANCE.equals(NullPlayer.INSTANCE));
     }
     @Test
     public void testEquals_withPlayer() {
@@ -117,52 +122,52 @@ public class PlayerGameTest {
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
 
         // when then
-        assertEquals(false, playerGame.equals(otherPlayer));
-        assertEquals(true, playerGame.equals(player));
+        assertEquals(false, deal.equals(otherPlayer));
+        assertEquals(true, deal.equals(player));
     }
 
     @Test
-    public void testEquals_playerGameWithPlayer() {
+    public void testEquals_dealWithPlayer() {
         // given
         GameType gameType = PlayerTest.mockGameType("game");
         Player otherPlayer = new Player("other player", "other url", gameType,
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
-        PlayerGame player = new PlayerGame(otherPlayer, NullGame.INSTANCE, gameType.name());
+        Deal player = new Deal(otherPlayer, NullGame.INSTANCE, gameType.name());
 
         // when then
-        assertEquals(false, playerGame.equals(player));
-        assertEquals(true, playerGame.equals(playerGame));
+        assertEquals(false, deal.equals(player));
+        assertEquals(true, deal.equals(deal));
     }
 
     @Test
     public void testEquals_room() {
         // when then
-        assertEquals(true, playerGame.equals("room"));
-        assertEquals(false, playerGame.equals("otherRoom"));
+        assertEquals(true, deal.equals("room"));
+        assertEquals(false, deal.equals("otherRoom"));
     }
 
     @Test
-    public void testEquals_playerGameWithGame() {
+    public void testEquals_dealWithGame() {
         // given
         Game game = new LockedGame(new ReentrantReadWriteLock()).wrap(mock(Game.class));
-        PlayerGame player = new PlayerGame(null, game, null);
+        Deal player = new Deal(null, game, null);
 
         // when then
-        assertEquals(false, playerGame.equals(player));
-        assertEquals(false, player.equals(playerGame));
+        assertEquals(false, deal.equals(player));
+        assertEquals(false, player.equals(deal));
     }
 
     @Test
     public void testEquals_player() {
         // given
-        PlayerGame player = new PlayerGame(null, game, null);
-        PlayerGame player2 = new PlayerGame(null, mock(Game.class), null);
+        Deal player = new Deal(null, game, null);
+        Deal player2 = new Deal(null, mock(Game.class), null);
 
         // when then
-        assertEquals(true, playerGame.equals(player));
-        assertEquals(true, player.equals(playerGame));
-        assertEquals(false, playerGame.equals(player2));
-        assertEquals(false, player2.equals(playerGame));
+        assertEquals(true, deal.equals(player));
+        assertEquals(true, player.equals(deal));
+        assertEquals(false, deal.equals(player2));
+        assertEquals(false, player2.equals(deal));
     }
 
     @Test
@@ -172,65 +177,79 @@ public class PlayerGameTest {
         GameField field = mock(GameField.class);
         when(realGame.getField()).thenReturn(field);
         Game game = new LockedGame(new ReentrantReadWriteLock()).wrap(realGame);
-        PlayerGame player = new PlayerGame(null, game, null);
+        Deal player = new Deal(null, game, null);
 
         // when then
-        assertEquals(false, playerGame.equals(field));
+        assertEquals(false, deal.equals(field));
         assertEquals(true, player.equals(field));
     }
 
     @Test
     public void testHashCode() {
         // when then
-        assertEquals(2096629736, playerGame.hashCode());
+        assertEquals(2096629736, deal.hashCode());
     }
 
     @Test
     public void testRemove() {
         // given
         boolean[] removed = {false};
-        Consumer<PlayerGame> onRemove = playerGame -> removed[0] = true;
+        Consumer<Deal> onRemove = deal -> removed[0] = true;
 
         // when
-        playerGame.remove(onRemove);
+        deal.remove(onRemove);
 
         // then
-        verify(game).close();
+        verify(LockedGame.unwrap(game)).close();
         assertEquals(true, removed[0]);
     }
 
     @Test
     public void testGetPlayer() {
         // when then
-        assertSame(player, playerGame.getPlayer());
+        assertSame(player, deal.getPlayer());
     }
 
     @Test
     public void testGetGame() {
         // when then
-        assertSame(game, playerGame.getGame());
+        assertSame(game, deal.getGame());
     }
 
     @Test
     public void testToString() {
         // when then
-        assertEquals(String.format("PlayerGame[player=player, room=room, game=%s]",
+        assertEquals(String.format("Deal[player=player, room=room, game=%s]",
                 game.getClass().getSimpleName()),
-                playerGame.toString());
+                deal.toString());
     }
     
     @Test 
     public void testSetRoomName_alsoUpdatePlayer() {
         // given
-        assertEquals("room", playerGame.getRoom());
-        assertEquals("room", playerGame.getPlayer().getRoom());
+        assertEquals("room", deal.getRoom());
+        assertEquals("room", deal.getPlayer().getRoom());
         
         // when 
-        playerGame.setRoom("otherRoom");
+        deal.setRoom("otherRoom");
         
         // then
-        assertEquals("otherRoom", playerGame.getRoom());
-        assertEquals("otherRoom", playerGame.getPlayer().getRoom());
+        assertEquals("otherRoom", deal.getRoom());
+        assertEquals("otherRoom", deal.getPlayer().getRoom());
+    }
+
+    @Test
+    public void testSetPlayerId_alsoUpdatePlayer() {
+        // given
+        assertEquals(DEFAULT_TEAM_ID, deal.getTeamId());
+        assertEquals(DEFAULT_TEAM_ID, deal.getPlayer().getTeamId());
+
+        // when
+        deal.setTeamId(12);
+
+        // then
+        assertEquals(12, deal.getTeamId());
+        assertEquals(12, deal.getPlayer().getTeamId());
     }
 
     @Test
@@ -239,32 +258,34 @@ public class PlayerGameTest {
         gameType = PlayerTest.mockGameType("game");
         player = spy(new Player("player", "url", gameType,
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE));
-        game = mock(Game.class);
+
+        setupGamePlayer();
+
         LevelProgress progress = mock(LevelProgress.class);
         when(game.getProgress()).thenReturn(progress);
 
-        playerGame = new PlayerGame(player, game, "room");
+        deal = new Deal(player, game, "room");
 
         // when
-        playerGame.clearScore();
+        deal.clearScore();
 
         // then
         verify(game.getProgress()).reset();
         verify(player).clearScore();
-        verify(game).clearScore();
+        verify(LockedGame.unwrap(game)).clearScore();
     }
 
     @Test
     public void testGetPlayerTeamId() {
-        GamePlayer gamePlayer = mock(GamePlayer.class);
-        when(game.getPlayer()).thenReturn(gamePlayer);
-        when(gamePlayer.getTeamId()).thenReturn(1);
+        assertEquals(DEFAULT_TEAM_ID, deal.getTeamId());
 
-        assertEquals(1, playerGame.getPlayerTeamId());
+        player.setTeamId(12);
+
+        assertEquals(12, deal.getTeamId());
     }
 
     @Test
     public void testGetPlayerTeamId_defaultTeamId() {
-        assertEquals(DEFAULT_TEAM_ID, playerGame.getPlayerTeamId());
+        assertEquals(DEFAULT_TEAM_ID, deal.getTeamId());
     }
 }

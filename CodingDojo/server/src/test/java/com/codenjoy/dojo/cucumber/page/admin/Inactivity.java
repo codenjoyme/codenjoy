@@ -44,6 +44,7 @@ import static org.junit.Assert.assertEquals;
 @RequiredArgsConstructor
 public class Inactivity {
 
+    // selectors
     public static final By KICK_ENABLED = xpath("//input[@name='inactivity.kickEnabled']");
     public static final By TIMEOUT_INPUT = xpath("//input[@name='inactivity.inactivityTimeout']");
     public static final By SAVE_BUTTON = xpath("//table[@id='inactivity']//input[@value='Save']");
@@ -51,6 +52,7 @@ public class Inactivity {
     public static final By PLAYER_INACTIVE_TICKS = xpath("//span[@class='input-ticks-inactive']");
     public static final Function<String, By> PLAYER_INACTIVE_TICK = email -> xpath("//tr[@player='%s']//span[@class='input-ticks-inactive']", email);
 
+    // page objects
     private final Page page;
     private final WebDriverWrapper web;
 
