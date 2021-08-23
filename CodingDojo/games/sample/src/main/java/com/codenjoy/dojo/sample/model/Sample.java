@@ -150,10 +150,6 @@ public class Sample implements Field {
         bombs().remove(pt);
     }
 
-    public List<Gold> getGold() {
-        return gold().all();
-    }
-
     private PointField.Accessor<Gold> gold() {
         return field.of(Gold.class);
     }
@@ -183,16 +179,8 @@ public class Sample implements Field {
         return settings;
     }
 
-    public List<Wall> getWalls() {
-        return walls().all();
-    }
-
     private PointField.Accessor<Wall> walls() {
         return field.of(Wall.class);
-    }
-
-    public List<Bomb> getBombs() {
-        return bombs().all();
     }
 
     private PointField.Accessor<Bomb> bombs() {
@@ -212,10 +200,10 @@ public class Sample implements Field {
             @Override
             public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<>(){{
-                    addAll(Sample.this.getWalls());
+                    addAll(Sample.this.walls().all());
                     addAll(Sample.this.getHeroes());
-                    addAll(Sample.this.getGold());
-                    addAll(Sample.this.getBombs());
+                    addAll(Sample.this.gold().all());
+                    addAll(Sample.this.bombs().all());
                 }};
             }
         };
