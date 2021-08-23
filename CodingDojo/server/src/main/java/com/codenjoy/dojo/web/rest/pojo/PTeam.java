@@ -26,6 +26,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,10 @@ public class PTeam {
 
     private int teamId;
     private List<String> players;
+
+    public PTeam(int teamId, String... players) {
+        this(teamId, Arrays.asList(players));
+    }
 
     public PTeam(Map.Entry<Integer, List<String>> entry) {
         this(entry.getKey(), entry.getValue());

@@ -25,11 +25,15 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import lombok.Getter;
 
+import java.util.Optional;
 import java.util.function.Consumer;
+
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 
 /**
  * Класс представляет собой игру пользователя, объединяя данные о пользователе в Player,
@@ -150,7 +154,10 @@ public class PlayerGame implements Tickable {
     }
 
     public int getPlayerTeamId() {
-        return getGame().getPlayer().getTeamId();
+        return Optional.ofNullable(getGame())
+                .map(Game::getPlayer)
+                .map(GamePlayer::getTeamId)
+                .orElse(DEFAULT_TEAM_ID);
     }
 
     public String popLastCommand() {

@@ -162,7 +162,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public PlayerGame add(Player player, String room, PlayerSave save) {
         GameType gameType = player.getGameType();
 
-        Single single = buildSingle(player, gameType);
+        Single single = buildSingle(player, save, gameType);
 
         Game game = new LockedGame(lock).wrap(single);
 
@@ -176,9 +176,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return playerGame;
     }
 
-    private Single buildSingle(Player player, GameType gameType) {
+    private Single buildSingle(Player player, PlayerSave save, GameType gameType) {
         GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
                 player.getId(), gameType.getSettings());
+        if (save != null && save != PlayerSave.NULL) {
+            gamePlayer.setTeamId(save.getTeamId());
+        }
 
         return new Single(gamePlayer,
                 gameType.getPrinterFactory(),
