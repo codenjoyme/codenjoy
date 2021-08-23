@@ -81,8 +81,8 @@ public class Sample implements Field {
 
             hero.tick();
 
-            if (field.contains(Gold.class, hero)) {
-                field.remove(Gold.class, hero);
+            if (gold().contains(hero)) {
+                gold().remove(hero);
                 player.event(Events.WIN);
 
                 Optional<Point> pos = freeRandom(null);
@@ -116,7 +116,7 @@ public class Sample implements Field {
                 || x < 0
                 || y < 0
                 || y > size() - 1
-                || field.contains(Wall.class, pt)
+                || walls().contains(pt)
                 || getHeroes().contains(pt);
     }
 
@@ -127,31 +127,35 @@ public class Sample implements Field {
 
     @Override
     public boolean isFree(Point pt) {
-        return !(field.contains(Gold.class, pt)
-                || field.contains(Bomb.class, pt)
-                || field.contains(Wall.class, pt)
+        return !(gold().contains(pt)
+                || bombs().contains(pt)
+                || walls().contains(pt)
                 || getHeroes().contains(pt));
     }
 
     @Override
     public boolean isBomb(Point pt) {
-        return field.contains(Bomb.class, pt);
+        return bombs().contains(pt);
     }
 
     @Override
     public void setBomb(Point pt) {
-        if (!field.contains(Bomb.class, pt)) {
+        if (!bombs().contains(pt)) {
             field.add(new Bomb(pt));
         }
     }
 
     @Override
     public void removeBomb(Point pt) {
-        field.remove(Bomb.class, pt);
+        bombs().remove(pt);
     }
 
     public List<Gold> getGold() {
-        return field.getAll(Gold.class);
+        return gold().all();
+    }
+
+    private PointField.Accessor<Gold> gold() {
+        return field.of(Gold.class);
     }
 
     public List<Hero> getHeroes() {
@@ -180,11 +184,19 @@ public class Sample implements Field {
     }
 
     public List<Wall> getWalls() {
-        return field.getAll(Wall.class);
+        return walls().all();
+    }
+
+    private PointField.Accessor<Wall> walls() {
+        return field.of(Wall.class);
     }
 
     public List<Bomb> getBombs() {
-        return field.getAll(Bomb.class);
+        return bombs().all();
+    }
+
+    private PointField.Accessor<Bomb> bombs() {
+        return field.of(Bomb.class);
     }
 
     @Override

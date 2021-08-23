@@ -58,25 +58,39 @@ public class PointField {
         return field[point.getX()][point.getY()];
     }
 
-    public <T extends Point> boolean contains(Class<?> filter, T element) {
-        return get(element).contains(filter);
+    interface Accessor<T> {
+        <E extends Point> boolean contains(E element);
+
+        <E extends Point> void remove(E element);
+
+        List<T> all();
     }
 
-    public <T extends Point> void remove(Class<?> filter, T element) {
-        get(element).remove(filter);
-    }
-
-    public <T> List<T> getAll(Class<T> filter) {
-        List<T> result = new LinkedList<>();
-        for (int x = 0; x < size(); x++) {
-            for (int y = 0; y < size(); y++) {
-                T element = field[x][y].get(filter);
-                if (element != null) {
-                    result.add(element);
-                }
+    public <T> Accessor<T> of(Class<T> filter) {
+        return new Accessor<>() {
+            @Override
+            public <E extends Point> boolean contains(E element) {
+                return get(element).contains(filter);
             }
-        }
-        return result;
-    }
 
+            @Override
+            public <E extends Point> void remove(E element) {
+                get(element).remove(filter);
+            }
+
+            @Override
+            public List<T> all() {
+                List<T> result = new LinkedList<>();
+                for (int x = 0; x < size(); x++) {
+                    for (int y = 0; y < size(); y++) {
+                        T element = field[x][y].get(filter);
+                        if (element != null) {
+                            result.add(element);
+                        }
+                    }
+                }
+                return result;
+            }
+        };
+    }
 }
