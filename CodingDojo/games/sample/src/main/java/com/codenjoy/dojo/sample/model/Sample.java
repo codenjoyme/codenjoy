@@ -34,15 +34,14 @@ import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static java.util.function.Predicate.*;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -117,7 +116,7 @@ public class Sample implements Field {
                 || y < 0
                 || y > size() - 1
                 || walls().contains(pt)
-                || getHeroes().contains(pt);
+                || heroes().contains(pt);
     }
 
     @Override
@@ -130,7 +129,7 @@ public class Sample implements Field {
         return !(gold().contains(pt)
                 || bombs().contains(pt)
                 || walls().contains(pt)
-                || getHeroes().contains(pt));
+                || heroes().contains(pt));
     }
 
     @Override
@@ -150,15 +149,17 @@ public class Sample implements Field {
         bombs().remove(pt);
     }
 
+    @Override
+    public void add(Hero hero) {
+        field.add(hero);
+    }
+
     private PointField.Accessor<Gold> gold() {
         return field.of(Gold.class);
     }
 
-    public List<Hero> getHeroes() {
-        return players.stream()
-                .map(Player::getHero)
-                .filter(not(Objects::isNull))
-                .collect(toList());
+    private PointField.Accessor<Hero> heroes() {
+        return field.of(Hero.class);
     }
 
     @Override
@@ -167,11 +168,20 @@ public class Sample implements Field {
             players.add(player);
         }
         player.newHero(this);
+        removeAloneHero();
+
+    }
+
+    private void removeAloneHero() {
+        heroes().removeNotIn(players.stream().
+                map(GamePlayer::getHero)
+                .collect(toList()));
     }
 
     @Override
     public void remove(Player player) {
         players.remove(player);
+        heroes().remove(player.getHero());
     }
 
     @Override
@@ -201,7 +211,7 @@ public class Sample implements Field {
             public Iterable<? extends Point> elements(Player player) {
                 return new LinkedList<>(){{
                     addAll(Sample.this.walls().all());
-                    addAll(Sample.this.getHeroes());
+                    addAll(Sample.this.heroes().all());
                     addAll(Sample.this.gold().all());
                     addAll(Sample.this.bombs().all());
                 }};

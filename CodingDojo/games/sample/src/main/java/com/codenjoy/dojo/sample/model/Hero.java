@@ -50,7 +50,9 @@ public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
     @Override
     public void init(Field field) {
-        this.field = field;
+        super.init(field);
+
+        field.add(this);
     }
 
     @Override

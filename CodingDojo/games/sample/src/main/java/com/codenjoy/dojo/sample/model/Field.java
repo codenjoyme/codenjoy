@@ -45,4 +45,6 @@ public interface Field extends GameField<Player> {
     void setBomb(Point pt);
 
     void removeBomb(Point pt);
+
+    void add(Hero hero);
 }

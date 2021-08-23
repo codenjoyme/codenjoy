@@ -52,6 +52,11 @@ public class PointField {
 
     public void add(Point point) {
         get(point).add(point);
+
+        point.onChange((from, to) -> {
+            get(from).remove(point.getClass());
+            get(to).add(to);
+        });
     }
 
     private PointList get(Point point) {
@@ -64,9 +69,11 @@ public class PointField {
         <E extends Point> void remove(E element);
 
         List<T> all();
+
+        void removeNotIn(List<T> valid);
     }
 
-    public <T> Accessor<T> of(Class<T> filter) {
+    public <T extends Point> Accessor<T> of(Class<T> filter) {
         return new Accessor<>() {
             @Override
             public <E extends Point> boolean contains(E element) {
@@ -90,6 +97,13 @@ public class PointField {
                     }
                 }
                 return result;
+            }
+
+            @Override
+            public void removeNotIn(List<T> valid) {
+                all().stream()
+                        .filter(it -> !valid.contains(it))
+                        .forEach(it -> remove(it));
             }
         };
     }
