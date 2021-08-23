@@ -52,15 +52,9 @@ import static java.util.stream.Collectors.toList;
  */
 public class Sample implements Field {
 
-    private List<Wall> walls;
-    private List<Gold> gold;
-    private List<Bomb> bombs;
-
+    private PointField field;
     private List<Player> players;
-
-    private int size;
     private Dice dice;
-
     private GameSettings settings;
 
     public Sample(Level level, Dice dice, GameSettings settings) {
@@ -71,10 +65,10 @@ public class Sample implements Field {
     }
 
     private void init(Level level) {
-        walls = level.walls();
-        gold = level.gold();
-        bombs = level.bombs();
-        size = level.size();
+        field = new PointField(level.size());
+        field.addAll(level.walls());
+        field.addAll(level.gold());
+        field.addAll(level.bombs());
     }
 
     /**
@@ -87,13 +81,13 @@ public class Sample implements Field {
 
             hero.tick();
 
-            if (gold.contains(hero)) {
-                gold.remove(hero);
+            if (field.contains(Gold.class, hero)) {
+                field.remove(Gold.class, hero);
                 player.event(Events.WIN);
 
                 Optional<Point> pos = freeRandom(null);
                 if (pos.isPresent()) {
-                    gold.add(new Gold(pos.get()));
+                    field.add(new Gold(pos.get()));
                 }
             }
         }
@@ -108,54 +102,56 @@ public class Sample implements Field {
     }
 
     public int size() {
-        return size;
+        return field.size();
     }
+
+    public static int count;
 
     @Override
     public boolean isBarrier(Point pt) {
         int x = pt.getX();
         int y = pt.getY();
 
-        return x > size - 1
+        return x > size() - 1
                 || x < 0
                 || y < 0
-                || y > size - 1
-                || walls.contains(pt)
+                || y > size() - 1
+                || field.contains(Wall.class, pt)
                 || getHeroes().contains(pt);
     }
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
+        return BoardUtils.freeRandom(size(), dice, pt -> isFree(pt));
     }
 
     @Override
     public boolean isFree(Point pt) {
-        return !(gold.contains(pt)
-                || bombs.contains(pt)
-                || walls.contains(pt)
+        return !(field.contains(Gold.class, pt)
+                || field.contains(Bomb.class, pt)
+                || field.contains(Wall.class, pt)
                 || getHeroes().contains(pt));
     }
 
     @Override
     public boolean isBomb(Point pt) {
-        return bombs.contains(pt);
+        return field.contains(Bomb.class, pt);
     }
 
     @Override
     public void setBomb(Point pt) {
-        if (!bombs.contains(pt)) {
-            bombs.add(new Bomb(pt));
+        if (!field.contains(Bomb.class, pt)) {
+            field.add(new Bomb(pt));
         }
     }
 
     @Override
     public void removeBomb(Point pt) {
-        bombs.remove(pt);
+        field.remove(Bomb.class, pt);
     }
 
     public List<Gold> getGold() {
-        return gold;
+        return field.getAll(Gold.class);
     }
 
     public List<Hero> getHeroes() {
@@ -184,17 +180,17 @@ public class Sample implements Field {
     }
 
     public List<Wall> getWalls() {
-        return walls;
+        return field.getAll(Wall.class);
     }
 
     public List<Bomb> getBombs() {
-        return bombs;
+        return field.getAll(Bomb.class);
     }
 
     @Override
     public BoardReader reader() {
         return new BoardReader<Player>() {
-            private int size = Sample.this.size;
+            private int size = Sample.this.size();
 
             @Override
             public int size() {
@@ -203,7 +199,7 @@ public class Sample implements Field {
 
             @Override
             public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<Point>(){{
+                return new LinkedList<>(){{
                     addAll(Sample.this.getWalls());
                     addAll(Sample.this.getHeroes());
                     addAll(Sample.this.getGold());
