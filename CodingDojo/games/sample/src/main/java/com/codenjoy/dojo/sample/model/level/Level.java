@@ -27,6 +27,7 @@ import com.codenjoy.dojo.sample.model.Hero;
 import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
+import com.codenjoy.dojo.services.PointField;
 
 import java.util.List;
 
@@ -47,4 +48,6 @@ public interface Level {
     List<Hero> heroes();
 
     List<Gold> gold();
+
+    PointField field();
 }

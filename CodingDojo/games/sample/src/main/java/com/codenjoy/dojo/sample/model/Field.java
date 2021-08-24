@@ -23,7 +23,11 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.items.Bomb;
+import com.codenjoy.dojo.sample.model.items.Gold;
+import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointField;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.Optional;
@@ -40,11 +44,13 @@ public interface Field extends GameField<Player> {
 
     boolean isFree(Point pt);
 
-    boolean isBomb(Point pt);
-
     void setBomb(Point pt);
 
-    void removeBomb(Point pt);
+    PointField.Accessor<Gold> gold();
 
-    void add(Hero hero);
+    PointField.Accessor<Hero> heroes();
+
+    PointField.Accessor<Wall> walls();
+
+    PointField.Accessor<Bomb> bombs();
 }

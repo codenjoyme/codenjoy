@@ -57,14 +57,7 @@ public class Sample implements Field {
         this.dice = dice;
         players = new LinkedList<>();
         this.settings = settings;
-        init(level);
-    }
-
-    private void init(Level level) {
-        field = new PointField(level.size());
-        field.addAll(level.walls());
-        field.addAll(level.gold());
-        field.addAll(level.bombs());
+        field = level.field();
     }
 
     /**
@@ -79,12 +72,11 @@ public class Sample implements Field {
 
             if (gold().contains(hero)) {
                 gold().remove(hero);
+
                 player.event(Events.WIN);
 
-                Optional<Point> pos = freeRandom(null);
-                if (pos.isPresent()) {
-                    field.add(new Gold(pos.get()));
-                }
+                freeRandom(null)
+                        .ifPresent(point -> field.add(new Gold(point)));
             }
         }
 
@@ -101,8 +93,6 @@ public class Sample implements Field {
         return field.size();
     }
 
-    public static int count;
-
     @Override
     public boolean isBarrier(Point pt) {
         return pt.isOutOf(size())
@@ -112,7 +102,7 @@ public class Sample implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(size(), dice, pt -> isFree(pt));
+        return BoardUtils.freeRandom(size(), dice, this::isFree);
     }
 
     @Override
@@ -124,25 +114,10 @@ public class Sample implements Field {
     }
 
     @Override
-    public boolean isBomb(Point pt) {
-        return bombs().contains(pt);
-    }
-
-    @Override
     public void setBomb(Point pt) {
         if (!bombs().contains(pt)) {
-            field.add(new Bomb(pt));
+            bombs().add(new Bomb(pt));
         }
-    }
-
-    @Override
-    public void removeBomb(Point pt) {
-        bombs().remove(pt);
-    }
-
-    @Override
-    public void add(Hero hero) {
-        field.add(hero);
     }
 
     @Override
@@ -152,9 +127,9 @@ public class Sample implements Field {
         }
         player.newHero(this);
         removeAloneHero();
-
     }
 
+    // TODO попробовать избвиться от этого метода
     private void removeAloneHero() {
         heroes().removeNotIn(players.stream().
                 map(GamePlayer::getHero)
@@ -164,6 +139,7 @@ public class Sample implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
+        // TODO попробовать избвиться от этой строчки
         heroes().remove(player.getHero());
     }
 
@@ -178,32 +154,36 @@ public class Sample implements Field {
     }
 
     @Override
-    public List<Player> load(String board, Supplier<Player> createPlayer) {
+    public List<Player> load(String board, Supplier<Player> creator) {
         Level level = new LevelImpl(board);
-        List<Player> players = new LinkedList<>();
+        List<Player> result = new LinkedList<>();
         level.heroes().forEach(hero -> {
-            Player player = createPlayer.get();
+            Player player = creator.get();
             player.setHero(hero);
-            players.add(player);
+            result.add(player);
 
         });
-        init(level);
-        return players;
+        field = level.field();
+        return result;
     }
 
-    private PointField.Accessor<Gold> gold() {
+    @Override
+    public PointField.Accessor<Gold> gold() {
         return field.of(Gold.class);
     }
 
-    private PointField.Accessor<Hero> heroes() {
+    @Override
+    public PointField.Accessor<Hero> heroes() {
         return field.of(Hero.class);
     }
 
-    private PointField.Accessor<Wall> walls() {
+    @Override
+    public PointField.Accessor<Wall> walls() {
         return field.of(Wall.class);
     }
 
-    private PointField.Accessor<Bomb> bombs() {
+    @Override
+    public PointField.Accessor<Bomb> bombs() {
         return field.of(Bomb.class);
     }
 

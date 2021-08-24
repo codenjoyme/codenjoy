@@ -28,6 +28,7 @@ import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.PointField;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import static com.codenjoy.dojo.games.sample.Element.*;
@@ -73,5 +74,12 @@ public class LevelImpl implements Level {
         return getObjects(xy, map, Wall::new, WALL);
     }
 
-
+    @Override
+    public PointField field() {
+        PointField result = new PointField(size());
+        result.addAll(walls());
+        result.addAll(gold());
+        result.addAll(bombs());
+        return result;
+    }
 }
