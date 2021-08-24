@@ -105,13 +105,7 @@ public class Sample implements Field {
 
     @Override
     public boolean isBarrier(Point pt) {
-        int x = pt.getX();
-        int y = pt.getY();
-
-        return x > size() - 1
-                || x < 0
-                || y < 0
-                || y > size() - 1
+        return pt.isOutOf(size())
                 || walls().contains(pt)
                 || heroes().contains(pt);
     }
