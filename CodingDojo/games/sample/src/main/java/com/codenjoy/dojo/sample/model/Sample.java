@@ -54,10 +54,10 @@ public class Sample implements Field {
     private GameSettings settings;
 
     public Sample(Level level, Dice dice, GameSettings settings) {
-        this.dice = dice;
-        players = new LinkedList<>();
-        this.settings = settings;
         field = level.field();
+        players = new LinkedList<>();
+        this.dice = dice;
+        this.settings = settings;
     }
 
     /**
@@ -126,12 +126,12 @@ public class Sample implements Field {
             players.add(player);
         }
         player.newHero(this);
-        removeAloneHero();
+        removeAloneHeroes();
     }
 
-    // TODO попробовать избвиться от этого метода
-    private void removeAloneHero() {
-        heroes().removeNotIn(players.stream().
+    // TODO DF3D попробовать избавиться от этого метода
+    private void removeAloneHeroes() {
+        heroes().removeNotSame(players.stream().
                 map(GamePlayer::getHero)
                 .collect(toList()));
     }
@@ -139,8 +139,7 @@ public class Sample implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
-        // TODO попробовать избвиться от этой строчки
-        heroes().remove(player.getHero());
+        removeAloneHeroes();
     }
 
     @Override
