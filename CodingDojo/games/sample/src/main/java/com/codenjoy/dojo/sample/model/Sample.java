@@ -145,14 +145,6 @@ public class Sample implements Field {
         field.add(hero);
     }
 
-    private PointField.Accessor<Gold> gold() {
-        return field.of(Gold.class);
-    }
-
-    private PointField.Accessor<Hero> heroes() {
-        return field.of(Hero.class);
-    }
-
     @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
@@ -180,34 +172,9 @@ public class Sample implements Field {
         return settings;
     }
 
-    private PointField.Accessor<Wall> walls() {
-        return field.of(Wall.class);
-    }
-
-    private PointField.Accessor<Bomb> bombs() {
-        return field.of(Bomb.class);
-    }
-
     @Override
     public BoardReader reader() {
-        return new BoardReader<Player>() {
-            private int size = Sample.this.size();
-
-            @Override
-            public int size() {
-                return size;
-            }
-
-            @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<>(){{
-                    addAll(Sample.this.walls().all());
-                    addAll(Sample.this.heroes().all());
-                    addAll(Sample.this.gold().all());
-                    addAll(Sample.this.bombs().all());
-                }};
-            }
-        };
+        return field.reader();
     }
 
     @Override
@@ -223,4 +190,21 @@ public class Sample implements Field {
         init(level);
         return players;
     }
+
+    private PointField.Accessor<Gold> gold() {
+        return field.of(Gold.class);
+    }
+
+    private PointField.Accessor<Hero> heroes() {
+        return field.of(Hero.class);
+    }
+
+    private PointField.Accessor<Wall> walls() {
+        return field.of(Wall.class);
+    }
+
+    private PointField.Accessor<Bomb> bombs() {
+        return field.of(Bomb.class);
+    }
+
 }
