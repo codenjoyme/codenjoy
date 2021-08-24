@@ -149,7 +149,11 @@ public class Sample implements Field {
 
     @Override
     public BoardReader reader() {
-        return field.reader();
+        return field.reader(
+                Hero.class,
+                Wall.class,
+                Gold.class,
+                Bomb.class);
     }
 
     @Override
