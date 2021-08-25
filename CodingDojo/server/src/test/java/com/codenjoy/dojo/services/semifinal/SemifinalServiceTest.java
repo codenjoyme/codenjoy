@@ -66,7 +66,8 @@ public class SemifinalServiceTest extends AbstractDealsTest {
                     .setPercentage(true)
                     .setLimit(50)
                     .setResetBoard(false)
-                    .setShuffleBoard(false);
+                    .setShuffleBoard(false)
+                    .setClearScores(false);
     }
 
     @Test
@@ -1258,7 +1259,8 @@ public class SemifinalServiceTest extends AbstractDealsTest {
                 "[Semifinal] Percentage=[[Semifinal] Percentage:Boolean = def[true] val[false]], " +
                 "[Semifinal] Limit=[[Semifinal] Limit:Integer = multiline[false] def[50] val[10]], " +
                 "[Semifinal] Reset board=[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
-                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]]})", settings.toString());
+                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Clear scores=[[Semifinal] Clear scores:Boolean = def[false] val[false]]})", settings.toString());
     }
 
     @Test
@@ -1284,7 +1286,8 @@ public class SemifinalServiceTest extends AbstractDealsTest {
                 "[Semifinal] Percentage=[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
                 "[Semifinal] Limit=[[Semifinal] Limit:Integer = multiline[false] def[50] val[34]], " +
                 "[Semifinal] Reset board=[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
-                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]]})", settings.toString());
+                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Clear scores=[[Semifinal] Clear scores:Boolean = def[false] val[false]]})", settings.toString());
     }
 
     @Test
