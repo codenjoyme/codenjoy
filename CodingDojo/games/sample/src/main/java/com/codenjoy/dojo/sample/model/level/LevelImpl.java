@@ -28,7 +28,7 @@ import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.PointField;
+import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import static com.codenjoy.dojo.games.sample.Element.*;
