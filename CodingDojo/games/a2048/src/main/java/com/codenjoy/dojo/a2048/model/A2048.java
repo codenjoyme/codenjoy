@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.Iterator;
+import java.util.function.Consumer;
 
 public class A2048 implements Field {
 
@@ -134,8 +135,8 @@ public class A2048 implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return () -> new Iterator<Point>() {
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(() -> new Iterator<Point>() {
                     private int x = 0;
                     private int y = 0;
                     private Numbers numb = A2048.this.numbers;
@@ -161,7 +162,7 @@ public class A2048 implements Field {
                     public void remove() {
                         throw new UnsupportedOperationException();
                     }
-                };
+                });
             }
         };
     }
