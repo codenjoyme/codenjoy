@@ -35,6 +35,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
@@ -237,20 +238,18 @@ public class Loderunner extends RoundField<Player> implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<>() {{
-                    addAll(Loderunner.this.allHeroes());
-                    addAll(Loderunner.this.enemies());
-                    addAll(Loderunner.this.yellowGold());
-                    addAll(Loderunner.this.greenGold());
-                    addAll(Loderunner.this.redGold());
-                    addAll(Loderunner.this.borders());
-                    addAll(Loderunner.this.bricks());
-                    addAll(Loderunner.this.ladder());
-                    addAll(Loderunner.this.pills());
-                    addAll(Loderunner.this.pipe());
-                    addAll(Loderunner.this.portals());
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(allHeroes());
+                processor.accept(enemies());
+                processor.accept(yellowGold());
+                processor.accept(greenGold());
+                processor.accept(redGold());
+                processor.accept(borders());
+                processor.accept(bricks());
+                processor.accept(ladder());
+                processor.accept(pills());
+                processor.accept(pipe());
+                processor.accept(portals());
             }
         };
     }
