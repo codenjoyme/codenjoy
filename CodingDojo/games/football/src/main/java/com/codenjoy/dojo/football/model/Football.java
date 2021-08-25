@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -232,14 +233,12 @@ public class Football implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<Point>() {{
-                    addAll(Football.this.getWalls());
-                    addAll(Football.this.getHeroes());
-                    addAll(Football.this.topGoals);
-                    addAll(Football.this.bottomGoals);
-                    addAll(Football.this.balls);
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(getWalls());
+                processor.accept(getHeroes());
+                processor.accept(topGoals);
+                processor.accept(bottomGoals);
+                processor.accept(balls);
             }
         };
     }
