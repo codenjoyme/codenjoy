@@ -29,7 +29,8 @@ import com.codenjoy.dojo.games.snake.Element;
 import com.codenjoy.dojo.snake.model.artifacts.*;
 import com.codenjoy.dojo.snake.services.GameSettings;
 
-import java.util.LinkedList;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.START_SNAKE_LENGTH;
 
@@ -181,13 +182,10 @@ public class Snake implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<Point>(){{
-                    walls.forEach(this::add);
-                    snake().forEach(this::add);
-                    add(apple);
-                    add(stone);
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(walls);
+                processor.accept(snake());
+                processor.accept(Arrays.asList(apple, stone));
             }
         };
     }
