@@ -23,9 +23,7 @@ package com.codenjoy.dojo.services.semifinal;
  */
 
 
-import com.codenjoy.dojo.services.AbstractDealsTest;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -55,6 +53,9 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         semifinal = new SemifinalService();
         semifinal.roomService = roomService;
         semifinal.deals = deals;
+        semifinal.saver = mock(GameSaver.class);
+        GameService gameService = mock(GameService.class);
+        semifinal.scoresCleaner = spy(new ScoresCleaner(semifinal.saver, roomService, gameService, timeService));
         semifinal.clean();
         roomService.removeAll();
     }
@@ -1314,5 +1315,37 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         GameType gameType = mock(GameType.class);
         when(gameType.getSettings()).thenReturn(new SettingsImpl());
         roomService.state(room).get().setType(gameType);
+    }
+
+    @Test
+    public void shouldClearScores_whenSettingsEnabled() {
+        // given
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(100);
+
+        updateSettings("room")
+                .setClearScores(true);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        verify(semifinal.scoresCleaner, only()).clearAllSavedScores(anyList(), anyList());
+    }
+
+    @Test
+    public void shouldNotClearScores_whenSettingsDisabled() {
+        // given
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(100);
+
+        updateSettings("room")
+                .setClearScores(false);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        verify(semifinal.scoresCleaner, never()).clearAllSavedScores(anyList(), anyList());
     }
 }
