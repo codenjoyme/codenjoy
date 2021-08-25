@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public class Expansion implements Tickable, IField {
 
@@ -610,8 +611,8 @@ public class Expansion implements Tickable, IField {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return null; // because layeredReader() implemented here
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                // do nothing because layeredReader() implemented here
             }
         };
     }
