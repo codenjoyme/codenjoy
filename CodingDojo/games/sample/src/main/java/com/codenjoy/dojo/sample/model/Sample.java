@@ -31,6 +31,7 @@ import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -172,22 +173,22 @@ public class Sample implements Field {
     }
 
     @Override
-    public PointField.Accessor<Gold> gold() {
+    public Accessor<Gold> gold() {
         return field.of(Gold.class);
     }
 
     @Override
-    public PointField.Accessor<Hero> heroes() {
+    public Accessor<Hero> heroes() {
         return field.of(Hero.class);
     }
 
     @Override
-    public PointField.Accessor<Wall> walls() {
+    public Accessor<Wall> walls() {
         return field.of(Wall.class);
     }
 
     @Override
-    public PointField.Accessor<Bomb> bombs() {
+    public Accessor<Bomb> bombs() {
         return field.of(Bomb.class);
     }
 

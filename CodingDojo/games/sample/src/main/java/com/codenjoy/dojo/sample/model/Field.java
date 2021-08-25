@@ -27,7 +27,7 @@ import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.field.PointField;
+import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.Optional;
@@ -46,11 +46,11 @@ public interface Field extends GameField<Player> {
 
     void setBomb(Point pt);
 
-    PointField.Accessor<Gold> gold();
+    Accessor<Gold> gold();
 
-    PointField.Accessor<Hero> heroes();
+    Accessor<Hero> heroes();
 
-    PointField.Accessor<Wall> walls();
+    Accessor<Wall> walls();
 
-    PointField.Accessor<Bomb> bombs();
+    Accessor<Bomb> bombs();
 }
