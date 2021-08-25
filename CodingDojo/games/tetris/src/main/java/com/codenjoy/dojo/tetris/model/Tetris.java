@@ -30,8 +30,8 @@ import com.codenjoy.dojo.tetris.services.GameSettings;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by Sergii_Zelenin on 7/10/2016.
@@ -91,16 +91,13 @@ public class Tetris implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
                 Hero hero = player.getHero();
-
-                return new LinkedList<Point>() {{
-                    List<Plot> droppedPlots = hero.dropped();
-                    List<Plot> currentFigurePlots = hero.currentFigure();
-                    droppedPlots.removeAll(currentFigurePlots);
-                    addAll(droppedPlots);
-                    addAll(currentFigurePlots);
-                }};
+                List<Plot> droppedPlots = hero.dropped();
+                List<Plot> currentFigurePlots = hero.currentFigure();
+                droppedPlots.removeAll(currentFigurePlots);
+                processor.accept(droppedPlots);
+                processor.accept(currentFigurePlots);
             }
         };
     }
