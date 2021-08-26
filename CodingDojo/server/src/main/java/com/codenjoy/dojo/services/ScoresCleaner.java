@@ -43,22 +43,20 @@ public class ScoresCleaner {
 
     public void clearAllSavedScores(List<Deal> active, List<String> saved) {
         active.forEach(Deal::clearScore);
-
-        long now = time.now();
-        saved.forEach(id -> cleanSavedScore(now, id));
+        saved.forEach(this::cleanSavedScore);
 
         List<Deal> notSaved = active.stream()
                 .filter(exclude(saved))
                 .collect(toList());
-        saver.saveGames(notSaved, now);
+        saver.saveGames(notSaved, time.now());
     }
 
-    public void cleanSavedScore(long now, String id) {
+    public void cleanSavedScore(String id) {
         PlayerSave playerSave = saver.loadGame(id);
         GameType type = roomService.gameType(playerSave.getRoom());
         String save = gameService.getDefaultProgress(type);
         Player player = new Player(playerSave);
         player.setScore(0);
-        saver.saveGame(player, playerSave.getTeamId(), save, now);
+        saver.saveGame(player, playerSave.getTeamId(), save, time.now());
     }
 }

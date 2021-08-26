@@ -732,7 +732,7 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             deals.get(id).clearScore();
-            scoresCleaner.cleanSavedScore(time.now(), id);
+            scoresCleaner.cleanSavedScore(id);
         } finally {
             lock.writeLock().unlock();
         }
