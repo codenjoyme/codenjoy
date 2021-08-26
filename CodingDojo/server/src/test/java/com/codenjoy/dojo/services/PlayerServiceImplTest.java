@@ -2400,7 +2400,7 @@ public class PlayerServiceImplTest {
         when(saver.loadGame("player")).thenReturn(playerSave);
 
         // when
-        scoresCleaner.cleanSavedScore("player");
+        scoresCleaner.cleanScores("player");
 
         // then
         verify(saver).saveGame(new Player(playerSave), teamId, null, 0L);

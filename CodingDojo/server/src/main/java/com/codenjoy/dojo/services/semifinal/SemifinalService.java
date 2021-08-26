@@ -122,7 +122,7 @@ public class SemifinalService implements Tickable {
             }
 
             if (reader.isClearScores()) {
-                scoresCleaner.clearAllSavedScores(deals.all(), saver.getSavedList());
+                scoresCleaner.cleanAllScores();
             }
         }
     }
