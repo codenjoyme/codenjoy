@@ -90,38 +90,42 @@ public class ScoresCleanerTest {
 
     @Test
     public void cleanAllScores() {
+        // given
         createPlayer("player1", "first", 100);
         createPlayer("player2", "second", 50);
 
+        // when
         scoresCleaner.cleanAllScores();
 
+        // then
         assertActiveScores("[0, 0]");
         assertSavedScores("[0, 0]");
     }
 
     @Test
     public void cleanAllScoresForRoom() {
+        // given
         createPlayer("player1", "first", 100);
         createPlayer("player2", "second", 50);
 
+        // when
         scoresCleaner.cleanAllScores("first");
 
+        // then
         assertActiveScores("[0, 50]");
         assertActiveScores("[0, 50]");
-
-        List<Object> savedScores = saver.getSaves().stream()
-                .map(Player::getScore)
-                .collect(Collectors.toList());
-        assertEquals("[0, 50]", savedScores.toString());
     }
 
     @Test
     public void cleanScoresForDeal() {
+        // given
         createPlayer("player1", "first", 100);
         createPlayer("player2", "second", 50);
 
+        // when
         scoresCleaner.cleanScores("player2");
 
+        // then
         assertActiveScores("[100, 0]");
         assertSavedScores("[100, 0]");
     }
