@@ -710,7 +710,7 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             semifinal.clean();
-            scoresCleaner.clearAllSavedScores(deals.all(), saver.getSavedList());
+            scoresCleaner.cleanAllScores();
         } finally {
             lock.writeLock().unlock();
         }
@@ -721,7 +721,7 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             semifinal.clean(room);
-            scoresCleaner.clearAllSavedScores(deals.getAll(withRoom(room)), saver.getSavedList(room));
+            scoresCleaner.cleanAllScores(room);
         } finally {
             lock.writeLock().unlock();
         }
@@ -731,8 +731,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void cleanScores(String id) {
         lock.writeLock().lock();
         try {
-            deals.get(id).clearScore();
-            scoresCleaner.cleanSavedScore(time.now(), id);
+            scoresCleaner.cleanScores(id);
         } finally {
             lock.writeLock().unlock();
         }

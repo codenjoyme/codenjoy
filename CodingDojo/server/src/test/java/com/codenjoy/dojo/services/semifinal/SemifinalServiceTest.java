@@ -55,7 +55,7 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         semifinal.deals = deals;
         semifinal.saver = mock(GameSaver.class);
         GameService gameService = mock(GameService.class);
-        semifinal.scoresCleaner = spy(new ScoresCleaner(semifinal.saver, roomService, gameService, timeService));
+        semifinal.scoresCleaner = spy(new ScoresCleaner(deals, semifinal.saver, roomService, gameService, timeService));
         semifinal.clean();
         roomService.removeAll();
     }
@@ -1330,7 +1330,7 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         ticksTillTimeout();
 
         // then
-        verify(semifinal.scoresCleaner, only()).clearAllSavedScores(anyList(), anyList());
+        verify(semifinal.scoresCleaner, only()).cleanAllScores();
     }
 
     @Test
@@ -1346,6 +1346,6 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         ticksTillTimeout();
 
         // then
-        verify(semifinal.scoresCleaner, never()).clearAllSavedScores(anyList(), anyList());
+        verify(semifinal.scoresCleaner, never()).cleanAllScores();
     }
 }
