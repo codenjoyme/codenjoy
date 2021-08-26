@@ -566,7 +566,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
                         "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
                         "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]]]",
+                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
+                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
                 settings1.build().toString());
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
@@ -578,7 +579,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
                 quote(settings2.toString()));
 
         // when
@@ -601,7 +603,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
                         "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
                         "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]]]",
+                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
+                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
                 settings1.build().toString());
 
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
@@ -613,7 +616,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
                 quote(settings2.toString()));
     }
 
@@ -629,7 +633,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
                         "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
                         "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]]]",
+                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
+                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
                 settings1.build().toString());
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
@@ -641,7 +646,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
                 quote(settings2.toString()));
 
         // when
@@ -665,7 +671,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
                         "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
                         "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]]]",
+                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
+                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
                 settings1.build().toString());
 
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
@@ -677,7 +684,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
                 quote(settings2.toString()));
     }
 
@@ -693,7 +701,9 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
                         "[[Semifinal] Limit:Integer = multiline[false] def[50] val[50]], " +
                         "[[Semifinal] Reset board:Boolean = def[true] val[true]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]]]",
+                        "[[Semifinal] Shuffle board:Boolean = def[true] val[true]], " +
+                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
+
                 settings1.build().toString());
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
@@ -705,7 +715,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
                 quote(settings2.toString()));
 
         // when
@@ -717,7 +728,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'name':'[Semifinal] Percentage','value':false}," +
                         "{'name':'[Semifinal] Limit','value':70}," +
                         "{'name':'[Semifinal] Reset board','value':false}," +
-                        "{'name':'[Semifinal] Shuffle board','value':false}" +
+                        "{'name':'[Semifinal] Shuffle board','value':false}," +
+                        "{'name':'[Semifinal] Clear scores','value':false}" +
                         "]}")));
 
         // then
@@ -730,7 +742,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "[[Semifinal] Percentage:Boolean = def[true] val[false]], " +
                         "[[Semifinal] Limit:Integer = multiline[false] def[50] val[70]], " +
                         "[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[false]]]",
+                        "[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
+                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
                 settings1.build().toString());
 
         // тут не поменялось ничего, т.к. комната другая
@@ -743,7 +756,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                 "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                 "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50'],'type':'editbox','value':'50','valueType':'Integer'}," +
                 "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
                 quote(settings2.toString()));
 
         // when
@@ -755,7 +769,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'name':'[Semifinal] Percentage','value':'true'}," +
                         "{'name':'[Semifinal] Limit','value':'60'}," +
                         "{'name':'[Semifinal] Reset board','value':'true'}," +
-                        "{'name':'[Semifinal] Shuffle board','value':'true'}" +
+                        "{'name':'[Semifinal] Shuffle board','value':'true'}," +
+                        "{'name':'[Semifinal] Clear scores','value':'false'}" +
                         "]}")));
 
         // then
@@ -768,7 +783,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "[[Semifinal] Percentage:Boolean = def[true] val[false]], " +
                         "[[Semifinal] Limit:Integer = multiline[false] def[50] val[70]], " +
                         "[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
-                        "[[Semifinal] Shuffle board:Boolean = def[true] val[false]]]",
+                        "[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
+                        "[[Semifinal] Clear scores:Boolean = def[false] val[false]]]",
                 settings1.build().toString());
 
         // а тут поменялось
@@ -781,7 +797,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         "{'def':'true','multiline':false,'name':'[Semifinal] Percentage','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
                         "{'def':'50','multiline':false,'name':'[Semifinal] Limit','options':['50','60'],'type':'editbox','value':'60','valueType':'Integer'}," +
                         "{'def':'true','multiline':false,'name':'[Semifinal] Reset board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
-                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}]}",
+                        "{'def':'true','multiline':false,'name':'[Semifinal] Shuffle board','options':['true'],'type':'checkbox','value':'true','valueType':'Boolean'}," +
+                        "{'def':'false','multiline':false,'name':'[Semifinal] Clear scores','options':['false'],'type':'checkbox','value':'false','valueType':'Boolean'}]}",
                 quote(settings2.toString()));
     }
 }

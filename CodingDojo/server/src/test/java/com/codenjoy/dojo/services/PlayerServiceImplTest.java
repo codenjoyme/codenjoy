@@ -158,6 +158,8 @@ public class PlayerServiceImplTest {
     @Autowired
     private PlayerServiceImpl playerService;
 
+    @Autowired
+    private ScoresCleaner scoresCleaner;
 
     private InformationCollector informationCollector;
 
@@ -2398,7 +2400,7 @@ public class PlayerServiceImplTest {
         when(saver.loadGame("player")).thenReturn(playerSave);
 
         // when
-        playerService.cleanSavedScore(0L, "player");
+        scoresCleaner.cleanScores("player");
 
         // then
         verify(saver).saveGame(new Player(playerSave), teamId, null, 0L);

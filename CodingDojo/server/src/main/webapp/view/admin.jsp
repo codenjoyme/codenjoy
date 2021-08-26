@@ -423,6 +423,10 @@
                     <td><form:checkbox path="semifinal.shuffleBoard"/></td>
                 </tr>
                 <tr>
+                    <td>Clear scores</td>
+                    <td><form:checkbox path="semifinal.clearScores"/></td>
+                </tr>
+                <tr>
                     <td>
                         <input type="hidden" name="game" value="${game}"/>
                         <input type="hidden" name="room" value="${room}"/>

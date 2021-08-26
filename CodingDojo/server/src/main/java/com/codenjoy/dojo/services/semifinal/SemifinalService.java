@@ -43,9 +43,12 @@ public class SemifinalService implements Tickable {
 
     @Autowired
     protected RoomService roomService;
-
     @Autowired
     protected Deals deals;
+    @Autowired
+    protected GameSaver saver;
+    @Autowired
+    protected ScoresCleaner scoresCleaner;
 
     public void clean() {
         for (String room : roomService.rooms()) {
@@ -116,6 +119,10 @@ public class SemifinalService implements Tickable {
             // если после удаления надо перегруппировать участников по бордам
             if (reader.isResetBoard()) {
                 deals.reloadAll(reader.isShuffleBoard(), withRoom);
+            }
+
+            if (reader.isClearScores()) {
+                scoresCleaner.cleanAllScores();
             }
         }
     }

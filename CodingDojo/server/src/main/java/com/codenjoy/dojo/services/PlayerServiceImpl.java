@@ -60,7 +60,6 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
-import static com.codenjoy.dojo.services.Deals.exclude;
 import static com.codenjoy.dojo.services.Deals.withRoom;
 import static java.util.stream.Collectors.*;
 
@@ -96,6 +95,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected TimeService time;
     @Autowired protected WhatsNextService whatsNext;
     @Autowired protected TeamService team;
+    @Autowired protected ScoresCleaner scoresCleaner;
 
     @Value("${game.ai}")
     protected boolean isAiNeeded;
@@ -710,12 +710,7 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             semifinal.clean();
-
-            List<Deal> active = deals.all();
-            active.forEach(Deal::clearScore);
-
-            List<String> saved = saver.getSavedList();
-            clearAllSavedScores(active, saved);
+            scoresCleaner.cleanAllScores();
         } finally {
             lock.writeLock().unlock();
         }
@@ -726,42 +721,17 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             semifinal.clean(room);
-
-            List<Deal> active = deals.getAll(withRoom(room));
-            active.forEach(Deal::clearScore);
-
-            List<String> saved = saver.getSavedList(room);
-            clearAllSavedScores(active, saved);
+            scoresCleaner.cleanAllScores(room);
         } finally {
             lock.writeLock().unlock();
         }
-    }
-
-    public void clearAllSavedScores(List<Deal> active, List<String> saved) {
-        long now = time.now();
-        saved.forEach(id -> cleanSavedScore(now, id));
-
-        List<Deal> notSaved = active.stream()
-                .filter(exclude(saved))
-                .collect(toList());
-        saver.saveGames(notSaved, now);
-    }
-
-    public void cleanSavedScore(long now, String id) {
-        PlayerSave playerSave = saver.loadGame(id);
-        GameType type = roomService.gameType(playerSave.getRoom());
-        String save = gameService.getDefaultProgress(type);
-        Player player = new Player(playerSave);
-        player.setScore(0);
-        saver.saveGame(player, playerSave.getTeamId(), save, now);
     }
 
     @Override
     public void cleanScores(String id) {
         lock.writeLock().lock();
         try {
-            deals.get(id).clearScore();
-            cleanSavedScore(time.now(), id);
+            scoresCleaner.cleanScores(id);
         } finally {
             lock.writeLock().unlock();
         }
