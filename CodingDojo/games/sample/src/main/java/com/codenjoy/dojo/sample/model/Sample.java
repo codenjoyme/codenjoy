@@ -161,7 +161,7 @@ public class Sample implements Field {
 
     @Override
     public List<Player> load(String board, Supplier<Player> creator) {
-        Level level = new LevelImpl(board);
+        LevelImpl level = new LevelImpl(board);
         List<Player> result = new LinkedList<>();
         level.heroes().forEach(hero -> {
             Player player = creator.get();

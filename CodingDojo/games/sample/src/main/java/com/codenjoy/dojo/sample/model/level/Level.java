@@ -23,13 +23,7 @@ package com.codenjoy.dojo.sample.model.level;
  */
 
 
-import com.codenjoy.dojo.sample.model.Hero;
-import com.codenjoy.dojo.sample.model.items.Bomb;
-import com.codenjoy.dojo.sample.model.items.Gold;
-import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.field.PointField;
-
-import java.util.List;
 
 /**
  * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
@@ -41,13 +35,8 @@ public interface Level {
      */
     int size();
 
-    List<Bomb> bombs();
-
-    List<Wall> walls();
-
-    List<Hero> heroes();
-
-    List<Gold> gold();
-
+    /**
+     * @return Двумерное поле со всеми элементами на нем
+     */
     PointField field();
 }
