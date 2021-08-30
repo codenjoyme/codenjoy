@@ -56,10 +56,11 @@ public class Sample implements Field {
     private GameSettings settings;
 
     public Sample(Level level, Dice dice, GameSettings settings) {
-        field = level.field();
-        players = new LinkedList<>();
         this.dice = dice;
         this.settings = settings;
+        players = new LinkedList<>();
+        field = level.field();
+        field.init(this);
     }
 
     /**
