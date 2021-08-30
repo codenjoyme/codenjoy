@@ -31,7 +31,7 @@ import static java.util.stream.Collectors.toList;
 
 public class Players implements Iterable<Player> {
 
-    private List<Player> players = new LinkedList<>();;
+    private List<Player> players = new LinkedList<>();
     private List<Hero> heroes = new LinkedList<>();
     private Field field;
 
