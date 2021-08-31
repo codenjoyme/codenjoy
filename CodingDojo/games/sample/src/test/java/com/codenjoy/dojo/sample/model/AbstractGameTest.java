@@ -113,10 +113,6 @@ public abstract class AbstractGameTest {
         field.tick();
     }
 
-    public void dice(int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y);
-    }
-
     // getters & asserts
 
     public void assertF(String expected, int index) {
