@@ -53,10 +53,11 @@ public abstract class AbstractGameTest {
     private List<EventListener> listeners;
     private List<Game> games;
     private List<Player> players;
+
     private Dice dice;
+    private PrinterFactory printer;
     protected Sample field;
     protected GameSettings settings;
-    private PrinterFactory printer;
     protected EventsListenersAssert events;
 
     @Before
