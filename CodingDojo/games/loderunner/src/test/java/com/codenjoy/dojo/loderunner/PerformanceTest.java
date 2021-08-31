@@ -27,6 +27,8 @@ import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -35,6 +37,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
@@ -59,6 +62,7 @@ public class PerformanceTest {
             @Override
             public GameSettings getSettings() {
                 return super.getSettings()
+                    .bool(ROUNDS_ENABLED, false)
                     .integer(ENEMIES_COUNT, enemies);
             }
         };
@@ -72,13 +76,32 @@ public class PerformanceTest {
 
         for (int i = 0; i < ticks; i++) {
             for (Game game : games) {
-                game.getField().tick();
+                Joystick joystick = game.getJoystick();
+                int next = new RandomDice().next(5);
+                if (next % 2 == 0) {
+                    joystick.act();
+                }
+                switch (next) {
+                    case 0: joystick.left(); break;
+                    case 1: joystick.right(); break;
+                    case 2: joystick.up(); break;
+                    case 3: joystick.down(); break;
+                }
+            }
+            // because of MULTIPLE there is only one tick for all
+            games.get(0).getField().tick();
+            for (Game game : games) {
+                if (game.isGameOver()) {
+                    game.newGame();
+                }
             }
             profiler.done("tick");
 
+            Object board = null;
             for (int j = 0; j < games.size(); j++) {
-                games.get(j).getBoardAsString();
+                board = games.get(j).getBoardAsString();
             }
+//            System.out.println(board);
             profiler.done("print");
         }
 
