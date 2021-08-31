@@ -22,9 +22,10 @@ package com.codenjoy.dojo.puzzlebox.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.puzzlebox.Element;
 import com.codenjoy.dojo.services.*;
 
-public class Box extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
+public class Box extends PointImpl implements Joystick, Tickable, State<Element, Player> {
 
     private Field field;
     private boolean alive;
@@ -128,15 +129,15 @@ public class Box extends PointImpl implements Joystick, Tickable, State<Elements
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if(done) {
-            return Elements.FILEDBOX;
+            return Element.FILEDBOX;
         }
         else if(isCurrent){
-            return Elements.CURBOX;
+            return Element.CURBOX;
         }
         else {
-            return Elements.BOX;
+            return Element.BOX;
         }
     }
 

@@ -38,7 +38,7 @@ public class SimpleProfiler {
     @Autowired
     private TimeService timeService;
 
-    private final PlayerGames playerGames;
+    private final Deals deals;
 
     public synchronized void start(String message) {
         this.message = message;
@@ -56,7 +56,7 @@ public class SimpleProfiler {
     public synchronized void phase(String phase) {
         if (log.isDebugEnabled()) {
             log.debug(phase + " for all {} games is {} ms",
-                    playerGames.size(), now() - phaseTime);
+                    deals.size(), now() - phaseTime);
             phaseTime = now();
         }
     }
@@ -64,7 +64,7 @@ public class SimpleProfiler {
     public synchronized void end() {
         if (log.isDebugEnabled()) {
             log.debug(message + " for all {} games is {} ms",
-                    playerGames.size(), now() - time);
+                    deals.size(), now() - time);
             time = now();
             phaseTime = now();
         }

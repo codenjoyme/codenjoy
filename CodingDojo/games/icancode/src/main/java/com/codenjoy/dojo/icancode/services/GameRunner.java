@@ -25,25 +25,27 @@ package com.codenjoy.dojo.icancode.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.games.icancode.Element;
+import com.codenjoy.dojo.icancode.model.ICanCode;
+import com.codenjoy.dojo.icancode.model.Level;
+import com.codenjoy.dojo.icancode.model.Player;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.ICanCode;
-import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.Level;
 import org.json.JSONObject;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.*;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
@@ -101,8 +103,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public CharElements[] getPlots() {
-        return Elements.values();
+    public CharElement[] getPlots() {
+        return Element.values();
     }
 
     @Override
@@ -117,12 +119,12 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
         if (settings.bool(IS_TRAINING_MODE)) { // TODO найти как это загрузить
 //            int total = Levels.collectSingle().size();
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
-        return new Player(listener, settings);
+        return new Player(listener, settings).inTeam(teamId);
     }
 
     @Override

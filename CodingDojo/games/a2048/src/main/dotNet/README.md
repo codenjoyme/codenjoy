@@ -4,7 +4,7 @@ For C#:
         * server = server_host_ip:8080 server ip inside your LAN
         * server = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
 - register your hero on server http://server/codenjoy-contest/register
-- open Bomberman.sln in VisualStudio
+- open *.sln in VisualStudio
 - open file Program.cs from "Demo" project
     + find line and replace value with your email, you entered during registration step
         * static string UserName = "user@mail.com";

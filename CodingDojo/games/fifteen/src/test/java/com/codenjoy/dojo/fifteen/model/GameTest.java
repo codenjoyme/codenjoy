@@ -23,6 +23,7 @@ package com.codenjoy.dojo.fifteen.model;
  */
 
 import com.codenjoy.dojo.fifteen.services.GameSettings;
+import com.codenjoy.dojo.games.fifteen.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -255,23 +256,23 @@ public class GameTest {
     //проверка на правильный расклад
     @Test
     public void testIsSolvabilityTrue() {
-        List<Elements> test = new LinkedList<Elements>();
-        test.add(Elements.A);
-        test.add(Elements.B);
-        test.add(Elements.C);
-        test.add(Elements.D);
-        test.add(Elements.E);
-        test.add(Elements.F);
-        test.add(Elements.G);
-        test.add(Elements.H);
-        test.add(Elements.I);
-        test.add(Elements.G);
-        test.add(Elements.K);
-        test.add(Elements.L);
-        test.add(Elements.M);
-        test.add(Elements.N);
-        test.add(Elements.O);
-        test.add(Elements.HERO);
+        List<Element> test = new LinkedList<Element>();
+        test.add(Element.A);
+        test.add(Element.B);
+        test.add(Element.C);
+        test.add(Element.D);
+        test.add(Element.E);
+        test.add(Element.F);
+        test.add(Element.G);
+        test.add(Element.H);
+        test.add(Element.I);
+        test.add(Element.G);
+        test.add(Element.K);
+        test.add(Element.L);
+        test.add(Element.M);
+        test.add(Element.N);
+        test.add(Element.O);
+        test.add(Element.HERO);
         boolean result = new Randomizer().canBeSolved(test);
         assertEquals(true, result);
     }
@@ -279,23 +280,23 @@ public class GameTest {
     //проверка на неправильный расклад
     @Test
     public void testIsSolvabilityFalse() {
-        List<Elements> test = new LinkedList<>();
-        test.add(Elements.A);
-        test.add(Elements.B);
-        test.add(Elements.C);
-        test.add(Elements.D);
-        test.add(Elements.E);
-        test.add(Elements.F);
-        test.add(Elements.G);
-        test.add(Elements.H);
-        test.add(Elements.I);
-        test.add(Elements.G);
-        test.add(Elements.K);
-        test.add(Elements.L);
-        test.add(Elements.M);
-        test.add(Elements.O);
-        test.add(Elements.N);
-        test.add(Elements.HERO);
+        List<Element> test = new LinkedList<>();
+        test.add(Element.A);
+        test.add(Element.B);
+        test.add(Element.C);
+        test.add(Element.D);
+        test.add(Element.E);
+        test.add(Element.F);
+        test.add(Element.G);
+        test.add(Element.H);
+        test.add(Element.I);
+        test.add(Element.G);
+        test.add(Element.K);
+        test.add(Element.L);
+        test.add(Element.M);
+        test.add(Element.O);
+        test.add(Element.N);
+        test.add(Element.HERO);
         boolean result = new Randomizer().canBeSolved(test);
         assertEquals(false, result);
     }

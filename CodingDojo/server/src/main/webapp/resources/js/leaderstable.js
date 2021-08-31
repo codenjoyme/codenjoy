@@ -56,6 +56,33 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
         return result;
     }
 
+    function getTeamsCount(teams) {
+        var result = [];
+        for (var index in teams) {
+            var team = teams[index];
+            if (!result.includes(team)) {
+                result.push(team);
+            }
+        }
+        return result;
+    }
+
+    function getTeams(data) {
+        var result = {};
+        var players = Object.keys(data);
+        for (var index in players) {
+            var player = players[index];
+            var teams = data[player].teams;
+            var teamsPlayers = Object.keys(teams);
+            for (var index2 in teamsPlayers) {
+                var player2 = teamsPlayers[index2];
+                var team = teams[player2];
+                result[player2] = team + 1;
+            }
+        }
+        return result;
+    }
+
     function sortByScore(data) {
         var vals = new Array();
 
@@ -86,6 +113,8 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
         }
         var scores = getAllValues(data);
         var readableNames = getReadableNames(data);
+        var teams = getTeams(data);
+        var teamsCount = getTeamsCount(teams);
         if (scores == null) {
             $("#table-logs-body").empty();
             return;
@@ -94,10 +123,13 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
         scores = sortByScore(scores);
 
         if (!onDrawItem) {
-            onDrawItem = function(count, you, link, name, score) {
+            onDrawItem = function(count, you, link, name, team, score) {
                 return '<tr>' +
                         '<td>' + count + '</td>' +
-                        '<td>' + '<a href="' + link + '">' + name + '</a>' + you + '</td>' +
+                        '<td>' + '<a href="' + link + '">' + name + '</a>' +
+                            '<span class="team-pow">' + team + '</span>' +
+                            '<span>' + you + '</span>' +
+                        '</td>' +
                         '<td class="center">' + score + '</td>' +
                     '</tr>';
             }
@@ -107,6 +139,7 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
         var count = 0;
         $.each(scores, function (email, score) {
             var name = readableNames[email];
+            var team = (teamsCount.length == 1) ? '' : ('[' + teams[email] + ']');
 
             var you = '';
             if (!!playerId) {
@@ -115,7 +148,7 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
 
             count++;
             var link = contextPath + '/board/player/' + email + ((!!code)?('?code=' + code):"");
-            tbody += onDrawItem(count, you, link, name, score);
+            tbody += onDrawItem(count, you, link, name, team, score);
 
         });
 

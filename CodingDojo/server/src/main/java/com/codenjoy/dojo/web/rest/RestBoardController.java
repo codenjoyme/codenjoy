@@ -59,8 +59,8 @@ public class RestBoardController {
     private PlayerService playerService;
     private Registration registration;
     private Validator validator;
-    private PlayerGames playerGames;
-    private PlayerGamesView playerGamesView;
+    private Deals deals;
+    private DealsView dealsView;
     private SaveService saveService;
     private ActionLogger actionLogger;
 
@@ -76,7 +76,7 @@ public class RestBoardController {
     {
         validator.checkPlayerCode(id, code);
 
-        playerGames.changeLevel(id, level);
+        deals.changeLevel(id, level);
 
         return true;
     }
@@ -84,13 +84,13 @@ public class RestBoardController {
     // TODO ROOM тут наверное room надо, хотя вот ниже есть метод...
     @GetMapping("/game/{game}/scores")
     public List<PScoresOf> getPlayersScoresForGame(@PathVariable("game") String game) {
-        return playerGamesView.getScoresForGame(game);
+        return dealsView.getScoresForGame(game);
     }
 
     // TODO test me
     @GetMapping("/room/{room}/scores")
     public List<PScoresOf> getPlayersScoresForRoom(@PathVariable("room") String room) {
-        return playerGamesView.getScoresForRoom(room);
+        return dealsView.getScoresForRoom(room);
     }
 
     // TODO test me
@@ -188,7 +188,7 @@ public class RestBoardController {
 
     @GetMapping("/{game}/status")
     public Map<String, Object> checkGameIsActive(@PathVariable("game") String game) {
-        boolean active = playerGames.getPlayersByGame(game).size() > 0;
+        boolean active = deals.getPlayersByGame(game).size() > 0;
         return Collections.singletonMap("active", active);
     }
 

@@ -1,10 +1,10 @@
 package com.codenjoy.dojo.icancode.model.items.perks;
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 
 public class FirePerk extends Perk {
 
     public FirePerk() {
-        super(Elements.FIRE_PERK);
+        super(Element.FIRE_PERK);
     }
 }

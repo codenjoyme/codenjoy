@@ -23,7 +23,7 @@ package com.codenjoy.dojo.reversi.model.items;
  */
 
 
-import com.codenjoy.dojo.reversi.model.Elements;
+import com.codenjoy.dojo.games.reversi.Element;
 import com.codenjoy.dojo.reversi.model.GetChip;
 import com.codenjoy.dojo.reversi.model.Player;
 import com.codenjoy.dojo.services.*;
@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public class Chip extends PointImpl implements State<Elements, Player> {
+public class Chip extends PointImpl implements State<Element, Player> {
 
     public static final Chip NULL = new Chip(false, pt(-1, -1), null);
 
@@ -45,28 +45,28 @@ public class Chip extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         boolean itsMyTurn = player.color() == field.currentColor();
         boolean itsMyChip = player.color() == color;
         if (!itsMyTurn && itsMyChip) {
             if (color) {
-                return Elements.WHITE_STOP;
+                return Element.WHITE_STOP;
             } else {
-                return Elements.BLACK_STOP;
+                return Element.BLACK_STOP;
             }
         }
 
         if (color == true) {
             if (field.currentColor() == color) {
-                return Elements.WHITE_TURN;
+                return Element.WHITE_TURN;
             } else {
-                return Elements.WHITE;
+                return Element.WHITE;
             }
         } else {
             if (field.currentColor() == color) {
-                return Elements.BLACK_TURN;
+                return Element.BLACK_TURN;
             } else {
-                return Elements.BLACK;
+                return Element.BLACK;
             }
         }
     }

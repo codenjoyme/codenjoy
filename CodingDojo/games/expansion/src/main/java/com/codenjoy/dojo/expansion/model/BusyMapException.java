@@ -22,10 +22,6 @@ package com.codenjoy.dojo.expansion.model;
  * #L%
  */
 
-
-/**
- * Created by Oleksandr_Baglai on 2017-09-07.
- */
 public class BusyMapException extends RuntimeException {
     public BusyMapException(String s) {
         super(s);

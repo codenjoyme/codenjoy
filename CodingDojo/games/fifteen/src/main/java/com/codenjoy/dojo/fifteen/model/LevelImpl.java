@@ -27,8 +27,8 @@ import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.fifteen.model.Elements.HERO;
-import static com.codenjoy.dojo.fifteen.model.Elements.WALL;
+import static com.codenjoy.dojo.games.fifteen.Element.HERO;
+import static com.codenjoy.dojo.games.fifteen.Element.WALL;
 
 public class LevelImpl implements Level {
 

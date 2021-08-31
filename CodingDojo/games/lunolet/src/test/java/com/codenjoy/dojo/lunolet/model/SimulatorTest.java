@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import com.codenjoy.dojo.games.lunolet.VesselState;
 import org.junit.Test;
 
 import java.awt.geom.Point2D;

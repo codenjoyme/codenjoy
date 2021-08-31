@@ -51,6 +51,7 @@ public class RegistrationTest {
     public static final String CODE_FOR_ID_AND_PASS = "4486751343675417965";
     private Registration registration;
     private static PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    private static final int STRENGTH = 4;
     private ConfigProperties properties;
 
     @Before
@@ -64,7 +65,7 @@ public class RegistrationTest {
                             public String getContext() {
                                 return "context";
                             }
-                        }), "admin", "admin", new BCryptPasswordEncoder(), properties, false);
+                        }), "admin", "admin", new BCryptPasswordEncoder(STRENGTH), properties, false);
     }
 
     @After

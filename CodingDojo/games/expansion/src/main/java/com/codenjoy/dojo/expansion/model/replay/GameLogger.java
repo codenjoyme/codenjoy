@@ -26,9 +26,6 @@ package com.codenjoy.dojo.expansion.model.replay;
 import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.Player;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-21.
- */
 public interface GameLogger {
     void start(Expansion expansion);
 

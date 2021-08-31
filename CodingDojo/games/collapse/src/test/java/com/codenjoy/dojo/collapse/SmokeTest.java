@@ -23,19 +23,16 @@ package com.codenjoy.dojo.collapse;
  */
 
 
-import com.codenjoy.dojo.collapse.client.Board;
-import com.codenjoy.dojo.collapse.client.ai.AISolver;
+import com.codenjoy.dojo.games.collapse.Board;
+import com.codenjoy.dojo.collapse.services.ai.AISolver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.collapse.services.GameRunner;
 import com.codenjoy.dojo.collapse.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.FIELD_SIZE;
 import static org.junit.Assert.assertEquals;

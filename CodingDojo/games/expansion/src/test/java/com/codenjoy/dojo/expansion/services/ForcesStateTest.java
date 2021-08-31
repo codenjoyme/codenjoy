@@ -23,7 +23,7 @@ package com.codenjoy.dojo.expansion.services;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.CellImpl;
 import com.codenjoy.dojo.expansion.model.levels.items.ForcesState;
@@ -31,19 +31,15 @@ import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
 import com.codenjoy.dojo.expansion.model.levels.items.Start;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-05.
- */
 public class ForcesStateTest {
 
     @Test
     public void shouldCountNotMoreThan() {
-        assertEquals("-=#", new ForcesState(new Start(Elements.BASE1)).state(null, null));
+        assertEquals("-=#", new ForcesState(new Start(Element.BASE1)).state(null, null));
         assertEquals("000", new ForcesState(forces(0)).state(null, null));
         assertEquals("001", new ForcesState(forces(1)).state(null, null));
         assertEquals("ZZZ", new ForcesState(forces(46655)).state(null, null));
@@ -59,7 +55,7 @@ public class ForcesStateTest {
         Hero hero = new Hero() {
             @Override
             public Start getBase() {
-                return new Start(Elements.BASE1);
+                return new Start(Element.BASE1);
             }
         };
         return new HeroForces(hero, count) {

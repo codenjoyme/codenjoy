@@ -23,15 +23,17 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Element;
+
 public class FieldItem extends BaseItem {
 
     protected Field field;
 
-    public FieldItem(Elements element) {
+    public FieldItem(Element element) {
         super(element);
     }
 
-    public FieldItem(Elements element, boolean passable) {
+    public FieldItem(Element element, boolean passable) {
         super(element, passable);
     }
 

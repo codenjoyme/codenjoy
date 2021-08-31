@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.tetris.client
 
+import com.codenjoy.dojo.games.tetris.Board
+
 /**
   * Класс, обрабатывающий строковое представление доски в виде JSON.
   * Содержит ряд унаследованных методов {@see Board},

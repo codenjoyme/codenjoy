@@ -25,7 +25,7 @@ package com.codenjoy.dojo.services.mocks;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -50,7 +50,7 @@ public class FirstGameType extends FakeGameType {
         return "first";
     }
 
-    public enum Elements implements CharElements {
+    public enum Element implements CharElement {
 
         NONE(' '),
         WALL('☼'),
@@ -58,7 +58,7 @@ public class FirstGameType extends FakeGameType {
 
         final char ch;
 
-        Elements(char ch) {
+        Element(char ch) {
             this.ch = ch;
         }
 
@@ -75,8 +75,8 @@ public class FirstGameType extends FakeGameType {
     }
 
     @Override
-    public Elements[] getPlots() {
-        return Elements.values();
+    public Element[] getPlots() {
+        return Element.values();
     }
 
     @Override
@@ -90,8 +90,8 @@ public class FirstGameType extends FakeGameType {
     }
 
     @Override
-    public CharElements getHeroElement() {
-        return Elements.HERO;
+    public CharElement getHeroElement() {
+        return Element.HERO;
     }
 
     @Override

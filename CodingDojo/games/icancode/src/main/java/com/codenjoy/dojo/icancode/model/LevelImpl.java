@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.items.perks.PerkUtils;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.LengthToXY;
@@ -60,14 +61,14 @@ public class LevelImpl implements Level {
             for (int x = 0; x < size; ++x) {
 
                 CellImpl cell = new CellImpl(x, y);
-                Elements element = Elements.valueOf(map.charAt(indexChar));
+                Element element = Element.valueOf(map.charAt(indexChar));
                 BaseItem item = create(element, settings);
 
-                if (element.getLayer() != Elements.Layers.LAYER1
-                    || element == Elements.GOLD
+                if (element.getLayer() != Element.Layers.LAYER1
+                    || element == Element.GOLD
                     || PerkUtils.isPerk(element))
                 {
-                    Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
+                    Element atBottom = Element.valueOf(Element.FLOOR.ch());
                     cell.add(create(atBottom, settings));
                 }
 
@@ -78,8 +79,8 @@ public class LevelImpl implements Level {
         }
     }
 
-    private BaseItem create(Elements element, GameSettings settings) {
-        BaseItem item = ElementsMapper.get(element);
+    private BaseItem create(Element element, GameSettings settings) {
+        BaseItem item = ElementMapper.get(element);
         if (Customizable.class.isAssignableFrom(item.getClass())) {
             ((Customizable)item).init(settings);
         }

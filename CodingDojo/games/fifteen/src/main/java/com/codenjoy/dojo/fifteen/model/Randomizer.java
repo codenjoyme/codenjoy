@@ -23,6 +23,7 @@ package com.codenjoy.dojo.fifteen.model;
  */
 
 
+import com.codenjoy.dojo.games.fifteen.Element;
 import com.codenjoy.dojo.services.Dice;
 
 import java.util.Arrays;
@@ -30,7 +31,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.fifteen.model.Elements.HERO;
+import static com.codenjoy.dojo.games.fifteen.Element.HERO;
 
 public class Randomizer {
 
@@ -47,29 +48,29 @@ public class Randomizer {
     public String getRandomMap(Dice dice) {
         this.dice = dice;
 
-        String randomElements = getRandomElements();
+        String random = getRandomElements();
 
         return String.format(TEMPLATE,
-                randomElements.substring(0, 4),
-                randomElements.substring(4, 8),
-                randomElements.substring(8, 12),
-                randomElements.substring(12, 16));
+                random.substring(0, 4),
+                random.substring(4, 8),
+                random.substring(8, 12),
+                random.substring(12, 16));
     }
 
     private String getRandomElements() {
         StringBuilder result = new StringBuilder();
 
-        List<Elements> randomElements = getRandomList();
+        List<Element> random = getRandomList();
 
-        for (int i = 0; i < randomElements.size(); i++) {
-            result.append(randomElements.get(i));
+        for (int i = 0; i < random.size(); i++) {
+            result.append(random.get(i));
         }
 
         return result.toString();
     }
 
-    private List<Elements> getRandomList() {
-        List<Elements> result = new LinkedList<>();
+    private List<Element> getRandomList() {
+        List<Element> result = new LinkedList<>();
         result.addAll(Arrays.asList(DigitHandler.DIGITS));
         result.add(HERO);
 
@@ -80,12 +81,12 @@ public class Randomizer {
         return result;
     }
 
-    private void shuffle(List<Elements> result) {
+    private void shuffle(List<Element> result) {
         for (int i = result.size(); i > 1; i--)
             Collections.swap(result, i - 1, dice.next(i));
     }
 
-    public boolean canBeSolved(List<Elements> result) {
+    public boolean canBeSolved(List<Element> result) {
         int sum = 0;
         for (int i = 0; i < result.size(); i++) {
             if (result.get(i) == HERO) {

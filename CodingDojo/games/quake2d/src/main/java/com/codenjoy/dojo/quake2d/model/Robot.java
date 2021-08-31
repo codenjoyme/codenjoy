@@ -22,12 +22,13 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.quake2d.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-public class Robot extends PointImpl implements Tickable, State<Elements, Player> {
+public class Robot extends PointImpl implements Tickable, State<Element, Player> {
 
     private Field field;
 
@@ -41,8 +42,8 @@ public class Robot extends PointImpl implements Tickable, State<Elements, Player
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.ROBOT;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.ROBOT;
     }
 
     @Override

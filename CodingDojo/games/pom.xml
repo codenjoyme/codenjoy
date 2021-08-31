@@ -26,6 +26,7 @@
         <fest-assert.version>1.4</fest-assert.version>
         <junit.version>4.13.1</junit.version>
         <mockito.version>3.7.7</mockito.version>
+        <pitest.version>1.6.4</pitest.version>
 
         <!-- Maven -->
         <maven-compiler.version>3.8.1</maven-compiler.version>
@@ -38,10 +39,15 @@
         <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
         <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+        <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
-        <client.sources>${user.resources}/${module.name}-servers.zip</client.sources>
-        <client.java.package>java/com/codenjoy/dojo/${module.name}</client.java.package>
+        <client.sources.file>${module.name}-servers.zip</client.sources.file>
+        <client.sources>${user.resources}/${client.sources.file}</client.sources>
+        <dojo.package>java/com/codenjoy/dojo</dojo.package>
+        <java.client.file>resources/user/java-client.zip</java.client.file>
+        <java.client>${project.build.directory}/java-client</java.client>
+        <markdown-page-generator.version>2.3.1-codenjoy</markdown-page-generator.version>
     </properties>
 
     <repositories>
@@ -56,7 +62,7 @@
         <module>sample</module>
         <module>sample-text</module>
         <module>a2048</module>
-        <module>bomberman</module>
+        <module>mollymage</module>
         <module>battlecity</module>
         <module>chess</module>
         <module>collapse</module>
@@ -337,7 +343,7 @@
                             <fileset>
                                 <directory>${user.resources}</directory>
                                 <includes>
-                                    <include>**/${module.name}-servers.zip</include>
+                                    <include>**/${client.sources.file}</include>
                                 </includes>
                                 <followSymlinks>false</followSymlinks>
                             </fileset>
@@ -356,6 +362,33 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>unpack</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>${project.groupId}</groupId>
+                                        <artifactId>client-java</artifactId>
+                                        <version>${project.version}</version>
+                                        <type>jar</type>
+                                        <outputDirectory>${java.client}</outputDirectory>
+                                        <overWrite>true</overWrite>
+                                        <includes>${java.client.file}</includes>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>${maven-antrun.version}</version>
                     <executions>
@@ -366,18 +399,26 @@
                             </goals>
                             <configuration>
                                 <target>
+                                    <unzip src="${java.client}/${java.client.file}"
+                                           dest="${java.client}"/>
+
                                     <zip destfile="${client.sources}"
-                                         basedir="."
-                                         includes="src/main/${client.java.package}/client/*.java,
-                                               src/main/${client.java.package}/model/elements/*.java,
-                                               src/main/${client.java.package}/model/Elements.java,
-                                               src/test/${client.java.package}/client/*.java,
+                                         basedir="${java.client}"
+                                         includes="
+                                               src/main/${dojo.package}/client/**,
+                                               src/main/${dojo.package}/games/${module.name}/**,
+                                               src/main/${dojo.package}/services/**,
+                                               src/main/${dojo.package}/*.java,
+                                               src/main/java/org/json/*.java,
+                                               src/test/${dojo.package}/client/**,
+                                               src/test/${dojo.package}/games/${module.name}/**,
+                                               src/test/${dojo.package}/services/**,
+                                               src/test/${dojo.package}/*.java,
                                                README.*,
+                                               mvnw,
+                                               mvnw.cmd,
                                                src/license/**,
-                                               **/pom.xml"
-                                         excludes="src/main/${client.java.package}/client/ai/*,
-                                               src/test/${client.java.package}/client/ai/*,
-                                               **/target/**"
+                                               pom.xml"
                                          update="true"/>
 
                                     <zip destfile="${client.sources}"
@@ -400,7 +441,8 @@
                                         <zipfileset dir="./target/stuff/" prefix="src/main/resources"/>
                                     </zip>
 
-                                    <copy file="${client.sources}" todir="target/classes/resources/user"/>
+                                    <copy file="${client.sources}"
+                                          todir="target/classes/resources/user"/>
                                 </target>
                             </configuration>
                         </execution>
@@ -430,6 +472,47 @@
                                 <goal>update-file-header</goal>
                             </goals>
                             <phase>process-sources</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.ruleoftech</groupId>
+                    <artifactId>markdown-page-generator-plugin</artifactId>
+                    <version>${markdown-page-generator.version}</version>
+                    <configuration>
+                        <inputDirectory>${basedir}/src/main/webapp/resources/help</inputDirectory>
+                        <inputEncoding>UTF-8</inputEncoding>
+                        <outputEncoding>UTF-8</outputEncoding>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-maven</artifactId>
+                    <version>${pitest.version}</version>
+                    <configuration>
+                        <targetClasses>
+                            <param>com.codenjoy.dojo.${module.name}.*</param>
+                        </targetClasses>
+                        <targetTests>
+                            <param>com.codenjoy.dojo.${module.name}.*</param>
+                        </targetTests>
+                        <reportsDirectory>${project.basedir}/pitest/</reportsDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>pitest</id>
+                            <goals>
+                                <goal>mutationCoverage</goal>
+                            </goals>
+                            <phase>test</phase>
                         </execution>
                     </executions>
                 </plugin>

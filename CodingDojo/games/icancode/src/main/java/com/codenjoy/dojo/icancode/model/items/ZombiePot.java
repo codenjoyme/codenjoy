@@ -22,10 +22,9 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.FieldItem;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.COUNT_ZOMBIES_ON_MAP;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.TICKS_PER_NEW_ZOMBIE;
@@ -35,7 +34,7 @@ public class ZombiePot extends FieldItem implements Tickable {
     private int time = 0;
 
     public ZombiePot() {
-        super(Elements.ZOMBIE_START);
+        super(Element.ZOMBIE_START);
     }
 
     @Override

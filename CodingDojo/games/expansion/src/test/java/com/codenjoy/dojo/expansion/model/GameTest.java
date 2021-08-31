@@ -30,6 +30,8 @@ import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
 import com.codenjoy.dojo.expansion.services.Events;
 import com.codenjoy.dojo.expansion.services.GameSettings;
+import com.codenjoy.dojo.games.expansion.Forces;
+import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -46,8 +48,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static junit.framework.Assert.*;
-import static org.mockito.Matchers.anyInt;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class GameTest {

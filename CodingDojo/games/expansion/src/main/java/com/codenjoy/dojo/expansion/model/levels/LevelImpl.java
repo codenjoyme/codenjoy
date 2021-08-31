@@ -23,7 +23,7 @@ package com.codenjoy.dojo.expansion.model.levels;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.services.LengthToXY;
@@ -61,11 +61,11 @@ public class LevelImpl implements Level {
 
     private void fillMap(String map) {
         fill(map, 1, (cell, ch) -> {
-            Elements element = Elements.valueOf(ch.charAt(0));
+            Element element = Element.valueOf(ch.charAt(0));
             BaseItem item = getBaseItem(element);
 
-            if (element.getLayer() != Elements.Layers.LAYER1) {
-                Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
+            if (element.getLayer() != Element.Layers.LAYER1) {
+                Element atBottom = Element.valueOf(Element.FLOOR.ch());
                 cell.addItem(getBaseItem(atBottom));
             }
             cell.addItem(item);
@@ -86,7 +86,7 @@ public class LevelImpl implements Level {
 
     public void fillForces(String forcesMap, List<Hero> heroes) {
         fill(forcesMap, ONE_CHAR, (cell, ch) -> {
-            int index = Elements.valueOf(ch.charAt(0)).getIndex();
+            int index = Element.valueOf(ch.charAt(0)).getIndex();
             if (index == -1) {
                 return;
             }
@@ -126,9 +126,9 @@ public class LevelImpl implements Level {
         }
     }
 
-    private BaseItem getBaseItem(Elements element) {
-        return constructor().withParameterTypes(Elements.class)
-                            .in(ElementsMapper.getItsClass(element))
+    private BaseItem getBaseItem(Element element) {
+        return constructor().withParameterTypes(Element.class)
+                            .in(ElementMapper.getItsClass(element))
                             .newInstance(element);
     }
 

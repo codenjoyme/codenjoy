@@ -29,7 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.moebius.model.Elements.*;
+import static com.codenjoy.dojo.games.moebius.Element.*;
 
 public class LevelImpl implements Level {
 

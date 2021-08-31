@@ -25,9 +25,10 @@ package com.codenjoy.dojo.sokoban.model.items;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.games.sokoban.Element;
 import com.codenjoy.dojo.sokoban.model.Player;
 
-public class BoxOnTheMark extends PointImpl implements State<Elements, Player> {
+public class BoxOnTheMark extends PointImpl implements State<Element, Player> {
 
     private boolean isActive;
 
@@ -36,8 +37,8 @@ public class BoxOnTheMark extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BOX_ON_THE_MARK;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BOX_ON_THE_MARK;
     }
 
     public boolean isActive() {

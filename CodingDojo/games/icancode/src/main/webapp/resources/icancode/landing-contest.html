@@ -357,7 +357,7 @@ Send program to Robot by running the YourSolver class as Main Application.
             <li><span class="list-values text-uppercase">move_boxes_perk</span> - <span class="list-values"> This is a special perk that gives you the ability to push/pull boxes.</span></li>
         </ul>
         <p>For check all board elements please check Elements enum</p>
-<pre>public enum Elements implements CharElements {
+<pre>public enum Element implements CharElement {
     // empty space where player can go
     EMPTY(LAYER2, '-'),
     FLOOR(LAYER1, '.'),
@@ -453,8 +453,8 @@ System.out.println(me);</pre>
             <p>You can use static import for good performance :).</p>
             <pre>import static com.codenjoy.dojo.client.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
-import static com.codenjoy.dojo.icancode.model.Elements.*;
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;</pre>
+import static com.codenjoy.dojo.games.icancode.Element.*;
+import static com.codenjoy.dojo.games.icancode.Element.Layers.*;</pre>
 
         <p><b>Important!</b> You can change any class that you want: Board, AbstractSolver and YourSolver. Also you can wryte your own Unit test.</p>
 

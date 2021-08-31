@@ -25,10 +25,8 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 
 import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class HelloWorldAlgorithm extends AlgorithmLevelImpl {
 

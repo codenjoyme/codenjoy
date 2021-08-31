@@ -22,12 +22,14 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
-import com.codenjoy.dojo.football.model.elements.Ball;
-import com.codenjoy.dojo.football.model.elements.Goal;
-import com.codenjoy.dojo.football.model.elements.Hero;
-import com.codenjoy.dojo.football.model.elements.Wall;
+import com.codenjoy.dojo.football.model.items.Ball;
+import com.codenjoy.dojo.football.model.items.Goal;
+import com.codenjoy.dojo.football.model.items.Hero;
+import com.codenjoy.dojo.football.model.items.Wall;
+import com.codenjoy.dojo.football.model.levels.Level;
 import com.codenjoy.dojo.football.services.Events;
 import com.codenjoy.dojo.football.services.GameSettings;
+import com.codenjoy.dojo.games.football.Element;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -73,14 +75,14 @@ public class Football implements Field {
         for (Ball ball : balls) {
             for (Goal goal : topGoals) {
                 if (goal.itsMe(ball)) {
-                    checkGoal(Events.TOP_GOAL, Elements.TOP_GOAL);
+                    checkGoal(Events.TOP_GOAL, Element.TOP_GOAL);
                     return;
                 }
             }
 
             for (Goal goal : bottomGoals) {
                 if (goal.itsMe(ball)) {
-                    checkGoal(Events.BOTTOM_GOAL, Elements.BOTTOM_GOAL);
+                    checkGoal(Events.BOTTOM_GOAL, Element.BOTTOM_GOAL);
                     return;
                 }
             }
@@ -116,7 +118,7 @@ public class Football implements Field {
         }
     }
 
-    public void checkGoal(Events event, Elements element) {
+    public void checkGoal(Events event, Element element) {
         for (Player player : players) {
             player.event(event);
             player.goalHited(true);
@@ -151,7 +153,7 @@ public class Football implements Field {
     }
 
     private boolean isOnMyHalf(Point pt, Player player) {
-        if (player.getMyGoal() == Elements.TOP_GOAL) {
+        if (player.getMyGoal() == Element.TOP_GOAL) {
             return pt.getY() > (size / 2);
         } else {
             return pt.getY() < (size / 2);
@@ -178,10 +180,10 @@ public class Football implements Field {
             players.add(player);
             if (players.size() % 2 == 1) {
                 player.setTeam("Team 1");
-                player.setMyGoal(Elements.BOTTOM_GOAL);
+                player.setMyGoal(Element.BOTTOM_GOAL);
             } else {
                 player.setTeam("Team 2");
-                player.setMyGoal(Elements.TOP_GOAL);
+                player.setMyGoal(Element.TOP_GOAL);
             }
         }
         player.newHero(this);

@@ -34,6 +34,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
+
 @Component
 public class WhatsNextService {
 
@@ -47,7 +49,9 @@ public class WhatsNextService {
             PlayerScores scores = gameType.getPlayerScores(1000, settings);
             Info listener = new Info(scores);
             infos.add(listener);
-            GamePlayer player = gameType.createPlayer(listener, StringUtils.EMPTY, settings);
+            GamePlayer player = gameType.createPlayer(
+                    listener, DEFAULT_TEAM_ID,
+                    StringUtils.EMPTY, settings);
             return player;
         });
 

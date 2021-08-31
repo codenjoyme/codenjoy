@@ -22,7 +22,6 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,15 +36,12 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
     @Autowired
     private RestBoardController service;
 
-    @Autowired
-    private PlayerService playerService;
-
     @Before
     public void setUp() {
         super.setUp();
 
-        playerService.removeAll();
-        roomService.removeAll();
+        players.removeAll();
+        rooms.removeAll();
         registration.removeAll();
 
         register("somePlayer", "ip", "validRoom", "first");

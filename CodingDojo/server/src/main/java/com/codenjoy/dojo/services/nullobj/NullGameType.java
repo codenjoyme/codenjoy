@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -70,7 +70,7 @@ public final class NullGameType implements GameType<Settings> {
     }
 
     @Override
-    public CharElements[] getPlots() {
+    public CharElement[] getPlots() {
         throw exception();
     }
 
@@ -95,7 +95,7 @@ public final class NullGameType implements GameType<Settings> {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, Settings settings) {
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, Settings settings) {
         throw exception();
     }
 

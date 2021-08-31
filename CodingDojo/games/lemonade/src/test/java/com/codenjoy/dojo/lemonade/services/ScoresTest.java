@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.*;
-import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
 

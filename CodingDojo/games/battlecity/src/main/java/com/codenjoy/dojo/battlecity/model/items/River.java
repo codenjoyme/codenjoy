@@ -22,20 +22,20 @@ package com.codenjoy.dojo.battlecity.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class River extends PointImpl implements State<Elements, Player> {
+public class River extends PointImpl implements State<Element, Player> {
 
 	public River(Point pt) {
 		super(pt);
 	}
 
 	@Override
-	public Elements state(Player player, Object... alsoAtPoint) {
-		return Elements.RIVER;
+	public Element state(Player player, Object... alsoAtPoint) {
+		return Element.RIVER;
 	}
 }

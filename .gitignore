@@ -24,8 +24,10 @@
 /CodingDojo/games/**/libs
 /CodingDojo/games/**/README.txt
 /CodingDojo/games/**/webapp/resources/user/*.zip
+/CodingDojo/games/**/pitest
 /CodingDojo/*-portable
 /CodingDojo/stuff
+/CodingDojo/.run
 /_temp/**
 /CodingDojo/portable/windows-cmd/codenjoy/**
 /CodingDojo/portable/windows-cmd/files/**
@@ -36,7 +38,7 @@
 /CodingDojo/portable/windows-cmd/tools/**
 /CodingDojo/games/a2048/src/main/dotNet/A2048/packages/**
 /CodingDojo/games/loderunner/src/main/dotNet/Loderunner/packages/**
-/CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**
+/CodingDojo/games/mollymage/src/main/dotNet/MollyMage/packages/**
 **/node_modules/
 **/package-lock.json
 

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.hex.model.levels.LevelImpl;
 import com.codenjoy.dojo.hex.services.Event;
 import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.*;

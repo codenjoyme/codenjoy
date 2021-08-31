@@ -24,10 +24,11 @@ package com.codenjoy.dojo.startandjump.model;
 
 
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.games.startandjump.Element;
 import com.codenjoy.dojo.startandjump.services.HeroStatus;
 import com.codenjoy.dojo.services.*;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
     private boolean alive;
     private Direction direction;
@@ -90,11 +91,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (alive) {
-            return Elements.HERO;
+            return Element.HERO;
         } else {
-            return Elements.BLACK_HERO;
+            return Element.BLACK_HERO;
         }
     }
 

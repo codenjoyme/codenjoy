@@ -27,9 +27,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Oleksandr_Baglai on 2017-08-05.
- */
 public class CodeSaverTest {
     @Test
     public void shouldCleanFileNameFromEmail() {

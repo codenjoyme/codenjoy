@@ -175,8 +175,6 @@ public class RegistrationService {
         String ip = getIp(request);
 
         if (!StringUtils.isEmpty(id)) {
-            email = registration.getEmailById(id);
-            name = registration.getNameById(id);
             if (!model.containsAttribute("bad_email")) {
                 validator.checkEmail(email, CAN_BE_NULL);
             }

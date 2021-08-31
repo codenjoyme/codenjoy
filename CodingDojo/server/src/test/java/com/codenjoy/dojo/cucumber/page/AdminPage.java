@@ -25,6 +25,7 @@ package com.codenjoy.dojo.cucumber.page;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.cucumber.page.admin.ActiveGames;
 import com.codenjoy.dojo.cucumber.page.admin.Inactivity;
+import com.codenjoy.dojo.cucumber.page.admin.Players;
 import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
@@ -47,8 +48,7 @@ import static org.junit.Assert.assertEquals;
 @Scope(SCOPE_CUCUMBER_GLUE)
 public class AdminPage implements Closeable {
 
-    public static final By LOAD_ALL_LINK = xpath("//a[text() = 'LoadAll']");
-
+    // selectors
     public static final String URL = "/admin?room=";
     public static final BiFunction<String, String, String> CREATE_ROOM_URL =
             (room, game) -> String.format("/admin?room=%s&game=%s", room, game);
@@ -65,6 +65,7 @@ public class AdminPage implements Closeable {
     private final WebDriverWrapper web;
     private final ActiveGames activeGames;
     private final Inactivity inactivity;
+    private final Players players;
 
     @Override
     public void close() {
@@ -116,10 +117,6 @@ public class AdminPage implements Closeable {
         return web.element("#pauseGame td a");
     }
 
-    public WebElement loadAllLink() {
-        return web.elementBy(LOAD_ALL_LINK);
-    }
-
     public void assertGameIsActive(boolean active) {
         String status = pauseResumeGameStatus().getText();
         String linkText = pauseResumeGameLink().getText();
@@ -158,7 +155,11 @@ public class AdminPage implements Closeable {
         return inactivity;
     }
 
+    public Players players() {
+        return players;
+    }
+
     public void clickLoadAll() {
-        loadAllLink().click();
+        players.loadAllLink().click();
     }
 }

@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import static com.codenjoy.dojo.cucumber.utils.PageUtils.pair;
 import static com.codenjoy.dojo.cucumber.utils.PageUtils.xpath;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static java.util.stream.Collectors.toList;
@@ -49,11 +50,13 @@ import static java.util.stream.Collectors.toMap;
 @RequiredArgsConstructor
 public class ActiveGames {
 
+    // selectors
     public static final By ALL_GAMES = xpath("//form/table[@id='activeGames']//tr[@game]");
     public static final By ROOMS = xpath(".//td/a[count(span)=1]");
     public static final Function<String, By> ROOM_LINK = room -> xpath("//a[@room='%s']", room);
     public static final Function<String, By> ROOM_PLAYERS = room -> xpath("//a[@room='%s']/span", room);
 
+    // page objects
     private final Page page;
     private final WebDriverWrapper web;
 
@@ -66,10 +69,6 @@ public class ActiveGames {
                         pair -> pair.getLeft().getAttribute("game"),
                         pair -> pair.getRight().getAttribute("room"),
                         HashMultimap::create));
-    }
-
-    private <T, U> ImmutablePair<T, U> pair(T e1, U e2) {
-        return new ImmutablePair<>(e1, e2);
     }
 
     public List<String> getRooms() {

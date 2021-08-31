@@ -23,6 +23,7 @@ package com.codenjoy.dojo.cucumber.utils;
  */
 
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.openqa.selenium.By;
 
 @UtilityClass
@@ -30,6 +31,10 @@ public class PageUtils {
 
     public static By xpath(String url, String... parameters) {
         return By.xpath(String.format(url, parameters));
+    }
+
+    public static <T, U> ImmutablePair<T, U> pair(T e1, U e2) {
+        return new ImmutablePair<>(e1, e2);
     }
 
 }

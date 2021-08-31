@@ -23,15 +23,13 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.QDirection;
 import org.json.JSONObject;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Oleksandr_Baglai on 2017-08-29.
- */
 public class ForcesMovesTest {
 
     @Test

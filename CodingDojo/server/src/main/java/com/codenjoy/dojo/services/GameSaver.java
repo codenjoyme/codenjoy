@@ -28,9 +28,9 @@ import java.util.List;
 
 public interface GameSaver {
 
-    void saveGame(Player player, String save, long time);
+    void saveGame(Player player, int teamId, String save, long time);
 
-    void saveGames(List<PlayerGame> playerGames, long time);
+    void saveGames(List<Deal> deals, long time);
 
     PlayerSave loadGame(String id);
 

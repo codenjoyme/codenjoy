@@ -23,6 +23,7 @@ package com.codenjoy.dojo.cucumber.page;
  */
 
 
+import com.codenjoy.dojo.client.Closeable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -31,7 +32,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -46,13 +46,12 @@ import static java.util.stream.Collectors.toList;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class WebDriverWrapper {
+public class WebDriverWrapper implements Closeable {
 
     public static final String CHROME_WEB_DRIVER = "webdriver.chrome.driver";
 
-    @Value("${server.path}")
-    private String serverPath;
     private WebDriver driver;
+    private final Server server;
 
     @PostConstruct
     public void init() {
@@ -60,7 +59,7 @@ public class WebDriverWrapper {
             System.setProperty(CHROME_WEB_DRIVER, determineChromeWebDriverLocation());
         }
         driver = new ChromeDriver();
-        log.info("Started here: {}", serverPath);
+        log.info("Started here: {}", server.path());
     }
 
     private static String determineChromeWebDriverLocation() {
@@ -86,7 +85,7 @@ public class WebDriverWrapper {
     }
 
     public void open(String url) {
-        driver.get(serverPath + url);
+        driver.get(server.path() + url);
     }
 
     public WebElement element(String css) {
@@ -103,13 +102,7 @@ public class WebDriverWrapper {
     }
 
     public String url() {
-        String absoluteUrl = driver.getCurrentUrl();
-        int position = absoluteUrl.indexOf(serverPath);
-        if (position == 0) {
-            return absoluteUrl.substring(serverPath.length());
-        } else {
-            return absoluteUrl;
-        }
+        return server.relative(driver.getCurrentUrl());
     }
 
     public void text(String css, String text) {
@@ -129,7 +122,8 @@ public class WebDriverWrapper {
         return element(css).getAttribute(attribute);
     }
 
-    public void closeBrowser() {
+    @Override
+    public void close() {
         driver.close();
     }
 
@@ -163,5 +157,9 @@ public class WebDriverWrapper {
         if (enabled ^ checkbox.isSelected()) {
             checkbox.click();
         }
+    }
+
+    public WebDriver driver() {
+        return driver;
     }
 }

@@ -49,7 +49,7 @@ public class SaveServiceImplTest {
     private Registration registration;
     private SaveServiceImpl saveService;
     private PlayerService playerService;
-    private PlayerGames playerGames;
+    private Deals deals;
     private GameSaver saver;
     private TimeService timeService;
 
@@ -61,7 +61,7 @@ public class SaveServiceImplTest {
     @Before
     public void setUp() {
         saveService = new SaveServiceImpl(){{
-            this.playerGames = SaveServiceImplTest.this.playerGames = new PlayerGames();
+            this.deals = SaveServiceImplTest.this.deals = new Deals();
             this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
@@ -86,7 +86,7 @@ public class SaveServiceImplTest {
         long time = saveService.save("vasia");
 
         // then
-        verify(saver).saveGame(player, "{\"key\":\"value\"}", time);
+        verify(saver).saveGame(player, 0, "{\"key\":\"value\"}", time);
     }
 
     private Player createPlayer(String id) {
@@ -116,8 +116,8 @@ public class SaveServiceImplTest {
             return field;
         };
 
-        TestUtils.Env env = TestUtils.getPlayerGame(
-                playerGames,
+        TestUtils.Env env = TestUtils.getDeal(
+                deals,
                 player,
                 room,
                 answerCreateGame,
@@ -125,9 +125,9 @@ public class SaveServiceImplTest {
                 null,
                 parameters -> "board"
         );
-        PlayerGame playerGame = env.playerGame;
+        Deal deal = env.deal;
 
-        return playerGame.getPlayer();
+        return deal.getPlayer();
     }
 
     @Test
@@ -136,7 +136,7 @@ public class SaveServiceImplTest {
         saveService.save("cocacola");
 
         // then
-        verify(saver, never()).saveGame(any(Player.class), any(String.class), anyLong());
+        verify(saver, never()).saveGame(any(Player.class), eq(0), any(String.class), anyLong());
     }
 
     @Test
@@ -208,7 +208,8 @@ public class SaveServiceImplTest {
                 "'id':'vasia'," +
                 "'room':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(actual));
+                "'score':0," +
+                "'teamId':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
@@ -234,7 +235,8 @@ public class SaveServiceImplTest {
                 "'id':'vasia'," +
                 "'room':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(actual));
+                "'score':0," +
+                "'teamId':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
@@ -262,7 +264,8 @@ public class SaveServiceImplTest {
                 "'id':'vasia'," +
                 "'room':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(actual));
+                "'score':0," +
+                "'teamId':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
@@ -273,6 +276,10 @@ public class SaveServiceImplTest {
 
         Player activeSavedPlayer = createPlayer("activeSaved"); // check sorting order (activeSaved > active)
         Player activePlayer = createPlayer("active");
+
+        teamId(activeSavedPlayer, 1);
+        teamId(activePlayer, 2);
+
         scores(activeSavedPlayer, 10);
         scores(activePlayer, 11);
 
@@ -314,6 +321,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':false,\n" +
                 "  'score':11,\n" +
+                "  'teamId':2,\n" +
                 "  'ticksInactive':1\n" +
                 "}, {\n" +
                 "  'active':true,\n" +
@@ -332,6 +340,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':true,\n" +
                 "  'score':10,\n" +
+                "  'teamId':1,\n" +
                 "  'ticksInactive':2\n" +
                 "}, {\n" +
                 "  'active':false,\n" +
@@ -349,6 +358,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':true,\n" +
                 "  'score':15,\n" +
+                "  'teamId':0,\n" +
                 "  'ticksInactive':0\n" +
                 "}]");
     }
@@ -369,6 +379,13 @@ public class SaveServiceImplTest {
         Player activePlayer = createPlayer("active", "room");
         Player activeSavedPlayerInOtherRoom = createPlayer("activeSavedInOtherRoom", "otherRoom");
         Player activePlayerInOtherRoom = createPlayer("activeInOtherRoom", "otherRoom");
+
+
+        teamId(activeSavedPlayer, 1);
+        teamId(activePlayer, 2);
+        teamId(activeSavedPlayerInOtherRoom, 3);
+        teamId(activePlayerInOtherRoom, 4);
+
         scores(activeSavedPlayer, 10);
         scores(activePlayer, 11);
         scores(activeSavedPlayerInOtherRoom, 12);
@@ -428,6 +445,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':false,\n" +
                 "  'score':11,\n" +
+                "  'teamId':2,\n" +
                 "  'ticksInactive':3\n" +
                 "}, {\n" +
                 "  'active':true,\n" +
@@ -446,6 +464,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':true,\n" +
                 "  'score':10,\n" +
+                "  'teamId':1,\n" +
                 "  'ticksInactive':4\n" +
                 "}, {\n" +
                 "  'active':false,\n" +
@@ -463,6 +482,7 @@ public class SaveServiceImplTest {
                 "  'room':'room',\n" +
                 "  'saved':true,\n" +
                 "  'score':15,\n" +
+                "  'teamId':0,\n" +
                 "  'ticksInactive':0\n" +
                 "}]");
 
@@ -489,6 +509,7 @@ public class SaveServiceImplTest {
                 "  'room':'otherRoom',\n" +
                 "  'saved':false,\n" +
                 "  'score':13,\n" +
+                "  'teamId':4,\n" +
                 "  'ticksInactive':2\n" +
                 "}, {\n" +
                 "  'active':true,\n" +
@@ -507,6 +528,7 @@ public class SaveServiceImplTest {
                 "  'room':'otherRoom',\n" +
                 "  'saved':true,\n" +
                 "  'score':12,\n" +
+                "  'teamId':3,\n" +
                 "  'ticksInactive':3\n" +
                 "}, {\n" +
                 "  'active':false,\n" +
@@ -524,6 +546,7 @@ public class SaveServiceImplTest {
                 "  'room':'otherRoom',\n" +
                 "  'saved':true,\n" +
                 "  'score':26,\n" +
+                "  'teamId':0,\n" +
                 "  'ticksInactive':0\n" +
                 "}]");
     }
@@ -551,6 +574,10 @@ public class SaveServiceImplTest {
         });
     }
 
+    private void teamId(Player player, int teamId) {
+        when(player.getTeamId()).thenReturn(teamId);
+    }
+
     private void scores(Player player, Object score) {
         when(player.getScore()).thenReturn(score);
     }
@@ -574,10 +601,10 @@ public class SaveServiceImplTest {
     public void assertSaveAll(long time, String expected) {
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
         verify(saver).saveGames(captor.capture(), eq(time));
-        List<PlayerGame> playerGames = captor.getValue();
+        List<Deal> deals = captor.getValue();
         assertEquals(expected,
-                playerGames.stream()
-                        .map(PlayerGame::getPlayer)
+                deals.stream()
+                        .map(Deal::getPlayer)
                         .map(Player::getId)
                         .collect(toList())
                         .toString());
@@ -793,5 +820,22 @@ public class SaveServiceImplTest {
         verify(saver).delete("first");
         verify(saver).delete("third");
         verifyNoMoreInteractions(saver, playerService);
+    }
+
+    @Test
+    public void testSaveGame_passTeamIdFromDeal() {
+        // given
+        setupTimeService(timeService);
+
+        int teamId = 3;
+        Player player = createPlayer("player");
+        Deal deal = deals.get(player.getId());
+        when(deal.getTeamId()).thenReturn(teamId);
+
+        // when
+        saveService.save(player.getId());
+
+        // then
+        verify(saver).saveGame(player, teamId, "{}", 2000L);
     }
 }

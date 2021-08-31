@@ -84,7 +84,7 @@ public class PerformanceTest {
 
         profiler.print();
 
-        int reserve = 3;
+        int reserve = 4;
         // сколько пользователей - столько раз выполнялось
         assertLess("print", 3000 * reserve);
         assertLess("tick", 20000 * reserve);

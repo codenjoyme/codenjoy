@@ -23,7 +23,7 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.Item;
@@ -31,15 +31,12 @@ import com.codenjoy.dojo.expansion.model.levels.Item;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Mikhail_Udalyi on 08.06.2016.
- */
 public abstract class BaseItem implements Item {
     private Cell cell;
     private FeatureItem feature;
-    protected Elements element;
+    protected Element element;
 
-    public BaseItem(Elements element) {
+    public BaseItem(Element element) {
         this.element = element;
     }
 
@@ -67,7 +64,7 @@ public abstract class BaseItem implements Item {
         return items;
     }
 
-    public Elements getState() {
+    public Element getState() {
         return element;
     }
 
@@ -116,7 +113,7 @@ public abstract class BaseItem implements Item {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return element;
     }
 

@@ -25,14 +25,15 @@ package com.codenjoy.dojo.moebius.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.moebius.client.Board;
-import com.codenjoy.dojo.moebius.client.ai.AISolver;
+import com.codenjoy.dojo.games.moebius.Board;
+import com.codenjoy.dojo.games.moebius.Element;
+import com.codenjoy.dojo.moebius.services.ai.AISolver;
 import com.codenjoy.dojo.moebius.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -65,8 +66,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public CharElements[] getPlots() {
-        return Elements.values();
+    public CharElement[] getPlots() {
+        return Element.values();
     }
 
     @Override
@@ -85,7 +86,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener, settings);
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
+        return new Player(listener, settings).inTeam(teamId);
     }
 }

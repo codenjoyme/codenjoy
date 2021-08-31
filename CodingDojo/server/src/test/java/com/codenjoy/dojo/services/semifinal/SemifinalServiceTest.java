@@ -23,9 +23,7 @@ package com.codenjoy.dojo.services.semifinal;
  */
 
 
-import com.codenjoy.dojo.services.AbstractPlayerGamesTest;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -42,7 +40,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.mockito.Mockito.*;
 
-public class SemifinalServiceTest extends AbstractPlayerGamesTest {
+public class SemifinalServiceTest extends AbstractDealsTest {
 
     private SemifinalService semifinal;
     private int timeout;
@@ -54,7 +52,10 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
         timeout = 3;
         semifinal = new SemifinalService();
         semifinal.roomService = roomService;
-        semifinal.playerGames = playerGames;
+        semifinal.deals = deals;
+        semifinal.saver = mock(GameSaver.class);
+        GameService gameService = mock(GameService.class);
+        semifinal.scoresCleaner = spy(new ScoresCleaner(deals, semifinal.saver, roomService, gameService, timeService));
         semifinal.clean();
         roomService.removeAll();
     }
@@ -66,7 +67,8 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
                     .setPercentage(true)
                     .setLimit(50)
                     .setResetBoard(false)
-                    .setShuffleBoard(false);
+                    .setShuffleBoard(false)
+                    .setClearScores(false);
     }
 
     @Test
@@ -822,11 +824,11 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
                 .setResetBoard(true);
 
         assertEquals(2, fields.size());
-        assertEquals(fields.get(0), playerGames.get("player1").getField());
-        assertEquals(fields.get(0), playerGames.get("player2").getField());
+        assertEquals(fields.get(0), deals.get("player1").getField());
+        assertEquals(fields.get(0), deals.get("player2").getField());
 
-        assertEquals(fields.get(1), playerGames.get("player3").getField());
-        assertEquals(fields.get(1), playerGames.get("player4").getField());
+        assertEquals(fields.get(1), deals.get("player3").getField());
+        assertEquals(fields.get(1), deals.get("player4").getField());
 
         assertRooms("{0=[player1, player2], " +
                 "1=[player3, player4]}");
@@ -1091,10 +1093,10 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
         assertActive(player1, player2);
 
         verify(player1.getScores(), never()).clear();
-        verify(playerGames.get(0).getGame().getField(), never()).clearScore();
+        verify(deals.get(0).getGame().getField(), never()).clearScore();
 
         verify(player2.getScores(), never()).clear();
-        verify(playerGames.get(1).getGame().getField(), never()).clearScore();
+        verify(deals.get(1).getGame().getField(), never()).clearScore();
     }
 
     private void assertActive(Player...players) {
@@ -1103,7 +1105,7 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
                         .map(Player::getId)
                         .collect(toList())
                         .toString(),
-                playerGames.players().toString());
+                deals.players().toString());
     }
 
     private void ticksTillTimeout() {
@@ -1258,7 +1260,8 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
                 "[Semifinal] Percentage=[[Semifinal] Percentage:Boolean = def[true] val[false]], " +
                 "[Semifinal] Limit=[[Semifinal] Limit:Integer = multiline[false] def[50] val[10]], " +
                 "[Semifinal] Reset board=[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
-                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]]})", settings.toString());
+                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Clear scores=[[Semifinal] Clear scores:Boolean = def[false] val[false]]})", settings.toString());
     }
 
     @Test
@@ -1284,7 +1287,8 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
                 "[Semifinal] Percentage=[[Semifinal] Percentage:Boolean = def[true] val[true]], " +
                 "[Semifinal] Limit=[[Semifinal] Limit:Integer = multiline[false] def[50] val[34]], " +
                 "[Semifinal] Reset board=[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
-                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]]})", settings.toString());
+                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Clear scores=[[Semifinal] Clear scores:Boolean = def[false] val[false]]})", settings.toString());
     }
 
     @Test
@@ -1311,5 +1315,37 @@ public class SemifinalServiceTest extends AbstractPlayerGamesTest {
         GameType gameType = mock(GameType.class);
         when(gameType.getSettings()).thenReturn(new SettingsImpl());
         roomService.state(room).get().setType(gameType);
+    }
+
+    @Test
+    public void shouldClearScores_whenSettingsEnabled() {
+        // given
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(100);
+
+        updateSettings("room")
+                .setClearScores(true);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        verify(semifinal.scoresCleaner, only()).cleanAllScores();
+    }
+
+    @Test
+    public void shouldNotClearScores_whenSettingsDisabled() {
+        // given
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(100);
+
+        updateSettings("room")
+                .setClearScores(false);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        verify(semifinal.scoresCleaner, never()).cleanAllScores();
     }
 }

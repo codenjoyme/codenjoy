@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.icancode.client
 
 import com.codenjoy.dojo.client.Solver
+import com.codenjoy.dojo.games.icancode.Board
 import com.codenjoy.dojo.services.Direction
 import org.junit.Before
 import org.junit.Test

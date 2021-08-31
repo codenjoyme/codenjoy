@@ -72,8 +72,8 @@ public class SqliteDBConfig {
     }
 
     @Bean
-    public PlayerGameSaver playerGameSaver() {
-        return new PlayerGameSaver(playerPoolFactory());
+    public DealSaver dealSaver() {
+        return new DealSaver(playerPoolFactory());
     }
 
     @Bean

@@ -28,9 +28,6 @@ import org.json.JSONObject;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-21.
- */
 public class TickData {
 
     public static final TickData NULL = new TickData() {

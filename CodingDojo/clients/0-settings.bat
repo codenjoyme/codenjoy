@@ -1,0 +1,48 @@
+@echo off 
+if "%GAME_TO_RUN%"=="" ( set GAME_TO_RUN=mollymage)
+if "%BOARD_URL%"==""  ( set BOARD_URL=http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000)
+if "%LANGUAGE%"==""   ( set LANGUAGE=pseudo)
+
+if "%ROOT%"==""       ( set ROOT=%CD%)
+
+if "%SKIP_TESTS%"=="" ( set SKIP_TESTS=true)
+if "%CODE_PAGE%"==""  ( set CODE_PAGE=65001)
+
+if "%TOOLS%"=="" ( set TOOLS_UPDATE=true)
+
+if "%TOOLS_UPDATE%"=="true" ( set TOOLS=%ROOT%\.tools)
+if "%TOOLS_UPDATE%"=="true" ( set ARCH=%TOOLS%\7z\7za.exe)
+if "%TOOLS_UPDATE%"=="true" ( set JAVA_HOME=%ROOT%\.jdk)
+if "%TOOLS_UPDATE%"=="true" ( set MAVEN_HOME=%ROOT%\.maven)
+if "%TOOLS_UPDATE%"=="true" ( set MAVEN_OPTS=-Dmaven.repo.local=%MAVEN_HOME%\repository)
+if "%TOOLS_UPDATE%"=="true" ( set MVNW=mvnw)
+if "%TOOLS_UPDATE%"=="true" ( set NODE_HOME=%ROOT%\.node)
+if "%TOOLS_UPDATE%"=="true" ( set NODE=%NODE_HOME%\node)
+if "%TOOLS_UPDATE%"=="true" ( set NPM=%NODE_HOME%\npm)
+if "%TOOLS_UPDATE%"=="true" ( set GOPATH=%ROOT%\.golang\go)
+if "%TOOLS_UPDATE%"=="true" ( set GO=%GOPATH%\bin\go)
+if "%TOOLS_UPDATE%"=="true" ( set GIT_HOME=%ROOT%\.gitTool)
+if "%TOOLS_UPDATE%"=="true" ( set GIT=%GIT_HOME%\cmd\git)
+
+if "%JAVA_CLIENT_HOME%"==""       ( set JAVA_CLIENT_HOME=%ROOT%\java)
+if "%PSEUDO_CLIENT_HOME%"==""     ( set PSEUDO_CLIENT_HOME=%ROOT%\pseudo)
+if "%PSEUDO_RULES%"==""           ( set PSEUDO_RULES=%PSEUDO_CLIENT_HOME%\rules)
+if "%PSEUDO_HERO_ELEMENTS%"==""   ( set PSEUDO_HERO_ELEMENTS=HERO,POTION_HERO,DEAD_HERO)
+if "%JAVASCRIPT_CLIENT_HOME%"=="" ( set JAVASCRIPT_CLIENT_HOME=%ROOT%\java-script)
+if "%GO_CLIENT_HOME%"==""         ( set GO_CLIENT_HOME=%ROOT%\go)
+if "%PHP_CLIENT_HOME%"==""        ( set PHP_CLIENT_HOME=%ROOT%\php)
+if "%PHP_HOME%"==""               ( set PHP_HOME=%ROOT%\.php)
+if "%PYTHON_CLIENT_HOME%"==""     ( set PYTHON_CLIENT_HOME=%ROOT%\python)
+if "%PYTHON_HOME%"==""            ( set PYTHON_HOME=%ROOT%\.python)
+
+
+if "%ARCH_GIT%"==""          ( set ARCH_GIT=https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-64-bit.zip)
+if "%ARCH_JDK%"==""          ( set ARCH_JDK=https://aka.ms/download-jdk/microsoft-jdk-11.0.11.9.1-windows-x64.zip)
+if "%ARCH_JDK_FOLDER%"==""   ( set ARCH_JDK_FOLDER=jdk-11.0.11+9)
+if "%ARCH_NODE%"==""         ( set ARCH_NODE=https://nodejs.org/dist/v14.17.0/node-v14.17.0-win-x64.zip)
+if "%ARCH_NODE_FOLDER%"==""  ( set ARCH_NODE_FOLDER=node-v14.17.0-win-x64)
+if "%ARCH_GO%"==""           ( set ARCH_GO=https://golang.org/dl/go1.16.5.windows-amd64.zip)
+if "%ARCH_GO_FOLDER%"==""    ( set ARCH_GO_FOLDER=go)
+if "%ARCH_PHP%"==""          ( set ARCH_PHP=https://windows.php.net/downloads/releases/archives/php-8.0.8-nts-Win32-vs16-x64.zip)
+if "%ARCH_PHP_COMPOSER%"=="" ( set ARCH_PHP_COMPOSER=https://getcomposer.org/download/latest-2.x/composer.phar)
+if "%ARCH_PYTHON%"==""       ( set ARCH_PYTHON=https://www.python.org/ftp/python/3.9.6/python-3.9.6-embed-amd64.zip)

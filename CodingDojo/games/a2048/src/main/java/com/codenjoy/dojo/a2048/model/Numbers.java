@@ -23,12 +23,11 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
+import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Numbers {
 
@@ -94,7 +93,7 @@ public class Numbers {
         return new Number(data[x][y], x, y);
     }
 
-    public boolean contains(Elements element) {
+    public boolean contains(Element element) {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 if (data[x][y] == element.number()) return true;

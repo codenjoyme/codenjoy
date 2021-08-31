@@ -22,21 +22,22 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.fifteen.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Digit extends PointImpl implements State<Elements, Player> {
+public class Digit extends PointImpl implements State<Element, Player> {
 
-    private Elements element;
+    private Element element;
 
-    public Digit(Point xy, Elements element) {
+    public Digit(Point xy, Element element) {
         super(xy);
         this.element = element;
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return element;
     }
 }

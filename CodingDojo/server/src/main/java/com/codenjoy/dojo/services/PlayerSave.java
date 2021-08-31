@@ -28,14 +28,17 @@ import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
+
 @Getter
 @Setter
 @ToString
 public class PlayerSave {
 
-    public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY);
+    public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, DEFAULT_TEAM_ID, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY);
 
     private String id;
+    private int teamId;
     private String callbackUrl;
     private String room;
     private String game;
@@ -47,7 +50,12 @@ public class PlayerSave {
     }
 
     public PlayerSave(String id, String callbackUrl, String game, String room, Object score, String save) {
+        this(id, DEFAULT_TEAM_ID, callbackUrl, game, room, score, save);
+    }
+
+    public PlayerSave(String id, int teamId, String callbackUrl, String game, String room, Object score, String save) {
         this.id = id;
+        this.teamId = teamId;
         this.game = game;
         this.room = room;
         this.callbackUrl = callbackUrl;
@@ -58,6 +66,7 @@ public class PlayerSave {
     public PlayerSave(Player save) {
         this.id = save.getId();
         this.game = save.getGame();
+        this.teamId = save.getTeamId();
         this.callbackUrl = save.getCallbackUrl();
         this.score = save.getScore();
         this.save = save.getData();

@@ -23,13 +23,10 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
-import com.codenjoy.dojo.expansion.model.Forces;
+import com.codenjoy.dojo.games.expansion.Element;
+import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.expansion.model.Player;
 
-/**
- * Created by Oleksandr_Baglai on 2017-08-29.
- */
 public class HeroForces extends FieldItem {
 
     public static final HeroForces EMPTY = new HeroForces();
@@ -38,7 +35,7 @@ public class HeroForces extends FieldItem {
     private int increase;
 
     protected HeroForces() {
-        super(Elements.FORCE1);
+        super(Element.FORCE1);
     }
 
     public HeroForces(Hero hero) {
@@ -51,13 +48,13 @@ public class HeroForces extends FieldItem {
         this.count = count;
     }
 
-    private static Elements getElement(Hero hero) {
+    private static Element getElement(Hero hero) {
         return hero.getBase().element();
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.getForce(hero.getBase().index());
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.getForce(hero.getBase().index());
     }
 
     public int getCount() {

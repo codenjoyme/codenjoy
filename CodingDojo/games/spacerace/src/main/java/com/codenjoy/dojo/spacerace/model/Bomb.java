@@ -23,11 +23,12 @@ package com.codenjoy.dojo.spacerace.model;
  */
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.games.spacerace.Element;
 
 /**
  * Артефакт Бомба на поле
  */
-public class Bomb extends PointImpl implements State<Elements, Player>, Tickable {
+public class Bomb extends PointImpl implements State<Element, Player>, Tickable {
     private Direction direction;
 
     public Bomb(int x, int y) {
@@ -40,8 +41,8 @@ public class Bomb extends PointImpl implements State<Elements, Player>, Tickable
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BOMB;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BOMB;
     }
 
     @Override

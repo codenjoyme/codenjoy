@@ -23,11 +23,12 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.games.minesweeper.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Object> {
+public class Hero extends PlayerHero<Field> implements State<Element, Object> {
 
     private boolean isDead = false;
     private MineDetector mineDetector;
@@ -85,11 +86,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Object> {
     }
 
     @Override
-    public Elements state(Object player, Object... alsoAtPoint) {
+    public Element state(Object player, Object... alsoAtPoint) {
         if (field.isSapperOnMine()) {
-            return Elements.BANG;
+            return Element.BANG;
         } else {
-            return Elements.DETECTOR;
+            return Element.DETECTOR;
         }
     }
     @Override

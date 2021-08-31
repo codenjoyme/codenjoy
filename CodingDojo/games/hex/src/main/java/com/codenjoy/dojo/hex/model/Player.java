@@ -23,6 +23,7 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.games.hex.Element;
 import com.codenjoy.dojo.hex.services.Event;
 import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
@@ -32,15 +33,13 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-import java.util.Optional;
-
 public class Player extends GamePlayer<Hero, Field> implements Tickable {
 
     private Hero active;
     private boolean alive;
     private Heroes heroes;
     private Hero newHero;
-    private Elements element;
+    private Element element;
     private int lose;
     private int win;
 
@@ -168,11 +167,11 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
         return heroes.contains(hero) || hero == newHero;
     }
 
-    public Elements getElement() {
+    public Element getElement() {
         return element;
     }
 
-    public void setElement(Elements element) {
+    public void setElement(Element element) {
         this.element = element;
     }
 

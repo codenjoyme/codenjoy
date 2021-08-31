@@ -25,9 +25,9 @@ package com.codenjoy.dojo.expansion.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.expansion.client.Board;
-import com.codenjoy.dojo.expansion.client.ai.AISolver;
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Board;
+import com.codenjoy.dojo.expansion.client.AISolver;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.Ticker;
@@ -42,7 +42,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -106,7 +106,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
         if (log.isDebugEnabled()) {
             log.debug("Creating GamePlayer for {}", playerId);
         }
@@ -123,9 +123,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
 //        }
 
-        Player player = new Player(listener, playerId, settings);
-
-        return player;
+        return new Player(listener, playerId, settings).inTeam(teamId);
     }
 
     @Override
@@ -139,8 +137,8 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
     }
 
     @Override
-    public CharElements[] getPlots() {
-        return Elements.values();
+    public CharElement[] getPlots() {
+        return Element.values();
     }
 
     @Override

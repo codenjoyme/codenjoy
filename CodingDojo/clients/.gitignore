@@ -1,0 +1,6 @@
+.maven
+.jdk
+.node
+.golang
+.tools/*.zip
+.m2

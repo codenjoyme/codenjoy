@@ -12,7 +12,7 @@
 	url = https://github.com/codenjoyme/codenjoy-excitebike.git
 [submodule "CodingDojo/games/selfdefense"]
 	path = CodingDojo/games/selfdefense
-	url = https://github.com/codenjoyme/codenjoy-selfdefense
+	url = https://github.com/codenjoyme/codenjoy-selfdefense.git
 [submodule "CodingDojo/games/japanese"]
 	path = CodingDojo/games/japanese
 	url = https://github.com/codenjoyme/codenjoy-japanese.git
@@ -28,3 +28,36 @@
 [submodule "CodingDojo/games/chess"]
 	path = CodingDojo/games/chess
 	url = https://github.com/codenjoyme/codenjoy-chess.git
+[submodule "CodingDojo/games/engine"]
+	path = CodingDojo/games/engine
+	url = https://github.com/codenjoyme/codenjoy-engine.git
+[submodule "CodingDojo/clients/java"]
+	path = CodingDojo/clients/java
+	url = https://github.com/codenjoyme/codenjoy-java-client.git	
+[submodule "CodingDojo/clients/java-script"]
+	path = CodingDojo/clients/java-script
+	url = https://github.com/codenjoyme/codenjoy-javascript-client.git
+[submodule "CodingDojo/clients/pseudo"]
+	path = CodingDojo/clients/pseudo
+	url = https://github.com/codenjoyme/codenjoy-pseudo-client.git
+[submodule "CodingDojo/clients/ruby"]
+	path = CodingDojo/clients/ruby
+	url = https://github.com/codenjoyme/codenjoy-ruby-client.git
+[submodule "CodingDojo/clients/go"]
+	path = CodingDojo/clients/go
+	url = https://github.com/codenjoyme/codenjoy-go-client.git
+[submodule "CodingDojo/games/mollymage"]
+	path = CodingDojo/games/mollymage
+	url = https://github.com/codenjoyme/codenjoy-mollymage.git
+[submodule "CodingDojo/clients/php"]
+	path = CodingDojo/clients/php
+	url = https://github.com/codenjoyme/codenjoy-php-client.git
+[submodule "CodingDojo/clients/python"]
+	path = CodingDojo/clients/python
+	url = https://github.com/codenjoyme/codenjoy-python-client.git
+[submodule "CodingDojo/clients/cpp"]
+	path = CodingDojo/clients/cpp
+	url = https://github.com/codenjoyme/codenjoy-cpp-client.git
+[submodule "CodingDojo/clients/scala"]
+	path = CodingDojo/clients/scala
+	url = https://github.com/codenjoyme/codenjoy-scala-client.git

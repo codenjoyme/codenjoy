@@ -23,9 +23,9 @@ package com.codenjoy.dojo.football.model;
  */
 
 
-import com.codenjoy.dojo.football.model.elements.Hero;
-import com.codenjoy.dojo.football.services.Events;
+import com.codenjoy.dojo.football.model.items.Hero;
 import com.codenjoy.dojo.football.services.GameSettings;
+import com.codenjoy.dojo.games.football.Element;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 public class Player extends GamePlayer<Hero, Field> {
 
     private boolean goalHited;
-    private Elements myGoal;
+    private Element myGoal;
     private String team;
 
     public Player(EventListener listener, GameSettings settings) {
@@ -66,11 +66,11 @@ public class Player extends GamePlayer<Hero, Field> {
         this.goalHited = false;
     }
 
-    public Elements getMyGoal() {
+    public Element getMyGoal() {
         return myGoal;
     }
 
-    public void setMyGoal(Elements myGoal) {
+    public void setMyGoal(Element myGoal) {
         this.myGoal = myGoal;
     }
 
@@ -82,7 +82,7 @@ public class Player extends GamePlayer<Hero, Field> {
         this.goalHited = goalHited;
     }
 
-    public Elements myGoal() {
+    public Element myGoal() {
         return myGoal;
     }
 }

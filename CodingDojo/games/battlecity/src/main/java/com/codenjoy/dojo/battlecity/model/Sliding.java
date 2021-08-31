@@ -23,8 +23,8 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 import com.codenjoy.dojo.battlecity.services.GameSettings;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.SLIPPERINESS;
 
@@ -70,7 +70,7 @@ public class Sliding {
     public boolean active(Tank tank) {
         return field.isIce(tank)
                 && slipperiness() != 0
-                && !tank.prizes().contains(Elements.PRIZE_NO_SLIDING);
+                && !tank.prizes().contains(Element.PRIZE_NO_SLIDING);
     }
 
     public void stop() {

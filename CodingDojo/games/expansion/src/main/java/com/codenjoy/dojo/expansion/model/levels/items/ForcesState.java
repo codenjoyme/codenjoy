@@ -29,9 +29,6 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * Created by Oleksandr_Baglai on 2017-12-12.
- */
 public class ForcesState implements State<String, Player> {
 
     public static final int COUNT_NUMBERS = TestUtils.COUNT_NUMBERS;

@@ -22,12 +22,13 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.quake2d.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Ability extends PointImpl implements State<Elements, Player> {
+public class Ability extends PointImpl implements State<Element, Player> {
     public static final int HEALTH_BONUS = 30;
     enum Type {WEAPON, DEFENCE, HEALTH}
 
@@ -49,17 +50,17 @@ public class Ability extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (type == Type.WEAPON){
-            return Elements.SUPER_WEAPON;
+            return Element.SUPER_WEAPON;
         }
 
         if (type == Type.DEFENCE) {
-            return Elements.SUPER_DEFENCE;
+            return Element.SUPER_DEFENCE;
         }
 
         if (type == Type.HEALTH) {
-            return Elements.HEALTH_PACKAGE;
+            return Element.HEALTH_PACKAGE;
         }
 
         throw new RuntimeException("Unknown ability type: " + type);

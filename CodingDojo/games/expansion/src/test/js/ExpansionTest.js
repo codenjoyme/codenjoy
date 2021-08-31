@@ -19,9 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-/**
- * Created by Mikhail_Udalyi on 14.07.2016.
- */
+
 QUnit.module('src/test/js/ExpansionTest.js');
 QUnit.test('Chars test', function(assert) {
     assert.deepEqual(Element.EMPTY, el('-', 'NONE'));

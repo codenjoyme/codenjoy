@@ -22,7 +22,7 @@ package com.codenjoy.dojo.icancode.model.items.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.*;
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_ACTIVITY;
@@ -33,7 +33,7 @@ public abstract class TimeoutPerk extends Perk {
     protected Timer availability;
     protected Timer activity;
 
-    public TimeoutPerk(Elements element) {
+    public TimeoutPerk(Element element) {
         super(element);
     }
 

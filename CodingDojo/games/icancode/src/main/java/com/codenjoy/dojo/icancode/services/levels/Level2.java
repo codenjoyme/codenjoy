@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Level2 implements Level {

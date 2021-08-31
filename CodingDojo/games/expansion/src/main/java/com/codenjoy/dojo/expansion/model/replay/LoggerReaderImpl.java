@@ -23,7 +23,7 @@ package com.codenjoy.dojo.expansion.model.replay;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.Point;
@@ -44,7 +44,7 @@ public class LoggerReaderImpl implements LoggerReader {
     private final GameSettings settings;
     private String hero;
     private Point basePosition;
-    private Elements baseColor;
+    private Element baseColor;
     private Map<String, String> playerNames = new LinkedHashMap<>();
     private Map<String, JSONObject> bases = new LinkedHashMap<>();
 
@@ -113,7 +113,7 @@ public class LoggerReaderImpl implements LoggerReader {
         if (player.equals(playerId)) {
             this.hero = hero;
             basePosition = new PointImpl(new JSONObject(base));
-            baseColor = Elements.getForce(Integer.valueOf(color));
+            baseColor = Element.getForce(Integer.valueOf(color));
         }
     }
 

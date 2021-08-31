@@ -22,23 +22,23 @@ package com.codenjoy.dojo.tetris.client
  * #L%
  */
 
+import com.codenjoy.dojo.games.tetris.{Board, Element}
 import com.codenjoy.dojo.services.Point
 import com.codenjoy.dojo.services.PointImpl.pt
-import com.codenjoy.dojo.tetris.model.Elements
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 object BoardScalaTest {
   def getBoard(glass: String, figureType: String, point: Point, futureFigures: Array[String]): Board = {
-    val result: JSONObject = BoardTest.getJson(glass, figureType, point, futureFigures)
+    val result: JSONObject = Board.getJson(glass, figureType, point, futureFigures)
     new BoardScala().forString(result.toString).asInstanceOf[Board]
   }
 }
 
 class BoardScalaTest {
   @Test def test() {
-    val board: Board = BoardTest.getBoard(
+    val board: Board = Board.getBoard(
       "......." +
       "......I" +
       "..LL..I" +
@@ -52,51 +52,51 @@ class BoardScalaTest {
 
     val glass = board.getGlass
 
-    assertEquals(Elements.NONE, glass.getAt(0, 0))
-    assertEquals(false, glass.isAt(0, 0, Elements.YELLOW))
-    assertEquals(true, glass.isAt(0, 0, Elements.NONE))
-    assertEquals(true, glass.isAt(0, 0, Elements.ORANGE, Elements.NONE))
+    assertEquals(Element.NONE, glass.getAt(0, 0))
+    assertEquals(false, glass.isAt(0, 0, Element.YELLOW))
+    assertEquals(true, glass.isAt(0, 0, Element.NONE))
+    assertEquals(true, glass.isAt(0, 0, Element.ORANGE, Element.NONE))
     assertEquals(true, glass.isFree(0, 0))
 
-    assertEquals(Elements.YELLOW, glass.getAt(2, 0))
-    assertEquals(true, glass.isAt(2, 0, Elements.YELLOW))
-    assertEquals(false, glass.isAt(2, 0, Elements.NONE))
-    assertEquals(false, glass.isAt(2, 0, Elements.ORANGE, Elements.NONE))
+    assertEquals(Element.YELLOW, glass.getAt(2, 0))
+    assertEquals(true, glass.isAt(2, 0, Element.YELLOW))
+    assertEquals(false, glass.isAt(2, 0, Element.NONE))
+    assertEquals(false, glass.isAt(2, 0, Element.ORANGE, Element.NONE))
     assertEquals(false, glass.isFree(2, 0))
 
-    assertEquals(Elements.GREEN, glass.getAt(2, 2))
-    assertEquals(false, glass.isAt(2, 2, Elements.YELLOW))
-    assertEquals(false, glass.isAt(2, 2, Elements.NONE))
-    assertEquals(false, glass.isAt(2, 2, Elements.ORANGE, Elements.NONE))
+    assertEquals(Element.GREEN, glass.getAt(2, 2))
+    assertEquals(false, glass.isAt(2, 2, Element.YELLOW))
+    assertEquals(false, glass.isAt(2, 2, Element.NONE))
+    assertEquals(false, glass.isAt(2, 2, Element.ORANGE, Element.NONE))
     assertEquals(false, glass.isFree(2, 2))
 
-    assertEquals(Elements.ORANGE, glass.getAt(3, 4))
-    assertEquals(false, glass.isAt(3, 4, Elements.YELLOW))
-    assertEquals(false, glass.isAt(3, 4, Elements.NONE))
-    assertEquals(true, glass.isAt(3, 4, Elements.ORANGE, Elements.NONE))
+    assertEquals(Element.ORANGE, glass.getAt(3, 4))
+    assertEquals(false, glass.isAt(3, 4, Element.YELLOW))
+    assertEquals(false, glass.isAt(3, 4, Element.NONE))
+    assertEquals(true, glass.isAt(3, 4, Element.ORANGE, Element.NONE))
     assertEquals(false, glass.isFree(3, 0))
 
     assertEquals("[[0,1], [1,1], [1,2], [2,2]]",
-      glass.get(Elements.GREEN).toString)
+      glass.get(Element.GREEN).toString)
 
     assertEquals("[[2,4], [3,2], [3,3], [3,4]]",
-      glass.get(Elements.ORANGE).toString)
+      glass.get(Element.ORANGE).toString)
 
     assertEquals("[[0,1], [1,1], [1,2], [2,2], " +
       "[2,4], [3,2], [3,3], [3,4]]",
-      glass.get(Elements.GREEN, Elements.ORANGE).toString)
+      glass.get(Element.GREEN, Element.ORANGE).toString)
 
     assertEquals("[., L, ., L, ., I, ., .]", glass.getNear(3, 4).toString)
-    assertEquals(false, glass.isNear(3, 4, Elements.PURPLE))
-    assertEquals(true, glass.isNear(3, 4, Elements.BLUE))
-    assertEquals(1, glass.countNear(3, 4, Elements.BLUE))
-    assertEquals(2, glass.countNear(3, 4, Elements.ORANGE))
+    assertEquals(false, glass.isNear(3, 4, Element.PURPLE))
+    assertEquals(true, glass.isNear(3, 4, Element.BLUE))
+    assertEquals(1, glass.countNear(3, 4, Element.BLUE))
+    assertEquals(2, glass.countNear(3, 4, Element.ORANGE))
 
     assertEquals("[S, S, ., O, ., O, L, L]", glass.getNear(pt(2, 2)).toString)
-    assertEquals(true, glass.isNear(pt(2, 2), Elements.ORANGE))
-    assertEquals(false, glass.isNear(pt(2, 2), Elements.BLUE))
-    assertEquals(2, glass.countNear(pt(2, 2), Elements.ORANGE))
-    assertEquals(2, glass.countNear(pt(2, 2), Elements.GREEN))
+    assertEquals(true, glass.isNear(pt(2, 2), Element.ORANGE))
+    assertEquals(false, glass.isNear(pt(2, 2), Element.BLUE))
+    assertEquals(2, glass.countNear(pt(2, 2), Element.ORANGE))
+    assertEquals(2, glass.countNear(pt(2, 2), Element.GREEN))
 
     assertEquals("[1,2]", board.getCurrentFigurePoint.toString)
     assertEquals("T", board.getCurrentFigureType.toString)

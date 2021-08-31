@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.services;
  */
 
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.Level;
 import com.codenjoy.dojo.icancode.model.LevelImpl;
 import com.codenjoy.dojo.icancode.services.levels.*;
@@ -142,7 +142,7 @@ public final class Levels {
 
                 if (isaBoolean(map, x, y, "###", "#  ", "## "))
                 {
-                    out.setAt(x, y, Elements.ANGLE_IN_LEFT.ch());
+                    out.setAt(x, y, Element.ANGLE_IN_LEFT.ch());
                 } else
                 if (chk("###" +
                         "  #" +
@@ -157,7 +157,7 @@ public final class Levels {
                         "  #" +
                         "   ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.ANGLE_IN_RIGHT.ch());
+                    out.setAt(x, y, Element.ANGLE_IN_RIGHT.ch());
                 } else
                 if (chk("#  " +
                         "#  " +
@@ -172,7 +172,7 @@ public final class Levels {
                         "#  " +
                         "## ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.ANGLE_BACK_LEFT.ch());
+                    out.setAt(x, y, Element.ANGLE_BACK_LEFT.ch());
                 } else
                 if (chk("  #" +
                         "  #" +
@@ -187,7 +187,7 @@ public final class Levels {
                         "  #" +
                         " ##", x, y, map))
                 {
-                    out.setAt(x, y, Elements.ANGLE_BACK_RIGHT.ch());
+                    out.setAt(x, y, Element.ANGLE_BACK_RIGHT.ch());
                 } else
                 if (chk("   " +
                         "   " +
@@ -202,7 +202,7 @@ public final class Levels {
                         "   " +
                         " # ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.WALL_BACK.ch());
+                    out.setAt(x, y, Element.WALL_BACK.ch());
                 } else
                 if (chk("#  " +
                         "#  " +
@@ -217,7 +217,7 @@ public final class Levels {
                         "#  " +
                         "   ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.WALL_LEFT.ch());
+                    out.setAt(x, y, Element.WALL_LEFT.ch());
                 } else
                 if (chk("  #" +
                         "  #" +
@@ -232,7 +232,7 @@ public final class Levels {
                         "  #" +
                         "   ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.WALL_RIGHT.ch());
+                    out.setAt(x, y, Element.WALL_RIGHT.ch());
                 } else
                 if (chk("###" +
                         "   " +
@@ -247,37 +247,37 @@ public final class Levels {
                         "   " +
                         "   ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.WALL_FRONT.ch());
+                    out.setAt(x, y, Element.WALL_FRONT.ch());
                 } else
                 if (chk("   " +
                         "   " +
                         "  #", x, y, map))
                 {
-                    out.setAt(x, y, Elements.WALL_BACK_ANGLE_LEFT.ch());
+                    out.setAt(x, y, Element.WALL_BACK_ANGLE_LEFT.ch());
                 } else
                 if (chk("   " +
                         "   " +
                         "#  ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.WALL_BACK_ANGLE_RIGHT.ch());
+                    out.setAt(x, y, Element.WALL_BACK_ANGLE_RIGHT.ch());
                 } else
                 if (chk("#  " +
                         "   " +
                         "   ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.ANGLE_OUT_RIGHT.ch());
+                    out.setAt(x, y, Element.ANGLE_OUT_RIGHT.ch());
                 } else
                 if (chk("  #" +
                         "   " +
                         "   ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.ANGLE_OUT_LEFT.ch());
+                    out.setAt(x, y, Element.ANGLE_OUT_LEFT.ch());
                 }
                 if (chk("   " +
                         "   " +
                         "   ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.BOX.ch());
+                    out.setAt(x, y, Element.BOX.ch());
                 }
 
             }

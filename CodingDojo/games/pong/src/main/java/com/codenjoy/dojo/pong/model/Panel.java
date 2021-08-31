@@ -22,11 +22,12 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.pong.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Panel extends PointImpl implements State<Elements, Player>, Barrier {
+public class Panel extends PointImpl implements State<Element, Player>, Barrier {
 
     private Hero owner;
 
@@ -46,8 +47,8 @@ public class Panel extends PointImpl implements State<Elements, Player>, Barrier
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return (owner == player.getHero()) ? Elements.HERO : Elements.PANEL;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return (owner == player.getHero()) ? Element.HERO : Element.PANEL;
     }
 
 }

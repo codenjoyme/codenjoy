@@ -24,8 +24,8 @@ package com.codenjoy.dojo.quadro;
 
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.quadro.client.Board;
-import com.codenjoy.dojo.quadro.client.ai.AISolver;
+import com.codenjoy.dojo.games.quadro.Board;
+import com.codenjoy.dojo.quadro.services.ai.AISolver;
 import com.codenjoy.dojo.quadro.services.GameRunner;
 import com.codenjoy.dojo.quadro.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;

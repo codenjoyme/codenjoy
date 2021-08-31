@@ -23,6 +23,9 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.games.hex.Element;
+import com.codenjoy.dojo.hex.model.items.Wall;
+import com.codenjoy.dojo.hex.model.levels.Level;
 import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -248,17 +251,17 @@ public class Hex implements Field {
         return walls;
     }
 
-    public Elements getNextElement() {
-        List<Elements> busy = players.stream()
+    public Element getNextElement() {
+        List<Element> busy = players.stream()
                 .map(Player::getElement)
                 .collect(toList());
 
-        List<Elements> free = Elements.heroesElements().stream()
+        List<Element> free = Element.heroes().stream()
                 .filter(el -> !busy.contains(el))
                 .collect(toList());
 
         if (free.isEmpty()) {
-            return Elements.HERO11; // TODO надо много героев наплодить либо запретить регистрацию, если привысили их число
+            return Element.HERO11; // TODO надо много героев наплодить либо запретить регистрацию, если привысили их число
         }
 
         return free.get(0);

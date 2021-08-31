@@ -22,11 +22,11 @@ package com.codenjoy.dojo.icancode.model.items.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 
 public class UnstoppableLaserPerk extends TimeoutPerk {
 
     public UnstoppableLaserPerk() {
-        super(Elements.UNSTOPPABLE_LASER_PERK);
+        super(Element.UNSTOPPABLE_LASER_PERK);
     }
 }

@@ -22,22 +22,28 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import com.codenjoy.dojo.cucumber.page.board.Leaderboard;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
+import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
 public class BoardPage {
 
+    // selectors
     public static final String URL = "/board/player/<PLAYER_ID>?code=<CODE>";
 
+    // page objects
     private final Page page;
     private final WebDriverWrapper web;
+    private final Leaderboard leaderboard;
 
     public void open() {
         web.open("/board");
@@ -47,7 +53,7 @@ public class BoardPage {
         page.assertPage("board");
     }
 
-    public void assertPlayersOnLeaderboard(String players) {
-        // TODO implement me
+    public Leaderboard leaderboard() {
+        return leaderboard;
     }
 }

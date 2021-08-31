@@ -23,7 +23,11 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.Pill.PillType;
+import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.loderunner.model.items.*;
+import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
+import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
@@ -123,7 +127,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    protected List<Player> players() {
+    public List<Player> players() {
         return players.all();
     }
 
@@ -433,7 +437,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         if (index == -1) {
             return false;
         }
-        return bricks.get(index).state(null) == Elements.BRICK;
+        return bricks.get(index).state(null) == Element.BRICK;
     }
 
     @Override
@@ -591,7 +595,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     // only for testing
-    void resetHeroes() {
+    public void resetHeroes() {
         players.resetHeroes();
     }
 

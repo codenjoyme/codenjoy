@@ -11,7 +11,7 @@ import _ from 'lodash';
 import { registerConfirmStart, registerResendStart } from '../../redux/register';
 import { book } from '../../routes';
 import { CustomInputComponent } from '../common/customInput';
-import errorImg from '../common/Bomb_server_Error.jpg';
+import errorImg from '../common/Server_Error.jpg';
 // own
 import styles from '../common/styles.module.css';
 

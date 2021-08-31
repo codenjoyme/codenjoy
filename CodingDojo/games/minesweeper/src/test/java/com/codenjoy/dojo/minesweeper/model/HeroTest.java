@@ -23,6 +23,8 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.games.minesweeper.Element;
+import com.codenjoy.dojo.minesweeper.model.items.Mine;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -362,7 +364,7 @@ public class HeroTest {
     }
 
     private String getBoardAsString(Field board) {
-        return (String) new PrinterFactoryImpl<Elements, Player>()
+        return (String) new PrinterFactoryImpl<Element, Player>()
                 .getPrinter(board.reader(),
                         new Player(listener, settings)).print();
     }

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.FieldItem;
 import com.codenjoy.dojo.icancode.model.Player;
 
@@ -31,11 +31,11 @@ import com.codenjoy.dojo.icancode.model.Player;
 public class Box extends FieldItem {
 
     public Box() {
-        super(Elements.BOX, IMPASSABLE);
+        super(Element.BOX, IMPASSABLE);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BOX;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BOX;
     }
 }

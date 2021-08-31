@@ -23,16 +23,16 @@ package com.codenjoy.dojo.battlecity.model.items;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.WALL_REGENERATE_TIME;
 
-public class Wall extends PointImpl implements Tickable, State<Elements, Player> {
+public class Wall extends PointImpl implements Tickable, State<Element, Player> {
 
-    private Elements ch;
+    private Element ch;
     private int timer;
     private boolean overDamage;
     private GameSettings settings;
@@ -57,50 +57,50 @@ public class Wall extends PointImpl implements Tickable, State<Elements, Player>
 
     public void destroyFrom(Direction bulletDirection) {
         if (ch.power() == 1 || overDamage) {
-            ch = Elements.WALL_DESTROYED;
+            ch = Element.WALL_DESTROYED;
             return;
         }
         if (bulletDirection.equals(Direction.UP)) {
             switch (ch) {
-                case WALL: ch = Elements.WALL_DESTROYED_DOWN; break;
-                case WALL_DESTROYED_DOWN: ch = Elements.WALL_DESTROYED_DOWN_TWICE; break;
-                case WALL_DESTROYED_UP: ch = Elements.WALL_DESTROYED_UP_DOWN; break;
-                case WALL_DESTROYED_LEFT: ch = Elements.WALL_DESTROYED_DOWN_LEFT; break;
-                case WALL_DESTROYED_RIGHT: ch = Elements.WALL_DESTROYED_DOWN_RIGHT; break;
+                case WALL: ch = Element.WALL_DESTROYED_DOWN; break;
+                case WALL_DESTROYED_DOWN: ch = Element.WALL_DESTROYED_DOWN_TWICE; break;
+                case WALL_DESTROYED_UP: ch = Element.WALL_DESTROYED_UP_DOWN; break;
+                case WALL_DESTROYED_LEFT: ch = Element.WALL_DESTROYED_DOWN_LEFT; break;
+                case WALL_DESTROYED_RIGHT: ch = Element.WALL_DESTROYED_DOWN_RIGHT; break;
             }
         } else if (bulletDirection.equals(Direction.RIGHT)) {
             switch (ch) {
-                case WALL: ch = Elements.WALL_DESTROYED_LEFT; break;
-                case WALL_DESTROYED_LEFT: ch = Elements.WALL_DESTROYED_LEFT_TWICE; break;
-                case WALL_DESTROYED_RIGHT: ch = Elements.WALL_DESTROYED_LEFT_RIGHT; break;
-                case WALL_DESTROYED_UP: ch = Elements.WALL_DESTROYED_UP_LEFT; break;
-                case WALL_DESTROYED_DOWN: ch = Elements.WALL_DESTROYED_DOWN_LEFT; break;
+                case WALL: ch = Element.WALL_DESTROYED_LEFT; break;
+                case WALL_DESTROYED_LEFT: ch = Element.WALL_DESTROYED_LEFT_TWICE; break;
+                case WALL_DESTROYED_RIGHT: ch = Element.WALL_DESTROYED_LEFT_RIGHT; break;
+                case WALL_DESTROYED_UP: ch = Element.WALL_DESTROYED_UP_LEFT; break;
+                case WALL_DESTROYED_DOWN: ch = Element.WALL_DESTROYED_DOWN_LEFT; break;
             }
         } else if (bulletDirection.equals(Direction.LEFT)) {
             switch (ch) {
-                case WALL: ch = Elements.WALL_DESTROYED_RIGHT; break;
-                case WALL_DESTROYED_RIGHT: ch = Elements.WALL_DESTROYED_RIGHT_TWICE; break;
-                case WALL_DESTROYED_UP: ch = Elements.WALL_DESTROYED_RIGHT_UP; break;
-                case WALL_DESTROYED_DOWN: ch = Elements.WALL_DESTROYED_DOWN_RIGHT; break;
-                case WALL_DESTROYED_LEFT: ch = Elements.WALL_DESTROYED_LEFT_RIGHT; break;
+                case WALL: ch = Element.WALL_DESTROYED_RIGHT; break;
+                case WALL_DESTROYED_RIGHT: ch = Element.WALL_DESTROYED_RIGHT_TWICE; break;
+                case WALL_DESTROYED_UP: ch = Element.WALL_DESTROYED_RIGHT_UP; break;
+                case WALL_DESTROYED_DOWN: ch = Element.WALL_DESTROYED_DOWN_RIGHT; break;
+                case WALL_DESTROYED_LEFT: ch = Element.WALL_DESTROYED_LEFT_RIGHT; break;
             }
         } else if (bulletDirection.equals(Direction.DOWN)) {
             switch (ch) {
-                case WALL: ch = Elements.WALL_DESTROYED_UP; break;
-                case WALL_DESTROYED_UP: ch = Elements.WALL_DESTROYED_UP_TWICE; break;
-                case WALL_DESTROYED_RIGHT: ch = Elements.WALL_DESTROYED_RIGHT_UP; break;
-                case WALL_DESTROYED_DOWN: ch = Elements.WALL_DESTROYED_UP_DOWN; break;
-                case WALL_DESTROYED_LEFT: ch = Elements.WALL_DESTROYED_UP_LEFT; break;
+                case WALL: ch = Element.WALL_DESTROYED_UP; break;
+                case WALL_DESTROYED_UP: ch = Element.WALL_DESTROYED_UP_TWICE; break;
+                case WALL_DESTROYED_RIGHT: ch = Element.WALL_DESTROYED_RIGHT_UP; break;
+                case WALL_DESTROYED_DOWN: ch = Element.WALL_DESTROYED_UP_DOWN; break;
+                case WALL_DESTROYED_LEFT: ch = Element.WALL_DESTROYED_UP_LEFT; break;
             }
         }
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (!destroyed()) {
             return ch;
         } else  {
-            return Elements.NONE;
+            return Element.NONE;
         }
     }
 
@@ -116,7 +116,7 @@ public class Wall extends PointImpl implements Tickable, State<Elements, Player>
     }
 
     public void reset() {
-        ch = Elements.WALL;
+        ch = Element.WALL;
     }
 
     public boolean destroyed() {

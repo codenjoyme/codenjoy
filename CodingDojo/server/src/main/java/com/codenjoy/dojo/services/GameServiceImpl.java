@@ -26,7 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.classloader.GameLoader;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.ReflectUtils;
 import com.codenjoy.dojo.web.controller.Validator;
@@ -166,13 +166,13 @@ public class GameServiceImpl implements GameService {
         return getStringListMap(plot -> String.valueOf(plot.ch()));
     }
 
-    // TODO может сделать универсальную версию метода с CharElements и ну его два вурхних метода?
+    // TODO может сделать универсальную версию метода с CharElement и ну его два вурхних метода?
     @Override
     public Map<String, List<String>> getSprites() {
         return getStringListMap(plot -> plot.name().toLowerCase() + "=" + plot.ch());
     }
 
-    private Map<String, List<String>> getStringListMap(Function<CharElements, String> mapper) {
+    private Map<String, List<String>> getStringListMap(Function<CharElement, String> mapper) {
         return cache.entrySet().stream()
                 .map(entry -> 
                     new HashMap.SimpleEntry<>(

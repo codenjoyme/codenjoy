@@ -26,7 +26,7 @@ package com.codenjoy.dojo.snake.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
-import com.codenjoy.dojo.snake.model.artifacts.Element;
+import com.codenjoy.dojo.snake.model.artifacts.Affectable;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 
 public interface Field extends GameField<Player> {
@@ -39,7 +39,7 @@ public interface Field extends GameField<Player> {
 
     Apple getApple();
 
-    Element getAt(Point place);
+    Affectable getAt(Point place);
 
     int getSize();
 

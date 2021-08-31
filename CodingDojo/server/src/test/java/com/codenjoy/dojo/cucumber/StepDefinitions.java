@@ -45,20 +45,20 @@ public class StepDefinitions {
     private final Page page;
     private final AdminPage admin;
     private final WebsocketClients clients;
+    private final Storage storage;
 
     @Before
     public void cleanUp() {
         admin.close();
         registration.close();
         clients.close();
+        storage.close();
     }
 
     @After
     public void tearDown() {
-        admin.close();
-        registration.close();
-        clients.close();
-        web.closeBrowser();
+        cleanUp();
+        web.close();
     }
 
     @ParameterType(value = "true|True|TRUE|false|False|FALSE")
@@ -339,7 +339,8 @@ public class StepDefinitions {
 
     @Then("There are players {string} on the leaderboard")
     public void thereArePlayersOnLeaderboard(String players) {
-        board.assertPlayersOnLeaderboard(players);
+        board.leaderboard().waitUntilNotEmpty();
+        board.leaderboard().assertPlayers(players);
     }
 
     @Then("There are players in rooms {string} on the admin page")
@@ -347,7 +348,7 @@ public class StepDefinitions {
         admin.assertPlayersInRooms(expected);
     }
 
-    @When("Click load all players")
+    @When("Click LoadAll players")
     public void clickLoadAllPlayers() {
         admin.clickLoadAll();
         clients.refreshAllRunnersSessions();
@@ -379,11 +380,13 @@ public class StepDefinitions {
                 .forEach(ticks -> assertEquals("0", ticks.getText()));
     }
 
-    @Then("Wait for {int} seconds")
-    public void waitForSeconds(int secondsToWait) throws InterruptedException {
-        for (int second = 1; second <= secondsToWait; second++) {
+    @Then("Wait for {int} seconds when refresh is {bool}")
+    public void waitForSeconds(int secondsToWait, boolean refresh) throws InterruptedException {
+        for (int second = 0; second < secondsToWait; second++) {
             Thread.sleep(1000);
-            page.refresh();
+            if (refresh) {
+                page.refresh();
+            }
         }
     }
 
@@ -395,5 +398,27 @@ public class StepDefinitions {
     @Then("Player {string} is kicked {bool}")
     public void playerIsKicked(String email, boolean isKicked) {
         admin.inactivity().assertPlayerKicked(email, isKicked);
+    }
+
+    @When("Enter value {string} = {string} for the {string} is {string} and click Save")
+    public void updatePlayerAttribute(String key, String value, String selectorKey, String selectorValue) {
+        admin.players().updatePlayer(selectorKey, selectorValue, key, value);
+    }
+
+    @When("Click ViewGame for the {string} is {string}")
+    public void clickViewGameOfPlayer(String selectorKey, String selectorValue) {
+        String url = admin.players().playerBoardLink(selectorKey, selectorValue);
+        page.open(url);
+    }
+
+    @When("Save page url as {string}")
+    public void savePageUrlAs(String key) {
+        storage.save(key, page.url());
+    }
+
+    @When("Click AllBoards on Leaderboard")
+    public void clickAllBoardsOnLeaderboard() {
+        String url = board.leaderboard().allBoardsLink();
+        page.open(url);
     }
 }

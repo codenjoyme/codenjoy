@@ -23,12 +23,13 @@ package com.codenjoy.dojo.quake2d.model;
  */
 
 
+import com.codenjoy.dojo.games.quake2d.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-public class Bullet extends PointImpl implements Tickable, State<Elements, Player> {
+public class Bullet extends PointImpl implements Tickable, State<Element, Player> {
     public static final int START_DAMAGE = 10;
     public static final int WEAPON_MULTIPLICATOR = 2;
     private Direction direction;
@@ -56,8 +57,8 @@ public class Bullet extends PointImpl implements Tickable, State<Elements, Playe
 //    }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BULLET;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BULLET;
     }
 
     @Override

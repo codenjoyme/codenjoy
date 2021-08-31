@@ -30,9 +30,6 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-/**
- * Created by Oleksandr_Baglai on 2017-08-05.
- */
 public class PlayerCommandTest {
 
     @Test

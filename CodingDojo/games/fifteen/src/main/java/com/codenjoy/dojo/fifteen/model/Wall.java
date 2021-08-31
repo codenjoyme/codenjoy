@@ -22,6 +22,7 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.fifteen.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
@@ -29,7 +30,7 @@ import com.codenjoy.dojo.services.State;
 /**
  * Артефакт Стена на поле
  */
-public class Wall extends PointImpl implements State<Elements, Player> {
+public class Wall extends PointImpl implements State<Element, Player> {
 
     public Wall(int x, int y) {
         super(x, y);
@@ -40,7 +41,7 @@ public class Wall extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.WALL;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.WALL;
     }
 }

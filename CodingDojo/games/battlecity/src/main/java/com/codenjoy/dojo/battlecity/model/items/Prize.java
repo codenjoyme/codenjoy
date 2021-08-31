@@ -23,7 +23,7 @@ package com.codenjoy.dojo.battlecity.model.items;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.*;
@@ -32,9 +32,9 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PRIZE_SPRITE_CHANGE_TICKS;
 
-public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
+public class Prize extends PointImpl implements Tickable, State<Element, Player> {
 
-    private final Elements elements;
+    private final Element elements;
     private final int prizeOnField;
     private final int prizeWorking;
 
@@ -45,7 +45,7 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
     private int ticks;
     private GameSettings settings;
 
-    public Prize(Point pt, int prizeOnField, int prizeWorking, Elements elements) {
+    public Prize(Point pt, int prizeOnField, int prizeWorking, Element elements) {
         super(pt);
         this.elements = elements;
         this.prizeOnField = prizeOnField;
@@ -59,13 +59,13 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (destroyed) {
-            return Elements.BANG;
+            return Element.BANG;
         }
 
         if (ticks % changeEveryTicks() == 0) {
-            return Elements.PRIZE;
+            return Element.PRIZE;
         }
 
         return elements;
@@ -99,7 +99,7 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
         destroyed = true;
     }
 
-    public Elements elements() {
+    public Element elements() {
         return elements;
     }
 

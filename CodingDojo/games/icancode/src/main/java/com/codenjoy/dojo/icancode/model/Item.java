@@ -23,11 +23,12 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.services.State;
 
 import java.util.List;
 
-public interface Item extends State<Elements, Player> {
+public interface Item extends State<Element, Player> {
 
     void action(Item item);
 

@@ -25,8 +25,8 @@ package com.codenjoy.dojo.tetris;
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.tetris.client.Board;
-import com.codenjoy.dojo.tetris.client.ai.AISolver;
+import com.codenjoy.dojo.games.tetris.Board;
+import com.codenjoy.dojo.tetris.services.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.levels.level.AllFigureLevels;
 import com.codenjoy.dojo.tetris.services.GameRunner;
 import com.codenjoy.dojo.tetris.services.GameSettings;

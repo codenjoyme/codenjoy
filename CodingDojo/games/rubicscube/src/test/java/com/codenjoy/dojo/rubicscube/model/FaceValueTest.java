@@ -23,6 +23,7 @@ package com.codenjoy.dojo.rubicscube.model;
  */
 
 
+import com.codenjoy.dojo.games.rubicscube.Element;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +32,7 @@ public class FaceValueTest {
 
     @Test
     public void testUpdateLine() {
-        FaceValue face = new FaceValue(Elements.BLUE);
+        FaceValue face = new FaceValue(Element.BLUE);
 
         assertEquals(
                 "BBB" +
@@ -66,7 +67,7 @@ public class FaceValueTest {
 
     @Test
     public void testUpdateRow() {
-        FaceValue face = new FaceValue(Elements.BLUE);
+        FaceValue face = new FaceValue(Element.BLUE);
 
         assertEquals(
                 "BBB" +

@@ -172,11 +172,11 @@ P.P.P.S: готов ответить за всё на любые вопросы
   Просто перевел это логику на спринговые профили, их как раз для таких целей нынче принято использовать.
   Но, я бы в перспективе вообще от классов PostgresDBConfig и SqliteDBConfig избавился и упростил конфиги. Осталось
   только вместе обсудить 2 момента: для чего были нужны самописные connection пулы + для чего таблицы в sqlite разнесены по разным физическим файлам базы
-?? 12) Вижу в start-server.bat # -Dcontext=another-context # -Psnake,bomberman,sample
+?? 12) Вижу в start-server.bat # -Dcontext=another-context # -Psnake,mollymage,sample
      Контекст менять потребность есть, эту фичу надо оставить рабочей
  Igor: здесь есть вопросы, давай обсудим вместе.
  13) В pom.xml билдера было случайно закоммичено
-     <exclude.bomberman>false</exclude.bomberman>
+     <exclude.mollymage>false</exclude.mollymage>
      Да и вообще его удалять пора, от слова "вообще"
 ✓+14) Длиные строчки как например в ControlWebSocketServlet я делаю по короче
      @Override
@@ -210,7 +210,7 @@ P.P.P.S: готов ответить за всё на любые вопросы
  17) Сейчас сервер запускается так
          call mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace,debug clean spring-boot:run -DallGames
 ?    вопрос в том, как поменять codenjoy-contest ? работает ли как раньше
-         # -Dcontext=another-context # -Psnake,bomberman,sample
+         # -Dcontext=another-context # -Psnake,mollymage,sample
 ?? Igor: давай вместе обсудим этот момент с контекстом.
 ?18) Как подменить application.yml - раньше конфиг codenjoy-contest.properties можно было размещать в jetty/config и приложение брало его вначале оттуда, а потом из war (если не нашло), можно ли сейчас так же подменять? Это актуально для скриптов запуска на linux сервере и windows portable
  Igor: подменять его не стоит, хотя можно. Для добавления предопределенных наборов настроек есть смысл завести в коде приложения аналогичный файл по маске application-${spring.profile.name}.yml
@@ -232,7 +232,7 @@ P.P.P.S: готов ответить за всё на любые вопросы
 Плюс то, что вылезло в ходе тестирования:
 
 ✓  22) Не удалось мне с ключиком # -Dcontext=another-context запуститься с другим контекстом по
-    mvn clean spring-boot:run -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace,debug -Psnake,bomberman,sample -Dcontext=another-context
+    mvn clean spring-boot:run -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace,debug -Psnake,mollymage,sample -Dcontext=another-context
  Igor: теперь должно работать
  23) зашел на админку http://127.0.0.1:8080/codenjoy-contest/admin
     ввел логин пароль admin/admin
@@ -277,7 +277,7 @@ P.P.P.S: готов ответить за всё на любые вопросы
     Ведь на linux в одном докер контейнере с сырцами и мейвеном собирался war
         а в другом контейнере этот war запускался в предустановленный jetty
     Я попробовал
-        mvn clean package -Dmaven.test.skip=true -Psnake,bomberman,sample
+        mvn clean package -Dmaven.test.skip=true -Psnake,mollymage,sample
         cd target
         java -Dspring-boot.run.profiles=sqlite,trace,debug -jar codenjoy-contest.jar
     Но получил
@@ -340,7 +340,7 @@ P.P.P.S: готов ответить за всё на любые вопросы
         2019-03-15T03:08:01.545 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - GET "/codenjoy-contest/", parameters={}
         2019-03-15T03:08:01.549 [qtp1912960603-17] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to public java.lang.String com.codenjoy.dojo.web.controller.MainPageController.getMainPage(javax.servlet.http.HttpServletRequest,org.springframework.ui.Model)
         2019-03-15T03:08:01.566 [qtp1912960603-17] DEBUG o.s.w.s.v.ContentNegotiatingViewResolver - Selected 'text/html' given [text/html, application/xhtml+xml, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8]
-        2019-03-15T03:08:01.576 [qtp1912960603-17] DEBUG o.s.web.servlet.view.JstlView - View name 'main', model {debug=true, ip=127.0.0.1, gameNames=[bomberman=bomberman, sample=sample, snake=snake]}
+        2019-03-15T03:08:01.576 [qtp1912960603-17] DEBUG o.s.web.servlet.view.JstlView - View name 'main', model {debug=true, ip=127.0.0.1, gameNames=[mollymage=mollymage, sample=sample, snake=snake]}
         2019-03-15T03:08:01.589 [qtp1912960603-17] DEBUG o.s.web.servlet.view.JstlView - Forwarding to [/view/main.jsp]
         2019-03-15T03:08:01.592 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - "ERROR" dispatch for GET "/codenjoy-contest/error", parameters={}
         2019-03-15T03:08:01.599 [qtp1912960603-17] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
@@ -895,7 +895,7 @@ from Alex: 2019-04-16
     Перенес формы логина/регистрации из icancode в модуль server как основные. Теперь ViewDelegationService используется
     только для кастомной админки icancode.
     Пример:
-    /codenjoyme-contest/admin&gameName=bomberman \
+    /codenjoyme-contest/admin&gameName=mollymage \
                                                   - используются для стандартной админки сервера
     /codenjoyme-contest/admin&gameName=icancode  /
 
@@ -1002,7 +1002,7 @@ from Alex: 2019-04-16
 + 71) Сейчас нет возможности "подглядеть" игрушку, если ты не зарегистрирован в системе
 + Igor: нужно обсудить, сейчас переход на другие игрушки работает корректно (кнопка View в списке игр)
 
-72) Я зарегался в 2048 впервые, а потом на страничке http://127.0.0.1:8080/codenjoy-contest/ хочу подглядеть bomberman но меня редиректит на форму регистрации снова
+72) Я зарегался в 2048 впервые, а потом на страничке http://127.0.0.1:8080/codenjoy-contest/ хочу подглядеть mollymage но меня редиректит на форму регистрации снова
 
 + 73) Джоин так же в пре-условиях 72) не работает так как отправляет на http://127.0.0.1:8080/codenjoy-contest/T-ODO/battlecity
  Igor: поправлено в п. 69
@@ -1148,7 +1148,7 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
  Igor: практически уверен, что раньше работало не так, но всё же могу и ошибаться. Добавил логику, как описано выше
 
 ---
-Стартовал только три игрушки tetris,bomberman,a2048 командой
+Стартовал только три игрушки tetris,mollymage,a2048 командой
 clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Ptetris,snake,a2048,battlecity -f pom.xml
 ---
 

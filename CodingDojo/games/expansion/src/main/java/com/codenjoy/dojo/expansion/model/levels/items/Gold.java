@@ -23,18 +23,15 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.Item;
 
-/**
- * Created by Mikhail_Udalyi on 09.06.2016.
- */
 public class Gold extends BaseItem {
 
     private boolean picked;
 
-    public Gold(Elements el) {
+    public Gold(Element el) {
         super(el);
         picked = false;
     }
@@ -50,9 +47,9 @@ public class Gold extends BaseItem {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
 //        if (picked) {
-//            return Elements.FLOOR;
+//            return Element.FLOOR;
 //        } else {
             return super.state(player, alsoAtPoint);
 //        }

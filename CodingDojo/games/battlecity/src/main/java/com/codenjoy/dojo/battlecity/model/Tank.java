@@ -29,6 +29,7 @@ import com.codenjoy.dojo.battlecity.model.items.Prizes;
 import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.services.round.Timer;
@@ -37,12 +38,12 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_BREAKING_WALLS;
-import static com.codenjoy.dojo.battlecity.model.Elements.PRIZE_WALKING_ON_WATER;
+import static com.codenjoy.dojo.games.battlecity.Element.PRIZE_BREAKING_WALLS;
+import static com.codenjoy.dojo.games.battlecity.Element.PRIZE_WALKING_ON_WATER;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class Tank extends RoundPlayerHero<Field> implements State<Elements, Player> {
+public class Tank extends RoundPlayerHero<Field> implements State<Element, Player> {
 
     protected Direction direction;
     protected boolean moving;
@@ -188,42 +189,42 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        Elements tree = player.getHero().treeState(this, alsoAtPoint);
+    public Element state(Player player, Object... alsoAtPoint) {
+        Element tree = player.getHero().treeState(this, alsoAtPoint);
         if (!isAlive()) {
-            return Elements.BANG;
+            return Element.BANG;
         }
 
         if (tree != null) {
-            return Elements.TREE;
+            return Element.TREE;
         }
 
         if (player.getHero() != this) {
             switch (direction) {
-                case LEFT:  return Elements.OTHER_TANK_LEFT;
-                case RIGHT: return Elements.OTHER_TANK_RIGHT;
-                case UP:    return Elements.OTHER_TANK_UP;
-                case DOWN:  return Elements.OTHER_TANK_DOWN;
+                case LEFT:  return Element.OTHER_TANK_LEFT;
+                case RIGHT: return Element.OTHER_TANK_RIGHT;
+                case UP:    return Element.OTHER_TANK_UP;
+                case DOWN:  return Element.OTHER_TANK_DOWN;
                 default:    throw new RuntimeException("Неправильное состояние танка!");
             }
         }
 
         switch (direction) {
-            case LEFT:  return Elements.TANK_LEFT;
-            case RIGHT: return Elements.TANK_RIGHT;
-            case UP:    return Elements.TANK_UP;
-            case DOWN:  return Elements.TANK_DOWN;
+            case LEFT:  return Element.TANK_LEFT;
+            case RIGHT: return Element.TANK_RIGHT;
+            case UP:    return Element.TANK_UP;
+            case DOWN:  return Element.TANK_DOWN;
             default:    throw new RuntimeException("Неправильное состояние танка!");
         }
     }
 
-    public Elements treeState(Tank tank, Object[] alsoAtPoint) {
+    public Element treeState(Tank tank, Object[] alsoAtPoint) {
         Tree tree = filterOne(alsoAtPoint, Tree.class);
         if (tree == null) {
             return null;
         }
 
-        if (prizes.contains(Elements.PRIZE_VISIBILITY)) {
+        if (prizes.contains(Element.PRIZE_VISIBILITY)) {
             return null;
         }
 
@@ -231,7 +232,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Elements, Play
             return null;
         }
 
-        return Elements.TREE;
+        return Element.TREE;
     }
 
     public void reset() {

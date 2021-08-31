@@ -48,9 +48,10 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
+import static com.codenjoy.dojo.games.icancode.Element.Layers.*;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.icancode.services.LevelsTest.VIEW_SIZE_TESTING;
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.utils.TestUtils.injectN;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -120,8 +121,8 @@ public class MultiplayerTest {
         listener2 = mock(EventListener.class);
         GameRunner gameRunner = new GameRunner();
 
-        GamePlayer player1 = gameRunner.createPlayer(listener1, null, settings);
-        GamePlayer player2 = gameRunner.createPlayer(listener2, null, settings);
+        GamePlayer player1 = gameRunner.createPlayer(listener1, DEFAULT_TEAM_ID, null, settings);
+        GamePlayer player2 = gameRunner.createPlayer(listener2, DEFAULT_TEAM_ID, null, settings);
 
         MultiplayerType type = MultiplayerType.TRAINING.apply(boards.length);
         single1 = new Single(player1, gameRunner.getPrinterFactory(), type);

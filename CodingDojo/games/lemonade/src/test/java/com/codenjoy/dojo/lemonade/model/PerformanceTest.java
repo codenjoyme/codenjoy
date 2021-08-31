@@ -23,13 +23,12 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
+import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.profile.Profiler;
-import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 

@@ -24,8 +24,8 @@ package com.codenjoy.dojo.rubicscube;
 
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.rubicscube.client.Board;
-import com.codenjoy.dojo.rubicscube.client.ai.AISolver;
+import com.codenjoy.dojo.games.rubicscube.Board;
+import com.codenjoy.dojo.rubicscube.services.ai.AISolver;
 import com.codenjoy.dojo.rubicscube.services.GameRunner;
 import com.codenjoy.dojo.rubicscube.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;

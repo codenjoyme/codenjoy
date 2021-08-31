@@ -23,13 +23,12 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
-import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.services.Events;
 import com.codenjoy.dojo.a2048.services.GameSettings;
+import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-
 
 import java.util.Iterator;
 
@@ -123,7 +122,7 @@ public class A2048 implements Field {
     }
 
     private boolean isWin() {
-        return numbers.contains(Elements._4194304);
+        return numbers.contains(Element._4194304);
     }
 
     @Override

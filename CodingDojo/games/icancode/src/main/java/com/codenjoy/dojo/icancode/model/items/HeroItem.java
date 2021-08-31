@@ -22,19 +22,19 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.FieldItem;
-import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Hero;
 import com.codenjoy.dojo.icancode.model.Player;
+import com.codenjoy.dojo.services.Tickable;
 
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
+import static com.codenjoy.dojo.games.icancode.Element.Layers.LAYER3;
 
 public class HeroItem extends FieldItem implements Tickable {
 
     protected Hero hero;
 
-    public HeroItem(Elements element) {
+    public HeroItem(Element element) {
         super(element);
     }
 
@@ -47,7 +47,7 @@ public class HeroItem extends FieldItem implements Tickable {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return hero.state(player, alsoAtPoint);
     }
 

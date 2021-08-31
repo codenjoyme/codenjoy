@@ -22,11 +22,11 @@ package com.codenjoy.dojo.icancode.model.items.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 
 public class UnlimitedFirePerk extends TimeoutPerk {
 
     public UnlimitedFirePerk() {
-        super(Elements.UNLIMITED_FIRE_PERK);
+        super(Element.UNLIMITED_FIRE_PERK);
     }
 }

@@ -22,18 +22,19 @@ package com.codenjoy.dojo.puzzlebox.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.puzzlebox.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Target extends PointImpl implements State<Elements, Player> {
+public class Target extends PointImpl implements State<Element, Player> {
 
     public Target(Point pt) {
         super(pt);
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.TARGET;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.TARGET;
     }
 }

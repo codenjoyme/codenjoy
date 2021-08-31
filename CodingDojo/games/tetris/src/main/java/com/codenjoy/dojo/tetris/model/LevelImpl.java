@@ -24,11 +24,12 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.games.tetris.Element;
 import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.tetris.model.Elements.NONE;
+import static com.codenjoy.dojo.games.tetris.Element.NONE;
 
 public class LevelImpl implements Level {
 
@@ -49,7 +50,7 @@ public class LevelImpl implements Level {
     public List<Plot> plots() {
         return LevelUtils.getObjects(xy, map,
                 (pt, el) -> new Plot(pt.getX(), pt.getY(), el),
-                Elements.valuesExcept(NONE));
+                Element.valuesExcept(NONE));
 
     }
 }

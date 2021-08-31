@@ -25,16 +25,14 @@ package com.codenjoy.dojo.hex;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.hex.client.Board;
-import com.codenjoy.dojo.hex.client.YourSolver;
-import com.codenjoy.dojo.hex.client.ai.AISolver;
+import com.codenjoy.dojo.games.hex.Board;
+import com.codenjoy.dojo.hex.services.ai.AISolver;
 import com.codenjoy.dojo.hex.services.GameRunner;
 import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 

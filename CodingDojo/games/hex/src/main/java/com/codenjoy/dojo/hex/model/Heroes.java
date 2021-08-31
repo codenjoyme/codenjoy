@@ -29,10 +29,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Heroes implements Iterable<Hero> {
+
     private List<Hero> heroes;
 
     public Heroes() {
-        heroes = new LinkedList<Hero>();
+        heroes = new LinkedList<>();
     }
 
     public void clear() {
@@ -44,7 +45,7 @@ public class Heroes implements Iterable<Hero> {
 
     @Override
     public Iterator<Hero> iterator() {
-        return new LinkedList<Hero>(heroes).iterator();
+        return new LinkedList<>(heroes).iterator();
     }
 
     public Stream<Hero> stream() {

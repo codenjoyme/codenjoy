@@ -22,51 +22,53 @@ package com.codenjoy.dojo.tetris.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.tetris.Element;
+
 public enum Type {
 
-    I("I", Elements.BLUE) {
+    I("I", Element.BLUE) {
         @Override
         public Figure create() {
             return new FigureImpl(0, 1, I, "#", "#", "#", "#");
         }
     },
 
-    J("J", Elements.CYAN) {
+    J("J", Element.CYAN) {
         @Override
         public Figure create() {
             return new FigureImpl(1, 1, J, " #", " #", "##");
         }
     },
 
-    L("L", Elements.ORANGE) {
+    L("L", Element.ORANGE) {
         @Override
         public Figure create() {
             return new FigureImpl(0, 1, L, "# ", "# ", "##");
         }
     },
 
-    O("O", Elements.YELLOW) {
+    O("O", Element.YELLOW) {
         @Override
         public Figure create() {
             return new FigureImpl(0, 0, O, "##", "##");
         }
     },
 
-    S("S", Elements.GREEN) {
+    S("S", Element.GREEN) {
         @Override
         public Figure create() {
             return new FigureImpl(1, 1, S, " ##", "## ");
         }
     },
 
-    T("T", Elements.PURPLE) {
+    T("T", Element.PURPLE) {
         @Override
         public Figure create() {
             return new FigureImpl(1, 1, T, " # ", "###");
         }
     },
 
-    Z("Z", Elements.RED) {
+    Z("Z", Element.RED) {
         @Override
         public Figure create() {
             return new FigureImpl(1, 1, Z, "## ", " ##");
@@ -74,9 +76,9 @@ public enum Type {
     };
 
     private String name;
-    private Elements color;
+    private Element color;
 
-    Type(String name, Elements color) {
+    Type(String name, Element color) {
         this.name = name;
         this.color = color;
     }
@@ -85,7 +87,7 @@ public enum Type {
         return name;
     }
 
-    public Elements getColor() {
+    public Element getColor() {
         return color;
     }
 

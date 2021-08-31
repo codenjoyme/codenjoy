@@ -25,9 +25,8 @@ package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.snake.model.artifacts.Element;
+import com.codenjoy.dojo.snake.model.artifacts.Affectable;
 import com.codenjoy.dojo.snake.model.artifacts.Tail;
 import com.codenjoy.dojo.snake.services.Events;
 
@@ -37,7 +36,7 @@ import java.util.LinkedList;
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.snake.model.BodyDirection.*;
 
-public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
+public class Hero extends PlayerHero<Field> implements Affectable, Iterable<Tail> {
 
     private LinkedList<Tail> elements;
     private Direction direction; 

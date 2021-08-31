@@ -23,6 +23,11 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.games.minesweeper.Element;
+import com.codenjoy.dojo.minesweeper.model.items.Cell;
+import com.codenjoy.dojo.minesweeper.model.items.Flag;
+import com.codenjoy.dojo.minesweeper.model.items.Mine;
+import com.codenjoy.dojo.minesweeper.model.items.Wall;
 import com.codenjoy.dojo.minesweeper.services.Events;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
@@ -200,7 +205,7 @@ public class Minesweeper implements Field {
     public int minesNear(Point pt) {
         Integer count = walkAt.get(pt);
         if (count == null) {
-            return Elements.NONE.value;
+            return Element.NONE.value();
         }
         return count;
     }

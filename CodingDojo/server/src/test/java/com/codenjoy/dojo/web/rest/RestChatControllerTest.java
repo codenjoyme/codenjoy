@@ -22,13 +22,9 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimeService;
-import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.room.RoomService;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 
@@ -40,15 +36,6 @@ import static org.mockito.Mockito.when;
 @Import(RestChatControllerTest.ContextConfiguration.class)
 public class RestChatControllerTest extends AbstractRestControllerTest {
 
-    @Autowired
-    private Chat chat;
-
-    @Autowired
-    private RoomService roomService;
-
-    @Autowired
-    private PlayerService playerService;
-
     @SpyBean
     private TimeService time;
 
@@ -57,8 +44,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         super.setUp();
 
         chat.removeAll();
-        playerService.removeAll();
-        roomService.removeAll();
+        players.removeAll();
+        rooms.removeAll();
         registration.removeAll();
 
         register("player", "ip", "validRoom", "first");

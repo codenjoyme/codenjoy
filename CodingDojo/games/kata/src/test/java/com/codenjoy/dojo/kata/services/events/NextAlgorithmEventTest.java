@@ -24,8 +24,9 @@ package com.codenjoy.dojo.kata.services.events;
 
 
 import org.junit.Test;
+
 import static com.codenjoy.dojo.kata.services.events.Scores.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class NextAlgorithmEventTest {
 

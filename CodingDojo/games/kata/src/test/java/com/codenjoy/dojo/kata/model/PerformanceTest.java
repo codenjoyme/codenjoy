@@ -27,8 +27,8 @@ import com.codenjoy.dojo.kata.services.GameRunner;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
 import java.util.LinkedList;

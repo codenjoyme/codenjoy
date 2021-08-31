@@ -26,8 +26,8 @@ package com.codenjoy.dojo.snakebattle;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.snakebattle.client.Board;
-import com.codenjoy.dojo.snakebattle.client.ai.AISolver;
+import com.codenjoy.dojo.games.snakebattle.Board;
+import com.codenjoy.dojo.snakebattle.services.ai.AISolver;
 import com.codenjoy.dojo.snakebattle.services.GameRunner;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import com.codenjoy.dojo.utils.Smoke;
@@ -60,7 +60,9 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
-                        return super.getSettings();
+                        GameSettings settings = super.getSettings();
+                        settings.setRoundsEnabled(true);
+                        return settings;
                     }
                 },
                 Stream.generate(solver)

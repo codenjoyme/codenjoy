@@ -23,6 +23,8 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.minesweeper.model.items.Mine;
+
 import java.util.List;
 
 public interface MinesGenerator {

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
+import com.codenjoy.dojo.games.collapse.Element;
 import com.codenjoy.dojo.services.Dice;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class LevelBuilder {
     public String getBoard() {
         StringBuffer result = new StringBuffer();
 
-        char borderChar = Elements.BORDER.ch();
+        char borderChar = Element.BORDER.ch();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 if (x == 0 || y == 0 || x == size - 1 || y == size - 1) {

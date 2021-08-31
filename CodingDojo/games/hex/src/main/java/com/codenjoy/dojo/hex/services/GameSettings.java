@@ -23,8 +23,8 @@ package com.codenjoy.dojo.hex.services;
  */
 
 
-import com.codenjoy.dojo.hex.model.Level;
-import com.codenjoy.dojo.hex.model.LevelImpl;
+import com.codenjoy.dojo.hex.model.levels.Level;
+import com.codenjoy.dojo.hex.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 

@@ -32,22 +32,42 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class FakeGameType extends AbstractGameType<Settings> {
+
+    @Setter
+    private Consumer<Field> onCreateField;
+
+    // We want to remember every field ever created,
+    // in order to count the indices.
+    private List<Field> fields = new LinkedList<>();
 
     @Override
     public PlayerScores getPlayerScores(Object score, Settings settings) {
         return new FakePlayerScores(score);
     }
 
-    class Field implements GameField<Player> {
+    public void clear() {
+        fields.clear();
+    }
 
+    public List<Field> fields() {
+        return fields;
+    }
+
+    public class Field implements GameField<Player> {
+
+        @Getter
         private Player player;
         private Settings settings;
 
@@ -104,7 +124,9 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
 
     @Override
     public GameField createGame(int levelNumber, Settings settings) {
-        return Mockito.spy(new Field(settings));
+        Field field = Mockito.spy(new Field(settings));
+        fields.add(field);
+        return field;
     }
 
     @Override
@@ -113,15 +135,15 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     @Override
     public abstract String name();
 
-    public class ClientBoard extends AbstractBoard<CharElements> {
+    public class ClientBoard extends AbstractBoard<CharElement> {
 
         @Override
-        public CharElements valueOf(char ch) {
+        public CharElement valueOf(char ch) {
             return FakeGameType.this.valueOf(ch);
         }
     }
 
-    public CharElements valueOf(char ch) {
+    public CharElement valueOf(char ch) {
         return Arrays.stream(getPlots())
                 .filter(el -> el.ch() == ch)
                 .findFirst()
@@ -129,7 +151,7 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     }
 
     @Override
-    public abstract CharElements[] getPlots();
+    public abstract CharElement[] getPlots();
 
     @Override
     public Class<? extends Solver> getAI() {
@@ -144,7 +166,7 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     @Override
     public abstract MultiplayerType getMultiplayerType(Settings settings);
 
-    class Hero extends PlayerHero implements NoDirectionJoystick, State<CharElements, Player> {
+    class Hero extends PlayerHero implements NoDirectionJoystick, State<CharElement, Player> {
 
         public Hero() {
             super(heroAt());
@@ -166,14 +188,14 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
         }
 
         @Override
-        public CharElements state(Player player, Object... alsoAtPoint) {
+        public CharElement state(Player player, Object... alsoAtPoint) {
             return getHeroElement();
         }
     }
 
     public abstract Point heroAt();
 
-    public abstract CharElements getHeroElement();
+    public abstract CharElement getHeroElement();
 
     class Player extends GamePlayer {
 
@@ -201,8 +223,8 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     };
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, Settings settings) {
-        return Mockito.spy(new Player(listener, settings));
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, Settings settings) {
+        return Mockito.spy(new Player(listener, settings)).inTeam(teamId);
     }
 
     @Override

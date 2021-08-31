@@ -31,12 +31,13 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.tetris.client.Board;
-import com.codenjoy.dojo.tetris.client.ai.AISolver;
+import com.codenjoy.dojo.games.tetris.Board;
+import com.codenjoy.dojo.games.tetris.Element;
+import com.codenjoy.dojo.tetris.services.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
 import com.codenjoy.dojo.tetris.services.scores.CumulativeScores;
@@ -88,8 +89,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public CharElements[] getPlots() {
-        return Elements.values();
+    public CharElement[] getPlots() {
+        return Element.values();
     }
 
     @Override
@@ -102,8 +103,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener, settings);
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
+        return new Player(listener, settings).inTeam(teamId);
     }
 
     @Override

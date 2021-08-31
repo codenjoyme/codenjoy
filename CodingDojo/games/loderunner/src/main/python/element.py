@@ -88,7 +88,7 @@ def value_of(char):
 
 
 class Element:
-    """ Class describes the Element objects for Bomberman game."""
+    """ Class describes the Element objects for the game."""
     def __init__(self, n_or_c):
         """ Construct an Element object from given name or char."""
         for n, c in _ELEMENTS.items():

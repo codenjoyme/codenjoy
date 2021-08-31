@@ -23,12 +23,13 @@ package com.codenjoy.dojo.moebius.model;
  */
 
 
+import com.codenjoy.dojo.games.moebius.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Line extends PointImpl implements State<Elements, Player> {
+public class Line extends PointImpl implements State<Element, Player> {
     enum Type {
         CROSS, LINE, CORNER;
     }
@@ -36,7 +37,7 @@ public class Line extends PointImpl implements State<Elements, Player> {
     private Direction direction;
     private Type type;
 
-    public Line(Point pt, Elements element) {
+    public Line(Point pt, Element element) {
         super(pt);
 
         switch (element) {
@@ -73,37 +74,37 @@ public class Line extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         return state();
     }
 
-    private Elements state() {
+    private Element state() {
         switch (type) {
             case LINE:
                 switch (direction) {
                     case LEFT:
-                        return Elements.LEFT_RIGHT;
+                        return Element.LEFT_RIGHT;
                     case RIGHT:
-                        return Elements.LEFT_RIGHT;
+                        return Element.LEFT_RIGHT;
                     case UP:
-                        return Elements.UP_DOWN;
+                        return Element.UP_DOWN;
                     case DOWN:
-                        return Elements.UP_DOWN;
+                        return Element.UP_DOWN;
                 }
                 break;
             case CORNER:
                 switch (direction) {
                     case UP:
-                        return Elements.LEFT_UP;
+                        return Element.LEFT_UP;
                     case RIGHT:
-                        return Elements.UP_RIGHT;
+                        return Element.UP_RIGHT;
                     case DOWN:
-                        return Elements.RIGHT_DOWN;
+                        return Element.RIGHT_DOWN;
                     case LEFT:
-                        return Elements.DOWN_LEFT;
+                        return Element.DOWN_LEFT;
                 }
                 break;
-            case CROSS:return Elements.CROSS;
+            case CROSS:return Element.CROSS;
         }
         throw new IllegalStateException("Чето не так с линией");
     }

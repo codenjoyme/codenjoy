@@ -22,11 +22,12 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.items.perks.*;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
+import static com.codenjoy.dojo.games.icancode.Element.Layers.*;
 import static org.junit.Assert.assertEquals;
 
 public class ItemsTest {
@@ -44,13 +45,13 @@ public class ItemsTest {
         assertEquals(LAYER3, new Hero(){{ flying = true; }}.getItem().layer());
 
         assertEquals(LAYER1, new Hole().layer());
-        assertEquals(LAYER2, new Laser(Elements.LASER_UP).layer());
-        assertEquals(LAYER2, new Laser(Elements.LASER_DOWN).layer());
-        assertEquals(LAYER2, new Laser(Elements.LASER_LEFT).layer());
-        assertEquals(LAYER2, new Laser(Elements.LASER_RIGHT).layer());
-        assertEquals(LAYER1, new LaserMachine(Elements.LASER_MACHINE_CHARGING_DOWN).layer());
+        assertEquals(LAYER2, new Laser(Element.LASER_UP).layer());
+        assertEquals(LAYER2, new Laser(Element.LASER_DOWN).layer());
+        assertEquals(LAYER2, new Laser(Element.LASER_LEFT).layer());
+        assertEquals(LAYER2, new Laser(Element.LASER_RIGHT).layer());
+        assertEquals(LAYER1, new LaserMachine(Element.LASER_MACHINE_CHARGING_DOWN).layer());
         assertEquals(LAYER1, new Start().layer());
-        assertEquals(LAYER1, new Wall(Elements.WALL_BACK).layer());
+        assertEquals(LAYER1, new Wall(Element.WALL_BACK).layer());
         assertEquals(LAYER2, new Zombie(true).layer());
         assertEquals(LAYER1, new ZombiePot().layer());
 

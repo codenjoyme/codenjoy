@@ -1,5 +1,27 @@
 package com.codenjoy.dojo.cucumber.page.admin;
 
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 - 2021 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import com.codenjoy.dojo.cucumber.page.Page;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
 import com.google.common.collect.ImmutableMap;
@@ -22,6 +44,7 @@ import static org.junit.Assert.assertEquals;
 @RequiredArgsConstructor
 public class Inactivity {
 
+    // selectors
     public static final By KICK_ENABLED = xpath("//input[@name='inactivity.kickEnabled']");
     public static final By TIMEOUT_INPUT = xpath("//input[@name='inactivity.inactivityTimeout']");
     public static final By SAVE_BUTTON = xpath("//table[@id='inactivity']//input[@value='Save']");
@@ -29,6 +52,7 @@ public class Inactivity {
     public static final By PLAYER_INACTIVE_TICKS = xpath("//span[@class='input-ticks-inactive']");
     public static final Function<String, By> PLAYER_INACTIVE_TICK = email -> xpath("//tr[@player='%s']//span[@class='input-ticks-inactive']", email);
 
+    // page objects
     private final Page page;
     private final WebDriverWrapper web;
 

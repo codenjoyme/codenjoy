@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.codenjoy.dojo.pong.model.BarrierOrientation.*;
-import static com.codenjoy.dojo.pong.model.Elements.*;
+import static com.codenjoy.dojo.games.pong.Element.*;
 
 public class LevelImpl implements Level {
 

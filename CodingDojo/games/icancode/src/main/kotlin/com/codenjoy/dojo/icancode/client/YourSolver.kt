@@ -23,6 +23,9 @@ package com.codenjoy.dojo.icancode.client
  */
 
 
+import com.codenjoy.dojo.games.icancode.AbstractSolver
+import com.codenjoy.dojo.games.icancode.Board
+import com.codenjoy.dojo.games.icancode.Command
 import com.codenjoy.dojo.services.Dice
 import com.codenjoy.dojo.services.Direction
 import com.codenjoy.dojo.services.RandomDice
@@ -42,6 +45,7 @@ class YourKotlinSolver(dice: Dice?) : AbstractSolver(dice) {
             }
 
             // TODO your code here
+
             return Command.go(Direction.RIGHT)
         }
     }

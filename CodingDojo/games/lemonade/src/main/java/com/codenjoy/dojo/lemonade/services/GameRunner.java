@@ -25,14 +25,18 @@ package com.codenjoy.dojo.lemonade.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.lemonade.client.Board;
-import com.codenjoy.dojo.lemonade.client.ai.AISolver;
-import com.codenjoy.dojo.lemonade.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.games.lemonade.Board;
+import com.codenjoy.dojo.games.lemonade.WeatherForecast;
+import com.codenjoy.dojo.lemonade.model.Lemonade;
+import com.codenjoy.dojo.lemonade.model.Player;
+import com.codenjoy.dojo.lemonade.services.ai.AISolver;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.json.JSONObject;
@@ -67,7 +71,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public CharElements[] getPlots() {
+    public CharElement[] getPlots() {
         return WeatherForecast.values();
     }
 
@@ -87,8 +91,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener, getDice().next(Integer.MAX_VALUE), settings);
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
+        return new Player(listener, getDice().next(Integer.MAX_VALUE), settings).inTeam(teamId);
     }
 
     @Override

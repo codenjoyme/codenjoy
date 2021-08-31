@@ -23,6 +23,8 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.games.hex.Element;
+import com.codenjoy.dojo.hex.model.levels.Level;
 import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -71,7 +73,7 @@ public class MultiplayerTest {
     // вводится 3-4-5-n игрок на поле
     @Test
     public void shouldManyPlayers() {
-        count = Elements.heroesElements().size() + 1;
+        count = Element.heroes().size() + 1;
         givenDice(0,0, 0,2, 0,4, 1,1, 1,3, 2,0, 2,2, 2,4, 3,1, 3,3, 4,0, 4,2, 4,4);
         givenGame();
 

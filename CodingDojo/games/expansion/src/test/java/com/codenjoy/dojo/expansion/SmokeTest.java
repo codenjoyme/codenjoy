@@ -25,8 +25,8 @@ package com.codenjoy.dojo.expansion;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.expansion.client.Board;
-import com.codenjoy.dojo.expansion.client.ai.AISolver;
+import com.codenjoy.dojo.games.expansion.Board;
+import com.codenjoy.dojo.expansion.client.AISolver;
 import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;

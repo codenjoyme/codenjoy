@@ -24,13 +24,13 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+import static com.codenjoy.dojo.services.Deals.withRoom;
 import static java.util.stream.Collectors.toMap;
 
 @Component("saveService")
@@ -41,24 +41,24 @@ public class SaveServiceImpl implements SaveService {
     @Autowired protected GameSaver saver;
     @Autowired protected PlayerService players;
     @Autowired protected Registration registration;
-    @Autowired protected PlayerGames playerGames;
+    @Autowired protected Deals deals;
     @Autowired protected TimeService time;
     @Autowired protected ConfigProperties config;
 
     @Override
     public long saveAll() {
-        return saveAll(playerGames.all());
+        return saveAll(deals.all());
     }
 
-    private long saveAll(List<PlayerGame> playerGames) {
+    private long saveAll(List<Deal> deals) {
         long now = time.now();
-        saver.saveGames(playerGames, now);
+        saver.saveGames(deals, now);
         return now;
     }
 
     @Override
     public long saveAll(String room) {
-        return saveAll(playerGames.getAll(withRoom(room)));
+        return saveAll(deals.getAll(withRoom(room)));
     }
 
     @Override
@@ -77,20 +77,21 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public long save(String id) {
-        PlayerGame playerGame = playerGames.get(id);
-        if (playerGame == NullPlayerGame.INSTANCE) {
+        Deal deal = deals.get(id);
+        if (deal == NullDeal.INSTANCE) {
             return -1;
         }
 
         long now = time.now();
-        saveGame(playerGame, now);
+        saveGame(deal, now);
         return now;
     }
 
-    private void saveGame(PlayerGame playerGame, long time) {
-        saver.saveGame(playerGame.getPlayer(),
-                playerGame.getGame().getSave().toString(),
-                time);
+    private void saveGame(Deal deal, long time) {
+        Player player = deal.getPlayer();
+        int teamId = deal.getTeamId();
+        String save = deal.getGame().getSave().toString();
+        saver.saveGame(player, teamId, save, time);
     }
 
     @Override
@@ -159,7 +160,7 @@ public class SaveServiceImpl implements SaveService {
         for (Player player : active) {
             PlayerInfo info = new PlayerInfo(player, now);
             setDataFromRegistration(info, users, player.getId());
-            setSaveFromField(info, playerGames.get(player.getId()));
+            setSaveFromField(info, deals.get(player.getId()));
 
             map.put(player.getId(), info);
         }
@@ -198,8 +199,8 @@ public class SaveServiceImpl implements SaveService {
         }
     }
 
-    void setSaveFromField(PlayerInfo info, PlayerGame playerGame) {
-        Game game = playerGame.getGame();
+    void setSaveFromField(PlayerInfo info, Deal deal) {
+        Game game = deal.getGame();
         if (game != null && game.getSave() != null) {
             info.setData(game.getSave().toString());
         }

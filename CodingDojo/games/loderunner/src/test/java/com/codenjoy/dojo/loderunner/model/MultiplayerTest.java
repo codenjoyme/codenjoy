@@ -24,7 +24,9 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.TestSettings;
-import com.codenjoy.dojo.loderunner.model.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.Brick;
+import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.levels.LevelImpl;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -2406,9 +2408,9 @@ public class MultiplayerTest {
         field.tick();
     }
 
-    // TODO тут дублирование с bomberman, может продумать единую архитектуру
+    // TODO тут дублирование с mollymage, может продумать единую архитектуру
     //      тестов работающую и для rounds и реализовать во всех играх начиная
-    //      с bomberman, loderunnes, snakebattle и battlecity
+    //      с mollymage, loderunnes, snakebattle и battlecity
     protected void removeAllDied() {
         players.forEach(player -> {
             if (!player.isAlive()) {

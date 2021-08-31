@@ -23,22 +23,18 @@ package com.codenjoy.dojo.sokoban;
  */
 
 
-import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.sokoban.client.Board;
-import com.codenjoy.dojo.sokoban.client.ai.AISolver;
+import com.codenjoy.dojo.games.sokoban.Board;
+import com.codenjoy.dojo.sokoban.services.ai.AISolver;
 import com.codenjoy.dojo.sokoban.services.GameRunner;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
 import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.sokoban.services.GameSettings.Keys.LEVEL_MAP;
-import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {

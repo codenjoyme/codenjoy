@@ -24,6 +24,8 @@ package com.codenjoy.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.expansion.model.levels.Levels;
+import com.codenjoy.dojo.games.expansion.Forces;
+import com.codenjoy.dojo.games.expansion.ForcesMoves;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;

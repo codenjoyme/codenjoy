@@ -40,7 +40,7 @@
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <maven-license-plugin.version>2.0.0</maven-license-plugin.version>
         <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
-        <maven-minify-plugin.version>1.7.6</maven-minify-plugin.version>
+        <maven-minify-plugin.version>2.0.0-codenjoy</maven-minify-plugin.version>
         <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
         <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
 
@@ -130,7 +130,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>bomberman</id>
+            <id>mollymage</id>
             <activation>
                 <property>
                     <name>allGames</name>
@@ -139,7 +139,7 @@
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>bomberman-engine</artifactId>
+                    <artifactId>mollymage-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -1064,7 +1064,7 @@
                                 <jsInclude>layout.js</jsInclude>
                                 <jsInclude>donate.js</jsInclude>
                                 <jsInclude>joystick.js</jsInclude>
-                                <!--jsInclude>chat.js</jsInclude-->
+                                <jsInclude>chat.js</jsInclude>
                                 <jsInclude>leaderstable.js</jsInclude>
                                 <jsInclude>hotkeys.js</jsInclude>
                                 <jsInclude>advertisement.js</jsInclude>

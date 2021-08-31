@@ -24,16 +24,15 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.games.tetris.Element;
 import com.codenjoy.dojo.tetris.services.Events;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
     private Glass glass;
 
@@ -175,9 +174,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (figure == null) {
-            return Elements.NONE;
+            return Element.NONE;
         }
 
         return figure.type().getColor();

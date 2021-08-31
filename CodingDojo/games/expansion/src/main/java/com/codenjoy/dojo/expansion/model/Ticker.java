@@ -27,9 +27,6 @@ import com.codenjoy.dojo.services.Tickable;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-06.
- */
 public class Ticker implements Tickable {
 
     public final AtomicLong time = new AtomicLong();

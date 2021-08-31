@@ -11,7 +11,7 @@ bundle install
 ```
 4. Run your client:
 ```
-ruby runner.rb https://dojorena.io/codenjoy-contest/board/player/70xewaaa7ddy9yphm1u0?code=2603499961919438773
+ruby runner.rb https://codenjoy.com/codenjoy-contest/board/player/70xewaaa7ddy9yphm1u0?code=2603499961919438773
 ```
 
 Now you can code your bot, change code of `solver.rb` after block

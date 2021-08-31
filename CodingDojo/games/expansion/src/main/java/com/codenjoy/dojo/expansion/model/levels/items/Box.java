@@ -23,21 +23,18 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Player;
 
-/**
- * Created by oleksandr.baglai on 24.06.2016.
- */
 public class Box extends FieldItem {
 
-    public Box(Elements el) {
+    public Box(Element el) {
         super(el);
         impassable();
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BREAK;
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.BREAK;
     }
 }

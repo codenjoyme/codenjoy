@@ -23,11 +23,9 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.PlayerCommand;
-import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -242,7 +240,11 @@ public class Validator {
     }
 
     public boolean isPlayerInRoom(String id, String room) {
-        return playerService.get(id).getRoom().equals(room);
+        Player player = playerService.get(id);
+        if (player == NullPlayer.INSTANCE) {
+            return false;
+        }
+        return player.getRoom().equals(room);
     }
 
     // TODO test me

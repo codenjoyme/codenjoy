@@ -22,13 +22,14 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
+import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.*;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
-import static com.codenjoy.dojo.icancode.model.Elements.*;
+import static com.codenjoy.dojo.games.icancode.Element.*;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.WALK_EACH_TICKS;
 
 public class Zombie extends FieldItem implements Tickable {
@@ -37,7 +38,7 @@ public class Zombie extends FieldItem implements Tickable {
     private int ticks = 0;
     private boolean die;
 
-    public Zombie(Elements gender) {
+    public Zombie(Element gender) {
         super(gender);
         die = false;
     }
@@ -47,12 +48,12 @@ public class Zombie extends FieldItem implements Tickable {
         die = false;
     }
 
-    private static Elements getElement(boolean gender) {
+    private static Element getElement(boolean gender) {
         return (gender) ? MALE_ZOMBIE : FEMALE_ZOMBIE;
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (die) {
             return ZOMBIE_DIE;
         }

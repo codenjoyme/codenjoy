@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.Hero;
 
-public class EmptySpace extends PointImpl implements Element {
+public class EmptySpace extends PointImpl implements Affectable {
 
     public EmptySpace(Point point) {
         super(point);

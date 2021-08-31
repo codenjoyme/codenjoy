@@ -23,11 +23,12 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
+import com.codenjoy.dojo.games.collapse.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Cell extends PointImpl implements State<Elements, Player> {
+public class Cell extends PointImpl implements State<Element, Player> {
     private int number;
 
     public Cell(Point point, int number) {
@@ -45,8 +46,8 @@ public class Cell extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.valueOf(String.valueOf(number).charAt(0));
+    public Element state(Player player, Object... alsoAtPoint) {
+        return Element.valueOf(String.valueOf(number).charAt(0));
     }
 
     public void exchange(Cell cell) {

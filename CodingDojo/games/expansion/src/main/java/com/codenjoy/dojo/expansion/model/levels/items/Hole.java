@@ -23,15 +23,12 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.levels.Item;
 
-/**
- * Created by Mikhail_Udalyi on 09.06.2016.
- */
 public class Hole extends BaseItem {
 
-    public Hole(Elements el) {
+    public Hole(Element el) {
         super(el);
     }
 

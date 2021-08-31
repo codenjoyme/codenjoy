@@ -23,11 +23,12 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
+import com.codenjoy.dojo.games.a2048.Element;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Number extends PointImpl implements State<Elements, Player> {
+public class Number extends PointImpl implements State<Element, Player> {
 
     private int number;
 
@@ -55,14 +56,14 @@ public class Number extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
+    public Element state(Player player, Object... alsoAtPoint) {
         if (number == Numbers.BREAK) {
-            return Elements._x;
+            return Element._x;
         }
 
         if (number == Numbers.NONE) {
-            return Elements.NONE;
+            return Element.NONE;
         }
-        return Elements.valueOf(number);
+        return Element.valueOf(number);
     }
 }

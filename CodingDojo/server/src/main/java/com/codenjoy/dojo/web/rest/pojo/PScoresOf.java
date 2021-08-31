@@ -22,25 +22,29 @@ package com.codenjoy.dojo.web.rest.pojo;
  * #L%
  */
 
-import com.codenjoy.dojo.services.PlayerGame;
+import com.codenjoy.dojo.services.Deal;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
 
 @AllArgsConstructor
 public class PScoresOf {
 
-    private PlayerGame playerGame;
+    private Deal deal;
 
     public String getId() {
-        return playerGame.getPlayer().getId();
+        return deal.getPlayer().getId();
     }
 
     public String getName() {
-        return playerGame.getPlayer().getReadableName();
+        return deal.getPlayer().getReadableName();
+    }
+
+    public int getTeamId() {
+        return deal.getTeamId();
     }
 
     public int getScore() {
-        Object score = playerGame.getPlayer().getScore();
+        Object score = deal.getPlayer().getScore();
         if (score instanceof JSONObject) {
             // это для игрушек, которые передают чуть больше инфы на фронт об очках
             return ((JSONObject)score).getInt("score");

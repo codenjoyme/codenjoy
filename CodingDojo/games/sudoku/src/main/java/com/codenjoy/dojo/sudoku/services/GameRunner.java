@@ -32,11 +32,11 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.sudoku.client.Board;
-import com.codenjoy.dojo.sudoku.client.ai.AISolver;
-import com.codenjoy.dojo.sudoku.model.Elements;
+import com.codenjoy.dojo.games.sudoku.Board;
+import com.codenjoy.dojo.sudoku.services.ai.AISolver;
+import com.codenjoy.dojo.games.sudoku.Element;
 import com.codenjoy.dojo.sudoku.model.Player;
 import com.codenjoy.dojo.sudoku.model.Sudoku;
 import com.codenjoy.dojo.sudoku.model.level.Level;
@@ -79,8 +79,8 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
     }
 
     @Override
-    public CharElements[] getPlots() {
-        return Elements.values();
+    public CharElement[] getPlots() {
+        return Element.values();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener, settings);
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
+        return new Player(listener, settings).inTeam(teamId);
     }
 }

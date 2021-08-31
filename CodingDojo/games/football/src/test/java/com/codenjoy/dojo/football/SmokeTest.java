@@ -24,9 +24,9 @@ package com.codenjoy.dojo.football;
 
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.football.client.Board;
-import com.codenjoy.dojo.football.client.YourSolver;
-import com.codenjoy.dojo.football.client.ai.AISolver;
+import com.codenjoy.dojo.games.football.Board;
+import com.codenjoy.dojo.games.football.YourSolver;
+import com.codenjoy.dojo.football.services.ai.AISolver;
 import com.codenjoy.dojo.football.services.GameRunner;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;

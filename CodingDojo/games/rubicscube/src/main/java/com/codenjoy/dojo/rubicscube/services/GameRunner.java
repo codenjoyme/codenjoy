@@ -24,9 +24,9 @@ package com.codenjoy.dojo.rubicscube.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.rubicscube.client.Board;
-import com.codenjoy.dojo.rubicscube.client.ai.AISolver;
-import com.codenjoy.dojo.rubicscube.model.Elements;
+import com.codenjoy.dojo.games.rubicscube.Board;
+import com.codenjoy.dojo.rubicscube.services.ai.AISolver;
+import com.codenjoy.dojo.games.rubicscube.Element;
 import com.codenjoy.dojo.rubicscube.model.Player;
 import com.codenjoy.dojo.rubicscube.model.RandomCommand;
 import com.codenjoy.dojo.rubicscube.model.RubicsCube;
@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -67,8 +67,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public CharElements[] getPlots() {
-        return Elements.values();
+    public CharElement[] getPlots() {
+        return Element.values();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener, settings);
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
+        return new Player(listener, settings).inTeam(teamId);
     }
 }

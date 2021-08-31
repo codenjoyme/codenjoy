@@ -24,6 +24,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.settings.Chance;
@@ -34,7 +35,7 @@ import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.PRIZE_WORK
 
 public class PrizeGenerator {
 
-    private Chance<Elements> chance;
+    private Chance<Element> chance;
     private Field field;
 
     private GameSettings settings;
@@ -46,7 +47,7 @@ public class PrizeGenerator {
     }
 
     public void drop(Point pt) {
-        Elements type = chance.any();
+        Element type = chance.any();
 
         field.add(new Prize(pt,
                 settings.integer(PRIZE_ON_FIELD),

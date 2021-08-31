@@ -22,7 +22,8 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
-import com.codenjoy.dojo.football.model.elements.Hero;
+import com.codenjoy.dojo.football.model.items.Hero;
+import com.codenjoy.dojo.football.model.levels.LevelImpl;
 import com.codenjoy.dojo.football.services.Events;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;

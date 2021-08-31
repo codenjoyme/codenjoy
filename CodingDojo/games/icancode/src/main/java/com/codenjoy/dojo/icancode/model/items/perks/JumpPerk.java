@@ -1,10 +1,10 @@
 package com.codenjoy.dojo.icancode.model.items.perks;
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.games.icancode.Element;
 
 public class JumpPerk extends Perk {
 
     public JumpPerk() {
-        super(Elements.JUMP_PERK);
+        super(Element.JUMP_PERK);
     }
 }
