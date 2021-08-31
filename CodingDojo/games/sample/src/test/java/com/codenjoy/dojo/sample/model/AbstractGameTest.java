@@ -66,7 +66,7 @@ public abstract class AbstractGameTest {
         games = new LinkedList<>();
 
         dice = mock(Dice.class);
-        settings = new TestGameSettings();
+        settings = settings();
         printer = new PrinterFactoryImpl();
         events = new EventsListenersAssert(() -> listeners, Events.class);
     }
@@ -103,6 +103,10 @@ public abstract class AbstractGameTest {
         game.on(field);
         game.newGame();
         return player;
+    }
+
+    protected TestGameSettings settings() {
+        return new TestGameSettings();
     }
 
     public void tick() {
