@@ -74,7 +74,7 @@ public class Sample implements Field {
             hero.tick();
 
             if (gold().contains(hero)) {
-                gold().remove(hero);
+                gold().removeAt(hero);
 
                 player.event(Events.WIN);
 

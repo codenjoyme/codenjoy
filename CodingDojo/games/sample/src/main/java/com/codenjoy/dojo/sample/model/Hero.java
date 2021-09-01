@@ -104,7 +104,7 @@ public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
             if (field.bombs().contains(to)) {
                 alive = false;
-                field.bombs().remove(to);
+                field.bombs().removeAt(to);
             }
 
             if (!field.isBarrier(to)) {
