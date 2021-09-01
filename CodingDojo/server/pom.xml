@@ -76,6 +76,10 @@
             <id>codenjoy-releases</id>
             <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
         </pluginRepository>
+        <pluginRepository>
+            <id>maven-central</id>
+            <url>http://central.maven.org/maven2/</url>
+        </pluginRepository>
     </pluginRepositories>
 
     <profiles>
