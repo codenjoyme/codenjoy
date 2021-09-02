@@ -32,6 +32,7 @@ import com.codenjoy.dojo.startandjump.services.HeroStatus;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -161,12 +162,10 @@ public class StartAndJump implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<Point>() {{
-                    addAll(getHeroes());
-                    if (walls != null) addAll(walls);
-                    if (platforms != null) addAll(platforms);
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(getHeroes());
+                if (walls != null) processor.accept(walls);
+                if (platforms != null) processor.accept(platforms);
             }
         };
     }

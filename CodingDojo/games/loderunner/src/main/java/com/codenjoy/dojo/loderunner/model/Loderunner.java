@@ -35,9 +35,11 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.field.Generator.generate;
 import static java.util.stream.Collectors.toList;
 
 public class Loderunner extends RoundField<Player> implements Field {
@@ -176,50 +178,44 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generateGold()  {
-        generate(yellowGold, GOLD_COUNT_YELLOW, pt -> new YellowGold(pt));
-        generate(greenGold,  GOLD_COUNT_GREEN, pt -> new GreenGold(pt));
-        generate(redGold,    GOLD_COUNT_RED, pt -> new RedGold(pt));
+        generate(yellowGold,
+                settings, GOLD_COUNT_YELLOW,
+                player -> freeRandom((Player) player),
+                pt -> new YellowGold(pt));
+
+        generate(greenGold,
+                settings, GOLD_COUNT_GREEN,
+                player -> freeRandom((Player) player),
+                pt -> new GreenGold(pt));
+
+        generate(redGold,
+                settings, GOLD_COUNT_RED,
+                player -> freeRandom((Player) player),
+                pt -> new RedGold(pt));
     }
 
     private void generatePills() {
-        generate(pills, SHADOW_PILLS_COUNT,
+        generate(pills,
+                settings, SHADOW_PILLS_COUNT,
+                player -> freeRandom((Player) player),
                 pt -> new Pill(pt, PillType.SHADOW_PILL));
     }
 
     private void generateEnemies() {
-        generate(enemies, ENEMIES_COUNT, pt -> {
-            Enemy enemy = new Enemy(pt, Direction.LEFT, level.getAi());
-            enemy.init(this);
-            return enemy;
-        });
+        generate(enemies,
+                settings, ENEMIES_COUNT,
+                player -> freeRandom((Player) player),
+                pt -> {
+                    Enemy enemy = new Enemy(pt, Direction.LEFT, level.getAi());
+                    enemy.init(this);
+                    return enemy;
+                });
     }
 
     private void generatePortals() {
-        generate(portals, PORTALS_COUNT,
+        generate(portals, settings, PORTALS_COUNT,
+                player -> freeRandom((Player) player),
                 pt -> new Portal(pt));
-    }
-
-    private <T> void generate(List<T> list,
-                          GameSettings.Keys key,
-                          Function<Point, T> creator)
-    {
-        int count = Math.max(0, settings.integer(key));
-        int added = count - list.size();
-        if (added == 0) {
-            return;
-        } else if (added < 0) {
-            // удаляем из существующих
-            // важно оставить текущие, потому что метод работает каждый тик
-            list.subList(count, list.size()).clear();
-        } else {
-            // добавляем недостающих к тем что есть
-            for (int i = 0; i < added; i++) {
-                Optional<Point> pt = freeRandom(null);
-                if (pt.isPresent()) {
-                    list.add(creator.apply(pt.get()));
-                }
-            }
-        }
     }
 
     private List<Player> getDied() {
@@ -237,20 +233,18 @@ public class Loderunner extends RoundField<Player> implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<>() {{
-                    addAll(Loderunner.this.allHeroes());
-                    addAll(Loderunner.this.enemies());
-                    addAll(Loderunner.this.yellowGold());
-                    addAll(Loderunner.this.greenGold());
-                    addAll(Loderunner.this.redGold());
-                    addAll(Loderunner.this.borders());
-                    addAll(Loderunner.this.bricks());
-                    addAll(Loderunner.this.ladder());
-                    addAll(Loderunner.this.pills());
-                    addAll(Loderunner.this.pipe());
-                    addAll(Loderunner.this.portals());
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(allHeroes());
+                processor.accept(enemies());
+                processor.accept(yellowGold());
+                processor.accept(greenGold());
+                processor.accept(redGold());
+                processor.accept(borders());
+                processor.accept(bricks());
+                processor.accept(ladder());
+                processor.accept(pills());
+                processor.accept(pipe());
+                processor.accept(portals());
             }
         };
     }

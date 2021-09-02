@@ -24,7 +24,7 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.sample.TestGameSettings;
-import com.codenjoy.dojo.sample.model.level.Level;
+import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -53,10 +53,11 @@ public abstract class AbstractGameTest {
     private List<EventListener> listeners;
     private List<Game> games;
     private List<Player> players;
+
     private Dice dice;
+    private PrinterFactory printer;
     protected Sample field;
     protected GameSettings settings;
-    private PrinterFactory printer;
     protected EventsListenersAssert events;
 
     @Before
@@ -66,7 +67,7 @@ public abstract class AbstractGameTest {
         games = new LinkedList<>();
 
         dice = mock(Dice.class);
-        settings = new TestGameSettings();
+        settings = settings();
         printer = new PrinterFactoryImpl();
         events = new EventsListenersAssert(() -> listeners, Events.class);
     }
@@ -86,7 +87,7 @@ public abstract class AbstractGameTest {
     public void givenFl(String map) {
         settings.string(LEVEL_MAP, map);
 
-        Level level = settings.level();
+        LevelImpl level = (LevelImpl) settings.level();
 
         field = new Sample(level, dice, settings);
         level.heroes().forEach(hero -> givenPlayer(hero));
@@ -105,12 +106,12 @@ public abstract class AbstractGameTest {
         return player;
     }
 
-    public void tick() {
-        field.tick();
+    protected TestGameSettings settings() {
+        return new TestGameSettings();
     }
 
-    public void dice(int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y);
+    public void tick() {
+        field.tick();
     }
 
     // getters & asserts

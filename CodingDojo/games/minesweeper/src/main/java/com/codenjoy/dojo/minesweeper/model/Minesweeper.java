@@ -37,6 +37,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.*;
 
@@ -221,15 +222,13 @@ public class Minesweeper implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<>() {{
-                    add(Minesweeper.this.sapper());
-                    addAll(Minesweeper.this.getMines());
-                    addAll(Minesweeper.this.removedMines);
-                    addAll(Minesweeper.this.getFlags());
-                    addAll(Minesweeper.this.getCells());
-                    addAll(Minesweeper.this.getWalls());
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(Arrays.asList(sapper()));
+                processor.accept(getMines());
+                processor.accept(removedMines);
+                processor.accept(getFlags());
+                processor.accept(getCells());
+                processor.accept(getWalls());
             }
         };
     }

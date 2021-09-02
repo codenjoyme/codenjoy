@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class Fifteen implements Field {
 
@@ -151,12 +152,10 @@ public class Fifteen implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<Point>() {{
-                    addAll(Fifteen.this.getWalls());
-                    addAll(Fifteen.this.getHeroes());
-                    addAll(Fifteen.this.getDigits());
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(getWalls());
+                processor.accept(getHeroes());
+                processor.accept(getDigits());
             }
         };
     }
