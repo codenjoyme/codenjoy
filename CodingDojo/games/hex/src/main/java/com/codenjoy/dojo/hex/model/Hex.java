@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
@@ -282,11 +283,9 @@ public class Hex implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<Point>() {{
-                    addAll(Hex.this.getHeroes());
-                    addAll(Hex.this.getWalls());
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(getHeroes());
+                processor.accept(getWalls());
             }
         };
     }

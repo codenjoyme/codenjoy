@@ -414,7 +414,7 @@ public class RegistrationTest {
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
-        assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);;
+        assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
 
         // when
         registration.remove("id1");

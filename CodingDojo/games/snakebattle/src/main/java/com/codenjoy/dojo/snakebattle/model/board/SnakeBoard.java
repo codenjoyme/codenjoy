@@ -38,11 +38,11 @@ import com.codenjoy.dojo.snakebattle.services.Events;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.snakebattle.model.hero.Hero.NEXT_TICK;
 import static java.util.stream.Collectors.toList;
 
@@ -476,36 +476,36 @@ public class SnakeBoard extends RoundField<Player> implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedHashSet<Point>(){{
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(new LinkedHashSet<>(){{
                     drawHeroes(hero -> !hero.isAlive(), hero -> Arrays.asList(hero.head()));
                     drawHeroes(hero -> hero.isFlying(), hero -> hero.reversedBody());
                     drawHeroes(hero -> !hero.isFlying(), hero -> hero.reversedBody());
 
-                    addAll(SnakeBoard.this.getWalls());
-                    addAll(SnakeBoard.this.getApples());
-                    addAll(SnakeBoard.this.getStones());
-                    addAll(SnakeBoard.this.getFlyingPills());
-                    addAll(SnakeBoard.this.getFuryPills());
-                    addAll(SnakeBoard.this.getGold());
-                    addAll(SnakeBoard.this.getStarts());
+                    addAll(getWalls());
+                    addAll(getApples());
+                    addAll(getStones());
+                    addAll(getFlyingPills());
+                    addAll(getFuryPills());
+                    addAll(getGold());
+                    addAll(getStarts());
 
                     for (Point p : this.toArray(new Point[0])) {
-                        if (p.isOutOf(SnakeBoard.this.size())) {
-                            remove(p);
+                    if (p.isOutOf(SnakeBoard.this.size())) {
+                                remove(p);
                         }
                     }
                 }
 
                     private void drawHeroes(Predicate<Hero> filter,
-                                            Function<Hero, List<? extends Point>> getElements)
+                                    Function<Hero, List<? extends Point>> getElements)
                     {
                         SnakeBoard.this.getHeroes().stream()
                                 .filter(filter)
                                 .sorted(Comparator.comparingInt(Hero::size))
-                                .forEach(hero -> addAll(getElements.apply(hero)));
+                                        .forEach(hero -> addAll(getElements.apply(hero)));
                     }
-                };
+                });
             }
         };
     }
