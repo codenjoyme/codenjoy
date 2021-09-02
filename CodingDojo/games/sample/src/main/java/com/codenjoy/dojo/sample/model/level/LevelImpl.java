@@ -28,13 +28,12 @@ import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.List;
-
 import static com.codenjoy.dojo.games.sample.Element.*;
-import static com.codenjoy.dojo.utils.LevelUtils.getObjects;
+import static com.codenjoy.dojo.utils.LevelUtils.*;
+
+import java.util.List;
 
 /**
  * Полезный утилитный класс для получения объектов на поле из текстового вида.
@@ -54,28 +53,25 @@ public class LevelImpl implements Level {
         return (int) Math.sqrt(map.length());
     }
 
+    @Override
     public List<Hero> heroes() {
         return getObjects(xy, map, Hero::new, HERO);
     }
 
+    @Override
     public List<Gold> gold() {
         return getObjects(xy, map, Gold::new, GOLD);
     }
 
+    @Override
     public List<Bomb> bombs() {
         return getObjects(xy, map, Bomb::new, BOMB);
     }
 
+    @Override
     public List<Wall> walls() {
         return getObjects(xy, map, Wall::new, WALL);
     }
 
-    @Override
-    public PointField field() {
-        PointField result = new PointField(size());
-        result.addAll(walls());
-        result.addAll(gold());
-        result.addAll(bombs());
-        return result;
-    }
+
 }

@@ -30,7 +30,6 @@ import com.codenjoy.dojo.spacerace.services.Events;
 import com.codenjoy.dojo.spacerace.services.GameSettings;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -413,15 +412,17 @@ public class Spacerace implements Field {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(explosions);
-                processor.accept(walls);
-                processor.accept(getHeroes());
-                processor.accept(getGold());
-                processor.accept(bombs);
-                processor.accept(stones);
-                processor.accept(bullets);
-                processor.accept(bulletPacks);
+            public Iterable<? extends Point> elements(Player player) {
+                return new LinkedList<>(){{
+                    addAll(explosions);
+                    addAll(walls);
+                    addAll(getHeroes());
+                    addAll(getGold());
+                    addAll(bombs);
+                    addAll(stones);
+                    addAll(bullets);
+                    addAll(bulletPacks);
+                }};
             }
         };
     }

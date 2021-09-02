@@ -32,8 +32,8 @@ import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
 import com.codenjoy.dojo.tetris.services.GameSettings;
 import org.junit.Test;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.FIGURE_DROPPED;
 import static com.codenjoy.dojo.tetris.model.Type.*;
@@ -262,9 +262,11 @@ public class CleanScoresTetrisTest {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(hero.dropped());
-                processor.accept(hero.currentFigure());
+            public Iterable<? extends Point> elements(Player player) {
+                return new LinkedList<Plot>() {{
+                    addAll(hero.dropped());
+                    addAll(hero.currentFigure());
+                }};
             }
         }, player);
 

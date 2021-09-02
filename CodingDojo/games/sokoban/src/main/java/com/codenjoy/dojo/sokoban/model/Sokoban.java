@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sokoban.model;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.sokoban.model.items.*;
 import com.codenjoy.dojo.sokoban.model.levels.Level;
@@ -34,9 +35,9 @@ import com.codenjoy.dojo.sokoban.services.GameSettings;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.Direction.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 public class Sokoban implements Field {
@@ -235,12 +236,14 @@ public class Sokoban implements Field {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(getWalls());
-                processor.accept(getHeroes());
-                processor.accept(getBoxesOnTheMarks());
-                processor.accept(getBoxes());
-                processor.accept(getMarks());
+            public Iterable<? extends Point> elements(Player player) {
+                LinkedList<Point> result = new LinkedList<>();
+                result.addAll(getWalls());
+                result.addAll(getHeroes());
+                result.addAll(getBoxesOnTheMarks());
+                result.addAll(getBoxes());
+                result.addAll(getMarks());
+                return result;
             }
         };
     }

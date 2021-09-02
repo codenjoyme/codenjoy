@@ -44,7 +44,7 @@ public class SmokeTest {
     public void test() {
         Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
 
-        // about 4.5 sec
+        // about 5 sec
         int ticks = 1000;
 
         Smoke.play(ticks, "SmokeTest.data",

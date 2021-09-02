@@ -31,7 +31,6 @@ import com.codenjoy.dojo.sudoku.services.GameSettings;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class Sudoku implements Field {
 
@@ -183,10 +182,12 @@ public class Sudoku implements Field {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(walls);
-                processor.accept(cells);
-                processor.accept(acts);
+            public Iterable<? extends Point> elements(Player player) {
+                return new LinkedList<Point>(){{
+                    addAll(Sudoku.this.walls);
+                    addAll(Sudoku.this.cells);
+                    addAll(Sudoku.this.acts);
+                }};
             }
         };
     }

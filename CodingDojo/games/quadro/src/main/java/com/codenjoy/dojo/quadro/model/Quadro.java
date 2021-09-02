@@ -33,7 +33,6 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.QDirection.*;
@@ -228,8 +227,8 @@ public class Quadro implements Field {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(chips.chips());
+            public Iterable<? extends Point> elements(Player player) {
+                return new ArrayList<>(chips.chips());
             }
         };
     }

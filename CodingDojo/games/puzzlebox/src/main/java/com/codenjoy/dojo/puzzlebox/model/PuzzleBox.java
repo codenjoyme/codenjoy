@@ -33,8 +33,6 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
-
 import static com.codenjoy.dojo.services.PointImpl.*;
 
 public class PuzzleBox implements Field {
@@ -112,10 +110,12 @@ public class PuzzleBox implements Field {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(getBoxes());
-                processor.accept(walls);
-                processor.accept(targets);
+            public Iterable<? extends Point> elements(Player player) {
+                return new LinkedList<Point>(){{
+                    addAll(getBoxes());
+                    addAll(walls);
+                    addAll(targets);
+                }};
             }
         };
     }

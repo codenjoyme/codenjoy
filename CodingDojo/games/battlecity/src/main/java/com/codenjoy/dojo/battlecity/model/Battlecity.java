@@ -35,7 +35,6 @@ import com.codenjoy.dojo.services.round.RoundField;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.games.battlecity.Element.*;
 import static java.util.function.Predicate.not;
@@ -388,15 +387,17 @@ public class Battlecity extends RoundField<Player> implements Field {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(borders());
-                processor.accept(allTanks());
-                processor.accept(walls());
-                processor.accept(bullets());
-                processor.accept(prizes());
-                processor.accept(trees());
-                processor.accept(ice());
-                processor.accept(rivers());
+            public Iterable<? extends Point> elements(Player player) {
+                return new LinkedList<Point>() {{
+                    addAll(Battlecity.this.borders());
+                    addAll(Battlecity.this.allTanks());
+                    addAll(Battlecity.this.walls());
+                    addAll(Battlecity.this.bullets());
+                    addAll(Battlecity.this.prizes());
+                    addAll(Battlecity.this.trees());
+                    addAll(Battlecity.this.ice());
+                    addAll(Battlecity.this.rivers());
+                }};
             }
         };
     }

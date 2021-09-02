@@ -37,7 +37,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashSet;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -69,8 +68,8 @@ public class PrinterTest {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(new HashSet<>(){{
+            public Iterable<? extends Point> elements(Player player) {
+                return new HashSet<Point>(){{
                     board.getWalls().forEach(this::add);
                     if (board.snake() != null) {
                         board.snake().forEach(this::add);
@@ -78,7 +77,7 @@ public class PrinterTest {
                     add(board.getApple());
                     add(board.getStone());
                     remove(null);
-                }});
+                }};
             }
         }, null);
     }

@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -247,11 +246,13 @@ public class Quake2D implements Field {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(getWalls());
-                processor.accept(getHeroes());
-                processor.accept(getAbilities());
-                processor.accept(getBullets());
+            public Iterable<? extends Point> elements(Player player) {
+                return new LinkedList<>(){{
+                    addAll(Quake2D.this.getWalls());
+                    addAll(Quake2D.this.getHeroes());
+                    addAll(Quake2D.this.getAbilities());
+                    addAll(Quake2D.this.getBullets());
+                }};
             }
         };
     }

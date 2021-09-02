@@ -38,7 +38,6 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -98,9 +97,11 @@ public class TetrisTest {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(hero.dropped());
-                processor.accept(hero.currentFigure());
+            public Iterable<? extends Point> elements(Player player) {
+                return new LinkedList<Plot>() {{
+                    addAll(hero.dropped());
+                    addAll(hero.currentFigure());
+                }};
             }
         }, player);
 

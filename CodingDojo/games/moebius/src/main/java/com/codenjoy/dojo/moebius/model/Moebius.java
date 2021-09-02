@@ -32,7 +32,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class Moebius implements Field {
 
@@ -184,8 +183,10 @@ public class Moebius implements Field {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(getLines());
+            public Iterable<? extends Point> elements(Player player) {
+                return new LinkedList<Point>(){{
+                    addAll(Moebius.this.getLines());
+                }};
             }
         };
     }

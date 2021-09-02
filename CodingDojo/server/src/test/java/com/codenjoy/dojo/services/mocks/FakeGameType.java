@@ -84,8 +84,10 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
                 }
 
                 @Override
-                public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                    processor.accept(Arrays.asList(hero()));
+                public Iterable<? extends Point> elements(Player player) {
+                    return new LinkedList<>() {{
+                        add(Field.this.hero());
+                    }};
                 }
             };
         }

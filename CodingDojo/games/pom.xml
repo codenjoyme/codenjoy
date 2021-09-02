@@ -56,20 +56,6 @@
             <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
         </repository>
     </repositories>
-    <pluginRepositories>
-        <!--  https://stackoverflow.com/questions/14396017/difference-between-repository-and-pluginrepository  -->
-        <!--  Maven will resolve plugin dependencies using the configured pluginRepository.
-              Other artifact dependencies (eg. a parent pom) are resolved using repository.  -->
-        <!--  We need to include <pluginDependency> here for markdown-page-generator-plugin:2.3.1-codenjoy  -->
-        <pluginRepository>
-            <id>codenjoy-releases</id>
-            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>maven-central</id>
-            <url>http://central.maven.org/maven2/</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <modules>
         <module>engine</module>

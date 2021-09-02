@@ -34,7 +34,6 @@ import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.games.battlecity.Element.*;
 import static com.codenjoy.dojo.services.Direction.*;
@@ -142,13 +141,15 @@ public class LevelImpl implements Level {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(getBorders());
-                processor.accept(getWalls());
-                processor.accept(getAiTanks());
-                processor.accept(getIce());
-                processor.accept(getRivers());
-                processor.accept(getTrees());
+            public Iterable<? extends Point> elements(Player player) {
+                return new LinkedList<>() {{
+                    addAll(LevelImpl.this.getBorders());
+                    addAll(LevelImpl.this.getWalls());
+                    addAll(LevelImpl.this.getAiTanks());
+                    addAll(LevelImpl.this.getIce());
+                    addAll(LevelImpl.this.getRivers());
+                    addAll(LevelImpl.this.getTrees());
+                }};
             }
         };
     }

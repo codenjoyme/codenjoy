@@ -27,9 +27,9 @@ import com.codenjoy.dojo.rubicscube.services.Events;
 import com.codenjoy.dojo.rubicscube.services.GameSettings;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class RubicsCube implements Field {
 
@@ -125,8 +125,8 @@ public class RubicsCube implements Field {
             }
 
             @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(cells.getCells());
+            public Iterable<? extends Point> elements(Player player) {
+                return RubicsCube.this.cells.getCells();
             }
         };
     }

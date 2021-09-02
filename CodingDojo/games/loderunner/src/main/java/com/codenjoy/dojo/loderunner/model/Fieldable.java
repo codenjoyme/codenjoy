@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model.level;
+package com.codenjoy.dojo.loderunner.model;
 
 /*-
  * #%L
@@ -22,29 +22,6 @@ package com.codenjoy.dojo.sample.model.level;
  * #L%
  */
 
-
-import com.codenjoy.dojo.sample.model.Hero;
-import com.codenjoy.dojo.sample.model.items.Bomb;
-import com.codenjoy.dojo.sample.model.items.Gold;
-import com.codenjoy.dojo.sample.model.items.Wall;
-
-import java.util.List;
-
-/**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
- */
-public interface Level {
-
-    /**
-     * @return Размер поля (обязательно квадратное)
-     */
-    int size();
-
-    List<Bomb> bombs();
-
-    List<Wall> walls();
-
-    List<Hero> heroes();
-
-    List<Gold> gold();
+public interface Fieldable {
+    void init(Field field);
 }

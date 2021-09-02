@@ -114,31 +114,6 @@ public class MultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void heroesCanBeRestartedInTheGame() {
-        // given
-        givenFl("☼☼☼☼☼☼\n" +
-                "☼☺ ☺ ☼\n" +
-                "☼    ☼\n" +
-                "☼ ☺  ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
-
-        // when
-        dice(4, 1);
-        game(1).newGame();
-
-        tick();
-
-        // then
-        assertF("☼☼☼☼☼☼\n" +
-                "☼☺   ☼\n" +
-                "☼    ☼\n" +
-                "☼ ☻  ☼\n" +
-                "☼   ☻☼\n" +
-                "☼☼☼☼☼☼\n", 0);
-    }
-
-    @Test
     public void anyOfTheHeroesCanExplodeOnABomb() {
         // given
         givenFl("☼☼☼☼☼☼\n" +
