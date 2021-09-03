@@ -91,6 +91,8 @@ public class ChatService {
         return playerNames.get(playerId);
     }
 
+    // TODO я могу получить сообщение из другой комнаты, главное задать
+    //      room плеера делающего запрос, а вот id можно указать любое
     public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
         PMessage message = getMessage(topicMessageId, room, playerId);
 
@@ -109,6 +111,9 @@ public class ChatService {
         return wrap(message);
     }
 
+    // TODO так же и тут, я могу запостить сообщение для topic-чата который находится
+    //      в другой комнате, для этого мне достаточно выбрать id сообщения из другого чата,
+    //      а так же указать комнату в которой я сейчас нахожусь.
     public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
@@ -125,6 +130,8 @@ public class ChatService {
         return wrap(message);
     }
 
+    // TODO я могу удалять сообщения из другой комнаты, для этого мне достаточно выбрать id сообщения из другого чата,
+    //      а так же указать комнату в которой я сейчас нахожусь.
     public boolean deleteMessage(int messageId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
