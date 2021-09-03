@@ -23,9 +23,8 @@ package com.codenjoy.dojo.sudoku.model.level.levels;
  */
 
 import com.codenjoy.dojo.sudoku.model.level.Level;
-import com.codenjoy.dojo.sudoku.model.level.LevelImpl;
 
-public class Level3 extends LevelImpl implements Level {
+public class Level3 extends Level {
 
     public Level3() {
         super(
