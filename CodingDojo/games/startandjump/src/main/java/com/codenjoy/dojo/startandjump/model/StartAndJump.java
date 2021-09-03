@@ -52,7 +52,7 @@ public class StartAndJump implements Field {
 
     public StartAndJump(Dice dice, Level level, GameSettings settings) {
         this.level = level;
-        size = level.getSize();
+        size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
         platformGenerator = new PlatformGenerator(dice, size, MAX_PLATFORM_LENGTH);

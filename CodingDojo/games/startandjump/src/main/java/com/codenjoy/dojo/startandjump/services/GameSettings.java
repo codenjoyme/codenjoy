@@ -25,7 +25,6 @@ package com.codenjoy.dojo.startandjump.services;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.startandjump.model.Level;
-import com.codenjoy.dojo.startandjump.model.LevelImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -85,7 +84,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public Level level() {
-        return new LevelImpl(string(LEVEL_MAP));
+        return new Level(string(LEVEL_MAP));
     }
 
 }

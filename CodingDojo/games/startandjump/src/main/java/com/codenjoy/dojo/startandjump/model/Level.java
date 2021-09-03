@@ -23,15 +23,27 @@ package com.codenjoy.dojo.startandjump.model;
  */
 
 
+import com.codenjoy.dojo.services.field.AbstractLevel;
+
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.startandjump.Element.*;
 
-    int getSize();
+public class Level extends AbstractLevel {
 
-    List<Hero> getHero();
+    public Level(String map) {
+        super(map);
+    }
 
-    List<Wall> getWalls();
+    public List<Hero> getHero() {
+        return find(Hero::new, HERO);
+    }
 
-    List<Platform> getPlatforms();
+    public List<Wall> getWalls() {
+        return find(Wall::new, WALL);
+    }
+
+    public List<Platform> getPlatforms() {
+        return find(Platform::new, PLATFORM);
+    }
 }
