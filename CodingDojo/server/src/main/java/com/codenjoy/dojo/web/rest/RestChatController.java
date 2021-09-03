@@ -35,6 +35,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * Rest сервис для работы с чатом.
+ *
+ * Все запросы отсуществляются от лица пользователя
+ * с проверкой находится ли пользователь в заявленной комнате чатом которой интересуется,
+ * и может ли пользователь осуществлять эти действия.
+ *
+ * Если пользователь - админ системы, то он может осуществлять все действия с чатом.
+ */
 @RestController
 @Secured(GameAuthoritiesConstants.ROLE_USER)
 @RequestMapping(RestChatController.URI)
