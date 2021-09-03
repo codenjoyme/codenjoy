@@ -76,7 +76,7 @@ public class CleanScoresTetrisTest {
 
     private void givenFl(String board) {
         printerFactory = new PrinterFactoryImpl<>();
-        Level level = new LevelImpl(board);
+        Level level = new Level(board);
         List<Plot> plots = level.plots();
 
         queue = new Figures(1);

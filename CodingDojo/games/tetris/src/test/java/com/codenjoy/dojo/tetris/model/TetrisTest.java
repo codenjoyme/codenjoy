@@ -36,7 +36,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -72,7 +71,7 @@ public class TetrisTest {
     private void givenFl(String board) {
         printerFactory = new PrinterFactoryImpl<>();
 
-        Level level = new LevelImpl(board);
+        Level level = new Level(board);
         List<Plot> plots = level.plots();
 
         queue = mock(FigureQueue.class);

@@ -23,11 +23,22 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.games.tetris.Element;
+import com.codenjoy.dojo.services.field.AbstractLevel;
+
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.tetris.Element.NONE;
 
-    int size();
+public class Level extends AbstractLevel {
 
-    List<Plot> plots();
+    public Level(String map) {
+        super(map);
+    }
+
+    public List<Plot> plots() {
+        return find((pt, el) -> new Plot(pt.getX(), pt.getY(), el),
+                Element.valuesExcept(NONE));
+
+    }
 }
