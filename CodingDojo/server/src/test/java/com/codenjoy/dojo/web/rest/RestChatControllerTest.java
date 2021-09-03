@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @Import(RestChatControllerTest.ContextConfiguration.class)
