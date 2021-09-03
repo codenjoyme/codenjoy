@@ -23,29 +23,79 @@ package com.codenjoy.dojo.battlecity.model.levels;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.*;
+import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.battlecity.model.items.*;
-import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.AbstractLevel;
+import com.codenjoy.dojo.services.field.PointField;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
-public interface Level {
+import static com.codenjoy.dojo.games.battlecity.Element.*;
+import static com.codenjoy.dojo.services.Direction.*;
 
-    int size();
+public class Level extends AbstractLevel {
 
-    List<Tank> getTanks();
+    private Dice dice;
 
-    List<Border> getBorders();
+    public Level(String map, Dice dice) {
+        super(map);
+        this.dice = dice;
+    }
 
-    List<Tank> getAiTanks();
+    @Override
+    protected void fill(PointField field) {
+        // do nothing
+    }
 
-    List<Wall> getWalls();
+    public List<Wall> getWalls() {
+        return find(Wall::new, WALL);
+    }
 
-    List<River> getRivers();
+    public List<River> getRivers() {
+        return find(River::new, RIVER);
+    }
 
-    List<Ice> getIce();
+    public List<Ice> getIce() {
+        return find(Ice::new, ICE);
+    }
 
-    List<Tree> getTrees();
+    public List<Tree> getTrees() {
+        return find(Tree::new, TREE);
+    }
 
-    BoardReader reader();
+    public List<Tank> getAiTanks() {
+        return new LinkedList<>(){{
+            addAll(find((pt, el) -> new AITank(pt, DOWN, dice), AI_TANK_DOWN));
+            addAll(find((pt, el) -> new AITank(pt, UP, dice), AI_TANK_UP));
+            addAll(find((pt, el) -> new AITank(pt, LEFT, dice), AI_TANK_LEFT));
+            addAll(find((pt, el) -> new AITank(pt, RIGHT, dice), AI_TANK_RIGHT));
+        }};
+    }
+
+    public List<Tank> getTanks() {
+        return new LinkedList<>(){{
+            addAll(find((pt, el) -> new Tank(pt, DOWN), TANK_DOWN, OTHER_TANK_DOWN));
+            addAll(find((pt, el) -> new Tank(pt, UP), TANK_UP, OTHER_TANK_UP));
+            addAll(find((pt, el) -> new Tank(pt, LEFT), TANK_LEFT, OTHER_TANK_LEFT));
+            addAll(find((pt, el) -> new Tank(pt, RIGHT), TANK_RIGHT, OTHER_TANK_RIGHT));
+        }};
+    }
+
+    public List<Border> getBorders() {
+        return find((pt, el) -> new Border(pt), BATTLE_WALL);
+    }
+
+    @Override
+    public void addAll(Consumer<Iterable<? extends Point>> processor) {
+        processor.accept(getBorders());
+        processor.accept(getWalls());
+        processor.accept(getAiTanks());
+        processor.accept(getIce());
+        processor.accept(getRivers());
+        processor.accept(getTrees());
+    }
 }
