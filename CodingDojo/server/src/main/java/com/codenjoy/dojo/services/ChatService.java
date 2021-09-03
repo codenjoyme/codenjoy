@@ -130,12 +130,10 @@ public class ChatService {
         return wrap(message);
     }
 
-    // TODO я могу удалять сообщения из другой комнаты, для этого мне достаточно выбрать id сообщения из другого чата,
-    //      а так же указать комнату в которой я сейчас нахожусь.
     public boolean deleteMessage(int messageId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
-        boolean deleted = chat.deleteMessage(messageId, playerId);
+        boolean deleted = chat.deleteMessage(room, messageId, playerId);
 
         if (!deleted) {
             throw exception("Player '%s' cant delete message with id '%s' in room '%s'",

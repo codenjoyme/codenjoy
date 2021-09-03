@@ -126,7 +126,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldDeleteMessages_cantDeleteWhenNotMyMessage() {
+    public void shouldDeleteMessages_cantDelete_whenNotMyMessage() {
         // given
         // id = 1
         nowIs(12345L);
@@ -146,7 +146,40 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldDeleteMessages_cantDeleteWhenNotExistsMessage() {
+    public void shouldDeleteMessages_cantDelete_whenNotMyRoom() {
+        // given
+        // id = 1
+        // create message in validRoom
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null}]",
+                fix(get("/rest/chat/validRoom/messages")));
+
+        // when
+        // rejoin in new room
+        join("player", "otherRoom");
+
+        // then
+        // cant delete message from old room
+        // (only by id = 1, room = player.room != message.room)
+        assertDeleteError("java.lang.IllegalArgumentException: " +
+                        "Player 'player' cant delete message with id " +
+                        "'1' in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages/1");
+
+        // when
+        // come back in old room again
+        join("player", "validRoom");
+
+        // message in still there
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null}]",
+                fix(get("/rest/chat/validRoom/messages")));
+    }
+
+    @Test
+    public void shouldDeleteMessages_cantDelete_whenNotExistsMessage() {
         // when then
         assertDeleteError("java.lang.IllegalArgumentException: " +
                         "Player 'player' cant delete message with id " +

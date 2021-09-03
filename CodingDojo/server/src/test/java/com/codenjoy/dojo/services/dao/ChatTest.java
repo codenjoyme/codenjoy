@@ -129,7 +129,7 @@ public class ChatTest {
                 chat.getLastMessageIds().toString());
 
         // when then
-        chat.deleteMessage(6, "player1");
+        chat.deleteMessage("room3", 6, "player1");
         assertEquals(Integer.valueOf(5), chat.getLastMessageId("room1"));
         assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
         assertEquals(null, chat.getLastMessageId("room3"));
@@ -137,7 +137,7 @@ public class ChatTest {
                 chat.getLastMessageIds().toString());
 
         // when then
-        chat.deleteMessage(5, "player2");
+        chat.deleteMessage("room1", 5, "player2");
         assertEquals(Integer.valueOf(3), chat.getLastMessageId("room1"));
         assertEquals(Integer.valueOf(4), chat.getLastMessageId("room2"));
         assertEquals(null, chat.getLastMessageId("room3"));
@@ -145,7 +145,7 @@ public class ChatTest {
                 chat.getLastMessageIds().toString());
 
         // when then
-        chat.deleteMessage(4, "player2");
+        chat.deleteMessage("room2", 4, "player2");
         assertEquals(Integer.valueOf(3), chat.getLastMessageId("room1"));
         assertEquals(null, chat.getLastMessageId("room2"));
         assertEquals(null, chat.getLastMessageId("room3"));
@@ -153,7 +153,7 @@ public class ChatTest {
                 chat.getLastMessageIds().toString());
 
         // when then
-        chat.deleteMessage(3, "player2");
+        chat.deleteMessage("room1", 3, "player2");
         assertEquals(Integer.valueOf(2), chat.getLastMessageId("room1"));
         assertEquals(null, chat.getLastMessageId("room2"));
         assertEquals(null, chat.getLastMessageId("room3"));
@@ -161,7 +161,7 @@ public class ChatTest {
                 chat.getLastMessageIds().toString());
 
         // when then
-        chat.deleteMessage(2, "player1");
+        chat.deleteMessage("room1", 2, "player1");
         assertEquals(Integer.valueOf(1), chat.getLastMessageId("room1"));
         assertEquals(null, chat.getLastMessageId("room2"));
         assertEquals(null, chat.getLastMessageId("room3"));
@@ -169,7 +169,7 @@ public class ChatTest {
                 chat.getLastMessageIds().toString());
 
         // when then
-        chat.deleteMessage(1, "player1");
+        chat.deleteMessage("room1", 1, "player1");
         assertEquals(null, chat.getLastMessageId("room1"));
         assertEquals(null, chat.getLastMessageId("room2"));
         assertEquals(null, chat.getLastMessageId("room3"));
@@ -308,21 +308,21 @@ public class ChatTest {
                 .in(chat.getMessages("room", 10));
 
         // when
-        assertEquals(true, chat.deleteMessage(1, "player1"));
+        assertEquals(true, chat.deleteMessage("room", 1, "player1"));
 
         // then
         assertThat(2, 3, 4)
                 .in(chat.getMessages("room", 10));
 
         // when
-        assertEquals(true, chat.deleteMessage(3, "player2"));
+        assertEquals(true, chat.deleteMessage("room", 3, "player2"));
 
         // then
         assertThat(2, 4)
                 .in(chat.getMessages("room", 10));
 
         // when
-        assertEquals(true, chat.deleteMessage(4, "player3"));
+        assertEquals(true, chat.deleteMessage("room", 4, "player3"));
 
         // then
         assertThat(2)
@@ -330,9 +330,21 @@ public class ChatTest {
     }
 
     @Test
-    public void shouldDeleteMessageById_whenNotExists() {
+    public void shouldDeleteMessageById_whenRoomNotExists() {
+        // given
+        addMessage("room", "player"); // id = 1
+
         // when then
-        assertEquals(false, chat.deleteMessage(100500, "player"));
+        assertEquals(false, chat.deleteMessage("otherRoom", 1, "player"));
+    }
+
+    @Test
+    public void shouldDeleteMessageById_whenInvalidRoom() {
+        // given
+        addMessage("room", "player"); // id = 1
+
+        // when then
+        assertEquals(false, chat.deleteMessage("room", 100500, "player"));
     }
 
     @Test
@@ -345,7 +357,7 @@ public class ChatTest {
                 .in(chat.getMessages("room", 10));
 
         // when then
-        assertEquals(false, chat.deleteMessage(1, "otherPlayer"));
+        assertEquals(false, chat.deleteMessage("room", 1, "otherPlayer"));
     }
 
     @Test

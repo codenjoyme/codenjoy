@@ -224,6 +224,13 @@ public abstract class AbstractRestControllerTest {
         return deal;
     }
 
+
+    protected void join(String id, String room) {
+        Player player = players.get(id);
+        player.setRoom(room);
+        players.update(player);
+    }
+
     private void resetMocks(Deal deal) {
         reset(deal.getField());
         reset(deal.getGame().getPlayer());

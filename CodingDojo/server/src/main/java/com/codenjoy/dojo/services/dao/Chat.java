@@ -216,11 +216,12 @@ public class Chat {
         return message;
     }
 
-    public boolean deleteMessage(int id, String playerId) {
+    public boolean deleteMessage(String room, int id, String playerId) {
         return 1 == pool.update("DELETE FROM messages " +
                 "WHERE id = ? " +
+                "AND room = ? " +
                 "AND player_id = ?",
-                new Object[]{id, playerId});
+                new Object[]{id, room, playerId});
     }
 
     private static List<Message> parseMessages(ResultSet rs) throws SQLException {
