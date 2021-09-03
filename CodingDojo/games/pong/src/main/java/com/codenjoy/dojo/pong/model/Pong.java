@@ -52,7 +52,7 @@ public class Pong implements Field {
 
     public Pong(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        size = level.getSize();
+        size = level.size();
         this.settings = settings;
         leftBound = 0 + BOUND_DISTANCE;
         rightBound = size - 1 - BOUND_DISTANCE;

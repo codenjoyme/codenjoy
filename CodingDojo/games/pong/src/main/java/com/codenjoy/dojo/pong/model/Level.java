@@ -22,16 +22,33 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.field.AbstractLevel;
+
+import java.util.HashMap;
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.pong.Element.*;
+import static com.codenjoy.dojo.pong.model.BarrierOrientation.HORIZONTAL;
+import static com.codenjoy.dojo.pong.model.BarrierOrientation.VERTICAL;
 
-    int getSize();
+public class Level extends AbstractLevel {
 
-    List<Hero> getHero();
+    public Level(String map) {
+        super(map);
+    }
 
-    List<Wall> getWalls();
+    public List<Hero> getHero() {
+        return find(Hero::new, HERO);
+    }
 
-    Ball getBall();
+    public List<Wall> getWalls() {
+        return find(new HashMap<>(){{
+                    put(VERTICAL_WALL, pt -> new Wall(pt, VERTICAL));
+                    put(HORIZONTAL_WALL, pt -> new Wall(pt, HORIZONTAL));
+                }});
+    }
 
+    public Ball getBall() {
+        return find(Ball::new, BALL).get(0);
+    }
 }
