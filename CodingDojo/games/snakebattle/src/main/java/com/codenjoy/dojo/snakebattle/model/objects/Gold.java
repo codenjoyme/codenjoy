@@ -38,10 +38,6 @@ public class Gold extends PointImpl implements State<Element, Player> {
         super(point);
     }
 
-    public Gold(int x, int y) {
-        super(x, y);
-    }
-
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
         return Element.GOLD;

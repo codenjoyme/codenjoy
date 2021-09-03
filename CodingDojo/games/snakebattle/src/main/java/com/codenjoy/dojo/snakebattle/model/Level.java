@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snakebattle.model.level;
+package com.codenjoy.dojo.snakebattle.model;
 
 /*-
  * #%L
@@ -23,39 +23,28 @@ package com.codenjoy.dojo.snakebattle.model.level;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.games.snakebattle.Element;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
-import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.games.snakebattle.Element.*;
+import static com.codenjoy.dojo.services.Direction.*;
 
-public class LevelImpl implements Level {
+public class Level extends AbstractLevel {
 
-    private LengthToXY xy;
-    private String map;
-
-    public LevelImpl(String map) {
-        this.map = LevelUtils.clear(map);
-        xy = new LengthToXY(getSize());
+    public Level(String map) {
+        super(map);
     }
 
-    @Override
-    public int getSize() {
-        return (int) Math.sqrt(map.length());
-    }
-
-    @Override
     public Hero getHero(Field field) {
-        Point point = LevelUtils.getObjects(xy, map, 
+        Point point = find(
                 pt -> pt,
                 HEAD_DOWN,
                 HEAD_UP,
@@ -187,9 +176,8 @@ public class LevelImpl implements Level {
         return null;
     }
 
-    @Override
     public Hero getEnemy(Field field) {
-        Point point = LevelUtils.getObjects(xy, map, 
+        Point point = find(
                 pt -> pt,
                 ENEMY_HEAD_DOWN,
                 ENEMY_HEAD_UP,
@@ -222,53 +210,32 @@ public class LevelImpl implements Level {
         }
     }
 
-    @Override
     public List<Apple> getApples() {
-        return LevelUtils.getObjects(xy, map, 
-                pt -> new Apple(pt),
-                APPLE);
+        return find(Apple::new, APPLE);
     }
 
-    @Override
     public List<Stone> getStones() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new Stone(pt),
-                STONE);
+        return find(Stone::new, STONE);
     }
 
-    @Override
     public List<FlyingPill> getFlyingPills() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new FlyingPill(pt),
-                FLYING_PILL);
+        return find(FlyingPill::new, FLYING_PILL);
     }
 
-    @Override
     public List<FuryPill> getFuryPills() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new FuryPill(pt),
-                FURY_PILL);
+        return find(FuryPill::new, FURY_PILL);
     }
 
-    @Override
     public List<Gold> getGold() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new Gold(pt),
-                GOLD);
+        return find(Gold::new, GOLD);
     }
 
-    @Override
     public List<Wall> getWalls() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new Wall(pt),
-                WALL);
+        return find(Wall::new, WALL);
     }
 
-    @Override
     public List<StartFloor> getStartPoints() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new StartFloor(pt),
-                START_FLOOR);
+        return find(StartFloor::new, START_FLOOR);
     }
 
     private Element getAt(Point pt) {

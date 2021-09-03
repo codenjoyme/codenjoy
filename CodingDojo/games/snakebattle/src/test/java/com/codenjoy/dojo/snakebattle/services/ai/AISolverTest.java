@@ -32,7 +32,7 @@ import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.TestGameSettings;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
-import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
+import com.codenjoy.dojo.snakebattle.model.Level;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,7 +66,7 @@ public class AISolverTest {
 
         // этот весь код ниже используется сейчас только для распечатки изображения доски (для наглядности)
         // можно смело убирать, если мешает
-        LevelImpl level = new LevelImpl(board);
+        Level level = new Level(board);
 
         settings = new TestGameSettings();
 

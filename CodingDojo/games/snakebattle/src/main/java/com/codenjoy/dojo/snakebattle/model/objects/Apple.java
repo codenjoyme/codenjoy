@@ -38,10 +38,6 @@ public class Apple extends PointImpl implements State<Element, Player> {
         super(point);
     }
 
-    public Apple(int x, int y) {
-        super(x, y);
-    }
-
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
         return Element.APPLE;

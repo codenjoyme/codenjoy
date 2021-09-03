@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.snakebattle.TestGameSettings;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
-import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.services.Events;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -71,7 +70,7 @@ public class GameTest {
     }
 
     private void given(String board) {
-        LevelImpl level = new LevelImpl(board);
+        Level level = new Level(board);
         game = new SnakeBoard(level, dice, settings);
         hero = level.getHero(game);
         listener = mock(EventListener.class);

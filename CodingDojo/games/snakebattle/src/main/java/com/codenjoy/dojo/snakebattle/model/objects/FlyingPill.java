@@ -38,10 +38,6 @@ public class FlyingPill extends PointImpl implements State<Element, Player> {
         super(point);
     }
 
-    public FlyingPill(int x, int y) {
-        super(x, y);
-    }
-
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
         return Element.FLYING_PILL;

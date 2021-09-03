@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.snakebattle.TestGameSettings;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
-import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.services.Events;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -84,7 +83,7 @@ public class MultiplayerTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board.replaceAll("\n", ""));
+        Level level = new Level(board.replaceAll("\n", ""));
 
         game = new SnakeBoard(level, dice,  settings);
 

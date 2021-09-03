@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snakebattle.TestGameSettings;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
-import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import org.junit.Test;
@@ -39,6 +38,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -60,7 +60,7 @@ public class BoardAddObjectsTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
+        Level level = new Level(board);
         GameSettings settings = new TestGameSettings();
         game = new SnakeBoard(level, mock(Dice.class), settings);
         Hero hero = level.getHero(game);
@@ -75,47 +75,47 @@ public class BoardAddObjectsTest {
     public static Collection<Object[]> data() {
         Object[][] params = new Object[][]{
                 // нельзя ставить яблоки на яблоки,камни,таблетки,золото,стены
-                {new Apple(2, 2), false},
-                {new Apple(2, 1), false},
-                {new Apple(3, 3), false},
-                {new Apple(3, 2), false},
-                {new Apple(3, 1), false},
-                {new Apple(3, 0), false},
+                {new Apple(pt(2, 2)), false},
+                {new Apple(pt(2, 1)), false},
+                {new Apple(pt(3, 3)), false},
+                {new Apple(pt(3, 2)), false},
+                {new Apple(pt(3, 1)), false},
+                {new Apple(pt(3, 0)), false},
                 // нельзя ставить камни на яблоки,камни,таблетки,золото,стены и справа от выходов
-                {new Stone(2, 3), false},
-                {new Stone(2, 2), false},
-                {new Stone(2, 1), false},
-                {new Stone(3, 3), false},
-                {new Stone(3, 2), false},
-                {new Stone(3, 1), false},
-                {new Stone(3, 0), false},
+                {new Stone(pt(2, 3)), false},
+                {new Stone(pt(2, 2)), false},
+                {new Stone(pt(2, 1)), false},
+                {new Stone(pt(3, 3)), false},
+                {new Stone(pt(3, 2)), false},
+                {new Stone(pt(3, 1)), false},
+                {new Stone(pt(3, 0)), false},
                 // нельзя ставить таблетки полёта на яблоки,камни,таблетки,золото,стены
-                {new FlyingPill(2, 2), false},
-                {new FlyingPill(2, 1), false},
-                {new FlyingPill(3, 3), false},
-                {new FlyingPill(3, 2), false},
-                {new FlyingPill(3, 1), false},
-                {new FlyingPill(3, 0), false},
+                {new FlyingPill(pt(2, 2)), false},
+                {new FlyingPill(pt(2, 1)), false},
+                {new FlyingPill(pt(3, 3)), false},
+                {new FlyingPill(pt(3, 2)), false},
+                {new FlyingPill(pt(3, 1)), false},
+                {new FlyingPill(pt(3, 0)), false},
                 // нельзя ставить таблетки ярости на яблоки,камни,таблетки,золото,стены
-                {new FuryPill(2, 2), false},
-                {new FuryPill(2, 1), false},
-                {new FuryPill(3, 3), false},
-                {new FuryPill(3, 2), false},
-                {new FuryPill(3, 1), false},
-                {new FuryPill(3, 0), false},
+                {new FuryPill(pt(2, 2)), false},
+                {new FuryPill(pt(2, 1)), false},
+                {new FuryPill(pt(3, 3)), false},
+                {new FuryPill(pt(3, 2)), false},
+                {new FuryPill(pt(3, 1)), false},
+                {new FuryPill(pt(3, 0)), false},
                 // нельзя ставить золото на яблоки,камни,таблетки,золото,стены
-                {new Gold(2, 2), false},
-                {new Gold(2, 1), false},
-                {new Gold(3, 3), false},
-                {new Gold(3, 2), false},
-                {new Gold(3, 1), false},
-                {new Gold(3, 0), false},
+                {new Gold(pt(2, 2)), false},
+                {new Gold(pt(2, 1)), false},
+                {new Gold(pt(3, 3)), false},
+                {new Gold(pt(3, 2)), false},
+                {new Gold(pt(3, 1)), false},
+                {new Gold(pt(3, 0)), false},
                 // можно ставить яблоки,камни,таблетки и золото в пустое место
-                {new Apple(4, 2), true},
-                {new Stone(4, 2), true},
-                {new FlyingPill(4, 2), true},
-                {new FuryPill(4, 2), true},
-                {new Gold(4, 2), true},
+                {new Apple(pt(4, 2)), true},
+                {new Stone(pt(4, 2)), true},
+                {new FlyingPill(pt(4, 2)), true},
+                {new FuryPill(pt(4, 2)), true},
+                {new Gold(pt(4, 2)), true},
         };
         return Arrays.asList(params);
     }
