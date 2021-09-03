@@ -23,15 +23,27 @@ package com.codenjoy.dojo.puzzlebox.model;
  */
 
 
+import com.codenjoy.dojo.services.field.AbstractLevel;
+
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.puzzlebox.Element.*;
 
-    int getSize();
+public class Level extends AbstractLevel {
 
-    List<Wall> getWalls();
+    public Level(String map) {
+        super(map);
+    }
 
-    List<Box> getBoxes();
+    public List<Wall> getWalls() {
+        return find(Wall::new, WALL);
+    }
 
-    List<Target> getTargets();
+    public List<Box> getBoxes() {
+        return find(Box::new, BOX);
+    }
+
+    public List<Target> getTargets() {
+        return find(Target::new, TARGET);
+    }
 }

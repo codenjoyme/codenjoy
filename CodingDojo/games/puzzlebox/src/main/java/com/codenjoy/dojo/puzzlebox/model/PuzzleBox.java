@@ -54,7 +54,7 @@ public class PuzzleBox implements Field {
         walls = level.getWalls();
         targets = level.getTargets();
         this.level = level;
-        size = level.getSize();
+        size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
     }
