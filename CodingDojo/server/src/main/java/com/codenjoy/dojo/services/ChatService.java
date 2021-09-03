@@ -92,6 +92,9 @@ public class ChatService {
     }
 
     public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
+        // TODO по сути будет по 2 запроса, что не ок по производительности
+        //      можно было бы валидацию зашить во второй запрос?
+        // room validation only
         PMessage message = getMessage(topicMessageId, room, playerId);
 
         return wrap(chat.getTopicMessages(message.getId()));
@@ -112,6 +115,12 @@ public class ChatService {
     public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
+        if (topicMessageId != null) {
+            // TODO по сути на каждый риплай, будет по 2 запроса, что не ок по производительности
+            // room validation only
+            getMessage(topicMessageId, room, playerId);
+        }
+
         Chat.Message message = Chat.Message.builder()
                 .room(room)
                 .topicId(topicMessageId)
@@ -120,7 +129,7 @@ public class ChatService {
                 .text(text)
                 .build();
 
-        chat.saveMessage(message);
+        message = chat.saveMessage(message);
 
         return wrap(message);
     }
@@ -128,7 +137,7 @@ public class ChatService {
     public boolean deleteMessage(int messageId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
-        boolean deleted = chat.deleteMessage(messageId, playerId);
+        boolean deleted = chat.deleteMessage(room, messageId, playerId);
 
         if (!deleted) {
             throw exception("Player '%s' cant delete message with id '%s' in room '%s'",

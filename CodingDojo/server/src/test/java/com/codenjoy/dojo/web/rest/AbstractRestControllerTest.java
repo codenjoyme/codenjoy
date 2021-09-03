@@ -224,6 +224,17 @@ public abstract class AbstractRestControllerTest {
         return deal;
     }
 
+    protected void assertPlayerInRoom(String id, String room) {
+        Player player = players.get(id);
+        assertEquals(room, player.getRoom());
+    }
+
+    protected void join(String id, String room) {
+        Player player = players.get(id);
+        player.setRoom(room);
+        players.update(player);
+    }
+
     private void resetMocks(Deal deal) {
         reset(deal.getField());
         reset(deal.getGame().getPlayer());
@@ -292,6 +303,11 @@ public abstract class AbstractRestControllerTest {
         }
     }
 
+    protected void assertGetError(String message, String uri) {
+        String source = get(500, uri);
+        JSONObject error = tryParseAsJson(source);
+        assertEquals(message, error.getString("message"));
+    }
     protected void assertPostError(String message, String uri, String data) {
         String source = post(500, uri, data);
         JSONObject error = tryParseAsJson(source);

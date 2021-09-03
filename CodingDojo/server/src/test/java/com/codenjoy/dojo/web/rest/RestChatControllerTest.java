@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @Import(RestChatControllerTest.ContextConfiguration.class)
@@ -126,7 +126,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldDeleteMessages_cantDeleteWhenNotMyMessage() {
+    public void shouldDeleteMessages_cantDelete_whenNotMyMessage() {
         // given
         // id = 1
         nowIs(12345L);
@@ -146,7 +146,40 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldDeleteMessages_cantDeleteWhenNotExistsMessage() {
+    public void shouldDeleteMessages_cantDelete_whenNotMyRoom() {
+        // given
+        // id = 1
+        // create message in validRoom
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null}]",
+                fix(get("/rest/chat/validRoom/messages")));
+
+        // when
+        // rejoin in new room
+        join("player", "otherRoom");
+
+        // then
+        // cant delete message from old room
+        // (only by id = 1, room = player.room != message.room)
+        assertDeleteError("java.lang.IllegalArgumentException: " +
+                        "Player 'player' cant delete message with id " +
+                        "'1' in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages/1");
+
+        // when
+        // come back in old room again
+        join("player", "validRoom");
+
+        // message in still there
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null}]",
+                fix(get("/rest/chat/validRoom/messages")));
+    }
+
+    @Test
+    public void shouldDeleteMessages_cantDelete_whenNotExistsMessage() {
         // when then
         assertDeleteError("java.lang.IllegalArgumentException: " +
                         "Player 'player' cant delete message with id " +
@@ -235,11 +268,45 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldPostMessage_whenPostItForOtherRoom() {
+    public void shouldPostMessage_fail_whenPostItForOtherRoom() {
         assertPostError("java.lang.IllegalArgumentException: " +
                         "Player 'player' is not in room 'otherRoom'",
                 "/rest/chat/otherRoom/messages",
                 unquote("{text:'message1'}"));
+    }
+
+    @Test
+    public void shouldPostMessage_fail_whenThreadTopicInOtherRoom() {
+        // given
+        assertPlayerInRoom("player", "validRoom");
+
+        assertEquals("[]", fix(get("/rest/chat/validRoom/messages")));
+
+        // post message that will be a root topic message
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        // when
+        // rejoin in other room
+        join("player", "otherRoom");
+
+        // try to post reply for topic message in other room
+        nowIs(12346L);
+        assertPostError("java.lang.IllegalArgumentException: " +
+                        "There is no message with id '1' in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages/1/replies",
+                unquote("{text:'message1'}"));
+
+        // then
+        // rejoin in old room
+        join("player", "validRoom");
+
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null}]",
+                fix(get("/rest/chat/validRoom/messages")));
+
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages/1/replies")));
     }
 
     @Test
@@ -614,6 +681,44 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals("[{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':null},\n" +
                         "{'id':7,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message7','time':12351,'topicId':null}]",
                 fix(get("/rest/chat/validRoom/messages?afterId=3&beforeId=8")));
+    }
+
+    @Test
+    public void shouldGetAllTopicMessages_fail_whenTryToGetItFromOtherRoom() {
+        // given
+        assertPlayerInRoom("player", "validRoom");
+
+        // message in room, will be topic 1
+        // id = 1
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        // message for topic1
+        // id = 2
+        nowIs(12346L);
+        post(200, "/rest/chat/validRoom/messages/1/replies",
+                unquote("{text:'message2'}"));
+
+        // just another one message in room
+        // id = 3
+        nowIs(12347L);
+        post(200, "/rest/chat/validRoom/messages/1/replies",
+                unquote("{text:'message3'}"));
+
+        // can get all topic messages
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':1},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':1}]",
+                fix(get("/rest/chat/validRoom/messages/1/replies")));
+
+        // when
+        join("player", "otherRoom");
+
+        // then
+        // cant get topic messages from other room
+        assertGetError("java.lang.IllegalArgumentException: " +
+                "There is no message with id '1' in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages/1/replies");
     }
 
     @Test
