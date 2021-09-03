@@ -303,6 +303,11 @@ public abstract class AbstractRestControllerTest {
         }
     }
 
+    protected void assertGetError(String message, String uri) {
+        String source = get(500, uri);
+        JSONObject error = tryParseAsJson(source);
+        assertEquals(message, error.getString("message"));
+    }
     protected void assertPostError(String message, String uri, String data) {
         String source = post(500, uri, data);
         JSONObject error = tryParseAsJson(source);

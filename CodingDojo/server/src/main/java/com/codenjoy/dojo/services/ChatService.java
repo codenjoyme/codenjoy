@@ -91,11 +91,10 @@ public class ChatService {
         return playerNames.get(playerId);
     }
 
-    // TODO я могу получить сообщение из другой комнаты, главное задать
-    //      room плеера делающего запрос, а вот id можно указать любое
     public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
         // TODO по сути будет по 2 запроса, что не ок по производительности
         //      можно было бы валидацию зашить во второй запрос?
+        // room validation only
         PMessage message = getMessage(topicMessageId, room, playerId);
 
         return wrap(chat.getTopicMessages(message.getId()));
@@ -118,7 +117,7 @@ public class ChatService {
 
         if (topicMessageId != null) {
             // TODO по сути на каждый риплай, будет по 2 запроса, что не ок по производительности
-            // only validation
+            // room validation only
             getMessage(topicMessageId, room, playerId);
         }
 

@@ -684,6 +684,44 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
+    public void shouldGetAllTopicMessages_fail_whenTryToGetItFromOtherRoom() {
+        // given
+        assertPlayerInRoom("player", "validRoom");
+
+        // message in room, will be topic 1
+        // id = 1
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        // message for topic1
+        // id = 2
+        nowIs(12346L);
+        post(200, "/rest/chat/validRoom/messages/1/replies",
+                unquote("{text:'message2'}"));
+
+        // just another one message in room
+        // id = 3
+        nowIs(12347L);
+        post(200, "/rest/chat/validRoom/messages/1/replies",
+                unquote("{text:'message3'}"));
+
+        // can get all topic messages
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':1},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':1}]",
+                fix(get("/rest/chat/validRoom/messages/1/replies")));
+
+        // when
+        join("player", "otherRoom");
+
+        // then
+        // cant get topic messages from other room
+        assertGetError("java.lang.IllegalArgumentException: " +
+                "There is no message with id '1' in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages/1/replies");
+    }
+
+    @Test
     public void shouldPostTopicMessageForAnotherTopicMessage() {
         // given
         shouldGetAllTopicMessages();
