@@ -171,7 +171,7 @@ public abstract class AbstractRestControllerTest {
     }
 
     @After
-    public void checkErrors() {
+    public void checkErrors() throws Exception {
         SmartAssert.checkResult(getClass());
     }
 

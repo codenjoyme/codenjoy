@@ -22,104 +22,34 @@ package com.codenjoy.dojo.stuff;
  * #L%
  */
 
-import lombok.SneakyThrows;
 import org.junit.Assert;
-import org.junit.ComparisonFailure;
-import org.junit.Test;
-import org.junit.runner.Description;
-import org.junit.runner.Runner;
-import org.junit.runner.notification.RunNotifier;
+import org.junit.internal.runners.model.MultipleFailureException;
 
-
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.junit.Assert.fail;
+/**
+ * Где стоит использовать этот способ проверки?
+ *
+ * В простых юнит тестах, которые ранаются быстро, особенно
+ * если там используется approvals подход с
+ * assertEquals("expected data", actual.toString()) нет
+ * надобности в SmartAssert. А вот если тест интеграционный
+ * спринговый, рест например, когда время его выполнения десятки
+ * секунд, когда в тесте несколько assert проверок таких, что их
+ * нельзя объединить (approvals подходом в одну) - то лучше
+ * использовать SmartAssert.
+ *
+ * SmartAssert в каждом своем assertEquals накапливает
+ * возражения, а потом в tearDown теста методом
+ * SmartAssert.checkResult() делается проверка и слетают
+ * все "expected but was actual" сообщения.
+ */
+public class SmartAssert {
 
-public class SmartAssert extends Runner {
-
-    public static int STACK_TRACE_COUNT = 10;
-    
-    private Class test;
-    
-    private static Map<String, List<Failure>> failures = new ConcurrentHashMap<>();
-
-    public SmartAssert(Class test) {
-        super();
-        this.test = test;
-    }
-
-    @Override
-    public Description getDescription() {
-        return Description.createTestDescription(test, 
-                "Do not panic! You have performed wonders in this... colourful Universe.");
-    }
-
-    @Override
-    @SneakyThrows
-    public void run(RunNotifier notifier) {
-        System.out.println("running the tests from SmartAssert: " + test);
-        Object testObject = test.newInstance();
-        for (Method method : test.getMethods()) {
-            if (!method.isAnnotationPresent(Test.class)) continue;
-
-            notifier.fireTestStarted(description(method));
-
-            method.invoke(testObject);
-            checkResult(failures(test.getName()));
-
-            notifier.fireTestFinished(description(method));
-        }
-    }
-
-    private Description description(Method method) {
-        return Description.createTestDescription(test, method.getName());
-    }
-
-    private static class Failure {
-
-        private String actual;
-        private String expected;
-        private String message;
-        private List<StackTraceElement> where;
-
-        private Failure(String expected, String actual) {
-            this.expected = expected;
-            this.actual = actual;
-            this.message = new ComparisonFailure("", expected, actual).getMessage();
-            where = getLines(STACK_TRACE_COUNT);
-        }
-
-        private List<StackTraceElement> getLines(int count) {
-            StackTraceElement[] stackTrace = stackTrace();
-            String caller = getCaller().getClassName();
-            
-            return new LinkedList<>(){{
-                for (int i = 0; i < stackTrace.length; i++) {
-                    if (size() >= count) break;
-                    
-                    StackTraceElement element = stackTrace[i];
-                    if (element.getClassName().equals(caller)) {
-                        add(element);
-                    }
-                }
-            }};
-        }
-        
-        @Override
-        public String toString() {
-            // TODO почему-то тут idea не подхватывает expected: but was:
-            return  "org.junit.ComparisonFailure: " + message + "\n" +
-                    "\t\texpected: " + expected + "\n" +
-                    "\t\tactual:   " + actual + "\n" +
-                        where.stream()
-                            .map(s -> "\t" + s + "\n")
-                            .reduce("", (left, right) -> left + right);
-        }
-    }
+    private static Map<String, List<AssertionError>> failures = new ConcurrentHashMap<>();
 
     private static StackTraceElement[] stackTrace() {
         Exception exception = new Exception();
@@ -147,35 +77,31 @@ public class SmartAssert extends Runner {
         try {
             Assert.assertEquals(expected, actual);
         } catch (AssertionError e) {
-            failures().add(new Failure(toString(expected), toString(actual)));
+            failures().add(e);
         }
     }
 
-    private static String toString(Object value) {
-        return (value == null) ? null : value.toString();
-    }
-
-    private static void checkResult(List<Failure> list) {
+    private static void checkResult(List<AssertionError> list) throws Exception {
         if (list.isEmpty()) return;
-        
-        list.forEach(System.err::println);
+
+        List<Throwable> errors = new LinkedList<>(list);
         list.clear();
-        fail("There are errors");
+        throw new MultipleFailureException(errors);
     }
 
-    public static void checkResult() {
+    public static void checkResult() throws Exception {
         checkResult(failures());
     }
     
-    public static void checkResult(Class<?> caller) {
+    public static void checkResult(Class<?> caller) throws Exception {
         checkResult(failures(caller.getName()));
     }
 
-    private static List<Failure> failures() {
+    private static List<AssertionError> failures() {
         return failures(getCaller().getClassName());
     }
     
-    private static List<Failure> failures(String caller) {
+    private static List<AssertionError> failures(String caller) {
         if (!failures.containsKey(caller)) {
             failures.put(caller, new LinkedList<>());
         }
