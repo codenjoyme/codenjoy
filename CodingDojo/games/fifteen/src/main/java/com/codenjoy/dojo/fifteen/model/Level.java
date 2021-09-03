@@ -22,16 +22,32 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.field.AbstractLevel;
+
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.fifteen.Element.HERO;
+import static com.codenjoy.dojo.games.fifteen.Element.WALL;
 
-    int getSize();
+public class Level extends AbstractLevel {
 
-    Hero getHero();
+    public Level(String map) {
+        super(map);
+    }
 
-    List<Digit> getDigits();
+    public List<Digit> getDigits() {
+        return find((pt, el) -> new Digit(pt, el), DigitHandler.DIGITS);
+    }
 
-    List<Wall> getWalls();
+    public Hero getHero() {
+        List<Hero> heroes = find((pt, el) -> new Hero(pt), HERO);
+        if (heroes.isEmpty()) {
+            throw new RuntimeException("Hero not found on the map");
+        }
+        return heroes.get(0);
+    }
 
+    public List<Wall> getWalls() {
+        return find((pt, el) -> new Wall(pt), WALL);
+    }
 }

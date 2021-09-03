@@ -50,7 +50,7 @@ public class Fifteen implements Field {
     public Fifteen(Level level, Dice dice, GameSettings settings) {
         this.level = level;
         this.dice = dice;
-        size = level.getSize();
+        size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
     }
@@ -116,7 +116,7 @@ public class Fifteen implements Field {
     public void newGame(Player player) {
         walls = level.getWalls();
         digits = level.getDigits();
-        size = level.getSize();
+        size = level.size();
         if (!players.contains(player)) {
             players.add(player);
         }
