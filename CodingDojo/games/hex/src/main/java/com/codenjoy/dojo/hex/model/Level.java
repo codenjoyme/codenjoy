@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.hex.model.levels;
+package com.codenjoy.dojo.hex.model;
 
 /*-
  * #%L
@@ -23,40 +23,27 @@ package com.codenjoy.dojo.hex.model.levels;
  */
 
 
-import com.codenjoy.dojo.hex.model.Hero;
 import com.codenjoy.dojo.hex.model.items.Wall;
-import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.utils.LevelUtils;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.games.hex.Element.*;
 
-public class LevelImpl implements Level {
+public class Level extends AbstractLevel {
 
-    private LengthToXY xy;
-    private String map;
-
-    public LevelImpl(String map) {
-        this.map = LevelUtils.clear(map);
-        xy = new LengthToXY(getSize());
+    public Level(String map) {
+        super(map);
     }
 
-    @Override
-    public int getSize() {
-        return (int) Math.sqrt(map.length());
-    }
-
-    @Override
     public List<Hero> getHeroes() {
-        return LevelUtils.getObjects(xy, map,
+        return find(
                 Hero::new,
                 HERO1, HERO2);
     }
 
-    @Override
     public List<Wall> getWalls() {
-        return LevelUtils.getObjects(xy, map,
+        return find(
                 Wall::new,
                 WALL);
     }
