@@ -131,7 +131,7 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public int size() {
-        return level.getSize();
+        return level.size();
     }
 
     @Override

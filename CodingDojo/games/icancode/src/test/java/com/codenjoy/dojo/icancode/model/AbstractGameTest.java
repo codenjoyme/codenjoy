@@ -146,7 +146,7 @@ public abstract class AbstractGameTest {
     protected List<Level> createLevels(String[] boards) {
         List<Level> levels = new LinkedList<>();
         for (String board : boards) {
-            Level level = new LevelImpl(board, settings);
+            Level level = new Level(board, settings);
             levels.add(level);
         }
         return levels;

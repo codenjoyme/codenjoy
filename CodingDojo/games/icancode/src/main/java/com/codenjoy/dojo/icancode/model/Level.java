@@ -23,23 +23,103 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.games.icancode.Element;
+import com.codenjoy.dojo.icancode.model.items.perks.PerkUtils;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 
+import java.util.LinkedList;
 import java.util.List;
 
-public interface Level {
+public class Level extends AbstractLevel {
 
-    Cell getCell(int x, int y);
+    private Cell[] cells;
+    private GameSettings settings;
 
-    Cell getCell(Point pt);
+    public Level(String map, GameSettings settings) {
+        super(map);
+        cells = new Cell[map.length()];
+        this.settings = settings;
+        if (size*size != map.length()) {
+            throw new IllegalArgumentException("map must be square! " + size + "^2 != " + map.length());
+        }
 
-    int getSize();
+        fillMap(map);
+    }
 
-    <T extends Item> List<T> getItems(Class clazz);
+    private void fillMap(String map) {
+        int indexChar = 0;
 
-    Cell[] getCells();
+        for (int y = size - 1; y > -1; --y) {
+            for (int x = 0; x < size; ++x) {
 
-    boolean isBarrier(Point pt);
+                CellImpl cell = new CellImpl(x, y);
+                Element element = Element.valueOf(map.charAt(indexChar));
+                BaseItem item = create(element, settings);
 
-    void setField(Field field);
+                if (element.getLayer() != Element.Layers.LAYER1
+                    || element == Element.GOLD
+                    || PerkUtils.isPerk(element))
+                {
+                    Element atBottom = Element.valueOf(Element.FLOOR.ch());
+                    cell.add(create(atBottom, settings));
+                }
+
+                cell.add(item);
+                cells[xy.getLength(x, y)] = cell;
+                ++indexChar;
+            }
+        }
+    }
+
+    private BaseItem create(Element element, GameSettings settings) {
+        BaseItem item = ElementMapper.get(element);
+        if (Customizable.class.isAssignableFrom(item.getClass())) {
+            ((Customizable)item).init(settings);
+        }
+        return item;
+    }
+
+    public Cell getCell(int x, int y) {
+        return cells[xy.getLength(x, y)];
+    }
+
+    public Cell getCell(Point pt) {
+        return getCell(pt.getX(), pt.getY());
+    }
+
+    public Cell[] getCells() {
+        return cells.clone();
+    }
+
+    public boolean isBarrier(Point pt) {
+        return pt.isOutOf(size)
+                || !getCell(pt).passable();
+    }
+
+    public <T extends Item> List<T> getItems(Class clazz) {
+        List<T> result = new LinkedList<>();
+        List<T> items;
+
+        for (int i = 0; i < cells.length; ++i) {
+            items = cells[i].items();
+
+            for (int j = 0; j < items.size(); ++j) {
+                if (clazz.isInstance(items.get(j))) {
+                    result.add(items.get(j));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public void setField(Field field) {
+        List<FieldItem> items = getItems(FieldItem.class);
+
+        for (int i = 0; i < items.size(); ++i) {
+            items.get(i).setField(field);
+        }
+    }
 }
