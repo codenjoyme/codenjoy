@@ -23,13 +23,28 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
+import com.codenjoy.dojo.games.collapse.Element;
+import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.field.AbstractLevel;
+import com.codenjoy.dojo.utils.LevelUtils;
+
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.collapse.Element.BORDER;
+import static com.codenjoy.dojo.games.collapse.Element.NONE;
 
-    int getSize();
+public class Level extends AbstractLevel{
 
-    List<Cell> getCells();
+    public Level(String map) {
+        super(map);
+    }
 
-    List<Wall> getWalls();
+    public List<Cell> getCells() {
+        return find((pt, el) -> new Cell(pt, el.number()),
+                Element.valuesExcept(NONE, BORDER));
+    }
+
+    public List<Wall> getWalls() {
+        return find(Wall::new, BORDER);
+    }
 }

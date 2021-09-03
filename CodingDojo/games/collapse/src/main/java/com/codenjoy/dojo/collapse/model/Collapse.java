@@ -53,7 +53,7 @@ public class Collapse implements Field {
         this.settings = settings;
         cells = new Container(level.getCells());
         walls = new Container(level.getWalls());
-        size = level.getSize();
+        size = level.size();
         gameOver = false;
     }
 
