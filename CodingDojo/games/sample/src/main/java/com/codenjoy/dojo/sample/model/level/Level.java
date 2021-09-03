@@ -38,5 +38,5 @@ public interface Level {
     /**
      * @return Двумерное поле со всеми элементами на нем
      */
-    PointField field();
+    void saveTo(PointField field);
 }

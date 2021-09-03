@@ -71,11 +71,10 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public PointField field() {
-        PointField result = new PointField(size());
-        result.addAll(walls());
-        result.addAll(gold());
-        result.addAll(bombs());
-        return result;
+    public void saveTo(PointField field) {
+        field.size(size());
+        field.addAll(walls());
+        field.addAll(gold());
+        field.addAll(bombs());
     }
 }

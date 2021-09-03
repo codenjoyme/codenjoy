@@ -55,11 +55,18 @@ public class Sample implements Field {
     private Dice dice;
     private GameSettings settings;
 
-    public Sample(Level level, Dice dice, GameSettings settings) {
+    public Sample(Dice dice, GameSettings settings) {
         this.dice = dice;
         this.settings = settings;
-        players = new LinkedList<>();
-        field = level.field();
+        this.field = new PointField();
+        this.players = new LinkedList<>();
+
+        clearScore();
+    }
+
+    @Override
+    public void clearScore() {
+        settings.level().saveTo(field);
         field.init(this);
     }
 
@@ -169,7 +176,7 @@ public class Sample implements Field {
             result.add(player);
 
         });
-        field = level.field();
+        level.saveTo(field);
         return result;
     }
 

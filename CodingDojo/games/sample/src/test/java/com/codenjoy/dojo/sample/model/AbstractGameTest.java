@@ -86,11 +86,8 @@ public abstract class AbstractGameTest {
 
     public void givenFl(String map) {
         settings.string(LEVEL_MAP, map);
-
-        LevelImpl level = (LevelImpl) settings.level();
-
-        field = new Sample(level, dice, settings);
-        level.heroes().forEach(hero -> givenPlayer(hero));
+        field = new Sample(dice, settings);
+        settings.level().heroes().forEach(hero -> givenPlayer(hero));
     }
 
     public Player givenPlayer(Point pt) {
