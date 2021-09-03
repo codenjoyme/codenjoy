@@ -28,7 +28,6 @@ import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.Ticker;
 import com.codenjoy.dojo.expansion.model.levels.Level;
-import com.codenjoy.dojo.expansion.model.levels.LevelImpl;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
@@ -79,7 +78,7 @@ public class ExpansionGameLoggerTest {
 
     @NotNull
     private Level getLevel() {
-        return new LevelImpl("name", "   1        2   ", 4);
+        return new Level("name", "   1        2   ", 4);
     }
 
     @Test

@@ -358,7 +358,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public int size() {
-        return level.getSize();
+        return level.size();
     }
 
     private boolean isBarrier(int x, int y) {
