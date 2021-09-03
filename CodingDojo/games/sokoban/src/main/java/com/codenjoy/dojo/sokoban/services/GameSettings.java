@@ -24,8 +24,7 @@ package com.codenjoy.dojo.sokoban.services;
 
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
-import com.codenjoy.dojo.sokoban.model.levels.Level;
-import com.codenjoy.dojo.sokoban.model.levels.LevelImpl;
+import com.codenjoy.dojo.sokoban.model.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -68,6 +67,6 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public Level level() {
-        return new LevelImpl(loadLevelMap());
+        return new Level(loadLevelMap());
     }
 }

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.levels;
+package com.codenjoy.dojo.sokoban.model;
 
 /*-
  * #%L
@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sokoban.model.levels;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 import com.codenjoy.dojo.sokoban.model.items.*;
 import com.codenjoy.dojo.utils.LevelUtils;
 
@@ -31,68 +32,41 @@ import java.util.List;
 
 import static com.codenjoy.dojo.games.sokoban.Element.*;
 
-public class LevelImpl implements Level {
+public class Level extends AbstractLevel {
 
-    private LengthToXY xy;
     private int marksToWin;
-    private String map;
 
-    public LevelImpl(String map) {
-        this.map = LevelUtils.clear(map);
-        xy = new LengthToXY(getSize());
+    public Level(String map) {
+        super(map);
         this.marksToWin = getMarks().size();
     }
 
-    public LevelImpl(String map, int marksToWin) {
-        this.map = map;
-        xy = new LengthToXY(getSize());
+    public Level(String map, int marksToWin) {
+        super(map);
         this.marksToWin = marksToWin;
     }
 
-    @Override
-    public int getSize() {
-        return (int) Math.sqrt(map.length());
-    }
-
-    @Override
     public int getMarksToWin() {
         return marksToWin;
     }
 
-    @Override
     public List<Hero> getHero() {
-        return LevelUtils.getObjects(xy, map,
-                Hero::new,
-                HERO);
-
+        return find(Hero::new, HERO);
     }
 
-    @Override
     public List<Wall> getWalls() {
-        return LevelUtils.getObjects(xy, map,
-                Wall::new,
-                WALL);
+        return find(Wall::new, WALL);
     }
 
-    @Override
     public List<Box> getBoxes() {
-        return LevelUtils.getObjects(xy, map,
-                Box::new,
-                BOX);
+        return find(Box::new, BOX);
     }
 
-    @Override
     public List<Mark> getMarks() {
-        return LevelUtils.getObjects(xy, map,
-                Mark::new,
-                MARK_TO_WIN);
+        return find(Mark::new, MARK_TO_WIN);
     }
 
-    @Override
     public List<BoxOnTheMark> getBoxesOnTheMarks() {
-        return LevelUtils.getObjects(xy, map,
-                BoxOnTheMark::new,
-                BOX_ON_THE_MARK);
+        return find(BoxOnTheMark::new, BOX_ON_THE_MARK);
     }
-
 }

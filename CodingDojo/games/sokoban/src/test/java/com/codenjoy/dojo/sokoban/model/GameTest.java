@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.sokoban.services.TextIOHelper;
 import com.codenjoy.dojo.sokoban.model.items.Box;
 import com.codenjoy.dojo.sokoban.model.items.Hero;
-import com.codenjoy.dojo.sokoban.model.levels.LevelImpl;
 import com.codenjoy.dojo.sokoban.model.items.Mark;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -74,11 +73,11 @@ public class GameTest {
     private void givenF1(String board, int marksToWin) {
         settings.string(LEVEL_MAP, board);
 
-        LevelImpl level;
+        Level level;
         if (marksToWin != 0) {
-            level = new LevelImpl(board, marksToWin);
+            level = new Level(board, marksToWin);
         } else {
-            level = new LevelImpl(board);
+            level = new Level(board);
         }
         hero = level.getHero().get(0);
 
