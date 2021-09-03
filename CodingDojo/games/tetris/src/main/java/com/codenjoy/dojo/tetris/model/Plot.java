@@ -27,11 +27,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.games.tetris.Element;
 
-/**
- * User: serhiy.zelenin
- * Date: 5/9/12
- * Time: 6:55 PM
- */
 public class Plot extends PointImpl implements State<Element, Player> {
 
     private Element color;

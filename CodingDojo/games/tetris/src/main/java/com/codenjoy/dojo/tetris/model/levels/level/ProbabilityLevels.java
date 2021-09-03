@@ -33,11 +33,6 @@ import static com.codenjoy.dojo.tetris.model.Type.*;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED;
 
 
-/**
- * User: oleksandr.baglai
- * Date: 9/23/12
- * Time: 3:18 PM
- */
 public class ProbabilityLevels extends Levels {
 
     public ProbabilityLevels(Dice dice, FigureQueue queue) {

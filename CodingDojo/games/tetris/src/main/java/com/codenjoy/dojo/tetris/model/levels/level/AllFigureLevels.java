@@ -32,11 +32,6 @@ import com.codenjoy.dojo.tetris.model.Levels;
 
 import static com.codenjoy.dojo.tetris.model.Type.*;
 
-/**
- * User: oleksandr.baglai
- * Date: 9/23/12
- * Time: 3:18 PM
- */
 public class AllFigureLevels extends Levels {
 
     public AllFigureLevels(Dice dice, FigureQueue queue) {

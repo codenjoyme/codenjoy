@@ -33,9 +33,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Created by Sergii_Zelenin on 7/10/2016.
- */
 public class Tetris implements Field {
 
     protected FigureQueue queue;

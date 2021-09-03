@@ -33,11 +33,6 @@ import static com.codenjoy.dojo.tetris.model.Type.*;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.WITHOUT_OVERFLOWN_LINES_REMOVED;
 
 
-/**
- * User: oleksandr.baglai
- * Date: 9/23/12
- * Time: 3:18 PM
- */
 public class ProbabilityWithoutOverflownLevels extends Levels {
 
     public static final int LINES_REMOVED_FOR_NEXT_LEVEL = 20;
