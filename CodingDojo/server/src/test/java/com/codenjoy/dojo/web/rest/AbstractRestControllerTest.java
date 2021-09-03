@@ -224,6 +224,10 @@ public abstract class AbstractRestControllerTest {
         return deal;
     }
 
+    protected void assertPlayerInRoom(String id, String room) {
+        Player player = players.get(id);
+        assertEquals(room, player.getRoom());
+    }
 
     protected void join(String id, String room) {
         Player player = players.get(id);

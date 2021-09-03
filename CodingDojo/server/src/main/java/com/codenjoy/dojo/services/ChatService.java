@@ -94,6 +94,8 @@ public class ChatService {
     // TODO я могу получить сообщение из другой комнаты, главное задать
     //      room плеера делающего запрос, а вот id можно указать любое
     public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
+        // TODO по сути будет по 2 запроса, что не ок по производительности
+        //      можно было бы валидацию зашить во второй запрос?
         PMessage message = getMessage(topicMessageId, room, playerId);
 
         return wrap(chat.getTopicMessages(message.getId()));
@@ -111,11 +113,14 @@ public class ChatService {
         return wrap(message);
     }
 
-    // TODO так же и тут, я могу запостить сообщение для topic-чата который находится
-    //      в другой комнате, для этого мне достаточно выбрать id сообщения из другого чата,
-    //      а так же указать комнату в которой я сейчас нахожусь.
     public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
+
+        if (topicMessageId != null) {
+            // TODO по сути на каждый риплай, будет по 2 запроса, что не ок по производительности
+            // only validation
+            getMessage(topicMessageId, room, playerId);
+        }
 
         Chat.Message message = Chat.Message.builder()
                 .room(room)
@@ -125,7 +130,7 @@ public class ChatService {
                 .text(text)
                 .build();
 
-        chat.saveMessage(message);
+        message = chat.saveMessage(message);
 
         return wrap(message);
     }
