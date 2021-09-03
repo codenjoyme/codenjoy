@@ -22,7 +22,6 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
-import com.codenjoy.dojo.football.model.levels.LevelImpl;
 import com.codenjoy.dojo.football.services.Events;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -58,12 +57,12 @@ public class MultiplayerTest {
     private Dice dice;
     private Football field;
     private EventsListenersAssert events;
-    private LevelImpl level;
+    private Level level;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        level = new LevelImpl(
+        level = new Level(
                 "☼☼┴┴☼☼\n" +
                 "☼    ☼\n" +
                 "☼  ∙ ☼\n" +
@@ -135,7 +134,7 @@ public class MultiplayerTest {
         List<String> board2 = boardLines(game2);
         List<String> board3 = boardLines(game3);
 
-        String empty = repeat(" ", level.getSize());
+        String empty = repeat(" ", level.size());
 
         List<String> result = new ArrayList<>();
         for (int i = 0; i < board1.size(); i++) {

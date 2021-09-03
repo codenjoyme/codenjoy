@@ -26,7 +26,6 @@ import com.codenjoy.dojo.football.model.items.Ball;
 import com.codenjoy.dojo.football.model.items.Goal;
 import com.codenjoy.dojo.football.model.items.Hero;
 import com.codenjoy.dojo.football.model.items.Wall;
-import com.codenjoy.dojo.football.model.levels.Level;
 import com.codenjoy.dojo.football.services.Events;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.games.football.Element;
@@ -59,7 +58,7 @@ public class Football implements Field {
     public Football(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         walls = level.getWalls();
-        size = level.getSize();
+        size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
         balls = level.getBalls();
