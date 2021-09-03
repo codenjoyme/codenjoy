@@ -63,7 +63,7 @@ public class Quake2D implements Field {
         counterOfAbility = ABILITY_TIME_EXIST;
         this.dice = dice;
         walls = level.getWalls();
-        size = level.getSize();
+        size = level.size();
         abilities = new LinkedList<>();
         players = new LinkedList<>();
         bullets = new LinkedList<>();
