@@ -26,11 +26,12 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
-import com.codenjoy.dojo.sample.model.level.Level;
-import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.sample.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.BoardUtils;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -168,7 +169,7 @@ public class Sample implements Field {
 
     @Override
     public List<Player> load(String board, Supplier<Player> creator) {
-        LevelImpl level = new LevelImpl(board);
+        Level level = new Level(board);
         List<Player> result = new LinkedList<>();
         level.heroes().forEach(hero -> {
             Player player = creator.get();
