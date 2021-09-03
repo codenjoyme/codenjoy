@@ -39,7 +39,7 @@ public class Level extends AbstractLevel {
     }
 
     public List<Hero> getHero() {
-        return find((pt, el) -> new Hero(pt),
+        return find(Hero::new,
                 HERO,
                 HERO_W_BALL,
                 TEAM_MEMBER,
@@ -49,12 +49,11 @@ public class Level extends AbstractLevel {
     }
 
     public List<Wall> getWalls() {
-        return find((pt, el) -> new Wall(pt),
-                WALL);
+        return find(Wall::new, WALL);
     }
 
     public List<Ball> getBalls() {
-        return find((pt, el) -> new Ball(pt),
+        return find(Ball::new,
                 BALL,
                 STOPPED_BALL,
                 HERO_W_BALL,
@@ -65,12 +64,10 @@ public class Level extends AbstractLevel {
     }
 
     public List<Goal> getTopGoals() {
-        return find(Goal::new,
-                TOP_GOAL);
+        return find(Goal::new, TOP_GOAL);
     }
 
     public List<Goal> getBottomGoals() {
-        return find(Goal::new,
-                BOTTOM_GOAL);
+        return find(Goal::new, BOTTOM_GOAL);
     }
 }

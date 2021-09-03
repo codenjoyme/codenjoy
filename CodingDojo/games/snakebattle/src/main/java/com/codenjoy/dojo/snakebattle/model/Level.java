@@ -36,6 +36,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.games.snakebattle.Element.*;
 import static com.codenjoy.dojo.services.Direction.*;
+import static java.util.function.Function.identity;
 
 public class Level extends AbstractLevel {
 
@@ -44,8 +45,7 @@ public class Level extends AbstractLevel {
     }
 
     public Hero getHero(Field field) {
-        Point point = find(
-                pt -> pt,
+        Point point = find(identity(),
                 HEAD_DOWN,
                 HEAD_UP,
                 HEAD_LEFT,
@@ -53,10 +53,9 @@ public class Level extends AbstractLevel {
                 HEAD_SLEEP,
                 HEAD_DEAD,
                 HEAD_EVIL,
-                HEAD_FLY)
-                .stream()
-                .findAny()
-                .orElse(null);
+                HEAD_FLY).stream()
+                        .findAny()
+                        .orElse(null);
 
         if (point == null) {
             return null;

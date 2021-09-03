@@ -42,10 +42,10 @@ public class Level extends AbstractLevel {
     }
 
     public List<Wall> getWalls() {
-        return find(new HashMap<>(){{
-                    put(VERTICAL_WALL, pt -> new Wall(pt, VERTICAL));
-                    put(HORIZONTAL_WALL, pt -> new Wall(pt, HORIZONTAL));
-                }});
+        return find(new HashMap<>() {{
+            put(VERTICAL_WALL, pt -> new Wall(pt, VERTICAL));
+            put(HORIZONTAL_WALL, pt -> new Wall(pt, HORIZONTAL));
+        }});
     }
 
     public Ball getBall() {

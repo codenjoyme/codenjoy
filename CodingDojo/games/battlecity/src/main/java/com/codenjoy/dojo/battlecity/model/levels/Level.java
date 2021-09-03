@@ -46,11 +46,6 @@ public class Level extends AbstractLevel {
         this.dice = dice;
     }
 
-    @Override
-    protected void fill(PointField field) {
-        // do nothing
-    }
-
     public List<Wall> getWalls() {
         return find(Wall::new, WALL);
     }
@@ -69,24 +64,24 @@ public class Level extends AbstractLevel {
 
     public List<Tank> getAiTanks() {
         return new LinkedList<>(){{
-            addAll(find((pt, el) -> new AITank(pt, DOWN, dice), AI_TANK_DOWN));
-            addAll(find((pt, el) -> new AITank(pt, UP, dice), AI_TANK_UP));
-            addAll(find((pt, el) -> new AITank(pt, LEFT, dice), AI_TANK_LEFT));
+            addAll(find((pt, el) -> new AITank(pt, DOWN, dice),  AI_TANK_DOWN));
+            addAll(find((pt, el) -> new AITank(pt, UP, dice),    AI_TANK_UP));
+            addAll(find((pt, el) -> new AITank(pt, LEFT, dice),  AI_TANK_LEFT));
             addAll(find((pt, el) -> new AITank(pt, RIGHT, dice), AI_TANK_RIGHT));
         }};
     }
 
     public List<Tank> getTanks() {
         return new LinkedList<>(){{
-            addAll(find((pt, el) -> new Tank(pt, DOWN), TANK_DOWN, OTHER_TANK_DOWN));
-            addAll(find((pt, el) -> new Tank(pt, UP), TANK_UP, OTHER_TANK_UP));
-            addAll(find((pt, el) -> new Tank(pt, LEFT), TANK_LEFT, OTHER_TANK_LEFT));
+            addAll(find((pt, el) -> new Tank(pt, DOWN),  TANK_DOWN,  OTHER_TANK_DOWN));
+            addAll(find((pt, el) -> new Tank(pt, UP),    TANK_UP,    OTHER_TANK_UP));
+            addAll(find((pt, el) -> new Tank(pt, LEFT),  TANK_LEFT,  OTHER_TANK_LEFT));
             addAll(find((pt, el) -> new Tank(pt, RIGHT), TANK_RIGHT, OTHER_TANK_RIGHT));
         }};
     }
 
     public List<Border> getBorders() {
-        return find((pt, el) -> new Border(pt), BATTLE_WALL);
+        return find(Border::new, BATTLE_WALL);
     }
 
     @Override

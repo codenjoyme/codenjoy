@@ -37,7 +37,7 @@ public class Level extends AbstractLevel {
     }
 
     public List<Plot> plots() {
-        return find((pt, el) -> new Plot(pt.getX(), pt.getY(), el),
+        return find(Plot::new,
                 Element.valuesExcept(NONE));
 
     }

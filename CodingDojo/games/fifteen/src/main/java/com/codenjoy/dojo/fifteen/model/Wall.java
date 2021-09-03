@@ -32,10 +32,6 @@ import com.codenjoy.dojo.services.State;
  */
 public class Wall extends PointImpl implements State<Element, Player> {
 
-    public Wall(int x, int y) {
-        super(x, y);
-    }
-
     public Wall(Point point) {
         super(point);
     }

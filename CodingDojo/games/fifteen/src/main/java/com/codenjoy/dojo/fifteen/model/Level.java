@@ -48,6 +48,6 @@ public class Level extends AbstractLevel {
     }
 
     public List<Wall> getWalls() {
-        return find((pt, el) -> new Wall(pt), WALL);
+        return find(Wall::new, WALL);
     }
 }

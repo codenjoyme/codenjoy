@@ -47,7 +47,9 @@ public class Level extends AbstractLevel {
     }
 
     public List<Ability> getAbility() {
-        return find(Ability::new, SUPER_WEAPON, SUPER_DEFENCE);
+        return find(Ability::new,
+                SUPER_WEAPON,
+                SUPER_DEFENCE);
     }
 
     public List<Wall> getWalls() {

@@ -44,13 +44,12 @@ public class Level extends AbstractLevel {
     }
 
     public List<Chip> chips(Field field) {
-        return find(
-                new HashMap<>(){{
-                    put(WHITE,      pt -> new Chip(true, pt, field));
-                    put(WHITE_TURN, pt -> new Chip(true, pt, field));
-                    put(BLACK,      pt -> new Chip(false, pt, field));
-                    put(BLACK_TURN, pt -> new Chip(false, pt, field));
-                }});
+        return find(new HashMap<>() {{
+            put(WHITE, pt -> new Chip(true, pt, field));
+            put(WHITE_TURN, pt -> new Chip(true, pt, field));
+            put(BLACK, pt -> new Chip(false, pt, field));
+            put(BLACK_TURN, pt -> new Chip(false, pt, field));
+        }});
     }
 
     public boolean currentColor() {
