@@ -24,7 +24,6 @@ package com.codenjoy.dojo.moebius.services;
 
 
 import com.codenjoy.dojo.moebius.model.Level;
-import com.codenjoy.dojo.moebius.model.LevelImpl;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -66,7 +65,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public Level level() {
-        return new LevelImpl(integer(SIZE));
+        return new Level(integer(SIZE));
     }
 
 }

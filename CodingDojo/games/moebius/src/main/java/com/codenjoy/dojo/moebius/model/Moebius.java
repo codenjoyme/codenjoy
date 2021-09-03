@@ -47,7 +47,7 @@ public class Moebius implements Field {
     public Moebius(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         this.level = level;
-        this.size = level.getSize();
+        this.size = level.size();
         this.settings = settings;
     }
 

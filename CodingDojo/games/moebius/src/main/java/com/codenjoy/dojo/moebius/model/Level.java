@@ -23,11 +23,45 @@ package com.codenjoy.dojo.moebius.model;
  */
 
 
+import com.codenjoy.dojo.services.field.AbstractLevel;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.moebius.Element.*;
 
-    int getSize();
+public class Level extends AbstractLevel {
 
-    List<Line> getLines();
+    public Level(int size) {
+        super(buildMap(size));
+    }
+
+    public Level(String map) {
+        super(map);
+    }
+
+    private static String buildMap(int size) {
+        StringBuilder board = new StringBuilder();
+        board.append(pad(size, '╔', '═', '╗'));
+        for (int y = 1; y < size - 1; y++) {
+            board.append(pad(size, '║', ' ', '║'));
+        }
+        board.append(pad(size, '╚', '═', '╝'));
+        return board.toString();
+    }
+
+    private static String pad(int len, char left, char middle, char right) {
+        return left + StringUtils.rightPad("", len - 2, middle) + right;
+    }
+
+    public List<Line> getLines() {
+        return find(Line::new,
+                LEFT_UP,
+                UP_RIGHT,
+                RIGHT_DOWN,
+                DOWN_LEFT,
+                LEFT_RIGHT,
+                UP_DOWN,
+                CROSS);
+    }
 }
