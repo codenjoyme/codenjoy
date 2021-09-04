@@ -101,6 +101,21 @@ public class GameRoomTest {
     }
 
     @Test
+    public void testPlayerContains() {
+        // given
+        GameRoom room = createRoom();
+
+        room.join(newDeal()); // player0
+        room.join(newDeal()); // player1
+
+        // when then
+        assertEquals(true, room.containsPlayer("player0"));
+        assertEquals(true, room.containsPlayer("player1"));
+        assertEquals(false, room.containsPlayer("player2"));
+        assertEquals(false, room.containsPlayer(null));
+    }
+
+    @Test
     public void isAvailable_gameSettingsNotProvided() {
         // given
         GameRoom room = createRoom();
