@@ -56,7 +56,9 @@ public class Deals implements Iterable<Deal>, Tickable {
     private Consumer<Deal> onAdd;
     private Consumer<Deal> onRemove;
     private ReadWriteLock lock = new ReentrantReadWriteLock();
-    private Spreader spreader = new Spreader();
+
+    @Autowired
+    private Spreader spreader;
 
     @Autowired
     protected RoomService roomService;
@@ -409,10 +411,5 @@ public class Deals implements Iterable<Deal>, Tickable {
                 .map(Deal::getRoom)
                 .distinct()
                 .collect(toList());
-    }
-
-    // TODO test me
-    public boolean fieldInRoom(int fieldId, String room) {
-        return spreader.fieldInRoom(fieldId, room);
     }
 }

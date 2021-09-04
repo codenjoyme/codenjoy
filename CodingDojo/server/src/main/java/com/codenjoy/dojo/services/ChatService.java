@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import lombok.AllArgsConstructor;
@@ -42,7 +43,7 @@ public class ChatService {
     private Chat chat;
     private TimeService time;
     private Registration registration;
-    private Deals deals;
+    private Spreader spreader;
     private final Map<String, String> playerNames = new ConcurrentHashMap<>();
 
     public List<PMessage> getMessages(String room, int count,
@@ -100,7 +101,7 @@ public class ChatService {
     }
 
     private void validateTopicExists(int topicMessageId, String room) {
-        if (deals.fieldInRoom(topicMessageId, room)) {
+        if (spreader.fieldInRoom(topicMessageId, room)) {
             // you can get field messages like topic messages
             return;
         }

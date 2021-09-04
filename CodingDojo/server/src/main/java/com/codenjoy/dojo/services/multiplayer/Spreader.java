@@ -26,6 +26,7 @@ import com.codenjoy.dojo.services.Deal;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
+@Component
 public class Spreader {
 
     private Multimap<String, GameRoom> rooms = LinkedHashMultimap.create();
