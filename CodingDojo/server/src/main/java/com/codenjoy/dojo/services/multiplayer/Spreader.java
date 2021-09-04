@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
@@ -130,10 +131,10 @@ public class Spreader {
         return rooms;
     }
 
-    // TODO test me
-    public boolean fieldInRoom(int fieldId, String roomName) {
-        return rooms.get(roomName).stream()
-                .anyMatch(room -> room.field().id() == fieldId);
+    public Optional<GameRoom> gameRoom(String room, String playerId) {
+        return rooms.get(room).stream()
+                .filter(r -> r.containsPlayer(playerId))
+                .findFirst();
     }
 
 }

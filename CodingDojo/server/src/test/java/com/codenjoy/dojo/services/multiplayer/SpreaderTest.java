@@ -31,16 +31,15 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.google.common.collect.Iterators;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.mock;
 
 public class SpreaderTest {
 
@@ -48,7 +47,7 @@ public class SpreaderTest {
 
     private final String room = "room";
     private final MultiplayerType multiplayerType = MultiplayerType.MULTIPLE;
-    private final Supplier<GameField> gameFiled = () -> NullGameField.INSTANCE;
+    private final Supplier<GameField> gameFiled = () -> mock(GameField.class);
     private List<Player> players = new LinkedList<>();
 
     private Player newPlayer() {
@@ -140,5 +139,51 @@ public class SpreaderTest {
                         .map(player -> String.valueOf(player.getTeamId()))
                         .collect(Collectors.joining("-")))
                 .collect(Collectors.joining(" | "));
+    }
+
+    @Test
+    public void testGetGameRoom() {
+        // given
+        int roomSize = 10;
+        SettingsReader settings = settings(roomSize, 1);
+
+        Deal deal1 = newDeal(0, settings);
+        Deal deal2 = newDeal(0, settings);
+
+        spreader.fieldFor(deal1, room, multiplayerType, roomSize, 0, gameFiled);
+        spreader.fieldFor(deal2, room, multiplayerType, roomSize, 0, gameFiled);
+
+        // when
+        Optional<GameRoom> optional1 = spreader.gameRoom(room, deal1.getPlayerId());
+        Optional<GameRoom> optional2 = spreader.gameRoom(room, deal2.getPlayerId());
+
+        // then
+        assertEquals(true, optional1.isPresent());
+        GameRoom room1 = optional1.get();
+
+        assertEquals(true, optional2.isPresent());
+        GameRoom room2 = optional2.get();
+
+        assertSame(room1, room2);
+
+        assertEquals(room, room1.room());
+        assertEquals(2, room1.countPlayers());
+        assertEquals(true, room1.containsPlayer(deal1.getPlayerId()));
+        assertEquals(true, room1.containsPlayer(deal2.getPlayerId()));
+        assertEquals(true, room1.containsDeal(deal1));
+        assertEquals(true, room1.containsDeal(deal2));
+        assertEquals(true, room1.containsTeam(0));
+        assertEquals(false, room1.containsTeam(1));
+        assertEquals(false, room1.isEmpty());
+        assertEquals(true, room1.isFree());
+        assertEquals(2, room1.countMembers(0));
+        assertEquals(0, room1.countMembers(1));
+        assertEquals(2, room1.countPlayers());
+        assertEquals(true, room1.isFor(room1.field()));
+        assertEquals(true, room1.deals().containsAll(Arrays.asList(deal1, deal2)));
+
+        // when then
+        assertEquals(false, spreader.gameRoom("otherRoom", deal1.getPlayerId()).isPresent());
+        assertEquals(false, spreader.gameRoom(room, "otherPlayer").isPresent());
     }
 }
