@@ -24,7 +24,7 @@
 /CodingDojo/games/**/libs
 /CodingDojo/games/**/README.txt
 /CodingDojo/games/**/webapp/resources/user/*.zip
-/CodingDojo/games/**/pitest
+/**/pitest/**
 /CodingDojo/*-portable
 /CodingDojo/stuff
 /CodingDojo/.run
@@ -41,5 +41,4 @@
 /CodingDojo/games/mollymage/src/main/dotNet/MollyMage/packages/**
 **/node_modules/
 **/package-lock.json
-
 .DS_Store
