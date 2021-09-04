@@ -57,13 +57,13 @@ public class Football implements Field {
 
     public Football(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        walls = level.getWalls();
+        walls = level.walls();
         size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
-        balls = level.getBalls();
-        topGoals = level.getTopGoals();
-        bottomGoals = level.getBottomGoals();
+        balls = level.balls();
+        topGoals = level.topGoals();
+        bottomGoals = level.bottomGoals();
 
         for (Ball ball : balls) {
             ball.init(this);

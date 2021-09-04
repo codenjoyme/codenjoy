@@ -59,17 +59,15 @@ public class Level extends AbstractLevel {
     private void fillMap(String map) {
         fill(map, 1, (cell, ch) -> {
             Element element = Element.valueOf(ch.charAt(0));
-            BaseItem item = getBaseItem(element);
+            BaseItem item = baseItem(element);
 
             if (element.getLayer() != Element.Layers.LAYER1) {
                 Element atBottom = Element.valueOf(Element.FLOOR.ch());
-                cell.addItem(getBaseItem(atBottom));
+                cell.addItem(baseItem(atBottom));
             }
             cell.addItem(item);
         });
     }
-
-
 
     public class ChHeroForces extends HeroForces {
         public ChHeroForces(Hero hero) {
@@ -123,35 +121,35 @@ public class Level extends AbstractLevel {
         }
     }
 
-    private BaseItem getBaseItem(Element element) {
+    private BaseItem baseItem(Element element) {
         return constructor().withParameterTypes(Element.class)
                             .in(ElementMapper.getItsClass(element))
                             .newInstance(element);
     }
 
-    public int getViewSize() {
+    public int viewSize() {
         return viewSize;
     }
 
-    public Cell getCell(int x, int y) {
+    public Cell cell(int x, int y) {
         return cells[xy.getLength(x, y)];
     }
 
-    public Cell getCell(Point point) {
-        return getCell(point.getX(), point.getY());
+    public Cell cell(Point point) {
+        return cell(point.getX(), point.getY());
     }
 
-    public Cell[] getCells() {
+    public Cell[] cells() {
         return cells.clone();
     }
 
     public boolean isBarrier(int x, int y) {
         boolean isAbroad = x > size - 1 || x < 0 || y < 0 || y > size - 1;
 
-        return isAbroad || !getCell(x, y).isPassable();
+        return isAbroad || !cell(x, y).isPassable();
     }
 
-    public <T> List<T> getItems(Class<T> clazz) {
+    public <T> List<T> items(Class<T> clazz) {
         List<T> result = new LinkedList<>();
         for (Cell cell : cells) {
             for (Item item : cell.getItems()) {
@@ -163,7 +161,7 @@ public class Level extends AbstractLevel {
         return result;
     }
 
-    public List<Cell> getCellsWith(Class with) {
+    public List<Cell> cellsWith(Class with) {
         List<Cell> result = new LinkedList<>();
         for (Cell cell : cells) {
             for (Item item : cell.getItems()) {
@@ -176,7 +174,7 @@ public class Level extends AbstractLevel {
         return result;
     }
 
-    public List<Cell> getCellsWith(Predicate<Cell> is) {
+    public List<Cell> cellsWith(Predicate<Cell> is) {
         List<Cell> result = new LinkedList<>();
         for (Cell cell : cells) {
             if (is.test(cell)) {
@@ -186,15 +184,15 @@ public class Level extends AbstractLevel {
         return result;
     }
 
-    public void setField(IField field) {
-        List<FieldItem> items = getItems(FieldItem.class);
+    public void field(IField field) {
+        List<FieldItem> items = items(FieldItem.class);
 
         for (int i = 0; i < items.size(); ++i) {
             items.get(i).setField(field);
         }
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 }

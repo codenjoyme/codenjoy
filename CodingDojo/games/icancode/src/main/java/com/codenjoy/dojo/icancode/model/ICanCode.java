@@ -62,7 +62,7 @@ public class ICanCode implements Tickable, Field {
     public ICanCode(Level level, Dice dice, boolean contest, GameSettings settings) {
         this.level = level;
         this.settings = settings;
-        level.setField(this);
+        level.field(this);
         this.dice = dice;
         this.contest = contest;
         players = new LinkedList();
@@ -90,11 +90,11 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public void tick() {
-        level.getItems(HeroItem.class).stream()
+        level.items(HeroItem.class).stream()
                 .map(it -> (HeroItem)it)
                 .forEach(HeroItem::tick);
 
-        level.getItems(Tickable.class).stream()
+        level.items(Tickable.class).stream()
                 .filter(it -> !(it instanceof HeroItem))
                 .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
                 .map(it -> (Tickable)it)
@@ -106,7 +106,7 @@ public class ICanCode implements Tickable, Field {
 
         // после всех перемещений, если герой в полете его надо
         // на 3й леер, иначе приземлить
-        level.getItems(HeroItem.class).stream()
+        level.items(HeroItem.class).stream()
                 .map(it -> (HeroItem)it)
                 .forEach(HeroItem::fixLayer);
 
@@ -136,12 +136,12 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public List<Zombie> zombies() {
-        return level.getItems(Zombie.class);
+        return level.items(Zombie.class);
     }
 
     @Override
     public List<Laser> lasers() {
-        return level.getItems(Laser.class);
+        return level.items(Laser.class);
     }
 
     @Override
@@ -153,22 +153,22 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public List<LaserMachine> laserMachines() {
-        return level.getItems(LaserMachine.class);
+        return level.items(LaserMachine.class);
     }
 
     @Override
     public List<ZombiePot> zombiePots() {
-        return level.getItems(ZombiePot.class);
+        return level.items(ZombiePot.class);
     }
 
     @Override
     public List<Floor> floor() {
-        return level.getItems(Floor.class);
+        return level.items(Floor.class);
     }
 
     @Override
     public List<Perk> availablePerks() {
-        return level.getItems(Perk.class);
+        return level.items(Perk.class);
     }
 
     @Override
@@ -178,25 +178,25 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public Cell getStartPosition() {
-        List<Item> items = level.getItems(Start.class);
+        List<Item> items = level.items(Start.class);
         int index = dice.next(items.size());
         return items.get(index).getCell();
     }
 
     @Override
     public Cell getEndPosition() {
-        return level.getItems(Exit.class).get(0).getCell();
+        return level.items(Exit.class).get(0).getCell();
     }
 
     @Override
     public void move(Item item, Point pt) {
-        Cell cell = level.getCell(pt);
+        Cell cell = level.cell(pt);
         cell.add(item);
         cell.comeIn(item);
     }
 
     public Optional<Perk> perkAt(Point pt) {
-        Cell cell = level.getCell(pt);
+        Cell cell = level.cell(pt);
         return availablePerks().stream()
                 .filter(perk -> perk.getCell().equals(cell))
                 .findAny();
@@ -204,7 +204,7 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public Cell getCell(Point pt) {
-        return level.getCell(pt);
+        return level.cell(pt);
     }
 
     @Override
@@ -395,7 +395,7 @@ public class ICanCode implements Tickable, Field {
 
             @Override
             public BiFunction<Integer, Integer, State> elements() {
-                Cell[] cells = ICanCode.this.level.getCells();
+                Cell[] cells = ICanCode.this.level.cells();
                 return (index, layer) -> cells[index].item(layer);
             }
 

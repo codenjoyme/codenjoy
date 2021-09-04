@@ -79,7 +79,7 @@ public class GameTest {
         } else {
             level = new Level(board);
         }
-        hero = level.getHero().get(0);
+        hero = level.hero().get(0);
 
         game = new Sokoban(level, dice, settings);
         listener = mock(EventListener.class);

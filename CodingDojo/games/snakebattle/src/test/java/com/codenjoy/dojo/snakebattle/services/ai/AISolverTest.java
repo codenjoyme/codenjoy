@@ -72,7 +72,7 @@ public class AISolverTest {
 
         SnakeBoard game = new SnakeBoard(level, dice, settings);
 
-        Hero hero = level.getHero(game);
+        Hero hero = level.hero(game);
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener, settings);
 

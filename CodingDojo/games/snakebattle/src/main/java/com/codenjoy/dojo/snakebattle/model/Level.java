@@ -44,7 +44,7 @@ public class Level extends AbstractLevel {
         super(map);
     }
 
-    public Hero getHero(Field field) {
+    public Hero hero(Field field) {
         Point point = find(identity(),
                 HEAD_DOWN,
                 HEAD_UP,
@@ -65,19 +65,19 @@ public class Level extends AbstractLevel {
     }
 
     private Hero parseSnake(Point head, Field field) {
-        Direction direction = getDirection(head);
+        Direction direction = direction(head);
         Hero hero = new Hero(direction);
         hero.init(field);
 
-        Element headElement = getAt(head);
+        Element headElement = at(head);
         if (Arrays.asList(HEAD_FLY, ENEMY_HEAD_FLY).contains(headElement)) {
-            direction = getHeadDirectionWithMod(head);
+            direction = headDirectionWithMod(head);
             hero.setDirection(direction);
             hero.eatFlying();
         }
 
         if (Arrays.asList(HEAD_EVIL, ENEMY_HEAD_EVIL).contains(headElement)) {
-            direction = getHeadDirectionWithMod(head);
+            direction = headDirectionWithMod(head);
             hero.setDirection(direction);
             hero.eatFury();
         }
@@ -95,8 +95,8 @@ public class Level extends AbstractLevel {
         return hero;
     }
 
-    private Direction getHeadDirectionWithMod(Point head) {
-        Element atLeft = getAt(LEFT.change(head));
+    private Direction headDirectionWithMod(Point head) {
+        Element atLeft = at(LEFT.change(head));
         if (Arrays.asList(Element.BODY_HORIZONTAL,
                 Element.BODY_RIGHT_DOWN,
                 Element.BODY_RIGHT_UP,
@@ -109,7 +109,7 @@ public class Level extends AbstractLevel {
             return RIGHT;
         }
 
-        Element atRight = getAt(RIGHT.change(head));
+        Element atRight = at(RIGHT.change(head));
         if (Arrays.asList(Element.BODY_HORIZONTAL,
                 Element.BODY_LEFT_DOWN,
                 Element.BODY_LEFT_UP,
@@ -122,7 +122,7 @@ public class Level extends AbstractLevel {
             return LEFT;
         }
 
-        Element atDown = getAt(DOWN.change(head));
+        Element atDown = at(DOWN.change(head));
         if (Arrays.asList(Element.BODY_VERTICAL,
                 Element.BODY_LEFT_UP,
                 Element.BODY_RIGHT_UP,
@@ -135,7 +135,7 @@ public class Level extends AbstractLevel {
             return UP;
         }
 
-        Element atUp = getAt(UP.change(head));
+        Element atUp = at(UP.change(head));
         if (Arrays.asList(Element.BODY_VERTICAL,
                 Element.BODY_LEFT_DOWN,
                 Element.BODY_RIGHT_DOWN,
@@ -152,7 +152,7 @@ public class Level extends AbstractLevel {
     }
 
     private Direction next(Point point, Direction direction) {
-        switch (getAt(point)) {
+        switch (at(point)) {
             case BODY_HORIZONTAL:
             case ENEMY_BODY_HORIZONTAL:
                 return direction;
@@ -175,7 +175,7 @@ public class Level extends AbstractLevel {
         return null;
     }
 
-    public Hero getEnemy(Field field) {
+    public Hero enemy(Field field) {
         Point point = find(
                 pt -> pt,
                 ENEMY_HEAD_DOWN,
@@ -197,8 +197,8 @@ public class Level extends AbstractLevel {
         return parseSnake(point, field);
     }
 
-    private Direction getDirection(Point point) {
-        switch (getAt(point)) {
+    private Direction direction(Point point) {
+        switch (at(point)) {
             case HEAD_DOWN :       return DOWN;
             case ENEMY_HEAD_DOWN : return DOWN;
             case HEAD_UP :         return UP;
@@ -209,35 +209,35 @@ public class Level extends AbstractLevel {
         }
     }
 
-    public List<Apple> getApples() {
+    public List<Apple> apples() {
         return find(Apple::new, APPLE);
     }
 
-    public List<Stone> getStones() {
+    public List<Stone> stones() {
         return find(Stone::new, STONE);
     }
 
-    public List<FlyingPill> getFlyingPills() {
+    public List<FlyingPill> flyingPills() {
         return find(FlyingPill::new, FLYING_PILL);
     }
 
-    public List<FuryPill> getFuryPills() {
+    public List<FuryPill> furyPills() {
         return find(FuryPill::new, FURY_PILL);
     }
 
-    public List<Gold> getGold() {
+    public List<Gold> gold() {
         return find(Gold::new, GOLD);
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return find(Wall::new, WALL);
     }
 
-    public List<StartFloor> getStartPoints() {
+    public List<StartFloor> startPoints() {
         return find(StartFloor::new, START_FLOOR);
     }
 
-    private Element getAt(Point pt) {
+    private Element at(Point pt) {
         return Element.valueOf(map.charAt(xy.getLength(pt.getX(), pt.getY())));
     }
 }

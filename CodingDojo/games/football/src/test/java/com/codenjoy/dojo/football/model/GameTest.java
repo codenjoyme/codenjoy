@@ -68,7 +68,7 @@ public class GameTest {
 
     private void givenFl(String board) {
         Level level = new Level(board);
-        hero = level.getHero().get(0);
+        hero = level.hero().get(0);
 
         game = new Football(level, dice, settings);
         listener = mock(EventListener.class);

@@ -60,7 +60,7 @@ public class Quadro implements Field {
         size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
-        chips = level.getChips();
+        chips = level.chips();
     }
 
     @Override

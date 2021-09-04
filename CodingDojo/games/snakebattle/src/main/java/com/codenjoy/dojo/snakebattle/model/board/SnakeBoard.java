@@ -64,13 +64,13 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     public SnakeBoard(Level level, Dice dice, GameSettings settings) {
         super(Events.START, Events.WIN, Events.DIE, settings);
         this.dice = dice;
-        walls = level.getWalls();
-        starts = level.getStartPoints();
-        apples = level.getApples();
-        stones = level.getStones();
-        flyingPills = level.getFlyingPills();
-        furyPills = level.getFuryPills();
-        gold = level.getGold();
+        walls = level.walls();
+        starts = level.startPoints();
+        apples = level.apples();
+        stones = level.stones();
+        flyingPills = level.flyingPills();
+        furyPills = level.furyPills();
+        gold = level.gold();
         size = level.size();
         this.settings = settings;
         players = new LinkedList<>();

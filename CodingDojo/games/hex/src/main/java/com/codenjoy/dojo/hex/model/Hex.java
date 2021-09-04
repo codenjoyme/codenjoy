@@ -49,7 +49,7 @@ public class Hex implements Field {
 
     public Hex(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        walls = level.getWalls();
+        walls = level.walls();
         size = level.size();
         this.settings = settings;
         players = new LinkedList<>();

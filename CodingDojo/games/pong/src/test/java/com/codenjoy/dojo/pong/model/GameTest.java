@@ -64,8 +64,8 @@ public class GameTest {
         Level level = new Level(board);
         game = new Pong(level, dice, settings);
 
-        if (!level.getHero().isEmpty()) {
-            hero = level.getHero().get(0);
+        if (!level.hero().isEmpty()) {
+            hero = level.hero().get(0);
             listener = mock(EventListener.class);
             player = new Player(listener, settings);
             game.newGame(player);

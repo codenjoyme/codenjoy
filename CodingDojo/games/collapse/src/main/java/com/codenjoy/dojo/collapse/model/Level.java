@@ -39,12 +39,12 @@ public class Level extends AbstractLevel{
         super(map);
     }
 
-    public List<Cell> getCells() {
+    public List<Cell> cells() {
         return find((pt, el) -> new Cell(pt, el.number()),
                 Element.valuesExcept(NONE, BORDER));
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return find(Wall::new, BORDER);
     }
 }

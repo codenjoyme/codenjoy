@@ -160,7 +160,7 @@ public class Moebius implements Field {
     @Override
     public void newGame(Player player) {
         this.player = player;
-        lines = level.getLines();
+        lines = level.lines();
         player.newHero(this);
     }
 

@@ -73,11 +73,11 @@ public class GameTest {
         Level level = new Level(board);
         game = new Hex(level, dice, settings);
 
-        hero1 = level.getHeroes().get(0);
+        hero1 = level.heroes().get(0);
         setupPlayer1();
 
-        if (level.getHeroes().size() > 1) {
-            hero2 = level.getHeroes().get(1);
+        if (level.heroes().size() > 1) {
+            hero2 = level.heroes().get(1);
             setupPlayer2();
         }
     }

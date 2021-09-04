@@ -72,7 +72,7 @@ public class GameTest {
     private void given(String board) {
         Level level = new Level(board);
         game = new SnakeBoard(level, dice, settings);
-        hero = level.getHero(game);
+        hero = level.hero(game);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);
         player.setHero(hero);

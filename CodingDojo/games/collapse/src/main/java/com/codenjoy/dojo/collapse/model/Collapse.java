@@ -31,7 +31,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -51,8 +50,8 @@ public class Collapse implements Field {
     public Collapse(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         this.settings = settings;
-        cells = new Container(level.getCells());
-        walls = new Container(level.getWalls());
+        cells = new Container(level.cells());
+        walls = new Container(level.walls());
         size = level.size();
         gameOver = false;
     }

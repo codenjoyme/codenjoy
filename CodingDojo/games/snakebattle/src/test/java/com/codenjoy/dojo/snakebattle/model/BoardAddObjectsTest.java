@@ -63,7 +63,7 @@ public class BoardAddObjectsTest {
         Level level = new Level(board);
         GameSettings settings = new TestGameSettings();
         game = new SnakeBoard(level, mock(Dice.class), settings);
-        Hero hero = level.getHero(game);
+        Hero hero = level.hero(game);
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener, settings);
         player.setHero(hero);

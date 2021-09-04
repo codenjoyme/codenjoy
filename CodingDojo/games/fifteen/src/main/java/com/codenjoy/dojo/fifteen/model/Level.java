@@ -35,11 +35,11 @@ public class Level extends AbstractLevel {
         super(map);
     }
 
-    public List<Digit> getDigits() {
+    public List<Digit> digits() {
         return find((pt, el) -> new Digit(pt, el), DigitHandler.DIGITS);
     }
 
-    public Hero getHero() {
+    public Hero hero() {
         List<Hero> heroes = find((pt, el) -> new Hero(pt), HERO);
         if (heroes.isEmpty()) {
             throw new RuntimeException("Hero not found on the map");
@@ -47,7 +47,7 @@ public class Level extends AbstractLevel {
         return heroes.get(0);
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return find(Wall::new, WALL);
     }
 }

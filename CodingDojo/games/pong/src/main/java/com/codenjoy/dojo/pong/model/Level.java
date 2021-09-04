@@ -37,18 +37,18 @@ public class Level extends AbstractLevel {
         super(map);
     }
 
-    public List<Hero> getHero() {
+    public List<Hero> hero() {
         return find(Hero::new, HERO);
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return find(new HashMap<>() {{
             put(VERTICAL_WALL, pt -> new Wall(pt, VERTICAL));
             put(HORIZONTAL_WALL, pt -> new Wall(pt, HORIZONTAL));
         }});
     }
 
-    public Ball getBall() {
+    public Ball ball() {
         return find(Ball::new, BALL).get(0);
     }
 }

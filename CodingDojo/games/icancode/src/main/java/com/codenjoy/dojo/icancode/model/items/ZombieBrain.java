@@ -37,7 +37,7 @@ public class ZombieBrain {
 
     public Direction whereToGo(Point zombie, Field field) {
         List<Point> heroes =
-                field.getLevel().getItems(HeroItem.class).stream()
+                field.getLevel().items(HeroItem.class).stream()
                         .map(item -> item.getCell())
                         .filter(not(Objects::isNull))
                         .collect(toList());

@@ -40,7 +40,7 @@ public class Level extends AbstractLevel {
         super(map);
     }
 
-    public ChipSet getChips() {
+    public ChipSet chips() {
         List<Chip> chips = find(new HashMap<>() {{
             put(YELLOW, pt -> new YellowChip(pt));
             put(RED, pt -> new RedChip(pt));

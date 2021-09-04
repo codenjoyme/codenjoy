@@ -81,24 +81,24 @@ public class Level extends AbstractLevel {
         return item;
     }
 
-    public Cell getCell(int x, int y) {
+    public Cell cell(int x, int y) {
         return cells[xy.getLength(x, y)];
     }
 
-    public Cell getCell(Point pt) {
-        return getCell(pt.getX(), pt.getY());
+    public Cell cell(Point pt) {
+        return cell(pt.getX(), pt.getY());
     }
 
-    public Cell[] getCells() {
+    public Cell[] cells() {
         return cells.clone();
     }
 
     public boolean isBarrier(Point pt) {
         return pt.isOutOf(size)
-                || !getCell(pt).passable();
+                || !cell(pt).passable();
     }
 
-    public <T extends Item> List<T> getItems(Class clazz) {
+    public <T extends Item> List<T> items(Class clazz) {
         List<T> result = new LinkedList<>();
         List<T> items;
 
@@ -115,8 +115,8 @@ public class Level extends AbstractLevel {
         return result;
     }
 
-    public void setField(Field field) {
-        List<FieldItem> items = getItems(FieldItem.class);
+    public void field(Field field) {
+        List<FieldItem> items = items(FieldItem.class);
 
         for (int i = 0; i < items.size(); ++i) {
             items.get(i).setField(field);

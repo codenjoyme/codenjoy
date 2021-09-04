@@ -114,8 +114,8 @@ public class Fifteen implements Field {
 
     @Override
     public void newGame(Player player) {
-        walls = level.getWalls();
-        digits = level.getDigits();
+        walls = level.walls();
+        digits = level.digits();
         size = level.size();
         if (!players.contains(player)) {
             players.add(player);
@@ -125,7 +125,7 @@ public class Fifteen implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return Optional.of(level.getHero());
+        return Optional.of(level.hero());
     }
 
     @Override

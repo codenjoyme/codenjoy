@@ -54,7 +54,7 @@ public class Level extends AbstractLevel {
         return left + StringUtils.rightPad("", len - 2, middle) + right;
     }
 
-    public List<Line> getLines() {
+    public List<Line> lines() {
         return find(Line::new,
                 LEFT_UP,
                 UP_RIGHT,

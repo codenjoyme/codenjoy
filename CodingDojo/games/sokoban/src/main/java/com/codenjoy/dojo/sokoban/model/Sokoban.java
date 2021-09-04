@@ -58,14 +58,14 @@ public class Sokoban implements Field {
     public Sokoban(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         size = level.size();
-        walls = level.getWalls();
-        boxes = level.getBoxes();
-        marks = level.getMarks();
+        walls = level.walls();
+        boxes = level.boxes();
+        marks = level.marks();
 //      boxesOnTheMarks = new LinkedList<>();
-        boxesOnTheMarks = level.getBoxesOnTheMarks();
+        boxesOnTheMarks = level.boxesOnTheMarks();
         this.settings = settings;
         marks.stream().forEach(mark -> mark.init(this));
-        this.marksToWin = level.getMarksToWin();
+        this.marksToWin = level.marksToWin();
         players = new LinkedList<>();
     }
 

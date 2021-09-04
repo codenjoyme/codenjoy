@@ -38,7 +38,7 @@ public class Level extends AbstractLevel {
         super(map);
     }
 
-    public List<Hero> getHero() {
+    public List<Hero> hero() {
         return find(Hero::new,
                 HERO,
                 HERO_W_BALL,
@@ -48,11 +48,11 @@ public class Level extends AbstractLevel {
                 ENEMY_W_BALL);
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return find(Wall::new, WALL);
     }
 
-    public List<Ball> getBalls() {
+    public List<Ball> balls() {
         return find(Ball::new,
                 BALL,
                 STOPPED_BALL,
@@ -63,11 +63,11 @@ public class Level extends AbstractLevel {
                 HITED_MY_GOAL);
     }
 
-    public List<Goal> getTopGoals() {
+    public List<Goal> topGoals() {
         return find(Goal::new, TOP_GOAL);
     }
 
-    public List<Goal> getBottomGoals() {
+    public List<Goal> bottomGoals() {
         return find(Goal::new, BOTTOM_GOAL);
     }
 }

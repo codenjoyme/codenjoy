@@ -35,15 +35,15 @@ public class Level extends AbstractLevel {
         super(map);
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return find(Wall::new, WALL);
     }
 
-    public List<Box> getBoxes() {
+    public List<Box> boxes() {
         return find(Box::new, BOX);
     }
 
-    public List<Target> getTargets() {
+    public List<Target> targets() {
         return find(Target::new, TARGET);
     }
 }

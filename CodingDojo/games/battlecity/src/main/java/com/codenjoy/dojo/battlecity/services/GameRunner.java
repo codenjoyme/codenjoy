@@ -61,12 +61,12 @@ public class GameRunner extends AbstractGameType<GameSettings> {
         Level level = settings.level(getDice());
         Battlecity game = new Battlecity(level.size(), getDice(), settings);
 
-        game.addBorder(level.getBorders());
-        game.addWall(level.getWalls());
-        game.addAiTanks(level.getAiTanks());
-        game.addRiver(level.getRivers());
-        game.addTree(level.getTrees());
-        game.addIce(level.getIce());
+        game.addBorder(level.borders());
+        game.addWall(level.walls());
+        game.addAiTanks(level.aiTanks());
+        game.addRiver(level.rivers());
+        game.addTree(level.trees());
+        game.addIce(level.ice());
         return game;
     }
 

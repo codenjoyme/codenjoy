@@ -142,8 +142,8 @@ public class StartAndJump implements Field {
         }
         player.newHero(this);
 
-        walls = level.getWalls();
-        platforms = level.getPlatforms();
+        walls = level.walls();
+        platforms = level.platforms();
     }
 
     @Override

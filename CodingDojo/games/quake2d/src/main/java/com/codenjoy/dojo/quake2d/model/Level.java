@@ -34,25 +34,25 @@ public class Level extends AbstractLevel {
         super(map);
     }
 
-    public List<Hero> getHero() {
+    public List<Hero> hero() {
         return find(Hero::new, HERO);
     }
 
-    public List<Robot> getRobots(Field field) {
+    public List<Robot> robots(Field field) {
         return find(Robot::new, ROBOT);
     }
 
-    public List<Hero> getOtherHero() {
+    public List<Hero> otherHero() {
         return find(Hero::new, OTHER_HERO);
     }
 
-    public List<Ability> getAbility() {
+    public List<Ability> ability() {
         return find(Ability::new,
                 SUPER_WEAPON,
                 SUPER_DEFENCE);
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return find(Wall::new, WALL);
     }
 

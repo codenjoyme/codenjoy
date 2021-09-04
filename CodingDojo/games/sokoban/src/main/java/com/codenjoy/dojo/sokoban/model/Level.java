@@ -23,10 +23,8 @@ package com.codenjoy.dojo.sokoban.model;
  */
 
 
-import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.field.AbstractLevel;
 import com.codenjoy.dojo.sokoban.model.items.*;
-import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class Level extends AbstractLevel {
 
     public Level(String map) {
         super(map);
-        this.marksToWin = getMarks().size();
+        this.marksToWin = marks().size();
     }
 
     public Level(String map, int marksToWin) {
@@ -46,27 +44,27 @@ public class Level extends AbstractLevel {
         this.marksToWin = marksToWin;
     }
 
-    public int getMarksToWin() {
+    public int marksToWin() {
         return marksToWin;
     }
 
-    public List<Hero> getHero() {
+    public List<Hero> hero() {
         return find(Hero::new, HERO);
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return find(Wall::new, WALL);
     }
 
-    public List<Box> getBoxes() {
+    public List<Box> boxes() {
         return find(Box::new, BOX);
     }
 
-    public List<Mark> getMarks() {
+    public List<Mark> marks() {
         return find(Mark::new, MARK_TO_WIN);
     }
 
-    public List<BoxOnTheMark> getBoxesOnTheMarks() {
+    public List<BoxOnTheMark> boxesOnTheMarks() {
         return find(BoxOnTheMark::new, BOX_ON_THE_MARK);
     }
 }

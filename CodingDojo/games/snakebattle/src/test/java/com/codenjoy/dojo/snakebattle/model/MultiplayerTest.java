@@ -87,14 +87,14 @@ public class MultiplayerTest {
 
         game = new SnakeBoard(level, dice,  settings);
 
-        hero = level.getHero(game);
+        hero = level.hero(game);
         hero.setActive(true);
         heroEvents = mock(EventListener.class);
         heroPlayer = new Player(heroEvents, settings);
         heroPlayer.setHero(hero);
         game.newGame(heroPlayer);
 
-        enemy = level.getEnemy(game);
+        enemy = level.enemy(game);
         enemy.setActive(true);
         enemyEvents = mock(EventListener.class);
         enemyPlayer = new Player(enemyEvents, settings);

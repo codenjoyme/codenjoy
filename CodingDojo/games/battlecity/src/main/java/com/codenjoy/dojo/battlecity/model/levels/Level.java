@@ -28,7 +28,6 @@ import com.codenjoy.dojo.battlecity.model.items.*;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.field.AbstractLevel;
-import com.codenjoy.dojo.services.field.PointField;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,23 +45,23 @@ public class Level extends AbstractLevel {
         this.dice = dice;
     }
 
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return find(Wall::new, WALL);
     }
 
-    public List<River> getRivers() {
+    public List<River> rivers() {
         return find(River::new, RIVER);
     }
 
-    public List<Ice> getIce() {
+    public List<Ice> ice() {
         return find(Ice::new, ICE);
     }
 
-    public List<Tree> getTrees() {
+    public List<Tree> trees() {
         return find(Tree::new, TREE);
     }
 
-    public List<Tank> getAiTanks() {
+    public List<Tank> aiTanks() {
         return new LinkedList<>(){{
             addAll(find((pt, el) -> new AITank(pt, DOWN, dice),  AI_TANK_DOWN));
             addAll(find((pt, el) -> new AITank(pt, UP, dice),    AI_TANK_UP));
@@ -71,7 +70,7 @@ public class Level extends AbstractLevel {
         }};
     }
 
-    public List<Tank> getTanks() {
+    public List<Tank> tanks() {
         return new LinkedList<>(){{
             addAll(find((pt, el) -> new Tank(pt, DOWN),  TANK_DOWN,  OTHER_TANK_DOWN));
             addAll(find((pt, el) -> new Tank(pt, UP),    TANK_UP,    OTHER_TANK_UP));
@@ -80,17 +79,17 @@ public class Level extends AbstractLevel {
         }};
     }
 
-    public List<Border> getBorders() {
+    public List<Border> borders() {
         return find(Border::new, BATTLE_WALL);
     }
 
     @Override
     public void addAll(Consumer<Iterable<? extends Point>> processor) {
-        processor.accept(getBorders());
-        processor.accept(getWalls());
-        processor.accept(getAiTanks());
-        processor.accept(getIce());
-        processor.accept(getRivers());
-        processor.accept(getTrees());
+        processor.accept(borders());
+        processor.accept(walls());
+        processor.accept(aiTanks());
+        processor.accept(ice());
+        processor.accept(rivers());
+        processor.accept(trees());
     }
 }
