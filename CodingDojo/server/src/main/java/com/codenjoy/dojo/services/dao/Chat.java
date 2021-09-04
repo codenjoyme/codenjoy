@@ -83,11 +83,21 @@ public class Chat {
                 rs -> rs.next() ? rs.getInt(1) : null);
     }
 
+    /**
+     * Используется для информирования пользователя о том, что
+     * пришли новые сообщения.
+     *
+     * @return Возвращает последние сообщения в каждой комнате
+     * с ключем этой комнаты, а значением - id сообщения.
+     */
+    // TODO А как же быть с topic сообщениями, о них ведь тоже надо
+    //      как-то информировать пользователя...
     public Map<String, Integer> getLastMessageIds() {
         return pool.select("SELECT m2.room, m2.id " +
                         "FROM" +
                         "    (SELECT room, MAX(time) as time" +
                         "        FROM messages" +
+                        "        WHERE topic_id IS NULL" +
                         "        GROUP BY room) m1" +
                         "    JOIN messages m2" +
                         "        ON m1.room = m2.room" +

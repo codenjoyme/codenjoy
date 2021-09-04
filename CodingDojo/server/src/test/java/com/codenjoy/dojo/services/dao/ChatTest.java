@@ -98,6 +98,28 @@ public class ChatTest {
     }
 
     @Test
+    public void shouldGetLastMessageIds_whenAddedTopicMessages() {
+        // when then
+        assertEquals("{}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        addMessage("room1", "player1"); // id = 1
+        assertEquals("{room1=1}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        addMessage("room1", "player1", 1); // id = 2
+        assertEquals("{room1=1}",
+                chat.getLastMessageIds().toString());
+
+        // when then
+        addMessage("room1", "player1", 1); // id = 3
+        assertEquals("{room1=1}",
+                chat.getLastMessageIds().toString());
+    }
+
+    @Test
     public void shouldGetLastMessageId() {
         // when then
         assertEquals(null, chat.getLastMessageId("room1"));
