@@ -135,17 +135,18 @@ public class ChatService {
             validateTopicExists(topicMessageId, room);
         }
 
-        Chat.Message message = Chat.Message.builder()
-                .room(room)
-                .topicId(topicMessageId)
-                .playerId(playerId)
-                .time(time.now())
-                .text(text)
-                .build();
+        return saveMessage(topicMessageId, text, room, playerId);
+    }
 
-        message = chat.saveMessage(message);
-
-        return wrap(message);
+    private PMessage saveMessage(Integer topicId, String text, String room, String playerId) {
+        return wrap(chat.saveMessage(
+                Chat.Message.builder()
+                        .room(room)
+                        .topicId(topicId)
+                        .playerId(playerId)
+                        .time(time.now())
+                        .text(text)
+                        .build()));
     }
 
     public boolean deleteMessage(int messageId, String room, String playerId) {
