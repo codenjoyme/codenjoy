@@ -92,17 +92,26 @@ public class ChatService {
     }
 
     public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
+        validateIsChatAvailable(playerId, room);
+        validateTopicExists(topicMessageId, room);
+
+        return wrap(chat.getTopicMessages(topicMessageId));
+    }
+
+    private void validateTopicExists(int topicMessageId, String room) {
         // TODO по сути будет по 2 запроса, что не ок по производительности
         //      можно было бы валидацию зашить во второй запрос?
         // room validation only
-        PMessage message = getMessage(topicMessageId, room, playerId);
-
-        return wrap(chat.getTopicMessages(message.getId()));
+        getMessage(topicMessageId, room);
     }
 
     public PMessage getMessage(int messageId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
+        return getMessage(messageId, room);
+    }
+
+    private PMessage getMessage(int messageId, String room) {
         Chat.Message message = chat.getMessageById(messageId);
 
         if (message == null || !message.getRoom().equals(room)) {
@@ -116,9 +125,7 @@ public class ChatService {
         validateIsChatAvailable(playerId, room);
 
         if (topicMessageId != null) {
-            // TODO по сути на каждый риплай, будет по 2 запроса, что не ок по производительности
-            // room validation only
-            getMessage(topicMessageId, room, playerId);
+            validateTopicExists(topicMessageId, room);
         }
 
         Chat.Message message = Chat.Message.builder()
