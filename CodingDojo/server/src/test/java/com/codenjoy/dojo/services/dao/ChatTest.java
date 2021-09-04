@@ -519,11 +519,15 @@ public class ChatTest {
                 chat.getMessages("otherRoom", MAX).toString());
     }
 
-    public Chat.Message addMessage(String room, String player, int... topicId) {
+    public Chat.Message addMessage(String room, String player) {
+        return addMessage(room, player, null);
+    }
+
+    public Chat.Message addMessage(String room, String player, Integer topicId) {
         long time = JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200");
         int index = messages.size() + 1;
-        Integer topic = (topicId.length != 0) ? topicId[0] : null;
-        Chat.Message message = new Chat.Message(room, topic, player,
+        Chat.Message message = new Chat.Message(
+                room, topicId, player,
                 time + 100000L * index,
                 "message" + index);
         Chat.Message added = chat.saveMessage(message);
