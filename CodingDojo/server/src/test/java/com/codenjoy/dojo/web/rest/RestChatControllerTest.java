@@ -276,6 +276,27 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
+    public void shouldPostMessage_fail_whenThreadTopicIsNotExists() {
+        // when then
+        // try to post reply for non exists topic message
+        nowIs(12345L);
+        assertPostError("java.lang.IllegalArgumentException: " +
+                        "There is no message with id '100500' in room 'validRoom'",
+                "/rest/chat/validRoom/messages/100500/replies",
+                unquote("{text:'message1'}"));
+
+        // then
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages")));
+
+        // then
+        // no topic, no replies
+        assertGetError("java.lang.IllegalArgumentException: " +
+                        "There is no message with id '100500' in room 'validRoom'",
+                "/rest/chat/validRoom/messages/100500/replies");
+    }
+
+    @Test
     public void shouldPostMessage_fail_whenThreadTopicInOtherRoom() {
         // given
         assertPlayerInRoom("player", "validRoom");
