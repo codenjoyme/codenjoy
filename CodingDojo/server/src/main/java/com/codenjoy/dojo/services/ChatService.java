@@ -144,7 +144,7 @@ public class ChatService {
                     playerId, messageId, room);
         }
 
-        return deleted;
+        return true;
     }
 
     public IllegalArgumentException exception(String message, Object... parameters) {
