@@ -52,7 +52,7 @@ public class Spreader {
         }
 
         if (gameRoom == null) {
-            gameRoom = new GameRoom(field.get(), roomSize, type.isDisposable());
+            gameRoom = new GameRoom(room, field.get(), roomSize, type.isDisposable());
             add(room, gameRoom);
         }
 
