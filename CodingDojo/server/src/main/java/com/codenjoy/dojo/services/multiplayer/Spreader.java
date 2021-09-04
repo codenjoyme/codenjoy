@@ -128,4 +128,10 @@ public class Spreader {
         return rooms;
     }
 
+    // TODO test me
+    public boolean fieldInRoom(int fieldId, String roomName) {
+        return rooms.get(roomName).stream()
+                .anyMatch(room -> room.field().id() == fieldId);
+    }
+
 }

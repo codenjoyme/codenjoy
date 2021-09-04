@@ -277,6 +277,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
     @Test
     public void shouldPostMessage_fail_whenThreadTopicIsNotExists() {
+        // given
+        assertPlayerInRoom("player", "validRoom");
+
         // when then
         // try to post reply for non exists topic message
         nowIs(12345L);
@@ -294,6 +297,29 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertGetError("java.lang.IllegalArgumentException: " +
                         "There is no message with id '100500' in room 'validRoom'",
                 "/rest/chat/validRoom/messages/100500/replies");
+    }
+
+    @Test
+    public void shouldPostMessage_success_whenThreadTopicIsFieldTopic() {
+        // given
+        assertPlayerInRoom("player", "validRoom");
+        int fieldId = deals.get("player").getField().id();
+
+        // when then
+        // try to post reply for exists field (topicId = fieldId)
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages/" + fieldId + "/replies",
+                unquote("{text:'message1'}"));
+
+        // then
+        // no messages in main room chat
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages")));
+
+        // then
+        // but if we know fieldId we can get their messages like topic messages
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':" + fieldId + "}]",
+                fix(get("/rest/chat/validRoom/messages/" + fieldId + "/replies")));
     }
 
     @Test

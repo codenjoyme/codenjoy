@@ -42,6 +42,7 @@ public class ChatService {
     private Chat chat;
     private TimeService time;
     private Registration registration;
+    private Deals deals;
     private final Map<String, String> playerNames = new ConcurrentHashMap<>();
 
     public List<PMessage> getMessages(String room, int count,
@@ -99,6 +100,11 @@ public class ChatService {
     }
 
     private void validateTopicExists(int topicMessageId, String room) {
+        if (deals.fieldInRoom(topicMessageId, room)) {
+            // you can get field messages like topic messages
+            return;
+        }
+
         // TODO по сути будет по 2 запроса, что не ок по производительности
         //      можно было бы валидацию зашить во второй запрос?
         // room validation only

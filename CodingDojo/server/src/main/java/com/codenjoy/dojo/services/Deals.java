@@ -273,7 +273,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         // независимо от типа игры нам нужно тикнуть все
         //      но только те, которые не DISPOSABLE и одновременно
         //      недокомплектованные пользователями
-        //      а так же котмнаты которых активны
+        //      а так же комнаты которых активны
         active.stream()
                 .filter(deal -> deal.getField() != null) // TODO разобраться почему так случается при переключении уровней icancode
                 .map(Deal::getField)
@@ -409,5 +409,10 @@ public class Deals implements Iterable<Deal>, Tickable {
                 .map(Deal::getRoom)
                 .distinct()
                 .collect(toList());
+    }
+
+    // TODO test me
+    public boolean fieldInRoom(int fieldId, String room) {
+        return spreader.fieldInRoom(fieldId, room);
     }
 }
