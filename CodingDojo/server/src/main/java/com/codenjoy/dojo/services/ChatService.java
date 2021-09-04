@@ -82,8 +82,8 @@ public class ChatService {
     }
 
     private PMessage wrap(Chat.Message message) {
-        return PMessage.from
-                (message, playerName(message.getPlayerId()));
+        return PMessage.from(message,
+                playerName(message.getPlayerId()));
     }
 
     private String playerName(String playerId) {
