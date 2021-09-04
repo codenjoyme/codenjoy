@@ -76,6 +76,7 @@ public class Chat {
         return pool.select("SELECT id " +
                         "FROM messages " +
                         "WHERE room = ? " +
+                        "AND topic_id IS NULL " +
                         "ORDER BY time DESC " +
                         "LIMIT 1;",
                 new Object[]{room},
