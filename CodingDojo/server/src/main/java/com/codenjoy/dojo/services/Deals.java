@@ -58,7 +58,7 @@ public class Deals implements Iterable<Deal>, Tickable {
     private ReadWriteLock lock = new ReentrantReadWriteLock();
 
     @Autowired
-    private Spreader spreader;
+    protected Spreader spreader;
 
     @Autowired
     protected RoomService roomService;

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -66,6 +67,7 @@ public class DealsViewTest {
     @Before
     public void setup() {
         deals = new Deals();
+        deals.spreader = new Spreader();
         dealsView = new DealsView();
         dealsView.service = deals;
 

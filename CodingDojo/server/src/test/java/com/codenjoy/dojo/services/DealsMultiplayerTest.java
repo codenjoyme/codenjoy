@@ -69,6 +69,7 @@ public class DealsMultiplayerTest {
         deals = new Deals();
 
         deals.roomService = mock(RoomService.class);
+        deals.spreader = new Spreader();
         // по умолчанию все комнаты активны
         when(deals.roomService.isActive(anyString())).thenReturn(true);
 

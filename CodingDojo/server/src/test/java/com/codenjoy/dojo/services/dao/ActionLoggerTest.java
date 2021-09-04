@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
 import lombok.SneakyThrows;
@@ -82,6 +83,7 @@ public class ActionLoggerTest {
 
         deals = new Deals(){{
             ActionLoggerTest.this.roomService = this.roomService = mock(RoomService.class);
+            this.spreader = new Spreader();
         }};
         allRoomsAreActive();
     }

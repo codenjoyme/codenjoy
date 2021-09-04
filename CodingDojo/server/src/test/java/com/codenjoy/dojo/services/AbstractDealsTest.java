@@ -23,10 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.GameRoom;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -57,6 +54,7 @@ public class AbstractDealsTest {
     protected List<GameField> fields = new LinkedList<>();
     protected RoomService roomService;
     protected TimeService timeService;
+    protected Spreader spreader;
     protected GameField fieldSaves = mock(GameField.class);
 
     @Before
@@ -64,6 +62,7 @@ public class AbstractDealsTest {
         deals = new Deals();
         roomService = deals.roomService = new RoomService();
         timeService = deals.timeService = mock(TimeService.class);
+        spreader = deals.spreader = new Spreader();
         when(fieldSaves.getSave()).thenReturn(null);
     }
 

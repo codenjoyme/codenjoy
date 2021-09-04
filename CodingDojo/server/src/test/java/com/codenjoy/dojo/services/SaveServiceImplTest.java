@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
@@ -62,6 +63,7 @@ public class SaveServiceImplTest {
     public void setUp() {
         saveService = new SaveServiceImpl(){{
             this.deals = SaveServiceImplTest.this.deals = new Deals();
+            this.deals.spreader = new Spreader();
             this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
