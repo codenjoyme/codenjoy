@@ -882,4 +882,22 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                         "{'id':7,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message7','time':12351,'topicId':null}]",
                 fix(get("/rest/chat/validRoom/messages")));
     }
+
+    @Test
+    public void shouldDeleteFieldMessage() {
+        // given
+        shouldPostMessageForField_success();
+
+        int fieldId = getFieldId("player");
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-" + fieldId + "}]",
+                fix(get("/rest/chat/validRoom/messages/field")));
+
+        // when
+        // delete field message
+        delete("/rest/chat/validRoom/messages/1");
+
+        // then
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages/field")));
+    }
 }
