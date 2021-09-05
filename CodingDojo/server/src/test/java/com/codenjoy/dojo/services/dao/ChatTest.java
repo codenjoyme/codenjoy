@@ -331,7 +331,7 @@ public class ChatTest {
 
         // when then
         assertThat(1, 2, 3)
-                .in(chat.getMessages("room1", 10));
+                .in(chat.getMessages(null, "room1", 10));
     }
 
     public class AssertThat {
@@ -359,9 +359,7 @@ public class ChatTest {
 
         public boolean isPresent(List<Chat.Message> list, Chat.Message found) {
             return list.stream()
-                    .filter(message -> found.getId() == message.getId())
-                    .findFirst()
-                    .isPresent();
+                    .anyMatch(message -> found.getId() == message.getId());
         }
     }
 
@@ -387,7 +385,7 @@ public class ChatTest {
 
         // when then
         assertThat(2, 3)
-                .in(chat.getMessages("room1", 2));
+                .in(chat.getMessages(null, "room1", 2));
     }
 
     @Test
@@ -397,7 +395,7 @@ public class ChatTest {
         
         // when then
         assertThat()
-                .in(chat.getMessages("room2", 2));
+                .in(chat.getMessages(null, "room2", 2));
     }
 
     @Test
@@ -407,7 +405,7 @@ public class ChatTest {
 
         // when then
         assertThat()
-                .in(chat.getMessages("room1", 0));
+                .in(chat.getMessages(null, "room1", 0));
     }
 
     @Test
@@ -449,28 +447,28 @@ public class ChatTest {
 
         // when then
         assertThat(1, 2, 3, 4)
-                .in(chat.getMessages("room", 10));
+                .in(chat.getMessages(null, "room", 10));
 
         // when
         assertEquals(true, chat.deleteMessage("room", 1, "player1"));
 
         // then
         assertThat(2, 3, 4)
-                .in(chat.getMessages("room", 10));
+                .in(chat.getMessages(null, "room", 10));
 
         // when
         assertEquals(true, chat.deleteMessage("room", 3, "player2"));
 
         // then
         assertThat(2, 4)
-                .in(chat.getMessages("room", 10));
+                .in(chat.getMessages(null, "room", 10));
 
         // when
         assertEquals(true, chat.deleteMessage("room", 4, "player3"));
 
         // then
         assertThat(2)
-                .in(chat.getMessages("room", 10));
+                .in(chat.getMessages(null, "room", 10));
     }
 
     @Test
@@ -498,7 +496,7 @@ public class ChatTest {
 
         // then
         assertThat(1)
-                .in(chat.getMessages("room", 10));
+                .in(chat.getMessages(null, "room", 10));
 
         // when then
         assertEquals(false, chat.deleteMessage("room", 1, "otherPlayer"));
@@ -512,43 +510,43 @@ public class ChatTest {
         // when then
         // первое сообщение c id = afterId не включается
         assertThat(3, 5, 7)
-                .in(chat.getMessagesAfter("room", MAX, 1, false));
+                .in(chat.getMessagesAfter(null, "room", MAX, 1, false));
 
         // то же только c inclusive = true
         assertThat(1, 3, 5, 7)
-                .in(chat.getMessagesAfter("room", MAX, 1, true));
+                .in(chat.getMessagesAfter(null, "room", MAX, 1, true));
 
         // берутся только два сверху, хотя доступные 3
         assertThat(3, 5)
-                .in(chat.getMessagesAfter("room", 2, 1, false));
+                .in(chat.getMessagesAfter(null, "room", 2, 1, false));
 
         // то же только c inclusive = true
         assertThat(1, 3)
-                .in(chat.getMessagesAfter("room", 2, 1, true));
+                .in(chat.getMessagesAfter(null, "room", 2, 1, true));
 
         // можно указывать даже айдишку из другого чата - они порядковые
         assertThat(3, 5, 7)
-                .in(chat.getMessagesAfter("room", MAX, 2, false));
+                .in(chat.getMessagesAfter(null, "room", MAX, 2, false));
 
         // то же только c inclusive = true
         assertThat(3, 5, 7)
-                .in(chat.getMessagesAfter("room", MAX, 2, true));
+                .in(chat.getMessagesAfter(null, "room", MAX, 2, true));
 
         // минус одно сообщение с id = afterId
         assertThat(5, 7)
-                .in(chat.getMessagesAfter("room", MAX, 4, false));
+                .in(chat.getMessagesAfter(null, "room", MAX, 4, false));
 
         // то же только c inclusive = true
         assertThat(5, 7)
-                .in(chat.getMessagesAfter("room", MAX, 4, true));
+                .in(chat.getMessagesAfter(null, "room", MAX, 4, true));
 
         // минус одно сообщение с id = afterId
         assertThat()
-                .in(chat.getMessagesAfter("room", MAX, 7, false));
+                .in(chat.getMessagesAfter(null, "room", MAX, 7, false));
 
         // то же только c inclusive = true
         assertThat(7)
-                .in(chat.getMessagesAfter("room", MAX, 7, true));
+                .in(chat.getMessagesAfter(null, "room", MAX, 7, true));
     }
 
     @Test
@@ -559,43 +557,43 @@ public class ChatTest {
         // when then
         // можно указывать даже айдишку из другого чата - они порядковые
         assertThat(1, 3, 5, 7)
-                .in(chat.getMessagesBefore("room", MAX, 8, false));
+                .in(chat.getMessagesBefore(null, "room", MAX, 8, false));
 
         // то же только c inclusive = true
         assertThat(1, 3, 5, 7)
-                .in(chat.getMessagesBefore("room", MAX, 8, true));
+                .in(chat.getMessagesBefore(null, "room", MAX, 8, true));
 
         // первое сообщение c id = beforeId не включается
         assertThat(1, 3, 5)
-                .in(chat.getMessagesBefore("room", MAX, 7, false));
+                .in(chat.getMessagesBefore(null, "room", MAX, 7, false));
 
         // то же только c inclusive = true
         assertThat(1, 3, 5, 7)
-                .in(chat.getMessagesBefore("room", MAX, 7, true));
+                .in(chat.getMessagesBefore(null, "room", MAX, 7, true));
 
         // берутся только два но с конца, хотя доступные 3
         assertThat(3, 5)
-                .in(chat.getMessagesBefore("room", 2, 7, false));
+                .in(chat.getMessagesBefore(null, "room", 2, 7, false));
 
         // то же только c inclusive = true
         assertThat(5, 7)
-                .in(chat.getMessagesBefore("room", 2, 7, true));
+                .in(chat.getMessagesBefore(null, "room", 2, 7, true));
 
         // минус одно сообщение с id = beforeId
         assertThat(1, 3)
-                .in(chat.getMessagesBefore("room", MAX, 5, false));
+                .in(chat.getMessagesBefore(null, "room", MAX, 5, false));
 
         // то же только c inclusive = true
         assertThat(1, 3, 5)
-                .in(chat.getMessagesBefore("room", MAX, 5, true));
+                .in(chat.getMessagesBefore(null, "room", MAX, 5, true));
 
         // минус одно сообщение с id = beforeId
         assertThat()
-                .in(chat.getMessagesBefore("room", MAX, 1, false));
+                .in(chat.getMessagesBefore(null, "room", MAX, 1, false));
 
         // то же только c inclusive = true
         assertThat(1)
-                .in(chat.getMessagesBefore("room", MAX, 1, true));
+                .in(chat.getMessagesBefore(null, "room", MAX, 1, true));
     }
 
     @Test
@@ -607,37 +605,37 @@ public class ChatTest {
         // можно указывать даже айдишку из другого чата - они порядковые
         // но первое сообщение c id = afterId не включается
         assertThat(3, 5, 7)
-                .in(chat.getMessagesBetween("room", 1, 8, false));
+                .in(chat.getMessagesBetween(null, "room", 1, 8, false));
 
         // то же только c inclusive = true
         assertThat(1, 3, 5, 7)
-                .in(chat.getMessagesBetween("room", 1, 8, true));
+                .in(chat.getMessagesBetween(null, "room", 1, 8, true));
 
         // первое сообщение c id = beforeId не включается
         // так же как и последнее сообщение c id = afterId тоже не включается
         assertThat(3, 5)
-                .in(chat.getMessagesBetween("room", 1, 7, false));
+                .in(chat.getMessagesBetween(null, "room", 1, 7, false));
 
         // то же только c inclusive = true
         assertThat(1, 3, 5, 7)
-                .in(chat.getMessagesBetween("room", 1, 7, true));
+                .in(chat.getMessagesBetween(null, "room", 1, 7, true));
 
         // минус одно сообщение с id = beforeId
         // минус одно сообщение с id = afterId
         assertThat(5)
-                .in(chat.getMessagesBetween("room", 3, 7, false));
+                .in(chat.getMessagesBetween(null, "room", 3, 7, false));
 
         // то же только c inclusive = true
         assertThat(3, 5, 7)
-                .in(chat.getMessagesBetween("room", 3, 7, true));
+                .in(chat.getMessagesBetween(null, "room", 3, 7, true));
 
         // когда встретились на границе
         assertThat()
-                .in(chat.getMessagesBetween("room", 5, 5, false));
+                .in(chat.getMessagesBetween(null, "room", 5, 5, false));
 
         // то же только c inclusive = true
         assertThat(5)
-                .in(chat.getMessagesBetween("room", 5, 5, true));
+                .in(chat.getMessagesBetween(null, "room", 5, 5, true));
     }
 
     public void givenCase() {
@@ -654,13 +652,13 @@ public class ChatTest {
                         "Chat.Message(id=3, topicId=null, room=room, playerId=player1, time=1615231723345, text=message3), " +
                         "Chat.Message(id=5, topicId=null, room=room, playerId=player2, time=1615231923345, text=message5), " +
                         "Chat.Message(id=7, topicId=null, room=room, playerId=player2, time=1615232123345, text=message7)]",
-                chat.getMessages("room", MAX).toString());
+                chat.getMessages(null, "room", MAX).toString());
 
         assertEquals("[Chat.Message(id=2, topicId=null, room=otherRoom, playerId=otherPlayer, time=1615231623345, text=message2), " +
                         "Chat.Message(id=4, topicId=null, room=otherRoom, playerId=otherPlayer, time=1615231823345, text=message4), " +
                         "Chat.Message(id=6, topicId=null, room=otherRoom, playerId=otherPlayer, time=1615232023345, text=message6), " +
                         "Chat.Message(id=8, topicId=null, room=otherRoom, playerId=otherPlayer, time=1615232223345, text=message8)]",
-                chat.getMessages("otherRoom", MAX).toString());
+                chat.getMessages(null, "otherRoom", MAX).toString());
     }
 
     public Chat.Message addMessage(String room, String player) {
@@ -694,7 +692,7 @@ public class ChatTest {
         // when then
         // all for room
         assertThat(1, 2, 4, 7)
-                .in(chat.getMessages("room", 10));
+                .in(chat.getMessages(null, "room", 10));
 
         // when then
         // all for topic 1 message in room
@@ -719,6 +717,6 @@ public class ChatTest {
         // when then
         // between messages in topic -> room messages between 3 ... 8
         assertThat(4, 7)
-                .in(chat.getMessagesBetween("room", 3, 8, false));
+                .in(chat.getMessagesBetween(null, "room", 3, 8, false));
     }
 }

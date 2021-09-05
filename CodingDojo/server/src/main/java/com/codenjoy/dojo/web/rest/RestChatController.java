@@ -58,19 +58,21 @@ public class RestChatController {
 
     /**
      * Возвращает сообщения для room-чата с проверкой пользователя.
-     * Если пользователь не содержится в этом чате, сообщений он не получит.
-     * Возвращается заданное в фильтре (count, afterId, beforeId, inclusive)
+     * Если пользователь не содержится в комнате {@code room},
+     * сообщений он не получит. Возвращается заданное в фильтре
+     * ({@code count}, {@code afterId}, {@code beforeId}, {@code inclusive})
      * количество сообщений. Все параметры опциональны - в зависимости от
      * их комбинации будет возвращено то или иное количество.
      *
      * @param room Имя комнаты, сообщения чата которой интересуют.
-     * @param count Количество сообщений, если указазаны afterId | beforeId
-     *              но не оба одновременно.
+     * @param count Количество сообщений, если указазаны {@code afterId}
+     *              или {@code beforeId} но не оба одновременно.
      * @param afterId Получать сообщения после сообщения с этой id.
      * @param beforeId Получать сообщения до сообщения с этой id.
      * @param inclusive Включать ли в запрос сообщения с id afterId |& beforeId.
      * @param user Пользователь осуществляющий запрос.
-     *             Если пользователя нет в комнате - сообщения получить неудастся.
+     *             Если пользователя нет в комнате {#code room}
+     *             - сообщения получить неудастся.
      * @return Заданное количество сообщений из room-чата.
      */
     @GetMapping("/{room}/messages")
@@ -84,7 +86,7 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getMessages(room, count,
+        return ResponseEntity.ok(chat.getMessages(null, room, count,
                 afterId, beforeId, inclusive, user.getId()));
     }
 
@@ -203,23 +205,41 @@ public class RestChatController {
     }
 
     /**
-     * Получение всех field-chat сообщений, привязанных к конкретному field.
+     * Возвращает сообщения для field-chat с проверкой пользователя.
      * Field-чат - это все сообщения созданные пользователями в контексте конкретной
      * игры на поле.
      *
-     * @param room Имя комнаты, сообщения чата которой интересуют.
-     * @param user Пользователь осуществляющтий запрос.
-     *            Если пользователя нет в комнате - сообщение получить неудастся.
-     * @return Список всех найденных сообщений со своими полями размещенными в PMessage.
+     * Если пользователь не содержится в комнате {@code room},
+     * сообщений он не получит. Возвращается заданное в фильтре
+     * ({@code count}, {@code afterId}, {@code beforeId}, {@code inclusive})
+     * количество сообщений. Все параметры опциональны - в зависимости от
+     * их комбинации будет возвращено то или иное количество.
+     *
+     * @param room Имя комнаты, сообщения field-чата которой интересуют.
+     * @param count Количество сообщений, если указазаны {@code afterId}
+     *              или {@code beforeId} но не оба одновременно.
+     * @param afterId Получать сообщения после сообщения с этой id.
+     * @param beforeId Получать сообщения до сообщения с этой id.
+     * @param inclusive Включать ли в запрос сообщения с id afterId |& beforeId.
+     * @param user Пользователь осуществляющий запрос.
+     *             Если пользователя нет в комнате {#code room}
+     *             - сообщения получить неудастся.
+     * @return Заданное количество сообщений из field-чата.
      */
+    // TODO потестить все поля, как с запросом из room-chat
     @GetMapping("/{room}/messages/field")
-    public ResponseEntity<?> getMessagesForFiled(
+    public ResponseEntity<?> getMessagesForField(
             @PathVariable(name = "room") String room,
+            @RequestParam(name = "count", required = false, defaultValue = DEFAULT_COUNT) int count,
+            @RequestParam(name = "afterId", required = false) Integer afterId,
+            @RequestParam(name = "beforeId", required = false) Integer beforeId,
+            @RequestParam(name = "inclusive", required = false, defaultValue = "false") boolean inclusive,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getFieldMessages(room, user.getId()));
+        return ResponseEntity.ok(chat.getFieldMessages(room, count,
+                afterId, beforeId, inclusive, user.getId()));
     }
 
     /**

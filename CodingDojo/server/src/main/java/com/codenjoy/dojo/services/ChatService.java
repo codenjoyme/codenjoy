@@ -51,12 +51,14 @@ public class ChatService {
     /**
      * Метод для получения заданного количества сообщений (относительно конкретных
      * {@code afterId}/{@code beforeId} сообщений) для конкретного пользователя
-     * {@code playerId} в room-чате {@code room}.
+     * {@code playerId} в room-чате {@code room}
+     * (или топика в нем, если указан {@param topicId}),
      *
      * Администратор может получать сообщения в любом чате,
-     * пользователь только в своем.
+     * пользователь - только в своем чате {@code room}.
      */
-    public List<PMessage> getMessages(String room, int count,
+    public List<PMessage> getMessages(Integer topicId,
+                                      String room, int count,
                                       Integer afterId, Integer beforeId,
                                       boolean inclusive,
                                       String playerId)
@@ -64,18 +66,18 @@ public class ChatService {
         validateIsChatAvailable(playerId, room);
 
         if (afterId != null && beforeId != null) {
-            return wrap(chat.getMessagesBetween(room, afterId, beforeId, inclusive));
+            return wrap(chat.getMessagesBetween(topicId, room, afterId, beforeId, inclusive));
         }
 
         if (afterId != null) {
-            return wrap(chat.getMessagesAfter(room, count, afterId, inclusive));
+            return wrap(chat.getMessagesAfter(topicId, room, count, afterId, inclusive));
         }
 
         if (beforeId != null) {
-            return wrap(chat.getMessagesBefore(room, count, beforeId, inclusive));
+            return wrap(chat.getMessagesBefore(topicId, room, count, beforeId, inclusive));
         }
 
-        return wrap(chat.getMessages(room, count));
+        return wrap(chat.getMessages(topicId, room, count));
     }
 
     /**
@@ -130,16 +132,23 @@ public class ChatService {
     }
 
     /**
-     * Метод для получения всех сообщений для конкретного пользователя
+     * Метод для получения заданного количества сообщений (относительно конкретных
+     * {@code afterId}/{@code beforeId} сообщений) для конкретного пользователя
      * {@code playerId} в field-чате поля на котором он играет в комнате
      * {@code room}.
      *
      * Администратор не может получать field-чат сообщения,
-     * пользователь только сообщения field-чата поля на котором пока что играет.
+     * пользователь - только сообщения field-чата поля на котором пока что играет.
      */
-    public List<PMessage> getFieldMessages(String room, String playerId) {
+    public List<PMessage> getFieldMessages(String room, int count,
+                                      Integer afterId, Integer beforeId,
+                                      boolean inclusive, String playerId)
+    {
         int topicId = getFieldTopicId(room, playerId);
-        return wrap(chat.getTopicMessages(topicId));
+        return getMessages(topicId,
+                room, count,
+                afterId, beforeId,
+                inclusive, playerId);
     }
 
     /**
