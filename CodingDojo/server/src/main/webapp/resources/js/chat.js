@@ -62,7 +62,6 @@ function initChat(contextPath, type) {
 
     var getMessages = async (afterId, beforeId, inclusive, count) => new Promise((resolve, reject) => {
         var params = buildParams(afterId, beforeId, inclusive, count);
-        params = (urlSuffix == '') ? params : ''; // TODO сделать метод получения field сообщений так же с after/before
         loadData('/rest/chat/' + setup.room + '/messages' + urlSuffix + params,
                 messages => resolve(messages),
                 error => reject(error));
