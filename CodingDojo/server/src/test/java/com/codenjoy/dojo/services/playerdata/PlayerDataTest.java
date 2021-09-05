@@ -43,7 +43,7 @@ public class PlayerDataTest {
                 new LinkedHashMap<>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
                 new LinkedHashMap<>(){{ put("user@mail.com", "User Muser"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
-                1);
+                1, 11);
 
         assertSame("board", data.getBoard());
         assertEquals(55, data.getScore());
@@ -54,7 +54,7 @@ public class PlayerDataTest {
         assertEquals("{user@mail.com=User Muser}", data.getReadableNames().toString());
         assertEquals("{user@mail.com=HeroDataImpl(level=1, coordinate=[10,5], isMultiplayer=true, additionalData=null)}", data.getCoordinates().toString());
         assertEquals("game", data.getGame());
-        assertEquals(Integer.valueOf(1), data.getLastChatMessage());
+        assertEquals(Integer.valueOf(1), data.getLastRoomChatMessage());
     }
 
     @Test
@@ -65,9 +65,9 @@ public class PlayerDataTest {
                 new LinkedHashMap<>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
                 new LinkedHashMap<>(){{ put("user@mail.com", "User Muser"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
-                null);
+                null, null);
 
-        assertEquals(null, data.getLastChatMessage());
+        assertEquals(null, data.getLastRoomChatMessage());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class PlayerDataTest {
                 new LinkedHashMap<>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
                 new LinkedHashMap<>(){{ put("user@mail.com", "User Muser"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
-                2);
+                2, 22);
 
         assertEquals("PlayerData[BoardSize:15, " +
                 "Board:'board', " +
@@ -90,7 +90,8 @@ public class PlayerDataTest {
                 "Coordinates:'{user@mail.com=HeroDataImpl(level=1, coordinate=[10,5], isMultiplayer=true, additionalData=null)}', " +
                 "ReadableNames:'{user@mail.com=User Muser}', " +
                 "Group:[player1, player2], " +
-                "LastChatMessage:2]",
+                "LastRoomChatMessage:2, " +
+                "LastFieldChatMessage:22]",
                 data.toString());
     }
 
@@ -102,7 +103,7 @@ public class PlayerDataTest {
                 new LinkedHashMap<>(){{ put("user@mail.com", new HeroDataImpl(1, pt(10, 5), true)); }},
                 new LinkedHashMap<>(){{ put("user@mail.com", "User Muser"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
-                1);
+                1, 11);
 
         assertEquals("", data.getInfo());
         assertTrue(data.toString(), data.toString().contains("Info:''"));

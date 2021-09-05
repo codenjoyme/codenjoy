@@ -147,7 +147,7 @@ public class PlayerServiceImplIntegrationTest {
         when(gameService.exists(anyString())).thenReturn(true);
         when(roomService.isOpened(anyString())).thenReturn(true);
 
-        when(chat.getLastMessageIds()).thenReturn(new HashMap<>());
+        when(chat.getLastRoomMessageIds()).thenReturn(new HashMap<>());
         when(time.now()).thenReturn(123L);
 
         // первый плеер зарегался (у него сейвов нет)

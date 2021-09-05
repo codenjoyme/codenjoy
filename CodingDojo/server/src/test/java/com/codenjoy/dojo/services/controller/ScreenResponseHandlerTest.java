@@ -96,7 +96,8 @@ public class ScreenResponseHandlerTest {
                 "      'player2'\n" +
                 "    ],\n" +
                 "    'info':'some_info2',\n" +
-                "    'lastChatMessage':2,\n" +
+                "    'lastFieldChatMessage':22,\n" +
+                "    'lastRoomChatMessage':2,\n" +
                 "    'readableNames':{\n" +
                 "      'player2':'Player2 Name2'\n" +
                 "    },\n" +
@@ -128,7 +129,8 @@ public class ScreenResponseHandlerTest {
                 "      'player4'\n" +
                 "    ],\n" +
                 "    'info':'some_info4',\n" +
-                "    'lastChatMessage':4,\n" +
+                "    'lastFieldChatMessage':44,\n" +
+                "    'lastRoomChatMessage':4,\n" +
                 "    'readableNames':{\n" +
                 "      'player4':'Player4 Name4'\n" +
                 "    },\n" +
@@ -185,7 +187,8 @@ public class ScreenResponseHandlerTest {
                 "      'player1'\n" +
                 "    ],\n" +
                 "    'info':'some_info1',\n" +
-                "    'lastChatMessage':1,\n" +
+                "    'lastFieldChatMessage':11,\n" +
+                "    'lastRoomChatMessage':1,\n" +
                 "    'readableNames':{\n" +
                 "      'player1':'Player1 Name1'\n" +
                 "    },\n" +
@@ -216,7 +219,8 @@ public class ScreenResponseHandlerTest {
                 "      'player2'\n" +
                 "    ],\n" +
                 "    'info':'some_info2',\n" +
-                "    'lastChatMessage':2,\n" +
+                "    'lastFieldChatMessage':22,\n" +
+                "    'lastRoomChatMessage':2,\n" +
                 "    'readableNames':{\n" +
                 "      'player2':'Player2 Name2'\n" +
                 "    },\n" +
@@ -247,7 +251,8 @@ public class ScreenResponseHandlerTest {
                 "      'player4'\n" +
                 "    ],\n" +
                 "    'info':'some_info4',\n" +
-                "    'lastChatMessage':4,\n" +
+                "    'lastFieldChatMessage':44,\n" +
+                "    'lastRoomChatMessage':4,\n" +
                 "    'readableNames':{\n" +
                 "      'player4':'Player4 Name4'\n" +
                 "    },\n" +
@@ -299,7 +304,8 @@ public class ScreenResponseHandlerTest {
                 "      'player3'\n" +
                 "    ],\n" +
                 "    'info':'some_info3',\n" +
-                "    'lastChatMessage':3,\n" +
+                "    'lastFieldChatMessage':33,\n" +
+                "    'lastRoomChatMessage':3,\n" +
                 "    'readableNames':{\n" +
                 "      'player3':'Player3 Name3'\n" +
                 "    },\n" +
@@ -352,7 +358,8 @@ public class ScreenResponseHandlerTest {
                 "      'player2'\n" +
                 "    ],\n" +
                 "    'info':'some_info2',\n" +
-                "    'lastChatMessage':2,\n" +
+                "    'lastFieldChatMessage':22,\n" +
+                "    'lastRoomChatMessage':2,\n" +
                 "    'readableNames':{\n" +
                 "      'player2':'Player2 Name2'\n" +
                 "    },\n" +
@@ -382,7 +389,7 @@ public class ScreenResponseHandlerTest {
                 new LinkedHashMap<>(){{ put("player1", new HeroDataImpl(1, pt(10, 5), true)); }},
                 new LinkedHashMap<>(){{ put("player1", "Player1 Name1"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
-                1));
+                1, 11));
 
         Player player2 = new Player("player2");
         player2.setGame("game");
@@ -394,7 +401,7 @@ public class ScreenResponseHandlerTest {
                 new LinkedHashMap<>(){{ put("player2", new HeroDataImpl(2, pt(12, 7), true)); }},
                 new LinkedHashMap<>(){{ put("player2", "Player2 Name2"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
-                2));
+                2, 22));
 
         Player player4 = new Player("player4");
         player4.setGame("game");
@@ -406,7 +413,7 @@ public class ScreenResponseHandlerTest {
                 new LinkedHashMap<>(){{ put("player4", new HeroDataImpl(4, pt(14, 9), false)); }},
                 new LinkedHashMap<>(){{ put("player4", "Player4 Name4"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player4")); }},
-                4));
+                4, 44));
 
         Player player3 = new Player("player3");
         player3.setGame("other_game");
@@ -418,7 +425,7 @@ public class ScreenResponseHandlerTest {
                 new LinkedHashMap<>(){{ put("player3", new HeroDataImpl(3, pt(13, 8), false)); }},
                 new LinkedHashMap<>(){{ put("player3", "Player3 Name3"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player3")); }},
-                3));
+                3, 33));
 
         return map;
     }

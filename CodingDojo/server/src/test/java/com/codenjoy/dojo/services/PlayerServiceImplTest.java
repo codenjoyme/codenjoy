@@ -49,7 +49,6 @@ import com.codenjoy.dojo.services.printer.GraphicPrinter;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
 import lombok.SneakyThrows;
@@ -207,7 +206,7 @@ public class PlayerServiceImplTest {
         });
         when(gameService.exists(anyString())).thenReturn(true);
 
-        when(chat.getLastMessageIds()).thenReturn(chatIds);
+        when(chat.getLastRoomMessageIds()).thenReturn(chatIds);
 
         // по умолчанию все команаты будут активными и открытыми для регистрации
         when(roomService.isActive(anyString())).thenReturn(true);
@@ -601,7 +600,8 @@ public class PlayerServiceImplTest {
                         "additionalData=null)}', \n" +
                     "ReadableNames:'{petya=readable_petya}', \n" +
                     "Group:[petya], \n" +
-                    "LastChatMessage:106558567], \n" +
+                    "LastRoomChatMessage:106558567, \n" +
+                    "LastFieldChatMessage:null], \n" +
                 "vasya=PlayerData[BoardSize:15, \n" +
                     "Board:'ABCD', \n" +
                     "Game:'game', \n" +
@@ -615,7 +615,8 @@ public class PlayerServiceImplTest {
                         "additionalData=null)}', \n" +
                     "ReadableNames:'{vasya=readable_vasya}', \n" +
                     "Group:[vasya], \n" +
-                    "LastChatMessage:111979568]}",
+                    "LastRoomChatMessage:111979568, \n" +
+                    "LastFieldChatMessage:null]}",
                 clean(split(data, ", \n")));
     }
 
