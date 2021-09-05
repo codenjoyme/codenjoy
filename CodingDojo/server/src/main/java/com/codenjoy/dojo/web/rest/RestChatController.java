@@ -226,7 +226,6 @@ public class RestChatController {
      *             - сообщения получить неудастся.
      * @return Заданное количество сообщений из field-чата.
      */
-    // TODO потестить все поля, как с запросом из room-chat
     @GetMapping("/{room}/messages/field")
     public ResponseEntity<?> getMessagesForField(
             @PathVariable(name = "room") String room,

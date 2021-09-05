@@ -251,7 +251,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 unquote("{text:'message1'}"));
 
         // then
-        assertEquals("{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':23455,'topicId':-" + fieldId + "}",
+        assertEquals("{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':23455,'topicId':-player_fieldId}",
                 fix(get("/rest/chat/validRoom/messages/1")));
 
         // when
@@ -260,7 +260,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 unquote("{text:'message2'}"));
 
         // then
-        assertEquals("{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':23456,'topicId':-" + fieldId + "}",
+        assertEquals("{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':23456,'topicId':-player_fieldId}",
                 fix(get("/rest/chat/validRoom/messages/2")));
     }
 
@@ -364,7 +364,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // then
         // but we can get field-chat messages
-        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-" + fieldId + "}]",
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-player_fieldId}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
     }
 
@@ -548,6 +548,111 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
+    public void shouldGetAllMessages_betweenBeforeAndAfter_forField() {
+        // given
+        // id = 1 topic message
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        // id = 2
+        nowIs(12346L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message3'}"));
+
+        // id = 3
+        nowIs(12347L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message4'}"));
+
+        // id = 4
+        nowIs(12348L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message5'}"));
+
+        // id = 5
+        nowIs(12349L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message6'}"));
+
+        // when then
+        // all
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null}]",
+                fix(get("/rest/chat/validRoom/messages")));
+
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message6','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field")));
+
+        // when then
+        assertEquals("[{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message6','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?count=2")));
+
+        // when then
+        // between + count (ignored)
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12347,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=1&beforeId=4&count=1")));
+
+        // when then
+        // between
+        assertEquals("[{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12348,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=2&beforeId=5")));
+
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=2&beforeId=3")));
+
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=3&beforeId=3")));
+
+        // when then
+        // after + count
+        assertEquals("[{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12348,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=2&count=2")));
+
+        // when then
+        // after
+        assertEquals("[{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message6','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=2")));
+
+        assertEquals("[{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message6','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=3")));
+
+        assertEquals("[{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message6','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=4")));
+
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=5")));
+
+        // when then
+        // before + count
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12347,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?beforeId=4&count=2")));
+
+        // when then
+        // before
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages/field?beforeId=0")));
+
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12346,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?beforeId=3")));
+
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12348,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?beforeId=5")));
+    }
+
+    @Test
     public void shouldGetAllMessages_betweenBeforeAndAfter_withInclude() {
         // given
         // id = 1
@@ -651,8 +756,124 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages?beforeId=4&inclusive=true")));
     }
 
+    @Test
+    public void shouldGetAllMessages_betweenBeforeAndAfter_withInclude_forField() {
+        // given
+        // id = 1 topic message
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        // id = 2
+        nowIs(12346L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message2'}"));
+
+        // id = 3
+        nowIs(12347L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message3'}"));
+
+        // id = 4
+        nowIs(12348L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message4'}"));
+
+        // id = 5
+        nowIs(12349L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message5'}"));
+
+        // when then
+        // all
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null}]",
+                fix(get("/rest/chat/validRoom/messages?")));
+
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?inclusive=true")));
+
+        // when then
+        assertEquals("[{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?count=2&inclusive=true")));
+
+        // when then
+        // between + count (ignored)
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=1&beforeId=4&count=1&inclusive=true")));
+
+        // when then
+        // between
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=2&beforeId=5&inclusive=true")));
+
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=2&beforeId=3&inclusive=true")));
+
+        assertEquals("[{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=3&beforeId=3&inclusive=true")));
+
+        // when then
+        // after + count
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=2&count=2&inclusive=true")));
+
+        // when then
+        // after
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=2&inclusive=true")));
+
+        assertEquals("[{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=3&inclusive=true")));
+
+        assertEquals("[{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=4&inclusive=true")));
+
+        assertEquals("[{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?afterId=5&inclusive=true")));
+
+        // when then
+        // before + count
+        assertEquals("[{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?beforeId=4&count=2&inclusive=true")));
+
+        // when then
+        // before
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages/field?beforeId=0&inclusive=true")));
+
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?beforeId=3&inclusive=true")));
+
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':-player_fieldId},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':12347,'topicId':-player_fieldId},\n" +
+                        "{'id':4,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message4','time':12348,'topicId':-player_fieldId},\n" +
+                        "{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message5','time':12349,'topicId':-player_fieldId}]",
+                fix(get("/rest/chat/validRoom/messages/field?beforeId=5&inclusive=true")));
+    }
+
     private String fix(String string) {
-        return quote(string).replace("},{", "},\n{");
+        return quote(string)
+                .replace("},{", "},\n{")
+                .replace(String.valueOf(getFieldId("player")), "player_fieldId");
     }
 
     @Test
@@ -935,7 +1156,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         shouldPostMessageForField_success();
 
         int fieldId = getFieldId("player");
-        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-" + fieldId + "}]",
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-player_fieldId}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
 
         // when
@@ -953,7 +1174,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         shouldPostMessageForField_success();
 
         int fieldId = getFieldId("player");
-        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-" + fieldId + "}]",
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-player_fieldId}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
 
         // switch to another, and come back again
