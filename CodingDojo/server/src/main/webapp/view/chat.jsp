@@ -24,7 +24,7 @@
 
 <div class="chat" style="display:none;" zoom-on-wheel>
     <script template type="text/x-jquery-tmpl">
-        <div message="{%= id %}" player="{%= player %}" class="chat-message, id-chat-message-{%= id %}">
+        <div message="{%= id %}" player="{%= player %}" class="chat-message id-chat-message-{%= id %}">
             <span class="message-author">{%= author %}</span>
             <span class="message-time" title="{%= dateTime %}">{%= time %}</span>
             <span class="delete-message"> x </span>
