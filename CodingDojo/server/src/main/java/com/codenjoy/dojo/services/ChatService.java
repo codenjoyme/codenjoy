@@ -48,6 +48,13 @@ public class ChatService {
     private Spreader spreader;
     private final Map<String, String> playerNames = new ConcurrentHashMap<>();
 
+    /**
+     * Метод для получения заданного количества сообщений (относительно конкретных
+     * after/before сообщений) для конкретного пользователя в room-чате.
+     *
+     * Администратор может получать сообщения в любом чате,
+     * пользователь только в своем.
+     */
     public List<PMessage> getMessages(String room, int count,
                                       Integer afterId, Integer beforeId,
                                       boolean inclusive,
@@ -70,6 +77,10 @@ public class ChatService {
         return wrap(chat.getMessages(room, count));
     }
 
+    /**
+     * Проверка пройдет, если плеер находится в заданной комнате,
+     * или если он админ.
+     */
     public void validateIsChatAvailable(String playerId, String room) {
         // TODO каждый раз при загрузке страницы будет в базу идти запрос а не админ ли это? - дорого
         if (!registration.isAdmin(playerId)) {
@@ -95,6 +106,13 @@ public class ChatService {
         return playerNames.get(playerId);
     }
 
+    /**
+     * Метод для получения всех сообщений для конкретного пользователя
+     * в topic-чате (чате под конкретным topicMessageId сообщением room-чата).
+     *
+     * Администратор может получать любые topic-сообщения в любом room-чате,
+     * пользователь только topic-чообщения в своем room-чате.
+     */
     public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
         validateTopicExists(topicMessageId, room);
@@ -109,11 +127,22 @@ public class ChatService {
         getMessage(topicMessageId, room);
     }
 
+    /**
+     * Метод для получения всех сообщений для конкретного пользователя
+     * в field-чате поля на котором он играет.
+     *
+     * Администратор не может получать field-чат сообщения,
+     * пользователь только сообщения field-чата поля на котором пока что играет.
+     */
     public List<PMessage> getFieldMessages(String room, String playerId) {
         int topicId = getFieldTopicId(room, playerId);
         return wrap(chat.getTopicMessages(topicId));
     }
 
+    /**
+     * Метод получения fieldId поля на котором играет пользователь в комнате room c
+     * предварительной проверкой соответствия пользователя комнате.
+     */
     private int getFieldTopicId(String room, String playerId) {
         Optional<GameRoom> gameRoom = spreader.gameRoom(room, playerId);
         gameRoom.orElseThrow(() ->
@@ -125,6 +154,14 @@ public class ChatService {
         return topicId;
     }
 
+    /**
+     * Метод для получения конкретного сообщения по id.
+     *
+     * Администратор может получать любые сообщения,
+     * пользователь только сообщения из своей комнаты.
+     */
+    // TODO пользователь зная fieldId не своей борды, и id сообщения там
+    //      сможет получить его с помощью этого метода
     public PMessage getMessage(int messageId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
@@ -141,11 +178,22 @@ public class ChatService {
         return wrap(message);
     }
 
+    /**
+     * Метод для публикации сообщения в field-чат от имени пользователя.
+     *
+     * Это возможно только, если пользователь находится в данной комнате.
+     */
     public PMessage postMessageForField(String text, String room, String playerId) {
         int topicId = getFieldTopicId(room, playerId);
         return saveMessage(topicId, text, room, playerId);
     }
 
+    /**
+     * Метод для публикации сообщения в room-чат (или thread-чат,
+     * если указан topicMessageId) от имени пользователя.
+     *
+     * Это возможно только, если пользователь находится в данной комнате.
+     */
     public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
@@ -167,6 +215,13 @@ public class ChatService {
                         .build()));
     }
 
+    /**
+     * Метод для удаления сообщения в любом чате (room-чат, thread-чат или
+     * field-чат) от имени пользователя.
+     *
+     * Это возможно только, если пользователь является автором сообщения
+     * и продолжает пребывать в заданной комнате.
+     */
     public boolean deleteMessage(int messageId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
