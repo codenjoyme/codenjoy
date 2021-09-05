@@ -20,10 +20,13 @@
  * #L%
  */
 
+var ROOM_TYPE = 'room';
+var FIELD_TYPE = 'field';
+
 function initChat(contextPath, type) {
 
     var root = $('.id-' + type + '-chat ');
-    var urlSuffix = (type == 'room') ? '' : '/field';
+    var urlSuffix = (type == ROOM_TYPE) ? '' : '/field';
 
     var deleteMessage = async (messageId) => new Promise((resolve, reject) =>
         deleteData('/rest/chat/' + setup.room + '/messages/' + messageId,
