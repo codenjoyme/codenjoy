@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.multiplayer.GameRoom;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -101,15 +103,30 @@ public class ChatService {
     }
 
     private void validateTopicExists(int topicMessageId, String room) {
-        if (spreader.fieldInRoom(topicMessageId, room)) {
-            // you can get field messages like topic messages
-            return;
-        }
-
         // TODO по сути будет по 2 запроса, что не ок по производительности
         //      можно было бы валидацию зашить во второй запрос?
         // room validation only
         getMessage(topicMessageId, room);
+    }
+
+    public List<PMessage> getFieldMessages(String room, String playerId) {
+        // TODO test me
+        validateIsChatAvailable(playerId, room);
+        // TODO test me
+        int topicId = getFieldTopicId(room, playerId);
+
+        return wrap(chat.getTopicMessages(topicId));
+    }
+
+    private int getFieldTopicId(String room, String playerId) {
+        Optional<GameRoom> gameRoom = spreader.gameRoom(room, playerId);
+        gameRoom.orElseThrow(() ->
+                exception("There is no player '%s' in room '%s'",
+                        playerId, room));
+
+        int fieldId = gameRoom.get().field().id();
+        int topicId = -fieldId; // TODO а точно тут надо минус, может сделать строковую айдишку скажем F-34324?
+        return topicId;
     }
 
     public PMessage getMessage(int messageId, String room, String playerId) {
@@ -126,6 +143,15 @@ public class ChatService {
                     messageId, room);
         }
         return wrap(message);
+    }
+
+    public PMessage postMessageForField(String text, String room, String playerId) {
+        // TODO test me
+        validateIsChatAvailable(playerId, room);
+        // TODO test me
+        int topicId = getFieldTopicId(room, playerId);
+
+        return saveMessage(topicId, text, room, playerId);
     }
 
     public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {

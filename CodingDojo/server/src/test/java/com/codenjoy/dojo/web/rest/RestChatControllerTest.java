@@ -300,15 +300,15 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldPostMessage_success_whenThreadTopicIsFieldTopic() {
+    public void shouldPostMessageForField_success() {
         // given
         assertPlayerInRoom("player", "validRoom");
         int fieldId = deals.get("player").getField().id();
 
         // when then
-        // try to post reply for exists field (topicId = fieldId)
+        // try to post message for exists field
         nowIs(12345L);
-        post(200, "/rest/chat/validRoom/messages/" + fieldId + "/replies",
+        post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message1'}"));
 
         // then
@@ -317,9 +317,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages")));
 
         // then
-        // but if we know fieldId we can get their messages like topic messages
-        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':" + fieldId + "}]",
-                fix(get("/rest/chat/validRoom/messages/" + fieldId + "/replies")));
+        // but we can get field-chat messages
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-" + fieldId + "}]",
+                fix(get("/rest/chat/validRoom/messages/field")));
     }
 
     @Test

@@ -137,6 +137,30 @@ public class RestChatController {
     }
 
     /**
+     * Метод для отправки сообщений в field-чат от имени конкретного пользователя.
+     * Field-чат - это все сообщения созданные пользователями в контексте конкретной
+     * игры на поле.
+     *
+     * @param room Имя комнаты в чат которой отправится сообщение.
+     * @param message POJO с сообщением.
+     * @param user Пользователь осуществляющтий запрос.
+     *              Если пользователя нет в комнате - сообщение в чат не доставится.
+     * @return В случае успеха вернется опубликованное сообщение с новой id,
+     *              ссылкой на fieldId и другими полями PMessage.
+     */
+    @PostMapping("/{room}/messages/field")
+    public ResponseEntity<?> postMessageForField(
+            @PathVariable(name = "room") String room,
+            @NotNull @RequestBody PMessageShort message,
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validator.checkUser(user);
+
+        return ResponseEntity.ok(chat.postMessageForField(message.getText(),
+                room, user.getId()));
+    }
+
+    /**
      * Получение конкретного сообщения room-chat по его id.
      *
      * @param room Имя комнаты, сообщения чата которой интересуют
@@ -176,6 +200,26 @@ public class RestChatController {
         validator.checkUser(user);
 
         return ResponseEntity.ok(chat.getTopicMessages(id, room, user.getId()));
+    }
+
+    /**
+     * Получение всех field-chat сообщений, привязанных к конкретному field.
+     * Field-чат - это все сообщения созданные пользователями в контексте конкретной
+     * игры на поле.
+     *
+     * @param room Имя комнаты, сообщения чата которой интересуют.
+     * @param user Пользователь осуществляющтий запрос.
+     *            Если пользователя нет в комнате - сообщение получить неудастся.
+     * @return Список всех найденных сообщений со своими полями размещенными в PMessage.
+     */
+    @GetMapping("/{room}/messages/field")
+    public ResponseEntity<?> getMessagesForFiled(
+            @PathVariable(name = "room") String room,
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validator.checkUser(user);
+
+        return ResponseEntity.ok(chat.getFieldMessages(room, user.getId()));
     }
 
     /**
