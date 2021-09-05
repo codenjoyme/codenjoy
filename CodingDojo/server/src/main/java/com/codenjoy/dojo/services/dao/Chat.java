@@ -86,17 +86,16 @@ public class Chat {
 
     /**
      * Используется для информирования пользователя о том, что
-     * пришли новые сообщения.
+     * пришли новые сообщения в room-чат. Метод готовит данные
+     * сразу для всех комнат.
      *
      * @return Возвращает последние сообщения в каждой комнате
      * с ключем этой комнаты, а значением - id сообщения.
      */
-    // TODO А как же быть с topic сообщениями, о них ведь тоже надо
-    //      как-то информировать пользователя...
-    public Map<String, Integer> getLastMessageIds() {
-        return pool.select("SELECT m2.room, m2.id " +
+    public Map<String, Integer> getLastRoomMessageIds() {
+        return (Map) pool.select("SELECT m2.room AS key, m2.id AS value " +
                         "FROM" +
-                        "    (SELECT room, MAX(time) as time" +
+                        "    (SELECT room, MAX(time) AS time" +
                         "        FROM messages" +
                         "        WHERE topic_id IS NULL" +
                         "        GROUP BY room) m1" +
@@ -107,11 +106,33 @@ public class Chat {
                 rs -> toMap(rs));
     }
 
+    /**
+     * Используется для информирования пользователя о том, что
+     * пришли новые сообщения в topic или field-чат. Метод готовит данные
+     * сразу для всех topic и filed.
+     *
+     * @return Возвращает последние сообщения в каждом чате.
+     * Ключ для topic-чата topicMessageId, а для field-чата ключ -fieldId).
+     * Значение - id последнего сообщения в этом чате.
+     */
+    public Map<Integer, Integer> getLastTopicMessageIds() {
+        return (Map) pool.select("SELECT m2.topic_id AS key, m2.id AS value " +
+                        "FROM" +
+                        "    (SELECT topic_id, MAX(time) AS time" +
+                        "        FROM messages" +
+                        "        GROUP BY topic_id) m1" +
+                        "    JOIN messages m2" +
+                        "        ON m1.topic_id = m2.topic_id" +
+                        "            AND m1.time = m2.time;",
+                new Object[]{},
+                rs -> toMap(rs));
+    }
+
     @SneakyThrows
-    public Map<String, Integer> toMap(ResultSet rs) {
+    public Map<Object, Integer> toMap(ResultSet rs) {
         return new LinkedHashMap<>(){{
            while (rs.next()) {
-                put(rs.getString("room"), rs.getInt("id"));
+                put(rs.getObject("key"), rs.getInt("value"));
            }
         }};
     }
