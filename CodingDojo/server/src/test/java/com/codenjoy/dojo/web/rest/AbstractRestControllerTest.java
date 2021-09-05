@@ -230,7 +230,7 @@ public abstract class AbstractRestControllerTest {
     }
 
     protected void join(String id, String room) {
-        Player player = players.get(id);
+        Player player = new Player(id);
         player.setRoom(room);
         players.update(player);
     }

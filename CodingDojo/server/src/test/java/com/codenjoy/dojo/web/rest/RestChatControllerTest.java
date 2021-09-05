@@ -303,7 +303,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldPostMessageForField_success() {
         // given
         assertPlayerInRoom("player", "validRoom");
-        int fieldId = deals.get("player").getField().id();
+        int fieldId = getFieldId("player");
 
         // when then
         // try to post message for exists field
@@ -320,6 +320,50 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // but we can get field-chat messages
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-" + fieldId + "}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
+    }
+
+    private int getFieldId(String player) {
+        return deals.get(player).getField().id();
+    }
+
+    @Test
+    public void shouldPostMessageForField_fail_whenThreadTopicInOtherRoom() {
+        // given
+        assertPlayerInRoom("player", "validRoom");
+        int fieldId = getFieldId("player");
+
+        // when then
+        // try to post field message for other room
+        assertPostError("java.lang.IllegalArgumentException: " +
+                        "Player 'player' is not in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages/field",
+                unquote("{text:'message1'}"));
+
+        // when then
+        // there are no messages here
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages")));
+
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages/field")));
+
+        // when then
+        // try to get field message from other room
+        assertGetError("java.lang.IllegalArgumentException: " +
+                        "Player 'player' is not in room 'otherRoom'",
+                "/rest/chat/otherRoom/messages/field");
+
+        // when
+        // rejoin in other room
+        join("player", "otherRoom");
+
+        // when then
+        // there are no messages here
+        assertEquals("[]",
+                fix(get("/rest/chat/otherRoom/messages")));
+
+        assertEquals("[]",
+                fix(get("/rest/chat/otherRoom/messages/field")));
     }
 
     @Test
@@ -339,7 +383,6 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         join("player", "otherRoom");
 
         // try to post reply for topic message in other room
-        nowIs(12346L);
         assertPostError("java.lang.IllegalArgumentException: " +
                         "There is no message with id '1' in room 'otherRoom'",
                 "/rest/chat/otherRoom/messages/1/replies",
