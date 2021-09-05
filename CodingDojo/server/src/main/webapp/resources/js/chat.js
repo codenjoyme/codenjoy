@@ -20,7 +20,10 @@
  * #L%
  */
 
-function initRoomChat(contextPath) {
+function initChat(contextPath, type) {
+
+    var root = $('.id-' + type + '-chat ');
+    var urlSuffix = (type == 'room') ? '' : '/field';
 
     var deleteMessage = async (messageId) => new Promise((resolve, reject) =>
         deleteData('/rest/chat/' + setup.room + '/messages/' + messageId,
@@ -29,7 +32,7 @@ function initRoomChat(contextPath) {
     );
 
     var postMessage = async (message) => new Promise((resolve, reject) =>
-        sendData('/rest/chat/' + setup.room + '/messages',
+        sendData('/rest/chat/' + setup.room + '/messages' + urlSuffix,
                 { text : escapeHtml(message) },
                 deleted => resolve(deleted),
                 error => reject(error))
@@ -56,7 +59,8 @@ function initRoomChat(contextPath) {
 
     var getMessages = async (afterId, beforeId, inclusive, count) => new Promise((resolve, reject) => {
         var params = buildParams(afterId, beforeId, inclusive, count);
-        loadData('/rest/chat/' + setup.room + '/messages' + params,
+        params = (urlSuffix == '') ? params : ''; // TODO сделать метод получения field сообщений так же с after/before
+        loadData('/rest/chat/' + setup.room + '/messages' + urlSuffix + params,
                 messages => resolve(messages),
                 error => reject(error));
     });
@@ -130,10 +134,10 @@ function initRoomChat(contextPath) {
                 dateTime: dateTime
             });
         });
-        var html = $('#room-chat script').tmpl(templateData);
+        var html = root.find('.chat script').tmpl(templateData);
 
         var scrollHeight = getScrollHeight();
-        html.find('span.delete-room-message').each(function( index ) {
+        html.find('span.delete-message').each(function( index ) {
             var deleteButton = $(this);
             var messageId = deleteButton.parent().attr('message');
             var message = getMessage(html, messageId);
@@ -150,9 +154,9 @@ function initRoomChat(contextPath) {
         });
 
         var anchor = 'div[message=' + messageId + ']';
-        if (!messageId || !$(anchor)[0]) {
+        if (!messageId || !root.find(anchor)[0]) {
             // если нет сообщения рядом с которым догружать - грузим в пустой чат
-            html.appendTo('#' + chatContainer.attr('id'));
+            html.appendTo(chatContainer);
             // сохраняем скролинг в той же позиции, иначе все сместится из за добавление в начало чата
             scrollTo(getScrollHeight() - scrollHeight);
         } else if (isAfterOrBefore) {
@@ -283,11 +287,11 @@ function initRoomChat(contextPath) {
         return;
     }
 
-    var postMessageButton = $('#post-room-message');
-    var newMessage = $('#new-room-message');
-    var chatContainer = $('#room-chat-container');
-    var chat = $('#room-chat');
-    var chatTab = $('#room-chat-tab');
+    var postMessageButton = root.find('.id-post-message');
+    var newMessage = root.find('.id-new-message');
+    var chatContainer = root.find('.id-chat-container');
+    var chat = root.find('.chat');
+    var chatTab = root.find('#' + type + '-chat-tab');
 
     loadChatMessages(function() {
         scrollToEnd(); // TODO почему-то оно не работает, когда чат неактивен, потому я делаю ###1

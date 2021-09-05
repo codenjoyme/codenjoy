@@ -37,12 +37,12 @@
     </div>
 
     <input class="tv-radio" id="tv-tab-2" name="tv-group" type="radio"/>
-    <div class="tv-content">
-        <%@include file="room-chat.jsp"%>
+    <div class="tv-content id-room-chat">
+        <%@include file="chat.jsp"%>
     </div>
 
     <input class="tv-radio" id="tv-tab-3" name="tv-group" type="radio"/>
-    <div class="tv-content">
-        <%@include file="field-chat.jsp"%>
+    <div class="tv-content id-field-chat">
+        <%@include file="chat.jsp"%>
     </div>
 </div>
