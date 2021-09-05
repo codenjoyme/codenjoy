@@ -193,13 +193,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldGetMessage_whenPostIt() {
-        // given
-        assertError("java.lang.IllegalArgumentException: " +
-                        "There is no message with id " +
-                        "'1' in room 'validRoom'",
-            "/rest/chat/validRoom/messages/1");
-
+    public void shouldGetMessage_success_whenPostIt_inRoomChat() {
         // when
         nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
@@ -220,6 +214,57 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
+    public void shouldGetMessage_success_whenPostIt_inTopicChat() {
+        // given
+        // room chat message (it will be an topic message)
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        // when
+        nowIs(23456L);
+        post(200, "/rest/chat/validRoom/messages/1/replies",
+                unquote("{text:'message2'}"));
+
+        // then
+        assertEquals("{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':23456,'topicId':1}",
+                fix(get("/rest/chat/validRoom/messages/2")));
+
+        // when
+        nowIs(23457L);
+        post(200, "/rest/chat/validRoom/messages/2/replies",
+                unquote("{text:'message3'}"));
+
+        // then
+        assertEquals("{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':23457,'topicId':2}",
+                fix(get("/rest/chat/validRoom/messages/3")));
+    }
+
+    @Test
+    public void shouldGetMessage_success_whenPostIt_inFieldChat() {
+        // given
+        int fieldId = getFieldId("player");
+
+        // when
+        nowIs(23455L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message1'}"));
+
+        // then
+        assertEquals("{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':23455,'topicId':-" + fieldId + "}",
+                fix(get("/rest/chat/validRoom/messages/1")));
+
+        // when
+        nowIs(23456L);
+        post(200, "/rest/chat/validRoom/messages/field",
+                unquote("{text:'message2'}"));
+
+        // then
+        assertEquals("{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':23456,'topicId':-" + fieldId + "}",
+                fix(get("/rest/chat/validRoom/messages/2")));
+    }
+
+    @Test
     public void shouldGetMessage_whenNotExists() {
         // when then
         // вообще нет сообщения
@@ -230,7 +275,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldGetMessage_whenTryGetMessageFromOtherRoom_likeMessageFromMyRoom() {
+    public void shouldGetMessage_fail_whenTryGetMessageFromOtherRoom_likeMessageFromMyRoom() {
         // given
         nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
@@ -246,7 +291,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldGetMessage_whenTryGetMessageFromOtherRoom() {
+    public void shouldGetMessage_fail_whenTryGetMessageFromOtherRoom() {
         // given
         nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
