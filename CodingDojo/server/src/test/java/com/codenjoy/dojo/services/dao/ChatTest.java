@@ -719,4 +719,65 @@ public class ChatTest {
         assertThat(4, 7)
                 .in(chat.getMessagesBetween(null, "room", 3, 8, false));
     }
+
+    @Test
+    public void shouldGetAllMessages_caseTopic() {
+        // given
+        addMessage("room", "player");       // id = 1 // message in room, will be topic 1
+        addMessage("room", "player");       // id = 2 // message in room, will be topic 2
+        addMessage("room", "player", 1);    // id = 3 // message for topic1
+        addMessage("room", "player");       // id = 4 // just another one message in room
+        addMessage("room", "player", 2);    // id = 5 // message for topic2
+        addMessage("room", "player", 1);    // id = 6 // message for topic1
+        addMessage("room", "player");       // id = 7 // just another one message in room
+        addMessage("room", "player", 1);    // id = 8 // message for topic1
+
+        // when then
+        // all for room
+        assertThat(1, 2, 4, 7)
+                .in(chat.getMessages(null, "room", 10));
+
+        // when then
+        // all for topic 1 message in room
+        assertThat(3, 6, 8)
+                .in(chat.getMessages(1, "room", MAX));
+
+        assertThat(6, 8)
+                .in(chat.getMessages(1, "room", 2));
+
+        // when then
+        // all for topic 2 message in room
+        assertThat(5)
+                .in(chat.getMessages(2, "room", MAX));
+
+        assertThat(5)
+                .in(chat.getMessages(2, "room", 1));
+
+        // when then
+        // get topic message like room message
+        assertThat()
+                .in(chat.getMessages(3, "room", MAX));
+
+        // when then
+        // all for non topic message in room
+        assertThat()
+                .in(chat.getMessages(4, "room", MAX));
+
+        // when then
+        // between messages in case between 3 ... 8
+        assertThat(4, 7)
+                .in(chat.getMessagesBetween(null, "room", 3, 8, true));
+
+        assertThat(3, 6, 8)
+                .in(chat.getMessagesBetween(1, "room", 3, 8, true));
+
+        assertThat(6)
+                .in(chat.getMessagesBetween(1, "room", 3, 8, false));
+
+        assertThat(5)
+                .in(chat.getMessagesBetween(2, "room", 3, 8, true));
+
+        assertThat()
+                .in(chat.getMessagesBetween(3, "room", 3, 8, true));
+    }
 }
