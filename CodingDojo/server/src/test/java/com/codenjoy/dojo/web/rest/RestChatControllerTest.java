@@ -335,7 +335,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // when then
         // try to post field message for other room
         assertPostError("java.lang.IllegalArgumentException: " +
-                        "Player 'player' is not in room 'otherRoom'",
+                        "There is no player 'player' in room 'otherRoom'",
                 "/rest/chat/otherRoom/messages/field",
                 unquote("{text:'message1'}"));
 
@@ -350,7 +350,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // when then
         // try to get field message from other room
         assertGetError("java.lang.IllegalArgumentException: " +
-                        "Player 'player' is not in room 'otherRoom'",
+                        "There is no player 'player' in room 'otherRoom'",
                 "/rest/chat/otherRoom/messages/field");
 
         // when

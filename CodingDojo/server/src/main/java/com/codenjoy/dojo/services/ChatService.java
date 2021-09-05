@@ -110,10 +110,7 @@ public class ChatService {
     }
 
     public List<PMessage> getFieldMessages(String room, String playerId) {
-        validateIsChatAvailable(playerId, room);
-        // TODO test me
         int topicId = getFieldTopicId(room, playerId);
-
         return wrap(chat.getTopicMessages(topicId));
     }
 
@@ -145,10 +142,7 @@ public class ChatService {
     }
 
     public PMessage postMessageForField(String text, String room, String playerId) {
-        validateIsChatAvailable(playerId, room);
-        // TODO test me
         int topicId = getFieldTopicId(room, playerId);
-
         return saveMessage(topicId, text, room, playerId);
     }
 
