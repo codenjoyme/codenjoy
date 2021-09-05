@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GameRoom;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.web.controller.Validator;
@@ -162,9 +163,12 @@ public class ChatService {
                 exception("There is no player '%s' in room '%s'",
                         playerId, room));
 
-        int fieldId = gameRoom.get().field().id();
-        int topicId = -fieldId; // TODO а точно тут надо минус, может сделать строковую айдишку скажем F-34324?
-        return topicId;
+        return topicId(gameRoom.get().field());
+    }
+
+    public static int topicId(GameField field) {
+        // TODO а точно тут надо минус, может сделать строковую айдишку скажем F-34324?
+        return - field.id();
     }
 
     /**
