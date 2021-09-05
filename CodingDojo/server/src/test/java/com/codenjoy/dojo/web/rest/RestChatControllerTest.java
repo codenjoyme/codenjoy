@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Import;
 import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.when;
 
 @Import(RestChatControllerTest.ContextConfiguration.class)
@@ -891,6 +892,29 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         int fieldId = getFieldId("player");
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-" + fieldId + "}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
+
+        // when
+        // delete field message
+        delete("/rest/chat/validRoom/messages/1");
+
+        // then
+        assertEquals("[]",
+                fix(get("/rest/chat/validRoom/messages/field")));
+    }
+
+    @Test
+    public void shouldDeleteFieldMessage_whenChangedField() {
+        // given
+        shouldPostMessageForField_success();
+
+        int fieldId = getFieldId("player");
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':-" + fieldId + "}]",
+                fix(get("/rest/chat/validRoom/messages/field")));
+
+        // switch to another, and come back again
+        join("player", "otherRoom");
+        join("player", "validRoom");
+        assertNotEquals(fieldId, getFieldId("player"));
 
         // when
         // delete field message

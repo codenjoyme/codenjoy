@@ -220,7 +220,8 @@ public class ChatService {
      * field-чат) от имени пользователя.
      *
      * Это возможно только, если пользователь является автором сообщения
-     * и продолжает пребывать в заданной комнате.
+     * и продолжает пребывать в заданной комнате (при этом при удалении
+     * field-сообщений он может покинуть изначальную field и пребывать в дургой)
      */
     public boolean deleteMessage(int messageId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
