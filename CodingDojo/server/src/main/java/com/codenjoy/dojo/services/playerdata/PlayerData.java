@@ -46,7 +46,8 @@ public class PlayerData implements ScreenData {
     private Map<String, HeroData> coordinates;
     private Map<String, String> readableNames;
     private List<String> group;
-    private Integer lastChatMessage;
+    private Integer lastRoomChatMessage;
+    private Integer lastFieldChatMessage;
 
     public String getInfo() {
         return (info == null) ? StringUtils.EMPTY : info;
@@ -65,7 +66,8 @@ public class PlayerData implements ScreenData {
                         "Coordinates:'%s', " +
                         "ReadableNames:'%s', " +
                         "Group:%s, " +
-                        "LastChatMessage:%s]",
+                        "LastRoomChatMessage:%s, " +
+                        "LastFieldChatMessage:%s]",
                 boardSize,
                 board,
                 game,
@@ -76,7 +78,8 @@ public class PlayerData implements ScreenData {
                 coordinates,
                 readableNames,
                 group,
-                lastChatMessage);
+                lastRoomChatMessage,
+                lastFieldChatMessage);
     }
 
 }

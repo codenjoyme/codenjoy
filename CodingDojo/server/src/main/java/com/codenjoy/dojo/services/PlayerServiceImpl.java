@@ -388,12 +388,14 @@ public class PlayerServiceImpl implements PlayerService {
         cacheBoards.clear();
 
         Map<String, GameData> gameDataMap = dealsView.getGamesDataMap();
-        Map<String, Integer> lastChatIds = chat.getLastMessageIds();
+        Map<String, Integer> lastRoomChatIds = chat.getLastRoomMessageIds();
+        Map<Integer, Integer> lastTopicChatIds = chat.getLastTopicMessageIds();
         for (Deal deal : deals) {
             Game game = deal.getGame();
             Player player = deal.getPlayer();
             try {
-                Integer lastChatMessage = lastChatIds.get(player.getRoom());
+                Integer lastRoomChatMessage = lastRoomChatIds.get(player.getRoom());
+                Integer lastFieldChatMessage = lastTopicChatIds.get(ChatService.topicId(deal.getField()));
 
                 String gameType = deal.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());
@@ -428,7 +430,8 @@ public class PlayerServiceImpl implements PlayerService {
                         coordinates,
                         readableNames,
                         group,
-                        lastChatMessage));
+                        lastRoomChatMessage,
+                        lastFieldChatMessage));
 
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +
