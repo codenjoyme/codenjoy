@@ -178,7 +178,11 @@ span.pow {
     height: 70vh;
 }
 
-.chat .delete-message {
+.chat .delete-room-message {
+    cursor: pointer;
+}
+
+.chat .delete-field-message {
     cursor: pointer;
 }
 

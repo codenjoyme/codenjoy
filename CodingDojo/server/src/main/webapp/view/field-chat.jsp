@@ -22,21 +22,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="chat" class="chat" style="display:none;" zoom-on-wheel>
+<div id="field-chat" class="chat" style="display:none;" zoom-on-wheel>
     <script template type="text/x-jquery-tmpl">
-        <div id="chat-message-{%= id %}" message="{%= id %}" player="{%= player %}" class="chat-message">
+        <div id="chat-field-message-{%= id %}" message="{%= id %}" player="{%= player %}" class="chat-message">
             <span class="message-author">{%= author %}</span>
             <span class="message-time" title="{%= dateTime %}">{%= time %}</span>
-            <span class="delete-message"> x </span>
+            <span class="delete-field-message"> x </span>
             <div class="message-text">{{html text}}</div>
         </div>
     </script>
-    <div id="chat-container" class="messages-container">
+    <div id="field-chat-container" class="messages-container">
     </div>
     <div class="message-area">
-        <textarea id="new-message" placeholder="Enter - submit, Shift+Enter - new line"></textarea>
+        <textarea id="new-field-message" placeholder="Enter - submit, Shift+Enter - new line"></textarea>
     </div>
     <div class="post-message-button">
-        <input type="button" id="post-message" value="Send">
+        <input type="button" id="post-field-message" value="Send">
     </div>
 </div>

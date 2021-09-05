@@ -96,7 +96,8 @@ function initBoardComponents(setup) {
     }
 
     if (setup.enableChat) {
-        initChat(setup.contextPath);
+        initRoomChat(setup.contextPath);
+        initFieldChat(setup.contextPath);
     }
 
     if (setup.enableDonate) {

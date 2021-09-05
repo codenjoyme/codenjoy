@@ -8,41 +8,35 @@
   it under the terms of the GNU General Public License as
   published by the Free Software Foundation, either version 3 of the
   License, or (at your option) any later version.
-
+  
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+  
   You should have received a copy of the GNU General Public
   License along with this program.  If not, see
   <http://www.gnu.org/licenses/gpl-3.0.html>.
   #L%
   --%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
-    <div class="tabs">
-        <label id="leaderboard-tab" class="tv-tab" for="tv-tab-1">Leaderboard</label>
-        <label id="room-chat-tab" class="tv-tab" for="tv-tab-2">Room chat</label>
-        <label id="field-chat-tab" class="tv-tab" for="tv-tab-3">Field chat</label>
+<div id="room-chat" class="chat" style="display:none;" zoom-on-wheel>
+    <script template type="text/x-jquery-tmpl">
+        <div id="room-chat-message-{%= id %}" message="{%= id %}" player="{%= player %}" class="chat-message">
+            <span class="message-author">{%= author %}</span>
+            <span class="message-time" title="{%= dateTime %}">{%= time %}</span>
+            <span class="delete-room-message"> x </span>
+            <div class="message-text">{{html text}}</div>
+        </div>
+    </script>
+    <div id="room-chat-container" class="messages-container">
     </div>
-
-    <input class="tv-radio" id="tv-tab-1" name="tv-group" type="radio" checked="checked"/>
-    <div class="tv-content">
-        <%@include file="leaderstable.jsp"%>
-        <%@include file="info.jsp"%>
+    <div class="message-area">
+        <textarea id="new-room-message" placeholder="Enter - submit, Shift+Enter - new line"></textarea>
     </div>
-
-    <input class="tv-radio" id="tv-tab-2" name="tv-group" type="radio"/>
-    <div class="tv-content">
-        <%@include file="room-chat.jsp"%>
-    </div>
-
-    <input class="tv-radio" id="tv-tab-3" name="tv-group" type="radio"/>
-    <div class="tv-content">
-        <%@include file="field-chat.jsp"%>
+    <div class="post-message-button">
+        <input type="button" id="post-room-message" value="Send">
     </div>
 </div>

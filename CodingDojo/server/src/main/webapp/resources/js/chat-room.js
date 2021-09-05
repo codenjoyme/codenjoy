@@ -20,7 +20,7 @@
  * #L%
  */
 
-function initChat(contextPath) {
+function initRoomChat(contextPath) {
 
     var deleteMessage = async (messageId) => new Promise((resolve, reject) =>
         deleteData('/rest/chat/' + setup.room + '/messages/' + messageId,
@@ -130,10 +130,10 @@ function initChat(contextPath) {
                 dateTime: dateTime
             });
         });
-        var html = $('#chat script').tmpl(templateData);
+        var html = $('#room-chat script').tmpl(templateData);
 
         var scrollHeight = getScrollHeight();
-        html.find('span.delete-message').each(function( index ) {
+        html.find('span.delete-room-message').each(function( index ) {
             var deleteButton = $(this);
             var messageId = deleteButton.parent().attr('message');
             var message = getMessage(html, messageId);
@@ -152,7 +152,7 @@ function initChat(contextPath) {
         var anchor = 'div[message=' + messageId + ']';
         if (!messageId || !$(anchor)[0]) {
             // если нет сообщения рядом с которым догружать - грузим в пустой чат
-            html.appendTo('#chat-container');
+            html.appendTo('#' + chatContainer.attr('id'));
             // сохраняем скролинг в той же позиции, иначе все сместится из за добавление в начало чата
             scrollTo(getScrollHeight() - scrollHeight);
         } else if (isAfterOrBefore) {
@@ -283,11 +283,11 @@ function initChat(contextPath) {
         return;
     }
 
-    var postMessageButton = $('#post-message');
-    var newMessage = $('#new-message');
-    var chatContainer = $('#chat-container');
-    var chat = $('#chat');
-    var chatTab = $('#chat-tab');
+    var postMessageButton = $('#post-room-message');
+    var newMessage = $('#new-room-message');
+    var chatContainer = $('#room-chat-container');
+    var chat = $('#room-chat');
+    var chatTab = $('#room-chat-tab');
 
     loadChatMessages(function() {
         scrollToEnd(); // TODO почему-то оно не работает, когда чат неактивен, потому я делаю ###1
