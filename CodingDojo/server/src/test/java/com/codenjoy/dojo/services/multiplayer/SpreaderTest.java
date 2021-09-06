@@ -22,14 +22,18 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.nullobj.NullGameField;
-import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.google.common.collect.Iterators;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -45,11 +49,26 @@ public class SpreaderTest {
     private final String room = "room";
     private final MultiplayerType multiplayerType = MultiplayerType.MULTIPLE;
     private final Supplier<GameField> gameFiled = () -> NullGameField.INSTANCE;
+    private List<Player> players = new LinkedList<>();
+
+    private Player newPlayer() {
+        Player result = new Player("player" + players.size());
+        players.add(result);
+        return result;
+    }
+
+    private Deal newDeal(int teamId, SettingsReader settings) {
+        GamePlayer gamePlayer = new GamePlayer(event -> {}, settings) {};
+        Game game = new Single(gamePlayer, null);
+        Deal result = new Deal(newPlayer(), game, room);
+        result.setTeamId(teamId);
+        return result;
+    }
 
     @Test
     public void fieldFor() {
         boolean failed = false;
-        for (int playersCount = 2; playersCount <= 100; playersCount++) {
+        for (int playersCount = 2; playersCount <= 50; playersCount++) {
             for (int playersPerRoom = 2; playersPerRoom <= playersCount; playersPerRoom++) {
                 for (int teamsPerRoom = 1; teamsPerRoom <= playersPerRoom; teamsPerRoom++) {
                     for (int teamsCount = teamsPerRoom; teamsCount <= playersCount; teamsCount++) {
@@ -59,12 +78,12 @@ public class SpreaderTest {
 
                         // given
                         Iterator<Integer> teamIterator = teamCycleIterator(teamsCount);
-                        RoundSettings settings = settings(playersPerRoom, teamsPerRoom);
-                        List<GamePlayer> players = createPlayers(playersCount, teamIterator, settings);
+                        SettingsReader settings = settings(playersPerRoom, teamsPerRoom);
+                        List<Deal> deals = createDeals(playersCount, teamIterator, settings);
 
                         // when
-                        for (GamePlayer player : players) {
-                            spreader.fieldFor(player, room, multiplayerType, playersPerRoom, 0, gameFiled);
+                        for (Deal deal : deals) {
+                            spreader.fieldFor(deal, room, multiplayerType, playersPerRoom, 0, gameFiled);
                         }
 
                         // then
@@ -93,35 +112,31 @@ public class SpreaderTest {
         return playerPerRoom <= maxMembers;
     }
 
-    private RoundSettings settings(int playerPerRoom, int teamsPerRoom) {
-        RoundSettingsImpl settings = new RoundSettingsImpl();
-        settings.getParameter(ROUNDS_PLAYERS_PER_ROOM.key()).update(playerPerRoom);
-        settings.getParameter(ROUNDS_TEAMS_PER_ROOM.key()).update(teamsPerRoom);
-        return settings;
+    private SettingsReader settings(int playerPerRoom, int teamsPerRoom) {
+        return new RoundSettingsImpl()
+                .integer(ROUNDS_PLAYERS_PER_ROOM, playerPerRoom)
+                .integer(ROUNDS_TEAMS_PER_ROOM, teamsPerRoom);
     }
 
     private Iterator<Integer> teamCycleIterator(int teamsCount) {
         List<Integer> teams = new ArrayList<>(teamsCount);
-        for (int i = 0; i < teamsCount; i++) {
-            teams.add(i);
+        for (int index = 0; index < teamsCount; index++) {
+            teams.add(index);
         }
         return Iterators.cycle(teams);
     }
 
-    private List<GamePlayer> createPlayers(int playersCount,
-                                           Iterator<Integer> teamIterator, RoundSettings settings) {
-        List<GamePlayer> players = new ArrayList<>();
-        for (int i = 0; i < playersCount; i++) {
-            GamePlayer player = new GamePlayer(event -> {}, settings) {};
-            player.setTeamId(teamIterator.next());
-            players.add(player);
+    private List<Deal> createDeals(int playersCount, Iterator<Integer> teamIterator, SettingsReader settings) {
+        List<Deal> result = new ArrayList<>();
+        for (int index = 0; index < playersCount; index++) {
+            result.add(newDeal(teamIterator.next(), settings));
         }
-        return players;
+        return result;
     }
 
     private String roomReport() {
         return spreader.rooms().values().stream()
-                .map(room -> room.players().stream()
+                .map(room -> room.deals().stream()
                         .map(player -> String.valueOf(player.getTeamId()))
                         .collect(Collectors.joining("-")))
                 .collect(Collectors.joining(" | "));

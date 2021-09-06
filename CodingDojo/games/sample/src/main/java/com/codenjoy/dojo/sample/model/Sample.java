@@ -30,19 +30,17 @@ import com.codenjoy.dojo.sample.model.level.Level;
 import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.sample.services.GameSettings;
-import com.codenjoy.dojo.services.BoardUtils;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.field.Accessor;
+import com.codenjoy.dojo.services.field.PointField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static java.util.function.Predicate.*;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -52,29 +50,17 @@ import static java.util.stream.Collectors.toList;
  */
 public class Sample implements Field {
 
-    private List<Wall> walls;
-    private List<Gold> gold;
-    private List<Bomb> bombs;
-
+    private PointField field;
     private List<Player> players;
-
-    private int size;
     private Dice dice;
-
     private GameSettings settings;
 
     public Sample(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        players = new LinkedList<>();
         this.settings = settings;
-        init(level);
-    }
-
-    private void init(Level level) {
-        walls = level.walls();
-        gold = level.gold();
-        bombs = level.bombs();
-        size = level.size();
+        players = new LinkedList<>();
+        field = level.field();
+        field.init(this);
     }
 
     /**
@@ -87,14 +73,13 @@ public class Sample implements Field {
 
             hero.tick();
 
-            if (gold.contains(hero)) {
-                gold.remove(hero);
+            if (gold().contains(hero)) {
+                gold().removeAt(hero);
+
                 player.event(Events.WIN);
 
-                Optional<Point> pos = freeRandom(null);
-                if (pos.isPresent()) {
-                    gold.add(new Gold(pos.get()));
-                }
+                freeRandom(null)
+                        .ifPresent(point -> field.add(new Gold(point)));
             }
         }
 
@@ -108,61 +93,34 @@ public class Sample implements Field {
     }
 
     public int size() {
-        return size;
+        return field.size();
     }
 
     @Override
     public boolean isBarrier(Point pt) {
-        int x = pt.getX();
-        int y = pt.getY();
-
-        return x > size - 1
-                || x < 0
-                || y < 0
-                || y > size - 1
-                || walls.contains(pt)
-                || getHeroes().contains(pt);
+        return pt.isOutOf(size())
+                || walls().contains(pt)
+                || heroes().contains(pt);
     }
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
+        return BoardUtils.freeRandom(size(), dice, this::isFree);
     }
 
     @Override
     public boolean isFree(Point pt) {
-        return !(gold.contains(pt)
-                || bombs.contains(pt)
-                || walls.contains(pt)
-                || getHeroes().contains(pt));
-    }
-
-    @Override
-    public boolean isBomb(Point pt) {
-        return bombs.contains(pt);
+        return !(gold().contains(pt)
+                || bombs().contains(pt)
+                || walls().contains(pt)
+                || heroes().contains(pt));
     }
 
     @Override
     public void setBomb(Point pt) {
-        if (!bombs.contains(pt)) {
-            bombs.add(new Bomb(pt));
+        if (!bombs().contains(pt)) {
+            bombs().add(new Bomb(pt));
         }
-    }
-
-    @Override
-    public void removeBomb(Point pt) {
-        bombs.remove(pt);
-    }
-
-    public List<Gold> getGold() {
-        return gold;
-    }
-
-    public List<Hero> getHeroes() {
-        return players.stream()
-                .map(Player::getHero)
-                .filter(not(Objects::isNull))
-                .collect(toList());
     }
 
     @Override
@@ -171,11 +129,20 @@ public class Sample implements Field {
             players.add(player);
         }
         player.newHero(this);
+        removeAloneHeroes();
+    }
+
+    // TODO DF3D попробовать избавиться от этого метода
+    private void removeAloneHeroes() {
+        heroes().removeNotSame(players.stream().
+                map(GamePlayer::getHero)
+                .collect(toList()));
     }
 
     @Override
     public void remove(Player player) {
         players.remove(player);
+        removeAloneHeroes();
     }
 
     @Override
@@ -183,47 +150,47 @@ public class Sample implements Field {
         return settings;
     }
 
-    public List<Wall> getWalls() {
-        return walls;
-    }
-
-    public List<Bomb> getBombs() {
-        return bombs;
-    }
-
     @Override
     public BoardReader reader() {
-        return new BoardReader<Player>() {
-            private int size = Sample.this.size;
-
-            @Override
-            public int size() {
-                return size;
-            }
-
-            @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<Point>(){{
-                    addAll(Sample.this.getWalls());
-                    addAll(Sample.this.getHeroes());
-                    addAll(Sample.this.getGold());
-                    addAll(Sample.this.getBombs());
-                }};
-            }
-        };
+        return field.reader(
+                Hero.class,
+                Wall.class,
+                Gold.class,
+                Bomb.class);
     }
 
     @Override
-    public List<Player> load(String board, Supplier<Player> createPlayer) {
-        Level level = new LevelImpl(board);
-        List<Player> players = new LinkedList<>();
+    public List<Player> load(String board, Supplier<Player> creator) {
+        LevelImpl level = new LevelImpl(board);
+        List<Player> result = new LinkedList<>();
         level.heroes().forEach(hero -> {
-            Player player = createPlayer.get();
+            Player player = creator.get();
             player.setHero(hero);
-            players.add(player);
+            result.add(player);
 
         });
-        init(level);
-        return players;
+        field = level.field();
+        return result;
     }
+
+    @Override
+    public Accessor<Gold> gold() {
+        return field.of(Gold.class);
+    }
+
+    @Override
+    public Accessor<Hero> heroes() {
+        return field.of(Hero.class);
+    }
+
+    @Override
+    public Accessor<Wall> walls() {
+        return field.of(Wall.class);
+    }
+
+    @Override
+    public Accessor<Bomb> bombs() {
+        return field.of(Bomb.class);
+    }
+
 }

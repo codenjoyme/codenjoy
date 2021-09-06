@@ -22,37 +22,58 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.mocks.GameSettings;
 import com.codenjoy.dojo.services.nullobj.NullGameField;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.junit.Test;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GameRoomTest {
 
     private int playersPerRoom = 2;
     private int teamsPerRoom = 1;
+    private List<Player> players = new LinkedList<>();
 
-    private GamePlayer newPlayer() {
-        return newPlayer(DEFAULT_TEAM_ID);
+    private Deal newDeal() {
+        return newDeal(DEFAULT_TEAM_ID, settings());
     }
 
-    private GamePlayer newPlayer(int teamId) {
-        GamePlayer player = new GamePlayer(event -> {}, settings()) {};
-        player.setTeamId(teamId);
-        return player;
+    private Deal newDeal(int teamId) {
+        return newDeal(teamId, settings());
     }
 
-    private RoundSettings settings() {
-        RoundSettingsImpl settings = new RoundSettingsImpl();
-        settings.getParameter(ROUNDS_PLAYERS_PER_ROOM.key()).update(playersPerRoom);
-        settings.getParameter(ROUNDS_TEAMS_PER_ROOM.key()).update(teamsPerRoom);
-        return settings;
+    private Deal newDeal(int teamId, SettingsReader settings) {
+        GamePlayer gamePlayer = new GamePlayer(event -> {}, settings) {};
+        Game game = new Single(gamePlayer, null);
+        Deal result = new Deal(newPlayer(), game, "room");
+        result.setTeamId(teamId);
+        return result;
+    }
+
+    private Player newPlayer() {
+        Player result = new Player("player" + players.size());
+        players.add(result);
+        return result;
+    }
+
+    private SettingsReader settings() {
+        return new RoundSettingsImpl()
+                .integer(ROUNDS_PLAYERS_PER_ROOM, playersPerRoom)
+                .integer(ROUNDS_TEAMS_PER_ROOM, teamsPerRoom);
     }
 
     private GameRoom createRoom() {
@@ -65,31 +86,33 @@ public class GameRoomTest {
         GameRoom room = createRoom();
 
         // when
-        room.join(newPlayer());
-        room.join(newPlayer());
+        room.join(newDeal());
+        room.join(newDeal());
 
         // then
-        assertEquals(false, room.isAvailable(newPlayer()));
+        assertEquals(false, room.isAvailable(newDeal()));
     }
 
     @Test
     public void isAvailable_gameSettingsNotProvided() {
         // given
         GameRoom room = createRoom();
-        GamePlayer player = new GamePlayer(event -> {}, null) {};
+
+        Deal deal = newDeal(0, null);
 
         // then
-        assertEquals(true, room.isAvailable(player));
+        assertEquals(true, room.isAvailable(deal));
     }
 
     @Test
     public void isAvailable_gameSettingsNotHaveMaxTeamPerRoomParameter() {
         // given
         GameRoom room = createRoom();
-        GamePlayer player = new GamePlayer(event -> {}, new GameSettings()) {};
+
+        Deal deal = newDeal(0, new GameSettings());
 
         // then
-        assertEquals(true, room.isAvailable(player));
+        assertEquals(true, room.isAvailable(deal));
     }
 
     @Test
@@ -98,7 +121,7 @@ public class GameRoomTest {
         GameRoom room = createRoom();
 
         // then
-        assertEquals(true, room.isAvailable(newPlayer()));
+        assertEquals(true, room.isAvailable(newDeal()));
     }
 
     @Test
@@ -109,11 +132,11 @@ public class GameRoomTest {
         GameRoom room = createRoom();
 
         // when
-        room.join(newPlayer(0));
-        room.join(newPlayer(1));
+        room.join(newDeal(0));
+        room.join(newDeal(1));
 
         // then
-        assertEquals(false, room.isAvailable(newPlayer(2)));
+        assertEquals(false, room.isAvailable(newDeal(2)));
     }
 
     @Test
@@ -124,15 +147,15 @@ public class GameRoomTest {
         GameRoom room = createRoom();
 
         // when
-        room.join(newPlayer(0));
-        room.join(newPlayer(0));
-        room.join(newPlayer(0));
-        room.join(newPlayer(1));
-        room.join(newPlayer(1));
+        room.join(newDeal(0));
+        room.join(newDeal(0));
+        room.join(newDeal(0));
+        room.join(newDeal(1));
+        room.join(newDeal(1));
 
         // then
-        assertEquals(false, room.isAvailable(newPlayer(0)));
-        assertEquals(true, room.isAvailable(newPlayer(1)));
+        assertEquals(false, room.isAvailable(newDeal(0)));
+        assertEquals(true, room.isAvailable(newDeal(1)));
     }
 
     @Test
@@ -143,15 +166,15 @@ public class GameRoomTest {
         GameRoom room = createRoom();
 
         // when
-        room.join(newPlayer(0));
-        room.join(newPlayer(0));
-        room.join(newPlayer(0));
-        room.join(newPlayer(1));
-        room.join(newPlayer(1));
-        room.join(newPlayer(1));
+        room.join(newDeal(0));
+        room.join(newDeal(0));
+        room.join(newDeal(0));
+        room.join(newDeal(1));
+        room.join(newDeal(1));
+        room.join(newDeal(1));
 
         // then
-        assertEquals(true, room.isAvailable(newPlayer(0)));
-        assertEquals(true, room.isAvailable(newPlayer(1)));
+        assertEquals(true, room.isAvailable(newDeal(0)));
+        assertEquals(true, room.isAvailable(newDeal(1)));
     }
 }

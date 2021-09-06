@@ -38,30 +38,32 @@ import java.util.function.Predicate;
 import static java.util.stream.Collectors.*;
 
 @Component
-public class PlayerGamesView {
+public class DealsView {
 
     @Autowired
-    protected PlayerGames service;
+    protected Deals service;
 
     public Map<String, GameData> getGamesDataMap() {
         Map<String, GuiPlotColorDecoder> decoders = getDecoders();
         Map<String, List<String>> groupsMap = getGroupsMap();
         Map<String, Object> scores = getScores();
+        Map<String, Object> teams = getTeams();
         Map<String, HeroData> coordinates = getCoordinates();
         Map<String, String> readableNames = getReadableNames();
 
         return service.all().stream()
                 .collect(toMap(
-                        pg -> pg.getPlayer().getId(),
-                        pg -> {
-                            GameType<Settings> gameType = pg.getGameType();
-                            String player = pg.getPlayer().getId();
+                        deal -> deal.getPlayer().getId(),
+                        deal -> {
+                            GameType<Settings> gameType = deal.getGameType();
+                            String player = deal.getPlayer().getId();
                             List<String> group = groupsMap.get(player);
 
                             return new GameData(
                                     gameType.getBoardSize(gameType.getSettings()).getValue(),
                                     decoders.get(gameType.name()),
                                     filterByGroup(scores, group),
+                                    filterByGroup(teams, group),
                                     group,
                                     filterByGroup(coordinates, group),
                                     filterByGroup(readableNames, group));
@@ -83,8 +85,8 @@ public class PlayerGamesView {
 
     private Map<String, HeroData> getCoordinates() {
         return service.all().stream()
-                .collect(toMap(pg -> pg.getPlayer().getId(),
-                        pg -> pg.getGame().getHero()));
+                .collect(toMap(deal -> deal.getPlayer().getId(),
+                        deal -> deal.getGame().getHero()));
     }
 
     public Map<String, List<String>> getGroupsMap() {
@@ -101,48 +103,54 @@ public class PlayerGamesView {
     }
 
     public List<List<String>> getGroupsByRooms() {
-        return getGroupBy(PlayerGame::getRoom);
+        return getGroupBy(Deal::getRoom);
     }
 
     public List<List<String>> getGroupsByField() {
-        return getGroupBy(PlayerGame::getField);
+        return getGroupBy(Deal::getField);
     }
 
-    private List<List<String>> getGroupBy(Function<PlayerGame, Object> function) {
+    private List<List<String>> getGroupBy(Function<Deal, Object> function) {
         return service.all().stream()
-                    .filter(playerGame -> Objects.nonNull(function.apply(playerGame)))
+                    .filter(deal -> Objects.nonNull(function.apply(deal)))
                     .collect(groupingBy(function))
                     .values().stream()
                     .map(group -> group.stream()
-                            .map(pg -> pg.getPlayer().getId())
+                            .map(deal -> deal.getPlayer().getId())
                             .collect(toList()))
                     .collect(toList());
     }
 
     public Map<String, Object> getScores() {
         return service.all().stream()
-                .collect(toMap(pg -> pg.getPlayer().getId(),
-                        pg -> pg.getPlayer().getScore()));
+                .collect(toMap(deal -> deal.getPlayer().getId(),
+                        deal -> deal.getPlayer().getScore()));
+    }
+
+    public Map<String, Object> getTeams() {
+        return service.all().stream()
+                .collect(toMap(deal -> deal.getPlayer().getId(),
+                        deal -> deal.getPlayer().getTeamId()));
     }
 
     public List<PScoresOf> getScoresForGame(String game) {
-        return scoresFor(pg -> pg.getPlayer().getGame().equals(game));
+        return scoresFor(deal -> deal.getPlayer().getGame().equals(game));
     }
 
-    private List<PScoresOf> scoresFor(Predicate<PlayerGame> predicate) {
+    private List<PScoresOf> scoresFor(Predicate<Deal> predicate) {
         return service.all().stream()
                 .filter(predicate)
-                .map(pg -> new PScoresOf(pg))
+                .map(deal -> new PScoresOf(deal))
                 .collect(toList());
     }
 
     public List<PScoresOf> getScoresForRoom(String room) {
-        return scoresFor(pg -> pg.getRoom().equals(room));
+        return scoresFor(deal -> deal.getRoom().equals(room));
     }
 
     public Map<String, String> getReadableNames() {
         return service.all().stream()
-                .collect(toMap(pg -> pg.getPlayer().getId(),
-                        pg -> pg.getPlayer().getNotNullReadableName()));
+                .collect(toMap(deal -> deal.getPlayer().getId(),
+                        deal -> deal.getPlayer().getNotNullReadableName()));
     }
 }

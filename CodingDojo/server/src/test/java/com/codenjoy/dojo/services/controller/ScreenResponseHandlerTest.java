@@ -104,6 +104,10 @@ public class ScreenResponseHandlerTest {
                 "    'scores':{\n" +
                 "      'player1':100,\n" +
                 "      'player2':200\n" +
+                "    },\n" +
+                "    'teams':{\n" +
+                "      'player1':1,\n" +
+                "      'player2':2\n" +
                 "    }\n" +
                 "  },\n" +
                 "  'player4':{\n" +
@@ -131,6 +135,9 @@ public class ScreenResponseHandlerTest {
                 "    'score':765,\n" +
                 "    'scores':{\n" +
                 "      'player4':400\n" +
+                "    },\n" +
+                "    'teams':{\n" +
+                "      'player4':4\n" +
                 "    }\n" +
                 "  }\n" +
                 "}", JsonUtils.prettyPrint(result));
@@ -185,6 +192,10 @@ public class ScreenResponseHandlerTest {
                 "    'score':134,\n" +
                 "    'scores':{\n" +
                 "      'player1':100\n" +
+                "    },\n" +
+                "    'teams':{\n" +
+                "      'player1':1,\n" +
+                "      'player2':2\n" +
                 "    }\n" +
                 "  },\n" +
                 "  'player2':{\n" +
@@ -212,6 +223,10 @@ public class ScreenResponseHandlerTest {
                 "    'score':546,\n" +
                 "    'scores':{\n" +
                 "      'player2':200\n" +
+                "    },\n" +
+                "    'teams':{\n" +
+                "      'player1':1,\n" +
+                "      'player2':2\n" +
                 "    }\n" +
                 "  },\n" +
                 "  'player4':{\n" +
@@ -239,6 +254,9 @@ public class ScreenResponseHandlerTest {
                 "    'score':765,\n" +
                 "    'scores':{\n" +
                 "      'player4':400\n" +
+                "    },\n" +
+                "    'teams':{\n" +
+                "      'player4':4\n" +
                 "    }\n" +
                 "  }\n" +
                 "}", JsonUtils.prettyPrint(result));
@@ -288,6 +306,9 @@ public class ScreenResponseHandlerTest {
                 "    'score':235,\n" +
                 "    'scores':{\n" +
                 "      'player3':300\n" +
+                "    },\n" +
+                "    'teams':{\n" +
+                "      'player3':3\n" +
                 "    }\n" +
                 "  }\n" +
                 "}", JsonUtils.prettyPrint(result));
@@ -339,6 +360,10 @@ public class ScreenResponseHandlerTest {
                 "    'scores':{\n" +
                 "      'player1':100,\n" +
                 "      'player2':200\n" +
+                "    },\n" +
+                "    'teams':{\n" +
+                "      'player1':1,\n" +
+                "      'player2':2\n" +
                 "    }\n" +
                 "  }\n" +
                 "}", JsonUtils.prettyPrint(result));
@@ -353,6 +378,7 @@ public class ScreenResponseHandlerTest {
         map.put(player1, new PlayerData(10, "some_board1", "game",
                 134, "some_info1",
                 new LinkedHashMap<>(){{ put("player1", 100); put("player2", 200); }},
+                new LinkedHashMap<>(){{ put("player1", 1); put("player2", 2); }},
                 new LinkedHashMap<>(){{ put("player1", new HeroDataImpl(1, pt(10, 5), true)); }},
                 new LinkedHashMap<>(){{ put("player1", "Player1 Name1"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
@@ -364,6 +390,7 @@ public class ScreenResponseHandlerTest {
         map.put(player2, new PlayerData(12, "some_board2", "game",
                 546, "some_info2",
                 new LinkedHashMap<>(){{ put("player1", 100); put("player2", 200); }},
+                new LinkedHashMap<>(){{ put("player1", 1); put("player2", 2); }},
                 new LinkedHashMap<>(){{ put("player2", new HeroDataImpl(2, pt(12, 7), true)); }},
                 new LinkedHashMap<>(){{ put("player2", "Player2 Name2"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
@@ -375,6 +402,7 @@ public class ScreenResponseHandlerTest {
         map.put(player4, new PlayerData(45, "some_board4", "game",
                 765, "some_info4",
                 new LinkedHashMap<>(){{ put("player4", 400); }},
+                new LinkedHashMap<>(){{ put("player4", 4); }},
                 new LinkedHashMap<>(){{ put("player4", new HeroDataImpl(4, pt(14, 9), false)); }},
                 new LinkedHashMap<>(){{ put("player4", "Player4 Name4"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player4")); }},
@@ -386,6 +414,7 @@ public class ScreenResponseHandlerTest {
         map.put(player3, new PlayerData(14, "some_board3", "other_game",
                 235, "some_info3",
                 new LinkedHashMap<>(){{ put("player3", 300); }},
+                new LinkedHashMap<>(){{ put("player3", 3); }},
                 new LinkedHashMap<>(){{ put("player3", new HeroDataImpl(3, pt(13, 8), false)); }},
                 new LinkedHashMap<>(){{ put("player3", "Player3 Name3"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player3")); }},

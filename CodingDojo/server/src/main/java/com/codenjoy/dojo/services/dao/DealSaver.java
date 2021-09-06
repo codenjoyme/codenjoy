@@ -39,7 +39,7 @@ import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public class PlayerGameSaver implements GameSaver {
+public class DealSaver implements GameSaver {
 
     public static final String INSERT_SAVES_QUERY = "INSERT INTO saves " +
                     "(time, player_id, team_id, callback_url, room_name, game_name, score, save) " +
@@ -56,7 +56,7 @@ public class PlayerGameSaver implements GameSaver {
 
     private CrudConnectionThreadPool pool;
 
-    public PlayerGameSaver(ConnectionThreadPoolFactory factory) {
+    public DealSaver(ConnectionThreadPoolFactory factory) {
         // TODO renname room_name -> room, game_name -> game
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS saves (" +
@@ -90,15 +90,15 @@ public class PlayerGameSaver implements GameSaver {
         private String time;
         private String save;
 
-        public Save(PlayerGame playerGame, String time) {
-            player = playerGame.getPlayer();
-            teamId = playerGame.getPlayerTeamId();
+        public Save(Deal deal, String time) {
+            player = deal.getPlayer();
+            teamId = deal.getTeamId();
             this.time = time;
 
             // осторожно! внутри есть блокировка, потому делаем это в конструкторе
             // если отпустим внутрь pool там будет выполняться в другом потоке
             // и случится завис, потому что одну write блокировку мы уже взяли в PSI
-            save = playerGame.getGame().getSave().toString();
+            save = deal.getGame().getSave().toString();
         }
 
         public String getSave() {
@@ -150,12 +150,12 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void saveGames(List<PlayerGame> playerGames, long time) {
-        if (playerGames.isEmpty()) return;
+    public void saveGames(List<Deal> deals, long time) {
+        if (deals.isEmpty()) return;
 
         String timeString = JDBCTimeUtils.toString(new Date(time));
-        List<Save> data = playerGames.stream()
-                .map(playerGame -> new Save(playerGame, timeString))
+        List<Save> data = deals.stream()
+                .map(deal -> new Save(deal, timeString))
                 .collect(toList());
 
         // TODO надо тут еще транзакцию навешать на эти два запроса

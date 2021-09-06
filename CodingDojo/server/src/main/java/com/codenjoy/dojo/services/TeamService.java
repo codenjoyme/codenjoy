@@ -22,7 +22,8 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.multiplayer.Sweeper;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,15 +40,14 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class TeamService {
 
-    private final PlayerGames playerGames;
+    private final Deals deals;
     private final SaveService saveService;
 
     public List<PTeam> getTeamInfo(String room) {
-        return playerGames.all().stream()
-                .filter(pg -> pg.getRoom().equals(room))
+        return deals.getAll(Deals.withRoom(room)).stream()
                 .collect(Collectors.groupingBy(
-                        PlayerGame::getPlayerTeamId,
-                        mapping(PlayerGame::getPlayerId, toList())))
+                        Deal::getTeamId,
+                        mapping(Deal::getPlayerId, toList())))
                 .entrySet().stream()
                 .map(PTeam::new)
                 .collect(toList());
@@ -55,13 +55,16 @@ public class TeamService {
 
     public void distributePlayersByTeam(String room, List<PTeam> teams) {
         for (PTeam team : teams) {
-            for (String playerId : team.getPlayers()) {
-                PlayerGame game = playerGames.get(playerId);
-                if (game == NullPlayerGame.INSTANCE) {
-                    log.warn("playerId {} has not been found", playerId);
+            for (String id : team.getPlayers()) {
+                Deal deal = deals.get(id);
+                if (deal == NullDeal.INSTANCE) {
+                    log.warn("Player with id '{}' has not been found", id);
                 }
-                if (room.equals(game.getRoom())) {
-                    game.getGame().getPlayer().setTeamId(team.getTeamId());
+                if (room.equals(deal.getRoom())) {
+                    deal.setTeamId(team.getTeamId());
+                    // TODO #3d4w тут надо вначале всех вывести из комнат,
+                    //      а потом органимзованно завести обратно
+                    deals.reload(id, Sweeper.on().allRemaining());
                 }
             }
         }

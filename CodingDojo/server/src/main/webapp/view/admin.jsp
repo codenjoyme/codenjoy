@@ -92,8 +92,7 @@
                             <a class="bold-room-${roomItem == room}"
                                room="${roomItem}"
                                href="${ctx}/admin?room=${roomItem}">
-                                    ${roomItem}<span class="pow">${playersCount.get(roomItem)}</span>
-                            </a>&nbsp;
+                                    ${roomItem}<span class="pow">${playersCount.get(roomItem)}</span></a>&nbsp;
                         </c:forEach>
                     </td>
                 </tr>
@@ -424,6 +423,10 @@
                     <td><form:checkbox path="semifinal.shuffleBoard"/></td>
                 </tr>
                 <tr>
+                    <td>Clear scores</td>
+                    <td><form:checkbox path="semifinal.clearScores"/></td>
+                </tr>
+                <tr>
                     <td>
                         <input type="hidden" name="game" value="${game}"/>
                         <input type="hidden" name="room" value="${room}"/>
@@ -511,6 +514,7 @@
                     <td class="header">PlayerName&nbsp;&nbsp;</td>
                     <td class="header">Email&nbsp;&nbsp;</td>
                     <td class="header">RoomName&nbsp;&nbsp;</td>
+                    <td class="header">Team&nbsp;&nbsp;</td>
                     <td class="header">Score&nbsp;&nbsp;</td>
                     <td class="header">IP&nbsp;&nbsp;</td>
                     <td class="header">Inactive&nbsp;&nbsp;</td>
@@ -556,6 +560,7 @@
                                 <td><form:input class="input-readable" path="players[${status.index}].readableName"/></td>
                                 <td><form:input class="input-email"    path="players[${status.index}].email"/></td>
                                 <td><form:input class="input-room"     path="players[${status.index}].room"/></td>
+                                <td><form:input class="input-team"     path="players[${status.index}].teamId"/></td>
                                 <td><form:input class="input-score"    path="players[${status.index}].score"/></td>
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
                                 <td>&nbsp;<span class="input-ticks-inactive">${player.ticksInactive}</span>&nbsp;</td>
@@ -633,6 +638,7 @@
                                 <td><input type="text" readonly="true" class="input-readable" value="${player.readableName}"/></td>
                                 <td><input type="text" readonly="true" class="input-email"    value="${player.email}"/></td>
                                 <td><input type="text" readonly="true" class="input-room"     value="${player.room}"/></td>
+                                <td><input type="text" readonly="true" class="input-team"     value="${player.teamId}"/></td>
                                 <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
                                 <td>&nbsp;<span class="input-ticks-inactive"></span>&nbsp;</td>

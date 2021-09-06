@@ -26,13 +26,14 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
@@ -125,43 +126,52 @@ public abstract class AbstractRestControllerTest {
     protected WebApplicationContext context;
 
     @Autowired
-    protected PlayerService playerService;
+    protected PlayerService players;
 
     @Autowired
     protected Registration registration;
 
     @Autowired
-    protected PlayerGames playerGames;
+    protected Deals deals;
+
+    @Autowired
+    protected DealsView dealsView;
 
     @Autowired
     protected ConfigProperties config;
 
     @Autowired
-    protected GameService games;
+    protected SemifinalService semifinal;
 
     @Autowired
-    protected SemifinalService semifinalService;
+    protected DebugService debug;
 
     @Autowired
-    protected DebugService debugService;
+    protected RoomService rooms;
 
     @Autowired
-    protected RoomService roomService;
+    protected GameServiceImpl games;
 
     @Autowired
-    protected GameServiceImpl gameService;
+    protected SaveService saves;
+
+    @Autowired
+    protected TeamService teamService;
+
+    @Autowired
+    protected Chat chat;
 
     @Before
     public void setUp() {
         CodenjoyContext.setContext("codenjoy-contest");
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
 
-        gameService.init();
-        debugService.resume();
+        games.init();
+        debug.resume();
     }
 
     @After
-    public void checkErrors() {
+    public void checkErrors() throws Exception {
         SmartAssert.checkResult(getClass());
     }
 
@@ -173,7 +183,7 @@ public abstract class AbstractRestControllerTest {
     }
 
     protected void asUser(String playerId, String password) {
-        Player player = playerService.get(playerId);
+        Player player = players.get(playerId);
         if (player == NullPlayer.INSTANCE) {
             fail("Expected: Player with id = " + playerId +
                     " But was: NullPlayer");
@@ -200,23 +210,34 @@ public abstract class AbstractRestControllerTest {
         login(null);
     }
 
-    protected PlayerGame register(String id, String ip, String room, String game) {
+    protected Deal register(String id, String ip, String room, String game) {
         String password = Hash.md5(id);
         String readableName = id + "-name";
         registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles());
-        playerService.register(id, game, room, ip);
-        PlayerGame playerGame = playerGames.get(id);
-        if (playerGame == NullPlayerGame.INSTANCE) {
+        players.register(id, game, room, ip);
+        Deal deal = deals.get(id);
+        if (deal == NullDeal.INSTANCE) {
             registration.remove(id); // удаляем если не можем создать
         } else {
-            resetMocks(playerGame);
+            resetMocks(deal);
         }
-        return playerGame;
+        return deal;
     }
 
-    private void resetMocks(PlayerGame playerGame) {
-        reset(playerGame.getField());
-        reset(playerGame.getGame().getPlayer());
+    protected void assertPlayerInRoom(String id, String room) {
+        Player player = players.get(id);
+        assertEquals(room, player.getRoom());
+    }
+
+    protected void join(String id, String room) {
+        Player player = players.get(id);
+        player.setRoom(room);
+        players.update(player);
+    }
+
+    private void resetMocks(Deal deal) {
+        reset(deal.getField());
+        reset(deal.getGame().getPlayer());
     }
 
     @SneakyThrows
@@ -282,6 +303,11 @@ public abstract class AbstractRestControllerTest {
         }
     }
 
+    protected void assertGetError(String message, String uri) {
+        String source = get(500, uri);
+        JSONObject error = tryParseAsJson(source);
+        assertEquals(message, error.getString("message"));
+    }
     protected void assertPostError(String message, String uri, String data) {
         String source = post(500, uri, data);
         JSONObject error = tryParseAsJson(source);

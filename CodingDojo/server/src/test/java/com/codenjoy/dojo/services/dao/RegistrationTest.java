@@ -51,6 +51,7 @@ public class RegistrationTest {
     public static final String CODE_FOR_ID_AND_PASS = "4486751343675417965";
     private Registration registration;
     private static PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    private static final int STRENGTH = 4;
     private ConfigProperties properties;
 
     @Before
@@ -64,7 +65,7 @@ public class RegistrationTest {
                             public String getContext() {
                                 return "context";
                             }
-                        }), "admin", "admin", new BCryptPasswordEncoder(), properties, false);
+                        }), "admin", "admin", new BCryptPasswordEncoder(STRENGTH), properties, false);
     }
 
     @After
@@ -413,7 +414,7 @@ public class RegistrationTest {
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
-        assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);;
+        assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
 
         // when
         registration.remove("id1");

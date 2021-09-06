@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -288,11 +289,9 @@ public class Reversi implements Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return new LinkedList<Point>(){{
-                    addAll(Reversi.this.chips);
-                    addAll(Reversi.this.breaks);
-                }};
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                processor.accept(chips);
+                processor.accept(breaks);
             }
         };
     }

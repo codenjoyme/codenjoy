@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_DROP_RATIO;
@@ -373,8 +374,8 @@ public class ICanCode implements Tickable, Field {
             }
 
             @Override
-            public Iterable<? extends Point> elements(Player player) {
-                return null; // because layeredReader() implemented here
+            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
+                // because layeredReader() implemented here
             }
         };
     }

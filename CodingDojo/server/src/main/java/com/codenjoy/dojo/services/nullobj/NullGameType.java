@@ -95,7 +95,7 @@ public final class NullGameType implements GameType<Settings> {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, Settings settings) {
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, Settings settings) {
         throw exception();
     }
 

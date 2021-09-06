@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.services.nullobj;
 
 /*-
  * #%L
@@ -22,6 +22,15 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
-public interface Fieldable {
-    void init(Field field);
+
+import com.codenjoy.dojo.services.Deal;
+import org.apache.commons.lang3.StringUtils;
+
+public final class NullDeal extends Deal {
+
+    public static final Deal INSTANCE = new NullDeal();
+
+    private NullDeal() {
+        super(NullPlayer.INSTANCE, NullGame.INSTANCE, StringUtils.EMPTY);
+    }
 }

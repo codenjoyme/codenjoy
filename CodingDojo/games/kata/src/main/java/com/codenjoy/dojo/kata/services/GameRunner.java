@@ -95,9 +95,9 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
         LevelsPool pool = new LevelsPoolImpl(settings.levels());
-        return new Player(listener, pool, settings);
+        return new Player(listener, pool, settings).inTeam(teamId);
     }
 
     @Override

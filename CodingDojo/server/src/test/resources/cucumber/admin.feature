@@ -131,7 +131,7 @@ Scenario: Admin can turn on / turn off kick for inactive players
 
   Given Login to Admin page
   When Select game room 'sample'
-  When Click load all players
+  When Click LoadAll players
 
   When Set inactivity kick enabled checkbox to true
   And Set inactivity timeout parameter to 10
@@ -142,13 +142,13 @@ Scenario: Admin can turn on / turn off kick for inactive players
 
   When Websocket 'client1' send 'ACT'
   # Waiting for 3 seconds to ensure that `client1` keeps on sending commands
-  Then Wait for 3 seconds
+  Then Wait for 3 seconds when refresh is true
   And Shutdown 'client1' websocket runner
 
   When Websocket 'client2' send 'ACT'
   # Waiting for 15 seconds to ensure that `client2` keeps on sending commands.
   # In the same time `client1` increments inactivity ticks to the specified max.
-  Then Wait for 15 seconds
+  Then Wait for 15 seconds when refresh is true
   And Shutdown 'client2' websocket runner
 
   Then Player 'user1@mail.com' is kicked true

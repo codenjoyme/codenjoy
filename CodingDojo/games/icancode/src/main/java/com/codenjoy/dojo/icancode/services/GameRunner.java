@@ -119,12 +119,12 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
         if (settings.bool(IS_TRAINING_MODE)) { // TODO найти как это загрузить
 //            int total = Levels.collectSingle().size();
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
-        return new Player(listener, settings);
+        return new Player(listener, settings).inTeam(teamId);
     }
 
     @Override

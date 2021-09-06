@@ -25,7 +25,7 @@ package com.codenjoy.dojo.loderunner.model.items.enemy;
 
 import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.model.Field;
-import com.codenjoy.dojo.loderunner.model.Fieldable;
+import com.codenjoy.dojo.services.field.Fieldable;
 import com.codenjoy.dojo.loderunner.model.Hero;
 import com.codenjoy.dojo.loderunner.model.Player;
 import com.codenjoy.dojo.services.*;
@@ -36,7 +36,7 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
-public class Enemy extends PointImpl implements Tickable, Fieldable, State<Element, Player> {
+public class Enemy extends PointImpl implements Tickable, Fieldable<Field>, State<Element, Player> {
 
     private Direction direction;
     private EnemyAI ai;

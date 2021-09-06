@@ -22,11 +22,9 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import java.util.Arrays;
@@ -43,15 +41,12 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     private Settings first;
     private Settings second;
 
-    @Autowired
-    private GameService gameService;
-
     @Before
     public void setUp() {
         super.setUp();
 
-        first = gameService.getGameType("first", "first").getSettings();
-        second = gameService.getGameType("second", "second").getSettings();
+        first = games.getGameType("first", "first").getSettings();
+        second = games.getGameType("second", "second").getSettings();
 
         first.clear();
         second.clear();

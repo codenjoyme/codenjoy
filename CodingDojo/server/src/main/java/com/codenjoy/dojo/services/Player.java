@@ -25,7 +25,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,6 +51,7 @@ public class Player implements ScreenRecipient, Closeable {
     private String callbackUrl;
     private String game;
     private String room;
+    private int teamId;
     private String password;
     private String passwordConfirmation;
     private PlayerScores scores;
@@ -84,7 +85,7 @@ public class Player implements ScreenRecipient, Closeable {
     @Override
     public boolean equals(Object o) {
         if (o == null) return false;
-        if (this == NullPlayer.INSTANCE && (o != NullPlayer.INSTANCE && o != NullPlayerGame.INSTANCE)) return false;
+        if (this == NullPlayer.INSTANCE && (o != NullPlayer.INSTANCE && o != NullDeal.INSTANCE)) return false;
 
         if (o instanceof Player) {
             Player p = (Player)o;
@@ -96,10 +97,10 @@ public class Player implements ScreenRecipient, Closeable {
             return (p.id.equals(id));
         }
 
-        if (o instanceof PlayerGame) {
-            PlayerGame pg = (PlayerGame)o;
+        if (o instanceof Deal) {
+            Deal deal = (Deal)o;
 
-            return pg.getPlayer().equals(this);
+            return deal.getPlayer().equals(this);
         }
 
         return false;

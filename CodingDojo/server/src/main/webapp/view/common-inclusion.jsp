@@ -38,7 +38,6 @@
             <script src="${ctx}/resources/js/all.min.js"></script>
         </c:otherwise>
     </c:choose>
-    <script src="${ctx}/resources/js/chat.js"></script>
 </head>
 
 <!-- TODO to remove games from here -->

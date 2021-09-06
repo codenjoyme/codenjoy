@@ -59,11 +59,11 @@ public class RestAdminController {
     private PlayerService playerService;
     private ErrorTicketService ticket;
     private SaveService saveService;
-    private PlayerGamesView playerGamesView;
+    private DealsView dealsView;
     private TimerService timerService;
     private RoomService roomService;
     private Registration registration;
-    private PlayerGames playerGames;
+    private Deals deals;
     private GameService games;
 
     @GetMapping("version")
@@ -99,7 +99,7 @@ public class RestAdminController {
     public Map<String, List<List<String>>> getPlayersGroups() {
         Map<String, List<List<String>>> result = new HashMap<>();
         List<Player> players = playerService.getAll();
-        List<List<String>> groups = playerGamesView.getGroupsByField();
+        List<List<String>> groups = dealsView.getGroupsByField();
         for (List<String> group : groups) {
             String playerId = group.get(0);
             Player player = players.stream()
@@ -119,7 +119,7 @@ public class RestAdminController {
     // TODO test me
     @GetMapping("/player/all/scores")
     public Map<String, Object> getPlayersScores() {
-        return playerGamesView.getScores();
+        return dealsView.getScores();
     }
 
     // TODO test me
@@ -147,7 +147,7 @@ public class RestAdminController {
     public List<PlayerDetailInfo> getPlayersForMigrate() {
         List<Player> players = playerService.getAll();
         List<Registration.User> users = registration.getUsers();
-        Map<String, List<String>> groups = playerGamesView.getGroupsMap();
+        Map<String, List<String>> groups = dealsView.getGroupsMap();
 
         List<PlayerDetailInfo> result = new LinkedList<>();
         for (Player player : players) {
@@ -156,9 +156,9 @@ public class RestAdminController {
                     .findFirst()
                     .orElse(null);
 
-            PlayerGame playerGame = playerGames.get(player.getId());
-            Game game = playerGame.getGame();
-            String room = playerGame.getRoom();
+            Deal deal = deals.get(player.getId());
+            Game game = deal.getGame();
+            String room = deal.getRoom();
             List<String> group = groups.get(player.getId());
             result.add(new PlayerDetailInfo(player, user, room, game, group));
         }
@@ -213,9 +213,7 @@ public class RestAdminController {
         validator.checkNotEmpty("score", score);
         validator.checkPlayerInRoom(id, room);
 
-        Player player = playerService.get(id);
-        player.setRoom(null);
-        player.setData(null);
+        Player player = new Player(id);
         player.setScore(score);
         playerService.update(player);
     }

@@ -105,20 +105,20 @@ public class ActionLogger extends Suspendable {
         return result;
     }
 
-    public void log(PlayerGames playerGames) {
-        if (!active || playerGames.size() == 0) return;
+    public void log(Deals deals) {
+        if (!active || deals.size() == 0) return;
 
         // для всех players одно и то же время используется - фактически как id группы сейвов
         long time = now();
-        for (PlayerGame playerGame : playerGames.active()) {
-            Player player = playerGame.getPlayer();
+        for (Deal deal : deals.active()) {
+            Player player = deal.getPlayer();
             cache.add(new BoardLog(time,
                     player.getId(),
                     player.getGame(),
                     player.getScore(),
-                    playerGame.getGame().getBoardAsString().toString(),
+                    deal.getGame().getBoardAsString().toString(),
                     player.getEventListener().popLastMessages(),
-                    playerGame.popLastCommand()));
+                    deal.popLastCommand()));
         }
 
         if (count++ % ticks == 0) {

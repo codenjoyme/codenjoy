@@ -106,7 +106,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+    public GamePlayer createPlayer(EventListener listener, int teamId, String playerId, GameSettings settings) {
         if (log.isDebugEnabled()) {
             log.debug("Creating GamePlayer for {}", playerId);
         }
@@ -123,9 +123,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
 //        }
 
-        Player player = new Player(listener, playerId, settings);
-
-        return player;
+        return new Player(listener, playerId, settings).inTeam(teamId);
     }
 
     @Override

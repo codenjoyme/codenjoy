@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -69,7 +70,7 @@ public class SoftSpreader {
         listeners.add(listener);
 
         String id = String.format("demo%s", playerIndex + 1);
-        Player player = (Player) gameRunner.createPlayer(listener, id, settings);
+        Player player = (Player) gameRunner.createPlayer(listener, DEFAULT_TEAM_ID, id, settings);
         Single game = new Single(player, gameRunner.getPrinterFactory());
         game.on(currents.get(playerIndex));
         game.newGame();

@@ -50,6 +50,7 @@ registration:
   password:
     min-length: 8
     autogen-length: 8
+    encode-strength: 6
 
 page:
   main:
@@ -60,6 +61,7 @@ page:
   admin:
     url: ''
   help.language: ''
+
 email:
   verification: false
   password: ''
