@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
+// TODO test me
 public class FieldService {
 
     private AtomicInteger id;
@@ -58,5 +59,9 @@ public class FieldService {
     public void removeAll() {
         id = new AtomicInteger(0);
         fields = new ConcurrentHashMap<>();
+    }
+
+    public void remove(GameField field) {
+        fields.remove(field);
     }
 }

@@ -102,6 +102,8 @@ public class Spreader {
     private void removeIfEmpty(GameRoom room) {
         if (!room.isEmpty()) return;
 
+        fields.remove(room.field());
+
         // TODO попробовать это решить иначе
         rooms.entries().stream()
                 .filter(entry -> entry.getValue() == room)
