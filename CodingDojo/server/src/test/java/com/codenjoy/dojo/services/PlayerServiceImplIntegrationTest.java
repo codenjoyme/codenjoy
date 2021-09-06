@@ -26,7 +26,6 @@ import com.codenjoy.dojo.client.*;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
-import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
@@ -59,7 +58,7 @@ public class PlayerServiceImplIntegrationTest {
     private ActionLogger actionLogger;
     private AutoSaver autoSaver;
     private TimeService time;
-    private Chat chat;
+    private ChatService chat;
     private GameSaver saver;
     private GameService gameService;
     private Controller screenController;
@@ -77,6 +76,7 @@ public class PlayerServiceImplIntegrationTest {
                 PlayerServiceImplIntegrationTest.this.deals
                         = this.deals = new Deals();
                 this.deals.spreader = new Spreader();
+                this.deals.fields = mock(FieldService.class);
 
                 PlayerServiceImplIntegrationTest.this.playerController
                         = this.playerController = mock(Controller.class);
@@ -97,7 +97,7 @@ public class PlayerServiceImplIntegrationTest {
                         = this.saver = mock(GameSaver.class);
 
                 PlayerServiceImplIntegrationTest.this.chat
-                        = this.chat = mock(Chat.class);
+                        = this.chat = mock(ChatService.class);
 
                 PlayerServiceImplIntegrationTest.this.time
                         = this.time = mock(TimeService.class);

@@ -84,7 +84,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected GameService gameService;
     @Autowired protected AutoSaver autoSaver;
     @Autowired protected GameSaver saver;
-    @Autowired protected Chat chat;
+    @Autowired protected ChatService chat;
     @Autowired protected ActionLogger actionLogger;
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties config;
@@ -395,7 +395,7 @@ public class PlayerServiceImpl implements PlayerService {
             Player player = deal.getPlayer();
             try {
                 Integer lastRoomChatMessage = lastRoomChatIds.get(player.getRoom());
-                Integer lastFieldChatMessage = lastTopicChatIds.get(ChatService.topicId(deal.getField()));
+                Integer lastFieldChatMessage = lastTopicChatIds.get(chat.getFieldTopicId(deal.getField()));
 
                 String gameType = deal.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());

@@ -47,6 +47,7 @@ public class ChatService {
     private TimeService time;
     private Registration registration;
     private Spreader spreader;
+    private FieldService fields;
     private final Map<String, String> playerNames = new ConcurrentHashMap<>();
 
     /**
@@ -163,12 +164,11 @@ public class ChatService {
                 exception("There is no player '%s' in room '%s'",
                         playerId, room));
 
-        return topicId(gameRoom.get().field());
+        return getFieldTopicId(gameRoom.get().field());
     }
 
-    public static int topicId(GameField field) {
-        // TODO а точно тут надо минус, может сделать строковую айдишку скажем F-34324?
-        return - field.id();
+    public int getFieldTopicId(GameField field) {
+        return Chat.topicId(fields.id(field));
     }
 
     /**
@@ -260,5 +260,13 @@ public class ChatService {
 
     public IllegalArgumentException exception(String message, Object... parameters) {
         return new IllegalArgumentException(String.format(message, parameters));
+    }
+
+    public Map<String, Integer> getLastRoomMessageIds() {
+        return chat.getLastRoomMessageIds();
+    }
+
+    public Map<Integer, Integer> getLastTopicMessageIds() {
+        return chat.getLastTopicMessageIds();
     }
 }

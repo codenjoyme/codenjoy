@@ -32,7 +32,6 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
@@ -68,6 +67,7 @@ public class DealsViewTest {
     public void setup() {
         deals = new Deals();
         deals.spreader = new Spreader();
+        deals.fields = mock(FieldService.class);
         dealsView = new DealsView();
         dealsView.service = deals;
 

@@ -73,6 +73,22 @@ public class Chat {
         );
     }
 
+    // TODO test me
+    public Integer getLastFieldId() {
+        return pool.select("SELECT topic_id " +
+                        "FROM messages " +
+                        "WHERE topic_id < 0 " +
+                        "ORDER BY time DESC " +
+                        "LIMIT 1;",
+                new Object[]{},
+                rs -> rs.next() ? topicId(rs.getInt(1)) : null);
+    }
+
+    public static int topicId(int fieldId) {
+        // TODO а точно тут надо минус, может сделать строковую айдишку скажем F-34324?
+        return - fieldId;
+    }
+
     public Integer getLastMessageId(String room) {
         return pool.select("SELECT id " +
                         "FROM messages " +

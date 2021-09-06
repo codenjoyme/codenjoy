@@ -64,6 +64,7 @@ public class SaveServiceImplTest {
         saveService = new SaveServiceImpl(){{
             this.deals = SaveServiceImplTest.this.deals = new Deals();
             this.deals.spreader = new Spreader();
+            this.deals.fields = mock(FieldService.class);
             this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);

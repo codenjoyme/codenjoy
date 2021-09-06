@@ -369,7 +369,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     private int getFieldId(String player) {
-        return deals.get(player).getField().id();
+        return fields.id(deals.get(player).getField());
     }
 
     @Test
@@ -873,7 +873,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     private String fix(String string) {
         return quote(string)
                 .replace("},{", "},\n{")
-                .replace(String.valueOf(getFieldId("player")), "player_fieldId");
+                .replace("'topicId':-" + getFieldId("player"), "'topicId':-player_fieldId");
     }
 
     @Test

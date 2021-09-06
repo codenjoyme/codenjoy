@@ -56,12 +56,14 @@ public class AbstractDealsTest {
     protected TimeService timeService;
     protected Spreader spreader;
     protected GameField fieldSaves = mock(GameField.class);
+    protected FieldService fieldService;
 
     @Before
     public void setUp() {
         deals = new Deals();
         roomService = deals.roomService = new RoomService();
         timeService = deals.timeService = mock(TimeService.class);
+        fieldService = deals.fields = mock(FieldService.class);
         spreader = deals.spreader = new Spreader();
         when(fieldSaves.getSave()).thenReturn(null);
     }

@@ -84,6 +84,7 @@ public class ActionLoggerTest {
         deals = new Deals(){{
             ActionLoggerTest.this.roomService = this.roomService = mock(RoomService.class);
             this.spreader = new Spreader();
+            this.fields = mock(FieldService.class);
         }};
         allRoomsAreActive();
     }

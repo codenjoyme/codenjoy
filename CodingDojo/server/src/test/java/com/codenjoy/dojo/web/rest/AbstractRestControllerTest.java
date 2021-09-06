@@ -161,6 +161,9 @@ public abstract class AbstractRestControllerTest {
     @Autowired
     protected Chat chat;
 
+    @Autowired
+    protected FieldService fields;
+
     @Before
     public void setUp() {
         CodenjoyContext.setContext("codenjoy-contest");
