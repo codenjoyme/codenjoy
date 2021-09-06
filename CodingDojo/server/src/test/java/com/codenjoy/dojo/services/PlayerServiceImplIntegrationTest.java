@@ -147,9 +147,6 @@ public class PlayerServiceImplIntegrationTest {
         when(gameService.exists(anyString())).thenReturn(true);
         when(roomService.isOpened(anyString())).thenReturn(true);
 
-        when(chat.getLastRoomMessageIds()).thenReturn(new HashMap<>());
-        when(time.now()).thenReturn(123L);
-
         // первый плеер зарегался (у него сейвов нет)
         when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);
         Player player1 = service.register("player1", "game1", "room1", "callback1");
