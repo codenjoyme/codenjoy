@@ -28,6 +28,8 @@ import com.codenjoy.dojo.battlecity.model.items.Border;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class DefaultBorders {
 
     private final List<Border> result;
@@ -46,15 +48,15 @@ public class DefaultBorders {
 
     private void addHorizontal() {
         for (int colNumber = 0; colNumber < size; colNumber++) {
-            result.add(new Border(0, colNumber));
-            result.add(new Border(size - 1, colNumber));
+            result.add(new Border(pt(0, colNumber)));
+            result.add(new Border(pt(size - 1, colNumber)));
         }
     }
 
     private void addVertical() {
         for (int rowNumber = 0; rowNumber < size; rowNumber++) {
-            result.add(new Border(rowNumber, 0));
-            result.add(new Border(rowNumber, size - 1));
+            result.add(new Border(pt(rowNumber, 0)));
+            result.add(new Border(pt(rowNumber, size - 1)));
         }
     }
 }

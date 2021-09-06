@@ -52,13 +52,13 @@ public class Pong implements Field {
 
     public Pong(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        size = level.getSize();
+        size = level.size();
         this.settings = settings;
         leftBound = 0 + BOUND_DISTANCE;
         rightBound = size - 1 - BOUND_DISTANCE;
-        ball = level.getBall();
+        ball = level.ball();
         ball.init(this);
-        walls = level.getWalls();
+        walls = level.walls();
         players = new LinkedList<>();
     }
 

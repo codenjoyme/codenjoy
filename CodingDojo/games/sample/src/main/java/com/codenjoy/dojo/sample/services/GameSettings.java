@@ -23,8 +23,7 @@ package com.codenjoy.dojo.sample.services;
  */
 
 
-import com.codenjoy.dojo.sample.model.level.Level;
-import com.codenjoy.dojo.sample.model.level.LevelImpl;
+import com.codenjoy.dojo.sample.model.Level;
 import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -104,7 +103,6 @@ public class GameSettings extends SettingsImpl
     }
 
     public Level level() {
-        return new LevelImpl(string(LEVEL_MAP));
+        return new Level(string(LEVEL_MAP));
     }
-
 }

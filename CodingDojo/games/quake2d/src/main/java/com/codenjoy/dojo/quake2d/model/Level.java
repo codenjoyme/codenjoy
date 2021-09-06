@@ -22,17 +22,39 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.field.AbstractLevel;
+
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.quake2d.Element.*;
 
-    int getSize();
+public class Level extends AbstractLevel {
 
-    List<Wall> getWalls();
+    public Level(String map) {
+        super(map);
+    }
 
-    List<Hero> getHero();
+    public List<Hero> hero() {
+        return find(Hero::new, HERO);
+    }
 
-    List<Ability> getAbility();
+    public List<Robot> robots(Field field) {
+        return find(Robot::new, ROBOT);
+    }
 
-    List<Robot> getRobots(Field field);
+    public List<Hero> otherHero() {
+        return find(Hero::new, OTHER_HERO);
+    }
+
+    public List<Ability> ability() {
+        return find(Ability::new,
+                SUPER_WEAPON,
+                SUPER_DEFENCE);
+    }
+
+    public List<Wall> walls() {
+        return find(Wall::new, WALL);
+    }
+
+
 }

@@ -36,9 +36,6 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
-/**
- * Created by Sergii_Zelenin on 7/17/2016.
- */
 public class LevelsFactory {
 
     public List<String> allLevels() {

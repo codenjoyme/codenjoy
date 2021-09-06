@@ -23,7 +23,6 @@ package com.codenjoy.dojo.football.model;
  */
 
 import com.codenjoy.dojo.football.model.items.Hero;
-import com.codenjoy.dojo.football.model.levels.LevelImpl;
 import com.codenjoy.dojo.football.services.Events;
 import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -68,8 +67,8 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
-        hero = level.getHero().get(0);
+        Level level = new Level(board);
+        hero = level.hero().get(0);
 
         game = new Football(level, dice, settings);
         listener = mock(EventListener.class);

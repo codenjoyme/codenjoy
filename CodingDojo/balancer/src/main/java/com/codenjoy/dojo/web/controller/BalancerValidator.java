@@ -42,9 +42,6 @@ import java.util.regex.Pattern;
 import static com.codenjoy.dojo.services.entity.Player.APPROVED;
 import static com.codenjoy.dojo.services.entity.Player.NOT_APPROVED;
 
-/**
- * Created by Oleksandr_Baglai on 2018-06-26.
- */
 @Controller
 public class BalancerValidator {
 

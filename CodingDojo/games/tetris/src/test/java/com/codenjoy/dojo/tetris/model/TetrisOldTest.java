@@ -43,9 +43,6 @@
 //import static org.fest.assertions.Assertions.assertThat;
 //import static org.mockito.Mockito.*;
 //
-///**
-// * @author serhiy.zelenin
-// */
 // TODO доделать этот тест
 //@RunWith(MockitoJUnitRunner.class)
 //public class TetrisOldTest {

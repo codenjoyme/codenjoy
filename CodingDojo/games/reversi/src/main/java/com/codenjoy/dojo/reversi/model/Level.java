@@ -23,18 +23,57 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
+import com.codenjoy.dojo.games.reversi.Element;
 import com.codenjoy.dojo.reversi.model.items.Break;
 import com.codenjoy.dojo.reversi.model.items.Chip;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 
+import java.util.HashMap;
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.reversi.Element.*;
 
-    int size();
+public class Level extends AbstractLevel {
 
-    List<Break> breaks(Field field);
+    public Level(String map) {
+        super(map);
+    }
 
-    List<Chip> chips(Field field);
+    public List<Break> breaks(Field field) {
+        return find(Break::new, BREAK);
+    }
 
-    boolean currentColor();
+    public List<Chip> chips(Field field) {
+        return find(new HashMap<>() {{
+            put(WHITE, pt -> new Chip(true, pt, field));
+            put(WHITE_TURN, pt -> new Chip(true, pt, field));
+            put(BLACK, pt -> new Chip(false, pt, field));
+            put(BLACK_TURN, pt -> new Chip(false, pt, field));
+        }});
+    }
+
+    public boolean currentColor() {
+        boolean whiteTurn = exists(WHITE_TURN);
+        boolean white = exists(WHITE);
+        boolean blackTurn = exists(BLACK_TURN);
+        boolean black = exists(BLACK);
+
+        if (whiteTurn && white
+                || blackTurn && black
+                || white && black)
+        {
+            error();
+        }
+
+        return whiteTurn || !blackTurn;
+    }
+
+    private boolean exists(Element element) {
+        return !find( pt -> pt, element).isEmpty();
+    }
+
+    private void error() {
+        throw new IllegalArgumentException("Пожалуйста используте либо WHITE_TURN + BLACK, " +
+                "либо BLACK_TURN + WHITE");
+    }
 }

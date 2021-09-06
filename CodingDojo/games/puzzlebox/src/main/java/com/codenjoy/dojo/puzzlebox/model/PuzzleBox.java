@@ -27,9 +27,7 @@ import com.codenjoy.dojo.puzzlebox.services.Events;
 import com.codenjoy.dojo.puzzlebox.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,10 +49,10 @@ public class PuzzleBox implements Field {
 
     public PuzzleBox(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        walls = level.getWalls();
-        targets = level.getTargets();
+        walls = level.walls();
+        targets = level.targets();
         this.level = level;
-        size = level.getSize();
+        size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
     }
@@ -95,7 +93,7 @@ public class PuzzleBox implements Field {
             players.add(player);
         }
         player.newHero(this);
-        player.getHero().setBoxes(level.getBoxes(), this);
+        player.getHero().setBoxes(level.boxes(), this);
     }
 
     public void remove(Player player) {

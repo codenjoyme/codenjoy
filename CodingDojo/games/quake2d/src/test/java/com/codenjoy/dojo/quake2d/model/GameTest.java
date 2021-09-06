@@ -65,8 +65,8 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
-        hero = level.getHero().get(0);
+        Level level = new Level(board);
+        hero = level.hero().get(0);
 
         game = new Quake2D(level, dice, settings);
         listener = mock(EventListener.class);
@@ -77,8 +77,8 @@ public class GameTest {
         hero.setHealth(Hero.START_HEALTH - hero.getHealth());
 
 
-        if (level.getOtherHero().size() != 0){
-            otherHero = level.getOtherHero().get(0);
+        if (level.otherHero().size() != 0){
+            otherHero = level.otherHero().get(0);
             otherPlayer = new Player(listener, settings);
             otherPlayer.setHero(otherHero);
             game.newGame(otherPlayer);

@@ -518,6 +518,10 @@
                         <targetTests>
                             <param>com.codenjoy.dojo.${module.name}.*</param>
                         </targetTests>
+                        <excludedTestClasses>
+                            <excludedTestClass>**Smoke*Test</excludedTestClass>
+                            <excludedTestClass>**Performance*Test</excludedTestClass>
+                        </excludedTestClasses>
                         <reportsDirectory>${project.basedir}/pitest/</reportsDirectory>
                     </configuration>
                     <executions>

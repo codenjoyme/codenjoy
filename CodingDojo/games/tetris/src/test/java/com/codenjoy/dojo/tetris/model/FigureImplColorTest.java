@@ -32,11 +32,6 @@ import java.util.Collection;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/14/12
- * Time: 6:31 PM
- */
 @RunWith(Parameterized.class)
 public class FigureImplColorTest {
     private int expectedColorCode;

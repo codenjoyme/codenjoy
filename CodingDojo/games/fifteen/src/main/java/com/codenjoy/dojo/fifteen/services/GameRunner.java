@@ -53,7 +53,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        Level level = new LevelImpl(new Randomizer().getRandomMap(getDice()));
+        Level level = new Level(new Randomizer().getRandomMap(getDice()));
         return new Fifteen(level, getDice(), settings);
     }
 

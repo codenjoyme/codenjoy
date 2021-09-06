@@ -33,11 +33,6 @@ import com.codenjoy.dojo.tetris.model.Figures;
 import static com.codenjoy.dojo.tetris.model.Type.*;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED;
 
-/**
- * User: oleksandr.baglai
- * Date: 9/23/12
- * Time: 3:18 PM
- */
 public class EasyLevels extends Levels {
 
     public EasyLevels(Dice dice, FigureQueue queue) {

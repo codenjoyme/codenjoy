@@ -30,10 +30,6 @@ public class Platform extends PointImpl implements Tickable, State<Element, Play
 
     private Direction direction;
 
-    public Platform(int x, int y) {
-        super(x, y);
-    }
-
     public Platform(Point point) {
         super(point);
     }

@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
+import static com.codenjoy.dojo.quake2d.model.Ability.Type.*;
+
 public class Ability extends PointImpl implements State<Element, Player> {
     public static final int HEALTH_BONUS = 30;
     enum Type {WEAPON, DEFENCE, HEALTH}
@@ -44,14 +46,20 @@ public class Ability extends PointImpl implements State<Element, Player> {
         }
     }
 
-    public Ability(Point pt, Type type) {
+    public Ability(Point pt, Element element) {
         super(pt);
-        this.type = type;
+        if (element == Element.SUPER_WEAPON) {
+            type = WEAPON;
+        } else if (element == Element.SUPER_DEFENCE) {
+            type = DEFENCE;
+        } else if (element == Element.HEALTH_PACKAGE) {
+            type = HEALTH;
+        }
     }
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        if (type == Type.WEAPON){
+        if (type == WEAPON){
             return Element.SUPER_WEAPON;
         }
 

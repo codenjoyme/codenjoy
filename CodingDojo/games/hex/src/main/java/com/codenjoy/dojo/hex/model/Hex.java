@@ -25,7 +25,6 @@ package com.codenjoy.dojo.hex.model;
 
 import com.codenjoy.dojo.games.hex.Element;
 import com.codenjoy.dojo.hex.model.items.Wall;
-import com.codenjoy.dojo.hex.model.levels.Level;
 import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -50,8 +49,8 @@ public class Hex implements Field {
 
     public Hex(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        walls = level.getWalls();
-        size = level.getSize();
+        walls = level.walls();
+        size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
     }

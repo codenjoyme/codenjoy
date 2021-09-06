@@ -81,7 +81,7 @@ public class Expansion implements Tickable, IField {
         this.settings = settings;
         WIN_MULTIPLE = Events.WIN(settings.winScore());
         DRAW_MULTIPLE = Events.WIN(settings.drawScore());
-        level.setField(this);
+        level.field(this);
         isMultiplayer = multiple;
         players = new LinkedList();
         this.gameLogger = gameLogger;
@@ -162,7 +162,7 @@ public class Expansion implements Tickable, IField {
         if (!players.isEmpty()) {
             attack();
 
-            for (Tickable item : level.getItems(Tickable.class)) {
+            for (Tickable item : level.items(Tickable.class)) {
                 if (item instanceof Hero) {
                     continue;
                 }
@@ -209,7 +209,7 @@ public class Expansion implements Tickable, IField {
             countChecker.before();
         }
 
-        for (Cell cell : level.getCellsWith(HeroForces.class)) {
+        for (Cell cell : level.cellsWith(HeroForces.class)) {
             List<HeroForces> forces = cell.getItems(HeroForces.class);
             if (forces.size() <= 1) continue;
 
@@ -234,7 +234,7 @@ public class Expansion implements Tickable, IField {
         private int count;
 
         public int count() {
-            return Arrays.asList(level.getCells()).stream()
+            return Arrays.asList(level.cells()).stream()
                     .mapToInt(cell -> {
                         List<HeroForces> items = cell.getItems(HeroForces.class);
                         if (items.isEmpty()) return 0;
@@ -320,7 +320,7 @@ public class Expansion implements Tickable, IField {
     private Events checkStatus(Player player, Hero hero) {
         if (losers.contains(player)) return null;
         if (players.size() == 1) {
-            List<Cell> freeCells = level.getCellsWith(
+            List<Cell> freeCells = level.cellsWith(
                     cell -> cell.getItems(HeroForces.class).isEmpty() &&
                             cell.isPassable() && cell.getItem(Hole.class) == null
             );
@@ -330,7 +330,7 @@ public class Expansion implements Tickable, IField {
             return null;
         }
 
-        List<HeroForces> allForces = level.getItems(HeroForces.class);
+        List<HeroForces> allForces = level.items(HeroForces.class);
         boolean alone = true;
         boolean exists = false;
         for (HeroForces item : allForces) {
@@ -358,7 +358,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public int size() {
-        return level.getSize();
+        return level.size();
     }
 
     private boolean isBarrier(int x, int y) {
@@ -367,7 +367,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public Start getBaseOf(Hero hero) {
-        List<Start> bases = level.getItems(Start.class);
+        List<Start> bases = level.items(Start.class);
 
         for (Start base : bases) {
             if (base.isOwnedBy(hero)) {
@@ -380,7 +380,7 @@ public class Expansion implements Tickable, IField {
     @Override
     @Nullable
     public Start getFreeBase() {
-        List<Start> bases = level.getItems(Start.class);
+        List<Start> bases = level.items(Start.class);
 
         Collections.sort(bases, (o1, o2) -> Integer.compare(o1.index(), o2.index()));
 
@@ -398,7 +398,7 @@ public class Expansion implements Tickable, IField {
     public HeroForces startMoveForces(Hero hero, int x, int y, int count) {
         if (count == 0) return HeroForces.EMPTY;
 
-        Cell cell = level.getCell(x, y);
+        Cell cell = level.cell(x, y);
         HeroForces force = getHeroForces(hero, cell);
 
         if (force == null) {
@@ -424,7 +424,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void removeForces(Hero hero, int x, int y) {
-        Cell cell = level.getCell(x, y);
+        Cell cell = level.cell(x, y);
         HeroForces force = cell.getItem(HeroForces.class);
         if (force != null && force.itsMe(hero)) {
             force.removeFromCell();
@@ -432,7 +432,7 @@ public class Expansion implements Tickable, IField {
     }
 
     private int leaveForces(Hero hero, int x, int y, int count) {
-        Cell cell = level.getCell(x, y);
+        Cell cell = level.cell(x, y);
 
         HeroForces force = getHeroForces(hero, cell);
         if (force == null) {
@@ -443,7 +443,7 @@ public class Expansion implements Tickable, IField {
     }
 
     private int countForces(Hero hero, int x, int y) {
-        Cell cell = level.getCell(x, y);
+        Cell cell = level.cell(x, y);
 
         HeroForces force = getHeroForces(hero, cell);
         if (force == null) {
@@ -459,20 +459,20 @@ public class Expansion implements Tickable, IField {
             return;
         }
 
-        for (Gold gold : level.getItems(Gold.class)) {
+        for (Gold gold : level.items(Gold.class)) {
             gold.reset();
         }
     }
 
     @Override
     public int totalRegions(){
-        return level.getCellsWith(cell -> cell.isPassable()
+        return level.cellsWith(cell -> cell.isPassable()
                 && cell.getItem(Hole.class) == null).size();
     }
 
     @Override
     public int regionsCount(Hero hero) {
-        return level.getCellsWith(cell -> cell.busy(hero)).size();
+        return level.cellsWith(cell -> cell.busy(hero)).size();
     }
 
     @Override
@@ -502,12 +502,12 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void removeFromCell(Hero hero) {
-        for (HeroForces forces : level.getItems(HeroForces.class)) {
+        for (HeroForces forces : level.items(HeroForces.class)) {
             if (forces.itsMe(hero)) {
                 forces.removeFromCell();
             }
         }
-        for (Start start : level.getItems(Start.class)) { // TODO test me
+        for (Start start : level.items(Start.class)) { // TODO test me
             if (start.isOwnedBy(hero)) {
                 start.setOwner(null);
             }
@@ -562,7 +562,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public int getViewSize() {
-        return level.getViewSize();
+        return level.viewSize();
     }
 
     public class LogState {
@@ -626,13 +626,13 @@ public class Expansion implements Tickable, IField {
 
             @Override
             public int viewSize() {
-                int viewSize = Expansion.this.level.getViewSize();
+                int viewSize = Expansion.this.level.viewSize();
                 return (viewSize == -1) ? size() : viewSize;
             }
 
             @Override
             public BiFunction<Integer, Integer, State> elements() {
-                Cell[] cells = Expansion.this.getCurrentLevel().getCells();
+                Cell[] cells = Expansion.this.getCurrentLevel().cells();
                 return (index, layer) -> {
                     if (layer == 2) {
                         return new ForcesState(cells[index].getItem(HeroForces.class));

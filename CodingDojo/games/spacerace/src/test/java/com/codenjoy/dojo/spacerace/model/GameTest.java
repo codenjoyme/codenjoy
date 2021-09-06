@@ -90,8 +90,8 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
-        hero = level.getHero(charger).get(0);
+        Level level = new Level(board);
+        hero = level.hero(charger).get(0);
         game = new Spacerace(level, dice, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, settings);

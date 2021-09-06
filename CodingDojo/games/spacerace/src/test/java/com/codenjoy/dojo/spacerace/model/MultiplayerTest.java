@@ -60,7 +60,7 @@ public class MultiplayerTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        Level level = new LevelImpl(
+        Level level = new Level(
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼   ☼" +

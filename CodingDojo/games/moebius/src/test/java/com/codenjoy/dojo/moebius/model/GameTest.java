@@ -66,7 +66,7 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
+        Level level = new Level(board);
         listener = mock(EventListener.class);
         game = new Moebius(level, dice, settings);
         player = new Player(listener, settings);

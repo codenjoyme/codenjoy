@@ -57,10 +57,10 @@ public class Quadro implements Field {
 
     public Quadro(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        size = level.getSize();
+        size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
-        chips = level.getChips();
+        chips = level.chips();
     }
 
     @Override

@@ -3,3 +3,4 @@
 *.iml
 /libs
 src/main/webapp/resources/user/icancode-servers.zip
+/**/pitest/**

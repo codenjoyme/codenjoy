@@ -142,7 +142,7 @@ public class Levels {
     public static List<Supplier<Level>> collectYours(final int viewSize, final String... boards) {
         return Arrays.stream(boards)
                 .map(board -> {
-                    Supplier<Level> result = () -> new LevelImpl("level_" + Integer.toHexString(board.hashCode()),
+                    Supplier<Level> result = () -> new Level("level_" + Integer.toHexString(board.hashCode()),
                                     board, viewSize);
                     return result;
                 })
@@ -158,13 +158,13 @@ public class Levels {
     }
 
     @NotNull
-    public static LevelImpl getLevel(int viewSize, String name) {
+    public static Level getLevel(int viewSize, String name) {
         String level = get(name);
         if (level == null) {
             level = get(make(name));
         }
         String resize = resize(level, viewSize);
-        return new LevelImpl(name, resize, viewSize);
+        return new Level(name, resize, viewSize);
     }
 
     static String resize(String level, int toSize) {

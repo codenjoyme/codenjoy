@@ -23,9 +23,31 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
-public interface Level {
+import com.codenjoy.dojo.quadro.model.items.Chip;
+import com.codenjoy.dojo.quadro.model.items.RedChip;
+import com.codenjoy.dojo.quadro.model.items.YellowChip;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 
-    int getSize();
+import java.util.HashMap;
+import java.util.List;
 
-    ChipSet getChips();
+import static com.codenjoy.dojo.games.quadro.Element.RED;
+import static com.codenjoy.dojo.games.quadro.Element.YELLOW;
+
+public class Level extends AbstractLevel {
+
+    public Level(String map) {
+        super(map);
+    }
+
+    public ChipSet chips() {
+        List<Chip> chips = find(new HashMap<>() {{
+            put(YELLOW, pt -> new YellowChip(pt));
+            put(RED, pt -> new RedChip(pt));
+        }});
+
+        return new ChipSet(){{
+            putAll(chips);
+        }};
+    }
 }

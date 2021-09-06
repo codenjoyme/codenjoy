@@ -25,7 +25,6 @@ package com.codenjoy.dojo.battlecity.services;
 
 import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
-import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
@@ -178,7 +177,7 @@ public class GameSettings extends SettingsImpl
     }
 
     public Level level(Dice dice) {
-        return new LevelImpl(string(LEVEL_MAP), dice);
+        return new Level(string(LEVEL_MAP), dice);
     }
 
 }

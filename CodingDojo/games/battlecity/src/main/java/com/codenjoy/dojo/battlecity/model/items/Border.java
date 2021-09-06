@@ -31,10 +31,6 @@ import com.codenjoy.dojo.services.State;
 
 public class Border extends PointImpl implements State<Element, Player> {
 
-    public Border(int x, int y) {
-        super(x, y);
-    }
-
     public Border(Point point) {
         super(point);
     }

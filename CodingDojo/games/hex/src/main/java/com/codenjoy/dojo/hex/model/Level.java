@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model.level;
+package com.codenjoy.dojo.hex.model;
 
 /*-
  * #%L
@@ -23,20 +23,26 @@ package com.codenjoy.dojo.sample.model.level;
  */
 
 
-import com.codenjoy.dojo.services.field.PointField;
+import com.codenjoy.dojo.hex.model.items.Wall;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 
-/**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
- */
-public interface Level {
+import java.util.List;
 
-    /**
-     * @return Размер поля (обязательно квадратное)
-     */
-    int size();
+import static com.codenjoy.dojo.games.hex.Element.*;
 
-    /**
-     * @return Двумерное поле со всеми элементами на нем
-     */
-    PointField field();
+public class Level extends AbstractLevel {
+
+    public Level(String map) {
+        super(map);
+    }
+
+    public List<Hero> heroes() {
+        return find(Hero::new,
+                HERO1,
+                HERO2);
+    }
+
+    public List<Wall> walls() {
+        return find(Wall::new, WALL);
+    }
 }

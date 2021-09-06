@@ -25,11 +25,6 @@ package com.codenjoy.dojo.tetris.model.levels.random;
 
 import com.codenjoy.dojo.services.Dice;
 
-/**
- * User: oleksandr.baglai
- * Date: 9/25/12
- * Time: 10:36 AM
- */
 public class ProbabilityRandomizer implements Randomizer {
 
     private Dice dice;

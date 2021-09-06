@@ -38,10 +38,6 @@ public class FuryPill extends PointImpl implements State<Element, Player> {
         super(point);
     }
 
-    public FuryPill(int x, int y) {
-        super(x, y);
-    }
-
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
         return Element.FURY_PILL;

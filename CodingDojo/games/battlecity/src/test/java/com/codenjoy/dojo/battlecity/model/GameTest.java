@@ -111,7 +111,7 @@ public class GameTest {
         };
         game = (Battlecity) runner.createGame(0, settings);
 
-        settings.level(dice).getTanks()
+        settings.level(dice).tanks()
                 .forEach(tank -> game.newGame(initPlayer(tank)));
         game.aiTanks().stream()
                 .filter(tank -> tank instanceof AITank)
