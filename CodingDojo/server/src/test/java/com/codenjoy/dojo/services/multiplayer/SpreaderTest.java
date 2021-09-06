@@ -26,11 +26,11 @@ import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.nullobj.NullGameField;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.google.common.collect.Iterators;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -40,23 +40,30 @@ import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 public class SpreaderTest {
 
     private final Spreader spreader = new Spreader(){{
-        fields = mock(FieldService.class);
+        fields = SpreaderTest.this.fieldService = mock(FieldService.class);
     }};
-
+    private FieldService fieldService;
     private final String room = "room";
     private final MultiplayerType multiplayerType = MultiplayerType.MULTIPLE;
-    private final Supplier<GameField> gameFiled = () -> mock(GameField.class);
+    private final Supplier<GameField> getField = () -> newField();
+    private List<GameField> fields = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
 
     private Player newPlayer() {
         Player result = new Player("player" + players.size());
         players.add(result);
         return result;
+    }
+
+    private GameField newField() {
+        GameField field = mock(GameField.class);
+        fields.add(field);
+        return field;
     }
 
     private Deal newDeal(int teamId, SettingsReader settings) {
@@ -85,7 +92,7 @@ public class SpreaderTest {
 
                         // when
                         for (Deal deal : deals) {
-                            spreader.fieldFor(deal, room, multiplayerType, playersPerRoom, 0, gameFiled);
+                            spreader.fieldFor(deal, room, multiplayerType, playersPerRoom, 0, getField);
                         }
 
                         // then
@@ -153,8 +160,8 @@ public class SpreaderTest {
         Deal deal1 = newDeal(0, settings);
         Deal deal2 = newDeal(0, settings);
 
-        spreader.fieldFor(deal1, room, multiplayerType, roomSize, 0, gameFiled);
-        spreader.fieldFor(deal2, room, multiplayerType, roomSize, 0, gameFiled);
+        spreader.fieldFor(deal1, room, multiplayerType, roomSize, 0, getField);
+        spreader.fieldFor(deal2, room, multiplayerType, roomSize, 0, getField);
 
         // when
         Optional<GameRoom> optional1 = spreader.gameRoom(room, deal1.getPlayerId());
@@ -188,5 +195,82 @@ public class SpreaderTest {
         // when then
         assertEquals(false, spreader.gameRoom("otherRoom", deal1.getPlayerId()).isPresent());
         assertEquals(false, spreader.gameRoom(room, "otherPlayer").isPresent());
+    }
+
+    @Test
+    public void testInformFieldService_whenAddAndRemove() {
+        // given
+        int roomSize = 2;
+        SettingsReader settings = settings(roomSize, 1);
+        assertEquals(0, fields.size());
+
+        // when
+        // register first player (1 of 2)
+        Deal deal1 = newDeal(0, settings);
+        spreader.fieldFor(deal1, room, multiplayerType, roomSize, 0, getField);
+
+        // then
+        assertEquals(1, fields.size());
+        verify(fieldService).register(fields.get(0));
+        reset();
+
+        // when
+        // register second player (2 of 2)
+        Deal deal2 = newDeal(0, settings);
+        spreader.fieldFor(deal2, room, multiplayerType, roomSize, 0, getField);
+
+        // then
+        assertEquals(1, fields.size());
+        reset();
+
+        // when
+        // register third player in other field (1 of 2)
+        Deal deal3 = newDeal(0, settings);
+        spreader.fieldFor(deal3, room, multiplayerType, roomSize, 0, getField);
+
+        // then
+        assertEquals(2, fields.size());
+        verify(fieldService).register(fields.get(1));
+        reset();
+
+        // when
+        // remove player1 only (field is not empty)
+        spreader.remove(deal1, Sweeper.off());
+
+        // then
+        assertEquals(2, fields.size());
+        reset();
+
+        // when
+        // remove player2 only (field is empty)
+        spreader.remove(deal2, Sweeper.off());
+
+        // then
+        assertEquals(2, fields.size());
+        verify(fieldService).remove(fields.get(0));
+        reset();
+
+        // when
+        // register forth player in other field (2 of 2)
+        Deal deal4 = newDeal(0, settings);
+        spreader.fieldFor(deal4, room, multiplayerType, roomSize, 0, getField);
+
+        // then
+        assertEquals(2, fields.size());
+        reset();
+
+        // when
+        // remove player3 with player4 (field is empty)
+        spreader.remove(deal3, Sweeper.on().allRemaining());
+
+        // then
+        assertEquals(2, fields.size());
+        verify(fieldService).remove(fields.get(1));
+        reset();
+    }
+
+    private void reset() {
+        verifyNoMoreInteractions(fieldService);
+        Mockito.reset(fieldService);
     }
 }

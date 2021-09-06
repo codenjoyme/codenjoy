@@ -28,16 +28,14 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import lombok.experimental.UtilityClass;
 import org.junit.Assert;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @UtilityClass
@@ -104,5 +102,17 @@ public class TestUtils {
         Assert.assertEquals("User codes mismatch", expected.getCode(), actual.getCode());
         Assert.assertEquals("User data mismatch", expected.getData(), actual.getData());
         Assert.assertTrue("User passwords mismatch", passwordEncoder.matches(originPassword, actual.getPassword()));
+    }
+
+    public static void assertException(String expected, Runnable runnable) {
+        try {
+            runnable.run();
+            fail("Expected exception");
+        } catch (Throwable throwable) {
+            assertEquals(expected,
+                    throwable.getClass().getSimpleName() +
+                            ": " +
+                            throwable.getMessage());
+        }
     }
 }
