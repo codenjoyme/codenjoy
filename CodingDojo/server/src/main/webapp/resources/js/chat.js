@@ -276,8 +276,8 @@ function initChat(contextPath, type) {
             }
 
             var realLastId = (type == ROOM_TYPE) ?
-                data[players[0]].lastRoomChatMessage :
-                data[players[0]].lastFieldChatMessage;
+                data[players[0]].chat.lastInRoom :
+                data[players[0]].chat.lastInField;
             var lastLoadedId = getLastMessageId();
             if (!lastLoadedId) {
                 loadChatMessages(null, null, realLastId, true);

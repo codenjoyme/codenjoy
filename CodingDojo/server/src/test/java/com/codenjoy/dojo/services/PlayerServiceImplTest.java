@@ -600,8 +600,9 @@ public class PlayerServiceImplTest {
                         "additionalData=null)}', \n" +
                     "ReadableNames:'{petya=readable_petya}', \n" +
                     "Group:[petya], \n" +
-                    "LastRoomChatMessage:106558567, \n" +
-                    "LastFieldChatMessage:null], \n" +
+                    "Chat:ChatService.Status(fieldId=2, \n" +
+                        "lastInRoom=106558567, \n" +
+                        "lastInField=null)], \n" +
                 "vasya=PlayerData[BoardSize:15, \n" +
                     "Board:'ABCD', \n" +
                     "Game:'game', \n" +
@@ -615,8 +616,9 @@ public class PlayerServiceImplTest {
                         "additionalData=null)}', \n" +
                     "ReadableNames:'{vasya=readable_vasya}', \n" +
                     "Group:[vasya], \n" +
-                    "LastRoomChatMessage:111979568, \n" +
-                    "LastFieldChatMessage:null]}",
+                    "Chat:ChatService.Status(fieldId=1, \n" +
+                        "lastInRoom=111979568, \n" +
+                        "lastInField=null)]}",
                 clean(split(data, ", \n")));
     }
 

@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -262,6 +264,16 @@ public class ChatService {
         return new IllegalArgumentException(String.format(message, parameters));
     }
 
+    @Data
+    @AllArgsConstructor
+    @ToString
+    public static class Status {
+        private int fieldId;
+        private Integer lastInRoom;
+        private Integer lastInField;
+    }
+
+    @ToString
     public class LastMessage {
         private final Map<String, Integer> room;
         private final Map<Integer, Integer> topic;
@@ -271,26 +283,30 @@ public class ChatService {
             topic = chat.getLastTopicMessageIds();
         }
 
-        public Integer inRoom(Deal deal) {
+        public Status at(Deal deal) {
+            int fieldId = fieldId(deal);
+            return new Status(
+                    fieldId,
+                    inRoom(deal),
+                    inField(fieldId));
+        }
+
+        private Integer inRoom(Deal deal) {
             return room.get(deal.getRoom());
         }
 
-        public Integer inField(Deal deal) {
-            return topic.get(Chat.topicId(fields.id(deal.getField())));
+        private Integer inField(int fieldId) {
+            return topic.get(Chat.topicId(fieldId));
         }
 
-        public Integer forTopic(Deal deal) {
+        private int fieldId(Deal deal) {
+            return fields.id(deal.getField());
+        }
+
+        private Integer forTopic(Deal deal) {
             // TODO когда дойдет очередь до topic реализовать и его
             // return room.get(deal.getRoom());
             return 0;
-        }
-
-        @Override
-        public String toString() {
-            return "LastMessage{" +
-                    "room=" + room +
-                    ", topic=" + topic +
-                    '}';
         }
     }
 

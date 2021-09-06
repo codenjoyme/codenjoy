@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.playerdata;
  */
 
 
+import com.codenjoy.dojo.services.ChatService;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import lombok.AllArgsConstructor;
@@ -46,8 +47,7 @@ public class PlayerData implements ScreenData {
     private Map<String, HeroData> coordinates;
     private Map<String, String> readableNames;
     private List<String> group;
-    private Integer lastRoomChatMessage;
-    private Integer lastFieldChatMessage;
+    private ChatService.Status chat;
 
     public String getInfo() {
         return (info == null) ? StringUtils.EMPTY : info;
@@ -66,8 +66,7 @@ public class PlayerData implements ScreenData {
                         "Coordinates:'%s', " +
                         "ReadableNames:'%s', " +
                         "Group:%s, " +
-                        "LastRoomChatMessage:%s, " +
-                        "LastFieldChatMessage:%s]",
+                        "Chat:%s]",
                 boardSize,
                 board,
                 game,
@@ -78,8 +77,7 @@ public class PlayerData implements ScreenData {
                 coordinates,
                 readableNames,
                 group,
-                lastRoomChatMessage,
-                lastFieldChatMessage);
+                chat);
     }
 
 }
