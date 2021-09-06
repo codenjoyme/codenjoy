@@ -74,21 +74,25 @@ public class ChatServiceTest {
 
         // when then
         ChatService.LastMessage last = service.getLast();
-        assertEquals("LastMessage{room={room1=3, room2=4}, " +
-                        "topic={1=7, 3=10, 2=11, 4=12, -1=16, -2=18, -3=19, -4=20}}",
+        assertEquals("ChatService.LastMessage(room={room1=3, room2=4}, " +
+                        "topic={1=7, 3=10, 2=11, 4=12, -1=16, -2=18, -3=19, -4=20})",
                 last.toString());
 
         // when then
-        assertEquals(3, (int) last.inRoom(dealFor("room1")));
-        assertEquals(4, (int) last.inRoom(dealFor("room2")));
+        assertEquals("ChatService.Status(fieldId=1, lastInRoom=3, lastInField=16)",
+                last.at(deal("room1", 1)).toString());
 
-        assertEquals(16, (int) last.inField(dealForField(1)));
-        assertEquals(18, (int) last.inField(dealForField(2)));
-        assertEquals(19, (int) last.inField(dealForField(3)));
-        assertEquals(20, (int) last.inField(dealForField(4)));
+        assertEquals("ChatService.Status(fieldId=2, lastInRoom=3, lastInField=18)",
+                last.at(deal("room1", 2)).toString());
+
+        assertEquals("ChatService.Status(fieldId=3, lastInRoom=4, lastInField=19)",
+                last.at(deal("room2", 3)).toString());
+
+        assertEquals("ChatService.Status(fieldId=4, lastInRoom=4, lastInField=20)",
+                last.at(deal("room2", 4)).toString());
     }
 
-    private Deal dealForField(int fieldId) {
+    private Deal deal(String room, int fieldId) {
         GameField field = mock(GameField.class);
 
         Game game = mock(Game.class);
@@ -97,10 +101,6 @@ public class ChatServiceTest {
         fields.register(field);
         when(fields.id(field)).thenReturn(fieldId);
 
-        return new Deal(new Player(), game, null);
-    }
-
-    private Deal dealFor(String room) {
-        return new Deal(new Player(), null, room);
+        return new Deal(new Player(), game, room);
     }
 }

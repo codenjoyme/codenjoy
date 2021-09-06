@@ -415,6 +415,7 @@ public class PlayerServiceImpl implements PlayerService {
                 List<String> group = gameData.getGroup();
                 Map<String, HeroData> coordinates = gameData.getCoordinates();
                 Map<String, String> readableNames = gameData.getReadableNames();
+                ChatService.Status chat = lastMessage.at(deal);
                 map.put(player, new PlayerData(boardSize,
                         encoded,
                         gameType,
@@ -425,8 +426,7 @@ public class PlayerServiceImpl implements PlayerService {
                         coordinates,
                         readableNames,
                         group,
-                        lastMessage.inRoom(deal),
-                        lastMessage.inField(deal)));
+                        chat));
 
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +
