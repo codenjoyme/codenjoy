@@ -1096,4 +1096,62 @@ public class ChatTest {
         assertThat()
                 .in(chat.getMessagesBetween(3, "room", 3, 8, true));
     }
+
+    @Test
+    public void shouldGetLastFieldId() {
+        // when then
+        addMessage("room", "player");      // room  chat
+        assertEquals(0, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player");      // room  chat
+        assertEquals(0, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player", -1);  // field chat
+        assertEquals(1, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player");      // room  chat
+        assertEquals(1, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player", 1);   // topic chat
+        assertEquals(1, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player", 2);   // topic chat
+        assertEquals(1, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player", -3);  // field chat
+        assertEquals(3, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player", -51); // field chat
+        assertEquals(51, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player", -2);  // field chat
+        assertEquals(51, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player");      // room  chat
+        assertEquals(51, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player", 60);  // topic chat
+        assertEquals(51, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player", 1);   // topic chat
+        assertEquals(51, chat.getLastFieldId());
+
+        // when then
+        assertEquals(51, chat.getLastFieldId());
+
+        // when then
+        addMessage("room", "player", -62); // field chat
+        assertEquals(62, chat.getLastFieldId());
+    }
 }

@@ -43,10 +43,7 @@ public class FieldService {
 
     @PostConstruct
     public void init() {
-        Integer last = chat.getLastFieldId();
-        if (last != null) {
-            id.set(last);
-        }
+        id.set(chat.getLastFieldId());
     }
 
     public void register(GameField field) {

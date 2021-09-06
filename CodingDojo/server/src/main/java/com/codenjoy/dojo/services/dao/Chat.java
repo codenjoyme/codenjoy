@@ -73,15 +73,17 @@ public class Chat {
         );
     }
 
-    // TODO test me
-    public Integer getLastFieldId() {
+    /**
+     * @return Последнюю fieldId которая была зарегистрирована в прошлом.
+     */
+    public int getLastFieldId() {
         return pool.select("SELECT topic_id " +
                         "FROM messages " +
                         "WHERE topic_id < 0 " +
-                        "ORDER BY time DESC " +
+                        "ORDER BY topic_id ASC " +
                         "LIMIT 1;",
                 new Object[]{},
-                rs -> rs.next() ? topicId(rs.getInt(1)) : null);
+                rs -> rs.next() ? topicId(rs.getInt(1)) : 0);
     }
 
     public static int topicId(int fieldId) {
