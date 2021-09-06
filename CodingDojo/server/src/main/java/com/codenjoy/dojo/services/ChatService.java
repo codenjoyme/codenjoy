@@ -262,11 +262,39 @@ public class ChatService {
         return new IllegalArgumentException(String.format(message, parameters));
     }
 
-    public Map<String, Integer> getLastRoomMessageIds() {
-        return chat.getLastRoomMessageIds();
+    public class LastMessage {
+        private final Map<String, Integer> room;
+        private final Map<Integer, Integer> topic;
+
+        public LastMessage() {
+            room = chat.getLastRoomMessageIds();
+            topic = chat.getLastTopicMessageIds();
+        }
+
+        public Integer inRoom(Deal deal) {
+            return room.get(deal.getRoom());
+        }
+
+        public Integer inField(Deal deal) {
+            return topic.get(Chat.topicId(fields.id(deal.getField())));
+        }
+
+        public Integer forTopic(Deal deal) {
+            // TODO когда дойдет очередь до topic реализовать и его
+            // return room.get(deal.getRoom());
+            return 0;
+        }
+
+        @Override
+        public String toString() {
+            return "LastMessage{" +
+                    "room=" + room +
+                    ", topic=" + topic +
+                    '}';
+        }
     }
 
-    public Map<Integer, Integer> getLastTopicMessageIds() {
-        return chat.getLastTopicMessageIds();
+    public LastMessage getLast() {
+        return new LastMessage();
     }
 }

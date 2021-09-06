@@ -30,7 +30,6 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
-import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
@@ -388,15 +387,11 @@ public class PlayerServiceImpl implements PlayerService {
         cacheBoards.clear();
 
         Map<String, GameData> gameDataMap = dealsView.getGamesDataMap();
-        Map<String, Integer> lastRoomChatIds = chat.getLastRoomMessageIds();
-        Map<Integer, Integer> lastTopicChatIds = chat.getLastTopicMessageIds();
+        ChatService.LastMessage lastMessage = chat.getLast();
         for (Deal deal : deals) {
             Game game = deal.getGame();
             Player player = deal.getPlayer();
             try {
-                Integer lastRoomChatMessage = lastRoomChatIds.get(player.getRoom());
-                Integer lastFieldChatMessage = lastTopicChatIds.get(chat.getFieldTopicId(deal.getField()));
-
                 String gameType = deal.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());
 
@@ -430,8 +425,8 @@ public class PlayerServiceImpl implements PlayerService {
                         coordinates,
                         readableNames,
                         group,
-                        lastRoomChatMessage,
-                        lastFieldChatMessage));
+                        lastMessage.inRoom(deal),
+                        lastMessage.inField(deal)));
 
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +

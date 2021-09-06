@@ -35,14 +35,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class FieldService {
 
-    private AtomicInteger id = new AtomicInteger(0);
-    private Map<GameField, Integer> fields = new ConcurrentHashMap<>();
+    private AtomicInteger id;
+    private Map<GameField, Integer> fields;
 
     @Autowired
     private Chat chat;
 
     @PostConstruct
     public void init() {
+        removeAll();
         id.set(chat.getLastFieldId());
     }
 
@@ -52,5 +53,10 @@ public class FieldService {
 
     public int id(GameField field) {
         return fields.get(field);
+    }
+
+    public void removeAll() {
+        id = new AtomicInteger(0);
+        fields = new ConcurrentHashMap<>();
     }
 }

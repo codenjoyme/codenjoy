@@ -982,6 +982,10 @@ public class ChatTest {
     }
 
     public Chat.Message addMessage(String room, String player, Integer topicId) {
+        return addMessage(chat, messages, room, player, topicId);
+    }
+
+    public static Chat.Message addMessage(Chat chat, List<Chat.Message> messages, String room, String player, Integer topicId) {
         long time = JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200");
         int index = messages.size() + 1;
         Chat.Message message = new Chat.Message(
