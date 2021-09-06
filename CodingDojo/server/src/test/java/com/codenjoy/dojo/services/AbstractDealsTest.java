@@ -63,8 +63,9 @@ public class AbstractDealsTest {
         deals = new Deals();
         roomService = deals.roomService = new RoomService();
         timeService = deals.timeService = mock(TimeService.class);
-        fieldService = deals.fields = mock(FieldService.class);
-        spreader = deals.spreader = new Spreader();
+        spreader = deals.spreader = new Spreader(){{
+            fields = mock(FieldService.class);
+        }};
         when(fieldSaves.getSave()).thenReturn(null);
     }
 

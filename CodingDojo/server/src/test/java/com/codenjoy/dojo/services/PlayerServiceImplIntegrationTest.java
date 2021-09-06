@@ -75,8 +75,9 @@ public class PlayerServiceImplIntegrationTest {
             {
                 PlayerServiceImplIntegrationTest.this.deals
                         = this.deals = new Deals();
-                this.deals.spreader = new Spreader();
-                this.deals.fields = mock(FieldService.class);
+                this.deals.spreader = new Spreader(){{
+                    fields = mock(FieldService.class);
+                }};
 
                 PlayerServiceImplIntegrationTest.this.playerController
                         = this.playerController = mock(Controller.class);

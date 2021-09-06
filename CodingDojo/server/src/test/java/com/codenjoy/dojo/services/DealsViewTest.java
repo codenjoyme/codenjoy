@@ -66,8 +66,9 @@ public class DealsViewTest {
     @Before
     public void setup() {
         deals = new Deals();
-        deals.spreader = new Spreader();
-        deals.fields = mock(FieldService.class);
+        deals.spreader = new Spreader(){{
+            fields = mock(FieldService.class);
+        }};
         dealsView = new DealsView();
         dealsView.service = deals;
 

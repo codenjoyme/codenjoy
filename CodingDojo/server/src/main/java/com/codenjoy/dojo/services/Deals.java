@@ -66,9 +66,6 @@ public class Deals implements Iterable<Deal>, Tickable {
     @Autowired
     protected TimeService timeService;
 
-    @Autowired
-    protected FieldService fields;
-
     public void onAdd(Consumer<Deal> consumer) {
         this.onAdd = consumer;
     }
@@ -133,9 +130,7 @@ public class Deals implements Iterable<Deal>, Tickable {
                 level,
                 () -> {
                     game.getPlayer().setProgress(progress);
-                    GameField newField = gameType.createGame(level, gameType.getSettings());
-                    fields.register(newField);
-                    return newField;
+                    return gameType.createGame(level, gameType.getSettings());
                 });
 
         game.on(field);

@@ -23,9 +23,11 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.FieldService;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -39,12 +41,15 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class Spreader {
 
+    @Autowired
+    protected FieldService fields;
+
     private Multimap<String, GameRoom> rooms = LinkedHashMultimap.create();
 
     public GameField fieldFor(Deal deal, String room,
                               MultiplayerType type,
                               int roomSize, int level,
-                              Supplier<GameField> field)
+                              Supplier<GameField> getField)
     {
         room = type.getRoom(room, level);
         GameRoom gameRoom = null;
@@ -53,7 +58,9 @@ public class Spreader {
         }
 
         if (gameRoom == null) {
-            gameRoom = new GameRoom(room, field.get(), roomSize, type.isDisposable());
+            GameField field = getField.get();
+            fields.register(field);
+            gameRoom = new GameRoom(room, field, roomSize, type.isDisposable());
             add(room, gameRoom);
         }
 
