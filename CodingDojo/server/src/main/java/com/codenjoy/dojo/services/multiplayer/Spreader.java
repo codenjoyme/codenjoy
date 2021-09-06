@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -84,13 +85,16 @@ public class Spreader {
      * оставаться на борде не имеет смысла
      */
     public List<Deal> remove(Deal deal, Sweeper sweeper) {
-        List<GameRoom> rooms = roomsFor(deal);
+        Optional<GameRoom> optional = roomsFor(deal);
 
-        List<Deal> removed = rooms.stream()
-                .flatMap(room -> room.remove(deal, sweeper).stream())
-                .collect(toList());
+        if (!optional.isPresent()) {
+            return Arrays.asList();
+        }
 
-        rooms.forEach(this::removeIfEmpty);
+        GameRoom room = optional.get();
+        List<Deal> removed = room.remove(deal, sweeper);
+
+        removeIfEmpty(room);
 
         return removed;
     }
@@ -98,6 +102,7 @@ public class Spreader {
     private void removeIfEmpty(GameRoom room) {
         if (!room.isEmpty()) return;
 
+        // TODO попробовать это решить иначе
         rooms.entries().stream()
                 .filter(entry -> entry.getValue() == room)
                 .map(Map.Entry::getKey)
@@ -105,16 +110,16 @@ public class Spreader {
                 .forEach(key -> rooms.remove(key, room));
     }
 
-    private List<GameRoom> roomsFor(Deal deal) {
+    private Optional<GameRoom> roomsFor(Deal deal) {
         return rooms.values().stream()
                 .filter(room -> room.containsDeal(deal))
-                .collect(toList());
+                .findFirst();
     }
 
-    private List<GameRoom> roomsFor(GameField field) {
+    private Optional<GameRoom> roomsFor(GameField field) {
         return rooms.values().stream()
                 .filter(room -> room.isFor(field))
-                .collect(toList());
+                .findFirst();
     }
 
     public boolean contains(Deal deal) {
@@ -123,15 +128,13 @@ public class Spreader {
 
     public boolean isRoomStaffed(GameField field) {
         if (field == null) {
-            log.warn("Почему-то комната для поля == null");
+            throw new IllegalArgumentException("Field is null");
         }
 
-        List<GameRoom> rooms = roomsFor(field);
-        if (rooms.size() != 1) {
-            log.warn("Почему-то комната для поля не одна: " + rooms.size());
-            return true;
-        }
-        return rooms.get(0).isStuffed();
+        return roomsFor(field)
+                .orElseThrow(() -> new IllegalStateException(
+                        "There is no room for field: " + field.hashCode()))
+                .isStuffed();
     }
 
     public Multimap<String, GameRoom> rooms() {

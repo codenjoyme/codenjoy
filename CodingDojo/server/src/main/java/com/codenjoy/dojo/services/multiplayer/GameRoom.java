@@ -156,9 +156,6 @@ public class GameRoom {
     }
 
     public boolean isFor(GameField input) {
-        if (field == null) { // TODO точно такое может быть?
-            return input == null;
-        }
         return field.equals(input);
     }
 

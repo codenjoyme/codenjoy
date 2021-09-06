@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.nullobj.NullGameField;
@@ -43,7 +44,9 @@ import static org.mockito.Mockito.mock;
 
 public class SpreaderTest {
 
-    private final Spreader spreader = new Spreader();
+    private final Spreader spreader = new Spreader(){{
+        fields = mock(FieldService.class);
+    }};
 
     private final String room = "room";
     private final MultiplayerType multiplayerType = MultiplayerType.MULTIPLE;
