@@ -33,7 +33,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
-// TODO test me
 public class FieldService {
 
     private AtomicInteger id;
@@ -53,6 +52,9 @@ public class FieldService {
     }
 
     public int id(GameField field) {
+        if (!fields.containsKey(field)) {
+            throw new IllegalStateException("Found unregistered field");
+        }
         return fields.get(field);
     }
 
