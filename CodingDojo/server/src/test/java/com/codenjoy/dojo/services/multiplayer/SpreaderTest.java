@@ -176,7 +176,7 @@ public class SpreaderTest {
 
         assertSame(room1, room2);
 
-        assertEquals(room, room1.room());
+        assertEquals(room, room1.name());
         assertEquals(2, room1.countPlayers());
         assertEquals(true, room1.containsPlayer(deal1.getPlayerId()));
         assertEquals(true, room1.containsPlayer(deal2.getPlayerId()));

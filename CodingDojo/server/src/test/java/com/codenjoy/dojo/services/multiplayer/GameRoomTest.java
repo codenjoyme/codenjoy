@@ -84,7 +84,7 @@ public class GameRoomTest {
         GameRoom room = createRoom();
 
         // when then
-        assertEquals(ROOM, room.room());
+        assertEquals(ROOM, room.name());
     }
 
     @Test

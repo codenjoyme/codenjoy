@@ -36,13 +36,13 @@ public class GameRoom {
 
     private final GameField field;
     private final int count;
-    private final String room;
+    private final String name;
     private int wasCount;
     private final boolean disposable;
     private List<Deal> deals = new LinkedList<>();
 
-    public GameRoom(String room, GameField field, int count, boolean disposable) {
-        this.room = room;
+    public GameRoom(String name, GameField field, int count, boolean disposable) {
+        this.name = name;
         this.field = field;
         this.count = count;
         this.disposable = disposable;
@@ -131,8 +131,8 @@ public class GameRoom {
                 .anyMatch(deal -> deal.getTeamId() == teamId);
     }
 
-    public String room() {
-        return room;
+    public String name() {
+        return name;
     }
 
     public long countTeams() {
