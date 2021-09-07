@@ -118,8 +118,11 @@ public class GameRoom {
     }
 
     public boolean containsPlayer(String playerId) {
+        if (playerId == null) {
+            return false;
+        }
         return deals.stream()
-                .anyMatch(deal -> playerId != null && playerId.equals(deal.getPlayerId()));
+                .anyMatch(deal -> deal.getPlayerId().equals(playerId));
     }
 
     public boolean containsDeal(Deal deal) {
