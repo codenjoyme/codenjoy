@@ -1,0 +1,32 @@
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Publish to docker hub
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: Build docker images
+        run: |
+          docker build -t dojobanica/codenjoy .
+
+      - name: Docker login
+        run: docker login -u dojobanica -p ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Publish images
+        run: |
+          docker push dojobanica/codenjoy
