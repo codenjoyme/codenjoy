@@ -160,6 +160,9 @@ public class PlayerServiceImplTest {
     @Autowired
     private ScoresCleaner scoresCleaner;
 
+    @Autowired
+    private FieldService fieldService;
+
     private InformationCollector informationCollector;
 
     @Mock
@@ -179,6 +182,8 @@ public class PlayerServiceImplTest {
     public void setUp() {
         Mockito.reset(actionLogger, autoSaver, gameService, playerController, deals);
         deals.clear();
+        chat.removeAll();
+        fieldService.removeAll();
 
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
         playerCaptor = ArgumentCaptor.forClass(Player.class);
