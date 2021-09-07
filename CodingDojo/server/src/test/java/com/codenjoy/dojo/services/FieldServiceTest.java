@@ -83,10 +83,10 @@ public class FieldServiceTest {
         addMessage("room2", "player2", 2, TOPIC);
         addMessage("room2", "player2", 2, TOPIC);
         // field chat
-        addMessage("room1", "player1", -1, FIELD);
-        addMessage("room1", "player1", -5, FIELD);  // max fieldId
-        addMessage("room1", "player2", -4, FIELD);
-        addMessage("room2", "player3", -3, FIELD);
+        addMessage("room1", "player1", 1, FIELD);
+        addMessage("room1", "player1", 5, FIELD);  // max fieldId
+        addMessage("room1", "player2", 4, FIELD);
+        addMessage("room2", "player3", 3, FIELD);
 
         // when
         fields.init();
