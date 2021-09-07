@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.chat;
 
 /*-
  * #%L
@@ -22,7 +22,9 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.chat.ChatType;
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.FieldService;
+import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.GameRoom;
@@ -272,13 +274,15 @@ public class ChatService {
         private int fieldId;
         private Integer lastInRoom;
         private Integer lastInField;
+        // TODO доделать и вернуть все
+        // private Map<Integer, Integer> lastInTopic;
     }
 
     @ToString
     public class LastMessage {
-        private final Map<String, Integer> room;
-        private final Map<Integer, Integer> topic;
-        private final Map<Integer, Integer> field;
+        private Map<String, Integer> room;
+        private Map<Integer, Integer> topic;
+        private Map<Integer, Integer> field;
 
         public LastMessage() {
             room = chat.getLastRoomMessageIds();
@@ -290,21 +294,8 @@ public class ChatService {
             int fieldId = fields.id(deal.getField());
             return new Status(
                     fieldId,
-                    inRoom(deal),
-                    inField(fieldId));
-        }
-
-        private Integer inRoom(Deal deal) {
-            return room.get(deal.getRoom());
-        }
-
-        private Integer inField(int fieldId) {
-            return field.get(fieldId);
-        }
-
-        // TODO test me
-        private Integer inTopic(int topicId) {
-            return topic.get(topicId);
+                    room.get(deal.getRoom()),
+                    field.get(fieldId));
         }
     }
 

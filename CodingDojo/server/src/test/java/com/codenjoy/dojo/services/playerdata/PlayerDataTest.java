@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services.playerdata;
  */
 
 
-import com.codenjoy.dojo.services.ChatService;
+import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import org.junit.Test;
 
