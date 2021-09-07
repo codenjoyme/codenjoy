@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.ChatTest;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -39,6 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.TestUtils.assertException;
+import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -55,8 +57,8 @@ public class FieldServiceTest {
 
     private List<Chat.Message> messages = new LinkedList<>();
 
-    public Chat.Message addMessage(String room, String player, Integer topicId) {
-        return ChatTest.addMessage(chat, messages, room, player, topicId);
+    public Chat.Message addMessage(String room, String player, Integer topicId, ChatType type) {
+        return ChatTest.addMessage(chat, messages, room, player, topicId, type);
     }
 
     @Before
@@ -70,21 +72,21 @@ public class FieldServiceTest {
         // given
         // random values, don't look for systems here
         // room chat
-        addMessage("room1", "player1", null); //
-        addMessage("room2", "player2", null); //
-        addMessage("room1", "player3", null); //
-        addMessage("room2", "player2", null); //
+        addMessage("room1", "player1", null, ROOM);
+        addMessage("room2", "player2", null, ROOM);
+        addMessage("room1", "player3", null, ROOM);
+        addMessage("room2", "player2", null, ROOM);
         // topic chat
-        addMessage("room1", "player1", 1);    //
-        addMessage("room2", "player2", 2);    //
-        addMessage("room1", "player1", 1);    //
-        addMessage("room2", "player2", 2);    //
-        addMessage("room2", "player2", 2);    //
+        addMessage("room1", "player1", 1, TOPIC);
+        addMessage("room2", "player2", 2, TOPIC);
+        addMessage("room1", "player1", 1, TOPIC);
+        addMessage("room2", "player2", 2, TOPIC);
+        addMessage("room2", "player2", 2, TOPIC);
         // field chat
-        addMessage("room1", "player1", -1);   //
-        addMessage("room1", "player1", -5);   // max fieldId
-        addMessage("room1", "player2", -4);   //
-        addMessage("room2", "player3", -3);   //
+        addMessage("room1", "player1", -1, FIELD);
+        addMessage("room1", "player1", -5, FIELD);  // max fieldId
+        addMessage("room1", "player2", -4, FIELD);
+        addMessage("room2", "player3", -3, FIELD);
 
         // when
         fields.init();

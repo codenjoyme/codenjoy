@@ -22,9 +22,9 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GameRoom;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.web.controller.Validator;
@@ -39,6 +39,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import static com.codenjoy.dojo.services.chat.ChatType.*;
 
 @Service
 @AllArgsConstructor
@@ -62,6 +64,7 @@ public class ChatService {
      * пользователь - только в своем чате {@code room}.
      */
     public List<PMessage> getMessages(Integer topicId,
+                                      ChatType type,
                                       String room, int count,
                                       Integer afterId, Integer beforeId,
                                       boolean inclusive,
@@ -70,18 +73,18 @@ public class ChatService {
         validateIsChatAvailable(playerId, room);
 
         if (afterId != null && beforeId != null) {
-            return wrap(chat.getMessagesBetween(topicId, room, afterId, beforeId, inclusive));
+            return wrap(chat.getMessagesBetween(topicId, type, room, afterId, beforeId, inclusive));
         }
 
         if (afterId != null) {
-            return wrap(chat.getMessagesAfter(topicId, room, count, afterId, inclusive));
+            return wrap(chat.getMessagesAfter(topicId, type, room, count, afterId, inclusive));
         }
 
         if (beforeId != null) {
-            return wrap(chat.getMessagesBefore(topicId, room, count, beforeId, inclusive));
+            return wrap(chat.getMessagesBefore(topicId, type, room, count, beforeId, inclusive));
         }
 
-        return wrap(chat.getMessages(topicId, room, count));
+        return wrap(chat.getMessages(topicId, type, room, count));
     }
 
     /**
@@ -121,18 +124,18 @@ public class ChatService {
      * Администратор может получать любые topic-сообщения в любом room-чате,
      * пользователь только topic-чообщения в своем room-чате.
      */
-    public List<PMessage> getTopicMessages(int topicMessageId, String room, String playerId) {
+    public List<PMessage> getTopicMessages(int topicId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
-        validateTopicExists(topicMessageId, room);
+        validateTopicExists(topicId, room);
 
-        return wrap(chat.getTopicMessages(topicMessageId));
+        return wrap(chat.getTopicMessages(topicId));
     }
 
-    private void validateTopicExists(int topicMessageId, String room) {
+    private void validateTopicExists(int id, String room) {
         // TODO по сути будет по 2 запроса, что не ок по производительности
         //      можно было бы валидацию зашить во второй запрос?
         // room validation only
-        getMessage(topicMessageId, room);
+        getMessage(id, room);
     }
 
     /**
@@ -150,6 +153,7 @@ public class ChatService {
     {
         int topicId = getFieldTopicId(room, playerId);
         return getMessages(topicId,
+                FIELD,
                 room, count,
                 afterId, beforeId,
                 inclusive, playerId);
@@ -166,15 +170,11 @@ public class ChatService {
                 exception("There is no player '%s' in room '%s'",
                         playerId, room));
 
-        return getFieldTopicId(gameRoom.get().field());
-    }
-
-    public int getFieldTopicId(GameField field) {
-        return Chat.topicId(fields.id(field));
+        return fields.id(gameRoom.get().field());
     }
 
     /**
-     * Метод для получения конкретного сообщения по {@code messageId}
+     * Метод для получения конкретного сообщения по {@code topicId}
      * из комнаты {@code room}. С его помощью можно получать любые сообщения
      * из любого чата (room, tread или field).
      *
@@ -183,18 +183,18 @@ public class ChatService {
      */
     // TODO пользователь зная fieldId не своей борды, и id сообщения там
     //      сможет получить его с помощью этого метода
-    public PMessage getMessage(int messageId, String room, String playerId) {
+    public PMessage getMessage(int topicId, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
-        return getMessage(messageId, room);
+        return getMessage(topicId, room);
     }
 
-    private PMessage getMessage(int messageId, String room) {
-        Chat.Message message = chat.getMessageById(messageId);
+    private PMessage getMessage(int id, String room) {
+        Chat.Message message = chat.getMessageById(id);
 
         if (message == null || !message.getRoom().equals(room)) {
             throw exception("There is no message with id '%s' in room '%s'",
-                    messageId, room);
+                    id, room);
         }
         return wrap(message);
     }
@@ -207,31 +207,32 @@ public class ChatService {
      */
     public PMessage postMessageForField(String text, String room, String playerId) {
         int topicId = getFieldTopicId(room, playerId);
-        return saveMessage(topicId, text, room, playerId);
+        return saveMessage(topicId, FIELD, text, room, playerId);
     }
 
     /**
      * Метод для публикации сообщения в room-чат (или thread-чат,
-     * если указан {@code topicMessageId}) комнаты {@code room}
+     * если указан {@code topicId}) комнаты {@code room}
      * от имени пользователя {@code playerId}.
      *
      * Это возможно только, если пользователь находится в данной комнате.
      */
-    public PMessage postMessage(Integer topicMessageId, String text, String room, String playerId) {
+    public PMessage postMessage(Integer topicId, ChatType type, String text, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
-        if (topicMessageId != null) {
-            validateTopicExists(topicMessageId, room);
+        if (topicId != null) {
+            validateTopicExists(topicId, room);
         }
 
-        return saveMessage(topicMessageId, text, room, playerId);
+        return saveMessage(topicId, type, text, room, playerId);
     }
 
-    private PMessage saveMessage(Integer topicId, String text, String room, String playerId) {
+    private PMessage saveMessage(Integer topicId, ChatType type, String text, String room, String playerId) {
         return wrap(chat.saveMessage(
                 Chat.Message.builder()
                         .room(room)
                         .topicId(topicId)
+                        .type(type)
                         .playerId(playerId)
                         .time(time.now())
                         .text(text)
@@ -277,14 +278,16 @@ public class ChatService {
     public class LastMessage {
         private final Map<String, Integer> room;
         private final Map<Integer, Integer> topic;
+        private final Map<Integer, Integer> field;
 
         public LastMessage() {
             room = chat.getLastRoomMessageIds();
-            topic = chat.getLastTopicMessageIds();
+            topic = chat.getLastTopicMessageIds(TOPIC);
+            field = chat.getLastTopicMessageIds(FIELD);
         }
 
         public Status at(Deal deal) {
-            int fieldId = fieldId(deal);
+            int fieldId = fields.id(deal.getField());
             return new Status(
                     fieldId,
                     inRoom(deal),
@@ -296,17 +299,12 @@ public class ChatService {
         }
 
         private Integer inField(int fieldId) {
-            return topic.get(Chat.topicId(fieldId));
+            return field.get(fieldId);
         }
 
-        private int fieldId(Deal deal) {
-            return fields.id(deal.getField());
-        }
-
-        private Integer forTopic(Deal deal) {
-            // TODO когда дойдет очередь до topic реализовать и его
-            // return room.get(deal.getRoom());
-            return 0;
+        // TODO test me
+        private Integer inTopic(int topicId) {
+            return topic.get(topicId);
         }
     }
 

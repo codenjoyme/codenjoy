@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.services.ChatService;
+import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.controller.Validator;
@@ -89,7 +90,7 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.getMessages(null, room, count,
+        return chat.getMessages(null, ChatType.ROOM, room, count,
                 afterId, beforeId, inclusive, user.getId());
     }
 
@@ -112,7 +113,7 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.postMessage(null, message.getText(),
+        return chat.postMessage(null, ChatType.ROOM, message.getText(),
                 room, user.getId());
     }
 
@@ -139,7 +140,7 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.postMessage(id, message.getText(),
+        return chat.postMessage(id, ChatType.TOPIC, message.getText(),
                 room, user.getId());
     }
 

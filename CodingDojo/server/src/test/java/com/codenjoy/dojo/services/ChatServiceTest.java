@@ -24,6 +24,8 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.services.chat.ChatType;
+import static com.codenjoy.dojo.services.chat.ChatType.*;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.ChatTest;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -59,8 +61,8 @@ public class ChatServiceTest {
 
     private List<Chat.Message> messages = new LinkedList<>();
 
-    public Chat.Message addMessage(String room, String player, Integer topicId) {
-        return ChatTest.addMessage(chat, messages, room, player, topicId);
+    public Chat.Message addMessage(String room, String player, Integer topicId, ChatType type) {
+        return ChatTest.addMessage(chat, messages, room, player, topicId, type);
     }
 
     @Before
@@ -73,31 +75,32 @@ public class ChatServiceTest {
     public void shouldGetLastMessage() {
         // given
         // random values, don't look for systems here
-        addMessage("room1", "player1", null); // 1
-        addMessage("room2", "player2", null); // 2
-        addMessage("room1", "player3", null); // 3  last room1
-        addMessage("room2", "player2", null); // 4  last room2
-        addMessage("room1", "player1", 1);    // 5
-        addMessage("room2", "player2", 2);    // 6
-        addMessage("room1", "player1", 1);    // 7  last topic1
-        addMessage("room2", "player2", 2);    // 8
-        addMessage("room1", "player2", 4);    // 9
-        addMessage("room2", "player3", 3);    // 10 last topic3
-        addMessage("room2", "player2", 2);    // 11 last topic2
-        addMessage("room1", "player2", 4);    // 12 last topic4
-        addMessage("room1", "player1", -1);   // 13
-        addMessage("room1", "player1", -1);   // 14
-        addMessage("room2", "player3", -3);   // 15
-        addMessage("room1", "player1", -1);   // 16 last field1
-        addMessage("room1", "player2", -4);   // 17
-        addMessage("room2", "player2", -2);   // 18 last field2
-        addMessage("room2", "player3", -3);   // 19 last field3
-        addMessage("room1", "player2", -4);   // 20 last field4
+        addMessage("room1", "player1", null, ROOM); // 1
+        addMessage("room2", "player2", null, ROOM); // 2
+        addMessage("room1", "player3", null, ROOM); // 3  last room1
+        addMessage("room2", "player2", null, ROOM); // 4  last room2
+        addMessage("room1", "player1", 1, TOPIC);   // 5
+        addMessage("room2", "player2", 2, TOPIC);   // 6
+        addMessage("room1", "player1", 1, TOPIC);   // 7  last topic1
+        addMessage("room2", "player2", 2, TOPIC);   // 8
+        addMessage("room1", "player2", 4, TOPIC);   // 9
+        addMessage("room2", "player3", 3, TOPIC);   // 10 last topic3
+        addMessage("room2", "player2", 2, TOPIC);   // 11 last topic2
+        addMessage("room1", "player2", 4, TOPIC);   // 12 last topic4
+        addMessage("room1", "player1", 1, FIELD);   // 13
+        addMessage("room1", "player1", 1, FIELD);   // 14
+        addMessage("room2", "player3", 3, FIELD);   // 15
+        addMessage("room1", "player1", 1, FIELD);   // 16 last field1
+        addMessage("room1", "player2", 4, FIELD);   // 17
+        addMessage("room2", "player2", 2, FIELD);   // 18 last field2
+        addMessage("room2", "player3", 3, FIELD);   // 19 last field3
+        addMessage("room1", "player2", 4, FIELD);   // 20 last field4
 
         // when then
         ChatService.LastMessage last = service.getLast();
         assertEquals("ChatService.LastMessage(room={room1=3, room2=4}, " +
-                        "topic={1=7, 3=10, 2=11, 4=12, -1=16, -2=18, -3=19, -4=20})",
+                        "topic={1=7, 3=10, 2=11, 4=12}, " +
+                        "field={1=16, 2=18, 3=19, 4=20})",
                 last.toString());
 
         // when then
