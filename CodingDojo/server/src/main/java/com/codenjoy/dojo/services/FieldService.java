@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
+// TODO подумать об использовании sql sequence для генерации смлудющего id
 public class FieldService {
 
     private AtomicInteger id;
