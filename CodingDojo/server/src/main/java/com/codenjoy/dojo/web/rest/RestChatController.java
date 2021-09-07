@@ -26,14 +26,16 @@ import com.codenjoy.dojo.services.ChatService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import com.codenjoy.dojo.web.rest.pojo.PMessageShort;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Rest сервис для работы с чатом.
@@ -76,7 +78,8 @@ public class RestChatController {
      * @return Заданное количество сообщений из room-чата.
      */
     @GetMapping("/{room}/messages")
-    public ResponseEntity<?> getMessages(
+    @ResponseStatus(HttpStatus.OK)
+    public List<PMessage> getMessages(
             @PathVariable(name = "room") String room,
             @RequestParam(name = "count", required = false, defaultValue = DEFAULT_COUNT) int count,
             @RequestParam(name = "afterId", required = false) Integer afterId,
@@ -86,8 +89,8 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getMessages(null, room, count,
-                afterId, beforeId, inclusive, user.getId()));
+        return chat.getMessages(null, room, count,
+                afterId, beforeId, inclusive, user.getId());
     }
 
     /**
@@ -98,18 +101,19 @@ public class RestChatController {
      * @param user Пользователь осуществляющтий запрос.
      *              Если пользователя нет в комнате - сообщение в чат не доставится.
      * @return В случае успеха вернется опубликованное сообщение с новой id и
- *              другими полями PMessage.
+     *              другими полями PMessage.
      */
     @PostMapping("/{room}/messages")
-    public ResponseEntity<?> postMessage(
+    @ResponseStatus(HttpStatus.OK)
+    public PMessage postMessage(
             @PathVariable(name = "room") String room,
             @NotNull @RequestBody PMessageShort message,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.postMessage(null, message.getText(),
-                room, user.getId()));
+        return chat.postMessage(null, message.getText(),
+                room, user.getId());
     }
 
     /**
@@ -126,7 +130,8 @@ public class RestChatController {
      *              ссылкой на topicId и другими полями PMessage.
      */
     @PostMapping("/{room}/messages/{id}/replies")
-    public ResponseEntity<?> postMessageForTopic(
+    @ResponseStatus(HttpStatus.OK)
+    public PMessage postMessageForTopic(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
             @NotNull @RequestBody PMessageShort message,
@@ -134,8 +139,8 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.postMessage(id, message.getText(),
-                room, user.getId()));
+        return chat.postMessage(id, message.getText(),
+                room, user.getId());
     }
 
     /**
@@ -151,15 +156,16 @@ public class RestChatController {
      *              ссылкой на fieldId и другими полями PMessage.
      */
     @PostMapping("/{room}/messages/field")
-    public ResponseEntity<?> postMessageForField(
+    @ResponseStatus(HttpStatus.OK)
+    public PMessage postMessageForField(
             @PathVariable(name = "room") String room,
             @NotNull @RequestBody PMessageShort message,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.postMessageForField(message.getText(),
-                room, user.getId()));
+        return chat.postMessageForField(message.getText(),
+                room, user.getId());
     }
 
     /**
@@ -172,14 +178,15 @@ public class RestChatController {
      * @return Найденное сообщение со своими полями размещенными в PMessage.
      */
     @GetMapping("/{room}/messages/{id}")
-    public ResponseEntity<?> getMessage(
+    @ResponseStatus(HttpStatus.OK)
+    public PMessage getMessage(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getMessage(id, room, user.getId()));
+        return chat.getMessage(id, room, user.getId());
     }
 
     /**
@@ -194,14 +201,15 @@ public class RestChatController {
      * @return Список всех найденных сообщений со своими полями размещенными в PMessage.
      */
     @GetMapping("/{room}/messages/{id}/replies")
-    public ResponseEntity<?> getMessagesForTopic(
+    @ResponseStatus(HttpStatus.OK)
+    public List<PMessage> getMessagesForTopic(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getTopicMessages(id, room, user.getId()));
+        return chat.getTopicMessages(id, room, user.getId());
     }
 
     /**
@@ -227,7 +235,8 @@ public class RestChatController {
      * @return Заданное количество сообщений из field-чата.
      */
     @GetMapping("/{room}/messages/field")
-    public ResponseEntity<?> getMessagesForField(
+    @ResponseStatus(HttpStatus.OK)
+    public List<PMessage> getMessagesForField(
             @PathVariable(name = "room") String room,
             @RequestParam(name = "count", required = false, defaultValue = DEFAULT_COUNT) int count,
             @RequestParam(name = "afterId", required = false) Integer afterId,
@@ -237,8 +246,8 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getFieldMessages(room, count,
-                afterId, beforeId, inclusive, user.getId()));
+        return chat.getFieldMessages(room, count,
+                afterId, beforeId, inclusive, user.getId());
     }
 
     /**
@@ -253,14 +262,15 @@ public class RestChatController {
      * @return true - если сообщение успешно удалено.
      */
     @DeleteMapping("/{room}/messages/{id}")
-    public ResponseEntity<?> deleteMessage(
+    @ResponseStatus(HttpStatus.OK)
+    public boolean deleteMessage(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.deleteMessage(id, room, user.getId()));
+        return chat.deleteMessage(id, room, user.getId());
     }
 
 }
