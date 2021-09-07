@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.dao;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -98,7 +98,8 @@ public class Players {
                 rs.getInt("approved"),
                 rs.getString("callback"),
                 rs.getString("verification_code"),
-                rs.getString("verification_type")
+                rs.getString("verification_type"),
+                rs.getString("githubUsername")
         );
     }
 
@@ -115,12 +116,12 @@ public class Players {
                     List<ServerLocation> result = new LinkedList<>();
                     while (rs.next()) {
                         result.add(
-                            new ServerLocation(
-                                rs.getString("email"),
-                                rs.getString("phone"),
-                                rs.getString("id"),
-                                rs.getString("code"),
-                                rs.getString("server")));
+                                new ServerLocation(
+                                        rs.getString("email"),
+                                        rs.getString("phone"),
+                                        rs.getString("id"),
+                                        rs.getString("code"),
+                                        rs.getString("server")));
                     }
                     return result;
                 }
@@ -171,21 +172,21 @@ public class Players {
 
     public void create(Player player) {
         pool.update("INSERT INTO players (" +
-                            "id, " +
-                            "first_name, " +
-                            "last_name, " +
-                            "password, " +
-                            "city, " +
-                            "skills, " +
-                            "comment, " +
-                            "code, " +
-                            "server, " +
-                            "phone, " +
-                            "email, " +
-                            "approved, " +
-                            "callback, " +
-                            "verification_code, " +
-                            "verification_type) " +
+                        "id, " +
+                        "first_name, " +
+                        "last_name, " +
+                        "password, " +
+                        "city, " +
+                        "skills, " +
+                        "comment, " +
+                        "code, " +
+                        "server, " +
+                        "phone, " +
+                        "email, " +
+                        "approved, " +
+                        "callback, " +
+                        "verification_code, " +
+                        "verification_type) " +
                         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
                 new Object[]{
                         player.getId(),

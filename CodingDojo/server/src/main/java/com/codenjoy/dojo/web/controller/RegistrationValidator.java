@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -66,19 +66,20 @@ public class RegistrationValidator implements Validator {
 
         Player player = (Player) target;
 
+        String fullName = player.getFullName();
         String name = player.getReadableName();
 
-        if (!validateNicknameStructure(name)) {
-            errors.rejectValue("readableName", "registration.nickname.invalid", new Object[]{ name }, null);
+        if (!validateNicknameStructure(fullName)) {
+            errors.rejectValue("fullName", "registration.nickname.invalid", new Object[]{name}, null);
         }
 
         if (!checkNameUniqueness(name)) {
-            errors.rejectValue("readableName", "registration.nickname.alreadyUsed", new Object[]{ name }, null);
+            errors.rejectValue("readableName", "registration.nickname.alreadyUsed", new Object[]{name}, null);
         }
 
         String email = player.getEmail();
         if (!validateEmailStructure(email)) {
-            errors.rejectValue("email", "registration.email.invalid", new Object[]{ email }, null);
+            errors.rejectValue("email", "registration.email.invalid", new Object[]{email}, null);
         }
 
         if (!checkEmailUniqueness(email)) {
@@ -92,17 +93,35 @@ public class RegistrationValidator implements Validator {
         }
 
         if (!checkPasswordLength(password)) {
-            errors.rejectValue("password", "registration.password.length", new Object[] { minPasswordLen }, null);
+            errors.rejectValue("password", "registration.password.length", new Object[]{minPasswordLen}, null);
         }
 
         if (!checkPasswordConfirmation(password, player.getPasswordConfirmation())) {
             errors.rejectValue("passwordConfirmation", "registration.password.invalidConfirmation");
         }
 
+        String github = player.getGitHubUsername();
+        if (!checkGitHubUniqueness(github)) {
+            errors.rejectValue("gitHubUsername", "registration.gitHubUsername.alreadyUsed");
+        }
+
+        String slackId = player.getSlackId();
+        if (!checkSlackIdUniqueness(slackId)) {
+            errors.rejectValue("slackId", "registration.slackId.alreadyUsed");
+        }
+
         String game = rooms.getGameName(player.getGame());
         if (!validator.isGameName(game, CANT_BE_NULL)) {
-            errors.rejectValue("game", "registration.game.invalid", new Object[]{ game }, null);
+            errors.rejectValue("game", "registration.game.invalid", new Object[]{game}, null);
         }
+    }
+
+    private boolean checkGitHubUniqueness(String github) {
+        return !registration.githubIsUsed(github);
+    }
+
+    private boolean checkSlackIdUniqueness(String slackId) {
+        return !registration.slackIdIsUsed(slackId);
     }
 
     private boolean checkPasswordConfirmation(String password, String passwordConfirmation) {

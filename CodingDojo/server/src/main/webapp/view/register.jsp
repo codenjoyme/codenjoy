@@ -83,6 +83,11 @@ License along with this program.  If not, see
                     </div>
                 </c:if>
                 <c:if test="${opened}">
+                    <div id="fullName" class="field not-valid" not-empty>
+                        <form:errors path="fullName" cssClass="error-message" />
+                        <form:input type="text" placeholder="FirstName LastName" path="fullName"/>
+                        <span class="icon fa"></span>
+                    </div>
                     <div id="readableName" class="field not-valid" not-empty>
                         <form:errors path="readableName" cssClass="error-message" />
                         <form:input type="text" placeholder="FirstName LastName" path="readableName"/>
@@ -128,6 +133,16 @@ License along with this program.  If not, see
                     </div>
                     <div id="data4" class="field not-valid" not-empty hidden>
                         <input type="text" placeholder="Experience"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="gitHubUsername" class="field not-valid">
+                        <form:errors path="gitHubUsername" cssClass="error-message" />
+                        <form:input type="gitHubUsername" placeholder="Github Username" path="gitHubUsername"/>
+                        <span class="icon fa"></span>
+                    </div>
+                    <div id="slackId" class="field not-valid">
+                        <form:errors path="slackId" cssClass="error-message" />
+                        <form:input type="slackId" placeholder="Slack Id" path="slackId"/>
                         <span class="icon fa"></span>
                     </div>
                     <c:if test="${not adminLogin}">

@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.dao;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -63,19 +63,21 @@ public class Registration {
         initialScripts.add("CREATE TABLE IF NOT EXISTS users (" +
                 "email varchar(255), " +
                 "id varchar(255), " +
+                "fullName varchar(255), " +
                 "readable_name varchar(255), " +
                 "email_approved int, " +
                 "password varchar(255)," +
                 "code varchar(255)," +
                 "data varchar(255)," +
                 "roles varchar(255)," +
-                "github_username varchar(255));");
+                "github_username varchar(255)," +
+                "slackId varchar(255));");
         if (initAdminUser) {
-            initialScripts.add(String.format("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles, github_username)" +
-                    " select '%s', '%s', '%s', %s,  '%s', '%s', '{}', '%s, %s', '%s'" +
-                    " where not exists (select 1 from users where id = '%s')",
-                    ADMIN_USER_ID, adminEmail, "admin", APPROVED, adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER,ADMIN_USER_ID,
-                    ADMIN_USER_ID));
+            initialScripts.add(String.format("INSERT INTO users (id, email, fullName, readable_name, email_approved, password, code, data, roles, github_username, slackId)" +
+                            " select '%s', '%s', '%s', '%s', %s,  '%s', '%s', '{}', '%s, %s', '%s', '%s'" +
+                            " where not exists (select 1 from users where id = '%s')",
+                    ADMIN_USER_ID, adminEmail, "admin", "admin", APPROVED, adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER, ADMIN_USER_ID,
+                    ADMIN_USER_ID, ADMIN_USER_ID));
         }
         pool = factory.create(initialScripts.toArray(new String[initialScripts.size()]));
     }
@@ -109,21 +111,21 @@ public class Registration {
         return count > 0;
     }
 
-    public User getOrRegister(String id, String email, String readableName,String gitHubUsername) {
+    public User getOrRegister(String id, String email, String fullName, String readableName, String gitHubUsername, String slackId) {
         Registration.User result = getUserById(id)
                 .orElseGet(() -> getUserByEmail(email)
-                    .orElseGet(() -> registerApproved(id, email, readableName,gitHubUsername)));
+                        .orElseGet(() -> registerApproved(id, email, fullName, readableName, gitHubUsername, slackId)));
         return result;
     }
-    
-    public User registerApproved(String id, String email, String readableName,String gitHubUsername) {
+
+    public User registerApproved(String id, String email, String fullName, String readableName, String gitHubUsername, String slackId) {
         if (StringUtils.isEmpty(id)) {
             id = Hash.getRandomId();
         }
         String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
 
-        User user = register(id, email, readableName,
-                password, "{}", GameAuthorities.USER.roles(),gitHubUsername);
+        User user = register(id, email, fullName, readableName,
+                password, "{}", GameAuthorities.USER.roles(), gitHubUsername, slackId);
 
         if (!properties.isEmailVerificationNeeded()) {
             approve(user.getCode());
@@ -133,14 +135,14 @@ public class Registration {
         return user;
     }
 
-    public User register(String id, String email, String readableName, String password, String data, Collection<String> roles,String gitHubUsername) {
+    public User register(String id, String email, String fullName, String readableName, String password, String data, Collection<String> roles, String gitHubUsername, String slackId) {
         roles = roles.isEmpty() ? GameAuthorities.USER.roles() : roles;
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
-        
-        pool.update("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles, github_username) VALUES (?,?,?,?,?,?,?,?,?);",
-                new Object[]{id, email, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles), gitHubUsername});
-        
+
+        pool.update("INSERT INTO users (id, email, fullName, readable_name, email_approved, password, code, data, roles, github_username, slackId) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
+                new Object[]{id, email, fullName, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles), gitHubUsername, slackId});
+
         return getUserByCode(code);
     }
 
@@ -160,7 +162,7 @@ public class Registration {
                 }
         );
     }
-    
+
     public String checkUser(String id) {
         if (getCodeById(id) != null) {
             return id;
@@ -208,6 +210,20 @@ public class Registration {
         );
     }
 
+    public boolean githubIsUsed(String github) {
+        return pool.select("SELECT count(*) AS total FROM users WHERE github_username = ?;",
+                new Object[]{github},
+                rs -> exists(rs, " github " + github)
+        );
+    }
+
+    public boolean slackIdIsUsed(String slackId) {
+        return pool.select("SELECT count(*) AS total FROM users WHERE slackid = ?;",
+                new Object[]{slackId},
+                rs -> exists(rs, " slackId " + slackId)
+        );
+    }
+
     public String getEmailById(String id) {
         return pool.select("SELECT email FROM users WHERE id = ?;",
                 new Object[]{id},
@@ -250,10 +266,24 @@ public class Registration {
         );
     }
 
+    public String getFullNameById(String id) {
+        return pool.select("SELECT fullName FROM users WHERE id = ?;",
+                new Object[]{id},
+                rs -> rs.next() ? rs.getString("fullName") : null
+        );
+    }
+
     public String getGitHubUsernameById(String id) {
         return pool.select("SELECT github_username FROM users WHERE id = ?;",
                 new Object[]{id},
                 rs -> rs.next() ? rs.getString("github_username") : null
+        );
+    }
+
+    public String getSlackIdById(String id) {
+        return pool.select("SELECT slackId FROM users WHERE id = ?;",
+                new Object[]{id},
+                rs -> rs.next() ? rs.getString("slackId") : null
         );
     }
 
@@ -293,11 +323,11 @@ public class Registration {
 
     public int updateGitHubUsername(String oldGitHubUsername, String gitHubUsername) {
         return pool.update("UPDATE users SET github_username = ? WHERE github_username = ?;",
-                new Object[]{gitHubUsername,oldGitHubUsername});
+                new Object[]{gitHubUsername, oldGitHubUsername});
     }
 
     @Data
-    @ToString(of = { "id", "email", "readableName", "approved", "code", "data" })
+    @ToString(of = {"id", "email", "readableName", "approved", "code", "data"})
     @EqualsAndHashCode(callSuper = true)
     @Accessors(chain = true)
     public static class User extends org.springframework.security.core.userdetails.User implements OAuth2User {
@@ -312,12 +342,13 @@ public class Registration {
         private String code;
         private String data;
         private String gitHubUsername;
+        private String slackId;
 
         public User() {
             super("anonymous", "", Collections.emptyList());
         }
 
-        public User(String id, String email, String readableName, int approved, String password, String code, String data, Collection<String> roles,String gitHubUsername) {
+        public User(String id, String email, String readableName, int approved, String password, String code, String data, Collection<String> roles, String gitHubUsername) {
             super(email, password, GameAuthorities.toGranted(roles));
             this.id = id;
             this.email = email;
@@ -344,7 +375,7 @@ public class Registration {
     }
 
     public User getUserByCode(String code) {
-        return pool.select("SELECT * FROM users where code = ?", new Object[] {code}, rs -> {
+        return pool.select("SELECT * FROM users where code = ?", new Object[]{code}, rs -> {
             if (!rs.next()) {
                 throw new UsernameNotFoundException(String.format("User with code '%s' does not exist", code));
             }
@@ -353,7 +384,7 @@ public class Registration {
     }
 
     public Optional<User> getUserByEmail(String email) {
-        return pool.select("SELECT * FROM users where email = ?", new Object[] {email}, rs -> {
+        return pool.select("SELECT * FROM users where email = ?", new Object[]{email}, rs -> {
             if (!rs.next()) {
                 return Optional.empty();
             }
@@ -362,7 +393,7 @@ public class Registration {
     }
 
     public Optional<User> getUserById(String id) {
-        return pool.select("SELECT * FROM users where id = ?", new Object[] {id}, rs -> {
+        return pool.select("SELECT * FROM users where id = ?", new Object[]{id}, rs -> {
             if (!rs.next()) {
                 return Optional.empty();
             }

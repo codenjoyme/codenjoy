@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -52,14 +52,18 @@ public class Validator {
     private static final String ROOM = GAME;
     private static final String CODE = "^[0-9]{1," + MAX_PLAYER_CODE_LENGTH + "}$";
     private static final String MD5 = "^[A-Za-f0-9]{32}$";
-    private static final String READABLE_NAME_LAT = "^[A-Za-z]{1,50}$";
-    private static final String READABLE_NAME_CYR = "^[А-Яа-яЁёҐґІіІіЄє]{1,50}$";
+    private static final String READABLE_NAME_LAT = "^[0-9A-Za-z]{1,50}$";
+    private static final String READABLE_NAME_CYR = "^[0-9А-Яа-яЁёҐґІіІіЄє]{1,50}$";
     private static final String NICK_NAME = "^[0-9A-Za-zА-Яа-яЁёҐґІіІіЄє ]{1,50}$";
 
-    @Autowired protected Registration registration;
-    @Autowired protected ConfigProperties properties;
-    @Autowired protected GameService gameService;
-    @Autowired protected PlayerService playerService;
+    @Autowired
+    protected Registration registration;
+    @Autowired
+    protected ConfigProperties properties;
+    @Autowired
+    protected GameService gameService;
+    @Autowired
+    protected PlayerService playerService;
 
     private Pattern email;
     private Pattern id;
@@ -115,14 +119,12 @@ public class Validator {
         String firstName = parts[0];
         String lastName = parts[1];
         if (readableNameLat.matcher(firstName).matches()
-                && readableNameLat.matcher(lastName).matches())
-        {
+                && readableNameLat.matcher(lastName).matches()) {
             return true;
         }
 
         if (readableNameCyr.matcher(firstName).matches()
-                && readableNameCyr.matcher(lastName).matches())
-        {
+                && readableNameCyr.matcher(lastName).matches()) {
             return true;
         }
 

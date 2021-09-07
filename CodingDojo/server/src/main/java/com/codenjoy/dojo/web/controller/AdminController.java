@@ -409,7 +409,7 @@ public class AdminController {
 
             created++;
             String code = register(id);
-            playerService.register(id, game, room, "127.0.0.1","repository");
+            playerService.register(id, game, room, "127.0.0.1","repository","slackId");
         }
     }
 
@@ -417,7 +417,7 @@ public class AdminController {
         if (registration.registered(id)) {
             return registration.login(id, id);
         } else {
-            return registration.register(id, id, id, id, "", GameAuthorities.USER.roles(),id).getCode();
+            return registration.register(id, id, id, id, id, "", GameAuthorities.USER.roles(),id,id).getCode();
         }
     }
 

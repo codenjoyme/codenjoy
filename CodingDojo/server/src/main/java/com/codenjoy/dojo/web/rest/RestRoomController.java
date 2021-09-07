@@ -129,7 +129,7 @@ public class RestRoomController {
         }
         String repositoryUrl = gameServerService.createOrGetRepository(user.getGitHubUsername());
 
-        Player player = playerService.register(user.getId(), game, room, request.getRemoteAddr(), repositoryUrl);
+        Player player = playerService.register(user.getId(), game, room, request.getRemoteAddr(), repositoryUrl, user.getSlackId());
 
         saveService.save(player);
 
