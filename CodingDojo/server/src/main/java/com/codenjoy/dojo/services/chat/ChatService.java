@@ -65,13 +65,13 @@ public class ChatService {
      * Администратор может получать сообщения в любом чате,
      * пользователь - только в своем чате {@code room}.
      */
-    public List<PMessage> getMessages(Integer topicId, ChatType type,
+    public List<PMessage> getMessages(ChatType type, Integer topicId,
                                       String playerId, Filter filter)
     {
         validateIsChatAvailable(playerId, filter.room());
 
         if (filter.afterId() != null && filter.beforeId() != null) {
-            return wrap(chat.getMessagesBetween(topicId, type, filter));
+            return wrap(chat.getMessagesBetween(type, topicId, filter));
         }
 
         if (filter.afterId() != null) {
@@ -79,10 +79,10 @@ public class ChatService {
         }
 
         if (filter.beforeId() != null) {
-            return wrap(chat.getMessagesBefore(topicId, type, filter));
+            return wrap(chat.getMessagesBefore(type, topicId, filter));
         }
 
-        return wrap(chat.getMessages(topicId, type, filter));
+        return wrap(chat.getMessages(type, topicId, filter));
     }
 
     /**
@@ -147,7 +147,7 @@ public class ChatService {
      */
     public List<PMessage> getFieldMessages(String room, String playerId, Filter filter) {
         int topicId = getFieldTopicId(room, playerId);
-        return getMessages(topicId, FIELD, playerId, filter);
+        return getMessages(FIELD, topicId, playerId, filter);
     }
 
     /**

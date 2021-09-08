@@ -99,7 +99,8 @@ public class RestChatController {
                 .inclusive(inclusive)
                 .get();
 
-        return chat.getMessages(null, ChatType.ROOM, user.getId(), filter);
+        return chat.getMessages(ChatType.ROOM, null,
+                user.getId(), filter);
     }
 
     /**
