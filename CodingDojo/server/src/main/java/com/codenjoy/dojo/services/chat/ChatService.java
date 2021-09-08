@@ -65,28 +65,24 @@ public class ChatService {
      * Администратор может получать сообщения в любом чате,
      * пользователь - только в своем чате {@code room}.
      */
-    public List<PMessage> getMessages(Integer topicId,
-                                      ChatType type,
-                                      String room, int count,
-                                      Integer afterId, Integer beforeId,
-                                      boolean inclusive,
-                                      String playerId)
+    public List<PMessage> getMessages(Integer topicId, ChatType type,
+                                      String playerId, Filter filter)
     {
-        validateIsChatAvailable(playerId, room);
+        validateIsChatAvailable(playerId, filter.room());
 
-        if (afterId != null && beforeId != null) {
-            return wrap(chat.getMessagesBetween(topicId, type, room, afterId, beforeId, inclusive));
+        if (filter.afterId() != null && filter.beforeId() != null) {
+            return wrap(chat.getMessagesBetween(topicId, type, filter));
         }
 
-        if (afterId != null) {
-            return wrap(chat.getMessagesAfter(topicId, type, room, count, afterId, inclusive));
+        if (filter.afterId() != null) {
+            return wrap(chat.getMessagesAfter(topicId, type, filter));
         }
 
-        if (beforeId != null) {
-            return wrap(chat.getMessagesBefore(topicId, type, room, count, beforeId, inclusive));
+        if (filter.beforeId() != null) {
+            return wrap(chat.getMessagesBefore(topicId, type, filter));
         }
 
-        return wrap(chat.getMessages(topicId, type, room, count));
+        return wrap(chat.getMessages(topicId, type, filter));
     }
 
     /**
@@ -149,16 +145,9 @@ public class ChatService {
      * Администратор не может получать field-чат сообщения,
      * пользователь - только сообщения field-чата поля на котором пока что играет.
      */
-    public List<PMessage> getFieldMessages(String room, int count,
-                                      Integer afterId, Integer beforeId,
-                                      boolean inclusive, String playerId)
-    {
+    public List<PMessage> getFieldMessages(String room, String playerId, Filter filter) {
         int topicId = getFieldTopicId(room, playerId);
-        return getMessages(topicId,
-                FIELD,
-                room, count,
-                afterId, beforeId,
-                inclusive, playerId);
+        return getMessages(topicId, FIELD, playerId, filter);
     }
 
     /**

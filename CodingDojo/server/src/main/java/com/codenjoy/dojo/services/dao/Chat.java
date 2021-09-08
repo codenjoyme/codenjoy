@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 import com.codenjoy.dojo.services.chat.ChatType;
+import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudPrimaryKeyConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
@@ -62,7 +63,7 @@ public class Chat {
      *        (или топика в нем, если указан {@param topicId}),
      *        посортированных в порядке возрастания времени
      */
-    public List<Message> getMessages(Integer topicId, ChatType type, String room, int count) {
+    public List<Message> getMessages(Integer topicId, ChatType type, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
                         "WHERE room = ? " +
@@ -71,7 +72,12 @@ public class Chat {
                         "ORDER BY time DESC " +
                         "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
-                new Object[]{room, topicId, type.id(), count},
+                new Object[]{
+                        filter.room(),
+                        topicId,
+                        type.id(),
+                        filter.count()
+                },
                 Chat::parseMessages
         );
     }
@@ -85,7 +91,9 @@ public class Chat {
                         "WHERE type = ? " +
                         "ORDER BY topic_id DESC " +
                         "LIMIT 1;",
-                new Object[]{ChatType.FIELD.id()},
+                new Object[]{
+                        ChatType.FIELD.id()
+                },
                 rs -> rs.next() ? rs.getInt(1) : 0);
     }
 
@@ -96,7 +104,10 @@ public class Chat {
                         "AND type = ? " +
                         "ORDER BY time DESC " +
                         "LIMIT 1;",
-                new Object[]{room, ChatType.ROOM.id()},
+                new Object[]{
+                        room,
+                        ChatType.ROOM.id()
+                },
                 rs -> rs.next() ? rs.getInt(1) : null);
     }
 
@@ -118,7 +129,9 @@ public class Chat {
                         "    JOIN messages m2" +
                         "        ON m1.room = m2.room" +
                         "            AND m1.time = m2.time;",
-                new Object[]{ChatType.ROOM.id()},
+                new Object[]{
+                        ChatType.ROOM.id()
+                },
                 rs -> toMap(rs));
     }
 
@@ -142,7 +155,9 @@ public class Chat {
                         "    JOIN messages m2" +
                         "        ON m1.topic_id = m2.topic_id" +
                         "            AND m1.time = m2.time;",
-                new Object[]{type.id()},
+                new Object[]{
+                        type.id()
+                },
                 rs -> toMap(rs));
     }
 
@@ -164,7 +179,10 @@ public class Chat {
                         "WHERE topic_id = ? " +
                         "AND type = ? " +
                         "ORDER BY time ASC;",
-                new Object[]{messageId, ChatType.TOPIC.id()},
+                new Object[]{
+                        messageId,
+                        ChatType.TOPIC.id()
+                },
                 Chat::parseMessages
         );
     }
@@ -177,13 +195,8 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId} и message {@param beforeId} помимо выбранных.
      */
-    public List<Message> getMessagesBetween(Integer topicId,
-                                            ChatType type,
-                                            String room,
-                                            int afterId, int beforeId,
-                                            boolean inclusive)
-    {
-        if (afterId > beforeId) {
+    public List<Message> getMessagesBetween(Integer topicId, ChatType type, Filter filter){
+        if (filter.afterId() > filter.beforeId()) {
             throw new IllegalArgumentException(
                     "afterId in interval should be smaller than beforeId");
         }
@@ -191,10 +204,16 @@ public class Chat {
                         "WHERE room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
-                        "AND id >" + (inclusive?"=":"") + " ? " +
-                        "AND id <" + (inclusive?"=":"") + " ? " +
+                        "AND id >" + (filter.inclusive() ? "=" : "") + " ? " +
+                        "AND id <" + (filter.inclusive() ? "=" : "") + " ? " +
                         "ORDER BY time ASC;",
-                new Object[]{room, topicId, type.id(), afterId, beforeId},
+                new Object[]{
+                        filter.room(),
+                        topicId,
+                        type.id(),
+                        filter.afterId(),
+                        filter.beforeId()
+                },
                 Chat::parseMessages
         );
     }
@@ -207,19 +226,21 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId}.
      */
-    public List<Message> getMessagesAfter(Integer topicId,
-                                          ChatType type,
-                                          String room, int count,
-                                          int afterId, boolean inclusive)
-    {
+    public List<Message> getMessagesAfter(Integer topicId, ChatType type, Filter filter) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
-                        "AND id >" + (inclusive?"=":"") + " ? " +
+                        "AND id >" + (filter.inclusive() ? "=" : "") + " ? " +
                         "ORDER BY time ASC " +
                         "LIMIT ?;",
-                new Object[]{room, topicId, type.id(), afterId, count},
+                new Object[]{
+                        filter.room(),
+                        topicId,
+                        type.id(),
+                        filter.afterId(),
+                        filter.count()
+                },
                 Chat::parseMessages
         );
     }
@@ -232,21 +253,23 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param beforeId}.
      */
-    public List<Message> getMessagesBefore(Integer topicId,
-                                           ChatType type,
-                                           String room, int count,
-                                           int beforeId, boolean inclusive)
-    {
+    public List<Message> getMessagesBefore(Integer topicId, ChatType type, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
                         "WHERE room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
-                        "AND id <" + (inclusive?"=":"") + " ? " +
+                        "AND id <" + (filter.inclusive() ? "=" : "") + " ? " +
                         "ORDER BY time DESC " +
                         "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
-                new Object[]{room, topicId, type.id(), beforeId, count},
+                new Object[]{
+                        filter.room(),
+                        topicId,
+                        type.id(),
+                        filter.beforeId(),
+                        filter.count()
+                },
                 Chat::parseMessages
         );
     }
@@ -283,11 +306,16 @@ public class Chat {
     }
 
     public boolean deleteMessage(String room, int id, String playerId) {
-        return 1 == pool.update("DELETE FROM messages " +
-                "WHERE id = ? " +
-                "AND room = ? " +
-                "AND player_id = ?",
-                new Object[]{id, room, playerId});
+        int count = pool.update("DELETE FROM messages " +
+                        "WHERE id = ? " +
+                        "AND room = ? " +
+                        "AND player_id = ?",
+                new Object[]{
+                        id,
+                        room,
+                        playerId
+                });
+        return count == 1;
     }
 
     private static List<Message> parseMessages(ResultSet rs) throws SQLException {

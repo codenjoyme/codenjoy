@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.ChatType;
+import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.controller.Validator;
@@ -90,8 +91,15 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.getMessages(null, ChatType.ROOM, room, count,
-                afterId, beforeId, inclusive, user.getId());
+        Filter filter = Filter
+                .room(room)
+                .count(count)
+                .afterId(afterId)
+                .beforeId(beforeId)
+                .inclusive(inclusive)
+                .get();
+
+        return chat.getMessages(null, ChatType.ROOM, user.getId(), filter);
     }
 
     /**
@@ -247,8 +255,15 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.getFieldMessages(room, count,
-                afterId, beforeId, inclusive, user.getId());
+        Filter filter = Filter
+                .room(room)
+                .count(count)
+                .afterId(afterId)
+                .beforeId(beforeId)
+                .inclusive(inclusive)
+                .get();
+
+        return chat.getFieldMessages(room, user.getId(), filter);
     }
 
     /**
