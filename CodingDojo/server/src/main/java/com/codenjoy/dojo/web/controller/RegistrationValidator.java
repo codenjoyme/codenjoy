@@ -32,6 +32,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 
 @Component
@@ -105,6 +109,10 @@ public class RegistrationValidator implements Validator {
             errors.rejectValue("gitHubUsername", "registration.gitHubUsername.alreadyUsed");
         }
 
+        if (!checkValidGithub(github)) {
+            errors.rejectValue("gitHubUsername", "registration.gitHubUsername.invalidGit");
+        }
+
         String slackId = player.getSlackId();
         if (!checkSlackIdUniqueness(slackId)) {
             errors.rejectValue("slackId", "registration.slackId.alreadyUsed");
@@ -118,6 +126,19 @@ public class RegistrationValidator implements Validator {
 
     private boolean checkGitHubUniqueness(String github) {
         return !registration.githubIsUsed(github);
+    }
+
+    private boolean checkValidGithub(String github) {
+        try {
+            URL url = new URL("https://github.com/" + github);
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+
+            int statusCode = http.getResponseCode();
+            System.out.println(statusCode);
+            return statusCode == 200;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     private boolean checkSlackIdUniqueness(String slackId) {

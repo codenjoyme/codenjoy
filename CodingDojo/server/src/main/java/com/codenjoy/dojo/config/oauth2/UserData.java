@@ -36,6 +36,7 @@ public class UserData {
     public UserData(Map<String, ?> map) {
         id = (String) map.get("player_id");
         email = (String) map.get("email");
+        fullName = (String) map.get("fullName");
         readableName = (String) map.get("name");
         gitHubUsername = (String) map.get("github_username");
         slackId = (String) map.get("slackId");
