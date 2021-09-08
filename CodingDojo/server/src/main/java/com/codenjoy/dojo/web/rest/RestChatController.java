@@ -99,8 +99,7 @@ public class RestChatController {
                 .inclusive(inclusive)
                 .get();
 
-        return chat.getMessages(ChatType.ROOM, null,
-                user.getId(), filter);
+        return chat.getRoomMessages(user.getId(), filter);
     }
 
     /**
@@ -122,8 +121,9 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.postMessage(null, ChatType.ROOM, message.getText(),
-                room, user.getId());
+        return chat.postMessage(ChatType.ROOM, null,
+                room, message.getText(),
+                user.getId());
     }
 
     /**
@@ -149,8 +149,9 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.postMessage(id, ChatType.TOPIC, message.getText(),
-                room, user.getId());
+        return chat.postMessage(ChatType.TOPIC, id,
+                room, message.getText(),
+                user.getId());
     }
 
     /**
@@ -202,24 +203,44 @@ public class RestChatController {
     /**
      * Получение всех thread-chat сообщений, привязанных к конкретному сообщению
      * room-chat. Thread-чат - это все reply сообщения на любое конкретное
-     * сообщение в любом чате.
+     * сообщение в любом чате. Возвращается заданное в фильтре
+     * ({@code count}, {@code afterId}, {@code beforeId}, {@code inclusive})
+     * количество сообщений. Все параметры опциональны - в зависимости от
+     * их комбинации будет возвращено то или иное количество.
      *
      * @param room Имя комнаты, сообщения чата которой интересуют.
-     * @param id Идентификатор сообщения, reply-сообщениями которого интересуются.
-     * @param user Пользователь осуществляющтий запрос.
-     *            Если пользователя нет в комнате - сообщение получить неудастся.
-     * @return Список всех найденных сообщений со своими полями размещенными в PMessage.
+     * @param count Количество сообщений, если указазаны {@code afterId}
+     *              или {@code beforeId} но не оба одновременно.
+     * @param afterId Получать сообщения после сообщения с этой id.
+     * @param beforeId Получать сообщения до сообщения с этой id.
+     * @param inclusive Включать ли в запрос сообщения с id afterId |& beforeId.
+     * @param user Пользователь осуществляющий запрос.
+     *             Если пользователя нет в комнате {#code room}
+     *             - сообщения получить неудастся.
+     * @return Заданное количество сообщений из room-чата.
      */
     @GetMapping("/{room}/messages/{id}/replies")
     @ResponseStatus(HttpStatus.OK)
     public List<PMessage> getMessagesForTopic(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
+            @RequestParam(name = "count", required = false, defaultValue = DEFAULT_COUNT) int count,
+            @RequestParam(name = "afterId", required = false) Integer afterId,
+            @RequestParam(name = "beforeId", required = false) Integer beforeId,
+            @RequestParam(name = "inclusive", required = false, defaultValue = "false") boolean inclusive,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return chat.getTopicMessages(id, room, user.getId());
+        Filter filter = Filter
+                .room(room)
+                .count(count)
+                .afterId(afterId)
+                .beforeId(beforeId)
+                .inclusive(inclusive)
+                .get();
+
+        return chat.getTopicMessages(id, user.getId(), filter);
     }
 
     /**

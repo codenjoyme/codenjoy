@@ -1001,7 +1001,6 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when then
         assertTopicMessages();
-
     }
 
     public void assertTopicMessages() {

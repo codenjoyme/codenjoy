@@ -59,13 +59,13 @@ public class ChatService {
     /**
      * Метод для получения заданного количества сообщений (относительно конкретных
      * {@code afterId}/{@code beforeId} сообщений) для конкретного пользователя
-     * {@code playerId} в room-чате {@code room}
-     * (или топика в нем, если указан {@param topicId}),
+     * {@code playerId} в room/filed/topic-чате (в соответствии с {@code type})
+     * конкретной комнаты {@code room}.
      *
      * Администратор может получать сообщения в любом чате,
      * пользователь - только в своем чате {@code room}.
      */
-    public List<PMessage> getMessages(ChatType type, Integer topicId,
+    private List<PMessage> getMessages(ChatType type, Integer topicId,
                                       String playerId, Filter filter)
     {
         validateIsChatAvailable(playerId, filter.room());
@@ -83,6 +83,19 @@ public class ChatService {
         }
 
         return wrap(chat.getMessages(type, topicId, filter));
+    }
+
+    /**
+     * Метод для получения всех сообщений для конкретного пользователя
+     * {@code playerId} в room-чате {@code room}.
+     *
+     * Администратор может получать любые сообщения в любом room-чате,
+     * пользователь только своего в своем room-чате.
+     */
+    public List<PMessage> getRoomMessages(String playerId, Filter filter) {
+        validateIsChatAvailable(playerId, filter.room());
+
+        return getMessages(ROOM, null, playerId, filter);
     }
 
     /**
@@ -120,13 +133,13 @@ public class ChatService {
      * {@code topicMessageId} сообщением room-чата {@code room}).
      *
      * Администратор может получать любые topic-сообщения в любом room-чате,
-     * пользователь только topic-чообщения в своем room-чате.
+     * пользователь только topic-сообщения в своем room-чате.
      */
-    public List<PMessage> getTopicMessages(int topicId, String room, String playerId) {
-        validateIsChatAvailable(playerId, room);
-        validateTopicExists(topicId, room);
+    public List<PMessage> getTopicMessages(int topicId, String playerId, Filter filter) {
+        validateIsChatAvailable(playerId, filter.room());
+        validateTopicExists(topicId, filter.room());
 
-        return wrap(chat.getTopicMessages(topicId));
+        return getMessages(TOPIC, topicId, playerId, filter);
     }
 
     private void validateTopicExists(int id, String room) {
@@ -208,7 +221,9 @@ public class ChatService {
      *
      * Это возможно только, если пользователь находится в данной комнате.
      */
-    public PMessage postMessage(Integer topicId, ChatType type, String text, String room, String playerId) {
+    public PMessage postMessage(ChatType type, Integer topicId,
+                                String room, String text, String playerId)
+    {
         validateIsChatAvailable(playerId, room);
 
         if (topicId != null) {
