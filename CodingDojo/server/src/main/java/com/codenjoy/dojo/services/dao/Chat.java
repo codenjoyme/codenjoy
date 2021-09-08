@@ -204,8 +204,8 @@ public class Chat {
                         "WHERE room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
-                        "AND id >" + (filter.inclusive() ? "=" : "") + " ? " +
-                        "AND id <" + (filter.inclusive() ? "=" : "") + " ? " +
+                        "AND id >" + eq(filter) + " ? " +
+                        "AND id <" + eq(filter) + " ? " +
                         "ORDER BY time ASC;",
                 new Object[]{
                         filter.room(),
@@ -216,6 +216,10 @@ public class Chat {
                 },
                 Chat::parseMessages
         );
+    }
+
+    private String eq(Filter filter) {
+        return filter.inclusive() ? "=" : "";
     }
 
     /**
@@ -231,7 +235,7 @@ public class Chat {
                         "WHERE room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
-                        "AND id >" + (filter.inclusive() ? "=" : "") + " ? " +
+                        "AND id >" + eq(filter) + " ? " +
                         "ORDER BY time ASC " +
                         "LIMIT ?;",
                 new Object[]{
@@ -259,7 +263,7 @@ public class Chat {
                         "WHERE room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
-                        "AND id <" + (filter.inclusive() ? "=" : "") + " ? " +
+                        "AND id <" + eq(filter) + " ? " +
                         "ORDER BY time DESC " +
                         "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
