@@ -41,7 +41,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.codenjoy.dojo.services.controller.ScreenResponseHandler.distinctByKey;
+import static com.codenjoy.dojo.services.controller.screen.ScreenResponseHandler.distinctByKey;
 import static java.util.stream.Collectors.toList;
 
 @Component

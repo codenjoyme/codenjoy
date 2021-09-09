@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.controller;
 
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.controller.screen.ScreenResponseHandler;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;

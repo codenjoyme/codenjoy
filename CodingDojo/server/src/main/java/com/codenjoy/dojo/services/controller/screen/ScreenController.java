@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.controller;
+package com.codenjoy.dojo.services.controller.screen;
 
 /*-
  * #%L
@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.controller;
 
 
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
