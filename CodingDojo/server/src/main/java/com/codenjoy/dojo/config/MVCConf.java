@@ -73,6 +73,9 @@ public class MVCConf implements WebMvcConfigurer {
     private PlayerTransport screenPlayerTransport;
 
     @Autowired
+    private PlayerTransport chatPlayerTransport;
+
+    @Autowired
     private AuthenticationService secureAuthenticationService;
 
     @Autowired
@@ -134,6 +137,16 @@ public class MVCConf implements WebMvcConfigurer {
         return new ServletRegistrationBean<>(servlet, path){{
             setLoadOnStartup(100);
             setName("wsScreenServlet");
+        }};
+    }
+
+    @Bean
+    public ServletRegistrationBean wsChatServlet(@Value("${mvc.servlet-path.chat}") String path) {
+        ScreenWebSocketServlet servlet = new ScreenWebSocketServlet(chatPlayerTransport, secureAuthenticationService);
+
+        return new ServletRegistrationBean<>(servlet, path){{
+            setLoadOnStartup(100);
+            setName("wsChatServlet");
         }};
     }
 }
