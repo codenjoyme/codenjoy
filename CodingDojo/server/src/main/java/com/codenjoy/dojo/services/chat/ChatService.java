@@ -222,7 +222,7 @@ public class ChatService {
      * Это возможно только, если пользователь находится в данной комнате.
      */
     public PMessage postMessage(ChatType type, Integer topicId,
-                                String room, String text, String playerId)
+                                String text, String room, String playerId)
     {
         validateIsChatAvailable(playerId, room);
 
