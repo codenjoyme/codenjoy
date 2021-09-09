@@ -25,52 +25,83 @@ package com.codenjoy.dojo.services.controller;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerTest;
-import com.codenjoy.dojo.services.TimerService;
-import com.codenjoy.dojo.services.WebSocketRunnerMock;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.hash.Hash;
-import com.codenjoy.dojo.services.nullobj.NullInformation;
-import com.codenjoy.dojo.services.nullobj.NullPlayerScores;
+import com.codenjoy.dojo.services.mocks.FirstGameType;
+import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.web.rest.AbstractRestControllerTest;
+import com.codenjoy.dojo.web.rest.TestLogin;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class,
+        properties = "spring.main.allow-bean-definition-overriding=true",
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(SQLiteProfile.NAME)
-public abstract class AbstractControllerTest {
+@Import(AbstractControllerTest.ContextConfiguration.class)
+@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
+public abstract class AbstractControllerTest<TData, TControl> {
 
-    public static final String URL = "%s://localhost:%s%s";
+    @TestConfiguration
+    public static class ContextConfiguration {
+        @Bean("gameService")
+        public GameServiceImpl gameService() {
+            return new GameServiceImpl(){
+                @Override
+                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
+                    return Arrays.asList(FirstGameType.class, SecondGameType.class);
+                }
+            };
+        }
+    }
+
+    public static final String URL = "%s://localhost:%s%s/%s";
 
     protected static WebSocketRunnerMock client;
-    protected static List<String> serverMessages = new LinkedList<>();
+    protected static List<String> receivedOnServer = new LinkedList<>();
 
-    private String url;
     private String serverAddress;
-    protected List<Player> players = new LinkedList<>();
+    protected List<Player> playersList = new LinkedList<>();
 
-    @MockBean
+    @Autowired
     private Registration registration;
 
     @Autowired
     private TimerService timer;
+
+
+    @Autowired
+    private PlayerService players;
+
+    @Autowired
+    private ConfigProperties config;
+
+    @Autowired
+    private Deals deals;
+
+    protected TestLogin login;
 
     @LocalServerPort
     private int port;
@@ -78,67 +109,75 @@ public abstract class AbstractControllerTest {
     @Value("${server.servlet.context-path}")
     private String contextPath;
 
-    protected void setupJetty() {
-        serverAddress = String.format(URL, "ws", port, contextPath + "/ws");
-        url = String.format(URL, "http", port, contextPath);
+    @Before
+    protected void setup() {
+        login = new TestLogin(config, players, registration, deals);
+
+        registration.removeAll();
+        players.removeAll();
+        deals.clear();
+
+        serverAddress = String.format(URL, "ws", port, contextPath, endpoint());
+        String url = String.format(URL, "http", port, contextPath, "");
         log.info("Web application started at: " + url);
         timer.pause();
     }
 
+    protected abstract String endpoint();
+
+    private void login(UsernamePasswordAuthenticationToken token) {
+        SecurityContextHolder.getContext().setAuthentication(token);
+    }
+
     protected void clean() {
-        players.forEach(player ->
+        playersList.forEach(player ->
                 controller().unregisterPlayerTransport(player));
 
         if (client != null) {
             client.reset();
         }
-        serverMessages.clear();
+        receivedOnServer.clear();
     }
 
-    protected abstract Controller controller();
+    protected abstract Controller<TData, TControl> controller();
 
-    protected void createPlayer(String id) {
+    protected void createPlayer(String id, String room, String game) {
         clean();
 
-        Player player = new Player(id, "127.0.0.1", PlayerTest.mockGameType("game"),
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
-        player.setCode(Hash.getCode(id, id));
-        players.add(player);
+        Deal deal = login.register(id, id, room, game);
+        Player player = deal.getPlayer();
+        player.setCode(registration.getCodeById(id));
+        playersList.add(player);
 
-        controller().registerPlayerTransport(player, control());
-
-        // SecureAuthenticationService спросит Registration а можно ли этому юзеру что-то делать?
-        when(registration.checkUser(player.getId(), player.getCode())).thenReturn(player.getId());
+        controller().registerPlayerTransport(player, control(player.getId()));
 
         client = new WebSocketRunnerMock(serverAddress, player.getId(), player.getCode());
     }
 
-    protected abstract Object control();
+    protected abstract TControl control(String id);
 
     @AfterClass
     public static void tearDown() {
         client.stop();
     }
 
-    protected void waitForResponse(Player player) {
-        waitForResponse(player, 1);
-    }
-
     // TODO как-нибудь когда будет достаточно времени и желания позапускать этот тест и разгадать, почему зависает тут тест
     @SneakyThrows
-    protected void waitForResponse(Player player, int times) {
-        Thread.sleep(300);
-        for (int index = 0; index < times; index++) {
-            controller().requestControl(player, "some-request-" + index);
-        }
+    protected void waitForClientsResponse() {
         int count = 0;
-        while (count < 20 && serverMessages.isEmpty()) {
+        while (count < 20 && receivedOnServer.isEmpty()) {
             Thread.sleep(300);
             count++;
         }
     }
 
+    @SneakyThrows
+    protected void sendToClient(Player player, TData request) {
+        Thread.sleep(300);
+        controller().requestControl(player, request);
+    }
+
     protected Player player(int index) {
-        return players.get(index);
+        return playersList.get(index);
     }
 }

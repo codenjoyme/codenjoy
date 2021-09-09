@@ -52,7 +52,7 @@ public class WebSocketRunnerMock {
     private int times;
     private boolean onlyOnce;
     private boolean answered;
-    public List<String> messages = new LinkedList<>();
+    private List<String> messages = new LinkedList<>();
 
     public WebSocketRunnerMock(String server, String id, String code) {
         this.server = server;
@@ -91,6 +91,10 @@ public class WebSocketRunnerMock {
         session.close();
     }
 
+    public String messages() {
+        return messages.toString();
+    }
+
     @SneakyThrows
     private void start(String server, String id, String code)  {
         wsClient = new WebSocketClient();
@@ -106,7 +110,7 @@ public class WebSocketRunnerMock {
         return this;
     }
 
-    public String getRequest() {
+    public String request() {
         return request;
     }
 
@@ -156,7 +160,7 @@ public class WebSocketRunnerMock {
             }
             if (!answered) {
                 for (int index = 0; index < times; index++) {
-                    send();
+                    sendToServer(answer);
                 }
                 if (onlyOnce) {
                     answered = true;
@@ -168,7 +172,7 @@ public class WebSocketRunnerMock {
     }
 
     @SneakyThrows
-    private void send() {
-        session.getRemote().sendString(answer);
+    public void sendToServer(String message) {
+        session.getRemote().sendString(message);
     }
 }

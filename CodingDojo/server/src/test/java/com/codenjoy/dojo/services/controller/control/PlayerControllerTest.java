@@ -23,9 +23,9 @@ package com.codenjoy.dojo.services.controller.control;
  */
 
 
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
-import com.codenjoy.dojo.services.controller.control.PlayerController;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,150 +35,210 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
-public class PlayerControllerTest extends AbstractControllerTest {
+public class PlayerControllerTest extends AbstractControllerTest<String, Joystick> {
+
+    public static final String INITIAL_REQUEST = "any data";
 
     @Autowired
     private PlayerController playerController;
 
     @Before
     public void setup() {
-        setupJetty();
-        createPlayer("user");
+        super.setup();
+
+        createPlayer("player", "room", "first");
+        login.asNone();
     }
 
     @Override
-    protected Object control() {
+    protected String endpoint() {
+        return "ws";
+    }
+
+    @Override
+    protected Joystick control(String id) {
         return new DirectionActJoystick() {
             @Override
             public void down() {
-                serverMessages.add("down");
+                receivedOnServer.add("down");
             }
 
             @Override
             public void up() {
-                serverMessages.add("up");
+                receivedOnServer.add("up");
             }
 
             @Override
             public void left() {
-                serverMessages.add("left");
+                receivedOnServer.add("left");
             }
 
             @Override
             public void right() {
-                serverMessages.add("right");
+                receivedOnServer.add("right");
             }
 
             @Override
             public void act(int... p) {
-                serverMessages.add("act" + Arrays.toString(p));
+                receivedOnServer.add("act" + Arrays.toString(p));
             }
         };
     }
 
     @Override
-    protected Controller controller() {
+    protected Controller<String, Joystick> controller() {
         return playerController;
     }
 
     @Test
     public void shouldLeft() {
+        // given
         client.willAnswer("LEFT").start();
-        waitForResponse(player(0));
 
-        assertEquals("[left]", serverMessages.toString());
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
+
+        // then
+        assertEquals("[left]", receivedOnServer.toString());
     }
 
     @Test
     public void shouldRight() {
+        // given
         client.willAnswer("right").start();
-        waitForResponse(player(0));
 
-        assertEquals("[right]", serverMessages.toString());
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
+
+        // then
+        assertEquals("[right]", receivedOnServer.toString());
         clean();
     }
 
     @Test
     public void shouldUp() {
+        // given
         client.willAnswer("Up").start();
-        waitForResponse(player(0));
 
-        assertEquals("[up]", serverMessages.toString());
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
+
+        // then
+        assertEquals("[up]", receivedOnServer.toString());
         clean();
     }
 
     @Test
     public void shouldAct() {
+        // given
         client.willAnswer("aCt").start();
-        waitForResponse(player(0));
 
-        assertEquals("[act[]]", serverMessages.toString());
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
+
+        // then
+        assertEquals("[act[]]", receivedOnServer.toString());
         clean();
     }
 
     @Test
     public void shouldActWithParameters() {
+        // given
         client.willAnswer("ACt(1,2 ,3, 5)").start();
-        waitForResponse(player(0));
 
-        assertEquals("[act[1, 2, 3, 5]]", serverMessages.toString());
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
+
+        // then
+        assertEquals("[act[1, 2, 3, 5]]", receivedOnServer.toString());
         clean();
     }
 
     @Test
     public void shouldDown() {
+        // given
         client.willAnswer("DowN").start();
-        waitForResponse(player(0));
 
-        assertEquals("[down]", serverMessages.toString());
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
+
+        // then
+        assertEquals("[down]", receivedOnServer.toString());
         clean();
     }
 
     @Test
     public void shouldRightAct() {
+        // given
         client.willAnswer("right,Act").start();
-        waitForResponse(player(0));
 
-        assertEquals("[right, act[]]", serverMessages.toString());
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
+
+        // then
+        assertEquals("[right, act[]]", receivedOnServer.toString());
         clean();
     }
 
     @Test
     public void shouldMixed() {
+        // given
         client.willAnswer("Act,right, left ,act").start();
-        waitForResponse(player(0));
 
-        assertEquals("[act[], right, left, act[]]", serverMessages.toString());
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
+
+        // then
+        assertEquals("[act[], right, left, act[]]", receivedOnServer.toString());
         clean();
     }
 
     @Test
     public void shouldCheckRequest() {
+        // given
         client.willAnswer("act").start();
-        waitForResponse(player(0));
 
-        assertEquals("board=some-request-0", client.getRequest());
-    }
-    
-    @Test
-    public void shouldServerGotOnlyOneWhenClientAnswerTwice() {
-        // given, when
-        client.willAnswer("LEFT").times(2).start();
-        waitForResponse(player(0));
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
 
         // then
-        assertEquals("[board=some-request-0]", client.messages.toString());
-        assertEquals("[left]", serverMessages.toString());
+        assertEquals("board=" + INITIAL_REQUEST, client.request());
+    }
+
+    @Test
+    public void shouldServerGotOnlyOneWhenClientAnswerTwice() {
+        // given
+        client.willAnswer("LEFT").times(2).start();
+
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
+
+        // then
+        assertEquals("[board=" + INITIAL_REQUEST + "]", client.messages());
+        assertEquals("[left]", receivedOnServer.toString());
     }
 
     @Test
     public void shouldClientGotOnlyOneWhenServerRequestTwice() {
-        // given, when
+        // given
         client.willAnswer("LEFT").times(1).onlyOnce().start();
-        waitForResponse(player(0), 2);
+
+        // when
+        sendToClient(player(0), INITIAL_REQUEST);
+        waitForClientsResponse();
 
         // then
-        assertEquals("[board=some-request-0]", client.messages.toString());
-        assertEquals("[left]", serverMessages.toString());
+        assertEquals("[board=" + INITIAL_REQUEST + "]", client.messages());
+        assertEquals("[left]", receivedOnServer.toString());
     }
 }
