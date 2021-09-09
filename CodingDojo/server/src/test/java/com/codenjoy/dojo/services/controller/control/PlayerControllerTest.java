@@ -47,6 +47,8 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         super.setup();
 
         createPlayer("player", "room", "first");
+        replyToServerImmediately(true);
+
         login.asNone();
     }
 

@@ -82,7 +82,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
     private List<WebSocketRunnerMock> clients = new LinkedList<>();
     private List<String> receivedOnServer = new LinkedList<>();
     private String serverAddress;
-    protected List<Player> playersList = new LinkedList<>();
+    private List<Player> playersList = new LinkedList<>();
 
     @Autowired
     private Registration registration;
@@ -119,6 +119,10 @@ public abstract class AbstractControllerTest<TData, TControl> {
         String url = String.format(URL, "http", port, contextPath, "");
         log.info("Web application started at: " + url);
         timer.pause();
+    }
+
+    protected void replyToServerImmediately(boolean input) {
+        clients.forEach(client -> client.replyToServerImmediately(input));
     }
 
     protected void serverReceived(String value) {

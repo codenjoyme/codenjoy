@@ -46,6 +46,7 @@ public class WebSocketRunnerMock {
     private Session session;
     private WebSocketClient wsClient;
     private String answer;
+    private boolean replyToServerImmediately;
     private static boolean started;
     private String request;
     private static boolean closed;
@@ -58,6 +59,7 @@ public class WebSocketRunnerMock {
         this.server = server;
         this.id = id;
         this.code = code;
+        replyToServerImmediately = false;
         reset();
     }
 
@@ -135,6 +137,10 @@ public class WebSocketRunnerMock {
         return this;
     }
 
+    public void replyToServerImmediately(boolean input) {
+        replyToServerImmediately = input;
+    }
+
     @WebSocket
     public class ClientSocket {
 
@@ -156,14 +162,19 @@ public class WebSocketRunnerMock {
             messages.add(data);
 
             if (answer == null) {
-                throw new IllegalArgumentException("Answer is null!");
-            }
-            if (!answered) {
-                for (int index = 0; index < times; index++) {
-                    sendToServer(answer);
+                if (replyToServerImmediately) {
+                    throw new IllegalArgumentException("Answer is null!");
+                } else {
+                    log.warn("Answer is null. Cant say to server reply.");
                 }
-                if (onlyOnce) {
-                    answered = true;
+            } else {
+                if (!answered) {
+                    for (int index = 0; index < times; index++) {
+                        sendToServer(answer);
+                    }
+                    if (onlyOnce) {
+                        answered = true;
+                    }
                 }
             }
 
