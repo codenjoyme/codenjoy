@@ -166,7 +166,7 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
     private void registerPlayers(int playersCount) {
         for (int index = 0; index < playersCount; index++) {
             int id = index + INDEX_FROM_1;
-            register("p" + id, ip, room, game);
+            login.register("p" + id, ip, room, game);
             out.accept(String.format("register(p%s)", id));
 
             printStatus();

@@ -49,8 +49,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenAuthenticated() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        login.register("validPlayer", "ip", "validRoom", "first");
+        login.asUser("validPlayer", "validPlayer");
 
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
@@ -76,8 +76,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenRegistrationIsClosed() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        login.register("validPlayer", "ip", "validRoom", "first");
+        login.asUser("validPlayer", "validPlayer");
 
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
@@ -115,8 +115,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenRegistrationIsClosed_caseGoToAnotherRoom() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        login.register("validPlayer", "ip", "validRoom", "first");
+        login.asUser("validPlayer", "validPlayer");
 
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
@@ -150,8 +150,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenNotAuthenticated() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asNone();
+        login.register("validPlayer", "ip", "validRoom", "first");
+        login.asNone();
 
         // then
         assertEquals("false", get("/rest/room/validRoom/joined"));
@@ -176,8 +176,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenUserOrRoomNotFound() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        login.register("validPlayer", "ip", "validRoom", "first");
+        login.asUser("validPlayer", "validPlayer");
 
         // then
         assertEquals("false", get("/rest/room/badRoom/joined"));
@@ -205,8 +205,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenRoomNameIsInvalid() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        login.register("validPlayer", "ip", "validRoom", "first");
+        login.asUser("validPlayer", "validPlayer");
 
         // when then
         assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
@@ -226,8 +226,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoined_whenPlayerNameIsInvalid() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        login.register("validPlayer", "ip", "validRoom", "first");
+        login.asUser("validPlayer", "validPlayer");
 
         // when then
         assertError("java.lang.IllegalArgumentException: Player id is invalid: '$bad$'",

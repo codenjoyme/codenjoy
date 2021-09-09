@@ -86,7 +86,7 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
         // in order to count the indices. So there we want to delete it.
         type.clear();
 
-        asAdmin();
+        login.asAdmin();
 
         // for all tests
         settings.playersAndTeamsPerRoom(4, 2);
@@ -95,7 +95,7 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
     public void givenPl(PTeam... teams) {
         for (PTeam team : teams) {
             for (String playerId : team.getPlayers()) {
-                register(playerId, ip, room, game);
+                login.register(playerId, ip, room, game);
             }
         }
         teamService.distributePlayersByTeam(room, Arrays.asList(teams));

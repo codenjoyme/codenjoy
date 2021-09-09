@@ -69,7 +69,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         registration.removeAll();
 
-        asAdmin();
+        login.asAdmin();
 
         players.removeAll();
         saves.removeAllSaves();
@@ -82,7 +82,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(false, service.isRoomActive("name"));
         assertEquals("false", get("/rest/admin/room/name/pause"));
 
-        register("player", "ip", "name", "first");
+        login.register("player", "ip", "name", "first");
 
         // TODO я думаю что сервис напрямую дергать не надо, т.к. его никто так вызывать не будет, только через rest
         assertEquals(true, service.isRoomActive("name"));
@@ -123,9 +123,9 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(false, service.isRoomActive("name1"));
         assertEquals("false", get("/rest/admin/room/name2/pause"));
 
-        register("player1", "ip1", "name1", "first");
-        register("player2", "ip2", "name1", "first");
-        register("player3", "ip3", "name2", "second");
+        login.register("player1", "ip1", "name1", "first");
+        login.register("player2", "ip2", "name1", "first");
+        login.register("player3", "ip3", "name2", "second");
 
         assertEquals(true, service.isRoomActive("name1"));
         assertEquals("true", get("/rest/admin/room/name2/pause"));
@@ -175,7 +175,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(true, service.isRoomRegistrationOpened("name"));
         assertEquals("true", get("/rest/admin/room/name/registration/open"));
 
-        register("player1", "ip1", "name", "first");
+        login.register("player1", "ip1", "name", "first");
         assertPlayersInActiveRooms("[player1->name]");
 
         // а теперь она есть, т.к. зашел первый пользователь
@@ -195,7 +195,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(false, players.isRegistrationOpened("name"));
 
         // when
-        register("player2", "ip2", "name", "first"); // not created
+        login.register("player2", "ip2", "name", "first"); // not created
 
         // then
         assertPlayersInActiveRooms("[player1->name]");
@@ -210,7 +210,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(true, players.isRegistrationOpened("name"));
 
         // when
-        register("player2", "ip2", "name", "first");
+        login.register("player2", "ip2", "name", "first");
 
         // then
         assertPlayersInActiveRooms("[player1->name, player2->name]");
@@ -223,9 +223,9 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(true, service.isRoomRegistrationOpened("name1"));
         assertEquals("true", get("/rest/admin/room/name2/registration/open"));
 
-        register("player1", "ip1", "name1", "first");
-        register("player2", "ip2", "name1", "first");
-        register("player3", "ip3", "name2", "second");
+        login.register("player1", "ip1", "name1", "first");
+        login.register("player2", "ip2", "name1", "first");
+        login.register("player3", "ip3", "name2", "second");
         assertPlayersInActiveRooms("[player1->name1, player2->name1, player3->name2]");
 
         // а теперь она есть, т.к. зашел первый пользователь
@@ -247,8 +247,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(true, players.isRegistrationOpened("name2"));
 
         // when
-        register("player4", "ip4", "name1", "first"); // not created
-        register("player5", "ip5", "name2", "second");
+        login.register("player4", "ip4", "name1", "first"); // not created
+        login.register("player5", "ip5", "name2", "second");
 
         // then
         assertPlayersInActiveRooms("[player1->name1, player2->name1, player3->name2, " +
@@ -265,8 +265,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         assertEquals(true, players.isRegistrationOpened("name2"));
 
         // when
-        register("player6", "ip6", "name1", "first");
-        register("player7", "ip7", "name2", "second");
+        login.register("player6", "ip6", "name1", "first");
+        login.register("player7", "ip7", "name2", "second");
 
         // then
         assertPlayersInActiveRooms("[player1->name1, player2->name1, player3->name2, " +
@@ -293,12 +293,12 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldSetClearScores() {
         // given
-        register("player1", "ip1", "room1", "first");
-        register("player2", "ip2", "room1", "first");
+        login.register("player1", "ip1", "room1", "first");
+        login.register("player2", "ip2", "room1", "first");
 
-        register("player3", "ip3", "room2", "first");
+        login.register("player3", "ip3", "room2", "first");
 
-        register("player4", "ip4", "room3", "second");
+        login.register("player4", "ip4", "room3", "second");
 
         assertScores("{player1=0, player2=0, player3=0, player4=0}");
 
@@ -362,12 +362,12 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldReloadAllPlayersInRoom() {
         // given
-        Deal deal1 = register("player1", "ip1", "room1", "first");
-        Deal deal2 = register("player2", "ip2", "room1", "first");
+        Deal deal1 = login.register("player1", "ip1", "room1", "first");
+        Deal deal2 = login.register("player2", "ip2", "room1", "first");
 
-        Deal deal3 = register("player3", "ip3", "room2", "first");
+        Deal deal3 = login.register("player3", "ip3", "room2", "first");
 
-        Deal deal4 = register("player4", "ip4", "room3", "second");
+        Deal deal4 = login.register("player4", "ip4", "room3", "second");
 
         // when
         assertEquals("", get("/rest/admin/room/room1/player/reload"));
@@ -391,16 +391,16 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGameOverInRoom() {
         // given
-        register("player1", "ip1", "room1", "first");
-        register("player2", "ip2", "room1", "first");
-        register("player3", "ip3", "room1", "first");
+        login.register("player1", "ip1", "room1", "first");
+        login.register("player2", "ip2", "room1", "first");
+        login.register("player3", "ip3", "room1", "first");
 
-        register("player4", "ip4", "room2", "first");
-        register("player5", "ip5", "room2", "first");
+        login.register("player4", "ip4", "room2", "first");
+        login.register("player5", "ip5", "room2", "first");
 
-        register("player6", "ip6", "room3", "second");
+        login.register("player6", "ip6", "room3", "second");
 
-        register("player7", "ip7", "room4", "second");
+        login.register("player7", "ip7", "room4", "second");
 
         // when
         assertEquals("", get("/rest/admin/room/room3/gameOver/player6"));
@@ -434,7 +434,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGameOverInRoom_validation() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
+        login.register("validPlayer", "ip", "validRoom", "first");
 
         // when then
         assertException("Room name is invalid: '$bad$'",
@@ -472,10 +472,10 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldSaveAllAndLoad() {
         // given
-        register("player1", "ip1", "room1", "first");
-        register("player2", "ip2", "room1", "first");
-        register("player3", "ip3", "room2", "first");
-        register("player4", "ip4", "room3", "second");
+        login.register("player1", "ip1", "room1", "first");
+        login.register("player2", "ip2", "room1", "first");
+        login.register("player3", "ip3", "room2", "first");
+        login.register("player4", "ip4", "room3", "second");
 
         service.setScores("room1", "player1", "10");
         service.setScores("room1", "player2", "20");

@@ -49,11 +49,11 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         rooms.removeAll();
         registration.removeAll();
 
-        register("player", "ip", "validRoom", "first");
-        register("player2", "ip", "validRoom", "first");
-        register("otherPlayer", "ip", "otherRoom", "first");
+        login.register("player", "ip", "validRoom", "first");
+        login.register("player2", "ip", "validRoom", "first");
+        login.register("otherPlayer", "ip", "otherRoom", "first");
 
-        asUser("player", "player");
+        login.asUser("player", "player");
     }
 
     @Test
@@ -138,7 +138,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages")));
 
         // when then
-        asUser("player2", "player2");
+        login.asUser("player2", "player2");
 
         assertDeleteError("java.lang.IllegalArgumentException: " +
                         "Player 'player2' cant delete message with id " +
@@ -283,7 +283,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when then
         // сообщение есть но я не могу его взять, т.к. я плеер из другой комнаты
-        asUser("otherPlayer", "otherPlayer");
+        login.asUser("otherPlayer", "otherPlayer");
 
         assertError("java.lang.IllegalArgumentException: " +
                         "There is no message with id '1' in room 'otherRoom'",
@@ -299,7 +299,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when then
         // сообщение есть но я не могу его взять, т.к. я плеер из другой комнаты
-        asUser("otherPlayer", "otherPlayer");
+        login.asUser("otherPlayer", "otherPlayer");
 
         assertError("java.lang.IllegalArgumentException: " +
                         "Player 'otherPlayer' is not in room 'validRoom'",
