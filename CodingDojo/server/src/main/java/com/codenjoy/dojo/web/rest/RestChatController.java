@@ -285,7 +285,7 @@ public class RestChatController {
                 .inclusive(inclusive)
                 .get();
 
-        return chat.getFieldMessages(room, user.getId(), filter);
+        return chat.getFieldMessages(user.getId(), filter);
     }
 
     /**

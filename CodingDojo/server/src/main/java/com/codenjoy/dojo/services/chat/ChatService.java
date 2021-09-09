@@ -158,8 +158,8 @@ public class ChatService {
      * Администратор не может получать field-чат сообщения,
      * пользователь - только сообщения field-чата поля на котором пока что играет.
      */
-    public List<PMessage> getFieldMessages(String room, String playerId, Filter filter) {
-        int topicId = getFieldTopicId(room, playerId);
+    public List<PMessage> getFieldMessages(String playerId, Filter filter) {
+        int topicId = getFieldTopicId(filter.room(), playerId);
         return getMessages(FIELD, topicId, playerId, filter);
     }
 
