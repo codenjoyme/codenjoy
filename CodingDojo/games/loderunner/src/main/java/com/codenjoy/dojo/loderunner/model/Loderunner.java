@@ -213,7 +213,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 settings, ENEMIES_COUNT,
                 player -> freeRandom((Player) player),
                 pt -> {
-                    Enemy enemy = new Enemy(pt, Direction.LEFT, level.getAi());
+                    Enemy enemy = new Enemy(pt, Direction.LEFT);
                     enemy.init(this);
                     return enemy;
                 });

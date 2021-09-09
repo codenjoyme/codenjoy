@@ -43,11 +43,8 @@ import static com.codenjoy.dojo.games.loderunner.Element.*;
 
 public class Level extends AbstractLevel {
 
-    private EnemyAI ai;
-
     public Level(String map) {
         super(map);
-        ai = new AI();
     }
 
     @Override
@@ -102,8 +99,8 @@ public class Level extends AbstractLevel {
 
     public List<Enemy> getEnemies() {
         return find(new HashMap<>() {{
-            put(ENEMY_LEFT, pt -> new Enemy(pt, Direction.LEFT, ai));
-            put(ENEMY_RIGHT, pt -> new Enemy(pt, Direction.RIGHT, ai));
+            put(ENEMY_LEFT, pt -> new Enemy(pt, Direction.LEFT));
+            put(ENEMY_RIGHT, pt -> new Enemy(pt, Direction.RIGHT));
         }});
     }
 
@@ -113,13 +110,5 @@ public class Level extends AbstractLevel {
 
     public List<Portal> getPortals() {
         return find(Portal::new, PORTAL);
-    }
-
-    public void setAI(EnemyAI ai) {
-        this.ai = ai;
-    }
-
-    public EnemyAI getAi() {
-        return this.ai;
     }
 }

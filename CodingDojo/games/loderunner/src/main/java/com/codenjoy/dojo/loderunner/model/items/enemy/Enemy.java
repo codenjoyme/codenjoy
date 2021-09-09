@@ -44,16 +44,24 @@ public class Enemy extends PointImpl implements Tickable, Fieldable<Field>, Stat
     private Class<? extends Point> withGold;
     private Hero prey;
 
-    public Enemy(Point pt, Direction direction, EnemyAI ai) {
+    public Enemy(Point pt, Direction direction) {
         super(pt);
         withGold = null;
         this.direction = direction;
-        this.ai = ai;
+        this.ai = new AI();
     }
 
     @Override
     public void init(Field field) {
         this.field = field;
+    }
+
+    public EnemyAI getAi() {
+        return ai;
+    }
+
+    public void setAi(EnemyAI ai) {
+        this.ai = ai;
     }
 
     private Point under(Point pt) {

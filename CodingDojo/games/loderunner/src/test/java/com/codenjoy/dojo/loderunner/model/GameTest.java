@@ -26,6 +26,7 @@ package com.codenjoy.dojo.loderunner.model;
 import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.model.items.Brick;
 import com.codenjoy.dojo.loderunner.model.items.Pill;
+import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
 import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyAI;
 import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
@@ -39,13 +40,16 @@ import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -56,10 +60,9 @@ public class GameTest {
     private Loderunner game;
     private List<Hero> heroes = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
+    private List<Joystick> enemies = new LinkedList<>();
     private Dice dice;
     private EventListener listener;
-    private EnemyAI ai;
-    private Joystick enemy;
     private PrinterFactory printer;
     private GameSettings settings;
     protected EventsListenersAssert events;
@@ -67,9 +70,7 @@ public class GameTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        ai = mock(EnemyAI.class);
         printer = new PrinterFactoryImpl();
-        enemy = new EnemyJoystick();
         settings = new TestSettings();
         events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
         Brick.DRILL_TIMER = 13;
@@ -89,7 +90,6 @@ public class GameTest {
 
     private void givenFl(String board) {
         Level level = getLevel(board, settings);
-        level.setAI(ai);
 
         if (level.getHeroes().isEmpty()) {
             throw new IllegalStateException("Нет героя!");
@@ -106,6 +106,8 @@ public class GameTest {
             heroes.add(player.getHero());
             player.getHero().direction = hero.direction;
         }
+        reloadAllEnemies();
+        
         dice(0); // всегда дальше выбираем нулевой индекс
     }
 
@@ -130,6 +132,14 @@ public class GameTest {
     
     private Player player() {
         return players.get(0);
+    }
+
+    private Joystick enemy() {
+        return enemies.get(0);
+    }
+
+    private Joystick enemy(int index) {
+        return enemies.get(index);
     }
 
     private void assertE(String expected) {
@@ -2052,10 +2062,6 @@ public class GameTest {
                 "☼☼☼☼☼☼");
     }
 
-    private void ai(Direction value) {
-        when(ai.getDirection(any(Field.class), any(), any())).thenReturn(value, null);
-    }
-
     // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо
     @Test
     public void shouldEnemyMoveLeft() {
@@ -2065,7 +2071,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2083,7 +2089,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2102,7 +2108,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2129,7 +2135,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2147,7 +2153,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2169,7 +2175,7 @@ public class GameTest {
         hero().act();
         game.tick();
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2205,7 +2211,7 @@ public class GameTest {
                 "☼#*#☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2228,7 +2234,7 @@ public class GameTest {
     public void shouldEnemyCantGoLeftIfWall() {
         shouldEnemyFallInPitRight();
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2242,7 +2248,7 @@ public class GameTest {
     public void shouldEnemyCantGoRightIfWall() {
         shouldEnemyFallInPitLeft();
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2282,7 +2288,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        enemy.left(); // после этого он может двигаться
+        enemy().left(); // после этого он может двигаться
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2302,7 +2308,7 @@ public class GameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2314,6 +2320,7 @@ public class GameTest {
         events.verifyAllEvents("[KILL_HERO]");
 
         dice(1, 3);
+        reloadAllEnemies();
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
         game.newGame(player());
 
@@ -2334,7 +2341,7 @@ public class GameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2397,7 +2404,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2429,7 +2436,7 @@ public class GameTest {
                 "☼ «H☼" +
                 "☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2438,7 +2445,7 @@ public class GameTest {
                 "☼  Q☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2457,7 +2464,7 @@ public class GameTest {
                 "☼ «H☼" +
                 "☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2466,7 +2473,7 @@ public class GameTest {
                 "☼  Q☼" +
                 "☼☼☼☼☼");
 
-        enemy.up();
+        enemy().up();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2475,7 +2482,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        enemy.up();
+        enemy().up();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2496,7 +2503,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        enemy.up();
+        enemy().up();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2505,7 +2512,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2526,7 +2533,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2535,7 +2542,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2544,7 +2551,7 @@ public class GameTest {
                 "☼  Q☼" +
                 "☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2565,7 +2572,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2600,7 +2607,7 @@ public class GameTest {
                 "☼H« ☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2609,7 +2616,7 @@ public class GameTest {
                 "☼Q  ☼" +
                 "☼☼☼☼☼");
 
-        enemy.up();
+        enemy().up();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2618,7 +2625,7 @@ public class GameTest {
                 "☼H  ☼" +
                 "☼☼☼☼☼");
 
-        enemy.up();
+        enemy().up();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2627,7 +2634,7 @@ public class GameTest {
                 "☼H  ☼" +
                 "☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2637,7 +2644,7 @@ public class GameTest {
                 "☼☼☼☼☼");
 
         // и упасть
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -2674,7 +2681,7 @@ public class GameTest {
                 "☼## ##☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2685,7 +2692,7 @@ public class GameTest {
                 "☼## ##☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2696,7 +2703,7 @@ public class GameTest {
                 "☼## ##☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2707,7 +2714,7 @@ public class GameTest {
                 "☼## ##☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2730,7 +2737,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2741,7 +2748,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2752,7 +2759,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2777,7 +2784,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2831,7 +2838,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -2843,7 +2850,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -2855,7 +2862,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -2905,7 +2912,7 @@ public class GameTest {
     public void shouldEnemyLeaveGoldWhenFallInPit() {
         shouldEnemyGetGoldWhenFallenFromPipe();
 
-        enemy.right();
+        enemy().right();
         hero().act();
         game.tick();
 
@@ -2918,7 +2925,7 @@ public class GameTest {
                 "☼####*#☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.right();     // если чертик с золотом падает в ямку - он оставляет золото на поверхности
+        enemy().right();     // если чертик с золотом падает в ямку - он оставляет золото на поверхности
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -2930,7 +2937,7 @@ public class GameTest {
                 "☼#### #☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -2998,7 +3005,7 @@ public class GameTest {
             game.tick();
         }
 
-        enemy.left();
+        enemy().left();
         hero().right();
         hero().act();
         game.tick();
@@ -3012,7 +3019,7 @@ public class GameTest {
                 "☼###*##☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3154,7 +3161,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -3216,7 +3223,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -3299,7 +3306,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         game.tick();
 
         assertE("☼☼☼☼☼☼►" +
@@ -3331,7 +3338,7 @@ public class GameTest {
                 "☼☼☼☼☼" +
                 "☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3340,7 +3347,7 @@ public class GameTest {
                 "☼☼☼☼☼" +
                 "☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3359,7 +3366,7 @@ public class GameTest {
                 "☼ H«☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3368,7 +3375,7 @@ public class GameTest {
                 "☼ Q ☼" +
                 "☼☼☼☼☼");
 
-        enemy.up();
+        enemy().up();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3377,7 +3384,7 @@ public class GameTest {
                 "☼ H ☼" +
                 "☼☼☼☼☼");
 
-        enemy.up();
+        enemy().up();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3396,7 +3403,7 @@ public class GameTest {
                 "☼ H«☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3405,7 +3412,7 @@ public class GameTest {
                 "☼ Q ☼" +
                 "☼☼☼☼☼");
 
-        enemy.up();
+        enemy().up();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3414,7 +3421,7 @@ public class GameTest {
                 "☼ H ☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3423,7 +3430,7 @@ public class GameTest {
                 "☼ H ☼" +
                 "☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3442,7 +3449,7 @@ public class GameTest {
                 "☼☼«☼☼" +
                 "☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3451,7 +3458,7 @@ public class GameTest {
                 "☼☼«☼☼" +
                 "☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼►" +
@@ -3480,7 +3487,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         game.tick();
 
         assertE("☼☼☼☼☼►" +
@@ -3501,19 +3508,10 @@ public class GameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         game.tick();
 
-        enemy.down();
-        game.tick();
-
-        assertE("☼☼☼☼☼►" +
-                "☼    ☼" +
-                "☼ H##☼" +
-                "☼#Q  ☼" +
-                "☼    ☼" +
-                "☼☼☼☼☼☼");
-
+        enemy().down();
         game.tick();
 
         assertE("☼☼☼☼☼►" +
@@ -3523,7 +3521,16 @@ public class GameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼►" +
+                "☼    ☼" +
+                "☼ H##☼" +
+                "☼#Q  ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼►" +
@@ -3553,7 +3560,7 @@ public class GameTest {
                 "☼ »  ☼" +
                 "☼☼☼☼☼☼");
 
-        enemy.up();
+        enemy().up();
         game.tick();
 
         assertE("☼☼☼☼☼►" +
@@ -3589,7 +3596,7 @@ public class GameTest {
                 "☼ » ☼" +
                 "☼☼☼☼☼");
 
-        enemy.right();     // если он отойдет - я упаду дальше
+        enemy().right();     // если он отойдет - я упаду дальше
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -3636,7 +3643,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         hero().act();
@@ -3651,7 +3658,7 @@ public class GameTest {
                 "☼####*#☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
         game.tick();
 
@@ -3701,7 +3708,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3713,7 +3720,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
         game.tick();
 
@@ -3749,7 +3756,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3761,7 +3768,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
         game.tick();
 
@@ -3814,7 +3821,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.down();
+        enemy().down();
         dice(2, 3);
         game.newGame(player());
         dice(0);  // охотимся за первым игроком
@@ -3867,7 +3874,7 @@ public class GameTest {
                 "☼###◄##☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.right();
+        enemy().right();
         game.tick();
         game.tick();
 
@@ -4035,29 +4042,43 @@ public class GameTest {
     }
 
     private class EnemyJoystick implements Joystick, DirectionActJoystick {
+        
+        private Enemy enemy;
+
+        public EnemyJoystick(Enemy enemy) {
+            this.enemy = enemy;
+            enemy.setAi(mock(EnemyAI.class));
+        }
+        
+        private void overwriteDirection(Direction direction) {
+            Mockito.reset(enemy.getAi());
+            when(enemy.getAi().getDirection(any(Field.class), any(Point.class), anyList()))
+                    .thenReturn(direction, null);
+        }
+
         @Override
         public void down() {
-            ai(Direction.DOWN);
+            overwriteDirection(DOWN);
         }
 
         @Override
         public void up() {
-            ai(Direction.UP);
+            overwriteDirection(UP);
         }
 
         @Override
         public void left() {
-            ai(Direction.LEFT);
+            overwriteDirection(LEFT);
         }
 
         @Override
         public void right() {
-            ai(Direction.RIGHT);
+            overwriteDirection(RIGHT);
         }
 
         @Override
         public void act(int... p) {
-            ai(null);
+            overwriteDirection(ACT);
         }
     }
 
@@ -4084,7 +4105,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy.left();
+        enemy().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4737,6 +4758,12 @@ public class GameTest {
     private void reloadAllHeroes() {
         players = game.players();
         heroes = game.allHeroes();
+    }
+    
+    private void reloadAllEnemies() {
+        enemies = game.enemies().stream()
+                .map(EnemyJoystick::new)
+                .collect(Collectors.toList());
     }
 
     // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
