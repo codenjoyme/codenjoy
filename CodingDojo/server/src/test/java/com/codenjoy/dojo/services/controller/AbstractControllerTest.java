@@ -29,11 +29,12 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.stuff.SmartAssert;
 import com.codenjoy.dojo.web.rest.AbstractRestControllerTest;
 import com.codenjoy.dojo.web.rest.TestLogin;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -109,6 +108,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     @Before
     protected void setup() {
+        tearDown();
         login = new TestLogin(config, players, registration, deals);
 
         registration.removeAll();
@@ -131,25 +131,9 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     protected abstract String endpoint();
 
-    private void login(UsernamePasswordAuthenticationToken token) {
-        SecurityContextHolder.getContext().setAuthentication(token);
-    }
-
-    protected void clean() {
-        playersList.forEach(player ->
-                controller().unregisterPlayerTransport(player));
-
-        if (client != null) {
-            client.reset();
-        }
-        receivedOnServer.clear();
-    }
-
     protected abstract Controller<TData, TControl> controller();
 
     protected void createPlayer(String id, String room, String game) {
-        clean();
-
         Deal deal = login.register(id, id, room, game);
         Player player = deal.getPlayer();
         player.setCode(registration.getCodeById(id));
@@ -167,9 +151,15 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     protected abstract TControl control(String id);
 
-    @AfterClass
-    public static void tearDown() {
+    @After
+    public void tearDown() {
+        playersList.forEach(player ->
+                controller().unregisterPlayerTransport(player));
+        clients.forEach(WebSocketRunnerMock::reset);
         clients.forEach(WebSocketRunnerMock::stop);
+        clients.clear();
+        receivedOnServer.clear();
+        SmartAssert.checkResult(getClass());
     }
 
     // TODO как-нибудь когда будет достаточно времени и желания позапускать этот тест и разгадать, почему зависает тут тест

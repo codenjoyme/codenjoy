@@ -103,7 +103,6 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[left]", receivedOnServer());
-        clean();
     }
 
     @Test
@@ -117,7 +116,6 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[right]", receivedOnServer());
-        clean();
     }
 
     @Test
@@ -131,7 +129,6 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[up]", receivedOnServer());
-        clean();
     }
 
     @Test
@@ -145,7 +142,6 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[act[]]", receivedOnServer());
-        clean();
     }
 
     @Test
@@ -159,7 +155,6 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[act[1, 2, 3, 5]]", receivedOnServer());
-        clean();
     }
 
     @Test
@@ -173,7 +168,6 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[down]", receivedOnServer());
-        clean();
     }
 
     @Test
@@ -187,7 +181,6 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[right, act[]]", receivedOnServer());
-        clean();
     }
 
     @Test
@@ -201,7 +194,6 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[act[], right, left, act[]]", receivedOnServer());
-        clean();
     }
 
     @Test
