@@ -21,7 +21,7 @@ mvc:
   servlet-path:
     screen: /screen-ws/*
     control: /ws/*
-    chat: /chat/*
+    chat: /chat-ws/*
 
 game:
   save:
