@@ -180,14 +180,11 @@ P.P.P.S: готов ответить за всё на любые вопросы
      Да и вообще его удалять пора, от слова "вообще"
 ✓+14) Длиные строчки как например в ControlWebSocketServlet я делаю по короче
      @Override
-     public void configure(WebSocketServletFactory webSocketServletFactory) {
-         PlayerSocketCreator creator =
-                 new PlayerSocketCreator(
-                         controlPlayerTransport,
-                         authentication,
-                         PlayerSocket.SERVER_SEND_FIRST);
-
-         webSocketServletFactory.setCreator(creator);
+     public void configure(WebSocketServletFactory factory) {
+         factory.setCreator(new PlayerSocketCreator(
+                 controlPlayerTransport,
+                 authentication,
+                 PlayerSocket.SERVER_SEND_FIRST));
 
          timer.resume();
      }

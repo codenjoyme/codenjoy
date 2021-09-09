@@ -43,13 +43,13 @@ public class PlayerSocketCreator implements WebSocketCreator {
 
     public static final String UNAUTHORIZED_ACCESS = "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.";
     private PlayerTransport transport;
-    private AuthenticationService authenticationService;
+    private AuthenticationService authentication;
     private boolean waitForClient;
 
     @Override
     public PlayerSocket createWebSocket(ServletUpgradeRequest servletRequest, ServletUpgradeResponse response) {
         HttpServletRequest request = servletRequest.getHttpServletRequest();
-        String authId = authenticationService.authenticate(request);
+        String authId = authentication.authenticate(request);
         PlayerSocket socket = new PlayerSocket(authId, waitForClient);
         if (authId == null) {
             log.warn("Unauthorized access [{}] from {}", getParameters(request), request.getRemoteAddr());
