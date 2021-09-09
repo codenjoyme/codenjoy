@@ -107,7 +107,7 @@ public class AITest {
     private void assertD(String expected) {
         assertEquals(expected,
                 ai.getPath(loderunner,
-                        loderunner.enemies().get(0),
+                        loderunner.enemies().all().get(0),
                         (List) loderunner.allHeroes()).toString());
     }
 
@@ -539,13 +539,13 @@ public class AITest {
                 "☼#####☼" +
                 "☼☼☼☼☼☼☼");
 
-        Enemy enemy1 = loderunner.enemies().get(0);
+        Enemy enemy1 = loderunner.enemies().all().get(0);
         assertEquals("[2,4]", enemy1.toString());
 
         Hero hero1 = loderunner.allHeroes().get(0);
         assertEquals("[1,3]", hero1.toString());
 
-        Enemy enemy2 = loderunner.enemies().get(1);
+        Enemy enemy2 = loderunner.enemies().all().get(1);
         assertEquals("[4,4]", enemy2.toString());
 
         Hero hero2 = loderunner.allHeroes().get(1);
@@ -602,7 +602,7 @@ public class AITest {
                 "☼☼☼☼☼☼☼☼");
 
         // проверяем следующую команду для первого чертика
-        Enemy enemy1 = loderunner.enemies().get(0);
+        Enemy enemy1 = loderunner.enemies().all().get(0);
         Hero hero1 = loderunner.allHeroes().get(0);
         assertEquals("[3,2]", enemy1.toString());
         assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy1, Arrays.asList(hero1)));
@@ -648,7 +648,7 @@ public class AITest {
                 "                \n");
 
         // проверяем следующую команду для второго чертика
-        Enemy enemy2 = loderunner.enemies().get(1);
+        Enemy enemy2 = loderunner.enemies().all().get(1);
         Hero hero2 = loderunner.allHeroes().get(1);
         assertEquals("[4,2]", enemy2.toString());
         assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy2, Arrays.asList(hero2)));
@@ -691,7 +691,7 @@ public class AITest {
                 "☼☼☼☼☼☼☼☼");
 
         // пробуем чтобы первый чертик пошел за вторым игроком
-        Enemy enemy2 = loderunner.enemies().get(1);
+        Enemy enemy2 = loderunner.enemies().all().get(1);
         assertEquals("[4,2]", enemy2.toString());
         Hero hero1 = loderunner.allHeroes().get(0);
         assertEquals("[2,6]", hero1.toString());
@@ -734,7 +734,7 @@ public class AITest {
                 "                \n");
 
         // пробуем чтобы второй чертик пошел за первым игроком
-        Enemy enemy1 = loderunner.enemies().get(0);
+        Enemy enemy1 = loderunner.enemies().all().get(0);
         assertEquals("[3,2]", enemy1.toString());
         Hero hero2 = loderunner.allHeroes().get(1);
         assertEquals("[5,6]", hero2.toString());
@@ -760,7 +760,7 @@ public class AITest {
     }
 
     private void assertQ(String expected) {
-        Enemy enemy = loderunner.enemies().get(0);
+        Enemy enemy = loderunner.enemies().all().get(0);
         List<Point> heroes = (List)loderunner.allHeroes();
         assertW(enemy, heroes, expected);
     }

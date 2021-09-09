@@ -129,7 +129,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable<Field>, Stat
         }
 
         // ищем за кем охотиться
-        List<Enemy> enemies = field.enemies();
+        List<Enemy> enemies = field.enemies().all();
         // выбираем только тех, за кем еще никто не охотится
         List<Hero> free = all.stream()
                 .filter(prey -> enemies.stream()

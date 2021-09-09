@@ -58,6 +58,7 @@ public class Level extends AbstractLevel {
         field.addAll(getYellowGold());
         field.addAll(getGreenGold());
         field.addAll(getRedGold());
+        field.addAll(getEnemies());
     }
 
     public List<Hero> getHeroes() {

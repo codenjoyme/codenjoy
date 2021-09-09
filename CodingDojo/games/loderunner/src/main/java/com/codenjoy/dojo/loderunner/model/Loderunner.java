@@ -50,7 +50,6 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     private int size;
     private Players players;
-    private List<Enemy> enemies;
     private int portalsTimer;
     private Dice dice;
     private GameSettings settings;
@@ -62,11 +61,10 @@ public class Loderunner extends RoundField<Player> implements Field {
         this.settings = settings;
         field = new PointField();
         players = new Players(this);
-        enemies = new LinkedList<>();
 
         finder = new ArrayList<>(){{
             add(pt -> getFrom(allHeroes(), pt));
-            add(pt -> getFrom(enemies(), pt));
+            add(pt -> getFrom(enemies().all(), pt));
             add(pt -> getFrom(yellowGold().all(), pt));
             add(pt -> getFrom(greenGold().all(), pt));
             add(pt -> getFrom(redGold().all(), pt));
@@ -91,10 +89,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         size = level.size();
         resetPortalsTimer();
 
-        enemies = level.getEnemies();
-        for (Enemy enemy : enemies) {
-            enemy.init(this);
-        }
+        enemies().forEach(enemy -> enemy.init(this));
 
         generateAll();
     }
@@ -191,7 +186,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generateEnemies() {
-        generate(enemies,
+        generate(enemies(),
                 settings, ENEMIES_COUNT,
                 player -> freeRandom((Player) player),
                 pt -> {
@@ -224,7 +219,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             @Override
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
                 processor.accept(allHeroes());
-                processor.accept(enemies());
+                processor.accept(enemies().all());
                 processor.accept(yellowGold().all());
                 processor.accept(greenGold().all());
                 processor.accept(redGold().all());
@@ -329,7 +324,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void enemiesGo() {
-        for (Enemy enemy : enemies) {
+        for (Enemy enemy : enemies().copy()) {
             enemy.tick();
 
             if (yellowGold().contains(enemy) && !enemy.withGold()) {
@@ -391,7 +386,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 || redGold().contains(over)
                 || isFullBrick(over)
                 || activeHeroes().contains(over)
-                || enemies.contains(over)) {
+                || enemies().contains(over)) {
             return false;
         }
 
@@ -411,7 +406,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 || isLadder(under)
                 || isBorder(under)
                 || isHeroAt(under)
-                || enemies.contains(under));
+                || enemies().contains(under));
     }
 
     @Override
@@ -473,7 +468,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 .filter(player -> player.getHero().under(PillType.SHADOW_PILL))
                 .map(Player::getHero)
                 .collect(toList());
-        return enemies.contains(pt) || shadows.contains(pt);
+        return enemies().contains(pt) || shadows.contains(pt);
     }
 
     @Override
@@ -547,8 +542,8 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public List<Enemy> enemies() {
-        return enemies;
+    public Accessor<Enemy> enemies() {
+        return field.of(Enemy.class);
     }
 
     @Override
