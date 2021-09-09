@@ -1,7 +1,9 @@
 package com.codenjoy.dojo.services.chat;
 
 import lombok.Builder;
+import lombok.ToString;
 
+@ToString
 public class Filter {
 
     private String room;
