@@ -109,7 +109,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             BoardController.URI + "/room/**",
             BoardController.URI + "/player/*",
             "/rest/player/*/*/wantsToPlay/**",
-            "/screen-ws/**"
+            "/screen-ws/**",
+            "/chat-ws/**" // TODO должен быть доступ закрыт
     ));
 
     @Value("${server.xFrameAllowedHosts}")
