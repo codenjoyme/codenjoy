@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.nullobj.NullInformation;
 import com.codenjoy.dojo.services.nullobj.NullPlayerScores;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -79,7 +81,7 @@ public abstract class AbstractControllerTest {
     protected void setupJetty() {
         serverAddress = String.format(URL, "ws", port, contextPath + "/ws");
         url = String.format(URL, "http", port, contextPath);
-        System.out.println("web application started at: " + url);
+        log.info("Web application started at: " + url);
         timer.pause();
     }
 

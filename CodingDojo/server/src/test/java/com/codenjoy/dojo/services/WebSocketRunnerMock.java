@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -36,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class WebSocketRunnerMock {
 
     private final String server;
@@ -75,7 +77,7 @@ public class WebSocketRunnerMock {
 
         }).start();
 
-        System.out.println("client starting...");
+        log.info("Client starting...");
         while (!started) {
             try {
                 Thread.sleep(10);
@@ -95,7 +97,7 @@ public class WebSocketRunnerMock {
         wsClient.start();
 
         URI uri = new URI(server + "?user=" + id + "&code=" + code);
-        System.out.println("Connecting to: " + uri);
+        log.info("Connecting to: " + uri);
         session = wsClient.connect(new ClientSocket(), uri).get(5000, TimeUnit.MILLISECONDS);
     }
 
@@ -134,19 +136,19 @@ public class WebSocketRunnerMock {
 
         @OnWebSocketConnect
         public void onConnect(Session session) {
-            System.out.println("client started!");
+            log.info("Client started");
             started = true;
         }
 
         @OnWebSocketClose
         public void onClose(int closeCode, String message) {
-            System.out.println("client closed!");
+            log.info("Client closed");
             closed = true;
         }
 
         @OnWebSocketMessage
         public void onMessage(String data) {
-            System.out.println("client got message: " + data);
+            log.info("Client got message: " + data);
             messages.add(data);
 
             if (answer == null) {
