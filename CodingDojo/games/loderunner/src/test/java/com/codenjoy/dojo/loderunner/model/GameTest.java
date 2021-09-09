@@ -27,7 +27,7 @@ import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.model.items.Brick;
 import com.codenjoy.dojo.loderunner.model.items.Pill;
 import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyAI;
-import com.codenjoy.dojo.loderunner.model.levels.LevelImpl;
+import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
@@ -90,7 +90,7 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = getLevel(board, settings);
+        Level level = getLevel(board, settings);
         level.setAI(ai);
 
         if (level.getHeroes().isEmpty()) {
@@ -113,8 +113,8 @@ public class GameTest {
         dice(0); // всегда дальше выбираем нулевой индекс
     }
 
-    public static LevelImpl getLevel(String board, GameSettings settings) {
-        LevelImpl level = new LevelImpl(board);
+    public static Level getLevel(String board, GameSettings settings) {
+        Level level = new Level(board);
         settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
                 .integer(GOLD_COUNT_RED, level.getRedGold().size())
                 .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())

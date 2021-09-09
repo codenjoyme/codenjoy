@@ -40,11 +40,11 @@ import java.util.List;
 
 import static com.codenjoy.dojo.games.loderunner.Element.*;
 
-public class LevelImpl extends AbstractLevel {
+public class Level extends AbstractLevel {
 
     private EnemyAI ai;
 
-    public LevelImpl(String map) {
+    public Level(String map) {
         super(map);
         ai = new AI();
     }

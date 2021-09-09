@@ -28,7 +28,7 @@ import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.model.Hero;
 import com.codenjoy.dojo.loderunner.model.Loderunner;
 import com.codenjoy.dojo.loderunner.model.Player;
-import com.codenjoy.dojo.loderunner.model.levels.LevelImpl;
+import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -57,7 +57,7 @@ public class AITest {
 
     private AI ai;
     private Loderunner loderunner;
-    private LevelImpl level;
+    private Level level;
     private Dice dice;
 
     @Before

@@ -23,9 +23,8 @@ package com.codenjoy.dojo.loderunner.services;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.levels.LevelImpl;
+import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.levels.Big;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -121,8 +120,8 @@ public class GameSettings extends SettingsImpl
         string(MAP_PATH, MAP_PATH_NONE);
     }
 
-    public LevelImpl level() {
-        return new LevelImpl(map());
+    public Level level() {
+        return new Level(map());
     }
 
     public String map() {

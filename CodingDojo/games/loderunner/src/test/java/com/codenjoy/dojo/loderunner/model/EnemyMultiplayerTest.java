@@ -24,7 +24,7 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.TestSettings;
-import com.codenjoy.dojo.loderunner.model.levels.LevelImpl;
+import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -96,7 +96,7 @@ public class EnemyMultiplayerTest {
     }
 
     private void setupGm(String board) {
-        LevelImpl level = getLevel(board, settings);
+        Level level = getLevel(board, settings);
         field = new Loderunner(level, dice, settings);
 
         for (Hero hero : level.getHeroes()) {
