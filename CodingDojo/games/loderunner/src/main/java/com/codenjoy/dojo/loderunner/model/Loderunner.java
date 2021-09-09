@@ -31,6 +31,7 @@ import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
@@ -55,7 +56,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<RedGold> redGold;
     private List<Pill> pills;
     private List<Portal> portals;
-    private Borders borders;
     private List<Brick> bricks;
     private List<Ladder> ladder;
     private List<Pipe> pipe;
@@ -71,7 +71,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         field = new PointField();
         players = new Players(this);
         enemies = new LinkedList<>();
-        borders = new Borders(settings.level().size());
 
         finder = new ArrayList<>(){{
             add(pt -> getFrom(allHeroes(), pt));
@@ -79,7 +78,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             add(pt -> getFrom(yellowGold(), pt));
             add(pt -> getFrom(greenGold(), pt));
             add(pt -> getFrom(redGold(), pt));
-            add(pt -> borders.get(pt));
+            add(pt -> getFrom(borders().all(), pt));
             add(pt -> getFrom(bricks(), pt));
             add(pt -> getFrom(ladder(), pt));
             add(pt -> getFrom(pills(), pt));
@@ -98,7 +97,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         field.init(this);
 
         size = level.size();
-        borders.setAll(level.getBorders());
         bricks = level.getBricks();
         ladder = level.getLadder();
         pipe = level.getPipe();
@@ -246,7 +244,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 processor.accept(yellowGold());
                 processor.accept(greenGold());
                 processor.accept(redGold());
-                processor.accept(borders());
+                processor.accept(borders().all());
                 processor.accept(bricks());
                 processor.accept(ladder());
                 processor.accept(pills());
@@ -523,7 +521,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isBorder(Point pt) {
-        return borders.contains(pt);
+        return borders().contains(pt);
     }
 
     public void newGame(Player player) {
@@ -563,8 +561,8 @@ public class Loderunner extends RoundField<Player> implements Field {
         return redGold;
     }
 
-    public List<Border> borders() {
-        return borders.all();
+    public Accessor<Border> borders() {
+        return field.of(Border.class);
     }
 
     @Override

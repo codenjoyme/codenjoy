@@ -49,7 +49,7 @@ public class Level extends AbstractLevel {
 
     @Override
     protected void fill(PointField field) {
-        // ...
+        field.addAll(getBorders());
     }
 
     public List<Hero> getHeroes() {
