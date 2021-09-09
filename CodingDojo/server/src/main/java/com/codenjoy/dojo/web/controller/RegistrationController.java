@@ -62,7 +62,7 @@ public class RegistrationController {
                            @RequestParam(name = "fullName", required = false) String fullName,
                            @RequestParam(name = "readableName", required = false) String name,
                            @RequestParam(name = "gitHubUsername", required = false) String github,
-                           @RequestParam(name = "slackId", required = false) String slackId) {
+                           @RequestParam(name = "slackEmail", required = false) String slackId) {
         return registrationService.openRegistrationForm(request, model, id, email, fullName, name, github, slackId, false);
     }
 
@@ -73,7 +73,7 @@ public class RegistrationController {
                                 @RequestParam(name = "fullName", required = false) String fullName,
                                 @RequestParam(name = "readableName", required = false) String name,
                                 @RequestParam(name = "gitHubUsername", required = false) String github,
-                                @RequestParam(name = "slackId", required = false) String slackId) {
+                                @RequestParam(name = "slackEmail", required = false) String slackId) {
         return registrationService.openRegistrationForm(request, model, id, email, fullName, name, github, slackId, true);
     }
 
@@ -88,7 +88,7 @@ public class RegistrationController {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);
             player.dropPassword();
-            return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getFullName(), player.getReadableName(), player.getGitHubUsername(), player.getSlackId());
+            return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getFullName(), player.getReadableName(), player.getGitHubUsername(), player.getSlackEmail());
         }
 
         String game = rooms.getGameName(player.getGame());

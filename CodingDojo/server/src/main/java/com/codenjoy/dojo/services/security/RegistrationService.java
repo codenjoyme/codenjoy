@@ -83,7 +83,7 @@ public class RegistrationService {
         String name = player.getReadableName();
         String game = player.getGame();
         String repositoryUrl = player.getRepositoryUrl();
-        String slackId = player.getSlackId();
+        String slackId = player.getSlackEmail();
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkEmail(email, CANT_BE_NULL);
         validator.checkGame(game, CANT_BE_NULL);
@@ -104,7 +104,7 @@ public class RegistrationService {
                 if (!playerService.isRegistrationOpened()) {
                     return openRegistrationForm(request, model, id, email, fullName, name, repositoryUrl, slackId);
                 }
-                Registration.User user = registration.register(id, player.getEmail(), player.getFullName(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles(), player.getGitHubUsername(), player.getSlackId());
+                Registration.User user = registration.register(id, player.getEmail(), player.getFullName(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles(), player.getGitHubUsername(), player.getSlackEmail());
                 code = user.getCode();
             } else {
                 code = registration.getCodeById(id);
@@ -119,7 +119,7 @@ public class RegistrationService {
                     map.put("game", game);
                     map.put("ip", getIp(request));
                     map.put("github", repositoryUrl);
-                    map.put("slackId", slackId);
+                    map.put("slackEmail", slackId);
 
                     String hostIp = properties.getServerIp(); // TODO to use server domain here
                     map.put("host", hostIp);
@@ -210,7 +210,7 @@ public class RegistrationService {
         player.setFullName(fullName);
         player.setReadableName(name);
         player.setGitHubUsername(github);
-        player.setSlackId(slackId);
+        player.setSlackEmail(slackId);
         player.setGame(rooms.getAlias(game));
         if (!model.containsAttribute("player")) {
             model.addAttribute("player", player);

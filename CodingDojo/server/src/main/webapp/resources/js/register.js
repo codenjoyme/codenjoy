@@ -39,7 +39,7 @@ function initRegistration(waitApprove, contextPath) {
         $("#readable-name").prop("disabled", status);
         $("#password").prop("disabled", status);
         $("#gitHubUsername").prop("disabled", status);
-        $("#slackId").prop("disabled", status);
+        $("#slackEmail").prop("disabled", status);
         $("#game select").prop("disabled", status)
         $("#gameType select").prop("disabled", status)
     }
@@ -54,7 +54,7 @@ function initRegistration(waitApprove, contextPath) {
             fullName: "registration-fullName",
             readableName: "registration-readableName",
             github: "registration-gitHubUsername",
-            slackId: "registration-slackId",
+            slackEmail: "registration-slackEmail",
             data: "registration-data",
             data1: "registration-data1",
             data2: "registration-data2",
@@ -101,7 +101,7 @@ function initRegistration(waitApprove, contextPath) {
             display('#data3', data.showData3);
             display('#data4', data.showData4);
             display('#gitHubUsername', data.showNames);
-            display('#slackId', data.showNames);
+            display('#slackEmail', data.showNames);
 
             fillFormFromLocalStorage(data);
 
@@ -155,7 +155,7 @@ function initRegistration(waitApprove, contextPath) {
         configurable('data3');
         configurable('data4');
         configurable('gitHubUsername');
-        configurable('slackId');
+        configurable('slackEmail');
 
         var validateElements = function () {
             for (var index in checkEls) {
@@ -192,7 +192,7 @@ function initRegistration(waitApprove, contextPath) {
         $('#readableName').checkAndTriggerAutoFillEvent();
         $('#password').checkAndTriggerAutoFillEvent();
         $('#gitHubUsername').checkAndTriggerAutoFillEvent();
-        $('#slackId').checkAndTriggerAutoFillEvent();
+        $('#slackEmail').checkAndTriggerAutoFillEvent();
 
         for (var index in checkEls) {
             if (!checkEls.hasOwnProperty(index)) {
@@ -227,7 +227,7 @@ function initRegistration(waitApprove, contextPath) {
         };
 
         $('#submit-button').click(submitForm);
-        $('#email, #password, #game, #gameType, #skills, #fullName, #readableName, #data1, #data2, #data3, #data4, #gitHubUsername, #slackId').keypress(function (e) {
+        $('#email, #password, #game, #gameType, #skills, #fullName, #readableName, #data1, #data2, #data3, #data4, #gitHubUsername, #slackEmail').keypress(function (e) {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 submitForm();
@@ -317,7 +317,7 @@ function initRegistration(waitApprove, contextPath) {
         loadInput(KEYS.userData.data3, '#data3');
         loadInput(KEYS.userData.data4, '#data4');
         loadInput(KEYS.userData.github, '#gitHubUsername');
-        loadInput(KEYS.userData.slackId, '#slackId');
+        loadInput(KEYS.userData.slackEmail, '#slackEmail');
     }
 
     function saveDataToLocalStorage() {
@@ -331,7 +331,7 @@ function initRegistration(waitApprove, contextPath) {
         localStorage.setItem(KEYS.userData.data3, $('#data3 input').val());
         localStorage.setItem(KEYS.userData.data4, $('#data4 input').val());
         localStorage.setItem(KEYS.userData.github, $('#gitHubUsername input').val());
-        localStorage.setItem(KEYS.userData.slackId, $('#slackId input').val());
+        localStorage.setItem(KEYS.userData.slackEmail, $('#slackEmail input').val());
     }
 
     $(document).ready(function() {

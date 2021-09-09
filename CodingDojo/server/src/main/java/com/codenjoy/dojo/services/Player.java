@@ -61,7 +61,7 @@ public class Player implements ScreenRecipient, Closeable {
     private InformationCollector eventListener;
     private Closeable ai;
     private String gitHubUsername;
-    private String slackId;
+    private String slackEmail;
     private String repositoryUrl;
 
     public Player(String id) {

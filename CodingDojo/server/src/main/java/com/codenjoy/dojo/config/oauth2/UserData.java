@@ -39,7 +39,7 @@ public class UserData {
         fullName = (String) map.get("fullName");
         readableName = (String) map.get("name");
         gitHubUsername = (String) map.get("github_username");
-        slackId = (String) map.get("slackId");
+        slackId = (String) map.get("slackEmail");
     }
 
     public String id() {

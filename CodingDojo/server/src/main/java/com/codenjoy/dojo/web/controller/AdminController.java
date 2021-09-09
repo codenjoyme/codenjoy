@@ -409,7 +409,7 @@ public class AdminController {
 
             created++;
             String code = register(id);
-            playerService.register(id, game, room, "127.0.0.1","repository","slackId");
+            playerService.register(id, game, room, "127.0.0.1","repository","slackEmail");
         }
     }
 

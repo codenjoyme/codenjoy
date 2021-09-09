@@ -71,9 +71,9 @@ public class Registration {
                 "data varchar(255)," +
                 "roles varchar(255)," +
                 "github_username varchar(255)," +
-                "slackId varchar(255));");
+                "slackEmail varchar(255));");
         if (initAdminUser) {
-            initialScripts.add(String.format("INSERT INTO users (id, email, fullName, readable_name, email_approved, password, code, data, roles, github_username, slackId)" +
+            initialScripts.add(String.format("INSERT INTO users (id, email, fullName, readable_name, email_approved, password, code, data, roles, github_username, slackEmail)" +
                             " select '%s', '%s', '%s', '%s', %s,  '%s', '%s', '{}', '%s, %s', '%s', '%s'" +
                             " where not exists (select 1 from users where id = '%s')",
                     ADMIN_USER_ID, adminEmail, "admin", "admin", APPROVED, adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER, ADMIN_USER_ID,
@@ -140,7 +140,7 @@ public class Registration {
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
 
-        pool.update("INSERT INTO users (id, email, fullName, readable_name, email_approved, password, code, data, roles, github_username, slackId) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
+        pool.update("INSERT INTO users (id, email, fullName, readable_name, email_approved, password, code, data, roles, github_username, slackEmail) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
                 new Object[]{id, email, fullName, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles), gitHubUsername, slackId});
 
         return getUserByCode(code);
@@ -217,10 +217,10 @@ public class Registration {
         );
     }
 
-    public boolean slackIdIsUsed(String slackId) {
-        return pool.select("SELECT count(*) AS total FROM users WHERE slackid = ?;",
+    public boolean slackEmailIsUsed(String slackId) {
+        return pool.select("SELECT count(*) AS total FROM users WHERE slackEmail = ?;",
                 new Object[]{slackId},
-                rs -> exists(rs, " slackId " + slackId)
+                rs -> exists(rs, " slackEmail " + slackId)
         );
     }
 
@@ -281,9 +281,9 @@ public class Registration {
     }
 
     public String getSlackIdById(String id) {
-        return pool.select("SELECT slackId FROM users WHERE id = ?;",
+        return pool.select("SELECT slackEmail FROM users WHERE id = ?;",
                 new Object[]{id},
-                rs -> rs.next() ? rs.getString("slackId") : null
+                rs -> rs.next() ? rs.getString("slackEmail") : null
         );
     }
 

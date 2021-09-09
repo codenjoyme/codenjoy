@@ -140,9 +140,9 @@ License along with this program.  If not, see
                         <form:input type="gitHubUsername" placeholder="Github Username" path="gitHubUsername"/>
                         <span class="icon fa"></span>
                     </div>
-                    <div id="slackId" class="field not-valid">
-                        <form:errors path="slackId" cssClass="error-message" />
-                        <form:input type="slackId" placeholder="Slack Id" path="slackId"/>
+                    <div id="slackEmail" class="field not-valid">
+                        <form:errors path="slackEmail" cssClass="error-message" />
+                        <form:input type="slackEmail" placeholder="Slack email(optional)" path="slackEmail"/>
                         <span class="icon fa"></span>
                     </div>
                     <c:if test="${not adminLogin}">

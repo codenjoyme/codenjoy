@@ -113,9 +113,12 @@ public class RegistrationValidator implements Validator {
             errors.rejectValue("gitHubUsername", "registration.gitHubUsername.invalidGit");
         }
 
-        String slackId = player.getSlackId();
-        if (!checkSlackIdUniqueness(slackId)) {
-            errors.rejectValue("slackId", "registration.slackId.alreadyUsed");
+        String slackEmail = player.getSlackEmail();
+        if (!checkSlackEmailUniqueness(slackEmail)) {
+            errors.rejectValue("slackEmail", "registration.slackEmail.alreadyUsed");
+        }
+        if (!validateEmailStructure(slackEmail)) {
+            errors.rejectValue("email", "registration.email.invalid", new Object[]{email}, null);
         }
 
         String game = rooms.getGameName(player.getGame());
@@ -134,15 +137,14 @@ public class RegistrationValidator implements Validator {
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
             int statusCode = http.getResponseCode();
-            System.out.println(statusCode);
             return statusCode == 200;
         } catch (IOException e) {
             return false;
         }
     }
 
-    private boolean checkSlackIdUniqueness(String slackId) {
-        return !registration.slackIdIsUsed(slackId);
+    private boolean checkSlackEmailUniqueness(String slackEmail) {
+        return !registration.slackEmailIsUsed(slackEmail);
     }
 
     private boolean checkPasswordConfirmation(String password, String passwordConfirmation) {

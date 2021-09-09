@@ -134,7 +134,7 @@ public class BoardController {
 
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {
-            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game, repositoryUrl, player.getSlackId());
+            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game, repositoryUrl, player.getSlackEmail());
         }
 
         populateBoardAttributes(model, player.getCode(), player, false);
