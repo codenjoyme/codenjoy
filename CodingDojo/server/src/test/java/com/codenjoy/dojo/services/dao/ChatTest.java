@@ -73,14 +73,14 @@ public class ChatTest {
         Chat.Message message1 = addMessage("room1", "player1");
 
         // then
-        assertEquals("Chat.Message(id=1, topicId=null, type=ROOM, room=room1, playerId=player1, time=1615231523345, text=message1)",
+        assertEquals("Chat.Message(id=1, topicId=null, type=ROOM(1), room=room1, playerId=player1, time=1615231523345, text=message1)",
                 message1.toString());
 
         // when
         Chat.Message message2 = addMessage("room2", "player2");
 
         // then
-        assertEquals("Chat.Message(id=2, topicId=null, type=ROOM, room=room2, playerId=player2, time=1615231623345, text=message2)",
+        assertEquals("Chat.Message(id=2, topicId=null, type=ROOM(1), room=room2, playerId=player2, time=1615231623345, text=message2)",
                 message2.toString());
     }
 
@@ -516,16 +516,16 @@ public class ChatTest {
         addMessage("room2", "player2");
 
         // when then
-        assertEquals("Chat.Message(id=1, topicId=null, type=ROOM, room=room1, playerId=player1, time=1615231523345, text=message1)",
+        assertEquals("Chat.Message(id=1, topicId=null, type=ROOM(1), room=room1, playerId=player1, time=1615231523345, text=message1)",
                 chat.getMessageById(1).toString());
 
-        assertEquals("Chat.Message(id=2, topicId=null, type=ROOM, room=room1, playerId=player1, time=1615231623345, text=message2)",
+        assertEquals("Chat.Message(id=2, topicId=null, type=ROOM(1), room=room1, playerId=player1, time=1615231623345, text=message2)",
                 chat.getMessageById(2).toString());
 
-        assertEquals("Chat.Message(id=3, topicId=null, type=ROOM, room=room1, playerId=player2, time=1615231723345, text=message3)",
+        assertEquals("Chat.Message(id=3, topicId=null, type=ROOM(1), room=room1, playerId=player2, time=1615231723345, text=message3)",
                 chat.getMessageById(3).toString());
 
-        assertEquals("Chat.Message(id=4, topicId=null, type=ROOM, room=room2, playerId=player2, time=1615231823345, text=message4)",
+        assertEquals("Chat.Message(id=4, topicId=null, type=ROOM(1), room=room2, playerId=player2, time=1615231823345, text=message4)",
                 chat.getMessageById(4).toString());
     }
 
@@ -1343,19 +1343,19 @@ public class ChatTest {
         addMessage("room", "player2");          // id = 7
         addMessage("otherRoom", "otherPlayer"); // id = 8 // другой чат - не берем
 
-        assertEquals("[Chat.Message(id=1, topicId=null, type=ROOM, room=room, playerId=player1, time=1615231523345, text=message1), " +
-                        "Chat.Message(id=3, topicId=null, type=ROOM, room=room, playerId=player1, time=1615231723345, text=message3), " +
-                        "Chat.Message(id=5, topicId=null, type=ROOM, room=room, playerId=player2, time=1615231923345, text=message5), " +
-                        "Chat.Message(id=7, topicId=null, type=ROOM, room=room, playerId=player2, time=1615232123345, text=message7)]",
+        assertEquals("[Chat.Message(id=1, topicId=null, type=ROOM(1), room=room, playerId=player1, time=1615231523345, text=message1), " +
+                        "Chat.Message(id=3, topicId=null, type=ROOM(1), room=room, playerId=player1, time=1615231723345, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, type=ROOM(1), room=room, playerId=player2, time=1615231923345, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, type=ROOM(1), room=room, playerId=player2, time=1615232123345, text=message7)]",
                 chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .get()).toString());
 
-        assertEquals("[Chat.Message(id=2, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615231623345, text=message2), " +
-                        "Chat.Message(id=4, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615231823345, text=message4), " +
-                        "Chat.Message(id=6, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615232023345, text=message6), " +
-                        "Chat.Message(id=8, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615232223345, text=message8)]",
+        assertEquals("[Chat.Message(id=2, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, time=1615231623345, text=message2), " +
+                        "Chat.Message(id=4, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, time=1615231823345, text=message4), " +
+                        "Chat.Message(id=6, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, time=1615232023345, text=message6), " +
+                        "Chat.Message(id=8, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, time=1615232223345, text=message8)]",
                 chat.getMessages(ROOM, null,
                         Filter.room("otherRoom")
                                 .count(MAX)
@@ -1379,32 +1379,32 @@ public class ChatTest {
         addMessage("room", "player2", 2, TOPIC);          // id = 14
         addMessage("otherRoom", "otherPlayer", 2, TOPIC); // id = 15 // другой чат - не берем
 
-        assertEquals("[Chat.Message(id=1, topicId=null, type=ROOM, room=room, playerId=player1, time=1615231523345, text=message1), \n" +
-                        "Chat.Message(id=2, topicId=null, type=ROOM, room=room, playerId=player1, time=1615231623345, text=message2)]",
+        assertEquals("[Chat.Message(id=1, topicId=null, type=ROOM(1), room=room, playerId=player1, time=1615231523345, text=message1), \n" +
+                        "Chat.Message(id=2, topicId=null, type=ROOM(1), room=room, playerId=player1, time=1615231623345, text=message2)]",
                 toString(chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .get())));
 
-        assertEquals("[Chat.Message(id=4, topicId=1, type=TOPIC, room=room, playerId=player1, time=1615231823345, text=message4), \n" +
-                        "Chat.Message(id=7, topicId=1, type=TOPIC, room=room, playerId=player2, time=1615232123345, text=message7), \n" +
-                        "Chat.Message(id=10, topicId=1, type=TOPIC, room=room, playerId=player2, time=1615232423345, text=message10), \n" +
-                        "Chat.Message(id=13, topicId=1, type=TOPIC, room=room, playerId=player2, time=1615232723345, text=message13)]",
+        assertEquals("[Chat.Message(id=4, topicId=1, type=TOPIC(2), room=room, playerId=player1, time=1615231823345, text=message4), \n" +
+                        "Chat.Message(id=7, topicId=1, type=TOPIC(2), room=room, playerId=player2, time=1615232123345, text=message7), \n" +
+                        "Chat.Message(id=10, topicId=1, type=TOPIC(2), room=room, playerId=player2, time=1615232423345, text=message10), \n" +
+                        "Chat.Message(id=13, topicId=1, type=TOPIC(2), room=room, playerId=player2, time=1615232723345, text=message13)]",
                 toString(chat.getMessages(TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .get())));
 
-        assertEquals("[Chat.Message(id=5, topicId=2, type=TOPIC, room=room, playerId=player1, time=1615231923345, text=message5), \n" +
-                        "Chat.Message(id=8, topicId=2, type=TOPIC, room=room, playerId=player2, time=1615232223345, text=message8), \n" +
-                        "Chat.Message(id=11, topicId=2, type=TOPIC, room=room, playerId=player2, time=1615232523345, text=message11), \n" +
-                        "Chat.Message(id=14, topicId=2, type=TOPIC, room=room, playerId=player2, time=1615232823345, text=message14)]",
+        assertEquals("[Chat.Message(id=5, topicId=2, type=TOPIC(2), room=room, playerId=player1, time=1615231923345, text=message5), \n" +
+                        "Chat.Message(id=8, topicId=2, type=TOPIC(2), room=room, playerId=player2, time=1615232223345, text=message8), \n" +
+                        "Chat.Message(id=11, topicId=2, type=TOPIC(2), room=room, playerId=player2, time=1615232523345, text=message11), \n" +
+                        "Chat.Message(id=14, topicId=2, type=TOPIC(2), room=room, playerId=player2, time=1615232823345, text=message14)]",
                 toString(chat.getMessages(TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .get())));
 
-        assertEquals("[Chat.Message(id=3, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615231723345, text=message3)]",
+        assertEquals("[Chat.Message(id=3, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, time=1615231723345, text=message3)]",
                 toString(chat.getMessages(ROOM, null,
                         Filter.room("otherRoom")
                                 .count(MAX)

@@ -24,4 +24,12 @@ public enum ChatType {
     public int id() {
         return id;
     }
+
+
+    @Override
+    public String toString() {
+        return String.format("%s(%s)",
+                name(),
+                id);
+    }
 }
