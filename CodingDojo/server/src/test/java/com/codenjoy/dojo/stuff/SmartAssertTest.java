@@ -44,7 +44,7 @@ public class SmartAssertTest {
     private boolean enable = false;
 
     @After
-    public void after() throws Exception {
+    public void after() {
         SmartAssert.checkResult();
     }
 

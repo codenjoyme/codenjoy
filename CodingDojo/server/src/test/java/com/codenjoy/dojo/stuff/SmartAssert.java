@@ -22,6 +22,7 @@ package com.codenjoy.dojo.stuff;
  * #L%
  */
 
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.internal.runners.model.MultipleFailureException;
 
@@ -89,11 +90,13 @@ public class SmartAssert {
         throw new MultipleFailureException(errors);
     }
 
-    public static void checkResult() throws Exception {
+    @SneakyThrows
+    public static void checkResult() {
         checkResult(failures());
     }
-    
-    public static void checkResult(Class<?> caller) throws Exception {
+
+    @SneakyThrows
+    public static void checkResult(Class<?> caller) {
         checkResult(failures(caller.getName()));
     }
 
