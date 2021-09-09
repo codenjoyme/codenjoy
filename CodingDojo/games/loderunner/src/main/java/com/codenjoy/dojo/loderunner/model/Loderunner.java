@@ -54,7 +54,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<YellowGold> yellowGold;
     private List<GreenGold> greenGold;
     private List<RedGold> redGold;
-    private List<Pill> pills;
     private int portalsTimer;
     private Dice dice;
     private GameSettings settings;
@@ -77,7 +76,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             add(pt -> getFrom(borders().all(), pt));
             add(pt -> getFrom(bricks().all(), pt));
             add(pt -> getFrom(ladder().all(), pt));
-            add(pt -> getFrom(pills(), pt));
+            add(pt -> getFrom(pills().all(), pt));
             add(pt -> getFrom(pipe().all(), pt));
             add(pt -> getFrom(portals().all(), pt));
         }};
@@ -96,7 +95,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         yellowGold = level.getYellowGold();
         greenGold = level.getGreenGold();
         redGold = level.getRedGold();
-        pills = level.getPills();
         resetPortalsTimer();
 
         enemies = level.getEnemies();
@@ -192,7 +190,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generatePills() {
-        generate(pills,
+        generate(pills(),
                 settings, SHADOW_PILLS_COUNT,
                 player -> freeRandom((Player) player),
                 pt -> new Pill(pt, PillType.SHADOW_PILL));
@@ -239,7 +237,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 processor.accept(borders().all());
                 processor.accept(bricks().all());
                 processor.accept(ladder().all());
-                processor.accept(pills());
+                processor.accept(pills().all());
                 processor.accept(pipe().all());
                 processor.accept(portals().all());
             }
@@ -314,8 +312,8 @@ public class Loderunner extends RoundField<Player> implements Field {
                 getGoldEvent(player, Events.GET_RED_GOLD, RedGold.class);
             }
 
-            if (pills.contains(hero)) {
-                pills.remove(hero);
+            if (pills().contains(hero)) {
+                pills().removeAt(hero);
                 hero.pick(PillType.SHADOW_PILL);
             }
 
@@ -575,8 +573,8 @@ public class Loderunner extends RoundField<Player> implements Field {
         return field.of(Ladder.class);
     }
 
-    public List<Pill> pills() {
-        return pills;
+    public Accessor<Pill> pills() {
+        return field.of(Pill.class);
     }
 
     public Accessor<Pipe> pipe() {
