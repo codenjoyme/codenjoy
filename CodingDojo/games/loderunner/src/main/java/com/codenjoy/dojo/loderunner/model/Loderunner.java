@@ -48,7 +48,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     private PointField field;
 
     private int size;
-    private Level level;
     private Players players;
     private List<Enemy> enemies;
     private List<YellowGold> yellowGold;
@@ -65,15 +64,14 @@ public class Loderunner extends RoundField<Player> implements Field {
     private GameSettings settings;
     private List<Function<Point, Point>> finder;
 
-    public Loderunner(Level level, Dice dice, GameSettings settings) {
+    public Loderunner(Dice dice, GameSettings settings) {
         super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_HERO, settings);
         this.dice = dice;
-        this.level = level;
         this.settings = settings;
         field = new PointField();
         players = new Players(this);
         enemies = new LinkedList<>();
-        borders = new Borders(level.size());
+        borders = new Borders(settings.level().size());
 
         finder = new ArrayList<>(){{
             add(pt -> getFrom(allHeroes(), pt));
@@ -94,7 +92,9 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void init() {
-        settings.level().saveTo(field);
+        Level level = settings.level();
+
+        level.saveTo(field);
         field.init(this);
 
         size = level.size();

@@ -44,9 +44,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.loderunner.model.GameTest.getLevel;
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_PILLS_COUNT;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -1042,9 +1040,16 @@ public class MultiplayerTest {
         return player;
     }
 
-    private void givenFl(String board) {
-        Level level = getLevel(board, settings);
-        field = new Loderunner(level, dice, settings);
+    private void givenFl(String map) {
+        settings.string(LEVEL_MAP, map);
+        Level level = settings.level();
+        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
+                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
+                .integer(GOLD_COUNT_RED, level.getRedGold().size())
+                .integer(SHADOW_PILLS_COUNT, level.getPills().size())
+                .integer(PORTALS_COUNT, level.getPortals().size())
+                .integer(ENEMIES_COUNT, level.getEnemies().size());
+        field = new Loderunner(dice, settings);
     }
 
     @Test

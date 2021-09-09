@@ -57,7 +57,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new Loderunner(settings.level(), getDice(), settings);
+        return new Loderunner(getDice(), settings);
     }
 
     @Override

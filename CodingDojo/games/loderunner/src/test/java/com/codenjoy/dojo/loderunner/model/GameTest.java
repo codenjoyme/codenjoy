@@ -89,17 +89,26 @@ public class GameTest {
         }
     }
 
-    private void givenFl(String board) {
-        Level level = getLevel(board, settings);
+    private void givenFl(String map) {
+        settings.string(LEVEL_MAP, map);
 
-        if (level.getHeroes().isEmpty()) {
+        Level level = settings.level();
+        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
+                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
+                .integer(GOLD_COUNT_RED, level.getRedGold().size())
+                .integer(SHADOW_PILLS_COUNT, level.getPills().size())
+                .integer(PORTALS_COUNT, level.getPortals().size())
+                .integer(ENEMIES_COUNT, level.getEnemies().size());
+
+        List<Hero> levelHeroes = level.getHeroes();
+        if (levelHeroes.isEmpty()) {
             throw new IllegalStateException("Нет героя!");
         }
 
-        game = new Loderunner(level, dice, settings);
+        game = new Loderunner(dice, settings);
         listener = mock(EventListener.class);
 
-        for (Hero hero : level.getHeroes()) {
+        for (Hero hero : levelHeroes) {
             dice(hero.getX(), hero.getY());
             Player player = new Player(listener, settings);
             players.add(player);
@@ -110,17 +119,6 @@ public class GameTest {
         reloadAllEnemies();
         
         dice(0); // всегда дальше выбираем нулевой индекс
-    }
-
-    public static Level getLevel(String board, GameSettings settings) {
-        Level level = new Level(board);
-        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
-                .integer(GOLD_COUNT_RED, level.getRedGold().size())
-                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
-                .integer(PORTALS_COUNT, level.getPortals().size())
-                .integer(ENEMIES_COUNT, level.getEnemies().size())
-                .integer(SHADOW_PILLS_COUNT, level.getPills().size());
-        return level;
     }
 
     private Hero hero() {

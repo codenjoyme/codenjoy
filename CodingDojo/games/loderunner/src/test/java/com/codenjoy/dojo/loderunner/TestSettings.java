@@ -40,7 +40,7 @@ public class TestSettings extends GameSettings {
         integer(SHADOW_PILLS_COUNT, 0);
         integer(PORTAL_TICKS, 10);
         integer(PORTALS_COUNT, 0);
-        string(MAP_PATH, "");
+        string(MAP_PATH, "none");
 
         integer(GOLD_COUNT_YELLOW, -1);
         integer(GOLD_COUNT_GREEN, 0);
