@@ -31,7 +31,6 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 public class WebSocketRunnerMock {
 
     private final String server;
-    private final String userName;
+    private final String id;
     private final String code;
     private Session session;
     private WebSocketClient wsClient;
@@ -53,16 +52,16 @@ public class WebSocketRunnerMock {
     private boolean answered;
     public List<String> messages = new LinkedList<>();
 
-    public WebSocketRunnerMock(String server, String userName, String code) {
+    public WebSocketRunnerMock(String server, String id, String code) {
         this.server = server;
-        this.userName = userName;
+        this.id = id;
         this.code = code;
         reset();
     }
 
     public void start() {
         new Thread(() -> {
-            start(server, userName, code);
+            start(server, id, code);
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {
@@ -91,11 +90,11 @@ public class WebSocketRunnerMock {
     }
 
     @SneakyThrows
-    private void start(String server, String userName, String code)  {
+    private void start(String server, String id, String code)  {
         wsClient = new WebSocketClient();
         wsClient.start();
 
-        URI uri = new URI(server + "?user=" + userName + "&code=" + code);
+        URI uri = new URI(server + "?user=" + id + "&code=" + code);
         System.out.println("Connecting to: " + uri);
         session = wsClient.connect(new ClientSocket(), uri).get(5000, TimeUnit.MILLISECONDS);
     }
