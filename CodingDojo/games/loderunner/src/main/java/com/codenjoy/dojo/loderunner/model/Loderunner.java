@@ -69,7 +69,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         this.settings = settings;
         players = new Players(this);
         enemies = new LinkedList<>();
-        borders = new Borders(level.getSize());
+        borders = new Borders(level.size());
 
         finder = new ArrayList<>(){{
             add(pt -> getFrom(allHeroes(), pt));
@@ -90,7 +90,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void init() {
-        size = level.getSize();
+        size = level.size();
         borders.setAll(level.getBorders());
         bricks = level.getBricks();
         ladder = level.getLadder();

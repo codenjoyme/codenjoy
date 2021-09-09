@@ -49,10 +49,6 @@ public class Level extends AbstractLevel {
         ai = new AI();
     }
 
-    public int getSize() {
-        return (int) Math.sqrt(map.length());
-    }
-
     public List<Hero> getHeroes() {
         EnumSet<Element> left = EnumSet.of(
                 HERO_DRILL_LEFT, HERO_LEFT, HERO_FALL_LEFT, HERO_PIPE_LEFT,
