@@ -32,14 +32,14 @@ import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
 
-import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_CODE_LENGTH;
-import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_ID_LENGTH;
-
 @Controller
 public class Validator {
 
     public static final boolean CAN_BE_NULL = true;
     public static final boolean CANT_BE_NULL = !CAN_BE_NULL;
+
+    public static final int MAX_PLAYER_ID_LENGTH = 100;
+    public static final int MAX_PLAYER_CODE_LENGTH = 50;
 
     private static final String EMAIL = "^(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6})$";
     private static final String ID = "^[A-Za-z0-9-]{1," + MAX_PLAYER_ID_LENGTH + "}$";
@@ -213,12 +213,14 @@ public class Validator {
         }
     }
 
-    public void checkPlayerCode(String id, String code) {
+    public String checkPlayerCode(String id, String code) {
         checkPlayerId(id, CANT_BE_NULL);
         checkCode(code, CANT_BE_NULL);
-        if (registration.checkUser(id, code) == null) {
+        String result = registration.checkUser(id, code);
+        if (result == null) {
             throw new IllegalArgumentException(String.format("Player code is invalid: '%s' for player: '%s'", code, id));
         }
+        return result;
     }
 
     public void checkNotNull(String name, Object input) {
