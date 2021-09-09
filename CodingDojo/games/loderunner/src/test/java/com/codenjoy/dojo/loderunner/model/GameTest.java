@@ -28,6 +28,7 @@ import com.codenjoy.dojo.loderunner.model.items.Brick;
 import com.codenjoy.dojo.loderunner.model.items.Pill;
 import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
 import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyAI;
+import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyJoystick;
 import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
@@ -4039,47 +4040,6 @@ public class GameTest {
                 "☼  ◄☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
-    }
-
-    private class EnemyJoystick implements Joystick, DirectionActJoystick {
-        
-        private Enemy enemy;
-
-        public EnemyJoystick(Enemy enemy) {
-            this.enemy = enemy;
-            enemy.setAi(mock(EnemyAI.class));
-        }
-        
-        private void overwriteDirection(Direction direction) {
-            Mockito.reset(enemy.getAi());
-            when(enemy.getAi().getDirection(any(Field.class), any(Point.class), anyList()))
-                    .thenReturn(direction, null);
-        }
-
-        @Override
-        public void down() {
-            overwriteDirection(DOWN);
-        }
-
-        @Override
-        public void up() {
-            overwriteDirection(UP);
-        }
-
-        @Override
-        public void left() {
-            overwriteDirection(LEFT);
-        }
-
-        @Override
-        public void right() {
-            overwriteDirection(RIGHT);
-        }
-
-        @Override
-        public void act(int... p) {
-            overwriteDirection(ACT);
-        }
     }
 
     @Test
