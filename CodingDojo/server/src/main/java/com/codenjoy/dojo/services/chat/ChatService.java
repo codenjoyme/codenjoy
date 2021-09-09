@@ -215,13 +215,33 @@ public class ChatService {
     }
 
     /**
+     * Метод для публикации сообщения в topic-чат комнаты {@code room}
+     * от имени пользователя {@code playerId}.
+     *
+     * Это возможно только, если пользователь находится в данной комнате.
+     */
+    public PMessage postMessageForTopic(int id, String text, String room, String playerId) {
+        return postMessage(TOPIC, id, text, room, playerId);
+    }
+
+    /**
+     * Метод для публикации сообщения в room-чат комнаты {@code room}
+     * от имени пользователя {@code playerId}.
+     *
+     * Это возможно только, если пользователь находится в данной комнате.
+     */
+    public PMessage postMessageForRoom(String text, String room, String playerId) {
+        return postMessage(ROOM, null, text, room, playerId);
+    }
+
+    /**
      * Метод для публикации сообщения в room-чат (или thread-чат,
      * если указан {@code topicId}) комнаты {@code room}
      * от имени пользователя {@code playerId}.
      *
      * Это возможно только, если пользователь находится в данной комнате.
      */
-    public PMessage postMessage(ChatType type, Integer topicId,
+    private PMessage postMessage(ChatType type, Integer topicId,
                                 String text, String room, String playerId)
     {
         validateIsChatAvailable(playerId, room);

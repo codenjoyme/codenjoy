@@ -121,7 +121,7 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.postMessage(ChatType.ROOM, null,
+        return chat.postMessageForRoom(
                 message.getText(), room,
                 user.getId());
     }
@@ -149,7 +149,7 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.postMessage(ChatType.TOPIC, id,
+        return chat.postMessageForTopic(id,
                 message.getText(), room,
                 user.getId());
     }
