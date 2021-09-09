@@ -2321,7 +2321,6 @@ public class GameTest {
         events.verifyAllEvents("[KILL_HERO]");
 
         dice(1, 3);
-        reloadAllEnemies();
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
         game.newGame(player());
 
