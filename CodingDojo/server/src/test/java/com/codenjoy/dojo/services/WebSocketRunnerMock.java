@@ -26,10 +26,7 @@ package com.codenjoy.dojo.services;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import java.net.URI;
@@ -54,6 +51,7 @@ public class WebSocketRunnerMock {
     private boolean onlyOnce;
     private boolean answered;
     private List<String> messages = new LinkedList<>();
+    private Throwable error;
 
     public WebSocketRunnerMock(String server, String id, String code) {
         this.server = server;
@@ -180,10 +178,19 @@ public class WebSocketRunnerMock {
 
             request = data;
         }
+
+        @OnWebSocketError
+        public void onError(Session session, Throwable reason) {
+            error = reason;
+        }
     }
 
     @SneakyThrows
     public void sendToServer(String message) {
         session.getRemote().sendString(message);
+    }
+
+    public Throwable error() {
+        return error;
     }
 }
