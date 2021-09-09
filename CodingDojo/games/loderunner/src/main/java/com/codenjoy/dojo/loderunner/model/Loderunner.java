@@ -57,7 +57,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<Pill> pills;
     private List<Portal> portals;
     private List<Brick> bricks;
-    private List<Ladder> ladder;
     private int portalsTimer;
     private Dice dice;
     private GameSettings settings;
@@ -79,7 +78,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             add(pt -> getFrom(redGold(), pt));
             add(pt -> getFrom(borders().all(), pt));
             add(pt -> getFrom(bricks(), pt));
-            add(pt -> getFrom(ladder(), pt));
+            add(pt -> getFrom(ladder().all(), pt));
             add(pt -> getFrom(pills(), pt));
             add(pt -> getFrom(pipe().all(), pt));
             add(pt -> getFrom(portals(), pt));
@@ -97,7 +96,6 @@ public class Loderunner extends RoundField<Player> implements Field {
 
         size = level.size();
         bricks = level.getBricks();
-        ladder = level.getLadder();
         yellowGold = level.getYellowGold();
         greenGold = level.getGreenGold();
         redGold = level.getRedGold();
@@ -244,7 +242,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 processor.accept(redGold());
                 processor.accept(borders().all());
                 processor.accept(bricks());
-                processor.accept(ladder());
+                processor.accept(ladder().all());
                 processor.accept(pills());
                 processor.accept(pipe().all());
                 processor.accept(portals());
@@ -444,7 +442,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isLadder(Point pt) {
-        return ladder.contains(pt);
+        return ladder().contains(pt);
     }
 
     @Override
@@ -579,8 +577,8 @@ public class Loderunner extends RoundField<Player> implements Field {
                 .collect(toList());
     }
 
-    public List<Ladder> ladder() {
-        return ladder;
+    public Accessor<Ladder> ladder() {
+        return field.of(Ladder.class);
     }
 
     public List<Pill> pills() {

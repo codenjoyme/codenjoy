@@ -51,6 +51,7 @@ public class Level extends AbstractLevel {
     protected void fill(PointField field) {
         field.addAll(getBorders());
         field.addAll(getPipe());
+        field.addAll(getLadder());
     }
 
     public List<Hero> getHeroes() {
