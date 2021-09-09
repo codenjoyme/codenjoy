@@ -48,9 +48,9 @@ public class PerformanceTest {
     @Test
     public void test() {
 
-        // about 24 sec
+        // about 5 sec
         int enemies = 4;
-        int players = 100;
+        int players = 20; // TODO up to 100
         int ticks = 100;
 
         profiler = new Profiler(){{

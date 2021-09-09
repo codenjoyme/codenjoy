@@ -1043,7 +1043,7 @@ public class MultiplayerTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = getLevel(board, settings, dice);
+        LevelImpl level = getLevel(board, settings);
         field = new Loderunner(level, dice, settings);
     }
 

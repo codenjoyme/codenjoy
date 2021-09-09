@@ -68,7 +68,7 @@ public class AITest {
     private void setupAI(String board) {
         dice = mock(Dice.class);
         GameSettings settings = new TestSettings();
-        level = getLevel(board, settings, dice);
+        level = getLevel(board, settings);
         loderunner = new Loderunner(level, dice, settings);
 
         for (Hero hero : level.getHeroes()) {

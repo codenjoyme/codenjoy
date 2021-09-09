@@ -96,7 +96,7 @@ public class EnemyMultiplayerTest {
     }
 
     private void setupGm(String board) {
-        LevelImpl level = getLevel(board, settings, dice);
+        LevelImpl level = getLevel(board, settings);
         field = new Loderunner(level, dice, settings);
 
         for (Hero hero : level.getHeroes()) {

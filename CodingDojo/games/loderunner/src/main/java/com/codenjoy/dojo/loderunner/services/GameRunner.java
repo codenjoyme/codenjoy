@@ -57,12 +57,12 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new Loderunner(settings.level(getDice()), getDice(), settings);
+        return new Loderunner(settings.level(), getDice(), settings);
     }
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
-        return v(settings.level(getDice()).getSize());
+        return v(settings.level().getSize());
     }
 
     @Override

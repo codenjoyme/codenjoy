@@ -90,7 +90,7 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = getLevel(board, settings, dice);
+        LevelImpl level = getLevel(board, settings);
         level.setAI(ai);
 
         if (level.getHeroes().isEmpty()) {
@@ -113,8 +113,8 @@ public class GameTest {
         dice(0); // всегда дальше выбираем нулевой индекс
     }
 
-    public static LevelImpl getLevel(String board, GameSettings settings, Dice dice) {
-        LevelImpl level = new LevelImpl(board, dice);
+    public static LevelImpl getLevel(String board, GameSettings settings) {
+        LevelImpl level = new LevelImpl(board);
         settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
                 .integer(GOLD_COUNT_RED, level.getRedGold().size())
                 .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.model.items.*;
 import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
 import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
-import com.codenjoy.dojo.loderunner.model.levels.Level;
+import com.codenjoy.dojo.loderunner.model.levels.LevelImpl;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
@@ -45,7 +45,7 @@ import static java.util.stream.Collectors.toList;
 public class Loderunner extends RoundField<Player> implements Field {
 
     private int size;
-    private Level level;
+    private LevelImpl level;
     private Players players;
     private List<Enemy> enemies;
     private List<YellowGold> yellowGold;
@@ -62,7 +62,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     private GameSettings settings;
     private List<Function<Point, Point>> finder;
 
-    public Loderunner(Level level, Dice dice, GameSettings settings) {
+    public Loderunner(LevelImpl level, Dice dice, GameSettings settings) {
         super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_HERO, settings);
         this.dice = dice;
         this.level = level;
