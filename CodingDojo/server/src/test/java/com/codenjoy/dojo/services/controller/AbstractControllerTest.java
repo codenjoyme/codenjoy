@@ -47,6 +47,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -165,6 +166,15 @@ public abstract class AbstractControllerTest<TData, TControl> {
     protected void waitForServerReceived() {
         int count = 0;
         while (count < 20 && receivedOnServer.isEmpty()) {
+            Thread.sleep(300);
+            count++;
+        }
+    }
+
+    @SneakyThrows
+    protected void waitForClientReceived(int index) {
+        int count = 0;
+        while (count < 20 && StringUtils.isEmpty(client(index).messages())) {
             Thread.sleep(300);
             count++;
         }
