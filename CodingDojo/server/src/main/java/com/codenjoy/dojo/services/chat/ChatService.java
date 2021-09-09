@@ -178,7 +178,7 @@ public class ChatService {
     }
 
     /**
-     * Метод для получения конкретного сообщения по {@code topicId}
+     * Метод для получения конкретного сообщения по {@code id}
      * из комнаты {@code room}. С его помощью можно получать любые сообщения
      * из любого чата (room, tread или field).
      *
@@ -187,10 +187,10 @@ public class ChatService {
      */
     // TODO пользователь зная fieldId не своей борды, и id сообщения там
     //      сможет получить его с помощью этого метода
-    public PMessage getMessage(int topicId, String room, String playerId) {
+    public PMessage getMessage(int id, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
-        return getMessage(topicId, room);
+        return getMessage(id, room);
     }
 
     private PMessage getMessage(int id, String room) {
@@ -246,7 +246,7 @@ public class ChatService {
     }
 
     /**
-     * Метод для удаления сообщения {@code messageId} в любом чате
+     * Метод для удаления сообщения {@code id} в любом чате
      * (room-чат, thread-чат или field-чат) комнаты {@code room}
      * от имени пользователя {@code playerId}.
      *
@@ -254,14 +254,14 @@ public class ChatService {
      * и продолжает пребывать в заданной комнате (при этом при удалении
      * field-сообщений он может покинуть изначальную field и пребывать в дургой)
      */
-    public boolean deleteMessage(int messageId, String room, String playerId) {
+    public boolean deleteMessage(int id, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
-        boolean deleted = chat.deleteMessage(room, messageId, playerId);
+        boolean deleted = chat.deleteMessage(room, id, playerId);
 
         if (!deleted) {
             throw exception("Player '%s' cant delete message with id '%s' in room '%s'",
-                    playerId, messageId, room);
+                    playerId, id, room);
         }
 
         return true;
