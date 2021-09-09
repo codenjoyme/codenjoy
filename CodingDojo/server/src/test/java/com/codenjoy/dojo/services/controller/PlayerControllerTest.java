@@ -23,78 +23,29 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
-import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
-import com.codenjoy.dojo.services.nullobj.NullInformation;
-import com.codenjoy.dojo.services.nullobj.NullPlayerScores;
-import lombok.SneakyThrows;
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = CodenjoyContestApplication.class,
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(SQLiteProfile.NAME)
-public class PlayerControllerTest {
-
-    private static String USER_NAME = "user";
-    private static String CODE = Hash.getCode(USER_NAME, "secureSoul");
-
-    private static WebSocketRunnerMock client;
-
-    private String url;
-
-    private Joystick joystick;
-    private Player player;
-
-    private String serverAddress;
-
-    private static List<String> serverMessages = new LinkedList<>();
-
-    @MockBean
-    private Registration registration;
+public class PlayerControllerTest extends AbstractControllerTest {
 
     @Autowired
     private PlayerController playerController;
 
-    @Autowired
-    private TimerService timer;
-
-    @LocalServerPort
-    private int port;
-
-    @Value("${server.servlet.context-path}")
-    private String contextPath;
-
     @Before
-    public void setupJetty() throws Exception {
-        url = String.format("http://localhost:%s%s", port, contextPath);
+    public void setup() {
+        setupJetty();
+        createPlayer("user");
+    }
 
-        serverAddress = String.format("ws://localhost:%s%s", port, contextPath + "/ws");
-
-        System.out.println("web application started at: " + url);
-
-        timer.pause();
-
-        joystick = new DirectionActJoystick() {
+    @Override
+    protected Object control() {
+        return new DirectionActJoystick() {
             @Override
             public void down() {
                 serverMessages.add("down");
@@ -120,43 +71,17 @@ public class PlayerControllerTest {
                 serverMessages.add("act" + Arrays.toString(p));
             }
         };
-
-        createPlayer();
     }
 
-    public void clean() {
-        if (player != null) {
-            playerController.unregisterPlayerTransport(player);
-        }
-        if (client != null) {
-            client.reset();
-        }
-        serverMessages.clear();
-    }
-
-    public void createPlayer() throws Exception {
-        clean();
-
-        player = new Player(USER_NAME, "127.0.0.1", PlayerTest.mockGameType("game"),
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
-
-        playerController.registerPlayerTransport(player, joystick);
-
-        // SecureAuthenticationService спросит Registration а можно ли этому юзеру что-то делать?
-        when(registration.checkUser(USER_NAME, CODE)).thenReturn(USER_NAME);
-
-        client = new WebSocketRunnerMock(serverAddress, USER_NAME, CODE);
-    }
-
-    @AfterClass
-    public static void tearDown() {
-        client.stop();
+    @Override
+    protected Controller controller() {
+        return playerController;
     }
 
     @Test
     public void shouldLeft() {
         client.willAnswer("LEFT").start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         assertEquals("[left]", serverMessages.toString());
     }
@@ -164,7 +89,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldRight() {
         client.willAnswer("right").start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         assertEquals("[right]", serverMessages.toString());
         clean();
@@ -173,7 +98,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldUp() {
         client.willAnswer("Up").start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         assertEquals("[up]", serverMessages.toString());
         clean();
@@ -182,7 +107,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldAct() {
         client.willAnswer("aCt").start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         assertEquals("[act[]]", serverMessages.toString());
         clean();
@@ -191,7 +116,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldActWithParameters() {
         client.willAnswer("ACt(1,2 ,3, 5)").start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         assertEquals("[act[1, 2, 3, 5]]", serverMessages.toString());
         clean();
@@ -200,7 +125,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldDown() {
         client.willAnswer("DowN").start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         assertEquals("[down]", serverMessages.toString());
         clean();
@@ -209,7 +134,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldRightAct() {
         client.willAnswer("right,Act").start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         assertEquals("[right, act[]]", serverMessages.toString());
         clean();
@@ -218,7 +143,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldMixed() {
         client.willAnswer("Act,right, left ,act").start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         assertEquals("[act[], right, left, act[]]", serverMessages.toString());
         clean();
@@ -227,45 +152,27 @@ public class PlayerControllerTest {
     @Test
     public void shouldCheckRequest() {
         client.willAnswer("act").start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         assertEquals("board=some-request-0", client.getRequest());
     }
-
-    private void waitForPlayerResponse() {
-        waitForPlayerResponse(1);
-    }
-
+    
     @Test
     public void shouldServerGotOnlyOneWhenClientAnswerTwice() {
         // given, when
         client.willAnswer("LEFT").times(2).start();
-        waitForPlayerResponse();
+        waitForResponse(player(0));
 
         // then
         assertEquals("[board=some-request-0]", client.messages.toString());
         assertEquals("[left]", serverMessages.toString());
     }
 
-    // TODO как-нибудь когда будет достаточно времени и желания позапускать этот тест и разгадать, почему зависает тут тест
-    @SneakyThrows
-    private void waitForPlayerResponse(int times) {
-        Thread.sleep(300);
-        for (int index = 0; index < times; index++) {
-            playerController.requestControl(player, "some-request-" + index);
-        }
-        int count = 0;
-        while (count < 20 && serverMessages.isEmpty()) {
-            Thread.sleep(300);
-            count++;
-        }
-    }
-
     @Test
     public void shouldClientGotOnlyOneWhenServerRequestTwice() {
         // given, when
         client.willAnswer("LEFT").times(1).onlyOnce().start();
-        waitForPlayerResponse(2);
+        waitForResponse(player(0), 2);
 
         // then
         assertEquals("[board=some-request-0]", client.messages.toString());
