@@ -93,7 +93,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldLeft() {
         // given
-        client.willAnswer("LEFT").start();
+        client(0).willAnswer("LEFT").start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -107,7 +107,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldRight() {
         // given
-        client.willAnswer("right").start();
+        client(0).willAnswer("right").start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -121,7 +121,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldUp() {
         // given
-        client.willAnswer("Up").start();
+        client(0).willAnswer("Up").start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -135,7 +135,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldAct() {
         // given
-        client.willAnswer("aCt").start();
+        client(0).willAnswer("aCt").start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -149,7 +149,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldActWithParameters() {
         // given
-        client.willAnswer("ACt(1,2 ,3, 5)").start();
+        client(0).willAnswer("ACt(1,2 ,3, 5)").start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -163,7 +163,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldDown() {
         // given
-        client.willAnswer("DowN").start();
+        client(0).willAnswer("DowN").start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -177,7 +177,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldRightAct() {
         // given
-        client.willAnswer("right,Act").start();
+        client(0).willAnswer("right,Act").start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -191,7 +191,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldMixed() {
         // given
-        client.willAnswer("Act,right, left ,act").start();
+        client(0).willAnswer("Act,right, left ,act").start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -205,7 +205,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldCheckRequest() {
         // given
-        client.willAnswer("act").start();
+        client(0).willAnswer("act").start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -218,7 +218,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldServerGotOnlyOneWhenClientAnswerTwice() {
         // given
-        client.willAnswer("LEFT").times(2).start();
+        client(0).willAnswer("LEFT").times(2).start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
@@ -232,7 +232,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldClientGotOnlyOneWhenServerRequestTwice() {
         // given
-        client.willAnswer("LEFT").times(1).onlyOnce().start();
+        client(0).willAnswer("LEFT").times(1).onlyOnce().start();
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);

@@ -79,9 +79,8 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     public static final String URL = "%s://localhost:%s%s/%s";
 
-    protected static WebSocketRunnerMock client;
-    protected static List<String> receivedOnServer = new LinkedList<>();
-
+    private List<WebSocketRunnerMock> clients = new LinkedList<>();
+    private List<String> receivedOnServer = new LinkedList<>();
     private String serverAddress;
     protected List<Player> playersList = new LinkedList<>();
 
@@ -154,14 +153,19 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
         controller().registerPlayerTransport(player, control(player.getId()));
 
-        client = new WebSocketRunnerMock(serverAddress, player.getId(), player.getCode());
+        WebSocketRunnerMock client = new WebSocketRunnerMock(serverAddress, player.getId(), player.getCode());
+        clients.add(client);
+    }
+
+    protected WebSocketRunnerMock client(int index) {
+        return clients.get(index);
     }
 
     protected abstract TControl control(String id);
 
     @AfterClass
     public static void tearDown() {
-        client.stop();
+        clients.forEach(WebSocketRunnerMock::stop);
     }
 
     // TODO как-нибудь когда будет достаточно времени и желания позапускать этот тест и разгадать, почему зависает тут тест
