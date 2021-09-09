@@ -37,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Component
 @RequiredArgsConstructor
@@ -117,8 +118,8 @@ public class RegistrationValidator implements Validator {
         if (!checkSlackEmailUniqueness(slackEmail)) {
             errors.rejectValue("slackEmail", "registration.slackEmail.alreadyUsed");
         }
-        if (!validateEmailStructure(slackEmail)) {
-            errors.rejectValue("email", "registration.email.invalid", new Object[]{email}, null);
+        if (!validateSlackEmailStructure(slackEmail)) {
+            errors.rejectValue("slackEmail", "registration.email.invalid", new Object[]{slackEmail}, null);
         }
 
         String game = rooms.getGameName(player.getGame());
@@ -172,6 +173,10 @@ public class RegistrationValidator implements Validator {
 
     private boolean validateEmailStructure(String email) {
         return validator.isEmail(email, CANT_BE_NULL);
+    }
+
+    private boolean validateSlackEmailStructure(String slackEmail) {
+        return validator.isEmail(slackEmail, CAN_BE_NULL);
     }
 
     private boolean validateNicknameStructure(String name) {
