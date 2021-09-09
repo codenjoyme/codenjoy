@@ -27,10 +27,10 @@ import com.codenjoy.dojo.loderunner.model.items.Brick;
 import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
 import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.round.RoundGameField;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface Field extends RoundGameField<Player> {
 
@@ -68,7 +68,7 @@ public interface Field extends RoundGameField<Player> {
 
     void suicide(Hero hero);
 
-    List<Brick> bricks();
+    Accessor<Brick> bricks();
 
     List<Hero> visibleHeroes();
 

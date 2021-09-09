@@ -56,7 +56,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<RedGold> redGold;
     private List<Pill> pills;
     private List<Portal> portals;
-    private List<Brick> bricks;
     private int portalsTimer;
     private Dice dice;
     private GameSettings settings;
@@ -77,7 +76,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             add(pt -> getFrom(greenGold(), pt));
             add(pt -> getFrom(redGold(), pt));
             add(pt -> getFrom(borders().all(), pt));
-            add(pt -> getFrom(bricks(), pt));
+            add(pt -> getFrom(bricks().all(), pt));
             add(pt -> getFrom(ladder().all(), pt));
             add(pt -> getFrom(pills(), pt));
             add(pt -> getFrom(pipe().all(), pt));
@@ -95,7 +94,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         field.init(this);
 
         size = level.size();
-        bricks = level.getBricks();
         yellowGold = level.getYellowGold();
         greenGold = level.getGreenGold();
         redGold = level.getRedGold();
@@ -241,7 +239,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 processor.accept(greenGold());
                 processor.accept(redGold());
                 processor.accept(borders().all());
-                processor.accept(bricks());
+                processor.accept(bricks().all());
                 processor.accept(ladder().all());
                 processor.accept(pills());
                 processor.accept(pipe().all());
@@ -253,7 +251,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<Player> bricksGo() {
         List<Player> die = new LinkedList<>();
 
-        bricks.forEach(Brick::tick);
+        bricks().forEach(Brick::tick);
 
         for (Player player : players) {
             Hero hero = player.getHero();
@@ -277,7 +275,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private Optional<Brick> getBrick(Point pt) {
-        return bricks.stream()
+        return bricks().stream()
                 .filter(brick -> brick.equals(pt))
                 .findFirst();
     }
@@ -427,12 +425,8 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isFullBrick(Point pt) {
-        // do not use streams here, optimized for performance
-        int index = bricks.indexOf(pt);
-        if (index == -1) {
-            return false;
-        }
-        return bricks.get(index).state(null) == Element.BRICK;
+        return bricks().getAt(pt).stream()
+                .anyMatch(brick -> brick.state(null) == Element.BRICK);
     }
 
     @Override
@@ -479,7 +473,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isBrick(Point pt) {
-        return bricks.contains(pt);
+        return bricks().contains(pt);
     }
 
     @Override
@@ -566,8 +560,9 @@ public class Loderunner extends RoundField<Player> implements Field {
         return enemies;
     }
 
-    public List<Brick> bricks() {
-        return bricks;
+    @Override
+    public Accessor<Brick> bricks() {
+        return field.of(Brick.class);
     }
 
     @Override
