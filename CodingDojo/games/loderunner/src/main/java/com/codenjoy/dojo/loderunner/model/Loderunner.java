@@ -31,6 +31,7 @@ import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
 
@@ -43,6 +44,8 @@ import static com.codenjoy.dojo.services.field.Generator.generate;
 import static java.util.stream.Collectors.toList;
 
 public class Loderunner extends RoundField<Player> implements Field {
+
+    private PointField field;
 
     private int size;
     private Level level;
@@ -67,6 +70,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         this.dice = dice;
         this.level = level;
         this.settings = settings;
+        field = new PointField();
         players = new Players(this);
         enemies = new LinkedList<>();
         borders = new Borders(level.size());
@@ -90,6 +94,9 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void init() {
+        settings.level().saveTo(field);
+        field.init(this);
+
         size = level.size();
         borders.setAll(level.getBorders());
         bricks = level.getBricks();

@@ -33,6 +33,7 @@ import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyAI;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.field.AbstractLevel;
+import com.codenjoy.dojo.services.field.PointField;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -47,6 +48,11 @@ public class Level extends AbstractLevel {
     public Level(String map) {
         super(map);
         ai = new AI();
+    }
+
+    @Override
+    protected void fill(PointField field) {
+        // ...
     }
 
     public List<Hero> getHeroes() {
