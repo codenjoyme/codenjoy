@@ -58,7 +58,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<Portal> portals;
     private List<Brick> bricks;
     private List<Ladder> ladder;
-    private List<Pipe> pipe;
     private int portalsTimer;
     private Dice dice;
     private GameSettings settings;
@@ -82,7 +81,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             add(pt -> getFrom(bricks(), pt));
             add(pt -> getFrom(ladder(), pt));
             add(pt -> getFrom(pills(), pt));
-            add(pt -> getFrom(pipe(), pt));
+            add(pt -> getFrom(pipe().all(), pt));
             add(pt -> getFrom(portals(), pt));
         }};
 
@@ -99,7 +98,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         size = level.size();
         bricks = level.getBricks();
         ladder = level.getLadder();
-        pipe = level.getPipe();
         yellowGold = level.getYellowGold();
         greenGold = level.getGreenGold();
         redGold = level.getRedGold();
@@ -248,7 +246,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 processor.accept(bricks());
                 processor.accept(ladder());
                 processor.accept(pills());
-                processor.accept(pipe());
+                processor.accept(pipe().all());
                 processor.accept(portals());
             }
         };
@@ -451,7 +449,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isPipe(Point pt) {
-        return pipe.contains(pt);
+        return pipe().contains(pt);
     }
 
     @Override
@@ -589,8 +587,8 @@ public class Loderunner extends RoundField<Player> implements Field {
         return pills;
     }
 
-    public List<Pipe> pipe() {
-        return pipe;
+    public Accessor<Pipe> pipe() {
+        return field.of(Pipe.class);
     }
 
     // only for testing

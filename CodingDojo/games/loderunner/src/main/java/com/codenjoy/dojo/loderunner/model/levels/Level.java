@@ -50,6 +50,7 @@ public class Level extends AbstractLevel {
     @Override
     protected void fill(PointField field) {
         field.addAll(getBorders());
+        field.addAll(getPipe());
     }
 
     public List<Hero> getHeroes() {
