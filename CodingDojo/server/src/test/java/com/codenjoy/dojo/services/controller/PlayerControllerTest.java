@@ -55,8 +55,8 @@ import static org.mockito.Mockito.when;
 @ActiveProfiles(SQLiteProfile.NAME)
 public class PlayerControllerTest {
 
-    private static String USER_NAME = "apofig@gmail.com";
-    private static String CODE = Hash.getCode("apofig@gmail.com", "secureSoul");
+    private static String USER_NAME = "user";
+    private static String CODE = Hash.getCode(USER_NAME, "secureSoul");
 
     private static WebSocketRunnerMock client;
 
