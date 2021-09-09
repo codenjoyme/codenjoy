@@ -51,9 +51,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     private int size;
     private Players players;
     private List<Enemy> enemies;
-    private List<YellowGold> yellowGold;
-    private List<GreenGold> greenGold;
-    private List<RedGold> redGold;
     private int portalsTimer;
     private Dice dice;
     private GameSettings settings;
@@ -70,9 +67,9 @@ public class Loderunner extends RoundField<Player> implements Field {
         finder = new ArrayList<>(){{
             add(pt -> getFrom(allHeroes(), pt));
             add(pt -> getFrom(enemies(), pt));
-            add(pt -> getFrom(yellowGold(), pt));
-            add(pt -> getFrom(greenGold(), pt));
-            add(pt -> getFrom(redGold(), pt));
+            add(pt -> getFrom(yellowGold().all(), pt));
+            add(pt -> getFrom(greenGold().all(), pt));
+            add(pt -> getFrom(redGold().all(), pt));
             add(pt -> getFrom(borders().all(), pt));
             add(pt -> getFrom(bricks().all(), pt));
             add(pt -> getFrom(ladder().all(), pt));
@@ -92,9 +89,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         field.init(this);
 
         size = level.size();
-        yellowGold = level.getYellowGold();
-        greenGold = level.getGreenGold();
-        redGold = level.getRedGold();
         resetPortalsTimer();
 
         enemies = level.getEnemies();
@@ -173,17 +167,17 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generateGold()  {
-        generate(yellowGold,
+        generate(yellowGold(),
                 settings, GOLD_COUNT_YELLOW,
                 player -> freeRandom((Player) player),
                 pt -> new YellowGold(pt));
 
-        generate(greenGold,
+        generate(greenGold(),
                 settings, GOLD_COUNT_GREEN,
                 player -> freeRandom((Player) player),
                 pt -> new GreenGold(pt));
 
-        generate(redGold,
+        generate(redGold(),
                 settings, GOLD_COUNT_RED,
                 player -> freeRandom((Player) player),
                 pt -> new RedGold(pt));
@@ -231,9 +225,9 @@ public class Loderunner extends RoundField<Player> implements Field {
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
                 processor.accept(allHeroes());
                 processor.accept(enemies());
-                processor.accept(yellowGold());
-                processor.accept(greenGold());
-                processor.accept(redGold());
+                processor.accept(yellowGold().all());
+                processor.accept(greenGold().all());
+                processor.accept(redGold().all());
                 processor.accept(borders().all());
                 processor.accept(bricks().all());
                 processor.accept(ladder().all());
@@ -301,14 +295,14 @@ public class Loderunner extends RoundField<Player> implements Field {
             Hero hero = player.getHero();
 
             hero.tick();
-            if (yellowGold.contains(hero)) {
-                yellowGold.remove(hero);
+            if (yellowGold().contains(hero)) {
+                yellowGold().removeAt(hero);
                 getGoldEvent(player, Events.GET_YELLOW_GOLD, YellowGold.class);
-            } else if (greenGold.contains(hero)) {
-                greenGold.remove(hero);
+            } else if (greenGold().contains(hero)) {
+                greenGold().removeAt(hero);
                 getGoldEvent(player, Events.GET_GREEN_GOLD, GreenGold.class);
-            } else if (redGold.contains(hero)) {
-                redGold.remove(hero);
+            } else if (redGold().contains(hero)) {
+                redGold().removeAt(hero);
                 getGoldEvent(player, Events.GET_RED_GOLD, RedGold.class);
             }
 
@@ -338,14 +332,14 @@ public class Loderunner extends RoundField<Player> implements Field {
         for (Enemy enemy : enemies) {
             enemy.tick();
 
-            if (yellowGold.contains(enemy) && !enemy.withGold()) {
-                yellowGold.remove(enemy);
+            if (yellowGold().contains(enemy) && !enemy.withGold()) {
+                yellowGold().removeAt(enemy);
                 enemy.getGold(YellowGold.class);
-            } else if (greenGold.contains(enemy) && !enemy.withGold()) {
-                greenGold.remove(enemy);
+            } else if (greenGold().contains(enemy) && !enemy.withGold()) {
+                greenGold().removeAt(enemy);
                 enemy.getGold(GreenGold.class);
-            } else if (redGold.contains(enemy) && !enemy.withGold()) {
-                redGold.remove(enemy);
+            } else if (redGold().contains(enemy) && !enemy.withGold()) {
+                redGold().removeAt(enemy);
                 enemy.getGold(RedGold.class);
             }
 
@@ -392,9 +386,9 @@ public class Loderunner extends RoundField<Player> implements Field {
 
         Point over = Direction.UP.change(pt);
         if (isLadder(over)
-                || yellowGold.contains(over)
-                || greenGold.contains(over)
-                || redGold.contains(over)
+                || yellowGold().contains(over)
+                || greenGold().contains(over)
+                || redGold().contains(over)
                 || isFullBrick(over)
                 || activeHeroes().contains(over)
                 || enemies.contains(over)) {
@@ -485,11 +479,11 @@ public class Loderunner extends RoundField<Player> implements Field {
     @Override
     public void leaveGold(Point pt, Class type) {
         if (type == YellowGold.class) {
-            yellowGold.add(new YellowGold(pt));
+            yellowGold().add(new YellowGold(pt));
         } else if (type == GreenGold.class) {
-            greenGold.add(new GreenGold(pt));
+            greenGold().add(new GreenGold(pt));
         } else if (type == RedGold.class) {
-            redGold.add(new RedGold(pt));
+            redGold().add(new RedGold(pt));
         }
     }
 
@@ -536,16 +530,16 @@ public class Loderunner extends RoundField<Player> implements Field {
         return field.of(Portal.class);
     }
 
-    public List<YellowGold> yellowGold() {
-        return yellowGold;
+    public Accessor<YellowGold> yellowGold() {
+        return field.of(YellowGold.class);
     }
 
-    public List<GreenGold> greenGold() {
-        return greenGold;
+    public Accessor<GreenGold> greenGold() {
+        return field.of(GreenGold.class);
     }
 
-    public List<RedGold> redGold() {
-        return redGold;
+    public Accessor<RedGold> redGold() {
+        return field.of(RedGold.class);
     }
 
     public Accessor<Border> borders() {
