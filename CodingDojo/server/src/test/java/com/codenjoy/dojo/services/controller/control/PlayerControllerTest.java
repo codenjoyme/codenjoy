@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.controller;
+package com.codenjoy.dojo.services.controller.control;
 
 /*-
  * #%L
@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
+import com.codenjoy.dojo.services.controller.AbstractControllerTest;
+import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.control.PlayerController;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import org.junit.Before;

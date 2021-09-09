@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.controller;
+package com.codenjoy.dojo.services.controller.control;
 
 /*-
  * #%L
