@@ -214,7 +214,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("board=" + INITIAL_REQUEST, client.request());
+        assertEquals("board=" + INITIAL_REQUEST, client(0).request());
     }
 
     @Test
@@ -227,7 +227,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[board=" + INITIAL_REQUEST + "]", client.messages());
+        assertEquals("[board=" + INITIAL_REQUEST + "]", client(0).messages());
         assertEquals("[left]", receivedOnServer());
     }
 
@@ -241,7 +241,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[board=" + INITIAL_REQUEST + "]", client.messages());
+        assertEquals("[board=" + INITIAL_REQUEST + "]", client(0).messages());
         assertEquals("[left]", receivedOnServer());
     }
 }
