@@ -54,12 +54,10 @@ import static org.mockito.Mockito.*;
 public class GameTest {
 
     private Loderunner game;
-    private Hero hero;
     private List<Hero> heroes = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
     private Dice dice;
     private EventListener listener;
-    private Player player;
     private EnemyAI ai;
     private Joystick enemy;
     private PrinterFactory printer;
@@ -108,8 +106,6 @@ public class GameTest {
             heroes.add(player.getHero());
             player.getHero().direction = hero.direction;
         }
-        this.hero = heroes.get(0);
-        this.player = players.get(0);
         dice(0); // всегда дальше выбираем нулевой индекс
     }
 
@@ -124,13 +120,21 @@ public class GameTest {
         return level;
     }
 
+    private Hero hero() {
+        return heroes.get(0);
+    }
+    
     private Hero hero(int index) {
         return heroes.get(index);
+    }
+    
+    private Player player() {
+        return players.get(0);
     }
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                printer.getPrinter(game.reader(), player).print());
+                printer.getPrinter(game.reader(), player()).print());
     }
 
     // есть карта со мной
@@ -158,8 +162,8 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
-        hero.left();
+        hero().act();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -243,8 +247,8 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
-        hero.right();
+        hero().act();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -271,7 +275,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -289,7 +293,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -318,7 +322,7 @@ public class GameTest {
     public void shouldStopWhenWallRight() {
         shouldMoveRight();
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -332,7 +336,7 @@ public class GameTest {
     public void shouldStopWhenWallLeft() {
         shouldMoveLeft();
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -412,7 +416,7 @@ public class GameTest {
                 "☼ ##☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -440,7 +444,7 @@ public class GameTest {
                 "☼## ☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -463,7 +467,7 @@ public class GameTest {
     public void shouldCantGoLeftIfWall() {
         shouldFallInPitRight();
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -477,7 +481,7 @@ public class GameTest {
     public void shouldCantGoRightIfWall() {
         shouldFallInPitLeft();
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -496,7 +500,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -505,7 +509,7 @@ public class GameTest {
                 "☼*##☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -514,8 +518,8 @@ public class GameTest {
                 "☼ ##☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
-        hero.act();
+        hero().left();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -524,7 +528,7 @@ public class GameTest {
                 "☼ *#☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -533,7 +537,7 @@ public class GameTest {
                 "☼  #☼" +
                 "☼☼☼☼☼");
 
-        hero.left();  // при падении я не могу передвигаться
+        hero().left();  // при падении я не могу передвигаться
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -542,7 +546,7 @@ public class GameTest {
                 "☼ ◄#☼" +
                 "☼☼☼☼☼");
 
-        hero.left(); // а вот в яме куда угодно, пока есть место
+        hero().left(); // а вот в яме куда угодно, пока есть место
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -551,7 +555,7 @@ public class GameTest {
                 "☼◄ #☼" +
                 "☼☼☼☼☼");
 
-        hero.right(); // пока стенки не заростут
+        hero().right(); // пока стенки не заростут
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -560,7 +564,7 @@ public class GameTest {
                 "☼ ►#☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
         game.tick();
 
@@ -570,7 +574,7 @@ public class GameTest {
                 "☼4►#☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -579,7 +583,7 @@ public class GameTest {
                 "☼◄ #☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -588,7 +592,7 @@ public class GameTest {
                 "☼2►#☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -597,7 +601,7 @@ public class GameTest {
                 "☼◄3#☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -629,7 +633,7 @@ public class GameTest {
                 "☼2##☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -650,7 +654,7 @@ public class GameTest {
 
         dice(2, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте
-        game.newGame(player);
+        game.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼ [ ☼" +
@@ -678,7 +682,7 @@ public class GameTest {
                 "☼3##☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -707,7 +711,7 @@ public class GameTest {
 
         dice(2, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте
-        game.newGame(player);
+        game.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼ [ ☼" +
@@ -722,9 +726,9 @@ public class GameTest {
     public void shouldCantDrillPit() {
         shouldDrillLeft();
 
-        hero.right();
+        hero().right();
         game.tick();
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -733,8 +737,8 @@ public class GameTest {
                 "☼ ##☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
-        hero.act();
+        hero().left();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -753,9 +757,9 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-//        hero.act();
-        hero.left();
-        hero.act();
+//        hero().act();
+        hero().left();
+        hero().act();
 
         game.tick();
 
@@ -783,7 +787,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -809,7 +813,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -837,7 +841,7 @@ public class GameTest {
                 "☼☼☼☼☼");
 
         dice(2, 3);
-        hero.right();
+        hero().right();
         game.tick();
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
@@ -847,7 +851,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -867,7 +871,7 @@ public class GameTest {
                 "☼☼☼☼☼");
 
         dice(3, 3);
-        hero.right();
+        hero().right();
         game.tick();
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
@@ -887,7 +891,7 @@ public class GameTest {
                 "☼ ►H☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -896,7 +900,7 @@ public class GameTest {
                 "☼  Y☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -915,7 +919,7 @@ public class GameTest {
                 "☼ ►H☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -924,7 +928,7 @@ public class GameTest {
                 "☼  Y☼" +
                 "☼☼☼☼☼");
 
-        hero.up();
+        hero().up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -933,7 +937,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        hero.up();
+        hero().up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -954,7 +958,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        hero.up();
+        hero().up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -963,7 +967,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -984,7 +988,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        hero.down();
+        hero().down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -993,7 +997,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        hero.down();
+        hero().down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1002,7 +1006,7 @@ public class GameTest {
                 "☼  Y☼" +
                 "☼☼☼☼☼");
 
-        hero.down();
+        hero().down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1023,7 +1027,7 @@ public class GameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1058,7 +1062,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1077,7 +1081,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1096,7 +1100,7 @@ public class GameTest {
                 "☼H◄ ☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1105,7 +1109,7 @@ public class GameTest {
                 "☼Y  ☼" +
                 "☼☼☼☼☼");
 
-        hero.up();
+        hero().up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1114,7 +1118,7 @@ public class GameTest {
                 "☼H  ☼" +
                 "☼☼☼☼☼");
 
-        hero.up();
+        hero().up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1123,7 +1127,7 @@ public class GameTest {
                 "☼H  ☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1133,7 +1137,7 @@ public class GameTest {
                 "☼☼☼☼☼");
 
         // и упасть
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1169,7 +1173,7 @@ public class GameTest {
                 "☼☼☼☼☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1190,7 +1194,7 @@ public class GameTest {
                 "☼## ##☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1201,7 +1205,7 @@ public class GameTest {
                 "☼## ##☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1212,7 +1216,7 @@ public class GameTest {
                 "☼## ##☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1223,7 +1227,7 @@ public class GameTest {
                 "☼## ##☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1246,7 +1250,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1257,7 +1261,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1268,7 +1272,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1293,7 +1297,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1346,7 +1350,7 @@ public class GameTest {
                 "☼ $   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1357,7 +1361,7 @@ public class GameTest {
                 "☼ $   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1369,7 +1373,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼");
 
         dice(1, 5);
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1433,7 +1437,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1444,7 +1448,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1507,7 +1511,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1570,7 +1574,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1611,7 +1615,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.down();
+        hero().down();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1643,7 +1647,7 @@ public class GameTest {
                 "☼☼☼☼☼" +
                 "☼☼☼☼☼");
 
-        hero.down();
+        hero().down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1652,7 +1656,7 @@ public class GameTest {
                 "☼☼☼☼☼" +
                 "☼☼☼☼☼");
 
-        hero.down();
+        hero().down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1670,7 +1674,7 @@ public class GameTest {
                 "☼ H◄☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1679,7 +1683,7 @@ public class GameTest {
                 "☼ Y ☼" +
                 "☼☼☼☼☼");
 
-        hero.up();
+        hero().up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1688,7 +1692,7 @@ public class GameTest {
                 "☼ H ☼" +
                 "☼☼☼☼☼");
 
-        hero.up();
+        hero().up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1707,7 +1711,7 @@ public class GameTest {
                 "☼ H◄☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1716,7 +1720,7 @@ public class GameTest {
                 "☼ Y ☼" +
                 "☼☼☼☼☼");
 
-        hero.up();
+        hero().up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1725,7 +1729,7 @@ public class GameTest {
                 "☼ H ☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1734,7 +1738,7 @@ public class GameTest {
                 "☼ H ☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1753,7 +1757,7 @@ public class GameTest {
                 "☼☼◄☼☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1762,7 +1766,7 @@ public class GameTest {
                 "☼☼◄☼☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -1791,7 +1795,7 @@ public class GameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        hero.down();
+        hero().down();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -1840,8 +1844,8 @@ public class GameTest {
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        hero.down();
-        hero.act();
+        hero().down();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -1851,7 +1855,7 @@ public class GameTest {
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        hero.down();
+        hero().down();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -1861,7 +1865,7 @@ public class GameTest {
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -1880,9 +1884,9 @@ public class GameTest {
                 "☼##☼" +
                 "☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
-        hero.left();
+        hero().left();
         game.tick();
         game.tick();
 
@@ -1920,21 +1924,21 @@ public class GameTest {
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
-        hero.right();
+        hero().right();
         game.tick();
 
-        hero.left();
-        hero.act();
+        hero().left();
+        hero().act();
         game.tick();
 
-        hero.right();
+        hero().right();
         game.tick();
 
-        hero.left();
-        hero.act();
+        hero().left();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -1944,11 +1948,11 @@ public class GameTest {
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
         game.tick();
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -1958,12 +1962,12 @@ public class GameTest {
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        hero.right();
-        hero.act();
+        hero().right();
+        hero().act();
         game.tick();
 
-        hero.left();
-        hero.act();
+        hero().left();
+        hero().act();
         game.tick();
 
         game.tick();
@@ -1975,7 +1979,7 @@ public class GameTest {
                 "☼ # #☼" +
                 "☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -1985,7 +1989,7 @@ public class GameTest {
                 "☼ # #☼" +
                 "☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -2006,19 +2010,10 @@ public class GameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        hero.down();
+        hero().down();
         game.tick();
 
-        hero.down();
-        game.tick();
-
-        assertE("☼☼☼☼☼☼" +
-                "☼    ☼" +
-                "☼ H##☼" +
-                "☼#Y  ☼" +
-                "☼    ☼" +
-                "☼☼☼☼☼☼");
-
+        hero().down();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -2028,7 +2023,16 @@ public class GameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼ H##☼" +
+                "☼#Y  ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
@@ -2162,7 +2166,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         enemy.right();
@@ -2191,8 +2195,8 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
-        hero.act();
+        hero().right();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2297,7 +2301,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         enemy.left();
         game.tick();
 
@@ -2311,7 +2315,7 @@ public class GameTest {
 
         dice(1, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
-        game.newGame(player);
+        game.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼[  ☼" +
@@ -2329,7 +2333,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         enemy.left();
         game.tick();
 
@@ -2344,7 +2348,7 @@ public class GameTest {
         dice(0,  // охотимся за первым игроком
             3, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
-        game.newGame(player);
+        game.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼  [☼" +
@@ -2362,7 +2366,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2375,7 +2379,7 @@ public class GameTest {
 
         dice(3, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
-        game.newGame(player);
+        game.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼  [☼" +
@@ -2407,7 +2411,7 @@ public class GameTest {
         dice(0,  // охотимся за первым игроком
             3, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
-        game.newGame(player);
+        game.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼  [☼" +
@@ -2902,7 +2906,7 @@ public class GameTest {
         shouldEnemyGetGoldWhenFallenFromPipe();
 
         enemy.right();
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -2943,7 +2947,7 @@ public class GameTest {
     public void shouldIWalkOnEnemyInPitAndGetGold() {
         shouldEnemyLeaveGoldWhenFallInPit();
 
-        hero.left();     //я могу пройти по нему сверху и забрать золото
+        hero().left();     //я могу пройти по нему сверху и забрать золото
         dice(1, 6);
         game.tick();
 
@@ -2958,7 +2962,7 @@ public class GameTest {
 
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -2970,7 +2974,7 @@ public class GameTest {
                 "☼####X#☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         dice(2, 6);
         game.tick();
 
@@ -2995,8 +2999,8 @@ public class GameTest {
         }
 
         enemy.left();
-        hero.right();
-        hero.act();
+        hero().right();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3047,7 +3051,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼");
 
         dice(1, 6);
-        hero.left();
+        hero().left();
         game.tick();
 
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
@@ -3061,7 +3065,7 @@ public class GameTest {
                 "☼####X#☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3074,7 +3078,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼");
 
         dice(2, 6);
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3118,7 +3122,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -3139,7 +3143,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
@@ -3635,7 +3639,7 @@ public class GameTest {
         enemy.left();
         game.tick();
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3812,7 +3816,7 @@ public class GameTest {
 
         enemy.down();
         dice(2, 3);
-        game.newGame(player);
+        game.newGame(player());
         dice(0);  // охотимся за первым игроком
         game.tick();
 
@@ -3838,7 +3842,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.act();
+        hero().act();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3850,7 +3854,7 @@ public class GameTest {
                 "☼###*##☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
         game.tick();
 
@@ -3879,7 +3883,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼");
 
         dice(2, 3);
-        game.newGame(player);
+        game.newGame(player());
         dice(0);  // охотимся за первым игроком
         game.tick();
 
@@ -3915,7 +3919,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.act(0);
+        hero().act(0);
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -3939,7 +3943,7 @@ public class GameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -3978,7 +3982,7 @@ public class GameTest {
 
         assertEquals(5, game.getPortalsTimer());
 
-        hero.left();
+        hero().left();
         game.tick();
 
         assertEquals(4, game.getPortalsTimer());
@@ -4238,7 +4242,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         verify(listener).event(Events.GET_YELLOW_GOLD);
@@ -4254,7 +4258,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         verify(listener).event(Events.GET_YELLOW_GOLD);
@@ -4270,7 +4274,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         verify(listener).event(Events.GET_GREEN_GOLD);
@@ -4286,7 +4290,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         verify(listener).event(Events.GET_RED_GOLD);
@@ -4302,7 +4306,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         verify(listener).event(Events.GET_RED_GOLD);
@@ -4409,7 +4413,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4477,7 +4481,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4562,21 +4566,21 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        assertEquals(false, hero.under(Pill.PillType.SHADOW_PILL));
+        assertEquals(false, hero().under(Pill.PillType.SHADOW_PILL));
 
-        hero.right();
+        hero().right();
         game.tick();
 
-        hero.right();
+        hero().right();
         game.tick();
 
-        hero.right();
+        hero().right();
         game.tick();
 
-        hero.right();
+        hero().right();
         game.tick();
 
-        hero.right();
+        hero().right();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4588,7 +4592,7 @@ public class GameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        assertEquals(true, hero.under(Pill.PillType.SHADOW_PILL));
+        assertEquals(true, hero().under(Pill.PillType.SHADOW_PILL));
 
         // when
         // почистим все
@@ -4596,7 +4600,7 @@ public class GameTest {
         game.clearScore();
         reloadAllHeroes();
 
-        assertEquals(false, hero.under(Pill.PillType.SHADOW_PILL));
+        assertEquals(false, hero().under(Pill.PillType.SHADOW_PILL));
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4732,10 +4736,7 @@ public class GameTest {
 
     private void reloadAllHeroes() {
         players = game.players();
-        player = players.get(0);
-
         heroes = game.allHeroes();
-        hero = heroes.get(0);
     }
 
     // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
