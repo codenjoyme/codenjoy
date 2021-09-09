@@ -33,6 +33,7 @@ import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class WebSocketRunnerMock {
@@ -44,9 +45,9 @@ public class WebSocketRunnerMock {
     private WebSocketClient wsClient;
     private String answer;
     private boolean replyToServerImmediately;
-    private static boolean started;
+    private AtomicBoolean started = new AtomicBoolean();
     private String request;
-    private static boolean closed;
+    private AtomicBoolean closed = new AtomicBoolean();
     private int times;
     private boolean onlyOnce;
     private boolean answered;
@@ -78,7 +79,7 @@ public class WebSocketRunnerMock {
         }).start();
 
         log.info("Client starting...");
-        while (!started) {
+        while (!started.get()) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -121,8 +122,8 @@ public class WebSocketRunnerMock {
         times = 1;
         onlyOnce = false;
         answered = false;
-        closed = false;
-        started = false;
+        closed.set(false);
+        started.set(false);
     }
 
     public WebSocketRunnerMock times(int times) {
@@ -145,13 +146,13 @@ public class WebSocketRunnerMock {
         @OnWebSocketConnect
         public void onConnect(Session session) {
             log.info("Client started");
-            started = true;
+            started.set(true);
         }
 
         @OnWebSocketClose
         public void onClose(int closeCode, String message) {
             log.info("Client closed");
-            closed = true;
+            closed.set(false);
         }
 
         @OnWebSocketMessage
