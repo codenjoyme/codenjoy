@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.controller;
+package com.codenjoy.dojo.services.controller.control;
 
 /*-
  * #%L
@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.BoardGameState;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.TimeService;
+import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.springframework.stereotype.Component;
 

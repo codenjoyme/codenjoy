@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.controller;
 
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.controller.control.PlayerResponseHandler;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import org.junit.Test;
 

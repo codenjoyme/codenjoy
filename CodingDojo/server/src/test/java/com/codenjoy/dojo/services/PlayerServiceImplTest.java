@@ -27,7 +27,7 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.controller.Controller;
-import com.codenjoy.dojo.services.controller.PlayerController;
+import com.codenjoy.dojo.services.controller.control.PlayerController;
 import com.codenjoy.dojo.services.controller.screen.ScreenController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Chat;

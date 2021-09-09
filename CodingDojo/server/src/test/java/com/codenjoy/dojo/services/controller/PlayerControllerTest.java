@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
+import com.codenjoy.dojo.services.controller.control.PlayerController;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import org.junit.Before;
 import org.junit.Test;
