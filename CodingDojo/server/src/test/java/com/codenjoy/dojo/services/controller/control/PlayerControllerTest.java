@@ -60,27 +60,27 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         return new DirectionActJoystick() {
             @Override
             public void down() {
-                receivedOnServer.add("down");
+                serverReceived("down");
             }
 
             @Override
             public void up() {
-                receivedOnServer.add("up");
+                serverReceived("up");
             }
 
             @Override
             public void left() {
-                receivedOnServer.add("left");
+                serverReceived("left");
             }
 
             @Override
             public void right() {
-                receivedOnServer.add("right");
+                serverReceived("right");
             }
 
             @Override
             public void act(int... p) {
-                receivedOnServer.add("act" + Arrays.toString(p));
+                serverReceived("act" + Arrays.toString(p));
             }
         };
     }
@@ -100,7 +100,8 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[left]", receivedOnServer.toString());
+        assertEquals("[left]", receivedOnServer());
+        clean();
     }
 
     @Test
@@ -113,7 +114,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[right]", receivedOnServer.toString());
+        assertEquals("[right]", receivedOnServer());
         clean();
     }
 
@@ -127,7 +128,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[up]", receivedOnServer.toString());
+        assertEquals("[up]", receivedOnServer());
         clean();
     }
 
@@ -141,7 +142,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[act[]]", receivedOnServer.toString());
+        assertEquals("[act[]]", receivedOnServer());
         clean();
     }
 
@@ -155,7 +156,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[act[1, 2, 3, 5]]", receivedOnServer.toString());
+        assertEquals("[act[1, 2, 3, 5]]", receivedOnServer());
         clean();
     }
 
@@ -169,7 +170,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[down]", receivedOnServer.toString());
+        assertEquals("[down]", receivedOnServer());
         clean();
     }
 
@@ -183,7 +184,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[right, act[]]", receivedOnServer.toString());
+        assertEquals("[right, act[]]", receivedOnServer());
         clean();
     }
 
@@ -197,7 +198,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         waitForServerReceived();
 
         // then
-        assertEquals("[act[], right, left, act[]]", receivedOnServer.toString());
+        assertEquals("[act[], right, left, act[]]", receivedOnServer());
         clean();
     }
 
@@ -225,7 +226,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[board=" + INITIAL_REQUEST + "]", client.messages());
-        assertEquals("[left]", receivedOnServer.toString());
+        assertEquals("[left]", receivedOnServer());
     }
 
     @Test
@@ -239,6 +240,6 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // then
         assertEquals("[board=" + INITIAL_REQUEST + "]", client.messages());
-        assertEquals("[left]", receivedOnServer.toString());
+        assertEquals("[left]", receivedOnServer());
     }
 }

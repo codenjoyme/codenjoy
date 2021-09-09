@@ -91,7 +91,6 @@ public abstract class AbstractControllerTest<TData, TControl> {
     @Autowired
     private TimerService timer;
 
-
     @Autowired
     private PlayerService players;
 
@@ -121,6 +120,10 @@ public abstract class AbstractControllerTest<TData, TControl> {
         String url = String.format(URL, "http", port, contextPath, "");
         log.info("Web application started at: " + url);
         timer.pause();
+    }
+
+    protected void serverReceived(String value) {
+        receivedOnServer.add(value);
     }
 
     protected abstract String endpoint();
@@ -179,5 +182,9 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     protected Player player(int index) {
         return playersList.get(index);
+    }
+
+    protected String receivedOnServer() {
+        return receivedOnServer.toString();
     }
 }
