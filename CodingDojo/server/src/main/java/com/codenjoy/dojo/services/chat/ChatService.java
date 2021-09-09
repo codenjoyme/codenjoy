@@ -326,4 +326,49 @@ public class ChatService {
     public LastMessage getLast() {
         return new LastMessage();
     }
+
+    public ChatControl control(String playerId) {
+        return new ChatControl() {
+            @Override
+            public List<PMessage> getAllRoom(Filter filter) {
+                return getRoomMessages(playerId, filter);
+            }
+
+            @Override
+            public List<PMessage> getAllTopic(int topicId, Filter filter) {
+                return getTopicMessages(topicId, playerId, filter);
+            }
+
+            @Override
+            public List<PMessage> getAllField(Filter filter) {
+                return getFieldMessages(playerId, filter);
+            }
+
+            @Override
+            public PMessage get(int id, String room) {
+                return getMessage(id, room, playerId);
+            }
+
+            @Override
+            public PMessage postRoom(String text, String room) {
+                return postMessageForRoom(text, room, playerId);
+            }
+
+            @Override
+            public PMessage postTopic(int topicId, String text, String room) {
+                return postMessageForTopic(topicId, text, room, playerId);
+            }
+
+            @Override
+            public PMessage postField(String text, String room) {
+                return postMessageForField(text, room, playerId);
+            }
+
+            @Override
+            public boolean delete(int id, String room) {
+                return deleteMessage(id, room, playerId);
+            }
+        };
+    }
+
 }

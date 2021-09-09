@@ -24,12 +24,19 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.ChatType;
 import static com.codenjoy.dojo.services.chat.ChatType.*;
+
+import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.ChatTest;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.web.rest.TestLogin;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +49,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -57,6 +64,23 @@ public class ChatServiceTest {
     @Autowired
     private Chat chat;
 
+    @Autowired
+    private Registration registration;
+
+    @SpyBean
+    private TimeService time;
+
+    @Autowired
+    private PlayerService players;
+
+    @Autowired
+    private ConfigProperties config;
+
+    @Autowired
+    private Deals deals;
+
+    protected TestLogin login;
+
     @SpyBean
     private FieldService fields;
 
@@ -68,8 +92,16 @@ public class ChatServiceTest {
 
     @Before
     public void setup() {
+        login = new TestLogin(config, players, registration, deals);
+
         chat.removeAll();
         fields.removeAll();
+        login.removeAll();
+    }
+
+    @After
+    public void after() {
+        SmartAssert.checkResult();
     }
 
     @Test
@@ -128,5 +160,127 @@ public class ChatServiceTest {
         when(fields.id(field)).thenReturn(fieldId);
 
         return new Deal(new Player(), game, room);
+    }
+
+    public void nowIs(long time) {
+        when(this.time.now()).thenReturn(time);
+    }
+
+    @Test
+    public void shouldGetControl() {
+        // given
+        login.register("player1", "ip", "name", "first");
+        login.join("player1", "room");
+
+        login.register("player2", "ip", "name", "first");
+        login.join("player2", "room");
+
+        // when
+        ChatControl player1 = service.control("player1");
+        ChatControl player2 = service.control("player2");
+
+        // when then
+        nowIs(12345L);
+        assertEquals("PMessage(id=1, text=message1, room=room, topicId=null, " +
+                        "playerId=player1, playerName=player1-name, time=12345)",
+                player1.postRoom("message1", "room").toString()); // 1
+
+        nowIs(12346L);
+        assertEquals("PMessage(id=2, text=message2, room=room, topicId=null, " +
+                        "playerId=player2, playerName=player2-name, time=12346)",
+                player2.postRoom("message2", "room").toString()); // 2
+
+        nowIs(12347L);
+        assertEquals("PMessage(id=3, text=message3, room=room, topicId=1, " +
+                        "playerId=player1, playerName=player1-name, time=12347)",
+                player1.postTopic(1, "message3", "room").toString()); // 3
+
+        nowIs(12348L);
+        assertEquals("PMessage(id=4, text=message4, room=room, topicId=2, " +
+                        "playerId=player2, playerName=player2-name, time=12348)",
+                player2.postTopic(2, "message4", "room").toString()); // 4
+
+        nowIs(12349L);
+        assertEquals("PMessage(id=5, text=message5, room=room, topicId=2, " +
+                        "playerId=player1, playerName=player1-name, time=12349)",
+                player1.postField("message5", "room").toString()); // 5
+
+        nowIs(12350L);
+        assertEquals("PMessage(id=6, text=message6, room=room, topicId=4, " +
+                        "playerId=player2, playerName=player2-name, time=12350)",
+                player2.postField("message6", "room").toString()); // 6
+
+        nowIs(12351L);
+        assertEquals("PMessage(id=7, text=message7, room=room, topicId=2, " +
+                        "playerId=player1, playerName=player1-name, time=12351)",
+                player1.postField("message7", "room").toString()); // 7
+
+        nowIs(12352L);
+        assertEquals("PMessage(id=8, text=message8, room=room, topicId=4, " +
+                        "playerId=player2, playerName=player2-name, time=12352)",
+                player2.postField("message8", "room").toString()); // 8
+
+        assertEquals("PMessage(id=1, text=message1, room=room, topicId=null, " +
+                        "playerId=player1, playerName=player1-name, time=12345)",
+                player1.get(1, "room").toString());
+
+        assertEquals("PMessage(id=5, text=message5, room=room, topicId=2, " +
+                        "playerId=player1, playerName=player1-name, time=12349)",
+                player2.get(5, "room").toString());
+
+        Filter filter = Filter
+                .room("room")
+                .afterId(1)
+                .beforeId(10)
+                .inclusive(true)
+                .count(10)
+                .get();
+
+        assertEquals("[PMessage(id=1, text=message1, room=room, topicId=null, " +
+                        "playerId=player1, playerName=player1-name, time=12345), " +
+                        "PMessage(id=2, text=message2, room=room, topicId=null, " +
+                        "playerId=player2, playerName=player2-name, time=12346)]",
+                player1.getAllRoom(filter).toString());
+
+        assertEquals("[PMessage(id=1, text=message1, room=room, topicId=null, " +
+                        "playerId=player1, playerName=player1-name, time=12345), " +
+                        "PMessage(id=2, text=message2, room=room, topicId=null, " +
+                        "playerId=player2, playerName=player2-name, time=12346)]",
+                player2.getAllRoom(filter).toString());
+
+        assertEquals("[PMessage(id=3, text=message3, room=room, topicId=1, " +
+                        "playerId=player1, playerName=player1-name, time=12347)]",
+                player1.getAllTopic(1, filter).toString());
+
+        assertEquals("[PMessage(id=4, text=message4, room=room, topicId=2, " +
+                        "playerId=player2, playerName=player2-name, time=12348)]",
+                player2.getAllTopic(2, filter).toString());
+
+        assertEquals("[PMessage(id=5, text=message5, room=room, topicId=2, " +
+                        "playerId=player1, playerName=player1-name, time=12349), " +
+                        "PMessage(id=7, text=message7, room=room, topicId=2, " +
+                        "playerId=player1, playerName=player1-name, time=12351)]",
+                player1.getAllField(filter).toString());
+
+        assertEquals("[PMessage(id=6, text=message6, room=room, topicId=4, " +
+                        "playerId=player2, playerName=player2-name, time=12350), " +
+                        "PMessage(id=8, text=message8, room=room, topicId=4, " +
+                        "playerId=player2, playerName=player2-name, time=12352)]",
+                player2.getAllField(filter).toString());
+
+        assertEquals(true,
+                player1.delete(5, "room"));
+
+        assertEquals(true,
+                player2.delete(6, "room"));
+
+        assertEquals("[PMessage(id=7, text=message7, room=room, topicId=2, " +
+                        "playerId=player1, playerName=player1-name, time=12351)]",
+                player1.getAllField(filter).toString());
+
+        assertEquals("[PMessage(id=8, text=message8, room=room, topicId=4, " +
+                        "playerId=player2, playerName=player2-name, time=12352)]",
+                player2.getAllField(filter).toString());
+
     }
 }
