@@ -111,9 +111,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
         tearDown();
         login = new TestLogin(config, players, registration, deals);
 
-        registration.removeAll();
-        players.removeAll();
-        deals.clear();
+        login.removeAll();
 
         serverAddress = String.format(URL, "ws", port, contextPath, endpoint());
         String url = String.format(URL, "http", port, contextPath, "");
