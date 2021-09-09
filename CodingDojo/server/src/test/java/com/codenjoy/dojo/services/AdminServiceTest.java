@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -53,14 +52,11 @@ public class AdminServiceTest {
     @SpyBean
     private TimeService timeService;
 
-    @SpyBean
+    @Autowired
     private PlayerService playerService;
 
-    @SpyBean
+    @Autowired
     private RoomService roomService;
-
-    @MockBean
-    private SaveService saveService;
 
     @Autowired
     private AdminService adminService;

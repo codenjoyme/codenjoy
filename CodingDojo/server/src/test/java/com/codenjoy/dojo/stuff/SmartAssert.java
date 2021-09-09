@@ -98,7 +98,7 @@ public class SmartAssert {
     }
 
     private static List<AssertionError> failures() {
-        return failures(getCaller().getClassName());
+        return failures(getCaller().getClassName().split("[$]")[0]);
     }
     
     private static List<AssertionError> failures(String caller) {

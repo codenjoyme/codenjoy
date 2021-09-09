@@ -22,8 +22,8 @@ package com.codenjoy.dojo.services.controller;
  * #L%
  */
 
+import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
@@ -80,6 +80,11 @@ public class ScreenResponseHandlerTest {
                 "  'player2':{\n" +
                 "    'board':'some_board2',\n" +
                 "    'boardSize':12,\n" +
+                "    'chat':{\n" +
+                "      'fieldId':222,\n" +
+                "      'lastInField':22,\n" +
+                "      'lastInRoom':2\n" +
+                "    },\n" +
                 "    'coordinates':{\n" +
                 "      'player2':{\n" +
                 "        'coordinate':{\n" +
@@ -96,7 +101,6 @@ public class ScreenResponseHandlerTest {
                 "      'player2'\n" +
                 "    ],\n" +
                 "    'info':'some_info2',\n" +
-                "    'lastChatMessage':2,\n" +
                 "    'readableNames':{\n" +
                 "      'player2':'Player2 Name2'\n" +
                 "    },\n" +
@@ -113,6 +117,11 @@ public class ScreenResponseHandlerTest {
                 "  'player4':{\n" +
                 "    'board':'some_board4',\n" +
                 "    'boardSize':45,\n" +
+                "    'chat':{\n" +
+                "      'fieldId':444,\n" +
+                "      'lastInField':44,\n" +
+                "      'lastInRoom':4\n" +
+                "    },\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
                 "        'coordinate':{\n" +
@@ -128,7 +137,6 @@ public class ScreenResponseHandlerTest {
                 "      'player4'\n" +
                 "    ],\n" +
                 "    'info':'some_info4',\n" +
-                "    'lastChatMessage':4,\n" +
                 "    'readableNames':{\n" +
                 "      'player4':'Player4 Name4'\n" +
                 "    },\n" +
@@ -170,6 +178,11 @@ public class ScreenResponseHandlerTest {
                 "  'player1':{\n" +
                 "    'board':'some_board1',\n" +
                 "    'boardSize':10,\n" +
+                "    'chat':{\n" +
+                "      'fieldId':111,\n" +
+                "      'lastInField':11,\n" +
+                "      'lastInRoom':1\n" +
+                "    },\n" +
                 "    'coordinates':{\n" +
                 "      'player1':{\n" +
                 "        'coordinate':{\n" +
@@ -185,7 +198,6 @@ public class ScreenResponseHandlerTest {
                 "      'player1'\n" +
                 "    ],\n" +
                 "    'info':'some_info1',\n" +
-                "    'lastChatMessage':1,\n" +
                 "    'readableNames':{\n" +
                 "      'player1':'Player1 Name1'\n" +
                 "    },\n" +
@@ -201,6 +213,11 @@ public class ScreenResponseHandlerTest {
                 "  'player2':{\n" +
                 "    'board':'some_board2',\n" +
                 "    'boardSize':12,\n" +
+                "    'chat':{\n" +
+                "      'fieldId':222,\n" +
+                "      'lastInField':22,\n" +
+                "      'lastInRoom':2\n" +
+                "    },\n" +
                 "    'coordinates':{\n" +
                 "      'player2':{\n" +
                 "        'coordinate':{\n" +
@@ -216,7 +233,6 @@ public class ScreenResponseHandlerTest {
                 "      'player2'\n" +
                 "    ],\n" +
                 "    'info':'some_info2',\n" +
-                "    'lastChatMessage':2,\n" +
                 "    'readableNames':{\n" +
                 "      'player2':'Player2 Name2'\n" +
                 "    },\n" +
@@ -232,6 +248,11 @@ public class ScreenResponseHandlerTest {
                 "  'player4':{\n" +
                 "    'board':'some_board4',\n" +
                 "    'boardSize':45,\n" +
+                "    'chat':{\n" +
+                "      'fieldId':444,\n" +
+                "      'lastInField':44,\n" +
+                "      'lastInRoom':4\n" +
+                "    },\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
                 "        'coordinate':{\n" +
@@ -247,7 +268,6 @@ public class ScreenResponseHandlerTest {
                 "      'player4'\n" +
                 "    ],\n" +
                 "    'info':'some_info4',\n" +
-                "    'lastChatMessage':4,\n" +
                 "    'readableNames':{\n" +
                 "      'player4':'Player4 Name4'\n" +
                 "    },\n" +
@@ -284,6 +304,11 @@ public class ScreenResponseHandlerTest {
                 "  'player3':{\n" +
                 "    'board':'some_board3',\n" +
                 "    'boardSize':14,\n" +
+                "    'chat':{\n" +
+                "      'fieldId':333,\n" +
+                "      'lastInField':33,\n" +
+                "      'lastInRoom':3\n" +
+                "    },\n" +
                 "    'coordinates':{\n" +
                 "      'player3':{\n" +
                 "        'coordinate':{\n" +
@@ -299,7 +324,6 @@ public class ScreenResponseHandlerTest {
                 "      'player3'\n" +
                 "    ],\n" +
                 "    'info':'some_info3',\n" +
-                "    'lastChatMessage':3,\n" +
                 "    'readableNames':{\n" +
                 "      'player3':'Player3 Name3'\n" +
                 "    },\n" +
@@ -336,6 +360,11 @@ public class ScreenResponseHandlerTest {
                 "  'player2':{\n" +
                 "    'board':'some_board2',\n" +
                 "    'boardSize':12,\n" +
+                "    'chat':{\n" +
+                "      'fieldId':222,\n" +
+                "      'lastInField':22,\n" +
+                "      'lastInRoom':2\n" +
+                "    },\n" +
                 "    'coordinates':{\n" +
                 "      'player2':{\n" +
                 "        'coordinate':{\n" +
@@ -352,7 +381,6 @@ public class ScreenResponseHandlerTest {
                 "      'player2'\n" +
                 "    ],\n" +
                 "    'info':'some_info2',\n" +
-                "    'lastChatMessage':2,\n" +
                 "    'readableNames':{\n" +
                 "      'player2':'Player2 Name2'\n" +
                 "    },\n" +
@@ -382,7 +410,7 @@ public class ScreenResponseHandlerTest {
                 new LinkedHashMap<>(){{ put("player1", new HeroDataImpl(1, pt(10, 5), true)); }},
                 new LinkedHashMap<>(){{ put("player1", "Player1 Name1"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
-                1));
+                new ChatService.Status(111, 1, 11)));
 
         Player player2 = new Player("player2");
         player2.setGame("game");
@@ -394,7 +422,7 @@ public class ScreenResponseHandlerTest {
                 new LinkedHashMap<>(){{ put("player2", new HeroDataImpl(2, pt(12, 7), true)); }},
                 new LinkedHashMap<>(){{ put("player2", "Player2 Name2"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }},
-                2));
+                new ChatService.Status(222, 2, 22)));
 
         Player player4 = new Player("player4");
         player4.setGame("game");
@@ -406,7 +434,7 @@ public class ScreenResponseHandlerTest {
                 new LinkedHashMap<>(){{ put("player4", new HeroDataImpl(4, pt(14, 9), false)); }},
                 new LinkedHashMap<>(){{ put("player4", "Player4 Name4"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player4")); }},
-                4));
+                new ChatService.Status(444, 4, 44)));
 
         Player player3 = new Player("player3");
         player3.setGame("other_game");
@@ -418,7 +446,7 @@ public class ScreenResponseHandlerTest {
                 new LinkedHashMap<>(){{ put("player3", new HeroDataImpl(3, pt(13, 8), false)); }},
                 new LinkedHashMap<>(){{ put("player3", "Player3 Name3"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList("player3")); }},
-                3));
+                new ChatService.Status(333, 3, 33)));
 
         return map;
     }

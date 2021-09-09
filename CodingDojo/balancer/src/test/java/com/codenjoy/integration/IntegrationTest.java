@@ -212,15 +212,6 @@ public class IntegrationTest {
         return result;
     }
 
-    private void assertException(String expected, Runnable supplier) {
-        try {
-            supplier.run();
-            fail("expected exception");
-        } catch (Exception e) {
-            assertEquals(expected, e.getMessage());
-        }
-    }
-
     private void assertError(String message, String source) {
         JSONObject error = tryParseAsJson(source);
         assertEquals(message, error.getString("message"));

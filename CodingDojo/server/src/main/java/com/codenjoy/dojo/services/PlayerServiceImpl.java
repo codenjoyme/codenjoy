@@ -28,9 +28,9 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
-import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
@@ -84,7 +84,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected GameService gameService;
     @Autowired protected AutoSaver autoSaver;
     @Autowired protected GameSaver saver;
-    @Autowired protected Chat chat;
+    @Autowired protected ChatService chat;
     @Autowired protected ActionLogger actionLogger;
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties config;
@@ -388,13 +388,11 @@ public class PlayerServiceImpl implements PlayerService {
         cacheBoards.clear();
 
         Map<String, GameData> gameDataMap = dealsView.getGamesDataMap();
-        Map<String, Integer> lastChatIds = chat.getLastMessageIds();
+        ChatService.LastMessage lastMessage = chat.getLast();
         for (Deal deal : deals) {
             Game game = deal.getGame();
             Player player = deal.getPlayer();
             try {
-                Integer lastChatMessage = lastChatIds.get(player.getRoom());
-
                 String gameType = deal.getGameType().name();
                 GameData gameData = gameDataMap.get(player.getId());
 
@@ -418,6 +416,7 @@ public class PlayerServiceImpl implements PlayerService {
                 List<String> group = gameData.getGroup();
                 Map<String, HeroData> coordinates = gameData.getCoordinates();
                 Map<String, String> readableNames = gameData.getReadableNames();
+                ChatService.Status chat = lastMessage.at(deal);
                 map.put(player, new PlayerData(boardSize,
                         encoded,
                         gameType,
@@ -428,7 +427,7 @@ public class PlayerServiceImpl implements PlayerService {
                         coordinates,
                         readableNames,
                         group,
-                        lastChatMessage));
+                        chat));
 
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +

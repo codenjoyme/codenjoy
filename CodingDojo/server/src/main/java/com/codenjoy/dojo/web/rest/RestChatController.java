@@ -22,18 +22,22 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.services.ChatService;
+import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.chat.ChatType;
+import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import com.codenjoy.dojo.web.rest.pojo.PMessageShort;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Rest сервис для работы с чатом.
@@ -58,23 +62,26 @@ public class RestChatController {
 
     /**
      * Возвращает сообщения для room-чата с проверкой пользователя.
-     * Если пользователь не содержится в этом чате, сообщений он не получит.
-     * Возвращается заданное в фильтре (count, afterId, beforeId, inclusive)
+     * Если пользователь не содержится в комнате {@code room},
+     * сообщений он не получит. Возвращается заданное в фильтре
+     * ({@code count}, {@code afterId}, {@code beforeId}, {@code inclusive})
      * количество сообщений. Все параметры опциональны - в зависимости от
      * их комбинации будет возвращено то или иное количество.
      *
      * @param room Имя комнаты, сообщения чата которой интересуют.
-     * @param count Количество сообщений, если указазаны afterId | beforeId
-     *              но не оба одновременно.
+     * @param count Количество сообщений, если указазаны {@code afterId}
+     *              или {@code beforeId} но не оба одновременно.
      * @param afterId Получать сообщения после сообщения с этой id.
      * @param beforeId Получать сообщения до сообщения с этой id.
      * @param inclusive Включать ли в запрос сообщения с id afterId |& beforeId.
      * @param user Пользователь осуществляющий запрос.
-     *             Если пользователя нет в комнате - сообщения получить неудастся.
+     *             Если пользователя нет в комнате {#code room}
+     *             - сообщения получить неудастся.
      * @return Заданное количество сообщений из room-чата.
      */
     @GetMapping("/{room}/messages")
-    public ResponseEntity<?> getMessages(
+    @ResponseStatus(HttpStatus.OK)
+    public List<PMessage> getMessages(
             @PathVariable(name = "room") String room,
             @RequestParam(name = "count", required = false, defaultValue = DEFAULT_COUNT) int count,
             @RequestParam(name = "afterId", required = false) Integer afterId,
@@ -84,8 +91,15 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getMessages(room, count,
-                afterId, beforeId, inclusive, user.getId()));
+        Filter filter = Filter
+                .room(room)
+                .count(count)
+                .afterId(afterId)
+                .beforeId(beforeId)
+                .inclusive(inclusive)
+                .get();
+
+        return chat.getRoomMessages(user.getId(), filter);
     }
 
     /**
@@ -96,18 +110,20 @@ public class RestChatController {
      * @param user Пользователь осуществляющтий запрос.
      *              Если пользователя нет в комнате - сообщение в чат не доставится.
      * @return В случае успеха вернется опубликованное сообщение с новой id и
- *              другими полями PMessage.
+     *              другими полями PMessage.
      */
     @PostMapping("/{room}/messages")
-    public ResponseEntity<?> postMessage(
+    @ResponseStatus(HttpStatus.OK)
+    public PMessage postMessage(
             @PathVariable(name = "room") String room,
             @NotNull @RequestBody PMessageShort message,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.postMessage(null, message.getText(),
-                room, user.getId()));
+        return chat.postMessage(ChatType.ROOM, null,
+                room, message.getText(),
+                user.getId());
     }
 
     /**
@@ -124,7 +140,8 @@ public class RestChatController {
      *              ссылкой на topicId и другими полями PMessage.
      */
     @PostMapping("/{room}/messages/{id}/replies")
-    public ResponseEntity<?> postMessageForTopic(
+    @ResponseStatus(HttpStatus.OK)
+    public PMessage postMessageForTopic(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
             @NotNull @RequestBody PMessageShort message,
@@ -132,8 +149,34 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.postMessage(id, message.getText(),
-                room, user.getId()));
+        return chat.postMessage(ChatType.TOPIC, id,
+                room, message.getText(),
+                user.getId());
+    }
+
+    /**
+     * Метод для отправки сообщений в field-чат от имени конкретного пользователя.
+     * Field-чат - это все сообщения созданные пользователями в контексте конкретной
+     * игры на поле.
+     *
+     * @param room Имя комнаты в чат которой отправится сообщение.
+     * @param message POJO с сообщением.
+     * @param user Пользователь осуществляющтий запрос.
+     *              Если пользователя нет в комнате - сообщение в чат не доставится.
+     * @return В случае успеха вернется опубликованное сообщение с новой id,
+     *              ссылкой на fieldId и другими полями PMessage.
+     */
+    @PostMapping("/{room}/messages/field")
+    @ResponseStatus(HttpStatus.OK)
+    public PMessage postMessageForField(
+            @PathVariable(name = "room") String room,
+            @NotNull @RequestBody PMessageShort message,
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validator.checkUser(user);
+
+        return chat.postMessageForField(message.getText(),
+                room, user.getId());
     }
 
     /**
@@ -146,36 +189,103 @@ public class RestChatController {
      * @return Найденное сообщение со своими полями размещенными в PMessage.
      */
     @GetMapping("/{room}/messages/{id}")
-    public ResponseEntity<?> getMessage(
+    @ResponseStatus(HttpStatus.OK)
+    public PMessage getMessage(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getMessage(id, room, user.getId()));
+        return chat.getMessage(id, room, user.getId());
     }
 
     /**
      * Получение всех thread-chat сообщений, привязанных к конкретному сообщению
      * room-chat. Thread-чат - это все reply сообщения на любое конкретное
-     * сообщение в любом чате.
+     * сообщение в любом чате. Возвращается заданное в фильтре
+     * ({@code count}, {@code afterId}, {@code beforeId}, {@code inclusive})
+     * количество сообщений. Все параметры опциональны - в зависимости от
+     * их комбинации будет возвращено то или иное количество.
      *
      * @param room Имя комнаты, сообщения чата которой интересуют.
-     * @param id Идентификатор сообщения, reply-сообщениями которого интересуются.
-     * @param user Пользователь осуществляющтий запрос.
-     *            Если пользователя нет в комнате - сообщение получить неудастся.
-     * @return Список всех найденных сообщений со своими полями размещенными в PMessage.
+     * @param count Количество сообщений, если указазаны {@code afterId}
+     *              или {@code beforeId} но не оба одновременно.
+     * @param afterId Получать сообщения после сообщения с этой id.
+     * @param beforeId Получать сообщения до сообщения с этой id.
+     * @param inclusive Включать ли в запрос сообщения с id afterId |& beforeId.
+     * @param user Пользователь осуществляющий запрос.
+     *             Если пользователя нет в комнате {#code room}
+     *             - сообщения получить неудастся.
+     * @return Заданное количество сообщений из room-чата.
      */
     @GetMapping("/{room}/messages/{id}/replies")
-    public ResponseEntity<?> getMessagesForTopic(
+    @ResponseStatus(HttpStatus.OK)
+    public List<PMessage> getMessagesForTopic(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
+            @RequestParam(name = "count", required = false, defaultValue = DEFAULT_COUNT) int count,
+            @RequestParam(name = "afterId", required = false) Integer afterId,
+            @RequestParam(name = "beforeId", required = false) Integer beforeId,
+            @RequestParam(name = "inclusive", required = false, defaultValue = "false") boolean inclusive,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getTopicMessages(id, room, user.getId()));
+        Filter filter = Filter
+                .room(room)
+                .count(count)
+                .afterId(afterId)
+                .beforeId(beforeId)
+                .inclusive(inclusive)
+                .get();
+
+        return chat.getTopicMessages(id, user.getId(), filter);
+    }
+
+    /**
+     * Возвращает сообщения для field-chat с проверкой пользователя.
+     * Field-чат - это все сообщения созданные пользователями в контексте конкретной
+     * игры на поле.
+     *
+     * Если пользователь не содержится в комнате {@code room},
+     * сообщений он не получит. Возвращается заданное в фильтре
+     * ({@code count}, {@code afterId}, {@code beforeId}, {@code inclusive})
+     * количество сообщений. Все параметры опциональны - в зависимости от
+     * их комбинации будет возвращено то или иное количество.
+     *
+     * @param room Имя комнаты, сообщения field-чата которой интересуют.
+     * @param count Количество сообщений, если указазаны {@code afterId}
+     *              или {@code beforeId} но не оба одновременно.
+     * @param afterId Получать сообщения после сообщения с этой id.
+     * @param beforeId Получать сообщения до сообщения с этой id.
+     * @param inclusive Включать ли в запрос сообщения с id afterId |& beforeId.
+     * @param user Пользователь осуществляющий запрос.
+     *             Если пользователя нет в комнате {#code room}
+     *             - сообщения получить неудастся.
+     * @return Заданное количество сообщений из field-чата.
+     */
+    @GetMapping("/{room}/messages/field")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PMessage> getMessagesForField(
+            @PathVariable(name = "room") String room,
+            @RequestParam(name = "count", required = false, defaultValue = DEFAULT_COUNT) int count,
+            @RequestParam(name = "afterId", required = false) Integer afterId,
+            @RequestParam(name = "beforeId", required = false) Integer beforeId,
+            @RequestParam(name = "inclusive", required = false, defaultValue = "false") boolean inclusive,
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validator.checkUser(user);
+
+        Filter filter = Filter
+                .room(room)
+                .count(count)
+                .afterId(afterId)
+                .beforeId(beforeId)
+                .inclusive(inclusive)
+                .get();
+
+        return chat.getFieldMessages(room, user.getId(), filter);
     }
 
     /**
@@ -190,14 +300,15 @@ public class RestChatController {
      * @return true - если сообщение успешно удалено.
      */
     @DeleteMapping("/{room}/messages/{id}")
-    public ResponseEntity<?> deleteMessage(
+    @ResponseStatus(HttpStatus.OK)
+    public boolean deleteMessage(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.deleteMessage(id, room, user.getId()));
+        return chat.deleteMessage(id, room, user.getId());
     }
 
 }
