@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.reset;
 
@@ -20,6 +21,12 @@ public class TestLogin {
     private PlayerService players;
     private Registration registration;
     private Deals deals;
+
+    public void removeAll() {
+        registration.removeAll();
+        players.removeAll();
+        deals.clear();
+    }
 
     public void asAdmin() {
         login(new UsernamePasswordAuthenticationToken(
@@ -73,5 +80,16 @@ public class TestLogin {
     private void resetMocks(Deal deal) {
         reset(deal.getField());
         reset(deal.getGame().getPlayer());
+    }
+
+    public void assertPlayerInRoom(String id, String room) {
+        Player player = players.get(id);
+        assertEquals(room, player.getRoom());
+    }
+
+    public void join(String id, String room) {
+        Player player = new Player(id);
+        player.setRoom(room);
+        players.update(player);
     }
 }

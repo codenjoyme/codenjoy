@@ -71,7 +71,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         login.asAdmin();
 
-        players.removeAll();
+        login.removeAll();
         saves.removeAllSaves();
         rooms.removeAll(); // тут чистятся все сеттинги
     }

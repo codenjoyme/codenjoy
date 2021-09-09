@@ -40,8 +40,7 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     public void setUp() {
         super.setUp();
 
-        players.removeAll();
-        registration.removeAll();
+        login.removeAll();
         rooms.removeAll();
     }
 

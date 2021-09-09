@@ -179,17 +179,6 @@ public abstract class AbstractRestControllerTest {
         SmartAssert.checkResult(getClass());
     }
 
-    protected void assertPlayerInRoom(String id, String room) {
-        Player player = players.get(id);
-        assertEquals(room, player.getRoom());
-    }
-
-    protected void join(String id, String room) {
-        Player player = new Player(id);
-        player.setRoom(room);
-        players.update(player);
-    }
-
     @SneakyThrows
     protected String mapToJson(Object obj) {
         return new ObjectMapper().writeValueAsString(obj);

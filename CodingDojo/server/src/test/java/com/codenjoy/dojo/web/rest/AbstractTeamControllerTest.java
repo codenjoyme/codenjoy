@@ -69,9 +69,8 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
     public void setUp() {
         super.setUp();
 
-        players.removeAll();
+        login.removeAll();
         rooms.removeAll();
-        registration.removeAll();
 
         // when changing teams, the current state is
         // saved to the database (there is a TeamId).

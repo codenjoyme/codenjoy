@@ -45,9 +45,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         super.setUp();
 
         chat.removeAll();
-        players.removeAll();
+        login.removeAll();
         rooms.removeAll();
-        registration.removeAll();
 
         login.register("player", "ip", "validRoom", "first");
         login.register("player2", "ip", "validRoom", "first");
@@ -160,7 +159,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when
         // rejoin in new room
-        join("player", "otherRoom");
+        login.join("player", "otherRoom");
 
         // then
         // cant delete message from old room
@@ -172,7 +171,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when
         // come back in old room again
-        join("player", "validRoom");
+        login.join("player", "validRoom");
 
         // message in still there
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null}]",
@@ -324,7 +323,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldPostMessage_fail_whenThreadTopicIsNotExists() {
         // given
-        assertPlayerInRoom("player", "validRoom");
+        login.assertPlayerInRoom("player", "validRoom");
 
         // when then
         // try to post reply for non exists topic message
@@ -348,7 +347,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldPostMessageForField_success() {
         // given
-        assertPlayerInRoom("player", "validRoom");
+        login.assertPlayerInRoom("player", "validRoom");
         int fieldId = getFieldId("player");
 
         // when then
@@ -375,7 +374,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldPostMessageForField_fail_whenThreadTopicInOtherRoom() {
         // given
-        assertPlayerInRoom("player", "validRoom");
+        login.assertPlayerInRoom("player", "validRoom");
         int fieldId = getFieldId("player");
 
         // when then
@@ -401,7 +400,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when
         // rejoin in other room
-        join("player", "otherRoom");
+        login.join("player", "otherRoom");
 
         // when then
         // there are no messages here
@@ -415,7 +414,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldPostMessage_fail_whenThreadTopicInOtherRoom() {
         // given
-        assertPlayerInRoom("player", "validRoom");
+        login.assertPlayerInRoom("player", "validRoom");
 
         assertEquals("[]", fix(get("/rest/chat/validRoom/messages")));
 
@@ -426,7 +425,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when
         // rejoin in other room
-        join("player", "otherRoom");
+        login.join("player", "otherRoom");
 
         // try to post reply for topic message in other room
         assertPostError("java.lang.IllegalArgumentException: " +
@@ -436,7 +435,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // then
         // rejoin in old room
-        join("player", "validRoom");
+        login.join("player", "validRoom");
 
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null}]",
                 fix(get("/rest/chat/validRoom/messages")));
@@ -1253,7 +1252,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetAllTopicMessages_fail_whenTryToGetItFromOtherRoom() {
         // given
-        assertPlayerInRoom("player", "validRoom");
+        login.assertPlayerInRoom("player", "validRoom");
 
         // message in room, will be topic 1
         // id = 1
@@ -1279,7 +1278,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages/1/replies")));
 
         // when
-        join("player", "otherRoom");
+        login.join("player", "otherRoom");
 
         // then
         // cant get topic messages from other room
@@ -1388,8 +1387,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages/field")));
 
         // switch to another, and come back again
-        join("player", "otherRoom");
-        join("player", "validRoom");
+        login.join("player", "otherRoom");
+        login.join("player", "validRoom");
         assertNotEquals(fieldId, getFieldId("player"));
 
         // when
