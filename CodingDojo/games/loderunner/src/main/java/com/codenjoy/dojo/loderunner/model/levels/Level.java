@@ -53,6 +53,7 @@ public class Level extends AbstractLevel {
         field.addAll(getPipe());
         field.addAll(getLadder());
         field.addAll(getBricks());
+        field.addAll(getPortals());
     }
 
     public List<Hero> getHeroes() {

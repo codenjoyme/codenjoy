@@ -55,7 +55,6 @@ public class Loderunner extends RoundField<Player> implements Field {
     private List<GreenGold> greenGold;
     private List<RedGold> redGold;
     private List<Pill> pills;
-    private List<Portal> portals;
     private int portalsTimer;
     private Dice dice;
     private GameSettings settings;
@@ -80,7 +79,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             add(pt -> getFrom(ladder().all(), pt));
             add(pt -> getFrom(pills(), pt));
             add(pt -> getFrom(pipe().all(), pt));
-            add(pt -> getFrom(portals(), pt));
+            add(pt -> getFrom(portals().all(), pt));
         }};
 
         init();
@@ -98,7 +97,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         greenGold = level.getGreenGold();
         redGold = level.getRedGold();
         pills = level.getPills();
-        portals = level.getPortals();
         resetPortalsTimer();
 
         enemies = level.getEnemies();
@@ -212,7 +210,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generatePortals() {
-        generate(portals, settings, PORTALS_COUNT,
+        generate(portals(), settings, PORTALS_COUNT,
                 player -> freeRandom((Player) player),
                 pt -> new Portal(pt));
     }
@@ -243,7 +241,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 processor.accept(ladder().all());
                 processor.accept(pills());
                 processor.accept(pipe().all());
-                processor.accept(portals());
+                processor.accept(portals().all());
             }
         };
     }
@@ -321,13 +319,14 @@ public class Loderunner extends RoundField<Player> implements Field {
                 hero.pick(PillType.SHADOW_PILL);
             }
 
-            if (portals.contains(hero)) {
+            if (portals().contains(hero)) {
                 transport(hero);
             }
         }
     }
 
     private void transport(PointImpl point) {
+        List<Portal> portals = portals().all();
         for (int i = 0; i < portals.size(); i++) {
             if (portals.get(i).equals(point)) {
                 Portal portalToMove = portals.get(i < portals.size() - 1 ? i + 1 : 0);
@@ -352,7 +351,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 enemy.getGold(RedGold.class);
             }
 
-            if (portals.contains(enemy)) {
+            if (portals().contains(enemy)) {
                 transport(enemy);
             }
         }
@@ -362,7 +361,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     private void portalsGo() {
         if (portalsTimer == 0) {
             resetPortalsTimer();
-            portals.clear();
+            portals().clear();
             generatePortals();
         } else {
             portalsTimer--;
@@ -535,8 +534,8 @@ public class Loderunner extends RoundField<Player> implements Field {
         }
     }
 
-    public List<Portal> portals() {
-        return portals;
+    public Accessor<Portal> portals() {
+        return field.of(Portal.class);
     }
 
     public List<YellowGold> yellowGold() {
