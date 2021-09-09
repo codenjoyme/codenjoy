@@ -93,7 +93,7 @@ public class WebSocketRunnerMock {
     }
 
     public String messages() {
-        return messages.toString();
+        return messages.toString().replace("\"", "'");
     }
 
     @SneakyThrows
