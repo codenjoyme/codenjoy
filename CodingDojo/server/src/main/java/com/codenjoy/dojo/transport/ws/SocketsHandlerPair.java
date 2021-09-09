@@ -28,9 +28,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * Created by indigo on 2017-11-26.
- */
 public class SocketsHandlerPair {
 
     private Function<PlayerSocket, Function<Object, Object>> filters;
