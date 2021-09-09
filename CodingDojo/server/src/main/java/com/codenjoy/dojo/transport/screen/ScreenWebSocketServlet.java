@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen.ws;
+package com.codenjoy.dojo.transport.screen;
 
 /*-
  * #%L

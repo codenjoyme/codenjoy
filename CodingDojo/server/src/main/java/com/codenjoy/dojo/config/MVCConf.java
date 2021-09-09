@@ -26,7 +26,7 @@ import com.codenjoy.dojo.services.JarResourceHttpRequestHandler;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.control.ControlWebSocketServlet;
-import com.codenjoy.dojo.transport.screen.ws.ScreenWebSocketServlet;
+import com.codenjoy.dojo.transport.screen.ScreenWebSocketServlet;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.springframework.beans.factory.annotation.Autowired;
