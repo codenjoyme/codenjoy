@@ -213,16 +213,20 @@ public class ChatCommandTest {
     }
 
     @Test
-    public void testPostTopic_messageIsNotExists() {
+    public void testPostTopic_caseException() {
+        // given
+        when(control.postTopic(anyInt(), eq(null), anyString()))
+                .thenThrow(new IllegalArgumentException("Message is null"));
+
         // when
         String result = command.process(new ChatRequest("{'command':'postTopic', " +
                 "'data':{'id': 12, 'room':'room'}}"));
 
         // then
-        verify(control, never()).postTopic(anyInt(), anyString(), anyString());
+        verify(control).postTopic(12, null, "room");
 
-        assertEquals("{'error':'JSONException'," +
-                        "'message':'JSONObject[\\'text\\'] not found.'}",
+        assertEquals("{'error':'IllegalArgumentException'," +
+                        "'message':'Message is null'}",
                 fix(result));
     }
 }
