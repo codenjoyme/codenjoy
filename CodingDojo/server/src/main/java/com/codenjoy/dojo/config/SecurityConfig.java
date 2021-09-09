@@ -312,7 +312,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         private LogoutSuccessHandler logoutSuccessHandler;
 
-        @Value("${mvc.control-servlet-path}")
+        @Value("${mvc.servlet-path.control}")
         private String controlWsURI;
 
         @PostConstruct
@@ -413,7 +413,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Value("${server.xFrameAllowedHosts}")
         private List<String> xFrameAllowedHosts = new ArrayList<>();
 
-        @Value("${mvc.control-servlet-path}")
+        @Value("${mvc.servlet-path.control}")
         private String controlWsURI;
 
         @Override

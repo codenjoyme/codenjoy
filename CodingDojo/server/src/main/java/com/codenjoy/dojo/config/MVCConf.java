@@ -118,20 +118,20 @@ public class MVCConf implements WebMvcConfigurer {
     }
 
     @Bean
-    public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+    public ServletRegistrationBean wsControlServlet(@Value("${mvc.servlet-path.control}") String path) {
         WebSocketServlet servlet = new ControlWebSocketServlet(timer, controlPlayerTransport, secureAuthenticationService);
 
-        return new ServletRegistrationBean<WebSocketServlet>(servlet, path){{
+        return new ServletRegistrationBean<>(servlet, path){{
             setLoadOnStartup(100);
             setName("wsControlServlet");
         }};
     }
 
     @Bean
-    public ServletRegistrationBean wsScreenServlet(@Value("${mvc.screen-servlet-path}") String path) {
+    public ServletRegistrationBean wsScreenServlet(@Value("${mvc.servlet-path.screen}") String path) {
         ScreenWebSocketServlet servlet = new ScreenWebSocketServlet(screenPlayerTransport, defaultAuthenticationService);
 
-        return new ServletRegistrationBean<WebSocketServlet>(servlet, path){{
+        return new ServletRegistrationBean<>(servlet, path){{
             setLoadOnStartup(100);
             setName("wsScreenServlet");
         }};

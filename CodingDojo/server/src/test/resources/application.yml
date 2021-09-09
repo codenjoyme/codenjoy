@@ -19,8 +19,9 @@ rest-sender:
 
 mvc:
   cache-period: 259200
-  screen-servlet-path: /screen-ws/*
-  control-servlet-path: /ws/*
+  servlet-path:
+    screen: /screen-ws/*
+    control: /ws/*
 
 game:
   save:
