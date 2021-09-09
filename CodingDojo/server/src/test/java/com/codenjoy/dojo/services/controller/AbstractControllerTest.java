@@ -163,7 +163,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     // TODO как-нибудь когда будет достаточно времени и желания позапускать этот тест и разгадать, почему зависает тут тест
     @SneakyThrows
-    protected void waitForClientsResponse() {
+    protected void waitForServerReceived() {
         int count = 0;
         while (count < 20 && receivedOnServer.isEmpty()) {
             Thread.sleep(300);

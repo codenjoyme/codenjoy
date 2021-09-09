@@ -97,7 +97,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[left]", receivedOnServer.toString());
@@ -110,7 +110,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[right]", receivedOnServer.toString());
@@ -124,7 +124,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[up]", receivedOnServer.toString());
@@ -138,7 +138,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[act[]]", receivedOnServer.toString());
@@ -152,7 +152,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[act[1, 2, 3, 5]]", receivedOnServer.toString());
@@ -166,7 +166,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[down]", receivedOnServer.toString());
@@ -180,7 +180,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[right, act[]]", receivedOnServer.toString());
@@ -194,7 +194,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[act[], right, left, act[]]", receivedOnServer.toString());
@@ -208,7 +208,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("board=" + INITIAL_REQUEST, client.request());
@@ -221,7 +221,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[board=" + INITIAL_REQUEST + "]", client.messages());
@@ -235,7 +235,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
         // when
         sendToClient(player(0), INITIAL_REQUEST);
-        waitForClientsResponse();
+        waitForServerReceived();
 
         // then
         assertEquals("[board=" + INITIAL_REQUEST + "]", client.messages());
