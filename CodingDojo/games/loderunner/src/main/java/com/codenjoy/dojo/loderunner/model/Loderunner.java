@@ -48,7 +48,6 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     private PointField field;
 
-    private int size;
     private Players players;
     private int portalsTimer;
     private Dice dice;
@@ -86,7 +85,6 @@ public class Loderunner extends RoundField<Player> implements Field {
         level.saveTo(field);
         field.init(this);
 
-        size = level.size();
         resetPortalsTimer();
 
         enemies().forEach(enemy -> enemy.init(this));
@@ -213,7 +211,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
             @Override
             public int size() {
-                return Loderunner.this.size;
+                return Loderunner.this.size();
             }
 
             @Override
@@ -266,7 +264,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     public List<Point> get(Point at) {
-        if (at.isOutOf(size)) {
+        if (at.isOutOf(size())) {
             return Arrays.asList(); // TODO это кажется только в тестах юзается, убрать бы отсюда для производительности
         }
 
@@ -361,8 +359,8 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isBarrier(Point pt) {
-          return pt.getX() > size - 1 || pt.getX() < 0
-                || pt.getY() < 0 || pt.getY() > size - 1
+          return pt.getX() > size() - 1 || pt.getX() < 0
+                || pt.getY() < 0 || pt.getY() > size() - 1
                 || isFullBrick(pt)
                 || isBorder(pt)
                 || (isHeroAt(pt) && !under(pt, PillType.SHADOW_PILL));
@@ -417,7 +415,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return BoardUtils.freeRandom(size, dice, pt -> isFree(pt));
+        return BoardUtils.freeRandom(size(), dice, pt -> isFree(pt));
     }
 
     @Override
@@ -492,7 +490,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public int size() {
-        return size;
+        return field.size();
     }
 
     @Override
