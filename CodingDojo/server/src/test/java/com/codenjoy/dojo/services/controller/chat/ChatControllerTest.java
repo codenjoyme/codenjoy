@@ -149,9 +149,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[get(1, room)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':[" +
+        assertEquals("[{'command':'error', 'data':" +
                         "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no message with id '1' in room 'room''}]}]",
+                        "'message':'There is no message with id '1' in room 'room''}}]",
                 client(0).messages());
     }
     
@@ -221,10 +221,10 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[delete(1, room)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':[" +
+        assertEquals("[{'command':'error', 'data':" +
                         "{'error':'IllegalArgumentException'," +
                         "'message':'Player 'player' cant delete " +
-                        "message with id '1' in room 'room''}]}]",
+                                    "message with id '1' in room 'room''}}]",
                 client(0).messages());
     }
 
@@ -246,9 +246,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllRoom(Filter(room=otherRoom, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'error', 'data':[" +
+        assertEquals("[{'command':'error', 'data':" +
                         "{'error':'IllegalArgumentException'," +
-                        "'message':'Player 'player' is not in room 'otherRoom''}]}]",
+                        "'message':'Player 'player' is not in room 'otherRoom''}}]",
                 client(0).messages());
     }
 
@@ -300,9 +300,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllTopic(1, Filter(room=room, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'error', 'data':[" +
+        assertEquals("[{'command':'error', 'data':" +
                         "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no message with id '1' in room 'room''}]}]",
+                        "'message':'There is no message with id '1' in room 'room''}}]",
                 client(0).messages());
     }
 
@@ -354,9 +354,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllField(Filter(room=otherRoom, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'error', 'data':[" +
+        assertEquals("[{'command':'error', 'data':" +
                         "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no player 'player' in room 'otherRoom''}]}]",
+                        "'message':'There is no player 'player' in room 'otherRoom''}}]",
                 client(0).messages());
     }
 
@@ -406,9 +406,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postRoom(message, otherRoom)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':[" +
+        assertEquals("[{'command':'error', 'data':" +
                         "{'error':'IllegalArgumentException'," +
-                        "'message':'Player 'player' is not in room 'otherRoom''}]",
+                        "'message':'Player 'player' is not in room 'otherRoom''}}]",
                 client(0).messages());
     }
 
@@ -486,9 +486,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postField(message, otherRoom)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':[" +
+        assertEquals("[{'command':'error', 'data':" +
                         "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no player 'player' in room 'otherRoom''}]}]",
+                        "'message':'There is no player 'player' in room 'otherRoom''}}]",
                 client(0).messages());
     }
 
@@ -623,9 +623,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postTopic(1, message, room)]", receivedOnServer());
-        assertEquals("[{'command':'error', 'data':[" +
+        assertEquals("[{'command':'error', 'data':" +
                         "{'error':'IllegalArgumentException'," +
-                        "'message':'There is no message with id '1' in room 'room''}]}]",
+                        "'message':'There is no message with id '1' in room 'room''}}]",
                 client(0).messages());
     }
 
