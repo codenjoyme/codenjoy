@@ -108,17 +108,14 @@ public class PlayerServiceImpl implements PlayerService {
     public void init() {
         deals.init(lock);
         deals.onAdd(deal -> {
-            Player player = deal.getPlayer();
-            Joystick joystick = deal.getJoystick();
-            playerController.registerPlayerTransport(player, joystick);
-            screenController.registerPlayerTransport(player, null);
-            chatController.registerPlayerTransport(player, chat.control(player.getId()));
+            playerController.registerPlayerTransport(deal);
+            screenController.registerPlayerTransport(deal);
+            chatController.registerPlayerTransport(deal);
         });
         deals.onRemove(deal -> {
-            Player player = deal.getPlayer();
-            playerController.unregisterPlayerTransport(player);
-            screenController.unregisterPlayerTransport(player);
-            chatController.unregisterPlayerTransport(player);
+            playerController.unregisterPlayerTransport(deal);
+            screenController.unregisterPlayerTransport(deal);
+            chatController.unregisterPlayerTransport(deal);
         });
     }
 

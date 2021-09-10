@@ -23,8 +23,9 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 
-import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.chat.ChatControl;
+import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.springframework.stereotype.Component;
@@ -33,21 +34,25 @@ import org.springframework.stereotype.Component;
 public class ChatController implements Controller<String, ChatControl> {
 
     private final PlayerTransport transport;
+    private final ChatService chatService;
 
     // autowiring by name
-    public ChatController(PlayerTransport chatPlayerTransport) {
+    public ChatController(PlayerTransport chatPlayerTransport, ChatService chatService) {
         transport = chatPlayerTransport;
+        this.chatService = chatService;
         transport.setDefaultFilter(Object::toString);
     }
 
     @Override
-    public void registerPlayerTransport(Player player, ChatControl chatControl) {
-        transport.registerPlayerEndpoint(player.getId(),
-                new ChatResponseHandler(player, chatControl, transport));
+    public void registerPlayerTransport(Deal deal) {
+        String id = deal.getPlayerId();
+        ChatControl control = chatService.control(id);
+        transport.registerPlayerEndpoint(id,
+                new ChatResponseHandler(deal.getPlayer(), control, transport));
     }
 
     @Override
-    public void unregisterPlayerTransport(Player player) {
-        transport.unregisterPlayerEndpoint(player.getId());
+    public void unregisterPlayerTransport(Deal deal) {
+        transport.unregisterPlayerEndpoint(deal.getPlayerId());
     }
 }

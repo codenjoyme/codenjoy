@@ -23,10 +23,7 @@ package com.codenjoy.dojo.services.controller.control;
  */
 
 
-import com.codenjoy.dojo.services.BoardGameState;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.TimeService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.springframework.stereotype.Component;
@@ -50,13 +47,14 @@ public class PlayerController implements Controller<String, Joystick> {
     }
 
     @Override
-    public void registerPlayerTransport(Player player, Joystick joystick) {
-        transport.registerPlayerEndpoint(player.getId(),
-                new PlayerResponseHandler(player, joystick, timeService.future()));
+    public void registerPlayerTransport(Deal deal) {
+        transport.registerPlayerEndpoint(deal.getPlayerId(),
+                new PlayerResponseHandler(deal.getPlayer(),
+                        deal.getJoystick(), timeService.future()));
     }
 
     @Override
-    public void unregisterPlayerTransport(Player player) {
-        transport.unregisterPlayerEndpoint(player.getId());
+    public void unregisterPlayerTransport(Deal deal) {
+        transport.unregisterPlayerEndpoint(deal.getPlayerId());
     }
 }

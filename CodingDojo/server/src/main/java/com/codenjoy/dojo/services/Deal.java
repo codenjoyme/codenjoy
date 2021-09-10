@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.nullobj.NullGame;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
 import lombok.Getter;
@@ -42,7 +43,9 @@ import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
  */
 @Getter
 public class Deal implements Tickable {
-    
+
+    public static final Deal ANONYMOUS = new Deal(Player.ANONYMOUS, NullGame.INSTANCE, null);
+
     private Player player;
     private Game game;
     private LazyJoystick joystick;

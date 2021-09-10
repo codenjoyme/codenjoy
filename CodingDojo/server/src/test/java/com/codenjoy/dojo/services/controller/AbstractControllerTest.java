@@ -83,7 +83,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
     private List<WebSocketRunnerMock> clients = new LinkedList<>();
     private List<String> receivedOnServer = new LinkedList<>();
     private String serverAddress;
-    private List<Player> playersList = new LinkedList<>();
+    private List<Deal> dealsList = new LinkedList<>();
 
     @Autowired
     private Registration registration;
@@ -135,9 +135,9 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     protected void createPlayer(String id, String room, String game) {
         Deal deal = login.register(id, id, room, game);
+        dealsList.add(deal);
         Player player = deal.getPlayer();
         player.setCode(registration.getCodeById(id));
-        playersList.add(player);
 
         WebSocketRunnerMock client = new WebSocketRunnerMock(serverAddress, player.getId(), player.getCode());
         clients.add(client);
@@ -149,8 +149,8 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     @After
     public void tearDown() {
-        playersList.forEach(player ->
-                controller().unregisterPlayerTransport(player));
+        dealsList.forEach(deal ->
+                controller().unregisterPlayerTransport(deal));
         clients.forEach(WebSocketRunnerMock::reset);
         clients.forEach(WebSocketRunnerMock::stop);
         clients.clear();
@@ -184,7 +184,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
     }
 
     protected Player player(int index) {
-        return playersList.get(index);
+        return dealsList.get(index).getPlayer();
     }
 
     protected String receivedOnServer() {

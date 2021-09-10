@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
+import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.Player;
 
 import java.io.IOException;
@@ -51,15 +52,14 @@ public interface Controller<TData, TControl> {
     /**
      * В момент регистрации пользователя для него создается канал связи
      * к которому потом можно будет подключиться по ws и управлять игрой
-     * @param player Новозарегистрированный пользователь
-     * @param control Джойстик, которым пользователь может управлять или дргой контрол
+     * @param deal Игра которая начинается.
      */
-    void registerPlayerTransport(Player player, TControl control);
+    void registerPlayerTransport(Deal deal);
 
     /**
      * В случае, если пользователь не хочет больше играть, то и канал связи
-     * закрывается
-     * @param player Пользователь, покинувший игру
+     * закрывается.
+     * @param deal Игра которая завершилась.
      */
-    void unregisterPlayerTransport(Player player);
+    void unregisterPlayerTransport(Deal deal);
 }

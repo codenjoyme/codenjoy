@@ -2341,9 +2341,10 @@ public class PlayerServiceImplTest {
     }
 
     private Joystick getJoystick(Controller controller) {
-        ArgumentCaptor<Joystick> joystickCaptor = ArgumentCaptor.forClass(Joystick.class);
-        verify(controller).registerPlayerTransport(any(Player.class), joystickCaptor.capture());
-        return joystickCaptor.getValue();
+        ArgumentCaptor<Deal> captor = ArgumentCaptor.forClass(Deal.class);
+        verify(controller).registerPlayerTransport(captor.capture());
+        Deal deal = captor.getValue();
+        return deal.getJoystick();
     }
 
     @Test
