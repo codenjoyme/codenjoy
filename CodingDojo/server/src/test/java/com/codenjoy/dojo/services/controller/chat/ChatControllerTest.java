@@ -637,4 +637,43 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                         "room=room, playerId=player, time=12345, text=message)",
                 chat.getMessageById(3).toString());
     }
+
+    @Test
+    public void shouldPostTopic_success_informAnotherUser() {
+        // given
+        createPlayer("player", "room", "first");
+        createPlayer("player2", "room", "first");
+
+        client(0).start();
+
+        messages.post("room", "player", null, ROOM); // 1
+        messages.post("room", "player", null, ROOM); // 2
+
+        // when
+        nowIs(12345L);
+        client(0).sendToServer("{'command':'postTopic', " +
+                "'data':{'id':1, 'room':'room', 'text':'message'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1);
+
+        // then
+        assertEquals("[postTopic(1, message, room)]", receivedOnServer());
+
+        assertEquals("Chat.Message(id=3, topicId=1, type=TOPIC(2), " +
+                        "room=room, playerId=player, time=12345, text=message)",
+                chat.getMessageById(3).toString());
+
+        // inform player1
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(0).messages());
+
+        // inform player2
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(1).messages());
+    }
 }
