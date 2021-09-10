@@ -31,6 +31,7 @@ public class PMessage {
     private final int id;
     private final String text;
     private final String room;
+    private final int type;
     private final Integer topicId;
     private final String playerId;
     private final String playerName;
@@ -41,6 +42,7 @@ public class PMessage {
                 message.getId(),
                 message.getText(),
                 message.getRoom(),
+                message.getType().id(),
                 message.getTopicId(),
                 message.getPlayerId(),
                 playerName,

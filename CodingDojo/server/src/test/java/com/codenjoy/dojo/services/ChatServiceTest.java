@@ -181,50 +181,50 @@ public class ChatServiceTest {
 
         // when then
         nowIs(12345L);
-        assertEquals("PMessage(id=1, text=message1, room=room, topicId=null, " +
+        assertEquals("PMessage(id=1, text=message1, room=room, type=1, topicId=null, " +
                         "playerId=player1, playerName=player1-name, time=12345)",
                 player1.postRoom("message1", "room").toString()); // 1
 
         nowIs(12346L);
-        assertEquals("PMessage(id=2, text=message2, room=room, topicId=null, " +
+        assertEquals("PMessage(id=2, text=message2, room=room, type=1, topicId=null, " +
                         "playerId=player2, playerName=player2-name, time=12346)",
                 player2.postRoom("message2", "room").toString()); // 2
 
         nowIs(12347L);
-        assertEquals("PMessage(id=3, text=message3, room=room, topicId=1, " +
+        assertEquals("PMessage(id=3, text=message3, room=room, type=2, topicId=1, " +
                         "playerId=player1, playerName=player1-name, time=12347)",
                 player1.postTopic(1, "message3", "room").toString()); // 3
 
         nowIs(12348L);
-        assertEquals("PMessage(id=4, text=message4, room=room, topicId=2, " +
+        assertEquals("PMessage(id=4, text=message4, room=room, type=2, topicId=2, " +
                         "playerId=player2, playerName=player2-name, time=12348)",
                 player2.postTopic(2, "message4", "room").toString()); // 4
 
         nowIs(12349L);
-        assertEquals("PMessage(id=5, text=message5, room=room, topicId=2, " +
+        assertEquals("PMessage(id=5, text=message5, room=room, type=3, topicId=2, " +
                         "playerId=player1, playerName=player1-name, time=12349)",
                 player1.postField("message5", "room").toString()); // 5
 
         nowIs(12350L);
-        assertEquals("PMessage(id=6, text=message6, room=room, topicId=4, " +
+        assertEquals("PMessage(id=6, text=message6, room=room, type=3, topicId=4, " +
                         "playerId=player2, playerName=player2-name, time=12350)",
                 player2.postField("message6", "room").toString()); // 6
 
         nowIs(12351L);
-        assertEquals("PMessage(id=7, text=message7, room=room, topicId=2, " +
+        assertEquals("PMessage(id=7, text=message7, room=room, type=3, topicId=2, " +
                         "playerId=player1, playerName=player1-name, time=12351)",
                 player1.postField("message7", "room").toString()); // 7
 
         nowIs(12352L);
-        assertEquals("PMessage(id=8, text=message8, room=room, topicId=4, " +
+        assertEquals("PMessage(id=8, text=message8, room=room, type=3, topicId=4, " +
                         "playerId=player2, playerName=player2-name, time=12352)",
                 player2.postField("message8", "room").toString()); // 8
 
-        assertEquals("PMessage(id=1, text=message1, room=room, topicId=null, " +
+        assertEquals("PMessage(id=1, text=message1, room=room, type=1, topicId=null, " +
                         "playerId=player1, playerName=player1-name, time=12345)",
                 player1.get(1, "room").toString());
 
-        assertEquals("PMessage(id=5, text=message5, room=room, topicId=2, " +
+        assertEquals("PMessage(id=5, text=message5, room=room, type=3, topicId=2, " +
                         "playerId=player1, playerName=player1-name, time=12349)",
                 player2.get(5, "room").toString());
 
@@ -236,35 +236,35 @@ public class ChatServiceTest {
                 .count(10)
                 .get();
 
-        assertEquals("[PMessage(id=1, text=message1, room=room, topicId=null, " +
+        assertEquals("[PMessage(id=1, text=message1, room=room, type=1, topicId=null, " +
                         "playerId=player1, playerName=player1-name, time=12345), " +
-                        "PMessage(id=2, text=message2, room=room, topicId=null, " +
+                        "PMessage(id=2, text=message2, room=room, type=1, topicId=null, " +
                         "playerId=player2, playerName=player2-name, time=12346)]",
                 player1.getAllRoom(filter).toString());
 
-        assertEquals("[PMessage(id=1, text=message1, room=room, topicId=null, " +
+        assertEquals("[PMessage(id=1, text=message1, room=room, type=1, topicId=null, " +
                         "playerId=player1, playerName=player1-name, time=12345), " +
-                        "PMessage(id=2, text=message2, room=room, topicId=null, " +
+                        "PMessage(id=2, text=message2, room=room, type=1, topicId=null, " +
                         "playerId=player2, playerName=player2-name, time=12346)]",
                 player2.getAllRoom(filter).toString());
 
-        assertEquals("[PMessage(id=3, text=message3, room=room, topicId=1, " +
+        assertEquals("[PMessage(id=3, text=message3, room=room, type=2, topicId=1, " +
                         "playerId=player1, playerName=player1-name, time=12347)]",
                 player1.getAllTopic(1, filter).toString());
 
-        assertEquals("[PMessage(id=4, text=message4, room=room, topicId=2, " +
+        assertEquals("[PMessage(id=4, text=message4, room=room, type=2, topicId=2, " +
                         "playerId=player2, playerName=player2-name, time=12348)]",
                 player2.getAllTopic(2, filter).toString());
 
-        assertEquals("[PMessage(id=5, text=message5, room=room, topicId=2, " +
+        assertEquals("[PMessage(id=5, text=message5, room=room, type=3, topicId=2, " +
                         "playerId=player1, playerName=player1-name, time=12349), " +
-                        "PMessage(id=7, text=message7, room=room, topicId=2, " +
+                        "PMessage(id=7, text=message7, room=room, type=3, topicId=2, " +
                         "playerId=player1, playerName=player1-name, time=12351)]",
                 player1.getAllField(filter).toString());
 
-        assertEquals("[PMessage(id=6, text=message6, room=room, topicId=4, " +
+        assertEquals("[PMessage(id=6, text=message6, room=room, type=3, topicId=4, " +
                         "playerId=player2, playerName=player2-name, time=12350), " +
-                        "PMessage(id=8, text=message8, room=room, topicId=4, " +
+                        "PMessage(id=8, text=message8, room=room, type=3, topicId=4, " +
                         "playerId=player2, playerName=player2-name, time=12352)]",
                 player2.getAllField(filter).toString());
 
@@ -274,11 +274,11 @@ public class ChatServiceTest {
         assertEquals(true,
                 player2.delete(6, "room"));
 
-        assertEquals("[PMessage(id=7, text=message7, room=room, topicId=2, " +
+        assertEquals("[PMessage(id=7, text=message7, room=room, type=3, topicId=2, " +
                         "playerId=player1, playerName=player1-name, time=12351)]",
                 player1.getAllField(filter).toString());
 
-        assertEquals("[PMessage(id=8, text=message8, room=room, topicId=4, " +
+        assertEquals("[PMessage(id=8, text=message8, room=room, type=3, topicId=4, " +
                         "playerId=player2, playerName=player2-name, time=12352)]",
                 player2.getAllField(filter).toString());
 
