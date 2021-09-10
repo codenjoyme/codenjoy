@@ -185,7 +185,7 @@ public class WebSocketRunnerMock {
 
     @SneakyThrows
     public void sendToServer(String message) {
-        while (session.getRemote() == null) {
+        while (session == null || session.getRemote() == null) {
             Thread.sleep(10);
         }
         session.getRemote().sendString(message);
