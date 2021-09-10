@@ -137,7 +137,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldGet_fail() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -159,7 +158,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldGet_success() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -183,7 +181,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldDelete_success() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -209,7 +206,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldDelete_fail() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -232,7 +228,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldGetAllRoom_fail() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -256,7 +251,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldGetAllRoom_success() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -286,7 +280,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldGetAllTopic_fail() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -310,7 +303,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldGetAllTopic_success() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -340,7 +332,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldGetAllField_fail() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -364,7 +355,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldGetAllField_success() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -394,7 +384,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldPostRoom_fail() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -416,7 +405,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldPostRoom_success() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -439,10 +427,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldPostRoom_success_informAnotherUser() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
-
         createPlayer("player2", "room", "first");
-        login.asUser("player2", "player2");
 
         client(0).start();
         client(1).start();
@@ -474,7 +459,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldPostField_fail() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -496,7 +480,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldPostField_success() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -528,10 +511,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                 .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
 
         Deal deal1 = createPlayer("player", "room", "third");
-        login.asUser("player", "player");
-
         Deal deal2 = createPlayer("player2", "room", "third");
-        login.asUser("player2", "player2");
 
         assertEquals("[1, 1]", Arrays.asList(
                 fields.id(deal1.getField()),
@@ -571,11 +551,12 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     @Test
     public void shouldPostField_success_dontInformAnotherUser_differentFields() {
         // given
-        createPlayer("player", "room", "first");
-        login.asUser("player", "player");
+        Deal deal1 = createPlayer("player", "room", "first");
+        Deal deal2 = createPlayer("player2", "room", "first");
 
-        createPlayer("player2", "room", "first");
-        login.asUser("player2", "player2");
+        assertEquals("[1, 2]", Arrays.asList(
+                fields.id(deal1.getField()),
+                fields.id(deal2.getField())).toString());
 
         client(0).start();
         client(1).start();
@@ -604,14 +585,12 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         // don't inform player2 because of other field
         assertEquals("[]",
                 client(1).messages());
-
     }
 
     @Test
     public void shouldPostTopic_fail() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
@@ -633,7 +612,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     public void shouldPostTopic_success() {
         // given
         createPlayer("player", "room", "first");
-        login.asUser("player", "player");
 
         client(0).start();
 
