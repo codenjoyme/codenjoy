@@ -85,6 +85,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         roomsSettings = new RoomHelper(rooms, games);
 
         messages.removeAll();
+        roomsSettings.removeAll();
         fields.removeAll();
 
         setupChatControl();
