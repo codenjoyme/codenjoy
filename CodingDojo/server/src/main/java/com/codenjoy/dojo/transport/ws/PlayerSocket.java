@@ -47,10 +47,11 @@ public class PlayerSocket {
 
     @OnWebSocketMessage
     public void onWebSocketText(String message) {
-        if (requested) {
-            requested = false;
-            handler.onResponse(this, message);
+        if (!requested) {
+            return;
         }
+        requested = false;
+        handler.onResponse(this, message);
     }
 
     @OnWebSocketClose
@@ -80,11 +81,12 @@ public class PlayerSocket {
         if (session == null) {
             return;
         }
-        if (!requested) {
-            requested = true;
-            if (session.isOpen()) {
-                session.getRemote().sendString(message);
-            }
+        if (requested) {
+            return;
+        }
+        requested = true;
+        if (session.isOpen()) {
+            session.getRemote().sendString(message);
         }
     }
 
