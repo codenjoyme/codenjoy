@@ -204,7 +204,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     }
 
     @Test
-    public void shouldDelete_success_informAnotherUser() {
+    public void shouldDelete_success_informAnotherUser_caseDeleteRoomMessage() {
         // given
         createPlayer("player", "room", "first");
         createPlayer("player2", "room", "first");
@@ -239,6 +239,92 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[{'command':'delete', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+                client(1).messages());
+
+        // don't inform player3 because of other room
+        assertEquals("[]",
+                client(2).messages());
+    }
+
+    @Test
+    public void shouldDelete_success_informAnotherUser_caseDeleteFieldMessage() {
+        // given
+        roomsSettings.settings("room", "third")
+                .bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_TEAMS_PER_ROOM, 1)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
+
+        Deal deal1 = createPlayer("player", "room", "third");
+        Deal deal2 = createPlayer("player2", "room", "third");
+        Deal deal3 = createPlayer("player3", "room2", "third"); // another room will be ignored
+
+        assertEquals("[1, 1, 2]", Arrays.asList(
+                fields.id(deal1.getField()),
+                fields.id(deal2.getField()),
+                fields.id(deal3.getField())).toString());
+
+        client(0).start();
+        client(1).start();
+        client(2).start();
+
+        messages.post("room", "player",  1, FIELD); // 1
+        messages.post("room", "player2", 1, FIELD); // 2
+        messages.post("room", "player3", 2, FIELD); // 3
+
+        // when
+        // delete field message by player1
+        client(0).sendToServer("{'command':'delete', " +
+                "'data':{'id':1, 'room':'room'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1);
+        waitForClientReceived(2, false);
+
+        // then
+        assertEquals("[delete(1, room)]", receivedOnServer());
+
+        assertEquals(null, chat.getMessageById(1));
+
+        // inform player1
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+                client(0).messages());
+
+        // inform player2 because of same field
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+                client(1).messages());
+
+        // don't inform player3 because of other room
+        assertEquals("[]",
+                client(2).messages());
+
+        // when
+        // delete another field message by player2
+        client(1).sendToServer("{'command':'delete', " +
+                "'data':{'id':2, 'room':'room'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1);
+        waitForClientReceived(2, false);
+
+        // then
+        assertEquals("[delete(2, room)]", receivedOnServer());
+
+        assertEquals(null, chat.getMessageById(2));
+
+        // inform player1
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':2,'text':'message2','room':'room','type':3,'topicId':1," +
+                        "'playerId':'player2','playerName':'player2-name','time':1615231623345}]}]",
+                client(0).messages());
+
+        // inform player2 because of same field
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':2,'text':'message2','room':'room','type':3,'topicId':1," +
+                        "'playerId':'player2','playerName':'player2-name','time':1615231623345}]}]",
                 client(1).messages());
 
         // don't inform player3 because of other room

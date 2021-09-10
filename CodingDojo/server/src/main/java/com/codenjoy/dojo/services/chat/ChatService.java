@@ -386,7 +386,7 @@ public class ChatService {
             }
 
             private void informDeleteInField(PMessage message, int fieldId, OnChange listener) {
-                spreader.players(fieldId) // TODO test me
+                spreader.players(fieldId)
                         .forEach(player -> listener.deleted(message, player.getId()));
             }
 
@@ -410,7 +410,6 @@ public class ChatService {
                 Chat.Message message = chat.getMessageById(id);
                 boolean deleted = deleteMessage(id, room, playerId);
                 if (deleted) {
-                    // TODO test me
                     informDelete(wrap(message), room, roomOrField(message));
                 }
                 return deleted;
@@ -433,7 +432,7 @@ public class ChatService {
                     case ROOM:
                         informDeleteInRoom(message, room, listener);
                         break;
-                    case FIELD: // TODO test me
+                    case FIELD:
                         informDeleteInField(message, message.getTopicId(), listener);
                         break;
                     default:
