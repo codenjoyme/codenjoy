@@ -32,7 +32,6 @@ import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.ChatHelper;
-import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
@@ -40,8 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
@@ -66,9 +63,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     @Autowired
     private Chat chat;
     
-    private List<String> changeEvents = new LinkedList<>();
-    private ChatControl.OnChange changeListener;
-
     private ChatHelper messages;
 
     @Before
@@ -81,26 +75,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         fields.removeAll();
 
         setupChatControl();
-        setupChangeListener();
-    }
-
-    private void setupChangeListener() {
-        changeListener = new ChatControl.OnChange() {
-            @Override
-            public void deleted(PMessage message, String playerId) {
-                changeEvents.add(String.format("['%s']:Message deleted: %s", playerId, message));
-            }
-
-            @Override
-            public void created(PMessage message, String playerId) {
-                changeEvents.add(String.format("['%s']:New message created: %s", playerId, message));
-            }
-        };
-    }
-
-    private String changeEvents() {
-        return changeEvents.stream()
-                .collect(joining(",\n"));
     }
 
     @Override
