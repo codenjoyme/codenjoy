@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.stuff.SmartAssert;
-import com.codenjoy.dojo.web.rest.TestLogin;
+import com.codenjoy.dojo.services.helper.LoginHelper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,7 +70,7 @@ public class DealsServiceTest {
     @Autowired
     private ConfigProperties config;
 
-    protected TestLogin login;
+    protected LoginHelper login;
 
     @Autowired
     private FieldService fields;
@@ -83,7 +83,7 @@ public class DealsServiceTest {
 
     @Before
     public void setup() {
-        login = new TestLogin(config, players, registration, deals);
+        login = new LoginHelper(config, players, registration, deals);
 
         fields.removeAll();
         rooms.removeAll();

@@ -28,13 +28,11 @@ import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
-import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,7 +69,6 @@ import java.util.Random;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.reset;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
@@ -161,11 +158,11 @@ public abstract class AbstractRestControllerTest {
     @Autowired
     protected FieldService fields;
 
-    protected TestLogin login;
+    protected LoginHelper login;
 
     @Before
     public void setUp() {
-        login = new TestLogin(config, players, registration, deals);
+        login = new LoginHelper(config, players, registration, deals);
 
         CodenjoyContext.setContext("codenjoy-contest");
         mvc = MockMvcBuilders.webAppContextSetup(context).build();

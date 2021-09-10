@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import com.codenjoy.dojo.web.rest.AbstractRestControllerTest;
-import com.codenjoy.dojo.web.rest.TestLogin;
+import com.codenjoy.dojo.services.helper.LoginHelper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -100,7 +100,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
     @SpyBean
     protected Deals deals;
 
-    protected TestLogin login;
+    protected LoginHelper login;
 
     @LocalServerPort
     private int port;
@@ -111,7 +111,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
     @Before
     protected void setup() {
         tearDown();
-        login = new TestLogin(config, players, registration, deals);
+        login = new LoginHelper(config, players, registration, deals);
 
         login.removeAll();
 

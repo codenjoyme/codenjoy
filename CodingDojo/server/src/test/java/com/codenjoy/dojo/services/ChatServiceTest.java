@@ -35,7 +35,7 @@ import com.codenjoy.dojo.services.dao.ChatTest;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.stuff.SmartAssert;
-import com.codenjoy.dojo.web.rest.TestLogin;
+import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import org.junit.After;
 import org.junit.Before;
@@ -81,7 +81,7 @@ public class ChatServiceTest {
     @Autowired
     private Deals deals;
 
-    protected TestLogin login;
+    protected LoginHelper login;
 
     @SpyBean
     private FieldService fields;
@@ -95,7 +95,7 @@ public class ChatServiceTest {
 
     @Before
     public void setup() {
-        login = new TestLogin(config, players, registration, deals);
+        login = new LoginHelper(config, players, registration, deals);
 
         chat.removeAll();
         fields.removeAll();

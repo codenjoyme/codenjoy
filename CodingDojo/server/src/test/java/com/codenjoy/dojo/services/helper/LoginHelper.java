@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.web.rest;
+package com.codenjoy.dojo.services.helper;
 
 /*-
  * #%L
@@ -37,7 +37,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.reset;
 
 @AllArgsConstructor
-public class TestLogin {
+public class LoginHelper {
 
     private ConfigProperties config;
     private PlayerService players;
