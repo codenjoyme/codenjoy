@@ -25,6 +25,7 @@ package com.codenjoy.dojo.config;
 import com.codenjoy.dojo.services.JarResourceHttpRequestHandler;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import com.codenjoy.dojo.transport.chat.ChatWebSocketServlet;
 import com.codenjoy.dojo.transport.control.ControlWebSocketServlet;
 import com.codenjoy.dojo.transport.screen.ScreenWebSocketServlet;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
@@ -142,7 +143,7 @@ public class MVCConf implements WebMvcConfigurer {
 
     @Bean
     public ServletRegistrationBean wsChatServlet(@Value("${mvc.servlet-path.chat}") String path) {
-        ScreenWebSocketServlet servlet = new ScreenWebSocketServlet(chatPlayerTransport, secureAuthenticationService);
+        ChatWebSocketServlet servlet = new ChatWebSocketServlet(chatPlayerTransport, secureAuthenticationService);
 
         return new ServletRegistrationBean<>(servlet, path){{
             setLoadOnStartup(100);
