@@ -429,9 +429,11 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         // given
         createPlayer("player", "room", "first");
         createPlayer("player2", "room", "first");
+        createPlayer("player3", "room2", "first"); // another room will be ignored
 
         client(0).start();
         client(1).start();
+        client(2).start();
 
         // when
         nowIs(12345L);
@@ -440,6 +442,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         waitForServerReceived();
         waitForClientReceived(0);
         waitForClientReceived(1);
+        waitForClientReceived(2, false);
 
         // then
         assertEquals("[postRoom(message1, room)]", receivedOnServer());
@@ -454,6 +457,10 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(1).messages());
+
+        // don't inform player3 because of other room
+        assertEquals("[]",
+                client(2).messages());
     }
 
     @Test
@@ -513,13 +520,16 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         Deal deal1 = createPlayer("player", "room", "third");
         Deal deal2 = createPlayer("player2", "room", "third");
+        Deal deal3 = createPlayer("player3", "room2", "third"); // another room will be ignored
 
-        assertEquals("[1, 1]", Arrays.asList(
+        assertEquals("[1, 1, 2]", Arrays.asList(
                 fields.id(deal1.getField()),
-                fields.id(deal2.getField())).toString());
+                fields.id(deal2.getField()),
+                fields.id(deal3.getField())).toString());
 
         client(0).start();
         client(1).start();
+        client(2).start();
 
         // when
         nowIs(12345L);
@@ -528,6 +538,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         waitForServerReceived();
         waitForClientReceived(0);
         waitForClientReceived(1);
+        waitForClientReceived(2, false);
 
         // then
         assertEquals("[postField(message, room)]", receivedOnServer());
@@ -547,6 +558,10 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                         "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(1).messages());
+
+        // inform player3 because of other room
+        assertEquals("[]",
+                client(2).messages());
     }
 
     @Test
@@ -643,9 +658,11 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         // given
         createPlayer("player", "room", "first");
         createPlayer("player2", "room", "first");
+        createPlayer("player3", "room2", "first"); // another room will be ignored
 
         client(0).start();
         client(1).start();
+        client(2).start();
 
         messages.post("room", "player", null, ROOM); // 1
         messages.post("room", "player", null, ROOM); // 2
@@ -657,6 +674,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         waitForServerReceived();
         waitForClientReceived(0);
         waitForClientReceived(1);
+        waitForClientReceived(2, false);
 
         // then
         assertEquals("[postTopic(1, message, room)]", receivedOnServer());
@@ -671,10 +689,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
 
-        // inform player2
+        // inform player2 because of same room
         assertEquals("[{'command':'add', 'data':[" +
                         "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(1).messages());
+
+        // don't inform player3 because of other room
+        assertEquals("[]",
+                client(2).messages());
     }
 }
