@@ -62,6 +62,7 @@ public class WebSocketRunnerMock {
         reset();
     }
 
+    @SneakyThrows
     public void start() {
         new Thread(() -> {
             start(server, id, code);
@@ -80,11 +81,7 @@ public class WebSocketRunnerMock {
 
         log.info("Client starting...");
         while (!started.get()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Thread.sleep(10);
         }
     }
 
