@@ -88,6 +88,8 @@ public class ChatServiceTest {
     private ChatHelper messages;
 
     private List<String> logs = new LinkedList<>();
+    private List<ChatControl.OnChange> listeners = new LinkedList<>();
+    private List<ChatControl> controls = new LinkedList<>();
 
     @Before
     public void setup() {
@@ -169,25 +171,14 @@ public class ChatServiceTest {
     @Test
     public void shouldGetControl() {
         // given
-        login.register("player1", "ip", "name", "first");
-        login.join("player1", "room");
-
-        login.register("player2", "ip", "name", "first");
-        login.join("player2", "room");
-
-        ChatControl.OnChange listener1 = getListener(1);
-        ChatControl.OnChange listener2 = getListener(2);
-
-        // when
-        ChatControl player1 = service.control("player1", listener1);
-        ChatControl player2 = service.control("player2", listener2);
+        givenThreePlayers();
 
         // when then
         // player1 create room message1
         nowIs(12345L);
         assertEquals("PMessage(id=1, text=message1, room=room, type=1, topicId=null, " +
                         "playerId=player1, playerName=player1-name, time=12345)",
-                player1.postRoom("message1", "room").toString());
+                control(1).postRoom("message1", "room").toString());
 
         assertListener(
                 "listener1-player1 created: PMessage(id=1, text=message1, room=room, type=1, " +
@@ -200,7 +191,7 @@ public class ChatServiceTest {
         nowIs(12346L);
         assertEquals("PMessage(id=2, text=message2, room=room, type=1, topicId=null, " +
                         "playerId=player2, playerName=player2-name, time=12346)",
-                player2.postRoom("message2", "room").toString());
+                control(2).postRoom("message2", "room").toString());
 
         assertListener(
                 "listener2-player1 created: PMessage(id=2, text=message2, room=room, type=1, " +
@@ -213,7 +204,7 @@ public class ChatServiceTest {
         nowIs(12347L);
         assertEquals("PMessage(id=3, text=message3, room=room, type=2, topicId=1, " +
                         "playerId=player1, playerName=player1-name, time=12347)",
-                player1.postTopic(1, "message3", "room").toString());
+                control(1).postTopic(1, "message3", "room").toString());
 
         assertListener(
                 "listener1-player1 created: PMessage(id=3, text=message3, room=room, type=2, " +
@@ -226,7 +217,7 @@ public class ChatServiceTest {
         nowIs(12348L);
         assertEquals("PMessage(id=4, text=message4, room=room, type=2, topicId=2, " +
                         "playerId=player2, playerName=player2-name, time=12348)",
-                player2.postTopic(2, "message4", "room").toString());
+                control(2).postTopic(2, "message4", "room").toString());
 
         assertListener(
                 "listener2-player1 created: PMessage(id=4, text=message4, room=room, type=2, " +
@@ -237,29 +228,29 @@ public class ChatServiceTest {
         // when then
         // player1 create field message5
         nowIs(12349L);
-        assertEquals("PMessage(id=5, text=message5, room=room, type=3, topicId=2, " +
+        assertEquals("PMessage(id=5, text=message5, room=room, type=3, topicId=1, " +
                         "playerId=player1, playerName=player1-name, time=12349)",
-                player1.postField("message5", "room").toString());
+                control(1).postField("message5", "room").toString());
 
         assertListener("listener1-player1 created: PMessage(id=5, text=message5, room=room, " +
-                "type=3, topicId=2, playerId=player1, playerName=player1-name, time=12349)");
+                "type=3, topicId=1, playerId=player1, playerName=player1-name, time=12349)");
 
         // when then
         // player2 create field message6
         nowIs(12350L);
-        assertEquals("PMessage(id=6, text=message6, room=room, type=3, topicId=4, " +
+        assertEquals("PMessage(id=6, text=message6, room=room, type=3, topicId=2, " +
                         "playerId=player2, playerName=player2-name, time=12350)",
-                player2.postField("message6", "room").toString());
+                control(2).postField("message6", "room").toString());
 
         assertListener("listener2-player2 created: PMessage(id=6, text=message6, room=room, type=3, " +
-                "topicId=4, playerId=player2, playerName=player2-name, time=12350)");
+                "topicId=2, playerId=player2, playerName=player2-name, time=12350)");
 
         // when then
         // player1 create topic field message7 in the field message5
         nowIs(12351L);
         assertEquals("PMessage(id=7, text=message7, room=room, type=2, " +
                         "topicId=5, playerId=player1, playerName=player1-name, time=12351)",
-                player1.postTopic(5, "message7", "room").toString());
+                control(1).postTopic(5, "message7", "room").toString());
 
         assertListener(
                 "listener1-player1 created: PMessage(id=7, text=message7, room=room, type=2, " +
@@ -272,7 +263,7 @@ public class ChatServiceTest {
         nowIs(12352L);
         assertEquals("PMessage(id=8, text=message8, room=room, type=2, " +
                         "topicId=6, playerId=player2, playerName=player2-name, time=12352)",
-                player2.postTopic(6, "message8", "room").toString());
+                control(2).postTopic(6, "message8", "room").toString());
 
         assertListener(
                 "listener2-player1 created: PMessage(id=8, text=message8, room=room, type=2, " +
@@ -284,15 +275,15 @@ public class ChatServiceTest {
         // player1 get room message1
         assertEquals("PMessage(id=1, text=message1, room=room, type=1, topicId=null, " +
                         "playerId=player1, playerName=player1-name, time=12345)",
-                player1.get(1, "room").toString());
+                control(1).get(1, "room").toString());
 
         assertListener("");
 
         // when then
         // player2 get topic message5
-        assertEquals("PMessage(id=5, text=message5, room=room, type=3, topicId=2, " +
+        assertEquals("PMessage(id=5, text=message5, room=room, type=3, topicId=1, " +
                         "playerId=player1, playerName=player1-name, time=12349)",
-                player2.get(5, "room").toString());
+                control(2).get(5, "room").toString());
 
         assertListener("");
 
@@ -311,7 +302,7 @@ public class ChatServiceTest {
                         "playerId=player1, playerName=player1-name, time=12345), " +
                         "PMessage(id=2, text=message2, room=room, type=1, topicId=null, " +
                         "playerId=player2, playerName=player2-name, time=12346)]",
-                player1.getAllRoom(filter).toString());
+                control(1).getAllRoom(filter).toString());
 
         assertListener("");
 
@@ -321,7 +312,7 @@ public class ChatServiceTest {
                         "playerId=player1, playerName=player1-name, time=12345), " +
                         "PMessage(id=2, text=message2, room=room, type=1, topicId=null, " +
                         "playerId=player2, playerName=player2-name, time=12346)]",
-                player2.getAllRoom(filter).toString());
+                control(2).getAllRoom(filter).toString());
 
         assertListener("");
 
@@ -329,7 +320,7 @@ public class ChatServiceTest {
         // player1 get all topic messages for room message1
         assertEquals("[PMessage(id=3, text=message3, room=room, type=2, topicId=1, " +
                         "playerId=player1, playerName=player1-name, time=12347)]",
-                player1.getAllTopic(1, filter).toString());
+                control(1).getAllTopic(1, filter).toString());
 
         assertListener("");
 
@@ -337,53 +328,53 @@ public class ChatServiceTest {
         // player2 get all room messages for room message2
         assertEquals("[PMessage(id=4, text=message4, room=room, type=2, topicId=2, " +
                         "playerId=player2, playerName=player2-name, time=12348)]",
-                player2.getAllTopic(2, filter).toString());
+                control(2).getAllTopic(2, filter).toString());
 
         assertListener("");
 
         // when then
         // player1 get all field messages
-        assertEquals("[PMessage(id=5, text=message5, room=room, type=3, topicId=2, " +
+        assertEquals("[PMessage(id=5, text=message5, room=room, type=3, topicId=1, " +
                         "playerId=player1, playerName=player1-name, time=12349)]",
-                player1.getAllField(filter).toString());
+                control(1).getAllField(filter).toString());
 
         assertListener("");
 
         // when then
         // player2 get all field messages
-        assertEquals("[PMessage(id=6, text=message6, room=room, type=3, topicId=4, " +
+        assertEquals("[PMessage(id=6, text=message6, room=room, type=3, topicId=2, " +
                         "playerId=player2, playerName=player2-name, time=12350)]",
-                player2.getAllField(filter).toString());
+                control(2).getAllField(filter).toString());
 
         assertListener("");
 
         // when then
         // player2 delete field message6
         assertEquals(true,
-                player2.delete(6, "room"));
+                control(2).delete(6, "room"));
 
         assertListener("listener2-player2 deleted: PMessage(id=6, text=message6, room=room, type=3, " +
-                "topicId=4, playerId=player2, playerName=player2-name, time=12350)");
+                "topicId=2, playerId=player2, playerName=player2-name, time=12350)");
 
         // when then
         // player1 get all field messages
-        assertEquals("[PMessage(id=5, text=message5, room=room, type=3, topicId=2, " +
+        assertEquals("[PMessage(id=5, text=message5, room=room, type=3, topicId=1, " +
                         "playerId=player1, playerName=player1-name, time=12349)]",
-                player1.getAllField(filter).toString());
+                control(1).getAllField(filter).toString());
 
         assertListener("");
 
         // when then
         // player2 get all field messages
         assertEquals("[]",
-                player2.getAllField(filter).toString());
+                control(2).getAllField(filter).toString());
 
         assertListener("");
 
         // when then
         // player1 delete topic message3
         assertEquals(true,
-                player1.delete(3, "room"));
+                control(1).delete(3, "room"));
 
         assertListener(
                 "listener1-player1 deleted: PMessage(id=3, text=message3, room=room, type=2, topicId=1, " +
@@ -394,7 +385,7 @@ public class ChatServiceTest {
         // when then
         // player1 get all topic messages for room message1
         assertEquals("[]",
-                player1.getAllTopic(1, filter).toString());
+                control(1).getAllTopic(1, filter).toString());
 
         assertListener("");
 
@@ -402,20 +393,38 @@ public class ChatServiceTest {
         // player2 get all topic messages for room message2
         assertEquals("[PMessage(id=4, text=message4, room=room, type=2, topicId=2, " +
                         "playerId=player2, playerName=player2-name, time=12348)]",
-                player2.getAllTopic(2, filter).toString());
+                control(2).getAllTopic(2, filter).toString());
 
         assertListener("");
 
         // when then
         // player2 delete topic field message8
         assertEquals(true,
-                player2.delete(8, "room"));
+                control(2).delete(8, "room"));
 
         assertListener(
                 "listener2-player1 deleted: PMessage(id=8, text=message8, room=room, type=2, " +
                         "topicId=6, playerId=player2, playerName=player2-name, time=12352),\n" +
                 "listener2-player2 deleted: PMessage(id=8, text=message8, room=room, type=2, " +
                         "topicId=6, playerId=player2, playerName=player2-name, time=12352)");
+    }
+
+    private ChatControl control(int id) {
+        return controls.get(id - 1);
+    }
+
+    private void givenThreePlayers() {
+        createPlayerWithControl("player1", "room", "first");
+        createPlayerWithControl("player2", "room", "first");
+        createPlayerWithControl("player3", "room2", "first");
+    }
+
+    private void createPlayerWithControl(String player, String room, String game) {
+        int index = listeners.size();
+        login.register(player, "ip", room, game);
+        login.join(player, room);
+        listeners.add(getListener(index + 1));
+        controls.add(service.control(player, listeners.get(index)));
     }
 
     private void assertListener(String expected) {
