@@ -36,8 +36,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static java.util.stream.Collectors.toList;
-
 @Slf4j
 @Component
 public class Spreader {
@@ -85,7 +83,7 @@ public class Spreader {
      * оставаться на борде не имеет смысла
      */
     public List<Deal> remove(Deal deal, Sweeper sweeper) {
-        Optional<GameRoom> optional = roomsFor(deal);
+        Optional<GameRoom> optional = roomFor(deal);
 
         if (!optional.isPresent()) {
             return Arrays.asList();
@@ -112,20 +110,20 @@ public class Spreader {
                 .forEach(key -> rooms.remove(key, room));
     }
 
-    private Optional<GameRoom> roomsFor(Deal deal) {
+    private Optional<GameRoom> roomFor(Deal deal) {
         return rooms.values().stream()
                 .filter(room -> room.containsDeal(deal))
                 .findFirst();
     }
 
-    private Optional<GameRoom> roomsFor(GameField field) {
+    private Optional<GameRoom> roomFor(GameField field) {
         return rooms.values().stream()
                 .filter(room -> room.isFor(field))
                 .findFirst();
     }
 
     public boolean contains(Deal deal) {
-        return !roomsFor(deal).isEmpty();
+        return !roomFor(deal).isEmpty();
     }
 
     public boolean isRoomStaffed(GameField field) {
@@ -133,7 +131,7 @@ public class Spreader {
             throw new IllegalArgumentException("Field is null");
         }
 
-        return roomsFor(field)
+        return roomFor(field)
                 .orElseThrow(() -> new IllegalStateException(
                         "There is no room for field: " + field.hashCode()))
                 .isStuffed();
