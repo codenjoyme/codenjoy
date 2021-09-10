@@ -28,7 +28,6 @@ import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
@@ -39,12 +38,11 @@ public class ScreenWebSocketServlet extends WebSocketServlet{
     private AuthenticationService authentication;
 
     @Override
-    public void configure(WebSocketServletFactory webSocketServletFactory) {
-        PlayerSocketCreator creator =
-                new PlayerSocketCreator(transport,
-                        authentication,
-                        PlayerSocket.CLIENT_SEND_FIRST);
-
-        webSocketServletFactory.setCreator(creator);
+    public void configure(WebSocketServletFactory factory) {
+        factory.setCreator(new PlayerSocketCreator(
+                transport,
+                authentication,
+                PlayerSocket.IN_TURN_COMMUNICATION,
+                PlayerSocket.CLIENT_SENDS_FIRST));
     }
 }

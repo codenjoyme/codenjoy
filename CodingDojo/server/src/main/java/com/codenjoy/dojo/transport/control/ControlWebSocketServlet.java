@@ -44,7 +44,8 @@ public class ControlWebSocketServlet extends WebSocketServlet {
         factory.setCreator(new PlayerSocketCreator(
                 transport,
                 authentication,
-                PlayerSocket.SERVER_SEND_FIRST));
+                PlayerSocket.IN_TURN_COMMUNICATION,
+                PlayerSocket.SERVER_SENDS_FIRST));
 
         timer.resume();
     }

@@ -42,15 +42,17 @@ import static java.util.stream.Collectors.toList;
 public class PlayerSocketCreator implements WebSocketCreator {
 
     public static final String UNAUTHORIZED_ACCESS = "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.";
+
     private PlayerTransport transport;
     private AuthenticationService authentication;
-    private boolean waitForClient;
+    private boolean inTurnCommunication; // TODO test me in PlayerTransportTest
+    private boolean clientSendsFirst;
 
     @Override
     public PlayerSocket createWebSocket(ServletUpgradeRequest servletRequest, ServletUpgradeResponse response) {
         HttpServletRequest request = servletRequest.getHttpServletRequest();
         String authId = authentication.authenticate(request);
-        PlayerSocket socket = new PlayerSocket(authId, waitForClient);
+        PlayerSocket socket = new PlayerSocket(authId, inTurnCommunication, clientSendsFirst);
         if (authId == null) {
             log.warn("Unauthorized access [{}] from {}", getParameters(request), request.getRemoteAddr());
             try {

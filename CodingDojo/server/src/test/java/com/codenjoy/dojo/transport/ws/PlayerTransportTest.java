@@ -50,7 +50,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldSendDataToWebSocketClient_caseClientSendFirst_withUniqueSocketFilter() throws IOException {
         // given
-        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
         createServerWebSocket("id");
         PlayerSocket webSocket = connectWebSocketClient("id");
 
@@ -74,10 +74,14 @@ public class PlayerTransportTest {
                 data -> data.toString().toUpperCase());
     }
 
-    private void createServices(boolean waitForClient) {
+    private void createServices(boolean clientSendsFirst) {
         transport = new PlayerTransportImpl();
         authentication = mock(AuthenticationService.class);
-        creator = new PlayerSocketCreator(transport, authentication, waitForClient);
+        creator = new PlayerSocketCreator(
+                transport,
+                authentication,
+                PlayerSocket.IN_TURN_COMMUNICATION,
+                clientSendsFirst);
     }
 
     private PlayerSocket connectWebSocketClient(String authId) {
@@ -107,7 +111,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldSendDataToWebSocketClient_caseServerSendFirst_withDefaultFilter() throws IOException {
         // given
-        createServices(PlayerSocket.SERVER_SEND_FIRST);
+        createServices(PlayerSocket.SERVER_SENDS_FIRST);
         createServerWebSocket("id");
         PlayerSocket webSocket = connectWebSocketClient("id");
 
@@ -134,7 +138,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldSendDataToWebSocketClient_caseClientSendFirst_forSeveralClients() throws IOException {
         // given
-        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id1");
         createServerWebSocket("id2");
@@ -164,7 +168,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldSendError_whenUserIsNotAuthenticate() throws IOException {
         // given
-        createServices(PlayerSocket.SERVER_SEND_FIRST);
+        createServices(PlayerSocket.SERVER_SENDS_FIRST);
         createServerWebSocket("id");
 
         // when
@@ -179,7 +183,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldSendState_whenNoWebSockets() throws IOException {
         // given
-        createServices(PlayerSocket.SERVER_SEND_FIRST);
+        createServices(PlayerSocket.SERVER_SENDS_FIRST);
 
         // no webSocket
         createServerWebSocket("id1");
@@ -200,7 +204,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldSendDataToWebSocketClient_caseClientConnectedBeforeServerSocketCreated() throws IOException {
         // given
-        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
         PlayerSocket webSocket = connectWebSocketClient("id");
         createServerWebSocket("id");
 
@@ -221,7 +225,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldNotSendToClients_whenUnregisterPlayerEndpoint() throws IOException {
         // given
-        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id");
 
@@ -253,7 +257,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldNotSendToClients_whenUnregisterPlayerSockets() throws IOException {
         // given
-        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id");
 
@@ -286,7 +290,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldAllClientsGetMessage_whenSendDataToAllWebSocketClients() throws IOException {
         // given
-        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id1");
         createServerWebSocket("id2");
@@ -317,7 +321,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldCollectErrors_whenSendDataToAllWebSocketClients() throws IOException {
         // given
-        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id1");
         createServerWebSocket("id2");
@@ -361,7 +365,7 @@ public class PlayerTransportTest {
     @Test
     public void shouldUnregisterPlayerSocket_whenClientClose() throws IOException {
         // given
-        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id");
 

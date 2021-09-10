@@ -42,6 +42,7 @@ public class ChatWebSocketServlet extends WebSocketServlet {
         factory.setCreator(new PlayerSocketCreator(
                 transport,
                 authentication,
-                PlayerSocket.CLIENT_SEND_FIRST));
+                PlayerSocket.BIDIRECTIONAL_COMMUNICATION,
+                PlayerSocket.CLIENT_SENDS_FIRST));
     }
 }
