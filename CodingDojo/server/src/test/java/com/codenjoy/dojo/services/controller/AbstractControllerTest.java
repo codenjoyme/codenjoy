@@ -178,15 +178,21 @@ public abstract class AbstractControllerTest<TData, TControl> {
                 false, receivedOnServer.isEmpty());
     }
 
-    @SneakyThrows
     protected void waitForClientReceived(int index) {
+        waitForClientReceived(index, true);
+    }
+
+    @SneakyThrows
+    protected void waitForClientReceived(int index, boolean shouldGetMessage) {
         int count = 0;
         while (count <= MAX && client(index).isEmpty()) {
             Thread.sleep(100);
             count++;
         }
-        assertEquals("The client never received the message",
-                false, client(index).isEmpty());
+        if (shouldGetMessage) {
+            assertEquals("The client never received the message",
+                    false, client(index).isEmpty());
+        }
     }
 
     @SneakyThrows

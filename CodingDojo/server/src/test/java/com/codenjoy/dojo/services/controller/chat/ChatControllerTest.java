@@ -566,8 +566,8 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         client(0).sendToServer("{'command':'postField', " +
                 "'data':{'room':'room', 'text':'message'}}");
         waitForServerReceived();
-        waitForClientReceived(0);
-        waitForClientReceived(1);
+        waitForClientReceived(0, true);
+        waitForClientReceived(1, false); // no message expected
 
         // then
         assertEquals("[postField(message, room)]", receivedOnServer());
