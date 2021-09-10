@@ -449,7 +449,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     }
 
     @Test
-    public void shouldPostRoom_informAnotherUserAboutNewMessage() {
+    public void shouldPostRoom_success_informAnotherUser() {
         // given
         createPlayer("player", "room", "first");
         login.asUser("player", "player");
@@ -476,7 +476,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
 
-        // inform player2
+        // inform player2 because of same room
         assertEquals("[{'command':'add', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
@@ -530,6 +530,45 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("Chat.Message(id=1, topicId=1, type=FIELD(3), room=room, " +
                         "playerId=player, time=12345, text=message)",
                 chat.getMessageById(1).toString());
+    }
+
+    @Test
+    public void shouldPostField_success_dontInformAnotherUser_differentFields() {
+        // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
+        createPlayer("player2", "room", "first");
+        login.asUser("player2", "player2");
+
+        client(0).start();
+        client(1).start();
+
+        // when
+        nowIs(12345L);
+        client(0).sendToServer("{'command':'postField', " +
+                "'data':{'room':'room', 'text':'message'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1);
+
+        // then
+        assertEquals("[postField(message, room)]", receivedOnServer());
+
+        assertEquals("Chat.Message(id=1, topicId=1, type=FIELD(3), room=room, " +
+                        "playerId=player, time=12345, text=message)",
+                chat.getMessageById(1).toString());
+
+        // inform player1
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(0).messages());
+
+        // dont inform player2 because of other field
+        assertEquals("[]",
+                client(1).messages());
+
     }
 
     @Test
