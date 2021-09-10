@@ -366,7 +366,7 @@ public class ChatService {
             @Override
             public PMessage postRoom(String text, String room) {
                 PMessage message = postMessageForRoom(text, room, playerId);
-                informCreateInRoom(message, room, listener); // TODO test me
+                informCreateInRoom(message, room, listener);
                 return message;
             }
 
@@ -386,21 +386,21 @@ public class ChatService {
             }
 
             private void informDeleteInField(PMessage message, int fieldId, OnChange listener) {
-                spreader.players(fieldId)
+                spreader.players(fieldId) // TODO test me
                         .forEach(player -> listener.deleted(message, player.getId()));
             }
 
             @Override
             public PMessage postTopic(int topicId, String text, String room) {
                 PMessage message = postMessageForTopic(topicId, text, room, playerId);
-                informCreateInRoom(message, room, listener); // TODO test me
+                informCreateInRoom(message, room, listener);
                 return message;
             }
 
             @Override
             public PMessage postField(String text, String room) {
                 PMessage message = postMessageForField(text, room, playerId);
-                informCreateInField(message, message.getTopicId(), listener); // TODO test me
+                informCreateInField(message, message.getTopicId(), listener);
                 return message;
             }
 
@@ -418,6 +418,7 @@ public class ChatService {
 
             private void informDelete(PMessage message, String room, ChatType type) {
                 if (type == null) {
+                    // TODO test me
                     // TODO такое себе решение, но может быть топик сообщение
                     //  уже давно удалено и мы не знаем что там было
                     //  если мы не будем удалять сообщения а только помечать их удаленными,
@@ -432,7 +433,7 @@ public class ChatService {
                     case ROOM:
                         informDeleteInRoom(message, room, listener);
                         break;
-                    case FIELD:
+                    case FIELD: // TODO test me
                         informDeleteInField(message, message.getTopicId(), listener);
                         break;
                     default:
