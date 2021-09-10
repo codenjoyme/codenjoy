@@ -217,10 +217,10 @@ public class Registration {
         );
     }
 
-    public boolean slackEmailIsUsed(String slackId) {
+    public boolean slackEmailIsUsed(String slackEmail) {
         return pool.select("SELECT count(*) AS total FROM users WHERE slackEmail = ?;",
-                new Object[]{slackId},
-                rs -> exists(rs, " slackEmail " + slackId)
+                new Object[]{slackEmail},
+                rs -> exists(rs, " slackEmail " + slackEmail)
         );
     }
 

@@ -145,6 +145,9 @@ public class RegistrationValidator implements Validator {
     }
 
     private boolean checkSlackEmailUniqueness(String slackEmail) {
+        if (slackEmail.equals("")) {
+            return true;
+        }
         return !registration.slackEmailIsUsed(slackEmail);
     }
 
