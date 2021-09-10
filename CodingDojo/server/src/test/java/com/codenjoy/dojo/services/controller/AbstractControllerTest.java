@@ -48,12 +48,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -64,6 +65,8 @@ import java.util.List;
 @Import(AbstractControllerTest.ContextConfiguration.class)
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 public abstract class AbstractControllerTest<TData, TControl> {
+
+    public static final int MAX = 40;
 
     @TestConfiguration
     public static class ContextConfiguration {
@@ -162,19 +165,23 @@ public abstract class AbstractControllerTest<TData, TControl> {
     @SneakyThrows
     protected void waitForServerReceived() {
         int count = 0;
-        while (count < 20 && receivedOnServer.isEmpty()) {
-            Thread.sleep(300);
+        while (count <= MAX && receivedOnServer.isEmpty()) {
+            Thread.sleep(100);
             count++;
         }
+        assertEquals("The server never received the message",
+                false, receivedOnServer.isEmpty());
     }
 
     @SneakyThrows
     protected void waitForClientReceived(int index) {
         int count = 0;
-        while (count < 20 && StringUtils.isEmpty(client(index).messages())) {
-            Thread.sleep(300);
+        while (count <= MAX && client(index).isEmpty()) {
+            Thread.sleep(100);
             count++;
         }
+        assertEquals("The client never received the message",
+                false, client(index).isEmpty());
     }
 
     @SneakyThrows
