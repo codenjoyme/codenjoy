@@ -43,4 +43,19 @@ public interface ChatControl {
     PMessage postField(String text, String room);
 
     boolean delete(int id, String room);
+
+    interface OnChange {
+
+        /**
+         * @param playerId Игрок в том же чате, которого надо проинформировать.
+         * @param messageId Удаленное сообщение
+         */
+        void deleted(int playerId, int messageId);
+
+        /**
+         * @param playerId Игрок в том же чате, которого надо проинформировать.
+         * @param message Созданное сообщение.
+         */
+        void created(int playerId, PMessage message);
+    }
 }

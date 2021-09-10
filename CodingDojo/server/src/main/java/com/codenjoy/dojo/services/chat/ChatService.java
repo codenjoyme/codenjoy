@@ -351,22 +351,32 @@ public class ChatService {
 
             @Override
             public PMessage postRoom(String text, String room) {
-                return postMessageForRoom(text, room, playerId);
+                PMessage message = postMessageForRoom(text, room, playerId);
+                // TODO inform all in same chat
+                return message;
             }
 
             @Override
             public PMessage postTopic(int topicId, String text, String room) {
-                return postMessageForTopic(topicId, text, room, playerId);
+                PMessage message = postMessageForTopic(topicId, text, room, playerId);
+                // TODO inform all in same chat
+                return message;
             }
 
             @Override
             public PMessage postField(String text, String room) {
-                return postMessageForField(text, room, playerId);
+                PMessage message = postMessageForField(text, room, playerId);
+                // TODO inform all in same chat
+                return message;
             }
 
             @Override
             public boolean delete(int id, String room) {
-                return deleteMessage(id, room, playerId);
+                boolean deleted = deleteMessage(id, room, playerId);
+                if (deleted) {
+                    // TODO inform all in same chat
+                }
+                return deleted;
             }
         };
     }
