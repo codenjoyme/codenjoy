@@ -74,6 +74,14 @@ public class SmartAssert {
         throw new RuntimeException();
     }
 
+    public static void assertEquals(String message, Object expected, Object actual) {
+        try {
+            Assert.assertEquals(message, expected, actual);
+        } catch (AssertionError e) {
+            failures().add(e);
+        }
+    }
+
     public static void assertEquals(Object expected, Object actual) {
         try {
             Assert.assertEquals(expected, actual);
