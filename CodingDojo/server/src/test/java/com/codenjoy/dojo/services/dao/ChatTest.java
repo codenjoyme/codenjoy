@@ -85,6 +85,20 @@ public class ChatTest {
     }
 
     @Test
+    public void shouldGetTypeById_allCases() {
+        // given
+        addMessage("room1", "player1"); // id = 1
+        addMessage("room1", "player1", 1, TOPIC); // id = 2
+        addMessage("room1", "player1", 1, FIELD); // id = 3
+
+        // when then
+        assertEquals("ROOM(1)", chat.getTypeById(1).toString());
+        assertEquals("TOPIC(2)", chat.getTypeById(2).toString());
+        assertEquals("FIELD(3)", chat.getTypeById(3).toString());
+        assertEquals(null, chat.getTypeById(4));
+    }
+
+    @Test
     public void shouldGetLastMessageId_whenAddedTopicMessages() {
         // when then
         assertEquals(null, chat.getLastMessageId("room1"));

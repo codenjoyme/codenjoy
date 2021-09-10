@@ -285,6 +285,17 @@ public class Chat {
         );
     }
 
+    public ChatType getTypeById(int messageId) {
+        return pool.select("SELECT type FROM messages WHERE id = ?",
+                new Object[]{messageId},
+                rs -> rs.next() ? type(rs) : null
+        );
+    }
+
+    private static ChatType type(ResultSet rs) throws SQLException {
+        return ChatType.valueOf(rs.getInt("type"));
+    }
+
     public Message saveMessage(Message message) {
         List<Object> objects = pool.batch(Arrays.asList("INSERT INTO messages " +
                         "(room, topic_id, type, player_id, time, text) " +
@@ -359,7 +370,7 @@ public class Chat {
             id = rs.getInt("id");
             room = rs.getString("room");
             topicId = (Integer) rs.getObject("topic_id");
-            type = ChatType.valueOf(rs.getInt("type"));
+            type = type(rs);
             playerId = rs.getString("player_id");
             time = JDBCTimeUtils.getTimeLong(rs);
             text = rs.getString("text");
