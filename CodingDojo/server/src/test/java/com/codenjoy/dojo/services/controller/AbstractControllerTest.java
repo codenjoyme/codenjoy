@@ -67,7 +67,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 @ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
 public abstract class AbstractControllerTest<TData, TControl> {
 
-    public static final int MAX = 40;
+    public static final int MAX = 20;
 
     @TestConfiguration
     public static class ContextConfiguration {
