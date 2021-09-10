@@ -287,6 +287,20 @@ public class ChatService {
         return true;
     }
 
+    private ChatType roomOrField(Chat.Message message) {
+        while (message.getType() == TOPIC) {
+            Integer topicId = message.getTopicId();
+            if (topicId == null) {
+                throw exception("Topic message with null topic_id: " + message.getId());
+            }
+            message = chat.getMessageById(topicId);
+            if (message == null) {
+                return null;
+            }
+        }
+        return message.getType();
+    }
+
     public IllegalArgumentException exception(String message, Object... parameters) {
         return new IllegalArgumentException(String.format(message, parameters));
     }
@@ -327,7 +341,7 @@ public class ChatService {
         return new LastMessage();
     }
 
-    public ChatControl control(String playerId) {
+    public ChatControl control(String playerId, ChatControl.OnChange listener) {
         return new ChatControl() {
             @Override
             public List<PMessage> getAllRoom(Filter filter) {
@@ -352,31 +366,78 @@ public class ChatService {
             @Override
             public PMessage postRoom(String text, String room) {
                 PMessage message = postMessageForRoom(text, room, playerId);
-                // TODO inform all in same chat
+                informCreateInRoom(message, room, listener); // TODO test me
                 return message;
+            }
+
+            private void informCreateInRoom(PMessage message, String room, OnChange listener) {
+                spreader.players(room)
+                        .forEach(player -> listener.created(message, player.getId()));
+            }
+
+            private void informCreateInField(PMessage message, int fieldId, OnChange listener) {
+                spreader.players(fieldId)
+                        .forEach(player -> listener.created(message, player.getId()));
+            }
+
+            private void informDeleteInRoom(PMessage message, String room, OnChange listener) {
+                spreader.players(room)
+                        .forEach(player -> listener.deleted(message, player.getId()));
+            }
+
+            private void informDeleteInField(PMessage message, int fieldId, OnChange listener) {
+                spreader.players(fieldId)
+                        .forEach(player -> listener.deleted(message, player.getId()));
             }
 
             @Override
             public PMessage postTopic(int topicId, String text, String room) {
                 PMessage message = postMessageForTopic(topicId, text, room, playerId);
-                // TODO inform all in same chat
+                informCreateInRoom(message, room, listener); // TODO test me
                 return message;
             }
 
             @Override
             public PMessage postField(String text, String room) {
                 PMessage message = postMessageForField(text, room, playerId);
-                // TODO inform all in same chat
+                informCreateInField(message, message.getTopicId(), listener); // TODO test me
                 return message;
             }
 
             @Override
             public boolean delete(int id, String room) {
+                // TODO тут два запроса, не совсем оптимально
+                Chat.Message message = chat.getMessageById(id);
                 boolean deleted = deleteMessage(id, room, playerId);
                 if (deleted) {
-                    // TODO inform all in same chat
+                    // TODO test me
+                    informDelete(wrap(message), room, roomOrField(message));
                 }
                 return deleted;
+            }
+
+            private void informDelete(PMessage message, String room, ChatType type) {
+                if (type == null) {
+                    // TODO такое себе решение, но может быть топик сообщение
+                    //  уже давно удалено и мы не знаем что там было
+                    //  если мы не будем удалять сообщения а только помечать их удаленными,
+                    //  тогда сможем вытянуть эту инфу. а если оставить как есть, то может случиться так
+                    //  что мы это было ROOM, а мы попытаемся после найти FILED с айдишкой topic_id и
+                    //  может случиться так что найдем ее, и проинформируем не тех пользователей про удаление
+                    informDeleteInRoom(message, room, listener);
+                    informDeleteInField(message, message.getTopicId(), listener);
+                    return;
+                }
+                switch (type) {
+                    case ROOM:
+                        informDeleteInRoom(message, room, listener);
+                        break;
+                    case FIELD:
+                        informDeleteInField(message, message.getTopicId(), listener);
+                        break;
+                    default:
+                        throw exception("Should be only ROOM or FIELD: " + message.getId());
+                }
             }
         };
     }
