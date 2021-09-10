@@ -45,11 +45,6 @@ public class PlayerController implements Controller<String, Joystick> {
     }
 
     @Override
-    public void requestControlToAll(String board) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean requestControl(Player player, String board) {
         return transport.sendState(player.getId(), new BoardGameState(board));
     }

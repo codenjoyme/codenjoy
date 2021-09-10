@@ -34,7 +34,9 @@ public interface Controller<TData, TControl> {
      * всем клиентам информацию об игре
      * @param data Данные к отправке
      */
-    void requestControlToAll(TData data);
+    default void requestControlToAll(TData data) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * С помощью этого метода PlayerServiceImpl отправляет через ws
@@ -42,7 +44,9 @@ public interface Controller<TData, TControl> {
      * @param player Плеер, которому отправляется ответ
      * @param data Данные к отправке
      */
-    boolean requestControl(Player player, TData data);
+    default boolean requestControl(Player player, TData data) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * В момент регистрации пользователя для него создается канал связи

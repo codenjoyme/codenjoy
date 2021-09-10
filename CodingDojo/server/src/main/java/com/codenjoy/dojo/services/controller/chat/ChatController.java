@@ -41,16 +41,6 @@ public class ChatController implements Controller<String, ChatControl> {
     }
 
     @Override
-    public void requestControlToAll(String json) {
-        transport.sendStateToAll(json);
-    }
-
-    @Override
-    public boolean requestControl(Player player, String json) {
-        return transport.sendState(player.getId(), json);
-    }
-
-    @Override
     public void registerPlayerTransport(Player player, ChatControl chatControl) {
         transport.registerPlayerEndpoint(player.getId(),
                 new ChatResponseHandler(player, chatControl, transport));

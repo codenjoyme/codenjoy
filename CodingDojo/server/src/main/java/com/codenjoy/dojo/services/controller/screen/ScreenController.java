@@ -54,12 +54,6 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
     }
 
     @Override
-    public boolean requestControl(Player player, Map<ScreenRecipient, ScreenData> data) {
-        // TODO этот метод вообще не используется
-        return transport.sendState(player.getId(), data);
-    }
-
-    @Override
     public void registerPlayerTransport(Player player, Void nothing) {
         transport.registerPlayerEndpoint(player.getId(),
                 new ScreenResponseHandler(transport, player));
