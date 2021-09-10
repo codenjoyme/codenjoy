@@ -36,15 +36,13 @@ import org.json.JSONObject;
 public class ChatResponseHandler implements ResponseHandler {
 
     private final Player player;
-    private final ChatControl chat;
     private final ChatCommand command;
     private final PlayerTransport transport;
 
     public ChatResponseHandler(Player player, ChatControl chat, PlayerTransport transport) {
         this.player = player;
-        this.chat = chat;
+        this.command = new ChatCommand(chat);
         this.transport = transport;
-        command = new ChatCommand(chat);
     }
 
     @Override
@@ -54,7 +52,9 @@ public class ChatResponseHandler implements ResponseHandler {
 
         ChatRequest request = new ChatRequest(message);
         String result = command.process(request);
-        transport.sendState(player.getId(), result);
+        if (result != null) {
+            transport.sendState(player.getId(), result);
+        }
     }
 
     @Override

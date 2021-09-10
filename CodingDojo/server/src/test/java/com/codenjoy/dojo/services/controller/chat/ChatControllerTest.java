@@ -27,12 +27,11 @@ import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
-import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.dao.ChatTest;
+import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,20 +65,42 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
     @Autowired
     private Chat chat;
+    
+    private List<String> changeEvents = new LinkedList<>();
+    private ChatControl.OnChange changeListener;
 
-    private List<Chat.Message> messages = new LinkedList<>();
+    private ChatHelper messages;
 
     @Before
     public void setup() {
         super.setup();
 
-        chat.removeAll();
+        messages = new ChatHelper(chat);
+        
+        messages.removeAll();
         fields.removeAll();
 
         setupChatControl();
+        setupChangeListener();
+    }
 
-        createPlayer("player", "room", "first");
-        login.asUser("player", "player");
+    private void setupChangeListener() {
+        changeListener = new ChatControl.OnChange() {
+            @Override
+            public void deleted(PMessage message, String playerId) {
+                changeEvents.add(String.format("['%s']:Message deleted: %s", playerId, message));
+            }
+
+            @Override
+            public void created(PMessage message, String playerId) {
+                changeEvents.add(String.format("['%s']:New message created: %s", playerId, message));
+            }
+        };
+    }
+
+    private String changeEvents() {
+        return changeEvents.stream()
+                .collect(joining(",\n"));
     }
 
     @Override
@@ -89,7 +110,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
     // we wrap ChatControl in spy to eavesdrop on how it is being used
     private void setupChatControl() {
-        when(chatService.control(anyString()))
+        when(chatService.control(anyString(), any(ChatControl.OnChange.class)))
                 .thenAnswer(inv -> chatControl((ChatControl) inv.callRealMethod()));
     }
 
@@ -128,6 +149,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     @Test
     public void shouldGet_fail() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -138,20 +162,21 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[get(1, room)]", receivedOnServer());
-        assertEquals("[{'error':'IllegalArgumentException'," +
-                "'message':'There is no message with id '1' in room 'room''}]",
+        assertEquals("[{'command':'error', 'data':[" +
+                        "{'error':'IllegalArgumentException'," +
+                        "'message':'There is no message with id '1' in room 'room''}]}]",
                 client(0).messages());
     }
-
-    public Chat.Message addMessage(String room, String player, Integer topicId, ChatType type) {
-        return ChatTest.addMessage(chat, messages, room, player, topicId, type);
-    }
-
+    
     @Test
     public void shouldGet_success() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
-        addMessage("room", "player", null, ROOM); // 1
+
+        messages.post("room", "player", null, ROOM); // 1
 
         // when
         client(0).sendToServer("{'command':'get', " +
@@ -161,16 +186,21 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[get(1, room)]", receivedOnServer());
-        assertEquals("[{'id':1,'text':'message1','room':'room','topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231523345}]",
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldDelete_success() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
-        addMessage("room", "player", null, ROOM); // 1
+
+        messages.post("room", "player", null, ROOM); // 1
 
         // when
         client(0).sendToServer("{'command':'delete', " +
@@ -180,7 +210,10 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[delete(1, room)]", receivedOnServer());
-        assertEquals("[true]", client(0).messages());
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
+                client(0).messages());
 
         assertEquals(null, chat.getMessageById(1));
     }
@@ -188,6 +221,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     @Test
     public void shouldDelete_fail() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -198,15 +234,19 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[delete(1, room)]", receivedOnServer());
-        assertEquals("[{'error':'IllegalArgumentException'," +
+        assertEquals("[{'command':'error', 'data':[" +
+                        "{'error':'IllegalArgumentException'," +
                         "'message':'Player 'player' cant delete " +
-                        "message with id '1' in room 'room''}]",
+                        "message with id '1' in room 'room''}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldGetAllRoom_fail() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -219,18 +259,23 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllRoom(Filter(room=otherRoom, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'error':'IllegalArgumentException'," +
-                "'message':'Player 'player' is not in room 'otherRoom''}]",
+        assertEquals("[{'command':'error', 'data':[" +
+                        "{'error':'IllegalArgumentException'," +
+                        "'message':'Player 'player' is not in room 'otherRoom''}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldGetAllRoom_success() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
-        addMessage("room", "player", null, ROOM); // 1
-        addMessage("room", "player", null, ROOM); // 2
-        addMessage("room", "player", null, ROOM); // 3
+
+        messages.post("room", "player", null, ROOM); // 1
+        messages.post("room", "player", null, ROOM); // 2
+        messages.post("room", "player", null, ROOM); // 3
 
         // when
         client(0).sendToServer("{'command':'getAllRoom', " +
@@ -242,16 +287,20 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllRoom(Filter(room=room, count=2, " +
                 "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[[{'id':2,'text':'message2','room':'room','topicId':null," +
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':2,'text':'message2','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}," +
-                        "{'id':3,'text':'message3','room':'room','topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':1615231723345}]]",
+                        "{'id':3,'text':'message3','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':1615231723345}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldGetAllTopic_fail() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -264,18 +313,23 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllTopic(1, Filter(room=room, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'error':'IllegalArgumentException'," +
-                        "'message':'There is no message with id '1' in room 'room''}]",
+        assertEquals("[{'command':'error', 'data':[" +
+                        "{'error':'IllegalArgumentException'," +
+                        "'message':'There is no message with id '1' in room 'room''}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldGetAllTopic_success() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
-        addMessage("room", "player", null, ROOM); // 1
-        addMessage("room", "player", 1, TOPIC); // 2
-        addMessage("room", "player", 1, TOPIC); // 3
+
+        messages.post("room", "player", null, ROOM); // 1
+        messages.post("room", "player", 1, TOPIC); // 2
+        messages.post("room", "player", 1, TOPIC); // 3
 
         // when
         client(0).sendToServer("{'command':'getAllTopic', " +
@@ -287,16 +341,20 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllTopic(1, Filter(room=room, count=2, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[[{'id':2,'text':'message2','room':'room','topicId':1," +
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}," +
-                        "{'id':3,'text':'message3','room':'room','topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231723345}]]",
+                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':1615231723345}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldGetAllField_fail() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -309,18 +367,23 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllField(Filter(room=otherRoom, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'error':'IllegalArgumentException'," +
-                        "'message':'There is no player 'player' in room 'otherRoom''}]",
+        assertEquals("[{'command':'error', 'data':[" +
+                        "{'error':'IllegalArgumentException'," +
+                        "'message':'There is no player 'player' in room 'otherRoom''}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldGetAllField_success() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
-        addMessage("room", "player", null, ROOM); // 1
-        addMessage("room", "player", 1, FIELD); // 2
-        addMessage("room", "player", 1, FIELD); // 3
+
+        messages.post("room", "player", null, ROOM); // 1
+        messages.post("room", "player", 1, FIELD); // 2
+        messages.post("room", "player", 1, FIELD); // 3
 
         // when
         client(0).sendToServer("{'command':'getAllField', " +
@@ -332,16 +395,20 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllField(Filter(room=room, count=2, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[[{'id':2,'text':'message2','room':'room','topicId':1," +
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':2,'text':'message2','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}," +
-                        "{'id':3,'text':'message3','room':'room','topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':1615231723345}]]",
+                        "{'id':3,'text':'message3','room':'room','type':3,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':1615231723345}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldPostRoom_fail() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -352,7 +419,8 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postRoom(message, otherRoom)]", receivedOnServer());
-        assertEquals("[{'error':'IllegalArgumentException'," +
+        assertEquals("[{'command':'error', 'data':[" +
+                        "{'error':'IllegalArgumentException'," +
                         "'message':'Player 'player' is not in room 'otherRoom''}]",
                 client(0).messages());
     }
@@ -360,6 +428,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     @Test
     public void shouldPostRoom_success() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -371,14 +442,53 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postRoom(message, room)]", receivedOnServer());
-        assertEquals("[{'id':1,'text':'message','room':'room','topicId':null," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]",
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':1,'text':'message','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
+    }
+
+    @Test
+    public void shouldPostRoom_informAnotherUserAboutNewMessage() {
+        // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
+        createPlayer("player2", "room", "first");
+        login.asUser("player2", "player2");
+
+        client(0).start();
+        client(1).start();
+
+        // when
+        nowIs(12345L);
+        client(0).sendToServer("{'command':'postRoom', " +
+                "'data':{'room':'room', 'text':'message1'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1);
+
+        // then
+        assertEquals("[postRoom(message1, room)]", receivedOnServer());
+        // inform player1
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(0).messages());
+
+        // inform player2
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(1).messages());
     }
 
     @Test
     public void shouldPostField_fail() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -389,14 +499,18 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postField(message, otherRoom)]", receivedOnServer());
-        assertEquals("[{'error':'IllegalArgumentException'," +
-                        "'message':'There is no player 'player' in room 'otherRoom''}]",
+        assertEquals("[{'command':'error', 'data':[" +
+                        "{'error':'IllegalArgumentException'," +
+                        "'message':'There is no player 'player' in room 'otherRoom''}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldPostField_success() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -408,8 +522,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postField(message, room)]", receivedOnServer());
-        assertEquals("[{'id':1,'text':'message','room':'room','topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]",
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
 
         assertEquals("Chat.Message(id=1, topicId=1, type=FIELD(3), room=room, " +
@@ -420,6 +535,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     @Test
     public void shouldPostTopic_fail() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
 
         // when
@@ -430,17 +548,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postTopic(1, message, room)]", receivedOnServer());
-        assertEquals("[{'error':'IllegalArgumentException'," +
-                        "'message':'There is no message with id '1' in room 'room''}]",
+        assertEquals("[{'command':'error', 'data':[" +
+                        "{'error':'IllegalArgumentException'," +
+                        "'message':'There is no message with id '1' in room 'room''}]}]",
                 client(0).messages());
     }
 
     @Test
     public void shouldPostTopic_success() {
         // given
+        createPlayer("player", "room", "first");
+        login.asUser("player", "player");
+
         client(0).start();
-        addMessage("room", "player", null, ROOM); // 1
-        addMessage("room", "player", null, ROOM); // 2
+
+        messages.post("room", "player", null, ROOM); // 1
+        messages.post("room", "player", null, ROOM); // 2
 
         // when
         nowIs(12345L);
@@ -451,8 +574,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postTopic(1, message, room)]", receivedOnServer());
-        assertEquals("[{'id':3,'text':'message','room':'room','topicId':1," +
-                        "'playerId':'player','playerName':'player-name','time':12345}]",
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
 
         assertEquals("Chat.Message(id=3, topicId=1, type=TOPIC(2), " +

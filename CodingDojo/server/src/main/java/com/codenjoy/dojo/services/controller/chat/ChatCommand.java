@@ -28,6 +28,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -35,18 +36,38 @@ import java.util.function.Function;
 @Slf4j
 public class ChatCommand {
 
+    public static final String ADD = "add";
+    public static final String GET_ALL_ROOM = "getAllRoom";
+    public static final String GET_ALL_TOPIC = "getAllTopic";
+    public static final String GET_ALL_FIELD = "getAllField";
+    public static final String GET = "get";
+    public static final String POST_ROOM = "postRoom";
+    public static final String POST_TOPIC = "postTopic";
+    public static final String POST_FIELD = "postField";
+    public static final String DELETE = "delete";
+    public static final String ERROR = "error";
+    public static final String NONE = null;
+
     private Map<String, Function<ChatRequest, String>> map = new HashMap<>();
     private ObjectMapper mapper = new ObjectMapper();
 
     public ChatCommand(ChatControl chat) {
-        map.put("getAllRoom",  request -> json(chat.getAllRoom(request.filter())));
-        map.put("getAllTopic", request -> json(chat.getAllTopic(request.id(), request.filter())));
-        map.put("getAllField", request -> json(chat.getAllField(request.filter())));
-        map.put("get",         request -> json(chat.get(request.id(), request.room())));
-        map.put("postRoom",    request -> json(chat.postRoom(request.text(), request.room())));
-        map.put("postTopic",   request -> json(chat.postTopic(request.id(), request.text(), request.room())));
-        map.put("postField",   request -> json(chat.postField(request.text(), request.room())));
-        map.put("delete",      request -> json(chat.delete(request.id(), request.room())));
+        map.put(GET_ALL_ROOM,  request -> answer(ADD,  chat.getAllRoom(request.filter())));
+        map.put(GET_ALL_TOPIC, request -> answer(ADD,  chat.getAllTopic(request.id(), request.filter())));
+        map.put(GET_ALL_FIELD, request -> answer(ADD,  chat.getAllField(request.filter())));
+        map.put(GET,           request -> answer(ADD,  Arrays.asList(chat.get(request.id(), request.room()))));
+        map.put(POST_ROOM,     request -> answer(NONE, chat.postRoom(request.text(), request.room())));
+        map.put(POST_FIELD,    request -> answer(NONE, chat.postField(request.text(), request.room())));
+        map.put(POST_TOPIC,    request -> answer(NONE, chat.postTopic(request.id(), request.text(), request.room())));
+        map.put(DELETE,        request -> answer(NONE, chat.delete(request.id(), request.room())));
+    }
+
+    private String answer(String command, Object data) {
+        if (command == null) {
+            return null;
+        }
+        return String.format("{'command':'%s', 'data':%s}",
+                command, json(data));
     }
 
     @SneakyThrows
@@ -59,7 +80,7 @@ public class ChatCommand {
             return map.get(request.method()).apply(request);
         } catch (Exception exception) {
             log.error("Error during chat request: " + request, exception);
-            return json(new Error(exception));
+            return answer(ERROR, new Error(exception));
         }
     }
 
