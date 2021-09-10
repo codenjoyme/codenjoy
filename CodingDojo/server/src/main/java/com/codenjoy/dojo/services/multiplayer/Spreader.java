@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
+import com.codenjoy.dojo.services.Player;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Component
@@ -120,6 +123,22 @@ public class Spreader {
         return rooms.values().stream()
                 .filter(room -> room.isFor(field))
                 .findFirst();
+    }
+
+    public List<Player> players(String roomName) {
+        return rooms.values().stream()
+                .filter(room -> room.name().equals(roomName))
+                .flatMap(room -> room.deals().stream())
+                .map(Deal::getPlayer)
+                .collect(toList());
+    }
+
+    public List<Player> players(int fieldId) {
+        return rooms.values().stream()
+                .filter(room -> fields.id(room.field()) == fieldId)
+                .flatMap(room -> room.deals().stream())
+                .map(Deal::getPlayer)
+                .collect(toList());
     }
 
     public boolean contains(Deal deal) {
