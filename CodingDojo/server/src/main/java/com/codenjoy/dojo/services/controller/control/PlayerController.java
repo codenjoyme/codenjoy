@@ -47,14 +47,14 @@ public class PlayerController implements Controller<String, Joystick> {
     }
 
     @Override
-    public void registerPlayerTransport(Deal deal) {
+    public void register(Deal deal) {
         transport.registerPlayerEndpoint(deal.getPlayerId(),
                 new PlayerResponseHandler(deal.getPlayer(),
                         deal.getJoystick(), timeService.future()));
     }
 
     @Override
-    public void unregisterPlayerTransport(Deal deal) {
+    public void unregister(Deal deal) {
         transport.unregisterPlayerEndpoint(deal.getPlayerId());
     }
 }

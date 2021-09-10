@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services.controller.screen;
 
 
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -46,7 +45,7 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
 
     @PostConstruct
     public void init() {
-        registerPlayerTransport(Deal.ANONYMOUS);
+        register(Deal.ANONYMOUS);
     }
 
     @Override
@@ -55,13 +54,13 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
     }
 
     @Override
-    public void registerPlayerTransport(Deal deal) {
+    public void register(Deal deal) {
         transport.registerPlayerEndpoint(deal.getPlayerId(),
                 new ScreenResponseHandler(transport, deal.getPlayer()));
     }
 
     @Override
-    public void unregisterPlayerTransport(Deal deal) {
+    public void unregister(Deal deal) {
         transport.unregisterPlayerEndpoint(deal.getPlayerId());
     }
 }

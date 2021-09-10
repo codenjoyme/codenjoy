@@ -108,14 +108,14 @@ public class PlayerServiceImpl implements PlayerService {
     public void init() {
         deals.init(lock);
         deals.onAdd(deal -> {
-            playerController.registerPlayerTransport(deal);
-            screenController.registerPlayerTransport(deal);
-            chatController.registerPlayerTransport(deal);
+            playerController.register(deal);
+            screenController.register(deal);
+            chatController.register(deal);
         });
         deals.onRemove(deal -> {
-            playerController.unregisterPlayerTransport(deal);
-            screenController.unregisterPlayerTransport(deal);
-            chatController.unregisterPlayerTransport(deal);
+            playerController.unregister(deal);
+            screenController.unregister(deal);
+            chatController.unregister(deal);
         });
     }
 

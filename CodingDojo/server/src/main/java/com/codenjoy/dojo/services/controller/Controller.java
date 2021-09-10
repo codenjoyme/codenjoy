@@ -51,15 +51,16 @@ public interface Controller<TData, TControl> {
 
     /**
      * В момент регистрации пользователя для него создается канал связи
-     * к которому потом можно будет подключиться по ws и управлять игрой
+     * к которому потом можно будет подключиться по ws и управлять ввереным
+     * ему контролом.
      * @param deal Игра которая начинается.
      */
-    void registerPlayerTransport(Deal deal);
+    void register(Deal deal);
 
     /**
      * В случае, если пользователь не хочет больше играть, то и канал связи
      * закрывается.
      * @param deal Игра которая завершилась.
      */
-    void unregisterPlayerTransport(Deal deal);
+    void unregister(Deal deal);
 }

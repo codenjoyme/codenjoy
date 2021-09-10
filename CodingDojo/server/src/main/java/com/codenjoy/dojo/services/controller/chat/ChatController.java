@@ -44,7 +44,7 @@ public class ChatController implements Controller<String, ChatControl> {
     }
 
     @Override
-    public void registerPlayerTransport(Deal deal) {
+    public void register(Deal deal) {
         String id = deal.getPlayerId();
         ChatControl control = chatService.control(id);
         transport.registerPlayerEndpoint(id,
@@ -52,7 +52,7 @@ public class ChatController implements Controller<String, ChatControl> {
     }
 
     @Override
-    public void unregisterPlayerTransport(Deal deal) {
+    public void unregister(Deal deal) {
         transport.unregisterPlayerEndpoint(deal.getPlayerId());
     }
 }

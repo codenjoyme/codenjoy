@@ -150,7 +150,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
     @After
     public void tearDown() {
         dealsList.forEach(deal ->
-                controller().unregisterPlayerTransport(deal));
+                controller().unregister(deal));
         clients.forEach(WebSocketRunnerMock::reset);
         clients.forEach(WebSocketRunnerMock::stop);
         clients.clear();
