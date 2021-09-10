@@ -27,6 +27,7 @@ import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.ChatTest;
+import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,15 +56,13 @@ public class FieldServiceTest {
     @Autowired
     private Chat chat;
 
-    private List<Chat.Message> messages = new LinkedList<>();
-
-    public Chat.Message addMessage(String room, String player, Integer topicId, ChatType type) {
-        return ChatTest.addMessage(chat, messages, room, player, topicId, type);
-    }
+    private ChatHelper messages;
 
     @Before
     public void setup() {
-        chat.removeAll();
+        messages = new ChatHelper(chat);
+        
+        messages.removeAll();
         fields.removeAll();
     }
 
@@ -72,21 +71,21 @@ public class FieldServiceTest {
         // given
         // random values, don't look for systems here
         // room chat
-        addMessage("room1", "player1", null, ROOM);
-        addMessage("room2", "player2", null, ROOM);
-        addMessage("room1", "player3", null, ROOM);
-        addMessage("room2", "player2", null, ROOM);
+        messages.post("room1", "player1", null, ROOM);
+        messages.post("room2", "player2", null, ROOM);
+        messages.post("room1", "player3", null, ROOM);
+        messages.post("room2", "player2", null, ROOM);
         // topic chat
-        addMessage("room1", "player1", 1, TOPIC);
-        addMessage("room2", "player2", 2, TOPIC);
-        addMessage("room1", "player1", 1, TOPIC);
-        addMessage("room2", "player2", 2, TOPIC);
-        addMessage("room2", "player2", 2, TOPIC);
+        messages.post("room1", "player1", 1, TOPIC);
+        messages.post("room2", "player2", 2, TOPIC);
+        messages.post("room1", "player1", 1, TOPIC);
+        messages.post("room2", "player2", 2, TOPIC);
+        messages.post("room2", "player2", 2, TOPIC);
         // field chat
-        addMessage("room1", "player1", 1, FIELD);
-        addMessage("room1", "player1", 5, FIELD);  // max fieldId
-        addMessage("room1", "player2", 4, FIELD);
-        addMessage("room2", "player3", 3, FIELD);
+        messages.post("room1", "player1", 1, FIELD);
+        messages.post("room1", "player1", 5, FIELD);  // max fieldId
+        messages.post("room1", "player2", 4, FIELD);
+        messages.post("room2", "player3", 3, FIELD);
 
         // when
         fields.init();

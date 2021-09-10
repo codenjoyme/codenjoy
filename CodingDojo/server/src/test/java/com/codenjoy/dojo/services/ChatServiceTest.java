@@ -26,13 +26,13 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
-import com.codenjoy.dojo.services.chat.ChatType;
+
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 
 import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.dao.ChatTest;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import com.codenjoy.dojo.services.helper.LoginHelper;
@@ -81,23 +81,20 @@ public class ChatServiceTest {
     @Autowired
     private Deals deals;
 
-    protected LoginHelper login;
-
     @SpyBean
     private FieldService fields;
 
-    private List<Chat.Message> messages = new LinkedList<>();
-    private List<String> logs = new LinkedList<>();
+    private LoginHelper login;
+    private ChatHelper messages;
 
-    public Chat.Message addMessage(String room, String player, Integer topicId, ChatType type) {
-        return ChatTest.addMessage(chat, messages, room, player, topicId, type);
-    }
+    private List<String> logs = new LinkedList<>();
 
     @Before
     public void setup() {
         login = new LoginHelper(config, players, registration, deals);
+        messages = new ChatHelper(chat);
 
-        chat.removeAll();
+        messages.removeAll();
         fields.removeAll();
         login.removeAll();
     }
@@ -111,26 +108,26 @@ public class ChatServiceTest {
     public void shouldGetLastMessage() {
         // given
         // random values, don't look for systems here
-        addMessage("room1", "player1", null, ROOM); // 1
-        addMessage("room2", "player2", null, ROOM); // 2
-        addMessage("room1", "player3", null, ROOM); // 3  last room1
-        addMessage("room2", "player2", null, ROOM); // 4  last room2
-        addMessage("room1", "player1", 1, TOPIC);   // 5
-        addMessage("room2", "player2", 2, TOPIC);   // 6
-        addMessage("room1", "player1", 1, TOPIC);   // 7  last topic1
-        addMessage("room2", "player2", 2, TOPIC);   // 8
-        addMessage("room1", "player2", 4, TOPIC);   // 9
-        addMessage("room2", "player3", 3, TOPIC);   // 10 last topic3
-        addMessage("room2", "player2", 2, TOPIC);   // 11 last topic2
-        addMessage("room1", "player2", 4, TOPIC);   // 12 last topic4
-        addMessage("room1", "player1", 1, FIELD);   // 13
-        addMessage("room1", "player1", 1, FIELD);   // 14
-        addMessage("room2", "player3", 3, FIELD);   // 15
-        addMessage("room1", "player1", 1, FIELD);   // 16 last field1
-        addMessage("room1", "player2", 4, FIELD);   // 17
-        addMessage("room2", "player2", 2, FIELD);   // 18 last field2
-        addMessage("room2", "player3", 3, FIELD);   // 19 last field3
-        addMessage("room1", "player2", 4, FIELD);   // 20 last field4
+        messages.post("room1", "player1", null, ROOM); // 1
+        messages.post("room2", "player2", null, ROOM); // 2
+        messages.post("room1", "player3", null, ROOM); // 3  last room1
+        messages.post("room2", "player2", null, ROOM); // 4  last room2
+        messages.post("room1", "player1", 1, TOPIC);   // 5
+        messages.post("room2", "player2", 2, TOPIC);   // 6
+        messages.post("room1", "player1", 1, TOPIC);   // 7  last topic1
+        messages.post("room2", "player2", 2, TOPIC);   // 8
+        messages.post("room1", "player2", 4, TOPIC);   // 9
+        messages.post("room2", "player3", 3, TOPIC);   // 10 last topic3
+        messages.post("room2", "player2", 2, TOPIC);   // 11 last topic2
+        messages.post("room1", "player2", 4, TOPIC);   // 12 last topic4
+        messages.post("room1", "player1", 1, FIELD);   // 13
+        messages.post("room1", "player1", 1, FIELD);   // 14
+        messages.post("room2", "player3", 3, FIELD);   // 15
+        messages.post("room1", "player1", 1, FIELD);   // 16 last field1
+        messages.post("room1", "player2", 4, FIELD);   // 17
+        messages.post("room2", "player2", 2, FIELD);   // 18 last field2
+        messages.post("room2", "player3", 3, FIELD);   // 19 last field3
+        messages.post("room1", "player2", 4, FIELD);   // 20 last field4
 
         // when then
         ChatService.LastMessage last = service.getLast();
