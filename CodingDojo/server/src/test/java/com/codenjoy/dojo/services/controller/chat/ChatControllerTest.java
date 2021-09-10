@@ -215,8 +215,10 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         client(2).start();
 
         messages.post("room", "player", null, ROOM); // 1
+        messages.post("room2", "player3", null, ROOM); // 2
 
         // when
+        // player1 delete message1
         client(0).sendToServer("{'command':'delete', " +
                 "'data':{'id':1, 'room':'room'}}");
         waitForServerReceived();
@@ -243,6 +245,34 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // don't inform player3 because of other room
         assertEquals("[]",
+                client(2).messages());
+
+        // when
+        // player3 delete message2
+        client(2).sendToServer("{'command':'delete', " +
+                "'data':{'id':2, 'room':'room2'}}");
+        waitForServerReceived();
+        waitForClientReceived(0, false);
+        waitForClientReceived(1, false);
+        waitForClientReceived(2);
+
+        // then
+        assertEquals("[delete(2, room2)]", receivedOnServer());
+
+        assertEquals(null, chat.getMessageById(2));
+
+        // don't inform player3 because of other room
+        assertEquals("[]",
+                client(0).messages());
+
+        // don't inform player3 because of other room
+        assertEquals("[]",
+                client(1).messages());
+
+        // inform player3 because of author
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':2,'text':'message2','room':'room2','type':1,'topicId':null," +
+                        "'playerId':'player3','playerName':'player3-name','time':1615231623345}]}]",
                 client(2).messages());
     }
 
@@ -345,7 +375,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         messages.post("room", "player",  1, FIELD); // 1
         messages.post("room", "player2", 1, FIELD); // 2
-        messages.post("room", "player3", 2, FIELD); // 3
+        messages.post("room2", "player3", 2, FIELD); // 3
 
         // when
         // delete field message by player1
@@ -405,6 +435,34 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // don't inform player3 because of other room
         assertEquals("[]",
+                client(2).messages());
+
+        // when
+        // delete another field message by player3
+        client(2).sendToServer("{'command':'delete', " +
+                "'data':{'id':3, 'room':'room2'}}");
+        waitForServerReceived();
+        waitForClientReceived(0, false);
+        waitForClientReceived(1, false);
+        waitForClientReceived(2);
+
+        // then
+        assertEquals("[delete(3, room2)]", receivedOnServer());
+
+        assertEquals(null, chat.getMessageById(3));
+
+        // don't inform player1 because of other room
+        assertEquals("[]",
+                client(0).messages());
+
+        // don't inform player2 because of other room
+        assertEquals("[]",
+                client(1).messages());
+
+        // inform player3 because of author
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':3,'text':'message3','room':'room2','type':3,'topicId':2," +
+                        "'playerId':'player3','playerName':'player3-name','time':1615231723345}]}]",
                 client(2).messages());
     }
 
