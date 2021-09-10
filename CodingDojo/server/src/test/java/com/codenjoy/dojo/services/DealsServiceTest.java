@@ -25,11 +25,11 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.LoginHelper;
+import com.codenjoy.dojo.services.helper.RoomHelper;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.stuff.SmartAssert;
-import com.codenjoy.dojo.services.helper.LoginHelper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,8 +70,6 @@ public class DealsServiceTest {
     @Autowired
     private ConfigProperties config;
 
-    protected LoginHelper login;
-
     @Autowired
     private FieldService fields;
 
@@ -81,12 +79,16 @@ public class DealsServiceTest {
     @Autowired
     private GameService games;
 
+    protected LoginHelper login;
+    private RoomHelper roomsSettings;
+
     @Before
     public void setup() {
         login = new LoginHelper(config, players, registration, deals);
+        roomsSettings = new RoomHelper(rooms, games);
 
         fields.removeAll();
-        rooms.removeAll();
+        roomsSettings.removeAll();
         login.removeAll();
     }
 
@@ -129,7 +131,7 @@ public class DealsServiceTest {
     @Test
     public void shouldPlayersInField_playersInRoom_forMultiplayerGame() {
         // given
-        settings("room", "third")
+        roomsSettings.settings("room", "third")
                 .bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TEAMS_PER_ROOM, 1)
                 .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
@@ -156,12 +158,6 @@ public class DealsServiceTest {
 
         // when then
         assertSameRoomPlayers("room", "[player1, player2, player3]");
-    }
-
-    private SettingsReader settings(String room, String game) {
-        GameType type = rooms.create(room, games.getGameType(game));
-        SettingsReader settings = (SettingsReader) type.getSettings();
-        return settings;
     }
 
     private void assertSameFieldPlayers(int fieldId, String expected) {
