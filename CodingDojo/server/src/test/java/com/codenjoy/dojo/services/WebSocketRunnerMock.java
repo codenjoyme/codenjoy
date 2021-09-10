@@ -92,7 +92,9 @@ public class WebSocketRunnerMock {
     }
 
     public String messages() {
-        return messages.toString().replace("\"", "'");
+        String result = messages.toString().replace("\"", "'");
+        messages.clear();
+        return result;
     }
 
     public boolean isEmpty() {

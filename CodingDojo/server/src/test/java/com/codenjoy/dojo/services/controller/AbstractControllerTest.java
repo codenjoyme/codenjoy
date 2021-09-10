@@ -206,6 +206,8 @@ public abstract class AbstractControllerTest<TData, TControl> {
     }
 
     protected String receivedOnServer() {
-        return receivedOnServer.toString();
+        String result = receivedOnServer.toString();
+        receivedOnServer.clear();
+        return result;
     }
 }
