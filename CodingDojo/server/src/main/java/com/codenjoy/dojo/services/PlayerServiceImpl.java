@@ -81,6 +81,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Qualifier("screenController")
     protected Controller screenController;
 
+    @Autowired
+    @Qualifier("chatController")
+    protected Controller chatController;
+
     @Autowired protected GameService gameService;
     @Autowired protected AutoSaver autoSaver;
     @Autowired protected GameSaver saver;
@@ -108,11 +112,13 @@ public class PlayerServiceImpl implements PlayerService {
             Joystick joystick = deal.getJoystick();
             playerController.registerPlayerTransport(player, joystick);
             screenController.registerPlayerTransport(player, null);
+            chatController.registerPlayerTransport(player, chat.control(player.getId()));
         });
         deals.onRemove(deal -> {
             Player player = deal.getPlayer();
             playerController.unregisterPlayerTransport(player);
             screenController.unregisterPlayerTransport(player);
+            chatController.unregisterPlayerTransport(player);
         });
     }
 

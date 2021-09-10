@@ -146,7 +146,7 @@ public class Deals implements Iterable<Deal>, Tickable {
 
         Game game = new LockedGame(lock).wrap(single);
 
-        Deal deal = new Deal(player, game, room);
+        Deal deal = create(player, room, game);
         all.add(deal);
 
         play(deal, parseSave(save));
@@ -155,6 +155,13 @@ public class Deals implements Iterable<Deal>, Tickable {
             onAdd.accept(deal);
         }
         return deal;
+    }
+
+    /**
+     * Do not inline this method, it will be overridden in tests.
+     */
+    public Deal create(Player player, String room, Game game) {
+        return new Deal(player, game, room);
     }
 
     private Single buildSingle(Player player, PlayerSave save) {

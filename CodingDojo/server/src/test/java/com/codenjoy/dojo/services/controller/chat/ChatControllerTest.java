@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.ChatTest;
+import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
@@ -75,6 +76,8 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         chat.removeAll();
         fields.removeAll();
 
+        setupChatControl();
+
         createPlayer("player", "room", "first");
         login.asUser("player", "player");
     }
@@ -84,10 +87,15 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         return "chat-ws";
     }
 
-    @Override
-    protected ChatControl control(String id) {
-        // TODO так себе решение, если найдешь в мокито как подписаться сразу на все методы - супер!
-        ChatControl control = spy(chatService.control(id));
+    // we wrap ChatControl in spy to eavesdrop on how it is being used
+    private void setupChatControl() {
+        when(chatService.control(anyString()))
+                .thenAnswer(inv -> chatControl((ChatControl) inv.callRealMethod()));
+    }
+
+    // TODO if you find in moсkito how to subscribe to all methods at once - super!
+    private ChatControl chatControl(ChatControl control) {
+        ChatControl spy = spy(control);
         Answer<?> answer = invocation -> {
             serverReceived(String.format("%s(%s)",
                     invocation.getMethod().getName(),
@@ -97,15 +105,15 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
             return invocation.callRealMethod();
         };
-        doAnswer(answer).when(control).get(anyInt(), anyString());
-        doAnswer(answer).when(control).delete(anyInt(), anyString());
-        doAnswer(answer).when(control).getAllRoom(any(Filter.class));
-        doAnswer(answer).when(control).getAllTopic(anyInt(), any(Filter.class));
-        doAnswer(answer).when(control).getAllField(any(Filter.class));
-        doAnswer(answer).when(control).postRoom(anyString(), anyString());
-        doAnswer(answer).when(control).postTopic(anyInt(), anyString(), anyString());
-        doAnswer(answer).when(control).postField(anyString(), anyString());
-        return control;
+        doAnswer(answer).when(spy).get(anyInt(), anyString());
+        doAnswer(answer).when(spy).delete(anyInt(), anyString());
+        doAnswer(answer).when(spy).getAllRoom(any(Filter.class));
+        doAnswer(answer).when(spy).getAllTopic(anyInt(), any(Filter.class));
+        doAnswer(answer).when(spy).getAllField(any(Filter.class));
+        doAnswer(answer).when(spy).postRoom(anyString(), anyString());
+        doAnswer(answer).when(spy).postTopic(anyInt(), anyString(), anyString());
+        doAnswer(answer).when(spy).postField(anyString(), anyString());
+        return spy;
     }
 
     public void nowIs(long time) {

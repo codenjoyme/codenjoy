@@ -23,10 +23,9 @@ package com.codenjoy.dojo.services.controller.control;
  */
 
 
-import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
-import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.spy;
 
 public class PlayerControllerTest extends AbstractControllerTest<String, Joystick> {
 
@@ -46,6 +49,8 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     public void setup() {
         super.setup();
 
+        overwriteDeal();
+
         createPlayer("player", "room", "first");
         replyToServerImmediately(true);
 
@@ -57,32 +62,68 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         return "ws";
     }
 
-    @Override
-    protected Joystick control(String id) {
-        return new DirectionActJoystick() {
+
+    // We wrap the Deal in spy to affect the return of the joystick,
+    // to wrap it in a decorator and then eavesdrop on the values.
+    // Oh Byte!
+    private void overwriteDeal() {
+        doAnswer(inv -> overwriteJoystick((Deal) inv.callRealMethod()))
+                .when(deals).create(any(Player.class), anyString(), any(Game.class));
+    }
+
+    private Deal overwriteJoystick(Deal deal) {
+        Deal spy = spy(deal);
+        doAnswer(inv -> listenJoystick((LazyJoystick) inv.callRealMethod()))
+                .when(spy).getJoystick();
+        return spy;
+    }
+
+    public LazyJoystick listenJoystick(LazyJoystick real) {
+        return new LazyJoystick(null) {
             @Override
             public void down() {
                 serverReceived("down");
+                real.down();
             }
 
             @Override
             public void up() {
                 serverReceived("up");
+                real.up();
             }
 
             @Override
             public void left() {
                 serverReceived("left");
+                real.left();
             }
 
             @Override
             public void right() {
                 serverReceived("right");
+                real.right();
             }
 
             @Override
             public void act(int... p) {
                 serverReceived("act" + Arrays.toString(p));
+                real.act(p);
+            }
+
+            @Override
+            public synchronized void tick() {
+                real.tick();
+            }
+
+            @Override
+            public void message(String message) {
+                serverReceived("message(" + message + ")");
+                real.message(message);
+            }
+
+            @Override
+            public synchronized String popLastCommands() {
+                return real.popLastCommands();
             }
         };
     }

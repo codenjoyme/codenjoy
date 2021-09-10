@@ -41,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -96,8 +97,8 @@ public abstract class AbstractControllerTest<TData, TControl> {
     @Autowired
     private ConfigProperties config;
 
-    @Autowired
-    private Deals deals;
+    @SpyBean
+    protected Deals deals;
 
     protected TestLogin login;
 
@@ -138,8 +139,6 @@ public abstract class AbstractControllerTest<TData, TControl> {
         player.setCode(registration.getCodeById(id));
         playersList.add(player);
 
-        controller().registerPlayerTransport(player, control(player.getId()));
-
         WebSocketRunnerMock client = new WebSocketRunnerMock(serverAddress, player.getId(), player.getCode());
         clients.add(client);
     }
@@ -147,8 +146,6 @@ public abstract class AbstractControllerTest<TData, TControl> {
     protected WebSocketRunnerMock client(int index) {
         return clients.get(index);
     }
-
-    protected abstract TControl control(String id);
 
     @After
     public void tearDown() {
