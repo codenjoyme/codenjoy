@@ -86,7 +86,9 @@ public class WebSocketRunnerMock {
     }
 
     public void stop() {
-        session.close();
+        if (session != null) {
+            session.close();
+        }
     }
 
     public String messages() {
