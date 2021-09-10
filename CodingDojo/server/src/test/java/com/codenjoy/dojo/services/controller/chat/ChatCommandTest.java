@@ -71,7 +71,7 @@ public class ChatCommandTest {
     }
 
     private void assertOne(String result) {
-        assertEquals("{'id':0,'text':'message1','room':'room1','topicId':13," +
+        assertEquals("{'id':0,'text':'message1','room':'room1','type':2,'topicId':13," +
                 "'playerId':'player1','playerName':'playerName1','time':12346}",
                 fix(result));
     }
@@ -119,9 +119,9 @@ public class ChatCommandTest {
     }
 
     private void assertList(String result) {
-        assertEquals("[{'id':0,'text':'message1','room':'room1','topicId':13," +
+        assertEquals("[{'id':0,'text':'message1','room':'room1','type':2,'topicId':13," +
                 "'playerId':'player1','playerName':'playerName1','time':12346}," +
-                "{'id':0,'text':'message2','room':'room2','topicId':14," +
+                "{'id':0,'text':'message2','room':'room2','type':2,'topicId':14," +
                 "'playerId':'player2','playerName':'playerName2','time':12347}]",
                 fix(result));
     }
