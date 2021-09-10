@@ -23,7 +23,9 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 
+import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
+import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
@@ -32,6 +34,8 @@ import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.ChatHelper;
+import com.codenjoy.dojo.services.helper.RoomHelper;
+import com.codenjoy.dojo.services.room.RoomService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
@@ -41,6 +45,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.joining;
 import static org.mockito.ArgumentMatchers.*;
@@ -54,6 +59,12 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     @Autowired
     private FieldService fields;
 
+    @Autowired
+    private RoomService rooms;
+
+    @Autowired
+    private GameService games;
+
     @SpyBean
     private ChatService chatService;
 
@@ -64,13 +75,15 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     private Chat chat;
     
     private ChatHelper messages;
+    private RoomHelper roomsSettings;
 
     @Before
     public void setup() {
         super.setup();
 
         messages = new ChatHelper(chat);
-        
+        roomsSettings = new RoomHelper(rooms, games);
+
         messages.removeAll();
         fields.removeAll();
 
@@ -507,6 +520,55 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     }
 
     @Test
+    public void shouldPostField_success_informAnotherUser_sameField() {
+        // given
+        roomsSettings.settings("room", "third")
+                .bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_TEAMS_PER_ROOM, 1)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
+
+        Deal deal1 = createPlayer("player", "room", "third");
+        login.asUser("player", "player");
+
+        Deal deal2 = createPlayer("player2", "room", "third");
+        login.asUser("player2", "player2");
+
+        assertEquals("[1, 1]", Arrays.asList(
+                fields.id(deal1.getField()),
+                fields.id(deal2.getField())).toString());
+
+        client(0).start();
+        client(1).start();
+
+        // when
+        nowIs(12345L);
+        client(0).sendToServer("{'command':'postField', " +
+                "'data':{'room':'room', 'text':'message'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1);
+
+        // then
+        assertEquals("[postField(message, room)]", receivedOnServer());
+
+        assertEquals("Chat.Message(id=1, topicId=1, type=FIELD(3), room=room, " +
+                        "playerId=player, time=12345, text=message)",
+                chat.getMessageById(1).toString());
+
+        // inform player1
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(0).messages());
+
+        // inform player2 because of same field
+        assertEquals("[{'command':'add', 'data':[" +
+                        "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':12345}]}]",
+                client(1).messages());
+    }
+
+    @Test
     public void shouldPostField_success_dontInformAnotherUser_differentFields() {
         // given
         createPlayer("player", "room", "first");
@@ -539,7 +601,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
 
-        // dont inform player2 because of other field
+        // don't inform player2 because of other field
         assertEquals("[]",
                 client(1).messages());
 

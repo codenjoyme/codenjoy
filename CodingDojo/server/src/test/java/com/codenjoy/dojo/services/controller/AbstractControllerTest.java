@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.mocks.ThirdGameType;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import com.codenjoy.dojo.web.rest.AbstractRestControllerTest;
 import com.codenjoy.dojo.services.helper.LoginHelper;
@@ -75,7 +76,10 @@ public abstract class AbstractControllerTest<TData, TControl> {
             return new GameServiceImpl(){
                 @Override
                 public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(FirstGameType.class, SecondGameType.class);
+                    return Arrays.asList(
+                            FirstGameType.class,
+                            SecondGameType.class,
+                            ThirdGameType.class);
                 }
             };
         }
@@ -136,7 +140,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     protected abstract Controller<TData, TControl> controller();
 
-    protected void createPlayer(String id, String room, String game) {
+    protected Deal createPlayer(String id, String room, String game) {
         Deal deal = login.register(id, id, room, game);
         dealsList.add(deal);
         Player player = deal.getPlayer();
@@ -144,6 +148,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
         WebSocketRunnerMock client = new WebSocketRunnerMock(serverAddress, player.getId(), player.getCode());
         clients.add(client);
+        return deal;
     }
 
     protected WebSocketRunnerMock client(int index) {
