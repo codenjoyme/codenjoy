@@ -194,6 +194,7 @@ public class WebSocketRunnerMock {
         while (session == null || session.getRemote() == null) {
             Thread.sleep(10);
         }
+        log.info("Client send: " + message);
         session.getRemote().sendString(message);
     }
 

@@ -645,6 +645,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         createPlayer("player2", "room", "first");
 
         client(0).start();
+        client(1).start();
 
         messages.post("room", "player", null, ROOM); // 1
         messages.post("room", "player", null, ROOM); // 2
