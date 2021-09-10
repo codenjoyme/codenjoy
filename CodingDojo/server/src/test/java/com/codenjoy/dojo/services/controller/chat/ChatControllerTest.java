@@ -247,6 +247,82 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     }
 
     @Test
+    public void shouldDelete_success_informAnotherUser_caseDeleteRoomTopicMessage() {
+        // given
+        createPlayer("player", "room", "first");
+        createPlayer("player2", "room", "first");
+        createPlayer("player3", "room2", "first"); // another room will be ignored
+
+        client(0).start();
+        client(1).start();
+        client(2).start();
+
+        messages.post("room", "player", null, ROOM); // 1
+        messages.post("room", "player", 1, TOPIC);   // 2
+        messages.post("room", "player2", 1, TOPIC);  // 3
+
+        // when
+        // player1 remove first topic message2
+        client(0).sendToServer("{'command':'delete', " +
+                "'data':{'id':2, 'room':'room'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1);
+        waitForClientReceived(2, false);
+
+        // then
+        assertEquals("[delete(2, room)]", receivedOnServer());
+
+        assertEquals(null, chat.getMessageById(2));
+
+        // inform player1
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+                client(0).messages());
+
+        // inform player2 because of same room
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
+                        "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
+                client(1).messages());
+
+        // don't inform player3 because of other room
+        assertEquals("[]",
+                client(2).messages());
+
+        // when
+        // player2 remove second topic message3
+        client(1).sendToServer("{'command':'delete', " +
+                "'data':{'id':3, 'room':'room'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1);
+        waitForClientReceived(2, false);
+
+        // then
+        assertEquals("[delete(3, room)]", receivedOnServer());
+
+        assertEquals(null, chat.getMessageById(3));
+
+        // inform player1
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
+                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+                client(0).messages());
+
+        // inform player2 because of same room
+        assertEquals("[{'command':'delete', 'data':[" +
+                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
+                        "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
+                client(1).messages());
+
+        // don't inform player3 because of other room
+        assertEquals("[]",
+                client(2).messages());
+    }
+
+    @Test
     public void shouldDelete_success_informAnotherUser_caseDeleteFieldMessage() {
         // given
         roomsSettings.settings("room", "third")
