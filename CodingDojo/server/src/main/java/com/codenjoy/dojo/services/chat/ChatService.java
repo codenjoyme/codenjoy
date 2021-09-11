@@ -287,7 +287,7 @@ public class ChatService {
         return true;
     }
 
-    private ChatType roomOrField(Chat.Message message) {
+    private Chat.Message rootFor(Chat.Message message) {
         while (message.getType() == TOPIC) {
             Integer topicId = message.getTopicId();
             if (topicId == null) {
@@ -298,7 +298,7 @@ public class ChatService {
                 return null;
             }
         }
-        return message.getType();
+        return message;
     }
 
     public IllegalArgumentException exception(String message, Object... parameters) {
@@ -410,13 +410,13 @@ public class ChatService {
                 Chat.Message message = chat.getMessageById(id);
                 boolean deleted = deleteMessage(id, room, playerId);
                 if (deleted) {
-                    informDelete(wrap(message), room, roomOrField(message));
+                    informDelete(wrap(message), room, rootFor(message));
                 }
                 return deleted;
             }
 
-            private void informDelete(PMessage message, String room, ChatType type) {
-                if (type == null) {
+            private void informDelete(PMessage message, String room, Chat.Message root) {
+                if (root == null) {
                     // TODO test me
                     // TODO такое себе решение, но может быть топик сообщение
                     //  уже давно удалено и мы не знаем что там было
@@ -428,12 +428,12 @@ public class ChatService {
                     informDeleteInField(message, message.getTopicId(), listener);
                     return;
                 }
-                switch (type) {
+                switch (root.getType()) {
                     case ROOM:
                         informDeleteInRoom(message, room, listener);
                         break;
                     case FIELD:
-                        informDeleteInField(message, message.getTopicId(), listener);
+                        informDeleteInField(message, root.getTopicId(), listener);
                         break;
                     default:
                         throw exception("Should be only ROOM or FIELD: " + message.getId());
