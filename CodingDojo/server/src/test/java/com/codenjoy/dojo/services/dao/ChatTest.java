@@ -508,22 +508,53 @@ public class ChatTest {
     public void shouldGetMessageById() {
         // given
         messages.post("room1", "player1");
-        messages.post("room1", "player1");
-        messages.post("room1", "player2");
+        messages.post("room1", "player1", 1, TOPIC);
+        messages.post("room1", "player2", 1, FIELD);
         messages.post("room2", "player2");
 
         // when then
+        assertMessages();
+    }
+
+    private void assertMessages() {
         assertEquals("Chat.Message(id=1, topicId=null, type=ROOM(1), room=room1, playerId=player1, time=1615231523345, text=message1)",
-                chat.getMessageById(1).toString());
+                chat.getAnyMessageById(1).toString());
 
-        assertEquals("Chat.Message(id=2, topicId=null, type=ROOM(1), room=room1, playerId=player1, time=1615231623345, text=message2)",
-                chat.getMessageById(2).toString());
+        assertEquals("Chat.Message(id=2, topicId=1, type=TOPIC(2), room=room1, playerId=player1, time=1615231623345, text=message2)",
+                chat.getAnyMessageById(2).toString());
 
-        assertEquals("Chat.Message(id=3, topicId=null, type=ROOM(1), room=room1, playerId=player2, time=1615231723345, text=message3)",
-                chat.getMessageById(3).toString());
+        assertEquals("Chat.Message(id=3, topicId=1, type=FIELD(3), room=room1, playerId=player2, time=1615231723345, text=message3)",
+                chat.getAnyMessageById(3).toString());
 
         assertEquals("Chat.Message(id=4, topicId=null, type=ROOM(1), room=room2, playerId=player2, time=1615231823345, text=message4)",
-                chat.getMessageById(4).toString());
+                chat.getAnyMessageById(4).toString());
+    }
+
+    @Test
+    public void shouldGetAnyMessageById() {
+        // given
+        messages.post("room1", "player1");
+        messages.post("room1", "player1", 1, TOPIC);
+        messages.post("room1", "player2", 1, FIELD);
+        messages.post("room2", "player2");
+
+        // when then
+        assertMessages();
+    }
+
+    @Test
+    public void shouldGetAnyMessageById_affectWhenRemove() {
+        // given
+        shouldGetAnyMessageById();
+
+        // when
+        chat.deleteMessage("room1", 1, "player1");
+        chat.deleteMessage("room1", 2, "player1");
+        chat.deleteMessage("room1", 3, "player2");
+        chat.deleteMessage("room2", 4, "player2");
+
+        // then
+        assertMessages();
     }
 
     @Test

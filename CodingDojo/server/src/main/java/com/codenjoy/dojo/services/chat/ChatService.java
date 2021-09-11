@@ -293,7 +293,7 @@ public class ChatService {
             if (topicId == null) {
                 throw exception("Topic message with null topic_id: " + message.getId());
             }
-            message = chat.getMessageById(topicId);
+            message = chat.getAnyMessageById(topicId);
             if (message == null) {
                 return null;
             }
@@ -406,7 +406,7 @@ public class ChatService {
 
             @Override
             public boolean delete(int id, String room) {
-                // TODO тут два запроса, не совсем оптимально
+                // TODO тут несколько запросов делается, не совсем оптимально
                 Chat.Message message = chat.getMessageById(id);
                 boolean deleted = deleteMessage(id, room, playerId);
                 if (deleted) {
@@ -416,19 +416,13 @@ public class ChatService {
             }
 
             private void informDelete(PMessage message, String room, Chat.Message root) {
-                if (root == null) {
-                    // TODO test me
-                    // TODO такое себе решение, но может быть топик сообщение
-                    //  уже давно удалено и мы не знаем что там было
-                    //  если мы не будем удалять сообщения а только помечать их удаленными,
-                    //  тогда сможем вытянуть эту инфу. а если оставить как есть, то может случиться так
-                    //  что мы это было ROOM, а мы попытаемся после найти FILED с айдишкой topic_id и
-                    //  может случиться так что найдем ее, и проинформируем не тех пользователей про удаление
-                    informDeleteInRoom(message, room, listener);
-                    informDeleteInField(message, message.getTopicId(), listener);
-                    return;
-                }
-                switch (root.getType()) {
+                ChatType type = (root == null)
+                        // TODO очень мало вероятно что такое случится,
+                        //   но если так - то информируем всех в комнате
+                        ? ROOM
+                        : root.getType();
+
+                switch (type) {
                     case ROOM:
                         informDeleteInRoom(message, room, listener);
                         break;

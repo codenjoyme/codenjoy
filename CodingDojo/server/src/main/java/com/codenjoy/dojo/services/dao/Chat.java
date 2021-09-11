@@ -297,6 +297,19 @@ public class Chat {
         );
     }
 
+    /**
+     * @param messageId Искомое сообщение.
+     * @return Найденное сообщение, даже если оно было ранее удалено.
+     */
+    public Message getAnyMessageById(int messageId) {
+        return pool.select("SELECT * " +
+                        "FROM messages " +
+                        "WHERE id = ?",
+                new Object[]{messageId},
+                rs -> rs.next() ? new Message(rs) : null
+        );
+    }
+
     public ChatType getTypeById(int messageId) {
         return pool.select("SELECT type " +
                         "FROM messages " +
