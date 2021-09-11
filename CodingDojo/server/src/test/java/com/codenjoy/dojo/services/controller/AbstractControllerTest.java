@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.controller;
 
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.TestSqliteDBLocations;
+import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;

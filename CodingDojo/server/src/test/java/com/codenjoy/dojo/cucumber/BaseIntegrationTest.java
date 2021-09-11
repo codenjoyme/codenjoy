@@ -23,7 +23,7 @@ package com.codenjoy.dojo.cucumber;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.TestSqliteDBLocations;
+import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.Ignore;

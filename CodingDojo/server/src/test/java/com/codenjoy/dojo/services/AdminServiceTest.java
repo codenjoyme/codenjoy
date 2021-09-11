@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.TestSqliteDBLocations;
+import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.mocks.FirstInactivityGameType;

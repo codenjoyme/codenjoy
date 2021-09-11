@@ -1,4 +1,4 @@
-package com.codenjoy.dojo;
+package com.codenjoy.dojo.config;
 
 /*-
  * #%L
