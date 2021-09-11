@@ -23,7 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.PropertyOverrideContextInitializer;
+import com.codenjoy.dojo.TestSqliteDBLocations;
 import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
@@ -49,6 +49,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -67,11 +68,12 @@ import java.util.Collection;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.fail;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
-@RunWith(SpringRunner.class)
 @ActiveProfiles(SQLiteProfile.NAME)
-@ContextConfiguration(initializers = PropertyOverrideContextInitializer.class)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
+@Import(AbstractRestControllerTest.ContextConfiguration.class)
 @WebAppConfiguration
 public abstract class AbstractRestControllerTest {
 

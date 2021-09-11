@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.LoginHelper;
@@ -38,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -47,9 +49,10 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class)
 @ActiveProfiles(SQLiteProfile.NAME)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
 public class DealsServiceTest {
 
     @Autowired

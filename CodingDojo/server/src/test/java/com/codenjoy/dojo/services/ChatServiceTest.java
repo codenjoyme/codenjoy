@@ -23,20 +23,17 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.PropertyOverrideContextInitializer;
+import com.codenjoy.dojo.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
-
-import static com.codenjoy.dojo.services.chat.ChatType.*;
-
 import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.ChatHelper;
+import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.stuff.SmartAssert;
-import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import org.junit.After;
 import org.junit.Before;
@@ -53,15 +50,16 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.joining;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class)
 @ActiveProfiles(SQLiteProfile.NAME)
-@ContextConfiguration(initializers = PropertyOverrideContextInitializer.class)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
 public class ChatServiceTest {
 
     @Autowired

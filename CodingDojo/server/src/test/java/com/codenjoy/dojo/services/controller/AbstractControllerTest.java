@@ -24,15 +24,15 @@ package com.codenjoy.dojo.services.controller;
 
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.PropertyOverrideContextInitializer;
+import com.codenjoy.dojo.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.mocks.ThirdGameType;
 import com.codenjoy.dojo.stuff.SmartAssert;
-import com.codenjoy.dojo.services.helper.LoginHelper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -63,8 +63,8 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
         properties = "spring.main.allow-bean-definition-overriding=true",
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(SQLiteProfile.NAME)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
 @Import(AbstractControllerTest.ContextConfiguration.class)
-@ContextConfiguration(initializers = PropertyOverrideContextInitializer.class)
 public abstract class AbstractControllerTest<TData, TControl> {
 
     public static final int MAX = 20;

@@ -23,10 +23,9 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.dao.ChatTest;
 import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
@@ -35,19 +34,18 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.services.TestUtils.assertException;
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class)
 @ActiveProfiles(SQLiteProfile.NAME)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
 public class FieldServiceTest {
 
     @Autowired

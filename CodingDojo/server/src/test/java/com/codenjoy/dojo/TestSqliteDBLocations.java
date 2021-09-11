@@ -6,7 +6,7 @@ import org.springframework.test.context.support.TestPropertySourceUtils;
 
 import java.util.Random;
 
-public class PropertyOverrideContextInitializer
+public class TestSqliteDBLocations
         implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override

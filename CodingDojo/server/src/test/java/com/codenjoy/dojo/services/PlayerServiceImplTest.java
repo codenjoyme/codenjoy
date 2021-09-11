@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.TestSqliteDBLocations;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.controller.Controller;
@@ -67,6 +68,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -87,10 +89,13 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class)
 @ActiveProfiles(SQLiteProfile.NAME)
-@TestPropertySource(properties = {"game.ai=true"})
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
+@TestPropertySource(properties = {
+        "game.ai=true"
+})
 public class PlayerServiceImplTest {
 
     public static final String VASYA = "vasya";

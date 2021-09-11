@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.Player;
@@ -37,6 +38,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.Errors;
@@ -48,16 +50,12 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * @author Igor Petrov
- * Created at 4/29/2019
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(SQLiteProfile.NAME)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
 @TestPropertySource(properties = {
         "registration.nickname.allowed=false",
         "registration.password.min-length=5"

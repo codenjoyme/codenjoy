@@ -25,7 +25,6 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.annotation.Import;
 
 import java.util.Arrays;
 
@@ -33,7 +32,6 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.web.rest.RestSettingsController.GENERAL;
 import static com.codenjoy.dojo.web.rest.RestSettingsController.SETTINGS;
 
-@Import(RestSettingsControllerTest.ContextConfiguration.class)
 public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
     public static final String NO_ROOM_NAME = null;

@@ -54,7 +54,10 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
             return new GameServiceImpl(){
                 @Override
                 public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(FirstSemifinalGameType.class, SecondSemifinalGameType.class);
+                    return Arrays.asList(
+                            FirstSemifinalGameType.class,
+                            SecondSemifinalGameType.class
+                    );
                 }
             };
         }
