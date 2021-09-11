@@ -371,6 +371,7 @@ public class ChatServiceTest {
         assertEquals(true,
                 control(1).delete(6, "room"));
 
+        // only player2 will receive update, because of each player on their own field
         assertListener(
                 "listener2-player2 deleted: PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
                 "    playerId=player2, playerName=player2-name, time=12350)");
@@ -421,9 +422,8 @@ public class ChatServiceTest {
         assertEquals(true,
                 control(1).delete(8, "room"));
 
+        // only player2 will receive update, because of each player on their own field
         assertListener(
-                "listener2-player1 deleted: PMessage(id=8, text=message8, room=room, type=2, topicId=6, \n" +
-                "    playerId=player2, playerName=player2-name, time=12352),\n" +
                 "listener2-player2 deleted: PMessage(id=8, text=message8, room=room, type=2, topicId=6, \n" +
                 "    playerId=player2, playerName=player2-name, time=12352)");
     }
