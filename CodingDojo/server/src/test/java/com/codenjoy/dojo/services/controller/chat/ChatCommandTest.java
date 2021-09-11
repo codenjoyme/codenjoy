@@ -71,8 +71,8 @@ public class ChatCommandTest {
     }
 
     private void assertOne(String result) {
-        assertEquals("{'id':0,'text':'message1','room':'room1','type':2,'topicId':13," +
-                "'playerId':'player1','playerName':'playerName1','time':12346}",
+        assertEquals("{'command':'add', 'data':[{'id':0,'text':'message1','room':'room1','type':2,'topicId':13," +
+                "'playerId':'player1','playerName':'playerName1','time':12346}]}",
                 fix(result));
     }
 
@@ -94,7 +94,8 @@ public class ChatCommandTest {
 
         // then
         verify(control).delete(1, "room");
-        assertEquals("true", result);
+
+        assertEquals(null, result);
     }
 
     @Test
@@ -119,10 +120,11 @@ public class ChatCommandTest {
     }
 
     private void assertList(String result) {
-        assertEquals("[{'id':0,'text':'message1','room':'room1','type':2,'topicId':13," +
-                "'playerId':'player1','playerName':'playerName1','time':12346}," +
-                "{'id':0,'text':'message2','room':'room2','type':2,'topicId':14," +
-                "'playerId':'player2','playerName':'playerName2','time':12347}]",
+        assertEquals("{'command':'add', 'data':[" +
+                        "{'id':0,'text':'message1','room':'room1','type':2,'topicId':13," +
+                        "'playerId':'player1','playerName':'playerName1','time':12346}," +
+                        "{'id':0,'text':'message2','room':'room2','type':2,'topicId':14," +
+                        "'playerId':'player2','playerName':'playerName2','time':12347}]}",
                 fix(result));
     }
 
@@ -185,7 +187,7 @@ public class ChatCommandTest {
         // then
         verify(control).postRoom("message4", "otherRoom");
 
-        assertOne(result);
+        assertEquals(null, result);
     }
 
     @Test
@@ -201,7 +203,7 @@ public class ChatCommandTest {
         // then
         verify(control).postField("message2", "room3");
 
-        assertOne(result);
+        assertEquals(null, result);
     }
 
     @Test
@@ -217,7 +219,7 @@ public class ChatCommandTest {
         // then
         verify(control).postTopic(12, "message1", "room");
 
-        assertOne(result);
+        assertEquals(null, result);
     }
 
     @Test
@@ -229,8 +231,9 @@ public class ChatCommandTest {
         // then
         verify(control, never()).postTopic(anyInt(), anyString(), anyString());
 
-        assertEquals("{'error':'JSONException'," +
-                "'message':'JSONObject[\\'text\\'] not a string.'}",
+        assertEquals("{'command':'error', 'data':" +
+                        "{'error':'JSONException'," +
+                        "'message':'JSONObject[\\'text\\'] not a string.'}}",
                 fix(result));
     }
 
@@ -247,8 +250,9 @@ public class ChatCommandTest {
         // then
         verify(control).postTopic(12, null, "room");
 
-        assertEquals("{'error':'IllegalArgumentException'," +
-                        "'message':'Message is null'}",
+        assertEquals("{'command':'error', 'data':" +
+                        "{'error':'IllegalArgumentException'," +
+                        "'message':'Message is null'}}",
                 fix(result));
     }
 }
