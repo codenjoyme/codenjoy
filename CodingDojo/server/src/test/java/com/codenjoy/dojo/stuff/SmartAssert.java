@@ -22,6 +22,7 @@ package com.codenjoy.dojo.stuff;
  * #L%
  */
 
+import com.codenjoy.dojo.services.helper.LoginHelper;
 import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.internal.runners.model.MultipleFailureException;
@@ -65,7 +66,8 @@ public class SmartAssert {
 
             if (className.contains("Abstract")
                 || className.equals(SmartAssert.class.getName())
-                || className.contains(SmartAssert.class.getSimpleName() + "$"))
+                || className.contains(SmartAssert.class.getSimpleName() + "$")
+                || className.contains(LoginHelper.class.getPackageName()))
             {
                 continue;
             }
