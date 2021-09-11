@@ -99,7 +99,6 @@ public class Chat {
                 rs -> rs.next() ? rs.getInt(1) : 0);
     }
 
-    // TODO test deleted
     public Integer getLastMessageId(String room) {
         return pool.select("SELECT id " +
                         "FROM messages " +
@@ -238,7 +237,6 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId}.
      */
-    // TODO test deleted
     public List<Message> getMessagesAfter(Integer topicId, ChatType type, Filter filter) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE deleted = 0 " +
@@ -267,7 +265,6 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param beforeId}.
      */
-    // TODO test deleted
     public List<Message> getMessagesBefore(ChatType type, Integer topicId, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
@@ -290,7 +287,6 @@ public class Chat {
         );
     }
 
-    // TODO test deleted
     public Message getMessageById(int messageId) {
         return pool.select("SELECT * " +
                         "FROM messages " +
