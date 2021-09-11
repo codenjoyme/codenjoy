@@ -1466,24 +1466,9 @@ public class ChatTest {
     }
 
     @Test
-    public void shouldGetTopicRoomAndFieldMessages_affectWhenRemove() {
+    public void shouldGetMessages_affectWhenRemove() {
         // given
-        messages.post("room", "player");            // id = 1  // message in room, will be topic1
-        messages.post("room", "player");            // id = 2  // message in room, will be topic2
-        messages.post("room", "player", 1, TOPIC);  // id = 3  // message for topic1
-        messages.post("room", "player", 1, TOPIC);  // id = 4  // message for topic1
-        messages.post("room", "player", 1, FIELD);  // id = 5  // message for field1
-        messages.post("room", "player", 1, FIELD);  // id = 6  // message for field1
-        messages.post("room", "player");            // id = 7  // just another one message in room
-        messages.post("room", "player", 2, TOPIC);  // id = 8  // message for topic2
-        messages.post("room", "player", 2, FIELD);  // id = 9  // message for field1
-        messages.post("room", "player", 2, TOPIC);  // id = 10 // message for topic2
-        messages.post("room", "player", 1, TOPIC);  // id = 11 // message for topic1
-        messages.post("room", "player", 1, FIELD);  // id = 12 // message for field1
-        messages.post("room", "player");            // id = 13 // just another one message in room
-        messages.post("room", "player", 1, TOPIC);  // id = 14 // message for topic1
-
-        /// ----- all room messages -----
+        givenMessages_affectWhenRemove();
 
         // when then
         // all for room
@@ -1515,7 +1500,44 @@ public class ChatTest {
                                 .count(10)
                                 .get()));
 
-        /// ----- get by id -----
+        // when
+        removeSeveralMessages_affectWhenRemove();
+
+        // when then
+        // all for room
+        messages.assertThat(1, 7, 13)
+                .in(chat.getMessages(ROOM, null,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // when then
+        // all for topic
+        messages.assertThat(3, 11, 14)
+                .in(chat.getMessages(TOPIC, 1,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // all for field
+        messages.assertThat(5, 12)
+                .in(chat.getMessages(FIELD, 1,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // all for field
+        messages.assertThat()
+                .in(chat.getMessages(FIELD, 2,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+    }
+
+    @Test
+    public void shouldGetById_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
 
         assertEquals("Chat.Message(id=2, topicId=null, type=ROOM(1), room=room, playerId=player, time=1615231623345, text=message2)",
                 chat.getMessageById(2).toString());
@@ -1532,7 +1554,20 @@ public class ChatTest {
         assertEquals("Chat.Message(id=10, topicId=2, type=TOPIC(2), room=room, playerId=player, time=1615232423345, text=message10)",
                 chat.getMessageById(10).toString());
 
-        /// ----- all topic messages -----
+        // when
+        removeSeveralMessages_affectWhenRemove();
+
+        assertEquals(null, chat.getMessageById(2));
+        assertEquals(null, chat.getMessageById(4));
+        assertEquals(null, chat.getMessageById(6));
+        assertEquals(null, chat.getMessageById(9));
+        assertEquals(null, chat.getMessageById(10));
+    }
+
+    @Test
+    public void shouldGetTopicMessages_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
 
         // when then
         // all for topic 1 message in room
@@ -1554,190 +1589,8 @@ public class ChatTest {
         messages.assertThat()
                 .in(chat.getTopicMessages(4));
 
-        /// ----- between ids -----
-
-        // when then
-        // get room messages
-        messages.assertThat(1, 2, 7, 13)
-                .in(chat.getMessagesBetween(ROOM, null,
-                        Filter.room("room")
-                                .afterId(1)
-                                .beforeId(14)
-                                .inclusive(true)
-                                .get()));
-
-        // when then
-        // get topic messages
-        messages.assertThat(3, 4, 11, 14)
-                .in(chat.getMessagesBetween(TOPIC, 1,
-                        Filter.room("room")
-                                .afterId(1)
-                                .beforeId(14)
-                                .inclusive(true)
-                                .get()));
-
-        // when then
-        // get field messages
-        messages.assertThat(5, 6, 12)
-                .in(chat.getMessagesBetween(FIELD, 1,
-                        Filter.room("room")
-                                .afterId(1)
-                                .beforeId(14)
-                                .inclusive(true)
-                                .get()));
-
-        // when then
-        // get field messages
-        messages.assertThat(9)
-                .in(chat.getMessagesBetween(FIELD, 2,
-                        Filter.room("room")
-                                .afterId(1)
-                                .beforeId(14)
-                                .inclusive(true)
-                                .get()));
-
-        /// ----- after id -----
-
-        // when then
-        // get room messages
-        messages.assertThat(1, 2, 7, 13)
-                .in(chat.getMessagesAfter(null, ROOM,
-                        Filter.room("room")
-                                .afterId(1)
-                                .inclusive(true)
-                                .count(10)
-                                .get()));
-
-        // when then
-        // get topic messages
-        messages.assertThat(3, 4, 11, 14)
-                .in(chat.getMessagesAfter(1, TOPIC,
-                        Filter.room("room")
-                                .afterId(1)
-                                .inclusive(true)
-                                .count(10)
-                                .get()));
-
-        // when then
-        // get field messages
-        messages.assertThat(5, 6, 12)
-                .in(chat.getMessagesAfter(1, FIELD,
-                        Filter.room("room")
-                                .afterId(1)
-                                .inclusive(true)
-                                .count(10)
-                                .get()));
-
-        // when then
-        // get field messages
-        messages.assertThat(9)
-                .in(chat.getMessagesAfter(2, FIELD,
-                        Filter.room("room")
-                                .afterId(1)
-                                .inclusive(true)
-                                .count(10)
-                                .get()));
-
-        /// ----- before id -----
-
-        // when then
-        // get room messages
-        messages.assertThat(1, 2, 7, 13)
-                .in(chat.getMessagesBefore(ROOM, null,
-                        Filter.room("room")
-                                .beforeId(14)
-                                .inclusive(true)
-                                .count(10)
-                                .get()));
-
-        // when then
-        // get topic messages
-        messages.assertThat(3, 4, 11, 14)
-                .in(chat.getMessagesBefore(TOPIC, 1,
-                        Filter.room("room")
-                                .beforeId(14)
-                                .inclusive(true)
-                                .count(10)
-                                .get()));
-
-        // when then
-        // get field messages
-        messages.assertThat(5, 6, 12)
-                .in(chat.getMessagesBefore(FIELD, 1,
-                        Filter.room("room")
-                                .beforeId(14)
-                                .inclusive(true)
-                                .count(10)
-                                .get()));
-
-        // when then
-        // get field messages
-        messages.assertThat(9)
-                .in(chat.getMessagesBefore(FIELD, 2,
-                        Filter.room("room")
-                                .beforeId(14)
-                                .inclusive(true)
-                                .count(10)
-                                .get()));
-
         // when
-        // remove several messages
-        // id = 2  // message in room, will be topic2
-        chat.deleteMessage("room", 2, "player");
-
-        // id = 4  // message for topic1
-        chat.deleteMessage("room", 4, "player");
-
-        // id = 6  // message for field1
-        chat.deleteMessage("room", 6, "player");
-
-        // id = 9  // message for field1
-        chat.deleteMessage("room", 9, "player");
-
-        // id = 10 // message for topic2
-        chat.deleteMessage("room", 10, "player");
-
-        /// ----- get by id -----
-
-        assertEquals(null, chat.getMessageById(2));
-        assertEquals(null, chat.getMessageById(4));
-        assertEquals(null, chat.getMessageById(6));
-        assertEquals(null, chat.getMessageById(9));
-        assertEquals(null, chat.getMessageById(10));
-
-        /// ----- all room messages -----
-
-        // when then
-        // all for room
-        messages.assertThat(1, 7, 13)
-                .in(chat.getMessages(ROOM, null,
-                        Filter.room("room")
-                                .count(10)
-                                .get()));
-
-        // when then
-        // all for topic
-        messages.assertThat(3, 11, 14)
-                .in(chat.getMessages(TOPIC, 1,
-                        Filter.room("room")
-                                .count(10)
-                                .get()));
-
-        // all for field
-        messages.assertThat(5, 12)
-                .in(chat.getMessages(FIELD, 1,
-                        Filter.room("room")
-                                .count(10)
-                                .get()));
-
-        // all for field
-        messages.assertThat()
-                .in(chat.getMessages(FIELD, 2,
-                        Filter.room("room")
-                                .count(10)
-                                .get()));
-
-        /// ----- all topic messages -----
+        removeSeveralMessages_affectWhenRemove();
 
         // when then
         // all for topic 1 message in room
@@ -1758,8 +1611,55 @@ public class ChatTest {
         // all for non topic message in room
         messages.assertThat()
                 .in(chat.getTopicMessages(4));
+    }
 
-        /// ----- between ids -----
+    @Test
+    public void shouldGetMessagesBetween_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
+
+        // when then
+        // get room messages
+        messages.assertThat(1, 2, 7, 13)
+                .in(chat.getMessagesBetween(ROOM, null,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(3, 4, 11, 14)
+                .in(chat.getMessagesBetween(TOPIC, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(5, 6, 12)
+                .in(chat.getMessagesBetween(FIELD, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(9)
+                .in(chat.getMessagesBetween(FIELD, 2,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when
+        removeSeveralMessages_affectWhenRemove();
 
         // when then
         // get room messages
@@ -1800,8 +1700,55 @@ public class ChatTest {
                                 .beforeId(14)
                                 .inclusive(true)
                                 .get()));
+    }
 
-        /// ----- after id -----
+    @Test
+    public void shouldGetMessagesAfter_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
+
+        // when then
+        // get room messages
+        messages.assertThat(1, 2, 7, 13)
+                .in(chat.getMessagesAfter(null, ROOM,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(3, 4, 11, 14)
+                .in(chat.getMessagesAfter(1, TOPIC,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(5, 6, 12)
+                .in(chat.getMessagesAfter(1, FIELD,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(9)
+                .in(chat.getMessagesAfter(2, FIELD,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when
+        removeSeveralMessages_affectWhenRemove();
 
         // when then
         // get room messages
@@ -1843,7 +1790,57 @@ public class ChatTest {
                                 .count(10)
                                 .get()));
 
-        /// ----- before id -----
+    }
+
+    @Test
+    public void shouldGetMessagesBefore_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
+
+        // when then
+        // get room messages
+        messages.assertThat(1, 2, 7, 13)
+                .in(chat.getMessagesBefore(ROOM, null,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(3, 4, 11, 14)
+                .in(chat.getMessagesBefore(TOPIC, 1,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(5, 6, 12)
+                .in(chat.getMessagesBefore(FIELD, 1,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(9)
+                .in(chat.getMessagesBefore(FIELD, 2,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+
+
+        // when
+        removeSeveralMessages_affectWhenRemove();
 
         // when then
         // get room messages
@@ -1884,6 +1881,41 @@ public class ChatTest {
                                 .inclusive(true)
                                 .count(10)
                                 .get()));
+    }
+
+    private void removeSeveralMessages_affectWhenRemove() {
+        // remove several messages
+        // id = 2  // message in room, will be topic2
+        chat.deleteMessage("room", 2, "player");
+
+        // id = 4  // message for topic1
+        chat.deleteMessage("room", 4, "player");
+
+        // id = 6  // message for field1
+        chat.deleteMessage("room", 6, "player");
+
+        // id = 9  // message for field1
+        chat.deleteMessage("room", 9, "player");
+
+        // id = 10 // message for topic2
+        chat.deleteMessage("room", 10, "player");
+    }
+
+    private void givenMessages_affectWhenRemove() {
+        messages.post("room", "player");            // id = 1  // message in room, will be topic1
+        messages.post("room", "player");            // id = 2  // message in room, will be topic2
+        messages.post("room", "player", 1, TOPIC);  // id = 3  // message for topic1
+        messages.post("room", "player", 1, TOPIC);  // id = 4  // message for topic1
+        messages.post("room", "player", 1, FIELD);  // id = 5  // message for field1
+        messages.post("room", "player", 1, FIELD);  // id = 6  // message for field1
+        messages.post("room", "player");            // id = 7  // just another one message in room
+        messages.post("room", "player", 2, TOPIC);  // id = 8  // message for topic2
+        messages.post("room", "player", 2, FIELD);  // id = 9  // message for field1
+        messages.post("room", "player", 2, TOPIC);  // id = 10 // message for topic2
+        messages.post("room", "player", 1, TOPIC);  // id = 11 // message for topic1
+        messages.post("room", "player", 1, FIELD);  // id = 12 // message for field1
+        messages.post("room", "player");            // id = 13 // just another one message in room
+        messages.post("room", "player", 1, TOPIC);  // id = 14 // message for topic1
     }
 
     @Test
