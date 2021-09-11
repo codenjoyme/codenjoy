@@ -89,10 +89,29 @@ public class ChatTest {
         messages.post("room1", "player1", 1, FIELD); // id = 3
 
         // when then
+        assertGetTypeById();
+    }
+
+    private void assertGetTypeById() {
         assertEquals("ROOM(1)", chat.getTypeById(1).toString());
         assertEquals("TOPIC(2)", chat.getTypeById(2).toString());
         assertEquals("FIELD(3)", chat.getTypeById(3).toString());
         assertEquals(null, chat.getTypeById(4));
+    }
+
+    @Test
+    public void shouldGetTypeById_allCases_doNotAffectWhenRemove() {
+        // given
+        shouldGetTypeById_allCases();
+
+        // when
+        assertEquals(true, chat.deleteMessage("room1", 1, "player1"));
+        assertEquals(true, chat.deleteMessage("room1", 2, "player1"));
+        assertEquals(true, chat.deleteMessage("room1", 3, "player1"));
+        assertEquals(false, chat.deleteMessage("room1", 4, "player1")); // not exists
+
+        // then
+        assertGetTypeById();
     }
 
     @Test
@@ -1610,4 +1629,17 @@ public class ChatTest {
         messages.post("room", "player", 62, FIELD); // field chat
         assertEquals(62, chat.getLastFieldId());
     }
+
+    @Test
+    public void shouldGetLastFieldId_doNotAffectWhenRemove() {
+        // given
+        shouldGetLastFieldId();
+
+        // when then
+        messages.removeAll(FIELD, 62, "room",
+                "[Chat.Message(id=13, topicId=62, type=FIELD(3), room=room, playerId=player, time=1615232723345, text=message13)]");
+
+        assertEquals(62, chat.getLastFieldId());
+    }
+
 }

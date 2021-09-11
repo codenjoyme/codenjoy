@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services.helper;
 
 import com.codenjoy.dojo.services.chat.ChatType;
+import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.ChatTest;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
@@ -43,6 +44,19 @@ public class ChatHelper {
 
     public AssertThat assertThat(int... ids) {
         return new AssertThat(ids);
+    }
+
+    public void removeAll(ChatType type, Integer topicId, String room, String expected) {
+        List<Chat.Message> list = chat.getMessages(type, topicId,
+                Filter.room(room)
+                        .count(Integer.MAX_VALUE)
+                        .get());
+
+        assertEquals(expected, list.toString());
+
+        list.forEach(message ->
+                assertEquals(true, chat.deleteMessage(room,
+                        message.getId(), message.getPlayerId())));
     }
 
     public class AssertThat {

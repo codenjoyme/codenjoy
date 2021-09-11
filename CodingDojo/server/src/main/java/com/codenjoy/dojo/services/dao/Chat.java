@@ -47,6 +47,7 @@ public class Chat {
                         "room varchar(255), " +
                         "topic_id int, " +
                         "type int, " +
+                        "deleted boolean, " +
                         "player_id varchar(255), " +
                         "time varchar(255), " +
                         "text varchar(255));"
@@ -63,10 +64,12 @@ public class Chat {
      *        (или дочернего чата в нем, если указан {@param topicId}),
      *        посортированных в порядке возрастания времени.
      */
+    // TODO test deleted
     public List<Message> getMessages(ChatType type, Integer topicId, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
-                        "WHERE room = ? " +
+                        "WHERE deleted = 0 " +
+                        "AND room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
                         "ORDER BY time DESC " +
@@ -97,10 +100,12 @@ public class Chat {
                 rs -> rs.next() ? rs.getInt(1) : 0);
     }
 
+    // TODO test deleted
     public Integer getLastMessageId(String room) {
         return pool.select("SELECT id " +
                         "FROM messages " +
-                        "WHERE room = ? " +
+                        "WHERE deleted = 0 " +
+                        "AND room = ? " +
                         "AND type = ? " +
                         "ORDER BY time DESC " +
                         "LIMIT 1;",
@@ -124,7 +129,8 @@ public class Chat {
                         "FROM" +
                         "    (SELECT room, MAX(time) AS time" +
                         "        FROM messages" +
-                        "        WHERE type = ?" +
+                        "        WHERE deleted = 0 " +
+                        "        AND type = ?" +
                         "        GROUP BY room) m1" +
                         "    JOIN messages m2" +
                         "        ON m1.room = m2.room" +
@@ -150,7 +156,8 @@ public class Chat {
                         "FROM" +
                         "    (SELECT topic_id, MAX(time) AS time" +
                         "        FROM messages" +
-                        "        WHERE type = ?" +
+                        "        WHERE deleted = 0 " +
+                        "        AND type = ?" +
                         "        GROUP BY topic_id) m1" +
                         "    JOIN messages m2" +
                         "        ON m1.topic_id = m2.topic_id" +
@@ -174,9 +181,11 @@ public class Chat {
      * @return Все соообщения текущего топика (родительского сообщения) {@param messageId},
      *        посортированных в порядке возрастания времени
      */
+    // TODO test deleted
     public List<Message> getTopicMessages(int messageId) {
         return pool.select("SELECT * FROM messages " +
-                        "WHERE topic_id = ? " +
+                        "WHERE deleted = 0 " +
+                        "AND topic_id = ? " +
                         "AND type = ? " +
                         "ORDER BY time ASC;",
                 new Object[]{
@@ -195,13 +204,15 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId} и message {@param beforeId} помимо выбранных.
      */
+    // TODO test deleted
     public List<Message> getMessagesBetween(ChatType type, Integer topicId, Filter filter){
         if (filter.afterId() > filter.beforeId()) {
             throw new IllegalArgumentException(
                     "afterId in interval should be smaller than beforeId");
         }
         return pool.select("SELECT * FROM messages " +
-                        "WHERE room = ? " +
+                        "WHERE deleted = 0 " +
+                        "AND room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
                         "AND id >" + eq(filter) + " ? " +
@@ -230,9 +241,11 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId}.
      */
+    // TODO test deleted
     public List<Message> getMessagesAfter(Integer topicId, ChatType type, Filter filter) {
         return pool.select("SELECT * FROM messages " +
-                        "WHERE room = ? " +
+                        "WHERE deleted = 0 " +
+                        "AND room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
                         "AND id >" + eq(filter) + " ? " +
@@ -257,10 +270,12 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param beforeId}.
      */
+    // TODO test deleted
     public List<Message> getMessagesBefore(ChatType type, Integer topicId, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
-                        "WHERE room = ? " +
+                        "WHERE deleted = 0 " +
+                        "AND room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
                         "AND id <" + eq(filter) + " ? " +
@@ -278,15 +293,21 @@ public class Chat {
         );
     }
 
+    // TODO test deleted
     public Message getMessageById(int messageId) {
-        return pool.select("SELECT * FROM messages WHERE id = ?",
+        return pool.select("SELECT * " +
+                        "FROM messages " +
+                        "WHERE deleted = 0 " +
+                        "AND id = ?",
                 new Object[]{messageId},
                 rs -> rs.next() ? new Message(rs) : null
         );
     }
 
     public ChatType getTypeById(int messageId) {
-        return pool.select("SELECT type FROM messages WHERE id = ?",
+        return pool.select("SELECT type " +
+                        "FROM messages " +
+                        "WHERE id = ?",
                 new Object[]{messageId},
                 rs -> rs.next() ? type(rs) : null
         );
@@ -296,14 +317,16 @@ public class Chat {
         return ChatType.valueOf(rs.getInt("type"));
     }
 
+    // TODO test deleted
     public Message saveMessage(Message message) {
         List<Object> objects = pool.batch(Arrays.asList("INSERT INTO messages " +
-                        "(room, topic_id, type, player_id, time, text) " +
-                        "VALUES (?, ?, ?, ?, ?, ?);",
+                        "(room, deleted, topic_id, type, player_id, time, text) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?);",
                 pool.getLastInsertedIdQuery("messages", "id")),
 
                 Arrays.asList(new Object[]{
                                 message.getRoom(),
+                                0,
                                 message.getTopicId(),
                                 message.getType().id(),
                                 message.getPlayerId(),
@@ -321,7 +344,8 @@ public class Chat {
     }
 
     public boolean deleteMessage(String room, int id, String playerId) {
-        int count = pool.update("DELETE FROM messages " +
+        int count = pool.update("UPDATE messages " +
+                        "SET deleted = 1 " +
                         "WHERE id = ? " +
                         "AND room = ? " +
                         "AND player_id = ?",
