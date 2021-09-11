@@ -24,10 +24,12 @@ package com.codenjoy.dojo.services.whatsnext;
 
 import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.stuff.SmartAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
 public class WatsNextServiceTest {
 
@@ -38,6 +40,11 @@ public class WatsNextServiceTest {
     public void setUp() {
         gameType = new GameRunner();
         whatsNext = new WhatsNextService();
+    }
+
+    @After
+    public void after() {
+        SmartAssert.checkResult();
     }
 
     @Test

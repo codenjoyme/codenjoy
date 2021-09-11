@@ -26,9 +26,7 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertEquals;
-// TODO сделать удобным вовыд и расскомментить
-// import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
 public class RestGameControllerTest extends AbstractRestControllerTest {
 

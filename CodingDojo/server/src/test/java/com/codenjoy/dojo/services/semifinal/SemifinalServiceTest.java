@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.stuff.SmartAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,9 +37,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.mockito.Mockito.*;
 
 public class SemifinalServiceTest extends AbstractDealsTest {
@@ -58,6 +59,11 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         semifinal.scoresCleaner = spy(new ScoresCleaner(deals, semifinal.saver, roomService, gameService, timeService));
         semifinal.clean();
         roomService.removeAll();
+    }
+
+    @After
+    public void after() {
+        SmartAssert.checkResult();
     }
 
     protected Settings settings(String room) {
@@ -1306,8 +1312,8 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         SemifinalSettingsImpl settings = semifinal.semifinalSettings("room");
 
         // then
-        assertNotSame(original.toString(), settings.toString());
         assertEquals("SettingsImpl(map={})", settings.toString());
+        assertEquals("TODO", settings.toString());
     }
 
     // эмулирую другой тип сеттингов, который без semifinal
