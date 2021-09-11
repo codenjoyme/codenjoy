@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
@@ -35,7 +36,7 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 
-@Import(RestTeamControllerApprovalsTest.ContextConfiguration.class)
+@Import(ThreeGamesConfiguration.class)
 public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest {
 
     public static final int TICKS = 20;
