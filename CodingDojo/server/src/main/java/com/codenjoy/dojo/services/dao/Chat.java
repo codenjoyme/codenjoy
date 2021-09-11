@@ -64,7 +64,6 @@ public class Chat {
      *        (или дочернего чата в нем, если указан {@param topicId}),
      *        посортированных в порядке возрастания времени.
      */
-    // TODO test deleted
     public List<Message> getMessages(ChatType type, Integer topicId, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
@@ -181,7 +180,6 @@ public class Chat {
      * @return Все соообщения текущего топика (родительского сообщения) {@param messageId},
      *        посортированных в порядке возрастания времени
      */
-    // TODO test deleted
     public List<Message> getTopicMessages(int messageId) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE deleted = 0 " +
@@ -204,7 +202,6 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId} и message {@param beforeId} помимо выбранных.
      */
-    // TODO test deleted
     public List<Message> getMessagesBetween(ChatType type, Integer topicId, Filter filter){
         if (filter.afterId() > filter.beforeId()) {
             throw new IllegalArgumentException(
