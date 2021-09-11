@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.PropertyOverrideContextInitializer;
 import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
@@ -47,14 +48,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -65,7 +63,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Random;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.fail;
@@ -74,7 +71,7 @@ import static org.junit.Assert.fail;
         properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
 @ActiveProfiles(SQLiteProfile.NAME)
-@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
+@ContextConfiguration(initializers = PropertyOverrideContextInitializer.class)
 @WebAppConfiguration
 public abstract class AbstractRestControllerTest {
 
@@ -88,29 +85,6 @@ public abstract class AbstractRestControllerTest {
                     return Arrays.asList(FirstGameType.class, SecondGameType.class);
                 }
             };
-        }
-    }
-
-    public static class PropertyOverrideContextInitializer
-            implements ApplicationContextInitializer<ConfigurableApplicationContext>
-    {
-        @Override
-        public void initialize(ConfigurableApplicationContext context) {
-            setup(context, "messages", "messages.db");
-            setup(context, "log", "logs.db");
-            setup(context, "payment", "payment.db");
-            setup(context, "saves", "saves.db");
-            setup(context, "users", "users.db");
-            setup(context, "settings", "settings.db");
-
-//            TestPropertySourceUtils.addPropertiesFilesToEnvironment(
-//                    context, "context-override-application.properties");
-        }
-
-        public void setup(ConfigurableApplicationContext context, String db, String file) {
-            String dbFile = "target/" + file + new Random().nextInt();
-            TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
-                    context, "database.files." + db + "=" + dbFile);
         }
     }
 
