@@ -22,12 +22,14 @@ package com.codenjoy.dojo;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 
 import java.util.Random;
 
+@Slf4j
 public class TestSqliteDBLocations
         implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
@@ -39,14 +41,12 @@ public class TestSqliteDBLocations
         setup(context, "saves", "saves.db");
         setup(context, "users", "users.db");
         setup(context, "settings", "settings.db");
-
-//            TestPropertySourceUtils.addPropertiesFilesToEnvironment(
-//                    context, "context-override-application.properties");
     }
 
     public void setup(ConfigurableApplicationContext context, String db, String file) {
         String dbFile = "target/" + file + new Random().nextInt();
-        TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
-                context, "database.files." + db + "=" + dbFile);
+        String property = "database.files." + db + "=" + dbFile;
+        log.info("Property overridden:" + property);
+        TestPropertySourceUtils.addInlinedPropertiesToEnvironment(context, property);
     }
 }
