@@ -22,46 +22,22 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
+import com.codenjoy.dojo.config.SemifinalGamesConfiguration;
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.GameServiceImpl;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.mocks.FirstSemifinalGameType;
-import com.codenjoy.dojo.services.mocks.SecondSemifinalGameType;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.verification.VerificationMode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.*;
 
-@Import(RestAdminControllerTest.ContextConfiguration.class)
+@Import(SemifinalGamesConfiguration.class)
 public class RestAdminControllerTest extends AbstractRestControllerTest {
-
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return new GameServiceImpl(){
-                @Override
-                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(
-                            FirstSemifinalGameType.class,
-                            SecondSemifinalGameType.class
-                    );
-                }
-            };
-        }
-    }
 
     @Autowired
     private RestAdminController service;

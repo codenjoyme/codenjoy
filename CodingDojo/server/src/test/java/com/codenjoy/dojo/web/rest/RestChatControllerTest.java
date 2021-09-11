@@ -22,6 +22,7 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
+import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.TimeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.when;
 
-@Import(RestChatControllerTest.ContextConfiguration.class)
+@Import(ThreeGamesConfiguration.class)
 public class RestChatControllerTest extends AbstractRestControllerTest {
 
     @SpyBean

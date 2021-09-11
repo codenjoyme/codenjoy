@@ -22,6 +22,7 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
+import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +34,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.web.rest.RestSettingsController.GENERAL;
 import static com.codenjoy.dojo.web.rest.RestSettingsController.SETTINGS;
 
-@Import(RestSettingsControllerTest.ContextConfiguration.class)
+@Import(ThreeGamesConfiguration.class)
 public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
     public static final String NO_ROOM_NAME = null;

@@ -77,23 +77,6 @@ import static org.junit.Assert.fail;
 @WebAppConfiguration
 public abstract class AbstractRestControllerTest {
 
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return new GameServiceImpl(){
-                @Override
-                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(
-                            FirstGameType.class,
-                            SecondGameType.class,
-                            ThirdGameType.class
-                    );
-                }
-            };
-        }
-    }
-
     protected MockMvc mvc;
 
     @Autowired

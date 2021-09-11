@@ -25,13 +25,11 @@ package com.codenjoy.dojo.services.controller;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.TestSqliteDBLocations;
+import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.LoginHelper;
-import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.SecondGameType;
-import com.codenjoy.dojo.services.mocks.ThirdGameType;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -41,17 +39,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,26 +58,10 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(SQLiteProfile.NAME)
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
-@Import(AbstractControllerTest.ContextConfiguration.class)
+@Import(ThreeGamesConfiguration.class)
 public abstract class AbstractControllerTest<TData, TControl> {
 
     public static final int MAX = 20;
-
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return new GameServiceImpl(){
-                @Override
-                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(
-                            FirstGameType.class,
-                            SecondGameType.class,
-                            ThirdGameType.class);
-                }
-            };
-        }
-    }
 
     public static final String URL = "%s://localhost:%s%s/%s";
 
