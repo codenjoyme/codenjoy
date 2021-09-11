@@ -1313,7 +1313,15 @@ public class SemifinalServiceTest extends AbstractDealsTest {
 
         // then
         assertEquals("SettingsImpl(map={})", settings.toString());
-        assertEquals("TODO", settings.toString());
+        assertEquals("SettingsImpl(map={" +
+                "[Semifinal] Enabled=[[Semifinal] Enabled:Boolean = def[false] val[true]], " +
+                "[Semifinal] Timeout=[[Semifinal] Timeout:Integer = multiline[false] def[900] val[3]], " +
+                "[Semifinal] Percentage=[[Semifinal] Percentage:Boolean = def[true] val[false]], " +
+                "[Semifinal] Limit=[[Semifinal] Limit:Integer = multiline[false] def[50] val[10]], " +
+                "[Semifinal] Reset board=[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Clear scores=[[Semifinal] Clear scores:Boolean = def[false] val[false]]})",
+                original.toString());
     }
 
     // эмулирую другой тип сеттингов, который без semifinal

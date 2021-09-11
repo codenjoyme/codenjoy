@@ -25,9 +25,11 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
+@Import(RestGameControllerTest.ContextConfiguration.class)
 public class RestGameControllerTest extends AbstractRestControllerTest {
 
     @Autowired
@@ -226,10 +228,14 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
 
     @Test
     public void shouldAllSprites() {
-        assertEquals("{first=[none= , wall=☼, hero=☺], second=[none= , red=R, green=G, blue=B]}", 
+        assertEquals("{third=[zerro=0, one=1, two=2, three=3], " +
+                        "first=[none= , wall=☼, hero=☺], second=[none= , " +
+                        "red=R, green=G, blue=B]}",
                 service.allSprites().toString());
         
-        assertEquals("{\"first\":[\"none= \",\"wall=☼\",\"hero=☺\"],\"second\":[\"none= \",\"red=R\",\"green=G\",\"blue=B\"]}", 
+        assertEquals("{\"third\":[\"zerro=0\",\"one=1\",\"two=2\",\"three=3\"]," +
+                        "\"first\":[\"none= \",\"wall=☼\",\"hero=☺\"]," +
+                        "\"second\":[\"none= \",\"red=R\",\"green=G\",\"blue=B\"]}",
                 get("/rest/game/sprites"));
     }
 

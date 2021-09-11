@@ -25,9 +25,11 @@ package com.codenjoy.dojo.web.rest;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
+@Import(RestRoomControllerTest.ContextConfiguration.class)
 public class RestRoomControllerTest extends AbstractRestControllerTest {
 
     @Autowired

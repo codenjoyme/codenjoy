@@ -26,9 +26,11 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
+@Import(RestBoardControllerTest.ContextConfiguration.class)
 public class RestBoardControllerTest extends AbstractRestControllerTest {
 
     @Autowired

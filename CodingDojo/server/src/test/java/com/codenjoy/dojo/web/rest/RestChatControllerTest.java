@@ -26,6 +26,7 @@ import com.codenjoy.dojo.services.TimeService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Import;
 
 import java.util.stream.IntStream;
 
@@ -33,6 +34,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.when;
 
+@Import(RestChatControllerTest.ContextConfiguration.class)
 public class RestChatControllerTest extends AbstractRestControllerTest {
 
     @SpyBean

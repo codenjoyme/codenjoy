@@ -32,6 +32,7 @@ import org.json.JSONArray;
 import org.junit.Before;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 
 import java.util.*;
 
@@ -40,6 +41,7 @@ import static com.codenjoy.dojo.utils.JsonUtils.toStringSorted;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.joining;
 
+@Import(AbstractTeamControllerTest.ContextConfiguration.class)
 public abstract class AbstractTeamControllerTest extends AbstractRestControllerTest  {
 
     public static final String game = "third";

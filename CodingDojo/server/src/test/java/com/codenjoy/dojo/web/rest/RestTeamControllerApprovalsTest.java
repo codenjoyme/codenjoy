@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.junit.Test;
+import org.springframework.context.annotation.Import;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +35,7 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 
+@Import(RestTeamControllerApprovalsTest.ContextConfiguration.class)
 public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest {
 
     public static final int TICKS = 20;

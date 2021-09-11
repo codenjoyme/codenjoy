@@ -24,10 +24,12 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.junit.Test;
+import org.springframework.context.annotation.Import;
 
 // an issue with the doc that illustrate some of test cases
 // with name like "get_logout_join_post"
 // https://github.com/codenjoyme/codenjoy/issues/162
+@Import(RestTeamControllerTest.ContextConfiguration.class)
 public class RestTeamControllerTest extends AbstractTeamControllerTest {
 
     @Test

@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.mocks.ThirdGameType;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.stuff.SmartAssert;
@@ -73,7 +74,6 @@ import static org.junit.Assert.fail;
         properties = "spring.main.allow-bean-definition-overriding=true")
 @ActiveProfiles(SQLiteProfile.NAME)
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
-@Import(AbstractRestControllerTest.ContextConfiguration.class)
 @WebAppConfiguration
 public abstract class AbstractRestControllerTest {
 
@@ -84,7 +84,11 @@ public abstract class AbstractRestControllerTest {
             return new GameServiceImpl(){
                 @Override
                 public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(FirstGameType.class, SecondGameType.class);
+                    return Arrays.asList(
+                            FirstGameType.class,
+                            SecondGameType.class,
+                            ThirdGameType.class
+                    );
                 }
             };
         }
