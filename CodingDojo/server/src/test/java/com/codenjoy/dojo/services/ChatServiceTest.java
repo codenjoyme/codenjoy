@@ -471,6 +471,14 @@ public class ChatServiceTest {
                 "listener2-player2 deleted: [\n" +
                 "    PMessage(id=8, text=message8, room=room, type=2, topicId=6, \n" +
                 "        playerId=player2, playerName=player2-name, time=12352)]");
+
+        // when then
+        // get empty list in room
+        assertMessages(control(0).getAllRoom(Filter.room("room").count(0).get()),
+                "[]");
+
+        assertListener(
+                "");
     }
 
     private void assertMessages(PMessage message, String expected) {
