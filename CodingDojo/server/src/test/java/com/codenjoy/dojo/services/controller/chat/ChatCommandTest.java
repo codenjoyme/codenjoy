@@ -70,12 +70,6 @@ public class ChatCommandTest {
         assertEquals(null, result);
     }
 
-    private void assertOne(String result) {
-        assertEquals("{'command':'add', 'data':[{'id':0,'text':'message1','room':'room1','type':2,'topicId':13," +
-                "'playerId':'player1','playerName':'playerName1','time':12346}]}",
-                fix(result));
-    }
-
     private PMessage someMessage(int id) {
         return PMessage.from(new Chat.Message(
                 "room" + id, 12 + id, ChatType.TOPIC,
@@ -117,15 +111,6 @@ public class ChatCommandTest {
                 captor.getValue().toString());
 
         assertEquals(null, result);
-    }
-
-    private void assertList(String result) {
-        assertEquals("{'command':'add', 'data':[" +
-                        "{'id':0,'text':'message1','room':'room1','type':2,'topicId':13," +
-                        "'playerId':'player1','playerName':'playerName1','time':12346}," +
-                        "{'id':0,'text':'message2','room':'room2','type':2,'topicId':14," +
-                        "'playerId':'player2','playerName':'playerName2','time':12347}]}",
-                fix(result));
     }
 
     private String fix(String string) {
