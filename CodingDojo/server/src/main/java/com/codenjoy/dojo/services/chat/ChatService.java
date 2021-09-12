@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services.chat;
 
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
-import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
@@ -41,12 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.joining;
 
 @Service
 @AllArgsConstructor
@@ -58,6 +54,8 @@ public class ChatService {
     private Registration registration;
     private Spreader spreader;
     private FieldService fields;
+
+    // TODO ох тут кеш некрасивый
     private final Map<String, String> playerNames = new ConcurrentHashMap<>();
 
     /**
@@ -119,7 +117,7 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
-    private PMessage wrap(Chat.Message message) {
+    public PMessage wrap(Chat.Message message) {
         return PMessage.from(message,
                 playerName(message.getPlayerId()));
     }
@@ -291,21 +289,7 @@ public class ChatService {
         return true;
     }
 
-    private Chat.Message rootFor(Chat.Message message) {
-        while (message.getType() == TOPIC) {
-            Integer topicId = message.getTopicId();
-            if (topicId == null) {
-                throw exception("Topic message with null topic_id: " + message.getId());
-            }
-            message = chat.getAnyMessageById(topicId);
-            if (message == null) {
-                return null;
-            }
-        }
-        return message;
-    }
-
-    public IllegalArgumentException exception(String message, Object... parameters) {
+    public static IllegalArgumentException exception(String message, Object... parameters) {
         return new IllegalArgumentException(String.format(message, parameters));
     }
 
@@ -346,119 +330,7 @@ public class ChatService {
     }
 
     public ChatControl control(String playerId, ChatControl.OnChange listener) {
-        return new ChatControl() {
-
-            private List<Player> player() {
-                return asList(new Player(playerId));
-            }
-
-            private void inform(List<Player> players,
-                                BiConsumer<List<PMessage>, String> listener,
-                                List<PMessage> messages)
-            {
-                if (messages.isEmpty()) return;
-                players.forEach(player -> listener.accept(messages, player.getId()));
-            }
-
-            private void informCreated(List<Player> players, List<PMessage> messages) {
-                inform(players, listener::created, messages);
-            }
-
-            private void informDeleted(List<Player> players, List<PMessage> messages) {
-                inform(players, listener::deleted, messages);
-            }
-
-            private List<Player> players(String room) {
-                return spreader.players(room);
-            }
-
-            private List<Player> players(int topicId) {
-                return spreader.players(topicId);
-            }
-
-            @Override
-            public List<PMessage> getAllRoom(Filter filter) {
-                List<PMessage> messages = getRoomMessages(playerId, filter);
-                informCreated(player(), messages);
-                return messages;
-            }
-
-            @Override
-            public List<PMessage> getAllTopic(int topicId, Filter filter) {
-                List<PMessage> messages = getTopicMessages(topicId, playerId, filter);
-                informCreated(player(), messages);
-                return messages;
-            }
-
-            @Override
-            public List<PMessage> getAllField(Filter filter) {
-                List<PMessage> messages = getFieldMessages(playerId, filter);
-                informCreated(player(), messages);
-                return messages;
-            }
-
-            @Override
-            public PMessage get(int id, String room) {
-                PMessage message = getMessage(id, room, playerId);
-                informCreated(player(), asList(message));
-                return message;
-            }
-
-            @Override
-            public PMessage postRoom(String text, String room) {
-                PMessage message = postMessageForRoom(text, room, playerId);
-                informCreated(players(room), asList(message));
-                return message;
-            }
-
-            @Override
-            public PMessage postTopic(int topicId, String text, String room) {
-                PMessage message = postMessageForTopic(topicId, text, room, playerId);
-                informCreated(players(room), asList(message));
-                return message;
-            }
-
-            @Override
-            public PMessage postField(String text, String room) {
-                PMessage message = postMessageForField(text, room, playerId);
-                informCreated(players(message.getTopicId()), asList(message));
-                return message;
-            }
-
-            @Override
-            public boolean delete(int id, String room) {
-                // TODO тут несколько запросов делается, не совсем оптимально
-                Chat.Message message = chat.getMessageById(id);
-                boolean deleted = deleteMessage(id, room, playerId);
-                if (deleted) {
-                    informDeleted(asList(wrap(message)), room, rootFor(message));
-                }
-                return deleted;
-            }
-
-            private void informDeleted(List<PMessage> messages, String room, Chat.Message root) {
-                ChatType type = (root == null)
-                        // TODO очень мало вероятно что такое случится,
-                        //   но если так - то информируем всех в комнате
-                        ? ROOM
-                        : root.getType();
-
-                switch (type) {
-                    case ROOM:
-                        informDeleted(players(room), messages);
-                        break;
-                    case FIELD:
-                        informDeleted(players(root.getTopicId()), messages);
-                        break;
-                    default:
-                        throw exception("Should be only ROOM or FIELD: " +
-                                messages.stream()
-                                        .map(PMessage::getId)
-                                        .map(Object::toString)
-                                        .collect(joining(",")));
-                }
-            }
-        };
+        return new ChatControlImpl(this, chat, spreader, playerId, listener);
     }
 
 }
