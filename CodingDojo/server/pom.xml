@@ -1078,6 +1078,7 @@
                                 <jsInclude>layout.js</jsInclude>
                                 <jsInclude>donate.js</jsInclude>
                                 <jsInclude>joystick.js</jsInclude>
+                                <jsInclude>chat-ws.js</jsInclude>
                                 <jsInclude>chat.js</jsInclude>
                                 <jsInclude>leaderstable.js</jsInclude>
                                 <jsInclude>hotkeys.js</jsInclude>

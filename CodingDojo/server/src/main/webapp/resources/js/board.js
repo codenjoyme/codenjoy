@@ -96,8 +96,13 @@ function initBoardComponents(setup) {
     }
 
     if (setup.enableChat) {
-        initChat(setup.contextPath, ROOM_TYPE);
-        initChat(setup.contextPath, FIELD_TYPE);
+        let onConnect = function(chatControl) {
+            initChat(setup.contextPath, chatControl, ROOM_TYPE);
+            initChat(setup.contextPath, chatControl, FIELD_TYPE);
+        };
+
+        initChatWebSocket(setup.room,
+            setup.playerId, setup.code, setup.contextPath, onConnect);
     }
 
     if (setup.enableDonate) {
