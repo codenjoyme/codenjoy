@@ -35,6 +35,7 @@ import org.mockito.ArgumentCaptor;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class ChatCommandTest {
@@ -192,10 +193,10 @@ public class ChatCommandTest {
     public void testPostTopic_messageIsNull() {
         // when
         command.process(new ChatRequest("{'command':'postTopic', " +
-                "'data':{'id': 12, 'text':2, 'room':'room'}}"));
+                "'data':{'id': 12, 'text':null, 'room':'room'}}"));
 
         // then
-        verify(control, never()).postTopic(anyInt(), anyString(), anyString());
+        verify(control).postTopic(anyInt(), eq(null), anyString());
     }
 
     @Test
@@ -205,9 +206,14 @@ public class ChatCommandTest {
                 .thenThrow(new IllegalArgumentException("Message is null"));
 
         // when
-        command.process(new ChatRequest("{'command':'postTopic', " +
-                "'data':{'id': 12, 'room':'room'}}"));
-
+        try {
+            command.process(new ChatRequest("{'command':'postTopic', " +
+                    "'data':{'id': 12, 'room':'room'}}"));
+            fail("Expected exception");
+        } catch (Exception exception) {
+            assertEquals("java.lang.IllegalArgumentException: Message is null",
+                    exception.toString());
+        }
         // then
         verify(control).postTopic(12, null, "room");
     }
