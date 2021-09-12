@@ -31,7 +31,7 @@ import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static com.codenjoy.dojo.services.controller.chat.ChatCommand.ADD;
 import static com.codenjoy.dojo.services.controller.chat.ChatCommand.DELETE;
@@ -60,13 +60,13 @@ public class ChatController implements Controller<String, ChatControl> {
     private ChatControl.OnChange chatListener() {
         return new ChatControl.OnChange() {
             @Override
-            public void deleted(PMessage message, String playerId) {
-                sendState(DELETE, Arrays.asList(message), playerId);
+            public void deleted(List<PMessage> messages, String playerId) {
+                sendState(DELETE, messages, playerId);
             }
 
             @Override
-            public void created(PMessage message, String playerId) {
-                sendState(ADD, Arrays.asList(message), playerId);
+            public void created(List<PMessage> messages, String playerId) {
+                sendState(ADD, messages, playerId);
             }
 
             private void sendState(String command, Object data, String playerId) {

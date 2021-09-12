@@ -36,6 +36,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -361,52 +362,52 @@ public class ChatService {
             @Override
             public PMessage get(int id, String room) {
                 PMessage message = getMessage(id, room, playerId);
-                informCreateForPlayer(message, playerId, listener);
+                informCreateForPlayer(Arrays.asList(message), playerId, listener);
                 return message;
             }
 
             @Override
             public PMessage postRoom(String text, String room) {
                 PMessage message = postMessageForRoom(text, room, playerId);
-                informCreateInRoom(message, room, listener);
+                informCreateInRoom(Arrays.asList(message), room, listener);
                 return message;
             }
 
-            private void informCreateForPlayer(PMessage message, String playerId, OnChange listener) {
-                listener.created(message, playerId);
+            private void informCreateForPlayer(List<PMessage> messages, String playerId, OnChange listener) {
+                listener.created(messages, playerId);
             }
 
-            private void informCreateInRoom(PMessage message, String room, OnChange listener) {
+            private void informCreateInRoom(List<PMessage> messages, String room, OnChange listener) {
                 spreader.players(room)
-                        .forEach(player -> listener.created(message, player.getId()));
+                        .forEach(player -> listener.created(messages, player.getId()));
             }
 
-            private void informCreateInField(PMessage message, int fieldId, OnChange listener) {
+            private void informCreateInField(List<PMessage> messages, int fieldId, OnChange listener) {
                 spreader.players(fieldId)
-                        .forEach(player -> listener.created(message, player.getId()));
+                        .forEach(player -> listener.created(messages, player.getId()));
             }
 
-            private void informDeleteInRoom(PMessage message, String room, OnChange listener) {
+            private void informDeleteInRoom(List<PMessage> messages, String room, OnChange listener) {
                 spreader.players(room)
-                        .forEach(player -> listener.deleted(message, player.getId()));
+                        .forEach(player -> listener.deleted(messages, player.getId()));
             }
 
-            private void informDeleteInField(PMessage message, int fieldId, OnChange listener) {
+            private void informDeleteInField(List<PMessage> messages, int fieldId, OnChange listener) {
                 spreader.players(fieldId)
-                        .forEach(player -> listener.deleted(message, player.getId()));
+                        .forEach(player -> listener.deleted(messages, player.getId()));
             }
 
             @Override
             public PMessage postTopic(int topicId, String text, String room) {
                 PMessage message = postMessageForTopic(topicId, text, room, playerId);
-                informCreateInRoom(message, room, listener);
+                informCreateInRoom(Arrays.asList(message), room, listener);
                 return message;
             }
 
             @Override
             public PMessage postField(String text, String room) {
                 PMessage message = postMessageForField(text, room, playerId);
-                informCreateInField(message, message.getTopicId(), listener);
+                informCreateInField(Arrays.asList(message), message.getTopicId(), listener);
                 return message;
             }
 
@@ -430,10 +431,10 @@ public class ChatService {
 
                 switch (type) {
                     case ROOM:
-                        informDeleteInRoom(message, room, listener);
+                        informDeleteInRoom(Arrays.asList(message), room, listener);
                         break;
                     case FIELD:
-                        informDeleteInField(message, root.getTopicId(), listener);
+                        informDeleteInField(Arrays.asList(message), root.getTopicId(), listener);
                         break;
                     default:
                         throw exception("Should be only ROOM or FIELD: " + message.getId());

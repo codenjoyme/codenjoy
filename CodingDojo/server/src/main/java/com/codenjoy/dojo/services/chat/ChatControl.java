@@ -47,15 +47,15 @@ public interface ChatControl {
     interface OnChange {
 
         /**
-         * @param message Удаленное сообщение
+         * @param messages Удаленные сообщения
          * @param playerId Игрок в том же чате, которого надо проинформировать.
          */
-        void deleted(PMessage message, String playerId);
+        void deleted(List<PMessage> messages, String playerId);
 
         /**
-         * @param message Созданное сообщение.
+         * @param messages Созданные сообщения.
          * @param playerId Игрок в том же чате, которого надо проинформировать.
          */
-        void created(PMessage message, String playerId);
+        void created(List<PMessage> messages, String playerId);
     }
 }
