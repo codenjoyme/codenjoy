@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.chat;
 
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
@@ -36,14 +37,15 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
+import static java.util.Arrays.asList;
 
 @Service
 @AllArgsConstructor
@@ -344,96 +346,73 @@ public class ChatService {
 
     public ChatControl control(String playerId, ChatControl.OnChange listener) {
         return new ChatControl() {
+
+            private List<Player> player() {
+                return asList(new Player(playerId));
+            }
+
+            private void inform(List<Player> players,
+                                BiConsumer<List<PMessage>, String> listener,
+                                List<PMessage> messages)
+            {
+                if (messages.isEmpty()) return;
+                players.forEach(player -> listener.accept(messages, player.getId()));
+            }
+
+            private void informCreated(List<Player> players, List<PMessage> messages) {
+                inform(players, listener::created, messages);
+            }
+
+            private void informDeleted(List<Player> players, List<PMessage> messages) {
+                inform(players, listener::deleted, messages);
+            }
+
             @Override
             public List<PMessage> getAllRoom(Filter filter) {
                 List<PMessage> messages = getRoomMessages(playerId, filter);
-                informCreateForPlayer(messages, playerId, listener);
+                informCreated(player(), messages);
                 return messages;
             }
 
             @Override
             public List<PMessage> getAllTopic(int topicId, Filter filter) {
                 List<PMessage> messages = getTopicMessages(topicId, playerId, filter);
-                informCreateForPlayer(messages, playerId, listener);
+                informCreated(player(), messages);
                 return messages;
             }
 
             @Override
             public List<PMessage> getAllField(Filter filter) {
                 List<PMessage> messages = getFieldMessages(playerId, filter);
-                informCreateForPlayer(messages, playerId, listener);
+                informCreated(player(), messages);
                 return messages;
             }
 
             @Override
             public PMessage get(int id, String room) {
                 PMessage message = getMessage(id, room, playerId);
-                informCreateForPlayer(Arrays.asList(message), playerId, listener);
+                informCreated(player(), asList(message));
                 return message;
             }
 
             @Override
             public PMessage postRoom(String text, String room) {
                 PMessage message = postMessageForRoom(text, room, playerId);
-                informCreateInRoom(Arrays.asList(message), room, listener);
+                informCreated(spreader.players(room), asList(message));
                 return message;
-            }
-
-            private void informCreateForPlayer(List<PMessage> messages, String playerId, OnChange listener) {
-                if (messages.isEmpty()) {
-                    return;
-                }
-
-                listener.created(messages, playerId);
-            }
-
-            private void informCreateInRoom(List<PMessage> messages, String room, OnChange listener) {
-                if (messages.isEmpty()) {
-                    return;
-                }
-
-                spreader.players(room)
-                        .forEach(player -> listener.created(messages, player.getId()));
-            }
-
-            private void informCreateInField(List<PMessage> messages, int fieldId, OnChange listener) {
-                if (messages.isEmpty()) {
-                    return;
-                }
-
-                spreader.players(fieldId)
-                        .forEach(player -> listener.created(messages, player.getId()));
-            }
-
-            private void informDeleteInRoom(List<PMessage> messages, String room, OnChange listener) {
-                if (messages.isEmpty()) {
-                    return;
-                }
-
-                spreader.players(room)
-                        .forEach(player -> listener.deleted(messages, player.getId()));
-            }
-
-            private void informDeleteInField(List<PMessage> messages, int fieldId, OnChange listener) {
-                if (messages.isEmpty()) {
-                    return;
-                }
-
-                spreader.players(fieldId)
-                        .forEach(player -> listener.deleted(messages, player.getId()));
             }
 
             @Override
             public PMessage postTopic(int topicId, String text, String room) {
                 PMessage message = postMessageForTopic(topicId, text, room, playerId);
-                informCreateInRoom(Arrays.asList(message), room, listener);
+                informCreated(spreader.players(room), asList(message));
                 return message;
             }
 
             @Override
             public PMessage postField(String text, String room) {
                 PMessage message = postMessageForField(text, room, playerId);
-                informCreateInField(Arrays.asList(message), message.getTopicId(), listener);
+                informCreated(spreader.players(message.getTopicId()), asList(message));
                 return message;
             }
 
@@ -457,10 +436,10 @@ public class ChatService {
 
                 switch (type) {
                     case ROOM:
-                        informDeleteInRoom(Arrays.asList(message), room, listener);
+                        informDeleted(spreader.players(room), asList(message));
                         break;
                     case FIELD:
-                        informDeleteInField(Arrays.asList(message), root.getTopicId(), listener);
+                        informDeleted(spreader.players(root.getTopicId()), asList(message));
                         break;
                     default:
                         throw exception("Should be only ROOM or FIELD: " + message.getId());
