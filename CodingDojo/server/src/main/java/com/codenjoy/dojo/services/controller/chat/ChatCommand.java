@@ -28,10 +28,9 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 @Slf4j
 public class ChatCommand {
@@ -46,12 +45,11 @@ public class ChatCommand {
     public static final String POST_FIELD = "postField";
     public static final String DELETE = "delete";
     public static final String ERROR = "error";
-    public static final String NONE = null;
     public static final String COMMAND_TEMPLATE = "{\"command\":\"%s\", \"data\":%s}";
 
     private static ObjectMapper mapper = new ObjectMapper();
 
-    private Map<String, Function<ChatRequest, String>> map = new HashMap<>();
+    private Map<String, Consumer<ChatRequest>> map = new HashMap<>();
 
     public static String answer(String command, Object data) {
         if (command == null) {
@@ -67,19 +65,20 @@ public class ChatCommand {
     }
 
     public ChatCommand(ChatControl chat) {
-        map.put(GET_ALL_ROOM,  request -> answer(NONE, chat.getAllRoom(request.filter())));
-        map.put(GET_ALL_TOPIC, request -> answer(NONE, chat.getAllTopic(request.id(), request.filter())));
-        map.put(GET_ALL_FIELD, request -> answer(NONE, chat.getAllField(request.filter())));
-        map.put(GET,           request -> answer(NONE, chat.get(request.id(), request.room())));
-        map.put(POST_ROOM,     request -> answer(NONE, chat.postRoom(request.text(), request.room())));
-        map.put(POST_FIELD,    request -> answer(NONE, chat.postField(request.text(), request.room())));
-        map.put(POST_TOPIC,    request -> answer(NONE, chat.postTopic(request.id(), request.text(), request.room())));
-        map.put(DELETE,        request -> answer(NONE, chat.delete(request.id(), request.room())));
+        map.put(GET_ALL_ROOM,  request -> chat.getAllRoom(request.filter()));
+        map.put(GET_ALL_TOPIC, request -> chat.getAllTopic(request.id(), request.filter()));
+        map.put(GET_ALL_FIELD, request -> chat.getAllField(request.filter()));
+        map.put(GET,           request -> chat.get(request.id(), request.room()));
+        map.put(POST_ROOM,     request -> chat.postRoom(request.text(), request.room()));
+        map.put(POST_FIELD,    request -> chat.postField(request.text(), request.room()));
+        map.put(POST_TOPIC,    request -> chat.postTopic(request.id(), request.text(), request.room()));
+        map.put(DELETE,        request -> chat.delete(request.id(), request.room()));
     }
 
     public String process(ChatRequest request) {
         try {
-            return map.get(request.method()).apply(request);
+            map.get(request.method()).accept(request);
+            return null;
         } catch (Exception exception) {
             log.error("Error during chat request: " + request, exception);
             return answer(ERROR, new Error(exception));
