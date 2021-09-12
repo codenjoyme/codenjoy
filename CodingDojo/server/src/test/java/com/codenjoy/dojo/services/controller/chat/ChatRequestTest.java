@@ -67,4 +67,21 @@ public class ChatRequestTest {
         assertEquals("Filter(room=null, count=null, afterId=null, beforeId=null, inclusive=null)",
                 request.filter().toString());
     }
+
+    @Test
+    public void testPropertiesIsNull() {
+        ChatRequest request = new ChatRequest("{'command':'getAllTopic', " +
+                "'data':{'id':null, 'room':null, 'count':null, " +
+                "'afterId':null, 'beforeId':null, 'inclusive':null}}");
+
+        assertEquals(null, request.count());
+        assertEquals(null, request.afterId());
+        assertEquals(null, request.beforeId());
+        assertEquals(null, request.id());
+        assertEquals(null, request.room());
+        assertEquals(null, request.inclusive());
+        assertEquals("getAllTopic", request.method());
+        assertEquals("Filter(room=null, count=null, afterId=null, beforeId=null, inclusive=null)",
+                request.filter().toString());
+    }
 }

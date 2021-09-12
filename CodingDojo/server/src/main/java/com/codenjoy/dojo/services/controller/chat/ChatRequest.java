@@ -25,8 +25,6 @@ package com.codenjoy.dojo.services.controller.chat;
 import com.codenjoy.dojo.services.chat.Filter;
 import org.json.JSONObject;
 
-import java.util.function.Function;
-
 public class ChatRequest {
 
     private final JSONObject data;
@@ -53,51 +51,39 @@ public class ChatRequest {
     }
 
     public Boolean inclusive() {
-        return getBoolean("inclusive");
+        return get("inclusive");
     }
 
     public Integer count() {
-        return getInteger("count");
+        return get("count");
     }
 
     public Integer beforeId() {
-        return getInteger("beforeId");
+        return get("beforeId");
     }
 
     public Integer afterId() {
-        return getInteger("afterId");
+        return get("afterId");
     }
 
     public String room() {
-        return getString("room");
+        return get("room");
     }
 
     public String text() {
-        return getString("text");
+        return get("text");
     }
 
     public Integer id() {
-        return getInteger("id");
+        return get("id");
     }
 
-    private <T> T getNullable(String key, Function<String, T> get) {
-        if (!data.has(key)) {
+    private <T> T get(String key) {
+        if (!data.has(key) || data.isNull(key)) {
             return null;
         }
 
-        return get.apply(key);
-    }
-
-    private Integer getInteger(String key) {
-        return getNullable(key, data::getInt);
-    }
-
-    private String getString(String key) {
-        return getNullable(key, data::getString);
-    }
-
-    private Boolean getBoolean(String key) {
-        return getNullable(key, data::getBoolean);
+        return (T) data.get(key);
     }
 
     @Override
