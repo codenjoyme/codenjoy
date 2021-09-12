@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.Filter;
+import com.codenjoy.dojo.services.chat.OnChange;
 import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
@@ -98,7 +99,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
     // we wrap ChatControl in spy to eavesdrop on how it is being used
     private void setupChatControl() {
-        when(chatService.control(anyString(), any(ChatControl.OnChange.class)))
+        when(chatService.control(anyString(), any(OnChange.class)))
                 .thenAnswer(inv -> chatControl((ChatControl) inv.callRealMethod()));
     }
 

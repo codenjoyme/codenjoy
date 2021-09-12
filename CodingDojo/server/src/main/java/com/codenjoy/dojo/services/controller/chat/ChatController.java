@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services.controller.chat;
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.chat.OnChange;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
@@ -68,8 +69,8 @@ public class ChatController implements Controller<String, ChatControl> {
         return mapper.writeValueAsString(object);
     }
 
-    private ChatControl.OnChange chatListener() {
-        return new ChatControl.OnChange() {
+    private OnChange chatListener() {
+        return new OnChange() {
             @Override
             public void deleted(List<PMessage> messages, String playerId) {
                 sendState(DELETE, messages, playerId);

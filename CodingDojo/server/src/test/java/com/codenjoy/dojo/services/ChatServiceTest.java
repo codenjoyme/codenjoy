@@ -28,6 +28,7 @@ import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.Filter;
+import com.codenjoy.dojo.services.chat.OnChange;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.ChatHelper;
@@ -90,7 +91,7 @@ public class ChatServiceTest {
     private ChatHelper messages;
 
     private List<String> logs = new LinkedList<>();
-    private List<ChatControl.OnChange> listeners = new LinkedList<>();
+    private List<OnChange> listeners = new LinkedList<>();
     private List<ChatControl> controls = new LinkedList<>();
 
     @Before
@@ -530,8 +531,8 @@ public class ChatServiceTest {
         logs.clear();
     }
 
-    private ChatControl.OnChange getListener(int id) {
-        return new ChatControl.OnChange() {
+    private OnChange getListener(int id) {
+        return new OnChange() {
             @Override
             public void deleted(List<PMessage> messages, String playerId) {
                 logs.add(String.format("listener%s-%s deleted: %s",

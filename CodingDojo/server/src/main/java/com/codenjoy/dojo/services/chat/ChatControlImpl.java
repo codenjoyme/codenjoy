@@ -23,7 +23,7 @@ public class ChatControlImpl implements ChatControl {
 
     private final List<Player> player;
     private final String playerId;
-    private final ChatControl.OnChange listener;
+    private final OnChange listener;
 
     public ChatControlImpl(ChatService service, Chat chat, Spreader spreader, String playerId, OnChange listener) {
         this.service = service;
