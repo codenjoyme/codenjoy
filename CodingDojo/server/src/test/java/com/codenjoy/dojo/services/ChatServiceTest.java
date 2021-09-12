@@ -447,7 +447,7 @@ public class ChatServiceTest {
                 "[]");
 
         assertListener(
-                "listener1-player1 created: []");
+                "");
 
         // when then
         // player2 get all topic messages for room message2

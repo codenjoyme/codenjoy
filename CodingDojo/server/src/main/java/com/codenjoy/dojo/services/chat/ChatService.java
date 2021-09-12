@@ -378,25 +378,45 @@ public class ChatService {
             }
 
             private void informCreateForPlayer(List<PMessage> messages, String playerId, OnChange listener) {
+                if (messages.isEmpty()) {
+                    return;
+                }
+
                 listener.created(messages, playerId);
             }
 
             private void informCreateInRoom(List<PMessage> messages, String room, OnChange listener) {
+                if (messages.isEmpty()) {
+                    return;
+                }
+
                 spreader.players(room)
                         .forEach(player -> listener.created(messages, player.getId()));
             }
 
             private void informCreateInField(List<PMessage> messages, int fieldId, OnChange listener) {
+                if (messages.isEmpty()) {
+                    return;
+                }
+
                 spreader.players(fieldId)
                         .forEach(player -> listener.created(messages, player.getId()));
             }
 
             private void informDeleteInRoom(List<PMessage> messages, String room, OnChange listener) {
+                if (messages.isEmpty()) {
+                    return;
+                }
+
                 spreader.players(room)
                         .forEach(player -> listener.deleted(messages, player.getId()));
             }
 
             private void informDeleteInField(List<PMessage> messages, int fieldId, OnChange listener) {
+                if (messages.isEmpty()) {
+                    return;
+                }
+
                 spreader.players(fieldId)
                         .forEach(player -> listener.deleted(messages, player.getId()));
             }
