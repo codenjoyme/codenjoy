@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.joining;
 
 @Service
 @AllArgsConstructor
@@ -367,6 +368,14 @@ public class ChatService {
                 inform(players, listener::deleted, messages);
             }
 
+            private List<Player> players(String room) {
+                return spreader.players(room);
+            }
+
+            private List<Player> players(int topicId) {
+                return spreader.players(topicId);
+            }
+
             @Override
             public List<PMessage> getAllRoom(Filter filter) {
                 List<PMessage> messages = getRoomMessages(playerId, filter);
@@ -398,21 +407,21 @@ public class ChatService {
             @Override
             public PMessage postRoom(String text, String room) {
                 PMessage message = postMessageForRoom(text, room, playerId);
-                informCreated(spreader.players(room), asList(message));
+                informCreated(players(room), asList(message));
                 return message;
             }
 
             @Override
             public PMessage postTopic(int topicId, String text, String room) {
                 PMessage message = postMessageForTopic(topicId, text, room, playerId);
-                informCreated(spreader.players(room), asList(message));
+                informCreated(players(room), asList(message));
                 return message;
             }
 
             @Override
             public PMessage postField(String text, String room) {
                 PMessage message = postMessageForField(text, room, playerId);
-                informCreated(spreader.players(message.getTopicId()), asList(message));
+                informCreated(players(message.getTopicId()), asList(message));
                 return message;
             }
 
@@ -422,12 +431,12 @@ public class ChatService {
                 Chat.Message message = chat.getMessageById(id);
                 boolean deleted = deleteMessage(id, room, playerId);
                 if (deleted) {
-                    informDelete(wrap(message), room, rootFor(message));
+                    informDeleted(asList(wrap(message)), room, rootFor(message));
                 }
                 return deleted;
             }
 
-            private void informDelete(PMessage message, String room, Chat.Message root) {
+            private void informDeleted(List<PMessage> messages, String room, Chat.Message root) {
                 ChatType type = (root == null)
                         // TODO очень мало вероятно что такое случится,
                         //   но если так - то информируем всех в комнате
@@ -436,13 +445,17 @@ public class ChatService {
 
                 switch (type) {
                     case ROOM:
-                        informDeleted(spreader.players(room), asList(message));
+                        informDeleted(players(room), messages);
                         break;
                     case FIELD:
-                        informDeleted(spreader.players(root.getTopicId()), asList(message));
+                        informDeleted(players(root.getTopicId()), messages);
                         break;
                     default:
-                        throw exception("Should be only ROOM or FIELD: " + message.getId());
+                        throw exception("Should be only ROOM or FIELD: " +
+                                messages.stream()
+                                        .map(PMessage::getId)
+                                        .map(Object::toString)
+                                        .collect(joining(",")));
                 }
             }
         };
