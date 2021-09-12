@@ -67,7 +67,7 @@ public class ChatCommand {
     }
 
     public ChatCommand(ChatControl chat) {
-        map.put(GET_ALL_ROOM,  request -> answer(ADD,  chat.getAllRoom(request.filter())));
+        map.put(GET_ALL_ROOM,  request -> answer(NONE, chat.getAllRoom(request.filter())));
         map.put(GET_ALL_TOPIC, request -> answer(ADD,  chat.getAllTopic(request.id(), request.filter())));
         map.put(GET_ALL_FIELD, request -> answer(ADD,  chat.getAllField(request.filter())));
         map.put(GET,           request -> answer(NONE, chat.get(request.id(), request.room())));

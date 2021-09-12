@@ -322,7 +322,11 @@ public class ChatServiceTest {
                 "PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
                 "    playerId=player2, playerName=player2-name, time=12346)]");
 
-        assertListener("");
+        assertListener(
+                "listener1-player1 created: [PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
+                "    playerId=player1, playerName=player1-name, time=12345), " +
+                "PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
+                "    playerId=player2, playerName=player2-name, time=12346)]");
 
         // when then
         // player2 get all room messages
@@ -332,7 +336,11 @@ public class ChatServiceTest {
                 "PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
                 "    playerId=player2, playerName=player2-name, time=12346)]");
 
-        assertListener("");
+        assertListener(
+                "listener2-player2 created: [PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
+                "    playerId=player1, playerName=player1-name, time=12345), " +
+                "PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
+                "    playerId=player2, playerName=player2-name, time=12346)]");
 
         // when then
         // player1 get all topic messages for room message1

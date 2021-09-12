@@ -346,7 +346,9 @@ public class ChatService {
         return new ChatControl() {
             @Override
             public List<PMessage> getAllRoom(Filter filter) {
-                return getRoomMessages(playerId, filter);
+                List<PMessage> messages = getRoomMessages(playerId, filter);
+                informCreateForPlayer(messages, playerId, listener);
+                return messages;
             }
 
             @Override

@@ -116,7 +116,7 @@ public class ChatCommandTest {
                         "beforeId=5, inclusive=true)",
                 captor.getValue().toString());
 
-        assertList(result);
+        assertEquals(null, result);
     }
 
     private void assertList(String result) {
