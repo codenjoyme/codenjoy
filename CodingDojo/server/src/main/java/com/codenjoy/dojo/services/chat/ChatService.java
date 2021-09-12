@@ -360,7 +360,9 @@ public class ChatService {
 
             @Override
             public PMessage get(int id, String room) {
-                return getMessage(id, room, playerId);
+                PMessage message = getMessage(id, room, playerId);
+                informCreateForPlayer(message, playerId, listener);
+                return message;
             }
 
             @Override
@@ -368,6 +370,10 @@ public class ChatService {
                 PMessage message = postMessageForRoom(text, room, playerId);
                 informCreateInRoom(message, room, listener);
                 return message;
+            }
+
+            private void informCreateForPlayer(PMessage message, String playerId, OnChange listener) {
+                listener.created(message, playerId);
             }
 
             private void informCreateInRoom(PMessage message, String room, OnChange listener) {

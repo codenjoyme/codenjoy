@@ -67,7 +67,7 @@ public class ChatCommandTest {
         // then
         verify(control).get(1, "room");
 
-        assertOne(result);
+        assertEquals(null, result);
     }
 
     private void assertOne(String result) {
@@ -226,14 +226,17 @@ public class ChatCommandTest {
     public void testPostTopic_messageIsNull() {
         // when
         String result = command.process(new ChatRequest("{'command':'postTopic', " +
-                "'data':{'id': 12, 'text':null, 'room':'room'}}"));
+                "'data':{'id': 12, 'text':2, 'room':'room'}}"));
 
         // then
         verify(control, never()).postTopic(anyInt(), anyString(), anyString());
 
         assertEquals("{'command':'error', 'data':" +
-                        "{'error':'JSONException'," +
-                        "'message':'JSONObject[\\'text\\'] not a string.'}}",
+                        "{'error':'ClassCastException'," +
+                        "'message':'class java.lang.Integer cannot be " +
+                        "cast to class java.lang.String (java.lang.Integer " +
+                        "and java.lang.String are in module java.base of " +
+                        "loader 'bootstrap')'}}",
                 fix(result));
     }
 

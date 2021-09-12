@@ -290,7 +290,9 @@ public class ChatServiceTest {
                 "[PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                         "    playerId=player1, playerName=player1-name, time=12345)]");
 
-        assertListener("");
+        assertListener(
+                "listener1-player1 created: PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
+                "    playerId=player1, playerName=player1-name, time=12345)");
 
         // when then
         // player2 get topic message5
@@ -299,7 +301,9 @@ public class ChatServiceTest {
                 "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12349)]");
 
-        assertListener("");
+        assertListener(
+                "listener2-player2 created: PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12349)");
 
         // given
         Filter filter = Filter

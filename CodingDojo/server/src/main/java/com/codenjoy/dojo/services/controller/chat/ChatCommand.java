@@ -70,7 +70,7 @@ public class ChatCommand {
         map.put(GET_ALL_ROOM,  request -> answer(ADD,  chat.getAllRoom(request.filter())));
         map.put(GET_ALL_TOPIC, request -> answer(ADD,  chat.getAllTopic(request.id(), request.filter())));
         map.put(GET_ALL_FIELD, request -> answer(ADD,  chat.getAllField(request.filter())));
-        map.put(GET,           request -> answer(ADD,  Arrays.asList(chat.get(request.id(), request.room()))));
+        map.put(GET,           request -> answer(NONE, chat.get(request.id(), request.room())));
         map.put(POST_ROOM,     request -> answer(NONE, chat.postRoom(request.text(), request.room())));
         map.put(POST_FIELD,    request -> answer(NONE, chat.postField(request.text(), request.room())));
         map.put(POST_TOPIC,    request -> answer(NONE, chat.postTopic(request.id(), request.text(), request.room())));
