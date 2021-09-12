@@ -47,9 +47,24 @@ public class ChatCommand {
     public static final String DELETE = "delete";
     public static final String ERROR = "error";
     public static final String NONE = null;
+    public static final String COMMAND_TEMPLATE = "{\"command\":\"%s\", \"data\":%s}";
+
+    private static ObjectMapper mapper = new ObjectMapper();
 
     private Map<String, Function<ChatRequest, String>> map = new HashMap<>();
-    private ObjectMapper mapper = new ObjectMapper();
+
+    public static String answer(String command, Object data) {
+        if (command == null) {
+            return null;
+        }
+        return String.format(COMMAND_TEMPLATE,
+                command, json(data));
+    }
+
+    @SneakyThrows
+    private static String json(Object object) {
+        return mapper.writeValueAsString(object);
+    }
 
     public ChatCommand(ChatControl chat) {
         map.put(GET_ALL_ROOM,  request -> answer(ADD,  chat.getAllRoom(request.filter())));
@@ -60,19 +75,6 @@ public class ChatCommand {
         map.put(POST_FIELD,    request -> answer(NONE, chat.postField(request.text(), request.room())));
         map.put(POST_TOPIC,    request -> answer(NONE, chat.postTopic(request.id(), request.text(), request.room())));
         map.put(DELETE,        request -> answer(NONE, chat.delete(request.id(), request.room())));
-    }
-
-    private String answer(String command, Object data) {
-        if (command == null) {
-            return null;
-        }
-        return String.format("{\"command\":\"%s\", \"data\":%s}",
-                command, json(data));
-    }
-
-    @SneakyThrows
-    private String json(Object object) {
-        return mapper.writeValueAsString(object);
     }
 
     public String process(ChatRequest request) {

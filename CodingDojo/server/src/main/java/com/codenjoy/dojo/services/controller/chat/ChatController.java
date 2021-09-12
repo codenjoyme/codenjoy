@@ -29,8 +29,6 @@ import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -43,14 +41,12 @@ public class ChatController implements Controller<String, ChatControl> {
 
     private final PlayerTransport transport;
     private final ChatService chatService;
-    private ObjectMapper mapper;
 
     // autowiring by name
     public ChatController(PlayerTransport chatPlayerTransport, ChatService chatService) {
         transport = chatPlayerTransport;
         this.chatService = chatService;
         transport.setDefaultFilter(Object::toString);
-        mapper = new ObjectMapper();
     }
 
     @Override
@@ -59,11 +55,6 @@ public class ChatController implements Controller<String, ChatControl> {
         ChatControl control = chatService.control(id, chatListener());
         transport.registerPlayerEndpoint(id,
                 new ChatResponseHandler(deal.getPlayer(), control, transport));
-    }
-
-    @SneakyThrows
-    private String json(Object object) {
-        return mapper.writeValueAsString(object);
     }
 
     private ChatControl.OnChange chatListener() {
@@ -84,8 +75,7 @@ public class ChatController implements Controller<String, ChatControl> {
                 }
 
                 transport.sendState(playerId,
-                        String.format("{\"command\":\"%s\", \"data\":%s}",
-                                command, json(data)));
+                        ChatCommand.answer(command, data));
             }
         };
     }
