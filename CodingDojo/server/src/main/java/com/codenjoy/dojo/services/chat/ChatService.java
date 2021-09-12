@@ -360,7 +360,9 @@ public class ChatService {
 
             @Override
             public List<PMessage> getAllField(Filter filter) {
-                return getFieldMessages(playerId, filter);
+                List<PMessage> messages = getFieldMessages(playerId, filter);
+                informCreateForPlayer(messages, playerId, listener);
+                return messages;
             }
 
             @Override

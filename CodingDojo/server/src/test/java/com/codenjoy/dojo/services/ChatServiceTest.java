@@ -391,7 +391,10 @@ public class ChatServiceTest {
                 "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12349)]");
 
-        assertListener("");
+        assertListener(
+                "listener1-player1 created: [\n" +
+                "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12349)]");
 
         // when then
         // player2 get all field messages
@@ -400,7 +403,10 @@ public class ChatServiceTest {
                 "[PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
                 "    playerId=player2, playerName=player2-name, time=12350)]");
 
-        assertListener("");
+        assertListener(
+                "listener2-player2 created: [\n" +
+                "    PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
+                "        playerId=player2, playerName=player2-name, time=12350)]");
 
         // when then
         // player2 delete field message6
@@ -420,13 +426,18 @@ public class ChatServiceTest {
                 "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12349)]");
 
-        assertListener("");
+        assertListener(
+                "listener1-player1 created: [\n" +
+                "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12349)]");
 
         // when then
         // player2 get all field messages
-        assertMessages(control(1).getAllField(filter), "[]");
+        assertMessages(control(1).getAllField(filter),
+                "[]");
 
-        assertListener("");
+        assertListener(
+                "");
 
         // when then
         // player1 delete topic message3
