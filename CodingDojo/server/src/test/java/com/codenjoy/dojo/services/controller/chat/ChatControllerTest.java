@@ -288,9 +288,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         client(1).start();
         client(2).start();
 
-        messages.post("room", "player", null, ROOM); // 1
-        messages.post("room", "player", 1, TOPIC);   // 2
-        messages.post("room", "player2", 1, TOPIC);  // 3
+        messages.post("room", "player", null, ROOM);     // 1
+        messages.post("room", "player", 1, ROOM_TOPIC);  // 2
+        messages.post("room", "player2", 1, ROOM_TOPIC); // 3
 
         // when
         // player1 remove first topic message2
@@ -362,9 +362,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         client(0).start();
         client(1).start();
 
-        messages.post("room", "player", null, ROOM); // 1
-        messages.post("room", "player", 1, TOPIC);   // 2
-        messages.post("room", "player2", 1, TOPIC);  // 3
+        messages.post("room", "player", null, ROOM);     // 1
+        messages.post("room", "player", 1, ROOM_TOPIC);  // 2
+        messages.post("room", "player2", 1, ROOM_TOPIC); // 3
 
         // when
         // player1 remove first topic message2
@@ -577,11 +577,11 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         client(1).start();
         client(2).start();
 
-        messages.post("room", "player",  1, FIELD); // 1
-        messages.post("room", "player",  1, TOPIC); // 2
-        messages.post("room", "player2", 1, TOPIC); // 3
-        messages.post("room2", "player3", 2, FIELD); // 4
-        messages.post("room2", "player3", 4, TOPIC); // 5
+        messages.post("room", "player",  1, FIELD);        // 1
+        messages.post("room", "player",  1, FIELD_TOPIC);  // 2
+        messages.post("room", "player2", 1, FIELD_TOPIC);  // 3
+        messages.post("room2", "player3", 2, FIELD);       // 4
+        messages.post("room2", "player3", 4, FIELD_TOPIC); // 5
 
         // when
         // delete field message2 by player1
@@ -598,15 +598,14 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        // TODO тут проблема, по сообщению кажется, что оно TOPIC in ROOM, а оно TOPIC in FIELD
         assertEquals("[{'command':'delete', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
+                        "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(0).messages());
 
         // inform player2 because of same field
         assertEquals("[{'command':'delete', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
+                        "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(1).messages());
 
@@ -630,13 +629,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // inform player1
         assertEquals("[{'command':'delete', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
+                        "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(0).messages());
 
         // inform player2 because of same field
         assertEquals("[{'command':'delete', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
+                        "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(1).messages());
 
@@ -668,7 +667,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // inform player3 because of author
         assertEquals("[{'command':'delete', 'data':[" +
-                        "{'id':5,'text':'message5','room':'room2','type':2,'topicId':4," +
+                        "{'id':5,'text':'message5','room':'room2','type':4,'topicId':4," +
                         "'playerId':'player3','playerName':'player3-name','time':1615231923345}]}]",
                 client(2).messages());
     }
@@ -692,9 +691,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         client(0).start();
         client(1).start();
 
-        messages.post("room", "player",  1, FIELD); // 1
-        messages.post("room", "player",  1, TOPIC); // 2
-        messages.post("room", "player2", 1, TOPIC); // 3
+        messages.post("room", "player",  1, FIELD);       // 1
+        messages.post("room", "player",  1, FIELD_TOPIC); // 2
+        messages.post("room", "player2", 1, FIELD_TOPIC); // 3
 
         // when
         // delete field message2 by player1
@@ -736,13 +735,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // inform player1 because of same field
         assertEquals("[{'command':'delete', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
+                        "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(0).messages());
 
         // inform player2
         assertEquals("[{'command':'delete', 'data':[" +
-                        "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
+                        "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(1).messages());
 
@@ -761,13 +760,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // inform player1
         assertEquals("[{'command':'delete', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
+                        "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
         assertEquals("[{'command':'delete', 'data':[" +
-                        "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
+                        "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(1).messages());
     }
@@ -876,9 +875,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         client(0).start();
 
-        messages.post("room", "player", null, ROOM); // 1
-        messages.post("room", "player", 1, TOPIC); // 2
-        messages.post("room", "player", 1, TOPIC); // 3
+        messages.post("room", "player", null, ROOM);    // 1
+        messages.post("room", "player", 1, ROOM_TOPIC); // 2
+        messages.post("room", "player", 1, ROOM_TOPIC); // 3
 
         // when
         client(0).sendToServer("{'command':'getAllTopic', " +
@@ -1217,7 +1216,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
 
-        assertEquals("Chat.Message(id=3, topicId=1, type=TOPIC(2), " +
+        assertEquals("Chat.Message(id=3, topicId=1, type=ROOM_TOPIC(2), " +
                         "room=room, playerId=player, time=12345, text=message)",
                 chat.getMessageById(3).toString());
     }
@@ -1248,7 +1247,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         // then
         assertEquals("[postTopic(1, message, room)]", receivedOnServer());
 
-        assertEquals("Chat.Message(id=3, topicId=1, type=TOPIC(2), " +
+        assertEquals("Chat.Message(id=3, topicId=1, type=ROOM_TOPIC(2), " +
                         "room=room, playerId=player, time=12345, text=message)",
                 chat.getMessageById(3).toString());
 

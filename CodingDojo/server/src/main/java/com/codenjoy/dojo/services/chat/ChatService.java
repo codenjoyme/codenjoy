@@ -139,16 +139,23 @@ public class ChatService {
      */
     public List<PMessage> getTopicMessages(int topicId, String playerId, Filter filter) {
         validateIsChatAvailable(playerId, filter.room());
-        validateTopicExists(topicId, filter.room());
+        ChatType type = validateTopicExists(topicId, filter.room());
 
-        return getMessages(TOPIC, topicId, playerId, filter);
+        return getMessages(type, topicId, playerId, filter);
     }
 
-    private void validateTopicExists(int id, String room) {
-        // TODO по сути будет по 2 запроса, что не ок по производительности
+    private ChatType validateTopicExists(Integer id, String room) {
+        // TODO по сути будет по N запросов, что не ок по производительности
         //      можно было бы валидацию зашить во второй запрос?
         // room validation only
-        getMessage(id, room);
+        ChatType type;
+        do {
+            PMessage message = getMessage(id, room);
+            type = valueOf(message.getType());
+            id = message.getTopicId();
+        } while (type != ROOM && type != FIELD);
+
+        return type.topic();
     }
 
     /**
@@ -223,7 +230,7 @@ public class ChatService {
      * Это возможно только, если пользователь находится в данной комнате.
      */
     public PMessage postMessageForTopic(int id, String text, String room, String playerId) {
-        return postMessage(TOPIC, id, text, room, playerId);
+        return postMessage(id, text, room, playerId);
     }
 
     /**
@@ -233,7 +240,7 @@ public class ChatService {
      * Это возможно только, если пользователь находится в данной комнате.
      */
     public PMessage postMessageForRoom(String text, String room, String playerId) {
-        return postMessage(ROOM, null, text, room, playerId);
+        return postMessage(null, text, room, playerId);
     }
 
     /**
@@ -243,16 +250,21 @@ public class ChatService {
      *
      * Это возможно только, если пользователь находится в данной комнате.
      */
-    private PMessage postMessage(ChatType type, Integer topicId,
+    private PMessage postMessage(Integer topicId,
                                 String text, String room, String playerId)
     {
         validateIsChatAvailable(playerId, room);
-
-        if (topicId != null) {
-            validateTopicExists(topicId, room);
-        }
+        ChatType type = rootType(topicId, room);
 
         return saveMessage(topicId, type, text, room, playerId);
+    }
+
+    private ChatType rootType(Integer topicId, String room) {
+        if (topicId == null) {
+            return ROOM;
+        }
+
+        return validateTopicExists(topicId, room);
     }
 
     private PMessage saveMessage(Integer topicId, ChatType type, String text, String room, String playerId) {
@@ -307,13 +319,15 @@ public class ChatService {
     @ToString
     public class LastMessage {
         private Map<String, Integer> room;
-        private Map<Integer, Integer> topic;
+        private Map<Integer, Integer> roomTopic;
         private Map<Integer, Integer> field;
+        private Map<Integer, Integer> fieldTopic;
 
         public LastMessage() {
             room = chat.getLastRoomMessageIds();
-            topic = chat.getLastTopicMessageIds(TOPIC);
+            roomTopic = chat.getLastTopicMessageIds(ROOM_TOPIC);
             field = chat.getLastTopicMessageIds(FIELD);
+            fieldTopic = chat.getLastTopicMessageIds(FIELD_TOPIC);
         }
 
         public Status at(Deal deal) {

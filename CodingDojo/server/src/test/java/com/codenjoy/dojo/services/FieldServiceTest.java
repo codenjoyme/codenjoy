@@ -69,21 +69,26 @@ public class FieldServiceTest {
         // given
         // random values, don't look for systems here
         // room chat
-        messages.post("room1", "player1", null, ROOM);
-        messages.post("room2", "player2", null, ROOM);
-        messages.post("room1", "player3", null, ROOM);
-        messages.post("room2", "player2", null, ROOM);
-        // topic chat
-        messages.post("room1", "player1", 1, TOPIC);
-        messages.post("room2", "player2", 2, TOPIC);
-        messages.post("room1", "player1", 1, TOPIC);
-        messages.post("room2", "player2", 2, TOPIC);
-        messages.post("room2", "player2", 2, TOPIC);
+        messages.post("room1", "player1", null, ROOM);    // 1
+        messages.post("room2", "player2", null, ROOM);    // 2
+        messages.post("room1", "player3", null, ROOM);    // 3
+        messages.post("room2", "player2", null, ROOM);    // 4
+        // room topic chat
+        messages.post("room1", "player1", 1, ROOM_TOPIC); // 5
+        messages.post("room2", "player2", 2, ROOM_TOPIC); // 6
+        messages.post("room1", "player1", 1, ROOM_TOPIC); // 7
+        messages.post("room2", "player2", 2, ROOM_TOPIC); // 8
+        messages.post("room2", "player2", 2, ROOM_TOPIC); // 9
         // field chat
-        messages.post("room1", "player1", 1, FIELD);
-        messages.post("room1", "player1", 5, FIELD);  // max fieldId
-        messages.post("room1", "player2", 4, FIELD);
-        messages.post("room2", "player3", 3, FIELD);
+        messages.post("room1", "player1", 1, FIELD);      // 10
+        messages.post("room1", "player1", 5, FIELD);      // 11 max fieldId
+        messages.post("room1", "player2", 4, FIELD);      // 12
+        messages.post("room2", "player3", 3, FIELD);      // 13
+        // field topic  chat
+        messages.post("room1", "player1", 10, FIELD_TOPIC); // 14
+        messages.post("room1", "player1", 11, FIELD_TOPIC); // 15
+        messages.post("room1", "player2", 10, FIELD_TOPIC); // 16
+        messages.post("room2", "player3", 13, FIELD_TOPIC); // 17
 
         // when
         fields.init();

@@ -27,8 +27,9 @@ import java.util.Arrays;
 public enum ChatType {
 
     ROOM(1),
-    TOPIC(2),
-    FIELD(3);
+    ROOM_TOPIC(2),
+    FIELD(3),
+    FIELD_TOPIC(4);
 
     private final int id;
 
@@ -53,5 +54,15 @@ public enum ChatType {
         return String.format("%s(%s)",
                 name(),
                 id);
+    }
+
+    public ChatType topic() {
+        switch (this) {
+            case ROOM:
+                return ROOM_TOPIC;
+            case FIELD:
+                return FIELD_TOPIC;
+            default: throw new IllegalArgumentException();
+        }
     }
 }

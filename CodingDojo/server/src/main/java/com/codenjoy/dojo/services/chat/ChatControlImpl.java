@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 import static com.codenjoy.dojo.services.chat.ChatService.exception;
-import static com.codenjoy.dojo.services.chat.ChatType.ROOM;
-import static com.codenjoy.dojo.services.chat.ChatType.TOPIC;
+import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
@@ -119,7 +118,9 @@ public class ChatControlImpl implements ChatControl {
     }
 
     private Chat.Message rootFor(Chat.Message message) {
-        while (message.getType() == TOPIC) {
+        while (message.getType() == ROOM_TOPIC
+            || message.getType() == FIELD_TOPIC)
+        {
             Integer topicId = message.getTopicId();
             if (topicId == null) {
                 throw exception("Topic message with null topic_id: " + message.getId());
@@ -141,9 +142,11 @@ public class ChatControlImpl implements ChatControl {
 
         switch (type) {
             case ROOM:
+            case ROOM_TOPIC:
                 informDeleted(players(room), messages);
                 break;
             case FIELD:
+            case FIELD_TOPIC:
                 informDeleted(players(root.getTopicId()), messages);
                 break;
             default:

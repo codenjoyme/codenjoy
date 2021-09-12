@@ -179,7 +179,7 @@ public class Chat {
      * @return Все соообщения текущего топика (родительского сообщения) {@param messageId},
      *        посортированных в порядке возрастания времени
      */
-    public List<Message> getTopicMessages(int messageId) {
+    public List<Message> getTopicMessages(ChatType type, int messageId) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE deleted = 0 " +
                         "AND topic_id = ? " +
@@ -187,7 +187,7 @@ public class Chat {
                         "ORDER BY time ASC;",
                 new Object[]{
                         messageId,
-                        ChatType.TOPIC.id()
+                        type.id()
                 },
                 Chat::parseMessages
         );

@@ -117,14 +117,16 @@ public class ChatServiceTest {
         messages.post("room2", "player2", null, ROOM); // 2
         messages.post("room1", "player3", null, ROOM); // 3  last room1
         messages.post("room2", "player2", null, ROOM); // 4  last room2
-        messages.post("room1", "player1", 1, TOPIC);   // 5
-        messages.post("room2", "player2", 2, TOPIC);   // 6
-        messages.post("room1", "player1", 1, TOPIC);   // 7  last topic1
-        messages.post("room2", "player2", 2, TOPIC);   // 8
-        messages.post("room1", "player2", 4, TOPIC);   // 9
-        messages.post("room2", "player3", 3, TOPIC);   // 10 last topic3
-        messages.post("room2", "player2", 2, TOPIC);   // 11 last topic2
-        messages.post("room1", "player2", 4, TOPIC);   // 12 last topic4
+
+        messages.post("room1", "player1", 1, ROOM_TOPIC);   // 5
+        messages.post("room2", "player2", 2, ROOM_TOPIC);   // 6
+        messages.post("room1", "player1", 1, ROOM_TOPIC);   // 7  last room topic1
+        messages.post("room2", "player2", 2, ROOM_TOPIC);   // 8
+        messages.post("room1", "player2", 4, ROOM_TOPIC);   // 9
+        messages.post("room2", "player3", 3, ROOM_TOPIC);   // 10 last room topic3
+        messages.post("room2", "player2", 2, ROOM_TOPIC);   // 11 last room topic2
+        messages.post("room1", "player2", 4, ROOM_TOPIC);   // 12 last room topic4
+
         messages.post("room1", "player1", 1, FIELD);   // 13
         messages.post("room1", "player1", 1, FIELD);   // 14
         messages.post("room2", "player3", 3, FIELD);   // 15
@@ -134,11 +136,22 @@ public class ChatServiceTest {
         messages.post("room2", "player3", 3, FIELD);   // 19 last field3
         messages.post("room1", "player2", 4, FIELD);   // 20 last field4
 
+        messages.post("room1", "player1", 13, FIELD_TOPIC);   // 21
+        messages.post("room1", "player1", 13, FIELD_TOPIC);   // 22
+        messages.post("room2", "player3", 15, FIELD_TOPIC);   // 23
+        messages.post("room1", "player1", 16, FIELD_TOPIC);   // 24
+        messages.post("room1", "player2", 16, FIELD_TOPIC);   // 25 last field topic15
+        messages.post("room2", "player2", 15, FIELD_TOPIC);   // 26
+        messages.post("room2", "player3", 15, FIELD_TOPIC);   // 27 last field topic15
+        messages.post("room1", "player2", 13, FIELD_TOPIC);   // 28 last field topic13
+
         // when then
         ChatService.LastMessage last = service.getLast();
-        assertEquals("ChatService.LastMessage(room={room1=3, room2=4}, " +
-                        "topic={1=7, 3=10, 2=11, 4=12}, " +
-                        "field={1=16, 2=18, 3=19, 4=20})",
+        assertEquals("ChatService.LastMessage(" +
+                        "room={room1=3, room2=4}, " +
+                        "roomTopic={1=7, 3=10, 2=11, 4=12}, " +
+                        "field={1=16, 2=18, 3=19, 4=20}, " +
+                        "fieldTopic={16=25, 15=27, 13=28})",
                 last.toString());
 
         // when then
@@ -271,15 +284,15 @@ public class ChatServiceTest {
         nowIs(12351L);
         assertMessages(
                 control(0).postTopic(5, "message7", "room"),
-                "[PMessage(id=7, text=message7, room=room, type=2, topicId=5, \n" +
+                "[PMessage(id=7, text=message7, room=room, type=4, topicId=5, \n" +
                 "    playerId=player1, playerName=player1-name, time=12351)]");
 
         assertListener(
                 "listener1-player1 created: [\n" +
-                "    PMessage(id=7, text=message7, room=room, type=2, topicId=5, \n" +
+                "    PMessage(id=7, text=message7, room=room, type=4, topicId=5, \n" +
                 "        playerId=player1, playerName=player1-name, time=12351)],\n" +
                 "listener1-player2 created: [\n" +
-                "    PMessage(id=7, text=message7, room=room, type=2, topicId=5, \n" +
+                "    PMessage(id=7, text=message7, room=room, type=4, topicId=5, \n" +
                 "        playerId=player1, playerName=player1-name, time=12351)]");
 
         // when then
@@ -287,15 +300,15 @@ public class ChatServiceTest {
         nowIs(12352L);
         assertMessages(
                 control(1).postTopic(6, "message8", "room"),
-                "[PMessage(id=8, text=message8, room=room, type=2, topicId=6, \n" +
+                "[PMessage(id=8, text=message8, room=room, type=4, topicId=6, \n" +
                 "    playerId=player2, playerName=player2-name, time=12352)]");
 
         assertListener(
                 "listener2-player1 created: [\n" +
-                "    PMessage(id=8, text=message8, room=room, type=2, topicId=6, \n" +
+                "    PMessage(id=8, text=message8, room=room, type=4, topicId=6, \n" +
                 "        playerId=player2, playerName=player2-name, time=12352)],\n" +
                 "listener2-player2 created: [\n" +
-                "    PMessage(id=8, text=message8, room=room, type=2, topicId=6, \n" +
+                "    PMessage(id=8, text=message8, room=room, type=4, topicId=6, \n" +
                 "        playerId=player2, playerName=player2-name, time=12352)]");
 
         // when then
@@ -481,7 +494,7 @@ public class ChatServiceTest {
         // only player2 will receive update, because of each player on their own field
         assertListener(
                 "listener2-player2 deleted: [\n" +
-                "    PMessage(id=8, text=message8, room=room, type=2, topicId=6, \n" +
+                "    PMessage(id=8, text=message8, room=room, type=4, topicId=6, \n" +
                 "        playerId=player2, playerName=player2-name, time=12352)]");
 
         // when then
