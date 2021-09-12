@@ -61,13 +61,11 @@ public class ChatCommandTest {
                 .thenReturn(someMessage(1));
 
         // when
-        String result = command.process(new ChatRequest("{'command':'get', " +
+        command.process(new ChatRequest("{'command':'get', " +
                 "'data':{'id':1, 'room':'room'}}"));
 
         // then
         verify(control).get(1, "room");
-
-        assertEquals(null, result);
     }
 
     private PMessage someMessage(int id) {
@@ -83,13 +81,12 @@ public class ChatCommandTest {
                 .thenReturn(true);
 
         // when
-        String result = command.process(new ChatRequest("{'command':'delete', " +
+        command.process(new ChatRequest("{'command':'delete', " +
                 "'data':{'id':1, 'room':'room'}}"));
 
         // then
         verify(control).delete(1, "room");
 
-        assertEquals(null, result);
     }
 
     @Test
@@ -99,7 +96,7 @@ public class ChatCommandTest {
                 .thenReturn(Arrays.asList(someMessage(1), someMessage(2)));
 
         // when
-        String result = command.process(new ChatRequest("{'command':'getAllRoom', " +
+        command.process(new ChatRequest("{'command':'getAllRoom', " +
                 "'data':{'room':'otherRoom', 'count':1, " +
                 "'afterId':2, 'beforeId':5, 'inclusive':true}}"));
 
@@ -109,12 +106,6 @@ public class ChatCommandTest {
         assertEquals("Filter(room=otherRoom, count=1, afterId=2, " +
                         "beforeId=5, inclusive=true)",
                 captor.getValue().toString());
-
-        assertEquals(null, result);
-    }
-
-    private String fix(String string) {
-        return string.replace("\"", "'");
     }
 
     @Test
@@ -124,7 +115,7 @@ public class ChatCommandTest {
                 .thenReturn(Arrays.asList(someMessage(1), someMessage(2)));
 
         // when
-        String result = command.process(new ChatRequest("{'command':'getAllField', " +
+        command.process(new ChatRequest("{'command':'getAllField', " +
                 "'data':{'room':'room', 'count':10, " +
                 "'afterId':3, 'beforeId':4, 'inclusive':false}}"));
 
@@ -134,8 +125,6 @@ public class ChatCommandTest {
         assertEquals("Filter(room=room, count=10, afterId=3, " +
                         "beforeId=4, inclusive=false)",
                 captor.getValue().toString());
-
-        assertEquals(null, result);
     }
 
     @Test
@@ -145,7 +134,7 @@ public class ChatCommandTest {
                 .thenReturn(Arrays.asList(someMessage(1), someMessage(2)));
 
         // when
-        String result = command.process(new ChatRequest("{'command':'getAllTopic', " +
+        command.process(new ChatRequest("{'command':'getAllTopic', " +
                 "'data':{'id':12, 'room':'room2', 'count':3, " +
                 "'afterId':4, 'beforeId':6, 'inclusive':true}}"));
 
@@ -155,8 +144,6 @@ public class ChatCommandTest {
         assertEquals("Filter(room=room2, count=3, afterId=4, " +
                         "beforeId=6, inclusive=true)",
                 captor.getValue().toString());
-
-        assertEquals(null, result);
     }
 
     @Test
@@ -166,13 +153,11 @@ public class ChatCommandTest {
                 .thenReturn(someMessage(1));
 
         // when
-        String result = command.process(new ChatRequest("{'command':'postRoom', " +
+        command.process(new ChatRequest("{'command':'postRoom', " +
                 "'data':{'text':'message4', 'room':'otherRoom'}}"));
 
         // then
         verify(control).postRoom("message4", "otherRoom");
-
-        assertEquals(null, result);
     }
 
     @Test
@@ -182,13 +167,11 @@ public class ChatCommandTest {
                 .thenReturn(someMessage(1));
 
         // when
-        String result = command.process(new ChatRequest("{'command':'postField', " +
+        command.process(new ChatRequest("{'command':'postField', " +
                 "'data':{'text':'message2', 'room':'room3'}}"));
 
         // then
         verify(control).postField("message2", "room3");
-
-        assertEquals(null, result);
     }
 
     @Test
@@ -198,31 +181,21 @@ public class ChatCommandTest {
                 .thenReturn(someMessage(1));
 
         // when
-        String result = command.process(new ChatRequest("{'command':'postTopic', " +
+        command.process(new ChatRequest("{'command':'postTopic', " +
                 "'data':{'id': 12, 'text':'message1', 'room':'room'}}"));
 
         // then
         verify(control).postTopic(12, "message1", "room");
-
-        assertEquals(null, result);
     }
 
     @Test
     public void testPostTopic_messageIsNull() {
         // when
-        String result = command.process(new ChatRequest("{'command':'postTopic', " +
+        command.process(new ChatRequest("{'command':'postTopic', " +
                 "'data':{'id': 12, 'text':2, 'room':'room'}}"));
 
         // then
         verify(control, never()).postTopic(anyInt(), anyString(), anyString());
-
-        assertEquals("{'command':'error', 'data':" +
-                        "{'error':'ClassCastException'," +
-                        "'message':'class java.lang.Integer cannot be " +
-                        "cast to class java.lang.String (java.lang.Integer " +
-                        "and java.lang.String are in module java.base of " +
-                        "loader 'bootstrap')'}}",
-                fix(result));
     }
 
     @Test
@@ -232,15 +205,10 @@ public class ChatCommandTest {
                 .thenThrow(new IllegalArgumentException("Message is null"));
 
         // when
-        String result = command.process(new ChatRequest("{'command':'postTopic', " +
+        command.process(new ChatRequest("{'command':'postTopic', " +
                 "'data':{'id': 12, 'room':'room'}}"));
 
         // then
         verify(control).postTopic(12, null, "room");
-
-        assertEquals("{'command':'error', 'data':" +
-                        "{'error':'IllegalArgumentException'," +
-                        "'message':'Message is null'}}",
-                fix(result));
     }
 }

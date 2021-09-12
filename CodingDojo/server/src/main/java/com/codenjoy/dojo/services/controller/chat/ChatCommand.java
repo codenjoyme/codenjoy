@@ -23,9 +23,6 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 import com.codenjoy.dojo.services.chat.ChatControl;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -45,24 +42,8 @@ public class ChatCommand {
     public static final String POST_FIELD = "postField";
     public static final String DELETE = "delete";
     public static final String ERROR = "error";
-    public static final String COMMAND_TEMPLATE = "{\"command\":\"%s\", \"data\":%s}";
-
-    private static ObjectMapper mapper = new ObjectMapper();
 
     private Map<String, Consumer<ChatRequest>> map = new HashMap<>();
-
-    public static String answer(String command, Object data) {
-        if (command == null) {
-            return null;
-        }
-        return String.format(COMMAND_TEMPLATE,
-                command, json(data));
-    }
-
-    @SneakyThrows
-    private static String json(Object object) {
-        return mapper.writeValueAsString(object);
-    }
 
     public ChatCommand(ChatControl chat) {
         map.put(GET_ALL_ROOM,  request -> chat.getAllRoom(request.filter()));
@@ -75,26 +56,8 @@ public class ChatCommand {
         map.put(DELETE,        request -> chat.delete(request.id(), request.room()));
     }
 
-    public String process(ChatRequest request) {
-        try {
-            map.get(request.method()).accept(request);
-            return null;
-        } catch (Exception exception) {
-            log.error("Error during chat request: " + request, exception);
-            return answer(ERROR, new Error(exception));
-        }
-    }
-
-    @Getter
-    private static class Error {
-
-        private final String error;
-        private final String message;
-
-        public Error(Exception exception) {
-           this.error = exception.getClass().getSimpleName();
-           this.message = exception.getMessage();
-        }
+    public void process(ChatRequest request) {
+        map.get(request.method()).accept(request);
     }
 
 }

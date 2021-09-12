@@ -29,24 +29,29 @@ import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.services.controller.chat.ChatCommand.ADD;
-import static com.codenjoy.dojo.services.controller.chat.ChatCommand.DELETE;
+import static com.codenjoy.dojo.services.controller.chat.ChatCommand.*;
 
 @Component
 public class ChatController implements Controller<String, ChatControl> {
 
+    public static final String COMMAND_TEMPLATE = "{\"command\":\"%s\", \"data\":%s}";
+
     private final PlayerTransport transport;
     private final ChatService chatService;
+    private final ObjectMapper mapper;
 
     // autowiring by name
     public ChatController(PlayerTransport chatPlayerTransport, ChatService chatService) {
         transport = chatPlayerTransport;
         this.chatService = chatService;
         transport.setDefaultFilter(Object::toString);
+        this.mapper = new ObjectMapper();
     }
 
     @Override
@@ -54,7 +59,13 @@ public class ChatController implements Controller<String, ChatControl> {
         String id = deal.getPlayerId();
         ChatControl control = chatService.control(id, chatListener());
         transport.registerPlayerEndpoint(id,
-                new ChatResponseHandler(deal.getPlayer(), control, transport));
+                new ChatResponseHandler(deal.getPlayer(), control,
+                        error -> sendState(ERROR, error, id)));
+    }
+
+    @SneakyThrows
+    private String json(Object object) {
+        return mapper.writeValueAsString(object);
     }
 
     private ChatControl.OnChange chatListener() {
@@ -68,16 +79,17 @@ public class ChatController implements Controller<String, ChatControl> {
             public void created(List<PMessage> messages, String playerId) {
                 sendState(ADD, messages, playerId);
             }
-
-            private void sendState(String command, Object data, String playerId) {
-                if (data == null) {
-                    return;
-                }
-
-                transport.sendState(playerId,
-                        ChatCommand.answer(command, data));
-            }
         };
+    }
+
+    private void sendState(String command, Object data, String playerId) {
+        if (data == null || command == null) {
+            return;
+        }
+
+        transport.sendState(playerId,
+                String.format(COMMAND_TEMPLATE,
+                        command, json(data)));
     }
 
     @Override

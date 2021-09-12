@@ -26,23 +26,21 @@ package com.codenjoy.dojo.services.controller.chat;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
-import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
-import org.json.JSONObject;
 
 @Slf4j
 public class ChatResponseHandler implements ResponseHandler {
 
     private final Player player;
     private final ChatCommand command;
-    private final PlayerTransport transport;
+    private final Error.OnError onError;
 
-    public ChatResponseHandler(Player player, ChatControl chat, PlayerTransport transport) {
+    public ChatResponseHandler(Player player, ChatControl chat, Error.OnError onError) {
         this.player = player;
         this.command = new ChatCommand(chat);
-        this.transport = transport;
+        this.onError = onError;
     }
 
     @Override
@@ -51,9 +49,11 @@ public class ChatResponseHandler implements ResponseHandler {
                 message, player.getId());
 
         ChatRequest request = new ChatRequest(message);
-        String result = command.process(request);
-        if (result != null) {
-            transport.sendState(player.getId(), result);
+        try {
+            command.process(request);
+        } catch (Exception exception) {
+            log.error("Error during chat request: " + request, exception);
+            onError.on(new Error(exception));
         }
     }
 
