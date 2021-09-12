@@ -367,7 +367,10 @@ public class ChatServiceTest {
                 "[PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12347)]");
 
-        assertListener("");
+        assertListener(
+                "listener1-player1 created: [\n" +
+                "    PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12347)]");
 
         // when then
         // player2 get all room messages for room message2
@@ -376,7 +379,10 @@ public class ChatServiceTest {
                 "[PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
                 "    playerId=player2, playerName=player2-name, time=12348)]");
 
-        assertListener("");
+        assertListener(
+                "listener2-player2 created: [\n" +
+                "    PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
+                "        playerId=player2, playerName=player2-name, time=12348)]");
 
         // when then
         // player1 get all field messages
@@ -437,9 +443,11 @@ public class ChatServiceTest {
 
         // when then
         // player1 get all topic messages for room message1
-        assertMessages(control(0).getAllTopic(1, filter), "[]");
+        assertMessages(control(0).getAllTopic(1, filter),
+                "[]");
 
-        assertListener("");
+        assertListener(
+                "listener1-player1 created: []");
 
         // when then
         // player2 get all topic messages for room message2
@@ -448,7 +456,10 @@ public class ChatServiceTest {
                 "[PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
                 "    playerId=player2, playerName=player2-name, time=12348)]");
 
-        assertListener("");
+        assertListener(
+                "listener2-player2 created: [\n" +
+                "    PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
+                "        playerId=player2, playerName=player2-name, time=12348)]");
 
         // when then
         // player2 delete topic field message8

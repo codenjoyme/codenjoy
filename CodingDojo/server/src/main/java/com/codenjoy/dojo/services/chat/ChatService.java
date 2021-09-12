@@ -353,7 +353,9 @@ public class ChatService {
 
             @Override
             public List<PMessage> getAllTopic(int topicId, Filter filter) {
-                return getTopicMessages(topicId, playerId, filter);
+                List<PMessage> messages = getTopicMessages(topicId, playerId, filter);
+                informCreateForPlayer(messages, playerId, listener);
+                return messages;
             }
 
             @Override
