@@ -66,7 +66,7 @@ public class ChatCommand {
         if (command == null) {
             return null;
         }
-        return String.format("{'command':'%s', 'data':%s}",
+        return String.format("{\"command\":\"%s\", \"data\":%s}",
                 command, json(data));
     }
 

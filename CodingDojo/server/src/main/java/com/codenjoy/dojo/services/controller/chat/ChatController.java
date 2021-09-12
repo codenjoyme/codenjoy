@@ -84,7 +84,7 @@ public class ChatController implements Controller<String, ChatControl> {
                 }
 
                 transport.sendState(playerId,
-                        String.format("{'command':'%s', 'data':%s}",
+                        String.format("{\"command\":\"%s\", \"data\":%s}",
                                 command, json(data)));
             }
         };
