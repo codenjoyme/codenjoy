@@ -81,10 +81,7 @@ public class AITest {
             Player player = new Player(mock(EventListener.class), settings);
             dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
             loderunner.newGame(player);
-            player.setHero(hero);
-            hero.setActive(true);
-            hero.init(loderunner);
-            loderunner.resetHeroes();
+            player.getHero().setDirection(hero.getDirection());
         }
 
         ai = new AI();
