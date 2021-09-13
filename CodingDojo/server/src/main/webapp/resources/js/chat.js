@@ -164,6 +164,10 @@ function initChat(contextPath, chatControl, type) {
     }
 
     chatControl.addListener(function(request) {
+        if (request.type != type) {
+            // не наш чат, не обрабатываем
+            return;
+        }
         var command = request.command;
         if (command == 'add') {
             var messages = request.data;
