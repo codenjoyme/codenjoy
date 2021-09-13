@@ -100,33 +100,37 @@ function initChat(contextPath, chatControl, type) {
     }
 
     function onLoadMessages(messages) {
-        // TODO разобраться с этим т.к. к нам никогда не придет пустой список
-        if (messages.length == 0) {
-            // // если ничего не пришло и грузим мы начало чата
-            // // значит это самое первое сообщение в чате - больше его загружать не будем
-            // if (!after && !firstMessageInChat) {
-            //     firstMessageInChat = messageId;
-            // }
-            loading = false;
-            return;
-        }
+        do {
+            // TODO разобраться с этим т.к. к нам никогда не придет пустой список
+            if (messages.length == 0) {
+                // // если ничего не пришло и грузим мы начало чата
+                // // значит это самое первое сообщение в чате - больше его загружать не будем
+                // if (!after && !firstMessageInChat) {
+                //     firstMessageInChat = messageId;
+                // }
+                loading = false;
+                return;
+            }
 
-        var first = messages[0].id;
-        var last = messages[messages.length - 1].id;
-        var all = allMessagesIds();
+            var first = messages[0].id;
+            var last = messages[messages.length - 1].id;
+            var all = allMessagesIds();
 
-        var after = nearestFor(first, all, true);
-        var before = nearestFor(last, all, false);
+            var after = nearestFor(first, all, true);
+            var before = nearestFor(last, all, false);
 
-        // удаляем дубликаты, которые у нас уже в чате есть
-        if (after == first) {
-            messages.shift();
-        }
+            // удаляем дубликаты, которые у нас уже в чате есть
+            var removeAfter = after == first;
+            if (removeAfter) {
+                messages.shift();
+            }
 
-        // удаляем дубликаты, которые у нас уже в чате есть
-        if (before == last) {
-            messages.pop();
-        }
+            // удаляем дубликаты, которые у нас уже в чате есть
+            var removeBefore = before == last;
+            if (removeBefore) {
+                messages.pop();
+            }
+        } while (removeAfter || removeBefore);
 
         // если после этого сообщений больше не осталось, то заканчиваем тут
         if (messages.length == 0) {
