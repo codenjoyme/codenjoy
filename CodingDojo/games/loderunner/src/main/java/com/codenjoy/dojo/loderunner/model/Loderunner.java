@@ -33,8 +33,10 @@ import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundField;
+import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -47,22 +49,23 @@ import static java.util.stream.Collectors.toList;
 public class Loderunner extends RoundField<Player> implements Field {
 
     private PointField field;
-
-    private Players players;
-    private int portalsTimer;
+    private List<Player> players;
     private Dice dice;
     private GameSettings settings;
+
+    private int portalsTimer;
     private List<Function<Point, Point>> finder;
 
     public Loderunner(Dice dice, GameSettings settings) {
         super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_HERO, settings);
+
         this.dice = dice;
         this.settings = settings;
-        field = new PointField();
-        players = new Players(this);
+        this.field = new PointField();
+        this.players = new LinkedList<>();
 
         finder = new ArrayList<>(){{
-            add(pt -> getFrom(allHeroes(), pt));
+            add(pt -> getFrom(heroes().all(), pt));
             add(pt -> getFrom(enemies().all(), pt));
             add(pt -> getFrom(yellowGold().all(), pt));
             add(pt -> getFrom(greenGold().all(), pt));
@@ -75,21 +78,7 @@ public class Loderunner extends RoundField<Player> implements Field {
             add(pt -> getFrom(portals().all(), pt));
         }};
 
-        init();
-        resetAllPlayers(); // TODO test me
-    }
-
-    private void init() {
-        Level level = settings.level();
-
-        level.saveTo(field);
-        field.init(this);
-
-        resetPortalsTimer();
-
-        enemies().forEach(enemy -> enemy.init(this));
-
-        generateAll();
+        clearScore();
     }
 
     private void generateAll() {
@@ -100,19 +89,20 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void resetAllPlayers() {
-        players.resetAll();
-    }
-
-    @Override
     public void clearScore() {
-        init();
-        super.clearScore(); // тут так же произойдет reset all players
+        settings.level().saveTo(field);
+        field.init(this);
+
+        resetPortalsTimer();
+        enemies().forEach(enemy -> enemy.init(this));
+        generateAll();
+
+        super.clearScore();
     }
 
     @Override
     public List<Player> players() {
-        return players.all();
+        return players;
     }
 
     @Override
@@ -152,11 +142,10 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void rewardMurderers(Point pt) {
-        players.stream()
-                .filter(player -> player.getHero().under(PillType.SHADOW_PILL))
-                .filter(shadow -> shadow.getHero().itsMe(pt))
+        heroes().stream()
+                .filter(hero -> hero.under(PillType.SHADOW_PILL))
+                .filter(shadow -> shadow.itsMe(pt))
                 .forEach(murderer -> murderer.event(Events.KILL_ENEMY));
-
     }
 
     private void generateGold()  {
@@ -216,7 +205,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
             @Override
             public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(allHeroes());
+                processor.accept(heroes());
                 processor.accept(enemies().all());
                 processor.accept(yellowGold().all());
                 processor.accept(greenGold().all());
@@ -240,15 +229,17 @@ public class Loderunner extends RoundField<Player> implements Field {
             Hero hero = player.getHero();
 
             if (!hero.isAlive()) {
-                Optional<Brick> brick = getBrick(hero);
-                if (!brick.isPresent()) continue;
+                List<Brick> bricks = bricks().getAt(hero);
+                if (bricks.isEmpty()) continue;
 
                 // Умер от того что кто-то просверлил стенку
                 die.add(player);
 
-                Hero killer = brick.get().getDrilledBy();
-                Player killerPlayer = players.getPlayer(killer);
-                if (killerPlayer != null && killerPlayer != player) {
+                Hero killer = bricks.get(0).getDrilledBy();
+                if (killer == null) continue;
+
+                Player killerPlayer = (Player) killer.getPlayer();
+                if (killerPlayer != null & killerPlayer != player) {
                     killerPlayer.event(Events.KILL_ENEMY);
                 }
             }
@@ -368,7 +359,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public void suicide(Hero hero) {
-        players.getPlayer(hero).event(Events.SUICIDE);
+        hero.getPlayer().event(Events.SUICIDE);
     }
 
     @Override
@@ -451,8 +442,8 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public List<Hero> allHeroes() {
-        return players.heroes();
+    public Accessor<Hero> heroes() {
+        return field.of(Hero.class);
     }
 
     @Override
@@ -462,9 +453,8 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isEnemyAt(Point pt) {
-        List<Hero> shadows = players.stream()
-                .filter(player -> player.getHero().under(PillType.SHADOW_PILL))
-                .map(Player::getHero)
+        List<Hero> shadows = heroes().stream()
+                .filter(hero -> hero.under(PillType.SHADOW_PILL))
                 .collect(toList());
         return enemies().contains(pt) || shadows.contains(pt);
     }
@@ -482,8 +472,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean under(Point pt, PillType pill) {
-        return players.stream()
-                .map(Player::getHero)
+        return heroes().stream()
                 .filter(hero -> hero.equals(pt))
                 .anyMatch(hero -> hero.under(pill));
     }
@@ -498,12 +487,27 @@ public class Loderunner extends RoundField<Player> implements Field {
         return borders().contains(pt);
     }
 
+    @Override
     public void newGame(Player player) {
-        players.add(player);
+        if (!players.contains(player)) {
+            players.add(player);
+        }
+        player.newHero(this);
+        removeAloneHeroes();
     }
 
+    @Override
     public void remove(Player player) {
-        players.remove(player);
+        super.remove(player);
+        removeAloneHeroes();
+    }
+
+    // TODO DF3D попробовать избавиться от этого метода
+    private void removeAloneHeroes() {
+        List<Hero> aloneHeroes = players.stream()
+                .map(GamePlayer::getHero)
+                .collect(toList());
+        heroes().removeNotSame(aloneHeroes);
     }
 
     @Override
@@ -566,11 +570,6 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     public Accessor<Pipe> pipe() {
         return field.of(Pipe.class);
-    }
-
-    // only for testing
-    public void resetHeroes() {
-        players.resetHeroes();
     }
 
     public int getPortalsTimer() {

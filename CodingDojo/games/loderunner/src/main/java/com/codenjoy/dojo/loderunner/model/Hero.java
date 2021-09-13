@@ -63,6 +63,13 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     @Override
+    public void init(Field field) {
+        super.init(field);
+
+        field.heroes().add(this);
+    }
+
+    @Override
     public void down() {
         if (!isActiveAndAlive()) return;
 
@@ -117,6 +124,10 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     @Override

@@ -26,14 +26,11 @@ package com.codenjoy.dojo.loderunner.model;
 import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.model.items.Brick;
 import com.codenjoy.dojo.loderunner.model.items.Pill;
-import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
-import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyAI;
 import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyJoystick;
 import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -41,7 +38,6 @@ import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
@@ -50,7 +46,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -4712,7 +4707,7 @@ public class GameTest {
 
     private void reloadAllHeroes() {
         players = game.players();
-        heroes = game.allHeroes();
+        heroes = game.heroes().all();
     }
     
     private void reloadAllEnemies() {

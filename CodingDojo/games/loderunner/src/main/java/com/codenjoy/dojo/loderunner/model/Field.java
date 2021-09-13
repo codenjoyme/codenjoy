@@ -64,7 +64,7 @@ public interface Field extends RoundGameField<Player> {
 
     List<Hero> activeHeroes();
 
-    List<Hero> allHeroes();
+    Accessor<Hero> heroes();
 
     void suicide(Hero hero);
 
