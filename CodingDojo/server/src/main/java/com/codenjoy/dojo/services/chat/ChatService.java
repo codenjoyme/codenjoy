@@ -67,8 +67,8 @@ public class ChatService {
      * Администратор может получать сообщения в любом чате,
      * пользователь - только в своем чате {@code room}.
      */
-    private List<PMessage> getMessages(ChatType type, Integer topicId,
-                                      String playerId, Filter filter)
+    protected List<PMessage> getMessages(ChatType type, Integer topicId,
+                                         String playerId, Filter filter)
     {
         validateIsChatAvailable(playerId, filter.room());
 
@@ -137,11 +137,19 @@ public class ChatService {
      * Администратор может получать любые topic-сообщения в любом room-чате,
      * пользователь только topic-сообщения в своем room-чате.
      */
-    public List<PMessage> getTopicMessages(int topicId, String playerId, Filter filter) {
-        validateIsChatAvailable(playerId, filter.room());
-        ChatType type = validateTopicExists(topicId, filter.room());
-
+    public List<PMessage> getTopicMessages(Integer topicId, String playerId, Filter filter) {
+        ChatType type = validateTopicAvailable(topicId, playerId, filter.room());
         return getMessages(type, topicId, playerId, filter);
+    }
+
+    protected ChatType validateTopicAvailable(Integer topicId, String playerId, String room) {
+        validateIsChatAvailable(playerId, room);
+
+        if (topicId == null) {
+            return ROOM;
+        }
+
+        return validateTopicExists(topicId, room);
     }
 
     private ChatType validateTopicExists(Integer id, String room) {
@@ -253,21 +261,11 @@ public class ChatService {
     private PMessage postMessage(Integer topicId,
                                 String text, String room, String playerId)
     {
-        validateIsChatAvailable(playerId, room);
-        ChatType type = rootType(topicId, room);
-
+        ChatType type = validateTopicAvailable(topicId, playerId, room);
         return saveMessage(topicId, type, text, room, playerId);
     }
 
-    private ChatType rootType(Integer topicId, String room) {
-        if (topicId == null) {
-            return ROOM;
-        }
-
-        return validateTopicExists(topicId, room);
-    }
-
-    private PMessage saveMessage(Integer topicId, ChatType type, String text, String room, String playerId) {
+    protected PMessage saveMessage(Integer topicId, ChatType type, String text, String room, String playerId) {
         return wrap(chat.saveMessage(
                 Chat.Message.builder()
                         .room(room)

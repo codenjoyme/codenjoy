@@ -65,4 +65,16 @@ public enum ChatType {
             default: throw new IllegalArgumentException();
         }
     }
+
+    public ChatType root() {
+        switch (this) {
+            case ROOM:
+            case ROOM_TOPIC:
+                return ROOM;
+            case FIELD:
+            case FIELD_TOPIC:
+                return FIELD;
+            default: throw new IllegalArgumentException();
+        }
+    }
 }

@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services.controller.chat;
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.chat.OnChange;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
@@ -41,7 +42,11 @@ import static com.codenjoy.dojo.services.controller.chat.ChatCommand.*;
 @Component
 public class ChatController implements Controller<String, ChatControl> {
 
-    public static final String COMMAND_TEMPLATE = "{\"command\":\"%s\", \"data\":%s}";
+    private static final String COMMAND_TEMPLATE =
+            "{\"command\":\"%s\", \"type\":\"%s\", \"data\":%s}";
+
+    private static final String ERROR_TEMPLATE =
+            "{\"command\":\"%s\", \"data\":%s}";
 
     private final PlayerTransport transport;
     private final ChatService chatService;
@@ -61,7 +66,7 @@ public class ChatController implements Controller<String, ChatControl> {
         ChatControl control = chatService.control(id, chatListener());
         transport.registerPlayerEndpoint(id,
                 new ChatResponseHandler(deal.getPlayer(), control,
-                        error -> sendState(ERROR, error, id)));
+                        error -> sendState(ERROR, null, error, id)));
     }
 
     @SneakyThrows
@@ -72,25 +77,35 @@ public class ChatController implements Controller<String, ChatControl> {
     private OnChange chatListener() {
         return new OnChange() {
             @Override
-            public void deleted(List<PMessage> messages, String playerId) {
-                sendState(DELETE, messages, playerId);
+            public void deleted(List<PMessage> messages, ChatType type, String playerId) {
+                sendState(DELETE, type, messages, playerId);
             }
 
             @Override
-            public void created(List<PMessage> messages, String playerId) {
-                sendState(ADD, messages, playerId);
+            public void created(List<PMessage> messages, ChatType type, String playerId) {
+                sendState(ADD, type, messages, playerId);
             }
         };
     }
 
-    private void sendState(String command, Object data, String playerId) {
+    private void sendState(String command, ChatType type, Object data, String playerId) {
         if (data == null || command == null) {
             return;
         }
+        transport.sendState(playerId, json(command, type, data));
+    }
 
-        transport.sendState(playerId,
-                String.format(COMMAND_TEMPLATE,
-                        command, json(data)));
+    private String json(String command, ChatType type, Object data) {
+        if (type == null) {
+            return String.format(ERROR_TEMPLATE,
+                    command,
+                    json(data));
+        }
+
+        return String.format(COMMAND_TEMPLATE,
+                command,
+                type.name().toLowerCase(),
+                json(data));
     }
 
     @Override

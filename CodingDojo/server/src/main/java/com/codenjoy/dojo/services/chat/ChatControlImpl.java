@@ -4,10 +4,10 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import static com.codenjoy.dojo.services.chat.ChatService.exception;
 import static com.codenjoy.dojo.services.chat.ChatType.*;
@@ -34,19 +34,20 @@ public class ChatControlImpl implements ChatControl {
     }
 
     private void inform(List<Player> players,
-                        BiConsumer<List<PMessage>, String> listener,
+                        TriConsumer<List<PMessage>, ChatType, String> listener,
+                        ChatType type,
                         List<PMessage> messages)
     {
         if (messages.isEmpty()) return;
-        players.forEach(player -> listener.accept(messages, player.getId()));
+        players.forEach(player -> listener.accept(messages, type, player.getId()));
     }
 
-    private void informCreated(List<Player> players, List<PMessage> messages) {
-        inform(players, listener::created, messages);
+    private void informCreated(List<Player> players, ChatType type, List<PMessage> messages) {
+        inform(players, listener::created, type, messages);
     }
 
-    private void informDeleted(List<Player> players, List<PMessage> messages) {
-        inform(players, listener::deleted, messages);
+    private void informDeleted(List<Player> players, ChatType type, List<PMessage> messages) {
+        inform(players, listener::deleted, type, messages);
     }
 
     private List<Player> players(String room) {
@@ -60,49 +61,54 @@ public class ChatControlImpl implements ChatControl {
     @Override
     public List<PMessage> getAllRoom(Filter filter) {
         List<PMessage> messages = service.getRoomMessages(playerId, filter);
-        informCreated(player, messages);
+        informCreated(player, ROOM, messages);
         return messages;
     }
 
     @Override
     public List<PMessage> getAllTopic(int topicId, Filter filter) {
-        List<PMessage> messages = service.getTopicMessages(topicId, playerId, filter);
-        informCreated(player, messages);
+        // TODO тут пришлось нарушить инкапсуляцию исходного метода, чтобы достать тип type сообщения
+        ChatType type = service.validateTopicAvailable(topicId, playerId, filter.room());
+        List<PMessage> messages = service.getMessages(type, topicId, playerId, filter);
+        informCreated(player, type.root(), messages);
         return messages;
     }
 
     @Override
     public List<PMessage> getAllField(Filter filter) {
         List<PMessage> messages = service.getFieldMessages(playerId, filter);
-        informCreated(player, messages);
+        informCreated(player, FIELD, messages);
         return messages;
     }
 
     @Override
     public PMessage get(int id, String room) {
         PMessage message = service.getMessage(id, room, playerId);
-        informCreated(player, asList(message));
+        ChatType type = valueOf(message.getType()).root();
+        informCreated(player, type, asList(message));
         return message;
     }
 
     @Override
     public PMessage postRoom(String text, String room) {
         PMessage message = service.postMessageForRoom(text, room, playerId);
-        informCreated(players(room), asList(message));
+        informCreated(players(room), ROOM, asList(message));
         return message;
     }
 
     @Override
     public PMessage postTopic(int topicId, String text, String room) {
-        PMessage message = service.postMessageForTopic(topicId, text, room, playerId);
-        informCreated(players(room), asList(message));
+        // TODO тут пришлось нарушить инкапсуляцию исходного метода, чтобы достать тип type сообщения
+        ChatType type = service.validateTopicAvailable(topicId, playerId, room);
+        PMessage message = service.saveMessage(topicId, type, text, room, playerId);
+        informCreated(players(room), type.root(), asList(message));
         return message;
     }
 
     @Override
     public PMessage postField(String text, String room) {
         PMessage message = service.postMessageForField(text, room, playerId);
-        informCreated(players(message.getTopicId()), asList(message));
+        informCreated(players(message.getTopicId()), FIELD, asList(message));
         return message;
     }
 
@@ -140,14 +146,12 @@ public class ChatControlImpl implements ChatControl {
                 ? ROOM
                 : root.getType();
 
-        switch (type) {
+        switch (type.root()) {
             case ROOM:
-            case ROOM_TOPIC:
-                informDeleted(players(room), messages);
+                informDeleted(players(room), ROOM, messages);
                 break;
             case FIELD:
-            case FIELD_TOPIC:
-                informDeleted(players(root.getTopicId()), messages);
+                informDeleted(players(root.getTopicId()), FIELD, messages);
                 break;
             default:
                 throw exception("Should be only ROOM or FIELD: " +

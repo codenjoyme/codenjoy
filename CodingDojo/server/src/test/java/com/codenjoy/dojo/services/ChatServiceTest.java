@@ -25,10 +25,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.chat.ChatControl;
-import com.codenjoy.dojo.services.chat.ChatService;
-import com.codenjoy.dojo.services.chat.Filter;
-import com.codenjoy.dojo.services.chat.OnChange;
+import com.codenjoy.dojo.services.chat.*;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.ChatHelper;
@@ -198,10 +195,10 @@ public class ChatServiceTest {
                 "    playerId=player1, playerName=player1-name, time=12345)]");
 
         assertListener(
-                "listener1-player1 created: [\n" +
+                "listener1-player1 created in room: [\n" +
                 "    PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                 "        playerId=player1, playerName=player1-name, time=12345)],\n" +
-                "listener1-player2 created: [\n" +
+                "listener1-player2 created in room: [\n" +
                 "    PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                 "        playerId=player1, playerName=player1-name, time=12345)]");
 
@@ -214,10 +211,10 @@ public class ChatServiceTest {
                 "    playerId=player2, playerName=player2-name, time=12346)]");
 
         assertListener(
-                "listener2-player1 created: [\n" +
+                "listener2-player1 created in room: [\n" +
                 "    PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
                 "        playerId=player2, playerName=player2-name, time=12346)],\n" +
-                "listener2-player2 created: [\n" +
+                "listener2-player2 created in room: [\n" +
                 "    PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
                 "        playerId=player2, playerName=player2-name, time=12346)]");
 
@@ -230,10 +227,10 @@ public class ChatServiceTest {
                 "    playerId=player1, playerName=player1-name, time=12347)]");
 
         assertListener(
-                "listener1-player1 created: [\n" +
+                "listener1-player1 created in room: [\n" +
                 "    PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
                 "        playerId=player1, playerName=player1-name, time=12347)],\n" +
-                "listener1-player2 created: [\n" +
+                "listener1-player2 created in room: [\n" +
                 "    PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
                 "        playerId=player1, playerName=player1-name, time=12347)]");
 
@@ -246,10 +243,10 @@ public class ChatServiceTest {
                 "    playerId=player2, playerName=player2-name, time=12348)]");
 
         assertListener(
-                "listener2-player1 created: [\n" +
+                "listener2-player1 created in room: [\n" +
                 "    PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
                 "        playerId=player2, playerName=player2-name, time=12348)],\n" +
-                "listener2-player2 created: [\n" +
+                "listener2-player2 created in room: [\n" +
                 "    PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
                 "        playerId=player2, playerName=player2-name, time=12348)]");
 
@@ -262,7 +259,7 @@ public class ChatServiceTest {
                 "    playerId=player1, playerName=player1-name, time=12349)]");
 
         assertListener(
-                "listener1-player1 created: [\n" +
+                "listener1-player1 created in field: [\n" +
                 "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "        playerId=player1, playerName=player1-name, time=12349)]");
 
@@ -275,7 +272,7 @@ public class ChatServiceTest {
                 "    playerId=player2, playerName=player2-name, time=12350)]");
 
         assertListener(
-                "listener2-player2 created: [\n" +
+                "listener2-player2 created in field: [\n" +
                 "    PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
                 "        playerId=player2, playerName=player2-name, time=12350)]");
 
@@ -288,10 +285,10 @@ public class ChatServiceTest {
                 "    playerId=player1, playerName=player1-name, time=12351)]");
 
         assertListener(
-                "listener1-player1 created: [\n" +
+                "listener1-player1 created in field: [\n" +
                 "    PMessage(id=7, text=message7, room=room, type=4, topicId=5, \n" +
                 "        playerId=player1, playerName=player1-name, time=12351)],\n" +
-                "listener1-player2 created: [\n" +
+                "listener1-player2 created in field: [\n" +
                 "    PMessage(id=7, text=message7, room=room, type=4, topicId=5, \n" +
                 "        playerId=player1, playerName=player1-name, time=12351)]");
 
@@ -304,10 +301,10 @@ public class ChatServiceTest {
                 "    playerId=player2, playerName=player2-name, time=12352)]");
 
         assertListener(
-                "listener2-player1 created: [\n" +
+                "listener2-player1 created in field: [\n" +
                 "    PMessage(id=8, text=message8, room=room, type=4, topicId=6, \n" +
                 "        playerId=player2, playerName=player2-name, time=12352)],\n" +
-                "listener2-player2 created: [\n" +
+                "listener2-player2 created in field: [\n" +
                 "    PMessage(id=8, text=message8, room=room, type=4, topicId=6, \n" +
                 "        playerId=player2, playerName=player2-name, time=12352)]");
 
@@ -319,7 +316,7 @@ public class ChatServiceTest {
                         "    playerId=player1, playerName=player1-name, time=12345)]");
 
         assertListener(
-                "listener1-player1 created: [\n" +
+                "listener1-player1 created in room: [\n" +
                 "    PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                 "        playerId=player1, playerName=player1-name, time=12345)]");
 
@@ -331,7 +328,7 @@ public class ChatServiceTest {
                 "    playerId=player1, playerName=player1-name, time=12349)]");
 
         assertListener(
-                "listener2-player2 created: [\n" +
+                "listener2-player2 created in field: [\n" +
                 "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "        playerId=player1, playerName=player1-name, time=12349)]");
 
@@ -353,7 +350,7 @@ public class ChatServiceTest {
                 "    playerId=player2, playerName=player2-name, time=12346)]");
 
         assertListener(
-                "listener1-player1 created: [\n" +
+                "listener1-player1 created in room: [\n" +
                 "    PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                 "        playerId=player1, playerName=player1-name, time=12345), \n" +
                 "    PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
@@ -368,7 +365,7 @@ public class ChatServiceTest {
                 "    playerId=player2, playerName=player2-name, time=12346)]");
 
         assertListener(
-                "listener2-player2 created: [\n" +
+                "listener2-player2 created in room: [\n" +
                 "    PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                 "        playerId=player1, playerName=player1-name, time=12345), \n" +
                 "    PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
@@ -382,7 +379,7 @@ public class ChatServiceTest {
                 "    playerId=player1, playerName=player1-name, time=12347)]");
 
         assertListener(
-                "listener1-player1 created: [\n" +
+                "listener1-player1 created in room: [\n" +
                 "    PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
                 "        playerId=player1, playerName=player1-name, time=12347)]");
 
@@ -394,7 +391,7 @@ public class ChatServiceTest {
                 "    playerId=player2, playerName=player2-name, time=12348)]");
 
         assertListener(
-                "listener2-player2 created: [\n" +
+                "listener2-player2 created in room: [\n" +
                 "    PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
                 "        playerId=player2, playerName=player2-name, time=12348)]");
 
@@ -406,7 +403,7 @@ public class ChatServiceTest {
                 "    playerId=player1, playerName=player1-name, time=12349)]");
 
         assertListener(
-                "listener1-player1 created: [\n" +
+                "listener1-player1 created in field: [\n" +
                 "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "        playerId=player1, playerName=player1-name, time=12349)]");
 
@@ -418,7 +415,7 @@ public class ChatServiceTest {
                 "    playerId=player2, playerName=player2-name, time=12350)]");
 
         assertListener(
-                "listener2-player2 created: [\n" +
+                "listener2-player2 created in field: [\n" +
                 "    PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
                 "        playerId=player2, playerName=player2-name, time=12350)]");
 
@@ -429,7 +426,7 @@ public class ChatServiceTest {
 
         // only player2 will receive update, because of each player on their own field
         assertListener(
-                "listener2-player2 deleted: [\n" +
+                "listener2-player2 deleted in field: [\n" +
                 "    PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
                 "        playerId=player2, playerName=player2-name, time=12350)]");
 
@@ -441,7 +438,7 @@ public class ChatServiceTest {
                 "    playerId=player1, playerName=player1-name, time=12349)]");
 
         assertListener(
-                "listener1-player1 created: [\n" +
+                "listener1-player1 created in field: [\n" +
                 "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "        playerId=player1, playerName=player1-name, time=12349)]");
 
@@ -459,10 +456,10 @@ public class ChatServiceTest {
                 control(0).delete(3, "room"));
 
         assertListener(
-                "listener1-player1 deleted: [\n" +
+                "listener1-player1 deleted in room: [\n" +
                 "    PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
                 "        playerId=player1, playerName=player1-name, time=12347)],\n" +
-                "listener1-player2 deleted: [\n" +
+                "listener1-player2 deleted in room: [\n" +
                 "    PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
                 "        playerId=player1, playerName=player1-name, time=12347)]");
 
@@ -482,7 +479,7 @@ public class ChatServiceTest {
                 "    playerId=player2, playerName=player2-name, time=12348)]");
 
         assertListener(
-                "listener2-player2 created: [\n" +
+                "listener2-player2 created in room: [\n" +
                 "    PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
                 "        playerId=player2, playerName=player2-name, time=12348)]");
 
@@ -493,7 +490,7 @@ public class ChatServiceTest {
 
         // only player2 will receive update, because of each player on their own field
         assertListener(
-                "listener2-player2 deleted: [\n" +
+                "listener2-player2 deleted in field: [\n" +
                 "    PMessage(id=8, text=message8, room=room, type=4, topicId=6, \n" +
                 "        playerId=player2, playerName=player2-name, time=12352)]");
 
@@ -547,15 +544,15 @@ public class ChatServiceTest {
     private OnChange getListener(int id) {
         return new OnChange() {
             @Override
-            public void deleted(List<PMessage> messages, String playerId) {
-                logs.add(String.format("listener%s-%s deleted: %s",
-                        id, playerId, messages));
+            public void deleted(List<PMessage> messages, ChatType type, String playerId) {
+                logs.add(String.format("listener%s-%s deleted in %s: %s",
+                        id, playerId, type.name().toLowerCase(), messages));
             }
 
             @Override
-            public void created(List<PMessage> messages, String playerId) {
-                logs.add(String.format("listener%s-%s created: %s",
-                        id, playerId, messages));
+            public void created(List<PMessage> messages, ChatType type, String playerId) {
+                logs.add(String.format("listener%s-%s created in %s: %s",
+                        id, playerId, type.name().toLowerCase(), messages));
             }
         };
     }

@@ -173,7 +173,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[get(1, room)]", receivedOnServer());
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(0).messages());
@@ -196,7 +196,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[delete(1, room)]", receivedOnServer());
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(0).messages());
@@ -233,13 +233,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(1));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(1).messages());
@@ -271,7 +271,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                 client(1).messages());
 
         // inform player3 because of author
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':2,'text':'message2','room':'room2','type':1,'topicId':null," +
                         "'playerId':'player3','playerName':'player3-name','time':1615231623345}]}]",
                 client(2).messages());
@@ -307,13 +307,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(1).messages());
@@ -337,13 +337,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(3));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(1).messages());
@@ -380,13 +380,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(1));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(1).messages());
@@ -405,13 +405,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(3));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(1).messages());
@@ -430,13 +430,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'room', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(1).messages());
@@ -482,13 +482,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(1));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(1).messages());
@@ -512,13 +512,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':3,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231623345}]}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':3,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231623345}]}]",
                 client(1).messages());
@@ -550,7 +550,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                 client(1).messages());
 
         // inform player3 because of author
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':3,'text':'message3','room':'room2','type':3,'topicId':2," +
                         "'playerId':'player3','playerName':'player3-name','time':1615231723345}]}]",
                 client(2).messages());
@@ -598,13 +598,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(1).messages());
@@ -628,13 +628,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(3));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(1).messages());
@@ -666,7 +666,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                 client(1).messages());
 
         // inform player3 because of author
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':5,'text':'message5','room':'room2','type':4,'topicId':4," +
                         "'playerId':'player3','playerName':'player3-name','time':1615231923345}]}]",
                 client(2).messages());
@@ -709,13 +709,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(1));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231523345}]}]",
                 client(1).messages());
@@ -734,13 +734,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(3));
 
         // inform player1 because of same field
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(0).messages());
 
         // inform player2
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':3,'text':'message3','room':'room','type':4,'topicId':1," +
                         "'playerId':'player2','playerName':'player2-name','time':1615231723345}]}]",
                 client(1).messages());
@@ -759,13 +759,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals(null, chat.getMessageById(2));
 
         // inform player1
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'delete', 'data':[" +
+        assertEquals("[{'command':'delete', 'type':'field', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':4,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}]}]",
                 client(1).messages());
@@ -837,7 +837,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllRoom(Filter(room=room, count=2, " +
                 "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}," +
                         "{'id':3,'text':'message3','room':'room','type':1,'topicId':null," +
@@ -889,7 +889,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllTopic(1, Filter(room=room, count=2, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}," +
                         "{'id':3,'text':'message3','room':'room','type':2,'topicId':1," +
@@ -941,7 +941,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[getAllField(Filter(room=room, count=2, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
                         "{'id':2,'text':'message2','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':1615231623345}," +
                         "{'id':3,'text':'message3','room':'room','type':3,'topicId':1," +
@@ -986,7 +986,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postRoom(message, room)]", receivedOnServer());
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
                         "{'id':1,'text':'message','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
@@ -1015,13 +1015,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         // then
         assertEquals("[postRoom(message1, room)]", receivedOnServer());
         // inform player1
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
                         "{'id':1,'text':'message1','room':'room','type':1,'topicId':null," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(1).messages());
@@ -1068,7 +1068,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postField(message, room)]", receivedOnServer());
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
                         "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
@@ -1116,13 +1116,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                 chat.getMessageById(1).toString());
 
         // inform player1
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
                         "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
 
         // inform player2 because of same field
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
                         "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(1).messages());
@@ -1161,7 +1161,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                 chat.getMessageById(1).toString());
 
         // inform player1
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'field', 'data':[" +
                         "{'id':1,'text':'message','room':'room','type':3,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
@@ -1211,7 +1211,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
         // then
         assertEquals("[postTopic(1, message, room)]", receivedOnServer());
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
                         "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
@@ -1252,13 +1252,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
                 chat.getMessageById(3).toString());
 
         // inform player1
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
                         "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(0).messages());
 
         // inform player2 because of same room
-        assertEquals("[{'command':'add', 'data':[" +
+        assertEquals("[{'command':'add', 'type':'room', 'data':[" +
                         "{'id':3,'text':'message','room':'room','type':2,'topicId':1," +
                         "'playerId':'player','playerName':'player-name','time':12345}]}]",
                 client(1).messages());
