@@ -54,29 +54,13 @@ public class Loderunner extends RoundField<Player> implements Field {
     private GameSettings settings;
 
     private int portalsTimer;
-    private List<Function<Point, Point>> finder;
 
     public Loderunner(Dice dice, GameSettings settings) {
         super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_HERO, settings);
-
         this.dice = dice;
         this.settings = settings;
         this.field = new PointField();
         this.players = new LinkedList<>();
-
-        finder = new ArrayList<>(){{
-            add(pt -> getFrom(heroes().all(), pt));
-            add(pt -> getFrom(enemies().all(), pt));
-            add(pt -> getFrom(yellowGold().all(), pt));
-            add(pt -> getFrom(greenGold().all(), pt));
-            add(pt -> getFrom(redGold().all(), pt));
-            add(pt -> getFrom(borders().all(), pt));
-            add(pt -> getFrom(bricks().all(), pt));
-            add(pt -> getFrom(ladder().all(), pt));
-            add(pt -> getFrom(pills().all(), pt));
-            add(pt -> getFrom(pipe().all(), pt));
-            add(pt -> getFrom(portals().all(), pt));
-        }};
 
         clearScore();
     }
@@ -254,26 +238,6 @@ public class Loderunner extends RoundField<Player> implements Field {
                 .findFirst();
     }
 
-    public List<Point> get(Point at) {
-        if (at.isOutOf(size())) {
-            return Arrays.asList(); // TODO это кажется только в тестах юзается, убрать бы отсюда для производительности
-        }
-
-        return finder.stream()
-                .map(function -> function.apply(at))
-                .filter(pt -> pt != null)
-                .collect(toList());
-    }
-
-    public Point getFrom(List<? extends Point> elements, Point pt) {
-        int index = elements.indexOf(pt);
-        if (index == -1) {
-            return null;
-        } else {
-            return elements.get(index);
-        }
-    }
-
     private void heroesGo() {
         for (Player player : players) {
             Hero hero = player.getHero();
@@ -421,7 +385,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isFree(Point pt) {
-        return get(pt).isEmpty();
+        return field.get(pt).isEmpty();
     }
 
     @Override
