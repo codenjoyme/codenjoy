@@ -180,28 +180,18 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     public BoardReader reader() {
-        return new BoardReader<Player>() {
-
-            @Override
-            public int size() {
-                return Loderunner.this.size();
-            }
-
-            @Override
-            public void addAll(Player player, Consumer<Iterable<? extends Point>> processor) {
-                processor.accept(heroes());
-                processor.accept(enemies().all());
-                processor.accept(yellowGold().all());
-                processor.accept(greenGold().all());
-                processor.accept(redGold().all());
-                processor.accept(borders().all());
-                processor.accept(bricks().all());
-                processor.accept(ladder().all());
-                processor.accept(pills().all());
-                processor.accept(pipe().all());
-                processor.accept(portals().all());
-            }
-        };
+        return field.reader(
+                Hero.class,
+                Enemy.class,
+                YellowGold.class,
+                GreenGold.class,
+                RedGold.class,
+                Border.class,
+                Brick.class,
+                Ladder.class,
+                Pill.class,
+                Pipe.class,
+                Portal.class);
     }
 
     private List<Player> bricksGo() {
