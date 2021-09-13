@@ -134,7 +134,7 @@ public class BoardController {
 
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {
-            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game, repositoryUrl);
+            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game, repositoryUrl, player.getSlackEmail());
         }
 
         populateBoardAttributes(model, player.getCode(), player, false);
@@ -143,11 +143,11 @@ public class BoardController {
 
     private void populateBoardAttributes(ModelMap model, String code, Player player, boolean allPlayersScreen) {
         populateBoardAttributes(model, code, player.getGame(), player.getRoom(), player.getGameOnly(), player.getId(),
-                player.getReadableName(), allPlayersScreen);
+                player.getReadableName(), player.getGitHubUsername(), allPlayersScreen);
     }
 
     private void populateBoardAttributes(ModelMap model, String code, String game, String room, String gameOnly,
-                                         String playerId, String readableName, boolean allPlayersScreen) {
+                                         String playerId, String readableName, String github, boolean allPlayersScreen) {
         model.addAttribute("code", code);
         model.addAttribute("game", game);
         model.addAttribute("room", room);
@@ -156,6 +156,7 @@ public class BoardController {
         model.addAttribute("gameOnly", gameOnly);
         model.addAttribute("playerId", playerId);
         model.addAttribute("readableName", readableName);
+        model.addAttribute("github", github);
         model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
     }
@@ -178,6 +179,7 @@ public class BoardController {
         model.addAttribute("gameOnly", GameServiceImpl.removeNumbers(game));
         model.addAttribute("playerId", user.get().getId());
         model.addAttribute("readableName", user.get().getReadableName());
+        model.addAttribute("github", user.get().getGitHubUsername());
 
         return "board-log";
     }
@@ -220,7 +222,7 @@ public class BoardController {
             code = user.getCode();
         }
 
-        populateBoardAttributes(model, code, game, room, player.getGameOnly(), null, null, true);
+        populateBoardAttributes(model, code, game, room, player.getGameOnly(), null, null, null, true);
         return "board";
     }
 
@@ -247,6 +249,7 @@ public class BoardController {
         model.addAttribute("gameOnly", player.getGameOnly());
         model.addAttribute("playerId", player.getId());
         model.addAttribute("readableName", player.getReadableName());
+        model.addAttribute("github", player.getGitHubUsername());
         model.addAttribute("allPlayersScreen", true);
         return "board";
     }

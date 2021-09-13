@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.entity;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -48,6 +48,7 @@ public class Player {
     private int approved;
     private String verificationCode;
     private String verificationType;
+    private String githubUsername;
 
     public Player() {
         // do nothing
@@ -67,7 +68,8 @@ public class Player {
     public Player(String id, String email, String phone, String firstName, String lastName,
                   String password, String city, String skills,
                   String comment, String code, String server,
-                  int approved, String callback, String verificationCode, String verificationType) {
+                  int approved, String callback, String verificationCode, String verificationType,
+                  String githubUsername) {
         this.id = id;
         this.email = email;
         this.phone = phone;
@@ -83,6 +85,7 @@ public class Player {
         this.callback = callback;
         this.verificationCode = verificationCode;
         this.verificationType = verificationType;
+        this.githubUsername = githubUsername;
     }
 
     @Override
@@ -103,6 +106,7 @@ public class Player {
                 ", callback='" + callback + '\'' +
                 ", verificationCode='" + verificationCode + '\'' +
                 ", verificationType='" + verificationType + '\'' +
+                ", githubUsername='" + githubUsername + '\'' +
                 '}';
     }
 
@@ -119,6 +123,8 @@ public class Player {
         code = StringUtils.isEmpty(code) ? player.code : code;
         server = StringUtils.isEmpty(server) ? player.server : server;
         approved = player.approved;
+        githubUsername = StringUtils.isEmpty(githubUsername) ? player.githubUsername : githubUsername;
+
 
         verificationCode = StringUtils.isEmpty(verificationCode) ? player.verificationCode : verificationCode;
         verificationType = StringUtils.isEmpty(verificationType) ? player.verificationType : verificationType;

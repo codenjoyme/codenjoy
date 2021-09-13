@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,7 +23,6 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.hash.Hash;
@@ -60,16 +59,22 @@ public class RegistrationController {
     public String register(HttpServletRequest request, Model model,
                            @RequestParam(name = "id", required = false) String id,
                            @RequestParam(name = "email", required = false) String email,
-                           @RequestParam(name = "readableName", required = false) String name) {
-        return registrationService.openRegistrationForm(request, model, id, email, name, false);
+                           @RequestParam(name = "fullName", required = false) String fullName,
+                           @RequestParam(name = "readableName", required = false) String name,
+                           @RequestParam(name = "gitHubUsername", required = false) String github,
+                           @RequestParam(name = "slackEmail", required = false) String slackId) {
+        return registrationService.openRegistrationForm(request, model, id, email, fullName, name, github, slackId, false);
     }
 
     @GetMapping(ADMIN)
     public String registerAdmin(HttpServletRequest request, Model model,
                                 @RequestParam(name = "id", required = false) String id,
                                 @RequestParam(name = "email", required = false) String email,
-                                @RequestParam(name = "readableName", required = false) String name) {
-        return registrationService.openRegistrationForm(request, model, id, email, name, true);
+                                @RequestParam(name = "fullName", required = false) String fullName,
+                                @RequestParam(name = "readableName", required = false) String name,
+                                @RequestParam(name = "gitHubUsername", required = false) String github,
+                                @RequestParam(name = "slackEmail", required = false) String slackId) {
+        return registrationService.openRegistrationForm(request, model, id, email, fullName, name, github, slackId, true);
     }
 
     private void populateCommonRegistrationModel(Model model, boolean isAdminLogin) {
@@ -83,12 +88,12 @@ public class RegistrationController {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);
             player.dropPassword();
-            return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());
+            return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getFullName(), player.getReadableName(), player.getGitHubUsername(), player.getSlackEmail());
         }
 
         String game = rooms.getGameName(player.getGame());
         String room = game; // TODO ROOM взять room с формы регистрации, либо если не установлено взять как тут
-        
+
         player.setGame(game);
 
         if (player.getId() == null) {
