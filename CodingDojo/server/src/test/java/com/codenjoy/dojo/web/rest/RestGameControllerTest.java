@@ -325,8 +325,8 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldUpdateScore() {
         registration.register("1", "dummy@email.com",
-                "Name", Hash.md5("password"), "{}",
-                Collections.singleton("ROLE_USER"), "username");
+                "Name", "nickName", Hash.md5("password"), "{}",
+                Collections.singleton("ROLE_USER"), "username", "slackEmail");
 
         Player player = new Player();
         player.setId("1");
@@ -334,7 +334,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
         gameSaver.saveGame(player, "{}", System.currentTimeMillis());
 
         post(HttpStatus.OK.value(), "/rest/game/update/username/score", "60");
-        assertEquals("60",gameSaver.loadGame("1").getScore());
+        assertEquals("60", gameSaver.loadGame("1").getScore());
         verify(updateHandler, times(1)).sendUpdate("username", 60);
     }
 

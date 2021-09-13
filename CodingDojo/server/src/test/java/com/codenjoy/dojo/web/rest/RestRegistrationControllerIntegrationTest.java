@@ -74,8 +74,8 @@ public class RestRegistrationControllerIntegrationTest extends AbstractRestContr
     public void setUp() {
         super.setUp();
         Registration.User register = registration.register("1", "dummy@email.com",
-                "Name", Hash.md5("password"), "{}",
-                Collections.singleton("ROLE_USER"), "ghusername");
+                "Name", "nickName", Hash.md5("password"), "{}",
+                Collections.singleton("ROLE_USER"), "ghusername", "slackEmail");
 
         PUser pUser = new PUser(register);
         playerDetailInfo.setRegistration(pUser);

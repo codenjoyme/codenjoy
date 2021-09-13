@@ -57,7 +57,7 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthen
         }
 
         String targetUrl = "/" + registrationService.register(principal.getId(),
-                principal.getCode(), game, room, request.getRemoteAddr(), repositoryUrl, principal.getSlackId());
+                principal.getCode(), game, room, request.getRemoteAddr(), repositoryUrl, principal.getSlackEmail());
 
         log.debug("Redirecting to  URL: " + targetUrl);
 

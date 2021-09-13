@@ -193,7 +193,7 @@ public class RegistrationService {
             fullName = registration.getFullNameById(id);
             name = registration.getNameById(id);
             github = registration.getGitHubUsernameById(id);
-            slackId = registration.getSlackIdById(id);
+            slackId = registration.getSlackEmailById(id);
             if (!model.containsAttribute("bad_email")) {
                 validator.checkEmail(email, CAN_BE_NULL);
             }

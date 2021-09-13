@@ -53,6 +53,22 @@ import static org.mockito.Mockito.when;
 
 public class RegistrationTest {
 
+    private static final String ID = "id";
+    private static final String EMAIL = "email";
+    private static final String NAME = "name";
+
+    private static final String NICK_NAME = "nickName";
+    private static final String FIRST_NICK_NAME = "nickName1";
+    private static final String SECOND_NICK_NAME = "nickName2";
+    private static final String THIRD_NICK_NAME = "nickName3";
+    private static final String FOURTH_NICK_NAME = "nickName4";
+
+    private static final String PASS = "pass";
+    private static final String SOME_DATA = "someData";
+    private static final String GITHUB_USERNAME = "username";
+    private static final String SLACK_EMAIL = "slackEmail";
+    private static final String DATA = "data";
+
     public static final String HASH = "someHash";
     public static final String CODE_FOR_ID_AND_PASS = "4486751343675417965";
     private static PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
@@ -86,33 +102,33 @@ public class RegistrationTest {
     @Test
     public void shouldApprove_registered() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, SOME_DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // then
-        assertTrue(registration.registered("id"));
-        assertFalse(registration.approved("id"));
+        assertTrue(registration.registered(ID));
+        assertFalse(registration.approved(ID));
 
         // when
         registration.approve(code);
 
         // then
-        assertTrue(registration.registered("id"));
-        assertTrue(registration.approved("id"));
+        assertTrue(registration.registered(ID));
+        assertTrue(registration.approved(ID));
     }
 
     @Test
     public void shouldRegisterWithData() {
         // when
-        String code = registration.register("id", "email", "name", "pass", "someData", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, SOME_DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // then
         assertEquals(CODE_FOR_ID_AND_PASS, code);
 
         Registration.User user = registration.getUserByCode(code);
 
-        Registration.User expected = new Registration.User("id", "email", "name", 0, "pass", CODE_FOR_ID_AND_PASS, "someData", USER.roles(), "username");
+        Registration.User expected = new Registration.User(ID, EMAIL, NAME, 0, PASS, CODE_FOR_ID_AND_PASS, SOME_DATA, USER.roles(), GITHUB_USERNAME);
 
-        assertUsersEqual(expected, user, "pass", PASSWORD_ENCODER);
+        assertUsersEqual(expected, user, PASS, PASSWORD_ENCODER);
     }
 
     @Test
@@ -138,11 +154,11 @@ public class RegistrationTest {
     @Test
     public void shouldSuccessLogin() {
         // given
-        Registration.User user = registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        Registration.User user = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL);
         registration.approve(user.getCode());
 
         // when
-        String code = registration.login("id", "pass");
+        String code = registration.login(ID, PASS);
 
         // then
         assertEquals(CODE_FOR_ID_AND_PASS, code);
@@ -151,10 +167,10 @@ public class RegistrationTest {
     @Test
     public void shouldUnSuccessLogin_whenNoApproveEmail() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL);
 
         // when
-        String code = registration.login("id", "pass");
+        String code = registration.login(ID, PASS);
 
         // then
         assertEquals(null, code);
@@ -163,11 +179,11 @@ public class RegistrationTest {
     @Test
     public void shouldUnSuccessLogin_whenBadPassword() {
         // given
-        Registration.User user = registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        Registration.User user = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL);
         registration.approve(user.getCode());
 
         // when
-        String code = registration.login("id", "bad_pass");
+        String code = registration.login(ID, "bad_pass");
 
         // then
         assertEquals(null, code);
@@ -176,10 +192,10 @@ public class RegistrationTest {
     @Test
     public void shouldGetCodeById() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL);
 
         // when
-        String code = registration.getCodeById("id");
+        String code = registration.getCodeById(ID);
 
         // then
         assertEquals(CODE_FOR_ID_AND_PASS, code);
@@ -188,7 +204,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetCodeById_ifNotFound() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL);
 
         // when
         String code = registration.getCodeById("bad_id");
@@ -200,31 +216,31 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByCode() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         String id = registration.getIdByCode(code);
 
         // then
-        assertEquals("id", id);
+        assertEquals(ID, id);
     }
 
     @Test
     public void shouldGetNameById() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
-        String name = registration.getNameById("id");
+        String name = registration.getNameById(ID);
 
         // then
-        assertEquals("name", name);
+        assertEquals(NAME, name);
     }
 
     @Test
     public void shouldGetIdByCode_ifNotFound() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         String email = registration.getIdByCode("bad_code");
@@ -236,8 +252,8 @@ public class RegistrationTest {
     @Test
     public void shouldUpdateReadableName() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles(), "username").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles(), "username").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
         Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
@@ -260,8 +276,8 @@ public class RegistrationTest {
     @Test
     public void shouldUpdateId() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles(), "username").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles(), "username").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
         Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
@@ -284,8 +300,8 @@ public class RegistrationTest {
     @Test
     public void shouldUpdateNameAndEmail() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles(), "username").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles(), "username").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
         Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
@@ -309,8 +325,8 @@ public class RegistrationTest {
     @Test
     public void shouldUpdateGitHubUsername() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles(), "username").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles(), "username").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
         Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
@@ -333,8 +349,8 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceExistingUser() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(), "username").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(), "username").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
@@ -355,8 +371,8 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceExistingUser_withoutCode() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(), "username").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(), "username").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
@@ -377,8 +393,8 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceNonExistingUser() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(), "username").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(), "username").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
@@ -399,8 +415,8 @@ public class RegistrationTest {
     @Test
     public void shouldRemoveUser() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(), "username").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(), "username").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
@@ -419,8 +435,8 @@ public class RegistrationTest {
     @Test
     public void shouldRemoveAllUsers() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList(), "username").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList(), "username").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
@@ -438,10 +454,10 @@ public class RegistrationTest {
     @Test
     public void shouldRemoveAllUsers_exceptAdmins() {
         // given
-        String code1 = registration.register("id1", "email1", "name1", "pass1", "someData1", USER.roles(), "username1").getCode();
-        String code2 = registration.register("id2", "email2", "name2", "pass2", "someData2", USER.roles(), "username2").getCode();
-        String code3 = registration.register("admin3", "email3", "name3", "pass3", "someData3", ADMIN.roles(), "username3").getCode();
-        String code4 = registration.register("admin4", "email4", "name4", "pass4", "someData4", ADMIN.roles(), "username4").getCode();
+        String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", USER.roles(), "username1", SLACK_EMAIL).getCode();
+        String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", USER.roles(), "username2", SLACK_EMAIL).getCode();
+        String code3 = registration.register("admin3", "email3", "name3", THIRD_NICK_NAME, "pass3", "someData3", ADMIN.roles(), "username3", SLACK_EMAIL).getCode();
+        String code4 = registration.register("admin4", "email4", "name4", FOURTH_NICK_NAME, "pass4", "someData4", ADMIN.roles(), "username4", SLACK_EMAIL).getCode();
 
         // when
         registration.removeAll();
@@ -458,7 +474,7 @@ public class RegistrationTest {
     public void shouldCheckUser_whenOnlyEmails() {
         // given
         String email = "user@email.com";
-        String code = registration.register(email, "email", "name", "pass", "someData", Arrays.asList(), "username").getCode();
+        String code = registration.register(email, EMAIL, NAME, NICK_NAME, PASS, SOME_DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when then
         assertEquals(email, registration.checkUser(email, code));
@@ -470,7 +486,7 @@ public class RegistrationTest {
         String email = "user@email.com";
         String id = Hash.getId(email, HASH);
 
-        String code = registration.register(id, "email", "name", "pass", "someData", Arrays.asList(), "username").getCode();
+        String code = registration.register(id, EMAIL, NAME, NICK_NAME, PASS, SOME_DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when then
         assertEquals(null, registration.checkUser(email, code));
@@ -483,7 +499,7 @@ public class RegistrationTest {
         String email = "user@email.com";
         String id = Hash.getId(email, HASH);
 
-        String code = registration.register(email, "email", "name", "pass", "someData", Arrays.asList(), "username").getCode();
+        String code = registration.register(email, EMAIL, NAME, NICK_NAME, PASS, SOME_DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when then
         assertEquals(null, registration.checkUser(id, code));
@@ -496,7 +512,7 @@ public class RegistrationTest {
         String email = "user@email.com";
         String id = Hash.getId(email, HASH);
 
-        String code = registration.register(id, "email", "name", "pass", "someData", Arrays.asList(), "username").getCode();
+        String code = registration.register(id, EMAIL, NAME, NICK_NAME, PASS, SOME_DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when then
         assertEquals(id, registration.checkUser(id, code));
@@ -512,7 +528,7 @@ public class RegistrationTest {
         when(properties.isEmailVerificationNeeded()).thenReturn(true);
 
         // when
-        Registration.User user = registration.registerApproved(id, email, readableName, null);
+        Registration.User user = registration.registerApproved(id, email, readableName, NICK_NAME, null, null);
 
         // then
         assertEquals(false, StringUtils.isEmpty(user.getId()));
@@ -528,7 +544,7 @@ public class RegistrationTest {
         when(properties.isEmailVerificationNeeded()).thenReturn(true);
 
         // when
-        Registration.User user = registration.registerApproved(id, email, readableName, null);
+        Registration.User user = registration.registerApproved(id, email, readableName, NICK_NAME, null, null);
 
         // then
         assertEquals("id", user.getId());
@@ -544,7 +560,7 @@ public class RegistrationTest {
         when(properties.isEmailVerificationNeeded()).thenReturn(false);
 
         // when
-        Registration.User user = registration.registerApproved(id, email, readableName, null);
+        Registration.User user = registration.registerApproved(id, email, readableName, NICK_NAME, null, null);
 
         // then
         assertEquals("id", user.getId());
@@ -566,11 +582,11 @@ public class RegistrationTest {
     @Test
     public void shouldGetOrRegister_whenFoundById() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), null).getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), null, null).getCode();
         String id = registration.getIdByCode(code);
 
         // when
-        Registration.User user = registration.getOrRegister(id, null, null, null);
+        Registration.User user = registration.getOrRegister(id, null, null, null, null, null);
 
         // then
         assertEquals(code, user.getCode());
@@ -580,11 +596,11 @@ public class RegistrationTest {
     @Test
     public void shouldGetOrRegister_whenFoundByEmail() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), null).getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), null, null).getCode();
         String id = registration.getIdByCode(code);
 
         // when
-        Registration.User user = registration.getOrRegister(null, "email", null, null);
+        Registration.User user = registration.getOrRegister(null, "email", null, null, null, null);
 
         // then
         assertEquals(id, user.getId());
@@ -598,7 +614,7 @@ public class RegistrationTest {
         when(properties.isEmailVerificationNeeded()).thenReturn(false);
 
         // when
-        Registration.User user = registration.getOrRegister("id", "email", "name", null);
+        Registration.User user = registration.getOrRegister("id", "email", "name", NICK_NAME, null, null);
 
         // then
         assertEquals(false, StringUtils.isEmpty(user.getId()));
@@ -617,7 +633,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetUserById_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String id = registration.getIdByCode(code);
 
         // when
@@ -642,7 +658,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByEmail_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         String id = registration.getIdByEmail("email");
@@ -664,7 +680,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByName_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         String id = registration.getIdByName("name");
@@ -686,7 +702,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetEmailById_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         String email = registration.getEmailById("id");
@@ -696,7 +712,7 @@ public class RegistrationTest {
     }
 
     @Test
-    public void shouldGetRoleById_notExistent(){
+    public void shouldGetRoleById_notExistent() {
         String role = registration.getEmailById("bad_id");
 
         // then
@@ -706,7 +722,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetRoleById_existent() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", Collections.singleton("ROLE_ADMIN"), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Collections.singleton("ROLE_ADMIN"), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         String role = registration.getRoleById("id");
@@ -727,7 +743,7 @@ public class RegistrationTest {
     @Test
     public void shouldEmailIsUsed_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         boolean used = registration.emailIsUsed("email");
@@ -748,7 +764,7 @@ public class RegistrationTest {
     @Test
     public void shouldNameIsUsed_existent() {
         // given 
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         boolean used = registration.nameIsUsed("name");
@@ -773,7 +789,7 @@ public class RegistrationTest {
     @Test
     public void shouldCheckUserByPassword_badPassword() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String id = registration.getIdByCode(code);
         String password = "bad_password";
 
@@ -799,7 +815,7 @@ public class RegistrationTest {
     @Test
     public void shouldCheckUser_goodId() {
         // given
-        String code = registration.register("id", "email", "name", "pass", "data", USER.roles(), "username").getCode();
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String id = registration.getIdByCode(code);
 
         // when
@@ -812,7 +828,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetGitHubUsernameById() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         String username = registration.getGitHubUsernameById("id");
@@ -824,7 +840,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByGitHubUsername() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         String id = registration.getIdByGitHubUsername("username");
@@ -836,7 +852,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetEmailByGitHubUsername() {
         // given
-        registration.register("id", "email", "name", "pass", "data", Arrays.asList(), "username");
+        registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
         String email = registration.getEmailByGitHubUsername("username");

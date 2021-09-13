@@ -118,7 +118,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(String id, String game, String room, String ip, String repositoryUrl, String slackId) {
+    public Player register(String id, String game, String room, String ip, String repositoryUrl, String slackEmail) {
         lock.writeLock().lock();
         try {
             log.debug("Registered user {} in game {}", id, game);
