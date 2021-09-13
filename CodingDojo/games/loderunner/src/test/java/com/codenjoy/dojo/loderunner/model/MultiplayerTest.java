@@ -236,8 +236,11 @@ public class MultiplayerTest {
                 "☼#Ѡ##☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        verify(listener(1)).event(Events.KILL_HERO);
-        verify(listener(0)).event(Events.KILL_ENEMY);
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_HERO]\n" +
+                "listener(2) => [KILL_HERO]\n");
         assertTrue(game(1).isGameOver());
 
         when(dice.next(anyInt())).thenReturn(1, 4);
@@ -280,8 +283,10 @@ public class MultiplayerTest {
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        verify(listener(0)).event(Events.GET_YELLOW_GOLD);
-
+        events.verifyAllEvents(
+                "listener(0) => [GET_YELLOW_GOLD]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n");
     }
 
     private Hero hero(int index) {
