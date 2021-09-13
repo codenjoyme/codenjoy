@@ -35,8 +35,8 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.Sweeper;
-import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
@@ -54,6 +54,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -61,7 +62,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.Deals.withRoom;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toMap;
 
 @Component("playerService")
 @Slf4j
@@ -391,7 +392,6 @@ public class PlayerServiceImpl implements PlayerService {
         cacheBoards.clear();
 
         Map<String, GameData> gameDataMap = dealsView.getGamesDataMap();
-        ChatService.LastMessage lastMessage = chat.getLast();
         for (Deal deal : deals) {
             Game game = deal.getGame();
             Player player = deal.getPlayer();
@@ -419,7 +419,6 @@ public class PlayerServiceImpl implements PlayerService {
                 List<String> group = gameData.getGroup();
                 Map<String, HeroData> coordinates = gameData.getCoordinates();
                 Map<String, String> readableNames = gameData.getReadableNames();
-                ChatService.Status chat = lastMessage.at(deal);
                 map.put(player, new PlayerData(boardSize,
                         encoded,
                         gameType,
@@ -429,8 +428,7 @@ public class PlayerServiceImpl implements PlayerService {
                         teams,
                         coordinates,
                         readableNames,
-                        group,
-                        chat));
+                        group));
 
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +

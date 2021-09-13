@@ -24,8 +24,8 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.control.PlayerController;
@@ -609,10 +609,7 @@ public class PlayerServiceImplTest {
                         "isMultiplayer=false, \n" +
                         "additionalData=null)}', \n" +
                     "ReadableNames:'{petya=readable_petya}', \n" +
-                    "Group:[petya], \n" +
-                    "Chat:ChatService.Status(fieldId=2, \n" +
-                        "lastInRoom=106558567, \n" +
-                        "lastInField=null)], \n" +
+                    "Group:[petya]], \n" +
                 "vasya=PlayerData[BoardSize:15, \n" +
                     "Board:'ABCD', \n" +
                     "Game:'game', \n" +
@@ -625,10 +622,7 @@ public class PlayerServiceImplTest {
                         "isMultiplayer=false, \n" +
                         "additionalData=null)}', \n" +
                     "ReadableNames:'{vasya=readable_vasya}', \n" +
-                    "Group:[vasya], \n" +
-                    "Chat:ChatService.Status(fieldId=1, \n" +
-                        "lastInRoom=111979568, \n" +
-                        "lastInField=null)]}",
+                    "Group:[vasya]]}",
                 clean(split(data, ", \n")));
     }
 
