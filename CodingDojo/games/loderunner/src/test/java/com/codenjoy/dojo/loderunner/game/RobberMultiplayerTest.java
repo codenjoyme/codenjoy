@@ -23,7 +23,7 @@ package com.codenjoy.dojo.loderunner.game;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.items.enemy.RobberJoystick;
+import com.codenjoy.dojo.loderunner.model.items.robber.RobberJoystick;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ROBBERS_COUNT;

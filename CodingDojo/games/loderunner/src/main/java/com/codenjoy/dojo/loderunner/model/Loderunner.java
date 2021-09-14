@@ -26,7 +26,7 @@ package com.codenjoy.dojo.loderunner.model;
 import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.model.items.*;
 import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
-import com.codenjoy.dojo.loderunner.model.items.enemy.Robber;
+import com.codenjoy.dojo.loderunner.model.items.robber.Robber;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model.items.enemy;
+package com.codenjoy.dojo.loderunner.model.items.robber;
 
 /*-
  * #%L

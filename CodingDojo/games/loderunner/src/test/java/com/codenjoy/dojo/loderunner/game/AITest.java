@@ -25,9 +25,9 @@ package com.codenjoy.dojo.loderunner.game;
 
 import com.codenjoy.dojo.games.loderunner.Board;
 import com.codenjoy.dojo.loderunner.model.Hero;
-import com.codenjoy.dojo.loderunner.model.items.enemy.AI;
-import com.codenjoy.dojo.loderunner.model.items.enemy.Robber;
-import com.codenjoy.dojo.loderunner.model.items.enemy.RobberJoystick;
+import com.codenjoy.dojo.loderunner.model.items.robber.AI;
+import com.codenjoy.dojo.loderunner.model.items.robber.Robber;
+import com.codenjoy.dojo.loderunner.model.items.robber.RobberJoystick;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;

@@ -28,7 +28,7 @@ import com.codenjoy.dojo.loderunner.model.Hero;
 import com.codenjoy.dojo.loderunner.model.Loderunner;
 import com.codenjoy.dojo.loderunner.model.Player;
 import com.codenjoy.dojo.loderunner.model.items.Brick;
-import com.codenjoy.dojo.loderunner.model.items.enemy.RobberJoystick;
+import com.codenjoy.dojo.loderunner.model.items.robber.RobberJoystick;
 import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;

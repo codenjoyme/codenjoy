@@ -27,7 +27,7 @@ import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.model.Hero;
 import com.codenjoy.dojo.loderunner.model.items.*;
 import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
-import com.codenjoy.dojo.loderunner.model.items.enemy.Robber;
+import com.codenjoy.dojo.loderunner.model.items.robber.Robber;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.field.AbstractLevel;
 import com.codenjoy.dojo.services.field.PointField;
