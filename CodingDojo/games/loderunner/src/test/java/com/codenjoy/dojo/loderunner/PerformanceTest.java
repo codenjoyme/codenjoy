@@ -38,7 +38,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 public class PerformanceTest {
@@ -117,6 +117,6 @@ public class PerformanceTest {
 
     private void assertLess(String phase, double expected) {
         double actual = profiler.info(phase).getTime();
-        assertTrue(actual + " > " + expected, actual < expected);
+        assertEquals(actual + " > " + expected, true, actual < expected);
     }
 }

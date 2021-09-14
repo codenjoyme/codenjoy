@@ -32,7 +32,6 @@ import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_CO
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_PILLS_COUNT;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -190,7 +189,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "listener(0) => [KILL_ENEMY]\n" +
                 "listener(1) => [KILL_HERO]\n" +
                 "listener(2) => [KILL_HERO]\n");
-        assertTrue(game(1).isGameOver());
+        assertEquals(true, game(1).isGameOver());
 
         when(dice.next(anyInt())).thenReturn(1, 4);
 
