@@ -22,6 +22,10 @@
 
 var setup = setup || {};
 
+// так как спрайты icancode вылазят за сетку элемента,
+// то надо рисовать всегда все спрайты
+setup.isDrawOnlyChanges = false;
+
 const PARAM_GAME_MODE = 'gameMode';
 
 const SPRITES_EKIDS = 'ekids';
