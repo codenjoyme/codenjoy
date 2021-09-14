@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.game;
 
 /*-
  * #%L
@@ -23,7 +23,6 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.game.AbstractGameTest;
 import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyJoystick;
 import org.junit.Test;
 
