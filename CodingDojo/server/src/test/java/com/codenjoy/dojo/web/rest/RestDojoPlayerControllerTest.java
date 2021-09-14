@@ -77,8 +77,8 @@ public class RestDojoPlayerControllerTest extends AbstractRestControllerTest {
     public void setUp() {
         super.setUp();
         registration.register("1", "dummy@email.com",
-                "Name", Hash.md5("password"), "{}",
-                Collections.singleton("ROLE_USER"), "username");
+                "Name", "Name", Hash.md5("password"), "{}",
+                Collections.singleton("ROLE_USER"), "username", "slackEmail");
 
         Player player = new Player();
         player.setId("1");

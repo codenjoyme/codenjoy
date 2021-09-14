@@ -27,7 +27,7 @@ import java.util.List;
 
 public interface PlayerService extends Tickable {
 
-    Player register(String id, String game, String room, String ip, String repositoryUrl, String slackId);
+    Player register(String id, String game, String room, String ip, String repositoryUrl, String slackEmail);
 
     Player register(PlayerSave save);
 

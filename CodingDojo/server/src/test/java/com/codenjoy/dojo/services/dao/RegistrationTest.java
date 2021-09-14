@@ -126,7 +126,7 @@ public class RegistrationTest {
 
         Registration.User user = registration.getUserByCode(code);
 
-        Registration.User expected = new Registration.User(ID, EMAIL, NAME, 0, PASS, CODE_FOR_ID_AND_PASS, SOME_DATA, USER.roles(), GITHUB_USERNAME);
+        Registration.User expected = new Registration.User(ID, EMAIL, NICK_NAME, 0, PASS, CODE_FOR_ID_AND_PASS, SOME_DATA, USER.roles(), GITHUB_USERNAME);
 
         assertUsersEqual(expected, user, PASS, PASSWORD_ENCODER);
     }
@@ -231,7 +231,7 @@ public class RegistrationTest {
         registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
-        String name = registration.getNameById(ID);
+        String name = registration.getFullNameById(ID);
 
         // then
         assertEquals(NAME, name);
@@ -255,8 +255,8 @@ public class RegistrationTest {
         String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
-        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
-        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
+        Registration.User expectedUser1 = new Registration.User("id1", "email1", "nickName1", 0, "pass1", code1, "someData1", USER.roles(), "username");
+        Registration.User expectedUser2 = new Registration.User("id2", "email2", "nickName2", 0, "pass2", code2, "someData2", USER.roles(), "username");
 
         Registration.User actualUser1 = registration.getUserByCode(code1);
         Registration.User actualUser2 = registration.getUserByCode(code2);
@@ -279,8 +279,8 @@ public class RegistrationTest {
         String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
-        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
-        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
+        Registration.User expectedUser1 = new Registration.User("id1", "email1", "nickName1", 0, "pass1", code1, "someData1", USER.roles(), "username");
+        Registration.User expectedUser2 = new Registration.User("id2", "email2", "nickName2", 0, "pass2", code2, "someData2", USER.roles(), "username");
 
         Registration.User actualUser1 = registration.getUserByCode(code1);
         Registration.User actualUser2 = registration.getUserByCode(code2);
@@ -289,7 +289,7 @@ public class RegistrationTest {
         assertUsersEqual(expectedUser2, actualUser2, "pass2", PASSWORD_ENCODER);
 
         // when
-        registration.updateId("name1", "updatedUser1");
+        registration.updateId("nickName1", "updatedUser1");
         actualUser1 = registration.getUserByCode(code1);
 
         // then
@@ -303,8 +303,8 @@ public class RegistrationTest {
         String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
-        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
-        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
+        Registration.User expectedUser1 = new Registration.User("id1", "email1", "nickName1", 0, "pass1", code1, "someData1", USER.roles(), "username");
+        Registration.User expectedUser2 = new Registration.User("id2", "email2", "nickName2", 0, "pass2", code2, "someData2", USER.roles(), "username");
 
         Registration.User actualUser1 = registration.getUserByCode(code1);
         Registration.User actualUser2 = registration.getUserByCode(code2);
@@ -328,8 +328,8 @@ public class RegistrationTest {
         String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
-        Registration.User expectedUser1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
-        Registration.User expectedUser2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
+        Registration.User expectedUser1 = new Registration.User("id1", "email1", "nickName1", 0, "pass1", code1, "someData1", USER.roles(), "username");
+        Registration.User expectedUser2 = new Registration.User("id2", "email2", "nickName2", 0, "pass2", code2, "someData2", USER.roles(), "username");
 
         Registration.User actualUser1 = registration.getUserByCode(code1);
         Registration.User actualUser2 = registration.getUserByCode(code2);
@@ -353,8 +353,8 @@ public class RegistrationTest {
         String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
+        Registration.User user1 = new Registration.User("id1", "email1", "nickName1", 0, "pass1", code1, "someData1", USER.roles(), "username");
+        Registration.User user2 = new Registration.User("id2", "email2", "nickName2", 0, "pass2", code2, "someData2", USER.roles(), "username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
@@ -374,8 +374,8 @@ public class RegistrationTest {
         String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
+        Registration.User user1 = new Registration.User("id1", "email1", "nickName1", 0, "pass1", code1, "someData1", USER.roles(), "username");
+        Registration.User user2 = new Registration.User("id2", "email2", "nickName2", 0, "pass2", code2, "someData2", USER.roles(), "username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
@@ -396,8 +396,8 @@ public class RegistrationTest {
         String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
+        Registration.User user1 = new Registration.User("id1", "email1", "nickName1", 0, "pass1", code1, "someData1", USER.roles(), "username");
+        Registration.User user2 = new Registration.User("id2", "email2", "nickName2", 0, "pass2", code2, "someData2", USER.roles(), "username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
@@ -418,8 +418,8 @@ public class RegistrationTest {
         String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
+        Registration.User user1 = new Registration.User("id1", "email1", "nickName1", 0, "pass1", code1, "someData1", USER.roles(), "username");
+        Registration.User user2 = new Registration.User("id2", "email2", "nickName2", 0, "pass2", code2, "someData2", USER.roles(), "username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
@@ -438,8 +438,8 @@ public class RegistrationTest {
         String code1 = registration.register("id1", "email1", "name1", FIRST_NICK_NAME, "pass1", "someData1", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
         String code2 = registration.register("id2", "email2", "name2", SECOND_NICK_NAME, "pass2", "someData2", Arrays.asList(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
-        Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles(), "username");
-        Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles(), "username");
+        Registration.User user1 = new Registration.User("id1", "email1", "nickName1", 0, "pass1", code1, "someData1", USER.roles(), "username");
+        Registration.User user2 = new Registration.User("id2", "email2", "nickName2", 0, "pass2", code2, "someData2", USER.roles(), "username");
 
         assertUsersEqual(user1, registration.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(user2, registration.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
@@ -532,7 +532,7 @@ public class RegistrationTest {
 
         // then
         assertEquals(false, StringUtils.isEmpty(user.getId()));
-        assertUser("email", "name", 0, "{}", user);
+        assertUser("email", "name", "nickName", 0, "{}", user);
     }
 
     @Test
@@ -548,7 +548,7 @@ public class RegistrationTest {
 
         // then
         assertEquals("id", user.getId());
-        assertUser("email", "name", 0, "{}", user);
+        assertUser("email", "name", "nickName", 0, "{}", user);
     }
 
     @Test
@@ -564,10 +564,10 @@ public class RegistrationTest {
 
         // then
         assertEquals("id", user.getId());
-        assertUser("email", "name", 1, "{}", user);
+        assertUser("email", "name", "nickName", 1, "{}", user);
     }
 
-    private void assertUser(String email, String readableName, int approved, String data, Registration.User user) {
+    private void assertUser(String email, String fullName, String readableName, int approved, String data, Registration.User user) {
         assertEquals(email, user.getEmail());
         assertEquals(user.getId(), user.getName());
         assertEquals(false, StringUtils.isEmpty(user.getCode()));
@@ -575,7 +575,7 @@ public class RegistrationTest {
         assertEquals(approved, user.getApproved());
         assertEquals(data, user.getData());
 
-        assertEquals(readableName, registration.getNameById(user.getId()));
+        assertEquals(fullName, registration.getFullNameById(user.getId()));
         assertEquals(user.getId(), registration.getIdByCode(user.getCode()));
     }
 
@@ -590,7 +590,7 @@ public class RegistrationTest {
 
         // then
         assertEquals(code, user.getCode());
-        assertUser("email", "name", 0, "data", user);
+        assertUser("email", "name", "nickName", 0, "data", user);
     }
 
     @Test
@@ -605,7 +605,7 @@ public class RegistrationTest {
         // then
         assertEquals(id, user.getId());
         assertEquals(code, user.getCode());
-        assertUser("email", "name", 0, "data", user);
+        assertUser("email", "name", "nickName", 0, "data", user);
     }
 
     @Test
@@ -618,7 +618,7 @@ public class RegistrationTest {
 
         // then
         assertEquals(false, StringUtils.isEmpty(user.getId()));
-        assertUser("email", "name", 1, "{}", user);
+        assertUser("email", "name", "nickName", 1, "{}", user);
     }
 
     @Test
@@ -643,7 +643,7 @@ public class RegistrationTest {
         assertEquals(true, user.isPresent());
 
         assertEquals(id, user.get().getId());
-        assertUser("email", "name", 0, "data", user.get());
+        assertUser("email", "name", "nickName", 0, "data", user.get());
     }
 
     @Test
@@ -683,7 +683,7 @@ public class RegistrationTest {
         String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
-        String id = registration.getIdByName("name");
+        String id = registration.getIdByName("nickName");
 
         // then
         assertEquals(false, StringUtils.isEmpty(id));
@@ -767,7 +767,7 @@ public class RegistrationTest {
         String code = registration.register(ID, EMAIL, NAME, NICK_NAME, PASS, DATA, USER.roles(), GITHUB_USERNAME, SLACK_EMAIL).getCode();
 
         // when
-        boolean used = registration.nameIsUsed("name");
+        boolean used = registration.nameIsUsed("nickName");
 
         // then
         assertEquals(true, used);
