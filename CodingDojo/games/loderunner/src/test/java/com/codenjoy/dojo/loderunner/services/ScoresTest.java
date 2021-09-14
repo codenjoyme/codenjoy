@@ -55,8 +55,8 @@ public class ScoresTest {
         scores.event(Events.GET_RED_GOLD);
     }
 
-    public void greenGold() {
-        scores.event(Events.GET_GREEN_GOLD);
+    public void gloveClue() {
+        scores.event(Events.GET_GLOVE_CLUE);
     }
 
     @Before
@@ -67,8 +67,8 @@ public class ScoresTest {
 
                 .integer(KILL_ROBBER_SCORE, 10)
 
-                .integer(GOLD_SCORE_GREEN, 2)
-                .integer(GOLD_SCORE_GREEN_INCREMENT, 1)
+                .integer(CLUE_SCORE_GLOVE, 2)
+                .integer(CLUE_SCORE_GLOVE_INCREMENT, 1)
 
                 .integer(CLUE_SCORE_KNIFE, 20)
                 .integer(CLUE_SCORE_KNIFE_INCREMENT, 10)
@@ -91,8 +91,8 @@ public class ScoresTest {
         redGold();
         redGold();
         redGold();
-        greenGold();
-        greenGold();
+        gloveClue();
+        gloveClue();
         knifeClue();
         knifeClue();
         knifeClue();
@@ -109,8 +109,8 @@ public class ScoresTest {
                 + 3 * settings.integer(GOLD_SCORE_RED)
                 + (1 + 2) * settings.integer(GOLD_SCORE_RED_INCREMENT)
 
-                + 2 * settings.integer(GOLD_SCORE_GREEN)
-                + (1) * settings.integer(GOLD_SCORE_GREEN_INCREMENT)
+                + 2 * settings.integer(CLUE_SCORE_GLOVE)
+                + (1) * settings.integer(CLUE_SCORE_GLOVE_INCREMENT)
 
                 - settings.integer(KILL_HERO_PENALTY),
                 scores.getScore());
@@ -129,12 +129,12 @@ public class ScoresTest {
         knifeClue();
         redGold();
         redGold();
-        greenGold();
-        greenGold();
-        greenGold();
+        gloveClue();
+        gloveClue();
+        gloveClue();
 
         assertEquals(529, scores.getScore());
-        assertEquals("Scores{score=529, red=200, green=3, knife=10}",
+        assertEquals("Scores{score=529, red=200, glove=3, knife=10}",
                 scores.toString());
 
         // when
@@ -142,7 +142,7 @@ public class ScoresTest {
 
         // then
         assertEquals(0, scores.getScore());
-        assertEquals("Scores{score=0, red=0, green=0, knife=0}",
+        assertEquals("Scores{score=0, red=0, glove=0, knife=0}",
                 scores.toString());
     }
 

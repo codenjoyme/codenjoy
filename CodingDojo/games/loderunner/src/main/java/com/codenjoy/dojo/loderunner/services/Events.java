@@ -30,7 +30,7 @@ public enum Events {
     KILL_HERO,        // героя убили
 
     GET_KNIFE_CLUE,  // подобрано золото
-    GET_GREEN_GOLD,
+    GET_GLOVE_CLUE,
     GET_RED_GOLD,
 
     SUICIDE;          // герой заблудился и решил суициднуться

@@ -4143,7 +4143,7 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         tick();
 
-        events.verifyAllEvents("[GET_GREEN_GOLD]");
+        events.verifyAllEvents("[GET_GLOVE_CLUE]");
         events.verifyNoEvents();
         listeners.forEach(Mockito::reset);
 
@@ -4211,11 +4211,11 @@ public class GameTest extends AbstractGameTest {
         // добавим еще золота
         settings.integer(CLUE_COUNT_KNIFE, settings.integer(CLUE_COUNT_KNIFE) + 2)
                 .integer(GOLD_COUNT_RED,    settings.integer(GOLD_COUNT_RED) + 3)
-                .integer(GOLD_COUNT_GREEN,  settings.integer(GOLD_COUNT_GREEN) + 1);
+                .integer(CLUE_COUNT_GLOVE,  settings.integer(CLUE_COUNT_GLOVE) + 1);
         dice(
             2, 3, // knife
             3, 3, // knife
-            4, 3, // green
+            4, 3, // glove
             5, 3, // red
             6, 3, // red
             6, 4, // red
@@ -4236,7 +4236,7 @@ public class GameTest extends AbstractGameTest {
         // удалим золота
         settings.integer(CLUE_COUNT_KNIFE, 1)
                 .integer(GOLD_COUNT_RED,    1)
-                .integer(GOLD_COUNT_GREEN,  1);
+                .integer(CLUE_COUNT_GLOVE,  1);
 
         dice(2, 6);  // герой
         field.clearScore();

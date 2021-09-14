@@ -134,10 +134,10 @@ public class Loderunner extends RoundField<Player> implements Field {
                 player -> freeRandom((Player) player),
                 pt -> new KnifeClue(pt));
 
-        generate(greenGold(),
-                settings, GOLD_COUNT_GREEN,
+        generate(gloveClue(),
+                settings, CLUE_COUNT_GLOVE,
                 player -> freeRandom((Player) player),
-                pt -> new GreenGold(pt));
+                pt -> new GloveClue(pt));
 
         generate(redGold(),
                 settings, GOLD_COUNT_RED,
@@ -180,7 +180,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 Hero.class,
                 Robber.class,
                 KnifeClue.class,
-                GreenGold.class,
+                GloveClue.class,
                 RedGold.class,
                 Border.class,
                 Brick.class,
@@ -232,9 +232,9 @@ public class Loderunner extends RoundField<Player> implements Field {
             if (knifeClue().contains(hero)) {
                 knifeClue().removeAt(hero);
                 getGoldEvent(player, Events.GET_KNIFE_CLUE, KnifeClue.class);
-            } else if (greenGold().contains(hero)) {
-                greenGold().removeAt(hero);
-                getGoldEvent(player, Events.GET_GREEN_GOLD, GreenGold.class);
+            } else if (gloveClue().contains(hero)) {
+                gloveClue().removeAt(hero);
+                getGoldEvent(player, Events.GET_GLOVE_CLUE, GloveClue.class);
             } else if (redGold().contains(hero)) {
                 redGold().removeAt(hero);
                 getGoldEvent(player, Events.GET_RED_GOLD, RedGold.class);
@@ -269,9 +269,9 @@ public class Loderunner extends RoundField<Player> implements Field {
             if (knifeClue().contains(robber) && !robber.withGold()) {
                 knifeClue().removeAt(robber);
                 robber.getGold(KnifeClue.class);
-            } else if (greenGold().contains(robber) && !robber.withGold()) {
-                greenGold().removeAt(robber);
-                robber.getGold(GreenGold.class);
+            } else if (gloveClue().contains(robber) && !robber.withGold()) {
+                gloveClue().removeAt(robber);
+                robber.getGold(GloveClue.class);
             } else if (redGold().contains(robber) && !robber.withGold()) {
                 redGold().removeAt(robber);
                 robber.getGold(RedGold.class);
@@ -321,7 +321,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         Point over = Direction.UP.change(pt);
         if (isLadder(over)
                 || knifeClue().contains(over)
-                || greenGold().contains(over)
+                || gloveClue().contains(over)
                 || redGold().contains(over)
                 || isFullBrick(over)
                 || activeHeroes().contains(over)
@@ -413,8 +413,8 @@ public class Loderunner extends RoundField<Player> implements Field {
     public void leaveGold(Point pt, Class type) {
         if (type == KnifeClue.class) {
             knifeClue().add(new KnifeClue(pt));
-        } else if (type == GreenGold.class) {
-            greenGold().add(new GreenGold(pt));
+        } else if (type == GloveClue.class) {
+            gloveClue().add(new GloveClue(pt));
         } else if (type == RedGold.class) {
             redGold().add(new RedGold(pt));
         }
@@ -481,8 +481,8 @@ public class Loderunner extends RoundField<Player> implements Field {
         return field.of(KnifeClue.class);
     }
 
-    public Accessor<GreenGold> greenGold() {
-        return field.of(GreenGold.class);
+    public Accessor<GloveClue> gloveClue() {
+        return field.of(GloveClue.class);
     }
 
     public Accessor<RedGold> redGold() {

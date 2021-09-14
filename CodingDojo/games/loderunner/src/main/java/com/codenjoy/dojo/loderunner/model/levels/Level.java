@@ -53,7 +53,7 @@ public class Level extends AbstractLevel {
         field.addAll(backways());
         field.addAll(potions());
         field.addAll(knifeClue());
-        field.addAll(greenGold());
+        field.addAll(gloveClue());
         field.addAll(redGold());
         field.addAll(robbers());
     }
@@ -87,8 +87,8 @@ public class Level extends AbstractLevel {
         return find(KnifeClue::new, KNIFE_CLUE);
     }
 
-    public List<GreenGold> greenGold() {
-        return find(GreenGold::new, GREEN_GOLD);
+    public List<GloveClue> gloveClue() {
+        return find(GloveClue::new, GLOVE_CLUE);
     }
 
     public List<RedGold> redGold() {

@@ -89,7 +89,7 @@ public abstract class AbstractGameTest {
 
         Level level = settings.level();
         settings.integer(CLUE_COUNT_KNIFE, level.knifeClue().size())
-                .integer(GOLD_COUNT_GREEN, level.greenGold().size())
+                .integer(CLUE_COUNT_GLOVE, level.gloveClue().size())
                 .integer(GOLD_COUNT_RED, level.redGold().size())
                 .integer(MASK_POTIONS_COUNT, level.potions().size())
                 .integer(BACKWAYS_COUNT, level.backways().size())

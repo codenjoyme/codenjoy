@@ -32,7 +32,7 @@ public class Scores implements PlayerScores {
     private volatile int score;
     private GameSettings settings;
     private volatile int countRed;
-    private volatile int countGreen;
+    private volatile int countGlove;
     private volatile int countKnife;
 
     public Scores(int startScore, GameSettings settings) {
@@ -48,7 +48,7 @@ public class Scores implements PlayerScores {
 
     private void clearSeries() {
         countRed = 0;
-        countGreen = 0;
+        countGlove = 0;
         countKnife = 0;
     }
 
@@ -62,9 +62,9 @@ public class Scores implements PlayerScores {
         if (event.equals(Events.GET_KNIFE_CLUE)) {
             score += settings.integer(CLUE_SCORE_KNIFE) + countKnife;
             countKnife += settings.integer(CLUE_SCORE_KNIFE_INCREMENT);
-        } else if (event.equals(Events.GET_GREEN_GOLD)) {
-            score += settings.integer(GOLD_SCORE_GREEN) + countGreen;
-            countGreen += settings.integer(GOLD_SCORE_GREEN_INCREMENT);
+        } else if (event.equals(Events.GET_GLOVE_CLUE)) {
+            score += settings.integer(CLUE_SCORE_GLOVE) + countGlove;
+            countGlove += settings.integer(CLUE_SCORE_GLOVE_INCREMENT);
         } else if (event.equals(Events.GET_RED_GOLD)) {
             score += settings.integer(GOLD_SCORE_RED) + countRed;
             countRed += settings.integer(GOLD_SCORE_RED_INCREMENT);
@@ -90,7 +90,7 @@ public class Scores implements PlayerScores {
         return "Scores{" +
                 "score=" + score +
                 ", red=" + countRed +
-                ", green=" + countGreen +
+                ", glove=" + countGlove +
                 ", knife=" + countKnife +
                 '}';
     }

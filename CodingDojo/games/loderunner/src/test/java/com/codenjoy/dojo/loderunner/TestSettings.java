@@ -43,10 +43,10 @@ public class TestSettings extends GameSettings {
         string(MAP_PATH, "none");
 
         integer(CLUE_COUNT_KNIFE, -1);
-        integer(GOLD_COUNT_GREEN, 0);
+        integer(CLUE_COUNT_GLOVE, 0);
         integer(GOLD_COUNT_RED, 0);
         integer(CLUE_SCORE_KNIFE, 1);
-        integer(GOLD_SCORE_GREEN, 5);
+        integer(CLUE_SCORE_GLOVE, 5);
         integer(GOLD_SCORE_RED, 10);
 
         integer(ROBBERS_COUNT, 0);
