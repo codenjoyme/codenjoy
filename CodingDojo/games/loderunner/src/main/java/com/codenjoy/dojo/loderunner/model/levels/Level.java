@@ -27,10 +27,7 @@ import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.model.Hero;
 import com.codenjoy.dojo.loderunner.model.items.*;
 import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
-import com.codenjoy.dojo.loderunner.model.items.enemy.AI;
 import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
-import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyAI;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.field.AbstractLevel;
 import com.codenjoy.dojo.services.field.PointField;
@@ -49,19 +46,19 @@ public class Level extends AbstractLevel {
 
     @Override
     protected void fill(PointField field) {
-        field.addAll(getBorders());
-        field.addAll(getPipe());
-        field.addAll(getLadder());
-        field.addAll(getBricks());
-        field.addAll(getPortals());
-        field.addAll(getPills());
-        field.addAll(getYellowGold());
-        field.addAll(getGreenGold());
-        field.addAll(getRedGold());
-        field.addAll(getEnemies());
+        field.addAll(borders());
+        field.addAll(pipe());
+        field.addAll(ladder());
+        field.addAll(bricks());
+        field.addAll(portals());
+        field.addAll(pills());
+        field.addAll(yellowGold());
+        field.addAll(greenGold());
+        field.addAll(redGold());
+        field.addAll(enemies());
     }
 
-    public List<Hero> getHeroes() {
+    public List<Hero> heroes() {
         EnumSet<Element> left = EnumSet.of(
                 HERO_DRILL_LEFT, HERO_LEFT, HERO_FALL_LEFT, HERO_PIPE_LEFT,
                 HERO_SHADOW_DRILL_LEFT,
@@ -78,46 +75,46 @@ public class Level extends AbstractLevel {
         }});
     }
 
-    public List<Brick> getBricks() {
+    public List<Brick> bricks() {
         return find(Brick::new, BRICK);
     }
 
-    public List<Border> getBorders() {
+    public List<Border> borders() {
         return find(Border::new, UNDESTROYABLE_WALL);
     }
 
-    public List<YellowGold> getYellowGold() {
+    public List<YellowGold> yellowGold() {
         return find(YellowGold::new, YELLOW_GOLD);
     }
 
-    public List<GreenGold> getGreenGold() {
+    public List<GreenGold> greenGold() {
         return find(GreenGold::new, GREEN_GOLD);
     }
 
-    public List<RedGold> getRedGold() {
+    public List<RedGold> redGold() {
         return find(RedGold::new, RED_GOLD);
     }
 
-    public List<Ladder> getLadder() {
+    public List<Ladder> ladder() {
         return find(Ladder::new, LADDER);
     }
 
-    public List<Pipe> getPipe() {
+    public List<Pipe> pipe() {
         return find(Pipe::new, PIPE);
     }
 
-    public List<Enemy> getEnemies() {
+    public List<Enemy> enemies() {
         return find(new HashMap<>() {{
             put(ENEMY_LEFT, pt -> new Enemy(pt, Direction.LEFT));
             put(ENEMY_RIGHT, pt -> new Enemy(pt, Direction.RIGHT));
         }});
     }
 
-    public List<Pill> getPills() {
+    public List<Pill> pills() {
         return find(pt -> new Pill(pt, PillType.SHADOW_PILL), SHADOW_PILL);
     }
 
-    public List<Portal> getPortals() {
+    public List<Portal> portals() {
         return find(Portal::new, PORTAL);
     }
 }

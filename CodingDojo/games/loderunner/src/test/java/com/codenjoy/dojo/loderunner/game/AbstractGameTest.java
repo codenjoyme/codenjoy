@@ -66,16 +66,16 @@ public abstract class AbstractGameTest {
         settings.string(LEVEL_MAP, map);
 
         Level level = settings.level();
-        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
-                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
-                .integer(GOLD_COUNT_RED, level.getRedGold().size())
-                .integer(SHADOW_PILLS_COUNT, level.getPills().size())
-                .integer(PORTALS_COUNT, level.getPortals().size())
-                .integer(ENEMIES_COUNT, level.getEnemies().size());
+        settings.integer(GOLD_COUNT_YELLOW, level.yellowGold().size())
+                .integer(GOLD_COUNT_GREEN, level.greenGold().size())
+                .integer(GOLD_COUNT_RED, level.redGold().size())
+                .integer(SHADOW_PILLS_COUNT, level.pills().size())
+                .integer(PORTALS_COUNT, level.portals().size())
+                .integer(ENEMIES_COUNT, level.enemies().size());
 
         field = new Loderunner(dice, settings);
 
-        for (Hero hero : level.getHeroes()) {
+        for (Hero hero : level.heroes()) {
             Player player = givenPlayer(hero.getX(), hero.getY());
             player.getHero().setDirection(hero.getDirection());
         }
