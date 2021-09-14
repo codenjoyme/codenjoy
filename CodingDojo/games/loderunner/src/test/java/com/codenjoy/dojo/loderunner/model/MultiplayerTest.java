@@ -23,26 +23,11 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.TestSettings;
+import com.codenjoy.dojo.loderunner.game.AbstractGameTest;
 import com.codenjoy.dojo.loderunner.model.items.Brick;
 import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
-import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
-import com.codenjoy.dojo.loderunner.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.utils.events.EventsListenersAssert;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
@@ -51,191 +36,155 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-public class MultiplayerTest {
-
-    private Dice dice;
-    private List<EventListener> listeners = new LinkedList<>();
-    private List<Player> players = new LinkedList<>();
-    private List<Hero> heroes = new LinkedList<>();
-    private List<Game> games = new LinkedList<>();
-    private Loderunner field;
-    private PrinterFactory printer;
-    private GameSettings settings;
-    protected EventsListenersAssert events;
-
-    @Before
-    public void setUp()  {
-        dice = mock(Dice.class);
-        printer = new PrinterFactoryImpl();
-        settings = new TestSettings();
-        events = new EventsListenersAssert(() -> listeners, Events.class);
-    }
-
-    @After
-    public void tearDown() {
-        events.verifyNoEvents();
-    }
-
-    private void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
-    }
+public class MultiplayerTest extends AbstractGameTest {
 
     // появляется другие игроки, игра становится мультипользовательской
     @Test
     public void shouldMultipleGame() { // TODO разделить тест на части
-        givenFl("☼☼☼☼☼☼" +
-                "☼    ☼" +
-                "☼####☼" +
-                "☼   $☼" +
-                "☼####☼" +
-                "☼☼☼☼☼☼");
-
-        // TODO сделать как в других играх, чтобы инфа о плеерах тянулась с givenFl
-        givenPlayer(1, 4);
-        givenPlayer(2, 2);
-        givenPlayer(3, 4);
-
-        assert1("☼☼☼☼☼☼\n" +
-                "☼► ( ☼\n" +
-                "☼####☼\n" +
-                "☼ ( $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
-
-        assert2("☼☼☼☼☼☼\n" +
-                "☼( ( ☼\n" +
+        givenFl("☼☼☼☼☼☼\n" +
+                "☼► ► ☼\n" +
                 "☼####☼\n" +
                 "☼ ► $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        assert3("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
+                "☼► ( ☼\n" +
+                "☼####☼\n" +
+                "☼ ( $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼☼\n" +
                 "☼( ► ☼\n" +
                 "☼####☼\n" +
                 "☼ ( $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 1);
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼( ( ☼\n" +
+                "☼####☼\n" +
+                "☼ ► $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n", 2);
 
         hero(0).right();
-        hero(1).left();
-        hero(2).right();
+        hero(1).right();
+        hero(2).left();
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼ ► (☼\n" +
                 "☼####☼\n" +
                 "☼)  $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼\n" +
-                "☼ ( (☼\n" +
-                "☼####☼\n" +
-                "☼◄  $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
-
-        assert3("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼ ( ►☼\n" +
                 "☼####☼\n" +
                 "☼)  $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 1);
+
+        assertF("☼☼☼☼☼☼\n" +
+                "☼ ( (☼\n" +
+                "☼####☼\n" +
+                "☼◄  $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n", 2);
 
         hero(0).act();
-        game(2).close();
+        game(1).close();
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼ R  ☼\n" +
                 "☼##*#☼\n" +
                 "☼)  $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼ ⌊  ☼\n" +
                 "☼##*#☼\n" +
                 "☼◄  $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 2);
 
         try {
-            assert3("☼☼☼☼☼☼\n" +
+            assertF("☼☼☼☼☼☼\n" +
                     "☼ ⌊  ☼\n" +
                     "☼##*#☼\n" +
                     "☼)  $☼\n" +
                     "☼####☼\n" +
-                    "☼☼☼☼☼☼\n");
+                    "☼☼☼☼☼☼\n", 1);
         } catch (IllegalStateException e) {
             assertEquals("No board for this player", e.getMessage());
         }
 
         hero(0).right();
 
-        field.tick();
-        field.tick();
-        field.tick();
+        tick();
+        tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
                 "☼) ►$☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
                 "☼◄ ($☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 2);
 
         hero(0).left();
         hero(0).act();
-        hero(1).right();
+        hero(2).right();
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
                 "☼ ⊏Я$☼\n" +
                 "☼#*##☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
                 "☼ [⌋$☼\n" +
                 "☼#*##☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 2);
 
         for (int c = 2; c < Brick.DRILL_TIMER; c++) {
-            field.tick();
+            tick();
         }
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼####☼\n" +
                 "☼  Я$☼\n" +
                 "☼#Z##☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼####☼\n" +
                 "☼  ⌋$☼\n" +
                 "☼#Ѡ##☼\n" +
-                "☼☼☼☼☼☼\n");
-
+                "☼☼☼☼☼☼\n", 2);
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_ENEMY]\n" +
@@ -245,43 +194,43 @@ public class MultiplayerTest {
 
         when(dice.next(anyInt())).thenReturn(1, 4);
 
-        game(1).newGame();
+        game(2).newGame();
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼(   ☼\n" +
                 "☼####☼\n" +
                 "☼  Я$☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼►   ☼\n" +
                 "☼####☼\n" +
                 "☼  ⌋$☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 2);
 
         hero(0).right();
 
         when(dice.next(anyInt())).thenReturn(1, 2);
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼(   ☼\n" +
                 "☼####☼\n" +
                 "☼$  ►☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼►   ☼\n" +
                 "☼####☼\n" +
                 "☼$  (☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 2);
 
         events.verifyAllEvents(
                 "listener(0) => [GET_YELLOW_GOLD]\n" +
@@ -289,86 +238,71 @@ public class MultiplayerTest {
                 "listener(2) => []\n");
     }
 
-    private Hero hero(int index) {
-        return (Hero) game(index).getPlayer().getHero();
-    }
-
-    private EventListener listener(int index) {
-        return listeners.get(index);
-    }
-
-    private Game game(int index) {
-        return games.get(index);
-    }
-
     @Test
     public void thatEnemiesDoNotHauntShadowPlayers() {
-        settings.integer(ENEMIES_COUNT, 1);
+        settings.integer(ENEMIES_COUNT, 1)
+                .integer(SHADOW_PILLS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼  »   ☼" +
+                "☼► » ► ☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        settings.integer(SHADOW_PILLS_COUNT, 1);
-        givenPlayer(5, 2)
-                .getHero().pick(PillType.SHADOW_PILL);
-        givenPlayer(1, 2);
+        enemy().disableMock();
+        hero(1).pick(PillType.SHADOW_PILL);
 
         dice(0); // охотимся за первым игроком // TODO потестить когда поохотимся за вторым
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼(«  ⊳ ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
     }
 
     @Test
     public void thatTwoShadowsWalkThroughEachOther() {
+        settings.integer(SHADOW_PILLS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼      ☼" +
+                "☼►►    ☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        settings.integer(SHADOW_PILLS_COUNT, 1);
-        givenPlayer(1, 2)
-                .getHero().pick(PillType.SHADOW_PILL);
-        givenPlayer(2, 2)
-                .getHero().pick(PillType.SHADOW_PILL);
+        hero(0).pick(PillType.SHADOW_PILL);
+        hero(1).pick(PillType.SHADOW_PILL);
 
         hero(0).right();
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼ ⊳    ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼ ⊳    ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         verify(listener(0), never()).event(Events.KILL_ENEMY);
         verify(listener(1), never()).event(Events.KILL_HERO);
@@ -376,88 +310,86 @@ public class MultiplayerTest {
 
     @Test
     public void thatShadowKillsNonShadowPlayer() {
+        settings.integer(SHADOW_PILLS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼      ☼" +
+                "☼►►    ☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        settings.integer(SHADOW_PILLS_COUNT, 1);
-        givenPlayer(1, 2)
-                .getHero().pick(PillType.SHADOW_PILL);
-        givenPlayer(2, 2);
+        hero().pick(PillType.SHADOW_PILL);
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼⊳(    ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼⋉►    ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        hero(0).right();
+        hero().right();
 
-        field.tick();
+        tick();
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_ENEMY]\n" +
                 "listener(1) => [KILL_HERO]\n");
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼ ⊳    ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼ Ѡ    ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         field.remove(player(1)); // он геймовер его уберут
-        field.tick();
+        tick();
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼ ⊳    ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼ Ѡ    ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
     }
 
     @Test
@@ -466,189 +398,185 @@ public class MultiplayerTest {
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
+                "☼►     ☼" +
+                "☼►     ☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
         settings.integer(SHADOW_PILLS_COUNT, 1);
-        givenPlayer(1, 3)
-                .getHero().pick(PillType.SHADOW_PILL);
-        givenPlayer(1, 2);
+        hero().pick(PillType.SHADOW_PILL);
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼⊄     ☼\n" +
                 "☼(     ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼⋢     ☼\n" +
                 "☼►     ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         dice(3, 3); // new pill
-        field.tick();
+        tick();
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_ENEMY]\n" +
                 "listener(1) => [KILL_HERO]\n");
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼  S   ☼\n" +
                 "☼⊳     ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼  S   ☼\n" +
                 "☼Ѡ     ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         field.remove(player(1)); // он геймовер его уберут
-        field.tick();
+        tick();
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼  S   ☼\n" +
                 "☼⊳     ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼  S   ☼\n" +
                 "☼Ѡ     ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
     }
 
     @Test
     public void thatShadowStairsUpTheLadderAtTheRegularPlayerAndKillsHim() {
+        settings.integer(SHADOW_PILLS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼      ☼" +
-                "☼  H   ☼" +
+                "☼  ►   ☼" +
+                "☼ ►H   ☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        settings.integer(SHADOW_PILLS_COUNT, 1);
-        givenPlayer(2, 2)
-            .getHero().pick(PillType.SHADOW_PILL);
-        givenPlayer(3, 3);
+        hero(1).pick(PillType.SHADOW_PILL);
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼  (   ☼\n" +
-                "☼ ⊳H   ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼  ►   ☼\n" +
                 "☼ ⋉H   ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        hero(0).right();
-        field.tick();
-
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼  (   ☼\n" +
-                "☼  ⍬   ☼\n" +
+                "☼ ⊳H   ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        hero(1).right();
+        tick();
+
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼  ►   ☼\n" +
                 "☼  ⋕   ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        hero(0).up();
-        field.tick();
+        assertF("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  (   ☼\n" +
+                "☼  ⍬   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n", 1);
+
+        hero(1).up();
+        tick();
 
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
-                "listener(1) => [KILL_HERO]\n");
+                "listener(0) => [KILL_HERO]\n" +
+                        "listener(1) => [KILL_ENEMY]\n");
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼  ⊳   ☼\n" +
-                "☼  H   ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼  Ѡ   ☼\n" +
                 "☼  H   ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        field.remove(player(1)); // он геймовер его уберут
-        field.tick();
+        assertF("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ⊳   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n", 1);
+
+        field.remove(player(0)); // он геймовер его уберут
+        tick();
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼  ⊳   ☼\n" +
-                "☼  H   ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼  Ѡ   ☼\n" +
                 "☼  H   ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
+
+        assertF("☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ⊳   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n", 1);
     }
 
     // можно ли проходить героям друг через дурга? Нет
@@ -657,152 +585,143 @@ public class MultiplayerTest {
         givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼    ☼" +
-                "☼    ☼" +
+                "☼►►  ☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        givenPlayer(1, 2);
-        givenPlayer(2, 2);
-
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►(  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(0).right();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►(  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(1).left();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►)  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
     }
 
     @Test
     public void shouldICantGoViaAnotherPlayer_whenAtLadder() {
         givenFl("☼☼☼☼☼☼" +
-                "☼    ☼" +
+                "☼ ►  ☼" +
                 "☼ H  ☼" +
-                "☼ H  ☼" +
+                "☼►H  ☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        givenPlayer(1, 2);
-        givenPlayer(2, 4);
-
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼ (  ☼\n" +
                 "☼ H  ☼\n" +
                 "☼►H  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 1);
 
-        hero(0).right();
-        hero(1).down();
-        field.tick();
+        hero(0).down();
+        hero(1).right();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ U  ☼\n" +
                 "☼ Y  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 1);
 
-        hero(0).up();
-        hero(1).down();
-        field.tick();
+        hero(0).down();
+        hero(1).up();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ U  ☼\n" +
                 "☼ Y  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 1);
 
-        hero(0).up();
-        hero(1).down();
-        field.tick();
+        hero(0).down();
+        hero(1).up();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ U  ☼\n" +
                 "☼ Y  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 1);
     }
 
     @Test
     public void shouldICantGoViaAnotherPlayer_whenAtPipe() {
         givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
-                "☼ ~~ ☼" +
+                "☼►~~►☼" +
                 "☼#  #☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        givenPlayer(1, 3);
-        givenPlayer(4, 3);
-
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼►~~(☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(0).right();
         hero(1).left();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ }Э ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ Є{ ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 1);
 
         hero(0).right();
         hero(1).left();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ }Э ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(0).right();
         hero(1).left();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ }Э ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
     }
 
     // могу ли я сверлить под другим героем? Нет
@@ -815,107 +734,99 @@ public class MultiplayerTest {
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        givenPlayer(1, 2);
-        givenPlayer(2, 2);
-
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►(  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(0).act();
         hero(1).left();
         hero(1).act();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼►)  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
     }
 
     // если я прыгаю сверху на героя, то я должен стоять у него на голове
     @Test
     public void shouldICanStayAtOtherHeroHead() {
         givenFl("☼☼☼☼☼☼" +
+                "☼ ►  ☼" +
                 "☼    ☼" +
-                "☼    ☼" +
-                "☼    ☼" +
+                "☼ ►  ☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        givenPlayer(2, 4);
-        givenPlayer(2, 2);
-
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼ [  ☼\n" +
                 "☼    ☼\n" +
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        hero(0).down();  //и даже если я сильно захочу я не смогу впрыгнуть в него
+        hero().down();  //и даже если я сильно захочу я не смогу впрыгнуть в него
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
     }
 
     // если я прыгаю сверху на героя который на трубе, то я должен стоять у него на голове
     @Test
     public void shouldICantStayAtOtherHeroHeadWhenOnPipe() {
         givenFl("☼☼☼☼☼☼" +
+                "☼ ►  ☼" +
                 "☼    ☼" +
-                "☼    ☼" +
-                "☼    ☼" +
+                "☼ ►  ☼" +
                 "☼ ~  ☼" +
                 "☼☼☼☼☼☼");
 
-        givenPlayer(2, 4);
-        givenPlayer(2, 2);
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ [  ☼\n" +
                 "☼    ☼\n" +
                 "☼ Є  ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ Є  ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        hero(0).down();
-        field.tick();
+        hero().down();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ Є  ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
     }
 
     @Test
@@ -923,202 +834,157 @@ public class MultiplayerTest {
         shouldICantStayAtOtherHeroHeadWhenOnPipe();
 
         hero(1).left();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼ [  ☼\n" +
                 "☼)~  ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼)}  ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(1).right();  // нельзя входить в друг в друга :) даже на трубе
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼(}  ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(0).left();  // нельзя входить в друг в друга :) даже на трубе
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼({  ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
     }
 
     // когда два героя на трубе, они не могут друг в друга войти
     @Test
     public void shouldStopOnPipe() {
         givenFl("☼☼☼☼☼☼" +
-                "☼    ☼" +
+                "☼ ►► ☼" +
                 "☼~~~~☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        givenPlayer(2, 4);
-        givenPlayer(3, 4);
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼~}Є~☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(1).left();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼~}Э~☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(0).right();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼~}Э~☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(0).right();
         hero(1).left();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼~}Э~☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
-    }
-
-    private void assert1(String expected) {
-        assertBoard(expected, 0);
-    }
-
-    private void assertBoard(String expected, int index) {
-        assertEquals(expected, game(index).getBoardAsString());
-    }
-
-    private void assert2(String expected) {
-        assertBoard(expected, 1);
-    }
-
-    private void assert3(String expected) {
-        assertBoard(expected, 2);
-    }
-
-    private Player givenPlayer(int x, int y) {
-        EventListener listener = mock(EventListener.class);
-        listeners.add(listener);
-        Player player = new Player(listener, settings);
-        players.add(player);
-        Single game = new Single(player, printer);
-        games.add(game);
-        game.on(field);
-        dice(x, y);  // позиция рассчитывается рендомно из dice
-        game.newGame();
-        heroes.add(player.getHero());
-        return player;
-    }
-
-    private void givenFl(String map) {
-        settings.string(LEVEL_MAP, map);
-        Level level = settings.level();
-        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
-                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
-                .integer(GOLD_COUNT_RED, level.getRedGold().size())
-                .integer(SHADOW_PILLS_COUNT, level.getPills().size())
-                .integer(PORTALS_COUNT, level.getPortals().size())
-                .integer(ENEMIES_COUNT, level.getEnemies().size());
-        field = new Loderunner(dice, settings);
+                "☼☼☼☼☼☼\n", 0);
     }
 
     @Test
     public void shouldICanGoWhenIAmAtOtherHero() {
         shouldICanStayAtOtherHeroHead();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        hero(0).left();
-        field.tick();
+        hero().left();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼]   ☼\n" +
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼◄(  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
     }
 
     @Test
     public void shouldICanGoWhenAtMeIsOtherHero() {
         shouldICanStayAtOtherHeroHead();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
         hero(1).right();
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ [  ☼\n" +
                 "☼  ( ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
 
-        field.tick();
+        tick();
 
-        assert1("☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
                 "☼ ►( ☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼\n", 0);
     }
-
 
     // тест с раундами: игра не начнется, пока не соберутся игроки
     // в достаточном количестве
@@ -1139,11 +1005,8 @@ public class MultiplayerTest {
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼      ☼" +
+                "☼► ►   ☼" +
                 "☼☼☼☼☼☼☼☼");
-
-        givenPlayer(1, 1);
-        givenPlayer(3, 1);
 
         // when
         // юзеров недостаточно, ничего не происходит
@@ -1153,23 +1016,22 @@ public class MultiplayerTest {
                 "listener(0) => []\n" +
                 "listener(1) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼Ѡ Z   ☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-
-        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼☼☼☼☼☼☼☼\n", 0);
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼Z Ѡ   ☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         // when
         // попытка переместиться
@@ -1182,23 +1044,22 @@ public class MultiplayerTest {
                 "listener(0) => []\n" +
                 "listener(1) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼Ѡ Z   ☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-
-        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼☼☼☼☼☼☼☼\n", 0);
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼Z Ѡ   ☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         // when
         givenPlayer(5, 1);
@@ -1211,32 +1072,30 @@ public class MultiplayerTest {
                 "listener(1) => [START_ROUND, [Round 1]]\n" +
                 "listener(2) => [START_ROUND, [Round 1]]\n");
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼► ( ( ☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-
-        assert2("☼☼☼☼☼☼☼☼\n" +
+                "☼☼☼☼☼☼☼☼\n", 0);
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼( ► ( ☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-
-        assert3("☼☼☼☼☼☼☼☼\n" +
+                "☼☼☼☼☼☼☼☼\n", 1);
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼( ( ► ☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 2);
 
         // when
         // попытка переместиться
@@ -1246,32 +1105,32 @@ public class MultiplayerTest {
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼ ► ( (☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 0);
 
-        assert2("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼ ( ► (☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        assert3("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼      ☼\n" +
                 "☼ ( ( ►☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 2);
     }
 
     @Test
@@ -1318,7 +1177,7 @@ public class MultiplayerTest {
                 "listener(6) => [START_ROUND, [Round 1]]\n" +
                 "listener(7) => [START_ROUND, [Round 1]]\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1327,11 +1186,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼( ►HH( (☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         drill(2, 3);
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1340,11 +1199,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼ ⊏ЯHH⌊⊐ ☼\n" +
                 "☼#*#HH#*#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         goUp();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1353,11 +1212,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼#(#HH#)#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         drill(4, 5);
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1366,7 +1225,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼#(#HH#)#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         goUp();
 
@@ -1394,7 +1253,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼( ◄  ( (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1403,11 +1262,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼#Z#HH#Z#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼( ◄  ( (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1416,11 +1275,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         drill(6, 7);
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ⊏Я  ⌊⊐ ☼\n" +
                 "☼#*#HH#*#☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1429,11 +1288,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊  ☼\n" +
                 "☼#(#HH#)#☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1442,7 +1301,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
         tick();
@@ -1472,7 +1331,7 @@ public class MultiplayerTest {
                 "listener(7) => []\n");
 
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊  ☼\n" +
                 "☼#(#HH#)#☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1481,11 +1340,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊  ☼\n" +
                 "☼#(#HH#)#☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1494,7 +1353,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
         tick();
@@ -1527,7 +1386,7 @@ public class MultiplayerTest {
                 "listener(6) => [KILL_HERO]\n" +
                 "listener(7) => [KILL_HERO]\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊  ☼\n" +
                 "☼#Z#HH#Z#☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1536,7 +1395,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -1551,7 +1410,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊  ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1560,11 +1419,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊  ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1573,7 +1432,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -1588,7 +1447,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Ѡ  Z  ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1597,7 +1456,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -1613,7 +1472,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1622,7 +1481,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -1638,7 +1497,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1647,12 +1506,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
-    }
-
-    public void assertScores(int score1, int score2) {
-        assertEquals(score1, hero(0).scores());
-        assertEquals(score2, hero(1).scores());
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
     }
 
     @Test
@@ -1700,7 +1554,7 @@ public class MultiplayerTest {
                 "listener(6) => [START_ROUND, [Round 1]]\n" +
                 "listener(7) => [START_ROUND, [Round 1]]\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1709,11 +1563,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼( ►HH( (☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         drill(2, 3);
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1722,11 +1576,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼ ⊏ЯHH⌊⊐ ☼\n" +
                 "☼#*#HH#*#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         goUp();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1735,11 +1589,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼#(#HH#)#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         drill(4, 5);
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1748,7 +1602,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼#(#HH#)#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         goUp();
 
@@ -1776,7 +1630,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼( ◄  ( (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1785,11 +1639,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼#Z#HH#Z#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼( ◄  ( (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1798,11 +1652,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         drill(6, -1);
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ⊏Я  ⌊ (☼\n" +
                 "☼#*#HH#*#☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1811,11 +1665,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼#(#HH# #☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1824,7 +1678,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
         tick();
@@ -1853,7 +1707,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼#(#HH# #☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1862,11 +1716,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼#(#HH# #☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1875,7 +1729,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
         tick();
@@ -1908,7 +1762,7 @@ public class MultiplayerTest {
                 "listener(6) => [KILL_HERO]\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼#Z#HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1917,7 +1771,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -1932,7 +1786,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1941,7 +1795,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -1960,7 +1814,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => [[Time is over]]\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Ѡ  Z Z☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1969,7 +1823,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -1985,7 +1839,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -1994,9 +1848,9 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
     }
-    
+
     @Test
     public void twoWinnersIfTheyHaveEqualKillsBeforeTimeout_caseTwoRounds() {
         settings.bool(ROUNDS_ENABLED, true)
@@ -2042,7 +1896,7 @@ public class MultiplayerTest {
                 "listener(6) => [START_ROUND, [Round 1]]\n" +
                 "listener(7) => [START_ROUND, [Round 1]]\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2051,11 +1905,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼( ►HH( (☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         drill(2, 3);
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2064,11 +1918,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼ ⊏ЯHH⌊⊐ ☼\n" +
                 "☼#*#HH#*#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         goUp();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2077,11 +1931,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼#(#HH#)#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         drill(4, 5);
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2090,7 +1944,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼#(#HH#)#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         goUp();
 
@@ -2118,7 +1972,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼( ◄  ( (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2127,11 +1981,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼#Z#HH#Z#☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼( ◄  ( (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2140,11 +1994,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         drill(6, -1);
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ⊏Я  ⌊ (☼\n" +
                 "☼#*#HH#*#☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2153,11 +2007,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼#(#HH# #☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2166,7 +2020,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
         tick();
@@ -2195,7 +2049,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼#(#HH# #☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2204,11 +2058,11 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼#(#HH# #☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2217,7 +2071,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
         tick();
@@ -2250,7 +2104,7 @@ public class MultiplayerTest {
                 "listener(6) => [KILL_HERO]\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼#Z#HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2259,7 +2113,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -2274,7 +2128,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼  Я  ⌊ (☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2283,7 +2137,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼   HH   ☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -2306,7 +2160,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => [[Time is over]]\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2315,7 +2169,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼  ѠHHZ Z☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -2330,7 +2184,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => [START_ROUND, [Round 2]]\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2339,7 +2193,7 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼  ►HH( (☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
         tick();
 
@@ -2354,7 +2208,7 @@ public class MultiplayerTest {
                 "listener(6) => []\n" +
                 "listener(7) => []\n");
 
-        assert1("☼☼☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        ☼\n" +
                 "☼###HH###☼\n" +
                 "☼☼☼☼HH☼☼☼☼\n" +
@@ -2363,10 +2217,10 @@ public class MultiplayerTest {
                 "☼☼☼☼HH☼☼☼☼\n" +
                 "☼  ►HH( (☼\n" +
                 "☼###HH###☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
     }
 
-    public void goUp() {
+    private void goUp() {
         // идут на следующий этаж
         hero(0).right();
         hero(1).left();
@@ -2389,7 +2243,7 @@ public class MultiplayerTest {
         tick();
     }
 
-    public void drill(int left, int right) {
+    private void drill(int left, int right) {
         // сверлят ямки
         hero(0).left();
         hero(0).act();
@@ -2405,13 +2259,13 @@ public class MultiplayerTest {
         tick();
     }
 
-    public void tick() {
-        events.verifyNoEvents();
+    @Override
+    protected void tick() {
         removeAllDied();
         // эмуляция проверки загрузки комнаты, если комната недогружена то не тикаем
         // вообше это делает фреймворк, тут лишь эмулируем
         if (settings.bool(ROUNDS_ENABLED)) {
-            if (settings.integer(ROUNDS_PLAYERS_PER_ROOM) != heroes.size()) {
+            if (settings.integer(ROUNDS_PLAYERS_PER_ROOM) != players.size()) {
                 return;
             }
         }
@@ -2421,20 +2275,11 @@ public class MultiplayerTest {
     // TODO тут дублирование с mollymage, может продумать единую архитектуру
     //      тестов работающую и для rounds и реализовать во всех играх начиная
     //      с mollymage, loderunnes, snakebattle и battlecity
-    protected void removeAllDied() {
+    private void removeAllDied() {
         players.forEach(player -> {
             if (!player.isAlive()) {
                 field.remove(player(players.indexOf(player)));
             }
         });
-    }
-
-    protected Player player(int index) {
-        return players.get(index);
-    }
-
-    protected void resetHeroes() {
-        heroes.clear();
-        players.forEach(player -> heroes.add(player.getHero()));
     }
 }

@@ -16,13 +16,20 @@ import static org.mockito.Mockito.when;
 public class EnemyJoystick implements Joystick, DirectionActJoystick {
 
     private final Enemy enemy;
+    private final EnemyAI realAi = new AI();
+    private final EnemyAI mockAi = mock(EnemyAI.class);
 
     public EnemyJoystick(Enemy enemy) {
         this.enemy = enemy;
-        enemy.setAi(mock(EnemyAI.class));
+        enemy.setAi(mockAi);
+    }
+
+    public void disableMock() {
+        enemy.setAi(realAi);
     }
 
     private void overwriteDirection(Direction direction) {
+        enemy.setAi(mockAi);
         Mockito.reset(enemy.getAi());
         when(enemy.getAi().getDirection(any(Field.class), any(Point.class), anyList()))
                 .thenReturn(direction, null);

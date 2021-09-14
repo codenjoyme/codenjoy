@@ -12,7 +12,8 @@ import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -28,23 +29,21 @@ import java.util.stream.Collectors;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public abstract class AbstractGameTest {
 
-    protected Loderunner field;
-
-    private List<Hero> heroes = new LinkedList<>();
-    private List<Player> players = new LinkedList<>();
-    private List<Joystick> enemies = new LinkedList<>();
+    protected List<EventListener> listeners = new LinkedList<>();
+    protected List<Player> players = new LinkedList<>();
+    private List<Game> games = new LinkedList<>();
 
     protected Dice dice = mock(Dice.class);
     protected PrinterFactory<Element, Player> printer = new PrinterFactoryImpl<>();
-    protected GameSettings settings = new TestSettings();
-
-    protected List<EventListener> listeners = new LinkedList<>();
+    protected Loderunner field;
+    protected GameSettings settings = settings();
     protected EventsListenersAssert events = new EventsListenersAssert(() -> listeners, Events.class);
+
+    protected List<EnemyJoystick> enemies = new LinkedList<>();
 
     @Before
     public void setup() {
@@ -54,6 +53,13 @@ public abstract class AbstractGameTest {
     @After
     public void tearDown() {
         events.verifyNoEvents();
+    }
+
+    protected void dice(int... ints) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : ints) {
+            when = when.thenReturn(i);
+        }
     }
 
     protected void givenFl(String map) {
@@ -67,22 +73,10 @@ public abstract class AbstractGameTest {
                 .integer(PORTALS_COUNT, level.getPortals().size())
                 .integer(ENEMIES_COUNT, level.getEnemies().size());
 
-        List<Hero> levelHeroes = level.getHeroes();
-        if (levelHeroes.isEmpty()) {
-            throw new IllegalStateException("Нет героя!");
-        }
-
         field = new Loderunner(dice, settings);
 
-        for (Hero hero : levelHeroes) {
-            dice(hero.getX(), hero.getY());
-
-            EventListener listener = mock(EventListener.class);
-            listeners.add(listener);
-            Player player = new Player(listener, settings);
-            players.add(player);
-            field.newGame(player);
-            heroes.add(player.getHero());
+        for (Hero hero : level.getHeroes()) {
+            Player player = givenPlayer(hero.getX(), hero.getY());
             player.getHero().setDirection(hero.getDirection());
         }
         reloadAllEnemies();
@@ -90,31 +84,25 @@ public abstract class AbstractGameTest {
         dice(0); // всегда дальше выбираем нулевой индекс
     }
 
-    protected void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+    protected Player givenPlayer(int x, int y) {
+        EventListener listener = mock(EventListener.class);
+        listeners.add(listener);
+        Player player = new Player(listener, settings);
+        players.add(player);
+        Single game = new Single(player, printer);
+        games.add(game);
+        dice(x, y);
+        game.on(field);
+        game.newGame();
+        return player;
     }
 
-    protected Hero hero() {
-        return heroes.get(0);
+    protected GameSettings settings() {
+        return spy(new TestSettings());
     }
 
-    protected Hero hero(int index) {
-        return heroes.get(index);
-    }
-
-    protected Player player() {
-        return players.get(0);
-    }
-
-    protected Joystick enemy() {
-        return enemies.get(0);
-    }
-
-    protected Joystick enemy(int index) {
-        return enemies.get(index);
+    protected void tick() {
+        field.tick();
     }
 
     protected void assertE(String expected) {
@@ -122,9 +110,59 @@ public abstract class AbstractGameTest {
                 printer.getPrinter(field.reader(), player()).print());
     }
 
-    protected void reloadAllHeroes() {
-        players = field.players();
-        heroes = field.heroes().all();
+    /**
+     * Проверяет одну борду с заданным индексом
+     *
+     * @param expected ожидаемое значение
+     * @param index    индекс
+     */
+    public void assertF(String expected, int index) {
+        assertEquals(expected, game(index).getBoardAsString());
+    }
+
+    protected void assertScores(int score1, int score2) {
+        assertEquals(score1, hero(0).scores());
+        assertEquals(score2, hero(1).scores());
+    }
+
+    protected Game game() {
+        return games.get(0);
+    }
+
+    protected Game game(int index) {
+        return games.get(index);
+    }
+
+    protected EventListener listener() {
+        return listeners.get(0);
+    }
+
+    protected EventListener listener(int index) {
+        return listeners.get(index);
+    }
+
+    protected Hero hero() {
+        return hero(0);
+    }
+
+    protected Hero hero(int index) {
+        return (Hero) game(index).getPlayer().getHero();
+    }
+
+    protected Player player() {
+        return player(0);
+    }
+
+    protected Player player(int index) {
+        return players.get(index);
+    }
+
+    protected EnemyJoystick enemy() {
+        return enemies.get(0);
+    }
+
+    protected EnemyJoystick enemy(int index) {
+        return enemies.get(index);
     }
 
     protected void reloadAllEnemies() {
