@@ -23,17 +23,15 @@ package com.codenjoy.dojo.loderunner.game;
  */
 
 
-import com.codenjoy.dojo.loderunner.game.AbstractGameTest;
 import com.codenjoy.dojo.loderunner.model.items.Brick;
 import com.codenjoy.dojo.loderunner.model.items.Pill;
-import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Point;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class GameTest extends AbstractGameTest {
 
@@ -4048,7 +4046,9 @@ public class GameTest extends AbstractGameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[KILL_HERO, KILL_ENEMY]");
+        events.verifyAllEvents("" +
+                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(1) => [KILL_HERO]\n");
 
         assertEquals(1, hero(0).scores());
         assertEquals(0, hero(1).scores());
@@ -4112,9 +4112,9 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         game.tick();
 
-        verify(listener).event(Events.GET_YELLOW_GOLD);
-        verifyNoMoreInteractions(listener);
-        reset(listener);
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyNoEvents();
+        listeners.forEach(Mockito::reset);
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4128,9 +4128,9 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         game.tick();
 
-        verify(listener).event(Events.GET_YELLOW_GOLD);
-        verifyNoMoreInteractions(listener);
-        reset(listener);
+        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyNoEvents();
+        listeners.forEach(Mockito::reset);
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4144,9 +4144,9 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         game.tick();
 
-        verify(listener).event(Events.GET_GREEN_GOLD);
-        verifyNoMoreInteractions(listener);
-        reset(listener);
+        events.verifyAllEvents("[GET_GREEN_GOLD]");
+        events.verifyNoEvents();
+        listeners.forEach(Mockito::reset);
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4160,9 +4160,9 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         game.tick();
 
-        verify(listener).event(Events.GET_RED_GOLD);
-        verifyNoMoreInteractions(listener);
-        reset(listener);
+        events.verifyAllEvents("[GET_RED_GOLD]");
+        events.verifyNoEvents();
+        listeners.forEach(Mockito::reset);
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4176,9 +4176,9 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         game.tick();
 
-        verify(listener).event(Events.GET_RED_GOLD);
-        verifyNoMoreInteractions(listener);
-        reset(listener);
+        events.verifyAllEvents("[GET_RED_GOLD]");
+        events.verifyNoEvents();
+        listeners.forEach(Mockito::reset);
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +

@@ -21,7 +21,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,8 +43,8 @@ public abstract class AbstractGameTest {
     protected PrinterFactory<Element, Player> printer = new PrinterFactoryImpl<>();
     protected GameSettings settings = new TestSettings();
 
-    protected EventListener listener;
-    protected EventsListenersAssert events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
+    protected List<EventListener> listeners = new LinkedList<>();
+    protected EventsListenersAssert events = new EventsListenersAssert(() -> listeners, Events.class);
 
     @Before
     public void setup() {
@@ -74,10 +73,12 @@ public abstract class AbstractGameTest {
         }
 
         game = new Loderunner(dice, settings);
-        listener = mock(EventListener.class);
 
         for (Hero hero : levelHeroes) {
             dice(hero.getX(), hero.getY());
+
+            EventListener listener = mock(EventListener.class);
+            listeners.add(listener);
             Player player = new Player(listener, settings);
             players.add(player);
             game.newGame(player);
