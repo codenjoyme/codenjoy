@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner.game;
 
 /*-
  * #%L
