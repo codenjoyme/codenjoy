@@ -103,7 +103,7 @@ var Elements = {
     PIT_FILL_2 : '2',
     PIT_FILL_3 : '3',
     PIT_FILL_4 : '4',
-    UNDESTROYABLE_WALL : '☼',
+    STONE : '☼',
 
     DRILL_PIT : '*',
 
@@ -341,7 +341,7 @@ var Board = function(board) {
     var getWalls = function() {
         var result = [];
         result = result.concat(findAll(Elements.BRICK));
-        result = result.concat(findAll(Elements.UNDESTROYABLE_WALL));
+        result = result.concat(findAll(Elements.STONE));
         return result;
     };
 
@@ -376,7 +376,7 @@ var Board = function(board) {
 
     var getAt = function(x, y) {
         if (pt(x, y).isOutOf(size)) {
-            return Elements.UNDESTROYABLE_WALL;
+            return Elements.STONE;
         }
         return board.charAt(xyl.getLength(x, y));
     };
@@ -467,7 +467,7 @@ var Board = function(board) {
         if (pt(x, y).isOutOf(size)) {
             return true;
         }
-        return isAnyOfAt(x, y, [Elements.BRICK, Elements.UNDESTROYABLE_WALL]);
+        return isAnyOfAt(x, y, [Elements.BRICK, Elements.STONE]);
     };
 
     var hasLadderAt = function(x, y) {

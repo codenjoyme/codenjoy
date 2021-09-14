@@ -80,7 +80,7 @@ public class Level extends AbstractLevel {
     }
 
     public List<Border> borders() {
-        return find(Border::new, UNDESTROYABLE_WALL);
+        return find(Border::new, STONE);
     }
 
     public List<YellowGold> yellowGold() {

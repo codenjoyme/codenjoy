@@ -37,6 +37,6 @@ public class Border extends PointImpl implements State<Element, Player> {
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        return Element.UNDESTROYABLE_WALL;
+        return Element.STONE;
     }
 }
