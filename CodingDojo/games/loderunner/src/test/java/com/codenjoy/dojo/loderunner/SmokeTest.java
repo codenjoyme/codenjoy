@@ -85,7 +85,7 @@ public class SmokeTest {
                                         "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n")
                                 .integer(MASK_POTIONS_COUNT, 1)
                                 .integer(CLUE_COUNT_GLOVE, 5)
-                                .integer(GOLD_COUNT_RED, 6)
+                                .integer(CLUE_COUNT_RING, 6)
                                 .integer(CLUE_COUNT_KNIFE, 7)
                                 .integer(ROBBERS_COUNT, 2);
                     }

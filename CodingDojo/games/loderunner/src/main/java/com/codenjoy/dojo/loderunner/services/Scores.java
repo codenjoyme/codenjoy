@@ -31,7 +31,7 @@ public class Scores implements PlayerScores {
 
     private volatile int score;
     private GameSettings settings;
-    private volatile int countRed;
+    private volatile int countRing;
     private volatile int countGlove;
     private volatile int countKnife;
 
@@ -47,7 +47,7 @@ public class Scores implements PlayerScores {
     }
 
     private void clearSeries() {
-        countRed = 0;
+        countRing = 0;
         countGlove = 0;
         countKnife = 0;
     }
@@ -65,9 +65,9 @@ public class Scores implements PlayerScores {
         } else if (event.equals(Events.GET_GLOVE_CLUE)) {
             score += settings.integer(CLUE_SCORE_GLOVE) + countGlove;
             countGlove += settings.integer(CLUE_SCORE_GLOVE_INCREMENT);
-        } else if (event.equals(Events.GET_RED_GOLD)) {
-            score += settings.integer(GOLD_SCORE_RED) + countRed;
-            countRed += settings.integer(GOLD_SCORE_RED_INCREMENT);
+        } else if (event.equals(Events.GET_RING_CLUE)) {
+            score += settings.integer(CLUE_SCORE_RING) + countRing;
+            countRing += settings.integer(CLUE_SCORE_RING_INCREMENT);
         } else if (event.equals(Events.KILL_ROBBER)) {
             score += settings.integer(KILL_ROBBER_SCORE);
         } else if (event.equals(Events.KILL_HERO)) {
@@ -89,7 +89,7 @@ public class Scores implements PlayerScores {
     public String toString() {
         return "Scores{" +
                 "score=" + score +
-                ", red=" + countRed +
+                ", ring=" + countRing +
                 ", glove=" + countGlove +
                 ", knife=" + countKnife +
                 '}';

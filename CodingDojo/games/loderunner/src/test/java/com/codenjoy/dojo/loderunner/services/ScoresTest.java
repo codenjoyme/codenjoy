@@ -51,8 +51,8 @@ public class ScoresTest {
         scores.event(Events.GET_KNIFE_CLUE);
     }
 
-    public void redGold() {
-        scores.event(Events.GET_RED_GOLD);
+    public void ringClue() {
+        scores.event(Events.GET_RING_CLUE);
     }
 
     public void gloveClue() {
@@ -73,8 +73,8 @@ public class ScoresTest {
                 .integer(CLUE_SCORE_KNIFE, 20)
                 .integer(CLUE_SCORE_KNIFE_INCREMENT, 10)
 
-                .integer(GOLD_SCORE_RED, 200)
-                .integer(GOLD_SCORE_RED_INCREMENT, 100);
+                .integer(CLUE_SCORE_RING, 200)
+                .integer(CLUE_SCORE_RING_INCREMENT, 100);
         
         scores = new Scores(0, settings);
     }
@@ -88,9 +88,9 @@ public class ScoresTest {
         killRobber();
 
         knifeClue();
-        redGold();
-        redGold();
-        redGold();
+        ringClue();
+        ringClue();
+        ringClue();
         gloveClue();
         gloveClue();
         knifeClue();
@@ -106,8 +106,8 @@ public class ScoresTest {
                 + 5 * settings.integer(CLUE_SCORE_KNIFE)
                 + (1 + 2 + 3 + 4) * settings.integer(CLUE_SCORE_KNIFE_INCREMENT)
 
-                + 3 * settings.integer(GOLD_SCORE_RED)
-                + (1 + 2) * settings.integer(GOLD_SCORE_RED_INCREMENT)
+                + 3 * settings.integer(CLUE_SCORE_RING)
+                + (1 + 2) * settings.integer(CLUE_SCORE_RING_INCREMENT)
 
                 + 2 * settings.integer(CLUE_SCORE_GLOVE)
                 + (1) * settings.integer(CLUE_SCORE_GLOVE_INCREMENT)
@@ -127,14 +127,14 @@ public class ScoresTest {
     public void shouldClearScore() {
         // given
         knifeClue();
-        redGold();
-        redGold();
+        ringClue();
+        ringClue();
         gloveClue();
         gloveClue();
         gloveClue();
 
         assertEquals(529, scores.getScore());
-        assertEquals("Scores{score=529, red=200, glove=3, knife=10}",
+        assertEquals("Scores{score=529, ring=200, glove=3, knife=10}",
                 scores.toString());
 
         // when
@@ -142,12 +142,12 @@ public class ScoresTest {
 
         // then
         assertEquals(0, scores.getScore());
-        assertEquals("Scores{score=0, red=0, glove=0, knife=0}",
+        assertEquals("Scores{score=0, ring=0, glove=0, knife=0}",
                 scores.toString());
     }
 
     @Test
-    public void shouldIncreaseForNextGold() {
+    public void shouldIncreaseForNextClue() {
         scores = new Scores(0, settings);
 
         knifeClue();

@@ -54,7 +54,7 @@ public interface Field extends RoundGameField<Player> {
 
     boolean isRobberAt(Point pt);
 
-    void leaveGold(Point pt, Class<? extends Point> clazz);
+    void leaveClue(Point pt, Class<? extends Point> clazz);
 
     boolean under(Point pt, PotionType potion);
 

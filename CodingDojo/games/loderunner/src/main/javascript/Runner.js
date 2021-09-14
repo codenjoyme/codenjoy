@@ -115,8 +115,8 @@ var Elements = {
     ROBBER_PIPE_RIGHT : '>',
     ROBBER_PIT : 'X',
 
-    /// gold ;)
-    GOLD : '$',
+    /// clue ;)
+    KNIFE_CLUE : '$',
 
     /// this is you
     HERO_DIE : 'Ѡ',
@@ -334,8 +334,8 @@ var Board = function(board) {
         return result;
     };
 
-    var getGold = function() {
-        return findAll(Elements.GOLD);
+    var getClue = function() {
+        return findAll(Elements.KNIFE_CLUE);
     };
 
     var getWalls = function() {
@@ -403,12 +403,12 @@ var Board = function(board) {
             "Me at: %s\n" +
             "Other heroes at: %s\n" +
             "Robbers at: %s\n" +
-            "Gold at: %s\n",
+            "Clue at: %s\n",
                 boardAsString(),
                 getMe(),
                 printArray(getOtherHeroes()),
                 printArray(getRobbers()),
-                printArray(getGold())
+                printArray(getClue())
             );
     };
 
@@ -474,8 +474,8 @@ var Board = function(board) {
         return isAnyOfAt(x, y, [Elements.LADDER, Elements.HERO_LADDER, Elements.ROBBER_LADDER]);
     };
 
-    var hasGoldAt = function(x, y) {
-        return isAt(x, y, Elements.GOLD);
+    var hasCluedAt = function(x, y) {
+        return isAt(x, y, Elements.KNIFE_CLUE);
     };
 
     var hasPipeAt = function(x, y) {
@@ -509,7 +509,7 @@ var Board = function(board) {
         getWalls : getWalls,
         getLadders : getLadders,
         getPipes : getPipes,
-        getGold : getGold,
+        getClue : getClue,
         isAnyOfAt : isAnyOfAt,
         isNear : isNear,
         isBarrierAt : isBarrierAt,
@@ -517,7 +517,7 @@ var Board = function(board) {
         hasOtherHeroAt : hasOtherHeroAt,
         hasWallAt : hasWallAt,
         hasLadderAt : hasLadderAt,
-        hasGoldAt : hasGoldAt,
+        hasClueAt : hasCluedAt,
         hasPipeAt : hasPipeAt,
         countNear : countNear
     };

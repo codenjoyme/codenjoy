@@ -41,7 +41,7 @@
         RobberPipeRight = (short)'>',
         RobberPit = (short)'X',
 
-        Gold = (short)'$',
+        KnifeClue = (short)'$',
 
         HeroDie = (short)'Ѡ',
         HeroCrackLeft = (short)'Я',

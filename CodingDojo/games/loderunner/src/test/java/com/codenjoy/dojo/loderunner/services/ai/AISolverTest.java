@@ -394,7 +394,7 @@ public class AISolverTest {
     /**
      * Проверяет куда пойдет AISolver на этом поле
      * @param boardString поле
-     * @param expected ожидаемый путь до горки золота
+     * @param expected ожидаемый путь до улик
      */
     private void assertC(String boardString, String expected) {
         Board board = (Board) new Board().forString(boardString);

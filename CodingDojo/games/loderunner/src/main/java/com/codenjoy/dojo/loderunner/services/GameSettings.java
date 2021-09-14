@@ -60,9 +60,9 @@ public class GameSettings extends SettingsImpl
         CLUE_SCORE_KNIFE("[Score] Knife clue score"),
         CLUE_SCORE_KNIFE_INCREMENT("[Score] Knife clue score increment"),
 
-        GOLD_COUNT_RED("[Game] Red gold count"),
-        GOLD_SCORE_RED("[Score] Red gold score"),
-        GOLD_SCORE_RED_INCREMENT("[Score] Red gold score increment"),
+        CLUE_COUNT_RING("[Game] Ring clue count"),
+        CLUE_SCORE_RING("[Score] Ring clue score"),
+        CLUE_SCORE_RING_INCREMENT("[Score] Ring clue score increment"),
 
         KILL_HERO_PENALTY("[Score] Kill hero penalty"),
         KILL_ROBBER_SCORE("[Score] Kill robber score"),
@@ -108,9 +108,9 @@ public class GameSettings extends SettingsImpl
         integer(CLUE_SCORE_KNIFE, 2);
         integer(CLUE_SCORE_KNIFE_INCREMENT, 1);
 
-        integer(GOLD_COUNT_RED, 10);
-        integer(GOLD_SCORE_RED, 5);
-        integer(GOLD_SCORE_RED_INCREMENT, 1);
+        integer(CLUE_COUNT_RING, 10);
+        integer(CLUE_SCORE_RING, 5);
+        integer(CLUE_SCORE_RING_INCREMENT, 1);
 
         integer(KILL_HERO_PENALTY, 1);
         integer(KILL_ROBBER_SCORE, 10);

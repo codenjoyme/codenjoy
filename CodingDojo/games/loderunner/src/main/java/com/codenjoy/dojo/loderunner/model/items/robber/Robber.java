@@ -41,12 +41,12 @@ public class Robber extends PointImpl implements Tickable, Fieldable<Field>, Sta
     private Direction direction;
     private RobberAI ai;
     private Field field;
-    private Class<? extends Point> withGold;
+    private Class<? extends Point> withClue;
     private Hero prey;
 
     public Robber(Point pt, Direction direction) {
         super(pt);
-        withGold = null;
+        withClue = null;
         this.direction = direction;
         this.ai = new AI();
     }
@@ -71,11 +71,11 @@ public class Robber extends PointImpl implements Tickable, Fieldable<Field>, Sta
     @Override
     public void tick() {
         if (isFall()) {
-            // при падении в ямку оставляем золото
-            if (field.isBrick(under(this)) && withGold != null) {
-                // TODO герой не может оставить золото, если он залез в ямку под лестницу, золото должно появиться сбоку
-                field.leaveGold(this, withGold);
-                withGold = null;
+            // при падении в ямку оставляем улику
+            if (field.isBrick(under(this)) && withClue != null) {
+                // TODO герой не может оставить улику, если он залез в ямку под лестницу, улика должно появиться сбоку
+                field.leaveClue(this, withClue);
+                withClue = null;
             }
             move(x, y - 1);
             return;
@@ -189,12 +189,12 @@ public class Robber extends PointImpl implements Tickable, Fieldable<Field>, Sta
         return direction.equals(Direction.LEFT);
     }
 
-    public void getGold(Class<? extends Point> clazz) {
-        withGold = clazz;
+    public void getClue(Class<? extends Point> clazz) {
+        withClue = clazz;
     }
 
-    public boolean withGold() {
-        return withGold != null;
+    public boolean withClue() {
+        return withClue != null;
     }
 
 }

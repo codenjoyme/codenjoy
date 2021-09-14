@@ -729,9 +729,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // на карте появляется золото, если я его беру то получаю +
+    // на карте появляется улика, если я его беру то получаю +
     @Test
-    public void shouldGoldOnMap_iCanGetIt() {
+    public void shouldClueOnMap_iCanGetIt() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ►$☼" +
@@ -970,9 +970,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // под золотом я не могу прострелить
+    // под уликой я не могу прострелить
     @Test
-    public void shouldICantCrackUnderGold() {
+    public void shouldICantCrackUnderClue() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ►$☼" +
@@ -1237,9 +1237,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    // если по дороге я встречаюсь с золотом, то я его захвачу
+    // если по дороге я встречаюсь с уликой, то я его захвачу
     @Test
-    public void shouldIGetGoldWhenFallenFromPipe() {
+    public void shouldIGetClueWhenFallenFromPipe() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ $~~◄☼" +
@@ -2713,9 +2713,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    // чертик может похитить 1 золото в падении
+    // чертик может похитить 1 улику в падении
     @Test
-    public void shouldRobberGetGoldWhenFallenFromPipe() {
+    public void shouldRobberGetClueWhenFallenFromPipe() {
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼  $~~«☼" +
@@ -2761,7 +2761,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        tick();      // чертик не берет больше 1 кучки золота
+        tick();      // чертик не берет больше 1 улики
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2796,8 +2796,8 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldRobberLeaveGoldWhenFallInPit() {
-        shouldRobberGetGoldWhenFallenFromPipe();
+    public void shouldRobberLeaveClueWhenFallInPit() {
+        shouldRobberGetClueWhenFallenFromPipe();
 
         robber().right();
         hero().act();
@@ -2812,7 +2812,7 @@ public class GameTest extends AbstractGameTest {
                 "☼####*#☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        robber().right();     // если чертик с золотом падает в ямку - он оставляет золото на поверхности
+        robber().right();     // если чертик с уликой падает в ямку - он оставляет улику на поверхности
         tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -2838,10 +2838,10 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldIWalkOnRobberInPitAndGetGold() {
-        shouldRobberLeaveGoldWhenFallInPit();
+    public void shouldIWalkOnRobberInPitAndGetClue() {
+        shouldRobberLeaveClueWhenFallInPit();
 
-        hero().left();     //я могу пройти по нему сверху и забрать золото
+        hero().left();     //я могу пройти по нему сверху и забрать улику
         dice(1, 6);
         tick();
 
@@ -2885,8 +2885,8 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNoMoreGoldARobber() {
-        shouldIWalkOnRobberInPitAndGetGold();
+    public void shouldNoMoreClueARobber() {
+        shouldIWalkOnRobberInPitAndGetClue();
 
         for (int c = 4; c < Brick.CRACK_TIMER; c++) { // враг вылазит
             tick();
@@ -2918,7 +2918,7 @@ public class GameTest extends AbstractGameTest {
                 "☼### ##☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        tick();  // золота у него больше нет
+        tick();  // уликы у него больше нет
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$$    ☼" +
@@ -2933,7 +2933,7 @@ public class GameTest extends AbstractGameTest {
     // я могу ходить по монстру, который в ямке
     @Test
     public void shouldIWalkOnRobber() {
-        shouldRobberLeaveGoldWhenFallInPit();
+        shouldRobberLeaveClueWhenFallInPit();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3501,11 +3501,11 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // если чертик после того, как упал в ямку оставил золото, то когда он выберется - он свое золото заберет
+    // если чертик после того, как упал в ямку оставил улику, то когда он выберется - он свою улику заберет
     // А когда снова упадет, то оставит
     @Test
-    public void shouldGetGoldWheExitFromPit() {
-        shouldRobberLeaveGoldWhenFallInPit();
+    public void shouldGetClueWheExitFromPit() {
+        shouldRobberLeaveClueWhenFallInPit();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4086,7 +4086,7 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldCollectAllGold() {
+    public void shouldCollectAllClue() {
         // given
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4159,7 +4159,7 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         tick();
 
-        events.verifyAllEvents("[GET_RED_GOLD]");
+        events.verifyAllEvents("[GET_RING_CLUE]");
         events.verifyNoEvents();
         listeners.forEach(Mockito::reset);
 
@@ -4175,7 +4175,7 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         tick();
 
-        events.verifyAllEvents("[GET_RED_GOLD]");
+        events.verifyAllEvents("[GET_RING_CLUE]");
         events.verifyNoEvents();
         listeners.forEach(Mockito::reset);
 
@@ -4190,9 +4190,9 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldResetGold_whenClearBoard() {
+    public void shouldResetClue_whenClearBoard() {
         // given
-        shouldCollectAllGold();
+        shouldCollectAllClue();
 
         // when
         dice(1, 2);
@@ -4208,17 +4208,17 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         // when
-        // добавим еще золота
+        // добавим еще улик
         settings.integer(CLUE_COUNT_KNIFE, settings.integer(CLUE_COUNT_KNIFE) + 2)
-                .integer(GOLD_COUNT_RED,    settings.integer(GOLD_COUNT_RED) + 3)
+                .integer(CLUE_COUNT_RING,    settings.integer(CLUE_COUNT_RING) + 3)
                 .integer(CLUE_COUNT_GLOVE,  settings.integer(CLUE_COUNT_GLOVE) + 1);
         dice(
             2, 3, // knife
             3, 3, // knife
             4, 3, // glove
-            5, 3, // red
-            6, 3, // red
-            6, 4, // red
+            5, 3, // ring
+            6, 3, // ring
+            6, 4, // ring
             1, 6  // герой
         );
         field.clearScore();
@@ -4233,10 +4233,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         // when
-        // удалим золота
+        // удалим улики
         settings.integer(CLUE_COUNT_KNIFE, 1)
-                .integer(GOLD_COUNT_RED,    1)
-                .integer(CLUE_COUNT_GLOVE,  1);
+                .integer(CLUE_COUNT_RING, 1)
+                .integer(CLUE_COUNT_GLOVE, 1);
 
         dice(2, 6);  // герой
         field.clearScore();

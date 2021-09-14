@@ -144,9 +144,9 @@ namespace Loderunner.Api
             .ToList();
         }
 
-        public List<BoardPoint> GetGoldPositions()
+        public List<BoardPoint> GetCluePositions()
         {
-            return FindAllElements(BoardElement.Gold)
+            return FindAllElements(BoardElement.KnifeClue)
             .ToList();
         }
 
@@ -198,9 +198,9 @@ namespace Loderunner.Api
             return GetLadderPositions().Contains(point);
         }
 
-        public bool HasGoldAt(BoardPoint point)
+        public bool HasClueAt(BoardPoint point)
         {
-            return GetGoldPositions().Contains(point);
+            return GetCluePositions().Contains(point);
         }
 
         public bool HasPipeAt(BoardPoint point)
