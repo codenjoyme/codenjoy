@@ -23,123 +23,19 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.TestSettings;
+import com.codenjoy.dojo.loderunner.game.AbstractGameTest;
 import com.codenjoy.dojo.loderunner.model.items.Brick;
 import com.codenjoy.dojo.loderunner.model.items.Pill;
-import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyJoystick;
-import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
-import com.codenjoy.dojo.loderunner.services.GameSettings;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.utils.events.EventsListenersAssert;
-import org.junit.After;
-import org.junit.Before;
+import com.codenjoy.dojo.services.Point;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-public class GameTest {
-
-    private Loderunner game;
-    private List<Hero> heroes = new LinkedList<>();
-    private List<Player> players = new LinkedList<>();
-    private List<Joystick> enemies = new LinkedList<>();
-    private Dice dice;
-    private EventListener listener;
-    private PrinterFactory printer;
-    private GameSettings settings;
-    protected EventsListenersAssert events;
-
-    @Before
-    public void setup() {
-        dice = mock(Dice.class);
-        printer = new PrinterFactoryImpl();
-        settings = new TestSettings();
-        events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
-        Brick.DRILL_TIMER = 13;
-    }
-
-    @After
-    public void tearDown() {
-        events.verifyNoEvents();
-    }
-
-    private void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
-    }
-
-    private void givenFl(String map) {
-        settings.string(LEVEL_MAP, map);
-
-        Level level = settings.level();
-        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
-                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
-                .integer(GOLD_COUNT_RED, level.getRedGold().size())
-                .integer(SHADOW_PILLS_COUNT, level.getPills().size())
-                .integer(PORTALS_COUNT, level.getPortals().size())
-                .integer(ENEMIES_COUNT, level.getEnemies().size());
-
-        List<Hero> levelHeroes = level.getHeroes();
-        if (levelHeroes.isEmpty()) {
-            throw new IllegalStateException("Нет героя!");
-        }
-
-        game = new Loderunner(dice, settings);
-        listener = mock(EventListener.class);
-
-        for (Hero hero : levelHeroes) {
-            dice(hero.getX(), hero.getY());
-            Player player = new Player(listener, settings);
-            players.add(player);
-            game.newGame(player);
-            heroes.add(player.getHero());
-            player.getHero().direction = hero.direction;
-        }
-        reloadAllEnemies();
-        
-        dice(0); // всегда дальше выбираем нулевой индекс
-    }
-
-    private Hero hero() {
-        return heroes.get(0);
-    }
-    
-    private Hero hero(int index) {
-        return heroes.get(index);
-    }
-    
-    private Player player() {
-        return players.get(0);
-    }
-
-    private Joystick enemy() {
-        return enemies.get(0);
-    }
-
-    private Joystick enemy(int index) {
-        return enemies.get(index);
-    }
-
-    private void assertE(String expected) {
-        assertEquals(TestUtils.injectN(expected),
-                printer.getPrinter(game.reader(), player()).print());
-    }
+public class GameTest extends AbstractGameTest {
 
     // есть карта со мной
     @Test
@@ -4703,17 +4599,6 @@ public class GameTest {
 
         // then
         assertEquals(5, game.getPortalsTimer());
-    }
-
-    private void reloadAllHeroes() {
-        players = game.players();
-        heroes = game.heroes().all();
-    }
-    
-    private void reloadAllEnemies() {
-        enemies = game.enemies().stream()
-                .map(EnemyJoystick::new)
-                .collect(Collectors.toList());
     }
 
     // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
