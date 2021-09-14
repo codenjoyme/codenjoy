@@ -164,7 +164,7 @@
 4: 2:Scores: 11
 4: 2:Answer: DOWN
 4: 1:Fire Event: GET_GREEN_GOLD
-4: 2:Fire Event: GET_YELLOW_GOLD
+4: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 5: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 5: 1:☼~~~~~~~~H$S ~~~☼
@@ -370,7 +370,7 @@
 9: 2:
 9: 2:Scores: 13
 9: 2:Answer: RIGHT
-9: 1:Fire Event: GET_YELLOW_GOLD
+9: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 10: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 10: 1:☼~~~~~~~~H$S ~~~☼
@@ -909,7 +909,7 @@
 22: 2:
 22: 2:Scores: 19
 22: 2:Answer: RIGHT
-22: 2:Fire Event: GET_YELLOW_GOLD
+22: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 23: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 23: 1:☼~~~~~~~~H$S ~~~☼
@@ -951,7 +951,7 @@
 23: 2:
 23: 2:Scores: 21
 23: 2:Answer: LEFT
-23: 2:Fire Event: GET_YELLOW_GOLD
+23: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 24: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 24: 1:☼~~~~~~~~H$S ~~~☼
@@ -1075,7 +1075,7 @@
 26: 2:
 26: 2:Scores: 24
 26: 2:Answer: DOWN
-26: 1:Fire Event: GET_YELLOW_GOLD
+26: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 27: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 27: 1:☼~~~~~~~~H$S ~~~☼
@@ -1282,7 +1282,7 @@
 31: 2:
 31: 2:Scores: 24
 31: 2:Answer: RIGHT
-31: 1:Fire Event: GET_YELLOW_GOLD
+31: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 32: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 32: 1:☼~~~~~~~~H$S ~~~☼
@@ -1654,7 +1654,7 @@
 40: 2:
 40: 2:Scores: 24
 40: 2:Answer: RIGHT
-40: 1:Fire Event: GET_YELLOW_GOLD
+40: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 41: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 41: 1:☼~~~~~~~~H$S ~~~☼
@@ -1696,7 +1696,7 @@
 41: 2:
 41: 2:Scores: 24
 41: 2:Answer: RIGHT
-41: 2:Fire Event: GET_YELLOW_GOLD
+41: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 42: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 42: 1:☼~~~~~~~~H$S ~~~☼
@@ -3468,7 +3468,7 @@
 84: 2:
 84: 2:Scores: 33
 84: 2:Answer: DOWN
-84: 2:Fire Event: GET_YELLOW_GOLD
+84: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 85: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 85: 1:☼~~~~~~~~H$S ~~~☼
@@ -3881,7 +3881,7 @@
 94: 2:
 94: 2:Scores: 35
 94: 2:Answer: DOWN
-94: 2:Fire Event: GET_YELLOW_GOLD
+94: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 95: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 95: 1:☼~~~~~~~~H$S ~~~☼
@@ -4374,7 +4374,7 @@
 106: 2:
 106: 2:Scores: 38
 106: 2:Answer: DOWN
-106: 2:Fire Event: GET_YELLOW_GOLD
+106: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 107: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 107: 1:☼~~~~~~~~H$S ~~~☼
@@ -4827,7 +4827,7 @@
 117: 2:
 117: 2:Scores: 42
 117: 2:Answer: LEFT
-117: 2:Fire Event: GET_YELLOW_GOLD
+117: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 118: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 118: 1:☼~~~~~~~~H$S ~~~☼
@@ -6272,7 +6272,7 @@
 152: 2:
 152: 2:Scores: 44
 152: 2:Answer: LEFT
-152: 1:Fire Event: GET_YELLOW_GOLD
+152: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 153: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 153: 1:☼~~~~~~~~H$S ~~~☼
@@ -6601,7 +6601,7 @@
 160: 2:
 160: 2:Scores: 44
 160: 2:Answer: RIGHT
-160: 1:Fire Event: GET_YELLOW_GOLD
+160: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 161: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 161: 1:☼~~~~~~~~H$S ~~~☼
@@ -6930,7 +6930,7 @@
 168: 2:
 168: 2:Scores: 44
 168: 2:Answer: RIGHT
-168: 1:Fire Event: GET_YELLOW_GOLD
+168: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 169: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 169: 1:☼~~~~~~~~H$S ~~~☼
@@ -7386,7 +7386,7 @@
 179: 2:
 179: 2:Scores: 43
 179: 2:Answer: RIGHT
-179: 2:Fire Event: GET_YELLOW_GOLD
+179: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 180: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 180: 1:☼~~~~~~~~H$S ~~~☼
@@ -7594,7 +7594,7 @@
 184: 2:
 184: 2:Scores: 45
 184: 2:Answer: DOWN
-184: 2:Fire Event: GET_YELLOW_GOLD
+184: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 185: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 185: 1:☼~~~~~~~~H$S ~~~☼
@@ -7636,7 +7636,7 @@
 185: 2:
 185: 2:Scores: 48
 185: 2:Answer: DOWN
-185: 1:Fire Event: GET_YELLOW_GOLD
+185: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 186: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 186: 1:☼~~~~~~~~H$S ~~~☼
@@ -7883,7 +7883,7 @@
 191: 2:
 191: 2:Scores: 48
 191: 2:Answer:
-191: 1:Fire Event: GET_YELLOW_GOLD
+191: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 192: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 192: 1:☼~~~~~~~~H$S ~~~☼
@@ -8132,7 +8132,7 @@
 197: 2:
 197: 2:Scores: 47
 197: 2:Answer:
-197: 1:Fire Event: GET_YELLOW_GOLD
+197: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 198: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 198: 1:☼~~~~~~~~H$S ~~~☼
@@ -8379,7 +8379,7 @@
 203: 2:
 203: 2:Scores: 47
 203: 2:Answer: DOWN
-203: 2:Fire Event: GET_YELLOW_GOLD
+203: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 204: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 204: 1:☼~~~~~~~~H$S ~~~☼
@@ -8915,7 +8915,7 @@
 216: 2:
 216: 2:Scores: 48
 216: 2:Answer:
-216: 1:Fire Event: GET_YELLOW_GOLD
+216: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 217: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 217: 1:☼~~~~~~~~H$S ~~~☼
@@ -8957,7 +8957,7 @@
 217: 2:
 217: 2:Scores: 48
 217: 2:Answer: LEFT
-217: 1:Fire Event: GET_YELLOW_GOLD
+217: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 218: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 218: 1:☼~~~~~~~~H$S ~~~☼
@@ -9123,7 +9123,7 @@
 221: 2:
 221: 2:Scores: 48
 221: 2:Answer: RIGHT
-221: 1:Fire Event: GET_YELLOW_GOLD
+221: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 222: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 222: 1:☼~~~~~~~~H$S ~~~☼
@@ -9206,8 +9206,8 @@
 223: 2:
 223: 2:Scores: 48
 223: 2:Answer: RIGHT
-223: 1:Fire Event: GET_YELLOW_GOLD
-223: 2:Fire Event: GET_YELLOW_GOLD
+223: 1:Fire Event: GET_KNIFE_CLUE
+223: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 224: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 224: 1:☼~~~~~~~~H$S ~~~☼
@@ -9536,7 +9536,7 @@
 231: 2:
 231: 2:Scores: 50
 231: 2:Answer: RIGHT
-231: 1:Fire Event: GET_YELLOW_GOLD
+231: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 232: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 232: 1:☼~~~~~~~~H$S ~~~☼
@@ -9578,7 +9578,7 @@
 232: 2:
 232: 2:Scores: 50
 232: 2:Answer: RIGHT
-232: 1:Fire Event: GET_YELLOW_GOLD
+232: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 233: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 233: 1:☼~~~~~~~~H$S ~~~☼
@@ -9786,7 +9786,7 @@
 237: 2:Scores: 50
 237: 2:Answer: DOWN
 237: 1:PLAYER_GAME_OVER -> START_NEW_GAME
-237: 2:Fire Event: GET_YELLOW_GOLD
+237: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 238: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 238: 1:☼~~~~~~~~H$S ~~~☼
@@ -10240,7 +10240,7 @@
 248: 2:
 248: 2:Scores: 53
 248: 2:Answer: RIGHT
-248: 2:Fire Event: GET_YELLOW_GOLD
+248: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 249: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 249: 1:☼~~~~~~~~H$S ~~~☼
@@ -10282,7 +10282,7 @@
 249: 2:
 249: 2:Scores: 57
 249: 2:Answer: DOWN
-249: 2:Fire Event: GET_YELLOW_GOLD
+249: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 250: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 250: 1:☼~~~~~~~~H$S ~~~☼
@@ -10448,7 +10448,7 @@
 253: 2:
 253: 2:Scores: 62
 253: 2:Answer: DOWN
-253: 1:Fire Event: GET_YELLOW_GOLD
+253: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 254: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 254: 1:☼~~~~~~~~H$S ~~~☼
@@ -10697,7 +10697,7 @@
 259: 2:
 259: 2:Scores: 61
 259: 2:Answer: LEFT
-259: 1:Fire Event: GET_YELLOW_GOLD
+259: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 260: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 260: 1:☼~~~~~~~~H$S ~~~☼
@@ -11192,7 +11192,7 @@
 271: 2:
 271: 2:Scores: 60
 271: 2:Answer: DOWN
-271: 1:Fire Event: GET_YELLOW_GOLD
+271: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 272: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 272: 1:☼~~~~~~~~H$S ~~~☼
@@ -11359,7 +11359,7 @@
 275: 2:Scores: 60
 275: 2:Answer: LEFT
 275: 1:PLAYER_GAME_OVER -> START_NEW_GAME
-275: 1:Fire Event: GET_YELLOW_GOLD
+275: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 276: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 276: 1:☼~~~~~~~~H$S ~~~☼
@@ -11524,7 +11524,7 @@
 279: 2:
 279: 2:Scores: 60
 279: 2:Answer: DOWN
-279: 1:Fire Event: GET_YELLOW_GOLD
+279: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 280: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 280: 1:☼~~~~~~~~H$S ~~~☼
@@ -11648,7 +11648,7 @@
 282: 2:
 282: 2:Scores: 60
 282: 2:Answer:
-282: 1:Fire Event: GET_YELLOW_GOLD
+282: 1:Fire Event: GET_KNIFE_CLUE
 282: 2:Fire Event: KILL_HERO
 ------------------------------------------
 283: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -11897,7 +11897,7 @@
 288: 2:
 288: 2:Scores: 59
 288: 2:Answer: LEFT
-288: 1:Fire Event: GET_YELLOW_GOLD
+288: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 289: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 289: 1:☼~~~~~~~~H$S ~~~☼
@@ -12640,7 +12640,7 @@
 306: 2:Scores: 57
 306: 2:Answer:
 306: 2:PLAYER_GAME_OVER -> START_NEW_GAME
-306: 1:Fire Event: GET_YELLOW_GOLD
+306: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 307: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 307: 1:☼~~~~~~~~H$S ~~~☼
@@ -13999,7 +13999,7 @@
 339: 2:
 339: 2:Scores: 67
 339: 2:Answer: DOWN
-339: 1:Fire Event: GET_YELLOW_GOLD
+339: 1:Fire Event: GET_KNIFE_CLUE
 339: 2:Fire Event: KILL_HERO
 ------------------------------------------
 340: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -14166,7 +14166,7 @@
 343: 2:
 343: 2:Scores: 66
 343: 2:Answer: DOWN
-343: 2:Fire Event: GET_YELLOW_GOLD
+343: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 344: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 344: 1:☼~~~~~~~~H$S ~~~☼
@@ -14290,7 +14290,7 @@
 346: 2:
 346: 2:Scores: 68
 346: 2:Answer: LEFT
-346: 1:Fire Event: GET_YELLOW_GOLD
+346: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 347: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 347: 1:☼~~~~~~~~H$S ~~~☼
@@ -14537,7 +14537,7 @@
 352: 2:
 352: 2:Scores: 68
 352: 2:Answer: LEFT
-352: 1:Fire Event: GET_YELLOW_GOLD
+352: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 353: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 353: 1:☼~~~~~~~~H$S ~~~☼
@@ -14579,7 +14579,7 @@
 353: 2:
 353: 2:Scores: 68
 353: 2:Answer: DOWN
-353: 1:Fire Event: GET_YELLOW_GOLD
+353: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 354: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 354: 1:☼~~~~~~~~H$S ~~~☼
@@ -14868,7 +14868,7 @@
 360: 2:
 360: 2:Scores: 68
 360: 2:Answer: DOWN
-360: 2:Fire Event: GET_YELLOW_GOLD
+360: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 361: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 361: 1:☼~~~~~~~~H$S ~~~☼
@@ -15034,7 +15034,7 @@
 364: 2:
 364: 2:Scores: 76
 364: 2:Answer: LEFT
-364: 2:Fire Event: GET_YELLOW_GOLD
+364: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 365: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 365: 1:☼~~~~~~~~H$S ~~~☼
@@ -15076,7 +15076,7 @@
 365: 2:
 365: 2:Scores: 80
 365: 2:Answer: RIGHT
-365: 1:Fire Event: GET_YELLOW_GOLD
+365: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 366: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 366: 1:☼~~~~~~~~H$S ~~~☼
@@ -15159,7 +15159,7 @@
 367: 2:
 367: 2:Scores: 80
 367: 2:Answer: DOWN
-367: 2:Fire Event: GET_YELLOW_GOLD
+367: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 368: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 368: 1:☼~~~~~~~~H$S ~~~☼
@@ -15533,7 +15533,7 @@
 376: 2:
 376: 2:Scores: 84
 376: 2:Answer: RIGHT
-376: 2:Fire Event: GET_YELLOW_GOLD
+376: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 377: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 377: 1:☼~~~~~~~~H(S ~~~☼
@@ -15781,7 +15781,7 @@
 382: 2:
 382: 2:Scores: 87
 382: 2:Answer: DOWN
-382: 1:Fire Event: GET_YELLOW_GOLD
+382: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 383: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 383: 1:☼~~~~~~~~H S ~~~☼
@@ -15905,7 +15905,7 @@
 385: 2:
 385: 2:Scores: 87
 385: 2:Answer: DOWN
-385: 2:Fire Event: GET_YELLOW_GOLD
+385: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 386: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 386: 1:☼~~~~~~~~H S ~~~☼
@@ -16399,7 +16399,7 @@
 397: 2:
 397: 2:Scores: 90
 397: 2:Answer: UP
-397: 1:Fire Event: GET_YELLOW_GOLD
+397: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 398: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 398: 1:☼~~~~~~~~H S ~~~☼
@@ -17269,7 +17269,7 @@
 418: 2:Scores: 99
 418: 2:Answer:
 418: 2:PLAYER_GAME_OVER -> START_NEW_GAME
-418: 1:Fire Event: GET_YELLOW_GOLD
+418: 1:Fire Event: GET_KNIFE_CLUE
 418: 2:Fire Event: KILL_HERO
 ------------------------------------------
 419: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -17850,7 +17850,7 @@
 432: 2:Scores: 96
 432: 2:Answer:
 432: 2:PLAYER_GAME_OVER -> START_NEW_GAME
-432: 1:Fire Event: GET_YELLOW_GOLD
+432: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 433: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 433: 1:☼~~~~~~~~H@S ~~~☼
@@ -18923,7 +18923,7 @@
 458: 2:
 458: 2:Scores: 96
 458: 2:Answer: RIGHT
-458: 2:Fire Event: GET_YELLOW_GOLD
+458: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 459: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 459: 1:☼~~~~~~~~H@S ~~~☼
@@ -18965,7 +18965,7 @@
 459: 2:
 459: 2:Scores: 98
 459: 2:Answer: DOWN
-459: 2:Fire Event: GET_YELLOW_GOLD
+459: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 460: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 460: 1:☼~~~~~~~~H@S ~~~☼
@@ -19089,7 +19089,7 @@
 462: 2:
 462: 2:Scores: 101
 462: 2:Answer: DOWN
-462: 2:Fire Event: GET_YELLOW_GOLD
+462: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 463: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 463: 1:☼~~~~~~~~H@S ~~~☼
@@ -19172,7 +19172,7 @@
 464: 2:
 464: 2:Scores: 105
 464: 2:Answer: LEFT
-464: 2:Fire Event: GET_YELLOW_GOLD
+464: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 465: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 465: 1:☼~~~~~~~~H@S ~~~☼
@@ -19296,7 +19296,7 @@
 467: 2:
 467: 2:Scores: 110
 467: 2:Answer: RIGHT
-467: 1:Fire Event: GET_YELLOW_GOLD
+467: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 468: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 468: 1:☼~~~~~~~~H@S ~~~☼
@@ -19338,7 +19338,7 @@
 468: 2:
 468: 2:Scores: 110
 468: 2:Answer: RIGHT
-468: 2:Fire Event: GET_YELLOW_GOLD
+468: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 469: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 469: 1:☼~~~~~~~~H@S ~~~☼
@@ -19544,8 +19544,8 @@
 473: 2:
 473: 2:Scores: 116
 473: 2:Answer: DOWN
-473: 1:Fire Event: GET_YELLOW_GOLD
-473: 2:Fire Event: GET_YELLOW_GOLD
+473: 1:Fire Event: GET_KNIFE_CLUE
+473: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 474: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 474: 1:☼~~~~~~~~H@S ~~~☼
@@ -20040,7 +20040,7 @@
 485: 2:
 485: 2:Scores: 122
 485: 2:Answer: DOWN
-485: 1:Fire Event: GET_YELLOW_GOLD
+485: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 486: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 486: 1:☼~~~~~~~~H@S ~~~☼
@@ -20659,7 +20659,7 @@
 500: 2:
 500: 2:Scores: 128
 500: 2:Answer: DOWN
-500: 1:Fire Event: GET_YELLOW_GOLD
+500: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 501: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 501: 1:☼~~~~~~~~H@S ~~~☼
@@ -21034,7 +21034,7 @@
 509: 2:
 509: 2:Scores: 132
 509: 2:Answer: LEFT
-509: 1:Fire Event: GET_YELLOW_GOLD
+509: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 510: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 510: 1:☼~~~~~~~~H@S ~~~☼
@@ -22723,7 +22723,7 @@
 550: 2:
 550: 2:Scores: 132
 550: 2:Answer: RIGHT
-550: 2:Fire Event: GET_YELLOW_GOLD
+550: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 551: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 551: 1:☼~~~~~~~~H@S ~~~☼
@@ -22971,7 +22971,7 @@
 556: 2:
 556: 2:Scores: 134
 556: 2:Answer: DOWN
-556: 2:Fire Event: GET_YELLOW_GOLD
+556: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 557: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 557: 1:☼~~~~~~~~H@S ~~~☼
@@ -23466,7 +23466,7 @@
 568: 2:
 568: 2:Scores: 137
 568: 2:Answer: DOWN
-568: 2:Fire Event: GET_YELLOW_GOLD
+568: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 569: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 569: 1:☼~~~~~~~~H@S ~~~☼
@@ -23836,7 +23836,7 @@
 577: 2:
 577: 2:Scores: 141
 577: 2:Answer: RIGHT
-577: 2:Fire Event: GET_YELLOW_GOLD
+577: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 578: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 578: 1:☼~~~~~~~~H@S ~~~☼
@@ -24249,7 +24249,7 @@
 587: 2:
 587: 2:Scores: 146
 587: 2:Answer: RIGHT
-587: 2:Fire Event: GET_YELLOW_GOLD
+587: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 588: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 588: 1:☼~~~~~~~~H@S ~~~☼
@@ -24955,7 +24955,7 @@
 604: 2:Scores: 150
 604: 2:Answer: UP
 604: 1:PLAYER_GAME_OVER -> START_NEW_GAME
-604: 1:Fire Event: GET_YELLOW_GOLD
+604: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 605: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 605: 1:☼~~~~~~~~H@S ~~~☼
@@ -25038,7 +25038,7 @@
 606: 2:
 606: 2:Scores: 150
 606: 2:Answer: RIGHT
-606: 2:Fire Event: GET_YELLOW_GOLD
+606: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 607: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 607: 1:☼~~~~~~~~H@S ~~~☼
@@ -25162,7 +25162,7 @@
 609: 2:
 609: 2:Scores: 152
 609: 2:Answer: RIGHT
-609: 1:Fire Event: GET_YELLOW_GOLD
+609: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 610: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 610: 1:☼~~~~~~~~H@S ~~~☼
@@ -25286,7 +25286,7 @@
 612: 2:
 612: 2:Scores: 152
 612: 2:Answer: DOWN
-612: 2:Fire Event: GET_YELLOW_GOLD
+612: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 613: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 613: 1:☼~~~~~~~~H@S ~~~☼
@@ -25410,7 +25410,7 @@
 615: 2:
 615: 2:Scores: 155
 615: 2:Answer: DOWN
-615: 1:Fire Event: GET_YELLOW_GOLD
+615: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 616: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 616: 1:☼~~~~~~~~H@S ~~~☼
@@ -25657,7 +25657,7 @@
 621: 2:
 621: 2:Scores: 155
 621: 2:Answer: RIGHT
-621: 1:Fire Event: GET_YELLOW_GOLD
+621: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 622: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 622: 1:☼~~~~~~~~H@S ~~~☼
@@ -26562,7 +26562,7 @@
 643: 2:
 643: 2:Scores: 154
 643: 2:Answer: LEFT
-643: 1:Fire Event: GET_YELLOW_GOLD
+643: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 644: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 644: 1:☼~~~~~~~~H@S ~~~☼
@@ -28254,7 +28254,7 @@
 684: 2:
 684: 2:Scores: 154
 684: 2:Answer: DOWN
-684: 2:Fire Event: GET_YELLOW_GOLD
+684: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 685: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 685: 1:☼~~~~~~~~H@S ~~~☼
@@ -28460,7 +28460,7 @@
 689: 2:
 689: 2:Scores: 156
 689: 2:Answer: LEFT
-689: 2:Fire Event: GET_YELLOW_GOLD
+689: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 690: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 690: 1:☼~~~~~~~~H@S ~~~☼
@@ -28707,7 +28707,7 @@
 695: 2:
 695: 2:Scores: 159
 695: 2:Answer: RIGHT
-695: 2:Fire Event: GET_YELLOW_GOLD
+695: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 696: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 696: 1:☼~~~~~~~~H@S ~~~☼
@@ -29326,7 +29326,7 @@
 710: 2:
 710: 2:Scores: 162
 710: 2:Answer: DOWN
-710: 1:Fire Event: GET_YELLOW_GOLD
+710: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 711: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 711: 1:☼~~~~~~~~H@S ~~~☼
@@ -29696,7 +29696,7 @@
 719: 2:
 719: 2:Scores: 162
 719: 2:Answer: RIGHT
-719: 1:Fire Event: GET_YELLOW_GOLD
+719: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 720: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 720: 1:☼~~~~~~~~H@S ~~~☼
@@ -30189,7 +30189,7 @@
 731: 2:
 731: 2:Scores: 162
 731: 2:Answer: UP
-731: 1:Fire Event: GET_YELLOW_GOLD
+731: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 732: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 732: 1:☼~~~~~~~~H@S ~~~☼
@@ -31300,7 +31300,7 @@
 758: 2:
 758: 2:Scores: 162
 758: 2:Answer: UP
-758: 1:Fire Event: GET_YELLOW_GOLD
+758: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 759: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 759: 1:☼~~~~~~~~H@S ~~~☼
@@ -31506,7 +31506,7 @@
 763: 2:
 763: 2:Scores: 162
 763: 2:Answer: UP
-763: 1:Fire Event: GET_YELLOW_GOLD
+763: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 764: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 764: 1:☼~~~~~~~~H@S ~~~☼
@@ -31630,7 +31630,7 @@
 766: 2:
 766: 2:Scores: 162
 766: 2:Answer: RIGHT
-766: 2:Fire Event: GET_YELLOW_GOLD
+766: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 767: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 767: 1:☼~~~~~~~~H@S ~~~☼
@@ -34022,7 +34022,7 @@
 824: 2:
 824: 2:Scores: 164
 824: 2:Answer: RIGHT
-824: 2:Fire Event: GET_YELLOW_GOLD
+824: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 825: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 825: 1:☼~~~~~~~~H@S ~~~☼
@@ -34065,7 +34065,7 @@
 825: 2:Scores: 166
 825: 2:Answer: RIGHT
 825: 1:Fire Event: GET_GREEN_GOLD
-825: 2:Fire Event: GET_YELLOW_GOLD
+825: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 826: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 826: 1:☼~~~~~~~~H@S ~~~☼
@@ -34107,7 +34107,7 @@
 826: 2:
 826: 2:Scores: 169
 826: 2:Answer: DOWN
-826: 2:Fire Event: GET_YELLOW_GOLD
+826: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 827: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 827: 1:☼~~~~~~~~H@S ~~~☼
@@ -34396,7 +34396,7 @@
 833: 2:
 833: 2:Scores: 178
 833: 2:Answer: LEFT
-833: 1:Fire Event: GET_YELLOW_GOLD
+833: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 834: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 834: 1:☼~~~~~~~~H@S ~~~☼
@@ -34438,7 +34438,7 @@
 834: 2:
 834: 2:Scores: 178
 834: 2:Answer: LEFT
-834: 1:Fire Event: GET_YELLOW_GOLD
+834: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 835: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 835: 1:☼~~~~~~~~H@S ~~~☼
@@ -34769,7 +34769,7 @@
 842: 2:
 842: 2:Scores: 177
 842: 2:Answer: LEFT
-842: 2:Fire Event: GET_YELLOW_GOLD
+842: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 843: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 843: 1:☼~~~~~~~~H@S ~~~☼
@@ -35346,7 +35346,7 @@
 856: 2:
 856: 2:Scores: 180
 856: 2:Answer: DOWN
-856: 1:Fire Event: GET_YELLOW_GOLD
+856: 1:Fire Event: GET_KNIFE_CLUE
 856: 2:Fire Event: GET_GREEN_GOLD
 ------------------------------------------
 857: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -35678,7 +35678,7 @@
 864: 2:
 864: 2:Scores: 182
 864: 2:Answer: DOWN
-864: 2:Fire Event: GET_YELLOW_GOLD
+864: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 865: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 865: 1:☼~~~~~~~~H@S ~~~☼
@@ -35887,7 +35887,7 @@
 869: 2:
 869: 2:Scores: 184
 869: 2:Answer: LEFT
-869: 1:Fire Event: GET_YELLOW_GOLD
+869: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 870: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 870: 1:☼~~~~~~~~H@S ~~~☼
@@ -36341,7 +36341,7 @@
 880: 2:
 880: 2:Scores: 184
 880: 2:Answer: DOWN
-880: 1:Fire Event: GET_YELLOW_GOLD
+880: 1:Fire Event: GET_KNIFE_CLUE
 880: 2:Fire Event: GET_GREEN_GOLD
 ------------------------------------------
 881: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -36920,7 +36920,7 @@
 894: 2:
 894: 2:Scores: 184
 894: 2:Answer: DOWN
-894: 1:Fire Event: GET_YELLOW_GOLD
+894: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 895: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 895: 1:☼~~~~~~~~H S ~~~☼
@@ -37127,7 +37127,7 @@
 899: 2:
 899: 2:Scores: 184
 899: 2:Answer: DOWN
-899: 2:Fire Event: GET_YELLOW_GOLD
+899: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 900: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 900: 1:☼~~~~~~~~H S ~~~☼
@@ -37210,7 +37210,7 @@
 901: 2:
 901: 2:Scores: 186
 901: 2:Answer: RIGHT
-901: 1:Fire Event: GET_YELLOW_GOLD
+901: 1:Fire Event: GET_KNIFE_CLUE
 901: 1:Fire Event: KILL_HERO
 ------------------------------------------
 902: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -37461,7 +37461,7 @@
 907: 2:
 907: 2:Scores: 186
 907: 2:Answer: RIGHT
-907: 1:Fire Event: GET_YELLOW_GOLD
+907: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 908: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 908: 1:☼~~~~~~~~H$S ~~~☼
@@ -37627,7 +37627,7 @@
 911: 2:
 911: 2:Scores: 191
 911: 2:Answer: DOWN
-911: 1:Fire Event: GET_YELLOW_GOLD
+911: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 912: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 912: 1:☼~~~~~~~~H$S ~~~☼
@@ -38038,7 +38038,7 @@
 921: 2:
 921: 2:Scores: 191
 921: 2:Answer: LEFT
-921: 1:Fire Event: GET_YELLOW_GOLD
+921: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 922: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 922: 1:☼~~~~~~~~H$S ~~~☼
@@ -38164,7 +38164,7 @@
 924: 2:Scores: 191
 924: 2:Answer: RIGHT
 924: 1:PLAYER_GAME_OVER -> START_NEW_GAME
-924: 2:Fire Event: GET_YELLOW_GOLD
+924: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 925: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 925: 1:☼~~~~~~~~H$S ~~~☼
@@ -38493,7 +38493,7 @@
 932: 2:
 932: 2:Scores: 194
 932: 2:Answer: LEFT
-932: 1:Fire Event: GET_YELLOW_GOLD
+932: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 933: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 933: 1:☼~~~~~~~~H$S ~~~☼
@@ -38699,7 +38699,7 @@
 937: 2:
 937: 2:Scores: 194
 937: 2:Answer: LEFT
-937: 2:Fire Event: GET_YELLOW_GOLD
+937: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 938: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 938: 1:☼~~~~~~~~H$S ~~~☼
@@ -39028,7 +39028,7 @@
 945: 2:
 945: 2:Scores: 198
 945: 2:Answer: UP
-945: 1:Fire Event: GET_YELLOW_GOLD
+945: 1:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 946: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 946: 1:☼~~~~~~~~H$S ~~~☼
@@ -39236,7 +39236,7 @@
 950: 2:
 950: 2:Scores: 198
 950: 2:Answer: RIGHT
-950: 1:Fire Event: GET_YELLOW_GOLD
+950: 1:Fire Event: GET_KNIFE_CLUE
 950: 2:Fire Event: GET_GREEN_GOLD
 ------------------------------------------
 951: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
@@ -39855,7 +39855,7 @@
 965: 2:
 965: 2:Scores: 205
 965: 2:Answer: DOWN
-965: 2:Fire Event: GET_YELLOW_GOLD
+965: 2:Fire Event: GET_KNIFE_CLUE
 ------------------------------------------
 966: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 966: 1:☼~~~~~~~~H$S ~~~☼
@@ -39938,7 +39938,7 @@
 967: 2:
 967: 2:Scores: 210
 967: 2:Answer:
-967: 1:Fire Event: GET_YELLOW_GOLD
+967: 1:Fire Event: GET_KNIFE_CLUE
 967: 2:Fire Event: KILL_HERO
 ------------------------------------------
 968: 1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼

@@ -56,9 +56,9 @@ public class GameSettings extends SettingsImpl
         GOLD_SCORE_GREEN("[Score] Green gold score"),
         GOLD_SCORE_GREEN_INCREMENT("[Score] Green gold score increment"),
 
-        GOLD_COUNT_YELLOW("[Game] Yellow gold count"),
-        GOLD_SCORE_YELLOW("[Score] Yellow gold score"),
-        GOLD_SCORE_YELLOW_INCREMENT("[Score] Yellow gold score increment"),
+        CLUE_COUNT_KNIFE("[Game] Knife clue count"),
+        CLUE_SCORE_KNIFE("[Score] Knife clue score"),
+        CLUE_SCORE_KNIFE_INCREMENT("[Score] Knife clue score increment"),
 
         GOLD_COUNT_RED("[Game] Red gold count"),
         GOLD_SCORE_RED("[Score] Red gold score"),
@@ -104,9 +104,9 @@ public class GameSettings extends SettingsImpl
         integer(GOLD_SCORE_GREEN, 1);
         integer(GOLD_SCORE_GREEN_INCREMENT, 1);
 
-        integer(GOLD_COUNT_YELLOW, 20);
-        integer(GOLD_SCORE_YELLOW, 2);
-        integer(GOLD_SCORE_YELLOW_INCREMENT, 1);
+        integer(CLUE_COUNT_KNIFE, 20);
+        integer(CLUE_SCORE_KNIFE, 2);
+        integer(CLUE_SCORE_KNIFE_INCREMENT, 1);
 
         integer(GOLD_COUNT_RED, 10);
         integer(GOLD_SCORE_RED, 5);

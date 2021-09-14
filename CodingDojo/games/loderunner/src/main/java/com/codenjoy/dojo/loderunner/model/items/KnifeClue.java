@@ -29,14 +29,14 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class YellowGold extends PointImpl implements State<Element, Player> {
+public class KnifeClue extends PointImpl implements State<Element, Player> {
 
-    public YellowGold(Point point) {
+    public KnifeClue(Point point) {
         super(point);
     }
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        return Element.YELLOW_GOLD;
+        return Element.KNIFE_CLUE;
     }
 }

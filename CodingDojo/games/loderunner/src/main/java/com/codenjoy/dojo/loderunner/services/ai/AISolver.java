@@ -85,7 +85,7 @@ public class AISolver implements Solver<Board> {
             return Arrays.asList();
         }
         List<Point> to = board.get(
-                Element.YELLOW_GOLD,
+                Element.KNIFE_CLUE,
                 Element.GREEN_GOLD,
                 Element.RED_GOLD);
         DeikstraFindWay.Possible map = possible(board);

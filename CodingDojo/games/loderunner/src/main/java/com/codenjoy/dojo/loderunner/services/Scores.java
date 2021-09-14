@@ -33,7 +33,7 @@ public class Scores implements PlayerScores {
     private GameSettings settings;
     private volatile int countRed;
     private volatile int countGreen;
-    private volatile int countYellow;
+    private volatile int countKnife;
 
     public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
@@ -49,7 +49,7 @@ public class Scores implements PlayerScores {
     private void clearSeries() {
         countRed = 0;
         countGreen = 0;
-        countYellow = 0;
+        countKnife = 0;
     }
 
     @Override
@@ -59,9 +59,9 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.GET_YELLOW_GOLD)) {
-            score += settings.integer(GOLD_SCORE_YELLOW) + countYellow;
-            countYellow += settings.integer(GOLD_SCORE_YELLOW_INCREMENT);
+        if (event.equals(Events.GET_KNIFE_CLUE)) {
+            score += settings.integer(CLUE_SCORE_KNIFE) + countKnife;
+            countKnife += settings.integer(CLUE_SCORE_KNIFE_INCREMENT);
         } else if (event.equals(Events.GET_GREEN_GOLD)) {
             score += settings.integer(GOLD_SCORE_GREEN) + countGreen;
             countGreen += settings.integer(GOLD_SCORE_GREEN_INCREMENT);
@@ -91,7 +91,7 @@ public class Scores implements PlayerScores {
                 "score=" + score +
                 ", red=" + countRed +
                 ", green=" + countGreen +
-                ", yellow=" + countYellow +
+                ", knife=" + countKnife +
                 '}';
     }
 }

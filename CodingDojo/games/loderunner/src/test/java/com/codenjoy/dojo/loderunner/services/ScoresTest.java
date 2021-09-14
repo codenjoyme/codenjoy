@@ -47,8 +47,8 @@ public class ScoresTest {
         scores.event(Events.SUICIDE);
     }
 
-    public void yellowGold() {
-        scores.event(Events.GET_YELLOW_GOLD);
+    public void knifeClue() {
+        scores.event(Events.GET_KNIFE_CLUE);
     }
 
     public void redGold() {
@@ -70,8 +70,8 @@ public class ScoresTest {
                 .integer(GOLD_SCORE_GREEN, 2)
                 .integer(GOLD_SCORE_GREEN_INCREMENT, 1)
 
-                .integer(GOLD_SCORE_YELLOW, 20)
-                .integer(GOLD_SCORE_YELLOW_INCREMENT, 10)
+                .integer(CLUE_SCORE_KNIFE, 20)
+                .integer(CLUE_SCORE_KNIFE_INCREMENT, 10)
 
                 .integer(GOLD_SCORE_RED, 200)
                 .integer(GOLD_SCORE_RED_INCREMENT, 100);
@@ -87,24 +87,24 @@ public class ScoresTest {
         killRobber();
         killRobber();
 
-        yellowGold();
+        knifeClue();
         redGold();
         redGold();
         redGold();
         greenGold();
         greenGold();
-        yellowGold();
-        yellowGold();
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
+        knifeClue();
+        knifeClue();
 
         killHero(); 
 
         assertEquals(140
                 + 3 * settings.integer(KILL_ROBBER_SCORE)
 
-                + 5 * settings.integer(GOLD_SCORE_YELLOW)
-                + (1 + 2 + 3 + 4) * settings.integer(GOLD_SCORE_YELLOW_INCREMENT)
+                + 5 * settings.integer(CLUE_SCORE_KNIFE)
+                + (1 + 2 + 3 + 4) * settings.integer(CLUE_SCORE_KNIFE_INCREMENT)
 
                 + 3 * settings.integer(GOLD_SCORE_RED)
                 + (1 + 2) * settings.integer(GOLD_SCORE_RED_INCREMENT)
@@ -126,7 +126,7 @@ public class ScoresTest {
     @Test
     public void shouldClearScore() {
         // given
-        yellowGold();
+        knifeClue();
         redGold();
         redGold();
         greenGold();
@@ -134,7 +134,7 @@ public class ScoresTest {
         greenGold();
 
         assertEquals(529, scores.getScore());
-        assertEquals("Scores{score=529, red=200, green=3, yellow=10}",
+        assertEquals("Scores{score=529, red=200, green=3, knife=10}",
                 scores.toString());
 
         // when
@@ -142,7 +142,7 @@ public class ScoresTest {
 
         // then
         assertEquals(0, scores.getScore());
-        assertEquals("Scores{score=0, red=0, green=0, yellow=0}",
+        assertEquals("Scores{score=0, red=0, green=0, knife=0}",
                 scores.toString());
     }
 
@@ -150,13 +150,13 @@ public class ScoresTest {
     public void shouldIncreaseForNextGold() {
         scores = new Scores(0, settings);
 
-        yellowGold();
-        yellowGold();
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
+        knifeClue();
+        knifeClue();
 
-        assertEquals(4 * settings.integer(GOLD_SCORE_YELLOW)
-                + (1 + 2 + 3) * settings.integer(GOLD_SCORE_YELLOW_INCREMENT),
+        assertEquals(4 * settings.integer(CLUE_SCORE_KNIFE)
+                + (1 + 2 + 3) * settings.integer(CLUE_SCORE_KNIFE_INCREMENT),
                 scores.getScore());
     }
 
@@ -165,28 +165,28 @@ public class ScoresTest {
         // given
         scores = new Scores(0, settings);
 
-        yellowGold();
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
+        knifeClue();
 
         // when
         killHero(); 
 
         // then
         Integer score = (Integer) scores.getScore();
-        assertEquals(3 * settings.integer(GOLD_SCORE_YELLOW)
-                    + (1 + 2) * settings.integer(GOLD_SCORE_YELLOW_INCREMENT)
+        assertEquals(3 * settings.integer(CLUE_SCORE_KNIFE)
+                    + (1 + 2) * settings.integer(CLUE_SCORE_KNIFE_INCREMENT)
                     - settings.integer(KILL_HERO_PENALTY),
                 (int)score);
 
         // when
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
 
         // then
         assertEquals(score
-                        + 2 * settings.integer(GOLD_SCORE_YELLOW)
-                        + 1 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT),
+                        + 2 * settings.integer(CLUE_SCORE_KNIFE)
+                        + 1 * settings.integer(CLUE_SCORE_KNIFE_INCREMENT),
                 scores.getScore());
     }
 
@@ -195,9 +195,9 @@ public class ScoresTest {
         // given
         scores = new Scores(0, settings);
 
-        yellowGold();
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
+        knifeClue();
 
         // when
         scores.clear();
@@ -205,11 +205,11 @@ public class ScoresTest {
         assertEquals(0, scores.getScore());
 
         // then
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
 
-        assertEquals(2 * settings.integer(GOLD_SCORE_YELLOW)
-                        + 1 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT),
+        assertEquals(2 * settings.integer(CLUE_SCORE_KNIFE)
+                        + 1 * settings.integer(CLUE_SCORE_KNIFE_INCREMENT),
                 scores.getScore());
     }
 
@@ -218,26 +218,26 @@ public class ScoresTest {
         // given
         scores = new Scores(0, settings);
 
-        yellowGold();
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
+        knifeClue();
 
         // when
         suicide();
 
         int saved = - settings.integer(SUICIDE_PENALTY)
-                + 3 * settings.integer(GOLD_SCORE_YELLOW)
-                + 3 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT);
+                + 3 * settings.integer(CLUE_SCORE_KNIFE)
+                + 3 * settings.integer(CLUE_SCORE_KNIFE_INCREMENT);
         assertEquals(saved,
                 scores.getScore());
 
         // then
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
 
         assertEquals(saved
-                        + 2 * settings.integer(GOLD_SCORE_YELLOW)
-                        + 1 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT),
+                        + 2 * settings.integer(CLUE_SCORE_KNIFE)
+                        + 1 * settings.integer(CLUE_SCORE_KNIFE_INCREMENT),
                 scores.getScore());
     }
 
@@ -246,26 +246,26 @@ public class ScoresTest {
         // given
         scores = new Scores(0, settings);
 
-        yellowGold();
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
+        knifeClue();
 
         // when
         killHero();
 
         int saved = - settings.integer(KILL_HERO_PENALTY)
-                + 3 * settings.integer(GOLD_SCORE_YELLOW)
-                + 3 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT);
+                + 3 * settings.integer(CLUE_SCORE_KNIFE)
+                + 3 * settings.integer(CLUE_SCORE_KNIFE_INCREMENT);
         assertEquals(saved,
                 scores.getScore());
 
         // then
-        yellowGold();
-        yellowGold();
+        knifeClue();
+        knifeClue();
 
         assertEquals(saved
-                        + 2 * settings.integer(GOLD_SCORE_YELLOW)
-                        + 1 * settings.integer(GOLD_SCORE_YELLOW_INCREMENT),
+                        + 2 * settings.integer(CLUE_SCORE_KNIFE)
+                        + 1 * settings.integer(CLUE_SCORE_KNIFE_INCREMENT),
                 scores.getScore());
     }
 

@@ -29,7 +29,7 @@ public enum Events {
     KILL_ROBBER,       // герой замуровал в стенке другого героя
     KILL_HERO,        // героя убили
 
-    GET_YELLOW_GOLD,  // подобрано золото
+    GET_KNIFE_CLUE,  // подобрано золото
     GET_GREEN_GOLD,
     GET_RED_GOLD,
 

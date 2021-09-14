@@ -86,7 +86,7 @@ public class SmokeTest {
                                 .integer(MASK_POTIONS_COUNT, 1)
                                 .integer(GOLD_COUNT_GREEN, 5)
                                 .integer(GOLD_COUNT_RED, 6)
-                                .integer(GOLD_COUNT_YELLOW, 7)
+                                .integer(CLUE_COUNT_KNIFE, 7)
                                 .integer(ROBBERS_COUNT, 2);
                     }
                 },

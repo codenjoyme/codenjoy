@@ -741,7 +741,7 @@ public class GameTest extends AbstractGameTest {
         dice(2, 3);
         hero().right();
         tick();
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
 
         assertE("☼☼☼☼☼" +
                 "☼ $ ☼" +
@@ -771,7 +771,7 @@ public class GameTest extends AbstractGameTest {
         dice(3, 3);
         hero().right();
         tick();
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
 
         assertE("☼☼☼☼☼" +
                 "☼  $☼" +
@@ -1282,7 +1282,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ $   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
 
         dice(2, 5);
         tick();
@@ -1295,7 +1295,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ $   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
 
         dice(3, 5);
         tick();
@@ -1308,7 +1308,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ $   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
 
         dice(4, 5);
         tick();
@@ -1321,7 +1321,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ ◄   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
     }
 
     // если я прострелил дырку и падаю в нее, а под ней ничего нет - то я падаю пока не найду препятствие
@@ -2854,7 +2854,7 @@ public class GameTest extends AbstractGameTest {
                 "☼####X#☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
 
         hero().left();
         tick();
@@ -2872,7 +2872,7 @@ public class GameTest extends AbstractGameTest {
         dice(2, 6);
         tick();
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$$    ☼" +
@@ -2948,7 +2948,7 @@ public class GameTest extends AbstractGameTest {
         hero().left();
         tick();
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$     ☼" +
@@ -2986,7 +2986,7 @@ public class GameTest extends AbstractGameTest {
 
         tick();
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
 
         tick();
         tick();
@@ -4111,7 +4111,7 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         tick();
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
         events.verifyNoEvents();
         listeners.forEach(Mockito::reset);
 
@@ -4127,7 +4127,7 @@ public class GameTest extends AbstractGameTest {
         hero().right();
         tick();
 
-        events.verifyAllEvents("[GET_YELLOW_GOLD]");
+        events.verifyAllEvents("[GET_KNIFE_CLUE]");
         events.verifyNoEvents();
         listeners.forEach(Mockito::reset);
 
@@ -4209,12 +4209,12 @@ public class GameTest extends AbstractGameTest {
 
         // when
         // добавим еще золота
-        settings.integer(GOLD_COUNT_YELLOW, settings.integer(GOLD_COUNT_YELLOW) + 2)
+        settings.integer(CLUE_COUNT_KNIFE, settings.integer(CLUE_COUNT_KNIFE) + 2)
                 .integer(GOLD_COUNT_RED,    settings.integer(GOLD_COUNT_RED) + 3)
                 .integer(GOLD_COUNT_GREEN,  settings.integer(GOLD_COUNT_GREEN) + 1);
         dice(
-            2, 3, // yellow
-            3, 3, // yellow
+            2, 3, // knife
+            3, 3, // knife
             4, 3, // green
             5, 3, // red
             6, 3, // red
@@ -4234,7 +4234,7 @@ public class GameTest extends AbstractGameTest {
 
         // when
         // удалим золота
-        settings.integer(GOLD_COUNT_YELLOW, 1)
+        settings.integer(CLUE_COUNT_KNIFE, 1)
                 .integer(GOLD_COUNT_RED,    1)
                 .integer(GOLD_COUNT_GREEN,  1);
 
