@@ -35,7 +35,7 @@ public abstract class AbstractGameTest {
 
     protected List<EventListener> listeners = new LinkedList<>();
     protected List<Player> players = new LinkedList<>();
-    private List<Game> games = new LinkedList<>();
+    protected List<Game> games = new LinkedList<>();
 
     protected Dice dice = mock(Dice.class);
     protected PrinterFactory<Element, Player> printer = new PrinterFactoryImpl<>();
@@ -108,6 +108,10 @@ public abstract class AbstractGameTest {
     protected void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(field.reader(), player()).print());
+    }
+
+    public void assertF(String expected) {
+        assertF(expected, 0);
     }
 
     /**

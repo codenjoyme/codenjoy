@@ -23,91 +23,32 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.TestSettings;
-import com.codenjoy.dojo.loderunner.services.Events;
-import com.codenjoy.dojo.loderunner.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.utils.events.EventsListenersAssert;
-import org.junit.After;
-import org.junit.Before;
+import com.codenjoy.dojo.loderunner.game.AbstractGameTest;
+import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyJoystick;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public class EnemyMultiplayerTest {
+public class EnemyMultiplayerTest extends AbstractGameTest {
 
-    private Dice dice;
-    private List<EventListener> listeners = new LinkedList<>();
-    private List<Player> players = new LinkedList<>();
-    private Game game;
-    private Loderunner field;
-    private PrinterFactory printerFactory;
-    private GameSettings settings;
-    private EventsListenersAssert events;
-
-    @Before
-    public void setUp() {
-        dice = mock(Dice.class);
-        printerFactory = new PrinterFactoryImpl();
-        settings = new TestSettings();
-        events = new EventsListenersAssert(() -> listeners, Events.class);
+    @Override
+    protected void givenFl(String map) {
+        super.givenFl(map);
+        enemies.forEach(EnemyJoystick::disableMock);
     }
 
-    @After
-    public void tearDown() {
-        events.verifyNoEvents();
-    }
-
-    private void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
-    }
-
-    private void atBoard(String expected) {
-        assertEquals(expected, game.getBoardAsString());
-    }
-
-    private void setupPlayer(int x, int y) {
-        EventListener listener = mock(EventListener.class);
-        listeners.add(listener);
-        Player player = new Player(listener, settings);
-        players.add(player);
-        game = new Single(player, printerFactory);
-        game.on(field);
-        dice(x, y);
-        game.newGame();
-    }
-
-    private void setupGm(String map) {
-        settings.string(LEVEL_MAP, map);
-        field = new Loderunner(dice, settings);
-
-        for (Hero hero : settings.level().getHeroes()) {
-            setupPlayer(hero.getX(), hero.getY());
-        }
+    private void removePlayer(int index) {
+        field.remove(players.get(index));
+        players.remove(index);
+        listeners.remove(index);
     }
 
     // чертик идет за тобой
     @Test
     public void shouldEnemyGoToHero() {
         settings.integer(ENEMIES_COUNT, 1);
-        setupGm("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼     »☼" +
                 "☼H#####☼" +
                 "☼H     ☼" +
@@ -116,9 +57,9 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼    « ☼\n" +
                 "☼H#####☼\n" +
                 "☼H     ☼\n" +
@@ -127,12 +68,12 @@ public class EnemyMultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        tick();
+        tick();
+        tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼«     ☼\n" +
                 "☼H#####☼\n" +
                 "☼H     ☼\n" +
@@ -141,10 +82,10 @@ public class EnemyMultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        field.tick();
-        field.tick();
+        tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼Q     ☼\n" +
@@ -153,11 +94,11 @@ public class EnemyMultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        field.tick();
-        field.tick();
-        field.tick();
+        tick();
+        tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼H  »  ☼\n" +
@@ -166,11 +107,11 @@ public class EnemyMultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        field.tick();
-        field.tick();
-        field.tick();
+        tick();
+        tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼H     ☼\n" +
@@ -179,10 +120,10 @@ public class EnemyMultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        field.tick();
-        field.tick();
+        tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼H     ☼\n" +
@@ -192,14 +133,14 @@ public class EnemyMultiplayerTest {
                 "☼☼☼☼☼☼☼☼\n");
 
         events.verifyAllEvents("[KILL_HERO]");
-        assertEquals(true, game.isGameOver());
+        assertEquals(true, game().isGameOver());
 
         dice(1, 4);
-        game.newGame();
+        game().newGame();
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H#####☼\n" +
                 "☼H  ►  ☼\n" +
@@ -213,7 +154,7 @@ public class EnemyMultiplayerTest {
     @Test
     public void shouldEnemyStop_whenNoPathToHero() {
         settings.integer(ENEMIES_COUNT, 1);
-        setupGm("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼     ►☼" +
                 "☼     #☼" +
                 "☼      ☼" +
@@ -222,9 +163,9 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼     ►☼\n" +
                 "☼     #☼\n" +
                 "☼      ☼\n" +
@@ -233,12 +174,12 @@ public class EnemyMultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        tick();
+        tick();
+        tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼     ►☼\n" +
                 "☼     #☼\n" +
                 "☼      ☼\n" +
@@ -252,7 +193,7 @@ public class EnemyMultiplayerTest {
     @Test
     public void shouldEnemyGoToHeroShortestWay() {
         settings.integer(ENEMIES_COUNT, 1);
-        setupGm("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼     »☼" +
                 "☼H####H☼" +
                 "☼H    H☼" +
@@ -261,9 +202,9 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H####Q☼\n" +
                 "☼H    H☼\n" +
@@ -277,7 +218,7 @@ public class EnemyMultiplayerTest {
     @Test
     public void shouldEnemyGoToHeroShortestWay2() {
         settings.integer(ENEMIES_COUNT, 1);
-        setupGm("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼»     ☼" +
                 "☼H####H☼" +
                 "☼H    H☼" +
@@ -286,9 +227,9 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼Q####H☼\n" +
                 "☼H    H☼\n" +
@@ -303,7 +244,7 @@ public class EnemyMultiplayerTest {
     @Test
     public void shouldEnemyGoToHeroShortestWayGetRoundOther() {
         settings.integer(ENEMIES_COUNT, 2);
-        setupGm("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼»    »☼" +
                 "☼H####H☼" +
                 "☼H    H☼" +
@@ -312,9 +253,9 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼Q####Q☼\n" +
                 "☼H    H☼\n" +
@@ -328,7 +269,7 @@ public class EnemyMultiplayerTest {
     @Test
     public void shouldEnemyGoToHeroShortestWayGetRoundOther2() {
         settings.integer(ENEMIES_COUNT, 2);
-        setupGm("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼» »   ☼" +
                 "☼H####H☼" +
                 "☼H    H☼" +
@@ -337,9 +278,9 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼ «    ☼\n" +
                 "☼Q####H☼\n" +
                 "☼H    H☼\n" +
@@ -354,7 +295,7 @@ public class EnemyMultiplayerTest {
     @Test
     public void shouldEnemyGoToNewHeroIfOneIsHidden() {
         settings.integer(ENEMIES_COUNT, 1);
-        setupGm("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼   ►  ☼" +
                 "☼######☼" +
                 "☼      ☼" +
@@ -363,12 +304,12 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        tick();
+        tick();
+        tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   ►  ☼\n" +
                 "☼######☼\n" +
                 "☼      ☼\n" +
@@ -377,35 +318,35 @@ public class EnemyMultiplayerTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        setupPlayer(1, 4);
-        field.tick();
+        givenPlayer(1, 4);
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   (  ☼\n" +
                 "☼######☼\n" +
                 "☼►     ☼\n" +
                 "☼###H##☼\n" +
                 "☼ » H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   (  ☼\n" +
                 "☼######☼\n" +
                 "☼Ѡ     ☼\n" +
                 "☼###H##☼\n" +
                 "☼   H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
@@ -416,7 +357,7 @@ public class EnemyMultiplayerTest {
     @Test
     public void shouldEveryEnemyRunsAfterHisHero_evenIfThereIsAnotherHeroNearbyWhoIsAlreadyBeingHunted() {
         settings.integer(ENEMIES_COUNT, 2);
-        setupGm("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼»  ► »☼" +
                 "☼H####H☼" +
                 "☼H    H☼" +
@@ -425,216 +366,210 @@ public class EnemyMultiplayerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼ » (  ☼\n" +
                 "☼H####Q☼\n" +
                 "☼H    H☼\n" +
                 "☼###H##☼\n" +
                 "☼  ►H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼  »(  ☼\n" +
                 "☼H####H☼\n" +
                 "☼H    Q☼\n" +
                 "☼###H##☼\n" +
                 "☼  ►H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        field.tick();
+        tick();
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_HERO]\n" +
                 "listener(1) => []\n");
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   Z  ☼\n" +
                 "☼H####H☼\n" +
                 "☼H   «H☼\n" +
                 "☼###H##☼\n" +
                 "☼  ►H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        field.tick();
+        tick();
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n");
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   Z» ☼\n" +
                 "☼H####H☼\n" +
                 "☼H  « H☼\n" +
                 "☼###H##☼\n" +
                 "☼  ►H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   Z »☼\n" +
                 "☼H####H☼\n" +
                 "☼H    H☼\n" +
                 "☼###Q##☼\n" +
                 "☼  ►H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   Z  ☼\n" +
                 "☼H####Q☼\n" +
                 "☼H    H☼\n" +
                 "☼###H##☼\n" +
                 "☼  ►Q  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        field.tick();
+        tick();
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => [KILL_HERO]\n");
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   Z  ☼\n" +
                 "☼H####H☼\n" +
                 "☼H    Q☼\n" +
                 "☼###H##☼\n" +
                 "☼  ѠH  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         // больше не за кем охотитья - охотники стоят на месте
-        field.tick();
+        tick();
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n");
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   Z  ☼\n" +
                 "☼H####H☼\n" +
                 "☼H    Q☼\n" +
                 "☼###H##☼\n" +
                 "☼  ѠH  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   Z  ☼\n" +
                 "☼H####H☼\n" +
                 "☼H    Q☼\n" +
                 "☼###H##☼\n" +
                 "☼  ѠH  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         // даже если на поле никого нет, чертики стоят на месте
         removePlayer(1);
         removePlayer(0);
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
                 "☼H####H☼\n" +
                 "☼H    Q☼\n" +
                 "☼###H##☼\n" +
                 "☼  «H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 1);
 
         // но стоит двоим ребятам появиться на поле
         // как вдруг охотники начнут охотиться каждый за своим
-        setupPlayer(1, 2);
-        setupPlayer(5, 6);
+        givenPlayer(1, 2);
+        givenPlayer(5, 6);
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼    ► ☼\n" +
                 "☼H####H☼\n" +
                 "☼H    Q☼\n" +
                 "☼###H##☼\n" +
                 "☼( «H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 3);
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼    ► ☼\n" +
                 "☼H####Q☼\n" +
                 "☼H    H☼\n" +
                 "☼###H##☼\n" +
                 "☼(« H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 3);
 
         // если один вдруг пропадет, то его охотник переключится
         removePlayer(0);
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼    ► ☼\n" +
                 "☼H####Q☼\n" +
                 "☼H    H☼\n" +
                 "☼###H##☼\n" +
                 "☼ « H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 3);
 
-        field.tick();
+        tick();
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼    ►»☼\n" +
                 "☼H####H☼\n" +
                 "☼H    H☼\n" +
                 "☼###H##☼\n" +
                 "☼  »H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 3);
 
         // и после того как нагонят оставшегося, снова зависнут
-        field.tick();
+        tick();
 
         events.verifyAllEvents("[KILL_HERO]");
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼    Ѡ ☼\n" +
                 "☼H####H☼\n" +
                 "☼H    H☼\n" +
                 "☼###H##☼\n" +
                 "☼  »H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n", 3);
 
-        field.tick();
+        tick();
 
         events.verifyAllEvents("[]");
 
-        atBoard("☼☼☼☼☼☼☼☼\n" +
+        assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼    Ѡ ☼\n" +
                 "☼H####H☼\n" +
                 "☼H    H☼\n" +
                 "☼###H##☼\n" +
                 "☼  »H  ☼\n" +
                 "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-    }
-
-    private void removePlayer(int index) {
-        field.remove(players.get(index));
-        players.remove(index);
-        listeners.remove(index);
+                "☼☼☼☼☼☼☼☼\n", 3);
     }
 }
