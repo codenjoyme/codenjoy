@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model.items.enemy;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,74 +24,46 @@ package com.codenjoy.dojo.loderunner.model.items.enemy;
 
 
 import com.codenjoy.dojo.games.loderunner.Board;
-import com.codenjoy.dojo.loderunner.TestSettings;
+import com.codenjoy.dojo.loderunner.game.AbstractGameTest;
 import com.codenjoy.dojo.loderunner.model.Hero;
-import com.codenjoy.dojo.loderunner.model.Loderunner;
-import com.codenjoy.dojo.loderunner.model.Player;
-import com.codenjoy.dojo.loderunner.model.levels.Level;
-import com.codenjoy.dojo.loderunner.services.GameSettings;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.utils.TestUtils.split;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public class AITest {
+public class AITest extends AbstractGameTest {
 
-    private AI ai;
-    private Loderunner loderunner;
-    private Dice dice;
+    private final AI ai = new AI();
 
-    @Before
+    @Override
     public void setup() {
+        super.setup();
         AI.POSSIBLE_IS_CONSTANT = true;
     }
 
-    private void setupAI(String map) {
-        dice = mock(Dice.class);
-        GameSettings settings = new TestSettings();
-        settings.string(LEVEL_MAP, map);
-        Level level = settings.level();
-        settings.integer(GOLD_COUNT_YELLOW, level.getYellowGold().size())
-                .integer(GOLD_COUNT_GREEN, level.getGreenGold().size())
-                .integer(GOLD_COUNT_RED, level.getRedGold().size())
-                .integer(SHADOW_PILLS_COUNT, level.getPills().size())
-                .integer(PORTALS_COUNT, level.getPortals().size())
-                .integer(ENEMIES_COUNT, level.getEnemies().size());
-        loderunner = new Loderunner(dice, settings);
-
-        for (Hero hero : settings.level().getHeroes()) {
-            Player player = new Player(mock(EventListener.class), settings);
-            dice(hero.getX(), hero.getY()); // позиция рассчитывается рендомно из dice
-            loderunner.newGame(player);
-            player.getHero().setDirection(hero.getDirection());
-        }
-
-        ai = new AI();
+    @Override
+    protected void reloadAllEnemies() {
+        enemies = field.enemies().stream()
+                .map(enemy -> new EnemyJoystick(enemy, ai))
+                .collect(Collectors.toList());
     }
 
     private void assertP(String map, String expected) {
-        setupAI(map);
+        givenFl(map);
 
         Map<Point, List<Direction>> result = new TreeMap<>();
-        for (Map.Entry<Point, List<Direction>> entry : ai.ways(loderunner).entrySet()) {
+        for (Map.Entry<Point, List<Direction>> entry : ai.ways(field).entrySet()) {
             List<Direction> value = entry.getValue();
             if (!value.isEmpty()) {
                 result.put(entry.getKey(), value);
@@ -103,16 +75,7 @@ public class AITest {
 
     private void assertD(String expected) {
         assertEquals(expected,
-                ai.getPath(loderunner,
-                        loderunner.enemies().all().get(0),
-                        (List) loderunner.heroes().all()).toString());
-    }
-
-    private void dice(int... ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
+                ai.getPath(field, field.enemies().all().get(0), (List) field.heroes().all()).toString());
     }
 
     @Test
@@ -291,7 +254,7 @@ public class AITest {
 
     @Test
     public void shouldOnlyLeft() {
-        setupAI("☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄ «☼" +
                 "☼###☼" +
@@ -313,7 +276,7 @@ public class AITest {
 
     @Test
     public void shouldOnlyRight() {
-        setupAI("☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼« ◄☼" +
                 "☼###☼" +
@@ -335,7 +298,7 @@ public class AITest {
 
     @Test
     public void shouldUpWithLadder() {
-        setupAI("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼" +
                 "☼   ◄☼" +
                 "☼   H☼" +
                 "☼«  H☼" +
@@ -360,7 +323,7 @@ public class AITest {
 
     @Test
     public void shouldUpWithLadderThenPipe() {
-        setupAI("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼◄~~~ ☼" +
                 "☼#  #H☼" +
@@ -388,7 +351,7 @@ public class AITest {
 
     @Test
     public void shouldUpWithLadderThenPipe2() {
-        setupAI("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼◄~~~H☼" +
                 "☼#   H☼" +
@@ -416,7 +379,7 @@ public class AITest {
 
     @Test
     public void shouldTwoEqualsWays() {
-        setupAI("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ~◄~ ☼" +
                 "☼H # H☼" +
@@ -444,7 +407,7 @@ public class AITest {
 
     @Test
     public void shouldTwoNotEqualsWays() {
-        setupAI("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ◄~~ ☼" +
                 "☼H#  H☼" +
@@ -472,7 +435,7 @@ public class AITest {
 
     @Test
     public void shouldTwoNotEqualsWays2() {
-        setupAI("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ◄~~ ☼" +
                 "☼H#  H☼" +
@@ -500,7 +463,7 @@ public class AITest {
 
     @Test
     public void shouldTwoNotEqualsWays3() {
-        setupAI("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ◄~ ☼" +
                 "☼H## H☼" +
@@ -528,7 +491,7 @@ public class AITest {
 
     @Test
     public void shouldOnPit() {
-        setupAI("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼#####☼" +
                 "☼ « « ☼" +
                 "☼◄###◄☼" +
@@ -536,20 +499,20 @@ public class AITest {
                 "☼#####☼" +
                 "☼☼☼☼☼☼☼");
 
-        Enemy enemy1 = loderunner.enemies().all().get(0);
+        Enemy enemy1 = field.enemies().all().get(0);
         assertEquals("[2,4]", enemy1.toString());
 
-        Hero hero1 = loderunner.heroes().all().get(0);
+        Hero hero1 = field.heroes().all().get(0);
         assertEquals("[1,3]", hero1.toString());
 
-        Enemy enemy2 = loderunner.enemies().all().get(1);
+        Enemy enemy2 = field.enemies().all().get(1);
         assertEquals("[4,4]", enemy2.toString());
 
-        Hero hero2 = loderunner.heroes().all().get(1);
+        Hero hero2 = field.heroes().all().get(1);
         assertEquals("[5,3]", hero2.toString());
 
-        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy1, Arrays.asList(hero2)));
-        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN]", ai.getPath(loderunner, enemy1, Arrays.asList(hero2)).toString());
+        assertEquals(Direction.RIGHT, ai.getDirection(field, enemy1, Arrays.asList(hero2)));
+        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN]", ai.getPath(field, enemy1, Arrays.asList(hero2)).toString());
 
         assertW(enemy1, Arrays.asList(hero2),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -567,8 +530,8 @@ public class AITest {
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "              \n");
 
-        assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy2, Arrays.asList(hero1)));
-        assertEquals("[LEFT, LEFT, LEFT, DOWN]", ai.getPath(loderunner, enemy2, Arrays.asList(hero1)).toString());
+        assertEquals(Direction.LEFT, ai.getDirection(field, enemy2, Arrays.asList(hero1)));
+        assertEquals("[LEFT, LEFT, LEFT, DOWN]", ai.getPath(field, enemy2, Arrays.asList(hero1)).toString());
 
         assertW(enemy2, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -589,7 +552,7 @@ public class AITest {
 
     @Test
     public void shouldTwoEnemiesWithTwoHero() {
-        setupAI("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼ ◄  ◄ ☼" +
                 "☼H#  #H☼" +
                 "☼H    H☼" +
@@ -599,14 +562,14 @@ public class AITest {
                 "☼☼☼☼☼☼☼☼");
 
         // проверяем следующую команду для первого чертика
-        Enemy enemy1 = loderunner.enemies().all().get(0);
-        Hero hero1 = loderunner.heroes().all().get(0);
+        Enemy enemy1 = field.enemies().all().get(0);
+        Hero hero1 = field.heroes().all().get(0);
         assertEquals("[3,2]", enemy1.toString());
-        assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy1, Arrays.asList(hero1)));
+        assertEquals(Direction.LEFT, ai.getDirection(field, enemy1, Arrays.asList(hero1)));
 
         // проверяем весь путь для первого чертика
         assertEquals("[2,6]", hero1.toString());
-        assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy1, Arrays.asList(hero1)).toString());
+        assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(field, enemy1, Arrays.asList(hero1)).toString());
 
         assertW(enemy1, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -645,14 +608,14 @@ public class AITest {
                 "                \n");
 
         // проверяем следующую команду для второго чертика
-        Enemy enemy2 = loderunner.enemies().all().get(1);
-        Hero hero2 = loderunner.heroes().all().get(1);
+        Enemy enemy2 = field.enemies().all().get(1);
+        Hero hero2 = field.heroes().all().get(1);
         assertEquals("[4,2]", enemy2.toString());
-        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy2, Arrays.asList(hero2)));
+        assertEquals(Direction.RIGHT, ai.getDirection(field, enemy2, Arrays.asList(hero2)));
 
         // проверяем весь путь для второго чертика
         assertEquals("[5,6]", hero2.toString());
-        assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy2, Arrays.asList(hero2)).toString());
+        assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(field, enemy2, Arrays.asList(hero2)).toString());
 
         assertW(enemy2, Arrays.asList(hero2),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -678,7 +641,7 @@ public class AITest {
     // TODO тут возможен случай, когда они друг друга анигилируют :)
     @Test
     public void shouldTwoEnemiesWithTwoHero_enemyIsBarrier() {
-        setupAI("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼ ◄  ◄ ☼" +
                 "☼H#  #H☼" +
                 "☼H    H☼" +
@@ -688,11 +651,11 @@ public class AITest {
                 "☼☼☼☼☼☼☼☼");
 
         // пробуем чтобы первый чертик пошел за вторым игроком
-        Enemy enemy2 = loderunner.enemies().all().get(1);
+        Enemy enemy2 = field.enemies().all().get(1);
         assertEquals("[4,2]", enemy2.toString());
-        Hero hero1 = loderunner.heroes().all().get(0);
+        Hero hero1 = field.heroes().all().get(0);
         assertEquals("[2,6]", hero1.toString());
-        assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy2, Arrays.asList(hero1)).toString());
+        assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(field, enemy2, Arrays.asList(hero1)).toString());
 
         assertW(enemy2, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -731,11 +694,11 @@ public class AITest {
                 "                \n");
 
         // пробуем чтобы второй чертик пошел за первым игроком
-        Enemy enemy1 = loderunner.enemies().all().get(0);
+        Enemy enemy1 = field.enemies().all().get(0);
         assertEquals("[3,2]", enemy1.toString());
-        Hero hero2 = loderunner.heroes().all().get(1);
+        Hero hero2 = field.heroes().all().get(1);
         assertEquals("[5,6]", hero2.toString());
-        assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy1, Arrays.asList(hero2)).toString());
+        assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(field, enemy1, Arrays.asList(hero2)).toString());
 
         assertW(enemy1, Arrays.asList(hero2),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -757,21 +720,21 @@ public class AITest {
     }
 
     private void assertQ(String expected) {
-        Enemy enemy = loderunner.enemies().all().get(0);
-        List<Point> heroes = (List)loderunner.heroes().all();
+        Enemy enemy = field.enemies().all().get(0);
+        List<Point> heroes = (List) field.heroes().all();
         assertW(enemy, heroes, expected);
     }
 
     private void assertW(Point from, List<Point> to, String expected) {
-        List<Direction> path = ai.getPath(loderunner, from, to);
-        Printer printer = new PrinterFactoryImpl<>().getPrinter(loderunner.reader(),
-                loderunner.players().iterator().next());
+        List<Direction> path = ai.getPath(field, from, to);
+        Printer printer = new PrinterFactoryImpl<>().getPrinter(field.reader(),
+                field.players().iterator().next());
         Board board = (Board) new Board().forString(printer.print().toString());
 
         String actual = TestUtils.drawShortestWay(
                 from,
                 path,
-                loderunner.size(),
+                field.size(),
                 pt -> board.getAt(pt).getChar());
 
         assertEquals(expected, actual);
@@ -782,7 +745,7 @@ public class AITest {
         AI.POSSIBLE_IS_CONSTANT = true;
 
         // about 7s
-        setupAI("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼     ◄                ◄      ~~~~~~~~~      ◄    ~~~~~~~☼" +
                 "☼##H########################H#H       H##########H       ☼" +
                 "☼  H            ◄           H######H  H          H#☼☼☼☼☼#☼" +
