@@ -24,12 +24,12 @@ package com.codenjoy.dojo.loderunner.game;
 
 
 import com.codenjoy.dojo.loderunner.model.items.Brick;
-import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.Potion.PotionType;
 import com.codenjoy.dojo.loderunner.services.Events;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ROBBERS_COUNT;
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_PILLS_COUNT;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.MASK_POTIONS_COUNT;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -238,9 +238,9 @@ public class MultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void thatRobbersDoNotHauntShadowPlayers() {
+    public void thatRobbersDoNotHauntMaskPlayers() {
         settings.integer(ROBBERS_COUNT, 1)
-                .integer(SHADOW_PILLS_COUNT, 1);
+                .integer(MASK_POTIONS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -251,7 +251,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         robber().disableMock();
-        hero(1).pick(PillType.SHADOW_PILL);
+        hero(1).pick(PotionType.MASK_POTION);
 
         dice(0); // охотимся за первым игроком // TODO потестить когда поохотимся за вторым
         tick();
@@ -267,8 +267,8 @@ public class MultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void thatTwoShadowsWalkThroughEachOther() {
-        settings.integer(SHADOW_PILLS_COUNT, 1);
+    public void thatTwoMasksWalkThroughEachOther() {
+        settings.integer(MASK_POTIONS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -278,8 +278,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero(0).pick(PillType.SHADOW_PILL);
-        hero(1).pick(PillType.SHADOW_PILL);
+        hero(0).pick(PotionType.MASK_POTION);
+        hero(1).pick(PotionType.MASK_POTION);
 
         hero(0).right();
 
@@ -308,8 +308,8 @@ public class MultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void thatShadowKillsNonShadowPlayer() {
-        settings.integer(SHADOW_PILLS_COUNT, 1);
+    public void thatMaskKillsNonMaskPlayer() {
+        settings.integer(MASK_POTIONS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -319,7 +319,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero().pick(PillType.SHADOW_PILL);
+        hero().pick(PotionType.MASK_POTION);
 
         assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
@@ -392,7 +392,7 @@ public class MultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void thatShadowFallsAtTheRegularPlayerAndKillsHim() {
+    public void thatMaskFallsAtTheRegularPlayerAndKillsHim() {
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -402,8 +402,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        settings.integer(SHADOW_PILLS_COUNT, 1);
-        hero().pick(PillType.SHADOW_PILL);
+        settings.integer(MASK_POTIONS_COUNT, 1);
+        hero().pick(PotionType.MASK_POTION);
 
         assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
@@ -423,7 +423,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n", 1);
 
-        dice(3, 3); // new pill
+        dice(3, 3); // new potion
         tick();
 
         events.verifyAllEvents(
@@ -475,8 +475,8 @@ public class MultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void thatShadowStairsUpTheLadderAtTheRegularPlayerAndKillsHim() {
-        settings.integer(SHADOW_PILLS_COUNT, 1);
+    public void thatMaskStairsUpTheLadderAtTheRegularPlayerAndKillsHim() {
+        settings.integer(MASK_POTIONS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -486,7 +486,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        hero(1).pick(PillType.SHADOW_PILL);
+        hero(1).pick(PotionType.MASK_POTION);
 
         assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +

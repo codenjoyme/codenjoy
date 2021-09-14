@@ -91,7 +91,7 @@ public abstract class AbstractGameTest {
         settings.integer(GOLD_COUNT_YELLOW, level.yellowGold().size())
                 .integer(GOLD_COUNT_GREEN, level.greenGold().size())
                 .integer(GOLD_COUNT_RED, level.redGold().size())
-                .integer(SHADOW_PILLS_COUNT, level.pills().size())
+                .integer(MASK_POTIONS_COUNT, level.potions().size())
                 .integer(BACKWAYS_COUNT, level.backways().size())
                 .integer(ROBBERS_COUNT, level.robbers().size());
 

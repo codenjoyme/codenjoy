@@ -25,7 +25,7 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.model.items.Ladder;
-import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.Potion.PotionType;
 import com.codenjoy.dojo.loderunner.model.items.Pipe;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -38,14 +38,14 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.codenjoy.dojo.games.loderunner.Element.*;
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_TICKS;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.MASK_TICKS;
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
 
     protected Direction direction;
-    private Map<PillType, Integer> pills = new HashMap<>();
+    private Map<PotionType, Integer> potions = new HashMap<>();
     private boolean moving;
     private boolean drill;
     private boolean drilled;
@@ -148,7 +148,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
             }
 
             boolean noPhysicalBarrier = !field.isBarrier(dest);
-            boolean victim = isRegularPlayerAt(dest) && isShadow();
+            boolean victim = isRegularPlayerAt(dest) && isMask();
             if (noPhysicalBarrier || victim) {
                 move(dest);
             }
@@ -156,27 +156,27 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         drill = false;
         moving = false;
         jump = false;
-        dissolvePills();
+        dissolvePotions();
     }
 
-    private boolean isShadow() {
-        return under(PillType.SHADOW_PILL);
+    private boolean isMask() {
+        return under(PotionType.MASK_POTION);
     }
 
     private boolean isRegularPlayerAt(Point pt) {
         return field.isHeroAt(pt)
-                && !field.under(pt, PillType.SHADOW_PILL);
+                && !field.under(pt, PotionType.MASK_POTION);
     }
 
-    private void dissolvePills() {
-        Set<PillType> active = pills.keySet();
-        for (PillType pill : active) {
-            int ticksLeft = pills.get(pill);
+    private void dissolvePotions() {
+        Set<PotionType> active = potions.keySet();
+        for (PotionType potion : active) {
+            int ticksLeft = potions.get(potion);
             ticksLeft--;
             if (ticksLeft < 0) {
-                pills.remove(pill);
+                potions.remove(potion);
             } else {
-                pills.put(pill, ticksLeft);
+                potions.put(potion, ticksLeft);
             }
         }
     }
@@ -195,7 +195,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
 
     public void clearScores() {
         score = 0;
-        pills.clear();
+        potions.clear();
     }
 
     @Override
@@ -204,20 +204,20 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     public boolean isVisible() {
-        return !under(PillType.SHADOW_PILL);
+        return !under(PotionType.MASK_POTION);
     }
 
-    public boolean under(PillType pill) {
-        return pills.containsKey(pill);
+    public boolean under(PotionType potion) {
+        return potions.containsKey(potion);
     }
 
-    public void pick(PillType pill) {
-        pills.put(pill, settings().integer(SHADOW_TICKS));
+    public void pick(PotionType potion) {
+        potions.put(potion, settings().integer(MASK_TICKS));
     }
 
     private void checkAlive() {
         // TODO: перепроверить. Кажется, где-то проскакивает ArrayIndexOutOfBoundsException
-        boolean killedByRobber = field.isRobberAt(this) && !isShadow() && super.isActive(); // TODO test me
+        boolean killedByRobber = field.isRobberAt(this) && !isMask() && super.isActive(); // TODO test me
         if (field.isFullBrick(this) || killedByRobber) {
             die();
         }
@@ -225,7 +225,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
 
     public boolean isFall() {
         return (field.isPit(this) && !field.isPipe(this) && !field.isLadder(this))
-            || (isShadow() && isRegularPlayerAt(underHero()));
+            || (isMask() && isRegularPlayerAt(underHero()));
     }
 
     private Point underHero() {
@@ -237,14 +237,14 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         if (StateUtils.itsMe(player, this, alsoAtPoint, player.getHero())) {
             Hero hero = player.getHero();
             Element state = hero.state(alsoAtPoint);
-            return hero.isShadow()
-                    ? state.shadow()
+            return hero.isMask()
+                    ? state.mask()
                     : state;
         } else {
             Element state = state(alsoAtPoint);
             state = state.otherHero();
-            return isShadow()
-                    ? state.shadow()
+            return isMask()
+                    ? state.mask()
                     : state;
         }
     }

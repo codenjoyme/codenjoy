@@ -44,8 +44,8 @@ public class GameSettings extends SettingsImpl
 
     public enum Keys implements Key {
 
-        SHADOW_PILLS_COUNT("[Game] Shadow pills count"),
-        SHADOW_TICKS("[Game] Shadow ticks"),
+        MASK_POTIONS_COUNT("[Game] Mask potions count"),
+        MASK_TICKS("[Game] Mask ticks"),
 
         BACKWAYS_COUNT("[Game] Backways count"),
         BACKWAY_TICKS("[Game] Backway ticks"),
@@ -92,8 +92,8 @@ public class GameSettings extends SettingsImpl
         initRound();
         initSemifinal();
 
-        integer(SHADOW_PILLS_COUNT, 0);
-        integer(SHADOW_TICKS, 15);
+        integer(MASK_POTIONS_COUNT, 0);
+        integer(MASK_TICKS, 15);
 
         integer(BACKWAYS_COUNT, 0);
         integer(BACKWAY_TICKS, 10);

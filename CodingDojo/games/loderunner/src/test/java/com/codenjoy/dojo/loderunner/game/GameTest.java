@@ -24,7 +24,7 @@ package com.codenjoy.dojo.loderunner.game;
 
 
 import com.codenjoy.dojo.loderunner.model.items.Brick;
-import com.codenjoy.dojo.loderunner.model.items.Pill;
+import com.codenjoy.dojo.loderunner.model.items.Potion;
 import com.codenjoy.dojo.services.Point;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -4403,9 +4403,9 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldResetPills_whenClearBoard() {
+    public void shouldResetPotions_whenClearBoard() {
         // given
-        settings.integer(SHADOW_PILLS_COUNT, 3);
+        settings.integer(MASK_POTIONS_COUNT, 3);
 
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4427,7 +4427,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        assertEquals(false, hero().under(Pill.PillType.SHADOW_PILL));
+        assertEquals(false, hero().under(Potion.PotionType.MASK_POTION));
 
         hero().right();
         tick();
@@ -4453,14 +4453,14 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        assertEquals(true, hero().under(Pill.PillType.SHADOW_PILL));
+        assertEquals(true, hero().under(Potion.PotionType.MASK_POTION));
 
         // when
         // почистим все
         dice(1, 2);  // hero
         field.clearScore();
 
-        assertEquals(false, hero().under(Pill.PillType.SHADOW_PILL));
+        assertEquals(false, hero().under(Potion.PotionType.MASK_POTION));
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4473,9 +4473,9 @@ public class GameTest extends AbstractGameTest {
 
         // when
         // добавим еще
-        settings.integer(SHADOW_PILLS_COUNT, settings.integer(SHADOW_PILLS_COUNT) + 2);
+        settings.integer(MASK_POTIONS_COUNT, settings.integer(MASK_POTIONS_COUNT) + 2);
         dice(
-                3, 3, // new pills
+                3, 3, // new potion
                 5, 3,
                 1, 6  // hero
         );
@@ -4492,7 +4492,7 @@ public class GameTest extends AbstractGameTest {
 
         // when
         // оставим только 1
-        settings.integer(SHADOW_PILLS_COUNT, 1);
+        settings.integer(MASK_POTIONS_COUNT, 1);
         dice(1, 2);  // hero
         field.clearScore();
 

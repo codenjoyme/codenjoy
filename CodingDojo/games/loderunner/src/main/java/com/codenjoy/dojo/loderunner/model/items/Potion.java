@@ -28,22 +28,22 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Pill extends PointImpl implements State<Element, Player> {
+public class Potion extends PointImpl implements State<Element, Player> {
 
-    private PillType pillType;
+    private PotionType potionType;
 
-    public Pill(Point pt, PillType pillType) {
+    public Potion(Point pt, PotionType potionType) {
         super(pt);
-        this.pillType = pillType;
+        this.potionType = potionType;
     }
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        return Element.SHADOW_PILL;
+        return Element.MASK_POTION;
     }
 
-    public enum PillType {
-        SHADOW_PILL,
-        SPEED_PILL  // TODO закончить тут
+    public enum PotionType {
+        MASK_POTION,
+        SPEED_POTION  // TODO закончить тут
     }
 }

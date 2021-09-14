@@ -36,8 +36,8 @@ public class TestSettings extends GameSettings {
         integer(KILL_ROBBER_SCORE, 10);
 
         integer(SUICIDE_PENALTY, 0);
-        integer(SHADOW_TICKS, 15);
-        integer(SHADOW_PILLS_COUNT, 0);
+        integer(MASK_TICKS, 15);
+        integer(MASK_POTIONS_COUNT, 0);
         integer(BACKWAY_TICKS, 10);
         integer(BACKWAYS_COUNT, 0);
         string(MAP_PATH, "none");

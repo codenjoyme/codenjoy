@@ -25,7 +25,7 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.model.items.*;
-import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.Potion.PotionType;
 import com.codenjoy.dojo.loderunner.model.items.robber.Robber;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
@@ -62,7 +62,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     private void generateAll() {
-        generatePills();
+        generatePotions();
         generateGold();
         generateBackways();
         generateRobbers();
@@ -123,8 +123,8 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     private void rewardMurderers(Point pt) {
         heroes().stream()
-                .filter(hero -> hero.under(PillType.SHADOW_PILL))
-                .filter(shadow -> shadow.itsMe(pt))
+                .filter(hero -> hero.under(PotionType.MASK_POTION))
+                .filter(mask -> mask.itsMe(pt))
                 .forEach(murderer -> murderer.event(Events.KILL_ROBBER));
     }
 
@@ -145,11 +145,11 @@ public class Loderunner extends RoundField<Player> implements Field {
                 pt -> new RedGold(pt));
     }
 
-    private void generatePills() {
-        generate(pills(),
-                settings, SHADOW_PILLS_COUNT,
+    private void generatePotions() {
+        generate(potions(),
+                settings, MASK_POTIONS_COUNT,
                 player -> freeRandom((Player) player),
-                pt -> new Pill(pt, PillType.SHADOW_PILL));
+                pt -> new Potion(pt, PotionType.MASK_POTION));
     }
 
     private void generateRobbers() {
@@ -185,7 +185,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 Border.class,
                 Brick.class,
                 Ladder.class,
-                Pill.class,
+                Potion.class,
                 Pipe.class,
                 Backway.class);
     }
@@ -240,9 +240,9 @@ public class Loderunner extends RoundField<Player> implements Field {
                 getGoldEvent(player, Events.GET_RED_GOLD, RedGold.class);
             }
 
-            if (pills().contains(hero)) {
-                pills().removeAt(hero);
-                hero.pick(PillType.SHADOW_PILL);
+            if (potions().contains(hero)) {
+                potions().removeAt(hero);
+                hero.pick(PotionType.MASK_POTION);
             }
 
             if (backways().contains(hero)) {
@@ -304,7 +304,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 || pt.getY() < 0 || pt.getY() > size() - 1
                 || isFullBrick(pt)
                 || isBorder(pt)
-                || (isHeroAt(pt) && !under(pt, PillType.SHADOW_PILL));
+                || (isHeroAt(pt) && !under(pt, PotionType.MASK_POTION));
     }
 
     @Override
@@ -403,10 +403,10 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     @Override
     public boolean isRobberAt(Point pt) {
-        List<Hero> shadows = heroes().stream()
-                .filter(hero -> hero.under(PillType.SHADOW_PILL))
+        List<Hero> masks = heroes().stream()
+                .filter(hero -> hero.under(PotionType.MASK_POTION))
                 .collect(toList());
-        return robbers().contains(pt) || shadows.contains(pt);
+        return robbers().contains(pt) || masks.contains(pt);
     }
 
     @Override
@@ -421,10 +421,10 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public boolean under(Point pt, PillType pill) {
+    public boolean under(Point pt, PotionType potion) {
         return heroes().stream()
                 .filter(hero -> hero.equals(pt))
-                .anyMatch(hero -> hero.under(pill));
+                .anyMatch(hero -> hero.under(potion));
     }
 
     @Override
@@ -514,8 +514,8 @@ public class Loderunner extends RoundField<Player> implements Field {
         return field.of(Ladder.class);
     }
 
-    public Accessor<Pill> pills() {
-        return field.of(Pill.class);
+    public Accessor<Potion> potions() {
+        return field.of(Potion.class);
     }
 
     public Accessor<Pipe> pipe() {

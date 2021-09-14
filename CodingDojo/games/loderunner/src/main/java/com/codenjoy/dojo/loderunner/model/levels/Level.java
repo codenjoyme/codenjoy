@@ -26,7 +26,7 @@ package com.codenjoy.dojo.loderunner.model.levels;
 import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.model.Hero;
 import com.codenjoy.dojo.loderunner.model.items.*;
-import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
+import com.codenjoy.dojo.loderunner.model.items.Potion.PotionType;
 import com.codenjoy.dojo.loderunner.model.items.robber.Robber;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.field.AbstractLevel;
@@ -51,7 +51,7 @@ public class Level extends AbstractLevel {
         field.addAll(ladder());
         field.addAll(bricks());
         field.addAll(backways());
-        field.addAll(pills());
+        field.addAll(potions());
         field.addAll(yellowGold());
         field.addAll(greenGold());
         field.addAll(redGold());
@@ -61,13 +61,13 @@ public class Level extends AbstractLevel {
     public List<Hero> heroes() {
         EnumSet<Element> left = EnumSet.of(
                 HERO_DRILL_LEFT, HERO_LEFT, HERO_FALL_LEFT, HERO_PIPE_LEFT,
-                HERO_SHADOW_DRILL_LEFT,
-                HERO_SHADOW_LEFT, HERO_SHADOW_FALL_LEFT, HERO_SHADOW_PIPE_LEFT);
+                HERO_MASK_DRILL_LEFT,
+                HERO_MASK_LEFT, HERO_MASK_FALL_LEFT, HERO_MASK_PIPE_LEFT);
 
         EnumSet<Element> right = EnumSet.of(
                 HERO_DRILL_RIGHT, HERO_RIGHT, HERO_FALL_RIGHT, HERO_PIPE_RIGHT,
-                HERO_SHADOW_DRILL_RIGHT,
-                HERO_SHADOW_RIGHT, HERO_SHADOW_FALL_RIGHT, HERO_SHADOW_PIPE_RIGHT);
+                HERO_MASK_DRILL_RIGHT,
+                HERO_MASK_RIGHT, HERO_MASK_FALL_RIGHT, HERO_MASK_PIPE_RIGHT);
 
         return find(new HashMap<>() {{
             left.forEach(element -> put(element, pt -> new Hero(pt, Direction.LEFT)));
@@ -110,8 +110,8 @@ public class Level extends AbstractLevel {
         }});
     }
 
-    public List<Pill> pills() {
-        return find(pt -> new Pill(pt, PillType.SHADOW_PILL), SHADOW_PILL);
+    public List<Potion> potions() {
+        return find(pt -> new Potion(pt, PotionType.MASK_POTION), MASK_POTION);
     }
 
     public List<Backway> backways() {
