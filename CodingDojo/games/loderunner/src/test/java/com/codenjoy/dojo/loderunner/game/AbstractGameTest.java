@@ -69,7 +69,7 @@ public abstract class AbstractGameTest {
 
     @Before
     public void setup() {
-        Brick.DRILL_TIMER = 13;
+        Brick.CRACK_TIMER = 13;
     }
 
     @After

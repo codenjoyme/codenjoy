@@ -105,7 +105,7 @@ var Elements = {
     PIT_FILL_4 : '4',
     STONE : '☼',
 
-    DRILL_PIT : '*',
+    CRACK_PIT : '*',
 
     // this is robber
     ROBBER_LADDER : 'Q',
@@ -120,8 +120,8 @@ var Elements = {
 
     /// this is you
     HERO_DIE : 'Ѡ',
-    HERO_DRILL_LEFT : 'Я',
-    HERO_DRILL_RIGHT : 'R',
+    HERO_CRACK_LEFT : 'Я',
+    HERO_CRACK_RIGHT : 'R',
     HERO_LADDER : 'Y',
     HERO_LEFT : '◄',
     HERO_RIGHT : '►',
@@ -159,8 +159,8 @@ var D = function(index, dx, dy, name) {
             case Direction.DOWN : return Direction.UP;
             case Direction.LEFT : return Direction.RIGHT;
             case Direction.RIGHT : return Direction.LEFT;
-            case Direction.DRILL_LEFT : return Direction.DRILL_RIGHT;
-            case Direction.DRILL_RIGHT : return Direction.DRILL_LEFT;
+            case Direction.CRACK_LEFT : return Direction.CRACK_RIGHT;
+            case Direction.CRACK_RIGHT : return Direction.CRACK_LEFT;
             default : return Direction.STOP;
         }
     };
@@ -186,14 +186,14 @@ var Direction = {
     DOWN        : D(3,  0,  1, 'DOWN'),       // move down
     LEFT        : D(0, -1,  0, 'LEFT'),
     RIGHT       : D(1,  1,  0, 'RIGHT'),
-    DRILL_LEFT  : D(4,  0,  0, 'ACT,LEFT'),   // drill ground and move left
-    DRILL_RIGHT : D(5,  0,  0, 'ACT,RIGHT'),  // drill ground and move right
+    CRACK_LEFT  : D(4,  0,  0, 'ACT,LEFT'),   // crack ground and move left
+    CRACK_RIGHT : D(5,  0,  0, 'ACT,RIGHT'),  // crack ground and move right
     STOP        : D(6,  0,  0, ''),           // stay
     DIE         : D(8,  0,  0, "ACT(0)")      // suicide
 };
 
 Direction.values = function() {
-   return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.DRILL_LEFT, Direction.DRILL_RIGHT, Direction.STOP, Direction.DIE];
+   return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.CRACK_LEFT, Direction.CRACK_RIGHT, Direction.STOP, Direction.DIE];
 };
 
 Direction.valueOf = function(index) {
@@ -300,8 +300,8 @@ var Board = function(board) {
     var getMe = function() {
         var result = [];
         result = result.concat(findAll(Elements.HERO_DIE));
-        result = result.concat(findAll(Elements.HERO_DRILL_LEFT));
-        result = result.concat(findAll(Elements.HERO_DRILL_RIGHT));
+        result = result.concat(findAll(Elements.HERO_CRACK_LEFT));
+        result = result.concat(findAll(Elements.HERO_CRACK_RIGHT));
         result = result.concat(findAll(Elements.HERO_FALL_RIGHT));
         result = result.concat(findAll(Elements.HERO_FALL_LEFT));
         result = result.concat(findAll(Elements.HERO_LADDER));

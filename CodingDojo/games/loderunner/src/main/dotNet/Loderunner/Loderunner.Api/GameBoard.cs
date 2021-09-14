@@ -47,8 +47,8 @@ namespace Loderunner.Api
             get
             {
                 return FindAllElements(BoardElement.HeroDie)
-                    .Concat(FindAllElements(BoardElement.HeroDrillLeft))
-                    .Concat(FindAllElements(BoardElement.HeroDrillRight))
+                    .Concat(FindAllElements(BoardElement.HeroCrackLeft))
+                    .Concat(FindAllElements(BoardElement.HeroCrackRight))
                     .Concat(FindAllElements(BoardElement.HeroFallRight))
                     .Concat(FindAllElements(BoardElement.HeroFallLeft))
                     .Concat(FindAllElements(BoardElement.HeroLadder))

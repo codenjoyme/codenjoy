@@ -51,9 +51,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // я могу сверлить дырки
+    // я могу простреливать дырки
     @Test
-    public void shouldDrillLeft() {
+    public void shouldCrackLeft() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ◄ ☼" +
@@ -80,8 +80,8 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldDrillCounter() {
-        shouldDrillLeft();
+    public void shouldCrackCounter() {
+        shouldCrackLeft();
 
         tick();
         tick();
@@ -138,7 +138,7 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldDrillRight() {
+    public void shouldCrackRight() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ◄ ☼" +
@@ -246,8 +246,8 @@ public class GameTest extends AbstractGameTest {
 
     // яма заростает со временем
     @Test
-    public void shouldDrillFilled() {
-        shouldDrillLeft();
+    public void shouldCrackFilled() {
+        shouldCrackLeft();
 
         tick();
 
@@ -303,10 +303,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // В просверленную яму я легко могу упасть
+    // В простреливаю яму я легко могу упасть
     @Test
     public void shouldFallInPitLeft() {
-        shouldDrillLeft();
+        shouldCrackLeft();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -334,7 +334,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldFallInPitRight() {
-        shouldDrillRight();
+        shouldCrackRight();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -513,7 +513,7 @@ public class GameTest extends AbstractGameTest {
     // если стенка замуровывается вместе со мной, то я умираю и появляюсь в рендомном месте
     @Test
     public void shouldIDieIPitFillWithMe() {
-        shouldDrillLeft();
+        shouldCrackLeft();
 
         tick();
         tick();
@@ -563,7 +563,7 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldIDieIPitFillWithMe2() {
-        shouldDrillLeft();
+        shouldCrackLeft();
 
         tick();
         tick();
@@ -619,10 +619,10 @@ public class GameTest extends AbstractGameTest {
 
     }
 
-    // я не могу сверлить уже отсверленную дырку, я даже не делаю вид что пытался
+    // я не могу простреливать уже прострелиную дырку, я даже не делаю вид что пытался
     @Test
-    public void shouldCantDrillPit() {
-        shouldDrillLeft();
+    public void shouldCantCrackPit() {
+        shouldCrackLeft();
 
         hero().right();
         tick();
@@ -648,7 +648,7 @@ public class GameTest extends AbstractGameTest {
 
     // выполнения команд left + act не зависят от порядка - если они сделаны в одном тике, то будет дырка слева без перемещения
     @Test
-    public void shouldDrillLeft_otherCommandSequence() {
+    public void shouldCrackLeft_otherCommandSequence() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ◄ ☼" +
@@ -676,9 +676,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // если я повернут в какую-то сторону и просто нажимаю сверлить то будет с той стороны дырка
+    // если я повернут в какую-то сторону и просто нажимаю прострелить то будет с той стороны дырка
     @Test
-    public void shouldDrillLeft_onyActCommand() {
+    public void shouldCrackLeft_onyActCommand() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ◄ ☼" +
@@ -704,7 +704,7 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldDrillRight_onyActCommand() {
+    public void shouldCrackRight_onyActCommand() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ► ☼" +
@@ -951,9 +951,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // под стеной я не могу сверлить
+    // под стеной я не могу прострелить
     @Test
-    public void shouldICantDrillUnderLadder() {
+    public void shouldICantCrackUnderLadder() {
         givenFl("☼☼☼☼☼" +
                 "☼  H☼" +
                 "☼ ►H☼" +
@@ -970,9 +970,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // под золотом я не могу сверлить
+    // под золотом я не могу прострелить
     @Test
-    public void shouldICantDrillUnderGold() {
+    public void shouldICantCrackUnderGold() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ►$☼" +
@@ -1062,9 +1062,9 @@ public class GameTest extends AbstractGameTest {
 
     }
 
-    // я не могу сверлить бетон
+    // я не могу прострелить бетон
     @Test
-    public void shouldICantDrillWall() {
+    public void shouldICantCrackWall() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ► ☼" +
@@ -1324,7 +1324,7 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
     }
 
-    // если я просверлил дырку и падаю в нее, а под ней ничего нет - то я падаю пока не найду препятствие
+    // если я прострелил дырку и падаю в нее, а под ней ничего нет - то я падаю пока не найду препятствие
     @Test
     public void shouldIFallWhenUnderPitIsFree() {
         givenFl("☼☼☼☼☼☼☼" +
@@ -1461,11 +1461,11 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    // TODO я могу просверлить дырку под лестницей, а потом спуститься туда
+    // TODO я могу прострелить дырку под лестницей, а потом спуститься туда
 
-    // я не могу просверлить дырку под другим камнем
+    // я не могу прострелить дырку под другим камнем
     @Test
-    public void shouldICantDrillUnderBrick() {
+    public void shouldICantCrackUnderBrick() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ►#☼" +
@@ -1722,10 +1722,10 @@ public class GameTest extends AbstractGameTest {
         }
     }
 
-    // Есть хитрый хак, когда спрыгиваешь с трубы, то можно при падении просверливать под собой
+    // Есть хитрый хак, когда спрыгиваешь с трубы, то можно при падении простреливать под собой
     // но она многоптточная
     @Test
-    public void shouldDrillDown() {
+    public void shouldCrackDown() {
         givenFl("☼☼☼☼☼☼" +
                 "☼  ◄ ☼" +
                 "☼  ~ ☼" +
@@ -1793,7 +1793,7 @@ public class GameTest extends AbstractGameTest {
                 "☼◄#☼" +
                 "☼☼☼☼");
 
-        for (int c = 3; c < Brick.DRILL_TIMER; c++) {
+        for (int c = 3; c < Brick.CRACK_TIMER; c++) {
             tick();
         }
 
@@ -1812,9 +1812,9 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[KILL_HERO]");
     }
 
-    // я могу сверлить стенки под стенками, если те разрушены
+    // я могу прострелить стенки под стенками, если те разрушены
     @Test
-    public void shouldDrillUnderDrilledBrick() {
+    public void shouldCrackUnderCrackedBrick() {
         givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼ ◄  ☼" +
@@ -2051,7 +2051,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // В просверленную яму чертик легко может упасть
+    // В простреленную яму чертик легко может упасть
     @Test
     public void shouldRobberFallInPitLeft() {
         givenFl("☼☼☼☼☼" +
@@ -2888,7 +2888,7 @@ public class GameTest extends AbstractGameTest {
     public void shouldNoMoreGoldARobber() {
         shouldIWalkOnRobberInPitAndGetGold();
 
-        for (int c = 4; c < Brick.DRILL_TIMER; c++) { // враг вылазит
+        for (int c = 4; c < Brick.CRACK_TIMER; c++) { // враг вылазит
             tick();
         }
 
@@ -3006,10 +3006,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
     }
 
-    // я не могу просверлить дырку непосредственно под монстром
+    // я не могу прострелить дырку непосредственно под монстром
     // TODO сделать так, чтобы мог
     @Test
-    public void shouldICantDrillUnderRobber() {
+    public void shouldICantCrackUnderRobber() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ►»☼" +
@@ -3026,7 +3026,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
     }
 
-    // если я просверлил дырку монстр падает в нее, а под ней ничего нет - монстр не проваливается сквозь
+    // если я прострелил дырку монстр падает в нее, а под ней ничего нет - монстр не проваливается сквозь
     @Test
     public void shouldRobberStayOnPitWhenUnderPitIsFree() {
         givenFl("☼☼☼☼☼☼☼" +
@@ -3516,7 +3516,7 @@ public class GameTest extends AbstractGameTest {
                 "☼####X#☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        for (int c = 3; c < Brick.DRILL_TIMER; c++) { // враг вылазит
+        for (int c = 3; c < Brick.CRACK_TIMER; c++) { // враг вылазит
             tick();
         }
         tick();
@@ -3788,7 +3788,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###X##☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        for (int c = 5; c < Brick.DRILL_TIMER; c++) { // враг вылазит
+        for (int c = 5; c < Brick.CRACK_TIMER; c++) { // враг вылазит
             tick();
         }
 
@@ -3979,7 +3979,7 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void shouldResetHeroScores_whenClearBoard() {
         // given
-        Brick.DRILL_TIMER = 4;
+        Brick.CRACK_TIMER = 4;
 
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4592,7 +4592,7 @@ public class GameTest extends AbstractGameTest {
         assertEquals(5, field.getBackwaysTimer());
     }
 
-    // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
+    // прострелить находясь на трубе нельзя, в оригинале только находясь на краю трубы
 
     // карта намного больше, чем квардартик вьюшка, и я подходя к границе просто передвигаю вьюшку
     // повляется многопользовательский режим игры в формате "стенка на стенку"

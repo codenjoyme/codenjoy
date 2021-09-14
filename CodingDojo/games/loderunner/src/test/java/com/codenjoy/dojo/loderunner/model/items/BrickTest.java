@@ -37,10 +37,10 @@ public class BrickTest {
 
         assertEquals(Element.BRICK, brick.state(null));
 
-        brick.drill(null);
+        brick.crack(null);
         brick.tick();
 
-        assertEquals(Element.DRILL_PIT, brick.state(null));
+        assertEquals(Element.CRACK_PIT, brick.state(null));
 
         brick.tick();
 

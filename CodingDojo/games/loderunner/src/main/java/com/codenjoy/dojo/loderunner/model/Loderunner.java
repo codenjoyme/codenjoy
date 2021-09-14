@@ -202,10 +202,10 @@ public class Loderunner extends RoundField<Player> implements Field {
                 List<Brick> bricks = bricks().getAt(hero);
                 if (bricks.isEmpty()) continue;
 
-                // Умер от того что кто-то просверлил стенку
+                // Умер от того что кто-то прострелил стенку
                 die.add(player);
 
-                Hero killer = bricks.get(0).getDrilledBy();
+                Hero killer = bricks.get(0).getCrackedBy();
                 if (killer == null) continue;
 
                 Player killerPlayer = (Player) killer.getPlayer();
@@ -313,7 +313,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     }
 
     @Override
-    public boolean tryToDrill(Hero byHero, Point pt) {
+    public boolean tryToCrack(Hero byHero, Point pt) {
         if (!isFullBrick(pt)) {
             return false;
         }
@@ -331,7 +331,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
         Optional<Brick> brick = getBrick(pt);
         if (brick.isPresent()) {
-            brick.get().drill(byHero);
+            brick.get().crack(byHero);
         }
 
         return true;
@@ -381,7 +381,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
     // TODO test
     //      может ли пройти через него вор - да
-    //      можно ли сверлить под ним - да
+    //      можно ли простреливать под ним - да
     //      является ли место с ним дыркой - да
     //      является ли место с ним препятствием - нет
     @Override

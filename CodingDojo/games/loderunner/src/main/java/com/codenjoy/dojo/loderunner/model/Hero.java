@@ -47,8 +47,8 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     protected Direction direction;
     private Map<PotionType, Integer> potions = new HashMap<>();
     private boolean moving;
-    private boolean drill;
-    private boolean drilled;
+    private boolean crack;
+    private boolean cracked;
     private boolean jump;
     private int score;
 
@@ -57,8 +57,8 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
         this.direction = direction;
         score = 0;
         moving = false;
-        drilled = false;
-        drill = false;
+        cracked = false;
+        crack = false;
         jump = false;
     }
 
@@ -95,7 +95,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     public void left() {
         if (!isActiveAndAlive()) return;
 
-        drilled = false;
+        cracked = false;
         direction = Direction.LEFT;
         moving = true;
     }
@@ -104,7 +104,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
     public void right() {
         if (!isActiveAndAlive()) return;
 
-        drilled = false;
+        cracked = false;
         direction = Direction.RIGHT;
         moving = true;
     }
@@ -119,7 +119,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
             return;
         }
 
-        drill = true;
+        crack = true;
     }
 
     public Direction getDirection() {
@@ -136,9 +136,9 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
 
         if (isFall()) {
             move(DOWN);
-        } else if (drill) {
+        } else if (crack) {
             Point hole = DOWN.change(direction.change(this));
-            drilled = field.tryToDrill(this, hole);
+            cracked = field.tryToCrack(this, hole);
         } else if (moving || jump) {
             Point dest;
             if (jump) {
@@ -153,7 +153,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
                 move(dest);
             }
         }
-        drill = false;
+        crack = false;
         moving = false;
         jump = false;
         dissolvePotions();
@@ -267,10 +267,10 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
                     : HERO_PIPE_RIGHT;
         }
 
-        if (drilled) {
+        if (cracked) {
             return isLeftTurn()
-                    ? HERO_DRILL_LEFT
-                    : HERO_DRILL_RIGHT;
+                    ? HERO_CRACK_LEFT
+                    : HERO_CRACK_RIGHT;
         }
 
         if (isFall()) {

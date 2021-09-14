@@ -34,42 +34,42 @@ import com.codenjoy.dojo.services.Tickable;
 public class Brick extends PointImpl implements Tickable, State<Element, Player> {
 
     // TODO move to settings
-    public static int DRILL_TIMER = 13;
+    public static int CRACK_TIMER = 13;
     public static final Brick NULL = new Brick(pt(-1, -1));
-    private int drill;
+    private int crack;
 
-    private Hero drilledBy;
+    private Hero crackedBy;
 
     public Brick(Point xy) {
         super(xy);
-        drill = -1;
+        crack = -1;
     }
 
-    public void drill(Hero hero) {
-        this.drilledBy = hero;
-        drill = 0;
+    public void crack(Hero hero) {
+        this.crackedBy = hero;
+        crack = 0;
     }
 
     @Override
     public void tick() {
-        if (drill == -1) {
-            drilledBy = null;
+        if (crack == -1) {
+            crackedBy = null;
         }
 
-        if (drill != -1) {
-            drill++;
-            if (drill == DRILL_TIMER) {
-                drill = -1;
+        if (crack != -1) {
+            crack++;
+            if (crack == CRACK_TIMER) {
+                crack = -1;
             }
         }
     }
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        if (drill == 1) {
-            return Element.DRILL_PIT;
-        } else if (drill > 1) {
-            switch (Brick.DRILL_TIMER - drill) {
+        if (crack == 1) {
+            return Element.CRACK_PIT;
+        } else if (crack > 1) {
+            switch (Brick.CRACK_TIMER - crack) {
                 case 1 : return Element.PIT_FILL_1;
                 case 2 : return Element.PIT_FILL_2;
                 case 3 : return Element.PIT_FILL_3;
@@ -81,7 +81,7 @@ public class Brick extends PointImpl implements Tickable, State<Element, Player>
         }
     }
 
-    public Hero getDrilledBy() {
-        return drilledBy;
+    public Hero getCrackedBy() {
+        return crackedBy;
     }
 }

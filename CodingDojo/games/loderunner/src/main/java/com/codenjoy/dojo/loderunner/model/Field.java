@@ -36,7 +36,7 @@ public interface Field extends RoundGameField<Player> {
 
     boolean isBarrier(Point pt);
 
-    boolean tryToDrill(Hero hero, Point pt);
+    boolean tryToCrack(Hero hero, Point pt);
 
     boolean isPit(Point pt);
 

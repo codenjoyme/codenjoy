@@ -165,7 +165,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼#*##☼\n" +
                 "☼☼☼☼☼☼\n", 2);
 
-        for (int c = 2; c < Brick.DRILL_TIMER; c++) {
+        for (int c = 2; c < Brick.CRACK_TIMER; c++) {
             tick();
         }
 
@@ -723,9 +723,9 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 0);
     }
 
-    // могу ли я сверлить под другим героем? Нет
+    // могу ли я прострелить под другим героем? Нет
     @Test
-    public void shouldICantDrillUnderOtherHero() {
+    public void shouldICantCrackUnderOtherHero() {
         givenFl("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼    ☼" +
@@ -1187,7 +1187,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼###HH###☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
-        drill(2, 3);
+        crack(2, 3);
 
         assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
@@ -1213,7 +1213,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼#(#HH#)#☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
-        drill(4, 5);
+        crack(4, 5);
 
         assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
@@ -1276,7 +1276,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼###HH###☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
-        drill(6, 7);
+        crack(6, 7);
 
         assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ⊏Я  ⌊⊐ ☼\n" +
@@ -1564,7 +1564,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼###HH###☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
-        drill(2, 3);
+        crack(2, 3);
 
         assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
@@ -1590,7 +1590,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼#(#HH#)#☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
-        drill(4, 5);
+        crack(4, 5);
 
         assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
@@ -1653,7 +1653,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼###HH###☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
-        drill(6, -1);
+        crack(6, -1);
 
         assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ⊏Я  ⌊ (☼\n" +
@@ -1906,7 +1906,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼###HH###☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
-        drill(2, 3);
+        crack(2, 3);
 
         assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
@@ -1932,7 +1932,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼#(#HH#)#☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
-        drill(4, 5);
+        crack(4, 5);
 
         assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼(      (☼\n" +
@@ -1995,7 +1995,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼###HH###☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
 
-        drill(6, -1);
+        crack(6, -1);
 
         assertF("☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ⊏Я  ⌊ (☼\n" +
@@ -2242,8 +2242,8 @@ public class MultiplayerTest extends AbstractGameTest {
         tick();
     }
 
-    private void drill(int left, int right) {
-        // сверлят ямки
+    private void crack(int left, int right) {
+        // простреливают ямки
         hero(0).left();
         hero(0).act();
         hero(1).right();

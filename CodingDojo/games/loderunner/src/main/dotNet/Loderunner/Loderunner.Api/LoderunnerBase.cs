@@ -109,8 +109,8 @@ namespace Loderunner.Api
                 case LoderunnerAction.GoRight: return "right";
                 case LoderunnerAction.GoUp: return "up";
                 case LoderunnerAction.GoDown: return "down";
-                case LoderunnerAction.DrillLeft: return "act,left";
-                case LoderunnerAction.DrillRight: return "act,right";
+                case LoderunnerAction.CrackLeft: return "act,left";
+                case LoderunnerAction.CrackRight: return "act,right";
                 default: return "stop";
             }
         }

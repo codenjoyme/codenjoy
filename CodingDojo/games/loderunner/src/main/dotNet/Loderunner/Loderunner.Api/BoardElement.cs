@@ -32,7 +32,7 @@
         PitFill4 = (short)'4',
         UndestroyableWall = (short)'☼',
 
-        DrillPit = (short)'*',
+        CrackPit = (short)'*',
 
         RobberLadder = (short)'Q',
         RobberLeft = (short)'«',
@@ -44,8 +44,8 @@
         Gold = (short)'$',
 
         HeroDie = (short)'Ѡ',
-        HeroDrillLeft = (short)'Я',
-        HeroDrillRight = (short)'R',
+        HeroCrackLeft = (short)'Я',
+        HeroCrackRight = (short)'R',
         HeroLadder = (short)'Y',
         HeroLeft = (short)'◄',
         HeroRight = (short)'►',

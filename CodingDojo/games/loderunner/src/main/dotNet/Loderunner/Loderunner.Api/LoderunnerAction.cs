@@ -28,8 +28,8 @@
         GoUp,
         GoDown,
         FrillLeft,
-        DrillRight,
-        DrillLeft,
+        CrackRight,
+        CrackLeft,
         DoNothing
     }
 }
