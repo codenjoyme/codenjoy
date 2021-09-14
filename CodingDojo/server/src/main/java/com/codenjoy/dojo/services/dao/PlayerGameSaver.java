@@ -69,7 +69,7 @@ public class PlayerGameSaver implements GameSaver {
                         player.getGame(),
                         player.getScore(),
                         save,
-                        player.getRepositoryUrl()
+                        player.getGitHubUsername()
                 });
     }
 
