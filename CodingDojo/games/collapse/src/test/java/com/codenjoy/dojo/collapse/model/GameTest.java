@@ -55,7 +55,7 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
+        Level level = new Level(board);
 
         dice = mock(Dice.class);
         game = new Collapse(level, dice, settings);

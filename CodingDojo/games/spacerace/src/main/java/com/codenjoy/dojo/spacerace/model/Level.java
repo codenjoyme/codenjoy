@@ -22,15 +22,27 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.field.AbstractLevel;
+
 import java.util.List;
 
-public interface Level {
+import static com.codenjoy.dojo.games.spacerace.Element.*;
 
-    int getSize();
+public class Level extends AbstractLevel {
 
-    List<Wall> getWalls();
+    public Level(String map) {
+        super(map);
+    }
 
-    List<Hero> getHero(BulletCharger charger);
+    public List<Hero> hero(BulletCharger charger) {
+        return find(pt -> new Hero(pt, charger), HERO);
+    }
 
-    List<Gold> getGold();
+    public List<Gold> gold() {
+        return find(Gold::new, GOLD);
+    }
+
+    public List<Wall> walls() {
+        return find(Wall::new, WALL);
+    }
 }

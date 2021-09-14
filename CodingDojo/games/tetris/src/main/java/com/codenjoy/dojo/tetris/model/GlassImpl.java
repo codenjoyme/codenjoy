@@ -33,6 +33,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class GlassImpl implements Glass {
 
     public static final int BITS = 3; // per point
@@ -199,7 +201,7 @@ public class GlassImpl implements Glass {
                 if (color == 0) {
                     continue;
                 }
-                plots.add(new Plot(0 - x + width, y, findColor(color - 1)));
+                plots.add(new Plot(pt(0 - x + width, y), findColor(color - 1)));
             }
         }
         return plots;
@@ -225,8 +227,9 @@ public class GlassImpl implements Glass {
                     continue;
                 }
                 int y = figure.top() - i;
-                plots.add(new Plot(this.x - x + figure.right(),
-                        this.y + y, findColor(color - 1)));
+                plots.add(new Plot(
+                        pt(this.x - x + figure.right(), this.y + y),
+                        findColor(color - 1)));
             }
         }
         return plots;

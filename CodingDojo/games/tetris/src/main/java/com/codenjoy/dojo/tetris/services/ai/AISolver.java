@@ -64,7 +64,7 @@ public class AISolver extends AbstractJsonSolver<Board> {
 
         Point point = board.getCurrentFigurePoint();
 
-        Level level = new LevelImpl(glassString);
+        Level level = new Level(glassString);
         List<Plot> plots = level.plots();
 
         removeCurrentFigure(glass, figure, point, plots);

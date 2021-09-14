@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.sokoban.model.items.*;
-import com.codenjoy.dojo.sokoban.model.levels.Level;
 import com.codenjoy.dojo.sokoban.services.Events;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
 
@@ -58,15 +57,15 @@ public class Sokoban implements Field {
 
     public Sokoban(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        size = level.getSize();
-        walls = level.getWalls();
-        boxes = level.getBoxes();
-        marks = level.getMarks();
+        size = level.size();
+        walls = level.walls();
+        boxes = level.boxes();
+        marks = level.marks();
 //      boxesOnTheMarks = new LinkedList<>();
-        boxesOnTheMarks = level.getBoxesOnTheMarks();
+        boxesOnTheMarks = level.boxesOnTheMarks();
         this.settings = settings;
         marks.stream().forEach(mark -> mark.init(this));
-        this.marksToWin = level.getMarksToWin();
+        this.marksToWin = level.marksToWin();
         players = new LinkedList<>();
     }
 

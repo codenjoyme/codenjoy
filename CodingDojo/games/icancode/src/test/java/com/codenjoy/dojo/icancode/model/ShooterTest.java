@@ -132,13 +132,13 @@ public class ShooterTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        assertEquals(0, game.getLevel().getItems(Laser.class).size());
+        assertEquals(0, game.getLevel().items(Laser.class).size());
 
         new Shooter(game).fire(Direction.DOWN,
                 hero.getPosition(),
                 hero.getItem());
 
-        assertEquals(1, game.getLevel().getItems(Laser.class).size());
+        assertEquals(1, game.getLevel().items(Laser.class).size());
         // TODO refactoring needed
         assertTrue(hero.getItem().getCell().items().stream()
                 .anyMatch(item -> item instanceof Laser));
@@ -194,13 +194,13 @@ public class ShooterTest extends AbstractGameTest {
 
         has(DeathRayPerk.class);
 
-        assertEquals(0, game.getLevel().getItems(Laser.class).size());
+        assertEquals(0, game.getLevel().items(Laser.class).size());
 
         // when
         new Shooter(game).fire(Direction.DOWN, hero.getItem().getCell(), hero.getItem());
 
         // then
-        assertEquals(3, game.getLevel().getItems(Laser.class).size());
+        assertEquals(3, game.getLevel().items(Laser.class).size());
 
         assertE("--------" +
                 "--------" +
@@ -212,7 +212,7 @@ public class ShooterTest extends AbstractGameTest {
                 "--------");
 
         // TODO refactoring needed
-        assertTrue(game.getLevel().getItems(Laser.class).stream()
+        assertTrue(game.getLevel().items(Laser.class).stream()
                 .map(item -> (Laser) item)
                 .allMatch(laser -> laser.deathRay() && laser.getTicks() == 0));
 
@@ -233,6 +233,6 @@ public class ShooterTest extends AbstractGameTest {
         game.tick();
 
         // then
-        assertEquals(0, game.getLevel().getItems(Laser.class).size());
+        assertEquals(0, game.getLevel().items(Laser.class).size());
     }
 }

@@ -157,7 +157,7 @@ public abstract class AbstractMultiplayerTest {
     }
 
     protected void givenForces(int player, String forces, String layer2) {
-        LevelImpl level = (LevelImpl) spreader.field(player).getCurrentLevel();
+        Level level = (Level) spreader.field(player).getCurrentLevel();
         level.fillForces(layer2, spreader.heroes());
         level.fillForcesCount(forces);
     }

@@ -10,18 +10,20 @@ package com.codenjoy.dojo.services.dao;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
+import com.codenjoy.dojo.services.chat.ChatType;
+import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudPrimaryKeyConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
@@ -44,6 +46,7 @@ public class Chat {
                         "id integer_primary_key, " +
                         "room varchar(255), " +
                         "topic_id int, " +
+                        "type int, " +
                         "player_id varchar(255), " +
                         "time varchar(255), " +
                         "text varchar(255));"
@@ -56,50 +59,113 @@ public class Chat {
 
     /**
      * @return {@param count} последних сообщений
-     *        для текущего чата {@param room},
-     *        посортированных в порядке возрастания времени
+     *        для текущего чата {@param room}
+     *        (или дочернего чата в нем, если указан {@param topicId}),
+     *        посортированных в порядке возрастания времени.
      */
-    public List<Message> getMessages(String room, int count) {
+    public List<Message> getMessages(ChatType type, Integer topicId, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
                         "WHERE room = ? " +
-                        "AND topic_id IS NULL " +
+                        "AND topic_id IS ? " +
+                        "AND type = ? " +
                         "ORDER BY time DESC " +
                         "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
-                new Object[]{room, count},
+                new Object[]{
+                        filter.room(),
+                        topicId,
+                        type.id(),
+                        filter.count()
+                },
                 Chat::parseMessages
         );
+    }
+
+    /**
+     * @return Последнюю fieldId которая была зарегистрирована в прошлом.
+     */
+    public int getLastFieldId() {
+        return pool.select("SELECT topic_id " +
+                        "FROM messages " +
+                        "WHERE type = ? " +
+                        "ORDER BY topic_id DESC " +
+                        "LIMIT 1;",
+                new Object[]{
+                        ChatType.FIELD.id()
+                },
+                rs -> rs.next() ? rs.getInt(1) : 0);
     }
 
     public Integer getLastMessageId(String room) {
         return pool.select("SELECT id " +
                         "FROM messages " +
                         "WHERE room = ? " +
+                        "AND type = ? " +
                         "ORDER BY time DESC " +
                         "LIMIT 1;",
-                new Object[]{room},
+                new Object[]{
+                        room,
+                        ChatType.ROOM.id()
+                },
                 rs -> rs.next() ? rs.getInt(1) : null);
     }
 
-    public Map<String, Integer> getLastMessageIds() {
-        return pool.select("SELECT m2.room, m2.id " +
+    /**
+     * Используется для информирования пользователя о том, что
+     * пришли новые сообщения в room-чат. Метод готовит данные
+     * сразу для всех комнат.
+     *
+     * @return Возвращает последние сообщения в каждой комнате
+     * с ключем этой комнаты, а значением - id сообщения.
+     */
+    public Map<String, Integer> getLastRoomMessageIds() {
+        return (Map) pool.select("SELECT m2.room AS key, m2.id AS value " +
                         "FROM" +
-                        "    (SELECT room, MAX(time) as time" +
+                        "    (SELECT room, MAX(time) AS time" +
                         "        FROM messages" +
+                        "        WHERE type = ?" +
                         "        GROUP BY room) m1" +
                         "    JOIN messages m2" +
                         "        ON m1.room = m2.room" +
                         "            AND m1.time = m2.time;",
-                new Object[]{},
+                new Object[]{
+                        ChatType.ROOM.id()
+                },
+                rs -> toMap(rs));
+    }
+
+    /**
+     * Используется для информирования пользователя о том, что
+     * пришли новые сообщения в topic или field-чат. Метод готовит данные
+     * сразу для всех topic и filed.
+     *
+     * @param type тип чата id'шками которого интересуемся.
+     * @return Возвращает последние сообщения в выбранном чате.
+     * Ключ для topic-чата topicMessageId, а для field-чата ключ fieldId).
+     * Значение - id последнего сообщения в этом чате.
+     */
+    public Map<Integer, Integer> getLastTopicMessageIds(ChatType type) {
+        return (Map) pool.select("SELECT m2.topic_id AS key, m2.id AS value " +
+                        "FROM" +
+                        "    (SELECT topic_id, MAX(time) AS time" +
+                        "        FROM messages" +
+                        "        WHERE type = ?" +
+                        "        GROUP BY topic_id) m1" +
+                        "    JOIN messages m2" +
+                        "        ON m1.topic_id = m2.topic_id" +
+                        "            AND m1.time = m2.time;",
+                new Object[]{
+                        type.id()
+                },
                 rs -> toMap(rs));
     }
 
     @SneakyThrows
-    public Map<String, Integer> toMap(ResultSet rs) {
+    public Map<Object, Integer> toMap(ResultSet rs) {
         return new LinkedHashMap<>(){{
            while (rs.next()) {
-                put(rs.getString("room"), rs.getInt("id"));
+                put(rs.getObject("key"), rs.getInt("value"));
            }
         }};
     }
@@ -111,77 +177,103 @@ public class Chat {
     public List<Message> getTopicMessages(int messageId) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE topic_id = ? " +
+                        "AND type = ? " +
                         "ORDER BY time ASC;",
-                new Object[]{messageId},
+                new Object[]{
+                        messageId,
+                        ChatType.TOPIC.id()
+                },
                 Chat::parseMessages
         );
     }
 
     /**
      * @return все сообщения в диапазоне ({@param afterId}...{@param beforeId})
-     *        для текущего чата {@param room},
+     *        для текущего чата {@param room}
+     *        (или дочернего чата в нем, если указан {@param topicId}),
      *        посортированных в порядке возрастания времени.
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId} и message {@param beforeId} помимо выбранных.
      */
-    public List<Message> getMessagesBetween(String room,
-                                            int afterId, int beforeId,
-                                            boolean inclusive)
-    {
-        if (afterId > beforeId) {
-            throw new IllegalArgumentException("afterId in interval should be smaller than beforeId");
+    public List<Message> getMessagesBetween(ChatType type, Integer topicId, Filter filter){
+        if (filter.afterId() > filter.beforeId()) {
+            throw new IllegalArgumentException(
+                    "afterId in interval should be smaller than beforeId");
         }
         return pool.select("SELECT * FROM messages " +
                         "WHERE room = ? " +
-                        "AND topic_id IS NULL " +
-                        "AND id >" + (inclusive?"=":"") + " ? " +
-                        "AND id <" + (inclusive?"=":"") + " ? " +
+                        "AND topic_id IS ? " +
+                        "AND type = ? " +
+                        "AND id >" + eq(filter) + " ? " +
+                        "AND id <" + eq(filter) + " ? " +
                         "ORDER BY time ASC;",
-                new Object[]{room, afterId, beforeId},
+                new Object[]{
+                        filter.room(),
+                        topicId,
+                        type.id(),
+                        filter.afterId(),
+                        filter.beforeId()
+                },
                 Chat::parseMessages
         );
     }
 
+    private String eq(Filter filter) {
+        return filter.inclusive() ? "=" : "";
+    }
+
     /**
      * @return {@param count} первых сообщений начиная с {@param afterId}
-     *        для текущего чата {@param room},
+     *        для текущего чата {@param room}
+     *        (или дочернего чата в нем, если указан {@param topicId}),
      *        посортированных в порядке возрастания времени.
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId}.
      */
-    public List<Message> getMessagesAfter(String room, int count,
-                                          int afterId, boolean inclusive)
-    {
+    public List<Message> getMessagesAfter(Integer topicId, ChatType type, Filter filter) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE room = ? " +
-                        "AND topic_id IS NULL " +
-                        "AND id >" + (inclusive?"=":"") + " ? " +
+                        "AND topic_id IS ? " +
+                        "AND type = ? " +
+                        "AND id >" + eq(filter) + " ? " +
                         "ORDER BY time ASC " +
                         "LIMIT ?;",
-                new Object[]{room, afterId, count},
+                new Object[]{
+                        filter.room(),
+                        topicId,
+                        type.id(),
+                        filter.afterId(),
+                        filter.count()
+                },
                 Chat::parseMessages
         );
     }
 
     /**
      * @return {@param count} последних сообщений перед {@param beforeId}
-     *        для текущего чата {@param room},
+     *        для текущего чата {@param room}
+     *        (или дочернего чата в нем, если указан {@param topicId}),
      *        посортированных в порядке возрастания времени.
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param beforeId}.
      */
-    public List<Message> getMessagesBefore(String room, int count,
-                                           int beforeId, boolean inclusive)
-    {
+    public List<Message> getMessagesBefore(ChatType type, Integer topicId, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
                         "WHERE room = ? " +
-                        "AND topic_id IS NULL " +
-                        "AND id <" + (inclusive?"=":"") + " ? " +
+                        "AND topic_id IS ? " +
+                        "AND type = ? " +
+                        "AND id <" + eq(filter) + " ? " +
                         "ORDER BY time DESC " +
                         "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
-                new Object[]{room, beforeId, count},
+                new Object[]{
+                        filter.room(),
+                        topicId,
+                        type.id(),
+                        filter.beforeId(),
+                        filter.count()
+                },
                 Chat::parseMessages
         );
     }
@@ -195,13 +287,14 @@ public class Chat {
 
     public Message saveMessage(Message message) {
         List<Object> objects = pool.batch(Arrays.asList("INSERT INTO messages " +
-                        "(room, topic_id, player_id, time, text) " +
-                        "VALUES (?, ?, ?, ?, ?);",
+                        "(room, topic_id, type, player_id, time, text) " +
+                        "VALUES (?, ?, ?, ?, ?, ?);",
                 pool.getLastInsertedIdQuery("messages", "id")),
 
                 Arrays.asList(new Object[]{
                                 message.getRoom(),
                                 message.getTopicId(),
+                                message.getType().id(),
                                 message.getPlayerId(),
                                 JDBCTimeUtils.toString(new Date(message.getTime())),
                                 message.getText()
@@ -217,11 +310,16 @@ public class Chat {
     }
 
     public boolean deleteMessage(String room, int id, String playerId) {
-        return 1 == pool.update("DELETE FROM messages " +
-                "WHERE id = ? " +
-                "AND room = ? " +
-                "AND player_id = ?",
-                new Object[]{id, room, playerId});
+        int count = pool.update("DELETE FROM messages " +
+                        "WHERE id = ? " +
+                        "AND room = ? " +
+                        "AND player_id = ?",
+                new Object[]{
+                        id,
+                        room,
+                        playerId
+                });
+        return count == 1;
     }
 
     private static List<Message> parseMessages(ResultSet rs) throws SQLException {
@@ -241,15 +339,17 @@ public class Chat {
     public static class Message {
         private int id;
         private Integer topicId;
+        private ChatType type;
         private String room;
         private String playerId;
         private long time;
         private String text;
 
         @Builder
-        public Message(String room, Integer topicId, String playerId, long time, String text) {
+        public Message(String room, Integer topicId, ChatType type, String playerId, long time, String text) {
             this.room = room;
             this.topicId = topicId;
+            this.type = type;
             this.playerId = playerId;
             this.time = time;
             this.text = text;
@@ -259,6 +359,7 @@ public class Chat {
             id = rs.getInt("id");
             room = rs.getString("room");
             topicId = (Integer) rs.getObject("topic_id");
+            type = ChatType.valueOf(rs.getInt("type"));
             playerId = rs.getString("player_id");
             time = JDBCTimeUtils.getTimeLong(rs);
             text = rs.getString("text");

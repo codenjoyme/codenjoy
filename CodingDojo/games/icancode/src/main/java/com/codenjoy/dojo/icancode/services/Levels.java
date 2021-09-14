@@ -25,7 +25,6 @@ package com.codenjoy.dojo.icancode.services;
 
 import com.codenjoy.dojo.games.icancode.Element;
 import com.codenjoy.dojo.icancode.model.Level;
-import com.codenjoy.dojo.icancode.model.LevelImpl;
 import com.codenjoy.dojo.icancode.services.levels.*;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.LevelUtils;
@@ -100,7 +99,7 @@ public final class Levels {
     }
 
     public static Level load(String levelMap, GameSettings settings) {
-        return new LevelImpl(resize(decorate(LevelUtils.clear(levelMap)), settings.integer(VIEW_SIZE)), settings);
+        return new Level(resize(decorate(LevelUtils.clear(levelMap)), settings.integer(VIEW_SIZE)), settings);
     }
 
     // TODO я думаю этот метод не нужен тут, так как он дублирует Layered view

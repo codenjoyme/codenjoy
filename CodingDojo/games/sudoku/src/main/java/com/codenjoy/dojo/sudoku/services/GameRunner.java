@@ -40,7 +40,6 @@ import com.codenjoy.dojo.games.sudoku.Element;
 import com.codenjoy.dojo.sudoku.model.Player;
 import com.codenjoy.dojo.sudoku.model.Sudoku;
 import com.codenjoy.dojo.sudoku.model.level.Level;
-import com.codenjoy.dojo.sudoku.model.level.LevelImpl;
 import com.codenjoy.dojo.sudoku.model.level.Levels;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -65,7 +64,7 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
     }
 
     private Level getLevel(int levelNumber, GameSettings settings) {
-        return new LevelImpl(settings.levelMap(levelNumber));
+        return new Level(settings.levelMap(levelNumber));
     }
 
     @Override

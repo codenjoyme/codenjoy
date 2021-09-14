@@ -29,16 +29,10 @@ import com.codenjoy.dojo.tetris.model.FigureQueue;
 import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
 import com.codenjoy.dojo.tetris.model.GlassEvent;
 import com.codenjoy.dojo.tetris.model.Levels;
-import com.codenjoy.dojo.tetris.model.Figures;
 
 import static com.codenjoy.dojo.tetris.model.Type.*;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.LINES_REMOVED;
 
-/**
- * User: oleksandr.baglai
- * Date: 9/23/12
- * Time: 3:18 PM
- */
 public class HardLevels extends Levels {
 
     public HardLevels(Dice dice, FigureQueue queue) {

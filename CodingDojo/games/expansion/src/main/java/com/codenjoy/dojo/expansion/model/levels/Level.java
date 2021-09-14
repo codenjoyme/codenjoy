@@ -24,32 +24,175 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 
 import com.codenjoy.dojo.expansion.model.IField;
+import com.codenjoy.dojo.expansion.model.levels.items.*;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
-public interface Level {
+import static org.fest.reflect.core.Reflection.constructor;
 
-    Cell getCell(int x, int y);
+public class Level extends AbstractLevel {
 
-    Cell getCell(Point point);
+    public static final int ONE_CHAR = 1;
+    private Cell[] cells;
+    private int viewSize;
+    private String name;
 
-    int getSize();
+    public Level(String name, String map, int viewSize) {
+        super(map);
 
-    int getViewSize();
+        this.name = name;
+        cells = new Cell[map.length()];
+        this.viewSize = viewSize;
+        if (size*size != map.length()) {
+            throw new IllegalArgumentException("map must be square! " + size + "^2 != " + map.length());
+        }
 
-    <T> List<T> getItems(Class<T> clazz);
+        fillMap(map);
+    }
 
-    Cell[] getCells();
+    private void fillMap(String map) {
+        fill(map, 1, (cell, ch) -> {
+            Element element = Element.valueOf(ch.charAt(0));
+            BaseItem item = baseItem(element);
 
-    boolean isBarrier(int x, int y);
+            if (element.getLayer() != Element.Layers.LAYER1) {
+                Element atBottom = Element.valueOf(Element.FLOOR.ch());
+                cell.addItem(baseItem(atBottom));
+            }
+            cell.addItem(item);
+        });
+    }
 
-    List<Cell> getCellsWith(Class clazz);
+    public class ChHeroForces extends HeroForces {
+        public ChHeroForces(Hero hero) {
+            super(hero, 0);
+        }
 
-    List<Cell> getCellsWith(Predicate<Cell> is);
+        public void setCount(int count) {
+            this.count = count;
+        }
+    }
 
-    void setField(IField field);
+    public void fillForces(String forcesMap, List<Hero> heroes) {
+        fill(forcesMap, ONE_CHAR, (cell, ch) -> {
+            int index = Element.valueOf(ch.charAt(0)).getIndex();
+            if (index == -1) {
+                return;
+            }
+            Hero hero = heroes.get(index);
+            HeroForces oldItem = cell.getItem(HeroForces.class);
+            if (oldItem != null) {
+                oldItem.removeFromCell();
+            }
+            cell.captureBy(new ChHeroForces(hero));
+        });
+    }
 
-    String getName();
+    public void fillForcesCount(String forcesCountMap) {
+        fill(forcesCountMap, ForcesState.COUNT_NUMBERS, (cell, countString) -> {
+            int count = ForcesState.parseCount(countString);
+            if (count == 0) {
+                return;
+            }
+            cell.getItem(ChHeroForces.class).setCount(count);
+        });
+    }
+
+    private void fill(String map, int len, BiConsumer<Cell, String> function) {
+        int indexChar = 0;
+        for (int y = size - 1; y > -1; --y) {
+            for (int x = 0; x < size; ++x) {
+                int length = xy.getLength(x, y);
+                Cell cell = cells[length];
+                if (cell == null) {
+                    cell = new CellImpl(x, y);
+                }
+                String ch = map.substring(indexChar*len, (indexChar + 1)*len);
+                function.accept(cell, ch);
+                cells[length] = cell;
+                ++indexChar;
+            }
+        }
+    }
+
+    private BaseItem baseItem(Element element) {
+        return constructor().withParameterTypes(Element.class)
+                            .in(ElementMapper.getItsClass(element))
+                            .newInstance(element);
+    }
+
+    public int viewSize() {
+        return viewSize;
+    }
+
+    public Cell cell(int x, int y) {
+        return cells[xy.getLength(x, y)];
+    }
+
+    public Cell cell(Point point) {
+        return cell(point.getX(), point.getY());
+    }
+
+    public Cell[] cells() {
+        return cells.clone();
+    }
+
+    public boolean isBarrier(int x, int y) {
+        boolean isAbroad = x > size - 1 || x < 0 || y < 0 || y > size - 1;
+
+        return isAbroad || !cell(x, y).isPassable();
+    }
+
+    public <T> List<T> items(Class<T> clazz) {
+        List<T> result = new LinkedList<>();
+        for (Cell cell : cells) {
+            for (Item item : cell.getItems()) {
+                if (clazz.isInstance(item)) {
+                    result.add((T)item);
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<Cell> cellsWith(Class with) {
+        List<Cell> result = new LinkedList<>();
+        for (Cell cell : cells) {
+            for (Item item : cell.getItems()) {
+                if (with.isInstance(item)) {
+                    result.add(cell);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<Cell> cellsWith(Predicate<Cell> is) {
+        List<Cell> result = new LinkedList<>();
+        for (Cell cell : cells) {
+            if (is.test(cell)) {
+                result.add(cell);
+            }
+        }
+        return result;
+    }
+
+    public void field(IField field) {
+        List<FieldItem> items = items(FieldItem.class);
+
+        for (int i = 0; i < items.size(); ++i) {
+            items.get(i).setField(field);
+        }
+    }
+
+    public String name() {
+        return name;
+    }
 }

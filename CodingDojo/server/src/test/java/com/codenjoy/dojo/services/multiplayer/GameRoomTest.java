@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.mocks.GameSettings;
 import com.codenjoy.dojo.services.nullobj.NullGameField;
-import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.junit.Test;
@@ -39,11 +38,10 @@ import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class GameRoomTest {
 
+    public static final String ROOM = "room";
     private int playersPerRoom = 2;
     private int teamsPerRoom = 1;
     private List<Player> players = new LinkedList<>();
@@ -59,7 +57,7 @@ public class GameRoomTest {
     private Deal newDeal(int teamId, SettingsReader settings) {
         GamePlayer gamePlayer = new GamePlayer(event -> {}, settings) {};
         Game game = new Single(gamePlayer, null);
-        Deal result = new Deal(newPlayer(), game, "room");
+        Deal result = new Deal(newPlayer(), game, ROOM);
         result.setTeamId(teamId);
         return result;
     }
@@ -77,7 +75,16 @@ public class GameRoomTest {
     }
 
     private GameRoom createRoom() {
-        return new GameRoom(NullGameField.INSTANCE, playersPerRoom, true);
+        return new GameRoom(ROOM, NullGameField.INSTANCE, playersPerRoom, true);
+    }
+
+    @Test
+    public void testGetRoom() {
+        // given
+        GameRoom room = createRoom();
+
+        // when then
+        assertEquals(ROOM, room.name());
     }
 
     @Test
@@ -91,6 +98,21 @@ public class GameRoomTest {
 
         // then
         assertEquals(false, room.isAvailable(newDeal()));
+    }
+
+    @Test
+    public void testPlayerContains() {
+        // given
+        GameRoom room = createRoom();
+
+        room.join(newDeal()); // player0
+        room.join(newDeal()); // player1
+
+        // when then
+        assertEquals(true, room.containsPlayer("player0"));
+        assertEquals(true, room.containsPlayer("player1"));
+        assertEquals(false, room.containsPlayer("player2"));
+        assertEquals(false, room.containsPlayer(null));
     }
 
     @Test

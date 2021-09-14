@@ -24,7 +24,6 @@ package com.codenjoy.dojo.a2048.services;
 
 
 import com.codenjoy.dojo.a2048.model.Level;
-import com.codenjoy.dojo.a2048.model.LevelImpl;
 import com.codenjoy.dojo.a2048.model.generator.CornerGenerator;
 import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.model.generator.RandomGenerator;
@@ -202,7 +201,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public Level level() {
-        return new LevelImpl(string(LEVEL_MAP));
+        return new Level(string(LEVEL_MAP));
     }
 
     public BreaksMode breaks() {

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snakebattle.model.level;
+package com.codenjoy.dojo.snakebattle.model;
 
 /*-
  * #%L
@@ -23,40 +23,29 @@ package com.codenjoy.dojo.snakebattle.model.level;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.games.snakebattle.Element;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
-import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.games.snakebattle.Element.*;
+import static com.codenjoy.dojo.services.Direction.*;
+import static java.util.function.Function.identity;
 
-public class LevelImpl implements Level {
+public class Level extends AbstractLevel {
 
-    private LengthToXY xy;
-    private String map;
-
-    public LevelImpl(String map) {
-        this.map = LevelUtils.clear(map);
-        xy = new LengthToXY(getSize());
+    public Level(String map) {
+        super(map);
     }
 
-    @Override
-    public int getSize() {
-        return (int) Math.sqrt(map.length());
-    }
-
-    @Override
-    public Hero getHero(Field field) {
-        Point point = LevelUtils.getObjects(xy, map, 
-                pt -> pt,
+    public Hero hero(Field field) {
+        Point point = find(identity(),
                 HEAD_DOWN,
                 HEAD_UP,
                 HEAD_LEFT,
@@ -64,10 +53,9 @@ public class LevelImpl implements Level {
                 HEAD_SLEEP,
                 HEAD_DEAD,
                 HEAD_EVIL,
-                HEAD_FLY)
-                .stream()
-                .findAny()
-                .orElse(null);
+                HEAD_FLY).stream()
+                        .findAny()
+                        .orElse(null);
 
         if (point == null) {
             return null;
@@ -77,19 +65,19 @@ public class LevelImpl implements Level {
     }
 
     private Hero parseSnake(Point head, Field field) {
-        Direction direction = getDirection(head);
+        Direction direction = direction(head);
         Hero hero = new Hero(direction);
         hero.init(field);
 
-        Element headElement = getAt(head);
+        Element headElement = at(head);
         if (Arrays.asList(HEAD_FLY, ENEMY_HEAD_FLY).contains(headElement)) {
-            direction = getHeadDirectionWithMod(head);
+            direction = headDirectionWithMod(head);
             hero.setDirection(direction);
             hero.eatFlying();
         }
 
         if (Arrays.asList(HEAD_EVIL, ENEMY_HEAD_EVIL).contains(headElement)) {
-            direction = getHeadDirectionWithMod(head);
+            direction = headDirectionWithMod(head);
             hero.setDirection(direction);
             hero.eatFury();
         }
@@ -107,8 +95,8 @@ public class LevelImpl implements Level {
         return hero;
     }
 
-    private Direction getHeadDirectionWithMod(Point head) {
-        Element atLeft = getAt(LEFT.change(head));
+    private Direction headDirectionWithMod(Point head) {
+        Element atLeft = at(LEFT.change(head));
         if (Arrays.asList(Element.BODY_HORIZONTAL,
                 Element.BODY_RIGHT_DOWN,
                 Element.BODY_RIGHT_UP,
@@ -121,7 +109,7 @@ public class LevelImpl implements Level {
             return RIGHT;
         }
 
-        Element atRight = getAt(RIGHT.change(head));
+        Element atRight = at(RIGHT.change(head));
         if (Arrays.asList(Element.BODY_HORIZONTAL,
                 Element.BODY_LEFT_DOWN,
                 Element.BODY_LEFT_UP,
@@ -134,7 +122,7 @@ public class LevelImpl implements Level {
             return LEFT;
         }
 
-        Element atDown = getAt(DOWN.change(head));
+        Element atDown = at(DOWN.change(head));
         if (Arrays.asList(Element.BODY_VERTICAL,
                 Element.BODY_LEFT_UP,
                 Element.BODY_RIGHT_UP,
@@ -147,7 +135,7 @@ public class LevelImpl implements Level {
             return UP;
         }
 
-        Element atUp = getAt(UP.change(head));
+        Element atUp = at(UP.change(head));
         if (Arrays.asList(Element.BODY_VERTICAL,
                 Element.BODY_LEFT_DOWN,
                 Element.BODY_RIGHT_DOWN,
@@ -164,7 +152,7 @@ public class LevelImpl implements Level {
     }
 
     private Direction next(Point point, Direction direction) {
-        switch (getAt(point)) {
+        switch (at(point)) {
             case BODY_HORIZONTAL:
             case ENEMY_BODY_HORIZONTAL:
                 return direction;
@@ -187,9 +175,8 @@ public class LevelImpl implements Level {
         return null;
     }
 
-    @Override
-    public Hero getEnemy(Field field) {
-        Point point = LevelUtils.getObjects(xy, map, 
+    public Hero enemy(Field field) {
+        Point point = find(
                 pt -> pt,
                 ENEMY_HEAD_DOWN,
                 ENEMY_HEAD_UP,
@@ -210,8 +197,8 @@ public class LevelImpl implements Level {
         return parseSnake(point, field);
     }
 
-    private Direction getDirection(Point point) {
-        switch (getAt(point)) {
+    private Direction direction(Point point) {
+        switch (at(point)) {
             case HEAD_DOWN :       return DOWN;
             case ENEMY_HEAD_DOWN : return DOWN;
             case HEAD_UP :         return UP;
@@ -222,56 +209,35 @@ public class LevelImpl implements Level {
         }
     }
 
-    @Override
-    public List<Apple> getApples() {
-        return LevelUtils.getObjects(xy, map, 
-                pt -> new Apple(pt),
-                APPLE);
+    public List<Apple> apples() {
+        return find(Apple::new, APPLE);
     }
 
-    @Override
-    public List<Stone> getStones() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new Stone(pt),
-                STONE);
+    public List<Stone> stones() {
+        return find(Stone::new, STONE);
     }
 
-    @Override
-    public List<FlyingPill> getFlyingPills() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new FlyingPill(pt),
-                FLYING_PILL);
+    public List<FlyingPill> flyingPills() {
+        return find(FlyingPill::new, FLYING_PILL);
     }
 
-    @Override
-    public List<FuryPill> getFuryPills() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new FuryPill(pt),
-                FURY_PILL);
+    public List<FuryPill> furyPills() {
+        return find(FuryPill::new, FURY_PILL);
     }
 
-    @Override
-    public List<Gold> getGold() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new Gold(pt),
-                GOLD);
+    public List<Gold> gold() {
+        return find(Gold::new, GOLD);
     }
 
-    @Override
-    public List<Wall> getWalls() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new Wall(pt),
-                WALL);
+    public List<Wall> walls() {
+        return find(Wall::new, WALL);
     }
 
-    @Override
-    public List<StartFloor> getStartPoints() {
-        return LevelUtils.getObjects(xy, map,
-                pt -> new StartFloor(pt),
-                START_FLOOR);
+    public List<StartFloor> startPoints() {
+        return find(StartFloor::new, START_FLOOR);
     }
 
-    private Element getAt(Point pt) {
+    private Element at(Point pt) {
         return Element.valueOf(map.charAt(xy.getLength(pt.getX(), pt.getY())));
     }
 }

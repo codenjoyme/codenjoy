@@ -24,7 +24,6 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.sample.TestGameSettings;
-import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -86,11 +85,8 @@ public abstract class AbstractGameTest {
 
     public void givenFl(String map) {
         settings.string(LEVEL_MAP, map);
-
-        LevelImpl level = (LevelImpl) settings.level();
-
-        field = new Sample(level, dice, settings);
-        level.heroes().forEach(hero -> givenPlayer(hero));
+        field = new Sample(dice, settings);
+        settings.level().heroes().forEach(hero -> givenPlayer(hero));
     }
 
     public Player givenPlayer(Point pt) {

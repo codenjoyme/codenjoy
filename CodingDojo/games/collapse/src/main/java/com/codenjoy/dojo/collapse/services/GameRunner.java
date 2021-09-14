@@ -54,7 +54,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     public GameField createGame(int levelNumber, GameSettings settings) {
         LevelBuilder builder = new LevelBuilder(getDice(),
                 getBoardSize(settings).getValue());
-        Level level = new LevelImpl(builder.getBoard());
+        Level level = new Level(builder.getBoard());
         return new Collapse(level, getDice(), settings);
     }
 

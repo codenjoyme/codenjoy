@@ -57,9 +57,9 @@ public class Spacerace implements Field {
 
     public Spacerace(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
-        walls = level.getWalls();
-        gold = level.getGold();
-        size = level.getSize();
+        walls = level.walls();
+        gold = level.gold();
+        size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
         bulletPacks = new LinkedList<>();

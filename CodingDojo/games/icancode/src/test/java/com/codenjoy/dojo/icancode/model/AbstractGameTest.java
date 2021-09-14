@@ -121,7 +121,7 @@ public abstract class AbstractGameTest {
         this.hero = game.getHeroes().get(0);
 
         // логика добавления нового героя на start позиции для 'X' символа
-        level.getItems(HeroItem.class)
+        level.items(HeroItem.class)
                 .forEach(item -> {
                     HeroItem heroItem = (HeroItem) item;
                     if (heroItem.getHero() == null) {
@@ -146,7 +146,7 @@ public abstract class AbstractGameTest {
     protected List<Level> createLevels(String[] boards) {
         List<Level> levels = new LinkedList<>();
         for (String board : boards) {
-            Level level = new LevelImpl(board, settings);
+            Level level = new Level(board, settings);
             levels.add(level);
         }
         return levels;

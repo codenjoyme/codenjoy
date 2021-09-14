@@ -50,7 +50,7 @@ public class Fifteen implements Field {
     public Fifteen(Level level, Dice dice, GameSettings settings) {
         this.level = level;
         this.dice = dice;
-        size = level.getSize();
+        size = level.size();
         this.settings = settings;
         players = new LinkedList<>();
     }
@@ -114,9 +114,9 @@ public class Fifteen implements Field {
 
     @Override
     public void newGame(Player player) {
-        walls = level.getWalls();
-        digits = level.getDigits();
-        size = level.getSize();
+        walls = level.walls();
+        digits = level.digits();
+        size = level.size();
         if (!players.contains(player)) {
             players.add(player);
         }
@@ -125,7 +125,7 @@ public class Fifteen implements Field {
 
     @Override
     public Optional<Point> freeRandom(Player player) {
-        return Optional.of(level.getHero());
+        return Optional.of(level.hero());
     }
 
     @Override

@@ -35,9 +35,6 @@ import java.util.regex.Pattern;
 import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_CODE_LENGTH;
 import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_ID_LENGTH;
 
-/**
- * Created by Oleksandr_Baglai on 2018-06-26.
- */
 @Controller
 public class Validator {
 

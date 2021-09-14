@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.football.model.levels;
+package com.codenjoy.dojo.football.model;
 
 /*-
  * #%L
@@ -26,32 +26,20 @@ import com.codenjoy.dojo.football.model.items.Ball;
 import com.codenjoy.dojo.football.model.items.Goal;
 import com.codenjoy.dojo.football.model.items.Hero;
 import com.codenjoy.dojo.football.model.items.Wall;
-import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.utils.LevelUtils;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.games.football.Element.*;
 
-public class LevelImpl implements Level {
+public class Level extends AbstractLevel {
 
-    private LengthToXY xy;
-    private String map;
-
-    public LevelImpl(String map) {
-        this.map = LevelUtils.clear(map);
-        xy = new LengthToXY(getSize());
+    public Level(String map) {
+        super(map);
     }
 
-    @Override
-    public int getSize() {
-        return (int) Math.sqrt(map.length());
-    }
-
-    @Override
-    public List<Hero> getHero() {
-        return LevelUtils.getObjects(xy, map,
-                (pt, el) -> new Hero(pt),
+    public List<Hero> hero() {
+        return find(Hero::new,
                 HERO,
                 HERO_W_BALL,
                 TEAM_MEMBER,
@@ -60,17 +48,12 @@ public class LevelImpl implements Level {
                 ENEMY_W_BALL);
     }
 
-    @Override
-    public List<Wall> getWalls() {
-        return LevelUtils.getObjects(xy, map,
-                (pt, el) -> new Wall(pt),
-                WALL);
+    public List<Wall> walls() {
+        return find(Wall::new, WALL);
     }
 
-    @Override
-    public List<Ball> getBalls() {
-        return LevelUtils.getObjects(xy, map,
-                (pt, el) -> new Ball(pt),
+    public List<Ball> balls() {
+        return find(Ball::new,
                 BALL,
                 STOPPED_BALL,
                 HERO_W_BALL,
@@ -80,17 +63,11 @@ public class LevelImpl implements Level {
                 HITED_MY_GOAL);
     }
 
-    @Override
-    public List<Goal> getTopGoals() {
-        return LevelUtils.getObjects(xy, map,
-                Goal::new,
-                TOP_GOAL);
+    public List<Goal> topGoals() {
+        return find(Goal::new, TOP_GOAL);
     }
 
-    @Override
-    public List<Goal> getBottomGoals() {
-        return LevelUtils.getObjects(xy, map,
-                Goal::new,
-                BOTTOM_GOAL);
+    public List<Goal> bottomGoals() {
+        return find(Goal::new, BOTTOM_GOAL);
     }
 }

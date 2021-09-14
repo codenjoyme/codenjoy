@@ -24,7 +24,6 @@ package com.codenjoy.dojo.quake2d.services;
 
 
 import com.codenjoy.dojo.quake2d.model.Level;
-import com.codenjoy.dojo.quake2d.model.LevelImpl;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -96,7 +95,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public Level level() {
-        return new LevelImpl(string(LEVEL_MAP));
+        return new Level(string(LEVEL_MAP));
     }
 
 }

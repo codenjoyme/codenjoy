@@ -66,7 +66,7 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        Level level = new LevelImpl(board);
+        Level level = new Level(board);
         game = new Quadro(level, dice, settings);
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);

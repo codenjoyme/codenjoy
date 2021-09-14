@@ -32,11 +32,6 @@ import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-/**
- * User: oleksandr.baglai
- * Date: 9/29/12
- * Time: 6:25 PM
- */
 public class FigureTypesLevelTest {
 
     @Test

@@ -23,13 +23,24 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
+import com.codenjoy.dojo.games.a2048.Element;
+import com.codenjoy.dojo.services.field.AbstractLevel;
+
 import java.util.List;
 
-public interface Level {
+public class Level extends AbstractLevel {
 
-    int size();
+    public Level(String map) {
+        super(map);
+    }
 
-    List<Number> numbers();
+    public List<Number> numbers() {
+        return find((pt, el) -> new Number(el.number(), pt),
+                Element.valuesExcept(Element.NONE));
+    }
 
-    List<Number> breaks();
+    public List<Number> breaks() {
+        return find((pt, el) -> new Number(el.number(), pt),
+                Element._x);
+    }
 }

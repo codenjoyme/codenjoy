@@ -56,7 +56,9 @@ public class Deals implements Iterable<Deal>, Tickable {
     private Consumer<Deal> onAdd;
     private Consumer<Deal> onRemove;
     private ReadWriteLock lock = new ReentrantReadWriteLock();
-    private Spreader spreader = new Spreader();
+
+    @Autowired
+    protected Spreader spreader;
 
     @Autowired
     protected RoomService roomService;
@@ -273,7 +275,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         // независимо от типа игры нам нужно тикнуть все
         //      но только те, которые не DISPOSABLE и одновременно
         //      недокомплектованные пользователями
-        //      а так же котмнаты которых активны
+        //      а так же комнаты которых активны
         active.stream()
                 .filter(deal -> deal.getField() != null) // TODO разобраться почему так случается при переключении уровней icancode
                 .map(Deal::getField)

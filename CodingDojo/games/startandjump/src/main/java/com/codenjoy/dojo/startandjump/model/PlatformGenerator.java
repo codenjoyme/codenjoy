@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.Dice;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class PlatformGenerator {
     private final Dice dice;
     private final int size;
@@ -66,7 +68,7 @@ public class PlatformGenerator {
             }
 
             if (newPlatformLengthLeft != 0) {
-                result.add(new Platform(size, newPlatformY));
+                result.add(new Platform(pt(size, newPlatformY)));
                 previousY = newPlatformY;
                 newPlatformLengthLeft--;
                 if (newPlatformLengthLeft == 0) {

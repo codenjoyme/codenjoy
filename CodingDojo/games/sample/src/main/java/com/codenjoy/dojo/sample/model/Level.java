@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model.level;
+package com.codenjoy.dojo.sample.model;
 
 /*-
  * #%L
@@ -23,59 +23,45 @@ package com.codenjoy.dojo.sample.model.level;
  */
 
 
-import com.codenjoy.dojo.sample.model.Hero;
 import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
-import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.field.AbstractLevel;
 import com.codenjoy.dojo.services.field.PointField;
-import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.games.sample.Element.*;
-import static com.codenjoy.dojo.utils.LevelUtils.getObjects;
 
 /**
  * Полезный утилитный класс для получения объектов на поле из текстового вида.
  */
-public class LevelImpl implements Level {
+public class Level extends AbstractLevel {
 
-    private LengthToXY xy;
-    private String map;
-
-    public LevelImpl(String map) {
-        this.map = LevelUtils.clear(map);
-        xy = new LengthToXY(size());
-    }
-
-    @Override
-    public int size() {
-        return (int) Math.sqrt(map.length());
+    public Level(String map) {
+        super(map);
     }
 
     public List<Hero> heroes() {
-        return getObjects(xy, map, Hero::new, HERO);
+        return find(Hero::new, HERO);
     }
 
     public List<Gold> gold() {
-        return getObjects(xy, map, Gold::new, GOLD);
+        return find(Gold::new, GOLD);
     }
 
     public List<Bomb> bombs() {
-        return getObjects(xy, map, Bomb::new, BOMB);
+        return find(Bomb::new, BOMB);
     }
 
     public List<Wall> walls() {
-        return getObjects(xy, map, Wall::new, WALL);
+        return find(Wall::new, WALL);
     }
 
     @Override
-    public PointField field() {
-        PointField result = new PointField(size());
-        result.addAll(walls());
-        result.addAll(gold());
-        result.addAll(bombs());
-        return result;
+    protected void fill(PointField field) {
+        field.addAll(walls());
+        field.addAll(gold());
+        field.addAll(bombs());
     }
 }
