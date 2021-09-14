@@ -62,7 +62,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().act();
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -70,7 +70,7 @@ public class GameTest extends AbstractGameTest {
                 "☼*##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -83,12 +83,12 @@ public class GameTest extends AbstractGameTest {
     public void shouldDrillCounter() {
         shouldDrillLeft();
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -96,7 +96,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ ##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -104,7 +104,7 @@ public class GameTest extends AbstractGameTest {
                 "☼4##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -112,7 +112,7 @@ public class GameTest extends AbstractGameTest {
                 "☼3##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -120,7 +120,7 @@ public class GameTest extends AbstractGameTest {
                 "☼2##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -128,7 +128,7 @@ public class GameTest extends AbstractGameTest {
                 "☼1##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -147,7 +147,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().act();
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -155,7 +155,7 @@ public class GameTest extends AbstractGameTest {
                 "☼##*☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -174,7 +174,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -192,7 +192,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -206,7 +206,7 @@ public class GameTest extends AbstractGameTest {
     public void shouldStopWhenNoMoreRightCommand() {
         shouldMoveRight();
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -221,7 +221,7 @@ public class GameTest extends AbstractGameTest {
         shouldMoveRight();
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -235,7 +235,7 @@ public class GameTest extends AbstractGameTest {
         shouldMoveLeft();
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -249,7 +249,7 @@ public class GameTest extends AbstractGameTest {
     public void shouldDrillFilled() {
         shouldDrillLeft();
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -257,12 +257,12 @@ public class GameTest extends AbstractGameTest {
                 "☼ ##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -270,7 +270,7 @@ public class GameTest extends AbstractGameTest {
                 "☼4##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -278,7 +278,7 @@ public class GameTest extends AbstractGameTest {
                 "☼3##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -286,7 +286,7 @@ public class GameTest extends AbstractGameTest {
                 "☼2##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -294,7 +294,7 @@ public class GameTest extends AbstractGameTest {
                 "☼1##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -315,7 +315,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -323,7 +323,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ ##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -343,7 +343,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -351,7 +351,7 @@ public class GameTest extends AbstractGameTest {
                 "☼## ☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -366,7 +366,7 @@ public class GameTest extends AbstractGameTest {
         shouldFallInPitRight();
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -380,7 +380,7 @@ public class GameTest extends AbstractGameTest {
         shouldFallInPitLeft();
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -399,7 +399,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -408,7 +408,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -418,7 +418,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().left();
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -427,7 +427,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -436,7 +436,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();  // при падении я не могу передвигаться
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -445,7 +445,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left(); // а вот в яме куда угодно, пока есть место
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -454,7 +454,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right(); // пока стенки не заростут
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -463,8 +463,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -473,7 +473,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -482,7 +482,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -491,7 +491,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -500,7 +500,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -515,15 +515,15 @@ public class GameTest extends AbstractGameTest {
     public void shouldIDieIPitFillWithMe() {
         shouldDrillLeft();
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -532,7 +532,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -540,7 +540,7 @@ public class GameTest extends AbstractGameTest {
                 "☼1##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -551,8 +551,8 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[KILL_HERO]");
 
         dice(2, 3);
-        game.tick();         // ну а после смерти он появляется в рендомном месте
-        game.newGame(player());
+        field.tick();         // ну а после смерти он появляется в рендомном месте
+        field.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼ [ ☼" +
@@ -565,14 +565,14 @@ public class GameTest extends AbstractGameTest {
     public void shouldIDieIPitFillWithMe2() {
         shouldDrillLeft();
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -581,7 +581,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -589,7 +589,7 @@ public class GameTest extends AbstractGameTest {
                 "☼2##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -597,7 +597,7 @@ public class GameTest extends AbstractGameTest {
                 "☼◄##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -608,8 +608,8 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[KILL_HERO]");
 
         dice(2, 3);
-        game.tick();         // ну а после смерти он появляется в рендомном месте
-        game.newGame(player());
+        field.tick();         // ну а после смерти он появляется в рендомном месте
+        field.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼ [ ☼" +
@@ -625,9 +625,9 @@ public class GameTest extends AbstractGameTest {
         shouldDrillLeft();
 
         hero().right();
-        game.tick();
+        field.tick();
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -637,7 +637,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().left();
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -659,7 +659,7 @@ public class GameTest extends AbstractGameTest {
         hero().left();
         hero().act();
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -667,7 +667,7 @@ public class GameTest extends AbstractGameTest {
                 "☼*##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -686,7 +686,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -694,7 +694,7 @@ public class GameTest extends AbstractGameTest {
                 "☼*##☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -712,7 +712,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -720,7 +720,7 @@ public class GameTest extends AbstractGameTest {
                 "☼##*☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -740,7 +740,7 @@ public class GameTest extends AbstractGameTest {
 
         dice(2, 3);
         hero().right();
-        game.tick();
+        field.tick();
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         assertE("☼☼☼☼☼" +
@@ -750,7 +750,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼ $ ☼" +
@@ -770,7 +770,7 @@ public class GameTest extends AbstractGameTest {
 
         dice(3, 3);
         hero().right();
-        game.tick();
+        field.tick();
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         assertE("☼☼☼☼☼" +
@@ -790,7 +790,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -799,7 +799,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -818,7 +818,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -827,7 +827,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -836,7 +836,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  Y☼" +
@@ -857,7 +857,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  Y☼" +
@@ -866,7 +866,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  Y☼" +
@@ -887,7 +887,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -896,7 +896,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -905,7 +905,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -926,7 +926,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼ ]H☼" +
@@ -934,7 +934,7 @@ public class GameTest extends AbstractGameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -942,7 +942,7 @@ public class GameTest extends AbstractGameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -961,7 +961,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  H☼" +
@@ -980,7 +980,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -999,7 +999,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼H  ☼" +
@@ -1008,7 +1008,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼H  ☼" +
@@ -1017,7 +1017,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼Y  ☼" +
@@ -1026,7 +1026,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼H► ☼" +
@@ -1036,7 +1036,7 @@ public class GameTest extends AbstractGameTest {
 
         // и упасть
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼H [☼" +
@@ -1044,7 +1044,7 @@ public class GameTest extends AbstractGameTest {
                 "☼H  ☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼H  ☼" +
@@ -1052,7 +1052,7 @@ public class GameTest extends AbstractGameTest {
                 "☼H  ☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼H  ☼" +
@@ -1072,7 +1072,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -1093,7 +1093,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1104,7 +1104,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1115,7 +1115,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1126,7 +1126,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1149,7 +1149,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1160,7 +1160,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1171,7 +1171,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1196,7 +1196,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1206,7 +1206,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1216,7 +1216,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1226,7 +1226,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1249,7 +1249,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1260,7 +1260,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1272,7 +1272,7 @@ public class GameTest extends AbstractGameTest {
 
         dice(1, 5);
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼$    ☼" +
@@ -1285,7 +1285,7 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         dice(2, 5);
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼$$   ☼" +
@@ -1298,7 +1298,7 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         dice(3, 5);
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼$$$  ☼" +
@@ -1311,7 +1311,7 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         dice(4, 5);
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼$$$$ ☼" +
@@ -1336,7 +1336,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼  Я  ☼" +
@@ -1347,7 +1347,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼ ]   ☼" +
@@ -1357,7 +1357,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1367,7 +1367,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1377,7 +1377,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1387,7 +1387,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1410,7 +1410,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼ ]   ☼" +
@@ -1420,7 +1420,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1430,7 +1430,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1440,7 +1440,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1450,7 +1450,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1473,7 +1473,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -1493,7 +1493,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1503,7 +1503,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1514,7 +1514,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1524,7 +1524,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1546,7 +1546,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -1555,7 +1555,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -1573,7 +1573,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼☼☼☼☼" +
@@ -1582,7 +1582,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼☼☼☼☼" +
@@ -1591,7 +1591,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼☼☼☼☼" +
@@ -1610,7 +1610,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼☼☼☼☼" +
@@ -1619,7 +1619,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼☼☼☼☼" +
@@ -1628,7 +1628,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼☼☼☼☼" +
@@ -1637,7 +1637,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼☼☼☼☼" +
@@ -1656,7 +1656,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -1665,7 +1665,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -1684,7 +1684,7 @@ public class GameTest extends AbstractGameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1694,7 +1694,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         hero().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1713,10 +1713,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼" +
                 "☼☼☼☼☼☼");
 
-        for (int x = 0; x < game.size(); x++) {
-            for (int y = 0; y < game.size(); y++) {
+        for (int x = 0; x < field.size(); x++) {
+            for (int y = 0; y < field.size(); y++) {
                 Point pt = pt(x, y);
-                assertEquals("At:" + pt, false, game.isFree(pt));
+                assertEquals("At:" + pt, false, field.isFree(pt));
             }
 
         }
@@ -1733,7 +1733,7 @@ public class GameTest extends AbstractGameTest {
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1744,7 +1744,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().down();
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1754,7 +1754,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         hero().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1764,7 +1764,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1783,10 +1783,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
         hero().left();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼" +
                 "☼  ☼" +
@@ -1794,7 +1794,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼");
 
         for (int c = 3; c < Brick.DRILL_TIMER; c++) {
-            game.tick();
+            field.tick();
         }
 
         assertE("☼☼☼☼" +
@@ -1802,7 +1802,7 @@ public class GameTest extends AbstractGameTest {
                 "☼Ѡ#☼" +
                 "☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼" +
                 "☼  ☼" +
@@ -1823,21 +1823,21 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         hero().right();
-        game.tick();
+        field.tick();
 
         hero().left();
         hero().act();
-        game.tick();
+        field.tick();
 
         hero().right();
-        game.tick();
+        field.tick();
 
         hero().left();
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1847,11 +1847,11 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1862,13 +1862,13 @@ public class GameTest extends AbstractGameTest {
 
         hero().right();
         hero().act();
-        game.tick();
+        field.tick();
 
         hero().left();
         hero().act();
-        game.tick();
+        field.tick();
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1878,7 +1878,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1888,7 +1888,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1909,10 +1909,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         hero().down();
-        game.tick();
+        field.tick();
 
         hero().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1921,7 +1921,7 @@ public class GameTest extends AbstractGameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1931,7 +1931,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1940,7 +1940,7 @@ public class GameTest extends AbstractGameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
@@ -1960,7 +1960,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -1978,7 +1978,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -1997,7 +1997,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -2005,7 +2005,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -2024,7 +2024,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -2042,7 +2042,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -2061,10 +2061,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2072,7 +2072,7 @@ public class GameTest extends AbstractGameTest {
                 "☼# #☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2091,7 +2091,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().right();
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2100,7 +2100,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2108,7 +2108,7 @@ public class GameTest extends AbstractGameTest {
                 "☼# #☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2123,7 +2123,7 @@ public class GameTest extends AbstractGameTest {
         shouldEnemyFallInPitRight();
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2137,7 +2137,7 @@ public class GameTest extends AbstractGameTest {
         shouldEnemyFallInPitLeft();
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2151,16 +2151,16 @@ public class GameTest extends AbstractGameTest {
     public void shouldMonsterGetUpFromPit() {
         shouldEnemyFallInPitLeft();
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2168,7 +2168,7 @@ public class GameTest extends AbstractGameTest {
                 "☼#X#☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2177,7 +2177,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left(); // после этого он может двигаться
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2197,7 +2197,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().right();
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2208,8 +2208,8 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[KILL_HERO]");
 
         dice(1, 3);
-        game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
-        game.newGame(player());
+        field.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
+        field.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼[  ☼" +
@@ -2229,7 +2229,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().right();
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2241,8 +2241,8 @@ public class GameTest extends AbstractGameTest {
 
         dice(0,  // охотимся за первым игроком
             3, 3);
-        game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
-        game.newGame(player());
+        field.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
+        field.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼  [☼" +
@@ -2261,7 +2261,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2272,8 +2272,8 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[KILL_HERO]");
 
         dice(3, 3);
-        game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
-        game.newGame(player());
+        field.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
+        field.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼  [☼" +
@@ -2292,7 +2292,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -2304,8 +2304,8 @@ public class GameTest extends AbstractGameTest {
 
         dice(0,  // охотимся за первым игроком
             3, 3);
-        game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
-        game.newGame(player());
+        field.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
+        field.newGame(player());
 
         assertE("☼☼☼☼☼" +
                 "☼  [☼" +
@@ -2324,7 +2324,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  H☼" +
@@ -2333,7 +2333,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  H☼" +
@@ -2352,7 +2352,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  H☼" +
@@ -2361,7 +2361,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  H☼" +
@@ -2370,7 +2370,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  Q☼" +
@@ -2391,7 +2391,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  Q☼" +
@@ -2400,7 +2400,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  Q☼" +
@@ -2421,7 +2421,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  H☼" +
@@ -2430,7 +2430,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  H☼" +
@@ -2439,7 +2439,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  H☼" +
@@ -2460,7 +2460,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼ «H☼" +
@@ -2468,7 +2468,7 @@ public class GameTest extends AbstractGameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  H☼" +
@@ -2476,7 +2476,7 @@ public class GameTest extends AbstractGameTest {
                 "☼  H☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼  H☼" +
@@ -2495,7 +2495,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼H  ☼" +
@@ -2504,7 +2504,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼H  ☼" +
@@ -2513,7 +2513,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼Q  ☼" +
@@ -2522,7 +2522,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼H» ☼" +
@@ -2532,7 +2532,7 @@ public class GameTest extends AbstractGameTest {
 
         // и упасть
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼H »☼" +
@@ -2540,7 +2540,7 @@ public class GameTest extends AbstractGameTest {
                 "☼H  ☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼H  ☼" +
@@ -2548,7 +2548,7 @@ public class GameTest extends AbstractGameTest {
                 "☼H  ☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼H  ☼" +
@@ -2569,7 +2569,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2580,7 +2580,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2591,7 +2591,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2602,7 +2602,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2625,7 +2625,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2636,7 +2636,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2647,7 +2647,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2672,7 +2672,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2682,7 +2682,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2692,7 +2692,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2702,7 +2702,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -2726,7 +2726,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2738,7 +2738,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2750,7 +2750,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2761,7 +2761,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();      // чертик не берет больше 1 кучки золота
+        field.tick();      // чертик не берет больше 1 кучки золота
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2772,7 +2772,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2783,7 +2783,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2801,7 +2801,7 @@ public class GameTest extends AbstractGameTest {
 
         enemy().right();
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2813,7 +2813,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().right();     // если чертик с золотом падает в ямку - он оставляет золото на поверхности
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2825,7 +2825,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -2843,7 +2843,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().left();     //я могу пройти по нему сверху и забрать золото
         dice(1, 6);
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$     ☼" +
@@ -2857,7 +2857,7 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$     ☼" +
@@ -2870,7 +2870,7 @@ public class GameTest extends AbstractGameTest {
 
         hero().left();
         dice(2, 6);
-        game.tick();
+        field.tick();
 
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
@@ -2889,13 +2889,13 @@ public class GameTest extends AbstractGameTest {
         shouldIWalkOnEnemyInPitAndGetGold();
 
         for (int c = 4; c < Brick.DRILL_TIMER; c++) { // враг вылазит
-            game.tick();
+            field.tick();
         }
 
         enemy().left();
         hero().right();
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$$    ☼" +
@@ -2907,7 +2907,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$$    ☼" +
@@ -2918,7 +2918,7 @@ public class GameTest extends AbstractGameTest {
                 "☼### ##☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();  // золота у него больше нет
+        field.tick();  // золота у него больше нет
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$$    ☼" +
@@ -2946,7 +2946,7 @@ public class GameTest extends AbstractGameTest {
 
         dice(1, 6);
         hero().left();
-        game.tick();
+        field.tick();
 
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
@@ -2960,7 +2960,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$     ☼" +
@@ -2973,7 +2973,7 @@ public class GameTest extends AbstractGameTest {
 
         dice(2, 6);
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$$    ☼" +
@@ -2984,17 +2984,17 @@ public class GameTest extends AbstractGameTest {
                 "☼####X#☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼$$    ☼" +
@@ -3017,7 +3017,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -3038,7 +3038,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼» Я  ☼" +
@@ -3049,7 +3049,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼ »Я  ☼" +
@@ -3059,7 +3059,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼  Я  ☼" +
@@ -3069,16 +3069,16 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼  Я  ☼" +
@@ -3088,7 +3088,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼ »Я  ☼" +
@@ -3111,7 +3111,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼ «   ☼" +
@@ -3121,7 +3121,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -3131,7 +3131,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -3141,7 +3141,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -3151,7 +3151,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -3173,7 +3173,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -3183,7 +3183,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -3194,7 +3194,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼");
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -3204,7 +3204,7 @@ public class GameTest extends AbstractGameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
@@ -3226,7 +3226,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -3235,7 +3235,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -3254,7 +3254,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
@@ -3263,7 +3263,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
@@ -3272,7 +3272,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
@@ -3291,7 +3291,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
@@ -3300,7 +3300,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
@@ -3309,7 +3309,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
@@ -3318,7 +3318,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
@@ -3337,7 +3337,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -3346,7 +3346,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼►" +
                 "☼   ☼" +
@@ -3365,7 +3365,7 @@ public class GameTest extends AbstractGameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
@@ -3375,7 +3375,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
@@ -3396,10 +3396,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
@@ -3408,7 +3408,7 @@ public class GameTest extends AbstractGameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
@@ -3418,7 +3418,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
@@ -3427,7 +3427,7 @@ public class GameTest extends AbstractGameTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
@@ -3448,7 +3448,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼");
 
         enemy().up();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
@@ -3467,7 +3467,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ » ☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -3475,7 +3475,7 @@ public class GameTest extends AbstractGameTest {
                 "☼ » ☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -3484,7 +3484,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         enemy().right();     // если он отойдет - я упаду дальше
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -3492,7 +3492,7 @@ public class GameTest extends AbstractGameTest {
                 "☼  »☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -3517,9 +3517,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         for (int c = 3; c < Brick.DRILL_TIMER; c++) { // враг вылазит
-            game.tick();
+            field.tick();
         }
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3531,10 +3531,10 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3546,8 +3546,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3571,7 +3571,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3582,9 +3582,9 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3596,7 +3596,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().down();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3608,8 +3608,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3632,7 +3632,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3644,7 +3644,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3656,8 +3656,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3681,7 +3681,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3692,8 +3692,8 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         events.verifyAllEvents("[KILL_HERO]");
 
@@ -3708,9 +3708,9 @@ public class GameTest extends AbstractGameTest {
 
         enemy().down();
         dice(2, 3);
-        game.newGame(player());
+        field.newGame(player());
         dice(0);  // охотимся за первым игроком
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3735,7 +3735,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().act();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3747,8 +3747,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().left();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3760,8 +3760,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().right();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         events.verifyAllEvents("[KILL_HERO]");
 
@@ -3775,9 +3775,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         dice(2, 3);
-        game.newGame(player());
+        field.newGame(player());
         dice(0);  // охотимся за первым игроком
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3789,7 +3789,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         for (int c = 5; c < Brick.DRILL_TIMER; c++) { // враг вылазит
-            game.tick();
+            field.tick();
         }
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3812,7 +3812,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().act(0);
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -3836,7 +3836,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼");
 
         hero().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  ]☼" +
@@ -3844,7 +3844,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  ⊛☼" +
@@ -3852,7 +3852,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼  ⊛☼" +
@@ -3872,12 +3872,12 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        assertEquals(5, game.getPortalsTimer());
+        assertEquals(5, field.getPortalsTimer());
 
         hero().left();
-        game.tick();
+        field.tick();
 
-        assertEquals(4, game.getPortalsTimer());
+        assertEquals(4, field.getPortalsTimer());
 
         assertE("☼☼☼☼☼" +
                 "☼  ]☼" +
@@ -3885,9 +3885,9 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
-        assertEquals(3, game.getPortalsTimer());
+        assertEquals(3, field.getPortalsTimer());
 
         assertE("☼☼☼☼☼" +
                 "☼  ⊛☼" +
@@ -3895,17 +3895,17 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
-        assertEquals(2, game.getPortalsTimer());
+        assertEquals(2, field.getPortalsTimer());
 
-        game.tick();
+        field.tick();
 
-        assertEquals(1, game.getPortalsTimer());
+        assertEquals(1, field.getPortalsTimer());
 
-        game.tick();
+        field.tick();
 
-        assertEquals(0, game.getPortalsTimer());
+        assertEquals(0, field.getPortalsTimer());
 
         assertE("☼☼☼☼☼" +
                 "☼  ⊛☼" +
@@ -3915,9 +3915,9 @@ public class GameTest extends AbstractGameTest {
 
         dice(1, 3,  // new portals
             2, 3);
-        game.tick();
+        field.tick();
 
-        assertEquals(5, game.getPortalsTimer());
+        assertEquals(5, field.getPortalsTimer());
 
         assertE("☼☼☼☼☼" +
                 "☼⊛⊛ ☼" +
@@ -3938,7 +3938,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3950,7 +3950,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         enemy().left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3963,7 +3963,7 @@ public class GameTest extends AbstractGameTest {
 
         // when
         dice(1, 2); // new hero coordinates
-        game.clearScore();
+        field.clearScore();
 
         // then
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3990,7 +3990,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4004,7 +4004,7 @@ public class GameTest extends AbstractGameTest {
         hero(0).act();
         hero(0).right();
         hero(1).left();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4015,7 +4015,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###*##☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4026,7 +4026,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###)##☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         events.verifyNoEvents();
 
@@ -4044,7 +4044,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###)##☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         events.verifyAllEvents("" +
                 "listener(0) => [KILL_ENEMY]\n" +
@@ -4067,7 +4067,7 @@ public class GameTest extends AbstractGameTest {
         // when
         dice(1, 2,
             6, 2);
-        game.clearScore();
+        field.clearScore();
         reloadAllHeroes();
 
         // then
@@ -4098,7 +4098,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4110,7 +4110,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
         events.verifyNoEvents();
@@ -4126,7 +4126,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         events.verifyAllEvents("[GET_YELLOW_GOLD]");
         events.verifyNoEvents();
@@ -4142,7 +4142,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         events.verifyAllEvents("[GET_GREEN_GOLD]");
         events.verifyNoEvents();
@@ -4158,7 +4158,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         events.verifyAllEvents("[GET_RED_GOLD]");
         events.verifyNoEvents();
@@ -4174,7 +4174,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         events.verifyAllEvents("[GET_RED_GOLD]");
         events.verifyNoEvents();
@@ -4197,7 +4197,7 @@ public class GameTest extends AbstractGameTest {
 
         // when
         dice(1, 2);
-        game.clearScore();
+        field.clearScore();
         reloadAllHeroes();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4223,7 +4223,7 @@ public class GameTest extends AbstractGameTest {
             6, 4, // red
             1, 6  // герой
         );
-        game.clearScore();
+        field.clearScore();
         reloadAllHeroes();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4242,7 +4242,7 @@ public class GameTest extends AbstractGameTest {
                 .integer(GOLD_COUNT_GREEN,  1);
 
         dice(2, 6);  // герой
-        game.clearScore();
+        field.clearScore();
         reloadAllHeroes();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4269,7 +4269,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼   ⊛  ☼" +
@@ -4281,7 +4281,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼   [  ☼" +
@@ -4292,7 +4292,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼   ⊛  ☼" +
@@ -4303,7 +4303,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼   ⊛  ☼" +
@@ -4315,7 +4315,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         // что интересно, если ты не выйдешь из портала то в следующий тик отправишься дальше
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼   [  ☼" +
@@ -4326,7 +4326,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼   ⊛  ☼" +
@@ -4337,7 +4337,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼   ⊛  ☼" +
@@ -4349,7 +4349,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼   ⊛  ☼" +
@@ -4379,7 +4379,7 @@ public class GameTest extends AbstractGameTest {
         settings.integer(PORTALS_COUNT, settings.integer(PORTALS_COUNT) + 1);
         dice(2, 4, // new portal
             1, 2); // hero
-        game.clearScore();
+        field.clearScore();
         reloadAllHeroes();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4395,7 +4395,7 @@ public class GameTest extends AbstractGameTest {
         // оставим два портала
         settings.integer(PORTALS_COUNT, 2);
         dice(1, 2); // hero
-        game.clearScore();
+        field.clearScore();
         reloadAllHeroes();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4422,7 +4422,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4436,19 +4436,19 @@ public class GameTest extends AbstractGameTest {
         assertEquals(false, hero().under(Pill.PillType.SHADOW_PILL));
 
         hero().right();
-        game.tick();
+        field.tick();
 
         hero().right();
-        game.tick();
+        field.tick();
 
         hero().right();
-        game.tick();
+        field.tick();
 
         hero().right();
-        game.tick();
+        field.tick();
 
         hero().right();
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4464,7 +4464,7 @@ public class GameTest extends AbstractGameTest {
         // when
         // почистим все
         dice(1, 2);  // hero
-        game.clearScore();
+        field.clearScore();
         reloadAllHeroes();
 
         assertEquals(false, hero().under(Pill.PillType.SHADOW_PILL));
@@ -4486,7 +4486,7 @@ public class GameTest extends AbstractGameTest {
                 5, 3,
                 1, 6  // hero
         );
-        game.clearScore();
+        field.clearScore();
         reloadAllHeroes();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4502,7 +4502,7 @@ public class GameTest extends AbstractGameTest {
         // оставим только 1
         settings.integer(SHADOW_PILLS_COUNT, 1);
         dice(1, 2);  // hero
-        game.clearScore();
+        field.clearScore();
         reloadAllHeroes();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4527,7 +4527,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4538,14 +4538,14 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        assertEquals(7 * 4, game.borders().size());
+        assertEquals(7 * 4, field.borders().size());
 
         // when
         dice(1, 2); // new hero
-        game.clearScore();
+        field.clearScore();
 
         // then
-        assertEquals(7 * 4, game.borders().size());
+        assertEquals(7 * 4, field.borders().size());
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4558,10 +4558,10 @@ public class GameTest extends AbstractGameTest {
 
         // when
         dice(2, 2); // new hero
-        game.clearScore();
+        field.clearScore();
 
         // then
-        assertEquals(7 * 4, game.borders().size());
+        assertEquals(7 * 4, field.borders().size());
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -4583,22 +4583,22 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        assertEquals(5, game.getPortalsTimer());
+        assertEquals(5, field.getPortalsTimer());
 
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
-        assertEquals(2, game.getPortalsTimer());
+        assertEquals(2, field.getPortalsTimer());
 
         // when
         dice(3, 3, // new portals
             3, 2,
             1, 2); // new hero
-        game.clearScore();
+        field.clearScore();
 
         // then
-        assertEquals(5, game.getPortalsTimer());
+        assertEquals(5, field.getPortalsTimer());
     }
 
     // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы

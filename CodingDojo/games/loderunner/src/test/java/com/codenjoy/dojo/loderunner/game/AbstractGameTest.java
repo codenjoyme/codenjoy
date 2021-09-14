@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 public abstract class AbstractGameTest {
 
-    protected Loderunner game;
+    protected Loderunner field;
 
     private List<Hero> heroes = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
@@ -72,7 +72,7 @@ public abstract class AbstractGameTest {
             throw new IllegalStateException("Нет героя!");
         }
 
-        game = new Loderunner(dice, settings);
+        field = new Loderunner(dice, settings);
 
         for (Hero hero : levelHeroes) {
             dice(hero.getX(), hero.getY());
@@ -81,7 +81,7 @@ public abstract class AbstractGameTest {
             listeners.add(listener);
             Player player = new Player(listener, settings);
             players.add(player);
-            game.newGame(player);
+            field.newGame(player);
             heroes.add(player.getHero());
             player.getHero().setDirection(hero.getDirection());
         }
@@ -119,16 +119,16 @@ public abstract class AbstractGameTest {
 
     protected void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                printer.getPrinter(game.reader(), player()).print());
+                printer.getPrinter(field.reader(), player()).print());
     }
 
     protected void reloadAllHeroes() {
-        players = game.players();
-        heroes = game.heroes().all();
+        players = field.players();
+        heroes = field.heroes().all();
     }
 
     protected void reloadAllEnemies() {
-        enemies = game.enemies().stream()
+        enemies = field.enemies().stream()
                 .map(EnemyJoystick::new)
                 .collect(Collectors.toList());
     }
