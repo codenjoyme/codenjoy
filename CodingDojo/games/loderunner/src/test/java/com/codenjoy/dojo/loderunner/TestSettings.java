@@ -38,8 +38,8 @@ public class TestSettings extends GameSettings {
         integer(SUICIDE_PENALTY, 0);
         integer(SHADOW_TICKS, 15);
         integer(SHADOW_PILLS_COUNT, 0);
-        integer(PORTAL_TICKS, 10);
-        integer(PORTALS_COUNT, 0);
+        integer(BACKWAY_TICKS, 10);
+        integer(BACKWAYS_COUNT, 0);
         string(MAP_PATH, "none");
 
         integer(GOLD_COUNT_YELLOW, -1);

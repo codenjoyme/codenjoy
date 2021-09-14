@@ -92,7 +92,7 @@ public abstract class AbstractGameTest {
                 .integer(GOLD_COUNT_GREEN, level.greenGold().size())
                 .integer(GOLD_COUNT_RED, level.redGold().size())
                 .integer(SHADOW_PILLS_COUNT, level.pills().size())
-                .integer(PORTALS_COUNT, level.portals().size())
+                .integer(BACKWAYS_COUNT, level.backways().size())
                 .integer(ROBBERS_COUNT, level.robbers().size());
 
         field = new Loderunner(dice, settings);

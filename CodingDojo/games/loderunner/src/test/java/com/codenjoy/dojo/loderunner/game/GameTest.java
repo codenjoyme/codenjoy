@@ -3824,8 +3824,8 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void iCanJumpThroughPortals() {
-        settings.integer(PORTALS_COUNT, 2);
+    public void iCanJumpThroughBackways() {
+        settings.integer(BACKWAYS_COUNT, 2);
 
         dice(1, 2,
             3, 3);
@@ -3862,9 +3862,9 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void portalsAreRecreatedEveryFewTicks() {
-        settings.integer(PORTALS_COUNT, 2)
-                .integer(PORTAL_TICKS, 5);
+    public void backwaysAreRecreatedEveryFewTicks() {
+        settings.integer(BACKWAYS_COUNT, 2)
+                .integer(BACKWAY_TICKS, 5);
 
         givenFl("☼☼☼☼☼" +
                 "☼  ⊛☼" +
@@ -3872,12 +3872,12 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        assertEquals(5, field.getPortalsTimer());
+        assertEquals(5, field.getBackwaysTimer());
 
         hero().left();
         tick();
 
-        assertEquals(4, field.getPortalsTimer());
+        assertEquals(4, field.getBackwaysTimer());
 
         assertE("☼☼☼☼☼" +
                 "☼  ]☼" +
@@ -3887,7 +3887,7 @@ public class GameTest extends AbstractGameTest {
 
         tick();
 
-        assertEquals(3, field.getPortalsTimer());
+        assertEquals(3, field.getBackwaysTimer());
 
         assertE("☼☼☼☼☼" +
                 "☼  ⊛☼" +
@@ -3897,15 +3897,15 @@ public class GameTest extends AbstractGameTest {
 
         tick();
 
-        assertEquals(2, field.getPortalsTimer());
+        assertEquals(2, field.getBackwaysTimer());
 
         tick();
 
-        assertEquals(1, field.getPortalsTimer());
+        assertEquals(1, field.getBackwaysTimer());
 
         tick();
 
-        assertEquals(0, field.getPortalsTimer());
+        assertEquals(0, field.getBackwaysTimer());
 
         assertE("☼☼☼☼☼" +
                 "☼  ⊛☼" +
@@ -3913,11 +3913,11 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        dice(1, 3,  // new portals
+        dice(1, 3,  // new backways
             2, 3);
         tick();
 
-        assertEquals(5, field.getPortalsTimer());
+        assertEquals(5, field.getBackwaysTimer());
 
         assertE("☼☼☼☼☼" +
                 "☼⊛⊛ ☼" +
@@ -4252,9 +4252,9 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldEndlesslyWalkThroughThePortals_untilExit() {
+    public void shouldEndlesslyWalkThroughTheBackways_untilExit() {
         // given
-        settings.integer(PORTALS_COUNT, 3);
+        settings.integer(BACKWAYS_COUNT, 3);
 
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼   ⊛  ☼" +
@@ -4310,7 +4310,7 @@ public class GameTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        // что интересно, если ты не выйдешь из портала то в следующий тик отправишься дальше
+        // что интересно, если ты не выйдешь из черный хода то в следующий тик отправишься дальше
         tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -4358,8 +4358,8 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldResetPortals_whenClearBoard() {
-        shouldEndlesslyWalkThroughThePortals_untilExit();
+    public void shouldResetBackways_whenClearBoard() {
+        shouldEndlesslyWalkThroughTheBackways_untilExit();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼   ⊛  ☼" +
@@ -4371,9 +4371,9 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         // when
-        // добавим еще один портал
-        settings.integer(PORTALS_COUNT, settings.integer(PORTALS_COUNT) + 1);
-        dice(2, 4, // new portal
+        // добавим еще один черный ход
+        settings.integer(BACKWAYS_COUNT, settings.integer(BACKWAYS_COUNT) + 1);
+        dice(2, 4, // new backway
             1, 2); // hero
         field.clearScore();
 
@@ -4387,8 +4387,8 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         // when
-        // оставим два портала
-        settings.integer(PORTALS_COUNT, 2);
+        // оставим два черный хода
+        settings.integer(BACKWAYS_COUNT, 2);
         dice(1, 2); // hero
         field.clearScore();
 
@@ -4565,8 +4565,8 @@ public class GameTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldResetPortalsTimeout_whenClearBoard() {
-        portalsAreRecreatedEveryFewTicks();
+    public void shouldResetBackwaysTimeout_whenClearBoard() {
+        backwaysAreRecreatedEveryFewTicks();
 
         assertE("☼☼☼☼☼" +
                 "☼⊛⊛ ☼" +
@@ -4574,22 +4574,22 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        assertEquals(5, field.getPortalsTimer());
+        assertEquals(5, field.getBackwaysTimer());
 
         tick();
         tick();
         tick();
 
-        assertEquals(2, field.getPortalsTimer());
+        assertEquals(2, field.getBackwaysTimer());
 
         // when
-        dice(3, 3, // new portals
+        dice(3, 3, // new backways
             3, 2,
             1, 2); // new hero
         field.clearScore();
 
         // then
-        assertEquals(5, field.getPortalsTimer());
+        assertEquals(5, field.getBackwaysTimer());
     }
 
     // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы

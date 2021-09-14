@@ -28,14 +28,14 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Portal extends PointImpl implements State<Element, Player> {
+public class Backway extends PointImpl implements State<Element, Player> {
 
-    public Portal(Point point) {
+    public Backway(Point point) {
         super(point);
     }
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        return Element.PORTAL;
+        return Element.BACKWAY;
     }
 }

@@ -50,7 +50,7 @@ public class Level extends AbstractLevel {
         field.addAll(pipe());
         field.addAll(ladder());
         field.addAll(bricks());
-        field.addAll(portals());
+        field.addAll(backways());
         field.addAll(pills());
         field.addAll(yellowGold());
         field.addAll(greenGold());
@@ -114,7 +114,7 @@ public class Level extends AbstractLevel {
         return find(pt -> new Pill(pt, PillType.SHADOW_PILL), SHADOW_PILL);
     }
 
-    public List<Portal> portals() {
-        return find(Portal::new, PORTAL);
+    public List<Backway> backways() {
+        return find(Backway::new, BACKWAY);
     }
 }

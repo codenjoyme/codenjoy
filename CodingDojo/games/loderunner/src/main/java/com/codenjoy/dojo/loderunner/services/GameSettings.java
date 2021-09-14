@@ -47,8 +47,8 @@ public class GameSettings extends SettingsImpl
         SHADOW_PILLS_COUNT("[Game] Shadow pills count"),
         SHADOW_TICKS("[Game] Shadow ticks"),
 
-        PORTALS_COUNT("[Game] Portals count"),
-        PORTAL_TICKS("[Game] Portal ticks"),
+        BACKWAYS_COUNT("[Game] Backways count"),
+        BACKWAY_TICKS("[Game] Backway ticks"),
 
         ROBBERS_COUNT("[Game] Robbers count"),
 
@@ -95,8 +95,8 @@ public class GameSettings extends SettingsImpl
         integer(SHADOW_PILLS_COUNT, 0);
         integer(SHADOW_TICKS, 15);
 
-        integer(PORTALS_COUNT, 0);
-        integer(PORTAL_TICKS, 10);
+        integer(BACKWAYS_COUNT, 0);
+        integer(BACKWAY_TICKS, 10);
 
         integer(ROBBERS_COUNT, 5);
 

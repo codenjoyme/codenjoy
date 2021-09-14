@@ -49,7 +49,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     private Dice dice;
     private GameSettings settings;
 
-    private int portalsTimer;
+    private int backwaysTimer;
 
     public Loderunner(Dice dice, GameSettings settings) {
         super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_HERO, settings);
@@ -64,7 +64,7 @@ public class Loderunner extends RoundField<Player> implements Field {
     private void generateAll() {
         generatePills();
         generateGold();
-        generatePortals();
+        generateBackways();
         generateRobbers();
     }
 
@@ -73,7 +73,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         settings.level().saveTo(field);
         field.init(this);
 
-        resetPortalsTimer();
+        resetBackwaysTimer();
         robbers().forEach(robber -> robber.init(this));
         generateAll();
 
@@ -106,7 +106,7 @@ public class Loderunner extends RoundField<Player> implements Field {
 
         die.addAll(bricksGo());
 
-        portalsGo();
+        backwaysGo();
 
         for (Player player : die) {
             Hero deadHero = player.getHero();
@@ -163,10 +163,10 @@ public class Loderunner extends RoundField<Player> implements Field {
                 });
     }
 
-    private void generatePortals() {
-        generate(portals(), settings, PORTALS_COUNT,
+    private void generateBackways() {
+        generate(backways(), settings, BACKWAYS_COUNT,
                 player -> freeRandom((Player) player),
-                pt -> new Portal(pt));
+                pt -> new Backway(pt));
     }
 
     private List<Player> getDied() {
@@ -187,7 +187,7 @@ public class Loderunner extends RoundField<Player> implements Field {
                 Ladder.class,
                 Pill.class,
                 Pipe.class,
-                Portal.class);
+                Backway.class);
     }
 
     private List<Player> bricksGo() {
@@ -245,18 +245,18 @@ public class Loderunner extends RoundField<Player> implements Field {
                 hero.pick(PillType.SHADOW_PILL);
             }
 
-            if (portals().contains(hero)) {
+            if (backways().contains(hero)) {
                 transport(hero);
             }
         }
     }
 
     private void transport(PointImpl point) {
-        List<Portal> portals = portals().all();
-        for (int i = 0; i < portals.size(); i++) {
-            if (portals.get(i).equals(point)) {
-                Portal portalToMove = portals.get(i < portals.size() - 1 ? i + 1 : 0);
-                point.move(portalToMove.getX(), portalToMove.getY());
+        List<Backway> backways = backways().all();
+        for (int i = 0; i < backways.size(); i++) {
+            if (backways.get(i).equals(point)) {
+                Backway backwayToMove = backways.get(i < backways.size() - 1 ? i + 1 : 0);
+                point.move(backwayToMove.getX(), backwayToMove.getY());
                 return;
             }
         }
@@ -277,25 +277,25 @@ public class Loderunner extends RoundField<Player> implements Field {
                 robber.getGold(RedGold.class);
             }
 
-            if (portals().contains(robber)) {
+            if (backways().contains(robber)) {
                 transport(robber);
             }
         }
     }
 
-    // TODO сделать чтобы каждый портал сам тикал свое время
-    private void portalsGo() {
-        if (portalsTimer == 0) {
-            resetPortalsTimer();
-            portals().clear();
-            generatePortals();
+    // TODO сделать чтобы каждый черный ход сам тикал свое время
+    private void backwaysGo() {
+        if (backwaysTimer == 0) {
+            resetBackwaysTimer();
+            backways().clear();
+            generateBackways();
         } else {
-            portalsTimer--;
+            backwaysTimer--;
         }
     }
 
-    private void resetPortalsTimer() {
-        portalsTimer = Math.max(1, settings.integer(PORTAL_TICKS));
+    private void resetBackwaysTimer() {
+        backwaysTimer = Math.max(1, settings.integer(BACKWAY_TICKS));
     }
 
     @Override
@@ -473,8 +473,8 @@ public class Loderunner extends RoundField<Player> implements Field {
         }
     }
 
-    public Accessor<Portal> portals() {
-        return field.of(Portal.class);
+    public Accessor<Backway> backways() {
+        return field.of(Backway.class);
     }
 
     public Accessor<YellowGold> yellowGold() {
@@ -522,7 +522,7 @@ public class Loderunner extends RoundField<Player> implements Field {
         return field.of(Pipe.class);
     }
 
-    public int getPortalsTimer() {
-        return portalsTimer;
+    public int getBackwaysTimer() {
+        return backwaysTimer;
     }
 }
