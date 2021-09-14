@@ -36,15 +36,15 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
-public class Enemy extends PointImpl implements Tickable, Fieldable<Field>, State<Element, Player> {
+public class Robber extends PointImpl implements Tickable, Fieldable<Field>, State<Element, Player> {
 
     private Direction direction;
-    private EnemyAI ai;
+    private RobberAI ai;
     private Field field;
     private Class<? extends Point> withGold;
     private Hero prey;
 
-    public Enemy(Point pt, Direction direction) {
+    public Robber(Point pt, Direction direction) {
         super(pt);
         withGold = null;
         this.direction = direction;
@@ -56,11 +56,11 @@ public class Enemy extends PointImpl implements Tickable, Fieldable<Field>, Stat
         this.field = field;
     }
 
-    public EnemyAI getAi() {
+    public RobberAI getAi() {
         return ai;
     }
 
-    public void setAi(EnemyAI ai) {
+    public void setAi(RobberAI ai) {
         this.ai = ai;
     }
 
@@ -91,7 +91,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable<Field>, Stat
 
         List<Hero> heroes = field.visibleHeroes();
 
-        // если тот, за км охотились уже ушел с поля или умер, или стал невидимым - будем искать нового
+        // если тот, за кем охотились уже ушел с поля или умер, или стал невидимым - будем искать нового
         if (prey == null || !prey.isActiveAndAlive() || prey.isVisible()) {
             prey = null;
         }
@@ -114,7 +114,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable<Field>, Stat
         Point pt = direction.change(this);
 
         // чертик чертику не помеха - пусть проходят друг сквозь друга
-        // if (field.isEnemyAt(pt.getX(), pt.getY())) return;
+        // if (field.isRobberAt(pt.getX(), pt.getY())) return;
 
         if (!field.isHeroAt(pt)
                 && field.isBarrier(pt)) return;
@@ -129,13 +129,13 @@ public class Enemy extends PointImpl implements Tickable, Fieldable<Field>, Stat
         }
 
         // ищем за кем охотиться
-        List<Enemy> enemies = field.enemies().all();
+        List<Robber> robbers = field.robbers().all();
         // выбираем только тех, за кем еще никто не охотится
         List<Hero> free = all.stream()
-                .filter(prey -> enemies.stream()
-                        .map(enemy -> enemy.prey())
+                .filter(prey -> robbers.stream()
+                        .map(Robber::prey)
                         .filter(Objects::nonNull)
-                        .noneMatch(escaping -> prey.equals(escaping)))
+                        .noneMatch(prey::equals))
                 .collect(toList());
         // если все заняты, будем бежать за ближайшим
         if (free.isEmpty()) {
@@ -167,22 +167,22 @@ public class Enemy extends PointImpl implements Tickable, Fieldable<Field>, Stat
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
         if (field.isBrick(this)) {
-            return Element.ENEMY_PIT;
+            return Element.ROBBER_MASK;
         }
 
         if (field.isLadder(this)) {
-            return Element.ENEMY_LADDER;
+            return Element.ROBBER_LADDER;
         }
 
         if (field.isPipe(this)) {
             return isLeftTurn()
-                    ? Element.ENEMY_PIPE_LEFT
-                    : Element.ENEMY_PIPE_RIGHT;
+                    ? Element.ROBBER_PIPE_LEFT
+                    : Element.ROBBER_PIPE_RIGHT;
         }
 
         return isLeftTurn()
-                ? Element.ENEMY_LEFT
-                : Element.ENEMY_RIGHT;
+                ? Element.ROBBER_LEFT
+                : Element.ROBBER_RIGHT;
     }
 
     public boolean isLeftTurn() {

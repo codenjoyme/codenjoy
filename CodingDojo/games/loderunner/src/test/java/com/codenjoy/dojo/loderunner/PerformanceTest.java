@@ -36,7 +36,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ROBBERS_COUNT;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -49,7 +49,7 @@ public class PerformanceTest {
     public void test() {
 
         // about 5 sec
-        int enemies = 4;
+        int robbers = 4;
         int players = 20; // TODO up to 100
         int ticks = 100;
 
@@ -63,7 +63,7 @@ public class PerformanceTest {
             public GameSettings getSettings() {
                 return super.getSettings()
                     .bool(ROUNDS_ENABLED, false)
-                    .integer(ENEMIES_COUNT, enemies);
+                    .integer(ROBBERS_COUNT, robbers);
             }
         };
 

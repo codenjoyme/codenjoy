@@ -33,7 +33,7 @@ import java.util.Map;
 
 import static com.codenjoy.dojo.services.Direction.DOWN;
 
-public class AI implements EnemyAI {
+public class AI implements RobberAI {
 
     public static boolean POSSIBLE_IS_CONSTANT = true;
 

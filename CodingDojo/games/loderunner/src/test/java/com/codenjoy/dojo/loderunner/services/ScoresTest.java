@@ -39,8 +39,8 @@ public class ScoresTest {
         scores.event(Events.KILL_HERO);
     }
 
-    public void killEnemy() {
-        scores.event(Events.KILL_ENEMY);
+    public void killRobber() {
+        scores.event(Events.KILL_ROBBER);
     }
 
     public void suicide() {
@@ -65,7 +65,7 @@ public class ScoresTest {
                 .integer(SUICIDE_PENALTY, 13)
                 .integer(KILL_HERO_PENALTY, 30)
 
-                .integer(KILL_ENEMY_SCORE, 10)
+                .integer(KILL_ROBBER_SCORE, 10)
 
                 .integer(GOLD_SCORE_GREEN, 2)
                 .integer(GOLD_SCORE_GREEN_INCREMENT, 1)
@@ -83,9 +83,9 @@ public class ScoresTest {
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        killEnemy();  
-        killEnemy();  
-        killEnemy();  
+        killRobber();
+        killRobber();
+        killRobber();
 
         yellowGold();
         redGold();
@@ -101,7 +101,7 @@ public class ScoresTest {
         killHero(); 
 
         assertEquals(140
-                + 3 * settings.integer(KILL_ENEMY_SCORE)
+                + 3 * settings.integer(KILL_ROBBER_SCORE)
 
                 + 5 * settings.integer(GOLD_SCORE_YELLOW)
                 + (1 + 2 + 3 + 4) * settings.integer(GOLD_SCORE_YELLOW_INCREMENT)

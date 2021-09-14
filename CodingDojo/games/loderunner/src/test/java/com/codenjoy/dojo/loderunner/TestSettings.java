@@ -33,7 +33,7 @@ public class TestSettings extends GameSettings {
         bool(ROUNDS_ENABLED, false);
 
         integer(KILL_HERO_PENALTY, 0);
-        integer(KILL_ENEMY_SCORE, 10);
+        integer(KILL_ROBBER_SCORE, 10);
 
         integer(SUICIDE_PENALTY, 0);
         integer(SHADOW_TICKS, 15);
@@ -49,6 +49,6 @@ public class TestSettings extends GameSettings {
         integer(GOLD_SCORE_GREEN, 5);
         integer(GOLD_SCORE_RED, 10);
 
-        integer(ENEMIES_COUNT, 0);
+        integer(ROBBERS_COUNT, 0);
     }
 }

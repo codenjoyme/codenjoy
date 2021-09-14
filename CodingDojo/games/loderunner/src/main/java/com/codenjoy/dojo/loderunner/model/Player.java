@@ -55,7 +55,7 @@ public class Player extends RoundGamePlayer<Hero, Field> {
 
         if (event instanceof Events) {
             switch ((Events) event) {
-                case KILL_ENEMY:
+                case KILL_ROBBER:
                     hero.increaseScore();
                     break;
                 case START_ROUND:

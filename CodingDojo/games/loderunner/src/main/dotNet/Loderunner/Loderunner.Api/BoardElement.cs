@@ -34,12 +34,12 @@
 
         DrillPit = (short)'*',
 
-        EnemyLadder = (short)'Q',
-        EnemyLeft = (short)'«',
-        EnemyRight = (short)'»',
-        EnemyPipeLeft = (short)'<',
-        EnemyPipeRight = (short)'>',
-        EnemyPit = (short)'X',
+        RobberLadder = (short)'Q',
+        RobberLeft = (short)'«',
+        RobberRight = (short)'»',
+        RobberPipeLeft = (short)'<',
+        RobberPipeRight = (short)'>',
+        RobberPit = (short)'X',
 
         Gold = (short)'$',
 

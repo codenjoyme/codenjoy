@@ -87,7 +87,7 @@ public class SmokeTest {
                                 .integer(GOLD_COUNT_GREEN, 5)
                                 .integer(GOLD_COUNT_RED, 6)
                                 .integer(GOLD_COUNT_YELLOW, 7)
-                                .integer(ENEMIES_COUNT, 2);
+                                .integer(ROBBERS_COUNT, 2);
                     }
                 },
                 Stream.generate(solver)
@@ -103,7 +103,7 @@ public class SmokeTest {
         // about 14 sec
         int ticks = 100;
         int players = 10;
-        int enemies = 5;
+        int robbers = 5;
         Supplier<Solver> solver = () -> new AISolver(dice);
 
         LocalGameRunner.showPlayers = "1";
@@ -119,7 +119,7 @@ public class SmokeTest {
                         return super.getSettings()
                                 .bool(ROUNDS_ENABLED, false)
                                 .string(LEVEL_MAP, Big.all().get(0))
-                                .integer(ENEMIES_COUNT, enemies);
+                                .integer(ROBBERS_COUNT, robbers);
                     }
                 },
                 Stream.generate(solver)

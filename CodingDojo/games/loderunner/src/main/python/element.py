@@ -40,13 +40,13 @@ _ELEMENTS = dict(
 
     DRILL_PIT  = '*',
 
-    // this is enemy
-    ENEMY_LADDER  = 'Q',
-    ENEMY_LEFT  = '«',
-    ENEMY_RIGHT  = '»',
-    ENEMY_PIPE_LEFT  = '<',
-    ENEMY_PIPE_RIGHT  = '>',
-    ENEMY_PIT  = 'X',
+    // this is robber
+    ROBBER_LADDER  = 'Q',
+    ROBBER_LEFT  = '«',
+    ROBBER_RIGHT  = '»',
+    ROBBER_PIPE_LEFT  = '<',
+    ROBBER_PIPE_RIGHT  = '>',
+    ROBBER_PIT  = 'X',
 
     # gold ;)
     GOLD  = '$',

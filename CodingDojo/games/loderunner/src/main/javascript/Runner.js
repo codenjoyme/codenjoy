@@ -107,13 +107,13 @@ var Elements = {
 
     DRILL_PIT : '*',
 
-    // this is enemy
-    ENEMY_LADDER : 'Q',
-    ENEMY_LEFT : '«',
-    ENEMY_RIGHT : '»',
-    ENEMY_PIPE_LEFT : '<',
-    ENEMY_PIPE_RIGHT : '>',
-    ENEMY_PIT : 'X',
+    // this is robber
+    ROBBER_LADDER : 'Q',
+    ROBBER_LEFT : '«',
+    ROBBER_RIGHT : '»',
+    ROBBER_PIPE_LEFT : '<',
+    ROBBER_PIPE_RIGHT : '>',
+    ROBBER_PIT : 'X',
 
     /// gold ;)
     GOLD : '$',
@@ -322,15 +322,15 @@ var Board = function(board) {
         return result;
     };
 
-    var getEnemies = function() {
+    var getRobbers = function() {
         var result = [];
-        result = result.concat(findAll(Elements.ENEMY_LADDER));
-        result = result.concat(findAll(Elements.ENEMY_LADDER));
-        result = result.concat(findAll(Elements.ENEMY_LEFT));
-        result = result.concat(findAll(Elements.ENEMY_PIPE_LEFT));
-        result = result.concat(findAll(Elements.ENEMY_PIPE_RIGHT));
-        result = result.concat(findAll(Elements.ENEMY_RIGHT));
-        result = result.concat(findAll(Elements.ENEMY_PIT));
+        result = result.concat(findAll(Elements.ROBBER_LADDER));
+        result = result.concat(findAll(Elements.ROBBER_LADDER));
+        result = result.concat(findAll(Elements.ROBBER_LEFT));
+        result = result.concat(findAll(Elements.ROBBER_PIPE_LEFT));
+        result = result.concat(findAll(Elements.ROBBER_PIPE_RIGHT));
+        result = result.concat(findAll(Elements.ROBBER_RIGHT));
+        result = result.concat(findAll(Elements.ROBBER_PIT));
         return result;
     };
 
@@ -349,7 +349,7 @@ var Board = function(board) {
         var result = [];
         result = result.concat(findAll(Elements.LADDER));
         result = result.concat(findAll(Elements.HERO_LADDER));
-        result = result.concat(findAll(Elements.ENEMY_LADDER));
+        result = result.concat(findAll(Elements.ROBBER_LADDER));
         return result;
     };
 
@@ -392,7 +392,7 @@ var Board = function(board) {
 
     var getBarriers = function() {
         var all = getWalls();
-        all = all.concat(getEnemies());
+        all = all.concat(getRobbers());
         all = all.concat(getOtherHeroes());
         all = all.concat(getWalls());
         return removeDuplicates(all);
@@ -402,12 +402,12 @@ var Board = function(board) {
         return util.format("Board:\n%s\n" +
             "Me at: %s\n" +
             "Other heroes at: %s\n" +
-            "Enemies at: %s\n" +
+            "Robbers at: %s\n" +
             "Gold at: %s\n",
                 boardAsString(),
                 getMe(),
                 printArray(getOtherHeroes()),
-                printArray(getEnemies()),
+                printArray(getRobbers()),
                 printArray(getGold())
             );
     };
@@ -453,9 +453,9 @@ var Board = function(board) {
         return contains(getBarriers(), pt(x, y));
     };
 
-    var hasEnemyAt = function(x, y) {
+    var hasRobberAt = function(x, y) {
         return isAnyOfAt(x, y,
-            [Elements.ENEMY_LADDER, Elements.ENEMY_LEFT, Elements.ENEMY_PIPE_LEFT, Elements.ENEMY_PIPE_RIGHT, Elements.ENEMY_PIT, Elements.ENEMY_RIGHT]);
+            [Elements.ROBBER_LADDER, Elements.ROBBER_LEFT, Elements.ROBBER_PIPE_LEFT, Elements.ROBBER_PIPE_RIGHT, Elements.ROBBER_PIT, Elements.ROBBER_RIGHT]);
     };
 
     var hasOtherHeroAt = function(x, y) {
@@ -471,7 +471,7 @@ var Board = function(board) {
     };
 
     var hasLadderAt = function(x, y) {
-        return isAnyOfAt(x, y, [Elements.LADDER, Elements.HERO_LADDER, Elements.ENEMY_LADDER]);
+        return isAnyOfAt(x, y, [Elements.LADDER, Elements.HERO_LADDER, Elements.ROBBER_LADDER]);
     };
 
     var hasGoldAt = function(x, y) {
@@ -513,7 +513,7 @@ var Board = function(board) {
         isAnyOfAt : isAnyOfAt,
         isNear : isNear,
         isBarrierAt : isBarrierAt,
-        hasEnemyAt : hasEnemyAt,
+        hasRobberAt : hasRobberAt,
         hasOtherHeroAt : hasOtherHeroAt,
         hasWallAt : hasWallAt,
         hasLadderAt : hasLadderAt,

@@ -63,7 +63,7 @@ public class AISolver implements Solver<Board> {
             public boolean possible(Point pt) {
                 if (pt.isOutOf(board.size())) return false;
                 if (board.isWall(pt)) return false;
-                if (board.isEnemyAt(pt)) return false;
+                if (board.isRobberAt(pt)) return false;
                 if (board.isOtherHeroAt(pt)) return false;
                 return true;
             }

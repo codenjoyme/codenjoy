@@ -108,14 +108,14 @@ namespace Loderunner.Api
             return result;
         }
 
-        public List<BoardPoint> GetEnemyPositions()
+        public List<BoardPoint> GetRobberPositions()
         {
-            return FindAllElements(BoardElement.EnemyLadder)
-                .Concat(FindAllElements(BoardElement.EnemyLeft))
-                .Concat(FindAllElements(BoardElement.EnemyPipeLeft))
-                .Concat(FindAllElements(BoardElement.EnemyPipeRight))
-                .Concat(FindAllElements(BoardElement.EnemyRight))
-                .Concat(FindAllElements(BoardElement.EnemyPit))
+            return FindAllElements(BoardElement.RobberLadder)
+                .Concat(FindAllElements(BoardElement.RobberLeft))
+                .Concat(FindAllElements(BoardElement.RobberPipeLeft))
+                .Concat(FindAllElements(BoardElement.RobberPipeRight))
+                .Concat(FindAllElements(BoardElement.RobberRight))
+                .Concat(FindAllElements(BoardElement.RobberPit))
                 .ToList();
         }
 
@@ -157,8 +157,8 @@ namespace Loderunner.Api
             .Concat(FindAllElements(BoardElement.HeroPipeRight))
             .Concat(FindAllElements(BoardElement.OtherHeroPipeLeft))
             .Concat(FindAllElements(BoardElement.OtherHeroPipeRight))
-            .Concat(FindAllElements(BoardElement.EnemyPipeLeft))
-            .Concat(FindAllElements(BoardElement.EnemyPipeRight))
+            .Concat(FindAllElements(BoardElement.RobberPipeLeft))
+            .Concat(FindAllElements(BoardElement.RobberPipeRight))
             .ToList();
         }
 
@@ -178,9 +178,9 @@ namespace Loderunner.Api
                    || HasElementAt(point.ShiftRight(), element);
         }
 
-        public bool HasEnemyAt(BoardPoint point)
+        public bool HasRobberAt(BoardPoint point)
         {
-            return GetEnemyPositions().Contains(point);
+            return GetRobberPositions().Contains(point);
         }
 
         public bool HasOtherHeroAt(BoardPoint point)

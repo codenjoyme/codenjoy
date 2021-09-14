@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
-public interface EnemyAI {
+public interface RobberAI {
 
     Direction getDirection(Field field, Point from, List<Point> to);
 

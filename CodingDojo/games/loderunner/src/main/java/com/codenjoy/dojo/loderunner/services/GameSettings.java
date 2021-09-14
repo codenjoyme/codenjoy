@@ -50,7 +50,7 @@ public class GameSettings extends SettingsImpl
         PORTALS_COUNT("[Game] Portals count"),
         PORTAL_TICKS("[Game] Portal ticks"),
 
-        ENEMIES_COUNT("[Game] Enemies count"),
+        ROBBERS_COUNT("[Game] Robbers count"),
 
         GOLD_COUNT_GREEN("[Game] Green gold count"),
         GOLD_SCORE_GREEN("[Score] Green gold score"),
@@ -65,7 +65,7 @@ public class GameSettings extends SettingsImpl
         GOLD_SCORE_RED_INCREMENT("[Score] Red gold score increment"),
 
         KILL_HERO_PENALTY("[Score] Kill hero penalty"),
-        KILL_ENEMY_SCORE("[Score] Kill enemy score"),
+        KILL_ROBBER_SCORE("[Score] Kill robber score"),
         SUICIDE_PENALTY("[Score] Suicide penalty"),
 
         LEVEL_MAP("[Level] Map"),
@@ -98,7 +98,7 @@ public class GameSettings extends SettingsImpl
         integer(PORTALS_COUNT, 0);
         integer(PORTAL_TICKS, 10);
 
-        integer(ENEMIES_COUNT, 5);
+        integer(ROBBERS_COUNT, 5);
 
         integer(GOLD_COUNT_GREEN, 40);
         integer(GOLD_SCORE_GREEN, 1);
@@ -113,7 +113,7 @@ public class GameSettings extends SettingsImpl
         integer(GOLD_SCORE_RED_INCREMENT, 1);
 
         integer(KILL_HERO_PENALTY, 1);
-        integer(KILL_ENEMY_SCORE, 10);
+        integer(KILL_ROBBER_SCORE, 10);
         integer(SUICIDE_PENALTY, 10);
 
         multiline(LEVEL_MAP, Big.all().get(0));

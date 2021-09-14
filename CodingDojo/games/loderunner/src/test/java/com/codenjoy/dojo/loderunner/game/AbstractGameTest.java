@@ -1,12 +1,34 @@
 package com.codenjoy.dojo.loderunner.game;
 
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 - 2021 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.model.Hero;
 import com.codenjoy.dojo.loderunner.model.Loderunner;
 import com.codenjoy.dojo.loderunner.model.Player;
 import com.codenjoy.dojo.loderunner.model.items.Brick;
-import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyJoystick;
+import com.codenjoy.dojo.loderunner.model.items.enemy.RobberJoystick;
 import com.codenjoy.dojo.loderunner.model.levels.Level;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.loderunner.services.GameSettings;
@@ -43,7 +65,7 @@ public abstract class AbstractGameTest {
     protected GameSettings settings = settings();
     protected EventsListenersAssert events = new EventsListenersAssert(() -> listeners, Events.class);
 
-    protected List<EnemyJoystick> enemies = new LinkedList<>();
+    protected List<RobberJoystick> robbers = new LinkedList<>();
 
     @Before
     public void setup() {
@@ -71,7 +93,7 @@ public abstract class AbstractGameTest {
                 .integer(GOLD_COUNT_RED, level.redGold().size())
                 .integer(SHADOW_PILLS_COUNT, level.pills().size())
                 .integer(PORTALS_COUNT, level.portals().size())
-                .integer(ENEMIES_COUNT, level.enemies().size());
+                .integer(ROBBERS_COUNT, level.robbers().size());
 
         field = new Loderunner(dice, settings);
 
@@ -79,7 +101,7 @@ public abstract class AbstractGameTest {
             Player player = givenPlayer(hero.getX(), hero.getY());
             player.getHero().setDirection(hero.getDirection());
         }
-        reloadAllEnemies();
+        reloadAllRobbers();
 
         dice(0); // всегда дальше выбираем нулевой индекс
     }
@@ -161,17 +183,17 @@ public abstract class AbstractGameTest {
         return players.get(index);
     }
 
-    protected EnemyJoystick enemy() {
-        return enemies.get(0);
+    protected RobberJoystick robber() {
+        return robbers.get(0);
     }
 
-    protected EnemyJoystick enemy(int index) {
-        return enemies.get(index);
+    protected RobberJoystick robber(int index) {
+        return robbers.get(index);
     }
 
-    protected void reloadAllEnemies() {
-        enemies = field.enemies().stream()
-                .map(EnemyJoystick::new)
+    protected void reloadAllRobbers() {
+        robbers = field.robbers().stream()
+                .map(RobberJoystick::new)
                 .collect(Collectors.toList());
     }
 }

@@ -28,7 +28,7 @@ import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ROBBERS_COUNT;
 import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.SHADOW_PILLS_COUNT;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
@@ -186,7 +186,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 2);
 
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
                 "listener(1) => [KILL_HERO]\n" +
                 "listener(2) => [KILL_HERO]\n");
         assertEquals(true, game(1).isGameOver());
@@ -238,8 +238,8 @@ public class MultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void thatEnemiesDoNotHauntShadowPlayers() {
-        settings.integer(ENEMIES_COUNT, 1)
+    public void thatRobbersDoNotHauntShadowPlayers() {
+        settings.integer(ROBBERS_COUNT, 1)
                 .integer(SHADOW_PILLS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -250,7 +250,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        enemy().disableMock();
+        robber().disableMock();
         hero(1).pick(PillType.SHADOW_PILL);
 
         dice(0); // охотимся за первым игроком // TODO потестить когда поохотимся за вторым
@@ -303,7 +303,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n", 1);
 
-        verify(listener(0), never()).event(Events.KILL_ENEMY);
+        verify(listener(0), never()).event(Events.KILL_ROBBER);
         verify(listener(1), never()).event(Events.KILL_HERO);
     }
 
@@ -344,7 +344,7 @@ public class MultiplayerTest extends AbstractGameTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
                 "listener(1) => [KILL_HERO]\n");
 
         assertF("☼☼☼☼☼☼☼☼\n" +
@@ -427,7 +427,7 @@ public class MultiplayerTest extends AbstractGameTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
                 "listener(1) => [KILL_HERO]\n");
 
         assertF("☼☼☼☼☼☼☼☼\n" +
@@ -532,7 +532,7 @@ public class MultiplayerTest extends AbstractGameTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_HERO]\n" +
-                        "listener(1) => [KILL_ENEMY]\n");
+                        "listener(1) => [KILL_ROBBER]\n");
 
         assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
@@ -1243,8 +1243,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(1, 1);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
-                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(1) => [KILL_ROBBER]\n" +
                 "listener(2) => [KILL_HERO]\n" +
                 "listener(3) => [KILL_HERO]\n" +
                 "listener(4) => []\n" +
@@ -1320,8 +1320,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(2, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
-                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(1) => [KILL_ROBBER]\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
                 "listener(4) => [KILL_HERO]\n" +
@@ -1376,8 +1376,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(3, 3);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
-                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(1) => [KILL_ROBBER]\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
                 "listener(4) => []\n" +
@@ -1620,8 +1620,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(1, 1);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
-                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(1) => [KILL_ROBBER]\n" +
                 "listener(2) => [KILL_HERO]\n" +
                 "listener(3) => [KILL_HERO]\n" +
                 "listener(4) => []\n" +
@@ -1697,8 +1697,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(2, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
-                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(1) => [KILL_ROBBER]\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
                 "listener(4) => [KILL_HERO]\n" +
@@ -1752,7 +1752,7 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(3, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
@@ -1962,8 +1962,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(1, 1);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
-                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(1) => [KILL_ROBBER]\n" +
                 "listener(2) => [KILL_HERO]\n" +
                 "listener(3) => [KILL_HERO]\n" +
                 "listener(4) => []\n" +
@@ -2039,8 +2039,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(2, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
-                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(1) => [KILL_ROBBER]\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
                 "listener(4) => [KILL_HERO]\n" +
@@ -2094,7 +2094,7 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(3, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ENEMY]\n" +
+                "listener(0) => [KILL_ROBBER]\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +

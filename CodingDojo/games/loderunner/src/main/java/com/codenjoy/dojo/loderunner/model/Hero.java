@@ -217,8 +217,8 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
 
     private void checkAlive() {
         // TODO: перепроверить. Кажется, где-то проскакивает ArrayIndexOutOfBoundsException
-        boolean killedByEnemy = field.isEnemyAt(this) && !isShadow() && super.isActive(); // TODO test me
-        if (field.isFullBrick(this) || killedByEnemy) {
+        boolean killedByRobber = field.isRobberAt(this) && !isShadow() && super.isActive(); // TODO test me
+        if (field.isFullBrick(this) || killedByRobber) {
             die();
         }
     }

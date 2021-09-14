@@ -23,18 +23,18 @@ package com.codenjoy.dojo.loderunner.game;
  */
 
 
-import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyJoystick;
+import com.codenjoy.dojo.loderunner.model.items.enemy.RobberJoystick;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ENEMIES_COUNT;
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.ROBBERS_COUNT;
 import static org.junit.Assert.assertEquals;
 
-public class EnemyMultiplayerTest extends AbstractGameTest {
+public class RobberMultiplayerTest extends AbstractGameTest {
 
     @Override
     protected void givenFl(String map) {
         super.givenFl(map);
-        enemies.forEach(EnemyJoystick::disableMock);
+        robbers.forEach(RobberJoystick::disableMock);
     }
 
     private void removePlayer(int index) {
@@ -45,8 +45,8 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
 
     // чертик идет за тобой
     @Test
-    public void shouldEnemyGoToHero() {
-        settings.integer(ENEMIES_COUNT, 1);
+    public void shouldRobberGoToHero() {
+        settings.integer(ROBBERS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼     »☼" +
                 "☼H#####☼" +
@@ -151,8 +151,8 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
 
     // чертик стоит на месте, если ко мне нет пути
     @Test
-    public void shouldEnemyStop_whenNoPathToHero() {
-        settings.integer(ENEMIES_COUNT, 1);
+    public void shouldRobberStop_whenNoPathToHero() {
+        settings.integer(ROBBERS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼     ►☼" +
                 "☼     #☼" +
@@ -190,8 +190,8 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
 
     // чертик идет за тобой по более короткому маршруту
     @Test
-    public void shouldEnemyGoToHeroShortestWay() {
-        settings.integer(ENEMIES_COUNT, 1);
+    public void shouldRobberGoToHeroShortestWay() {
+        settings.integer(ROBBERS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼     »☼" +
                 "☼H####H☼" +
@@ -215,8 +215,8 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldEnemyGoToHeroShortestWay2() {
-        settings.integer(ENEMIES_COUNT, 1);
+    public void shouldRobberGoToHeroShortestWay2() {
+        settings.integer(ROBBERS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼»     ☼" +
                 "☼H####H☼" +
@@ -241,8 +241,8 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
 
     // другой чертик чертику не помеха
     @Test
-    public void shouldEnemyGoToHeroShortestWayGetRoundOther() {
-        settings.integer(ENEMIES_COUNT, 2);
+    public void shouldRobberGoToHeroShortestWayGetRoundOther() {
+        settings.integer(ROBBERS_COUNT, 2);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼»    »☼" +
                 "☼H####H☼" +
@@ -266,8 +266,8 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldEnemyGoToHeroShortestWayGetRoundOther2() {
-        settings.integer(ENEMIES_COUNT, 2);
+    public void shouldRobberGoToHeroShortestWayGetRoundOther2() {
+        settings.integer(ROBBERS_COUNT, 2);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼» »   ☼" +
                 "☼H####H☼" +
@@ -292,8 +292,8 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
 
     // если чертику не достать одного он бежит за другим а не зависает
     @Test
-    public void shouldEnemyGoToNewHeroIfOneIsHidden() {
-        settings.integer(ENEMIES_COUNT, 1);
+    public void shouldRobberGoToNewHeroIfOneIsHidden() {
+        settings.integer(ROBBERS_COUNT, 1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼   ►  ☼" +
                 "☼######☼" +
@@ -354,8 +354,8 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
 
     // каждый чертик бежит за своим героем, даже если к нему занятый уже герой ближе
     @Test
-    public void shouldEveryEnemyRunsAfterHisHero_evenIfThereIsAnotherHeroNearbyWhoIsAlreadyBeingHunted() {
-        settings.integer(ENEMIES_COUNT, 2);
+    public void shouldEveryRobberRunsAfterHisHero_evenIfThereIsAnotherHeroNearbyWhoIsAlreadyBeingHunted() {
+        settings.integer(ROBBERS_COUNT, 2);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼»  ► »☼" +
                 "☼H####H☼" +
@@ -454,7 +454,7 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n", 1);
 
-        // больше не за кем охотитья - охотники стоят на месте
+        // больше не за кем охотитья - воры стоят на месте
         tick();
 
         events.verifyAllEvents(
@@ -497,7 +497,7 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼\n", 1);
 
         // но стоит двоим ребятам появиться на поле
-        // как вдруг охотники начнут охотиться каждый за своим
+        // как вдруг воры начнут охотиться каждый за своим
         givenPlayer(1, 2);
         givenPlayer(5, 6);
 
@@ -521,7 +521,7 @@ public class EnemyMultiplayerTest extends AbstractGameTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n", 3);
 
-        // если один вдруг пропадет, то его охотник переключится
+        // если один вдруг пропадет, то его воры переключится
         removePlayer(0);
 
         assertF("☼☼☼☼☼☼☼☼\n" +

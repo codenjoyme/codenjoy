@@ -27,7 +27,7 @@ import com.codenjoy.dojo.games.loderunner.Element;
 import com.codenjoy.dojo.loderunner.model.Hero;
 import com.codenjoy.dojo.loderunner.model.items.*;
 import com.codenjoy.dojo.loderunner.model.items.Pill.PillType;
-import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
+import com.codenjoy.dojo.loderunner.model.items.enemy.Robber;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.field.AbstractLevel;
 import com.codenjoy.dojo.services.field.PointField;
@@ -55,7 +55,7 @@ public class Level extends AbstractLevel {
         field.addAll(yellowGold());
         field.addAll(greenGold());
         field.addAll(redGold());
-        field.addAll(enemies());
+        field.addAll(robbers());
     }
 
     public List<Hero> heroes() {
@@ -103,10 +103,10 @@ public class Level extends AbstractLevel {
         return find(Pipe::new, PIPE);
     }
 
-    public List<Enemy> enemies() {
+    public List<Robber> robbers() {
         return find(new HashMap<>() {{
-            put(ENEMY_LEFT, pt -> new Enemy(pt, Direction.LEFT));
-            put(ENEMY_RIGHT, pt -> new Enemy(pt, Direction.RIGHT));
+            put(ROBBER_LEFT, pt -> new Robber(pt, Direction.LEFT));
+            put(ROBBER_RIGHT, pt -> new Robber(pt, Direction.RIGHT));
         }});
     }
 

@@ -26,7 +26,7 @@ public enum Events {
     START_ROUND,      // раунд стартовал
     WIN_ROUND,        // герой победил в раунде
 
-    KILL_ENEMY,       // герой замуровал в стенке другого героя
+    KILL_ROBBER,       // герой замуровал в стенке другого героя
     KILL_HERO,        // героя убили
 
     GET_YELLOW_GOLD,  // подобрано золото

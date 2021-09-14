@@ -86,15 +86,15 @@ class Board:
         points.update(self._find_all(Element('Elements.OTHER_HERO_PIPE_RIGHT')))
         return list(points)
 
-    def get_enemies(self):
+    def get_robbers(self):
         """ Return the list of points for other heroes."""
         points = set()
-        points.update(self._find_all(Element('Elements.ENEMY_LADDER')))
-        points.update(self._find_all(Element('Elements.ENEMY_LEFT')))
-        points.update(self._find_all(Element('Elements.ENEMY_PIPE_LEFT')))
-        points.update(self._find_all(Element('Elements.ENEMY_PIPE_RIGHT')))
-        points.update(self._find_all(Element('Elements.ENEMY_RIGHT')))
-        points.update(self._find_all(Element('Elements.ENEMY_PIT')))
+        points.update(self._find_all(Element('Elements.ROBBER_LADDER')))
+        points.update(self._find_all(Element('Elements.ROBBER_LEFT')))
+        points.update(self._find_all(Element('Elements.ROBBER_PIPE_LEFT')))
+        points.update(self._find_all(Element('Elements.ROBBER_PIPE_RIGHT')))
+        points.update(self._find_all(Element('Elements.ROBBER_RIGHT')))
+        points.update(self._find_all(Element('Elements.ROBBER_PIT')))
         return list(points)
 
     def get_gold(self):
@@ -133,11 +133,11 @@ class Board:
 
     def to_string(self):
         return ("Board:\n{brd}\Me at: {mbm}\nOther Heroes "
-                "at: {obm}\nEnemies at: {mcp}\nGold at:".format(
+                "at: {obm}\nRobbers at: {mcp}\nGold at:".format(
                                           brd=self._line_by_line(),
                                           mbm=self.get_me(),
                                           obm=self.get_other_heroes(),
-                                          mcp=self.get_enemies(),
+                                          mcp=self.get_robbers(),
                                           dwl=self.get_gold())
         )
 

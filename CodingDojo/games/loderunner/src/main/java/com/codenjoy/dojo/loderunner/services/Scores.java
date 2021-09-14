@@ -68,8 +68,8 @@ public class Scores implements PlayerScores {
         } else if (event.equals(Events.GET_RED_GOLD)) {
             score += settings.integer(GOLD_SCORE_RED) + countRed;
             countRed += settings.integer(GOLD_SCORE_RED_INCREMENT);
-        } else if (event.equals(Events.KILL_ENEMY)) {
-            score += settings.integer(KILL_ENEMY_SCORE);
+        } else if (event.equals(Events.KILL_ROBBER)) {
+            score += settings.integer(KILL_ROBBER_SCORE);
         } else if (event.equals(Events.KILL_HERO)) {
             clearSeries();
             score -= settings.integer(KILL_HERO_PENALTY);

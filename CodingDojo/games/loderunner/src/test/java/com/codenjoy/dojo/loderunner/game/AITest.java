@@ -26,8 +26,8 @@ package com.codenjoy.dojo.loderunner.game;
 import com.codenjoy.dojo.games.loderunner.Board;
 import com.codenjoy.dojo.loderunner.model.Hero;
 import com.codenjoy.dojo.loderunner.model.items.enemy.AI;
-import com.codenjoy.dojo.loderunner.model.items.enemy.Enemy;
-import com.codenjoy.dojo.loderunner.model.items.enemy.EnemyJoystick;
+import com.codenjoy.dojo.loderunner.model.items.enemy.Robber;
+import com.codenjoy.dojo.loderunner.model.items.enemy.RobberJoystick;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
@@ -55,9 +55,9 @@ public class AITest extends AbstractGameTest {
     }
 
     @Override
-    protected void reloadAllEnemies() {
-        enemies = field.enemies().stream()
-                .map(enemy -> new EnemyJoystick(enemy, ai))
+    protected void reloadAllRobbers() {
+        robbers = field.robbers().stream()
+                .map(robber -> new RobberJoystick(robber, ai))
                 .collect(Collectors.toList());
     }
 
@@ -77,7 +77,7 @@ public class AITest extends AbstractGameTest {
 
     private void assertD(String expected) {
         assertEquals(expected,
-                ai.getPath(field, field.enemies().all().get(0), (List) field.heroes().all()).toString());
+                ai.getPath(field, field.robbers().all().get(0), (List) field.heroes().all()).toString());
     }
 
     @Test
@@ -501,22 +501,22 @@ public class AITest extends AbstractGameTest {
                 "☼#####☼" +
                 "☼☼☼☼☼☼☼");
 
-        Enemy enemy1 = field.enemies().all().get(0);
-        assertEquals("[2,4]", enemy1.toString());
+        Robber robber1 = field.robbers().all().get(0);
+        assertEquals("[2,4]", robber1.toString());
 
         Hero hero1 = field.heroes().all().get(0);
         assertEquals("[1,3]", hero1.toString());
 
-        Enemy enemy2 = field.enemies().all().get(1);
-        assertEquals("[4,4]", enemy2.toString());
+        Robber robber2 = field.robbers().all().get(1);
+        assertEquals("[4,4]", robber2.toString());
 
         Hero hero2 = field.heroes().all().get(1);
         assertEquals("[5,3]", hero2.toString());
 
-        assertEquals(Direction.RIGHT, ai.getDirection(field, enemy1, Arrays.asList(hero2)));
-        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN]", ai.getPath(field, enemy1, Arrays.asList(hero2)).toString());
+        assertEquals(Direction.RIGHT, ai.getDirection(field, robber1, Arrays.asList(hero2)));
+        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN]", ai.getPath(field, robber1, Arrays.asList(hero2)).toString());
 
-        assertW(enemy1, Arrays.asList(hero2),
+        assertW(robber1, Arrays.asList(hero2),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "              \n" +
                 " ☼ # # # # # ☼\n" +
@@ -532,10 +532,10 @@ public class AITest extends AbstractGameTest {
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "              \n");
 
-        assertEquals(Direction.LEFT, ai.getDirection(field, enemy2, Arrays.asList(hero1)));
-        assertEquals("[LEFT, LEFT, LEFT, DOWN]", ai.getPath(field, enemy2, Arrays.asList(hero1)).toString());
+        assertEquals(Direction.LEFT, ai.getDirection(field, robber2, Arrays.asList(hero1)));
+        assertEquals("[LEFT, LEFT, LEFT, DOWN]", ai.getPath(field, robber2, Arrays.asList(hero1)).toString());
 
-        assertW(enemy2, Arrays.asList(hero1),
+        assertW(robber2, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "              \n" +
                 " ☼ # # # # # ☼\n" +
@@ -553,7 +553,7 @@ public class AITest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldTwoEnemiesWithTwoHero() {
+    public void shouldTwoRobbersWithTwoHero() {
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼ ◄  ◄ ☼" +
                 "☼H#  #H☼" +
@@ -564,16 +564,16 @@ public class AITest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         // проверяем следующую команду для первого чертика
-        Enemy enemy1 = field.enemies().all().get(0);
+        Robber robber1 = field.robbers().all().get(0);
         Hero hero1 = field.heroes().all().get(0);
-        assertEquals("[3,2]", enemy1.toString());
-        assertEquals(Direction.LEFT, ai.getDirection(field, enemy1, Arrays.asList(hero1)));
+        assertEquals("[3,2]", robber1.toString());
+        assertEquals(Direction.LEFT, ai.getDirection(field, robber1, Arrays.asList(hero1)));
 
         // проверяем весь путь для первого чертика
         assertEquals("[2,6]", hero1.toString());
-        assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(field, enemy1, Arrays.asList(hero1)).toString());
+        assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(field, robber1, Arrays.asList(hero1)).toString());
 
-        assertW(enemy1, Arrays.asList(hero1),
+        assertW(robber1, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ .→◄ . . ) . ☼\n" +
@@ -591,7 +591,7 @@ public class AITest extends AbstractGameTest {
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n");
 
-        assertW(enemy1, Arrays.asList(hero1),
+        assertW(robber1, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ .→◄ . . ) . ☼\n" +
@@ -610,16 +610,16 @@ public class AITest extends AbstractGameTest {
                 "                \n");
 
         // проверяем следующую команду для второго чертика
-        Enemy enemy2 = field.enemies().all().get(1);
+        Robber robber2 = field.robbers().all().get(1);
         Hero hero2 = field.heroes().all().get(1);
-        assertEquals("[4,2]", enemy2.toString());
-        assertEquals(Direction.RIGHT, ai.getDirection(field, enemy2, Arrays.asList(hero2)));
+        assertEquals("[4,2]", robber2.toString());
+        assertEquals(Direction.RIGHT, ai.getDirection(field, robber2, Arrays.asList(hero2)));
 
         // проверяем весь путь для второго чертика
         assertEquals("[5,6]", hero2.toString());
-        assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(field, enemy2, Arrays.asList(hero2)).toString());
+        assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(field, robber2, Arrays.asList(hero2)).toString());
 
-        assertW(enemy2, Arrays.asList(hero2),
+        assertW(robber2, Arrays.asList(hero2),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ . ◄ . . )←. ☼\n" +
@@ -642,7 +642,7 @@ public class AITest extends AbstractGameTest {
     // но они будут пытаться, в надежде, что другой чертик не будет стоять на месте
     // TODO тут возможен случай, когда они друг друга анигилируют :)
     @Test
-    public void shouldTwoEnemiesWithTwoHero_enemyIsBarrier() {
+    public void shouldTwoRobbersWithTwoHero_robberIsBarrier() {
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼ ◄  ◄ ☼" +
                 "☼H#  #H☼" +
@@ -653,13 +653,13 @@ public class AITest extends AbstractGameTest {
                 "☼☼☼☼☼☼☼☼");
 
         // пробуем чтобы первый чертик пошел за вторым игроком
-        Enemy enemy2 = field.enemies().all().get(1);
-        assertEquals("[4,2]", enemy2.toString());
+        Robber robber2 = field.robbers().all().get(1);
+        assertEquals("[4,2]", robber2.toString());
         Hero hero1 = field.heroes().all().get(0);
         assertEquals("[2,6]", hero1.toString());
-        assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(field, enemy2, Arrays.asList(hero1)).toString());
+        assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(field, robber2, Arrays.asList(hero1)).toString());
 
-        assertW(enemy2, Arrays.asList(hero1),
+        assertW(robber2, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ .→◄ . . ) . ☼\n" +
@@ -677,7 +677,7 @@ public class AITest extends AbstractGameTest {
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n");
 
-        assertW(enemy2, Arrays.asList(hero1),
+        assertW(robber2, Arrays.asList(hero1),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ .→◄ . . ) . ☼\n" +
@@ -696,13 +696,13 @@ public class AITest extends AbstractGameTest {
                 "                \n");
 
         // пробуем чтобы второй чертик пошел за первым игроком
-        Enemy enemy1 = field.enemies().all().get(0);
-        assertEquals("[3,2]", enemy1.toString());
+        Robber robber1 = field.robbers().all().get(0);
+        assertEquals("[3,2]", robber1.toString());
         Hero hero2 = field.heroes().all().get(1);
         assertEquals("[5,6]", hero2.toString());
-        assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(field, enemy1, Arrays.asList(hero2)).toString());
+        assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(field, robber1, Arrays.asList(hero2)).toString());
 
-        assertW(enemy1, Arrays.asList(hero2),
+        assertW(robber1, Arrays.asList(hero2),
                 " ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "                \n" +
                 " ☼ . ◄ . . )←. ☼\n" +
@@ -722,9 +722,9 @@ public class AITest extends AbstractGameTest {
     }
 
     private void assertQ(String expected) {
-        Enemy enemy = field.enemies().all().get(0);
+        Robber robber = field.robbers().all().get(0);
         List<Point> heroes = (List) field.heroes().all();
-        assertW(enemy, heroes, expected);
+        assertW(robber, heroes, expected);
     }
 
     private void assertW(Point from, List<Point> to, String expected) {

@@ -272,7 +272,7 @@ public class AISolverTest {
     }
 
     @Test
-    public void testEnemyAtWay() {
+    public void testRobberAtWay() {
         assertC("☼☼☼☼☼☼☼☼☼☼" +
                 "☼     H  ☼" +
                 "☼     H  ☼" +
