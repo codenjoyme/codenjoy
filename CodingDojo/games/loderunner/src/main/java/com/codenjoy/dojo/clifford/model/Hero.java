@@ -23,7 +23,7 @@ package com.codenjoy.dojo.clifford.model;
  */
 
 
-import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.games.clifford.Element;
 import com.codenjoy.dojo.clifford.model.items.Ladder;
 import com.codenjoy.dojo.clifford.model.items.Potion.PotionType;
 import com.codenjoy.dojo.clifford.model.items.Pipe;
@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.codenjoy.dojo.games.loderunner.Element.*;
+import static com.codenjoy.dojo.games.clifford.Element.*;
 import static com.codenjoy.dojo.clifford.services.GameSettings.Keys.MASK_TICKS;
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;

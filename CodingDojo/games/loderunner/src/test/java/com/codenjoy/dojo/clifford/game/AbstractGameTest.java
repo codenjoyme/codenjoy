@@ -22,7 +22,7 @@ package com.codenjoy.dojo.clifford.game;
  * #L%
  */
 
-import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.games.clifford.Element;
 import com.codenjoy.dojo.clifford.TestSettings;
 import com.codenjoy.dojo.clifford.model.Hero;
 import com.codenjoy.dojo.clifford.model.DetectiveClifford;

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.clifford.model;
  */
 
 
-import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.games.clifford.Element;
 import com.codenjoy.dojo.clifford.model.items.*;
 import com.codenjoy.dojo.clifford.model.items.Potion.PotionType;
 import com.codenjoy.dojo.clifford.model.items.robber.Robber;

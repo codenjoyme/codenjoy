@@ -25,8 +25,8 @@ package com.codenjoy.dojo.clifford.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.games.loderunner.Board;
-import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.games.clifford.Board;
+import com.codenjoy.dojo.games.clifford.Element;
 import com.codenjoy.dojo.clifford.model.DetectiveClifford;
 import com.codenjoy.dojo.clifford.model.Player;
 import com.codenjoy.dojo.clifford.services.ai.AISolver;

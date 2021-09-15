@@ -23,7 +23,7 @@ package com.codenjoy.dojo.clifford.model.levels;
  */
 
 
-import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.games.clifford.Element;
 import com.codenjoy.dojo.clifford.model.Hero;
 import com.codenjoy.dojo.clifford.model.items.*;
 import com.codenjoy.dojo.clifford.model.items.Potion.PotionType;
@@ -36,7 +36,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.codenjoy.dojo.games.loderunner.Element.*;
+import static com.codenjoy.dojo.games.clifford.Element.*;
 
 public class Level extends AbstractLevel {
 

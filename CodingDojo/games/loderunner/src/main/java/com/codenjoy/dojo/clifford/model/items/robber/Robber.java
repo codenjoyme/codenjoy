@@ -23,7 +23,7 @@ package com.codenjoy.dojo.clifford.model.items.robber;
  */
 
 
-import com.codenjoy.dojo.games.loderunner.Element;
+import com.codenjoy.dojo.games.clifford.Element;
 import com.codenjoy.dojo.clifford.model.Field;
 import com.codenjoy.dojo.services.field.Fieldable;
 import com.codenjoy.dojo.clifford.model.Hero;
