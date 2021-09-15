@@ -65,6 +65,7 @@ public class AISolver implements Solver<Board> {
                 if (board.isWall(pt)) return false;
                 if (board.isRobberAt(pt)) return false;
                 if (board.isOtherHeroAt(pt)) return false;
+                if (board.isEnemyHeroAt(pt)) return false;
                 return true;
             }
         };
