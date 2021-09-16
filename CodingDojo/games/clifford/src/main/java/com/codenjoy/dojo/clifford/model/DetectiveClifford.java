@@ -132,17 +132,17 @@ public class DetectiveClifford extends RoundField<Player> implements Field {
         generate(knifeClue(),
                 settings, CLUE_COUNT_KNIFE,
                 player -> freeRandom((Player) player),
-                pt -> new KnifeClue(pt));
+                pt -> new ClueKnife(pt));
 
         generate(gloveClue(),
                 settings, CLUE_COUNT_GLOVE,
                 player -> freeRandom((Player) player),
-                pt -> new GloveClue(pt));
+                pt -> new ClueGlove(pt));
 
         generate(ringClue(),
                 settings, CLUE_COUNT_RING,
                 player -> freeRandom((Player) player),
-                pt -> new RingClue(pt));
+                pt -> new ClueRing(pt));
     }
 
     private void generatePotions() {
@@ -179,9 +179,9 @@ public class DetectiveClifford extends RoundField<Player> implements Field {
         return field.reader(
                 Hero.class,
                 Robber.class,
-                KnifeClue.class,
-                GloveClue.class,
-                RingClue.class,
+                ClueKnife.class,
+                ClueGlove.class,
+                ClueRing.class,
                 Border.class,
                 Brick.class,
                 Ladder.class,
@@ -231,13 +231,13 @@ public class DetectiveClifford extends RoundField<Player> implements Field {
             hero.tick();
             if (knifeClue().contains(hero)) {
                 knifeClue().removeAt(hero);
-                getClueEvent(player, Events.GET_KNIFE_CLUE, KnifeClue.class);
+                getClueEvent(player, Events.GET_KNIFE_CLUE, ClueKnife.class);
             } else if (gloveClue().contains(hero)) {
                 gloveClue().removeAt(hero);
-                getClueEvent(player, Events.GET_GLOVE_CLUE, GloveClue.class);
+                getClueEvent(player, Events.GET_GLOVE_CLUE, ClueGlove.class);
             } else if (ringClue().contains(hero)) {
                 ringClue().removeAt(hero);
-                getClueEvent(player, Events.GET_RING_CLUE, RingClue.class);
+                getClueEvent(player, Events.GET_RING_CLUE, ClueRing.class);
             }
 
             if (potions().contains(hero)) {
@@ -268,13 +268,13 @@ public class DetectiveClifford extends RoundField<Player> implements Field {
 
             if (knifeClue().contains(robber) && !robber.withClue()) {
                 knifeClue().removeAt(robber);
-                robber.getClue(KnifeClue.class);
+                robber.getClue(ClueKnife.class);
             } else if (gloveClue().contains(robber) && !robber.withClue()) {
                 gloveClue().removeAt(robber);
-                robber.getClue(GloveClue.class);
+                robber.getClue(ClueGlove.class);
             } else if (ringClue().contains(robber) && !robber.withClue()) {
                 ringClue().removeAt(robber);
-                robber.getClue(RingClue.class);
+                robber.getClue(ClueRing.class);
             }
 
             if (backways().contains(robber)) {
@@ -411,12 +411,12 @@ public class DetectiveClifford extends RoundField<Player> implements Field {
 
     @Override
     public void leaveClue(Point pt, Class type) {
-        if (type == KnifeClue.class) {
-            knifeClue().add(new KnifeClue(pt));
-        } else if (type == GloveClue.class) {
-            gloveClue().add(new GloveClue(pt));
-        } else if (type == RingClue.class) {
-            ringClue().add(new RingClue(pt));
+        if (type == ClueKnife.class) {
+            knifeClue().add(new ClueKnife(pt));
+        } else if (type == ClueGlove.class) {
+            gloveClue().add(new ClueGlove(pt));
+        } else if (type == ClueRing.class) {
+            ringClue().add(new ClueRing(pt));
         }
     }
 
@@ -477,16 +477,16 @@ public class DetectiveClifford extends RoundField<Player> implements Field {
         return field.of(Backway.class);
     }
 
-    public Accessor<KnifeClue> knifeClue() {
-        return field.of(KnifeClue.class);
+    public Accessor<ClueKnife> knifeClue() {
+        return field.of(ClueKnife.class);
     }
 
-    public Accessor<GloveClue> gloveClue() {
-        return field.of(GloveClue.class);
+    public Accessor<ClueGlove> gloveClue() {
+        return field.of(ClueGlove.class);
     }
 
-    public Accessor<RingClue> ringClue() {
-        return field.of(RingClue.class);
+    public Accessor<ClueRing> ringClue() {
+        return field.of(ClueRing.class);
     }
 
     public Accessor<Border> borders() {
