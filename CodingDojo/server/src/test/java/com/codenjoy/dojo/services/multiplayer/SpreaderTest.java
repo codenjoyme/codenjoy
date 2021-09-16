@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.multiplayer;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -28,7 +28,9 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.stuff.SmartAssert;
 import com.google.common.collect.Iterators;
+import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -38,8 +40,8 @@ import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertSame;
 import static org.mockito.Mockito.*;
 
 public class SpreaderTest {
@@ -72,6 +74,11 @@ public class SpreaderTest {
         Deal result = new Deal(newPlayer(), game, room);
         result.setTeamId(teamId);
         return result;
+    }
+
+    @After
+    public void after() {
+        SmartAssert.checkResult();
     }
 
     @Test
