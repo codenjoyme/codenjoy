@@ -159,7 +159,7 @@ public class SpreaderTest {
     }
 
     @Test
-    public void testGetGameRoom() {
+    public void testGetGameRoom_caseMultiplayerType() {
         // given
         int roomSize = 10;
         SettingsReader settings = settings(roomSize, 1);
@@ -184,24 +184,57 @@ public class SpreaderTest {
         assertSame(room1, room2);
 
         assertEquals(room, room1.name());
-        assertEquals(2, room1.countPlayers());
-        assertEquals(true, room1.containsPlayer(deal1.getPlayerId()));
-        assertEquals(true, room1.containsPlayer(deal2.getPlayerId()));
-        assertEquals(true, room1.containsDeal(deal1));
-        assertEquals(true, room1.containsDeal(deal2));
-        assertEquals(true, room1.containsTeam(0));
-        assertEquals(false, room1.containsTeam(1));
-        assertEquals(false, room1.isEmpty());
-        assertEquals(true, room1.isFree());
-        assertEquals(2, room1.countMembers(0));
-        assertEquals(0, room1.countMembers(1));
-        assertEquals(2, room1.countPlayers());
-        assertEquals(true, room1.isFor(room1.field()));
-        assertEquals(true, room1.deals().containsAll(Arrays.asList(deal1, deal2)));
+        assertOtherFields(room1, deal1, deal2);
+    }
+
+    private void assertOtherFields(GameRoom room, Deal deal1, Deal deal2) {
+        assertEquals(2, room.countPlayers());
+        assertEquals(true, room.containsPlayer(deal1.getPlayerId()));
+        assertEquals(true, room.containsPlayer(deal2.getPlayerId()));
+        assertEquals(true, room.containsDeal(deal1));
+        assertEquals(true, room.containsDeal(deal2));
+        assertEquals(true, room.containsTeam(0));
+        assertEquals(false, room.containsTeam(1));
+        assertEquals(false, room.isEmpty());
+        assertEquals(true, room.isFree());
+        assertEquals(2, room.countMembers(0));
+        assertEquals(0, room.countMembers(1));
+        assertEquals(2, room.countPlayers());
+        assertEquals(true, room.isFor(room.field()));
+        assertEquals(true, room.deals().containsAll(Arrays.asList(deal1, deal2)));
 
         // when then
         assertEquals(false, spreader.gameRoom("otherRoom", deal1.getPlayerId()).isPresent());
-        assertEquals(false, spreader.gameRoom(room, "otherPlayer").isPresent());
+        assertEquals(false, spreader.gameRoom(this.room, "otherPlayer").isPresent());
+    }
+
+    @Test
+    public void testGetGameRoom_caseLevelType() {
+        // given
+        int roomSize = 10;
+        SettingsReader settings = settings(roomSize, 1);
+
+        Deal deal1 = newDeal(0, settings);
+        Deal deal2 = newDeal(0, settings);
+
+        spreader.fieldFor(deal1, room, levelsType, roomSize, 0, getField);
+        spreader.fieldFor(deal2, room, levelsType, roomSize, 0, getField);
+
+        // when
+        Optional<GameRoom> optional1 = spreader.gameRoom(room, deal1.getPlayerId());
+        Optional<GameRoom> optional2 = spreader.gameRoom(room, deal2.getPlayerId());
+
+        // then
+        assertEquals(true, optional1.isPresent());
+        GameRoom room1 = optional1.get();
+
+        assertEquals(true, optional2.isPresent());
+        GameRoom room2 = optional2.get();
+
+        assertSame(room1, room2);
+
+        assertEquals(room + "[0]", room1.name());
+        assertOtherFields(room1, deal1, deal2);
     }
 
     @Test

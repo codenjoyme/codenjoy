@@ -161,7 +161,12 @@ public class Spreader {
     }
 
     public Optional<GameRoom> gameRoom(String room, String playerId) {
-        return rooms.get(room).stream()
+        // так надо потому, что в rooms обычно комнаты будут 'room',
+        // но для levels типов уровней будут 'room[N]', где N уровень
+        // TODO #7D4 быть может стоит как-то 'иначее' называть комнаты для levels?
+        return rooms.keys().stream()
+                .filter(key -> key.equals(room) || key.startsWith(room + "["))
+                .flatMap(key -> rooms.get(key).stream())
                 .filter(r -> r.containsPlayer(playerId))
                 .findFirst();
     }
