@@ -144,16 +144,22 @@ public abstract class AbstractControllerTest<TData, TControl> {
         SmartAssert.checkResult(getClass());
     }
 
+    protected void waitForServerReceived() {
+        waitForServerReceived(true);
+    }
+
     // TODO как-нибудь когда будет достаточно времени и желания позапускать этот тест и разгадать, почему зависает тут тест
     @SneakyThrows
-    protected void waitForServerReceived() {
+    protected void waitForServerReceived(boolean shouldGetMessage) {
         int count = 0;
         while (count <= MAX && receivedOnServer.isEmpty()) {
             Thread.sleep(100);
             count++;
         }
-        assertEquals("The server never received the message",
-                false, receivedOnServer.isEmpty());
+        if (shouldGetMessage) {
+            assertEquals("The server never received the message",
+                    false, receivedOnServer.isEmpty());
+        }
     }
 
     protected void waitForClientReceived(int index) {
