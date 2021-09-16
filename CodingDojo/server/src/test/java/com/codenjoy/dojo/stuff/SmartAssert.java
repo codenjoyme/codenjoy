@@ -92,6 +92,14 @@ public class SmartAssert {
         }
     }
 
+    public static void assertSame(Object object1, Object object2) {
+        try {
+            Assert.assertSame(object1, object2);
+        } catch (AssertionError e) {
+            failures().add(e);
+        }
+    }
+
     private static void checkResult(List<AssertionError> list) throws Exception {
         if (list.isEmpty()) return;
 
