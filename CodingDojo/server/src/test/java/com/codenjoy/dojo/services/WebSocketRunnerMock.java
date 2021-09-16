@@ -108,7 +108,8 @@ public class WebSocketRunnerMock {
 
         URI uri = new URI(server + "?user=" + id + "&code=" + code);
         log.info("Connecting to: " + uri);
-        session = wsClient.connect(new ClientSocket(), uri).get(5000, TimeUnit.MILLISECONDS);
+        session = wsClient.connect(new ClientSocket(), uri)
+                .get(500, TimeUnit.MILLISECONDS);
     }
 
     public WebSocketRunnerMock willAnswer(String answer) {
@@ -151,6 +152,9 @@ public class WebSocketRunnerMock {
         @OnWebSocketConnect
         public void onConnect(Session session) {
             log.info("Client started");
+            if (WebSocketRunnerMock.this.session == null) {
+                WebSocketRunnerMock.this.session = session;
+            }
             started.set(true);
         }
 
