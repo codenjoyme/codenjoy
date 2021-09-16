@@ -62,7 +62,7 @@ function initChat(contextPath, chatControl, type) {
         });
     }
 
-    function loadChatMessages(afterId, beforeId, inclusive, count) {
+    function loadChatMessages(afterId, beforeId, inclusive) {
         loading = true;
 
         // если грузили уже с таким beforeId и сообщений больше не приходило
@@ -72,6 +72,10 @@ function initChat(contextPath, chatControl, type) {
             return;
         }
 
+        // TODO загружать 30 сообщений сразу в чат,
+        //      чтобы отобразился вертикальный скроллинг, иначе
+        //      нельзя будет грузить в прошлое
+        var count = 30;
         getMessages(afterId, beforeId, inclusive, count);
     }
 
@@ -361,10 +365,7 @@ function initChat(contextPath, chatControl, type) {
 
     // метод начальной загрузки пустого чата
     var loadChat = function() {
-        // TODO загружать 30 сообщений сразу в чат, тоже костыль,
-        //      чтобы отобразился вертикальный скролинг, иначе
-        //      нельзя будет грузить в прошлое
-        loadChatMessages(null, null, null, 30);
+        loadChatMessages(null, null, null);
     }
 
     // проверяем, надо ли обновить весь чат
