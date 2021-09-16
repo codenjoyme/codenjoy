@@ -24,6 +24,8 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.TimeService;
+import com.codenjoy.dojo.services.helper.ChatHelper;
+import com.codenjoy.dojo.services.helper.RoomHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +34,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.mock;
@@ -43,19 +46,57 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @SpyBean
     private TimeService time;
 
+    private RoomHelper roomsSettings;
+
     @Before
     public void setUp() {
         super.setUp();
 
-        chat.removeAll();
+        roomsSettings = new RoomHelper(rooms, games);
+
+        login.asNone();
         fields.removeAll();
 
         increaseFieldIds();
 
-        login.register("player", "ip", "validRoom", "first");
-        login.register("player2", "ip", "validRoom", "first");
-        login.register("otherPlayer", "ip", "otherRoom", "first");
+        createPlayers();
 
+        // should be the last, because other setup stuff can print to field chat
+        chat.removeAll();
+    }
+
+    private void createPlayers() {
+        // other setup stuff can print to field chat
+        chat.removeAll();
+
+        // given
+        nowIs(12342L);
+        login.register("player", "ip", "validRoom", "first");
+        login.asUser("player", "player");
+
+        // then
+        assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'Player joined the field','time':12342,'topicId':101,'type':3}]",
+                fix(get("/rest/chat/validRoom/messages/field")));
+
+        // given
+        nowIs(12343L);
+        login.register("player2", "ip", "validRoom", "first");
+        login.asUser("player2", "player2");
+
+        // then
+        assertEquals("[{'id':2,'playerId':'player2','playerName':'player2-name','room':'validRoom','text':'Player joined the field','time':12343,'topicId':102,'type':3}]",
+                fix(get("/rest/chat/validRoom/messages/field")));
+
+        // given
+        nowIs(12344L);
+        login.register("otherPlayer", "ip", "otherRoom", "first");
+        login.asUser("otherPlayer", "otherPlayer");
+
+        // then
+        assertEquals("[{'id':3,'playerId':'otherPlayer','playerName':'otherPlayer-name','room':'otherRoom','text':'Player joined the field','time':12344,'topicId':103,'type':3}]",
+                fix(get("/rest/chat/otherRoom/messages/field")));
+
+        // given
         login.asUser("player", "player");
     }
 
@@ -119,7 +160,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // then
         assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':23456,'topicId':null,'type':1},\n" +
-                "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':34567,'topicId':null,'type':1}]",
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message3','time':34567,'topicId':null,'type':1}]",
                 fix(get("/rest/chat/validRoom/messages")));
 
         // when
@@ -418,7 +459,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals("[]",
                 fix(get("/rest/chat/otherRoom/messages")));
 
-        assertEquals("[]",
+        assertEquals("[{'id':2,'playerId':'player','playerName':'player-name','room':'otherRoom','text':'Player joined the field','time':12344,'topicId':104,'type':3}]",
                 fix(get("/rest/chat/otherRoom/messages/field")));
     }
 
@@ -856,7 +897,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages?beforeId=0&inclusive=true")));
 
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null,'type':1},\n" +
-                "{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':null,'type':1}]",
+                        "{'id':2,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message2','time':12346,'topicId':null,'type':1}]",
                 fix(get("/rest/chat/validRoom/messages?beforeId=2&inclusive=true")));
 
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom','text':'message1','time':12345,'topicId':null,'type':1},\n" +
@@ -1292,7 +1333,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // then
         // cant get topic messages from other room
         assertGetError("java.lang.IllegalArgumentException: " +
-                "There is no message with id '1' in room 'otherRoom'",
+                        "There is no message with id '1' in room 'otherRoom'",
                 "/rest/chat/otherRoom/messages/1/replies");
     }
 
@@ -1452,12 +1493,58 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         login.join("player", "validRoom");
         assertNotEquals(fieldId, getFieldId("player"));
 
+        assertEquals("[{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'Player joined the field','time':12345,'topicId':105,'type':3}]",
+                fix(get("/rest/chat/validRoom/messages/field")));
+
         // when
         // delete field message
         delete("/rest/chat/validRoom/messages/1");
 
         // then
-        assertEquals("[]",
+        assertEquals("[{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom','text':'Player joined the field','time':12345,'topicId':105,'type':3}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
+    }
+
+    @Test
+    public void shouldPrintJoinLeaveChat_forNewUser_inSameMultiplayerField() {
+        // given
+        // game type will be a multiple
+        roomsSettings.settings("multipleRoom", "third")
+                .bool(ROUNDS_ENABLED, false);
+
+        nowIs(12345L);
+        login.register("player4", "ip", "multipleRoom", "third");
+        login.asUser("player4", "player4");
+        int fieldId = getFieldId("player4");
+
+        login.join("player", "multipleRoom");
+
+        // another player is also in the same room
+        assertEquals("multipleRoom", deals.get("player").getRoom());
+        // another player is also in the same field
+        assertEquals(fieldId, getFieldId("player"));
+
+        // then
+        assertEquals("[{'id':1,'playerId':'player4','playerName':'player4-name','room':'multipleRoom','text':'Player joined the field','time':12345,'topicId':104,'type':3},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'multipleRoom','text':'Player joined the field','time':12345,'topicId':104,'type':3}]",
+                fix(get("/rest/chat/multipleRoom/messages/field")));
+
+        // switch to another room
+        nowIs(12346L);
+        login.join("player4", "otherRoom");
+        assertNotEquals(fieldId, getFieldId("player4"));
+
+        assertEquals("[{'id':5,'playerId':'player4','playerName':'player4-name','room':'otherRoom','text':'Player joined the field','time':12346,'topicId':105,'type':3}]",
+                fix(get("/rest/chat/otherRoom/messages/field")));
+
+        // and come back again
+        nowIs(12347L);
+        login.join("player4", "multipleRoom");
+
+        assertEquals("[{'id':1,'playerId':'player4','playerName':'player4-name','room':'multipleRoom','text':'Player joined the field','time':12345,'topicId':104,'type':3},\n" +
+                        "{'id':3,'playerId':'player','playerName':'player-name','room':'multipleRoom','text':'Player joined the field','time':12345,'topicId':104,'type':3},\n" +
+                        "{'id':4,'playerId':'player4','playerName':'player4-name','room':'multipleRoom','text':'Player left the field','time':12346,'topicId':104,'type':3},\n" +
+                        "{'id':7,'playerId':'player4','playerName':'player4-name','room':'multipleRoom','text':'Player joined the field','time':12347,'topicId':104,'type':3}]",
+                fix(get("/rest/chat/multipleRoom/messages/field")));
     }
 }

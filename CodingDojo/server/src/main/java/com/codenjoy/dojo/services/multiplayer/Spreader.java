@@ -66,7 +66,9 @@ public class Spreader {
             add(room, gameRoom);
         }
 
-        return gameRoom.join(deal);
+        GameField field = gameRoom.join(deal);
+        deal.chat().postField("Player joined the field", room);
+        return field;
     }
 
     private void add(String room, GameRoom gameRoom) {
@@ -93,6 +95,7 @@ public class Spreader {
         }
 
         GameRoom room = optional.get();
+        deal.chat().postField("Player left the field", deal.getRoom());
         List<Deal> removed = room.remove(deal, sweeper);
 
         removeIfEmpty(room);
