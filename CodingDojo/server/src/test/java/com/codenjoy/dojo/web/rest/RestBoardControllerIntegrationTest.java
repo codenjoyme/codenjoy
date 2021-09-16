@@ -65,8 +65,8 @@ public class RestBoardControllerIntegrationTest extends AbstractRestControllerTe
     public void setUp() {
         super.setUp();
         registration.register("1", "dummy@email.com",
-                "Name", Hash.md5("password"), "{}",
-                Collections.singleton("ROLE_USER"), "ghusername");
+                "Name", "nickName", Hash.md5("password"), "{}",
+                Collections.singleton("ROLE_USER"), "ghusername", "slackEmail");
         Player player = new Player();
         player.setId("1");
         player.setRoom("kata");

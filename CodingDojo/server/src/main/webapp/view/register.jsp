@@ -90,7 +90,7 @@ License along with this program.  If not, see
                     </div>
                     <div id="readableName" class="field not-valid" not-empty>
                         <form:errors path="readableName" cssClass="error-message" />
-                        <form:input type="text" placeholder="FirstName LastName" path="readableName"/>
+                        <form:input type="text" placeholder="User name" path="readableName"/>
                         <span class="icon fa"></span>
                     </div>
                     <div id="email" class="field not-valid">

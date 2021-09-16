@@ -10,12 +10,12 @@ package com.codenjoy.dojo.cucumber.page;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -69,8 +69,8 @@ public class RegistrationPage {
     public void registerInDatabase(String name, String email, String password, String country, String techSkills, String company, String experience) {
         String data = String.join("%s|%s|%s|%s", country, techSkills, company, experience);
         String id = Hash.getRandomId();
-        registration.register(id, email, name, Hash.md5(password), data,
-                Arrays.asList(GameAuthoritiesConstants.ROLE_USER),name);
+        registration.register(id, email, name, name, Hash.md5(password), data,
+                Arrays.asList(GameAuthoritiesConstants.ROLE_USER), name, name);
 
     }
 

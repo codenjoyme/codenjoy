@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -140,9 +140,9 @@ public class PlayerServiceImplTest {
 
     @Mock
     private GameType gameType;
-    
+
     private InformationCollector informationCollector;
-    
+
     @Mock
     private GraphicPrinter printer;
     private List<Joystick> joysticks = new LinkedList<>();
@@ -423,25 +423,25 @@ public class PlayerServiceImplTest {
 
         assertEquals(
                 "{petya=PlayerData[" +
-                    "BoardSize:15, Board:'DCBA', Game:'game', " +
-                    "Score:234, Info:'', " +
-                    "Scores:'{'petya':234}', " +
-                    "HeroesData:'{" +
+                        "BoardSize:15, Board:'DCBA', Game:'game', " +
+                        "Score:234, Info:'', " +
+                        "Scores:'{'petya':234}', " +
+                        "HeroesData:'{" +
                         "'coordinates':{'petya':{'coordinate':{'x':3,'y':4},'level':0,'multiplayer':false}}," +
                         "'group':['petya']," +
                         "'readableNames':{'petya':'readable_petya'}" +
                         "}', " +
-                    "LastChatMessage:106558567], " +
-                "vasya=PlayerData[" +
-                    "BoardSize:15, Board:'ABCD', Game:'game', " +
-                    "Score:123, Info:'', " +
-                    "Scores:'{'vasya':123}', " +
-                    "HeroesData:'{" +
+                        "LastChatMessage:106558567], " +
+                        "vasya=PlayerData[" +
+                        "BoardSize:15, Board:'ABCD', Game:'game', " +
+                        "Score:123, Info:'', " +
+                        "Scores:'{'vasya':123}', " +
+                        "HeroesData:'{" +
                         "'coordinates':{'vasya':{'coordinate':{'x':1,'y':2},'level':0,'multiplayer':false}}," +
                         "'group':['vasya']," +
                         "'readableNames':{'vasya':'readable_vasya'}" +
                         "}', " +
-                    "LastChatMessage:111979568]}",
+                        "LastChatMessage:111979568]}",
                 data.toString().replaceAll("\"", "'"));
     }
 
@@ -542,7 +542,7 @@ public class PlayerServiceImplTest {
 
     private Player createPlayer(String id, String game, String room) {
         Player player = playerService.register(id, game, room,
-                getCallbackUrl(id),"repository");
+                getCallbackUrl(id), "repository", "slackEmail");
         players.add(player);
         chatIds.put(room, Math.abs(id.hashCode()));
 
@@ -564,7 +564,7 @@ public class PlayerServiceImplTest {
     }
 
     @SneakyThrows
-    private void assertSentToPlayers(Player ... players) {
+    private void assertSentToPlayers(Player... players) {
         verify(screenController).requestControlToAll(screenSendCaptor.capture());
         Map sentScreens1 = screenSendCaptor.getValue();
         Map sentScreens = sentScreens1;
@@ -575,7 +575,7 @@ public class PlayerServiceImplTest {
     }
 
     @SneakyThrows
-    private void assertHostsCaptured(String ... hostUrls) {
+    private void assertHostsCaptured(String... hostUrls) {
         verify(playerController, times(hostUrls.length)).requestControl(playerCaptor.capture(), anyString());
 
         assertEquals(hostUrls.length, playerCaptor.getAllValues().size());
@@ -588,7 +588,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayerFromSavedPlayerGame_whenPlayerNotRegisterYet() {
         // given
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 100,"{}","repository");
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 100, "{}", "repository");
 
         // when
         playerService.register(save);
@@ -610,7 +610,7 @@ public class PlayerServiceImplTest {
         Player registeredPlayer = createPlayer(VASYA);
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", "other_room", 200,"{}","repository");
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", "other_room", 200, "{}", "repository");
 
         // when
         playerService.register(save);
@@ -633,7 +633,7 @@ public class PlayerServiceImplTest {
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
         assertEquals(0, registeredPlayer.getScore());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 200,"{}","repository");
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 200, "{}", "repository");
 
         // when
         playerService.register(save);
@@ -673,7 +673,7 @@ public class PlayerServiceImplTest {
         // when, then
         checkInfo("");
     }
-    
+
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifPositiveValue() {
         // given
@@ -907,7 +907,7 @@ public class PlayerServiceImplTest {
         setup(game1);
 
         List list = Reflection.field(PlayerGames.Fields.all).ofType(List.class).in(playerGames).get();
-        PlayerGame playerGame = (PlayerGame)list.remove(0);
+        PlayerGame playerGame = (PlayerGame) list.remove(0);
         PlayerGame spy = spy(playerGame);
         list.add(spy);
 
@@ -1215,8 +1215,8 @@ public class PlayerServiceImplTest {
         Joystick joystick2 = joystick(PETYA);
 
         // when then
-        assertSame(joystick1, ((LockedJoystick)playerService.getJoystick(VASYA)).getWrapped());
-        assertSame(joystick2, ((LockedJoystick)playerService.getJoystick(PETYA)).getWrapped());
+        assertSame(joystick1, ((LockedJoystick) playerService.getJoystick(VASYA)).getWrapped());
+        assertSame(joystick2, ((LockedJoystick) playerService.getJoystick(PETYA)).getWrapped());
         assertSame(NullJoystick.INSTANCE, playerService.getJoystick(KATYA));
     }
 
@@ -1239,7 +1239,7 @@ public class PlayerServiceImplTest {
         // given
         createPlayer(VASYA);
         createPlayer(PETYA);
-        
+
         // when
         playerService.cleanAllScores();
 
@@ -1408,11 +1408,11 @@ public class PlayerServiceImplTest {
         Player player2 = createPlayer(PETYA);
 
         // when
-        List<PlayerInfo> infos = new LinkedList<PlayerInfo>(){{
-            add(new PlayerInfo(player1){{
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>() {{
+            add(new PlayerInfo(player1) {{
                 setData("{\"some\":\"data1\"}");
             }});
-            add(new PlayerInfo(player2){{
+            add(new PlayerInfo(player2) {{
                 setData("{\"some\":\"data2\"}");
             }});
         }};
@@ -1436,11 +1436,11 @@ public class PlayerServiceImplTest {
         Player player2 = createPlayer(PETYA);
 
         // when
-        List<PlayerInfo> infos = new LinkedList<PlayerInfo>(){{
-            add(new PlayerInfo(player1){{
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>() {{
+            add(new PlayerInfo(player1) {{
                 setData("{\"some\":\"data1\"}");
             }});
-            add(new PlayerInfo(player2){{
+            add(new PlayerInfo(player2) {{
                 setData("{}"); // same
             }});
         }};
@@ -1460,17 +1460,17 @@ public class PlayerServiceImplTest {
         Player player4 = createPlayer(OLIA);
 
         // when
-        List<PlayerInfo> infos = new LinkedList<PlayerInfo>(){{
-            add(new PlayerInfo(player1){{
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>() {{
+            add(new PlayerInfo(player1) {{
                 setData("{\"some\":\"data1\"}");
             }});
-            add(new PlayerInfo(player2){{
+            add(new PlayerInfo(player2) {{
                 setData(""); // empty
             }});
-            add(new PlayerInfo(player3){{
+            add(new PlayerInfo(player3) {{
                 setData(null); // null
             }});
-            add(new PlayerInfo(player4){{
+            add(new PlayerInfo(player4) {{
                 setData("null"); // "null"
             }});
         }};
@@ -1525,8 +1525,8 @@ public class PlayerServiceImplTest {
         WebSocketRunner.ATTEMPTS = 0;
         WebSocketRunner.TIMEOUT = 100;
 
-        when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
-        when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
+        when(gameType.getAI()).thenReturn((Class) AISolverStub.class);
+        when(gameType.getBoard()).thenReturn((Class) BoardStub.class);
 
         String game = createPlayer(VASYA).getGame();
 
@@ -1550,9 +1550,9 @@ public class PlayerServiceImplTest {
     @Test
     public void testLoadPlayersFromSaveAndLoadAI() {
         // given
-        when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
-        when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
-        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", "room", 100,"{}","repository");
+        when(gameType.getAI()).thenReturn((Class) AISolverStub.class);
+        when(gameType.getBoard()).thenReturn((Class) BoardStub.class);
+        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", "room", 100, "{}", "repository");
 
         // when
         playerService.register(save);

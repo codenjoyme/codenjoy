@@ -111,21 +111,21 @@ public class Registration {
         return count > 0;
     }
 
-    public User getOrRegister(String id, String email, String fullName, String readableName, String gitHubUsername, String slackId) {
+    public User getOrRegister(String id, String email, String fullName, String readableName, String gitHubUsername, String slackEmail) {
         Registration.User result = getUserById(id)
                 .orElseGet(() -> getUserByEmail(email)
-                        .orElseGet(() -> registerApproved(id, email, fullName, readableName, gitHubUsername, slackId)));
+                        .orElseGet(() -> registerApproved(id, email, fullName, readableName, gitHubUsername, slackEmail)));
         return result;
     }
 
-    public User registerApproved(String id, String email, String fullName, String readableName, String gitHubUsername, String slackId) {
+    public User registerApproved(String id, String email, String fullName, String readableName, String gitHubUsername, String slackEmail) {
         if (StringUtils.isEmpty(id)) {
             id = Hash.getRandomId();
         }
         String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
 
         User user = register(id, email, fullName, readableName,
-                password, "{}", GameAuthorities.USER.roles(), gitHubUsername, slackId);
+                password, "{}", GameAuthorities.USER.roles(), gitHubUsername, slackEmail);
 
         if (!properties.isEmailVerificationNeeded()) {
             approve(user.getCode());
@@ -135,13 +135,13 @@ public class Registration {
         return user;
     }
 
-    public User register(String id, String email, String fullName, String readableName, String password, String data, Collection<String> roles, String gitHubUsername, String slackId) {
+    public User register(String id, String email, String fullName, String readableName, String password, String data, Collection<String> roles, String gitHubUsername, String slackEmail) {
         roles = roles.isEmpty() ? GameAuthorities.USER.roles() : roles;
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
 
         pool.update("INSERT INTO users (id, email, fullName, readable_name, email_approved, password, code, data, roles, github_username, slackEmail) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
-                new Object[]{id, email, fullName, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles), gitHubUsername, slackId});
+                new Object[]{id, email, fullName, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles), gitHubUsername, slackEmail});
 
         return getUserByCode(code);
     }
@@ -280,7 +280,7 @@ public class Registration {
         );
     }
 
-    public String getSlackIdById(String id) {
+    public String getSlackEmailById(String id) {
         return pool.select("SELECT slackEmail FROM users WHERE id = ?;",
                 new Object[]{id},
                 rs -> rs.next() ? rs.getString("slackEmail") : null
@@ -342,7 +342,7 @@ public class Registration {
         private String code;
         private String data;
         private String gitHubUsername;
-        private String slackId;
+        private String slackEmail;
 
         public User() {
             super("anonymous", "", Collections.emptyList());

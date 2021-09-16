@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.GameServerService;
 import com.codenjoy.dojo.services.LinkService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.SaveServiceImpl;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
@@ -71,6 +72,7 @@ public class RegistrationService {
     private UserDetailsService userDetailsService;
     private ViewDelegationService viewDelegationService;
     private GameServerService gameServerService;
+    private SaveServiceImpl saveService;
 
     public String register(Player player, String room, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
@@ -82,8 +84,8 @@ public class RegistrationService {
         String fullName = player.getFullName();
         String name = player.getReadableName();
         String game = player.getGame();
-        String repositoryUrl = player.getRepositoryUrl();
-        String slackId = player.getSlackEmail();
+        String githubUsername = player.getGitHubUsername();
+        String slackEmail = player.getSlackEmail();
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkEmail(email, CANT_BE_NULL);
         validator.checkGame(game, CANT_BE_NULL);
@@ -96,13 +98,13 @@ public class RegistrationService {
             if (code == null) {
                 model.addAttribute("bad_pass", true);
 
-                return openRegistrationForm(request, model, id, email, fullName, name, repositoryUrl, slackId);
+                return openRegistrationForm(request, model, id, email, fullName, name, githubUsername, slackEmail);
             }
             registration.updateNameAndEmail(id, name, email);
         } else {
             if (!registered) {
                 if (!playerService.isRegistrationOpened()) {
-                    return openRegistrationForm(request, model, id, email, fullName, name, repositoryUrl, slackId);
+                    return openRegistrationForm(request, model, id, email, fullName, name, githubUsername, slackEmail);
                 }
                 Registration.User user = registration.register(id, player.getEmail(), player.getFullName(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles(), player.getGitHubUsername(), player.getSlackEmail());
                 code = user.getCode();
@@ -118,8 +120,8 @@ public class RegistrationService {
                     map.put("code", code);
                     map.put("game", game);
                     map.put("ip", getIp(request));
-                    map.put("github", repositoryUrl);
-                    map.put("slackEmail", slackId);
+                    map.put("github", githubUsername);
+                    map.put("slackEmail", slackEmail);
 
                     String hostIp = properties.getServerIp(); // TODO to use server domain here
                     map.put("host", hostIp);
@@ -150,12 +152,12 @@ public class RegistrationService {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 model.addAttribute("bad_pass", true);
-                return openRegistrationForm(request, model, id, email, fullName, name, repositoryUrl, slackId);
+                return openRegistrationForm(request, model, id, email, fullName, name, githubUsername, slackEmail);
             }
-            return connectRegisteredPlayer(player.getCode(), request, id, room, game, repositoryUrl, slackId);
+            return connectRegisteredPlayer(player.getCode(), request, id, room, game, githubUsername, slackEmail);
         } else {
             model.addAttribute("wait_approve", true);
-            return openRegistrationForm(request, model, id, email, fullName, name, repositoryUrl, slackId);
+            return openRegistrationForm(request, model, id, email, fullName, name, githubUsername, slackEmail);
         }
     }
 
@@ -164,8 +166,8 @@ public class RegistrationService {
         mailService.sendEmail(id, title, body);
     }
 
-    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String room, String game, String repositoryUrl, String slackId) {
-        return "redirect:/" + register(id, code, game, room, request.getRemoteAddr(), repositoryUrl, slackId);
+    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String room, String game, String githubUsername, String slackId) {
+        return "redirect:/" + register(id, code, game, room, request.getRemoteAddr(), githubUsername, slackId);
     }
 
     public String openRegistrationForm(HttpServletRequest request, Model model,
@@ -193,7 +195,7 @@ public class RegistrationService {
             fullName = registration.getFullNameById(id);
             name = registration.getNameById(id);
             github = registration.getGitHubUsernameById(id);
-            slackId = registration.getSlackIdById(id);
+            slackId = registration.getSlackEmailById(id);
             if (!model.containsAttribute("bad_email")) {
                 validator.checkEmail(email, CAN_BE_NULL);
             }
@@ -223,11 +225,12 @@ public class RegistrationService {
         return getRegister(model);
     }
 
-    public String register(String id, String code, String game, String room, String ip, String repositoryUrl, String slackId) {
-        Player player = playerService.register(id, game, room, ip, repositoryUrl, slackId);
+    public String register(String id, String code, String game, String room, String ip, String githubUsername, String slackId) {
+        Player player = playerService.register(id, game, room, ip, getRepository(githubUsername), slackId);
         if (player == NullPlayer.INSTANCE) {
             return "login";
         }
+        saveService.save(player);
         return getBoardUrl(code, player.getId(), game);
     }
 
