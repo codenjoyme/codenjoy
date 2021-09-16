@@ -23,10 +23,7 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 
-import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.FieldService;
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.TimeService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.Filter;
@@ -60,6 +57,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     @Autowired
     private FieldService fields;
 
+
+    @Autowired
+    private PlayerService players;
     @Autowired
     private RoomService rooms;
 
@@ -149,6 +149,20 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         assertEquals("[PMessage(id=1, text=message1, room=room, type=3, topicId=1, " +
                         "playerId=player, playerName=player-name, time=12345)]",
                 control.getAllField(Filter.room("room").count(10).get()).toString());
+    }
+
+
+    @Test
+    public void shouldRemoveChatControl_whenRemovePlayer() {
+        // given
+        createPlayer("player", "room", "first");
+        Deal deal = deals.get("player");
+
+        // when
+        players.remove(deal.getPlayerId());
+
+        // then
+        assertEquals(null, deal.chat());
     }
 
     @Test

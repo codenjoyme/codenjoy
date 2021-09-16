@@ -87,6 +87,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         all.remove(index);
 
         deal.remove(onRemove);
+        deal.setChat(null);
         deal.getGame().on(null);
     }
 
