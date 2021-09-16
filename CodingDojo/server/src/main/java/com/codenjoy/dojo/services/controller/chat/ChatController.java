@@ -64,6 +64,7 @@ public class ChatController implements Controller<String, ChatControl> {
     public void register(Deal deal) {
         String id = deal.getPlayerId();
         ChatControl control = chatService.control(id, chatListener());
+        deal.setChat(control);
         transport.registerPlayerEndpoint(id,
                 new ChatResponseHandler(deal.getPlayer(), control,
                         error -> sendState(ERROR, null, error, id)));

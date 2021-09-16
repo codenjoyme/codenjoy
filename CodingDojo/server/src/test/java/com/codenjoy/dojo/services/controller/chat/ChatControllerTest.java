@@ -136,6 +136,22 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     }
 
     @Test
+    public void shouldSetChatControl_whenRegisterDeal() {
+        // when
+        createPlayer("player", "room", "first");
+        Deal deal = deals.get("player");
+        ChatControl control = deal.chat();
+
+        // then
+        nowIs(12345L);
+        control.postField("message1", "room");
+
+        assertEquals("[PMessage(id=1, text=message1, room=room, type=3, topicId=1, " +
+                        "playerId=player, playerName=player-name, time=12345)]",
+                control.getAllField(Filter.room("room").count(10).get()).toString());
+    }
+
+    @Test
     public void shouldGet_fail() {
         // given
         createPlayer("player", "room", "first");
