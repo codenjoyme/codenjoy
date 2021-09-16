@@ -36,14 +36,6 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Autowired
     private RestRoomController service;
 
-    @Before
-    public void setUp() {
-        super.setUp();
-
-        login.removeAll();
-        rooms.removeAll();
-    }
-
     // проверяем что для залогиненого пользователя все методы сервиса отрабатывают
     @Test
     public void shouldJoinJoinedAndLeave_whenAuthenticated() {

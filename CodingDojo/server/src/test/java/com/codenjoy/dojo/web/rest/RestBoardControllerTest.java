@@ -41,11 +41,7 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
     public void setUp() {
         super.setUp();
 
-        login.removeAll();
-        rooms.removeAll();
-
         login.register("somePlayer", "ip", "validRoom", "first");
-
         login.asUser("somePlayer", "somePlayer");
     }
 

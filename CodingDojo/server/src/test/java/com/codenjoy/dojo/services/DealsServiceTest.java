@@ -90,9 +90,9 @@ public class DealsServiceTest {
         login = new LoginHelper(config, players, registration, deals);
         roomsSettings = new RoomHelper(rooms, games);
 
+        login.removeAll();
         fields.removeAll();
         roomsSettings.removeAll();
-        login.removeAll();
     }
 
     @After

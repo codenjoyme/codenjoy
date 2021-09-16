@@ -121,8 +121,10 @@ public abstract class AbstractRestControllerTest {
         CodenjoyContext.setContext("codenjoy-contest");
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
 
-        games.init();
         debug.resume();
+
+        login.removeAll();
+        games.init(); // тут чистятся rooms и связанные с ними сеттинги
     }
 
     @After

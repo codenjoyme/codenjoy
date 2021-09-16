@@ -96,9 +96,9 @@ public class ChatServiceTest {
         login = new LoginHelper(config, players, registration, deals);
         messages = new ChatHelper(chat);
 
+        login.removeAll();
         messages.removeAll();
         fields.removeAll();
-        login.removeAll();
     }
 
     @After

@@ -45,9 +45,8 @@ public class LoginHelper {
     private Deals deals;
 
     public void removeAll() {
-        registration.removeAll();
         players.removeAll();
-        deals.clear();
+        registration.removeAll();
     }
 
     public void asAdmin() {

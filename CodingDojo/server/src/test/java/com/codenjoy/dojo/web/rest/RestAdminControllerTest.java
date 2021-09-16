@@ -46,13 +46,9 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     public void setUp() {
         super.setUp();
 
-        registration.removeAll();
-
         login.asAdmin();
-
-        login.removeAll();
         saves.removeAllSaves();
-        rooms.removeAll(); // тут чистятся все сеттинги
+        fields.removeAll();
     }
 
     @Test
