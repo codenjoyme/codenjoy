@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.mocks.FirstInactivityGameType;
 import com.codenjoy.dojo.services.mocks.SecondSemifinalGameType;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.stuff.SmartAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,13 +41,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PlayerServiceImplTest.setupTimeService;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.joining;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class)
@@ -73,6 +74,11 @@ public class AdminServiceTest {
         players.removeAll();
         rooms.removeAll();
         fields.removeAll();
+    }
+
+    @After
+    public void after() {
+        SmartAssert.checkResult();
     }
 
     @Test
