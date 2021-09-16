@@ -64,7 +64,7 @@ public class TeamService {
                     deal.setTeamId(team.getTeamId());
                     // TODO #3d4w тут надо вначале всех вывести из комнат,
                     //      а потом органимзованно завести обратно
-                    deals.reload(id, Sweeper.on().allRemaining());
+                    deals.reload(deal, Sweeper.on().allRemaining());
                 }
             }
         }

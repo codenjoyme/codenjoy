@@ -801,7 +801,7 @@ public class DealsTest extends AbstractDealsTest {
         assertRooms("{0=[player1, player2]}");
 
         // when
-        deals.reload("player1", Sweeper.on().lastAlone());
+        deals.reload(deals.get("player1"), Sweeper.on().lastAlone());
 
         // then
         // created new field for player3
@@ -821,7 +821,7 @@ public class DealsTest extends AbstractDealsTest {
         assertRooms("{0=[player1, player2]}");
 
         // when
-        deals.reload("player1", Sweeper.off());
+        deals.reload(deals.get("player1"), Sweeper.off());
 
         // then
         assertRooms("{0=[player2], 1=[player1]}");

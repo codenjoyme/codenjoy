@@ -269,7 +269,7 @@ public class Deals implements Iterable<Deal>, Tickable {
                     }
 
                     if (type.isDisposable() && game.shouldLeave()) {
-                        reload(id, Sweeper.on().lastAlone());
+                        reload(deal, Sweeper.on().lastAlone());
                         return;
                     }
 
@@ -294,18 +294,22 @@ public class Deals implements Iterable<Deal>, Tickable {
         getGameTypes().forEach(GameType::quietTick);
     }
 
-    public void reload(String id, Sweeper sweeper) {
-        reload(id, null, sweeper);
+    public void reload(Deal deal, Sweeper sweeper) {
+        reload(deal, null, sweeper);
     }
 
-    private void reload(String id, JSONObject save, Sweeper sweeper) {
-        Deal deal = get(id);
+    private void reload(Deal deal, JSONObject save, Sweeper sweeper) {
+        reload(deal, null, save, sweeper);
+    }
+
+    private void reload(Deal deal, String room, JSONObject save, Sweeper sweeper) {
         if (save == null) {
             save = deal.getGame().getSave();
         }
-
         removeInRoom(deal, sweeper);
-
+        if (room != null) {
+            deal.setRoom(room);
+        }
         play(deal, save);
     }
 
@@ -323,7 +327,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         }
 
         games.forEach(deal -> spreader.remove(deal, Sweeper.off()));
-        games.forEach(deal -> reload(deal.getPlayerId(), Sweeper.off()));
+        games.forEach(deal -> reload(deal, Sweeper.off()));
     }
 
     private void quiet(Runnable runnable) {
@@ -351,7 +355,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         LevelProgress progress = new LevelProgress(save);
         if (progress.canChange(level)) {
             progress.change(level);
-            reload(id, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
+            reload(deal, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
             deal.fireOnLevelChanged();
         }
     }
@@ -360,8 +364,9 @@ public class Deals implements Iterable<Deal>, Tickable {
         if (save == null) {
             return false;
         }
-        reload(id, save, Sweeper.on().lastAlone());
-        get(id).fireOnLevelChanged();
+        Deal deal = get(id);
+        reload(deal, save, Sweeper.on().lastAlone());
+        deal.fireOnLevelChanged();
         return true;
     }
 
@@ -370,7 +375,7 @@ public class Deals implements Iterable<Deal>, Tickable {
 
         deal.setTeamId(teamId);
 
-        reload(id, Sweeper.on().lastAlone());
+        reload(deal, Sweeper.on().lastAlone());
     }
 
     public void changeRoom(String id, String gameName, String newRoom) {
@@ -381,8 +386,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         if (!deal.getPlayer().getGame().equals(gameName)) {
             return;
         }
-        deal.setRoom(newRoom);
-        reload(id, Sweeper.on().lastAlone());
+        reload(deal, newRoom, null, Sweeper.on().lastAlone());
     }
 
     public Deal get(int index) {
