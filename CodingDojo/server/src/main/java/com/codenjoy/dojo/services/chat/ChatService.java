@@ -43,6 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
 @AllArgsConstructor
@@ -182,7 +183,7 @@ public class ChatService {
 
     /**
      * Метод получения fieldId поля на котором играет пользователь {@code playerId}
-     * в комнате {@code room} c  предварительной проверкой
+     * в комнате {@code room} с предварительной проверкой
      * соответствия пользователя комнате.
      */
     private int getFieldTopicId(String room, String playerId) {
@@ -283,8 +284,8 @@ public class ChatService {
      * от имени пользователя {@code playerId}.
      *
      * Это возможно только, если пользователь является автором сообщения
-     * и продолжает пребывать в заданной комнате (при этом при удалении
-     * field-сообщений он может покинуть изначальную field и пребывать в дургой)
+     * и продолжает пребывать в заданной комнате. При этом при удалении
+     * field-сообщений он может покинуть изначальную field и пребывать в другой.
      */
     public boolean deleteMessage(int id, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
@@ -316,10 +317,10 @@ public class ChatService {
 
     @ToString
     public class LastMessage {
-        private Map<String, Integer> room;
-        private Map<Integer, Integer> roomTopic;
-        private Map<Integer, Integer> field;
-        private Map<Integer, Integer> fieldTopic;
+        private final Map<String, Integer> room;
+        private final Map<Integer, Integer> roomTopic;
+        private final Map<Integer, Integer> field;
+        private final Map<Integer, Integer> fieldTopic;
 
         public LastMessage() {
             room = chat.getLastRoomMessageIds();
