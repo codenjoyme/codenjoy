@@ -43,7 +43,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
     public static final String INITIAL_REQUEST = "any data";
 
     @Autowired
-    private PlayerController сontroller;
+    private PlayerController controller;
 
     @Before
     public void setup() {
@@ -130,7 +130,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
 
     @Override
     protected Controller<String, Joystick> controller() {
-        return сontroller;
+        return controller;
     }
 
     @Test
