@@ -27,7 +27,6 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.chat.ChatController;
 import com.codenjoy.dojo.services.controller.control.PlayerController;
@@ -81,6 +80,7 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.AdminServiceTest.assertPlayersLastResponse;
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName;
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
@@ -228,10 +228,7 @@ public class PlayerServiceImplTest {
         when(roomService.isActive(anyString())).thenReturn(true);
         when(roomService.isOpened(anyString())).thenReturn(true);
 
-        doAnswer(inv -> {
-            String id = inv.getArgument(0);
-            return "readable_" + id;
-        }).when(registration).getNameById(anyString());
+        setupReadableName(registration);
 
         deals.clear();
         Mockito.reset(playerController, screenController,
@@ -618,7 +615,7 @@ public class PlayerServiceImplTest {
                         "coordinate=[3,4], \n" +
                         "isMultiplayer=false, \n" +
                         "additionalData=null)}', \n" +
-                    "ReadableNames:'{petya=readable_petya}', \n" +
+                    "ReadableNames:'{petya=petya_name}', \n" +
                     "Group:[petya]], \n" +
                 "vasya=PlayerData[BoardSize:15, \n" +
                     "Board:'ABCD', \n" +
@@ -631,7 +628,7 @@ public class PlayerServiceImplTest {
                         "coordinate=[1,2], \n" +
                         "isMultiplayer=false, \n" +
                         "additionalData=null)}', \n" +
-                    "ReadableNames:'{vasya=readable_vasya}', \n" +
+                    "ReadableNames:'{vasya=vasya_name}', \n" +
                     "Group:[vasya]]}",
                 clean(split(data, ", \n")));
     }

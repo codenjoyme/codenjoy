@@ -38,6 +38,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -72,9 +73,7 @@ public class ScoresCleanerTest {
         Player player = new Player(id);
         player.setGameType(new FirstGameType());
         player.setScores(new FakePlayerScores(score));
-        player.setReadableName(id + "_name");
-        when(registration.getNameById(anyString()))
-                .thenReturn(player.getReadableName());
+        setupReadableName(registration);
         deals.add(player, room, new PlayerSave("{}"));
         saver.save(id);
     }

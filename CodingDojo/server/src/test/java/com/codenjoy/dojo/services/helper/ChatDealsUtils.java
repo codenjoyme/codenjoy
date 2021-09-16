@@ -26,10 +26,12 @@ import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.Deals;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.dao.Registration;
 
 import java.util.function.Consumer;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
@@ -54,5 +56,14 @@ public class ChatDealsUtils {
             setupChat(deal);
             return null;
         }).when(chatController).register(any(Deal.class));
+    }
+
+    public static void setupReadableName(Registration registration) {
+        // for the field chat activity
+        doAnswer(inv -> {
+            String id = (String) inv.getArguments()[0];
+            return id + "_name";
+        }).when(registration).getNameById(anyString());
+
     }
 }

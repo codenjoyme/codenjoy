@@ -47,11 +47,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PlayerServiceImplTest.setupTimeService;
+import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.joining;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class)
@@ -128,12 +127,7 @@ public class AdminServiceTest {
         rooms.create("room3", new SecondSemifinalGameType());
 
         setupTimeService(time);
-
-        // for the field chat activity
-        doAnswer(inv -> {
-            String id = (String) inv.getArguments()[0];
-            return id + "_name";
-        }).when(registration).getNameById(anyString());
+        setupReadableName(registration);
 
         players.register("player1", "first", "room1", "ip1");
         players.register("player2", "first", "room1", "ip2");
