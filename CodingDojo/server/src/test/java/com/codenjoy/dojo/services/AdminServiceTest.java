@@ -54,31 +54,31 @@ import static org.junit.Assert.assertEquals;
 public class AdminServiceTest {
 
     @SpyBean
-    private TimeService timeService;
+    private TimeService time;
 
     @Autowired
-    private PlayerService playerService;
+    private PlayerService players;
 
     @Autowired
-    private RoomService roomService;
+    private RoomService rooms;
 
     @Autowired
     private FieldService fields;
 
     @Autowired
-    private AdminService adminService;
+    private AdminService service;
 
     @Before
     public void setup() {
-        playerService.removeAll();
-        roomService.removeAll();
+        players.removeAll();
+        rooms.removeAll();
         fields.removeAll();
     }
 
     @Test
     public void shouldUpdateSettings_whenUpdateInactivity() {
         // given
-        roomService.create("room", new FirstInactivityGameType());
+        rooms.create("room", new FirstInactivityGameType());
 
         assertSettings("First[Parameter 1=15, \n" +
                 "Parameter 2=true, \n" +
@@ -86,49 +86,48 @@ public class AdminServiceTest {
                 "[Inactivity] Inactivity timeout ticks=300]");
 
         // when
-        adminService.updateInactivity("room",
+        service.updateInactivity("room",
                 new InactivitySettingsImpl()
                         .setInactivityTimeout(123)
                         .setKickEnabled(true));
 
         // then
         assertSettings("First[Parameter 1=15, \n" +
-                        "Parameter 2=true, \n" +
-                        "[Inactivity] Kick inactive players=true, \n" +
-                        "[Inactivity] Inactivity timeout ticks=123]");
+                "Parameter 2=true, \n" +
+                "[Inactivity] Kick inactive players=true, \n" +
+                "[Inactivity] Inactivity timeout ticks=123]");
     }
 
     private void assertSettings(String expected) {
         assertEquals(expected,
-                split(roomService.settings("room"), ", \n"));
+                split(rooms.settings("room"), ", \n"));
     }
 
     @Test
     public void shouldResetLastResponse_whenUpdateInactivity() {
         // given
-        roomService.create("room1", new FirstInactivityGameType());
-        roomService.create("room2", new FirstInactivityGameType());
-        roomService.create("room3", new SecondSemifinalGameType());
+        rooms.create("room1", new FirstInactivityGameType());
+        rooms.create("room2", new FirstInactivityGameType());
+        rooms.create("room3", new SecondSemifinalGameType());
 
-        setupTimeService(timeService);
+        setupTimeService(time);
 
-        List<Player> players = new LinkedList<>();
-        players.add(playerService.register("player1", "first", "room1", "ip1"));
-        players.add(playerService.register("player2", "first", "room1", "ip2"));
-        players.add(playerService.register("player3", "first", "room2", "ip3"));   // another room
-        players.add(playerService.register("player4", "second", "room3", "ip4"));  // another game
+        players.register("player1", "first", "room1", "ip1");
+        players.register("player2", "first", "room1", "ip2");
+        players.register("player3", "first", "room2", "ip3");   // another room
+        players.register("player4", "second", "room3", "ip4");  // another game
 
-        assertPlayersLastResponse(playerService.getAll(),
+        assertPlayersLastResponse(this.players.getAll(),
                 "[player1: 1000], [player2: 2000], [player3: 3000], [player4: 4000]");
 
         // when
-        adminService.updateInactivity("room1",
+        service.updateInactivity("room1",
                 new InactivitySettingsImpl()
                         .setInactivityTimeout(123)
                         .setKickEnabled(true));
 
         // then
-        assertPlayersLastResponse(playerService.getAll(),
+        assertPlayersLastResponse(this.players.getAll(),
                 "[player1: 5000], [player2: 6000], [player3: 3000], [player4: 4000]");
     }
 
