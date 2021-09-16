@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.helper.RoomHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.stuff.SmartAssert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -1525,6 +1526,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals(fieldId, getFieldId("player"));
 
         // then
+        // prints that two players joined
         assertEquals("[{'id':1,'playerId':'player4','playerName':'player4-name','room':'multipleRoom','text':'Player joined the field','time':12345,'topicId':104,'type':3},\n" +
                         "{'id':3,'playerId':'player','playerName':'player-name','room':'multipleRoom','text':'Player joined the field','time':12345,'topicId':104,'type':3}]",
                 fix(get("/rest/chat/multipleRoom/messages/field")));
@@ -1541,10 +1543,53 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         nowIs(12347L);
         login.join("player4", "multipleRoom");
 
+        // prints that one leaved field and come back again
         assertEquals("[{'id':1,'playerId':'player4','playerName':'player4-name','room':'multipleRoom','text':'Player joined the field','time':12345,'topicId':104,'type':3},\n" +
                         "{'id':3,'playerId':'player','playerName':'player-name','room':'multipleRoom','text':'Player joined the field','time':12345,'topicId':104,'type':3},\n" +
                         "{'id':4,'playerId':'player4','playerName':'player4-name','room':'multipleRoom','text':'Player left the field','time':12346,'topicId':104,'type':3},\n" +
                         "{'id':7,'playerId':'player4','playerName':'player4-name','room':'multipleRoom','text':'Player joined the field','time':12347,'topicId':104,'type':3}]",
                 fix(get("/rest/chat/multipleRoom/messages/field")));
+    }
+
+    @Test
+    public void shouldPrintJoinLeaveChat_forNewUser_inDifferentSingleFields() {
+        // given
+        // game type will be a single
+        String game = "first";
+
+        nowIs(12345L);
+        login.register("player4", "ip", "singleRoom", game);
+        login.asUser("player4", "player4");
+        int fieldId = getFieldId("player4");
+
+        login.join("player", "singleRoom");
+
+        // another player is also in the same room
+        assertEquals("singleRoom", deals.get("player").getRoom());
+        // another player isn't in the same field
+        assertNotEquals(fieldId, getFieldId("player"));
+
+        // then
+        // prints only one 'joined' message, because of player is on single field
+        assertEquals("[{'id':1,'playerId':'player4','playerName':'player4-name','room':'singleRoom','text':'Player joined the field','time':12345,'topicId':104,'type':3}]",
+                fix(get("/rest/chat/singleRoom/messages/field")));
+
+        // switch to another room
+        nowIs(12346L);
+        login.join("player4", "otherRoom");
+        assertNotEquals(fieldId, getFieldId("player4"));
+
+        assertEquals("[{'id':5,'playerId':'player4','playerName':'player4-name','room':'otherRoom','text':'Player joined the field','time':12346,'topicId':106,'type':3}]",
+                fix(get("/rest/chat/otherRoom/messages/field")));
+
+        // and come back again
+        nowIs(12347L);
+        login.join("player4", "singleRoom");
+
+        // prints only one 'joined' message,
+        //      because of new field created
+        //      and this is a single field
+        assertEquals("[{'id':7,'playerId':'player4','playerName':'player4-name','room':'singleRoom','text':'Player joined the field','time':12347,'topicId':107,'type':3}]",
+                fix(get("/rest/chat/singleRoom/messages/field")));
     }
 }

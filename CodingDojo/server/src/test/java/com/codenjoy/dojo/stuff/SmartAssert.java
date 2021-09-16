@@ -84,6 +84,14 @@ public class SmartAssert {
         }
     }
 
+    public static void assertNotEquals(Object expected, Object actual) {
+        try {
+            Assert.assertNotEquals(expected, actual);
+        } catch (AssertionError e) {
+            failures().add(e);
+        }
+    }
+
     public static void assertEquals(Object expected, Object actual) {
         try {
             Assert.assertEquals(expected, actual);
