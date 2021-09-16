@@ -81,9 +81,10 @@ public class Deals implements Iterable<Deal>, Tickable {
     public void remove(String id, Sweeper sweeper) {
         int index = all.indexOf(new Player(id));
         if (index == -1) return;
-        Deal deal = all.remove(index);
+        Deal deal = all.get(index);
 
         removeInRoom(deal, sweeper);
+        all.remove(index);
 
         deal.remove(onRemove);
         deal.getGame().on(null);
@@ -147,13 +148,13 @@ public class Deals implements Iterable<Deal>, Tickable {
         Game game = new LockedGame(lock).wrap(single);
 
         Deal deal = create(player, room, game);
+        if (onAdd != null) {
+            onAdd.accept(deal);
+        }
         all.add(deal);
 
         play(deal, parseSave(save));
 
-        if (onAdd != null) {
-            onAdd.accept(deal);
-        }
         return deal;
     }
 
