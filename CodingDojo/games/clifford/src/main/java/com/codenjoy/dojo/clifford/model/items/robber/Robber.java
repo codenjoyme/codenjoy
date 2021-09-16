@@ -167,7 +167,9 @@ public class Robber extends PointImpl implements Tickable, Fieldable<Field>, Sta
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
         if (field.isBrick(this)) {
-            return Element.ROBBER_PIT;
+            return isLeftTurn()
+                    ? Element.ROBBER_PIT_LEFT
+                    : Element.ROBBER_PIT_RIGHT;
         }
 
         if (field.isLadder(this)) {
