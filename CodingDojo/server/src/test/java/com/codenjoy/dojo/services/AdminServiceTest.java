@@ -25,13 +25,16 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.chat.Filter;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.mocks.FirstInactivityGameType;
 import com.codenjoy.dojo.services.mocks.SecondSemifinalGameType;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.stuff.SmartAssert;
+import io.cucumber.java.Before;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,8 @@ import static com.codenjoy.dojo.services.PlayerServiceImplTest.setupTimeService;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.utils.TestUtils.split;
 import static java.util.stream.Collectors.joining;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class)
@@ -65,6 +70,12 @@ public class AdminServiceTest {
 
     @Autowired
     private FieldService fields;
+
+    @Autowired
+    private ChatService chat;
+
+    @SpyBean
+    private Registration registration;
 
     @Autowired
     private AdminService service;
@@ -118,13 +129,26 @@ public class AdminServiceTest {
 
         setupTimeService(time);
 
+        // for the field chat activity
+        doAnswer(inv -> {
+            String id = (String) inv.getArguments()[0];
+            return id + "_name";
+        }).when(registration).getNameById(anyString());
+
         players.register("player1", "first", "room1", "ip1");
         players.register("player2", "first", "room1", "ip2");
         players.register("player3", "first", "room2", "ip3");   // another room
         players.register("player4", "second", "room3", "ip4");  // another game
 
-        assertPlayersLastResponse(this.players.getAll(),
-                "[player1: 1000], [player2: 2000], [player3: 3000], [player4: 4000]");
+        assertPlayersLastResponse(players.getAll(),
+                "[player1: 1000], [player2: 3000], [player3: 5000], [player4: 7000]");
+
+
+        // field chat activity
+        assertEquals("[1] player1_name at 2000: Player joined the field,\n" +
+                        "[2] player2_name at 4000: Player joined the field,\n" +
+                        "[3] player3_name at 6000: Player joined the field",
+                allFieldChat());
 
         // when
         service.updateInactivity("room1",
@@ -133,8 +157,20 @@ public class AdminServiceTest {
                         .setKickEnabled(true));
 
         // then
-        assertPlayersLastResponse(this.players.getAll(),
-                "[player1: 5000], [player2: 6000], [player3: 3000], [player4: 4000]");
+        assertPlayersLastResponse(players.getAll(),
+                "[player1: 9000], [player2: 10000], [player3: 5000], [player4: 7000]");
+    }
+
+    private String allFieldChat() {
+        return players.getAll().stream()
+                .flatMap(player -> chat.getFieldMessages(player.getId(),
+                        Filter.room(player.getRoom()).count(10).get()).stream())
+                .map(mesage -> String.format("[%s] %s at %s: %s",
+                        mesage.getId(),
+                        mesage.getPlayerName(),
+                        mesage.getTime(),
+                        mesage.getText()))
+                .collect(joining(",\n"));
     }
 
     public static void assertPlayersLastResponse(List<Player> players, String expected) {

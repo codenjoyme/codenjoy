@@ -27,13 +27,16 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.controller.chat.ChatController;
 import com.codenjoy.dojo.services.controller.control.PlayerController;
 import com.codenjoy.dojo.services.controller.screen.ScreenController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.DealSaver;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.joystick.NoDirectionJoystick;
@@ -122,6 +125,9 @@ public class PlayerServiceImplTest {
 
     @MockBean
     private ScreenController screenController;
+
+    @MockBean
+    private ChatController chatController;
 
     @MockBean
     private AutoSaver autoSaver;
@@ -228,10 +234,13 @@ public class PlayerServiceImplTest {
         }).when(registration).getNameById(anyString());
 
         deals.clear();
-        Mockito.reset(playerController, screenController, actionLogger);
+        Mockito.reset(playerController, screenController,
+                chatController, actionLogger);
         playerService.openRegistration();
 
         playerService.init();
+
+        ChatDealsUtils.setupChat(chatController);
     }
 
     public GameType getGameType(String game, String room) {
@@ -555,7 +564,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSetLastResponse_whenCreatePlayer() {
         // given
-        setupTimeService(this.timeService);
+        setupTimeService(timeService);
 
         // when
         createPlayer(VASYA, "game1", "room1");
@@ -570,7 +579,8 @@ public class PlayerServiceImplTest {
 
     public static void setupTimeService(TimeService timeService) {
         AtomicLong time = new AtomicLong(1);
-        when(timeService.now()).thenAnswer(inv -> time.getAndIncrement() * 1000L);
+        when(timeService.now())
+                .thenAnswer(inv -> time.getAndIncrement() * 1000L);
     }
 
     @Test

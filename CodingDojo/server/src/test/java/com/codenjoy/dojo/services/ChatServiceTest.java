@@ -530,6 +530,9 @@ public class ChatServiceTest {
         login.join(player, room);
         listeners.add(getListener(index + 1));
         controls.add(service.control(player, listeners.get(index)));
+
+        assertListener("");
+        chat.removeAll();
     }
 
     private void assertListener(String expected) {

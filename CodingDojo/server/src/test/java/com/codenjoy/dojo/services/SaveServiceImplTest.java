@@ -23,7 +23,9 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
@@ -63,6 +65,7 @@ public class SaveServiceImplTest {
     public void setUp() {
         saveService = new SaveServiceImpl(){{
             this.deals = SaveServiceImplTest.this.deals = new Deals();
+            ChatDealsUtils.setupChat(deals, null);
             this.deals.spreader = new Spreader(){{
                 fields = mock(FieldService.class);
             }};

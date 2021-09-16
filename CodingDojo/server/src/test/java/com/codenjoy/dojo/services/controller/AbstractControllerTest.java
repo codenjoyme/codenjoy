@@ -28,6 +28,7 @@ import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.stuff.SmartAssert;
@@ -82,6 +83,9 @@ public abstract class AbstractControllerTest<TData, TControl> {
     @Autowired
     private ConfigProperties config;
 
+    @Autowired
+    private Chat chat;
+
     @SpyBean
     protected Deals deals;
 
@@ -126,7 +130,17 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
         WebSocketRunnerMock client = new WebSocketRunnerMock(serverAddress, player.getId(), player.getCode());
         clients.add(client);
+
+        // remove all messages about a player joining the field
+        removeFootprints();
+
         return deal;
+    }
+
+    private void removeFootprints() {
+        waitForServerReceived(false);
+        receivedOnServer.clear();
+        chat.removeAll();
     }
 
     protected WebSocketRunnerMock client(int index) {

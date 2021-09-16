@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -42,8 +43,6 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 public class DealsMultiplayerTest {
 
@@ -72,6 +71,8 @@ public class DealsMultiplayerTest {
         deals.spreader = new Spreader(){{
             fields = mock(FieldService.class);
         }};
+        ChatDealsUtils.setupChat(deals, null);
+
         // по умолчанию все комнаты активны
         when(deals.roomService.isActive(anyString())).thenReturn(true);
 

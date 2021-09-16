@@ -26,6 +26,8 @@ import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.chat.ChatControl;
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.stuff.SmartAssert;
@@ -52,6 +54,7 @@ public class SpreaderTest {
     private FieldService fieldService;
     private final String room = "room";
     private final MultiplayerType multiplayerType = MultiplayerType.MULTIPLE;
+    private final MultiplayerType levelsType = MultiplayerType.SINGLE_LEVELS.apply(5);
     private final Supplier<GameField> getField = () -> newField();
     private List<GameField> fields = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
@@ -72,6 +75,7 @@ public class SpreaderTest {
         GamePlayer gamePlayer = new GamePlayer(event -> {}, settings) {};
         Game game = new Single(gamePlayer, null);
         Deal result = new Deal(newPlayer(), game, room);
+        ChatDealsUtils.setupChat(result);
         result.setTeamId(teamId);
         return result;
     }

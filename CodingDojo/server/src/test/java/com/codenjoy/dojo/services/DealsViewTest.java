@@ -23,7 +23,9 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -69,6 +71,7 @@ public class DealsViewTest {
         deals.spreader = new Spreader(){{
             fields = mock(FieldService.class);
         }};
+        ChatDealsUtils.setupChat(deals, null);
         dealsView = new DealsView();
         dealsView.service = deals;
 
