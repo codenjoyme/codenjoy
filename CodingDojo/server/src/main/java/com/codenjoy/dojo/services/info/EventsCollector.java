@@ -42,12 +42,12 @@ public class EventsCollector implements Information {
     }
 
     @Override
-    public void onAdd(Consumer<String> listener) {
+    public void subscribe(Consumer<String> listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void remove(Consumer<String> listener) {
+    public void unsubscribe(Consumer<String> listener) {
         listeners.remove(listener);
     }
 

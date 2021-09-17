@@ -349,7 +349,7 @@ public class ScoresCollectorTest {
         scores = new Scores(false);
         info = new ScoresCollector(scores);
         List<String> messages = new LinkedList<>();
-        info.onAdd(messages::add);
+        info.subscribe(messages::add);
 
         // when
         event(1);
@@ -374,12 +374,12 @@ public class ScoresCollectorTest {
 
         List<String> messages1 = new LinkedList<>();
         List<String> messages2 = new LinkedList<>();
-        info.onAdd(messages1::add);
+        info.subscribe(messages1::add);
 
         // when
         event(1);
         jsonEvent(2);
-        info.onAdd(messages2::add);
+        info.subscribe(messages2::add);
         levelChanged(4);
         event("fight!");
 
@@ -407,16 +407,16 @@ public class ScoresCollectorTest {
         List<String> messages2 = new LinkedList<>();
         Consumer<String> listener1 = messages1::add;
         Consumer<String> listener2 = messages2::add;
-        info.onAdd(listener1);
-        info.onAdd(listener2);
+        info.subscribe(listener1);
+        info.subscribe(listener2);
 
         // when
         event(1);
         event(2);
-        info.remove(listener1);
+        info.unsubscribe(listener1);
         event(3);
         event(4);
-        info.remove(listener2);
+        info.unsubscribe(listener2);
         event(5);
         event(6);
 

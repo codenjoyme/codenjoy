@@ -33,7 +33,7 @@ public interface Information extends EventListener, ChangeLevelListener {
 
     String getAllMessages();
 
-    void onAdd(Consumer<String> listener);
+    void subscribe(Consumer<String> listener);
 
-    void remove(Consumer<String> listener);
+    void unsubscribe(Consumer<String> listener);
 }
