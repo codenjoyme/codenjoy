@@ -140,12 +140,12 @@ public class ChatAuthorityImpl implements ChatAuthority {
         Chat.Message message = chat.getMessageById(id);
         boolean deleted = service.deleteMessage(id, room, playerId);
         if (deleted) {
-            informDeleted(asList(service.wrap(message)), room, rootFor(message));
+            informDeleted(asList(service.wrap(message)), room, headFor(message));
         }
         return deleted;
     }
 
-    private Chat.Message rootFor(Chat.Message message) {
+    private Chat.Message headFor(Chat.Message message) {
         while (message.getType() == ROOM_TOPIC
             || message.getType() == FIELD_TOPIC)
         {
