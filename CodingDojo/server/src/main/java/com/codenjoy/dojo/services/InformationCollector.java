@@ -42,9 +42,9 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         return 0;
     };
 
-    protected LinkedList<String> pool = new LinkedList<>();
+    protected LinkedList<String> out = new LinkedList<>();
     private PlayerScores scores;
-    private Collector collector = new Collector();
+    private Collector all = new Collector();
 
     public InformationCollector(PlayerScores scores) {
         this.scores = scores;
@@ -52,10 +52,10 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void event(Object event) {
-        collector.put(event.toString());
+        all.put(event.toString());
 
         if (event instanceof CustomMessage) {
-            pool.add(((CustomMessage) event).getMessage());
+            out.add(((CustomMessage) event).getMessage());
         } else {
             Object before = scores.getScore();
             scores.event(event);
@@ -66,7 +66,7 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
     private void add(Object before) {
         int delta = delta(scores.getScore(), before);
         if (delta != 0) {
-            pool.add(showSign(delta));
+            out.add(showSign(delta));
         }
     }
 
@@ -93,31 +93,31 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public String getMessage() {
-        if (pool.isEmpty()) {
+        if (out.isEmpty()) {
             return null;
         }
-        String result = pool.stream()
+        String result = out.stream()
                 .sorted(LEVEL_AT_LAST)
                 .collect(joining(", "));
-        pool.clear();
+        out.clear();
         return result;
     }
 
     public Deque<String> all() {
-        return pool;
+        return out;
     }
 
     @Override
     public void levelChanged(LevelProgress progress) {
-        pool.add(LEVEL + progress.getCurrent());
+        out.add(LEVEL + progress.getCurrent());
     }
 
     public void setInfo(String information) {
-        pool.clear();
-        pool.add(information);
+        out.clear();
+        out.add(information);
     }
 
     public String popLastMessages() {
-        return collector.popAll();
+        return all.popAll();
     }
 }
