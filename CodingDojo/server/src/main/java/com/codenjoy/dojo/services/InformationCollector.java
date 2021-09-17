@@ -28,12 +28,12 @@ import org.json.JSONObject;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.joining;
 
 public class InformationCollector implements EventListener, ChangeLevelListener, Information {
 
-    protected Deque<String> pool = new LinkedList<>();
+    protected LinkedList<String> pool = new LinkedList<>();
     private PlayerScores playerScores;
     private Collector collector = new Collector();
     private static final String LEVEL = "Level ";
@@ -85,33 +85,22 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public String getMessage() {
-        List<String> result = new LinkedList<>();
-        String message;
-        do {
-            message = infoAboutLevelChangedMustBeLast(pool.pollFirst());
-            if (message != null) {
-                result.add(message);
-            }
-        } while (message != null);
-
-        if (result.isEmpty()) {
+        if (pool.isEmpty()) {
             return null;
         }
-        return result.stream()
-                .collect(Collectors.joining(", "));
+        String result = pool.stream()
+                .sorted((o1, o2) -> {
+                    if (o1.contains(LEVEL)) return 1;
+                    if (o2.contains(LEVEL)) return -1;
+                    return 0;
+                })
+                .collect(joining(", "));
+        pool.clear();
+        return result;
     }
 
     public Deque<String> all() {
         return pool;
-    }
-
-    private String infoAboutLevelChangedMustBeLast(String message) {
-        if (message != null && message.contains(LEVEL)) {
-            pool.add(message);
-            return pool.pollFirst();
-        } else {
-            return message;
-        }
     }
 
     @Override
