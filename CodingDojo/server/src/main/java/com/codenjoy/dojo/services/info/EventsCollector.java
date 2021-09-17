@@ -2,11 +2,14 @@ package com.codenjoy.dojo.services.info;
 
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 
+import java.util.function.Consumer;
+
 public class EventsCollector implements Information {
 
     public static final String LEVEL = "Level ";
 
-    protected Collector all = new Collector();
+    private Collector all = new Collector();
+    private Consumer<String> onAdd;
 
     @Override
     public void event(Object event) {
@@ -29,6 +32,14 @@ public class EventsCollector implements Information {
 
     public void put(String message) {
         all.put(message);
+        if (onAdd != null) {
+            onAdd.accept(message);
+        }
+    }
+
+    @Override
+    public void onAdd(Consumer<String> onAdd) {
+        this.onAdd = onAdd;
     }
 
 }

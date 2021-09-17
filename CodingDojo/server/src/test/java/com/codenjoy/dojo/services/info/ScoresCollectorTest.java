@@ -30,6 +30,9 @@ import lombok.AllArgsConstructor;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public class ScoresCollectorTest {
@@ -337,5 +340,28 @@ public class ScoresCollectorTest {
         assertEquals("[3, 2, 1, Fight!!!]",
                 info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
+    }
+
+    @Test
+    public void shouldOnAdd_whenAddMessage() {
+        // given
+        scores = new Scores(false);
+        info = new ScoresCollector(scores);
+        List<String> messages = new LinkedList<>();
+        info.onAdd(messages::add);
+
+        // when
+        event(1);
+        jsonEvent(2);
+        levelChanged(4);
+        event("fight!");
+
+        // then
+        assertEquals(
+                "[Event[1] => +1, " +
+                "Event[{'score':2}] => +2, " +
+                "Level 4, " +
+                "fight!]",
+                messages.toString());
     }
 }

@@ -58,7 +58,7 @@ public class ScoresCollector extends EventsCollector {
 
             int delta = delta(after, before);
             String message = showSign(delta);
-            all.put(event.toString() + " => " + message);
+            super.put(event.toString() + " => " + message);
 
             if (delta != 0) {
                 out.put(message);
