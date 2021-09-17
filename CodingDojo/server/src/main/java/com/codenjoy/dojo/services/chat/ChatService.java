@@ -331,8 +331,8 @@ public class ChatService {
         return new LastMessage();
     }
 
-    public ChatControl control(String playerId, OnChange listener) {
-        return new ChatControlImpl(this, chat, spreader, playerId, listener);
+    public ChatAuthority authority(String playerId, OnChange listener) {
+        return new ChatAuthorityImpl(this, chat, spreader, playerId, listener);
     }
 
 }

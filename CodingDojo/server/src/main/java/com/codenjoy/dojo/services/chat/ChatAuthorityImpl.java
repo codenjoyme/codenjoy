@@ -36,7 +36,7 @@ import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
-public class ChatControlImpl implements ChatControl {
+public class ChatAuthorityImpl implements ChatAuthority {
 
     private final ChatService service;
     private final Chat chat;
@@ -46,7 +46,7 @@ public class ChatControlImpl implements ChatControl {
     private final String playerId;
     private final OnChange listener;
 
-    public ChatControlImpl(ChatService service, Chat chat, Spreader spreader, String playerId, OnChange listener) {
+    public ChatAuthorityImpl(ChatService service, Chat chat, Spreader spreader, String playerId, OnChange listener) {
         this.service = service;
         this.chat = chat;
         this.spreader = spreader;

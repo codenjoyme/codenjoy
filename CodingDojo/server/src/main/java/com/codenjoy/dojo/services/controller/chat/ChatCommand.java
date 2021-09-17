@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services.controller.chat;
  * #L%
  */
 
-import com.codenjoy.dojo.services.chat.ChatControl;
+import com.codenjoy.dojo.services.chat.ChatAuthority;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class ChatCommand {
 
     private Map<String, Consumer<ChatRequest>> map = new HashMap<>();
 
-    public ChatCommand(ChatControl chat) {
+    public ChatCommand(ChatAuthority chat) {
         map.put(GET_ALL_ROOM,  request -> chat.getAllRoom(request.filter()));
         map.put(GET_ALL_TOPIC, request -> chat.getAllTopic(request.id(), request.filter()));
         map.put(GET_ALL_FIELD, request -> chat.getAllField(request.filter()));

@@ -23,13 +23,13 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.chat.ChatControl;
+import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.nullobj.NullGame;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.nullobj.NullDeal;
 import lombok.Getter;
 
 import java.util.Optional;
@@ -50,7 +50,7 @@ public class Deal implements Tickable {
     private Player player;
     private Game game;
     private LazyJoystick joystick;
-    private ChatControl chat;
+    private ChatAuthority chat;
 
     public Deal(Player player, Game game, String room) {
         this.player = player;
@@ -189,11 +189,11 @@ public class Deal implements Tickable {
         return gameType.getMultiplayerType(gameType.getSettings());
     }
 
-    public void setChat(ChatControl control) {
-        this.chat = control;
+    public void setChat(ChatAuthority chat) {
+        this.chat = chat;
     }
 
-    public ChatControl chat() {
+    public ChatAuthority chat() {
         return chat;
     }
 }

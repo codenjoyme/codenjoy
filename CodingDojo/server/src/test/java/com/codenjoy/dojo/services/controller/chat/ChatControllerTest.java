@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimeService;
-import com.codenjoy.dojo.services.chat.ChatControl;
+import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.chat.OnChange;
@@ -51,7 +51,7 @@ import static java.util.stream.Collectors.joining;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-public class ChatControllerTest extends AbstractControllerTest<String, ChatControl> {
+public class ChatControllerTest extends AbstractControllerTest<String, ChatAuthority> {
 
     @Autowired
     private ChatController controller;
@@ -93,13 +93,13 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
     // we wrap ChatControl in spy to eavesdrop on how it is being used
     private void setupChatControl() {
-        when(chatService.control(anyString(), any(OnChange.class)))
-                .thenAnswer(inv -> chatControl((ChatControl) inv.callRealMethod()));
+        when(chatService.authority(anyString(), any(OnChange.class)))
+                .thenAnswer(inv -> authority((ChatAuthority) inv.callRealMethod()));
     }
 
     // TODO if you find in moсkito how to subscribe to all methods at once - super!
-    private ChatControl chatControl(ChatControl control) {
-        ChatControl spy = spy(control);
+    private ChatAuthority authority(ChatAuthority chat) {
+        ChatAuthority spy = spy(chat);
         Answer<?> answer = invocation -> {
             serverReceived(String.format("%s(%s)",
                     invocation.getMethod().getName(),
@@ -125,7 +125,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     }
 
     @Override
-    protected Controller<String, ChatControl> controller() {
+    protected Controller<String, ChatAuthority> controller() {
         return controller;
     }
 
@@ -134,15 +134,15 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         // when
         createPlayer("player", "room", "first");
         Deal deal = deals.get("player");
-        ChatControl control = deal.chat();
+        ChatAuthority chat = deal.chat();
 
         // then
         nowIs(12345L);
-        control.postField("message1", "room");
+        chat.postField("message1", "room");
 
         assertEquals("[PMessage(id=1, text=message1, room=room, type=3, topicId=1, " +
                         "playerId=player, playerName=player-name, time=12345)]",
-                control.getAllField(Filter.room("room").count(10).get()).toString());
+                chat.getAllField(Filter.room("room").count(10).get()).toString());
     }
 
 

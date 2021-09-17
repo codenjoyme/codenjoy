@@ -26,7 +26,7 @@ import com.codenjoy.dojo.web.rest.pojo.PMessage;
 
 import java.util.List;
 
-public interface ChatControl {
+public interface ChatAuthority {
 
     List<PMessage> getAllRoom(Filter filter);
 

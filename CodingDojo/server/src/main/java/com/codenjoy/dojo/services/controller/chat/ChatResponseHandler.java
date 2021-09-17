@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.controller.chat;
 
 
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.chat.ChatControl;
+import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class ChatResponseHandler implements ResponseHandler {
     private final ChatCommand command;
     private final Error.OnError onError;
 
-    public ChatResponseHandler(Player player, ChatControl chat, Error.OnError onError) {
+    public ChatResponseHandler(Player player, ChatAuthority chat, Error.OnError onError) {
         this.player = player;
         this.command = new ChatCommand(chat);
         this.onError = onError;

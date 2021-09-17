@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services.controller.chat;
  * #L%
  */
 
-import com.codenjoy.dojo.services.chat.ChatControl;
+import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Chat;
@@ -40,25 +40,25 @@ import static org.mockito.Mockito.*;
 
 public class ChatCommandTest {
 
-    private ChatControl control;
+    private ChatAuthority chat;
     private ChatCommand command;
 
     @Before
     public void setup() {
         // given
-        control = mock(ChatControl.class);
-        command = new ChatCommand(control);
+        chat = mock(ChatAuthority.class);
+        command = new ChatCommand(chat);
     }
 
     @After
     public void after() {
-        verifyNoMoreInteractions(control);
+        verifyNoMoreInteractions(chat);
     }
 
     @Test
     public void testGet() {
         // given
-        when(control.get(anyInt(), anyString()))
+        when(chat.get(anyInt(), anyString()))
                 .thenReturn(someMessage(1));
 
         // when
@@ -66,7 +66,7 @@ public class ChatCommandTest {
                 "'data':{'id':1, 'room':'room'}}"));
 
         // then
-        verify(control).get(1, "room");
+        verify(chat).get(1, "room");
     }
 
     private PMessage someMessage(int id) {
@@ -78,7 +78,7 @@ public class ChatCommandTest {
     @Test
     public void testDelete() {
         // given
-        when(control.delete(anyInt(), anyString()))
+        when(chat.delete(anyInt(), anyString()))
                 .thenReturn(true);
 
         // when
@@ -86,14 +86,14 @@ public class ChatCommandTest {
                 "'data':{'id':1, 'room':'room'}}"));
 
         // then
-        verify(control).delete(1, "room");
+        verify(chat).delete(1, "room");
 
     }
 
     @Test
     public void testAllInRoom() {
         // given
-        when(control.getAllRoom(any(Filter.class)))
+        when(chat.getAllRoom(any(Filter.class)))
                 .thenReturn(Arrays.asList(someMessage(1), someMessage(2)));
 
         // when
@@ -103,7 +103,7 @@ public class ChatCommandTest {
 
         // then
         ArgumentCaptor<Filter> captor = ArgumentCaptor.forClass(Filter.class);
-        verify(control).getAllRoom(captor.capture());
+        verify(chat).getAllRoom(captor.capture());
         assertEquals("Filter(room=otherRoom, count=1, afterId=2, " +
                         "beforeId=5, inclusive=true)",
                 captor.getValue().toString());
@@ -112,7 +112,7 @@ public class ChatCommandTest {
     @Test
     public void testAllInField() {
         // given
-        when(control.getAllField(any(Filter.class)))
+        when(chat.getAllField(any(Filter.class)))
                 .thenReturn(Arrays.asList(someMessage(1), someMessage(2)));
 
         // when
@@ -122,7 +122,7 @@ public class ChatCommandTest {
 
         // then
         ArgumentCaptor<Filter> captor = ArgumentCaptor.forClass(Filter.class);
-        verify(control).getAllField(captor.capture());
+        verify(chat).getAllField(captor.capture());
         assertEquals("Filter(room=room, count=10, afterId=3, " +
                         "beforeId=4, inclusive=false)",
                 captor.getValue().toString());
@@ -131,7 +131,7 @@ public class ChatCommandTest {
     @Test
     public void testAllInTopic() {
         // given
-        when(control.getAllTopic(anyInt(), any(Filter.class)))
+        when(chat.getAllTopic(anyInt(), any(Filter.class)))
                 .thenReturn(Arrays.asList(someMessage(1), someMessage(2)));
 
         // when
@@ -141,7 +141,7 @@ public class ChatCommandTest {
 
         // then
         ArgumentCaptor<Filter> captor = ArgumentCaptor.forClass(Filter.class);
-        verify(control).getAllTopic(eq(12), captor.capture());
+        verify(chat).getAllTopic(eq(12), captor.capture());
         assertEquals("Filter(room=room2, count=3, afterId=4, " +
                         "beforeId=6, inclusive=true)",
                 captor.getValue().toString());
@@ -150,7 +150,7 @@ public class ChatCommandTest {
     @Test
     public void testPostRoom() {
         // given
-        when(control.postRoom(anyString(), anyString()))
+        when(chat.postRoom(anyString(), anyString()))
                 .thenReturn(someMessage(1));
 
         // when
@@ -158,13 +158,13 @@ public class ChatCommandTest {
                 "'data':{'text':'message4', 'room':'otherRoom'}}"));
 
         // then
-        verify(control).postRoom("message4", "otherRoom");
+        verify(chat).postRoom("message4", "otherRoom");
     }
 
     @Test
     public void testPostField() {
         // given
-        when(control.postField(anyString(), anyString()))
+        when(chat.postField(anyString(), anyString()))
                 .thenReturn(someMessage(1));
 
         // when
@@ -172,13 +172,13 @@ public class ChatCommandTest {
                 "'data':{'text':'message2', 'room':'room3'}}"));
 
         // then
-        verify(control).postField("message2", "room3");
+        verify(chat).postField("message2", "room3");
     }
 
     @Test
     public void testPostTopic() {
         // given
-        when(control.postTopic(anyInt(), anyString(), anyString()))
+        when(chat.postTopic(anyInt(), anyString(), anyString()))
                 .thenReturn(someMessage(1));
 
         // when
@@ -186,7 +186,7 @@ public class ChatCommandTest {
                 "'data':{'id': 12, 'text':'message1', 'room':'room'}}"));
 
         // then
-        verify(control).postTopic(12, "message1", "room");
+        verify(chat).postTopic(12, "message1", "room");
     }
 
     @Test
@@ -196,13 +196,13 @@ public class ChatCommandTest {
                 "'data':{'id': 12, 'text':null, 'room':'room'}}"));
 
         // then
-        verify(control).postTopic(anyInt(), eq(null), anyString());
+        verify(chat).postTopic(anyInt(), eq(null), anyString());
     }
 
     @Test
     public void testPostTopic_caseException() {
         // given
-        when(control.postTopic(anyInt(), eq(null), anyString()))
+        when(chat.postTopic(anyInt(), eq(null), anyString()))
                 .thenThrow(new IllegalArgumentException("Message is null"));
 
         // when
@@ -215,6 +215,6 @@ public class ChatCommandTest {
                     exception.toString());
         }
         // then
-        verify(control).postTopic(12, null, "room");
+        verify(chat).postTopic(12, null, "room");
     }
 }

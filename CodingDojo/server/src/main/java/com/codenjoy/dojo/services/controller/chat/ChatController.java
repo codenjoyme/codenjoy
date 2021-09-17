@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.controller.chat;
 
 
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.chat.ChatControl;
+import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.chat.OnChange;
@@ -40,7 +40,7 @@ import java.util.List;
 import static com.codenjoy.dojo.services.controller.chat.ChatCommand.*;
 
 @Component
-public class ChatController implements Controller<String, ChatControl> {
+public class ChatController implements Controller<String, ChatAuthority> {
 
     private static final String COMMAND_TEMPLATE =
             "{\"command\":\"%s\", \"type\":\"%s\", \"data\":%s}";
@@ -63,10 +63,10 @@ public class ChatController implements Controller<String, ChatControl> {
     @Override
     public void register(Deal deal) {
         String id = deal.getPlayerId();
-        ChatControl control = chatService.control(id, chatListener());
-        deal.setChat(control);
+        ChatAuthority authority = chatService.authority(id, chatListener());
+        deal.setChat(authority);
         transport.registerPlayerEndpoint(id,
-                new ChatResponseHandler(deal.getPlayer(), control,
+                new ChatResponseHandler(deal.getPlayer(), authority,
                         error -> sendState(ERROR, null, error, id)));
     }
 
