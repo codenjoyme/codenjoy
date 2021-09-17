@@ -24,169 +24,268 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import lombok.SneakyThrows;
+import lombok.AllArgsConstructor;
 import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.*;
 
 public class InformationCollectorTest {
 
-    public enum Events {
-        EAT_APPLE, KILL, EAT_STONE;
+    @AllArgsConstructor
+    public class Event {
+        Object data;
+    }
+    
+    private Scores scores;
+    private InformationCollector info;
+
+    public static class Scores implements PlayerScores {
+
+        public static final String SCORE = "score";
+        private Object score;
+
+        public Scores(boolean isJson) {
+            if (isJson) {
+                score = new JSONObject();
+                set(0);
+            } else {
+                score = 0;
+            }
+        }
+        @Override
+        public int clear() {
+            if (score != null) {
+                set(0);
+            }
+
+            return 0;
+        }
+
+        @Override
+        public Object getScore() {
+            return  (score instanceof JSONObject)
+                    ? new JSONObject(){{
+                        put(SCORE, Scores.this.get());
+                    }}
+                    : score;
+        }
+
+        @Override
+        public void event(Object event) {
+            Object data = ((Event) event).data;
+            if (score == null) {
+                score = data;
+                return;
+            }
+
+            int value = InformationCollector.parse(data);
+            int result = get() + value;
+            result = Math.max(0, result);
+            set(result);
+        }
+
+        @Override
+        public void update(Object score) {
+            // do nothing
+        }
+
+        public void set(int input) {
+            if (score instanceof JSONObject) {
+                ((JSONObject)score).put(SCORE, input);
+            } else {
+                score = input;
+            }
+        }
+
+        public int get() {
+            return InformationCollector.parse(score);
+        }
     }
 
-    private PlayerScores playerScores;
-    private InformationCollector collector;
-
-    @Before
-    public void setup() {
-        playerScores = mock(PlayerScores.class);
-        when(playerScores.getScore()).thenReturn(0);
-        collector = new InformationCollector(playerScores);
+    public void event(int score) {
+        info.event(new Event(score));
     }
 
-    public void snakeEatApple() {
-        collector.event(Events.EAT_APPLE);
+    private void event(String message) {
+        info.event(new CustomMessage(message));
     }
 
-    public void snakeIsDead() {
-        collector.event(Events.KILL);
-    }
-
-    public void snakeEatStone() {
-        collector.event(Events.EAT_STONE);
+    public void jsonEvent(int score) {
+        info.event(new Event(json(score)));
     }
 
     private void levelChanged(int level) {
-        collector.levelChanged(new LevelProgress(level + 1, level, level - 1));
+        info.levelChanged(new LevelProgress(level + 1, level, level - 1));
     }
 
     @Test
-    public void shouldFIFOQueue() {
-        when(playerScores.getScore())
-                .thenReturn(0)
-                .thenReturn(1)
-                .thenReturn(0)
-                .thenReturn(2)
-                .thenReturn(0)
-                .thenReturn(3);
+    public void shouldFifo_caseInteger() {
+        // given
+        scores = new Scores(false);
+        info = new InformationCollector(scores);
 
-        snakeEatApple();
-        snakeEatStone();
-        snakeIsDead();
+        // when
+        event(14);
+        event(11);
+        event(13);
+        event(12);
         levelChanged(4);
 
-        assertEquals("+1, +2, +3, Level 4", collector.getMessage());
-        assertNull(collector.getMessage());
+        // then
+        assertEquals("+14, +11, +13, +12, Level 4", info.getMessage());
+        assertNull(info.getMessage());
     }
 
     @Test
-    public void shouldFIFOQueue_ifJsonObject() {
-        when(playerScores.getScore())
-                .thenReturn(json(0))
-                .thenReturn(json(1))
-                .thenReturn(json(0))
-                .thenReturn(json(2))
-                .thenReturn(json(0))
-                .thenReturn(json(3));
+    public void shouldFifo_caseJson() {
+        // given
+        scores = new Scores(true);
+        info = new InformationCollector(scores);
 
-        snakeEatApple();
-        snakeEatStone();
-        snakeIsDead();
+        // when
+        jsonEvent(14);
+        jsonEvent(11);
+        jsonEvent(13);
+        jsonEvent(12);
         levelChanged(4);
 
-        assertEquals("+1, +2, +3, Level 4", collector.getMessage());
-        assertNull(collector.getMessage());
+        // then
+        assertEquals("+14, +11, +13, +12, Level 4", info.getMessage());
+        assertNull(info.getMessage());
     }
 
-    private JSONObject json(int score) {
+    private static JSONObject json(int score) {
         return new JSONObject(String.format("{'score':%s}", score));
     }
 
     @Test
-    public void shouldFIFOQueueButWhenPresentInformationAboutLevelChangedThenReturnItLast() {
-        when(playerScores.getScore())
-                .thenReturn(0)
-                .thenReturn(1)
-                .thenReturn(0)
-                .thenReturn(2)
-                .thenReturn(0)
-                .thenReturn(3);
+    public void shouldFifo_butLevelChangesInfoAtEnd_caseInteger() {
+        // given
+        scores = new Scores(false);
+        info = new InformationCollector(scores);
 
-        snakeEatApple();
+        // when
+        event(13);
         levelChanged(4);
-        snakeEatStone();
-        snakeIsDead();
+        event(11);
+        event(12);
 
-        assertEquals("+1, +2, +3, Level 4", collector.getMessage());
-        assertNull(collector.getMessage());
+        // then
+        assertEquals("+13, +11, +12, Level 4", info.getMessage());
+        assertNull(info.getMessage());
     }
 
     @Test
-    public void shouldCallPlayerScoreWhenSnakeEatApple() {
-        snakeEatApple();
+    public void shouldFifo_butLevelChangesInfoAtEnd_caseJson() {
+        // given
+        scores = new Scores(true);
+        info = new InformationCollector(scores);
 
-        verify(playerScores).event(Events.EAT_APPLE);
+        // when
+        jsonEvent(13);
+        levelChanged(4);
+        jsonEvent(11);
+        jsonEvent(12);
+
+        // then
+        assertEquals("+13, +11, +12, Level 4", info.getMessage());
+        assertNull(info.getMessage());
     }
 
     @Test
-    public void shouldCallPlayerScoreWhenSnakeEatStone() {
-        snakeEatStone();
+    public void shouldInvalidateInfo_whenSetNewData() {
+        // given
+        scores = new Scores(false);
+        info = new InformationCollector(scores);
 
-        verify(playerScores).event(Events.EAT_STONE);
+
+        // when
+        event(11);
+        event(12);
+
+        // then
+        info.setInfo("qwe");
+        assertEquals("qwe", info.getMessage());
     }
 
     @Test
-    public void shouldCallPlayerScoreWhenSnakeIsDead() {
-        snakeIsDead();
+    public void shouldIgnoreZero_caseJson() {
+        // given
+        scores = new Scores(true);
+        info = new InformationCollector(scores);
+        scores.set(11);
 
-        verify(playerScores).event(Events.KILL);
+        // when
+        jsonEvent(0);
+
+        // then
+        assertEquals(null, info.getMessage());
+        assertNull(info.getMessage());
     }
 
     @Test
-    public void shouldClearOldInfoWhenSetNew() {
-        snakeEatApple();
-        snakeEatApple();
+    public void shouldIgnoreZero_caseInteger() {
+        // given
+        scores = new Scores(false);
+        info = new InformationCollector(scores);
+        scores.set(11);
 
-        collector.setInfo("qwe");
-        assertEquals("qwe", collector.getMessage());
+        // when
+        event(0);
+
+        // then
+        assertEquals(null, info.getMessage());
+        assertNull(info.getMessage());
     }
 
     @Test
-    public void shouldIgnoreZeroPenalty() {
-        when(playerScores.getScore()).thenReturn(0);
+    public void shouldNotLessThanZero_caseJson() {
+        // given
+        scores = new Scores(true);
+        info = new InformationCollector(scores);
+        scores.set(13);
 
-        snakeEatStone();
-        snakeIsDead();
+        // when
+        jsonEvent(-10);
+        jsonEvent(-10);
 
-        assertEquals(null, collector.getMessage());
-        assertNull(collector.getMessage());
+        // then
+        assertEquals("-10, -3", info.getMessage());
+        assertNull(info.getMessage());
     }
 
     @Test
-    public void shouldGetPenaltyToZero() {
-        when(playerScores.getScore()).thenReturn(13).thenReturn(3).thenReturn(3).thenReturn(0);
+    public void shouldNotLessThanZero_caseInteger() {
+        // given
+        scores = new Scores(false);
+        info = new InformationCollector(scores);
+        scores.set(13);
 
-        snakeEatStone();
-        snakeIsDead();
+        // when
+        event(-11);
+        event(-11);
 
-        assertEquals("-10, -3", collector.getMessage());
-        assertNull(collector.getMessage());
+        // then
+        assertEquals("-11, -2", info.getMessage());
+        assertNull(info.getMessage());
     }
 
     @Test
     public void shouldPrintCustomMessage() {
-        collector.event(new CustomMessage("3"));
-        collector.event(new CustomMessage("2"));
-        collector.event(new CustomMessage("1"));
-        collector.event(new CustomMessage("Fight!!!"));
+        // given
+        scores = new Scores(false);
+        info = new InformationCollector(scores);
 
-        assertEquals("3, 2, 1, Fight!!!", collector.getMessage());
-        assertNull(collector.getMessage());
+        // when
+        event("3");
+        event("2");
+        event("1");
+        event("Fight!!!");
+
+        // then
+        assertEquals("3, 2, 1, Fight!!!", info.getMessage());
+        assertNull(info.getMessage());
     }
-
 }
