@@ -82,8 +82,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
         super.setup();
 
         messages.removeAll();
-        roomsSettings.removeAll();
-        fields.removeAll();
 
         setupChatControl();
     }

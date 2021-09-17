@@ -24,7 +24,8 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.mocks.*;
+import com.codenjoy.dojo.services.mocks.ThirdGameSettings;
+import com.codenjoy.dojo.services.mocks.ThirdGameType;
 import com.codenjoy.dojo.services.multiplayer.GameRoom;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.json.JSONArray;
@@ -36,7 +37,6 @@ import java.util.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.utils.JsonUtils.toStringSorted;
 import static java.util.stream.Collectors.*;
-import static java.util.stream.Collectors.joining;
 
 @Import(ThreeGamesConfiguration.class)
 public abstract class AbstractTeamControllerTest extends AbstractRestControllerTest  {
@@ -53,7 +53,6 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
         super.setUp();
 
         login.removeAll();
-        rooms.removeAll();
 
         // when changing teams, the current state is
         // saved to the database (there is a TeamId).

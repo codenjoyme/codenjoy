@@ -51,13 +51,10 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
     @Before
     public void setUp() {
+        login.asNone();
         super.setUp();
 
-        login.asNone();
-        fields.removeAll();
-
         increaseFieldIds();
-
         createPlayers();
 
         // should be the last, because other setup stuff can print to field chat
@@ -65,9 +62,6 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     private void createPlayers() {
-        // other setup stuff can print to field chat
-        chat.removeAll();
-
         // given
         nowIs(12342L);
         login.register("player", "ip", "validRoom", "first");

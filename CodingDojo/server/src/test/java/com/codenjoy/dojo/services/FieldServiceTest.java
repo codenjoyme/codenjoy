@@ -26,6 +26,7 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.helper.ChatHelper;
+import com.codenjoy.dojo.services.helper.CleanHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,10 +54,12 @@ public class FieldServiceTest {
     @Autowired
     private ChatHelper messages;
 
+    @Autowired
+    private CleanHelper clean;
+
     @Before
     public void setup() {
-        messages.removeAll();
-        fields.removeAll();
+        clean.removeAll();
     }
 
     @Test

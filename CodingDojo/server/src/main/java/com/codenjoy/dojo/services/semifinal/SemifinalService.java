@@ -43,10 +43,13 @@ public class SemifinalService implements Tickable {
 
     @Autowired
     protected RoomService roomService;
+
     @Autowired
     protected Deals deals;
+
     @Autowired
     protected GameSaver saver;
+
     @Autowired
     protected ScoresCleaner scoresCleaner;
 

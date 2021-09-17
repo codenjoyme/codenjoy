@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.CleanHelper;
 import com.codenjoy.dojo.services.mocks.FakePlayerScores;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import org.junit.Before;
@@ -40,8 +41,6 @@ import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -63,10 +62,12 @@ public class ScoresCleanerTest {
     @SpyBean
     Registration registration;
 
+    @Autowired
+    CleanHelper clean;
+
     @Before
-    public void init() {
-        saver.removeAllSaves();
-        playerService.removeAll();
+    public void setup() {
+        clean.removeAll();
     }
 
     private void createPlayer(String id, String room, Object score) {

@@ -44,11 +44,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
     @Before
     public void setUp() {
-        super.setUp();
-
         login.asAdmin();
-        saves.removeAllSaves();
-        fields.removeAll();
+        super.setUp();
     }
 
     @Test

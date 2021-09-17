@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.helper;
  */
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.chat.PlayersCache;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
@@ -48,16 +47,10 @@ public class LoginHelper {
     private PlayerService players;
     private Registration registration;
     private Deals deals;
-    private GameServiceImpl games;
-    private FieldService fields;
-    private PlayersCache playersCache;
+    private CleanHelper clean;
 
     public void removeAll() {
-        players.removeAll();
-        registration.removeAll();
-        games.init(); // тут чистятся rooms и связанные с ними сеттинги
-        fields.removeAll();
-        playersCache.removeAll();
+        clean.removeAll();
     }
 
     public void asAdmin() {
