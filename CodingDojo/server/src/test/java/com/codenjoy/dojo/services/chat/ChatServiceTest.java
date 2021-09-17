@@ -85,7 +85,6 @@ public class ChatServiceTest {
     public void setup() {
         login.removeAll();
         messages.removeAll();
-        fields.removeAll();
     }
 
     @After

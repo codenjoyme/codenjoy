@@ -71,7 +71,6 @@ public class DealsServiceTest {
     @Before
     public void setup() {
         login.removeAll();
-        fields.removeAll();
         roomsSettings.removeAll();
     }
 

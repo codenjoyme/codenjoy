@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services.helper;
  * #L%
  */
 
-import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 public class RoomHelper {
 
     private RoomService rooms;
-    private GameService games;
+    private GameServiceImpl games;
 
     public SettingsReader settings(String room, String game) {
         GameType type = rooms.create(room, games.getGameType(game));
@@ -45,7 +45,6 @@ public class RoomHelper {
     }
 
     public void removeAll() {
-        rooms.removeAll();
-        games.removeAll();
+        games.init(); // тут чистятся rooms и связанные с ними сеттинги
     }
 }

@@ -123,7 +123,6 @@ public abstract class AbstractRestControllerTest {
         debug.resume();
 
         login.removeAll();
-        games.init(); // тут чистятся rooms и связанные с ними сеттинги
     }
 
     @After

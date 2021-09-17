@@ -38,7 +38,6 @@ public class PlayersCacheTest {
     @Before
     public void setup() {
         login.removeAll();
-        cache.removeAll();
     }
 
     @After

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.mocks.FirstInactivityGameType;
 import com.codenjoy.dojo.services.mocks.SecondSemifinalGameType;
@@ -79,11 +80,12 @@ public class AdminServiceTest {
     @Autowired
     private AdminService service;
 
+    @Autowired
+    private LoginHelper login;
+
     @Before
     public void setup() {
-        players.removeAll();
-        rooms.removeAll();
-        fields.removeAll();
+        login.removeAll();
     }
 
     @After
