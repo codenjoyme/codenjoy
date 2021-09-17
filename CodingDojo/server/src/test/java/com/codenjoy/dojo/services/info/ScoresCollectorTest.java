@@ -32,6 +32,7 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
 
@@ -393,6 +394,43 @@ public class ScoresCollectorTest {
         assertEquals(
                 "[Level 4, " +
                 "fight!]",
+                messages2.toString());
+    }
+
+    @Test
+    public void shouldRemoveListener() {
+        // given
+        scores = new Scores(false);
+        info = new ScoresCollector(scores);
+
+        List<String> messages1 = new LinkedList<>();
+        List<String> messages2 = new LinkedList<>();
+        Consumer<String> listener1 = messages1::add;
+        Consumer<String> listener2 = messages2::add;
+        info.onAdd(listener1);
+        info.onAdd(listener2);
+
+        // when
+        event(1);
+        event(2);
+        info.remove(listener1);
+        event(3);
+        event(4);
+        info.remove(listener2);
+        event(5);
+        event(6);
+
+        // then
+        assertEquals(
+                "[Event[1] => +1, " +
+                "Event[2] => +2]",
+                messages1.toString());
+
+        assertEquals(
+                "[Event[1] => +1, " +
+                "Event[2] => +2, " +
+                "Event[3] => +3, " +
+                "Event[4] => +4]",
                 messages2.toString());
     }
 }

@@ -46,4 +46,9 @@ public class EventsCollector implements Information {
         listeners.add(listener);
     }
 
+    @Override
+    public void remove(Consumer<String> listener) {
+        listeners.remove(listener);
+    }
+
 }
