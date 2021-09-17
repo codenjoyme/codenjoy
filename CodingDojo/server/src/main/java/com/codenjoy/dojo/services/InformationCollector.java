@@ -35,7 +35,7 @@ import static java.util.stream.Collectors.joining;
 public class InformationCollector implements EventListener, ChangeLevelListener, Information {
 
     protected LinkedList<String> pool = new LinkedList<>();
-    private PlayerScores playerScores;
+    private PlayerScores scores;
     private Collector collector = new Collector();
     private static final String LEVEL = "Level ";
 
@@ -45,8 +45,8 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         return 0;
     };
 
-    public InformationCollector(PlayerScores playerScores) {
-        this.playerScores = playerScores;
+    public InformationCollector(PlayerScores scores) {
+        this.scores = scores;
     }
 
     @Override
@@ -56,14 +56,14 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         if (event instanceof CustomMessage) {
             pool.add(((CustomMessage) event).getMessage());
         } else {
-            Object before = playerScores.getScore();
-            playerScores.event(event);
+            Object before = scores.getScore();
+            scores.event(event);
             add(before);
         }
     }
 
     private void add(Object before) {
-        int delta = delta(playerScores.getScore(), before);
+        int delta = delta(scores.getScore(), before);
         if (delta != 0) {
             pool.add(showSign(delta));
         }
