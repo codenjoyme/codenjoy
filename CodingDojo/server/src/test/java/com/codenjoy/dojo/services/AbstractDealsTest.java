@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
+import com.codenjoy.dojo.services.info.InformationCollector;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;

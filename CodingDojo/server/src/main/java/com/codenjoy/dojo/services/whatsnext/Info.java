@@ -22,8 +22,8 @@ package com.codenjoy.dojo.services.whatsnext;
  * #L%
  */
 
-import com.codenjoy.dojo.services.InformationCollector;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.info.InformationCollector;
 
 public class Info extends InformationCollector {
 

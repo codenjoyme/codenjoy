@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
+import com.codenjoy.dojo.services.info.InformationCollector;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;

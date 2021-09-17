@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.info.InformationCollector;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.json.JSONObject;
 import org.junit.After;

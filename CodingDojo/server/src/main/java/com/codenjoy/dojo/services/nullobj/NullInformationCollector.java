@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 
-import com.codenjoy.dojo.services.InformationCollector;
+import com.codenjoy.dojo.services.info.InformationCollector;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.apache.commons.lang3.StringUtils;
 
