@@ -57,14 +57,12 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         } else {
             Object before = scores.getScore();
             scores.event(event);
-            add(before);
-        }
-    }
+            Object after = scores.getScore();
 
-    private void add(Object before) {
-        int delta = delta(scores.getScore(), before);
-        if (delta != 0) {
-            out.put(showSign(delta));
+            int delta = delta(after, before);
+            if (delta != 0) {
+                out.put(showSign(delta));
+            }
         }
     }
 
@@ -75,9 +73,12 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
     public static int parse(Object score) {
         if (score instanceof Integer) {
             return (Integer)score;
-        } else if (score instanceof JSONObject) {
+        }
+
+        if (score instanceof JSONObject) {
             return ((JSONObject)score).getInt("score");
         }
+
         throw new UnsupportedOperationException("Unknown type: " + score.getClass());
     }
 
