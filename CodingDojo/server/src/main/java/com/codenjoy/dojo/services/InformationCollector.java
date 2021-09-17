@@ -27,8 +27,8 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.json.JSONObject;
 
 import java.util.Comparator;
-import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 import static java.util.stream.Collectors.joining;
 
@@ -42,7 +42,7 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         return 0;
     };
 
-    protected LinkedList<String> out = new LinkedList<>();
+    protected List<String> out = new LinkedList<>();
     private PlayerScores scores;
     private Collector all = new Collector();
 
@@ -103,7 +103,7 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         return result;
     }
 
-    public Deque<String> all() {
+    public List<String> all() {
         return out;
     }
 
