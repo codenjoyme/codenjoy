@@ -27,8 +27,6 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.json.JSONObject;
 
 import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 
 import static java.util.stream.Collectors.joining;
 
@@ -42,9 +40,9 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         return 0;
     };
 
-    protected List<String> out = new LinkedList<>();
-    private PlayerScores scores;
-    private Collector all = new Collector();
+    protected PlayerScores scores;
+    protected Collector out = new Collector();
+    protected Collector all = new Collector();
 
     public InformationCollector(PlayerScores scores) {
         this.scores = scores;
@@ -55,7 +53,7 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         all.put(event.toString());
 
         if (event instanceof CustomMessage) {
-            out.add(((CustomMessage) event).getMessage());
+            out.put(((CustomMessage) event).getMessage());
         } else {
             Object before = scores.getScore();
             scores.event(event);
@@ -66,7 +64,7 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
     private void add(Object before) {
         int delta = delta(scores.getScore(), before);
         if (delta != 0) {
-            out.add(showSign(delta));
+            out.put(showSign(delta));
         }
     }
 
@@ -103,18 +101,19 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         return result;
     }
 
-    public List<String> all() {
-        return out;
+    @Override
+    public String toString() {
+        return out.toString();
     }
 
     @Override
     public void levelChanged(LevelProgress progress) {
-        out.add(LEVEL + progress.getCurrent());
+        out.put(LEVEL + progress.getCurrent());
     }
 
     public void setInfo(String information) {
         out.clear();
-        out.add(information);
+        out.put(information);
     }
 
     public String popLastMessages() {

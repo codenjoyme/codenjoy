@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Stream;
 
 public class Collector {
 
@@ -46,5 +47,17 @@ public class Collector {
     @Override
     public String toString() {
         return list.toString();
+    }
+
+    public Stream<String> stream() {
+        return list.stream();
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    public void clear() {
+        list.clear();
     }
 }

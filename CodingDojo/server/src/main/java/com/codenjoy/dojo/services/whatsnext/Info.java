@@ -33,7 +33,7 @@ public class Info extends InformationCollector {
 
     @Override
     public void event(Object event) {
-        out.add(event.toString());
+        out.put(event.toString());
         super.event(event);
     }
 }

@@ -47,7 +47,7 @@ public class ResultPrinter {
             boardSeparator();
 
             Single single = singles.get(index);
-            String info = infos.get(index).all().toString();
+            String info = infos.get(index).toString();
             String prefix = String.format("| (%s) ", countFromOne(index));
 
             String board = single.getBoardAsString().toString();
