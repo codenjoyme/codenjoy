@@ -116,7 +116,7 @@ public class WhatsNextServiceTest {
                 "| (1) ☼ X ☼      \n" +
                 "| (1) ☼   ☼      \n" +
                 "| (1) ☼☼☼☼☼      \n" +
-                "| (1) Events:[LOSE, -100]\n" +
+                "| (1) Events:[LOSE => -100]\n" +
                 "|                \n" +
                 "+----------------\n");
     }

@@ -49,18 +49,19 @@ public class ScoresCollector extends EventsCollector {
 
     @Override
     public void event(Object event) {
-        super.event(event);
-
         if (event instanceof CustomMessage) {
-            out.put(((CustomMessage) event).getMessage());
+            put(((CustomMessage) event).getMessage());
         } else {
             Object before = scores.getScore();
             scores.event(event);
             Object after = scores.getScore();
 
             int delta = delta(after, before);
+            String message = showSign(delta);
+            all.put(event.toString() + " => " + message);
+
             if (delta != 0) {
-                put(showSign(delta));
+                out.put(message);
             }
         }
     }

@@ -145,14 +145,10 @@ public class ScoresCollectorTest {
         assertEquals(null, info.getMessage());
 
         assertEquals(
-                "[Event[14], " +
-                "+14, " +
-                "Event[11], " +
-                "+11, " +
-                "Event[13], " +
-                "+13, " +
-                "Event[12], " +
-                "+12, " +
+                "[Event[14] => +14, " +
+                "Event[11] => +11, " +
+                "Event[13] => +13, " +
+                "Event[12] => +12, " +
                 "Level 4]",
                 info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
@@ -177,14 +173,10 @@ public class ScoresCollectorTest {
         assertEquals(null, info.getMessage());
 
         assertEquals(
-                "[Event[{'score':14}], " +
-                "+14, " +
-                "Event[{'score':11}], " +
-                "+11, " +
-                "Event[{'score':13}], " +
-                "+13, " +
-                "Event[{'score':12}], " +
-                "+12, " +
+                "[Event[{'score':14}] => +14, " +
+                "Event[{'score':11}] => +11, " +
+                "Event[{'score':13}] => +13, " +
+                "Event[{'score':12}] => +12, " +
                 "Level 4]",
                 info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
@@ -211,13 +203,10 @@ public class ScoresCollectorTest {
         assertEquals(null, info.getMessage());
 
         assertEquals(
-                "[Event[13], " +
-                "+13, " +
+                "[Event[13] => +13, " +
                 "Level 4, " +
-                "Event[11], " +
-                "+11, " +
-                "Event[12], " +
-                "+12]",
+                "Event[11] => +11, " +
+                "Event[12] => +12]",
                 info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
     }
@@ -239,13 +228,11 @@ public class ScoresCollectorTest {
         assertEquals(null, info.getMessage());
 
         assertEquals(
-                "[Event[{'score':13}], " +
-                "+13, " +
+                "[Event[{'score':13}] => +13, " +
                 "Level 4, " +
-                "Event[{'score':11}], " +
-                "+11, " +
-                "Event[{'score':12}], " +
-                "+12]", info.getAllMessages());
+                "Event[{'score':11}] => +11, " +
+                "Event[{'score':12}] => +12]",
+                info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
     }
 
@@ -263,7 +250,8 @@ public class ScoresCollectorTest {
         assertEquals(null, info.getMessage());
         assertEquals(null, info.getMessage());
 
-        assertEquals("[Event[{'score':0}]]", info.getAllMessages());
+        assertEquals("[Event[{'score':0}] => 0]",
+                info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
     }
 
@@ -281,7 +269,8 @@ public class ScoresCollectorTest {
         assertEquals(null, info.getMessage());
         assertEquals(null, info.getMessage());
 
-        assertEquals("[Event[0]]", info.getAllMessages());
+        assertEquals("[Event[0] => 0]",
+                info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
     }
 
@@ -301,10 +290,8 @@ public class ScoresCollectorTest {
         assertEquals(null, info.getMessage());
 
         assertEquals(
-                "[Event[{'score':-10}], " +
-                "-10, " +
-                "Event[{'score':-10}], " +
-                "-3]",
+                "[Event[{'score':-10}] => -10, " +
+                "Event[{'score':-10}] => -3]",
                 info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
     }
@@ -325,10 +312,8 @@ public class ScoresCollectorTest {
         assertEquals(null, info.getMessage());
 
         assertEquals(
-                "[Event[-11], " +
-                "-11, " +
-                "Event[-11], " +
-                "-2]",
+                "[Event[-11] => -11, " +
+                "Event[-11] => -2]",
                 info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
     }
@@ -349,7 +334,7 @@ public class ScoresCollectorTest {
         assertEquals("3, 2, 1, Fight!!!", info.getMessage());
         assertEquals(null, info.getMessage());
 
-        assertEquals("[[3], [2], [1], [Fight!!!]]",
+        assertEquals("[3, 2, 1, Fight!!!]",
                 info.getAllMessages());
         assertEquals("[]", info.getAllMessages());
     }
