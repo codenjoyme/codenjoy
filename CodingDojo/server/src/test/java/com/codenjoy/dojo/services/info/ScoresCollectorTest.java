@@ -343,7 +343,7 @@ public class ScoresCollectorTest {
     }
 
     @Test
-    public void shouldOnAdd_whenAddMessage() {
+    public void shouldOnAdd_whenAddMessage_oneListener() {
         // given
         scores = new Scores(false);
         info = new ScoresCollector(scores);
@@ -363,5 +363,36 @@ public class ScoresCollectorTest {
                 "Level 4, " +
                 "fight!]",
                 messages.toString());
+    }
+
+    @Test
+    public void shouldOnAdd_whenAddMessage_twoListeners() {
+        // given
+        scores = new Scores(false);
+        info = new ScoresCollector(scores);
+
+        List<String> messages1 = new LinkedList<>();
+        List<String> messages2 = new LinkedList<>();
+        info.onAdd(messages1::add);
+
+        // when
+        event(1);
+        jsonEvent(2);
+        info.onAdd(messages2::add);
+        levelChanged(4);
+        event("fight!");
+
+        // then
+        assertEquals(
+                "[Event[1] => +1, " +
+                "Event[{'score':2}] => +2, " +
+                "Level 4, " +
+                "fight!]",
+                messages1.toString());
+
+        assertEquals(
+                "[Level 4, " +
+                "fight!]",
+                messages2.toString());
     }
 }

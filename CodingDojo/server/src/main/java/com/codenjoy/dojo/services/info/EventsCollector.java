@@ -2,6 +2,8 @@ package com.codenjoy.dojo.services.info;
 
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EventsCollector implements Information {
@@ -10,6 +12,7 @@ public class EventsCollector implements Information {
 
     private Collector all = new Collector();
     private Consumer<String> onAdd;
+    private List<Consumer<String>> listeners = new LinkedList<>();
 
     @Override
     public void event(Object event) {
@@ -32,15 +35,15 @@ public class EventsCollector implements Information {
 
     public void put(String message) {
         all.put(message);
-        if (onAdd != null) {
-            onAdd.accept(message);
+
+        for (Consumer<String> listener : listeners) {
+            listener.accept(message);
         }
     }
 
     @Override
-    public void onAdd(Consumer<String> onAdd) {
-        this.onAdd = onAdd;
+    public void onAdd(Consumer<String> listener) {
+        listeners.add(listener);
     }
 
 }
-
