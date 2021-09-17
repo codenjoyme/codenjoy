@@ -35,6 +35,12 @@ public class InformationCollectorTest {
     @AllArgsConstructor
     public class Event {
         Object data;
+
+        @Override
+        public String toString() {
+            return String.format("Event[%s]", data)
+                    .replace("\"", "'");
+        }
     }
     
     private Scores scores;
@@ -135,6 +141,15 @@ public class InformationCollectorTest {
         // then
         assertEquals("+14, +11, +13, +12, Level 4", info.getMessage());
         assertEquals(null, info.getMessage());
+
+        assertEquals(
+                "[Event[14], " +
+                "Event[11], " +
+                "Event[13], " +
+                "Event[12], " +
+                "Level 4]",
+                info.getAllMessages());
+        assertEquals("[]", info.getAllMessages());
     }
 
     @Test
@@ -151,8 +166,18 @@ public class InformationCollectorTest {
         levelChanged(4);
 
         // then
-        assertEquals("+14, +11, +13, +12, Level 4", info.getMessage());
+        assertEquals("+14, +11, +13, +12, Level 4",
+                info.getMessage());
         assertEquals(null, info.getMessage());
+
+        assertEquals(
+                "[Event[{'score':14}], " +
+                "Event[{'score':11}], " +
+                "Event[{'score':13}], " +
+                "Event[{'score':12}], " +
+                "Level 4]",
+                info.getAllMessages());
+        assertEquals("[]", info.getAllMessages());
     }
 
     private static JSONObject json(int score) {
@@ -174,6 +199,10 @@ public class InformationCollectorTest {
         // then
         assertEquals("+13, +11, +12, Level 4", info.getMessage());
         assertEquals(null, info.getMessage());
+
+        assertEquals("[Event[13], Level 4, Event[11], Event[12]]",
+                info.getAllMessages());
+        assertEquals("[]", info.getAllMessages());
     }
 
     @Test
@@ -191,6 +220,13 @@ public class InformationCollectorTest {
         // then
         assertEquals("+13, +11, +12, Level 4", info.getMessage());
         assertEquals(null, info.getMessage());
+
+        assertEquals(
+                "[Event[{'score':13}], " +
+                "Level 4, " +
+                "Event[{'score':11}], " +
+                "Event[{'score':12}]]", info.getAllMessages());
+        assertEquals("[]", info.getAllMessages());
     }
 
     @Test
@@ -206,6 +242,9 @@ public class InformationCollectorTest {
         // then
         assertEquals(null, info.getMessage());
         assertEquals(null, info.getMessage());
+
+        assertEquals("[Event[{'score':0}]]", info.getAllMessages());
+        assertEquals("[]", info.getAllMessages());
     }
 
     @Test
@@ -221,6 +260,9 @@ public class InformationCollectorTest {
         // then
         assertEquals(null, info.getMessage());
         assertEquals(null, info.getMessage());
+
+        assertEquals("[Event[0]]", info.getAllMessages());
+        assertEquals("[]", info.getAllMessages());
     }
 
     @Test
@@ -237,6 +279,12 @@ public class InformationCollectorTest {
         // then
         assertEquals("-10, -3", info.getMessage());
         assertEquals(null, info.getMessage());
+
+        assertEquals(
+                "[Event[{'score':-10}], " +
+                "Event[{'score':-10}]]",
+                info.getAllMessages());
+        assertEquals("[]", info.getAllMessages());
     }
 
     @Test
@@ -253,6 +301,12 @@ public class InformationCollectorTest {
         // then
         assertEquals("-11, -2", info.getMessage());
         assertEquals(null, info.getMessage());
+
+        assertEquals(
+                "[Event[-11], " +
+                "Event[-11]]",
+                info.getAllMessages());
+        assertEquals("[]", info.getAllMessages());
     }
 
     @Test
@@ -270,5 +324,9 @@ public class InformationCollectorTest {
         // then
         assertEquals("3, 2, 1, Fight!!!", info.getMessage());
         assertEquals(null, info.getMessage());
+
+        assertEquals("[[3], [2], [1], [Fight!!!]]",
+                info.getAllMessages());
+        assertEquals("[]", info.getAllMessages());
     }
 }

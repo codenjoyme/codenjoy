@@ -106,7 +106,9 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void levelChanged(LevelProgress progress) {
-        out.put(LEVEL + progress.getCurrent());
+        String message = LEVEL + progress.getCurrent();
+        out.put(message);
+        all.put(message);
     }
 
     public String getAllMessages() {
