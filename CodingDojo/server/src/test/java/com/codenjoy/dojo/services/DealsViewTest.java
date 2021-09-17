@@ -835,7 +835,7 @@ public class DealsViewTest {
 
         String name = getNextName();
         Player player = new Player(name, "http://" + name + ".com:8080", gameType, gameScore, null);
-        player.setEventListener(mock(InformationCollector.class));
+        player.setInfo(mock(InformationCollector.class));
         player.setReadableName("readable_" + name);
         players.add(player);
 

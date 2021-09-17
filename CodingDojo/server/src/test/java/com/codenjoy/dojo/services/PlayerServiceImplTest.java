@@ -869,7 +869,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifPositiveValue() {
         // given
-        informationCollector = createPlayer(VASYA).getEventListener();
+        informationCollector = createPlayer(VASYA).getInfo();
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 13);
@@ -881,7 +881,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifNegativeValue() {
         // given
-        informationCollector = createPlayer(VASYA).getEventListener();
+        informationCollector = createPlayer(VASYA).getInfo();
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 9);
@@ -894,7 +894,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifAdditionalInfo() {
         // given
-        informationCollector = createPlayer(VASYA).getEventListener();
+        informationCollector = createPlayer(VASYA).getInfo();
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 13);

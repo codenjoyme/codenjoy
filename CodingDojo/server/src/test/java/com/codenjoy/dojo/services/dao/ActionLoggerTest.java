@@ -161,7 +161,7 @@ public class ActionLoggerTest {
     private void addPlayer(Deals deals, String board, int scoreValue, String id, String room, String game) {
         PlayerScores score = getScore(scoreValue);
         Player player = new Player(id, "127.0.0.1", PlayerTest.mockGameType(game), score, null);
-        player.setEventListener(mock(InformationCollector.class));
+        player.setInfo(mock(InformationCollector.class));
 
         TestUtils.Env env = TestUtils.getDeal(deals, player, room,
                 inv -> {

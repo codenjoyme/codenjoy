@@ -128,7 +128,7 @@ public class DealsMultiplayerTest {
     private void playerWantsToPlay(GameType gameType) {
         int index = gamePlayers.size();
         Player player = new Player("player" + index);
-        player.setEventListener(mock(InformationCollector.class));
+        player.setInfo(mock(InformationCollector.class));
         players.add(player);
         Deal deal = playerWantsToPlay(gameType, player, null);
         getFileds.add(() -> deal.getGame().getField());

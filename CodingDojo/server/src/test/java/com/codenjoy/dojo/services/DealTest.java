@@ -51,7 +51,7 @@ public class DealTest {
     public void setup() {
         gameType = PlayerTest.mockGameType("game");
         player = new Player("player", "url", gameType,
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
+                NullPlayerScores.INSTANCE, NullInformationCollector.INSTANCE);
 
         setupGamePlayer();
         deal = new Deal(player, game, "room");
@@ -119,7 +119,7 @@ public class DealTest {
     public void testEquals_withPlayer() {
         // given
         Player otherPlayer = new Player("other player", "other url", PlayerTest.mockGameType("game"),
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
+                NullPlayerScores.INSTANCE, NullInformationCollector.INSTANCE);
 
         // when then
         assertEquals(false, deal.equals(otherPlayer));
@@ -131,7 +131,7 @@ public class DealTest {
         // given
         GameType gameType = PlayerTest.mockGameType("game");
         Player otherPlayer = new Player("other player", "other url", gameType,
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
+                NullPlayerScores.INSTANCE, NullInformationCollector.INSTANCE);
         Deal player = new Deal(otherPlayer, NullGame.INSTANCE, gameType.name());
 
         // when then
@@ -257,7 +257,7 @@ public class DealTest {
         // given
         gameType = PlayerTest.mockGameType("game");
         player = spy(new Player("player", "url", gameType,
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE));
+                NullPlayerScores.INSTANCE, NullInformationCollector.INSTANCE));
 
         setupGamePlayer();
 

@@ -111,7 +111,7 @@ public class SaveServiceImplTest {
         when(player.getCallbackUrl()).thenReturn("http://" + id + ":1234");
         when(player.getEmail()).thenReturn(null);        // берется из registration
         when(player.getReadableName()).thenReturn(null); // берется из registration
-        when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
+        when(player.getInfo()).thenReturn(mock(InformationCollector.class));
         long now = timeService.now();
         when(player.getLastResponse()).thenReturn(now);
         when(playerService.get(id)).thenReturn(player);

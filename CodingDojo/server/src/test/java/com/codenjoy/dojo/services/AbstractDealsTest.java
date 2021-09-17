@@ -152,9 +152,9 @@ public class AbstractDealsTest {
                                   PlayerSave save, Object board)
     {
         GameType gameType = getGameType(game, room);
-        Player player = new Player(id, "url", gameType, gameType.getPlayerScores(0, null), mock(Information.class));
+        Player player = new Player(id, "url", gameType, gameType.getPlayerScores(0, null), mock(InformationCollector.class));
         players.add(player);
-        player.setEventListener(mock(InformationCollector.class));
+        player.setInfo(mock(InformationCollector.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
         player.setAi(ai);

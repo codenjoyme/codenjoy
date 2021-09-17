@@ -32,7 +32,7 @@ public final class NullPlayer extends Player {
 
     private NullPlayer() {
        super(StringUtils.EMPTY, StringUtils.EMPTY, NullGameType.INSTANCE,
-               NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
+               NullPlayerScores.INSTANCE, NullInformationCollector.INSTANCE);
     }
 }
 

@@ -23,19 +23,30 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 
-import com.codenjoy.dojo.services.Information;
+import com.codenjoy.dojo.services.InformationCollector;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.apache.commons.lang3.StringUtils;
 
-public final class NullInformation implements Information {
+public final class NullInformationCollector extends InformationCollector {
 
-    public static final Information INSTANCE = new NullInformation();
+    public static final InformationCollector INSTANCE = new NullInformationCollector();
 
-    private NullInformation() {
-        // do nothing
+    private NullInformationCollector() {
+        super(NullPlayerScores.INSTANCE);
     }
 
     @Override
     public String getMessage() {
         return StringUtils.EMPTY;
+    }
+
+    @Override
+    public void event(Object event) {
+        // do nothing
+    }
+
+    @Override
+    public void levelChanged(LevelProgress progress) {
+        // do nothing
     }
 }

@@ -36,7 +36,7 @@ public class PlayerTest {
         PlayerScores scores = mock(PlayerScores.class);
         when(scores.getScore()).thenReturn(123);
 
-        Information info = mock(Information.class);
+        InformationCollector info = mock(InformationCollector.class);
         String game1 = "game";
         Player player = new Player("vasia", "http://valia:8888/", mockGameType(game1), scores, info);
 

@@ -171,7 +171,7 @@ public class Deals implements Iterable<Deal>, Tickable {
             player.setTeamId(save.getTeamId());
         }
         GameType gameType = player.getGameType();
-        GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
+        GamePlayer gamePlayer = gameType.createPlayer(player.getInfo(),
                 player.getTeamId(), player.getId(), gameType.getSettings());
         return new Single(gamePlayer,
                 gameType.getPrinterFactory(),

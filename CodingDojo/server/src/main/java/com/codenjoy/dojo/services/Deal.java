@@ -154,7 +154,7 @@ public class Deal implements Tickable {
     public void fireOnLevelChanged() {
         Game game = getGame();
         Player player = getPlayer();
-        player.getEventListener().levelChanged(game.getProgress());
+        player.getInfo().levelChanged(game.getProgress());
     }
 
     public String getRoom() {

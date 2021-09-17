@@ -319,7 +319,6 @@ public class PlayerServiceImpl implements PlayerService {
 
             player = new Player(name, callbackUrl,
                     gameType, playerScores, listener);
-            player.setEventListener(listener);
             player.setLastResponse(time.now());
             player.setRoom(room);
 

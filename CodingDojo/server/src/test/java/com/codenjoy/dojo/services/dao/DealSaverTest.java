@@ -67,7 +67,7 @@ public class DealSaverTest {
     public void shouldSaveLoadDeal() {
         // given
         PlayerScores scores = getScores(10);
-        Information info = getInfo("Some info");
+        InformationCollector info = getInfo("Some info");
         GameService gameService = getGameService(scores);
         Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info);
         player.setRoom("room");
@@ -115,8 +115,8 @@ public class DealSaverTest {
         return gameService;
     }
 
-    private Information getInfo(String string) {
-        Information info = mock(Information.class);
+    private InformationCollector getInfo(String string) {
+        InformationCollector info = mock(InformationCollector.class);
         when(info.getMessage()).thenReturn(string);
         return info;
     }

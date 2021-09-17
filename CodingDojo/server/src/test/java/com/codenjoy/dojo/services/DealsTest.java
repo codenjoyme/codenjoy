@@ -1090,12 +1090,12 @@ public class DealsTest extends AbstractDealsTest {
         ArgumentCaptor<LevelProgress> captor = ArgumentCaptor.forClass(LevelProgress.class);
         Player player = deals.get(playerId).getPlayer();
         if (expected == null) {
-            verifyNoMoreInteractions(player.getEventListener());
+            verifyNoMoreInteractions(player.getInfo());
         } else {
-            verify(player.getEventListener(), times(ONCE)).levelChanged(captor.capture());
+            verify(player.getInfo(), times(ONCE)).levelChanged(captor.capture());
             assertEquals(expected, captor.getValue().toString());
         }
-        reset(player.getEventListener());
+        reset(player.getInfo());
     }
 
     @Test
