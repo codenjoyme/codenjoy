@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.json.JSONObject;
 
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -37,6 +38,12 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
     private PlayerScores playerScores;
     private Collector collector = new Collector();
     private static final String LEVEL = "Level ";
+
+    public static final Comparator<String> LEVEL_AT_LAST = (o1, o2) -> {
+        if (o1.contains(LEVEL)) return 1;
+        if (o2.contains(LEVEL)) return -1;
+        return 0;
+    };
 
     public InformationCollector(PlayerScores playerScores) {
         this.playerScores = playerScores;
@@ -89,11 +96,7 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
             return null;
         }
         String result = pool.stream()
-                .sorted((o1, o2) -> {
-                    if (o1.contains(LEVEL)) return 1;
-                    if (o2.contains(LEVEL)) return -1;
-                    return 0;
-                })
+                .sorted(LEVEL_AT_LAST)
                 .collect(joining(", "));
         pool.clear();
         return result;
