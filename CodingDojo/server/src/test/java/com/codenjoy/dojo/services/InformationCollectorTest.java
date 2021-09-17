@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class InformationCollectorTest {
 
@@ -135,7 +134,7 @@ public class InformationCollectorTest {
 
         // then
         assertEquals("+14, +11, +13, +12, Level 4", info.getMessage());
-        assertNull(info.getMessage());
+        assertEquals(null, info.getMessage());
     }
 
     @Test
@@ -153,7 +152,7 @@ public class InformationCollectorTest {
 
         // then
         assertEquals("+14, +11, +13, +12, Level 4", info.getMessage());
-        assertNull(info.getMessage());
+        assertEquals(null, info.getMessage());
     }
 
     private static JSONObject json(int score) {
@@ -174,7 +173,7 @@ public class InformationCollectorTest {
 
         // then
         assertEquals("+13, +11, +12, Level 4", info.getMessage());
-        assertNull(info.getMessage());
+        assertEquals(null, info.getMessage());
     }
 
     @Test
@@ -191,7 +190,7 @@ public class InformationCollectorTest {
 
         // then
         assertEquals("+13, +11, +12, Level 4", info.getMessage());
-        assertNull(info.getMessage());
+        assertEquals(null, info.getMessage());
     }
 
     @Test
@@ -222,7 +221,7 @@ public class InformationCollectorTest {
 
         // then
         assertEquals(null, info.getMessage());
-        assertNull(info.getMessage());
+        assertEquals(null, info.getMessage());
     }
 
     @Test
@@ -237,7 +236,7 @@ public class InformationCollectorTest {
 
         // then
         assertEquals(null, info.getMessage());
-        assertNull(info.getMessage());
+        assertEquals(null, info.getMessage());
     }
 
     @Test
@@ -253,7 +252,7 @@ public class InformationCollectorTest {
 
         // then
         assertEquals("-10, -3", info.getMessage());
-        assertNull(info.getMessage());
+        assertEquals(null, info.getMessage());
     }
 
     @Test
@@ -269,7 +268,7 @@ public class InformationCollectorTest {
 
         // then
         assertEquals("-11, -2", info.getMessage());
-        assertNull(info.getMessage());
+        assertEquals(null, info.getMessage());
     }
 
     @Test
@@ -286,6 +285,6 @@ public class InformationCollectorTest {
 
         // then
         assertEquals("3, 2, 1, Fight!!!", info.getMessage());
-        assertNull(info.getMessage());
+        assertEquals(null, info.getMessage());
     }
 }
