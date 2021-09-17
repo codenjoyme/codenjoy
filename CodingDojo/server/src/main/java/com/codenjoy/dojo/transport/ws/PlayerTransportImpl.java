@@ -58,8 +58,7 @@ public class PlayerTransportImpl implements PlayerTransport {
                 }
             }
             if (!messages.isEmpty()) {
-                log.warn("Error during send state to all players: " +
-                        messages.toString());
+                log.warn("Error during send state to all players: " + messages);
             }
             log.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
         } finally {
