@@ -2,11 +2,11 @@ package com.codenjoy.dojo.services.info;
 
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 
-public class EventsCollector implements Information {
+public abstract class EventsCollector implements Information {
 
     public static final String LEVEL = "Level ";
 
-    private Collector all = new Collector();
+    protected Collector all = new Collector();
 
     @Override
     public void event(Object event) {
@@ -19,12 +19,14 @@ public class EventsCollector implements Information {
     }
 
     @Override
-    public void levelChanged(LevelProgress progress) {
-        all.put(LEVEL + progress.getCurrent());
-    }
+    public abstract void levelChanged(LevelProgress progress);
 
     public String getAllMessages() {
         return all.popAll();
+    }
+
+    public void put(String message) {
+        all.put(message);
     }
 
 }

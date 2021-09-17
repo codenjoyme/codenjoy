@@ -41,7 +41,7 @@ public class ScoresCollector extends EventsCollector {
     };
 
     private PlayerScores scores;
-    protected Collector out = new Collector();
+    private Collector out = new Collector();
 
     public ScoresCollector(PlayerScores scores) {
         this.scores = scores;
@@ -60,7 +60,7 @@ public class ScoresCollector extends EventsCollector {
 
             int delta = delta(after, before);
             if (delta != 0) {
-                out.put(showSign(delta));
+                put(showSign(delta));
             }
         }
     }
@@ -105,8 +105,12 @@ public class ScoresCollector extends EventsCollector {
 
     @Override
     public void levelChanged(LevelProgress progress) {
-        super.levelChanged(progress);
+        put(LEVEL + progress.getCurrent());
+    }
 
-        out.put(LEVEL + progress.getCurrent());
+    @Override
+    public void put(String message) {
+        super.put(message);
+        out.put(message);
     }
 }
