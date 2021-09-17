@@ -81,12 +81,9 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         throw new UnsupportedOperationException("Unknown type: " + score.getClass());
     }
 
-    private String showSign(int integer) {
-        if (integer > 0) {
-            return "+" + integer;
-        } else {
-            return "" + integer;
-        }
+    private String showSign(int value) {
+        String sign = value > 0 ? "+" : "";
+        return sign + value;
     }
 
     @Override
