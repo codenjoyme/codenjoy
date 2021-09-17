@@ -22,13 +22,18 @@ package com.codenjoy.dojo.services.helper;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import lombok.AllArgsConstructor;
+import org.mockito.internal.util.MockUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @Lazy
 @Component
@@ -46,5 +51,20 @@ public class RoomHelper {
 
     public void removeAll() {
         games.init(); // тут чистятся rooms и связанные с ними сеттинги
+    }
+
+    public void mockDice(String game, Dice dice) {
+        if (!MockUtil.isMock(games)) {
+            throw new IllegalStateException(
+                    "Please write '@SpyBean private GameService games;' " +
+                            "in your @SpringBootTest class");
+        }
+        when(games.getGameType(game))
+                .thenAnswer(inv -> {
+                    GameType real = (GameType) inv.callRealMethod();
+                    GameType spy = spy(real);
+                    when(spy.getDice()).thenReturn(dice);
+                    return spy;
+                });
     }
 }
