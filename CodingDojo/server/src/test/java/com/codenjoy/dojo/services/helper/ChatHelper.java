@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.ChatTest;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
+import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -112,5 +113,16 @@ public class ChatHelper {
             return list.stream()
                     .anyMatch(message -> found.getId() == message.getId());
         }
+    }
+
+    public void check(PMessage message, String expected) {
+        check(Arrays.asList(message), expected);
+    }
+
+    public void check(List<PMessage> messages, String expected) {
+        assertEquals(expected,
+                messages.toString()
+                        .replace(", playerId", ", \n    playerId")
+                        .replace("), PMessage(", "), \nPMessage("));
     }
 }
