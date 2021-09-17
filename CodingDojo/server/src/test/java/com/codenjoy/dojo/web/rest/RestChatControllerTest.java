@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.helper.RoomHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 
@@ -45,13 +46,12 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @SpyBean
     private TimeService time;
 
+    @Autowired
     private RoomHelper roomsSettings;
 
     @Before
     public void setUp() {
         super.setUp();
-
-        roomsSettings = new RoomHelper(rooms, games);
 
         login.asNone();
         fields.removeAll();

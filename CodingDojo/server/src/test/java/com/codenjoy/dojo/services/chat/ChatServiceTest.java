@@ -27,7 +27,6 @@ import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -66,25 +65,16 @@ public class ChatServiceTest {
     @Autowired
     private Chat chat;
 
-    @Autowired
-    private Registration registration;
-
     @SpyBean
     private TimeService time;
-
-    @Autowired
-    private PlayerService players;
-
-    @Autowired
-    private ConfigProperties config;
-
-    @Autowired
-    private Deals deals;
 
     @SpyBean
     private FieldService fields;
 
+    @Autowired
     private LoginHelper login;
+
+    @Autowired
     private ChatHelper messages;
 
     private List<String> logs = new LinkedList<>();
@@ -93,9 +83,6 @@ public class ChatServiceTest {
 
     @Before
     public void setup() {
-        login = new LoginHelper(config, players, registration, deals);
-        messages = new ChatHelper(chat);
-
         login.removeAll();
         messages.removeAll();
         fields.removeAll();

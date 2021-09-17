@@ -26,13 +26,17 @@ import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.SettingsReader;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
+@Lazy
+@Component
+@AllArgsConstructor
 public class RoomHelper {
 
-    private final RoomService rooms;
-    private final GameService games;
+    private RoomService rooms;
+    private GameService games;
 
     public SettingsReader settings(String room, String game) {
         GameType type = rooms.create(room, games.getGameType(game));

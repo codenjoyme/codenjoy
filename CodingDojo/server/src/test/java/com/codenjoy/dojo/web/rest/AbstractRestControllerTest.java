@@ -23,8 +23,8 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.client.CodenjoyContext;
+import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Chat;
@@ -112,12 +112,11 @@ public abstract class AbstractRestControllerTest {
     @Autowired
     protected FieldService fields;
 
+    @Autowired
     protected LoginHelper login;
 
     @Before
     public void setUp() {
-        login = new LoginHelper(config, players, registration, deals);
-
         CodenjoyContext.setContext("codenjoy-contest");
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
 

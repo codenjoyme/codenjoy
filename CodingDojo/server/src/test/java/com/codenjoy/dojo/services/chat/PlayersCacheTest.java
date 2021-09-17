@@ -3,9 +3,6 @@ package com.codenjoy.dojo.services.chat;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.Deals;
-import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.stuff.SmartAssert;
@@ -36,20 +33,10 @@ public class PlayersCacheTest {
     private PlayersCache cache;
 
     @Autowired
-    private ConfigProperties config;
-
-    @Autowired
-    private PlayerService players;
-
-    @Autowired
-    private Deals deals;
-
     private LoginHelper login;
 
     @Before
     public void setup() {
-        login = new LoginHelper(config, players, registration, deals);
-
         login.removeAll();
         cache.removeAll();
     }

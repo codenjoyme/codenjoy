@@ -23,7 +23,10 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.FieldService;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.Filter;
@@ -33,7 +36,6 @@ import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.helper.RoomHelper;
-import com.codenjoy.dojo.services.room.RoomService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
@@ -57,14 +59,8 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
     @Autowired
     private FieldService fields;
 
-
     @Autowired
     private PlayerService players;
-    @Autowired
-    private RoomService rooms;
-
-    @Autowired
-    private GameService games;
 
     @SpyBean
     private ChatService chatService;
@@ -74,16 +70,16 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatContr
 
     @Autowired
     private Chat chat;
-    
+
+    @Autowired
     private ChatHelper messages;
+
+    @Autowired
     private RoomHelper roomsSettings;
 
     @Before
     public void setup() {
         super.setup();
-
-        messages = new ChatHelper(chat);
-        roomsSettings = new RoomHelper(rooms, games);
 
         messages.removeAll();
         roomsSettings.removeAll();

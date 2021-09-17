@@ -29,13 +29,17 @@ import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.reset;
 
+@Lazy
+@Component
 @AllArgsConstructor
 public class LoginHelper {
 

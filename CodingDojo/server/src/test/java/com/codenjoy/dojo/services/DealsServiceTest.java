@@ -25,11 +25,9 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.services.helper.RoomHelper;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
-import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import org.junit.After;
 import org.junit.Before;
@@ -56,40 +54,22 @@ import static org.mockito.Mockito.when;
 public class DealsServiceTest {
 
     @Autowired
-    private Deals deals;
-
-    @Autowired
     private Spreader spreader;
-
-    @Autowired
-    private Registration registration;
 
     @SpyBean
     private TimeService time;
 
     @Autowired
-    private PlayerService players;
-
-    @Autowired
-    private ConfigProperties config;
-
-    @Autowired
     private FieldService fields;
 
     @Autowired
-    private RoomService rooms;
+    protected LoginHelper login;
 
     @Autowired
-    private GameService games;
-
-    protected LoginHelper login;
     private RoomHelper roomsSettings;
 
     @Before
     public void setup() {
-        login = new LoginHelper(config, players, registration, deals);
-        roomsSettings = new RoomHelper(rooms, games);
-
         login.removeAll();
         fields.removeAll();
         roomsSettings.removeAll();

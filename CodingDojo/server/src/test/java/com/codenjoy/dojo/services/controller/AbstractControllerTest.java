@@ -78,17 +78,12 @@ public abstract class AbstractControllerTest<TData, TControl> {
     private TimerService timer;
 
     @Autowired
-    private PlayerService players;
-
-    @Autowired
-    private ConfigProperties config;
-
-    @Autowired
     private Chat chat;
 
     @SpyBean
     protected Deals deals;
 
+    @Autowired
     protected LoginHelper login;
 
     @LocalServerPort
@@ -100,7 +95,6 @@ public abstract class AbstractControllerTest<TData, TControl> {
     @Before
     protected void setup() {
         tearDown();
-        login = new LoginHelper(config, players, registration, deals);
 
         login.removeAll();
 

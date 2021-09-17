@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.ChatTest;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -37,6 +39,8 @@ import static com.codenjoy.dojo.services.chat.ChatType.ROOM;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
 
+@Lazy
+@Component
 @RequiredArgsConstructor
 public class ChatHelper {
 
