@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.controller;
 
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
@@ -55,7 +56,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class,
-        properties = "spring.main.allow-bean-definition-overriding=true",
+        properties = Constants.ALLOW_OVERRIDING,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(SQLiteProfile.NAME)
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
