@@ -43,6 +43,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+// TODO try @SpringBootTest
 public class AbstractDealsTest {
 
     protected Deals deals;

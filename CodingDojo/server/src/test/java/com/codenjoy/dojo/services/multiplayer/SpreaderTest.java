@@ -26,7 +26,6 @@ import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -46,6 +45,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertSame;
 import static org.mockito.Mockito.*;
 
+// TODO try @SpringBootTest
 public class SpreaderTest {
 
     private final Spreader spreader = new Spreader(){{

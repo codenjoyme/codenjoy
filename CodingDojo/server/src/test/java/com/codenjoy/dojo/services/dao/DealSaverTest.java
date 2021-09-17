@@ -40,6 +40,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+// TODO try @SpringBootTest
 public class DealSaverTest {
 
     private DealSaver saver;

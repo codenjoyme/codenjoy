@@ -41,6 +41,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+// TODO try @SpringBootTest
 public class ValidatorTest {
 
     private ConfigProperties properties;

@@ -37,6 +37,7 @@ import java.util.Random;
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
+// TODO try @SpringBootTest
 public class ChatTest {
 
     public static final int MAX = 100;

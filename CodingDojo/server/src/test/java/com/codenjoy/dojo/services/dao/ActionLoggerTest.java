@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -49,6 +48,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+// TODO try @SpringBootTest
 public class ActionLoggerTest {
 
     private ActionLogger logger;

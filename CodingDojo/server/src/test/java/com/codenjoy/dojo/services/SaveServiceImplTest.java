@@ -46,6 +46,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+// TODO try @SpringBootTest
 public class SaveServiceImplTest {
 
     private Registration registration;

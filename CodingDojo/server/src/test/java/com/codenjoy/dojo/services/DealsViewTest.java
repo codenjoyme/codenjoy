@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.hero.HeroData;
@@ -53,6 +52,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+// TODO try @SpringBootTest
 public class DealsViewTest {
 
     private DealsView dealsView;

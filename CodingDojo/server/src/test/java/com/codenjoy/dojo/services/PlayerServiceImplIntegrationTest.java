@@ -22,9 +22,9 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.client.*;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
@@ -52,6 +52,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+// TODO try @SpringBootTest
 public class PlayerServiceImplIntegrationTest {
 
     private PlayerService service;

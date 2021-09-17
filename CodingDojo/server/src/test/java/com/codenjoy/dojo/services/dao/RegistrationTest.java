@@ -45,6 +45,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+// TODO try @SpringBootTest
 public class RegistrationTest {
 
     public static final String HASH = "someHash";

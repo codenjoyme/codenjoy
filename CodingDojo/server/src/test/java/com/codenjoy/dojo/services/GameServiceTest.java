@@ -39,6 +39,7 @@ import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+// TODO try @SpringBootTest
 public class GameServiceTest {
 
     private RoomService roomService;
