@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.stuff.SmartAssert;
@@ -61,6 +62,7 @@ public class SpreaderTest {
 
     private Player newPlayer() {
         Player result = new Player("player" + players.size());
+        result.setInfo(mock(Information.class));
         players.add(result);
         return result;
     }

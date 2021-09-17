@@ -25,6 +25,7 @@ public class CleanHelper {
     private PlayersCache playersCache;
     private SaveService saves;
     private SemifinalService semifinal;
+    private TimeHelper time;
 
     public void removeAll() {
         // order is important
@@ -36,5 +37,6 @@ public class CleanHelper {
         playersCache.removeAll();
         saves.removeAllSaves();
         chat.removeAll();
+        time.removeAll();
     }
 }

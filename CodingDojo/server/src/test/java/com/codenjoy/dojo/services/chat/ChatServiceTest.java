@@ -25,10 +25,14 @@ package com.codenjoy.dojo.services.chat;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.FieldService;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.helper.LoginHelper;
+import com.codenjoy.dojo.services.helper.TimeHelper;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
@@ -43,7 +47,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,8 +68,8 @@ public class ChatServiceTest {
     @Autowired
     private Chat chat;
 
-    @SpyBean
-    private TimeService time;
+    @Autowired
+    private TimeHelper time;
 
     @SpyBean
     private FieldService fields;
@@ -162,10 +165,6 @@ public class ChatServiceTest {
         return new Deal(new Player(), game, room);
     }
 
-    public void nowIs(long time) {
-        when(this.time.now()).thenReturn(time);
-    }
-
     @Test
     public void shouldGetControl() {
         // given
@@ -173,7 +172,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 create room message1
-        nowIs(12345L);
+        time.nowIs(12345L);
         assertMessages(
                 chat(0).postRoom("message1", "room"),
                 "[PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
@@ -189,7 +188,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 create room message2
-        nowIs(12346L);
+        time.nowIs(12346L);
         assertMessages(
                 chat(1).postRoom("message2", "room"),
                 "[PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
@@ -205,7 +204,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 create topic message3 in the message1
-        nowIs(12347L);
+        time.nowIs(12347L);
         assertMessages(
                 chat(0).postTopic(1, "message3", "room"),
                 "[PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
@@ -221,7 +220,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 create topic message4 in the message2
-        nowIs(12348L);
+        time.nowIs(12348L);
         assertMessages(
                 chat(1).postTopic(2, "message4", "room"),
                 "[PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
@@ -237,7 +236,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 create field message5
-        nowIs(12349L);
+        time.nowIs(12349L);
         assertMessages(
                 chat(0).postField("message5", "room"),
                 "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
@@ -250,7 +249,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 create field message6
-        nowIs(12350L);
+        time.nowIs(12350L);
         assertMessages(
                 chat(1).postField("message6", "room"),
                 "[PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
@@ -263,7 +262,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 create topic field message7 in the field message5
-        nowIs(12351L);
+        time.nowIs(12351L);
         assertMessages(
                 chat(0).postTopic(5, "message7", "room"),
                 "[PMessage(id=7, text=message7, room=room, type=4, topicId=5, \n" +
@@ -279,7 +278,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 create topic field message8 in the field message6
-        nowIs(12352L);
+        time.nowIs(12352L);
         assertMessages(
                 chat(1).postTopic(6, "message8", "room"),
                 "[PMessage(id=8, text=message8, room=room, type=4, topicId=6, \n" +

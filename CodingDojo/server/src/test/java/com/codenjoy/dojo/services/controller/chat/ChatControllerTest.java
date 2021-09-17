@@ -26,7 +26,6 @@ package com.codenjoy.dojo.services.controller.chat;
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.PlayerService;
-import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.Filter;
@@ -36,6 +35,7 @@ import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.helper.RoomHelper;
+import com.codenjoy.dojo.services.helper.TimeHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
@@ -65,8 +65,8 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
     @SpyBean
     private ChatService chatService;
 
-    @SpyBean
-    private TimeService time;
+    @Autowired
+    private TimeHelper time;
 
     @Autowired
     private Chat chat;
@@ -120,10 +120,6 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         return spy;
     }
 
-    public void nowIs(long time) {
-        when(this.time.now()).thenReturn(time);
-    }
-
     @Override
     protected Controller<String, ChatAuthority> controller() {
         return controller;
@@ -137,7 +133,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         ChatAuthority chat = deal.chat();
 
         // then
-        nowIs(12345L);
+        time.nowIs(12345L);
         chat.postField("message1", "room");
 
         assertEquals("[PMessage(id=1, text=message1, room=room, type=3, topicId=1, " +
@@ -1002,7 +998,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(0).start();
 
         // when
-        nowIs(12345L);
+        time.nowIs(12345L);
         client(0).sendToServer("{'command':'postRoom', " +
                 "'data':{'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1028,7 +1024,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(2).start();
 
         // when
-        nowIs(12345L);
+        time.nowIs(12345L);
         client(0).sendToServer("{'command':'postRoom', " +
                 "'data':{'room':'room', 'text':'message1'}}");
         waitForServerReceived();
@@ -1084,7 +1080,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(0).start();
 
         // when
-        nowIs(12345L);
+        time.nowIs(12345L);
         client(0).sendToServer("{'command':'postField', " +
                 "'data':{'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1124,7 +1120,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(2).start();
 
         // when
-        nowIs(12345L);
+        time.nowIs(12345L);
         client(0).sendToServer("{'command':'postField', " +
                 "'data':{'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1170,7 +1166,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(1).start();
 
         // when
-        nowIs(12345L);
+        time.nowIs(12345L);
         client(0).sendToServer("{'command':'postField', " +
                 "'data':{'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1227,7 +1223,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         messages.post("room", "player", null, ROOM); // 2
 
         // when
-        nowIs(12345L);
+        time.nowIs(12345L);
         client(0).sendToServer("{'command':'postTopic', " +
                 "'data':{'id':1, 'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1260,7 +1256,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         messages.post("room", "player", null, ROOM); // 2
 
         // when
-        nowIs(12345L);
+        time.nowIs(12345L);
         client(0).sendToServer("{'command':'postTopic', " +
                 "'data':{'id':1, 'room':'room', 'text':'message'}}");
         waitForServerReceived();

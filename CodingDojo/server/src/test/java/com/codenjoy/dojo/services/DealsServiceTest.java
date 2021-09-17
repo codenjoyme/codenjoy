@@ -27,6 +27,7 @@ import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.services.helper.RoomHelper;
+import com.codenjoy.dojo.services.helper.TimeHelper;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import org.junit.After;
@@ -35,7 +36,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -45,7 +45,6 @@ import java.util.Arrays;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class)
@@ -56,8 +55,8 @@ public class DealsServiceTest {
     @Autowired
     private Spreader spreader;
 
-    @SpyBean
-    private TimeService time;
+    @Autowired
+    private TimeHelper time;
 
     @Autowired
     private FieldService fields;
@@ -76,10 +75,6 @@ public class DealsServiceTest {
     @After
     public void after() {
         SmartAssert.checkResult();
-    }
-
-    public void nowIs(long time) {
-        when(this.time.now()).thenReturn(time);
     }
 
     @Test

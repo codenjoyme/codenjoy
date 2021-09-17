@@ -30,11 +30,18 @@ import java.util.function.Supplier;
 @Component
 public class TimeService {
 
+    private Supplier<Long> time =
+            () -> Calendar.getInstance().getTimeInMillis();
+
     public long now() {
-        return Calendar.getInstance().getTimeInMillis();
+        return time.get();
     }
 
     public Supplier<Long> future() {
-        return () -> now();
+        return time;
+    }
+
+    public void set(Supplier<Long> time) {
+        this.time = time;
     }
 }
