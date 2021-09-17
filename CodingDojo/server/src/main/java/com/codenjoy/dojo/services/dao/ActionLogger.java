@@ -117,7 +117,7 @@ public class ActionLogger extends Suspendable {
                     player.getGame(),
                     player.getScore(),
                     deal.getGame().getBoardAsString().toString(),
-                    player.getInfo().popLastMessages(),
+                    player.getInfo().getAllMessages(),
                     deal.popLastCommand()));
         }
 
