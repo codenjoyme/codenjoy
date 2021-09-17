@@ -51,6 +51,7 @@ public class Deal implements Tickable {
     private Game game;
     private LazyJoystick joystick;
     private ChatAuthority chat;
+    private Consumer<String> messages;
 
     public Deal(Player player, Game game, String room) {
         this.player = player;
@@ -191,6 +192,12 @@ public class Deal implements Tickable {
 
     public void setChat(ChatAuthority chat) {
         this.chat = chat;
+        if (chat != null) {
+            messages = message -> chat.postField(message, getRoom());
+            player.getInfo().add(messages);
+        } else {
+            player.getInfo().remove(messages);
+        }
     }
 
     public ChatAuthority chat() {
