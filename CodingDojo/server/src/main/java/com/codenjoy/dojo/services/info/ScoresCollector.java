@@ -23,9 +23,7 @@ package com.codenjoy.dojo.services.info;
  */
 
 
-import com.codenjoy.dojo.services.ChangeLevelListener;
 import com.codenjoy.dojo.services.CustomMessage;
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.json.JSONObject;
@@ -34,9 +32,7 @@ import java.util.Comparator;
 
 import static java.util.stream.Collectors.joining;
 
-public class InformationCollector implements EventListener, ChangeLevelListener, Information {
-
-    private static final String LEVEL = "Level ";
+public class ScoresCollector extends EventsCollector {
 
     public static final Comparator<String> LEVEL_AT_LAST = (o1, o2) -> {
         if (o1.contains(LEVEL)) return 1;
@@ -44,17 +40,16 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         return 0;
     };
 
-    protected PlayerScores scores;
+    private PlayerScores scores;
     protected Collector out = new Collector();
-    protected Collector all = new Collector();
 
-    public InformationCollector(PlayerScores scores) {
+    public ScoresCollector(PlayerScores scores) {
         this.scores = scores;
     }
 
     @Override
     public void event(Object event) {
-        all.put(event.toString());
+        super.event(event);
 
         if (event instanceof CustomMessage) {
             out.put(((CustomMessage) event).getMessage());
@@ -110,12 +105,8 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void levelChanged(LevelProgress progress) {
-        String message = LEVEL + progress.getCurrent();
-        out.put(message);
-        all.put(message);
-    }
+        super.levelChanged(progress);
 
-    public String getAllMessages() {
-        return all.popAll();
+        out.put(LEVEL + progress.getCurrent());
     }
 }

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.json.JSONObject;
 import org.junit.After;
@@ -68,7 +68,7 @@ public class DealSaverTest {
     public void shouldSaveLoadDeal() {
         // given
         PlayerScores scores = getScores(10);
-        InformationCollector info = getInfo("Some info");
+        Information info = getInfo("Some info");
         GameService gameService = getGameService(scores);
         Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info);
         player.setRoom("room");
@@ -116,8 +116,8 @@ public class DealSaverTest {
         return gameService;
     }
 
-    private InformationCollector getInfo(String string) {
-        InformationCollector info = mock(InformationCollector.class);
+    private Information getInfo(String string) {
+        Information info = mock(Information.class);
         when(info.getMessage()).thenReturn(string);
         return info;
     }

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -836,7 +836,7 @@ public class DealsViewTest {
 
         String name = getNextName();
         Player player = new Player(name, "http://" + name + ".com:8080", gameType, gameScore, null);
-        player.setInfo(mock(InformationCollector.class));
+        player.setInfo(mock(Information.class));
         player.setReadableName("readable_" + name);
         players.add(player);
 

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -129,7 +129,7 @@ public class DealsMultiplayerTest {
     private void playerWantsToPlay(GameType gameType) {
         int index = gamePlayers.size();
         Player player = new Player("player" + index);
-        player.setInfo(mock(InformationCollector.class));
+        player.setInfo(mock(Information.class));
         players.add(player);
         Deal deal = playerWantsToPlay(gameType, player, null);
         getFileds.add(() -> deal.getGame().getField());

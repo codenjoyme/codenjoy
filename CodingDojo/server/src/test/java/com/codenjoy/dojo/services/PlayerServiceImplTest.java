@@ -37,7 +37,7 @@ import com.codenjoy.dojo.services.dao.DealSaver;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.joystick.NoDirectionJoystick;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
@@ -175,7 +175,7 @@ public class PlayerServiceImplTest {
     @Autowired
     private FieldService fieldService;
 
-    private InformationCollector informationCollector;
+    private Information info;
 
     @Mock
     private GraphicPrinter printer;
@@ -870,36 +870,36 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifPositiveValue() {
         // given
-        informationCollector = createPlayer(VASYA).getInfo();
+        info = createPlayer(VASYA).getInfo();
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 13);
-        informationCollector.levelChanged(new LevelProgress(3, 2, 1));
-        informationCollector.event("event1");
+        info.levelChanged(new LevelProgress(3, 2, 1));
+        info.event("event1");
         checkInfo("+3, Level 2");
     }
 
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifNegativeValue() {
         // given
-        informationCollector = createPlayer(VASYA).getInfo();
+        info = createPlayer(VASYA).getInfo();
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 9);
-        informationCollector.event("event1");
+        info.event("event1");
         when(playerScores(0).getScore()).thenReturn(10, 8);
-        informationCollector.event("event2");
+        info.event("event2");
         checkInfo("-1, -2");
     }
 
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifAdditionalInfo() {
         // given
-        informationCollector = createPlayer(VASYA).getInfo();
+        info = createPlayer(VASYA).getInfo();
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 13);
-        informationCollector.event("event1");
+        info.event("event1");
         checkInfo("+3");
     }
 

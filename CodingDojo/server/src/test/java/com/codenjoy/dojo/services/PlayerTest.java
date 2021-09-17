@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -37,7 +37,7 @@ public class PlayerTest {
         PlayerScores scores = mock(PlayerScores.class);
         when(scores.getScore()).thenReturn(123);
 
-        InformationCollector info = mock(InformationCollector.class);
+        Information info = mock(Information.class);
         String game1 = "game";
         Player player = new Player("vasia", "http://valia:8888/", mockGameType(game1), scores, info);
 

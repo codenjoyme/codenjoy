@@ -23,9 +23,9 @@ package com.codenjoy.dojo.services.whatsnext;
  */
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.ScoresCollector;
 
-public class Info extends InformationCollector {
+public class Info extends ScoresCollector {
 
     public Info(PlayerScores playerScores) {
         super(playerScores);

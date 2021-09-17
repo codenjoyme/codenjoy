@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
@@ -153,9 +153,9 @@ public class AbstractDealsTest {
                                   PlayerSave save, Object board)
     {
         GameType gameType = getGameType(game, room);
-        Player player = new Player(id, "url", gameType, gameType.getPlayerScores(0, null), mock(InformationCollector.class));
+        Player player = new Player(id, "url", gameType, gameType.getPlayerScores(0, null), mock(Information.class));
         players.add(player);
-        player.setInfo(mock(InformationCollector.class));
+        player.setInfo(mock(Information.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
         player.setAi(ai);

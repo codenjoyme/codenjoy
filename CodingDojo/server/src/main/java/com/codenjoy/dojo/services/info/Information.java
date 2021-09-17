@@ -23,6 +23,11 @@ package com.codenjoy.dojo.services.info;
  */
 
 
-public interface Information {
+import com.codenjoy.dojo.services.ChangeLevelListener;
+import com.codenjoy.dojo.services.EventListener;
+
+public interface Information extends EventListener, ChangeLevelListener {
     String getMessage();
+
+    String getAllMessages();
 }

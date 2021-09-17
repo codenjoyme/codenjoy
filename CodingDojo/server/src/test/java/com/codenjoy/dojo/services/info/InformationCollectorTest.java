@@ -46,7 +46,7 @@ public class InformationCollectorTest {
     }
     
     private Scores scores;
-    private InformationCollector info;
+    private Information info;
 
     public static class Scores implements PlayerScores {
 
@@ -87,7 +87,7 @@ public class InformationCollectorTest {
                 return;
             }
 
-            int value = InformationCollector.parse(data);
+            int value = ScoresCollector.parse(data);
             int result = get() + value;
             result = Math.max(0, result);
             set(result);
@@ -107,7 +107,7 @@ public class InformationCollectorTest {
         }
 
         public int get() {
-            return InformationCollector.parse(score);
+            return ScoresCollector.parse(score);
         }
     }
 
@@ -131,7 +131,7 @@ public class InformationCollectorTest {
     public void shouldFifo_caseInteger() {
         // given
         scores = new Scores(false);
-        info = new InformationCollector(scores);
+        info = new ScoresCollector(scores);
 
         // when
         event(14);
@@ -158,7 +158,7 @@ public class InformationCollectorTest {
     public void shouldFifo_caseJson() {
         // given
         scores = new Scores(true);
-        info = new InformationCollector(scores);
+        info = new ScoresCollector(scores);
 
         // when
         jsonEvent(14);
@@ -190,7 +190,7 @@ public class InformationCollectorTest {
     public void shouldFifo_butLevelChangesInfoAtEnd_caseInteger() {
         // given
         scores = new Scores(false);
-        info = new InformationCollector(scores);
+        info = new ScoresCollector(scores);
 
         // when
         event(13);
@@ -211,7 +211,7 @@ public class InformationCollectorTest {
     public void shouldFifo_butLevelChangesInfoAtEnd_caseJson() {
         // given
         scores = new Scores(true);
-        info = new InformationCollector(scores);
+        info = new ScoresCollector(scores);
 
         // when
         jsonEvent(13);
@@ -235,7 +235,7 @@ public class InformationCollectorTest {
     public void shouldIgnoreZero_caseJson() {
         // given
         scores = new Scores(true);
-        info = new InformationCollector(scores);
+        info = new ScoresCollector(scores);
         scores.set(11);
 
         // when
@@ -253,7 +253,7 @@ public class InformationCollectorTest {
     public void shouldIgnoreZero_caseInteger() {
         // given
         scores = new Scores(false);
-        info = new InformationCollector(scores);
+        info = new ScoresCollector(scores);
         scores.set(11);
 
         // when
@@ -271,7 +271,7 @@ public class InformationCollectorTest {
     public void shouldNotLessThanZero_caseJson() {
         // given
         scores = new Scores(true);
-        info = new InformationCollector(scores);
+        info = new ScoresCollector(scores);
         scores.set(13);
 
         // when
@@ -293,7 +293,7 @@ public class InformationCollectorTest {
     public void shouldNotLessThanZero_caseInteger() {
         // given
         scores = new Scores(false);
-        info = new InformationCollector(scores);
+        info = new ScoresCollector(scores);
         scores.set(13);
 
         // when
@@ -315,7 +315,7 @@ public class InformationCollectorTest {
     public void shouldPrintCustomMessage() {
         // given
         scores = new Scores(false);
-        info = new InformationCollector(scores);
+        info = new ScoresCollector(scores);
 
         // when
         event("3");

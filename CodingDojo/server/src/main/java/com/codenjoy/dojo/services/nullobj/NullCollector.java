@@ -23,15 +23,16 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
+import com.codenjoy.dojo.services.info.ScoresCollector;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.apache.commons.lang3.StringUtils;
 
-public final class NullInformationCollector extends InformationCollector {
+public final class NullCollector extends ScoresCollector {
 
-    public static final InformationCollector INSTANCE = new NullInformationCollector();
+    public static final Information INSTANCE = new NullCollector();
 
-    private NullInformationCollector() {
+    private NullCollector() {
         super(NullPlayerScores.INSTANCE);
     }
 

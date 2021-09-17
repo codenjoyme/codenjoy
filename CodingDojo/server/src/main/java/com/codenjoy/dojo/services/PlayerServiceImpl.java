@@ -34,7 +34,8 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
+import com.codenjoy.dojo.services.info.ScoresCollector;
 import com.codenjoy.dojo.services.multiplayer.Sweeper;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
@@ -316,7 +317,7 @@ public class PlayerServiceImpl implements PlayerService {
             deals.remove(player.getId(), Sweeper.on().lastAlone());
 
             PlayerScores playerScores = gameType.getPlayerScores(save.getScore(), gameType.getSettings());
-            InformationCollector listener = new InformationCollector(playerScores);
+            Information listener = new ScoresCollector(playerScores);
 
             player = new Player(name, callbackUrl,
                     gameType, playerScores, listener);

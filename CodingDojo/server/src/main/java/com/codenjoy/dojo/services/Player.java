@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -57,7 +57,7 @@ public class Player implements ScreenRecipient, Closeable {
     private String passwordConfirmation;
     private PlayerScores scores;
     private Object score;
-    private InformationCollector info;
+    private Information info;
     private GameType gameType;
     private Closeable ai;
     private long lastResponse;
@@ -66,7 +66,7 @@ public class Player implements ScreenRecipient, Closeable {
         this.id = id;
     }
 
-    public Player(String id, String callbackUrl, GameType gameType, PlayerScores scores, InformationCollector info) {
+    public Player(String id, String callbackUrl, GameType gameType, PlayerScores scores, Information info) {
         this.id = id;
         this.callbackUrl = callbackUrl;
         this.gameType = gameType;

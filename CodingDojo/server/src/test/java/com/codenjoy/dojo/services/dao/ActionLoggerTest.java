@@ -25,7 +25,7 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
-import com.codenjoy.dojo.services.info.InformationCollector;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -162,7 +162,7 @@ public class ActionLoggerTest {
     private void addPlayer(Deals deals, String board, int scoreValue, String id, String room, String game) {
         PlayerScores score = getScore(scoreValue);
         Player player = new Player(id, "127.0.0.1", PlayerTest.mockGameType(game), score, null);
-        player.setInfo(mock(InformationCollector.class));
+        player.setInfo(mock(Information.class));
 
         TestUtils.Env env = TestUtils.getDeal(deals, player, room,
                 inv -> {
