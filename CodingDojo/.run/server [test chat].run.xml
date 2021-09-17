@@ -8,7 +8,8 @@
       <pattern testClass="com.codenjoy.dojo.services.controller.chat.ChatControllerTest" />
       <pattern testClass="com.codenjoy.dojo.services.controller.chat.ChatCommandTest" />
       <pattern testClass="com.codenjoy.dojo.services.controller.chat.ChatRequestTest" />
-      <pattern testClass="com.codenjoy.dojo.services.ChatServiceTest" />
+      <pattern testClass="com.codenjoy.dojo.services.chat.ChatServiceTest" />
+      <pattern testClass="com.codenjoy.dojo.services.chat.PlayersCahce" />
       <pattern testClass="com.codenjoy.dojo.services.dao.ChatTest" />
       <pattern testClass="com.codenjoy.dojo.web.rest.RestChatControllerTest" />
     </patterns>

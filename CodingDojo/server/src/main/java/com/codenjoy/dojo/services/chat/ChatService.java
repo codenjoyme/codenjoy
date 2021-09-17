@@ -39,11 +39,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
 @AllArgsConstructor
@@ -55,9 +53,7 @@ public class ChatService {
     private Registration registration;
     private Spreader spreader;
     private FieldService fields;
-
-    // TODO ох тут кеш некрасивый
-    private final Map<String, String> playerNames = new ConcurrentHashMap<>();
+    private PlayersCache playersCache; // TODO ох тут кеш некрасивый
 
     /**
      * Метод для получения заданного количества сообщений (относительно конкретных
@@ -120,14 +116,7 @@ public class ChatService {
 
     public PMessage wrap(Chat.Message message) {
         return PMessage.from(message,
-                playerName(message.getPlayerId()));
-    }
-
-    private String playerName(String playerId) {
-        if (!playerNames.containsKey(playerId)) {
-            playerNames.put(playerId, registration.getNameById(playerId));
-        }
-        return playerNames.get(playerId);
+                playersCache.name(message.getPlayerId()));
     }
 
     /**
