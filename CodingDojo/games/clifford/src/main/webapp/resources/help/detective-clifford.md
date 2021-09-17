@@ -1,3 +1,5 @@
+<meta charset="UTF-8">
+
 [Fork me on GitHub](https://github.com/codenjoyme/codenjoy)
 # Detective Clifford codenjoy — как играть?
 Игровой demo-сервер доступен так же в интернете 24/7 в целях ознакомления http://codenjoy.com/codenjoy-contest
