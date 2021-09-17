@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import lombok.AllArgsConstructor;
+import org.mockito.internal.util.MockUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -98,7 +99,9 @@ public class LoginHelper {
         if (deal == NullDeal.INSTANCE) {
             registration.remove(id); // удаляем если не можем создать
         } else {
-            resetMocks(deal);
+            if (MockUtil.isMock(deal)) {
+                resetMocks(deal);
+            }
         }
         return deal;
     }
