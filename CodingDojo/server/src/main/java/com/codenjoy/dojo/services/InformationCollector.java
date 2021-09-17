@@ -34,9 +34,6 @@ import static java.util.stream.Collectors.joining;
 
 public class InformationCollector implements EventListener, ChangeLevelListener, Information {
 
-    protected LinkedList<String> pool = new LinkedList<>();
-    private PlayerScores scores;
-    private Collector collector = new Collector();
     private static final String LEVEL = "Level ";
 
     public static final Comparator<String> LEVEL_AT_LAST = (o1, o2) -> {
@@ -44,6 +41,10 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         if (o2.contains(LEVEL)) return -1;
         return 0;
     };
+
+    protected LinkedList<String> pool = new LinkedList<>();
+    private PlayerScores scores;
+    private Collector collector = new Collector();
 
     public InformationCollector(PlayerScores scores) {
         this.scores = scores;
