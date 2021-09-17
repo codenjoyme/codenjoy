@@ -31,7 +31,7 @@ import org.junit.Test;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
-public class WatsNextServiceTest {
+public class WhatsNextServiceTest {
 
     private GameType gameType;
     private WhatsNextService whatsNext;
