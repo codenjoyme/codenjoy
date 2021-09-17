@@ -194,22 +194,6 @@ public class InformationCollectorTest {
     }
 
     @Test
-    public void shouldInvalidateInfo_whenSetNewData() {
-        // given
-        scores = new Scores(false);
-        info = new InformationCollector(scores);
-
-
-        // when
-        event(11);
-        event(12);
-
-        // then
-        info.setInfo("qwe");
-        assertEquals("qwe", info.getMessage());
-    }
-
-    @Test
     public void shouldIgnoreZero_caseJson() {
         // given
         scores = new Scores(true);

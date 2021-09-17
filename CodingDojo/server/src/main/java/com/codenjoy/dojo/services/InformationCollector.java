@@ -108,11 +108,6 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
         out.put(LEVEL + progress.getCurrent());
     }
 
-    public void setInfo(String information) {
-        out.clear();
-        out.put(information);
-    }
-
     public String popLastMessages() {
         return all.popAll();
     }
