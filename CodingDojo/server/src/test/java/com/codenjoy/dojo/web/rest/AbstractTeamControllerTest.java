@@ -49,8 +49,8 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
     protected ThirdGameType type;
 
     @Before
-    public void setUp() {
-        super.setUp();
+    public void setup() {
+        super.setup();
 
         login.removeAll();
 

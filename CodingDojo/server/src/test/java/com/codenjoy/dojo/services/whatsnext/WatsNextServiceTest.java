@@ -37,7 +37,7 @@ public class WatsNextServiceTest {
     private WhatsNextService whatsNext;
 
     @Before
-    public void setUp() {
+    public void setup() {
         gameType = new GameRunner();
         whatsNext = new WhatsNextService();
     }

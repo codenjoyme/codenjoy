@@ -29,7 +29,7 @@ import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,7 +40,7 @@ public class SecureAuthenticationServiceTest {
     private SecureAuthenticationService service;
 
     @Before
-    public void setUp() {
+    public void setup() {
         service = new SecureAuthenticationService(){{
             SecureAuthenticationServiceTest.this.registration =
                     this.registration = mock(Registration.class);

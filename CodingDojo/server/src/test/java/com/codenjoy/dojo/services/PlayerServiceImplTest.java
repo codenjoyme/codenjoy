@@ -190,7 +190,7 @@ public class PlayerServiceImplTest {
     private Consumer<GameType> gameTypePostSetup;
 
     @Before
-    public void setUp() {
+    public void setup() {
         Mockito.reset(actionLogger, autoSaver, gameService, playerController, deals);
         deals.clear();
         chat.removeAll();

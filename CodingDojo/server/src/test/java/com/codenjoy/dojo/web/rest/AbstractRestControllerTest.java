@@ -116,7 +116,7 @@ public abstract class AbstractRestControllerTest {
     protected LoginHelper login;
 
     @Before
-    public void setUp() {
+    public void setup() {
         CodenjoyContext.setContext("codenjoy-contest");
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
 

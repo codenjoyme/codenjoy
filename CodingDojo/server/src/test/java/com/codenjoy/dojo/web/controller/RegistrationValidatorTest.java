@@ -81,7 +81,7 @@ public class RegistrationValidatorTest {
     private Errors errors;
 
     @Before
-    public void setUp() {
+    public void setup() {
         reset(commonValidator, registration);
 
         errors = makeErrors();

@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.chat.ChatControl;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -62,7 +61,7 @@ public class SaveServiceImplTest {
     public static final boolean NOT_REGISTERED = false;
 
     @Before
-    public void setUp() {
+    public void setup() {
         saveService = new SaveServiceImpl(){{
             this.deals = SaveServiceImplTest.this.deals = new Deals();
             ChatDealsUtils.setupChat(deals, null);

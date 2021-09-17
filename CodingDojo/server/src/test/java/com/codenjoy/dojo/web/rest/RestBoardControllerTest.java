@@ -38,8 +38,8 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
     private RestBoardController service;
 
     @Before
-    public void setUp() {
-        super.setUp();
+    public void setup() {
+        super.setup();
 
         login.register("somePlayer", "ip", "validRoom", "first");
         login.asUser("somePlayer", "somePlayer");

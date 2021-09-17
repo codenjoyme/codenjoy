@@ -50,9 +50,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     private RoomHelper roomsSettings;
 
     @Before
-    public void setUp() {
+    public void setup() {
         login.asNone();
-        super.setUp();
+        super.setup();
 
         increaseFieldIds();
         createPlayers();

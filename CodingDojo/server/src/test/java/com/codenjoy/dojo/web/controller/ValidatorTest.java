@@ -22,7 +22,10 @@ package com.codenjoy.dojo.web.controller;
  * #L%
  */
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -34,9 +37,9 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ValidatorTest {
 
@@ -47,7 +50,7 @@ public class ValidatorTest {
     private PlayerService playerService;
 
     @Before
-    public void setUp() {
+    public void setup() {
         validator = new Validator() {{
             ValidatorTest.this.registration = this.registration = mock(Registration.class);
             ValidatorTest.this.properties = this.properties = mock(ConfigProperties.class);

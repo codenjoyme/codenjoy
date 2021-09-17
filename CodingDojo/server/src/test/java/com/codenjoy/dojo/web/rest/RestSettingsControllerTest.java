@@ -43,8 +43,8 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     private Settings second;
 
     @Before
-    public void setUp() {
-        super.setUp();
+    public void setup() {
+        super.setup();
 
         first = games.getGameType("first", "first").getSettings();
         second = games.getGameType("second", "second").getSettings();

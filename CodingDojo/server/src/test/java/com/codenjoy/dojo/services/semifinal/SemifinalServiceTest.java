@@ -48,7 +48,7 @@ public class SemifinalServiceTest extends AbstractDealsTest {
 
     @Before
     public void setup() {
-        super.setUp();
+        super.setup();
 
         timeout = 3;
         semifinal = new SemifinalService();

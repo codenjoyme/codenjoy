@@ -43,9 +43,9 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     private RestAdminController service;
 
     @Before
-    public void setUp() {
+    public void setup() {
         login.asAdmin();
-        super.setUp();
+        super.setup();
     }
 
     @Test

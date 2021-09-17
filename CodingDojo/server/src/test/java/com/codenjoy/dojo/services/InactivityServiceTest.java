@@ -34,7 +34,7 @@ import java.util.Calendar;
 import static com.codenjoy.dojo.services.incativity.InactivitySettings.Keys.INACTIVITY_ENABLED;
 import static com.codenjoy.dojo.services.incativity.InactivitySettings.Keys.INACTIVITY_TIMEOUT;
 import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.MULTIPLE;
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class InactivityServiceTest extends AbstractDealsTest {
@@ -42,8 +42,8 @@ public class InactivityServiceTest extends AbstractDealsTest {
     private InactivityService inactivity;
 
     @Before
-    public void setUp() {
-        super.setUp();
+    public void setup() {
+        super.setup();
         deals = spy(deals);
         timeService = spy(timeService);
         inactivity = new InactivityService(deals, timeService);

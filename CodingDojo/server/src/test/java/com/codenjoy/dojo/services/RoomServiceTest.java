@@ -48,7 +48,7 @@ public class RoomServiceTest {
     private GameType game2;
 
     @Before
-    public void setUp() {
+    public void setup() {
         // given
         service = new RoomService();
         game1 = new FirstGameType();

@@ -60,7 +60,7 @@ public class AbstractDealsTest {
     protected FieldService fieldService;
 
     @Before
-    public void setUp() {
+    public void setup() {
         deals = new Deals();
         roomService = deals.roomService = new RoomService();
         timeService = deals.timeService = mock(TimeService.class);
