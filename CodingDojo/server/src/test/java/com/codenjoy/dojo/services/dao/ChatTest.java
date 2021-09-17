@@ -56,7 +56,7 @@ public class ChatTest {
                             }
                         }));
         
-        messages = new ChatHelper(chat);
+        messages = new ChatHelper(chat, null);
     }
 
     @After

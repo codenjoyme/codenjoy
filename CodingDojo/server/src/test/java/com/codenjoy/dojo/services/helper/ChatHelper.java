@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.helper;
  * #L%
  */
 
+import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.dao.Chat;
@@ -46,6 +47,7 @@ import static java.util.stream.Collectors.toList;
 public class ChatHelper {
 
     private final Chat chat;
+    private final ChatService chatService;
     private List<Chat.Message> messages = new LinkedList<>();
 
     public void removeAll() {
@@ -84,6 +86,21 @@ public class ChatHelper {
         list.forEach(message ->
                 assertEquals(true, chat.deleteMessage(room,
                         message.getId(), message.getPlayerId())));
+    }
+
+    public void checkField(String player, String room, String expected) {
+        List<PMessage> messages = chatService.getFieldMessages(player,
+                Filter.room(room)
+                        .count(Integer.MAX_VALUE)
+                        .get());
+
+        check(messages, expected);
+
+        // mark removed
+        messages.forEach(message ->
+                chatService.deleteMessage(message.getId(),
+                        message.getRoom(),
+                        message.getPlayerId()));
     }
 
     public class AssertThat {
