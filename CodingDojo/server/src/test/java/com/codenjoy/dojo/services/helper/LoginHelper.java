@@ -47,6 +47,7 @@ public class LoginHelper {
     private PlayerService players;
     private Registration registration;
     private Deals deals;
+    private FieldService fields;
     private CleanHelper clean;
 
     public void removeAll() {
@@ -116,5 +117,9 @@ public class LoginHelper {
         Player player = new Player(id);
         player.setRoom(room);
         players.update(player);
+    }
+
+    public int fieldId(String player) {
+        return fields.id(deals.get(player).getField());
     }
 }

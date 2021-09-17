@@ -300,7 +300,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetMessage_success_whenPostIt_inFieldChat() {
         // given
-        int fieldId = getFieldId("player");
+        int fieldId = login.fieldId("player");
 
         // when
         time.nowIs(23455L);
@@ -408,7 +408,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldPostMessageForField_success() {
         // given
         login.assertPlayerInRoom("player", "validRoom");
-        int fieldId = getFieldId("player");
+        int fieldId = login.fieldId("player");
 
         // when then
         // try to post message for exists field
@@ -428,15 +428,11 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages/field")));
     }
 
-    private int getFieldId(String player) {
-        return fields.id(deals.get(player).getField());
-    }
-
     @Test
     public void shouldPostMessageForField_fail_whenThreadTopicInOtherRoom() {
         // given
         login.assertPlayerInRoom("player", "validRoom");
-        int fieldId = getFieldId("player");
+        int fieldId = login.fieldId("player");
 
         // when then
         // try to post field message for other room
@@ -1726,7 +1722,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // given
         shouldPostMessageForField_success();
 
-        int fieldId = getFieldId("player");
+        int fieldId = login.fieldId("player");
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom',\n" + 
                         "    'text':'message1','time':12345,'topicId':101,'type':3}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
@@ -1745,7 +1741,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // given
         shouldPostMessageForField_success();
 
-        int fieldId = getFieldId("player");
+        int fieldId = login.fieldId("player");
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom',\n" + 
                         "    'text':'message1','time':12345,'topicId':101,'type':3}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
@@ -1753,7 +1749,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // switch to another, and come back again
         login.join("player", "otherRoom");
         login.join("player", "validRoom");
-        assertNotEquals(fieldId, getFieldId("player"));
+        assertNotEquals(fieldId, login.fieldId("player"));
 
         assertEquals("[{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom',\n" + 
                         "    'text':'Player joined the field','time':12345,'topicId':105,'type':3}]",
@@ -1779,14 +1775,14 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         time.nowIs(12345L);
         login.register("player4", "ip", "multipleRoom", "third");
         login.asUser("player4", "player4");
-        int fieldId = getFieldId("player4");
+        int fieldId = login.fieldId("player4");
 
         login.join("player", "multipleRoom");
 
         // another player is also in the same room
         assertEquals("multipleRoom", deals.get("player").getRoom());
         // another player is also in the same field
-        assertEquals(fieldId, getFieldId("player"));
+        assertEquals(fieldId, login.fieldId("player"));
 
         // then
         // prints that two players joined
@@ -1799,7 +1795,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // switch to another room
         time.nowIs(12346L);
         login.join("player4", "otherRoom");
-        assertNotEquals(fieldId, getFieldId("player4"));
+        assertNotEquals(fieldId, login.fieldId("player4"));
 
         assertEquals("[{'id':5,'playerId':'player4','playerName':'player4-name','room':'otherRoom',\n" + 
                         "    'text':'Player joined the field','time':12346,'topicId':105,'type':3}]",
@@ -1830,14 +1826,14 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         time.nowIs(12345L);
         login.register("player4", "ip", "singleRoom", game);
         login.asUser("player4", "player4");
-        int fieldId = getFieldId("player4");
+        int fieldId = login.fieldId("player4");
 
         login.join("player", "singleRoom");
 
         // another player is also in the same room
         assertEquals("singleRoom", deals.get("player").getRoom());
         // another player isn't in the same field
-        assertNotEquals(fieldId, getFieldId("player"));
+        assertNotEquals(fieldId, login.fieldId("player"));
 
         // then
         // prints only one 'joined' message, because of player is on single field
@@ -1848,7 +1844,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // switch to another room
         time.nowIs(12346L);
         login.join("player4", "otherRoom");
-        assertNotEquals(fieldId, getFieldId("player4"));
+        assertNotEquals(fieldId, login.fieldId("player4"));
 
         assertEquals("[{'id':5,'playerId':'player4','playerName':'player4-name','room':'otherRoom',\n" + 
                         "    'text':'Player joined the field','time':12346,'topicId':106,'type':3}]",
