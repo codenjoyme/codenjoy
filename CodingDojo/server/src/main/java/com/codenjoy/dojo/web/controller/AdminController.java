@@ -214,7 +214,7 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/game/board/reloadAll")
+    @GetMapping("/game/player/reloadAll")
     public String resetAllPlayers(HttpServletRequest request) {
         String room = getGameRoom(request);
         saveService.saveAll(room);
@@ -230,7 +230,7 @@ public class AdminController {
         return getAdmin(room);
     }
 
-    @GetMapping("/player/reloadAll")
+    @GetMapping("/board/reloadAll")
     public String reloadAllPlayersRooms(HttpServletRequest request) {
         String room = getGameRoom(request);
         playerService.reloadAllRooms(room);

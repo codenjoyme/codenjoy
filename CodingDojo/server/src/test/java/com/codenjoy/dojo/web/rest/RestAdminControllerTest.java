@@ -349,7 +349,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                         .forEach(Mockito::reset);
 
         // when
-        assertEquals("", get("/rest/admin/room/room1/player/reload"));
+        assertEquals("", get("/rest/admin/room/room1/board/reload"));
 
         // then
         verifyNewGame(deal1, atLeastOnce());
@@ -364,7 +364,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
                 () -> service.reloadPlayers("$bad$"));
 
         assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
-                "/rest/admin/room/$bad$/player/reload");
+                "/rest/admin/room/$bad$/board/reload");
     }
 
     @Test
