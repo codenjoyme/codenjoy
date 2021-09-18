@@ -28,9 +28,12 @@ import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.mockito.verification.VerificationMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+
+import java.util.Arrays;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
@@ -340,6 +343,10 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         Deal deal3 = with.login.register("player3", "ip3", "room2", "first");
 
         Deal deal4 = with.login.register("player4", "ip4", "room3", "second");
+
+        Arrays.asList(deal1, deal2, deal3, deal4).stream()
+                        .map(Deal::getField)
+                        .forEach(Mockito::reset);
 
         // when
         assertEquals("", get("/rest/admin/room/room1/player/reload"));
