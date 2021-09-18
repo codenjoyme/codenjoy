@@ -23,8 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
-import com.codenjoy.dojo.services.helper.RoomHelper;
-import com.codenjoy.dojo.services.helper.TimeHelper;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,14 +41,11 @@ import static org.mockito.Mockito.mock;
 public class RestChatControllerTest extends AbstractRestControllerTest {
 
     @Autowired
-    private TimeHelper time;
-
-    @Autowired
-    private RoomHelper roomsSettings;
+    private Helpers with;
 
     @Before
     public void setup() {
-        login.asNone();
+        with.login.asNone();
         super.setup();
 
         increaseFieldIds();
@@ -61,9 +57,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
     private void createPlayers() {
         // given
-        time.nowIs(12342L);
-        login.register("player", "ip", "validRoom", "first");
-        login.asUser("player", "player");
+        with.time.nowIs(12342L);
+        with.login.register("player", "ip", "validRoom", "first");
+        with.login.asUser("player", "player");
 
         // then
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom',\n" + 
@@ -71,9 +67,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages/field")));
 
         // given
-        time.nowIs(12343L);
-        login.register("player2", "ip", "validRoom", "first");
-        login.asUser("player2", "player2");
+        with.time.nowIs(12343L);
+        with.login.register("player2", "ip", "validRoom", "first");
+        with.login.asUser("player2", "player2");
 
         // then
         assertEquals("[{'id':2,'playerId':'player2','playerName':'player2-name','room':'validRoom',\n" + 
@@ -81,9 +77,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages/field")));
 
         // given
-        time.nowIs(12344L);
-        login.register("otherPlayer", "ip", "otherRoom", "first");
-        login.asUser("otherPlayer", "otherPlayer");
+        with.time.nowIs(12344L);
+        with.login.register("otherPlayer", "ip", "otherRoom", "first");
+        with.login.asUser("otherPlayer", "otherPlayer");
 
         // then
         assertEquals("[{'id':3,'playerId':'otherPlayer','playerName':'otherPlayer-name','room':'otherRoom',\n" + 
@@ -91,7 +87,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/otherRoom/messages/field")));
 
         // given
-        login.asUser("player", "player");
+        with.login.asUser("player", "player");
     }
 
     // делаю это специально, чтобы не путались в topic_id field и room
@@ -107,7 +103,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals("[]", fix(get("/rest/chat/validRoom/messages")));
 
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
@@ -117,7 +113,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages")));
 
         // when
-        time.nowIs(23456L);
+        with.time.nowIs(23456L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message2'}"));
 
@@ -133,17 +129,17 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldDeleteMessages() {
         // given
         // id = 1
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // id = 2
-        time.nowIs(23456L);
+        with.time.nowIs(23456L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message2'}"));
 
         // id = 3
-        time.nowIs(34567L);
+        with.time.nowIs(34567L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message3'}"));
 
@@ -184,7 +180,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldDeleteMessages_cantDelete_whenNotMyMessage() {
         // given
         // id = 1
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
@@ -193,7 +189,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages")));
 
         // when then
-        login.asUser("player2", "player2");
+        with.login.asUser("player2", "player2");
 
         assertDeleteError("java.lang.IllegalArgumentException: " +
                         "Player 'player2' cant delete message with id " +
@@ -206,7 +202,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // given
         // id = 1
         // create message in validRoom
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
@@ -216,7 +212,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when
         // rejoin in new room
-        login.join("player", "otherRoom");
+        with.login.join("player", "otherRoom");
 
         // then
         // cant delete message from old room
@@ -228,7 +224,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when
         // come back in old room again
-        login.join("player", "validRoom");
+        with.login.join("player", "validRoom");
 
         // message in still there
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom',\n" + 
@@ -248,7 +244,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetMessage_success_whenPostIt_inRoomChat() {
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
@@ -258,7 +254,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages/1")));
 
         // when
-        time.nowIs(23456L);
+        with.time.nowIs(23456L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message2'}"));
 
@@ -272,12 +268,12 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetMessage_success_whenPostIt_inTopicChat() {
         // given
         // room chat message (it will be an topic message)
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // when
-        time.nowIs(23456L);
+        with.time.nowIs(23456L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message2'}"));
 
@@ -287,7 +283,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages/2")));
 
         // when
-        time.nowIs(23457L);
+        with.time.nowIs(23457L);
         post(200, "/rest/chat/validRoom/messages/2/replies",
                 unquote("{text:'message3'}"));
 
@@ -300,10 +296,10 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetMessage_success_whenPostIt_inFieldChat() {
         // given
-        int fieldId = login.fieldId("player");
+        int fieldId = with.login.fieldId("player");
 
         // when
-        time.nowIs(23455L);
+        with.time.nowIs(23455L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message1'}"));
 
@@ -313,7 +309,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages/1")));
 
         // when
-        time.nowIs(23456L);
+        with.time.nowIs(23456L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message2'}"));
 
@@ -336,13 +332,13 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetMessage_fail_whenTryGetMessageFromOtherRoom_likeMessageFromMyRoom() {
         // given
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // when then
         // сообщение есть но я не могу его взять, т.к. я плеер из другой комнаты
-        login.asUser("otherPlayer", "otherPlayer");
+        with.login.asUser("otherPlayer", "otherPlayer");
 
         assertError("java.lang.IllegalArgumentException: " +
                         "There is no message with id '1' in room 'otherRoom'",
@@ -352,13 +348,13 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetMessage_fail_whenTryGetMessageFromOtherRoom() {
         // given
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // when then
         // сообщение есть но я не могу его взять, т.к. я плеер из другой комнаты
-        login.asUser("otherPlayer", "otherPlayer");
+        with.login.asUser("otherPlayer", "otherPlayer");
 
         assertError("java.lang.IllegalArgumentException: " +
                         "Player 'otherPlayer' is not in room 'validRoom'",
@@ -383,11 +379,11 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldPostMessage_fail_whenThreadTopicIsNotExists() {
         // given
-        login.assertPlayerInRoom("player", "validRoom");
+        with.login.assertPlayerInRoom("player", "validRoom");
 
         // when then
         // try to post reply for non exists topic message
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         assertPostError("java.lang.IllegalArgumentException: " +
                         "There is no message with id '100500' in room 'validRoom'",
                 "/rest/chat/validRoom/messages/100500/replies",
@@ -407,12 +403,12 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldPostMessageForField_success() {
         // given
-        login.assertPlayerInRoom("player", "validRoom");
-        int fieldId = login.fieldId("player");
+        with.login.assertPlayerInRoom("player", "validRoom");
+        int fieldId = with.login.fieldId("player");
 
         // when then
         // try to post message for exists field
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message1'}"));
 
@@ -431,8 +427,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldPostMessageForField_fail_whenThreadTopicInOtherRoom() {
         // given
-        login.assertPlayerInRoom("player", "validRoom");
-        int fieldId = login.fieldId("player");
+        with.login.assertPlayerInRoom("player", "validRoom");
+        int fieldId = with.login.fieldId("player");
 
         // when then
         // try to post field message for other room
@@ -457,7 +453,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when
         // rejoin in other room
-        login.join("player", "otherRoom");
+        with.login.join("player", "otherRoom");
 
         // when then
         // there are no messages here
@@ -472,18 +468,18 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldPostMessage_fail_whenThreadTopicInOtherRoom() {
         // given
-        login.assertPlayerInRoom("player", "validRoom");
+        with.login.assertPlayerInRoom("player", "validRoom");
 
         assertEquals("[]", fix(get("/rest/chat/validRoom/messages")));
 
         // post message that will be a root topic message
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // when
         // rejoin in other room
-        login.join("player", "otherRoom");
+        with.login.join("player", "otherRoom");
 
         // try to post reply for topic message in other room
         assertPostError("java.lang.IllegalArgumentException: " +
@@ -493,7 +489,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // then
         // rejoin in old room
-        login.join("player", "validRoom");
+        with.login.join("player", "validRoom");
 
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom',\n" + 
                         "    'text':'message1','time':12345,'topicId':null,'type':1}]",
@@ -514,22 +510,22 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetAllMessages_betweenBeforeAndAfter() {
         // given
         // id = 1
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // id = 2
-        time.nowIs(12346L);
+        with.time.nowIs(12346L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message2'}"));
 
         // id = 3
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message3'}"));
 
         // id = 4
-        time.nowIs(12348L);
+        with.time.nowIs(12348L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message4'}"));
 
@@ -632,27 +628,27 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetAllMessages_betweenBeforeAndAfter_forTopic() {
         // given
         // id = 1 will be a topic id
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // id = 2
-        time.nowIs(12346L);
+        with.time.nowIs(12346L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message2'}"));
 
         // id = 3
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message3'}"));
 
         // id = 4
-        time.nowIs(12348L);
+        with.time.nowIs(12348L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message4'}"));
 
         // id = 5
-        time.nowIs(12349L);
+        with.time.nowIs(12349L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message5'}"));
 
@@ -755,27 +751,27 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetAllMessages_betweenBeforeAndAfter_forField() {
         // given
         // id = 1 topic message
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // id = 2
-        time.nowIs(12346L);
+        with.time.nowIs(12346L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message3'}"));
 
         // id = 3
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message4'}"));
 
         // id = 4
-        time.nowIs(12348L);
+        with.time.nowIs(12348L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message5'}"));
 
         // id = 5
-        time.nowIs(12349L);
+        with.time.nowIs(12349L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message6'}"));
 
@@ -885,22 +881,22 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetAllMessages_betweenBeforeAndAfter_withInclude() {
         // given
         // id = 1
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // id = 2
-        time.nowIs(12346L);
+        with.time.nowIs(12346L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message2'}"));
 
         // id = 3
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message3'}"));
 
         // id = 4
-        time.nowIs(12348L);
+        with.time.nowIs(12348L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message4'}"));
 
@@ -1024,27 +1020,27 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetAllMessages_betweenBeforeAndAfter_withInclude_forTopic() {
         // given
         // id = 1 will be a topic id
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // id = 2
-        time.nowIs(12346L);
+        with.time.nowIs(12346L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message2'}"));
 
         // id = 3
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message3'}"));
 
         // id = 4
-        time.nowIs(12348L);
+        with.time.nowIs(12348L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message4'}"));
 
         // id = 5
-        time.nowIs(12349L);
+        with.time.nowIs(12349L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message5'}"));
 
@@ -1168,27 +1164,27 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetAllMessages_betweenBeforeAndAfter_withInclude_forField() {
         // given
         // id = 1 topic message
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // id = 2
-        time.nowIs(12346L);
+        with.time.nowIs(12346L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message2'}"));
 
         // id = 3
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message3'}"));
 
         // id = 4
-        time.nowIs(12348L);
+        with.time.nowIs(12348L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message4'}"));
 
         // id = 5
-        time.nowIs(12349L);
+        with.time.nowIs(12349L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message5'}"));
 
@@ -1327,7 +1323,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         int startInclusive = 1;
         int endExclusive = 21;
         IntStream.range(startInclusive, endExclusive).forEach(index -> {
-            time.nowIs(12345L + index);
+            with.time.nowIs(12345L + index);
             post(200, "/rest/chat/validRoom/messages",
                     unquote("{text:'message" + index + "'}"));
         });
@@ -1444,49 +1440,49 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // given
         // message in room, will be topic 1
         // id = 1
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // message in room, will be topic 2
         // id = 2
-        time.nowIs(12346L);
+        with.time.nowIs(12346L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message2'}"));
 
         // message for topic1
         // id = 3
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message3'}"));
 
         // just another one message in room
         // id = 4
-        time.nowIs(12348L);
+        with.time.nowIs(12348L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message4'}"));
 
         // message for topic2
         // id = 5
-        time.nowIs(12349L);
+        with.time.nowIs(12349L);
         post(200, "/rest/chat/validRoom/messages/2/replies",
                 unquote("{text:'message5'}"));
 
         // message for topic1
         // id = 6
-        time.nowIs(12350L);
+        with.time.nowIs(12350L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message6'}"));
 
         // just another one message in room
         // id = 7
-        time.nowIs(12351L);
+        with.time.nowIs(12351L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message7'}"));
 
         // message for topic1
         // id = 8
-        time.nowIs(12352L);
+        with.time.nowIs(12352L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message8'}"));
 
@@ -1545,23 +1541,23 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetAllTopicMessages_fail_whenTryToGetItFromOtherRoom() {
         // given
-        login.assertPlayerInRoom("player", "validRoom");
+        with.login.assertPlayerInRoom("player", "validRoom");
 
         // message in room, will be topic 1
         // id = 1
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
         // message for topic1
         // id = 2
-        time.nowIs(12346L);
+        with.time.nowIs(12346L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message2'}"));
 
         // just another one message in room
         // id = 3
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message3'}"));
 
@@ -1573,7 +1569,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/validRoom/messages/1/replies")));
 
         // when
-        login.join("player", "otherRoom");
+        with.login.join("player", "otherRoom");
 
         // then
         // cant get topic messages from other room
@@ -1589,7 +1585,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // topic message for topic1 message :)
         // id = 9
-        time.nowIs(12353L);
+        with.time.nowIs(12353L);
         post(200, "/rest/chat/validRoom/messages/8/replies",
                 unquote("{text:'message9'}"));
 
@@ -1608,30 +1604,30 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldPostTopicMessageForFieldMessage() {
         // given
         // first field message
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message1'}"));
 
         // second field message
-        time.nowIs(12346L);
+        with.time.nowIs(12346L);
         post(200, "/rest/chat/validRoom/messages/field",
                 unquote("{text:'message2'}"));
 
         // try to post topic messages for exists field message1
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message3'}"));
 
-        time.nowIs(12348L);
+        with.time.nowIs(12348L);
         post(200, "/rest/chat/validRoom/messages/1/replies",
                 unquote("{text:'message4'}"));
 
         // try to post topic messages for exists field message2
-        time.nowIs(12347L);
+        with.time.nowIs(12347L);
         post(200, "/rest/chat/validRoom/messages/2/replies",
                 unquote("{text:'message3'}"));
 
-        time.nowIs(12348L);
+        with.time.nowIs(12348L);
         post(200, "/rest/chat/validRoom/messages/2/replies",
                 unquote("{text:'message4'}"));
 
@@ -1722,7 +1718,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // given
         shouldPostMessageForField_success();
 
-        int fieldId = login.fieldId("player");
+        int fieldId = with.login.fieldId("player");
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom',\n" + 
                         "    'text':'message1','time':12345,'topicId':101,'type':3}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
@@ -1741,15 +1737,15 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // given
         shouldPostMessageForField_success();
 
-        int fieldId = login.fieldId("player");
+        int fieldId = with.login.fieldId("player");
         assertEquals("[{'id':1,'playerId':'player','playerName':'player-name','room':'validRoom',\n" + 
                         "    'text':'message1','time':12345,'topicId':101,'type':3}]",
                 fix(get("/rest/chat/validRoom/messages/field")));
 
         // switch to another, and come back again
-        login.join("player", "otherRoom");
-        login.join("player", "validRoom");
-        assertNotEquals(fieldId, login.fieldId("player"));
+        with.login.join("player", "otherRoom");
+        with.login.join("player", "validRoom");
+        assertNotEquals(fieldId, with.login.fieldId("player"));
 
         assertEquals("[{'id':5,'playerId':'player','playerName':'player-name','room':'validRoom',\n" + 
                         "    'text':'Player joined the field','time':12345,'topicId':105,'type':3}]",
@@ -1769,20 +1765,20 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldPrintJoinLeaveChat_forNewUser_inSameMultiplayerField() {
         // given
         // game type will be a multiple
-        roomsSettings.settings("multipleRoom", "third")
+        with.rooms.settings("multipleRoom", "third")
                 .bool(ROUNDS_ENABLED, false);
 
-        time.nowIs(12345L);
-        login.register("player4", "ip", "multipleRoom", "third");
-        login.asUser("player4", "player4");
-        int fieldId = login.fieldId("player4");
+        with.time.nowIs(12345L);
+        with.login.register("player4", "ip", "multipleRoom", "third");
+        with.login.asUser("player4", "player4");
+        int fieldId = with.login.fieldId("player4");
 
-        login.join("player", "multipleRoom");
+        with.login.join("player", "multipleRoom");
 
         // another player is also in the same room
         assertEquals("multipleRoom", deals.get("player").getRoom());
         // another player is also in the same field
-        assertEquals(fieldId, login.fieldId("player"));
+        assertEquals(fieldId, with.login.fieldId("player"));
 
         // then
         // prints that two players joined
@@ -1793,17 +1789,17 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/multipleRoom/messages/field")));
 
         // switch to another room
-        time.nowIs(12346L);
-        login.join("player4", "otherRoom");
-        assertNotEquals(fieldId, login.fieldId("player4"));
+        with.time.nowIs(12346L);
+        with.login.join("player4", "otherRoom");
+        assertNotEquals(fieldId, with.login.fieldId("player4"));
 
         assertEquals("[{'id':5,'playerId':'player4','playerName':'player4-name','room':'otherRoom',\n" + 
                         "    'text':'Player joined the field','time':12346,'topicId':105,'type':3}]",
                 fix(get("/rest/chat/otherRoom/messages/field")));
 
         // and come back again
-        time.nowIs(12347L);
-        login.join("player4", "multipleRoom");
+        with.time.nowIs(12347L);
+        with.login.join("player4", "multipleRoom");
 
         // prints that one leaved field and come back again
         assertEquals("[{'id':1,'playerId':'player4','playerName':'player4-name','room':'multipleRoom',\n" + 
@@ -1823,17 +1819,17 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         // game type will be a single
         String game = "first";
 
-        time.nowIs(12345L);
-        login.register("player4", "ip", "singleRoom", game);
-        login.asUser("player4", "player4");
-        int fieldId = login.fieldId("player4");
+        with.time.nowIs(12345L);
+        with.login.register("player4", "ip", "singleRoom", game);
+        with.login.asUser("player4", "player4");
+        int fieldId = with.login.fieldId("player4");
 
-        login.join("player", "singleRoom");
+        with.login.join("player", "singleRoom");
 
         // another player is also in the same room
         assertEquals("singleRoom", deals.get("player").getRoom());
         // another player isn't in the same field
-        assertNotEquals(fieldId, login.fieldId("player"));
+        assertNotEquals(fieldId, with.login.fieldId("player"));
 
         // then
         // prints only one 'joined' message, because of player is on single field
@@ -1842,17 +1838,17 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 fix(get("/rest/chat/singleRoom/messages/field")));
 
         // switch to another room
-        time.nowIs(12346L);
-        login.join("player4", "otherRoom");
-        assertNotEquals(fieldId, login.fieldId("player4"));
+        with.time.nowIs(12346L);
+        with.login.join("player4", "otherRoom");
+        assertNotEquals(fieldId, with.login.fieldId("player4"));
 
         assertEquals("[{'id':5,'playerId':'player4','playerName':'player4-name','room':'otherRoom',\n" + 
                         "    'text':'Player joined the field','time':12346,'topicId':106,'type':3}]",
                 fix(get("/rest/chat/otherRoom/messages/field")));
 
         // and come back again
-        time.nowIs(12347L);
-        login.join("player4", "singleRoom");
+        with.time.nowIs(12347L);
+        with.login.join("player4", "singleRoom");
 
         // prints only one 'joined' message,
         //      because of new field created

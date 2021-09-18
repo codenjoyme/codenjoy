@@ -30,9 +30,7 @@ import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.helper.ChatHelper;
-import com.codenjoy.dojo.services.helper.LoginHelper;
-import com.codenjoy.dojo.services.helper.TimeHelper;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
@@ -68,17 +66,11 @@ public class ChatServiceTest {
     @Autowired
     private Chat chat;
 
-    @Autowired
-    private TimeHelper time;
-
     @SpyBean
     private FieldService fields;
 
     @Autowired
-    private LoginHelper login;
-
-    @Autowired
-    private ChatHelper messages;
+    private Helpers with;
 
     private List<String> logs = new LinkedList<>();
     private List<OnChange> listeners = new LinkedList<>();
@@ -86,7 +78,7 @@ public class ChatServiceTest {
 
     @Before
     public void setup() {
-        login.removeAll();
+        with.clean.removeAll();
     }
 
     @After
@@ -98,37 +90,37 @@ public class ChatServiceTest {
     public void shouldGetLastMessage() {
         // given
         // random values, don't look for systems here
-        messages.post("room1", "player1", null, ROOM); // 1
-        messages.post("room2", "player2", null, ROOM); // 2
-        messages.post("room1", "player3", null, ROOM); // 3  last room1
-        messages.post("room2", "player2", null, ROOM); // 4  last room2
+        with.chat.post("room1", "player1", null, ROOM); // 1
+        with.chat.post("room2", "player2", null, ROOM); // 2
+        with.chat.post("room1", "player3", null, ROOM); // 3  last room1
+        with.chat.post("room2", "player2", null, ROOM); // 4  last room2
 
-        messages.post("room1", "player1", 1, ROOM_TOPIC);   // 5
-        messages.post("room2", "player2", 2, ROOM_TOPIC);   // 6
-        messages.post("room1", "player1", 1, ROOM_TOPIC);   // 7  last room topic1
-        messages.post("room2", "player2", 2, ROOM_TOPIC);   // 8
-        messages.post("room1", "player2", 4, ROOM_TOPIC);   // 9
-        messages.post("room2", "player3", 3, ROOM_TOPIC);   // 10 last room topic3
-        messages.post("room2", "player2", 2, ROOM_TOPIC);   // 11 last room topic2
-        messages.post("room1", "player2", 4, ROOM_TOPIC);   // 12 last room topic4
+        with.chat.post("room1", "player1", 1, ROOM_TOPIC);   // 5
+        with.chat.post("room2", "player2", 2, ROOM_TOPIC);   // 6
+        with.chat.post("room1", "player1", 1, ROOM_TOPIC);   // 7  last room topic1
+        with.chat.post("room2", "player2", 2, ROOM_TOPIC);   // 8
+        with.chat.post("room1", "player2", 4, ROOM_TOPIC);   // 9
+        with.chat.post("room2", "player3", 3, ROOM_TOPIC);   // 10 last room topic3
+        with.chat.post("room2", "player2", 2, ROOM_TOPIC);   // 11 last room topic2
+        with.chat.post("room1", "player2", 4, ROOM_TOPIC);   // 12 last room topic4
 
-        messages.post("room1", "player1", 1, FIELD);   // 13
-        messages.post("room1", "player1", 1, FIELD);   // 14
-        messages.post("room2", "player3", 3, FIELD);   // 15
-        messages.post("room1", "player1", 1, FIELD);   // 16 last field1
-        messages.post("room1", "player2", 4, FIELD);   // 17
-        messages.post("room2", "player2", 2, FIELD);   // 18 last field2
-        messages.post("room2", "player3", 3, FIELD);   // 19 last field3
-        messages.post("room1", "player2", 4, FIELD);   // 20 last field4
+        with.chat.post("room1", "player1", 1, FIELD);   // 13
+        with.chat.post("room1", "player1", 1, FIELD);   // 14
+        with.chat.post("room2", "player3", 3, FIELD);   // 15
+        with.chat.post("room1", "player1", 1, FIELD);   // 16 last field1
+        with.chat.post("room1", "player2", 4, FIELD);   // 17
+        with.chat.post("room2", "player2", 2, FIELD);   // 18 last field2
+        with.chat.post("room2", "player3", 3, FIELD);   // 19 last field3
+        with.chat.post("room1", "player2", 4, FIELD);   // 20 last field4
 
-        messages.post("room1", "player1", 13, FIELD_TOPIC);   // 21
-        messages.post("room1", "player1", 13, FIELD_TOPIC);   // 22
-        messages.post("room2", "player3", 15, FIELD_TOPIC);   // 23
-        messages.post("room1", "player1", 16, FIELD_TOPIC);   // 24
-        messages.post("room1", "player2", 16, FIELD_TOPIC);   // 25 last field topic15
-        messages.post("room2", "player2", 15, FIELD_TOPIC);   // 26
-        messages.post("room2", "player3", 15, FIELD_TOPIC);   // 27 last field topic15
-        messages.post("room1", "player2", 13, FIELD_TOPIC);   // 28 last field topic13
+        with.chat.post("room1", "player1", 13, FIELD_TOPIC);   // 21
+        with.chat.post("room1", "player1", 13, FIELD_TOPIC);   // 22
+        with.chat.post("room2", "player3", 15, FIELD_TOPIC);   // 23
+        with.chat.post("room1", "player1", 16, FIELD_TOPIC);   // 24
+        with.chat.post("room1", "player2", 16, FIELD_TOPIC);   // 25 last field topic15
+        with.chat.post("room2", "player2", 15, FIELD_TOPIC);   // 26
+        with.chat.post("room2", "player3", 15, FIELD_TOPIC);   // 27 last field topic15
+        with.chat.post("room1", "player2", 13, FIELD_TOPIC);   // 28 last field topic13
 
         // when then
         ChatService.LastMessage last = service.getLast();
@@ -172,8 +164,8 @@ public class ChatServiceTest {
 
         // when then
         // player1 create room message1
-        time.nowIs(12345L);
-        messages.check(
+        with.time.nowIs(12345L);
+        with.chat.check(
                 chat(0).postRoom("message1", "room"),
                 "[PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                 "    playerId=player1, playerName=player1-name, time=12345)]");
@@ -188,8 +180,8 @@ public class ChatServiceTest {
 
         // when then
         // player2 create room message2
-        time.nowIs(12346L);
-        messages.check(
+        with.time.nowIs(12346L);
+        with.chat.check(
                 chat(1).postRoom("message2", "room"),
                 "[PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
                 "    playerId=player2, playerName=player2-name, time=12346)]");
@@ -204,8 +196,8 @@ public class ChatServiceTest {
 
         // when then
         // player1 create topic message3 in the message1
-        time.nowIs(12347L);
-        messages.check(
+        with.time.nowIs(12347L);
+        with.chat.check(
                 chat(0).postTopic(1, "message3", "room"),
                 "[PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12347)]");
@@ -220,8 +212,8 @@ public class ChatServiceTest {
 
         // when then
         // player2 create topic message4 in the message2
-        time.nowIs(12348L);
-        messages.check(
+        with.time.nowIs(12348L);
+        with.chat.check(
                 chat(1).postTopic(2, "message4", "room"),
                 "[PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
                 "    playerId=player2, playerName=player2-name, time=12348)]");
@@ -236,8 +228,8 @@ public class ChatServiceTest {
 
         // when then
         // player1 create field message5
-        time.nowIs(12349L);
-        messages.check(
+        with.time.nowIs(12349L);
+        with.chat.check(
                 chat(0).postField("message5", "room"),
                 "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12349)]");
@@ -249,8 +241,8 @@ public class ChatServiceTest {
 
         // when then
         // player2 create field message6
-        time.nowIs(12350L);
-        messages.check(
+        with.time.nowIs(12350L);
+        with.chat.check(
                 chat(1).postField("message6", "room"),
                 "[PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
                 "    playerId=player2, playerName=player2-name, time=12350)]");
@@ -262,8 +254,8 @@ public class ChatServiceTest {
 
         // when then
         // player1 create topic field message7 in the field message5
-        time.nowIs(12351L);
-        messages.check(
+        with.time.nowIs(12351L);
+        with.chat.check(
                 chat(0).postTopic(5, "message7", "room"),
                 "[PMessage(id=7, text=message7, room=room, type=4, topicId=5, \n" +
                 "    playerId=player1, playerName=player1-name, time=12351)]");
@@ -278,8 +270,8 @@ public class ChatServiceTest {
 
         // when then
         // player2 create topic field message8 in the field message6
-        time.nowIs(12352L);
-        messages.check(
+        with.time.nowIs(12352L);
+        with.chat.check(
                 chat(1).postTopic(6, "message8", "room"),
                 "[PMessage(id=8, text=message8, room=room, type=4, topicId=6, \n" +
                 "    playerId=player2, playerName=player2-name, time=12352)]");
@@ -294,7 +286,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 get room message1
-        messages.check(
+        with.chat.check(
                 chat(0).get(1, "room"),
                 "[PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                         "    playerId=player1, playerName=player1-name, time=12345)]");
@@ -306,7 +298,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 get topic message5
-        messages.check(
+        with.chat.check(
                 chat(1).get(5, "room"),
                 "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12349)]");
@@ -327,7 +319,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 get all room messages
-        messages.check(chat(0).getAllRoom(filter),
+        with.chat.check(chat(0).getAllRoom(filter),
                 "[PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                 "    playerId=player1, playerName=player1-name, time=12345), \n" +
                 "PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
@@ -342,7 +334,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 get all room messages
-        messages.check(chat(1).getAllRoom(filter),
+        with.chat.check(chat(1).getAllRoom(filter),
                 "[PMessage(id=1, text=message1, room=room, type=1, topicId=null, \n" +
                 "    playerId=player1, playerName=player1-name, time=12345), \n" +
                 "PMessage(id=2, text=message2, room=room, type=1, topicId=null, \n" +
@@ -357,7 +349,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 get all topic messages for room message1
-        messages.check(
+        with.chat.check(
                 chat(0).getAllTopic(1, filter),
                 "[PMessage(id=3, text=message3, room=room, type=2, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12347)]");
@@ -369,7 +361,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 get all room messages for room message2
-        messages.check(
+        with.chat.check(
                 chat(1).getAllTopic(2, filter),
                 "[PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
                 "    playerId=player2, playerName=player2-name, time=12348)]");
@@ -381,7 +373,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 get all field messages
-        messages.check(
+        with.chat.check(
                 chat(0).getAllField(filter),
                 "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12349)]");
@@ -393,7 +385,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 get all field messages
-        messages.check(
+        with.chat.check(
                 chat(1).getAllField(filter),
                 "[PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
                 "    playerId=player2, playerName=player2-name, time=12350)]");
@@ -416,7 +408,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 get all field messages
-        messages.check(
+        with.chat.check(
                 chat(0).getAllField(filter),
                 "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12349)]");
@@ -428,7 +420,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 get all field messages
-        messages.check(chat(1).getAllField(filter),
+        with.chat.check(chat(1).getAllField(filter),
                 "[]");
 
         assertListener(
@@ -449,7 +441,7 @@ public class ChatServiceTest {
 
         // when then
         // player1 get all topic messages for room message1
-        messages.check(chat(0).getAllTopic(1, filter),
+        with.chat.check(chat(0).getAllTopic(1, filter),
                 "[]");
 
         assertListener(
@@ -457,7 +449,7 @@ public class ChatServiceTest {
 
         // when then
         // player2 get all topic messages for room message2
-        messages.check(
+        with.chat.check(
                 chat(1).getAllTopic(2, filter),
                 "[PMessage(id=4, text=message4, room=room, type=2, topicId=2, \n" +
                 "    playerId=player2, playerName=player2-name, time=12348)]");
@@ -480,7 +472,7 @@ public class ChatServiceTest {
 
         // when then
         // get empty list in room
-        messages.check(chat(0).getAllRoom(Filter.room("room").count(0).get()),
+        with.chat.check(chat(0).getAllRoom(Filter.room("room").count(0).get()),
                 "[]");
 
         assertListener(
@@ -499,8 +491,8 @@ public class ChatServiceTest {
 
     private void createPlayerWithControl(String player, String room, String game) {
         int index = listeners.size();
-        login.register(player, "ip", room, game);
-        login.join(player, room);
+        with.login.register(player, "ip", room, game);
+        with.login.join(player, room);
         listeners.add(getListener(index + 1));
         chats.add(service.authority(player, listeners.get(index)));
 

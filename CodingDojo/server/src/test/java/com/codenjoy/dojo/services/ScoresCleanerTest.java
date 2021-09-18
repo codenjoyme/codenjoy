@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.helper.CleanHelper;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.mocks.FakePlayerScores;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
@@ -65,11 +65,11 @@ public class ScoresCleanerTest {
     Registration registration;
 
     @Autowired
-    CleanHelper clean;
+    Helpers with;
 
     @Before
     public void setup() {
-        clean.removeAll();
+        with.clean.removeAll();
     }
 
     private void createPlayer(String id, String room, Object score) {

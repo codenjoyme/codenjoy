@@ -31,7 +31,7 @@ import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.helper.LoginHelper;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -85,7 +85,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
     protected Deals deals;
 
     @Autowired
-    protected LoginHelper login;
+    protected Helpers with;
 
     @LocalServerPort
     private int port;
@@ -97,7 +97,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
     protected void setup() {
         tearDown();
 
-        login.removeAll();
+        with.clean.removeAll();
 
         serverAddress = String.format(URL, "ws", port, contextPath, endpoint());
         String url = String.format(URL, "http", port, contextPath, "");
@@ -118,7 +118,7 @@ public abstract class AbstractControllerTest<TData, TControl> {
     protected abstract Controller<TData, TControl> controller();
 
     protected Deal createPlayer(String id, String room, String game) {
-        Deal deal = login.register(id, id, room, game);
+        Deal deal = with.login.register(id, id, room, game);
         dealsList.add(deal);
         Player player = deal.getPlayer();
         player.setCode(registration.getCodeById(id));

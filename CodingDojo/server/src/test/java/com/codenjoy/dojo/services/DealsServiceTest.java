@@ -25,9 +25,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.helper.LoginHelper;
-import com.codenjoy.dojo.services.helper.RoomHelper;
-import com.codenjoy.dojo.services.helper.TimeHelper;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import org.junit.After;
@@ -56,20 +54,14 @@ public class DealsServiceTest {
     private Spreader spreader;
 
     @Autowired
-    private TimeHelper time;
-
-    @Autowired
     private FieldService fields;
 
     @Autowired
-    protected LoginHelper login;
-
-    @Autowired
-    private RoomHelper roomsSettings;
+    protected Helpers with;
 
     @Before
     public void setup() {
-        login.removeAll();
+        with.clean.removeAll();
     }
 
     @After
@@ -80,14 +72,14 @@ public class DealsServiceTest {
     @Test
     public void shouldPlayersInField_playersInRoom_forSingleGame() {
         // given
-        Deal deal1 = login.register("player1", "ip", "room", "first");
-        login.join("player1", "room");
+        Deal deal1 = with.login.register("player1", "ip", "room", "first");
+        with.login.join("player1", "room");
 
-        Deal deal2 = login.register("player2", "ip", "room", "first");
-        login.join("player2", "room");
+        Deal deal2 = with.login.register("player2", "ip", "room", "first");
+        with.login.join("player2", "room");
 
-        Deal deal3 = login.register("player3", "ip", "room", "first");
-        login.join("player3", "room");
+        Deal deal3 = with.login.register("player3", "ip", "room", "first");
+        with.login.join("player3", "room");
 
         int field1 = fields.id(deal1.getField());
         int field2 = fields.id(deal2.getField());
@@ -107,19 +99,19 @@ public class DealsServiceTest {
     @Test
     public void shouldPlayersInField_playersInRoom_forMultiplayerGame() {
         // given
-        roomsSettings.settings("room", "third")
+        with.rooms.settings("room", "third")
                 .bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TEAMS_PER_ROOM, 1)
                 .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
 
-        Deal deal1 = login.register("player1", "ip", "room", "third");
-        login.join("player1", "room");
+        Deal deal1 = with.login.register("player1", "ip", "room", "third");
+        with.login.join("player1", "room");
 
-        Deal deal2 = login.register("player2", "ip", "room", "third");
-        login.join("player2", "room");
+        Deal deal2 = with.login.register("player2", "ip", "room", "third");
+        with.login.join("player2", "room");
 
-        Deal deal3 = login.register("player3", "ip", "room", "third");
-        login.join("player3", "room");
+        Deal deal3 = with.login.register("player3", "ip", "room", "third");
+        with.login.join("player3", "room");
 
         int field1 = fields.id(deal1.getField());
         int field2 = fields.id(deal2.getField());

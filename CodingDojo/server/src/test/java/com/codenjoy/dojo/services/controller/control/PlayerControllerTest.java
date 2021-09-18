@@ -54,7 +54,7 @@ public class PlayerControllerTest extends AbstractControllerTest<String, Joystic
         createPlayer("player", "room", "first");
         replyToServerImmediately(true);
 
-        login.asNone();
+        with.login.asNone();
     }
 
     @Override

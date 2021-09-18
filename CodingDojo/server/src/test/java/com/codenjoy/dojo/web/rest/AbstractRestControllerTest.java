@@ -30,7 +30,7 @@ import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.helper.LoginHelper;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
@@ -114,7 +114,7 @@ public abstract class AbstractRestControllerTest {
     protected FieldService fields;
 
     @Autowired
-    protected LoginHelper login;
+    protected Helpers with;
 
     @Before
     public void setup() {
@@ -123,7 +123,7 @@ public abstract class AbstractRestControllerTest {
 
         debug.resume();
 
-        login.removeAll();
+        with.clean.removeAll();
     }
 
     @After

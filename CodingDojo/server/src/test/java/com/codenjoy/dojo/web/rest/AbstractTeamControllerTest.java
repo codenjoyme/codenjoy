@@ -52,7 +52,7 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
     public void setup() {
         super.setup();
 
-        login.removeAll();
+        with.clean.removeAll();
 
         // when changing teams, the current state is
         // saved to the database (there is a TeamId).
@@ -67,7 +67,7 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
         // in order to count the indices. So there we want to delete it.
         type.clear();
 
-        login.asAdmin();
+        with.login.asAdmin();
 
         // for all tests
         settings.playersAndTeamsPerRoom(4, 2);
@@ -76,7 +76,7 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
     public void givenPl(PTeam... teams) {
         for (PTeam team : teams) {
             for (String playerId : team.getPlayers()) {
-                login.register(playerId, ip, room, game);
+                with.login.register(playerId, ip, room, game);
             }
         }
         teamService.distributePlayersByTeam(room, Arrays.asList(teams));

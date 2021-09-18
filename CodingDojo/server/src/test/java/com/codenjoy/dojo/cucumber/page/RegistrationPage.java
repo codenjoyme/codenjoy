@@ -25,7 +25,7 @@ package com.codenjoy.dojo.cucumber.page;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
-import com.codenjoy.dojo.services.helper.CleanHelper;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -61,12 +61,12 @@ public class RegistrationPage implements Closeable {
     private final WebDriverWrapper web;
 
     // application services
-    private final CleanHelper clean;
+    private final Helpers with;
     private final Registration registration;
 
     @Override
     public void close() {
-        clean.removeAll();
+        with.clean.removeAll();
     }
 
     public void assertUserInDatabase(String user) {

@@ -49,11 +49,6 @@ public class LoginHelper {
     private Registration registration;
     private Deals deals;
     private FieldService fields;
-    private CleanHelper clean;
-
-    public void removeAll() {
-        clean.removeAll();
-    }
 
     public void asAdmin() {
         login(new UsernamePasswordAuthenticationToken(

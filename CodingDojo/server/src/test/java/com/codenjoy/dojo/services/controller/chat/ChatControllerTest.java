@@ -33,9 +33,7 @@ import com.codenjoy.dojo.services.chat.OnChange;
 import com.codenjoy.dojo.services.controller.AbstractControllerTest;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.helper.ChatHelper;
-import com.codenjoy.dojo.services.helper.RoomHelper;
-import com.codenjoy.dojo.services.helper.TimeHelper;
+import com.codenjoy.dojo.services.helper.Helpers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
@@ -66,22 +64,16 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
     private ChatService chatService;
 
     @Autowired
-    private TimeHelper time;
-
-    @Autowired
     private Chat chat;
-
+    
     @Autowired
-    private ChatHelper messages;
-
-    @Autowired
-    private RoomHelper roomsSettings;
+    private Helpers with;
 
     @Before
     public void setup() {
         super.setup();
 
-        messages.removeAll();
+        with.chat.removeAll();
 
         setupChatControl();
     }
@@ -133,7 +125,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         ChatAuthority chat = deal.chat();
 
         // then
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         chat.postField("message1", "room");
 
         assertEquals("[PMessage(id=1, text=message1, room=room, type=3, topicId=1, " +
@@ -183,7 +175,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         client(0).start();
 
-        messages.post("room", "player", null, ROOM); // 1
+        with.chat.post("room", "player", null, ROOM); // 1
 
         // when
         client(0).sendToServer("{'command':'get', " +
@@ -206,7 +198,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         client(0).start();
 
-        messages.post("room", "player", null, ROOM); // 1
+        with.chat.post("room", "player", null, ROOM); // 1
 
         // when
         client(0).sendToServer("{'command':'delete', " +
@@ -235,8 +227,8 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(1).start();
         client(2).start();
 
-        messages.post("room", "player", null, ROOM); // 1
-        messages.post("room2", "player3", null, ROOM); // 2
+        with.chat.post("room", "player", null, ROOM); // 1
+        with.chat.post("room2", "player3", null, ROOM); // 2
 
         // when
         // player1 delete message1
@@ -308,9 +300,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(1).start();
         client(2).start();
 
-        messages.post("room", "player", null, ROOM);     // 1
-        messages.post("room", "player", 1, ROOM_TOPIC);  // 2
-        messages.post("room", "player2", 1, ROOM_TOPIC); // 3
+        with.chat.post("room", "player", null, ROOM);     // 1
+        with.chat.post("room", "player", 1, ROOM_TOPIC);  // 2
+        with.chat.post("room", "player2", 1, ROOM_TOPIC); // 3
 
         // when
         // player1 remove first topic message2
@@ -382,9 +374,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(0).start();
         client(1).start();
 
-        messages.post("room", "player", null, ROOM);     // 1
-        messages.post("room", "player", 1, ROOM_TOPIC);  // 2
-        messages.post("room", "player2", 1, ROOM_TOPIC); // 3
+        with.chat.post("room", "player", null, ROOM);     // 1
+        with.chat.post("room", "player", 1, ROOM_TOPIC);  // 2
+        with.chat.post("room", "player2", 1, ROOM_TOPIC); // 3
 
         // when
         // player1 remove first topic message2
@@ -465,7 +457,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
     @Test
     public void shouldDelete_success_informAnotherUser_caseDeleteFieldMessage() {
         // given
-        roomsSettings.settings("room", "third")
+        with.rooms.settings("room", "third")
                 .bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TEAMS_PER_ROOM, 1)
                 .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
@@ -483,9 +475,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(1).start();
         client(2).start();
 
-        messages.post("room", "player",  1, FIELD); // 1
-        messages.post("room", "player2", 1, FIELD); // 2
-        messages.post("room2", "player3", 2, FIELD); // 3
+        with.chat.post("room", "player",  1, FIELD); // 1
+        with.chat.post("room", "player2", 1, FIELD); // 2
+        with.chat.post("room2", "player3", 2, FIELD); // 3
 
         // when
         // delete field message by player1
@@ -579,7 +571,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
     @Test
     public void shouldDelete_success_informAnotherUser_caseDeleteFieldTopicMessage() {
         // given
-        roomsSettings.settings("room", "third")
+        with.rooms.settings("room", "third")
                 .bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TEAMS_PER_ROOM, 1)
                 .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
@@ -597,11 +589,11 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(1).start();
         client(2).start();
 
-        messages.post("room", "player",  1, FIELD);        // 1
-        messages.post("room", "player",  1, FIELD_TOPIC);  // 2
-        messages.post("room", "player2", 1, FIELD_TOPIC);  // 3
-        messages.post("room2", "player3", 2, FIELD);       // 4
-        messages.post("room2", "player3", 4, FIELD_TOPIC); // 5
+        with.chat.post("room", "player",  1, FIELD);        // 1
+        with.chat.post("room", "player",  1, FIELD_TOPIC);  // 2
+        with.chat.post("room", "player2", 1, FIELD_TOPIC);  // 3
+        with.chat.post("room2", "player3", 2, FIELD);       // 4
+        with.chat.post("room2", "player3", 4, FIELD_TOPIC); // 5
 
         // when
         // delete field message2 by player1
@@ -696,7 +688,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
     @Test
     public void shouldDelete_success_informAnotherUser_caseDeleteFieldTopicMessage_whenDeletedRootField() {
         // given
-        roomsSettings.settings("room", "third")
+        with.rooms.settings("room", "third")
                 .bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TEAMS_PER_ROOM, 1)
                 .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
@@ -711,9 +703,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(0).start();
         client(1).start();
 
-        messages.post("room", "player",  1, FIELD);       // 1
-        messages.post("room", "player",  1, FIELD_TOPIC); // 2
-        messages.post("room", "player2", 1, FIELD_TOPIC); // 3
+        with.chat.post("room", "player",  1, FIELD);       // 1
+        with.chat.post("room", "player",  1, FIELD_TOPIC); // 2
+        with.chat.post("room", "player2", 1, FIELD_TOPIC); // 3
 
         // when
         // delete field message2 by player1
@@ -848,9 +840,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         client(0).start();
 
-        messages.post("room", "player", null, ROOM); // 1
-        messages.post("room", "player", null, ROOM); // 2
-        messages.post("room", "player", null, ROOM); // 3
+        with.chat.post("room", "player", null, ROOM); // 1
+        with.chat.post("room", "player", null, ROOM); // 2
+        with.chat.post("room", "player", null, ROOM); // 3
 
         // when
         client(0).sendToServer("{'command':'getAllRoom', " +
@@ -900,9 +892,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         client(0).start();
 
-        messages.post("room", "player", null, ROOM);    // 1
-        messages.post("room", "player", 1, ROOM_TOPIC); // 2
-        messages.post("room", "player", 1, ROOM_TOPIC); // 3
+        with.chat.post("room", "player", null, ROOM);    // 1
+        with.chat.post("room", "player", 1, ROOM_TOPIC); // 2
+        with.chat.post("room", "player", 1, ROOM_TOPIC); // 3
 
         // when
         client(0).sendToServer("{'command':'getAllTopic', " +
@@ -952,9 +944,9 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         client(0).start();
 
-        messages.post("room", "player", null, ROOM); // 1
-        messages.post("room", "player", 1, FIELD); // 2
-        messages.post("room", "player", 1, FIELD); // 3
+        with.chat.post("room", "player", null, ROOM); // 1
+        with.chat.post("room", "player", 1, FIELD); // 2
+        with.chat.post("room", "player", 1, FIELD); // 3
 
         // when
         client(0).sendToServer("{'command':'getAllField', " +
@@ -1003,7 +995,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(0).start();
 
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         client(0).sendToServer("{'command':'postRoom', " +
                 "'data':{'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1029,7 +1021,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(2).start();
 
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         client(0).sendToServer("{'command':'postRoom', " +
                 "'data':{'room':'room', 'text':'message1'}}");
         waitForServerReceived();
@@ -1085,7 +1077,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(0).start();
 
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         client(0).sendToServer("{'command':'postField', " +
                 "'data':{'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1106,7 +1098,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
     @Test
     public void shouldPostField_success_informAnotherUser_sameField() {
         // given
-        roomsSettings.settings("room", "third")
+        with.rooms.settings("room", "third")
                 .bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TEAMS_PER_ROOM, 1)
                 .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
@@ -1125,7 +1117,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(2).start();
 
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         client(0).sendToServer("{'command':'postField', " +
                 "'data':{'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1160,7 +1152,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
     @Test
     public void shouldGet_fail_informOnlyPlayerThatSendsRequest_sameField() {
         // given
-        roomsSettings.settings("room", "third")
+        with.rooms.settings("room", "third")
                 .bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TEAMS_PER_ROOM, 1)
                 .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
@@ -1179,7 +1171,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(2).start();
 
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         client(0).sendToServer("{'command':'get', " +
                 "'data':{'id':1, 'room':'room'}}");
         waitForServerReceived();
@@ -1218,7 +1210,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(1).start();
 
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         client(0).sendToServer("{'command':'postField', " +
                 "'data':{'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1271,11 +1263,11 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
 
         client(0).start();
 
-        messages.post("room", "player", null, ROOM); // 1
-        messages.post("room", "player", null, ROOM); // 2
+        with.chat.post("room", "player", null, ROOM); // 1
+        with.chat.post("room", "player", null, ROOM); // 2
 
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         client(0).sendToServer("{'command':'postTopic', " +
                 "'data':{'id':1, 'room':'room', 'text':'message'}}");
         waitForServerReceived();
@@ -1304,11 +1296,11 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         client(1).start();
         client(2).start();
 
-        messages.post("room", "player", null, ROOM); // 1
-        messages.post("room", "player", null, ROOM); // 2
+        with.chat.post("room", "player", null, ROOM); // 1
+        with.chat.post("room", "player", null, ROOM); // 2
 
         // when
-        time.nowIs(12345L);
+        with.time.nowIs(12345L);
         client(0).sendToServer("{'command':'postTopic', " +
                 "'data':{'id':1, 'room':'room', 'text':'message'}}");
         waitForServerReceived();

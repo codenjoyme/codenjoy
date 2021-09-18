@@ -26,7 +26,7 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.helper.LoginHelper;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import org.junit.After;
 import org.junit.Before;
@@ -55,11 +55,11 @@ public class PlayersCacheTest {
     private PlayersCache cache;
 
     @Autowired
-    private LoginHelper login;
+    private Helpers with;
 
     @Before
     public void setup() {
-        login.removeAll();
+        with.clean.removeAll();
     }
 
     @After
@@ -70,7 +70,7 @@ public class PlayersCacheTest {
     @Test
     public void shouldGetName_firstTime() {
         // given
-        login.register("player", "ip", "room", "first");
+        with.login.register("player", "ip", "room", "first");
         reset(registration);
         cache.removeAll();
 
@@ -103,7 +103,7 @@ public class PlayersCacheTest {
     @Test
     public void shouldGetName_notRegisteredUser() {
         // given
-        login.register("player-ai", "ip", "room", "first");
+        with.login.register("player-ai", "ip", "room", "first");
         registration.remove("player-ai"); // no registration recprds
         reset(registration);
         cache.removeAll();

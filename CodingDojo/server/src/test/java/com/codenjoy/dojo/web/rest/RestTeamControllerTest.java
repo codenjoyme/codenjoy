@@ -38,25 +38,25 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         settings.playersAndTeamsPerRoom(2, 2);
 
         // when then
-        login.register("player1", ip, room, game);
+        with.login.register("player1", ip, room, game);
 
         asrtFld("[f0: player1(t0)]");
 
         // when then
-        login.register("player2", ip, room, game);
+        with.login.register("player2", ip, room, game);
 
         asrtFld("[f0: player1(t0)]\n" +
                 "[f1: player2(t0)]");
 
         // when then
-        login.register("player3", ip, room, game);
+        with.login.register("player3", ip, room, game);
 
         asrtFld("[f0: player1(t0)]\n" +
                 "[f1: player2(t0)]\n" +
                 "[f2: player3(t0)]");
 
         // when then
-        login.register("player4", ip, room, game);
+        with.login.register("player4", ip, room, game);
 
         asrtFld("[f0: player1(t0)]\n" +
                 "[f1: player2(t0)]\n" +
@@ -113,10 +113,10 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         settings.playersAndTeamsPerRoom(2, 2);
 
         // when then
-        login.register("player1", ip, room, game);
-        login.register("player2", ip, room, game);
-        login.register("player3", ip, room, game);
-        login.register("player4", ip, room, game);
+        with.login.register("player1", ip, room, game);
+        with.login.register("player2", ip, room, game);
+        with.login.register("player3", ip, room, game);
+        with.login.register("player4", ip, room, game);
 
         asrtFld("[f0: player1(t0)]\n" +
                 "[f1: player2(t0)]\n" +
@@ -163,14 +163,14 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         settings.playersAndTeamsPerRoom(4, 2);
 
         // when then
-        login.register("player1", ip, room, game);
-        login.register("player2", ip, room, game);
-        login.register("player3", ip, room, game);
-        login.register("player4", ip, room, game);
-        login.register("player5", ip, room, game);
-        login.register("player6", ip, room, game);
-        login.register("player7", ip, room, game);
-        login.register("player8", ip, room, game);
+        with.login.register("player1", ip, room, game);
+        with.login.register("player2", ip, room, game);
+        with.login.register("player3", ip, room, game);
+        with.login.register("player4", ip, room, game);
+        with.login.register("player5", ip, room, game);
+        with.login.register("player6", ip, room, game);
+        with.login.register("player7", ip, room, game);
+        with.login.register("player8", ip, room, game);
 
         asrtFld("[f0: player1(t0), player2(t0)]\n" +
                 "[f1: player3(t0), player4(t0)]\n" +
@@ -344,7 +344,7 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         asrtTms("[1: player1, player2]\n" +
                 "[2: player3, player4]");
 
-        login.register("player5", ip, room, game);
+        with.login.register("player5", ip, room, game);
 
         asrtTms("[0: player5]\n" +
                 "[1: player1, player2]\n" +
@@ -375,7 +375,7 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         asrtTms("[3: player1, player2]\n" +
                 "[4: player3, player4]");
 
-        login.register("player5", ip, room, game);
+        with.login.register("player5", ip, room, game);
 
         asrtTms("[0: player5]\n" +
                 "[3: player1, player2]\n" +
