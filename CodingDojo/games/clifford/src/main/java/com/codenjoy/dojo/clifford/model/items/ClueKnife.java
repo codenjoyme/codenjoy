@@ -37,6 +37,6 @@ public class ClueKnife extends PointImpl implements State<Element, Player> {
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        return Element.KNIFE_CLUE;
+        return Element.CLUE_KNIFE;
     }
 }

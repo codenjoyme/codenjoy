@@ -86,9 +86,9 @@ public class AISolver implements Solver<Board> {
             return Arrays.asList();
         }
         List<Point> to = board.get(
-                Element.KNIFE_CLUE,
-                Element.GLOVE_CLUE,
-                Element.RING_CLUE);
+                Element.CLUE_KNIFE,
+                Element.CLUE_GLOVE,
+                Element.CLUE_RING);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }

@@ -84,15 +84,15 @@ public class Level extends AbstractLevel {
     }
 
     public List<ClueKnife> knifeClue() {
-        return find(ClueKnife::new, KNIFE_CLUE);
+        return find(ClueKnife::new, CLUE_KNIFE);
     }
 
     public List<ClueGlove> gloveClue() {
-        return find(ClueGlove::new, GLOVE_CLUE);
+        return find(ClueGlove::new, CLUE_GLOVE);
     }
 
     public List<ClueRing> ringClue() {
-        return find(ClueRing::new, RING_CLUE);
+        return find(ClueRing::new, CLUE_RING);
     }
 
     public List<Ladder> ladder() {

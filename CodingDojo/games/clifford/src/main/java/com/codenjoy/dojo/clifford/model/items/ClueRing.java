@@ -36,6 +36,6 @@ public class ClueRing extends PointImpl implements State<Element, Player> {
 
     @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        return Element.RING_CLUE;
+        return Element.CLUE_RING;
     }
 }
