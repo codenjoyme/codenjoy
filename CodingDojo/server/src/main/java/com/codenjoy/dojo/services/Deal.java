@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.nullobj.NullDeal;
 import com.codenjoy.dojo.services.nullobj.NullGame;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -42,6 +43,7 @@ import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
  * Игру на которой он играет - Game. Комнату в которой эта игра происходит - playerRoom. 
  * А так же джойстик которым он играет - Joystick. 
  */
+@Slf4j
 @Getter
 public class Deal implements Tickable {
 
@@ -193,7 +195,15 @@ public class Deal implements Tickable {
     public void setChat(ChatAuthority chat) {
         this.chat = chat;
         if (chat != null) {
-            messages = message -> chat.postField(message, getRoom());
+            messages = message -> {
+                try {
+                    chat.postField(message, getRoom());
+                } catch (Exception exception) {
+                    // TODO случается такое, когда перегружаешь всех участников на админке
+                    //      а в жто время игра постит сообщения
+                    log.error("Post event message to the player: " + getPlayerId(), exception);
+                }
+            };
             player.getInfo().add(messages);
         } else {
             player.getInfo().remove(messages);
