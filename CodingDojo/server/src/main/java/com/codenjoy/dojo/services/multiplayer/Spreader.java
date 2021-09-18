@@ -95,10 +95,11 @@ public class Spreader {
         }
 
         GameRoom room = optional.get();
-        deal.chat().postField("Player left the field", deal.getRoom());
-        List<Deal> removed = room.remove(deal, sweeper);
 
+        deal.chat().postField("Player left the field", deal.getRoom());
         deal.getGame().close();
+
+        List<Deal> removed = room.remove(deal, sweeper);
 
         removeIfEmpty(room);
 
