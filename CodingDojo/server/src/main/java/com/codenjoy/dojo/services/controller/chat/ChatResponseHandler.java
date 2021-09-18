@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 
-import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
@@ -33,45 +33,50 @@ import org.eclipse.jetty.websocket.api.Session;
 @Slf4j
 public class ChatResponseHandler implements ResponseHandler {
 
-    private final Player player;
-    private final ChatCommand command;
-    private final Error.OnError onError;
+    private final Deal deal;
+    private final LazyChatCommand command;
 
-    public ChatResponseHandler(Player player, ChatAuthority chat, Error.OnError onError) {
-        this.player = player;
-        this.command = new ChatCommand(chat);
-        this.onError = onError;
+    public ChatResponseHandler(Deal deal, ChatAuthority chat, Error.OnError onError) {
+        this.deal = deal;
+        this.command = new LazyChatCommand(chat, onError);
     }
 
     @Override
     public void onResponse(PlayerSocket socket, String message) {
         log.debug("Received response: {} from player: {}",
-                message, player.getId());
+                message, getPlayerId());
 
         ChatRequest request = new ChatRequest(message);
-        try {
-            command.process(request);
-        } catch (Exception exception) {
-            log.error("Error during chat request: " + request, exception);
-            onError.on(new Error(exception));
-        }
+        command.process(request);
     }
 
     @Override
     public void onClose(PlayerSocket socket, int statusCode, String reason) {
         log.debug("Websocket closed: {} from player: {} status code: {} reason: {}",
-                player.getId(), statusCode, reason);
+                getPlayerId(), statusCode, reason);
     }
 
     @Override
     public void onError(PlayerSocket socket, Throwable error) {
         log.error("Request error: player: {}, error: {}",
-                player.getId(), error);
+                getPlayerId(), error);
     }
 
     @Override
     public void onConnect(PlayerSocket socket, Session session) {
         log.debug("Connected: player: {}, session: {}",
-                player.getId(), session);
+                getPlayerId(), session);
+    }
+
+    public String getPlayerId() {
+        return deal.getPlayerId();
+    }
+
+    public boolean isFor(Deal deal) {
+        return deal.equals(deal);
+    }
+
+    public void tick() {
+        command.tick();
     }
 }

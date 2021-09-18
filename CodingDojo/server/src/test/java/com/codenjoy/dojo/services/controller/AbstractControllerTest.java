@@ -157,11 +157,12 @@ public abstract class AbstractControllerTest<TData, TControl> {
         waitForServerReceived(true);
     }
 
-    // TODO как-нибудь когда будет достаточно времени и желания позапускать этот тест и разгадать, почему зависает тут тест
+    // TODO как-нибудь когда будет достаточно времени и желания разобрать этот тест и разгадать, почему зависает тут тест
     @SneakyThrows
     protected void waitForServerReceived(boolean shouldGetMessage) {
         int count = 0;
         while (count <= MAX && receivedOnServer.isEmpty()) {
+            tick();
             Thread.sleep(100);
             count++;
         }
@@ -169,6 +170,10 @@ public abstract class AbstractControllerTest<TData, TControl> {
             assertEquals("The server never received the message",
                     false, receivedOnServer.isEmpty());
         }
+    }
+
+    protected void tick() {
+        // overwrite me
     }
 
     protected void waitForClientReceived(int index) {

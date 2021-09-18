@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.controller.chat.ChatController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.ChatDealsUtils;
@@ -91,7 +92,7 @@ public class PlayerServiceImplIntegrationTest {
                         = this.screenController = mock(Controller.class);
 
                 PlayerServiceImplIntegrationTest.this.chatController
-                        = this.chatController = mock(Controller.class);
+                        = this.chatController = mock(ChatController.class);
 
                 ChatDealsUtils.setupChat(chatController);
 

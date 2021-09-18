@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.controller.chat;
 
 
 import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.chat.ChatAuthority;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.ChatType;
@@ -36,11 +37,12 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.codenjoy.dojo.services.controller.chat.ChatCommand.*;
 
 @Component
-public class ChatController implements Controller<String, ChatAuthority> {
+public class ChatController implements Controller<String, ChatAuthority>, Tickable {
 
     private static final String COMMAND_TEMPLATE =
             "{\"command\":\"%s\", \"type\":\"%s\", \"data\":%s}";
@@ -51,6 +53,7 @@ public class ChatController implements Controller<String, ChatAuthority> {
     private final PlayerTransport transport;
     private final ChatService chatService;
     private final ObjectMapper mapper;
+    private final List<ChatResponseHandler> handlers;
 
     // autowiring by name
     public ChatController(PlayerTransport chatPlayerTransport, ChatService chatService) {
@@ -58,6 +61,7 @@ public class ChatController implements Controller<String, ChatAuthority> {
         this.chatService = chatService;
         transport.setDefaultFilter(Object::toString);
         this.mapper = new ObjectMapper();
+        handlers = new CopyOnWriteArrayList<>();
     }
 
     @Override
@@ -65,9 +69,10 @@ public class ChatController implements Controller<String, ChatAuthority> {
         String id = deal.getPlayerId();
         ChatAuthority authority = chatService.authority(id, chatListener());
         deal.setChat(authority);
-        transport.registerPlayerEndpoint(id,
-                new ChatResponseHandler(deal.getPlayer(), authority,
-                        error -> sendState(ERROR, null, error, id)));
+        ChatResponseHandler handler = new ChatResponseHandler(deal, authority,
+                error -> sendState(ERROR, null, error, id));
+        transport.registerPlayerEndpoint(id, handler);
+        handlers.add(handler);
     }
 
     @SneakyThrows
@@ -112,5 +117,11 @@ public class ChatController implements Controller<String, ChatAuthority> {
     @Override
     public void unregister(Deal deal) {
         transport.unregisterPlayerEndpoint(deal.getPlayerId());
+        handlers.removeIf(handler -> handler.isFor(deal));
+    }
+
+    @Override
+    public synchronized void tick() {
+        handlers.forEach(ChatResponseHandler::tick);
     }
 }

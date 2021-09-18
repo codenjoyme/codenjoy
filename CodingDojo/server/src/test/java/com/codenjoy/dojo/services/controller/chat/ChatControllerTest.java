@@ -836,6 +836,11 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 client(0).messages());
     }
 
+    @Override
+    protected void tick() {
+        controller.tick();
+    }
+
     @Test
     public void shouldGetAllRoom_success() {
         // given

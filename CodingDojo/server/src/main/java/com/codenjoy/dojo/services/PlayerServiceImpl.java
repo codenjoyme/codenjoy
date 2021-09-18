@@ -30,6 +30,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.controller.chat.ChatController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
@@ -86,7 +87,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
     @Qualifier("chatController")
-    protected Controller chatController;
+    protected ChatController chatController;
 
     @Autowired protected GameService gameService;
     @Autowired protected AutoSaver autoSaver;
@@ -351,6 +352,7 @@ public class PlayerServiceImpl implements PlayerService {
             deals.tick();
             sendScreenUpdates();
             requestControls();
+            chatController.tick();
 
             inactivity.tick();
             semifinal.tick();
