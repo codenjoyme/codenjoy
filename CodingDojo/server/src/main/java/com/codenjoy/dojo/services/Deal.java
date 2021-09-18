@@ -115,7 +115,6 @@ public class Deal implements Tickable {
         if (onRemove != null) {
             onRemove.accept(this);
         }
-        game.close();
         player.close();
     }
 

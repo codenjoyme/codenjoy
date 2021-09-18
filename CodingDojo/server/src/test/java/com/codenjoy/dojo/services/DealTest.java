@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -195,12 +196,14 @@ public class DealTest {
         // given
         boolean[] removed = {false};
         Consumer<Deal> onRemove = deal -> removed[0] = true;
+        Closeable ai = mock(Closeable.class);
+        player.setAi(ai);
 
         // when
         deal.remove(onRemove);
 
         // then
-        verify(LockedGame.unwrap(game)).close();
+        verify(ai).close();
         assertEquals(true, removed[0]);
     }
 

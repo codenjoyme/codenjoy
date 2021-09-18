@@ -88,7 +88,6 @@ public class Deals implements Iterable<Deal>, Tickable {
 
         deal.remove(onRemove);
         deal.setChat(null);
-        deal.getGame().on(null);
     }
 
     private void removeInRoom(Deal deal, Sweeper sweeper) {
@@ -117,8 +116,6 @@ public class Deals implements Iterable<Deal>, Tickable {
         Game game = deal.getGame();
         String room = deal.getRoom();
         GameType gameType = deal.getGameType();
-
-        game.close();
 
         MultiplayerType type = deal.getType();
         int roomSize = type.loadProgress(game, save);
