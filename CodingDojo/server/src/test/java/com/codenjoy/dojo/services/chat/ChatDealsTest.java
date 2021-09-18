@@ -28,10 +28,7 @@ import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.RealGameConfiguration;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.LazyJoystick;
-import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.helper.LoginHelper;
 import com.codenjoy.dojo.services.helper.RoomHelper;
@@ -68,6 +65,7 @@ public class ChatDealsTest {
     @Autowired
     private RoomHelper roomsSettings;
 
+    // do not remove this - it used for spy-decorating for the component
     @SpyBean
     private GameService games;
 
@@ -84,12 +82,15 @@ public class ChatDealsTest {
     private PlayerService players;
 
     @Autowired
-    private ChatService chat;
+    private TimerService timer;
 
     @Before
     public void setup() {
         login.asNone();
         login.removeAll();
+
+        // don't tick any services (we will tick PSI in manual mode)
+        timer.pause();
     }
 
     @After
