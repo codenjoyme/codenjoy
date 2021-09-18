@@ -1158,6 +1158,53 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
     }
 
     @Test
+    public void shouldGet_fail_informOnlyPlayerThatSendsRequest_sameField() {
+        // given
+        roomsSettings.settings("room", "third")
+                .bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_TEAMS_PER_ROOM, 1)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
+
+        Deal deal1 = createPlayer("player", "room", "third");
+        Deal deal2 = createPlayer("player2", "room", "third");
+        Deal deal3 = createPlayer("player3", "room2", "third"); // another room will be ignored
+
+        assertEquals("[1, 1, 2]", Arrays.asList(
+                fields.id(deal1.getField()),
+                fields.id(deal2.getField()),
+                fields.id(deal3.getField())).toString());
+
+        client(0).start();
+        client(1).start();
+        client(2).start();
+
+        // when
+        time.nowIs(12345L);
+        client(0).sendToServer("{'command':'get', " +
+                "'data':{'id':1, 'room':'room'}}");
+        waitForServerReceived();
+        waitForClientReceived(0);
+        waitForClientReceived(1, false);
+        waitForClientReceived(2, false);
+
+        // then
+        assertEquals("[get(1, room)]", receivedOnServer());
+
+        // inform player1 because of player is a requester
+        assertEquals("[{'command':'error', 'data':{'error':'IllegalArgumentException'," +
+                        "'message':'There is no message with id '1' in room 'room''}}]",
+                client(0).messages());
+
+        // inform player2 because player is not a requester
+        assertEquals("[]",
+                client(1).messages());
+
+        // inform player3 because of other room
+        assertEquals("[]",
+                client(2).messages());
+    }
+
+    @Test
     public void shouldPostField_success_dontInformAnotherUser_differentFields() {
         // given
         Deal deal1 = createPlayer("player", "room", "first");
