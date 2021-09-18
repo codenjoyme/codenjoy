@@ -23,8 +23,10 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class Error {
 
     private final String error;
