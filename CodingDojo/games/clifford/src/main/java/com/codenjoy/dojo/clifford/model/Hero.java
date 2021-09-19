@@ -34,12 +34,14 @@ import com.codenjoy.dojo.services.StateUtils;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static com.codenjoy.dojo.games.clifford.Element.*;
 import static com.codenjoy.dojo.clifford.services.GameSettings.Keys.MASK_TICKS;
 import static com.codenjoy.dojo.services.Direction.DOWN;
+import static com.codenjoy.dojo.services.StateUtils.filter;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
@@ -225,7 +227,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
 
     public boolean isFall() {
         return (field.isPit(this) && !field.isPipe(this) && !field.isLadder(this))
-            || (isMask() && isRegularPlayerAt(underHero()));
+                || (isMask() && isRegularPlayerAt(underHero()));
     }
 
     private Point underHero() {
@@ -242,7 +244,9 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
                     : state;
         } else {
             Element state = state(alsoAtPoint);
-            state = state.otherHero();
+            state = anyHeroFromAnotherTeam(player, filter(alsoAtPoint, Hero.class))
+                    ? state.enemyHero()
+                    : state.otherHero();
             return isMask()
                     ? state.mask()
                     : state;
@@ -286,5 +290,10 @@ public class Hero extends RoundPlayerHero<Field> implements State<Element, Playe
 
     private boolean isLeftTurn() {
         return direction.equals(Direction.LEFT);
+    }
+
+    private boolean anyHeroFromAnotherTeam(Player player, List<Hero> heroes) {
+        return heroes.stream()
+                .anyMatch(h -> player.getTeamId() != h.getPlayer().getTeamId());
     }
 }
