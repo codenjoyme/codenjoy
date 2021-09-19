@@ -304,12 +304,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private Player getPlayer(PlayerSave save, String game, String room) {
-        String name = save.getId();
+        String id = save.getId();
         String callbackUrl = save.getCallbackUrl();
 
         GameType gameType = gameService.getGameType(game, room);
-        Player player = getPlayer(name);
-        Deal oldDeal = deals.get(name);
+        Player player = getPlayer(id);
+        Deal oldDeal = deals.get(id);
 
         boolean newPlayer = (player instanceof NullPlayer) 
                 || !game.equals(player.getGame())
@@ -320,7 +320,7 @@ public class PlayerServiceImpl implements PlayerService {
             PlayerScores playerScores = gameType.getPlayerScores(save.getScore(), gameType.getSettings());
             Information listener = new ScoresCollector(playerScores);
 
-            player = new Player(name, callbackUrl,
+            player = new Player(id, callbackUrl,
                     gameType, playerScores, listener);
             player.setLastResponse(time.now());
             player.setRoom(room);
@@ -333,7 +333,7 @@ public class PlayerServiceImpl implements PlayerService {
             // TODO N+1 проблема во время загрузки приложения
             player.setReadableName(registration.getNameById(player.getId()));
 
-            log.debug("Player {} starting new game {}", name, deal.getGame());
+            log.debug("Player {} starting new game {}", id, deal.getGame());
         } else {
           // do nothing
         }
