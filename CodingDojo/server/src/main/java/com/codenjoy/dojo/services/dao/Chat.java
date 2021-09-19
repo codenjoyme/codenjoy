@@ -333,7 +333,7 @@ public class Chat {
 
                 Arrays.asList(new Object[]{
                                 message.getRoom(),
-                                0,
+                                false,
                                 message.getTopicId(),
                                 message.getType().id(),
                                 message.getPlayerId(),
