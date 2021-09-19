@@ -33,7 +33,6 @@ public class EventsCollector implements Information {
     public static final String LEVEL = "Level ";
 
     private Collector all = new Collector();
-    private Consumer<String> onAdd;
     private List<Consumer<String>> listeners = new LinkedList<>();
 
     @Override
