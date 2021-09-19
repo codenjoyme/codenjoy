@@ -129,7 +129,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         chat.postField("message1", "room");
 
         assertEquals("[PMessage(id=1, text=message1, room=room, type=3, topicId=1, " +
-                        "playerId=player, playerName=player-name, time=12345)]",
+                        "playerId=player, playerName=player-name, recipientId=null, time=12345)]",
                 chat.getAllField(Filter.room("room").count(10).get()).toString());
     }
 
@@ -1091,7 +1091,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 client(0).messages());
 
         assertEquals("Chat.Message(id=1, topicId=1, type=FIELD(3), room=room, " +
-                        "playerId=player, time=12345, text=message)",
+                        "playerId=player, recipientId=null, time=12345, text=message)",
                 chat.getMessageById(1).toString());
     }
 
@@ -1129,7 +1129,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[postField(message, room)]", receivedOnServer());
 
         assertEquals("Chat.Message(id=1, topicId=1, type=FIELD(3), room=room, " +
-                        "playerId=player, time=12345, text=message)",
+                        "playerId=player, recipientId=null, time=12345, text=message)",
                 chat.getMessageById(1).toString());
 
         // inform player1
@@ -1221,7 +1221,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[postField(message, room)]", receivedOnServer());
 
         assertEquals("Chat.Message(id=1, topicId=1, type=FIELD(3), room=room, " +
-                        "playerId=player, time=12345, text=message)",
+                        "playerId=player, recipientId=null, time=12345, text=message)",
                 chat.getMessageById(1).toString());
 
         // inform player1
@@ -1281,7 +1281,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
                 client(0).messages());
 
         assertEquals("Chat.Message(id=3, topicId=1, type=ROOM_TOPIC(2), " +
-                        "room=room, playerId=player, time=12345, text=message)",
+                        "room=room, playerId=player, recipientId=null, time=12345, text=message)",
                 chat.getMessageById(3).toString());
     }
 
@@ -1312,7 +1312,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         assertEquals("[postTopic(1, message, room)]", receivedOnServer());
 
         assertEquals("Chat.Message(id=3, topicId=1, type=ROOM_TOPIC(2), " +
-                        "room=room, playerId=player, time=12345, text=message)",
+                        "room=room, playerId=player, recipientId=null, time=12345, text=message)",
                 chat.getMessageById(3).toString());
 
         // inform player1

@@ -56,10 +56,15 @@ public class ChatHelper {
     }
 
     public Chat.Message post(String room, String player, Integer topicId, ChatType type) {
+        return post(room, player, topicId, type, null);
+    }
+
+    public Chat.Message post(String room, String player, Integer topicId, ChatType type, String recepient) {
         long time = JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200");
         int index = messages.size() + 1;
         Chat.Message message = new Chat.Message(
-                room, topicId, type, player,
+                room, topicId, type,
+                player, recepient,
                 time + 100000L * index,
                 "message" + index);
         Chat.Message added = chat.saveMessage(message);
@@ -81,7 +86,7 @@ public class ChatHelper {
                         .count(Integer.MAX_VALUE)
                         .get());
 
-        assertEquals(expected, list.toString());
+        assertEquals(expected, list.toString()); // TODO add split /n
 
         list.forEach(message ->
                 assertEquals(true, chat.deleteMessage(room,
@@ -94,7 +99,7 @@ public class ChatHelper {
                         .count(Integer.MAX_VALUE)
                         .get());
 
-        check(messages, expected);
+        check(messages, expected); // TODO add split /n
 
         // mark removed
         messages.forEach(message ->

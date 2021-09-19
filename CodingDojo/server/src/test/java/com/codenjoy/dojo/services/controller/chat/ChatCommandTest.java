@@ -71,8 +71,8 @@ public class ChatCommandTest {
 
     private PMessage someMessage(int id) {
         return PMessage.from(new Chat.Message(
-                "room" + id, 12 + id, ChatType.ROOM_TOPIC,
-                "player" + id, 12345L + id, "message" + id), "playerName" + id);
+                "room" + id, 12 + id, ChatType.ROOM_TOPIC, "player" + id, null,
+                12345L + id, "message" + id), "playerName" + id);
     }
 
     @Test

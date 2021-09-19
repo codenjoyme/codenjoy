@@ -49,6 +49,7 @@ public class Chat {
                         "type int, " +
                         "deleted boolean, " +
                         "player_id varchar(255), " +
+                        "recipient_id varchar(255), " +
                         "time varchar(255), " +
                         "text varchar(255));"
         );
@@ -383,15 +384,17 @@ public class Chat {
         private ChatType type;
         private String room;
         private String playerId;
+        private String recipientId;
         private long time;
         private String text;
 
         @Builder
-        public Message(String room, Integer topicId, ChatType type, String playerId, long time, String text) {
+        public Message(String room, Integer topicId, ChatType type, String playerId, String recipientId, long time, String text) {
             this.room = room;
             this.topicId = topicId;
             this.type = type;
             this.playerId = playerId;
+            this.recipientId = recipientId;
             this.time = time;
             this.text = text;
         }
@@ -402,6 +405,7 @@ public class Chat {
             topicId = (Integer) rs.getObject("topic_id");
             type = type(rs);
             playerId = rs.getString("player_id");
+            recipientId = rs.getString("recipient_id");
             time = JDBCTimeUtils.getTimeLong(rs);
             text = rs.getString("text");
         }
