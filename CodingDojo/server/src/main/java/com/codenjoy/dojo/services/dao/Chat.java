@@ -63,7 +63,7 @@ public class Chat {
      * @return {@param count} последних сообщений
      *        для текущего чата {@param room}
      *        (или дочернего чата в нем, если указан {@param topicId}),
-     *        посортированных в порядке возрастания времени.
+     *        отсортированных в порядке возрастания времени.
      */
     public List<Message> getMessages(ChatType type, Integer topicId, Filter filter) {
         return pool.select("SELECT * FROM " +
@@ -121,7 +121,7 @@ public class Chat {
      * сразу для всех комнат.
      *
      * @return Возвращает последние сообщения в каждой комнате
-     * с ключем этой комнаты, а значением - id сообщения.
+     * с ключом этой комнаты, а значением - id сообщения.
      */
     public Map<String, Integer> getLastRoomMessageIds() {
         return (Map) pool.select("SELECT m2.room AS key, m2.id AS value " +
@@ -178,7 +178,7 @@ public class Chat {
 
     /**
      * @return Все соообщения текущего топика (родительского сообщения) {@param messageId},
-     *        посортированных в порядке возрастания времени
+     *        отсортированных в порядке возрастания времени
      */
     public List<Message> getTopicMessages(ChatType type, int messageId) {
         return pool.select("SELECT * FROM messages " +
@@ -198,7 +198,7 @@ public class Chat {
      * @return все сообщения в диапазоне ({@param afterId}...{@param beforeId})
      *        для текущего чата {@param room}
      *        (или дочернего чата в нем, если указан {@param topicId}),
-     *        посортированных в порядке возрастания времени.
+     *        отсортированных в порядке возрастания времени.
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId} и message {@param beforeId} помимо выбранных.
      */
@@ -234,7 +234,7 @@ public class Chat {
      * @return {@param count} первых сообщений начиная с {@param afterId}
      *        для текущего чата {@param room}
      *        (или дочернего чата в нем, если указан {@param topicId}),
-     *        посортированных в порядке возрастания времени.
+     *        отсортированных в порядке возрастания времени.
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId}.
      */
@@ -262,7 +262,7 @@ public class Chat {
      * @return {@param count} последних сообщений перед {@param beforeId}
      *        для текущего чата {@param room}
      *        (или дочернего чата в нем, если указан {@param topicId}),
-     *        посортированных в порядке возрастания времени.
+     *        отсортированных в порядке возрастания времени.
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param beforeId}.
      */
