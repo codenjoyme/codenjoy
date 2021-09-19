@@ -64,8 +64,9 @@ public class GameSettings extends SettingsImpl
         CLUE_SCORE_RING("[Score] Ring clue score"),
         CLUE_SCORE_RING_INCREMENT("[Score] Ring clue score increment"),
 
+        KILL_HERO_SCORE("[Score] Kill hero score"),
+        KILL_ENEMY_SCORE("[Score] Kill enemy score"),
         HERO_DIE_PENALTY("[Score] Hero die penalty"),
-        KILL_ROBBER_SCORE("[Score] Kill robber score"),
         SUICIDE_PENALTY("[Score] Suicide penalty"),
 
         LEVEL_MAP("[Level] Map"),
@@ -112,8 +113,9 @@ public class GameSettings extends SettingsImpl
         integer(CLUE_SCORE_RING, 5);
         integer(CLUE_SCORE_RING_INCREMENT, 1);
 
+        integer(KILL_HERO_SCORE, 20);
+        integer(KILL_ENEMY_SCORE, 50);
         integer(HERO_DIE_PENALTY, 1);
-        integer(KILL_ROBBER_SCORE, 10);
         integer(SUICIDE_PENALTY, 10);
 
         multiline(LEVEL_MAP, Big.all().get(0));

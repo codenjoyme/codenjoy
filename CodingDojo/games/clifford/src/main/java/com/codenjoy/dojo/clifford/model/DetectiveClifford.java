@@ -121,11 +121,19 @@ public class DetectiveClifford extends RoundField<Player> implements Field {
         // do nothing
     }
 
-    private void rewardMurderers(Point pt) {
+    private void rewardMurderers(Hero deadHero) {
+        int deadHeroTeam = deadHero.getPlayer().getTeamId();
         heroes().stream()
                 .filter(hero -> hero.under(PotionType.MASK_POTION))
-                .filter(mask -> mask.itsMe(pt))
-                .forEach(murderer -> murderer.event(Events.KILL_ROBBER));
+                .filter(mask -> mask.itsMe(deadHero))
+                .forEach(murderer -> {
+                    int murderTeam = murderer.getPlayer().getTeamId();
+                    if (murderTeam == deadHeroTeam) {
+                        murderer.event(Events.KILL_HERO);
+                    } else {
+                        murderer.event(Events.KILL_ENEMY);
+                    }
+                });
     }
 
     private void generateClue()  {
@@ -210,7 +218,11 @@ public class DetectiveClifford extends RoundField<Player> implements Field {
 
                 Player killerPlayer = (Player) killer.getPlayer();
                 if (killerPlayer != null & killerPlayer != player) {
-                    killerPlayer.event(Events.KILL_ROBBER);
+                    if (killerPlayer.getTeamId() == player.getTeamId()) {
+                        killerPlayer.event(Events.KILL_HERO);
+                    } else {
+                        killerPlayer.event(Events.KILL_ENEMY);
+                    }
                 }
             }
         }

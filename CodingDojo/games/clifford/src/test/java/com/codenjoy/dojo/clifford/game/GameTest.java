@@ -4047,7 +4047,7 @@ public class GameTest extends AbstractGameTest {
         tick();
 
         events.verifyAllEvents("" +
-                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
                 "listener(1) => [HERO_DIE]\n");
 
         assertEquals(1, hero(0).scores());

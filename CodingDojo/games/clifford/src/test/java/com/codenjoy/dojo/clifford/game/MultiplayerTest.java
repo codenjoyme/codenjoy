@@ -186,7 +186,7 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼☼☼☼☼☼\n", 2);
 
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
                 "listener(1) => [HERO_DIE]\n" +
                 "listener(2) => [HERO_DIE]\n");
         assertEquals(true, game(1).isGameOver());
@@ -303,7 +303,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n", 1);
 
-        verify(listener(0), never()).event(Events.KILL_ROBBER);
+        verify(listener(0), never()).event(Events.KILL_HERO);
+        verify(listener(0), never()).event(Events.KILL_ENEMY);
         verify(listener(1), never()).event(Events.HERO_DIE);
     }
 
@@ -344,7 +345,7 @@ public class MultiplayerTest extends AbstractGameTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
                 "listener(1) => [HERO_DIE]\n");
 
         assertF("☼☼☼☼☼☼☼☼\n" +
@@ -427,7 +428,7 @@ public class MultiplayerTest extends AbstractGameTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
                 "listener(1) => [HERO_DIE]\n");
 
         assertF("☼☼☼☼☼☼☼☼\n" +
@@ -532,7 +533,7 @@ public class MultiplayerTest extends AbstractGameTest {
 
         events.verifyAllEvents(
                 "listener(0) => [HERO_DIE]\n" +
-                        "listener(1) => [KILL_ROBBER]\n");
+                        "listener(1) => [KILL_HERO]\n");
 
         assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼      ☼\n" +
@@ -1243,8 +1244,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(1, 1);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
-                "listener(1) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
+                "listener(1) => [KILL_HERO]\n" +
                 "listener(2) => [HERO_DIE]\n" +
                 "listener(3) => [HERO_DIE]\n" +
                 "listener(4) => []\n" +
@@ -1320,8 +1321,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(2, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
-                "listener(1) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
+                "listener(1) => [KILL_HERO]\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
                 "listener(4) => [HERO_DIE]\n" +
@@ -1376,8 +1377,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(3, 3);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
-                "listener(1) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
+                "listener(1) => [KILL_HERO]\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
                 "listener(4) => []\n" +
@@ -1620,8 +1621,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(1, 1);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
-                "listener(1) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
+                "listener(1) => [KILL_HERO]\n" +
                 "listener(2) => [HERO_DIE]\n" +
                 "listener(3) => [HERO_DIE]\n" +
                 "listener(4) => []\n" +
@@ -1697,8 +1698,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(2, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
-                "listener(1) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
+                "listener(1) => [KILL_HERO]\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
                 "listener(4) => [HERO_DIE]\n" +
@@ -1752,7 +1753,7 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(3, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
@@ -1962,8 +1963,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(1, 1);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
-                "listener(1) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
+                "listener(1) => [KILL_HERO]\n" +
                 "listener(2) => [HERO_DIE]\n" +
                 "listener(3) => [HERO_DIE]\n" +
                 "listener(4) => []\n" +
@@ -2039,8 +2040,8 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(2, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
-                "listener(1) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
+                "listener(1) => [KILL_HERO]\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
                 "listener(4) => [HERO_DIE]\n" +
@@ -2094,7 +2095,7 @@ public class MultiplayerTest extends AbstractGameTest {
 
         assertScores(3, 2);
         events.verifyAllEvents(
-                "listener(0) => [KILL_ROBBER]\n" +
+                "listener(0) => [KILL_HERO]\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
                 "listener(3) => []\n" +
@@ -2218,6 +2219,108 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼###HH###☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼\n", 0);
     }
+
+    @Test
+    public void heroKillHeroAndKillEnemy() {
+        settings.bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_TIME_BEFORE_START, 1)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, 4);
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼" +
+                "☼        ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼HH☼☼☼☼" +
+                "☼   HH   ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼HH☼☼☼☼" +
+                "☼   HH   ☼" +
+                "☼###HH###☼" +
+                "☼☼☼☼☼☼☼☼☼☼");
+
+        givenPlayer(3, 2).inTeam(1);
+        givenPlayer(6, 2).inTeam(2);
+
+        givenPlayer(1, 2).inTeam(1);
+        givenPlayer(8, 2).inTeam(1);
+
+        tick();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n" +
+                "listener(3) => [START_ROUND, [Round 1]]\n");
+
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼( ►HH❪ (☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
+
+        crack(2, 3);
+
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼ ⊏ЯHH⟦⊐ ☼\n" +
+                "☼#*#HH#*#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
+
+        goUp();
+
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼  ◄HH❪  ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
+
+        tick();
+
+        assertF("☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼  ◄HH❪  ☼\n" +
+                "☼###HH###☼\n" +
+                "☼☼☼☼HH☼☼☼☼\n" +
+                "☼   HH   ☼\n" +
+                "☼#(#HH#)#☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼\n", 0);
+
+        goUp();
+
+        assertScores(0, 0);
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n");
+
+        tick();
+
+        assertScores(1, 1);
+        events.verifyAllEvents(
+                "listener(0) => [KILL_HERO]\n" +
+                "listener(1) => [KILL_ENEMY]\n" +
+                "listener(2) => [HERO_DIE]\n" +
+                "listener(3) => [HERO_DIE]\n");
+    }
+
 
     private void goUp() {
         // идут на следующий этаж

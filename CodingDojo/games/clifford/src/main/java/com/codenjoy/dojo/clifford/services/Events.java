@@ -26,8 +26,10 @@ public enum Events {
     START_ROUND,      // раунд стартовал
     WIN_ROUND,        // герой победил в раунде
 
-    KILL_ROBBER,       // герой замуровал в стенке другого героя
-    HERO_DIE,         // героя убили
+    // TODO: implement KILL_ROBBER (for this time robber cannot be killed);
+    KILL_HERO,         // герой замуровал в стенке другого героя
+    KILL_ENEMY,        // герой замуровал в стенке другого вражеского героя
+    HERO_DIE,          // героя убили
 
     GET_KNIFE_CLUE,  // подобрано улику
     GET_GLOVE_CLUE,
