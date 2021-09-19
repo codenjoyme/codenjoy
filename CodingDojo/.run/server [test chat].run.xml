@@ -5,6 +5,8 @@
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="pattern" />
     <patterns>
+      <pattern testClass="com.codenjoy.dojo.services.chat.ChatDealsTest" />
+      <pattern testClass="com.codenjoy.dojo.services.controller.chat.LazyChatCommandTest" />
       <pattern testClass="com.codenjoy.dojo.services.controller.chat.ChatControllerTest" />
       <pattern testClass="com.codenjoy.dojo.services.controller.chat.ChatCommandTest" />
       <pattern testClass="com.codenjoy.dojo.services.controller.chat.ChatRequestTest" />
