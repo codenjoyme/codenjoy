@@ -199,7 +199,7 @@ public class Deal implements Tickable {
                     chat.postField(message, getRoom());
                 } catch (Exception exception) {
                     // TODO случается такое, когда перегружаешь всех участников на админке
-                    //      а в жто время игра постит сообщения
+                    //      а в это время игра постит сообщения
                     log.error("Post event message to the player: " + getPlayerId(), exception);
                 }
             };
