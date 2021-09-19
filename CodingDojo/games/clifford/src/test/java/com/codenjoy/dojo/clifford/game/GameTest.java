@@ -548,7 +548,7 @@ public class GameTest extends AbstractGameTest {
                 "☼Ѡ##☼" +
                 "☼☼☼☼☼");
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
 
         dice(2, 3);
         tick();         // ну а после смерти он появляется в рендомном месте
@@ -605,7 +605,7 @@ public class GameTest extends AbstractGameTest {
                 "☼Ѡ##☼" +
                 "☼☼☼☼☼");
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
 
         dice(2, 3);
         tick();         // ну а после смерти он появляется в рендомном месте
@@ -1809,7 +1809,7 @@ public class GameTest extends AbstractGameTest {
                 "☼Ѡ#☼" +
                 "☼☼☼☼");
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
     }
 
     // я могу прострелить стенки под стенками, если те разрушены
@@ -2205,7 +2205,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
 
         dice(1, 3);
         tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
@@ -2237,7 +2237,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
 
         dice(0,  // охотимся за первым игроком
             3, 3);
@@ -2269,7 +2269,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
 
         dice(3, 3);
         tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
@@ -2300,7 +2300,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
 
         dice(0,  // охотимся за первым игроком
             3, 3);
@@ -3695,7 +3695,7 @@ public class GameTest extends AbstractGameTest {
         tick();
         tick();
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3763,7 +3763,7 @@ public class GameTest extends AbstractGameTest {
         tick();
         tick();
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3820,7 +3820,7 @@ public class GameTest extends AbstractGameTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        events.verifyAllEvents("[KILL_HERO, SUICIDE]");
+        events.verifyAllEvents("[HERO_DIE, SUICIDE]");
     }
 
     @Test
@@ -4048,7 +4048,7 @@ public class GameTest extends AbstractGameTest {
 
         events.verifyAllEvents("" +
                 "listener(0) => [KILL_ROBBER]\n" +
-                "listener(1) => [KILL_HERO]\n");
+                "listener(1) => [HERO_DIE]\n");
 
         assertEquals(1, hero(0).scores());
         assertEquals(0, hero(1).scores());

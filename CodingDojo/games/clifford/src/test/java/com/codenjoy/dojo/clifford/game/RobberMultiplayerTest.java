@@ -131,7 +131,7 @@ public class RobberMultiplayerTest extends AbstractGameTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
         assertEquals(true, game().isGameOver());
 
         dice(1, 4);
@@ -349,7 +349,7 @@ public class RobberMultiplayerTest extends AbstractGameTest {
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
-                "listener(1) => [KILL_HERO]\n");
+                "listener(1) => [HERO_DIE]\n");
     }
 
     // каждый чертик бежит за своим героем, даже если к нему занятый уже герой ближе
@@ -390,7 +390,7 @@ public class RobberMultiplayerTest extends AbstractGameTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [KILL_HERO]\n" +
+                "listener(0) => [HERO_DIE]\n" +
                 "listener(1) => []\n");
 
         assertF("☼☼☼☼☼☼☼☼\n" +
@@ -443,7 +443,7 @@ public class RobberMultiplayerTest extends AbstractGameTest {
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
-                "listener(1) => [KILL_HERO]\n");
+                "listener(1) => [HERO_DIE]\n");
 
         assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼   Z  ☼\n" +
@@ -547,7 +547,7 @@ public class RobberMultiplayerTest extends AbstractGameTest {
         // и после того как нагонят оставшегося, снова зависнут
         tick();
 
-        events.verifyAllEvents("[KILL_HERO]");
+        events.verifyAllEvents("[HERO_DIE]");
 
         assertF("☼☼☼☼☼☼☼☼\n" +
                 "☼    Ѡ ☼\n" +

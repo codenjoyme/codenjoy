@@ -60,7 +60,7 @@ public class Player extends RoundGamePlayer<Hero, Field> {
                     break;
                 case START_ROUND:
                 case SUICIDE:
-                case KILL_HERO:
+                case HERO_DIE:
                 case WIN_ROUND:
                     hero.clearScores();
                     break;

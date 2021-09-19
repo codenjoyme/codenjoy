@@ -52,7 +52,7 @@ public class DetectiveClifford extends RoundField<Player> implements Field {
     private int backwaysTimer;
 
     public DetectiveClifford(Dice dice, GameSettings settings) {
-        super(Events.START_ROUND, Events.WIN_ROUND, Events.KILL_HERO, settings);
+        super(Events.START_ROUND, Events.WIN_ROUND, Events.HERO_DIE, settings);
         this.dice = dice;
         this.settings = settings;
         this.field = new PointField();

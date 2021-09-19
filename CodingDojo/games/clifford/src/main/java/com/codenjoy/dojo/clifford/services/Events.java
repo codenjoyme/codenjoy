@@ -27,7 +27,7 @@ public enum Events {
     WIN_ROUND,        // герой победил в раунде
 
     KILL_ROBBER,       // герой замуровал в стенке другого героя
-    KILL_HERO,        // героя убили
+    HERO_DIE,         // героя убили
 
     GET_KNIFE_CLUE,  // подобрано улику
     GET_GLOVE_CLUE,

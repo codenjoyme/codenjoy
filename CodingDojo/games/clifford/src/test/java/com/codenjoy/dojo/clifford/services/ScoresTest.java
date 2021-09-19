@@ -35,8 +35,8 @@ public class ScoresTest {
     private PlayerScores scores;
     private GameSettings settings;
 
-    public void killHero() {
-        scores.event(Events.KILL_HERO);
+    public void heroDie() {
+        scores.event(Events.HERO_DIE);
     }
 
     public void killRobber() {
@@ -63,7 +63,7 @@ public class ScoresTest {
     public void setup() {
         settings = new GameSettings()
                 .integer(SUICIDE_PENALTY, 13)
-                .integer(KILL_HERO_PENALTY, 30)
+                .integer(HERO_DIE_PENALTY, 30)
 
                 .integer(KILL_ROBBER_SCORE, 10)
 
@@ -98,7 +98,7 @@ public class ScoresTest {
         knifeClue();
         knifeClue();
 
-        killHero(); 
+        heroDie();
 
         assertEquals(140
                 + 3 * settings.integer(KILL_ROBBER_SCORE)
@@ -112,13 +112,13 @@ public class ScoresTest {
                 + 2 * settings.integer(CLUE_SCORE_GLOVE)
                 + (1) * settings.integer(CLUE_SCORE_GLOVE_INCREMENT)
 
-                - settings.integer(KILL_HERO_PENALTY),
+                - settings.integer(HERO_DIE_PENALTY),
                 scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        killHero();    
+        heroDie();
 
         assertEquals(0, scores.getScore());
     }
@@ -170,13 +170,13 @@ public class ScoresTest {
         knifeClue();
 
         // when
-        killHero(); 
+        heroDie();
 
         // then
         Integer score = (Integer) scores.getScore();
         assertEquals(3 * settings.integer(CLUE_SCORE_KNIFE)
                     + (1 + 2) * settings.integer(CLUE_SCORE_KNIFE_INCREMENT)
-                    - settings.integer(KILL_HERO_PENALTY),
+                    - settings.integer(HERO_DIE_PENALTY),
                 (int)score);
 
         // when
@@ -242,7 +242,7 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldCleanIncreasedIfKillHero() {
+    public void shouldCleanIncreasedIfHeroDie() {
         // given
         scores = new Scores(0, settings);
 
@@ -251,9 +251,9 @@ public class ScoresTest {
         knifeClue();
 
         // when
-        killHero();
+        heroDie();
 
-        int saved = - settings.integer(KILL_HERO_PENALTY)
+        int saved = - settings.integer(HERO_DIE_PENALTY)
                 + 3 * settings.integer(CLUE_SCORE_KNIFE)
                 + 3 * settings.integer(CLUE_SCORE_KNIFE_INCREMENT);
         assertEquals(saved,

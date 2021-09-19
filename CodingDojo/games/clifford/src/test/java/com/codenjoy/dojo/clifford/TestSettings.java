@@ -32,7 +32,7 @@ public class TestSettings extends GameSettings {
     public TestSettings() {
         bool(ROUNDS_ENABLED, false);
 
-        integer(KILL_HERO_PENALTY, 0);
+        integer(HERO_DIE_PENALTY, 0);
         integer(KILL_ROBBER_SCORE, 10);
 
         integer(SUICIDE_PENALTY, 0);

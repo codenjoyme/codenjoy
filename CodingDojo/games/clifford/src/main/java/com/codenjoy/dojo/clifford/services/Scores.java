@@ -70,9 +70,9 @@ public class Scores implements PlayerScores {
             countRing += settings.integer(CLUE_SCORE_RING_INCREMENT);
         } else if (event.equals(Events.KILL_ROBBER)) {
             score += settings.integer(KILL_ROBBER_SCORE);
-        } else if (event.equals(Events.KILL_HERO)) {
+        } else if (event.equals(Events.HERO_DIE)) {
             clearSeries();
-            score -= settings.integer(KILL_HERO_PENALTY);
+            score -= settings.integer(HERO_DIE_PENALTY);
         } else if (event.equals(Events.SUICIDE)) {
             clearSeries();
             score -= settings.integer(SUICIDE_PENALTY);
