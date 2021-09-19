@@ -68,7 +68,7 @@ public class Chat {
     public List<Message> getMessages(ChatType type, Integer topicId, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
-                        "WHERE deleted = 0 " +
+                        "WHERE deleted = FALSE " +
                         "AND room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
@@ -103,7 +103,7 @@ public class Chat {
     public Integer getLastMessageId(String room) {
         return pool.select("SELECT id " +
                         "FROM messages " +
-                        "WHERE deleted = 0 " +
+                        "WHERE deleted = FALSE " +
                         "AND room = ? " +
                         "AND type = ? " +
                         "ORDER BY time DESC " +
@@ -128,7 +128,7 @@ public class Chat {
                         "FROM" +
                         "    (SELECT room, MAX(time) AS time" +
                         "        FROM messages" +
-                        "        WHERE deleted = 0 " +
+                        "        WHERE deleted = FALSE " +
                         "        AND type = ?" +
                         "        GROUP BY room) m1" +
                         "    JOIN messages m2" +
@@ -155,7 +155,7 @@ public class Chat {
                         "FROM" +
                         "    (SELECT topic_id, MAX(time) AS time" +
                         "        FROM messages" +
-                        "        WHERE deleted = 0 " +
+                        "        WHERE deleted = FALSE " +
                         "        AND type = ?" +
                         "        GROUP BY topic_id) m1" +
                         "    JOIN messages m2" +
@@ -182,7 +182,7 @@ public class Chat {
      */
     public List<Message> getTopicMessages(ChatType type, int messageId) {
         return pool.select("SELECT * FROM messages " +
-                        "WHERE deleted = 0 " +
+                        "WHERE deleted = FALSE " +
                         "AND topic_id = ? " +
                         "AND type = ? " +
                         "ORDER BY time ASC;",
@@ -208,7 +208,7 @@ public class Chat {
                     "afterId in interval should be smaller than beforeId");
         }
         return pool.select("SELECT * FROM messages " +
-                        "WHERE deleted = 0 " +
+                        "WHERE deleted = FALSE " +
                         "AND room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
@@ -240,7 +240,7 @@ public class Chat {
      */
     public List<Message> getMessagesAfter(Integer topicId, ChatType type, Filter filter) {
         return pool.select("SELECT * FROM messages " +
-                        "WHERE deleted = 0 " +
+                        "WHERE deleted = FALSE " +
                         "AND room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
@@ -269,7 +269,7 @@ public class Chat {
     public List<Message> getMessagesBefore(ChatType type, Integer topicId, Filter filter) {
         return pool.select("SELECT * FROM " +
                         "(SELECT * FROM messages " +
-                        "WHERE deleted = 0 " +
+                        "WHERE deleted = FALSE " +
                         "AND room = ? " +
                         "AND topic_id IS ? " +
                         "AND type = ? " +
@@ -291,7 +291,7 @@ public class Chat {
     public Message getMessageById(int messageId) {
         return pool.select("SELECT * " +
                         "FROM messages " +
-                        "WHERE deleted = 0 " +
+                        "WHERE deleted = FALSE " +
                         "AND id = ?",
                 new Object[]{messageId},
                 rs -> rs.next() ? new Message(rs) : null
@@ -352,7 +352,7 @@ public class Chat {
 
     public boolean deleteMessage(String room, int id, String playerId) {
         int count = pool.update("UPDATE messages " +
-                        "SET deleted = 1 " +
+                        "SET deleted = TRUE " +
                         "WHERE id = ? " +
                         "AND room = ? " +
                         "AND player_id = ?",
