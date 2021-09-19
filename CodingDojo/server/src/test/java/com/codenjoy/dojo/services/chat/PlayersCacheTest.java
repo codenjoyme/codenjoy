@@ -23,8 +23,8 @@ package com.codenjoy.dojo.services.chat;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.stuff.SmartAssert;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(Constants.DATABASE_TYPE)
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
 public class PlayersCacheTest {
 

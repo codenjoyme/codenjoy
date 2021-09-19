@@ -25,7 +25,6 @@ package com.codenjoy.dojo.cucumber;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -40,7 +39,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = Constants.ALLOW_OVERRIDING,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(Constants.DATABASE_TYPE)
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
 public class BaseIntegrationTest {
 }

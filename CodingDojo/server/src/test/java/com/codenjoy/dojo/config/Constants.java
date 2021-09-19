@@ -22,8 +22,12 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.config.meta.PostgreSQLProfile;
+
 public class Constants {
 
     public static final String ALLOW_OVERRIDING =
             "spring.main.allow-bean-definition-overriding=true";
+
+    public static final String DATABASE_TYPE = PostgreSQLProfile.NAME;
 }

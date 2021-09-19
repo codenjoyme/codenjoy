@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.info.Information;
@@ -46,7 +46,7 @@ import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(Constants.DATABASE_TYPE)
 public class ScoresCleanerTest {
 
     @Autowired

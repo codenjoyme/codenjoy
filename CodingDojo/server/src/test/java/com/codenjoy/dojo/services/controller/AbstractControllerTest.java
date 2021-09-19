@@ -27,7 +27,6 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
@@ -58,7 +57,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = Constants.ALLOW_OVERRIDING,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(Constants.DATABASE_TYPE)
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
 @Import(ThreeGamesConfiguration.class)
 public abstract class AbstractControllerTest<TData, TControl> {

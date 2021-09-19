@@ -23,8 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
@@ -43,7 +43,7 @@ import static org.mockito.Mockito.mock;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(Constants.DATABASE_TYPE)
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
 public class FieldServiceTest {
 

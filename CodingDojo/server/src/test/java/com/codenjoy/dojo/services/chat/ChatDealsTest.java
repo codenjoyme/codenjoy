@@ -27,7 +27,6 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.RealGameConfiguration;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.stuff.SmartAssert;
@@ -49,7 +48,7 @@ import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = Constants.ALLOW_OVERRIDING)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(Constants.DATABASE_TYPE)
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
 @Import(RealGameConfiguration.class)
 public class ChatDealsTest {

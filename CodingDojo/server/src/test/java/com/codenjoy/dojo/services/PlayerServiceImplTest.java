@@ -25,8 +25,8 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.chat.ChatController;
 import com.codenjoy.dojo.services.controller.control.PlayerController;
@@ -95,7 +95,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(Constants.DATABASE_TYPE)
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
 @TestPropertySource(properties = {
         "game.ai=true"

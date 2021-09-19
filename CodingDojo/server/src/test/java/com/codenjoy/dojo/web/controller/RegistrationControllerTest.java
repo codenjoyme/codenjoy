@@ -22,7 +22,7 @@ package com.codenjoy.dojo.web.controller;
  * #L%
  */
 
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.config.Constants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(Constants.DATABASE_TYPE)
 @WebAppConfiguration
 public class RegistrationControllerTest {
 
