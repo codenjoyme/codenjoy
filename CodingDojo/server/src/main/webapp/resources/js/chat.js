@@ -175,7 +175,13 @@ function initChat(contextPath, chatControl, type) {
             return;
         }
 
+        var needScroll = scrolledAtEnd();
+
         appendMessages(messages, messageId, afterOrBefore);
+
+        if (needScroll) {
+            scrollToEnd();
+        }
 
         loading = false;
     }
@@ -272,6 +278,11 @@ function initChat(contextPath, chatControl, type) {
 
     function scrollTo(position) {
         chatContainer.scrollTop(position);
+    }
+
+    function scrolledAtEnd() {
+        return (chatContainer[0].scrollTop + chatContainer[0].clientHeight)
+            - getScrollHeight() < 3; // там дробные доли пикселей, их так учитываем
     }
 
     function scrollToEnd() {
