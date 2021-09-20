@@ -161,6 +161,9 @@ public abstract class AbstractRestControllerTest {
     @Autowired
     protected Chat chat;
 
+    @Autowired
+    protected FieldService fields;
+
     @Before
     public void setUp() {
         CodenjoyContext.setContext("codenjoy-contest");
@@ -230,7 +233,7 @@ public abstract class AbstractRestControllerTest {
     }
 
     protected void join(String id, String room) {
-        Player player = players.get(id);
+        Player player = new Player(id);
         player.setRoom(room);
         players.update(player);
     }

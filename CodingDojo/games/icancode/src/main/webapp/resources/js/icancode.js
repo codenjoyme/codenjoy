@@ -65,9 +65,6 @@ setup.enableForkMe = false;
 setup.enableAdvertisement = false;
 setup.showBody = false;
 setup.debug = false;
-// так как спрайты icancode вылазят за сетку элемента,
-// то надо рисовать всегда все спрайты
-setup.isDrawOnlyChanges = false;
 
 // ========================== leaderboard page ==========================
 

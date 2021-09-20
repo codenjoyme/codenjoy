@@ -60,14 +60,14 @@
  * @name SimpleModal
  * @type jQuery
  * @requires jQuery v1.3
- * @cat Plugins/Windows and Overlays
+ * cat Plugins/Windows and Overlays
  * @author Eric Martin (http://ericmmartin.com)
  * @version 1.4.4
  *
  * Changed by Alexander.Baglay in line 266
  */
 
-;(function (factory) {
+(function (factory) {
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(['jquery'], factory);

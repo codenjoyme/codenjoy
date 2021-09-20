@@ -24,15 +24,16 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.client.*;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
-import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.multiplayer.Spreader;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.room.RoomService;
@@ -58,7 +59,7 @@ public class PlayerServiceImplIntegrationTest {
     private ActionLogger actionLogger;
     private AutoSaver autoSaver;
     private TimeService time;
-    private Chat chat;
+    private ChatService chat;
     private GameSaver saver;
     private GameService gameService;
     private Controller screenController;
@@ -75,6 +76,9 @@ public class PlayerServiceImplIntegrationTest {
             {
                 PlayerServiceImplIntegrationTest.this.deals
                         = this.deals = new Deals();
+                this.deals.spreader = new Spreader(){{
+                    fields = mock(FieldService.class);
+                }};
 
                 PlayerServiceImplIntegrationTest.this.playerController
                         = this.playerController = mock(Controller.class);
@@ -95,7 +99,7 @@ public class PlayerServiceImplIntegrationTest {
                         = this.saver = mock(GameSaver.class);
 
                 PlayerServiceImplIntegrationTest.this.chat
-                        = this.chat = mock(Chat.class);
+                        = this.chat = mock(ChatService.class);
 
                 PlayerServiceImplIntegrationTest.this.time
                         = this.time = mock(TimeService.class);
@@ -144,9 +148,6 @@ public class PlayerServiceImplIntegrationTest {
         // по умолчанию все команаты будут активными и открытыми для регистрации
         when(gameService.exists(anyString())).thenReturn(true);
         when(roomService.isOpened(anyString())).thenReturn(true);
-
-        when(chat.getLastMessageIds()).thenReturn(new HashMap<>());
-        when(time.now()).thenReturn(123L);
 
         // первый плеер зарегался (у него сейвов нет)
         when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);

@@ -20,7 +20,20 @@
  * #L%
  */
 
-function initChat(contextPath) {
+var ROOM_TYPE = 'room';
+var FIELD_TYPE = 'field';
+
+function initChat(contextPath, type) {
+
+    var root = $('.id-' + type + '-chat ');
+
+    // запросы field и room чата несколько отличаются, вот на этот хвостик
+    var urlSuffix = (type == ROOM_TYPE) ? '' : '/field';
+
+    // в случае если это field-чат тут будем хранить
+    // field id которое придет с первым сообщением к нам
+    // или с обновлением тика
+    var fieldId = null;
 
     var deleteMessage = async (messageId) => new Promise((resolve, reject) =>
         deleteData('/rest/chat/' + setup.room + '/messages/' + messageId,
@@ -29,7 +42,7 @@ function initChat(contextPath) {
     );
 
     var postMessage = async (message) => new Promise((resolve, reject) =>
-        sendData('/rest/chat/' + setup.room + '/messages',
+        sendData('/rest/chat/' + setup.room + '/messages' + urlSuffix,
                 { text : escapeHtml(message) },
                 deleted => resolve(deleted),
                 error => reject(error))
@@ -56,7 +69,7 @@ function initChat(contextPath) {
 
     var getMessages = async (afterId, beforeId, inclusive, count) => new Promise((resolve, reject) => {
         var params = buildParams(afterId, beforeId, inclusive, count);
-        loadData('/rest/chat/' + setup.room + '/messages' + params,
+        loadData('/rest/chat/' + setup.room + '/messages' + urlSuffix + params,
                 messages => resolve(messages),
                 error => reject(error));
     });
@@ -101,12 +114,39 @@ function initChat(contextPath) {
             return;
         }
 
+        // пришли подгруженные сообщения
+        var topicId = messages[0].topicId;
+        // и если в первом есть отрицательный topicId
+        if (topicId != null && topicId < 0) {
+            // проверим а не надо ли перегрузить весь чат?
+            if (needToReloadChat(-topicId)) {
+                loading = false;
+                return;
+            }
+        }
+
         appendMessages(messages, messageId, after);
 
         loading = false;
         if (!!onLoad) {
             onLoad(messages);
         }
+    }
+
+    var SYSTEM_ID = '-1';
+
+    // с помощью этого малого мы сможем печатать
+    // в чат банальные логи
+    function appendText(string) {
+        var message = {
+            id : SYSTEM_ID,
+            text : string,
+            room : null,
+            playerId : 0,
+            playerName : 'system',
+            time : new Date().getTime()
+        };
+        appendMessages([message]);
     }
 
     function appendMessages(messages, messageId, isAfterOrBefore) {
@@ -130,7 +170,7 @@ function initChat(contextPath) {
                 dateTime: dateTime
             });
         });
-        var html = $('#chat script').tmpl(templateData);
+        var html = root.find('.chat script').tmpl(templateData);
 
         var scrollHeight = getScrollHeight();
         html.find('span.delete-message').each(function( index ) {
@@ -150,9 +190,9 @@ function initChat(contextPath) {
         });
 
         var anchor = 'div[message=' + messageId + ']';
-        if (!messageId || !$(anchor)[0]) {
+        if (!messageId || !root.find(anchor)[0]) {
             // если нет сообщения рядом с которым догружать - грузим в пустой чат
-            html.appendTo('#chat-container');
+            html.appendTo(chatContainer);
             // сохраняем скролинг в той же позиции, иначе все сместится из за добавление в начало чата
             scrollTo(getScrollHeight() - scrollHeight);
         } else if (isAfterOrBefore) {
@@ -215,13 +255,19 @@ function initChat(contextPath) {
         return null;
     }
 
+    // с помощью этого селектора мы пропускаем все системные
+    // сообщения (логи), которые напечатаны с id=SYSTEM_ID
+    function userMessages() {
+        return "div [message != '" + SYSTEM_ID + "']";
+    }
+
     function getFirstMessageId() {
-        return chatContainer.children('div [message]')
+        return chatContainer.children(userMessages())
             .first().attr('message');
     }
 
     function getLastMessageId() {
-        return chatContainer.children('div [message]')
+        return chatContainer.children(userMessages())
             .last().attr('message');
     }
 
@@ -269,7 +315,15 @@ function initChat(contextPath) {
                 return;
             }
 
-            var realLastId = data[players[0]].lastChatMessage;
+            // с очередным тиком так же пришел статус обновлений чата
+            var status = data[players[0]].chat;
+            // быть может этот чат пора прегрузить?
+            if (needToReloadChat(status.fieldId)) {
+                return;
+            }
+            var realLastId = (type == ROOM_TYPE) ?
+                status.lastInRoom :
+                status.lastInField;
             var lastLoadedId = getLastMessageId();
             if (!lastLoadedId) {
                 loadChatMessages(null, null, realLastId, true);
@@ -279,20 +333,45 @@ function initChat(contextPath) {
         });
     }
 
+    // метод начальной загрузки пустого чата
+    var loadChat = function() {
+        loadChatMessages(function() {
+            scrollToEnd(); // TODO почему-то оно не работает, когда чат неактивен, потому я делаю ###1
+        }, null, null, null, 30); // TODO загружать 30 сообщений сразу в чат, тоже костыль, чтобы отобразился вертикальный скролинг, иначе нельзя будет грузить в прошлое
+    }
+
+    // проверяем, надо ли обновить весь чат
+    // актуально, когда field чат использовался,
+    // но уже игрок покинул field
+    var needToReloadChat = function(id) {
+        if (type != FIELD_TYPE || fieldId == id) {
+            // не, это не field чат
+            // или юзер еще не покидал эту field
+            return false;
+        }
+
+        // а вот тут мы инвалидируем чат, чистим и грузим новый контент
+        fieldId = id;
+        chatContainer.empty();
+        appendText("Field '" + id + "' created");
+        loadChat();
+
+        // сообщаем там на верху, чтобы не продолжали то
+        // что делали раньше - неактуально уже
+        return true;
+    }
+
     if (!setup.enableChat || !setup.authenticated) {
         return;
     }
 
-    var postMessageButton = $('#post-message');
-    var newMessage = $('#new-message');
-    var chatContainer = $('#chat-container');
-    var chat = $('#chat');
-    var chatTab = $('#chat-tab');
+    var postMessageButton = root.find('.id-post-message');
+    var newMessage = root.find('.id-new-message');
+    var chatContainer = root.find('.id-chat-container');
+    var chat = root.find('.chat');
+    var chatTab = root.find('#' + type + '-chat-tab');
 
-    loadChatMessages(function() {
-        scrollToEnd(); // TODO почему-то оно не работает, когда чат неактивен, потому я делаю ###1
-    }, null, null, null, 30); // TODO загружать 30 сообщений сразу в чат, тоже костыль, чтобы отобразился вертикальный скролинг, иначе нельзя будет грузить в прошлое
-
+    loadChat();
     var firstLoad = false; // ###1
     var loading = false;
     listenNewMessages();
