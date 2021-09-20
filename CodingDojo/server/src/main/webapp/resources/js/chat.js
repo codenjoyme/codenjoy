@@ -145,16 +145,27 @@ function initChat(contextPath, chatControl, type) {
         var afterOrBefore = null;
         var messageId = null;
         if (after == null && before == null) {
-            // do nothing
+            // чат пустой, просто добавим как первые сообщения
         } else if (after == null && before != null) {
-            afterOrBefore = true;
+            // добавляем новые сообщения перед before
+            afterOrBefore = false;
             messageId = before;
         } else if (after != null && before == null) {
-            afterOrBefore = false;
-            messageId = afterId;
-        } else if (after != null && before != null) {
+            // добавляем новые сообщения после after
             afterOrBefore = true;
-            messageId = before;
+            messageId = after;
+        } else if (after != null && before != null) {
+            // тут не понятно куда добавлять,
+            // надо смотреть что реально пришло
+            if (first > after) {
+                // добавляем новые сообщения после after
+                afterOrBefore = true;
+                messageId = before;
+            } else if (last < before) {
+                // добавляем новые сообщения перед before
+                afterOrBefore = false;
+                messageId = before;
+            }
         }
 
         // проверим а не надо ли перегрузить весь чат?
