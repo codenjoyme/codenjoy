@@ -158,14 +158,14 @@ public abstract class AbstractControllerTest<TData, TControl> {
 
     // TODO как-нибудь когда будет достаточно времени и желания разобрать этот тест и разгадать, почему зависает тут тест
     @SneakyThrows
-    protected void waitForServerReceived(boolean shouldGetMessage) {
+    protected void waitForServerReceived(boolean checkMessageReceived) {
         int count = 0;
         while (count <= MAX && receivedOnServer.isEmpty()) {
             tick();
             Thread.sleep(100);
             count++;
         }
-        if (shouldGetMessage) {
+        if (checkMessageReceived) {
             assertEquals("The server never received the message",
                     false, receivedOnServer.isEmpty());
         }
@@ -180,13 +180,13 @@ public abstract class AbstractControllerTest<TData, TControl> {
     }
 
     @SneakyThrows
-    protected void waitForClientReceived(int index, boolean shouldGetMessage) {
+    protected void waitForClientReceived(int index, boolean checkMessageReceived) {
         int count = 0;
         while (count <= MAX && client(index).isEmpty()) {
             Thread.sleep(100);
             count++;
         }
-        if (shouldGetMessage) {
+        if (checkMessageReceived) {
             assertEquals("The client never received the message",
                     false, client(index).isEmpty());
         }
