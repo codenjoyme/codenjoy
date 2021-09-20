@@ -177,8 +177,6 @@ function initChat(contextPath, chatControl, type) {
 
         appendMessages(messages, messageId, afterOrBefore);
 
-        scrollToEnd();
-
         loading = false;
     }
 
