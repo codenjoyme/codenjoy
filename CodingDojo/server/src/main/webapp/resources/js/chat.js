@@ -36,6 +36,68 @@ function initChat(contextPath, chatControl, type) {
     // или с обновлением тика
     var fieldId = null;
 
+    var setupScroll = function(element) {
+        var pos = null;
+
+        function height() {
+            return element[0].scrollHeight;
+        }
+
+        function out() {
+            return element.outerHeight();
+        }
+
+        function top() {
+            return element.scrollTop();
+        }
+
+        function atEnd() {
+            // 1 потому что разница в дробные части пикселя
+            return (height() - (top() + out())) < 1;
+        }
+
+        function atStart() {
+            return top() == 0;
+        }
+
+        function scroll(position) {
+            element.scrollTop(position);
+        }
+
+        function scrollStart() {
+            scroll(0);
+        }
+
+        function scrollEnd() {
+            scroll(height());
+        }
+
+        function save() {
+            pos = height();
+        }
+
+        function load() {
+            if (pos == null) {
+                return;
+            }
+            scroll(height() - pos);
+            pos = null;
+        }
+
+        return {
+            height : height,
+            out : out,
+            top : top,
+            atEnd : atEnd,
+            atStart : atStart,
+            scroll : scroll,
+            scrollEnd : scrollEnd,
+            scrollStart : scrollStart,
+            save : save,
+            load : load
+        }
+    }
+
     var deleteMessage = function(messageId) {
         chatControl.send('delete', {
             id : messageId,
@@ -175,12 +237,12 @@ function initChat(contextPath, chatControl, type) {
             return;
         }
 
-        var needScroll = scrolledAtEnd();
+        var needScroll = chatScroll.atEnd();
 
         appendMessages(messages, messageId, afterOrBefore);
 
         if (needScroll) {
-            scrollToEnd();
+            chatScroll.scrollEnd();
         }
 
         loading = false;
@@ -242,7 +304,7 @@ function initChat(contextPath, chatControl, type) {
         });
         var html = root.find('.chat script').tmpl(templateData);
 
-        var scrollHeight = getScrollHeight();
+        chatScroll.save();
         html.find('span.delete-message').each(function( index ) {
             var deleteButton = $(this);
             var messageId = id(deleteButton.parent());
@@ -260,37 +322,22 @@ function initChat(contextPath, chatControl, type) {
         if (!messageId || !root.find(anchor)[0]) {
             // если нет сообщения рядом с которым догружать - грузим в пустой чат
             html.appendTo(chatContainer);
-            // сохраняем скролинг в той же позиции, иначе все сместится из за добавление в начало чата
-            scrollTo(getScrollHeight() - scrollHeight);
+            // сохраняем скроллинг в той же позиции, иначе все
+            // сместится из за добавление в начало чата
+            chatScroll.load();
         } else if (isAfterOrBefore) {
             html.insertAfter(anchor);
             // тут скролинг не смещается, потому что аппенится в конце
         } else {
             html.insertBefore(anchor);
-            // сохраняем скролинг в той же позиции, иначе все сместится из за добавление в начало чата
-            scrollTo(getScrollHeight() - scrollHeight);
+            // сохраняем скроллинг в той же позиции, иначе все
+            // сместится из за добавление в начало чата
+            chatScroll.load();
         }
     }
 
     function escapeHtml(data) {
         return $('<div />').text(data).html();
-    }
-
-    function scrollTo(position) {
-        chatContainer.scrollTop(position);
-    }
-
-    function scrolledAtEnd() {
-        return (chatContainer[0].scrollTop + chatContainer[0].clientHeight)
-            - getScrollHeight() < 3; // там дробные доли пикселей, их так учитываем
-    }
-
-    function scrollToEnd() {
-        chatContainer.scrollTop(getScrollHeight());
-    }
-
-    function getScrollHeight() {
-        return chatContainer[0].scrollHeight;
     }
 
     function initPost() {
@@ -369,15 +416,10 @@ function initChat(contextPath, chatControl, type) {
 
     function initScrolling() {
         chatContainer.scroll(function() {
-            var el = $(this);
-            var scrollTop = el.scrollTop();
-            var scrollHeight = el[0].scrollHeight;
-            var outerHeight = el.outerHeight();
-            var atChatStart = scrollTop == 0;
-            var atChatEnd = (scrollHeight - scrollTop - outerHeight) < 1;
-            if (atChatStart) {
+            var scroll = setupScroll($(this));
+            if (scroll.atStart()) {
                 loadBefore();
-            } else if (atChatEnd) {
+            } else if (scroll.atEnd()) {
                 loadAfter();
             }
         });
@@ -416,6 +458,7 @@ function initChat(contextPath, chatControl, type) {
     var postMessageButton = root.find('.id-post-message');
     var newMessage = root.find('.id-new-message');
     var chatContainer = root.find('.id-chat-container');
+    var chatScroll = setupScroll(chatContainer);
     var chat = root.find('.chat');
     var chatTab = root.find('#' + type + '-chat-tab');
 
