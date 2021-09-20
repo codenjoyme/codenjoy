@@ -92,8 +92,8 @@ var getSettings = function(name) {
 var getTickDateTime = function(time, readable) {
     var date = new Date(parseInt(time));
     return date.getFullYear() + '-' +
-           date.getDate().padLeft() + '-' +
-           (date.getMonth() + 1).padLeft() +
+            (date.getMonth() + 1).padLeft() + '-' +
+            date.getDate().padLeft() +
            (!!readable ? ' ' : 'T') +
            getTickTime(time, readable);
 }
