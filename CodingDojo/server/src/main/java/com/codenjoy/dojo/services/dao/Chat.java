@@ -260,7 +260,7 @@ public class Chat {
      *        Если флаг {@param inclusive} установлен - ты получишь так же в запросе
      *        message {@param afterId}.
      */
-    public List<Message> getMessagesAfter(Integer topicId, ChatType type, Filter filter) {
+    public List<Message> getMessagesAfter(ChatType type, Integer topicId, Filter filter) {
         return pool.select(
                 "SELECT * FROM messages " +
                     "WHERE deleted = FALSE " +

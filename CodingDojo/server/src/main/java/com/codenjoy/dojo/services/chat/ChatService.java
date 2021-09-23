@@ -74,7 +74,7 @@ public class ChatService {
         }
 
         if (filter.afterId() != null) {
-            return wrap(chat.getMessagesAfter(topicId, type, filter));
+            return wrap(chat.getMessagesAfter(type, topicId, filter));
         }
 
         if (filter.beforeId() != null) {
