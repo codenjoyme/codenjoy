@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 import com.codenjoy.dojo.services.ContextPathGetter;
+import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.chat.Filter;
 import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
@@ -528,63 +529,69 @@ public class ChatTest {
         int field;
     }
 
+    interface ChatMessages {
+        List<Chat.Message> getAll(ChatType type, Integer topicId, Filter filter);
+    }
+
     @Test
     public void shouldGetAllMessages_casePersonalMessages() {
         // given
         // for all
         Triplet ids = givenAllTypesMessagesWithPersonal();
 
+        ChatMessages method = chat::getMessages;
+
         // when then
         // for room
         messages.assertThat(1)
-                .in(chat.getMessages(ROOM, null,
+                .in(method.getAll(ROOM, null,
                         filter("room1", null)));
 
         messages.assertThat(1, 6)
-                .in(chat.getMessages(ROOM, null,
+                .in(method.getAll(ROOM, null,
                         filter("room1", "player1")));
 
         messages.assertThat(1, 11)
-                .in(chat.getMessages(ROOM, null,
+                .in(method.getAll(ROOM, null,
                         filter("room1", "player2")));
 
         // for room topic
         messages.assertThat(2)
-                .in(chat.getMessages(ROOM_TOPIC, ids.roomTopic,
+                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
                         filter("room1", null)));
 
         messages.assertThat(2, 7)
-                .in(chat.getMessages(ROOM_TOPIC, ids.roomTopic,
+                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
                         filter("room1", "player1")));
 
         messages.assertThat(2, 12)
-                .in(chat.getMessages(ROOM_TOPIC, ids.roomTopic,
+                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
                         filter("room1", "player2")));
 
         // for field
         messages.assertThat(3)
-                .in(chat.getMessages(FIELD, ids.field,
+                .in(method.getAll(FIELD, ids.field,
                         filter("room1", null)));
 
         messages.assertThat(3, 8)
-                .in(chat.getMessages(FIELD, ids.field,
+                .in(method.getAll(FIELD, ids.field,
                         filter("room1", "player1")));
 
         messages.assertThat(3, 13)
-                .in(chat.getMessages(FIELD, ids.field,
+                .in(method.getAll(FIELD, ids.field,
                         filter("room1", "player2")));
 
         // for field topic
         messages.assertThat(4)
-                .in(chat.getMessages(FIELD_TOPIC, ids.fieldTopic,
+                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
                         filter("room1", null)));
 
         messages.assertThat(4, 9)
-                .in(chat.getMessages(FIELD_TOPIC, ids.fieldTopic,
+                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
                         filter("room1", "player1")));
 
         messages.assertThat(4, 14)
-                .in(chat.getMessages(FIELD_TOPIC, ids.fieldTopic,
+                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
                         filter("room1", "player2")));
     }
 
@@ -624,58 +631,60 @@ public class ChatTest {
     public void shouldGetMessagesBetween_casePersonalMessages() {
         // given
         Triplet ids = givenAllTypesMessagesWithPersonal();
-        
+
+        ChatMessages method = chat::getMessagesBetween;
+
         // when then
         // for room
         messages.assertThat(1)
-                .in(chat.getMessagesBetween(ROOM, null,
+                .in(method.getAll(ROOM, null,
                         filter("room1", null)));
 
         messages.assertThat(1, 6)
-                .in(chat.getMessagesBetween(ROOM, null,
+                .in(method.getAll(ROOM, null,
                         filter("room1", "player1")));
 
         messages.assertThat(1, 11)
-                .in(chat.getMessagesBetween(ROOM, null,
+                .in(method.getAll(ROOM, null,
                         filter("room1", "player2")));
 
         // for room topic
         messages.assertThat(2)
-                .in(chat.getMessagesBetween(ROOM_TOPIC, ids.roomTopic,
+                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
                         filter("room1", null)));
 
         messages.assertThat(2, 7)
-                .in(chat.getMessagesBetween(ROOM_TOPIC, ids.roomTopic,
+                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
                         filter("room1", "player1")));
 
         messages.assertThat(2, 12)
-                .in(chat.getMessagesBetween(ROOM_TOPIC, ids.roomTopic,
+                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
                         filter("room1", "player2")));
 
         // for field
         messages.assertThat(3)
-                .in(chat.getMessagesBetween(FIELD, ids.field,
+                .in(method.getAll(FIELD, ids.field,
                         filter("room1", null)));
 
         messages.assertThat(3, 8)
-                .in(chat.getMessagesBetween(FIELD, ids.field,
+                .in(method.getAll(FIELD, ids.field,
                         filter("room1", "player1")));
 
         messages.assertThat(3, 13)
-                .in(chat.getMessagesBetween(FIELD, ids.field,
+                .in(method.getAll(FIELD, ids.field,
                         filter("room1", "player2")));
 
         // for field topic
         messages.assertThat(4)
-                .in(chat.getMessagesBetween(FIELD_TOPIC, ids.fieldTopic,
+                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
                         filter("room1", null)));
 
         messages.assertThat(4, 9)
-                .in(chat.getMessagesBetween(FIELD_TOPIC, ids.fieldTopic,
+                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
                         filter("room1", "player1")));
 
         messages.assertThat(4, 14)
-                .in(chat.getMessagesBetween(FIELD_TOPIC, ids.fieldTopic,
+                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
                         filter("room1", "player2")));
     }
 
