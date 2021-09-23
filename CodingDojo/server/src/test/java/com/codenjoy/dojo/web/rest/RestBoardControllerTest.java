@@ -49,7 +49,7 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
     public void playerWantsToPlay() {
         String code = registration.getCodeById("somePlayer");
         String expected = "{\n" +
-                "  'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',\n" +
+                "  'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæ',\n" +
                 "  'context':'/codenjoy-contest',\n" +
                 "  'gameType':{\n" +
                 "    'boardSize':6,\n" +
@@ -99,7 +99,7 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
                 "    ],\n" +
                 "    'room':'validRoom',\n" +
                 "    'sprites':{\n" +
-                "      'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',\n" +
+                "      'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæ',\n" +
                 "      'names':[\n" +
                 "        'none',\n" +
                 "        'wall',\n" +
@@ -136,7 +136,7 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
         assertEquals(expected, JsonUtils.prettyPrint(get("/rest/player/somePlayer/" + code + "/wantsToPlay/first/validRoom")));
 
         String expected2 = "{\n" +
-                "  'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',\n" +
+                "  'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæ',\n" +
                 "  'context':'/codenjoy-contest',\n" +
                 "  'gameType':{\n" +
                 "    'boardSize':5,\n" +
@@ -186,7 +186,7 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
                 "    ],\n" +
                 "    'room':'validRoom2',\n" +
                 "    'sprites':{\n" +
-                "      'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',\n" +
+                "      'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæ',\n" +
                 "      'names':[\n" +
                 "        'none',\n" +
                 "        'red',\n" +
