@@ -161,11 +161,11 @@ public class AdminServiceTest {
         return players.getAll().stream()
                 .flatMap(player -> chat.getFieldMessages(player.getId(),
                         Filter.room(player.getRoom()).count(10).get()).stream())
-                .map(mesage -> String.format("[%s] %s at %s: %s",
-                        mesage.getId(),
-                        mesage.getPlayerName(),
-                        mesage.getTime(),
-                        mesage.getText()))
+                .map(message -> String.format("[%s] %s at %s: %s",
+                        message.getId(),
+                        message.getPlayerName(),
+                        message.getTime(),
+                        message.getText()))
                 .collect(joining(",\n"));
     }
 
