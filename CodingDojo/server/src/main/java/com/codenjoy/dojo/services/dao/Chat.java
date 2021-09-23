@@ -70,14 +70,13 @@ public class Chat {
                         "(SELECT * FROM messages " +
                         "WHERE deleted = FALSE " +
                         "AND room = ? " +
-                        "AND topic_id IS ? " +
-                        "AND type = ? " +
+                        "AND " + is("topic_id", topicId) +
+                        " AND type = ? " +
                         "ORDER BY time DESC " +
                         "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
                 new Object[]{
                         filter.room(),
-                        topicId,
                         type.id(),
                         filter.count()
                 },
@@ -146,9 +145,9 @@ public class Chat {
      * пришли новые сообщения в topic или field-чат. Метод готовит данные
      * сразу для всех topic и filed.
      *
-     * @param type тип чата id'шками которого интересуемся.
+     * @param type тип чата идентификаторами которого интересуемся.
      * @return Возвращает последние сообщения в выбранном чате.
-     * Ключ для topic-чата topicMessageId, а для field-чата ключ fieldId).
+     * Ключ для topic-чата topicMessageId, а для field-чата ключ fieldId.
      * Значение - id последнего сообщения в этом чате.
      */
     public Map<Integer, Integer> getLastTopicMessageIds(ChatType type) {
@@ -179,17 +178,16 @@ public class Chat {
     }
 
     /**
-     * @return Все соообщения текущего топика (родительского сообщения) {@param messageId},
+     * @return Все сообщения текущего топика (родительского сообщения) {@param topicId},
      *        отсортированных в порядке возрастания времени
      */
-    public List<Message> getTopicMessages(ChatType type, int messageId) {
+    public List<Message> getTopicMessages(ChatType type, int topicId) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE deleted = FALSE " +
-                        "AND topic_id = ? " +
-                        "AND type = ? " +
+                        "AND " + is("topic_id", topicId) +
+                        " AND type = ? " +
                         "ORDER BY time ASC;",
                 new Object[]{
-                        messageId,
                         type.id()
                 },
                 Chat::parseMessages
@@ -197,7 +195,7 @@ public class Chat {
     }
 
     /**
-     * @return все сообщения в диапазоне ({@param afterId}...{@param beforeId})
+     * @return Все сообщения в диапазоне ({@param afterId}...{@param beforeId})
      *        для текущего чата {@param room}
      *        (или дочернего чата в нем, если указан {@param topicId}),
      *        отсортированных в порядке возрастания времени.
@@ -212,20 +210,25 @@ public class Chat {
         return pool.select("SELECT * FROM messages " +
                         "WHERE deleted = FALSE " +
                         "AND room = ? " +
-                        "AND topic_id IS ? " +
-                        "AND type = ? " +
+                        "AND " + is("topic_id", topicId) +
+                        " AND type = ? " +
                         "AND id >" + eq(filter) + " ? " +
                         "AND id <" + eq(filter) + " ? " +
                         "ORDER BY time ASC;",
                 new Object[]{
                         filter.room(),
-                        topicId,
                         type.id(),
                         filter.afterId(),
                         filter.beforeId()
                 },
                 Chat::parseMessages
         );
+    }
+
+    private String is(String column, Integer id) {
+        return (id == null)
+                ? column + " IS NULL"
+                : column + " = '" + id + "'";
     }
 
     private String eq(Filter filter) {
@@ -244,14 +247,13 @@ public class Chat {
         return pool.select("SELECT * FROM messages " +
                         "WHERE deleted = FALSE " +
                         "AND room = ? " +
-                        "AND topic_id IS ? " +
-                        "AND type = ? " +
+                        "AND " + is("topic_id", topicId) +
+                        " AND type = ? " +
                         "AND id >" + eq(filter) + " ? " +
                         "ORDER BY time ASC " +
                         "LIMIT ?;",
                 new Object[]{
                         filter.room(),
-                        topicId,
                         type.id(),
                         filter.afterId(),
                         filter.count()
@@ -273,15 +275,14 @@ public class Chat {
                         "(SELECT * FROM messages " +
                         "WHERE deleted = FALSE " +
                         "AND room = ? " +
-                        "AND topic_id IS ? " +
-                        "AND type = ? " +
+                        "AND " + is("topic_id", topicId) +
+                        " AND type = ? " +
                         "AND id <" + eq(filter) + " ? " +
                         "ORDER BY time DESC " +
                         "LIMIT ?) as result " +
                         "ORDER BY time ASC;",
                 new Object[]{
                         filter.room(),
-                        topicId,
                         type.id(),
                         filter.beforeId(),
                         filter.count()
