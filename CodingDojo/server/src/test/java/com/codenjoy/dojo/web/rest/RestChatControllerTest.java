@@ -1773,6 +1773,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         with.login.asUser("player4", "player4");
         int fieldId = with.login.fieldId("player4");
 
+        with.time.nowIs(12346L);
         with.login.join("player", "multipleRoom");
 
         // another player is also in the same room
@@ -1785,31 +1786,31 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals("[{'id':1,'playerId':'player4','playerName':'player4-name','room':'multipleRoom',\n" + 
                         "    'text':'Player joined the field','time':12345,'topicId':104,'type':3},\n" +
                         "{'id':3,'playerId':'player','playerName':'player-name','room':'multipleRoom',\n" + 
-                        "    'text':'Player joined the field','time':12345,'topicId':104,'type':3}]",
+                        "    'text':'Player joined the field','time':12346,'topicId':104,'type':3}]",
                 fix(get("/rest/chat/multipleRoom/messages/field")));
 
         // switch to another room
-        with.time.nowIs(12346L);
+        with.time.nowIs(12347L);
         with.login.join("player4", "otherRoom");
         assertNotEquals(fieldId, with.login.fieldId("player4"));
 
         assertEquals("[{'id':5,'playerId':'player4','playerName':'player4-name','room':'otherRoom',\n" + 
-                        "    'text':'Player joined the field','time':12346,'topicId':105,'type':3}]",
+                        "    'text':'Player joined the field','time':12347,'topicId':105,'type':3}]",
                 fix(get("/rest/chat/otherRoom/messages/field")));
 
         // and come back again
-        with.time.nowIs(12347L);
+        with.time.nowIs(12348L);
         with.login.join("player4", "multipleRoom");
 
         // prints that one leaved field and come back again
         assertEquals("[{'id':1,'playerId':'player4','playerName':'player4-name','room':'multipleRoom',\n" + 
                         "    'text':'Player joined the field','time':12345,'topicId':104,'type':3},\n" +
                         "{'id':3,'playerId':'player','playerName':'player-name','room':'multipleRoom',\n" + 
-                        "    'text':'Player joined the field','time':12345,'topicId':104,'type':3},\n" +
+                        "    'text':'Player joined the field','time':12346,'topicId':104,'type':3},\n" +
                         "{'id':4,'playerId':'player4','playerName':'player4-name','room':'multipleRoom',\n" + 
-                        "    'text':'Player left the field','time':12346,'topicId':104,'type':3},\n" +
+                        "    'text':'Player left the field','time':12347,'topicId':104,'type':3},\n" +
                         "{'id':7,'playerId':'player4','playerName':'player4-name','room':'multipleRoom',\n" + 
-                        "    'text':'Player joined the field','time':12347,'topicId':104,'type':3}]",
+                        "    'text':'Player joined the field','time':12348,'topicId':104,'type':3}]",
                 fix(get("/rest/chat/multipleRoom/messages/field")));
     }
 
