@@ -40,6 +40,8 @@ public interface ChatAuthority {
 
     PMessage postTopic(int topicId, String text, String room);
 
+    PMessage postFieldFor(String recipientId, String text, String room);
+
     PMessage postField(String text, String room);
 
     boolean delete(int id, String room);

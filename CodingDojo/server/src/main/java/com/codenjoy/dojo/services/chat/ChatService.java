@@ -42,6 +42,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
+import static com.codenjoy.dojo.services.dao.Chat.FOR_ALL;
 
 @Service
 @AllArgsConstructor
@@ -68,6 +69,7 @@ public class ChatService {
                                          String playerId, Filter filter)
     {
         validateIsChatAvailable(playerId, filter.room());
+        filter.recipientId(playerId);
 
         if (filter.afterId() != null && filter.beforeId() != null) {
             return wrap(chat.getMessagesBetween(type, topicId, filter));
@@ -212,13 +214,16 @@ public class ChatService {
 
     /**
      * Метод для публикации сообщения в field-чат комнаты {@code room}
-     * от имени пользователя {@code playerId}.
+     * от имени пользователя {@code playerId} для конкретного пользователя
+     * {@code recipientId} (или для всех, если указано обратное).
      *
      * Это возможно только, если пользователь находится в данной комнате.
      */
-    public PMessage postMessageForField(String text, String room, String playerId) {
+    public PMessage postMessageForField(String text, String room,
+                                        String playerId, String recipientId)
+    {
         int topicId = getFieldTopicId(room, playerId);
-        return saveMessage(topicId, FIELD, text, room, playerId);
+        return saveMessage(topicId, FIELD, text, room, playerId, recipientId);
     }
 
     /**
@@ -252,16 +257,20 @@ public class ChatService {
                                 String text, String room, String playerId)
     {
         ChatType type = validateTopicAvailable(topicId, playerId, room);
-        return saveMessage(topicId, type, text, room, playerId);
+        return saveMessage(topicId, type, text, room, playerId, FOR_ALL);
     }
 
-    protected PMessage saveMessage(Integer topicId, ChatType type, String text, String room, String playerId) {
+    protected PMessage saveMessage(Integer topicId, ChatType type,
+                                   String text, String room,
+                                   String playerId, String recipientId)
+    {
         return wrap(chat.saveMessage(
                 Chat.Message.builder()
                         .room(room)
                         .topicId(topicId)
                         .type(type)
                         .playerId(playerId)
+                        .recipientId(recipientId)
                         .time(time.now())
                         .text(text)
                         .build()));

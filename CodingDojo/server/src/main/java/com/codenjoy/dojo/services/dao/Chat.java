@@ -39,6 +39,11 @@ import java.util.*;
 import static java.lang.String.format;
 
 public class Chat {
+
+    // TODO рассмотреть возможность постить личные сообщения в topic и
+    //      room чате во всех api.
+    public static final String FOR_ALL = null;
+
     private final CrudPrimaryKeyConnectionThreadPool pool;
 
     public Chat(ConnectionThreadPoolFactory factory) {

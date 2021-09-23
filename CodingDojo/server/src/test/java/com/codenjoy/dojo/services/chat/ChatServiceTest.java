@@ -45,10 +45,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.joining;
 import static org.mockito.Mockito.mock;
@@ -60,6 +62,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(initializers = TestSqliteDBLocations.class)
 public class ChatServiceTest {
 
+    public static final int MAX = 100;
     @Autowired
     private ChatService service;
 
@@ -312,9 +315,9 @@ public class ChatServiceTest {
         Filter filter = Filter
                 .room("room")
                 .afterId(1)
-                .beforeId(10)
+                .beforeId(MAX)
                 .inclusive(true)
-                .count(10)
+                .count(MAX)
                 .get();
 
         // when then
@@ -479,6 +482,311 @@ public class ChatServiceTest {
                 "");
     }
 
+    @Test
+    public void shouldGetPersonalFieldMessages_caseSingle() {
+        // given
+        String singleGame = "first";
+
+        Deal deal1 = createPlayerWithControl("player1", "room", singleGame);
+        Deal deal2 = createPlayerWithControl("player2", "room", singleGame);
+        Deal deal3 = createPlayerWithControl("player3", "otherRoom", singleGame);
+
+        assertEquals("[1, 2, 3]", Arrays.asList(
+                fields.id(deal1.getField()),
+                fields.id(deal2.getField()),
+                fields.id(deal3.getField())).toString());
+
+        // when then
+        // player1 create field message1
+        with.time.nowIs(12349L);
+        with.chat.check(
+                chat(0).postField("message1", "room"),
+                "[PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12349)]");
+
+        assertListener(
+                "listener1-player1 created in field: [\n" +
+                "    PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12349)]");
+
+        // when then
+        // player2 create field message2
+        with.time.nowIs(12350L);
+        with.chat.check(
+                chat(1).postField("message2", "room"),
+                "[PMessage(id=2, text=message2, room=room, type=3, topicId=2, \n" +
+                "    playerId=player2, playerName=player2-name, time=12350)]");
+
+        assertListener(
+                "listener2-player2 created in field: [\n" +
+                "    PMessage(id=2, text=message2, room=room, type=3, topicId=2, \n" +
+                "        playerId=player2, playerName=player2-name, time=12350)]");
+
+        // when then
+        // player1 create personal field message3 for player2
+        with.time.nowIs(12351L);
+        with.chat.check(
+                chat(0).postFieldFor("player2", "message3", "room"),
+                "[PMessage(id=3, text=message3, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12351)]");
+
+        // for other player
+        assertListener(
+                "listener1-player2 created in field: [\n" +
+                "    PMessage(id=3, text=message3, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12351)]");
+
+        // when then
+        // player2 create personal field message4 for player1
+        with.time.nowIs(12352L);
+        with.chat.check(
+                chat(1).postFieldFor("player1", "message4", "room"),
+                "[PMessage(id=4, text=message4, room=room, type=3, topicId=2, \n" +
+                        "    playerId=player2, playerName=player2-name, time=12352)]");
+
+        // for other player
+        assertListener(
+                "listener2-player1 created in field: [\n" +
+                "    PMessage(id=4, text=message4, room=room, type=3, topicId=2, \n" +
+                "        playerId=player2, playerName=player2-name, time=12352)]");
+
+        // when then
+        // player1 create personal field message5 for itself
+        with.time.nowIs(12353L);
+        with.chat.check(
+                chat(0).postFieldFor("player1", "message5", "room"),
+                "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12353)]");
+
+        // for itself
+        assertListener(
+                "listener1-player1 created in field: [\n" +
+                "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12353)]");
+
+        // when then
+        // player2 create personal field message6 for itself
+        with.time.nowIs(12354L);
+        with.chat.check(
+                chat(1).postFieldFor("player2", "message6", "room"),
+                "[PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
+                "    playerId=player2, playerName=player2-name, time=12354)]");
+
+        // for itself
+        assertListener(
+                "listener2-player2 created in field: [\n" +
+                "    PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
+                "        playerId=player2, playerName=player2-name, time=12354)]");
+
+        // given
+        Filter filter = Filter
+                .room("room")
+                .afterId(1)
+                .beforeId(MAX)
+                .inclusive(true)
+                .count(MAX)
+                .get();
+
+        // when then
+        // player1 get all field messages
+        with.chat.check(
+                chat(0).getAllField(filter),
+                "[PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12349), \n" +
+                "PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12353)]");
+
+        assertListener(
+                "listener1-player1 created in field: [\n" +
+                "    PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12349), \n" +
+                "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12353)]");
+
+        // when then
+        // player2 get all field messages
+        with.chat.check(
+                chat(1).getAllField(filter),
+                "[PMessage(id=2, text=message2, room=room, type=3, topicId=2, \n" +
+                "    playerId=player2, playerName=player2-name, time=12350), \n" +
+                "PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
+                "    playerId=player2, playerName=player2-name, time=12354)]");
+
+        assertListener(
+                "listener2-player2 created in field: [\n" +
+                "    PMessage(id=2, text=message2, room=room, type=3, topicId=2, \n" +
+                "        playerId=player2, playerName=player2-name, time=12350), \n" +
+                "    PMessage(id=6, text=message6, room=room, type=3, topicId=2, \n" +
+                "        playerId=player2, playerName=player2-name, time=12354)]");
+    }
+
+    @Test
+    public void shouldGetPersonalFieldMessages_caseMultiple() {
+        // given
+        String multipleGame = "third";
+
+        // given
+        with.rooms.settings("room", "third")
+                .bool(ROUNDS_ENABLED, true)
+                .integer(ROUNDS_TEAMS_PER_ROOM, 1)
+                .integer(ROUNDS_PLAYERS_PER_ROOM, 2);
+
+        Deal deal1 = createPlayerWithControl("player1", "room", multipleGame);
+        Deal deal2 = createPlayerWithControl("player2", "room", multipleGame);
+        Deal deal3 = createPlayerWithControl("player3", "otherRoom", multipleGame);
+
+        // TODO extract to helper
+        assertEquals("[1, 1, 2]", Arrays.asList(
+                fields.id(deal1.getField()),
+                fields.id(deal2.getField()),
+                fields.id(deal3.getField())).toString());
+
+        // when then
+        // player1 create field message1
+        with.time.nowIs(12349L);
+        with.chat.check(
+                chat(0).postField("message1", "room"),
+                "[PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12349)]");
+
+        assertListener(
+                "listener1-player1 created in field: [\n" +
+                "    PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12349)],\n" +
+                "listener1-player2 created in field: [\n" +
+                "    PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12349)]");
+
+        // when then
+        // player2 create field message2
+        with.time.nowIs(12350L);
+        with.chat.check(
+                chat(1).postField("message2", "room"),
+                "[PMessage(id=2, text=message2, room=room, type=3, topicId=1, \n" +
+                "    playerId=player2, playerName=player2-name, time=12350)]");
+
+        assertListener(
+                "listener2-player1 created in field: [\n" +
+                "    PMessage(id=2, text=message2, room=room, type=3, topicId=1, \n" +
+                "        playerId=player2, playerName=player2-name, time=12350)],\n" +
+                "listener2-player2 created in field: [\n" +
+                "    PMessage(id=2, text=message2, room=room, type=3, topicId=1, \n" +
+                "        playerId=player2, playerName=player2-name, time=12350)]");
+
+        // when then
+        // player1 create personal field message3 for player2
+        with.time.nowIs(12351L);
+        with.chat.check(
+                chat(0).postFieldFor("player2", "message3", "room"),
+                "[PMessage(id=3, text=message3, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12351)]");
+
+        // for other player
+        assertListener(
+                "listener1-player2 created in field: [\n" +
+                "    PMessage(id=3, text=message3, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12351)]");
+
+        // when then
+        // player2 create personal field message4 for player1
+        with.time.nowIs(12352L);
+        with.chat.check(
+                chat(1).postFieldFor("player1", "message4", "room"),
+                "[PMessage(id=4, text=message4, room=room, type=3, topicId=1, \n" +
+                        "    playerId=player2, playerName=player2-name, time=12352)]");
+
+        // for other player
+        assertListener(
+                "listener2-player1 created in field: [\n" +
+                "    PMessage(id=4, text=message4, room=room, type=3, topicId=1, \n" +
+                "        playerId=player2, playerName=player2-name, time=12352)]");
+
+        // when then
+        // player1 create personal field message5 for itself
+        with.time.nowIs(12353L);
+        with.chat.check(
+                chat(0).postFieldFor("player1", "message5", "room"),
+                "[PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12353)]");
+
+        // for itself
+        assertListener(
+                "listener1-player1 created in field: [\n" +
+                "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12353)]");
+
+        // when then
+        // player2 create personal field message6 for itself
+        with.time.nowIs(12354L);
+        with.chat.check(
+                chat(1).postFieldFor("player2", "message6", "room"),
+                "[PMessage(id=6, text=message6, room=room, type=3, topicId=1, \n" +
+                "    playerId=player2, playerName=player2-name, time=12354)]");
+
+        // for itself
+        assertListener(
+                "listener2-player2 created in field: [\n" +
+                "    PMessage(id=6, text=message6, room=room, type=3, topicId=1, \n" +
+                "        playerId=player2, playerName=player2-name, time=12354)]");
+
+        // given
+        Filter filter = Filter
+                .room("room")
+                .afterId(1)
+                .beforeId(MAX)
+                .inclusive(true)
+                .count(MAX)
+                .get();
+
+        // when then
+        // player1 get all field messages
+        with.chat.check(
+                chat(0).getAllField(filter),
+                "[PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12349), \n" +
+                "PMessage(id=2, text=message2, room=room, type=3, topicId=1, \n" +
+                "    playerId=player2, playerName=player2-name, time=12350), \n" +
+                "PMessage(id=4, text=message4, room=room, type=3, topicId=1, \n" +
+                "    playerId=player2, playerName=player2-name, time=12352), \n" +
+                "PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12353)]");
+
+        assertListener(
+                "listener1-player1 created in field: [\n" +
+                "    PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12349), \n" +
+                "    PMessage(id=2, text=message2, room=room, type=3, topicId=1, \n" +
+                "        playerId=player2, playerName=player2-name, time=12350), \n" +
+                "    PMessage(id=4, text=message4, room=room, type=3, topicId=1, \n" +
+                "        playerId=player2, playerName=player2-name, time=12352), \n" +
+                "    PMessage(id=5, text=message5, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12353)]");
+
+        // when then
+        // player2 get all field messages
+        with.chat.check(
+                chat(1).getAllField(filter),
+                "[PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12349), \n" +
+                "PMessage(id=2, text=message2, room=room, type=3, topicId=1, \n" +
+                "    playerId=player2, playerName=player2-name, time=12350), \n" +
+                "PMessage(id=3, text=message3, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12351), \n" +
+                "PMessage(id=6, text=message6, room=room, type=3, topicId=1, \n" +
+                "    playerId=player2, playerName=player2-name, time=12354)]");
+
+        assertListener(
+                "listener2-player2 created in field: [\n" +
+                "    PMessage(id=1, text=message1, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12349), \n" +
+                "    PMessage(id=2, text=message2, room=room, type=3, topicId=1, \n" +
+                "        playerId=player2, playerName=player2-name, time=12350), \n" +
+                "    PMessage(id=3, text=message3, room=room, type=3, topicId=1, \n" +
+                "        playerId=player1, playerName=player1-name, time=12351), \n" +
+                "    PMessage(id=6, text=message6, room=room, type=3, topicId=1, \n" +
+                "        playerId=player2, playerName=player2-name, time=12354)]");
+    }
+
     private ChatAuthority chat(int index) {
         return chats.get(index);
     }
@@ -489,15 +797,16 @@ public class ChatServiceTest {
         createPlayerWithControl("player3", "room2", "first");
     }
 
-    private void createPlayerWithControl(String player, String room, String game) {
+    private Deal createPlayerWithControl(String player, String room, String game) {
         int index = listeners.size();
-        with.login.register(player, "ip", room, game);
+        Deal deal = with.login.register(player, "ip", room, game);
         with.login.join(player, room);
         listeners.add(getListener(index + 1));
         chats.add(service.authority(player, listeners.get(index)));
 
         assertListener("");
         chat.removeAll();
+        return deal;
     }
 
     private void assertListener(String expected) {

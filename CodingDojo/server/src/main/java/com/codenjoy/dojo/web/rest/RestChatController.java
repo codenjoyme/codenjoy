@@ -39,6 +39,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.dao.Chat.FOR_ALL;
+
 /**
  * Rest сервис для работы с чатом.
  *
@@ -176,7 +178,7 @@ public class RestChatController {
         validator.checkUser(user);
 
         return chat.postMessageForField(message.getText(),
-                room, user.getId());
+                room, user.getId(), FOR_ALL);
     }
 
     /**

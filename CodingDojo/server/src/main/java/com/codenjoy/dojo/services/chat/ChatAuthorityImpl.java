@@ -33,6 +33,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.chat.ChatService.exception;
 import static com.codenjoy.dojo.services.chat.ChatType.*;
+import static com.codenjoy.dojo.services.dao.Chat.FOR_ALL;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
@@ -51,7 +52,7 @@ public class ChatAuthorityImpl implements ChatAuthority {
         this.chat = chat;
         this.spreader = spreader;
         this.playerId = playerId;
-        this.player = Arrays.asList(new Player(playerId));
+        this.player = player(playerId);
         this.listener = listener;
     }
 
@@ -78,6 +79,14 @@ public class ChatAuthorityImpl implements ChatAuthority {
 
     private List<Player> players(int topicId) {
         return spreader.players(topicId);
+    }
+
+    private List<Player> players(String recipientId, Integer topicId) {
+        return recipientId == null ? players(topicId) : player(recipientId);
+    }
+
+    private List<Player> player(String playerId) {
+        return Arrays.asList(new Player(playerId));
     }
 
     @Override
@@ -122,16 +131,21 @@ public class ChatAuthorityImpl implements ChatAuthority {
     public PMessage postTopic(int topicId, String text, String room) {
         // TODO тут пришлось нарушить инкапсуляцию исходного метода, чтобы достать тип type сообщения
         ChatType type = service.validateTopicAvailable(topicId, playerId, room);
-        PMessage message = service.saveMessage(topicId, type, text, room, playerId);
+        PMessage message = service.saveMessage(topicId, type, text, room, playerId, FOR_ALL);
         informCreated(players(room), type.root(), asList(message));
         return message;
     }
 
     @Override
-    public PMessage postField(String text, String room) {
-        PMessage message = service.postMessageForField(text, room, playerId);
-        informCreated(players(message.getTopicId()), FIELD, asList(message));
+    public PMessage postFieldFor(String recipientId, String text, String room) {
+        PMessage message = service.postMessageForField(text, room, playerId, recipientId);
+        informCreated(players(recipientId, message.getTopicId()), FIELD, asList(message));
         return message;
+    }
+
+    @Override
+    public PMessage postField(String text, String room) {
+        return postFieldFor(FOR_ALL, text, room);
     }
 
     @Override
