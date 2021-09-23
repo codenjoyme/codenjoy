@@ -238,7 +238,7 @@
         Football
         Hex
         Kata
-        Loderunner
+        Clifford
         Minesweeper
         Moebius
     Добавлен SmokeTest для некоторых игр, которые уже приведены к новому интерфейсу

@@ -81,7 +81,7 @@
         <module>chess</module>
         <module>collapse</module>
         <module>hex</module>
-        <module>loderunner</module>
+        <module>clifford</module>
         <module>minesweeper</module>
         <module>rubicscube</module>
         <module>sudoku</module>

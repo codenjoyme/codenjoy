@@ -219,7 +219,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>loderunner</id>
+            <id>clifford</id>
             <activation>
                 <property>
                     <name>allGames</name>
@@ -228,7 +228,7 @@
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>loderunner-engine</artifactId>
+                    <artifactId>clifford-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
