@@ -61,3 +61,6 @@
 [submodule "CodingDojo/clients/scala"]
 	path = CodingDojo/clients/scala
 	url = https://github.com/codenjoyme/codenjoy-scala-client.git
+[submodule "CodingDojo/games/clifford"]
+	path = CodingDojo/games/clifford
+	url = https://github.com/codenjoyme/codenjoy-clifford.git
