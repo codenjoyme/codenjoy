@@ -59,12 +59,12 @@ public class ChatHelper {
         return post(room, player, topicId, type, null);
     }
 
-    public Chat.Message post(String room, String player, Integer topicId, ChatType type, String recepient) {
+    public Chat.Message post(String room, String player, Integer topicId, ChatType type, String recipient) {
         long time = JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200");
         int index = messages.size() + 1;
         Chat.Message message = new Chat.Message(
                 room, topicId, type,
-                player, recepient,
+                player, recipient,
                 time + 100000L * index,
                 "message" + index);
         Chat.Message added = chat.saveMessage(message);
