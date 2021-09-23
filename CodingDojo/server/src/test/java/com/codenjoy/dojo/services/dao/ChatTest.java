@@ -536,63 +536,10 @@ public class ChatTest {
     @Test
     public void shouldGetAllMessages_casePersonalMessages() {
         // given
-        // for all
         Triplet ids = givenAllTypesMessagesWithPersonal();
 
-        ChatMessages method = chat::getMessages;
-
         // when then
-        // for room
-        messages.assertThat(1)
-                .in(method.getAll(ROOM, null,
-                        filter("room1", null)));
-
-        messages.assertThat(1, 6)
-                .in(method.getAll(ROOM, null,
-                        filter("room1", "player1")));
-
-        messages.assertThat(1, 11)
-                .in(method.getAll(ROOM, null,
-                        filter("room1", "player2")));
-
-        // for room topic
-        messages.assertThat(2)
-                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
-                        filter("room1", null)));
-
-        messages.assertThat(2, 7)
-                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
-                        filter("room1", "player1")));
-
-        messages.assertThat(2, 12)
-                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
-                        filter("room1", "player2")));
-
-        // for field
-        messages.assertThat(3)
-                .in(method.getAll(FIELD, ids.field,
-                        filter("room1", null)));
-
-        messages.assertThat(3, 8)
-                .in(method.getAll(FIELD, ids.field,
-                        filter("room1", "player1")));
-
-        messages.assertThat(3, 13)
-                .in(method.getAll(FIELD, ids.field,
-                        filter("room1", "player2")));
-
-        // for field topic
-        messages.assertThat(4)
-                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
-                        filter("room1", null)));
-
-        messages.assertThat(4, 9)
-                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
-                        filter("room1", "player1")));
-
-        messages.assertThat(4, 14)
-                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
-                        filter("room1", "player2")));
+        assertGetMessagesForParticipant(ids, chat::getMessages);
     }
 
     private Triplet givenAllTypesMessagesWithPersonal() {
@@ -632,8 +579,12 @@ public class ChatTest {
         // given
         Triplet ids = givenAllTypesMessagesWithPersonal();
 
-        ChatMessages method = chat::getMessagesBetween;
+        // when then
+        assertGetMessagesForParticipant(ids, chat::getMessagesBetween);
 
+    }
+
+    private void assertGetMessagesForParticipant(Triplet ids, ChatMessages method) {
         // when then
         // for room
         messages.assertThat(1)
