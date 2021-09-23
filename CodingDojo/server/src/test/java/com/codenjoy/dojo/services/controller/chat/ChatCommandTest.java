@@ -104,7 +104,7 @@ public class ChatCommandTest {
         // then
         ArgumentCaptor<Filter> captor = ArgumentCaptor.forClass(Filter.class);
         verify(chat).getAllRoom(captor.capture());
-        assertEquals("Filter(room=otherRoom, count=1, afterId=2, " +
+        assertEquals("Filter(room=otherRoom, recipientId=null, count=1, afterId=2, " +
                         "beforeId=5, inclusive=true)",
                 captor.getValue().toString());
     }
@@ -123,7 +123,7 @@ public class ChatCommandTest {
         // then
         ArgumentCaptor<Filter> captor = ArgumentCaptor.forClass(Filter.class);
         verify(chat).getAllField(captor.capture());
-        assertEquals("Filter(room=room, count=10, afterId=3, " +
+        assertEquals("Filter(room=room, recipientId=null, count=10, afterId=3, " +
                         "beforeId=4, inclusive=false)",
                 captor.getValue().toString());
     }
@@ -142,7 +142,7 @@ public class ChatCommandTest {
         // then
         ArgumentCaptor<Filter> captor = ArgumentCaptor.forClass(Filter.class);
         verify(chat).getAllTopic(eq(12), captor.capture());
-        assertEquals("Filter(room=room2, count=3, afterId=4, " +
+        assertEquals("Filter(room=room2, recipientId=null, count=3, afterId=4, " +
                         "beforeId=6, inclusive=true)",
                 captor.getValue().toString());
     }

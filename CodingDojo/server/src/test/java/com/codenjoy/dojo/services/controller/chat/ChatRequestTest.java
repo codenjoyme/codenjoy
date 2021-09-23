@@ -48,7 +48,7 @@ public class ChatRequestTest {
         assertEquals("room2", request.room());
         assertEquals(true, request.inclusive());
         assertEquals("getAllTopic", request.method());
-        assertEquals("Filter(room=room2, count=3, afterId=4, beforeId=6, inclusive=true)",
+        assertEquals("Filter(room=room2, recipientId=null, count=3, afterId=4, beforeId=6, inclusive=true)",
                 request.filter().toString());
     }
 
@@ -64,7 +64,7 @@ public class ChatRequestTest {
         assertEquals(null, request.room());
         assertEquals(null, request.inclusive());
         assertEquals("getAllTopic", request.method());
-        assertEquals("Filter(room=null, count=null, afterId=null, beforeId=null, inclusive=null)",
+        assertEquals("Filter(room=null, recipientId=null, count=null, afterId=null, beforeId=null, inclusive=null)",
                 request.filter().toString());
     }
 
@@ -81,7 +81,7 @@ public class ChatRequestTest {
         assertEquals(null, request.room());
         assertEquals(null, request.inclusive());
         assertEquals("getAllTopic", request.method());
-        assertEquals("Filter(room=null, count=null, afterId=null, beforeId=null, inclusive=null)",
+        assertEquals("Filter(room=null, recipientId=null, count=null, afterId=null, beforeId=null, inclusive=null)",
                 request.filter().toString());
     }
 }

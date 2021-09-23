@@ -129,7 +129,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         chat.postField("message1", "room");
 
         assertEquals("[PMessage(id=1, text=message1, room=room, type=3, topicId=1, " +
-                        "playerId=player, playerName=player-name, recipientId=null, time=12345)]",
+                        "playerId=player, playerName=player-name, time=12345)]",
                 chat.getAllField(Filter.room("room").count(10).get()).toString());
     }
 
@@ -819,7 +819,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         waitForClientReceived(0);
 
         // then
-        assertEquals("[getAllRoom(Filter(room=otherRoom, count=1, " +
+        assertEquals("[getAllRoom(Filter(room=otherRoom, recipientId=null, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
         assertEquals("[{'command':'error', 'data':" +
@@ -851,7 +851,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         waitForClientReceived(0);
 
         // then
-        assertEquals("[getAllRoom(Filter(room=room, count=2, " +
+        assertEquals("[getAllRoom(Filter(room=room, recipientId=null, count=2, " +
                 "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
         assertEquals("[{'command':'add', 'type':'room', 'data':[" +
@@ -876,7 +876,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         waitForClientReceived(0);
 
         // then
-        assertEquals("[getAllTopic(1, Filter(room=room, count=1, " +
+        assertEquals("[getAllTopic(1, Filter(room=room, recipientId=null, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
         assertEquals("[{'command':'error', 'data':" +
@@ -903,7 +903,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         waitForClientReceived(0);
 
         // then
-        assertEquals("[getAllTopic(1, Filter(room=room, count=2, " +
+        assertEquals("[getAllTopic(1, Filter(room=room, recipientId=null, count=2, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
         assertEquals("[{'command':'add', 'type':'room', 'data':[" +
@@ -928,7 +928,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         waitForClientReceived(0);
 
         // then
-        assertEquals("[getAllField(Filter(room=otherRoom, count=1, " +
+        assertEquals("[getAllField(Filter(room=otherRoom, recipientId=null, count=1, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
         assertEquals("[{'command':'error', 'data':" +
@@ -955,7 +955,7 @@ public class ChatControllerTest extends AbstractControllerTest<String, ChatAutho
         waitForClientReceived(0);
 
         // then
-        assertEquals("[getAllField(Filter(room=room, count=2, " +
+        assertEquals("[getAllField(Filter(room=room, recipientId=null, count=2, " +
                         "afterId=null, beforeId=null, inclusive=null))]",
                 receivedOnServer());
         assertEquals("[{'command':'add', 'type':'field', 'data':[" +
