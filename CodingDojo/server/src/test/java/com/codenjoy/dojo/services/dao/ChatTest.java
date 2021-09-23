@@ -521,6 +521,260 @@ public class ChatTest {
         assertMessages();
     }
 
+    static class Triplet {
+        int roomTopic;
+        int fieldTopic;
+        int field;
+    }
+
+    @Test
+    public void shouldGetAllMessages_casePersonalMessages() {
+        // given
+        // for all
+        Triplet ids = givenAllTypesMessagesWithPersonal();
+
+        // when then
+        // for room
+        messages.assertThat(1)
+                .in(chat.getMessages(ROOM, null,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId(null)
+                                .get()));
+
+        messages.assertThat(1, 6)
+                .in(chat.getMessages(ROOM, null,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player1")
+                                .get()));
+
+        messages.assertThat(1, 11)
+                .in(chat.getMessages(ROOM, null,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player2")
+                                .get()));
+
+        // for room topic
+        messages.assertThat(2)
+                .in(chat.getMessages(ROOM_TOPIC, ids.roomTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId(null)
+                                .get()));
+
+        messages.assertThat(2, 7)
+                .in(chat.getMessages(ROOM_TOPIC, ids.roomTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player1")
+                                .get()));
+
+        messages.assertThat(2, 12)
+                .in(chat.getMessages(ROOM_TOPIC, ids.roomTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player2")
+                                .get()));
+
+        // for field
+        messages.assertThat(3)
+                .in(chat.getMessages(FIELD, ids.field,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId(null)
+                                .get()));
+
+        messages.assertThat(3, 8)
+                .in(chat.getMessages(FIELD, ids.field,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player1")
+                                .get()));
+
+        messages.assertThat(3, 13)
+                .in(chat.getMessages(FIELD, ids.field,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player2")
+                                .get()));
+
+        // for field topic
+        messages.assertThat(4)
+                .in(chat.getMessages(FIELD_TOPIC, ids.fieldTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId(null)
+                                .get()));
+
+        messages.assertThat(4, 9)
+                .in(chat.getMessages(FIELD_TOPIC, ids.fieldTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player1")
+                                .get()));
+
+        messages.assertThat(4, 14)
+                .in(chat.getMessages(FIELD_TOPIC, ids.fieldTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player2")
+                                .get()));
+    }
+
+    private Triplet givenAllTypesMessagesWithPersonal() {
+        Triplet ids = new Triplet();
+
+        // 1
+        ids.roomTopic = messages.post("room1", "player1", null, ROOM).getId();
+        // 2
+        messages.post("room1", "player1", ids.roomTopic, ROOM_TOPIC);
+        // 3
+        ids.field = 1;
+        ids.fieldTopic = messages.post("room1", "player2", ids.field, FIELD).getId();
+        // 4
+        messages.post("room1", "player2", ids.fieldTopic, FIELD_TOPIC);
+        // 5
+        messages.post("room2", "player2", null, ROOM);
+
+        // personal for player1
+        messages.post("room1", "player1", null, ROOM, "player1");              // 6
+        messages.post("room1", "player1", ids.roomTopic, ROOM_TOPIC, "player1");   // 7
+        messages.post("room1", "player2", ids.field, FIELD, "player1");            // 8
+        messages.post("room1", "player2", ids.fieldTopic, FIELD_TOPIC, "player1"); // 9
+        messages.post("room2", "player2", null, ROOM, "player1");              // 10
+
+        // personal for player2
+        messages.post("room1", "player1", null, ROOM, "player2");              // 11
+        messages.post("room1", "player1", ids.roomTopic, ROOM_TOPIC, "player2");   // 12
+        messages.post("room1", "player2", ids.field, FIELD, "player2");            // 13
+        messages.post("room1", "player2", ids.fieldTopic, FIELD_TOPIC, "player2"); // 14
+        messages.post("room2", "player2", null, ROOM, "player2");              // 15
+
+        return ids;
+    }
+
+    @Test
+    public void shouldGetMessagesBetween_casePersonalMessages() {
+        // given
+        // for all
+        // 1
+        int roomTopic = messages.post("room1", "player1", null, ROOM).getId();
+        // 2
+        messages.post("room1", "player1", roomTopic, ROOM_TOPIC);
+        int field = 1;
+        // 3
+        int fieldTopic = messages.post("room1", "player2", field, FIELD).getId();
+        // 4
+        messages.post("room1", "player2", fieldTopic, FIELD_TOPIC);
+        // 5
+        messages.post("room2", "player2", null, ROOM);
+
+        // personal for player1
+        messages.post("room1", "player1", null, ROOM, "player1");              // 6
+        messages.post("room1", "player1", roomTopic, ROOM_TOPIC, "player1");   // 7
+        messages.post("room1", "player2", field, FIELD, "player1");            // 8
+        messages.post("room1", "player2", fieldTopic, FIELD_TOPIC, "player1"); // 9
+        messages.post("room2", "player2", null, ROOM, "player1");              // 10
+
+        // personal for player2
+        messages.post("room1", "player1", null, ROOM, "player2");              // 11
+        messages.post("room1", "player1", roomTopic, ROOM_TOPIC, "player2");   // 12
+        messages.post("room1", "player2", field, FIELD, "player2");            // 13
+        messages.post("room1", "player2", fieldTopic, FIELD_TOPIC, "player2"); // 14
+        messages.post("room2", "player2", null, ROOM, "player2");              // 15
+
+        // when then
+        // for room
+        messages.assertThat(1)
+                .in(chat.getMessages(ROOM, null,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId(null)
+                                .get()));
+
+        messages.assertThat(1, 6)
+                .in(chat.getMessages(ROOM, null,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player1")
+                                .get()));
+
+        messages.assertThat(1, 11)
+                .in(chat.getMessages(ROOM, null,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player2")
+                                .get()));
+
+        // for room topic
+        messages.assertThat(2)
+                .in(chat.getMessages(ROOM_TOPIC, roomTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId(null)
+                                .get()));
+
+        messages.assertThat(2, 7)
+                .in(chat.getMessages(ROOM_TOPIC, roomTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player1")
+                                .get()));
+
+        messages.assertThat(2, 12)
+                .in(chat.getMessages(ROOM_TOPIC, roomTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player2")
+                                .get()));
+
+        // for field
+        messages.assertThat(3)
+                .in(chat.getMessages(FIELD, field,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId(null)
+                                .get()));
+
+        messages.assertThat(3, 8)
+                .in(chat.getMessages(FIELD, field,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player1")
+                                .get()));
+
+        messages.assertThat(3, 13)
+                .in(chat.getMessages(FIELD, field,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player2")
+                                .get()));
+
+        // for field topic
+        messages.assertThat(4)
+                .in(chat.getMessages(FIELD_TOPIC, fieldTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId(null)
+                                .get()));
+
+        messages.assertThat(4, 9)
+                .in(chat.getMessages(FIELD_TOPIC, fieldTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player1")
+                                .get()));
+
+        messages.assertThat(4, 14)
+                .in(chat.getMessages(FIELD_TOPIC, fieldTopic,
+                        Filter.room("room1")
+                                .count(10)
+                                .recipientId("player2")
+                                .get()));
+    }
+
     private void assertMessages() {
         assertEquals("Chat.Message(id=1, topicId=null, type=ROOM(1), room=room1, playerId=player1, recipientId=null, time=1615231523345, text=message1)",
                 chat.getMessageById(1).toString());

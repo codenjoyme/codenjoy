@@ -36,6 +36,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import static java.lang.String.format;
+
 public class Chat {
     private final CrudPrimaryKeyConnectionThreadPool pool;
 
@@ -70,13 +72,14 @@ public class Chat {
                 "SELECT * " +
                     "FROM " +
                         "(SELECT * FROM messages " +
-                        "WHERE deleted = FALSE " +
-                        "AND room = ? " +
-                        "AND " + is("topic_id", topicId) +
-                        " AND type = ? " +
-                        "ORDER BY time DESC " +
-                        "LIMIT ?) as result " +
-                        "ORDER BY time ASC;",
+                            "WHERE deleted = FALSE " +
+                                "AND room = ? " +
+                                "AND " + is("topic_id", topicId) +
+                                "AND " + nullOrIs("recipient_id", filter.recipientId()) +
+                                "AND type = ? " +
+                            "ORDER BY time DESC " +
+                            "LIMIT ?) as result " +
+                    "ORDER BY time ASC;",
                 new Object[]{
                         filter.room(),
                         type.id(),
@@ -239,6 +242,12 @@ public class Chat {
                 : column + " = '" + id + "' ";
     }
 
+    private String nullOrIs(String column, String id) {
+        return (id == null)
+                ? format("%s IS NULL ", column)
+                : format("(%s IS NULL OR %s = '%s') ", column, column, id);
+    }
+
     private String eq(Filter filter) {
         return filter.inclusive() ? "=" : "";
     }
@@ -345,8 +354,8 @@ public class Chat {
     public Message saveMessage(Message message) {
         List<Object> objects = pool.batch(Arrays.asList(
                 "INSERT INTO messages " +
-                        "(room, deleted, topic_id, type, player_id, time, text) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?);",
+                        "(room, deleted, topic_id, type, player_id, recipient_id, time, text) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
                 pool.getLastInsertedIdQuery("messages", "id")),
 
                 Arrays.asList(new Object[]{
@@ -355,6 +364,7 @@ public class Chat {
                                 message.getTopicId(),
                                 message.getType().id(),
                                 message.getPlayerId(),
+                                message.getRecipientId(),
                                 JDBCTimeUtils.toString(new Date(message.getTime())),
                                 message.getText()
                         },

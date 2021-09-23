@@ -29,14 +29,16 @@ import lombok.ToString;
 public class Filter {
 
     private String room;
+    private String recipientId;
     private Integer count;
     private Integer afterId;
     private Integer beforeId;
     private Boolean inclusive;
 
     @Builder(builderMethodName = "with", buildMethodName = "get")
-    public Filter(String room, Integer count, Integer afterId, Integer beforeId, Boolean inclusive) {
+    public Filter(String room, String recipientId, Integer count, Integer afterId, Integer beforeId, Boolean inclusive) {
         this.room = room;
+        this.recipientId = recipientId;
         this.count = count;
         this.afterId = afterId;
         this.beforeId = beforeId;
@@ -49,6 +51,10 @@ public class Filter {
 
     public String room() {
         return room;
+    }
+
+    public String recipientId() {
+        return recipientId;
     }
 
     public Integer count() {
@@ -65,5 +71,9 @@ public class Filter {
 
     public Boolean inclusive() {
         return inclusive;
+    }
+
+    public void recipientId(String recipientId) {
+        this.recipientId = recipientId;
     }
 }
