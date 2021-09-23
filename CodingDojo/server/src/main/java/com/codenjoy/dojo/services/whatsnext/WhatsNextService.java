@@ -43,15 +43,15 @@ import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 @Component
 public class WhatsNextService {
 
-    // не хотелось рефакторить этот метод, дабы в нем было видно что делает сервер,
-    // чтобы создать игру
+    // не хотелось рефакторить этот метод, дабы в нем было видно, что делает сервер
+    // для создания игры.
     public String calculate(GameType gameType, String board, String allActions) {
         Settings settings = gameType.getSettings();
         GameField game = gameType.createGame(0, settings);
         List<Information> infos = new LinkedList<>();
         List<GamePlayer> players  = game.load(board, () -> {
             PlayerScores scores = gameType.getPlayerScores(1000, settings);
-            Information listener = new ScoresCollector(scores);
+            Information listener = new ScoresCollector(null, scores);
             infos.add(listener);
             GamePlayer player = gameType.createPlayer(
                     listener, DEFAULT_TEAM_ID,

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.chat.ChatAuthority;
+import com.codenjoy.dojo.services.info.MessagesListener;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -34,6 +35,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
@@ -53,7 +55,7 @@ public class Deal implements Tickable {
     private Game game;
     private LazyJoystick joystick;
     private ChatAuthority chat;
-    private Consumer<String> messages;
+    private MessagesListener messages;
 
     public Deal(Player player, Game game, String room) {
         this.player = player;
@@ -194,9 +196,9 @@ public class Deal implements Tickable {
     public void setChat(ChatAuthority chat) {
         this.chat = chat;
         if (chat != null) {
-            messages = message -> {
+            messages = (playerId, message) -> {
                 try {
-                    chat.postField(message, getRoom());
+                    chat.postFieldFor(playerId, message, getRoom());
                 } catch (Exception exception) {
                     // TODO случается такое, когда перегружаешь всех участников на админке
                     //      а в это время игра постит сообщения

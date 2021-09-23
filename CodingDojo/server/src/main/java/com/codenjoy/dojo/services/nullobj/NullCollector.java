@@ -33,7 +33,7 @@ public final class NullCollector extends ScoresCollector {
     public static final Information INSTANCE = new NullCollector();
 
     private NullCollector() {
-        super(NullPlayerScores.INSTANCE);
+        super(StringUtils.EMPTY, NullPlayerScores.INSTANCE);
     }
 
     @Override

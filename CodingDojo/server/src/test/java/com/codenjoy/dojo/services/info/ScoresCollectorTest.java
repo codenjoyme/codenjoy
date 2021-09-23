@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import static org.junit.Assert.assertEquals;
 
@@ -135,7 +135,7 @@ public class ScoresCollectorTest {
     public void shouldFifo_caseInteger() {
         // given
         scores = new Scores(false);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
 
         // when
         event(14);
@@ -162,7 +162,7 @@ public class ScoresCollectorTest {
     public void shouldFifo_caseJson() {
         // given
         scores = new Scores(true);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
 
         // when
         jsonEvent(14);
@@ -194,7 +194,7 @@ public class ScoresCollectorTest {
     public void shouldFifo_butLevelChangesInfoAtEnd_caseInteger() {
         // given
         scores = new Scores(false);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
 
         // when
         event(13);
@@ -219,7 +219,7 @@ public class ScoresCollectorTest {
     public void shouldFifo_butLevelChangesInfoAtEnd_caseJson() {
         // given
         scores = new Scores(true);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
 
         // when
         jsonEvent(13);
@@ -244,7 +244,7 @@ public class ScoresCollectorTest {
     public void shouldIgnoreZero_caseJson() {
         // given
         scores = new Scores(true);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
         scores.set(11);
 
         // when
@@ -263,7 +263,7 @@ public class ScoresCollectorTest {
     public void shouldIgnoreZero_caseInteger() {
         // given
         scores = new Scores(false);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
         scores.set(11);
 
         // when
@@ -282,7 +282,7 @@ public class ScoresCollectorTest {
     public void shouldNotLessThanZero_caseJson() {
         // given
         scores = new Scores(true);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
         scores.set(13);
 
         // when
@@ -304,7 +304,7 @@ public class ScoresCollectorTest {
     public void shouldNotLessThanZero_caseInteger() {
         // given
         scores = new Scores(false);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
         scores.set(13);
 
         // when
@@ -326,7 +326,7 @@ public class ScoresCollectorTest {
     public void shouldPrintCustomMessage() {
         // given
         scores = new Scores(false);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
 
         // when
         event("3");
@@ -347,9 +347,10 @@ public class ScoresCollectorTest {
     public void shouldOnAdd_whenAddMessage_oneListener() {
         // given
         scores = new Scores(false);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
         List<String> messages = new LinkedList<>();
-        info.add(messages::add);
+        MessagesListener listener = add(messages);
+        info.add(listener);
 
         // when
         event(1);
@@ -359,41 +360,48 @@ public class ScoresCollectorTest {
 
         // then
         assertEquals(
-                "[Event[1] => +1, " +
-                "Event[{'score':2}] => +2, " +
-                "Level 4, " +
-                "fight!]",
+                "['Event[1] => +1' > id, " +
+                "'Event[{'score':2}] => +2' > id, " +
+                "'Level 4' > id, " +
+                "'fight!' > id]",
                 messages.toString());
+    }
+
+    private MessagesListener add(List<String> messages) {
+        return (playerId, message) -> messages.add(String.format("'%s' > %s", message, playerId));
     }
 
     @Test
     public void shouldOnAdd_whenAddMessage_twoListeners() {
         // given
         scores = new Scores(false);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
 
         List<String> messages1 = new LinkedList<>();
         List<String> messages2 = new LinkedList<>();
-        info.add(messages1::add);
+        MessagesListener listener1 = add(messages1);
+        info.add(listener1);
 
         // when
         event(1);
         jsonEvent(2);
-        info.add(messages2::add);
+        MessagesListener listener2 =
+                add(messages2);
+        info.add(listener2);
         levelChanged(4);
         event("fight!");
 
         // then
         assertEquals(
-                "[Event[1] => +1, " +
-                "Event[{'score':2}] => +2, " +
-                "Level 4, " +
-                "fight!]",
+                "['Event[1] => +1' > id, " +
+                "'Event[{'score':2}] => +2' > id, " +
+                "'Level 4' > id, " +
+                "'fight!' > id]",
                 messages1.toString());
 
         assertEquals(
-                "[Level 4, " +
-                "fight!]",
+                "['Level 4' > id, " +
+                "'fight!' > id]",
                 messages2.toString());
     }
 
@@ -401,12 +409,12 @@ public class ScoresCollectorTest {
     public void shouldRemoveListener() {
         // given
         scores = new Scores(false);
-        info = new ScoresCollector(scores);
+        info = new ScoresCollector("id", scores);
 
         List<String> messages1 = new LinkedList<>();
         List<String> messages2 = new LinkedList<>();
-        Consumer<String> listener1 = messages1::add;
-        Consumer<String> listener2 = messages2::add;
+        MessagesListener listener1 = add(messages1);
+        MessagesListener listener2 = add(messages2);
         info.add(listener1);
         info.add(listener2);
 
@@ -422,15 +430,15 @@ public class ScoresCollectorTest {
 
         // then
         assertEquals(
-                "[Event[1] => +1, " +
-                "Event[2] => +2]",
+                "['Event[1] => +1' > id, " +
+                "'Event[2] => +2' > id]",
                 messages1.toString());
 
         assertEquals(
-                "[Event[1] => +1, " +
-                "Event[2] => +2, " +
-                "Event[3] => +3, " +
-                "Event[4] => +4]",
+                "['Event[1] => +1' > id, " +
+                "'Event[2] => +2' > id, " +
+                "'Event[3] => +3' > id, " +
+                "'Event[4] => +4' > id]",
                 messages2.toString());
     }
 }

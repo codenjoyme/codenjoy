@@ -26,14 +26,13 @@ package com.codenjoy.dojo.services.info;
 import com.codenjoy.dojo.services.ChangeLevelListener;
 import com.codenjoy.dojo.services.EventListener;
 
-import java.util.function.Consumer;
-
 public interface Information extends EventListener, ChangeLevelListener {
+
     String getMessage();
 
     String getAllMessages();
 
-    void add(Consumer<String> listener);
+    void add(MessagesListener listener);
 
-    void remove(Consumer<String> listener);
+    void remove(MessagesListener listener);
 }

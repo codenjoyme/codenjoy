@@ -85,6 +85,7 @@ public class ChatDealsTest {
         SmartAssert.checkResult();
     }
 
+    // only the player who caused this event will receive messages about events in the field chat.
     @Test
     public void shouldPostAllScoresMessagesIntoChat() {
         // given

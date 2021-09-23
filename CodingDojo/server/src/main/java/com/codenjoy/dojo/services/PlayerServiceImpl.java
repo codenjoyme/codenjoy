@@ -318,7 +318,7 @@ public class PlayerServiceImpl implements PlayerService {
             deals.remove(player.getId(), Sweeper.on().lastAlone());
 
             PlayerScores playerScores = gameType.getPlayerScores(save.getScore(), gameType.getSettings());
-            Information listener = new ScoresCollector(playerScores);
+            Information listener = new ScoresCollector(id, playerScores);
 
             player = new Player(id, callbackUrl,
                     gameType, playerScores, listener);

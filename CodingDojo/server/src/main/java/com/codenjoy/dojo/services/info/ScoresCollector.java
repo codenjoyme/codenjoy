@@ -43,7 +43,8 @@ public class ScoresCollector extends EventsCollector {
     private PlayerScores scores;
     private Collector out = new Collector();
 
-    public ScoresCollector(PlayerScores scores) {
+    public ScoresCollector(String playerId, PlayerScores scores) {
+        super(playerId);
         this.scores = scores;
     }
 
