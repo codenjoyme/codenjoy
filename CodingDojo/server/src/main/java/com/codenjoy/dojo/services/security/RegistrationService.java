@@ -166,8 +166,8 @@ public class RegistrationService {
         mailService.sendEmail(id, title, body);
     }
 
-    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String room, String game, String githubUsername, String slackId) {
-        return "redirect:/" + register(id, code, game, room, request.getRemoteAddr(), githubUsername, slackId);
+    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String room, String game, String githubUsername, String slackEmail) {
+        return "redirect:/" + register(id, code, game, room, request.getRemoteAddr(), githubUsername, slackEmail);
     }
 
     public String openRegistrationForm(HttpServletRequest request, Model model,
@@ -176,8 +176,8 @@ public class RegistrationService {
                                        String fullName,
                                        String name,
                                        String github,
-                                       String slackId) {
-        return openRegistrationForm(request, model, id, email, fullName, name, github, slackId, false);
+                                       String slackEmail) {
+        return openRegistrationForm(request, model, id, email, fullName, name, github, slackEmail, false);
     }
 
     public String openRegistrationForm(HttpServletRequest request, Model model,
@@ -186,7 +186,7 @@ public class RegistrationService {
                                        String fullName,
                                        String name,
                                        String github,
-                                       String slackId,
+                                       String slackEmail,
                                        boolean isAdminLogin) {
         String ip = getIp(request);
 
@@ -195,7 +195,7 @@ public class RegistrationService {
             fullName = registration.getFullNameById(id);
             name = registration.getNameById(id);
             github = registration.getGitHubUsernameById(id);
-            slackId = registration.getSlackEmailById(id);
+            slackEmail = registration.getSlackEmailById(id);
             if (!model.containsAttribute("bad_email")) {
                 validator.checkEmail(email, CAN_BE_NULL);
             }
@@ -212,7 +212,7 @@ public class RegistrationService {
         player.setFullName(fullName);
         player.setReadableName(name);
         player.setGitHubUsername(github);
-        player.setSlackEmail(slackId);
+        player.setSlackEmail(slackEmail);
         player.setGame(rooms.getAlias(game));
         if (!model.containsAttribute("player")) {
             model.addAttribute("player", player);
@@ -225,8 +225,8 @@ public class RegistrationService {
         return getRegister(model);
     }
 
-    public String register(String id, String code, String game, String room, String ip, String githubUsername, String slackId) {
-        Player player = playerService.register(id, game, room, ip, getRepository(githubUsername), slackId);
+    public String register(String id, String code, String game, String room, String ip, String githubUsername, String slackEmail) {
+        Player player = playerService.register(id, game, room, ip, getRepository(githubUsername), slackEmail);
         if (player == NullPlayer.INSTANCE) {
             return "login";
         }

@@ -16,6 +16,7 @@ message UserDetailsUsernameRequest{
 message UserDetailsResponse{
   string id = 1;
   string email = 2;
+  string slackEmail = 3;
 }
 
 message UserRequest{
