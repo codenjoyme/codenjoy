@@ -126,6 +126,15 @@ public class ChatDealsTest {
                 "PMessage(id=2, text=Player joined the field, room=room, type=3, topicId=1, \n" +
                 "    playerId=player2, playerName=player2-name, time=12346)]");
 
+        with.chat.checkField(player2, room,
+                "[PMessage(id=1, text=Player joined the field, room=room, type=3, topicId=1, \n" +
+                "    playerId=player1, playerName=player1-name, time=12345), \n" +
+                "PMessage(id=2, text=Player joined the field, room=room, type=3, topicId=1, \n" +
+                "    playerId=player2, playerName=player2-name, time=12346)]");
+
+        with.chat.cleanField(player1, room);
+        with.chat.cleanField(player2, room);
+
         assertEquals("☼☼☼☼☼☼\n" +
                     "☼    ☼\n" +
                     "☼ $$ ☼\n" +
@@ -153,6 +162,12 @@ public class ChatDealsTest {
                 "[PMessage(id=3, text=WIN => +30, room=room, type=3, topicId=1, \n" +
                 "    playerId=player1, playerName=player1-name, time=12346)]");
 
+        with.chat.checkField(player2, room,
+                "[]");
+
+        with.chat.cleanField(player1, room);
+        with.chat.cleanField(player2, room);
+
         // when
         joystick1.down();
         joystick2.down();
@@ -168,7 +183,13 @@ public class ChatDealsTest {
                 deal1.getGame().getBoardAsString());
 
         with.chat.checkField(player1, room,
+                "[]");
+
+        with.chat.checkField(player2, room,
                 "[PMessage(id=4, text=LOSE => 0, room=room, type=3, topicId=1, \n" +
                 "    playerId=player2, playerName=player2-name, time=12346)]");
+
+        with.chat.cleanField(player1, room);
+        with.chat.cleanField(player2, room);
     }
 }

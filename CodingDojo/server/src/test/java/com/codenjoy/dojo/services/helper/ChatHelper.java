@@ -94,18 +94,22 @@ public class ChatHelper {
     }
 
     public void checkField(String player, String room, String expected) {
-        List<PMessage> messages = chatService.getFieldMessages(player,
+        check(getField(player, room), expected); // TODO add split /n
+    }
+
+    private List<PMessage> getField(String player, String room) {
+        return chatService.getFieldMessages(player,
                 Filter.room(room)
                         .count(Integer.MAX_VALUE)
                         .get());
+    }
 
-        check(messages, expected); // TODO add split /n
-
-        // mark removed
-        messages.forEach(message ->
-                chatService.deleteMessage(message.getId(),
-                        message.getRoom(),
-                        message.getPlayerId()));
+    public void cleanField(String player, String room) {
+        getField(player, room)
+                .forEach(message ->
+                        chatService.deleteMessage(message.getId(),
+                                message.getRoom(),
+                                message.getPlayerId()));
     }
 
     public class AssertThat {
