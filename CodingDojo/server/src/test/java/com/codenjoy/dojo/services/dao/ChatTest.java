@@ -581,7 +581,24 @@ public class ChatTest {
 
         // when then
         assertGetMessagesForParticipant(ids, chat::getMessagesBetween);
+    }
 
+    @Test
+    public void shouldGetMessagesAfter_casePersonalMessages() {
+        // given
+        Triplet ids = givenAllTypesMessagesWithPersonal();
+
+        // when then
+        assertGetMessagesForParticipant(ids, chat::getMessagesAfter);
+    }
+
+    @Test
+    public void shouldGetMessagesBefore_casePersonalMessages() {
+        // given
+        Triplet ids = givenAllTypesMessagesWithPersonal();
+
+        // when then
+        assertGetMessagesForParticipant(ids, chat::getMessagesBefore);
     }
 
     private void assertGetMessagesForParticipant(Triplet ids, ChatMessages method) {
