@@ -222,6 +222,7 @@ public class Chat {
                     "WHERE deleted = FALSE " +
                         "AND room = ? " +
                         "AND " + is("topic_id", topicId) +
+                        "AND " + nullOrIs("recipient_id", filter.recipientId()) +
                         "AND type = ? " +
                         "AND id >" + eq(filter) + " ? " +
                         "AND id <" + eq(filter) + " ? " +
