@@ -133,7 +133,8 @@ public class Chat {
                         "        GROUP BY room) m1" +
                         "    JOIN messages m2" +
                         "        ON m1.room = m2.room" +
-                        "            AND m1.time = m2.time;",
+                        "            AND m1.time = m2.time" +
+                        "    ORDER BY m2.time ASC;",
                 new Object[]{
                         ChatType.ROOM.id()
                 },
@@ -160,7 +161,8 @@ public class Chat {
                         "        GROUP BY topic_id) m1" +
                         "    JOIN messages m2" +
                         "        ON m1.topic_id = m2.topic_id" +
-                        "            AND m1.time = m2.time;",
+                        "            AND m1.time = m2.time" +
+                        "    ORDER BY m2.time ASC;",
                 new Object[]{
                         type.id()
                 },
