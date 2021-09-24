@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -51,7 +52,7 @@ public class DealTest {
     public void setup() {
         gameType = PlayerTest.mockGameType("game");
         player = new Player("player", "url", gameType,
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
+                NullPlayerScores.INSTANCE, NullCollector.INSTANCE);
 
         setupGamePlayer();
         deal = new Deal(player, game, "room");
@@ -119,7 +120,7 @@ public class DealTest {
     public void testEquals_withPlayer() {
         // given
         Player otherPlayer = new Player("other player", "other url", PlayerTest.mockGameType("game"),
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
+                NullPlayerScores.INSTANCE, NullCollector.INSTANCE);
 
         // when then
         assertEquals(false, deal.equals(otherPlayer));
@@ -131,7 +132,7 @@ public class DealTest {
         // given
         GameType gameType = PlayerTest.mockGameType("game");
         Player otherPlayer = new Player("other player", "other url", gameType,
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
+                NullPlayerScores.INSTANCE, NullCollector.INSTANCE);
         Deal player = new Deal(otherPlayer, NullGame.INSTANCE, gameType.name());
 
         // when then
@@ -195,12 +196,14 @@ public class DealTest {
         // given
         boolean[] removed = {false};
         Consumer<Deal> onRemove = deal -> removed[0] = true;
+        Closeable ai = mock(Closeable.class);
+        player.setAi(ai);
 
         // when
         deal.remove(onRemove);
 
         // then
-        verify(LockedGame.unwrap(game)).close();
+        verify(ai).close();
         assertEquals(true, removed[0]);
     }
 
@@ -257,7 +260,7 @@ public class DealTest {
         // given
         gameType = PlayerTest.mockGameType("game");
         player = spy(new Player("player", "url", gameType,
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE));
+                NullPlayerScores.INSTANCE, NullCollector.INSTANCE));
 
         setupGamePlayer();
 

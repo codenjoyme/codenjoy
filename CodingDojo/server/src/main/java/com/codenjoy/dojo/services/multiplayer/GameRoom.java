@@ -138,8 +138,8 @@ public class GameRoom {
         return name;
     }
 
-    public long countTeams() {
-        return deals.stream()
+    public int countTeams() {
+        return (int) deals.stream()
                 .map(Deal::getGame)
                 .map(Game::getPlayer)
                 .map(GamePlayer::getTeamId)
@@ -147,12 +147,12 @@ public class GameRoom {
                 .count();
     }
 
-    public long countPlayers() {
+    public int countPlayers() {
         return deals.size();
     }
 
-    public long countMembers(int teamId) {
-        return deals.stream()
+    public int countMembers(int teamId) {
+        return (int) deals.stream()
                 .filter(deal -> deal.getTeamId() == teamId)
                 .distinct()
                 .count();

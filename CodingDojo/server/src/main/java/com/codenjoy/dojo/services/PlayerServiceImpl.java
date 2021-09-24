@@ -30,13 +30,16 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.controller.chat.ChatController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.info.Information;
+import com.codenjoy.dojo.services.info.ScoresCollector;
 import com.codenjoy.dojo.services.multiplayer.Sweeper;
-import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
@@ -54,6 +57,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -61,7 +65,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.Deals.withRoom;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toMap;
 
 @Component("playerService")
 @Slf4j
@@ -80,6 +84,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     @Qualifier("screenController")
     protected Controller screenController;
+
+    @Autowired
+    @Qualifier("chatController")
+    protected ChatController chatController;
 
     @Autowired protected GameService gameService;
     @Autowired protected AutoSaver autoSaver;
@@ -104,15 +112,14 @@ public class PlayerServiceImpl implements PlayerService {
     public void init() {
         deals.init(lock);
         deals.onAdd(deal -> {
-            Player player = deal.getPlayer();
-            Joystick joystick = deal.getJoystick();
-            playerController.registerPlayerTransport(player, joystick);
-            screenController.registerPlayerTransport(player, null);
+            playerController.register(deal);
+            screenController.register(deal);
+            chatController.register(deal);
         });
         deals.onRemove(deal -> {
-            Player player = deal.getPlayer();
-            playerController.unregisterPlayerTransport(player);
-            screenController.unregisterPlayerTransport(player);
+            playerController.unregister(deal);
+            screenController.unregister(deal);
+            chatController.unregister(deal);
         });
     }
 
@@ -297,12 +304,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private Player getPlayer(PlayerSave save, String game, String room) {
-        String name = save.getId();
+        String id = save.getId();
         String callbackUrl = save.getCallbackUrl();
 
         GameType gameType = gameService.getGameType(game, room);
-        Player player = getPlayer(name);
-        Deal oldDeal = deals.get(name);
+        Player player = getPlayer(id);
+        Deal oldDeal = deals.get(id);
 
         boolean newPlayer = (player instanceof NullPlayer) 
                 || !game.equals(player.getGame())
@@ -311,11 +318,10 @@ public class PlayerServiceImpl implements PlayerService {
             deals.remove(player.getId(), Sweeper.on().lastAlone());
 
             PlayerScores playerScores = gameType.getPlayerScores(save.getScore(), gameType.getSettings());
-            InformationCollector listener = new InformationCollector(playerScores);
+            Information listener = new ScoresCollector(id, playerScores);
 
-            player = new Player(name, callbackUrl,
+            player = new Player(id, callbackUrl,
                     gameType, playerScores, listener);
-            player.setEventListener(listener);
             player.setLastResponse(time.now());
             player.setRoom(room);
 
@@ -327,7 +333,7 @@ public class PlayerServiceImpl implements PlayerService {
             // TODO N+1 проблема во время загрузки приложения
             player.setReadableName(registration.getNameById(player.getId()));
 
-            log.debug("Player {} starting new game {}", name, deal.getGame());
+            log.debug("Player {} starting new game {}", id, deal.getGame());
         } else {
           // do nothing
         }
@@ -346,6 +352,7 @@ public class PlayerServiceImpl implements PlayerService {
             deals.tick();
             sendScreenUpdates();
             requestControls();
+            chatController.tick();
 
             inactivity.tick();
             semifinal.tick();
@@ -388,7 +395,6 @@ public class PlayerServiceImpl implements PlayerService {
         cacheBoards.clear();
 
         Map<String, GameData> gameDataMap = dealsView.getGamesDataMap();
-        ChatService.LastMessage lastMessage = chat.getLast();
         for (Deal deal : deals) {
             Game game = deal.getGame();
             Player player = deal.getPlayer();
@@ -416,7 +422,6 @@ public class PlayerServiceImpl implements PlayerService {
                 List<String> group = gameData.getGroup();
                 Map<String, HeroData> coordinates = gameData.getCoordinates();
                 Map<String, String> readableNames = gameData.getReadableNames();
-                ChatService.Status chat = lastMessage.at(deal);
                 map.put(player, new PlayerData(boardSize,
                         encoded,
                         gameType,
@@ -426,8 +431,7 @@ public class PlayerServiceImpl implements PlayerService {
                         teams,
                         coordinates,
                         readableNames,
-                        group,
-                        chat));
+                        group));
 
             } catch (Exception e) {
                 log.error("Unable to send screen updates to player " + player.getId() +

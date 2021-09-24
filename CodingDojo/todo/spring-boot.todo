@@ -140,7 +140,7 @@ P.P.P.S: готов ответить за всё на любые вопросы
 ✓10) В коде MVCConf
      вместо
          @Bean
-         public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+         public ServletRegistrationBean wsControlServlet(@Value("${mvc.servlet-path.control}") String path) {
              ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path);
              servletRegistrationBean.setLoadOnStartup(100);
              servletRegistrationBean.setName("wsControlServlet");
@@ -148,7 +148,7 @@ P.P.P.S: готов ответить за всё на любые вопросы
          }
      предпочитаю делать так
          @Bean
-         public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+         public ServletRegistrationBean wsControlServlet(@Value("${mvc.servlet-path.control}") String path) {
              return new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path){{
                  setLoadOnStartup(100);
                  setLoadOnStartup(100);
@@ -159,7 +159,7 @@ P.P.P.S: готов ответить за всё на любые вопросы
      если не ок, тогда объект который возвращается из метода называю result, иначе слишком много слов Servlet+Registration+Bean для одного метода
          вместо
          @Bean
-         public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+         public ServletRegistrationBean wsControlServlet(@Value("${mvc.servlet-path.control}") String path) {
              ServletRegistrationBean result = new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path);
              result.setLoadOnStartup(100);
              result.setName("wsControlServlet");
@@ -180,14 +180,11 @@ P.P.P.S: готов ответить за всё на любые вопросы
      Да и вообще его удалять пора, от слова "вообще"
 ✓+14) Длиные строчки как например в ControlWebSocketServlet я делаю по короче
      @Override
-     public void configure(WebSocketServletFactory webSocketServletFactory) {
-         PlayerSocketCreator creator =
-                 new PlayerSocketCreator(
-                         controlPlayerTransport,
-                         authentication,
-                         PlayerSocket.SERVER_SEND_FIRST);
-
-         webSocketServletFactory.setCreator(creator);
+     public void configure(WebSocketServletFactory factory) {
+         factory.setCreator(new PlayerSocketCreator(
+                 controlPlayerTransport,
+                 authentication,
+                 PlayerSocket.SERVER_SEND_FIRST));
 
          timer.resume();
      }

@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.client.Closeable;
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
@@ -42,6 +44,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+// TODO try @SpringBootTest
 public class AbstractDealsTest {
 
     protected Deals deals;
@@ -59,7 +62,7 @@ public class AbstractDealsTest {
     protected FieldService fieldService;
 
     @Before
-    public void setUp() {
+    public void setup() {
         deals = new Deals();
         roomService = deals.roomService = new RoomService();
         timeService = deals.timeService = mock(TimeService.class);
@@ -152,12 +155,12 @@ public class AbstractDealsTest {
         GameType gameType = getGameType(game, room);
         Player player = new Player(id, "url", gameType, gameType.getPlayerScores(0, null), mock(Information.class));
         players.add(player);
-        player.setEventListener(mock(InformationCollector.class));
+        player.setInfo(mock(Information.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
         player.setAi(ai);
 
-        deals.onAdd(deal -> lazyJoysticks.add(deal.getJoystick()));
+        ChatDealsUtils.setupChat(deals, deal -> lazyJoysticks.add(deal.getJoystick()));
 
         TestUtils.Env env =
                 TestUtils.getDeal(

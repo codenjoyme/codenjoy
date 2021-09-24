@@ -23,11 +23,9 @@ package com.codenjoy.dojo.cucumber.page;
  */
 
 import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.PlayerService;
-import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -63,17 +61,12 @@ public class RegistrationPage implements Closeable {
     private final WebDriverWrapper web;
 
     // application services
+    private final Helpers with;
     private final Registration registration;
-    private final PlayerService playerService;
-    private final GameService gameService;
-    private final SaveService saveService;
 
     @Override
     public void close() {
-        registration.removeAll();
-        playerService.removeAll();
-        gameService.removeAll();
-        saveService.removeAllSaves();
+        with.clean.removeAll();
     }
 
     public void assertUserInDatabase(String user) {

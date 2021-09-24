@@ -41,7 +41,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.codenjoy.dojo.services.controller.ScreenResponseHandler.distinctByKey;
+import static com.codenjoy.dojo.services.controller.screen.ScreenResponseHandler.distinctByKey;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -81,12 +81,13 @@ public class Deals implements Iterable<Deal>, Tickable {
     public void remove(String id, Sweeper sweeper) {
         int index = all.indexOf(new Player(id));
         if (index == -1) return;
-        Deal deal = all.remove(index);
+        Deal deal = all.get(index);
 
         removeInRoom(deal, sweeper);
+        all.remove(index);
 
         deal.remove(onRemove);
-        deal.getGame().on(null);
+        deal.setChat(null);
     }
 
     private void removeInRoom(Deal deal, Sweeper sweeper) {
@@ -116,8 +117,6 @@ public class Deals implements Iterable<Deal>, Tickable {
         String room = deal.getRoom();
         GameType gameType = deal.getGameType();
 
-        game.close();
-
         MultiplayerType type = deal.getType();
         int roomSize = type.loadProgress(game, save);
         LevelProgress progress = game.getProgress();
@@ -146,15 +145,22 @@ public class Deals implements Iterable<Deal>, Tickable {
 
         Game game = new LockedGame(lock).wrap(single);
 
-        Deal deal = new Deal(player, game, room);
+        Deal deal = create(player, room, game);
+        if (onAdd != null) {
+            onAdd.accept(deal);
+        }
         all.add(deal);
 
         play(deal, parseSave(save));
 
-        if (onAdd != null) {
-            onAdd.accept(deal);
-        }
         return deal;
+    }
+
+    /**
+     * Do not inline this method, it will be overridden in tests.
+     */
+    public Deal create(Player player, String room, Game game) {
+        return new Deal(player, game, room);
     }
 
     private Single buildSingle(Player player, PlayerSave save) {
@@ -162,7 +168,7 @@ public class Deals implements Iterable<Deal>, Tickable {
             player.setTeamId(save.getTeamId());
         }
         GameType gameType = player.getGameType();
-        GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
+        GamePlayer gamePlayer = gameType.createPlayer(player.getInfo(),
                 player.getTeamId(), player.getId(), gameType.getSettings());
         return new Single(gamePlayer,
                 gameType.getPrinterFactory(),
@@ -262,7 +268,7 @@ public class Deals implements Iterable<Deal>, Tickable {
                     }
 
                     if (type.isDisposable() && game.shouldLeave()) {
-                        reload(id, Sweeper.on().lastAlone());
+                        reload(deal, Sweeper.on().lastAlone());
                         return;
                     }
 
@@ -287,18 +293,22 @@ public class Deals implements Iterable<Deal>, Tickable {
         getGameTypes().forEach(GameType::quietTick);
     }
 
-    public void reload(String id, Sweeper sweeper) {
-        reload(id, null, sweeper);
+    public void reload(Deal deal, Sweeper sweeper) {
+        reload(deal, null, sweeper);
     }
 
-    private void reload(String id, JSONObject save, Sweeper sweeper) {
-        Deal deal = get(id);
+    private void reload(Deal deal, JSONObject save, Sweeper sweeper) {
+        reload(deal, null, save, sweeper);
+    }
+
+    private void reload(Deal deal, String room, JSONObject save, Sweeper sweeper) {
         if (save == null) {
             save = deal.getGame().getSave();
         }
-
         removeInRoom(deal, sweeper);
-
+        if (room != null) {
+            deal.setRoom(room);
+        }
         play(deal, save);
     }
 
@@ -316,7 +326,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         }
 
         games.forEach(deal -> spreader.remove(deal, Sweeper.off()));
-        games.forEach(deal -> reload(deal.getPlayerId(), Sweeper.off()));
+        games.forEach(deal -> reload(deal, Sweeper.off()));
     }
 
     private void quiet(Runnable runnable) {
@@ -344,7 +354,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         LevelProgress progress = new LevelProgress(save);
         if (progress.canChange(level)) {
             progress.change(level);
-            reload(id, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
+            reload(deal, progress.saveTo(new JSONObject()), Sweeper.on().lastAlone());
             deal.fireOnLevelChanged();
         }
     }
@@ -353,8 +363,9 @@ public class Deals implements Iterable<Deal>, Tickable {
         if (save == null) {
             return false;
         }
-        reload(id, save, Sweeper.on().lastAlone());
-        get(id).fireOnLevelChanged();
+        Deal deal = get(id);
+        reload(deal, save, Sweeper.on().lastAlone());
+        deal.fireOnLevelChanged();
         return true;
     }
 
@@ -363,7 +374,7 @@ public class Deals implements Iterable<Deal>, Tickable {
 
         deal.setTeamId(teamId);
 
-        reload(id, Sweeper.on().lastAlone());
+        reload(deal, Sweeper.on().lastAlone());
     }
 
     public void changeRoom(String id, String gameName, String newRoom) {
@@ -374,8 +385,7 @@ public class Deals implements Iterable<Deal>, Tickable {
         if (!deal.getPlayer().getGame().equals(gameName)) {
             return;
         }
-        deal.setRoom(newRoom);
-        reload(id, Sweeper.on().lastAlone());
+        reload(deal, newRoom, null, Sweeper.on().lastAlone());
     }
 
     public Deal get(int index) {

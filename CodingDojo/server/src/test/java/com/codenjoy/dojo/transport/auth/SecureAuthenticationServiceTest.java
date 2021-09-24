@@ -23,12 +23,13 @@ package com.codenjoy.dojo.transport.auth;
  */
 
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.web.controller.Validator;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -39,16 +40,22 @@ public class SecureAuthenticationServiceTest {
     private SecureAuthenticationService service;
 
     @Before
-    public void setUp() {
+    public void setup() {
         service = new SecureAuthenticationService(){{
             SecureAuthenticationServiceTest.this.registration =
                     this.registration = mock(Registration.class);
+            this.validator = new Validator(){{
+                this.registration = SecureAuthenticationServiceTest.this.registration;
+            }};
         }};
     }
 
     @Test
     public void user_registered() {
-        shouldCheckUserIs("userid");
+        // given
+        сheckUser("userid");
+
+        // when then
         assertAuth("userid",
                 "57823465983456583485", "user");
 
@@ -56,48 +63,83 @@ public class SecureAuthenticationServiceTest {
 
     @Test
     public void user_notRegistered() {
-        shouldCheckUserIs(null);
-        assertAuth(null,
-                "57823465983456583485", "user");
+        // given
+        сheckUser(null);
+
+        // when then
+        assertAuthFail("57823465983456583485", "user");
+    }
+
+    @Test
+    public void user_badId() {
+        // given
+        сheckUser("userid");
+
+        // when then
+        assertAuthFail("12345678901234567890", "user$");
+    }
+
+    @Test
+    public void user_badCode() {
+        // given
+        сheckUser("userid");
+
+        // when then
+        assertAuthFail("12345678901234567890__", "user");
     }
 
     @Test
     public void ai_withValidName_andValidCode() {
-        shouldCheckUserIs(null);
-        assertAuth("some-text-super-ai",
-                "12345678901234567890", "some-text-super-ai");
+        // given
+        сheckUser(null);
+
+        // when then
+        assertAuthSuccess("12345678901234567890", "some-text-super-ai");
     }
 
     @Test
     public void ai_withInvalidName_andValidCode() {
-        shouldCheckUserIs(null);
-        assertAuth(null,
-                "12345678901234567890", "user");
+        // given
+        сheckUser(null);
+
+        // when then
+        assertAuthFail("12345678901234567890", "user-ai");
     }
 
     @Test
     public void ai_withValidName_andInvalidCode_ignoreCode() {
-        shouldCheckUserIs(null);
-        assertAuth("some-text-super-ai",
-                "11111111111111111110", "some-text-super-ai");
+        // given
+        сheckUser(null);
+
+        // when then
+        assertAuthSuccess("1111111111111111111__", "some-text-super-ai");
     }
 
     @Test
     public void ai_withInvalidName_andInvalidCode_ignoreCode() {
-        shouldCheckUserIs(null);
-        assertAuth(null,
-                "11111111111111111110", "user");
+        // given
+        сheckUser(null);
+
+        // when then
+        assertAuthFail("11111111111111111110", "user");
     }
 
-    private void shouldCheckUserIs(String exists) {
+    private void сheckUser(String exists) {
         when(registration.checkUser(anyString(), anyString())).thenReturn(exists);
     }
 
+    private void assertAuthFail(String code, String id) {
+        assertAuth(null, code, id);
+    }
+
+    private void assertAuthSuccess(String code, String id) {
+        assertAuth(id, code, id);
+    }
+    
     private void assertAuth(String expectedUser, String code, String id) {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getParameter("user")).thenReturn(id);
         when(request.getParameter("code")).thenReturn(code);
-
 
         assertEquals(expectedUser, service.authenticate(request));
     }

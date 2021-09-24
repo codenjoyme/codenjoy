@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.json.JSONObject;
 import org.junit.After;
@@ -40,6 +41,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+// TODO try @SpringBootTest
 public class DealSaverTest {
 
     private DealSaver saver;

@@ -25,15 +25,19 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.config.Constants;
+import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.services.controller.Controller;
-import com.codenjoy.dojo.services.controller.PlayerController;
-import com.codenjoy.dojo.services.controller.ScreenController;
+import com.codenjoy.dojo.services.controller.chat.ChatController;
+import com.codenjoy.dojo.services.controller.control.PlayerController;
+import com.codenjoy.dojo.services.controller.screen.ScreenController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.DealSaver;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 import com.codenjoy.dojo.services.joystick.NoDirectionJoystick;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
@@ -67,6 +71,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -76,6 +81,7 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.AdminServiceTest.assertPlayersLastResponse;
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName;
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
@@ -87,10 +93,13 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
-@TestPropertySource(properties = {"game.ai=true"})
+@SpringBootTest(classes = CodenjoyContestApplication.class)
+@ActiveProfiles(Constants.DATABASE_TYPE)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
+@TestPropertySource(properties = {
+        "game.ai=true"
+})
 public class PlayerServiceImplTest {
 
     public static final String VASYA = "vasya";
@@ -117,6 +126,9 @@ public class PlayerServiceImplTest {
 
     @MockBean
     private ScreenController screenController;
+
+    @MockBean
+    private ChatController chatController;
 
     @MockBean
     private AutoSaver autoSaver;
@@ -163,7 +175,7 @@ public class PlayerServiceImplTest {
     @Autowired
     private FieldService fieldService;
 
-    private InformationCollector informationCollector;
+    private Information info;
 
     @Mock
     private GraphicPrinter printer;
@@ -179,7 +191,7 @@ public class PlayerServiceImplTest {
     private Consumer<GameType> gameTypePostSetup;
 
     @Before
-    public void setUp() {
+    public void setup() {
         Mockito.reset(actionLogger, autoSaver, gameService, playerController, deals);
         deals.clear();
         chat.removeAll();
@@ -217,16 +229,16 @@ public class PlayerServiceImplTest {
         when(roomService.isActive(anyString())).thenReturn(true);
         when(roomService.isOpened(anyString())).thenReturn(true);
 
-        doAnswer(inv -> {
-            String id = inv.getArgument(0);
-            return "readable_" + id;
-        }).when(registration).getNameById(anyString());
+        setupReadableName(registration);
 
         deals.clear();
-        Mockito.reset(playerController, screenController, actionLogger);
+        Mockito.reset(playerController, screenController,
+                chatController, actionLogger);
         playerService.openRegistration();
 
         playerService.init();
+
+        ChatDealsUtils.setupChat(chatController);
     }
 
     public GameType getGameType(String game, String room) {
@@ -550,7 +562,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSetLastResponse_whenCreatePlayer() {
         // given
-        setupTimeService(this.timeService);
+        setupTimeService(timeService);
 
         // when
         createPlayer(VASYA, "game1", "room1");
@@ -565,7 +577,8 @@ public class PlayerServiceImplTest {
 
     public static void setupTimeService(TimeService timeService) {
         AtomicLong time = new AtomicLong(1);
-        when(timeService.now()).thenAnswer(inv -> time.getAndIncrement() * 1000L);
+        when(timeService.now())
+                .thenAnswer(inv -> time.getAndIncrement() * 1000L);
     }
 
     @Test
@@ -603,11 +616,8 @@ public class PlayerServiceImplTest {
                         "coordinate=[3,4], \n" +
                         "isMultiplayer=false, \n" +
                         "additionalData=null)}', \n" +
-                    "ReadableNames:'{petya=readable_petya}', \n" +
-                    "Group:[petya], \n" +
-                    "Chat:ChatService.Status(fieldId=2, \n" +
-                        "lastInRoom=106558567, \n" +
-                        "lastInField=null)], \n" +
+                    "ReadableNames:'{petya=petya_name}', \n" +
+                    "Group:[petya]], \n" +
                 "vasya=PlayerData[BoardSize:15, \n" +
                     "Board:'ABCD', \n" +
                     "Game:'game', \n" +
@@ -619,11 +629,8 @@ public class PlayerServiceImplTest {
                         "coordinate=[1,2], \n" +
                         "isMultiplayer=false, \n" +
                         "additionalData=null)}', \n" +
-                    "ReadableNames:'{vasya=readable_vasya}', \n" +
-                    "Group:[vasya], \n" +
-                    "Chat:ChatService.Status(fieldId=1, \n" +
-                        "lastInRoom=111979568, \n" +
-                        "lastInField=null)]}",
+                    "ReadableNames:'{vasya=vasya_name}', \n" +
+                    "Group:[vasya]]}",
                 clean(split(data, ", \n")));
     }
 
@@ -863,36 +870,36 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifPositiveValue() {
         // given
-        informationCollector = createPlayer(VASYA).getEventListener();
+        info = createPlayer(VASYA).getInfo();
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 13);
-        informationCollector.levelChanged(new LevelProgress(3, 2, 1));
-        informationCollector.event("event1");
+        info.levelChanged(new LevelProgress(3, 2, 1));
+        info.event("event1");
         checkInfo("+3, Level 2");
     }
 
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifNegativeValue() {
         // given
-        informationCollector = createPlayer(VASYA).getEventListener();
+        info = createPlayer(VASYA).getInfo();
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 9);
-        informationCollector.event("event1");
+        info.event("event1");
         when(playerScores(0).getScore()).thenReturn(10, 8);
-        informationCollector.event("event2");
+        info.event("event2");
         checkInfo("-1, -2");
     }
 
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifAdditionalInfo() {
         // given
-        informationCollector = createPlayer(VASYA).getEventListener();
+        info = createPlayer(VASYA).getInfo();
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 13);
-        informationCollector.event("event1");
+        info.event("event1");
         checkInfo("+3");
     }
 
@@ -2341,9 +2348,10 @@ public class PlayerServiceImplTest {
     }
 
     private Joystick getJoystick(Controller controller) {
-        ArgumentCaptor<Joystick> joystickCaptor = ArgumentCaptor.forClass(Joystick.class);
-        verify(controller).registerPlayerTransport(any(Player.class), joystickCaptor.capture());
-        return joystickCaptor.getValue();
+        ArgumentCaptor<Deal> captor = ArgumentCaptor.forClass(Deal.class);
+        verify(controller).register(captor.capture());
+        Deal deal = captor.getValue();
+        return deal.getJoystick();
     }
 
     @Test

@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.stuff.SmartAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,9 +37,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.mockito.Mockito.*;
 
 public class SemifinalServiceTest extends AbstractDealsTest {
@@ -47,7 +48,7 @@ public class SemifinalServiceTest extends AbstractDealsTest {
 
     @Before
     public void setup() {
-        super.setUp();
+        super.setup();
 
         timeout = 3;
         semifinal = new SemifinalService();
@@ -58,6 +59,11 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         semifinal.scoresCleaner = spy(new ScoresCleaner(deals, semifinal.saver, roomService, gameService, timeService));
         semifinal.clean();
         roomService.removeAll();
+    }
+
+    @After
+    public void after() {
+        SmartAssert.checkResult();
     }
 
     protected Settings settings(String room) {
@@ -1306,8 +1312,16 @@ public class SemifinalServiceTest extends AbstractDealsTest {
         SemifinalSettingsImpl settings = semifinal.semifinalSettings("room");
 
         // then
-        assertNotSame(original.toString(), settings.toString());
         assertEquals("SettingsImpl(map={})", settings.toString());
+        assertEquals("SettingsImpl(map={" +
+                "[Semifinal] Enabled=[[Semifinal] Enabled:Boolean = def[false] val[true]], " +
+                "[Semifinal] Timeout=[[Semifinal] Timeout:Integer = multiline[false] def[900] val[3]], " +
+                "[Semifinal] Percentage=[[Semifinal] Percentage:Boolean = def[true] val[false]], " +
+                "[Semifinal] Limit=[[Semifinal] Limit:Integer = multiline[false] def[50] val[10]], " +
+                "[Semifinal] Reset board=[[Semifinal] Reset board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Shuffle board=[[Semifinal] Shuffle board:Boolean = def[true] val[false]], " +
+                "[Semifinal] Clear scores=[[Semifinal] Clear scores:Boolean = def[false] val[false]]})",
+                original.toString());
     }
 
     // эмулирую другой тип сеттингов, который без semifinal

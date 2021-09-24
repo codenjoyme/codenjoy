@@ -25,8 +25,9 @@ package com.codenjoy.dojo.config;
 import com.codenjoy.dojo.services.JarResourceHttpRequestHandler;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import com.codenjoy.dojo.transport.chat.ChatWebSocketServlet;
 import com.codenjoy.dojo.transport.control.ControlWebSocketServlet;
-import com.codenjoy.dojo.transport.screen.ws.ScreenWebSocketServlet;
+import com.codenjoy.dojo.transport.screen.ScreenWebSocketServlet;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,9 @@ public class MVCConf implements WebMvcConfigurer {
 
     @Autowired
     private PlayerTransport screenPlayerTransport;
+
+    @Autowired
+    private PlayerTransport chatPlayerTransport;
 
     @Autowired
     private AuthenticationService secureAuthenticationService;
@@ -118,22 +122,32 @@ public class MVCConf implements WebMvcConfigurer {
     }
 
     @Bean
-    public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+    public ServletRegistrationBean wsControlServlet(@Value("${mvc.servlet-path.control}") String path) {
         WebSocketServlet servlet = new ControlWebSocketServlet(timer, controlPlayerTransport, secureAuthenticationService);
 
-        return new ServletRegistrationBean<WebSocketServlet>(servlet, path){{
+        return new ServletRegistrationBean<>(servlet, path){{
             setLoadOnStartup(100);
             setName("wsControlServlet");
         }};
     }
 
     @Bean
-    public ServletRegistrationBean wsScreenServlet(@Value("${mvc.screen-servlet-path}") String path) {
+    public ServletRegistrationBean wsScreenServlet(@Value("${mvc.servlet-path.screen}") String path) {
         ScreenWebSocketServlet servlet = new ScreenWebSocketServlet(screenPlayerTransport, defaultAuthenticationService);
 
-        return new ServletRegistrationBean<WebSocketServlet>(servlet, path){{
+        return new ServletRegistrationBean<>(servlet, path){{
             setLoadOnStartup(100);
             setName("wsScreenServlet");
+        }};
+    }
+
+    @Bean
+    public ServletRegistrationBean wsChatServlet(@Value("${mvc.servlet-path.chat}") String path) {
+        ChatWebSocketServlet servlet = new ChatWebSocketServlet(chatPlayerTransport, secureAuthenticationService);
+
+        return new ServletRegistrationBean<>(servlet, path){{
+            setLoadOnStartup(100);
+            setName("wsChatServlet");
         }};
     }
 }

@@ -24,8 +24,9 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,7 +59,6 @@ public class Player implements ScreenRecipient, Closeable {
     private Object score;
     private Information info;
     private GameType gameType;
-    private InformationCollector eventListener;
     private Closeable ai;
     private long lastResponse;
 

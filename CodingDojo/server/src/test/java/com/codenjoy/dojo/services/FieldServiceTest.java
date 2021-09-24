@@ -23,10 +23,9 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.chat.ChatType;
-import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.dao.ChatTest;
+import com.codenjoy.dojo.config.Constants;
+import com.codenjoy.dojo.config.TestSqliteDBLocations;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,37 +33,29 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.services.TestUtils.assertException;
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@SpringBootTest(classes = CodenjoyContestApplication.class)
+@ActiveProfiles(Constants.DATABASE_TYPE)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
 public class FieldServiceTest {
 
     @Autowired
     private FieldService fields;
 
     @Autowired
-    private Chat chat;
-
-    private List<Chat.Message> messages = new LinkedList<>();
-
-    public Chat.Message addMessage(String room, String player, Integer topicId, ChatType type) {
-        return ChatTest.addMessage(chat, messages, room, player, topicId, type);
-    }
+    private Helpers with;
 
     @Before
     public void setup() {
-        chat.removeAll();
-        fields.removeAll();
+        with.clean.removeAll();
     }
 
     @Test
@@ -72,21 +63,26 @@ public class FieldServiceTest {
         // given
         // random values, don't look for systems here
         // room chat
-        addMessage("room1", "player1", null, ROOM);
-        addMessage("room2", "player2", null, ROOM);
-        addMessage("room1", "player3", null, ROOM);
-        addMessage("room2", "player2", null, ROOM);
-        // topic chat
-        addMessage("room1", "player1", 1, TOPIC);
-        addMessage("room2", "player2", 2, TOPIC);
-        addMessage("room1", "player1", 1, TOPIC);
-        addMessage("room2", "player2", 2, TOPIC);
-        addMessage("room2", "player2", 2, TOPIC);
+        with.chat.post("room1", "player1", null, ROOM);    // 1
+        with.chat.post("room2", "player2", null, ROOM);    // 2
+        with.chat.post("room1", "player3", null, ROOM);    // 3
+        with.chat.post("room2", "player2", null, ROOM);    // 4
+        // room topic chat
+        with.chat.post("room1", "player1", 1, ROOM_TOPIC); // 5
+        with.chat.post("room2", "player2", 2, ROOM_TOPIC); // 6
+        with.chat.post("room1", "player1", 1, ROOM_TOPIC); // 7
+        with.chat.post("room2", "player2", 2, ROOM_TOPIC); // 8
+        with.chat.post("room2", "player2", 2, ROOM_TOPIC); // 9
         // field chat
-        addMessage("room1", "player1", 1, FIELD);
-        addMessage("room1", "player1", 5, FIELD);  // max fieldId
-        addMessage("room1", "player2", 4, FIELD);
-        addMessage("room2", "player3", 3, FIELD);
+        with.chat.post("room1", "player1", 1, FIELD);      // 10
+        with.chat.post("room1", "player1", 5, FIELD);      // 11 max fieldId
+        with.chat.post("room1", "player2", 4, FIELD);      // 12
+        with.chat.post("room2", "player3", 3, FIELD);      // 13
+        // field topic  chat
+        with.chat.post("room1", "player1", 10, FIELD_TOPIC); // 14
+        with.chat.post("room1", "player1", 11, FIELD_TOPIC); // 15
+        with.chat.post("room1", "player2", 10, FIELD_TOPIC); // 16
+        with.chat.post("room2", "player3", 13, FIELD_TOPIC); // 17
 
         // when
         fields.init();

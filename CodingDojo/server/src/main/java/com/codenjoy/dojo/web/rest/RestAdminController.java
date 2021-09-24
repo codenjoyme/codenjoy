@@ -218,15 +218,15 @@ public class RestAdminController {
         playerService.update(player);
     }
 
-    @GetMapping(ROOM + "/player/reload")
-    public void reloadPlayers(@PathVariable("room") String room) {
+    @GetMapping(ROOM + "/board/reload")
+    public void reloadBoards(@PathVariable("room") String room) {
         validator.checkRoom(room, CANT_BE_NULL);
 
         playerService.reloadAllRooms(room);
     }
 
-    @GetMapping(ROOM + "/board/reload") // TODO test me
-    public void reloadBoards(@PathVariable("room") String room) {
+    @GetMapping(ROOM + "/player/reload") // TODO test me
+    public void reloadPlayers(@PathVariable("room") String room) {
         validator.checkRoom(room, CANT_BE_NULL);
 
         saveService.saveAll(room);

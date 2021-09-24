@@ -22,35 +22,25 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import org.junit.Before;
+import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
-@Import(RestRoomControllerTest.ContextConfiguration.class)
+@Import(ThreeGamesConfiguration.class)
 public class RestRoomControllerTest extends AbstractRestControllerTest {
-
 
     @Autowired
     private RestRoomController service;
-
-    @Before
-    public void setUp() {
-        super.setUp();
-
-        players.removeAll();
-        registration.removeAll();
-        rooms.removeAll();
-    }
 
     // проверяем что для залогиненого пользователя все методы сервиса отрабатывают
     @Test
     public void shouldJoinJoinedAndLeave_whenAuthenticated() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        with.login.register("validPlayer", "ip", "validRoom", "first");
+        with.login.asUser("validPlayer", "validPlayer");
 
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
@@ -76,8 +66,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenRegistrationIsClosed() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        with.login.register("validPlayer", "ip", "validRoom", "first");
+        with.login.asUser("validPlayer", "validPlayer");
 
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
@@ -115,8 +105,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenRegistrationIsClosed_caseGoToAnotherRoom() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        with.login.register("validPlayer", "ip", "validRoom", "first");
+        with.login.asUser("validPlayer", "validPlayer");
 
         // then
         assertEquals("true", get("/rest/room/validRoom/joined"));
@@ -150,8 +140,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenNotAuthenticated() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asNone();
+        with.login.register("validPlayer", "ip", "validRoom", "first");
+        with.login.asNone();
 
         // then
         assertEquals("false", get("/rest/room/validRoom/joined"));
@@ -176,8 +166,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenUserOrRoomNotFound() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        with.login.register("validPlayer", "ip", "validRoom", "first");
+        with.login.asUser("validPlayer", "validPlayer");
 
         // then
         assertEquals("false", get("/rest/room/badRoom/joined"));
@@ -205,8 +195,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoinJoinedAndLeave_whenRoomNameIsInvalid() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        with.login.register("validPlayer", "ip", "validRoom", "first");
+        with.login.asUser("validPlayer", "validPlayer");
 
         // when then
         assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
@@ -226,8 +216,8 @@ public class RestRoomControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldJoined_whenPlayerNameIsInvalid() {
         // given
-        register("validPlayer", "ip", "validRoom", "first");
-        asUser("validPlayer", "validPlayer");
+        with.login.register("validPlayer", "ip", "validRoom", "first");
+        with.login.asUser("validPlayer", "validPlayer");
 
         // when then
         assertError("java.lang.IllegalArgumentException: Player id is invalid: '$bad$'",

@@ -69,10 +69,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * @author Igor Petrov
- * Created at 3/6/2019
- */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -113,7 +109,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             BoardController.URI + "/room/**",
             BoardController.URI + "/player/*",
             "/rest/player/*/*/wantsToPlay/**",
-            "/screen-ws/**"
+            "/screen-ws/**",
+            "/chat-ws/**" // TODO должен быть доступ закрыт
     ));
 
     @Value("${server.xFrameAllowedHosts}")
@@ -312,7 +309,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         private LogoutSuccessHandler logoutSuccessHandler;
 
-        @Value("${mvc.control-servlet-path}")
+        @Value("${mvc.servlet-path.control}")
         private String controlWsURI;
 
         @PostConstruct
@@ -413,7 +410,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Value("${server.xFrameAllowedHosts}")
         private List<String> xFrameAllowedHosts = new ArrayList<>();
 
-        @Value("${mvc.control-servlet-path}")
+        @Value("${mvc.servlet-path.control}")
         private String controlWsURI;
 
         @Override

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.info.Information;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

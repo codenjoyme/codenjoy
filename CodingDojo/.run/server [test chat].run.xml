@@ -1,0 +1,22 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="server [test chat]" type="JUnit" factoryName="JUnit">
+    <module name="codenjoy-contest" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="pattern" />
+    <patterns>
+      <pattern testClass="com.codenjoy.dojo.services.chat.ChatDealsTest" />
+      <pattern testClass="com.codenjoy.dojo.services.controller.chat.LazyChatCommandTest" />
+      <pattern testClass="com.codenjoy.dojo.services.controller.chat.ChatControllerTest" />
+      <pattern testClass="com.codenjoy.dojo.services.controller.chat.ChatCommandTest" />
+      <pattern testClass="com.codenjoy.dojo.services.controller.chat.ChatRequestTest" />
+      <pattern testClass="com.codenjoy.dojo.services.chat.ChatServiceTest" />
+      <pattern testClass="com.codenjoy.dojo.services.chat.PlayersCahce" />
+      <pattern testClass="com.codenjoy.dojo.services.dao.ChatTest" />
+      <pattern testClass="com.codenjoy.dojo.web.rest.RestChatControllerTest" />
+    </patterns>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

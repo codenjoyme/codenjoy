@@ -24,18 +24,14 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.config.Constants;
+import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.log.DebugService;
-import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.SecondGameType;
-import com.codenjoy.dojo.services.nullobj.NullDeal;
-import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,17 +45,10 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -68,57 +57,16 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Random;
-
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.reset;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class,
-        properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
-@ContextConfiguration(initializers = AbstractRestControllerTest.PropertyOverrideContextInitializer.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class,
+        properties = Constants.ALLOW_OVERRIDING)
+@ActiveProfiles(Constants.DATABASE_TYPE)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
 @WebAppConfiguration
 public abstract class AbstractRestControllerTest {
-
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return new GameServiceImpl(){
-                @Override
-                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(FirstGameType.class, SecondGameType.class);
-                }
-            };
-        }
-    }
-
-    public static class PropertyOverrideContextInitializer
-            implements ApplicationContextInitializer<ConfigurableApplicationContext>
-    {
-        @Override
-        public void initialize(ConfigurableApplicationContext context) {
-            setup(context, "messages", "messages.db");
-            setup(context, "log", "logs.db");
-            setup(context, "payment", "payment.db");
-            setup(context, "saves", "saves.db");
-            setup(context, "users", "users.db");
-            setup(context, "settings", "settings.db");
-
-//            TestPropertySourceUtils.addPropertiesFilesToEnvironment(
-//                    context, "context-override-application.properties");
-        }
-
-        public void setup(ConfigurableApplicationContext context, String db, String file) {
-            String dbFile = "target/" + file + new Random().nextInt();
-            TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
-                    context, "database.files." + db + "=" + dbFile);
-        }
-    }
 
     protected MockMvc mvc;
 
@@ -164,83 +112,22 @@ public abstract class AbstractRestControllerTest {
     @Autowired
     protected FieldService fields;
 
+    @Autowired
+    protected Helpers with;
+
     @Before
-    public void setUp() {
+    public void setup() {
         CodenjoyContext.setContext("codenjoy-contest");
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
 
-        games.init();
         debug.resume();
+
+        with.clean.removeAll();
     }
 
     @After
-    public void checkErrors() throws Exception {
+    public void checkErrors() {
         SmartAssert.checkResult(getClass());
-    }
-
-    protected void asAdmin() {
-        login(new UsernamePasswordAuthenticationToken(
-                config.getAdminLogin(),
-                Hash.md5(config.getAdminPassword()))
-        );
-    }
-
-    protected void asUser(String playerId, String password) {
-        Player player = players.get(playerId);
-        if (player == NullPlayer.INSTANCE) {
-            fail("Expected: Player with id = " + playerId +
-                    " But was: NullPlayer");
-        }
-
-        Registration.User user = registration.getUserById(playerId).orElse(null);
-        if (user == null) {
-            fail("Expected: Registered user with id = " + playerId +
-                    " But was: Registration not found");
-        }
-
-
-        login(new UsernamePasswordAuthenticationToken(
-                user,
-                Hash.md5(password)
-        ));
-    }
-
-    private void login(UsernamePasswordAuthenticationToken token) {
-        SecurityContextHolder.getContext().setAuthentication(token);
-    }
-
-    protected void asNone() {
-        login(null);
-    }
-
-    protected Deal register(String id, String ip, String room, String game) {
-        String password = Hash.md5(id);
-        String readableName = id + "-name";
-        registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles());
-        players.register(id, game, room, ip);
-        Deal deal = deals.get(id);
-        if (deal == NullDeal.INSTANCE) {
-            registration.remove(id); // удаляем если не можем создать
-        } else {
-            resetMocks(deal);
-        }
-        return deal;
-    }
-
-    protected void assertPlayerInRoom(String id, String room) {
-        Player player = players.get(id);
-        assertEquals(room, player.getRoom());
-    }
-
-    protected void join(String id, String room) {
-        Player player = new Player(id);
-        player.setRoom(room);
-        players.update(player);
-    }
-
-    private void resetMocks(Deal deal) {
-        reset(deal.getField());
-        reset(deal.getGame().getPlayer());
     }
 
     @SneakyThrows

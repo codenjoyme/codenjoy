@@ -25,14 +25,15 @@ package com.codenjoy.dojo.services.jdbc;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 public class CrudConnectionThreadPool extends ConnectionThreadPool {
@@ -73,6 +74,8 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
                 ResultSet resultSet = stmt.executeQuery();
                 return mapper.mapFor(resultSet);
             } catch (SQLException e) {
+                log.info("[SQL] Select query: {} with {}",
+                        query, Arrays.toString(parameters));
                 throw new RuntimeException(String.format("Error when select '%s': %s", query, e));
             }
         });
@@ -98,6 +101,8 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
                 }
                 return stmt.executeUpdate();
             } catch (SQLException e) {
+                log.info("[SQL] Update query: {} with {}",
+                        query, Arrays.toString(parameters));
                 throw new RuntimeException(String.format("Error when update '%s': %s", query, e));
             }
         });
@@ -106,7 +111,7 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
     public <T> int[] batchUpdate(String query, List<T> parameters, ForStmt<T> forStmt) {
         if (log.isDebugEnabled()) {
             log.debug("[SQL] Batch update query: {} with {}",
-                    query, parameters.toString());
+                    query, parameters);
         }
         return run(connection -> {
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -117,6 +122,8 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
                 }
                 return stmt.executeBatch();
             } catch (SQLException e) {
+                log.info("[SQL] Batch update query: {} with {}",
+                        query, parameters);
                 throw new RuntimeException(String.format("Error when update '%s': %s", query, e));
             }
         });
@@ -124,11 +131,11 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
 
     public List<Object> batch(List<String> queries, List<Object[]> parameters, List<ObjectMapper<?>> mapper) {
         if (log.isDebugEnabled()) {
-            List<String> params = parameters.stream()
-                    .map(it -> Arrays.toString(it))
-                    .collect(toList());
             log.debug("[SQL] Batch queries in transaction: {} with {}",
-                    queries.toString(), params.toString());
+                    queries,
+                    parameters.stream()
+                            .map(Arrays::toString)
+                            .collect(Collectors.joining(", ")));
         }
         return run(connection -> {
             List<Object> result = new LinkedList<>();
@@ -154,6 +161,11 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
                 }
                 connection.commit();
             } catch (SQLException e) {
+                log.info("[SQL] Batch queries in transaction: {} with {}",
+                        queries,
+                        parameters.stream()
+                                .map(Arrays::toString)
+                                .collect(Collectors.joining(", ")));
                 throw new RuntimeException(String.format("Error when update '%s': %s", queries, e));
             } finally {
                 try {

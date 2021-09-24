@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
@@ -35,7 +36,7 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 
-@Import(RestTeamControllerApprovalsTest.ContextConfiguration.class)
+@Import(ThreeGamesConfiguration.class)
 public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest {
 
     public static final int TICKS = 20;
@@ -166,7 +167,7 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
     private void registerPlayers(int playersCount) {
         for (int index = 0; index < playersCount; index++) {
             int id = index + INDEX_FROM_1;
-            register("p" + id, ip, room, game);
+            with.login.register("p" + id, ip, room, game);
             out.accept(String.format("register(p%s)", id));
 
             printStatus();

@@ -31,31 +31,46 @@ import java.io.IOException;
 @WebSocket
 public class PlayerSocket {
 
-    public static final boolean CLIENT_SEND_FIRST = true;
-    public static final boolean SERVER_SEND_FIRST = !CLIENT_SEND_FIRST;
+    public static final boolean CLIENT_SENDS_FIRST = true;
+    public static final boolean SERVER_SENDS_FIRST = !CLIENT_SENDS_FIRST;
+
+    public static final boolean IN_TURN_COMMUNICATION = true;
+    public static final boolean BIDIRECTIONAL_COMMUNICATION = !IN_TURN_COMMUNICATION;
 
     private ResponseHandler handler = NullResponseHandler.NULL;
     private Session session;
     private String id;
-    private boolean requested;
+    private boolean clientTurn;
+    private boolean inTurn;
     private Runnable onClose;
 
-    public PlayerSocket(String id, boolean requested) {
+    /**
+     * @param id Player с которым происходит общение.
+     * @param inTurn Должны ли сервер с клиентом общаться по очереди?
+     *               Если да - то все сообщения что придут вне очереди - игнорируются.
+     * @param clientFirst Если очередность включена флаг говорит о том, кто
+     *                    первым посылает запрос клиент или сервер.
+     */
+    public PlayerSocket(String id, boolean inTurn, boolean clientFirst) {
         this.id = id;
-        this.requested = requested;
+        this.inTurn = inTurn;
+        this.clientTurn = clientFirst;
     }
 
     @OnWebSocketMessage
     public void onWebSocketText(String message) {
-        if (requested) {
-            requested = false;
-            handler.onResponse(this, message);
+        if (inTurn) {
+            if (!clientTurn) {
+                return;
+            }
         }
+        clientTurn = false;
+        handler.onResponse(this, message);
     }
 
     @OnWebSocketClose
     public void onWebSocketClose(int statusCode, String reason) {
-        requested = false;
+        clientTurn = false;
         handler.onClose(this, statusCode, reason);
         if (session != null) {
             session.close();
@@ -80,11 +95,14 @@ public class PlayerSocket {
         if (session == null) {
             return;
         }
-        if (!requested) {
-            requested = true;
-            if (session.isOpen()) {
-                session.getRemote().sendString(message);
+        if (inTurn) {
+            if (clientTurn) {
+                return;
             }
+        }
+        clientTurn = true;
+        if (session.isOpen()) {
+            session.getRemote().sendString(message);
         }
     }
 

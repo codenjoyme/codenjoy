@@ -22,7 +22,10 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.config.Constants;
+import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.Helpers;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.mocks.FakePlayerScores;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import org.junit.Before;
@@ -30,17 +33,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@ActiveProfiles(Constants.DATABASE_TYPE)
 public class ScoresCleanerTest {
 
     @Autowired
@@ -55,16 +61,23 @@ public class ScoresCleanerTest {
     @Autowired
     ScoresCleaner scoresCleaner;
 
+    @SpyBean
+    Registration registration;
+
+    @Autowired
+    Helpers with;
+
     @Before
-    public void init() {
-        saver.removeAllSaves();
-        playerService.removeAll();
+    public void setup() {
+        with.clean.removeAll();
     }
 
     private void createPlayer(String id, String room, Object score) {
         Player player = new Player(id);
+        player.setInfo(mock(Information.class));
         player.setGameType(new FirstGameType());
         player.setScores(new FakePlayerScores(score));
+        setupReadableName(registration);
         deals.add(player, room, new PlayerSave("{}"));
         saver.save(id);
     }

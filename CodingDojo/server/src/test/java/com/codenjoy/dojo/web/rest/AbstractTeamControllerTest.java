@@ -22,24 +22,23 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
+import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.Deal;
-import com.codenjoy.dojo.services.GameServiceImpl;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.mocks.*;
+import com.codenjoy.dojo.services.mocks.ThirdGameSettings;
+import com.codenjoy.dojo.services.mocks.ThirdGameType;
 import com.codenjoy.dojo.services.multiplayer.GameRoom;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.json.JSONArray;
 import org.junit.Before;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 
 import java.util.*;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.utils.JsonUtils.toStringSorted;
 import static java.util.stream.Collectors.*;
-import static java.util.stream.Collectors.joining;
 
+@Import(ThreeGamesConfiguration.class)
 public abstract class AbstractTeamControllerTest extends AbstractRestControllerTest  {
 
     public static final String game = "third";
@@ -49,29 +48,11 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
     protected ThirdGameSettings settings;
     protected ThirdGameType type;
 
-    @TestConfiguration
-    public static class ContextConfiguration {
-        @Bean("gameService")
-        public GameServiceImpl gameService() {
-            return new GameServiceImpl(){
-                @Override
-                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(
-                            FirstGameType.class,
-                            SecondGameType.class,
-                            ThirdGameType.class);
-                }
-            };
-        }
-    }
-
     @Before
-    public void setUp() {
-        super.setUp();
+    public void setup() {
+        super.setup();
 
-        players.removeAll();
-        rooms.removeAll();
-        registration.removeAll();
+        with.clean.removeAll();
 
         // when changing teams, the current state is
         // saved to the database (there is a TeamId).
@@ -86,7 +67,7 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
         // in order to count the indices. So there we want to delete it.
         type.clear();
 
-        asAdmin();
+        with.login.asAdmin();
 
         // for all tests
         settings.playersAndTeamsPerRoom(4, 2);
@@ -95,7 +76,7 @@ public abstract class AbstractTeamControllerTest extends AbstractRestControllerT
     public void givenPl(PTeam... teams) {
         for (PTeam team : teams) {
             for (String playerId : team.getPlayers()) {
-                register(playerId, ip, room, game);
+                with.login.register(playerId, ip, room, game);
             }
         }
         teamService.distributePlayersByTeam(room, Arrays.asList(teams));

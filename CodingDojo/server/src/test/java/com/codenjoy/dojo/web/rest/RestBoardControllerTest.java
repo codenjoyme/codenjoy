@@ -22,6 +22,7 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
+import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,23 +31,18 @@ import org.springframework.context.annotation.Import;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
-@Import(RestBoardControllerTest.ContextConfiguration.class)
+@Import(ThreeGamesConfiguration.class)
 public class RestBoardControllerTest extends AbstractRestControllerTest {
 
     @Autowired
     private RestBoardController service;
 
     @Before
-    public void setUp() {
-        super.setUp();
+    public void setup() {
+        super.setup();
 
-        players.removeAll();
-        rooms.removeAll();
-        registration.removeAll();
-
-        register("somePlayer", "ip", "validRoom", "first");
-
-        asUser("somePlayer", "somePlayer");
+        with.login.register("somePlayer", "ip", "validRoom", "first");
+        with.login.asUser("somePlayer", "somePlayer");
     }
 
     @Test

@@ -23,14 +23,19 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.chat.ChatAuthority;
+import com.codenjoy.dojo.services.info.MessagesListener;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullDeal;
+import com.codenjoy.dojo.services.nullobj.NullGame;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
@@ -40,12 +45,17 @@ import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
  * Игру на которой он играет - Game. Комнату в которой эта игра происходит - playerRoom. 
  * А так же джойстик которым он играет - Joystick. 
  */
+@Slf4j
 @Getter
 public class Deal implements Tickable {
-    
+
+    public static final Deal ANONYMOUS = new Deal(Player.ANONYMOUS, NullGame.INSTANCE, null);
+
     private Player player;
     private Game game;
     private LazyJoystick joystick;
+    private ChatAuthority chat;
+    private MessagesListener messages;
 
     public Deal(Player player, Game game, String room) {
         this.player = player;
@@ -107,7 +117,6 @@ public class Deal implements Tickable {
         if (onRemove != null) {
             onRemove.accept(this);
         }
-        game.close();
         player.close();
     }
 
@@ -149,7 +158,7 @@ public class Deal implements Tickable {
     public void fireOnLevelChanged() {
         Game game = getGame();
         Player player = getPlayer();
-        player.getEventListener().levelChanged(game.getProgress());
+        player.getInfo().levelChanged(game.getProgress());
     }
 
     public String getRoom() {
@@ -182,5 +191,27 @@ public class Deal implements Tickable {
     public MultiplayerType getType() {
         GameType gameType = getGameType();
         return gameType.getMultiplayerType(gameType.getSettings());
+    }
+
+    public void setChat(ChatAuthority chat) {
+        this.chat = chat;
+        if (chat != null) {
+            messages = (playerId, message) -> {
+                try {
+                    chat.postFieldFor(playerId, message, getRoom());
+                } catch (Exception exception) {
+                    // TODO случается такое, когда перегружаешь всех участников на админке
+                    //      а в это время игра постит сообщения
+                    log.error("Post event message to the player: " + getPlayerId(), exception);
+                }
+            };
+            player.getInfo().add(messages);
+        } else {
+            player.getInfo().remove(messages);
+        }
+    }
+
+    public ChatAuthority chat() {
+        return chat;
     }
 }

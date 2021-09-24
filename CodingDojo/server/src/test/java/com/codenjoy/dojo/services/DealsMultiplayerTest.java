@@ -22,6 +22,8 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -42,9 +44,8 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
+// TODO try @SpringBootTest
 public class DealsMultiplayerTest {
 
     private Deals deals;
@@ -72,6 +73,8 @@ public class DealsMultiplayerTest {
         deals.spreader = new Spreader(){{
             fields = mock(FieldService.class);
         }};
+        ChatDealsUtils.setupChat(deals, null);
+
         // по умолчанию все комнаты активны
         when(deals.roomService.isActive(anyString())).thenReturn(true);
 
@@ -126,7 +129,7 @@ public class DealsMultiplayerTest {
     private void playerWantsToPlay(GameType gameType) {
         int index = gamePlayers.size();
         Player player = new Player("player" + index);
-        player.setEventListener(mock(InformationCollector.class));
+        player.setInfo(mock(Information.class));
         players.add(player);
         Deal deal = playerWantsToPlay(gameType, player, null);
         getFileds.add(() -> deal.getGame().getField());

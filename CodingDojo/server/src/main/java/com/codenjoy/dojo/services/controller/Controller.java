@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
+import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.Player;
 
 import java.io.IOException;
@@ -34,7 +35,9 @@ public interface Controller<TData, TControl> {
      * всем клиентам информацию об игре
      * @param data Данные к отправке
      */
-    void requestControlToAll(TData data);
+    default void requestControlToAll(TData data) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * С помощью этого метода PlayerServiceImpl отправляет через ws
@@ -42,20 +45,22 @@ public interface Controller<TData, TControl> {
      * @param player Плеер, которому отправляется ответ
      * @param data Данные к отправке
      */
-    boolean requestControl(Player player, TData data);
+    default boolean requestControl(Player player, TData data) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * В момент регистрации пользователя для него создается канал связи
-     * к которому потом можно будет подключиться по ws и управлять игрой
-     * @param player Новозарегистрированный пользователь
-     * @param control Джойстик, которым пользователь может управлять или дргой контрол
+     * к которому потом можно будет подключиться по ws и управлять ввереным
+     * ему контролом.
+     * @param deal Игра которая начинается.
      */
-    void registerPlayerTransport(Player player, TControl control);
+    void register(Deal deal);
 
     /**
      * В случае, если пользователь не хочет больше играть, то и канал связи
-     * закрывается
-     * @param player Пользователь, покинувший игру
+     * закрывается.
+     * @param deal Игра которая завершилась.
      */
-    void unregisterPlayerTransport(Player player);
+    void unregister(Deal deal);
 }

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.info.Collector;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;

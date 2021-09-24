@@ -24,21 +24,24 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.config.Constants;
+import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = CodenjoyContestApplication.class)
 @RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
+@SpringBootTest(classes = CodenjoyContestApplication.class)
+@ActiveProfiles(Constants.DATABASE_TYPE)
+@ContextConfiguration(initializers = TestSqliteDBLocations.class)
 @TestPropertySource(properties = {
         "game.save.auto=true"
 })

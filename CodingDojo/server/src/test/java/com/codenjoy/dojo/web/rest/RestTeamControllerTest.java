@@ -22,6 +22,7 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
+import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.junit.Test;
 import org.springframework.context.annotation.Import;
@@ -29,7 +30,7 @@ import org.springframework.context.annotation.Import;
 // an issue with the doc that illustrate some of test cases
 // with name like "get_logout_join_post"
 // https://github.com/codenjoyme/codenjoy/issues/162
-@Import(RestTeamControllerTest.ContextConfiguration.class)
+@Import(ThreeGamesConfiguration.class)
 public class RestTeamControllerTest extends AbstractTeamControllerTest {
 
     @Test
@@ -37,25 +38,25 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         settings.playersAndTeamsPerRoom(2, 2);
 
         // when then
-        register("player1", ip, room, game);
+        with.login.register("player1", ip, room, game);
 
         asrtFld("[f0: player1(t0)]");
 
         // when then
-        register("player2", ip, room, game);
+        with.login.register("player2", ip, room, game);
 
         asrtFld("[f0: player1(t0)]\n" +
                 "[f1: player2(t0)]");
 
         // when then
-        register("player3", ip, room, game);
+        with.login.register("player3", ip, room, game);
 
         asrtFld("[f0: player1(t0)]\n" +
                 "[f1: player2(t0)]\n" +
                 "[f2: player3(t0)]");
 
         // when then
-        register("player4", ip, room, game);
+        with.login.register("player4", ip, room, game);
 
         asrtFld("[f0: player1(t0)]\n" +
                 "[f1: player2(t0)]\n" +
@@ -112,10 +113,10 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         settings.playersAndTeamsPerRoom(2, 2);
 
         // when then
-        register("player1", ip, room, game);
-        register("player2", ip, room, game);
-        register("player3", ip, room, game);
-        register("player4", ip, room, game);
+        with.login.register("player1", ip, room, game);
+        with.login.register("player2", ip, room, game);
+        with.login.register("player3", ip, room, game);
+        with.login.register("player4", ip, room, game);
 
         asrtFld("[f0: player1(t0)]\n" +
                 "[f1: player2(t0)]\n" +
@@ -162,14 +163,14 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         settings.playersAndTeamsPerRoom(4, 2);
 
         // when then
-        register("player1", ip, room, game);
-        register("player2", ip, room, game);
-        register("player3", ip, room, game);
-        register("player4", ip, room, game);
-        register("player5", ip, room, game);
-        register("player6", ip, room, game);
-        register("player7", ip, room, game);
-        register("player8", ip, room, game);
+        with.login.register("player1", ip, room, game);
+        with.login.register("player2", ip, room, game);
+        with.login.register("player3", ip, room, game);
+        with.login.register("player4", ip, room, game);
+        with.login.register("player5", ip, room, game);
+        with.login.register("player6", ip, room, game);
+        with.login.register("player7", ip, room, game);
+        with.login.register("player8", ip, room, game);
 
         asrtFld("[f0: player1(t0), player2(t0)]\n" +
                 "[f1: player3(t0), player4(t0)]\n" +
@@ -343,7 +344,7 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         asrtTms("[1: player1, player2]\n" +
                 "[2: player3, player4]");
 
-        register("player5", ip, room, game);
+        with.login.register("player5", ip, room, game);
 
         asrtTms("[0: player5]\n" +
                 "[1: player1, player2]\n" +
@@ -374,7 +375,7 @@ public class RestTeamControllerTest extends AbstractTeamControllerTest {
         asrtTms("[3: player1, player2]\n" +
                 "[4: player3, player4]");
 
-        register("player5", ip, room, game);
+        with.login.register("player5", ip, room, game);
 
         asrtTms("[0: player5]\n" +
                 "[3: player1, player2]\n" +

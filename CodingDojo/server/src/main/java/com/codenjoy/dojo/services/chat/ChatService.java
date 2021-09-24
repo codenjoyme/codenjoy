@@ -39,10 +39,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
+import static com.codenjoy.dojo.services.dao.Chat.FOR_ALL;
 
 @Service
 @AllArgsConstructor
@@ -54,7 +54,7 @@ public class ChatService {
     private Registration registration;
     private Spreader spreader;
     private FieldService fields;
-    private final Map<String, String> playerNames = new ConcurrentHashMap<>();
+    private PlayersCache playersCache; // TODO ох тут кеш некрасивый
 
     /**
      * Метод для получения заданного количества сообщений (относительно конкретных
@@ -65,17 +65,18 @@ public class ChatService {
      * Администратор может получать сообщения в любом чате,
      * пользователь - только в своем чате {@code room}.
      */
-    private List<PMessage> getMessages(ChatType type, Integer topicId,
-                                      String playerId, Filter filter)
+    protected List<PMessage> getMessages(ChatType type, Integer topicId,
+                                         String playerId, Filter filter)
     {
         validateIsChatAvailable(playerId, filter.room());
+        filter.recipientId(playerId);
 
         if (filter.afterId() != null && filter.beforeId() != null) {
             return wrap(chat.getMessagesBetween(type, topicId, filter));
         }
 
         if (filter.afterId() != null) {
-            return wrap(chat.getMessagesAfter(topicId, type, filter));
+            return wrap(chat.getMessagesAfter(type, topicId, filter));
         }
 
         if (filter.beforeId() != null) {
@@ -115,16 +116,9 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
-    private PMessage wrap(Chat.Message message) {
+    public PMessage wrap(Chat.Message message) {
         return PMessage.from(message,
-                playerName(message.getPlayerId()));
-    }
-
-    private String playerName(String playerId) {
-        if (!playerNames.containsKey(playerId)) {
-            playerNames.put(playerId, registration.getNameById(playerId));
-        }
-        return playerNames.get(playerId);
+                playersCache.name(message.getPlayerId()));
     }
 
     /**
@@ -135,18 +129,33 @@ public class ChatService {
      * Администратор может получать любые topic-сообщения в любом room-чате,
      * пользователь только topic-сообщения в своем room-чате.
      */
-    public List<PMessage> getTopicMessages(int topicId, String playerId, Filter filter) {
-        validateIsChatAvailable(playerId, filter.room());
-        validateTopicExists(topicId, filter.room());
-
-        return getMessages(TOPIC, topicId, playerId, filter);
+    public List<PMessage> getTopicMessages(Integer topicId, String playerId, Filter filter) {
+        ChatType type = validateTopicAvailable(topicId, playerId, filter.room());
+        return getMessages(type, topicId, playerId, filter);
     }
 
-    private void validateTopicExists(int id, String room) {
-        // TODO по сути будет по 2 запроса, что не ок по производительности
+    protected ChatType validateTopicAvailable(Integer topicId, String playerId, String room) {
+        validateIsChatAvailable(playerId, room);
+
+        if (topicId == null) {
+            return ROOM;
+        }
+
+        return validateTopicExists(topicId, room);
+    }
+
+    private ChatType validateTopicExists(Integer id, String room) {
+        // TODO по сути будет по N запросов, что не ок по производительности
         //      можно было бы валидацию зашить во второй запрос?
         // room validation only
-        getMessage(id, room);
+        ChatType type;
+        do {
+            PMessage message = getMessage(id, room);
+            type = valueOf(message.getType());
+            id = message.getTopicId();
+        } while (type != ROOM && type != FIELD);
+
+        return type.topic();
     }
 
     /**
@@ -158,14 +167,14 @@ public class ChatService {
      * Администратор не может получать field-чат сообщения,
      * пользователь - только сообщения field-чата поля на котором пока что играет.
      */
-    public List<PMessage> getFieldMessages(String room, String playerId, Filter filter) {
-        int topicId = getFieldTopicId(room, playerId);
+    public List<PMessage> getFieldMessages(String playerId, Filter filter) {
+        int topicId = getFieldTopicId(filter.room(), playerId);
         return getMessages(FIELD, topicId, playerId, filter);
     }
 
     /**
      * Метод получения fieldId поля на котором играет пользователь {@code playerId}
-     * в комнате {@code room} c  предварительной проверкой
+     * в комнате {@code room} с предварительной проверкой
      * соответствия пользователя комнате.
      */
     private int getFieldTopicId(String room, String playerId) {
@@ -178,7 +187,7 @@ public class ChatService {
     }
 
     /**
-     * Метод для получения конкретного сообщения по {@code topicId}
+     * Метод для получения конкретного сообщения по {@code id}
      * из комнаты {@code room}. С его помощью можно получать любые сообщения
      * из любого чата (room, tread или field).
      *
@@ -187,10 +196,10 @@ public class ChatService {
      */
     // TODO пользователь зная fieldId не своей борды, и id сообщения там
     //      сможет получить его с помощью этого метода
-    public PMessage getMessage(int topicId, String room, String playerId) {
+    public PMessage getMessage(int id, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
-        return getMessage(topicId, room);
+        return getMessage(id, room);
     }
 
     private PMessage getMessage(int id, String room) {
@@ -205,13 +214,36 @@ public class ChatService {
 
     /**
      * Метод для публикации сообщения в field-чат комнаты {@code room}
+     * от имени пользователя {@code playerId} для конкретного пользователя
+     * {@code recipientId} (или для всех, если указано обратное).
+     *
+     * Это возможно только, если пользователь находится в данной комнате.
+     */
+    public PMessage postMessageForField(String text, String room,
+                                        String playerId, String recipientId)
+    {
+        int topicId = getFieldTopicId(room, playerId);
+        return saveMessage(topicId, FIELD, text, room, playerId, recipientId);
+    }
+
+    /**
+     * Метод для публикации сообщения в topic-чат комнаты {@code room}
      * от имени пользователя {@code playerId}.
      *
      * Это возможно только, если пользователь находится в данной комнате.
      */
-    public PMessage postMessageForField(String text, String room, String playerId) {
-        int topicId = getFieldTopicId(room, playerId);
-        return saveMessage(topicId, FIELD, text, room, playerId);
+    public PMessage postMessageForTopic(int id, String text, String room, String playerId) {
+        return postMessage(id, text, room, playerId);
+    }
+
+    /**
+     * Метод для публикации сообщения в room-чат комнаты {@code room}
+     * от имени пользователя {@code playerId}.
+     *
+     * Это возможно только, если пользователь находится в данной комнате.
+     */
+    public PMessage postMessageForRoom(String text, String room, String playerId) {
+        return postMessage(null, text, room, playerId);
     }
 
     /**
@@ -221,53 +253,52 @@ public class ChatService {
      *
      * Это возможно только, если пользователь находится в данной комнате.
      */
-    public PMessage postMessage(ChatType type, Integer topicId,
-                                String room, String text, String playerId)
+    private PMessage postMessage(Integer topicId,
+                                String text, String room, String playerId)
     {
-        validateIsChatAvailable(playerId, room);
-
-        if (topicId != null) {
-            validateTopicExists(topicId, room);
-        }
-
-        return saveMessage(topicId, type, text, room, playerId);
+        ChatType type = validateTopicAvailable(topicId, playerId, room);
+        return saveMessage(topicId, type, text, room, playerId, FOR_ALL);
     }
 
-    private PMessage saveMessage(Integer topicId, ChatType type, String text, String room, String playerId) {
+    protected PMessage saveMessage(Integer topicId, ChatType type,
+                                   String text, String room,
+                                   String playerId, String recipientId)
+    {
         return wrap(chat.saveMessage(
                 Chat.Message.builder()
                         .room(room)
                         .topicId(topicId)
                         .type(type)
                         .playerId(playerId)
+                        .recipientId(recipientId)
                         .time(time.now())
                         .text(text)
                         .build()));
     }
 
     /**
-     * Метод для удаления сообщения {@code messageId} в любом чате
+     * Метод для удаления сообщения {@code id} в любом чате
      * (room-чат, thread-чат или field-чат) комнаты {@code room}
      * от имени пользователя {@code playerId}.
      *
      * Это возможно только, если пользователь является автором сообщения
-     * и продолжает пребывать в заданной комнате (при этом при удалении
-     * field-сообщений он может покинуть изначальную field и пребывать в дургой)
+     * и продолжает пребывать в заданной комнате. При этом при удалении
+     * field-сообщений он может покинуть изначальную field и пребывать в другой.
      */
-    public boolean deleteMessage(int messageId, String room, String playerId) {
+    public boolean deleteMessage(int id, String room, String playerId) {
         validateIsChatAvailable(playerId, room);
 
-        boolean deleted = chat.deleteMessage(room, messageId, playerId);
+        boolean deleted = chat.deleteMessage(room, id, playerId);
 
         if (!deleted) {
             throw exception("Player '%s' cant delete message with id '%s' in room '%s'",
-                    playerId, messageId, room);
+                    playerId, id, room);
         }
 
         return true;
     }
 
-    public IllegalArgumentException exception(String message, Object... parameters) {
+    public static IllegalArgumentException exception(String message, Object... parameters) {
         return new IllegalArgumentException(String.format(message, parameters));
     }
 
@@ -284,14 +315,16 @@ public class ChatService {
 
     @ToString
     public class LastMessage {
-        private Map<String, Integer> room;
-        private Map<Integer, Integer> topic;
-        private Map<Integer, Integer> field;
+        private final Map<String, Integer> room;
+        private final Map<Integer, Integer> roomTopic;
+        private final Map<Integer, Integer> field;
+        private final Map<Integer, Integer> fieldTopic;
 
         public LastMessage() {
             room = chat.getLastRoomMessageIds();
-            topic = chat.getLastTopicMessageIds(TOPIC);
+            roomTopic = chat.getLastTopicMessageIds(ROOM_TOPIC);
             field = chat.getLastTopicMessageIds(FIELD);
+            fieldTopic = chat.getLastTopicMessageIds(FIELD_TOPIC);
         }
 
         public Status at(Deal deal) {
@@ -306,4 +339,9 @@ public class ChatService {
     public LastMessage getLast() {
         return new LastMessage();
     }
+
+    public ChatAuthority authority(String playerId, OnChange listener) {
+        return new ChatAuthorityImpl(this, chat, spreader, playerId, listener);
+    }
+
 }

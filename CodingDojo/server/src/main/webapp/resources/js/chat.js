@@ -23,9 +23,10 @@
 var ROOM_TYPE = 'room';
 var FIELD_TYPE = 'field';
 
-function initChat(contextPath, type) {
+function initChat(contextPath, chatControl, type) {
 
     var root = $('.id-' + type + '-chat ');
+    var firstMessageInChat = null;
 
     // запросы field и room чата несколько отличаются, вот на этот хвостик
     var urlSuffix = (type == ROOM_TYPE) ? '' : '/field';
@@ -35,48 +36,95 @@ function initChat(contextPath, type) {
     // или с обновлением тика
     var fieldId = null;
 
-    var deleteMessage = async (messageId) => new Promise((resolve, reject) =>
-        deleteData('/rest/chat/' + setup.room + '/messages/' + messageId,
-                deleted => resolve(deleted),
-                error => reject(error))
-    );
+    var setupScroll = function(element) {
+        var pos = null;
 
-    var postMessage = async (message) => new Promise((resolve, reject) =>
-        sendData('/rest/chat/' + setup.room + '/messages' + urlSuffix,
-                { text : escapeHtml(message) },
-                deleted => resolve(deleted),
-                error => reject(error))
-    );
+        function height() {
+            return element[0].scrollHeight;
+        }
 
-    function buildParams(afterId, beforeId, inclusive, count) {
-        var ch = () => (!!result) ? '&' : '?';
+        function out() {
+            return element.outerHeight();
+        }
 
-        var result = '';
-        if (!!afterId) {
-            result += ch() + 'afterId=' + afterId;
+        function top() {
+            return element.scrollTop();
         }
-        if (!!beforeId) {
-            result += ch() + 'beforeId=' + beforeId;
+
+        function atEnd() {
+            // 1 потому что разница в дробные части пикселя
+            return (height() - (top() + out())) < 1;
         }
-        if (!!inclusive) {
-            result += ch() + 'inclusive=' + inclusive;
+
+        function atStart() {
+            return top() == 0;
         }
-        if (!!count) {
-            result += ch() + 'count=' + count;
+
+        function scroll(position) {
+            element.scrollTop(position);
         }
-        return result;
+
+        function scrollStart() {
+            scroll(0);
+        }
+
+        function scrollEnd() {
+            scroll(height());
+        }
+
+        function save() {
+            pos = height();
+        }
+
+        function load() {
+            if (pos == null) {
+                return;
+            }
+            scroll(height() - pos);
+            pos = null;
+        }
+
+        return {
+            height : height,
+            out : out,
+            top : top,
+            atEnd : atEnd,
+            atStart : atStart,
+            scroll : scroll,
+            scrollEnd : scrollEnd,
+            scrollStart : scrollStart,
+            save : save,
+            load : load
+        }
     }
 
-    var getMessages = async (afterId, beforeId, inclusive, count) => new Promise((resolve, reject) => {
-        var params = buildParams(afterId, beforeId, inclusive, count);
-        loadData('/rest/chat/' + setup.room + '/messages' + urlSuffix + params,
-                messages => resolve(messages),
-                error => reject(error));
-    });
+    var deleteMessage = function(messageId) {
+        chatControl.send('delete', {
+            id : messageId,
+            room : setup.room
+        });
+    }
 
-    var firstMessageInChat = null;
+    var postMessage = function(message) {
+        var command = (type == ROOM_TYPE) ? 'postRoom' : 'postField';
+        chatControl.send(command, {
+            text : message,
+            room : setup.room
+        });
+    }
 
-    async function loadChatMessages(onLoad, afterId, beforeId, inclusive, count) {
+    var getMessages = function(afterId, beforeId, inclusive, count) {
+        var command = (type == ROOM_TYPE) ? 'getAllRoom' : 'getAllField';
+        chatControl.send(command, {
+            afterId : afterId,
+            beforeId : beforeId,
+            inclusive : inclusive,
+            count : count,
+            room : setup.room
+        });
+    }
+
+    function loadChatMessages(afterId, beforeId, inclusive) {
         loading = true;
 
         // если грузили уже с таким beforeId и сообщений больше не приходило
@@ -86,52 +134,136 @@ function initChat(contextPath, type) {
             return;
         }
 
-        var messages = await getMessages(afterId, beforeId, inclusive, count);
-        var messageId = null;
-        var after = true;
-        if (!!afterId) {
-            messageId = afterId;
-            after = true;
-        } else if (!!beforeId) {
-            messageId = beforeId;
-            after = false;
-        }
+        // TODO загружать 30 сообщений сразу в чат,
+        //      чтобы отобразился вертикальный скроллинг, иначе
+        //      нельзя будет грузить в прошлое
+        var count = 30;
+        getMessages(afterId, beforeId, inclusive, count);
+    }
 
-        // когда мы грузим в диапазоне значений, это мы догружаем новые сообщения
-        // нам нужно подгрузить в чат (afterId, beforeId] но пришло [afterId, beforeId]
-        // потому и удаляем afterId который у нас уже есть в чате
-        if (inclusive && !!afterId && !!beforeId) {
-            messages.shift();
-        }
+    function onDeleteMessages(messages) {
+        var message = messages[0]; // TODO сделать возможным удаление сразу несколько
 
-        if (messages.length == 0) {
-            // если ничего не пришло и грузим мы начало чата
-            // значит это самое первое сообщение в чате - больше его загружать не будем
-            if (!after && !firstMessageInChat) {
-                firstMessageInChat = messageId;
+        var elements = chatContainer.find(messageWith(message.id));
+        if (elements.length == 0) {
+            return;
+        }
+        elements.first().remove();
+    }
+
+    function nearestFor(search, all, order) {
+        var min = null;
+        var found = null;
+        all = (order) ? all : all.reverse();
+        for (var index in all) {
+            var value = all[index];
+            if (min == null || Math.abs(search - value) < min) {
+                min = Math.abs(search - value);
+                found = value;
             }
+        }
+        return found;
+    }
+
+    function onLoadMessages(messages) {
+        do {
+            // TODO разобраться с этим т.к. к нам никогда не придет пустой список
+            if (messages.length == 0) {
+                // // если ничего не пришло и грузим мы начало чата
+                // // значит это самое первое сообщение в чате - больше его загружать не будем
+                // if (!after && !firstMessageInChat) {
+                //     firstMessageInChat = messageId;
+                // }
+                loading = false;
+                return;
+            }
+
+            var first = messages[0].id;
+            var last = messages[messages.length - 1].id;
+            var all = allMessagesIds();
+
+            var after = nearestFor(first, all, true);
+            var before = nearestFor(last, all, false);
+
+            // удаляем дубликаты, которые у нас уже в чате есть
+            var removeAfter = after == first;
+            if (removeAfter) {
+                messages.shift();
+            }
+
+            // удаляем дубликаты, которые у нас уже в чате есть
+            var removeBefore = before == last;
+            if (removeBefore) {
+                messages.pop();
+            }
+        } while (removeAfter || removeBefore);
+
+        // если после этого сообщений больше не осталось, то заканчиваем тут
+        if (messages.length == 0) {
             loading = false;
             return;
         }
 
-        // пришли подгруженные сообщения
-        var topicId = messages[0].topicId;
-        // и если в первом есть отрицательный topicId
-        if (topicId != null && topicId < 0) {
-            // проверим а не надо ли перегрузить весь чат?
-            if (needToReloadChat(-topicId)) {
-                loading = false;
-                return;
+        var afterOrBefore = null;
+        var messageId = null;
+        if (after == null && before == null) {
+            // чат пустой, просто добавим как первые сообщения
+        } else if (after == null && before != null) {
+            // добавляем новые сообщения перед before
+            afterOrBefore = false;
+            messageId = before;
+        } else if (after != null && before == null) {
+            // добавляем новые сообщения после after
+            afterOrBefore = true;
+            messageId = after;
+        } else if (after != null && before != null) {
+            // тут не понятно куда добавлять,
+            // надо смотреть что реально пришло
+            if (first > after) {
+                // добавляем новые сообщения после after
+                afterOrBefore = true;
+                messageId = before;
+            } else if (last < before) {
+                // добавляем новые сообщения перед before
+                afterOrBefore = false;
+                messageId = before;
             }
         }
 
-        appendMessages(messages, messageId, after);
+        // проверим а не надо ли перегрузить весь чат?
+        var topicId = messages[0].topicId;
+        if (needToReloadChat(topicId)) {
+            loading = false;
+            return;
+        }
+
+        var needScroll = chatScroll.atEnd();
+
+        appendMessages(messages, messageId, afterOrBefore);
+
+        if (needScroll) {
+            chatScroll.scrollEnd();
+        }
 
         loading = false;
-        if (!!onLoad) {
-            onLoad(messages);
-        }
     }
+
+    chatControl.addListener(function(request) {
+        if (request.type != type) {
+            // не наш чат, не обрабатываем
+            return;
+        }
+        var command = request.command;
+        if (command == 'add') {
+            var messages = request.data;
+            onLoadMessages(messages);
+        } else if (command == 'delete') {
+            var messages = request.data;
+            onDeleteMessages(messages);
+        } else if (command == 'error') {
+            console.log(request);
+        }
+    });
 
     var SYSTEM_ID = '-1';
 
@@ -172,53 +304,40 @@ function initChat(contextPath, type) {
         });
         var html = root.find('.chat script').tmpl(templateData);
 
-        var scrollHeight = getScrollHeight();
+        chatScroll.save();
         html.find('span.delete-message').each(function( index ) {
             var deleteButton = $(this);
-            var messageId = deleteButton.parent().attr('message');
+            var messageId = id(deleteButton.parent());
             var message = getMessage(html, messageId);
             if (message.attr('player') != setup.playerId) {
                 deleteButton.remove();
                 return;
             }
             deleteButton.click(async () => {
-                var deleted = await deleteMessage(messageId)
-                if (deleted) {
-                    message.remove();
-                }
+                deleteMessage(messageId);
             });
         });
 
-        var anchor = 'div[message=' + messageId + ']';
+        var anchor = messageWith(messageId);
         if (!messageId || !root.find(anchor)[0]) {
             // если нет сообщения рядом с которым догружать - грузим в пустой чат
             html.appendTo(chatContainer);
-            // сохраняем скролинг в той же позиции, иначе все сместится из за добавление в начало чата
-            scrollTo(getScrollHeight() - scrollHeight);
+            // сохраняем скроллинг в той же позиции, иначе все
+            // сместится из за добавление в начало чата
+            chatScroll.load();
         } else if (isAfterOrBefore) {
             html.insertAfter(anchor);
             // тут скролинг не смещается, потому что аппенится в конце
         } else {
             html.insertBefore(anchor);
-            // сохраняем скролинг в той же позиции, иначе все сместится из за добавление в начало чата
-            scrollTo(getScrollHeight() - scrollHeight);
+            // сохраняем скроллинг в той же позиции, иначе все
+            // сместится из за добавление в начало чата
+            chatScroll.load();
         }
     }
 
     function escapeHtml(data) {
         return $('<div />').text(data).html();
-    }
-
-    function scrollTo(position) {
-        chatContainer.scrollTop(position);
-    }
-
-    function scrollToEnd() {
-        chatContainer.scrollTop(getScrollHeight());
-    }
-
-    function getScrollHeight() {
-        return chatContainer[0].scrollHeight;
     }
 
     function initPost() {
@@ -231,24 +350,22 @@ function initChat(contextPath, type) {
             }
         });
 
-        postMessageButton.click(async function() {
+        postMessageButton.click(function() {
             var message = newMessage.val();
             if (message == '') {
                 return;
             }
 
-            var message = await postMessage(message);
-            appendMessages([message]);
+            var message = postMessage(message);
             newMessage.val('');
             newMessage.focus();
-            scrollToEnd();
         });
     }
 
     function getMessage(messages, messageId) {
         for (var index in messages) {
             var message = $(messages[index]);
-            if (message.attr('message') == messageId) {
+            if (id(message) == messageId) {
                 return message;
             }
         }
@@ -258,86 +375,59 @@ function initChat(contextPath, type) {
     // с помощью этого селектора мы пропускаем все системные
     // сообщения (логи), которые напечатаны с id=SYSTEM_ID
     function userMessages() {
-        return "div [message != '" + SYSTEM_ID + "']";
+        return "div[message!='" + SYSTEM_ID + "']";
+    }
+
+    // с помощью этого селектора мы получаем сообщение с заданой id
+    function messageWith(id) {
+        return "div[message='" + id + "']";
+    }
+
+    // возвращает id всех сообщений на данный момент загруженных в чат
+    function allMessagesIds() {
+        return chatContainer.children(userMessages())
+            .map(function() {
+                return id($(this));
+            })
+            .get();
     }
 
     function getFirstMessageId() {
-        return chatContainer.children(userMessages())
-            .first().attr('message');
+        return id(chatContainer.children(userMessages()).first());
     }
 
     function getLastMessageId() {
-        return chatContainer.children(userMessages())
-            .last().attr('message');
+        return id(chatContainer.children(userMessages()).last());
+    }
+
+    function id(element) {
+        return parseInt(element.attr('message'));
     }
 
     function loadBefore(){
         let beforeId = getFirstMessageId();
-        loadChatMessages(null, null, beforeId, false);
+        loadChatMessages(null, beforeId, false);
     }
 
     function loadAfter(){
         let afterId = getLastMessageId();
-        loadChatMessages(null, afterId, null, false);
+        loadChatMessages(afterId, null, false);
     }
 
     function initScrolling() {
         chatContainer.scroll(function() {
-            var el = $(this);
-            var scrollTop = el.scrollTop();
-            var scrollHeight = el[0].scrollHeight;
-            var outerHeight = el.outerHeight();
-            var atChatStart = scrollTop == 0;
-            var atChatEnd = (scrollHeight - scrollTop - outerHeight) < 1;
-            if (atChatStart) {
+            var scroll = setupScroll($(this));
+            if (scroll.atStart()) {
                 loadBefore();
-            } else if (atChatEnd) {
+            } else if (scroll.atEnd()) {
                 loadAfter();
-            }
-        });
-    }
-
-    function listenNewMessages() {
-        $('body').bind('board-updated', function(event, data) {
-            var players = Object.keys(data);
-            if (players.length == 0) {
-                return;
-            }
-
-            if (chat.is(':hidden')) {
-                return;
-            }
-            if (!firstLoad) { // ###1
-                firstLoad = true;
-                scrollToEnd();
-            }
-            if (!!loading) {
-                return;
-            }
-
-            // с очередным тиком так же пришел статус обновлений чата
-            var status = data[players[0]].chat;
-            // быть может этот чат пора прегрузить?
-            if (needToReloadChat(status.fieldId)) {
-                return;
-            }
-            var realLastId = (type == ROOM_TYPE) ?
-                status.lastInRoom :
-                status.lastInField;
-            var lastLoadedId = getLastMessageId();
-            if (!lastLoadedId) {
-                loadChatMessages(null, null, realLastId, true);
-            } else if (realLastId > lastLoadedId) {
-                loadChatMessages(null, lastLoadedId, realLastId, true);
             }
         });
     }
 
     // метод начальной загрузки пустого чата
     var loadChat = function() {
-        loadChatMessages(function() {
-            scrollToEnd(); // TODO почему-то оно не работает, когда чат неактивен, потому я делаю ###1
-        }, null, null, null, 30); // TODO загружать 30 сообщений сразу в чат, тоже костыль, чтобы отобразился вертикальный скролинг, иначе нельзя будет грузить в прошлое
+        loadChatMessages(null, null, null);
     }
 
     // проверяем, надо ли обновить весь чат
@@ -368,13 +458,12 @@ function initChat(contextPath, type) {
     var postMessageButton = root.find('.id-post-message');
     var newMessage = root.find('.id-new-message');
     var chatContainer = root.find('.id-chat-container');
+    var chatScroll = setupScroll(chatContainer);
     var chat = root.find('.chat');
     var chatTab = root.find('#' + type + '-chat-tab');
 
-    loadChat();
-    var firstLoad = false; // ###1
     var loading = false;
-    listenNewMessages();
+    loadChat();
     initPost();
     initScrolling();
     chat.show();

@@ -22,6 +22,8 @@ package com.codenjoy.dojo.stuff;
  * #L%
  */
 
+import com.codenjoy.dojo.services.helper.Helpers;
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.internal.runners.model.MultipleFailureException;
 
@@ -64,7 +66,8 @@ public class SmartAssert {
 
             if (className.contains("Abstract")
                 || className.equals(SmartAssert.class.getName())
-                || className.contains(SmartAssert.class.getSimpleName() + "$"))
+                || className.contains(SmartAssert.class.getSimpleName() + "$")
+                || className.contains(Helpers.class.getPackageName()))
             {
                 continue;
             }
@@ -73,9 +76,33 @@ public class SmartAssert {
         throw new RuntimeException();
     }
 
+    public static void assertEquals(String message, Object expected, Object actual) {
+        try {
+            Assert.assertEquals(message, expected, actual);
+        } catch (AssertionError e) {
+            failures().add(e);
+        }
+    }
+
+    public static void assertNotEquals(Object expected, Object actual) {
+        try {
+            Assert.assertNotEquals(expected, actual);
+        } catch (AssertionError e) {
+            failures().add(e);
+        }
+    }
+
     public static void assertEquals(Object expected, Object actual) {
         try {
             Assert.assertEquals(expected, actual);
+        } catch (AssertionError e) {
+            failures().add(e);
+        }
+    }
+
+    public static void assertSame(Object object1, Object object2) {
+        try {
+            Assert.assertSame(object1, object2);
         } catch (AssertionError e) {
             failures().add(e);
         }
@@ -89,11 +116,13 @@ public class SmartAssert {
         throw new MultipleFailureException(errors);
     }
 
-    public static void checkResult() throws Exception {
+    @SneakyThrows
+    public static void checkResult() {
         checkResult(failures());
     }
-    
-    public static void checkResult(Class<?> caller) throws Exception {
+
+    @SneakyThrows
+    public static void checkResult(Class<?> caller) {
         checkResult(failures(caller.getName()));
     }
 

@@ -25,28 +25,26 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.chat.ChatType;
 import com.codenjoy.dojo.services.chat.Filter;
-import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
+import com.codenjoy.dojo.services.helper.ChatHelper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
-import static java.util.stream.Collectors.toList;
 
+// TODO try @SpringBootTest
 public class ChatTest {
 
     public static final int MAX = 100;
-    private Chat chat;
 
-    private List<Chat.Message> messages = new LinkedList<>();
+    private Chat chat;
+    private ChatHelper messages;
 
     @Before
     public void setup() {
@@ -59,10 +57,12 @@ public class ChatTest {
                                 return "context";
                             }
                         }));
+        
+        messages = new ChatHelper(chat, null);
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         chat.removeDatabase();
         SmartAssert.checkResult();
     }
@@ -70,18 +70,54 @@ public class ChatTest {
     @Test
     public void shouldGenerateId_whenSaveMessage() {
         // when
-        Chat.Message message1 = addMessage("room1", "player1");
+        Chat.Message message1 = messages.post("room1", "player1");
 
         // then
-        assertEquals("Chat.Message(id=1, topicId=null, type=ROOM, room=room1, playerId=player1, time=1615231523345, text=message1)",
+        assertEquals("Chat.Message(id=1, topicId=null, type=ROOM(1), room=room1, playerId=player1, recipientId=null, time=1615231523345, text=message1)",
                 message1.toString());
 
         // when
-        Chat.Message message2 = addMessage("room2", "player2");
+        Chat.Message message2 = messages.post("room2", "player2");
 
         // then
-        assertEquals("Chat.Message(id=2, topicId=null, type=ROOM, room=room2, playerId=player2, time=1615231623345, text=message2)",
+        assertEquals("Chat.Message(id=2, topicId=null, type=ROOM(1), room=room2, playerId=player2, recipientId=null, time=1615231623345, text=message2)",
                 message2.toString());
+    }
+
+    @Test
+    public void shouldGetTypeById_allCases() {
+        // given
+        messages.post("room1", "player1");                 // id = 1
+        messages.post("room1", "player1", 1, ROOM_TOPIC);  // id = 2
+        messages.post("room1", "player1", 1, FIELD);       // id = 3
+        messages.post("room1", "player1", 3, FIELD_TOPIC); // id = 4
+
+        // when then
+        assertGetTypeById();
+    }
+
+    private void assertGetTypeById() {
+        assertEquals("ROOM(1)", chat.getTypeById(1).toString());
+        assertEquals("ROOM_TOPIC(2)", chat.getTypeById(2).toString());
+        assertEquals("FIELD(3)", chat.getTypeById(3).toString());
+        assertEquals("FIELD_TOPIC(4)", chat.getTypeById(4).toString());
+        assertEquals(null, chat.getTypeById(5));
+    }
+
+    @Test
+    public void shouldGetTypeById_allCases_doNotAffectWhenRemove() {
+        // given
+        shouldGetTypeById_allCases();
+
+        // when
+        assertEquals(true, chat.deleteMessage("room1", 1, "player1"));
+        assertEquals(true, chat.deleteMessage("room1", 2, "player1"));
+        assertEquals(true, chat.deleteMessage("room1", 3, "player1"));
+        assertEquals(true, chat.deleteMessage("room1", 4, "player1"));
+        assertEquals(false, chat.deleteMessage("room1", 5, "player1")); // not exists
+
+        // then
+        assertGetTypeById();
     }
 
     @Test
@@ -90,19 +126,19 @@ public class ChatTest {
         assertEquals(null, chat.getLastMessageId("room1"));
 
         // when then
-        addMessage("room1", "player1"); // id = 1
+        messages.post("room1", "player1"); // id = 1
 
         assertEquals(Integer.valueOf(1),
                 chat.getLastMessageId("room1"));
 
         // when then
-        addMessage("room1", "player1", 1, TOPIC); // id = 2
+        messages.post("room1", "player1", 1, ROOM_TOPIC); // id = 2
 
         assertEquals(Integer.valueOf(1),
                 chat.getLastMessageId("room1"));
 
         // when then
-        addMessage("room1", "player1", 1, TOPIC); // id = 3
+        messages.post("room1", "player1", 1, ROOM_TOPIC); // id = 3
 
         assertEquals(Integer.valueOf(1),
                 chat.getLastMessageId("room1"));
@@ -115,19 +151,19 @@ public class ChatTest {
                 chat.getLastRoomMessageIds().toString());
 
         // when then
-        addMessage("room1", "player1"); // id = 1
+        messages.post("room1", "player1"); // id = 1
 
         assertEquals("{room1=1}",
                 chat.getLastRoomMessageIds().toString());
 
         // when then
-        addMessage("room1", "player1", 1, TOPIC); // id = 2
+        messages.post("room1", "player1", 1, ROOM_TOPIC); // id = 2
 
         assertEquals("{room1=1}",
                 chat.getLastRoomMessageIds().toString());
 
         // when then
-        addMessage("room1", "player1", 1, TOPIC); // id = 3
+        messages.post("room1", "player1", 1, ROOM_TOPIC); // id = 3
 
         assertEquals("{room1=1}",
                 chat.getLastRoomMessageIds().toString());
@@ -140,37 +176,37 @@ public class ChatTest {
                 chat.getLastRoomMessageIds().toString());
 
         // when then
-        addMessage("room1", "player1"); // id = 1
+        messages.post("room1", "player1"); // id = 1
 
         assertEquals("{room1=1}",
                 chat.getLastRoomMessageIds().toString());
 
         // when then
-        addMessage("room1", "player1"); // id = 2
+        messages.post("room1", "player1"); // id = 2
 
         assertEquals("{room1=2}",
                 chat.getLastRoomMessageIds().toString());
 
         // when then
-        addMessage("room1", "player2"); // id = 3
+        messages.post("room1", "player2"); // id = 3
 
         assertEquals("{room1=3}",
                 chat.getLastRoomMessageIds().toString());
 
         // when then
-        addMessage("room2", "player2"); // id = 4
+        messages.post("room2", "player2"); // id = 4
 
         assertEquals("{room1=3, room2=4}",
                 chat.getLastRoomMessageIds().toString());
 
         // when then
-        addMessage("room1", "player2"); // id = 5
+        messages.post("room1", "player2"); // id = 5
 
         assertEquals("{room2=4, room1=5}",
                 chat.getLastRoomMessageIds().toString());
 
         // when then
-        addMessage("room3", "player1"); // id = 6
+        messages.post("room3", "player1"); // id = 6
 
         assertEquals("{room2=4, room1=5, room3=6}",
                 chat.getLastRoomMessageIds().toString());
@@ -215,83 +251,83 @@ public class ChatTest {
     @Test
     public void shouldGetLastTopicMessageIds() {
         // when then
-        addMessage("room1", "player1"); // id = 1
-        addMessage("room1", "player2"); // id = 2
+        messages.post("room1", "player1"); // id = 1
+        messages.post("room1", "player2"); // id = 2
 
         assertEquals("{}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
-        addMessage("room1", "player1", 1, TOPIC); // id = 3
+        messages.post("room1", "player1", 1, ROOM_TOPIC); // id = 3
 
         assertEquals("{1=3}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
-        addMessage("room1", "player2", 2, TOPIC); // id = 4
+        messages.post("room1", "player2", 2, ROOM_TOPIC); // id = 4
 
         assertEquals("{1=3, 2=4}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
-        addMessage("room2", "player2", 1, TOPIC); // id = 5
+        messages.post("room2", "player2", 1, ROOM_TOPIC); // id = 5
 
         assertEquals("{2=4, 1=5}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
-        addMessage("room1", "player2", 2, TOPIC); // id = 6
+        messages.post("room1", "player2", 2, ROOM_TOPIC); // id = 6
 
         assertEquals("{1=5, 2=6}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
-        addMessage("room3", "player1", 1, TOPIC); // id = 7
+        messages.post("room3", "player1", 1, ROOM_TOPIC); // id = 7
 
         assertEquals("{2=6, 1=7}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
         chat.deleteMessage("room3", 7, "player1");
 
         assertEquals("{1=5, 2=6}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
         chat.deleteMessage("room1", 6, "player2");
 
         assertEquals("{2=4, 1=5}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
         chat.deleteMessage("room2", 5, "player2");
 
         assertEquals("{1=3, 2=4}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
         chat.deleteMessage("room1", 4, "player2");
 
         assertEquals("{1=3}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
         chat.deleteMessage("room1", 3, "player1");
 
         assertEquals("{}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
         chat.deleteMessage("room1", 2, "player1");
 
         assertEquals("{}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
 
         // when then
         chat.deleteMessage("room1", 1, "player1");
 
         assertEquals("{}",
-                chat.getLastTopicMessageIds(TOPIC).toString());
+                chat.getLastTopicMessageIds(ROOM_TOPIC).toString());
     }
 
     @Test
@@ -300,19 +336,19 @@ public class ChatTest {
         assertEquals(null, chat.getLastMessageId("room1"));
 
         // when then
-        addMessage("room1", "player1"); // id = 1
+        messages.post("room1", "player1"); // id = 1
 
         assertEquals(Integer.valueOf(1),
                 chat.getLastMessageId("room1"));
 
         // when then
-        addMessage("room1", "player1"); // id = 2
+        messages.post("room1", "player1"); // id = 2
 
         assertEquals(Integer.valueOf(2),
                 chat.getLastMessageId("room1"));
 
         // when then
-        addMessage("room1", "player2"); // id = 3
+        messages.post("room1", "player2"); // id = 3
 
         assertEquals(Integer.valueOf(3),
                 chat.getLastMessageId("room1"));
@@ -320,7 +356,7 @@ public class ChatTest {
                 chat.getLastMessageId("room2"));
 
         // when then
-        addMessage("room2", "player2"); // id = 4 // не включен - другая комната
+        messages.post("room2", "player2"); // id = 4 // не включен - другая комната
 
         assertEquals(Integer.valueOf(3),
                 chat.getLastMessageId("room1"));
@@ -328,7 +364,7 @@ public class ChatTest {
                 chat.getLastMessageId("room2"));
 
         // when then
-        addMessage("room1", "player2"); // id = 5
+        messages.post("room1", "player2"); // id = 5
 
         assertEquals(Integer.valueOf(5),
                 chat.getLastMessageId("room1"));
@@ -338,7 +374,7 @@ public class ChatTest {
                 chat.getLastMessageId("room3"));
 
         // when then
-        addMessage("room3", "player1"); // id = 6
+        messages.post("room3", "player1"); // id = 6
 
         assertEquals(Integer.valueOf(5),
                 chat.getLastMessageId("room1"));
@@ -411,46 +447,17 @@ public class ChatTest {
     @Test
     public void shouldGetAllMessages_onlyForThisRoom_whenRequestedMoreThanPresent() {
         // given
-        addMessage("room1", "player1"); // id = 1
-        addMessage("room1", "player1"); // id = 2
-        addMessage("room1", "player2"); // id = 3
-        addMessage("room2", "player2"); // id = 4 // не включен - другая комната
+        messages.post("room1", "player1"); // id = 1
+        messages.post("room1", "player1"); // id = 2
+        messages.post("room1", "player2"); // id = 3
+        messages.post("room2", "player2"); // id = 4 // не включен - другая комната
 
         // when then
-        assertThat(1, 2, 3)
+        messages.assertThat(1, 2, 3)
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room1")
                                 .count(10)
                                 .get()));
-    }
-
-    public class AssertThat {
-
-        private List<Integer> expectedIds;
-
-        public AssertThat(int[] ids) {
-            expectedIds = Arrays.stream(ids).mapToObj(i -> i).collect(toList());
-        }
-
-        public void in(List<Chat.Message> actual) {
-            List<Integer> actualIds = actual.stream()
-                    .map(message -> message.getId())
-                    .collect(toList());
-
-            assertEquals(expectedIds.toString(), actualIds.toString());
-
-            List<Chat.Message> expected = ChatTest.this.messages.stream()
-                    .filter(message -> isPresent(actual, message))
-                    .collect(toList());
-
-            assertEquals(ChatTest.toString(expected),
-                    ChatTest.toString(actual));
-        }
-
-        public boolean isPresent(List<Chat.Message> list, Chat.Message found) {
-            return list.stream()
-                    .anyMatch(message -> found.getId() == message.getId());
-        }
     }
 
     public static String toString(List<Chat.Message> messages) {
@@ -459,22 +466,18 @@ public class ChatTest {
                         "), \nChat.Message(");
     }
 
-    private AssertThat assertThat(int... ids) {
-        return new AssertThat(ids);
-    }
-
     @Test
     public void shouldGetAllMessages_onlyForThisRoom_whenRequestedLessThanPresent() {
         // given
         // так как getMessages берет только последние сообщения
         // это сообщение не включено - запросили не так много сообщений
-        addMessage("room1", "player1");
-        addMessage("room1", "player1");
-        addMessage("room1", "player2");
-        addMessage("room2", "player2"); // не включен - другая комната
+        messages.post("room1", "player1");
+        messages.post("room1", "player1");
+        messages.post("room1", "player2");
+        messages.post("room2", "player2"); // не включен - другая комната
 
         // when then
-        assertThat(2, 3)
+        messages.assertThat(2, 3)
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room1")
                                 .count(2)
@@ -484,10 +487,10 @@ public class ChatTest {
     @Test
     public void shouldGetAllMessages_onlyForThisRoom_whenNoSuchRoom() {
         // given
-        addMessage("room1", "player1");
+        messages.post("room1", "player1");
         
         // when then
-        assertThat()
+        messages.assertThat()
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room2")
                                 .count(2)
@@ -497,10 +500,10 @@ public class ChatTest {
     @Test
     public void shouldGetAllMessages_onlyForThisRoom_whenZeroMessages() {
         // given
-        addMessage("room1", "player1");
+        messages.post("room1", "player1");
 
         // when then
-        assertThat()
+        messages.assertThat()
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room1")
                                 .count(0)
@@ -510,23 +513,219 @@ public class ChatTest {
     @Test
     public void shouldGetMessageById() {
         // given
-        addMessage("room1", "player1");
-        addMessage("room1", "player1");
-        addMessage("room1", "player2");
-        addMessage("room2", "player2");
+        messages.post("room1", "player1");                 // 1
+        messages.post("room1", "player1", 1, ROOM_TOPIC);  // 2
+        messages.post("room1", "player2", 1, FIELD);       // 3
+        messages.post("room1", "player2", 3, FIELD_TOPIC); // 4
+        messages.post("room2", "player2");                 // 5
 
         // when then
-        assertEquals("Chat.Message(id=1, topicId=null, type=ROOM, room=room1, playerId=player1, time=1615231523345, text=message1)",
+        assertMessages();
+    }
+
+    static class Triplet {
+        int roomTopic;
+        int fieldTopic;
+        int field;
+    }
+
+    interface ChatMessages {
+        List<Chat.Message> getAll(ChatType type, Integer topicId, Filter filter);
+    }
+
+    @Test
+    public void shouldGetAllMessages_casePersonalMessages() {
+        // given
+        Triplet ids = givenAllTypesMessagesWithPersonal();
+
+        // when then
+        assertGetMessagesForParticipant(ids, chat::getMessages);
+    }
+
+    private Triplet givenAllTypesMessagesWithPersonal() {
+        Triplet ids = new Triplet();
+
+        // 1
+        ids.roomTopic = messages.post("room1", "player1", null, ROOM).getId();
+        // 2
+        messages.post("room1", "player1", ids.roomTopic, ROOM_TOPIC);
+        // 3
+        ids.field = 1;
+        ids.fieldTopic = messages.post("room1", "player2", ids.field, FIELD).getId();
+        // 4
+        messages.post("room1", "player2", ids.fieldTopic, FIELD_TOPIC);
+        // 5
+        messages.post("room2", "player2", null, ROOM);
+
+        // personal for player1
+        messages.post("room1", "player1", null, ROOM, "player1");                  // 6
+        messages.post("room1", "player1", ids.roomTopic, ROOM_TOPIC, "player1");   // 7
+        messages.post("room1", "player2", ids.field, FIELD, "player1");            // 8
+        messages.post("room1", "player2", ids.fieldTopic, FIELD_TOPIC, "player1"); // 9
+        messages.post("room2", "player2", null, ROOM, "player1");                  // 10
+
+        // personal for player2
+        messages.post("room1", "player1", null, ROOM, "player2");                  // 11
+        messages.post("room1", "player1", ids.roomTopic, ROOM_TOPIC, "player2");   // 12
+        messages.post("room1", "player2", ids.field, FIELD, "player2");            // 13
+        messages.post("room1", "player2", ids.fieldTopic, FIELD_TOPIC, "player2"); // 14
+        messages.post("room2", "player2", null, ROOM, "player2");                  // 15
+
+        return ids;
+    }
+
+    @Test
+    public void shouldGetMessagesBetween_casePersonalMessages() {
+        // given
+        Triplet ids = givenAllTypesMessagesWithPersonal();
+
+        // when then
+        assertGetMessagesForParticipant(ids, chat::getMessagesBetween);
+    }
+
+    @Test
+    public void shouldGetMessagesAfter_casePersonalMessages() {
+        // given
+        Triplet ids = givenAllTypesMessagesWithPersonal();
+
+        // when then
+        assertGetMessagesForParticipant(ids, chat::getMessagesAfter);
+    }
+
+    @Test
+    public void shouldGetMessagesBefore_casePersonalMessages() {
+        // given
+        Triplet ids = givenAllTypesMessagesWithPersonal();
+
+        // when then
+        assertGetMessagesForParticipant(ids, chat::getMessagesBefore);
+    }
+
+    private void assertGetMessagesForParticipant(Triplet ids, ChatMessages method) {
+        // when then
+        // for room
+        messages.assertThat(1)
+                .in(method.getAll(ROOM, null,
+                        filter("room1", null)));
+
+        messages.assertThat(1, 6)
+                .in(method.getAll(ROOM, null,
+                        filter("room1", "player1")));
+
+        messages.assertThat(1, 11)
+                .in(method.getAll(ROOM, null,
+                        filter("room1", "player2")));
+
+        // for room topic
+        messages.assertThat(2)
+                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
+                        filter("room1", null)));
+
+        messages.assertThat(2, 7)
+                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
+                        filter("room1", "player1")));
+
+        messages.assertThat(2, 12)
+                .in(method.getAll(ROOM_TOPIC, ids.roomTopic,
+                        filter("room1", "player2")));
+
+        // for field
+        messages.assertThat(3)
+                .in(method.getAll(FIELD, ids.field,
+                        filter("room1", null)));
+
+        messages.assertThat(3, 8)
+                .in(method.getAll(FIELD, ids.field,
+                        filter("room1", "player1")));
+
+        messages.assertThat(3, 13)
+                .in(method.getAll(FIELD, ids.field,
+                        filter("room1", "player2")));
+
+        // for field topic
+        messages.assertThat(4)
+                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
+                        filter("room1", null)));
+
+        messages.assertThat(4, 9)
+                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
+                        filter("room1", "player1")));
+
+        messages.assertThat(4, 14)
+                .in(method.getAll(FIELD_TOPIC, ids.fieldTopic,
+                        filter("room1", "player2")));
+    }
+
+    private Filter filter(String room, String recipientId) {
+        return Filter.room(room)
+                .count(MAX)
+                .afterId(0)
+                .beforeId(MAX)
+                .inclusive(true)
+                .recipientId(recipientId)
+                .get();
+    }
+
+    private void assertMessages() {
+        assertEquals("Chat.Message(id=1, topicId=null, type=ROOM(1), room=room1, playerId=player1, recipientId=null, time=1615231523345, text=message1)",
                 chat.getMessageById(1).toString());
 
-        assertEquals("Chat.Message(id=2, topicId=null, type=ROOM, room=room1, playerId=player1, time=1615231623345, text=message2)",
+        assertEquals("Chat.Message(id=2, topicId=1, type=ROOM_TOPIC(2), room=room1, playerId=player1, recipientId=null, time=1615231623345, text=message2)",
                 chat.getMessageById(2).toString());
 
-        assertEquals("Chat.Message(id=3, topicId=null, type=ROOM, room=room1, playerId=player2, time=1615231723345, text=message3)",
+        assertEquals("Chat.Message(id=3, topicId=1, type=FIELD(3), room=room1, playerId=player2, recipientId=null, time=1615231723345, text=message3)",
                 chat.getMessageById(3).toString());
 
-        assertEquals("Chat.Message(id=4, topicId=null, type=ROOM, room=room2, playerId=player2, time=1615231823345, text=message4)",
+        assertEquals("Chat.Message(id=4, topicId=3, type=FIELD_TOPIC(4), room=room1, playerId=player2, recipientId=null, time=1615231823345, text=message4)",
                 chat.getMessageById(4).toString());
+
+        assertEquals("Chat.Message(id=5, topicId=null, type=ROOM(1), room=room2, playerId=player2, recipientId=null, time=1615231923345, text=message5)",
+                chat.getMessageById(5).toString());
+    }
+
+    private void assertAnyMessages() {
+        assertEquals("Chat.Message(id=1, topicId=null, type=ROOM(1), room=room1, playerId=player1, recipientId=null, time=1615231523345, text=message1)",
+                chat.getAnyMessageById(1).toString());
+
+        assertEquals("Chat.Message(id=2, topicId=1, type=ROOM_TOPIC(2), room=room1, playerId=player1, recipientId=null, time=1615231623345, text=message2)",
+                chat.getAnyMessageById(2).toString());
+
+        assertEquals("Chat.Message(id=3, topicId=1, type=FIELD(3), room=room1, playerId=player2, recipientId=null, time=1615231723345, text=message3)",
+                chat.getAnyMessageById(3).toString());
+
+        assertEquals("Chat.Message(id=4, topicId=3, type=FIELD_TOPIC(4), room=room1, playerId=player2, recipientId=null, time=1615231823345, text=message4)",
+                chat.getAnyMessageById(4).toString());
+
+        assertEquals("Chat.Message(id=5, topicId=null, type=ROOM(1), room=room2, playerId=player2, recipientId=null, time=1615231923345, text=message5)",
+                chat.getAnyMessageById(5).toString());
+    }
+
+    @Test
+    public void shouldGetAnyMessageById() {
+        // given
+        messages.post("room1", "player1");                 // 1
+        messages.post("room1", "player1", 1, ROOM_TOPIC);  // 2
+        messages.post("room1", "player2", 1, FIELD);       // 3
+        messages.post("room1", "player2", 3, FIELD_TOPIC); // 4
+        messages.post("room2", "player2");                 // 5
+
+        // when then
+        assertAnyMessages();
+    }
+
+    @Test
+    public void shouldGetAnyMessageById_affectWhenRemove() {
+        // given
+        shouldGetAnyMessageById();
+
+        // when
+        chat.deleteMessage("room1", 1, "player1");
+        chat.deleteMessage("room1", 2, "player1");
+        chat.deleteMessage("room1", 3, "player2");
+        chat.deleteMessage("room2", 4, "player2");
+
+        // then
+        assertAnyMessages();
     }
 
     @Test
@@ -539,13 +738,13 @@ public class ChatTest {
     @Test
     public void shouldDeleteMessageById() {
         // given
-        addMessage("room", "player1"); // id = 1
-        addMessage("room", "player1"); // id = 2
-        addMessage("room", "player2"); // id = 3
-        addMessage("room", "player3"); // id = 4
+        messages.post("room", "player1"); // id = 1
+        messages.post("room", "player1"); // id = 2
+        messages.post("room", "player2"); // id = 3
+        messages.post("room", "player3"); // id = 4
 
         // when then
-        assertThat(1, 2, 3, 4)
+        messages.assertThat(1, 2, 3, 4)
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(10)
@@ -555,7 +754,7 @@ public class ChatTest {
         assertEquals(true, chat.deleteMessage("room", 1, "player1"));
 
         // then
-        assertThat(2, 3, 4)
+        messages.assertThat(2, 3, 4)
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(10)
@@ -565,7 +764,7 @@ public class ChatTest {
         assertEquals(true, chat.deleteMessage("room", 3, "player2"));
 
         // then
-        assertThat(2, 4)
+        messages.assertThat(2, 4)
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(10)
@@ -575,7 +774,7 @@ public class ChatTest {
         assertEquals(true, chat.deleteMessage("room", 4, "player3"));
 
         // then
-        assertThat(2)
+        messages.assertThat(2)
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(10)
@@ -585,7 +784,7 @@ public class ChatTest {
     @Test
     public void shouldDeleteMessageById_whenRoomNotExists() {
         // given
-        addMessage("room", "player"); // id = 1
+        messages.post("room", "player"); // id = 1
 
         // when then
         assertEquals(false, chat.deleteMessage("otherRoom", 1, "player"));
@@ -594,7 +793,7 @@ public class ChatTest {
     @Test
     public void shouldDeleteMessageById_whenInvalidRoom() {
         // given
-        addMessage("room", "player"); // id = 1
+        messages.post("room", "player"); // id = 1
 
         // when then
         assertEquals(false, chat.deleteMessage("room", 100500, "player"));
@@ -603,10 +802,10 @@ public class ChatTest {
     @Test
     public void shouldDeleteMessageById_whenOtherPlayer() {
         // given
-        addMessage("room", "player");
+        messages.post("room", "player");
 
         // then
-        assertThat(1)
+        messages.assertThat(1)
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(10)
@@ -623,8 +822,8 @@ public class ChatTest {
 
         // when then
         // первое сообщение c id = afterId не включается
-        assertThat(3, 5, 7)
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat(3, 5, 7)
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(1)
@@ -632,8 +831,8 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(1, 3, 5, 7)
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat(1, 3, 5, 7)
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(1)
@@ -641,8 +840,8 @@ public class ChatTest {
                                 .get()));
 
         // берутся только два сверху, хотя доступные 3
-        assertThat(3, 5)
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat(3, 5)
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(2)
                                 .afterId(1)
@@ -650,8 +849,8 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(1, 3)
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat(1, 3)
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(2)
                                 .afterId(1)
@@ -659,8 +858,8 @@ public class ChatTest {
                                 .get()));
 
         // можно указывать даже айдишку из другого чата - они порядковые
-        assertThat(3, 5, 7)
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat(3, 5, 7)
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(2)
@@ -668,8 +867,8 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(3, 5, 7)
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat(3, 5, 7)
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(2)
@@ -677,8 +876,8 @@ public class ChatTest {
                                 .get()));
 
         // минус одно сообщение с id = afterId
-        assertThat(5, 7)
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat(5, 7)
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(4)
@@ -686,8 +885,8 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(5, 7)
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat(5, 7)
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(4)
@@ -695,8 +894,8 @@ public class ChatTest {
                                 .get()));
 
         // минус одно сообщение с id = afterId
-        assertThat()
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat()
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(7)
@@ -704,8 +903,8 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(7)
-                .in(chat.getMessagesAfter(null, ROOM,
+        messages.assertThat(7)
+                .in(chat.getMessagesAfter(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(7)
@@ -724,32 +923,32 @@ public class ChatTest {
 
         // when then
         // можно указывать даже айдишку из другого чата - они порядковые
-        assertThat(4, 7, 10, 13)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(4, 7, 10, 13)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(1)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(4, 7)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(4, 7)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(2)
                                 .afterId(1)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(5, 8, 11, 14)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(5, 8, 11, 14)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(1)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(5, 8)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(5, 8)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(2)
                                 .afterId(1)
@@ -757,32 +956,32 @@ public class ChatTest {
                                 .get()));
 
         // сообщение c id = afterId, и id = beforeId не включается
-        assertThat(7, 10, 13)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(7, 10, 13)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(4)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(7, 10)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(7, 10)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(2)
                                 .afterId(4)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(8, 11, 14)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(8, 11, 14)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(5)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(8, 11)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(8, 11)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(2)
                                 .afterId(5)
@@ -790,32 +989,32 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(4, 7, 10, 13)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(4, 7, 10, 13)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(4)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(4, 7)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(4, 7)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(2)
                                 .afterId(4)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(5, 8, 11, 14)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(5, 8, 11, 14)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(5)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(5, 8)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(5, 8)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(2)
                                 .afterId(5)
@@ -823,32 +1022,32 @@ public class ChatTest {
                                 .get()));
 
         // когда встретились на границе
-        assertThat(10, 13)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(10, 13)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(7)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(10)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(10)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(1)
                                 .afterId(7)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(11, 14)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(11, 14)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(8)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(11)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(11)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(1)
                                 .afterId(8)
@@ -856,32 +1055,32 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(7, 10, 13)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(7, 10, 13)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(7)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(7)
-                .in(chat.getMessagesAfter(1, TOPIC,
+        messages.assertThat(7)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(1)
                                 .afterId(7)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(8, 11, 14)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(8, 11, 14)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .afterId(8)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(8)
-                .in(chat.getMessagesAfter(2, TOPIC,
+        messages.assertThat(8)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(1)
                                 .afterId(8)
@@ -905,7 +1104,7 @@ public class ChatTest {
         //      Решил не делать этого. Chat DAO – это универсальное
         //      низкоуровневое апи, я хочу его сделать независимым от
         //      типа сообщений.
-        assertThat(1, 3, 5, 7)
+        messages.assertThat(1, 3, 5, 7)
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
@@ -914,7 +1113,7 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(1, 3, 5, 7)
+        messages.assertThat(1, 3, 5, 7)
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
@@ -923,7 +1122,7 @@ public class ChatTest {
                                 .get()));
 
         // первое сообщение c id = beforeId не включается
-        assertThat(1, 3, 5)
+        messages.assertThat(1, 3, 5)
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
@@ -932,7 +1131,7 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(1, 3, 5, 7)
+        messages.assertThat(1, 3, 5, 7)
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
@@ -941,7 +1140,7 @@ public class ChatTest {
                                 .get()));
 
         // берутся только два но с конца, хотя доступные 3
-        assertThat(3, 5)
+        messages.assertThat(3, 5)
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(2)
@@ -950,7 +1149,7 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(5, 7)
+        messages.assertThat(5, 7)
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(2)
@@ -959,7 +1158,7 @@ public class ChatTest {
                                 .get()));
 
         // минус одно сообщение с id = beforeId
-        assertThat(1, 3)
+        messages.assertThat(1, 3)
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
@@ -968,7 +1167,7 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(1, 3, 5)
+        messages.assertThat(1, 3, 5)
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
@@ -977,7 +1176,7 @@ public class ChatTest {
                                 .get()));
 
         // минус одно сообщение с id = beforeId
-        assertThat()
+        messages.assertThat()
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
@@ -986,7 +1185,7 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(1)
+        messages.assertThat(1)
                 .in(chat.getMessagesBefore(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
@@ -1006,32 +1205,32 @@ public class ChatTest {
 
         // when then
         // можно указывать даже айдишку из другого чата - они порядковые
-        assertThat(4, 7, 10, 13)
-                .in(chat.getMessagesBefore(TOPIC, 1,
+        messages.assertThat(4, 7, 10, 13)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(15)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(10, 13)
-                .in(chat.getMessagesBefore(TOPIC, 1,
+        messages.assertThat(10, 13)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(2)
                                 .beforeId(15)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(5, 8, 11, 14)
-                .in(chat.getMessagesBefore(TOPIC, 2,
+        messages.assertThat(5, 8, 11, 14)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(15)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(11, 14)
-                .in(chat.getMessagesBefore(TOPIC, 2,
+        messages.assertThat(11, 14)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(2)
                                 .beforeId(15)
@@ -1039,32 +1238,32 @@ public class ChatTest {
                                 .get()));
 
         // сообщение c id = afterId, и id = beforeId не включается
-        assertThat(4, 7, 10)
-                .in(chat.getMessagesBefore(TOPIC, 1,
+        messages.assertThat(4, 7, 10)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(13)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(7, 10)
-                .in(chat.getMessagesBefore(TOPIC, 1,
+        messages.assertThat(7, 10)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(2)
                                 .beforeId(13)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(5, 8, 11)
-                .in(chat.getMessagesBefore(TOPIC, 2,
+        messages.assertThat(5, 8, 11)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(14)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(8, 11)
-                .in(chat.getMessagesBefore(TOPIC, 2,
+        messages.assertThat(8, 11)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(2)
                                 .beforeId(14)
@@ -1072,32 +1271,32 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(4, 7, 10, 13)
-                .in(chat.getMessagesBefore(TOPIC, 1,
+        messages.assertThat(4, 7, 10, 13)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(13)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(10, 13)
-                .in(chat.getMessagesBefore(TOPIC, 1,
+        messages.assertThat(10, 13)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(2)
                                 .beforeId(13)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(5, 8, 11, 14)
-                .in(chat.getMessagesBefore(TOPIC, 2,
+        messages.assertThat(5, 8, 11, 14)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(14)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(11, 14)
-                .in(chat.getMessagesBefore(TOPIC, 2,
+        messages.assertThat(11, 14)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(2)
                                 .beforeId(14)
@@ -1105,16 +1304,16 @@ public class ChatTest {
                                 .get()));
 
         // когда встретились на границе
-        assertThat(4)
-                .in(chat.getMessagesBefore(TOPIC, 1,
+        messages.assertThat(4)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(7)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(5)
-                .in(chat.getMessagesBefore(TOPIC, 2,
+        messages.assertThat(5)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(8)
@@ -1122,32 +1321,32 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(4, 7)
-                .in(chat.getMessagesBefore(TOPIC, 1,
+        messages.assertThat(4, 7)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(7)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(7)
-                .in(chat.getMessagesBefore(TOPIC, 1,
+        messages.assertThat(7)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(1)
                                 .beforeId(7)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(5, 8)
-                .in(chat.getMessagesBefore(TOPIC, 2,
+        messages.assertThat(5, 8)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .beforeId(8)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(8)
-                .in(chat.getMessagesBefore(TOPIC, 2,
+        messages.assertThat(8)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(1)
                                 .beforeId(8)
@@ -1163,7 +1362,7 @@ public class ChatTest {
         // when then
         // можно указывать даже айдишку из другого чата - они порядковые
         // но первое сообщение c id = afterId не включается
-        assertThat(3, 5, 7)
+        messages.assertThat(3, 5, 7)
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(1)
@@ -1172,7 +1371,7 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(1, 3, 5, 7)
+        messages.assertThat(1, 3, 5, 7)
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(1)
@@ -1182,7 +1381,7 @@ public class ChatTest {
 
         // первое сообщение c id = beforeId не включается
         // так же как и последнее сообщение c id = afterId тоже не включается
-        assertThat(3, 5)
+        messages.assertThat(3, 5)
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(1)
@@ -1191,7 +1390,7 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(1, 3, 5, 7)
+        messages.assertThat(1, 3, 5, 7)
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(1)
@@ -1201,7 +1400,7 @@ public class ChatTest {
 
         // минус одно сообщение с id = beforeId
         // минус одно сообщение с id = afterId
-        assertThat(5)
+        messages.assertThat(5)
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(3)
@@ -1210,7 +1409,7 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(3, 5, 7)
+        messages.assertThat(3, 5, 7)
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(3)
@@ -1219,7 +1418,7 @@ public class ChatTest {
                                 .get()));
 
         // когда встретились на границе
-        assertThat()
+        messages.assertThat()
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(5)
@@ -1228,7 +1427,7 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(5)
+        messages.assertThat(5)
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(5)
@@ -1248,16 +1447,16 @@ public class ChatTest {
 
         // when then
         // можно указывать даже айдишку из другого чата - они порядковые
-        assertThat(4, 7, 10, 13)
-                .in(chat.getMessagesBetween(TOPIC, 1,
+        messages.assertThat(4, 7, 10, 13)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .afterId(1)
                                 .beforeId(15)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(5, 8, 11, 14)
-                .in(chat.getMessagesBetween(TOPIC, 2,
+        messages.assertThat(5, 8, 11, 14)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .afterId(1)
                                 .beforeId(15)
@@ -1265,16 +1464,16 @@ public class ChatTest {
                                 .get()));
 
         // сообщение c id = afterId, и id = beforeId не включается
-        assertThat(7, 10)
-                .in(chat.getMessagesBetween(TOPIC, 1,
+        messages.assertThat(7, 10)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .afterId(4)
                                 .beforeId(13)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(8, 11)
-                .in(chat.getMessagesBetween(TOPIC, 2,
+        messages.assertThat(8, 11)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .afterId(5)
                                 .beforeId(14)
@@ -1282,16 +1481,16 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(4, 7, 10, 13)
-                .in(chat.getMessagesBetween(TOPIC, 1,
+        messages.assertThat(4, 7, 10, 13)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .afterId(4)
                                 .beforeId(13)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(5, 8, 11, 14)
-                .in(chat.getMessagesBetween(TOPIC, 2,
+        messages.assertThat(5, 8, 11, 14)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .afterId(5)
                                 .beforeId(14)
@@ -1299,16 +1498,16 @@ public class ChatTest {
                                 .get()));
 
         // когда встретились на границе
-        assertThat()
-                .in(chat.getMessagesBetween(TOPIC, 1,
+        messages.assertThat()
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .afterId(7)
                                 .beforeId(7)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat()
-                .in(chat.getMessagesBetween(TOPIC, 2,
+        messages.assertThat()
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .afterId(8)
                                 .beforeId(8)
@@ -1316,16 +1515,16 @@ public class ChatTest {
                                 .get()));
 
         // то же только c inclusive = true
-        assertThat(7)
-                .in(chat.getMessagesBetween(TOPIC, 1,
+        messages.assertThat(7)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .afterId(7)
                                 .beforeId(7)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(8)
-                .in(chat.getMessagesBetween(TOPIC, 2,
+        messages.assertThat(8)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .afterId(8)
                                 .beforeId(8)
@@ -1334,28 +1533,28 @@ public class ChatTest {
     }
 
     public void givenCase() {
-        addMessage("room", "player1");          // id = 1
-        addMessage("otherRoom", "otherPlayer"); // id = 2 // другой чат - не берем
-        addMessage("room", "player1");          // id = 3
-        addMessage("otherRoom", "otherPlayer"); // id = 4 // другой чат - не берем
-        addMessage("room", "player2");          // id = 5
-        addMessage("otherRoom", "otherPlayer"); // id = 6 // другой чат - не берем
-        addMessage("room", "player2");          // id = 7
-        addMessage("otherRoom", "otherPlayer"); // id = 8 // другой чат - не берем
+        messages.post("room", "player1");          // id = 1
+        messages.post("otherRoom", "otherPlayer"); // id = 2 // другой чат - не берем
+        messages.post("room", "player1");          // id = 3
+        messages.post("otherRoom", "otherPlayer"); // id = 4 // другой чат - не берем
+        messages.post("room", "player2");          // id = 5
+        messages.post("otherRoom", "otherPlayer"); // id = 6 // другой чат - не берем
+        messages.post("room", "player2");          // id = 7
+        messages.post("otherRoom", "otherPlayer"); // id = 8 // другой чат - не берем
 
-        assertEquals("[Chat.Message(id=1, topicId=null, type=ROOM, room=room, playerId=player1, time=1615231523345, text=message1), " +
-                        "Chat.Message(id=3, topicId=null, type=ROOM, room=room, playerId=player1, time=1615231723345, text=message3), " +
-                        "Chat.Message(id=5, topicId=null, type=ROOM, room=room, playerId=player2, time=1615231923345, text=message5), " +
-                        "Chat.Message(id=7, topicId=null, type=ROOM, room=room, playerId=player2, time=1615232123345, text=message7)]",
+        assertEquals("[Chat.Message(id=1, topicId=null, type=ROOM(1), room=room, playerId=player1, recipientId=null, time=1615231523345, text=message1), " +
+                        "Chat.Message(id=3, topicId=null, type=ROOM(1), room=room, playerId=player1, recipientId=null, time=1615231723345, text=message3), " +
+                        "Chat.Message(id=5, topicId=null, type=ROOM(1), room=room, playerId=player2, recipientId=null, time=1615231923345, text=message5), " +
+                        "Chat.Message(id=7, topicId=null, type=ROOM(1), room=room, playerId=player2, recipientId=null, time=1615232123345, text=message7)]",
                 chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .get()).toString());
 
-        assertEquals("[Chat.Message(id=2, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615231623345, text=message2), " +
-                        "Chat.Message(id=4, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615231823345, text=message4), " +
-                        "Chat.Message(id=6, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615232023345, text=message6), " +
-                        "Chat.Message(id=8, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615232223345, text=message8)]",
+        assertEquals("[Chat.Message(id=2, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, recipientId=null, time=1615231623345, text=message2), " +
+                        "Chat.Message(id=4, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, recipientId=null, time=1615231823345, text=message4), " +
+                        "Chat.Message(id=6, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, recipientId=null, time=1615232023345, text=message6), " +
+                        "Chat.Message(id=8, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, recipientId=null, time=1615232223345, text=message8)]",
                 chat.getMessages(ROOM, null,
                         Filter.room("otherRoom")
                                 .count(MAX)
@@ -1363,95 +1562,75 @@ public class ChatTest {
     }
 
     public void givenCase_topic() {
-        addMessage("room", "player1");             // id = 1  // первый topic
-        addMessage("room", "player1");             // id = 2  // второй topic
-        addMessage("otherRoom", "otherPlayer");    // id = 3  // другой чат - не берем
-        addMessage("room", "player1", 1, TOPIC);          // id = 4
-        addMessage("room", "player1", 2, TOPIC);          // id = 5
-        addMessage("otherRoom", "otherPlayer", 2, TOPIC); // id = 6  // другой чат - не берем
-        addMessage("room", "player2", 1, TOPIC);          // id = 7
-        addMessage("room", "player2", 2, TOPIC);          // id = 8
-        addMessage("otherRoom", "otherPlayer", 2, TOPIC); // id = 9  // другой чат - не берем
-        addMessage("room", "player2", 1, TOPIC);          // id = 10
-        addMessage("room", "player2", 2, TOPIC);          // id = 11
-        addMessage("otherRoom", "otherPlayer", 2, TOPIC); // id = 12 // другой чат - не берем
-        addMessage("room", "player2", 1, TOPIC);          // id = 13
-        addMessage("room", "player2", 2, TOPIC);          // id = 14
-        addMessage("otherRoom", "otherPlayer", 2, TOPIC); // id = 15 // другой чат - не берем
+        messages.post("room", "player1");                         // id = 1  // первый topic
+        messages.post("room", "player1");                         // id = 2  // второй topic
+        messages.post("otherRoom", "otherPlayer");                // id = 3  // другой чат - не берем
+        messages.post("room", "player1", 1, ROOM_TOPIC);          // id = 4
+        messages.post("room", "player1", 2, ROOM_TOPIC);          // id = 5
+        messages.post("otherRoom", "otherPlayer", 2, ROOM_TOPIC); // id = 6  // другой чат - не берем
+        messages.post("room", "player2", 1, ROOM_TOPIC);          // id = 7
+        messages.post("room", "player2", 2, ROOM_TOPIC);          // id = 8
+        messages.post("otherRoom", "otherPlayer", 2, ROOM_TOPIC); // id = 9  // другой чат - не берем
+        messages.post("room", "player2", 1, ROOM_TOPIC);          // id = 10
+        messages.post("room", "player2", 2, ROOM_TOPIC);          // id = 11
+        messages.post("otherRoom", "otherPlayer", 2, ROOM_TOPIC); // id = 12 // другой чат - не берем
+        messages.post("room", "player2", 1, ROOM_TOPIC);          // id = 13
+        messages.post("room", "player2", 2, ROOM_TOPIC);          // id = 14
+        messages.post("otherRoom", "otherPlayer", 2, ROOM_TOPIC); // id = 15 // другой чат - не берем
 
-        assertEquals("[Chat.Message(id=1, topicId=null, type=ROOM, room=room, playerId=player1, time=1615231523345, text=message1), \n" +
-                        "Chat.Message(id=2, topicId=null, type=ROOM, room=room, playerId=player1, time=1615231623345, text=message2)]",
+        assertEquals("[Chat.Message(id=1, topicId=null, type=ROOM(1), room=room, playerId=player1, recipientId=null, time=1615231523345, text=message1), \n" +
+                        "Chat.Message(id=2, topicId=null, type=ROOM(1), room=room, playerId=player1, recipientId=null, time=1615231623345, text=message2)]",
                 toString(chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(MAX)
                                 .get())));
 
-        assertEquals("[Chat.Message(id=4, topicId=1, type=TOPIC, room=room, playerId=player1, time=1615231823345, text=message4), \n" +
-                        "Chat.Message(id=7, topicId=1, type=TOPIC, room=room, playerId=player2, time=1615232123345, text=message7), \n" +
-                        "Chat.Message(id=10, topicId=1, type=TOPIC, room=room, playerId=player2, time=1615232423345, text=message10), \n" +
-                        "Chat.Message(id=13, topicId=1, type=TOPIC, room=room, playerId=player2, time=1615232723345, text=message13)]",
-                toString(chat.getMessages(TOPIC, 1,
+        assertEquals("[Chat.Message(id=4, topicId=1, type=ROOM_TOPIC(2), room=room, playerId=player1, recipientId=null, time=1615231823345, text=message4), \n" +
+                        "Chat.Message(id=7, topicId=1, type=ROOM_TOPIC(2), room=room, playerId=player2, recipientId=null, time=1615232123345, text=message7), \n" +
+                        "Chat.Message(id=10, topicId=1, type=ROOM_TOPIC(2), room=room, playerId=player2, recipientId=null, time=1615232423345, text=message10), \n" +
+                        "Chat.Message(id=13, topicId=1, type=ROOM_TOPIC(2), room=room, playerId=player2, recipientId=null, time=1615232723345, text=message13)]",
+                toString(chat.getMessages(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .get())));
 
-        assertEquals("[Chat.Message(id=5, topicId=2, type=TOPIC, room=room, playerId=player1, time=1615231923345, text=message5), \n" +
-                        "Chat.Message(id=8, topicId=2, type=TOPIC, room=room, playerId=player2, time=1615232223345, text=message8), \n" +
-                        "Chat.Message(id=11, topicId=2, type=TOPIC, room=room, playerId=player2, time=1615232523345, text=message11), \n" +
-                        "Chat.Message(id=14, topicId=2, type=TOPIC, room=room, playerId=player2, time=1615232823345, text=message14)]",
-                toString(chat.getMessages(TOPIC, 2,
+        assertEquals("[Chat.Message(id=5, topicId=2, type=ROOM_TOPIC(2), room=room, playerId=player1, recipientId=null, time=1615231923345, text=message5), \n" +
+                        "Chat.Message(id=8, topicId=2, type=ROOM_TOPIC(2), room=room, playerId=player2, recipientId=null, time=1615232223345, text=message8), \n" +
+                        "Chat.Message(id=11, topicId=2, type=ROOM_TOPIC(2), room=room, playerId=player2, recipientId=null, time=1615232523345, text=message11), \n" +
+                        "Chat.Message(id=14, topicId=2, type=ROOM_TOPIC(2), room=room, playerId=player2, recipientId=null, time=1615232823345, text=message14)]",
+                toString(chat.getMessages(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .get())));
 
-        assertEquals("[Chat.Message(id=3, topicId=null, type=ROOM, room=otherRoom, playerId=otherPlayer, time=1615231723345, text=message3)]",
+        assertEquals("[Chat.Message(id=3, topicId=null, type=ROOM(1), room=otherRoom, playerId=otherPlayer, recipientId=null, time=1615231723345, text=message3)]",
                 toString(chat.getMessages(ROOM, null,
                         Filter.room("otherRoom")
                                 .count(MAX)
                                 .get())));
 
         assertEquals("[]",
-                toString(chat.getMessages(TOPIC, 3,
+                toString(chat.getMessages(ROOM_TOPIC, 3,
                         Filter.room("otherRoom")
                                 .count(MAX)
                                 .get())));
     }
 
-    public Chat.Message addMessage(String room, String player) {
-        return addMessage(room, player, null, ROOM);
-    }
-
-    public Chat.Message addMessage(String room, String player, Integer topicId, ChatType type) {
-        return addMessage(chat, messages, room, player, topicId, type);
-    }
-
-    public static Chat.Message addMessage(Chat chat, List<Chat.Message> messages, String room, String player, Integer topicId, ChatType type) {
-        long time = JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200");
-        int index = messages.size() + 1;
-        Chat.Message message = new Chat.Message(
-                room, topicId, type, player,
-                time + 100000L * index,
-                "message" + index);
-        Chat.Message added = chat.saveMessage(message);
-        messages.add(added);
-        return added;
-    }
-
     @Test
     public void shouldGetAllTopicMessages() {
         // given
-        addMessage("room", "player");       // id = 1 // message in room, will be topic 1
-        addMessage("room", "player");       // id = 2 // message in room, will be topic 2
-        addMessage("room", "player", 1, TOPIC);    // id = 3 // message for topic1
-        addMessage("room", "player");       // id = 4 // just another one message in room
-        addMessage("room", "player", 2, TOPIC);    // id = 5 // message for topic2
-        addMessage("room", "player", 1, TOPIC);    // id = 6 // message for topic1
-        addMessage("room", "player");       // id = 7 // just another one message in room
-        addMessage("room", "player", 1, TOPIC);    // id = 8 // message for topic1
+        messages.post("room", "player");                // id = 1 // message in room, will be topic 1
+        messages.post("room", "player");                // id = 2 // message in room, will be topic 2
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 3 // message for topic1
+        messages.post("room", "player");                // id = 4 // just another one message in room
+        messages.post("room", "player", 2, ROOM_TOPIC); // id = 5 // message for topic2
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 6 // message for topic1
+        messages.post("room", "player");                // id = 7 // just another one message in room
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 8 // message for topic1
 
         // when then
         // all for room
-        assertThat(1, 2, 4, 7)
+        messages.assertThat(1, 2, 4, 7)
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(10)
@@ -1459,27 +1638,27 @@ public class ChatTest {
 
         // when then
         // all for topic 1 message in room
-        assertThat(3, 6, 8)
-                .in(chat.getTopicMessages(1));
+        messages.assertThat(3, 6, 8)
+                .in(chat.getTopicMessages(ROOM_TOPIC, 1));
 
         // when then
         // all for topic 2 message in room
-        assertThat(5)
-                .in(chat.getTopicMessages(2));
+        messages.assertThat(5)
+                .in(chat.getTopicMessages(ROOM_TOPIC, 2));
 
         // when then
         // get topic message like room message
-        assertThat()
-                .in(chat.getTopicMessages(3));
+        messages.assertThat()
+                .in(chat.getTopicMessages(ROOM_TOPIC, 3));
 
         // when then
         // all for non topic message in room
-        assertThat()
-                .in(chat.getTopicMessages(4));
+        messages.assertThat()
+                .in(chat.getTopicMessages(ROOM_TOPIC, 4));
 
         // when then
         // between messages in topic -> room messages between 3 ... 8
-        assertThat(4, 7)
+        messages.assertThat(4, 7)
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(3)
@@ -1489,20 +1668,473 @@ public class ChatTest {
     }
 
     @Test
-    public void shouldGetAllMessages_caseTopic() {
+    public void shouldGetMessages_affectWhenRemove() {
         // given
-        addMessage("room", "player");       // id = 1 // message in room, will be topic 1
-        addMessage("room", "player");       // id = 2 // message in room, will be topic 2
-        addMessage("room", "player", 1, TOPIC);    // id = 3 // message for topic1
-        addMessage("room", "player");       // id = 4 // just another one message in room
-        addMessage("room", "player", 2, TOPIC);    // id = 5 // message for topic2
-        addMessage("room", "player", 1, TOPIC);    // id = 6 // message for topic1
-        addMessage("room", "player");       // id = 7 // just another one message in room
-        addMessage("room", "player", 1, TOPIC);    // id = 8 // message for topic1
+        givenMessages_affectWhenRemove();
 
         // when then
         // all for room
-        assertThat(1, 2, 4, 7)
+        messages.assertThat(1, 2, 7, 13)
+                .in(chat.getMessages(ROOM, null,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // when then
+        // all for topic
+        messages.assertThat(3, 4, 11, 14)
+                .in(chat.getMessages(ROOM_TOPIC, 1,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // all for field
+        messages.assertThat(5, 6, 12)
+                .in(chat.getMessages(FIELD, 1,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // all for field
+        messages.assertThat(9)
+                .in(chat.getMessages(FIELD, 2,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // when
+        removeSeveralMessages_affectWhenRemove();
+
+        // when then
+        // all for room
+        messages.assertThat(1, 7, 13)
+                .in(chat.getMessages(ROOM, null,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // when then
+        // all for topic
+        messages.assertThat(3, 11, 14)
+                .in(chat.getMessages(ROOM_TOPIC, 1,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // all for field
+        messages.assertThat(5, 12)
+                .in(chat.getMessages(FIELD, 1,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+
+        // all for field
+        messages.assertThat()
+                .in(chat.getMessages(FIELD, 2,
+                        Filter.room("room")
+                                .count(10)
+                                .get()));
+    }
+
+    @Test
+    public void shouldGetById_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
+
+        assertEquals("Chat.Message(id=2, topicId=null, type=ROOM(1), room=room, playerId=player, recipientId=null, time=1615231623345, text=message2)",
+                chat.getMessageById(2).toString());
+
+        assertEquals("Chat.Message(id=4, topicId=1, type=ROOM_TOPIC(2), room=room, playerId=player, recipientId=null, time=1615231823345, text=message4)",
+                chat.getMessageById(4).toString());
+
+        assertEquals("Chat.Message(id=6, topicId=1, type=FIELD(3), room=room, playerId=player, recipientId=null, time=1615232023345, text=message6)",
+                chat.getMessageById(6).toString());
+
+        assertEquals("Chat.Message(id=9, topicId=2, type=FIELD(3), room=room, playerId=player, recipientId=null, time=1615232323345, text=message9)",
+                chat.getMessageById(9).toString());
+
+        assertEquals("Chat.Message(id=10, topicId=2, type=ROOM_TOPIC(2), room=room, playerId=player, recipientId=null, time=1615232423345, text=message10)",
+                chat.getMessageById(10).toString());
+
+        // when
+        removeSeveralMessages_affectWhenRemove();
+
+        assertEquals(null, chat.getMessageById(2));
+        assertEquals(null, chat.getMessageById(4));
+        assertEquals(null, chat.getMessageById(6));
+        assertEquals(null, chat.getMessageById(9));
+        assertEquals(null, chat.getMessageById(10));
+    }
+
+    @Test
+    public void shouldGetTopicMessages_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
+
+        // when then
+        // all for topic 1 message in room
+        messages.assertThat(3, 4, 11, 14)
+                .in(chat.getTopicMessages(ROOM_TOPIC, 1));
+
+        // when then
+        // all for topic 2 message in room
+        messages.assertThat(8, 10)
+                .in(chat.getTopicMessages(ROOM_TOPIC, 2));
+
+        // when then
+        // get topic message like room message
+        messages.assertThat()
+                .in(chat.getTopicMessages(ROOM_TOPIC, 3));
+
+        // when then
+        // all for non topic message in room
+        messages.assertThat()
+                .in(chat.getTopicMessages(ROOM_TOPIC, 4));
+
+        // when
+        removeSeveralMessages_affectWhenRemove();
+
+        // when then
+        // all for topic 1 message in room
+        messages.assertThat(3, 11, 14)
+                .in(chat.getTopicMessages(ROOM_TOPIC, 1));
+
+        // when then
+        // all for topic 2 message in room
+        messages.assertThat(8)
+                .in(chat.getTopicMessages(ROOM_TOPIC, 2));
+
+        // when then
+        // get topic message like room message
+        messages.assertThat()
+                .in(chat.getTopicMessages(ROOM_TOPIC, 3));
+
+        // when then
+        // all for non topic message in room
+        messages.assertThat()
+                .in(chat.getTopicMessages(ROOM_TOPIC, 4));
+    }
+
+    @Test
+    public void shouldGetMessagesBetween_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
+
+        // when then
+        // get room messages
+        messages.assertThat(1, 2, 7, 13)
+                .in(chat.getMessagesBetween(ROOM, null,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(3, 4, 11, 14)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(5, 6, 12)
+                .in(chat.getMessagesBetween(FIELD, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(9)
+                .in(chat.getMessagesBetween(FIELD, 2,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when
+        removeSeveralMessages_affectWhenRemove();
+
+        // when then
+        // get room messages
+        messages.assertThat(1, 7, 13)
+                .in(chat.getMessagesBetween(ROOM, null,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(3, 11, 14)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(5, 12)
+                .in(chat.getMessagesBetween(FIELD, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat()
+                .in(chat.getMessagesBetween(FIELD, 2,
+                        Filter.room("room")
+                                .afterId(1)
+                                .beforeId(14)
+                                .inclusive(true)
+                                .get()));
+    }
+
+    @Test
+    public void shouldGetMessagesAfter_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
+
+        // when then
+        // get room messages
+        messages.assertThat(1, 2, 7, 13)
+                .in(chat.getMessagesAfter(ROOM, null,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(3, 4, 11, 14)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(5, 6, 12)
+                .in(chat.getMessagesAfter(FIELD, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(9)
+                .in(chat.getMessagesAfter(FIELD, 2,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when
+        removeSeveralMessages_affectWhenRemove();
+
+        // when then
+        // get room messages
+        messages.assertThat(1, 7, 13)
+                .in(chat.getMessagesAfter(ROOM, null,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(3, 11, 14)
+                .in(chat.getMessagesAfter(ROOM_TOPIC, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(5, 12)
+                .in(chat.getMessagesAfter(FIELD, 1,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat()
+                .in(chat.getMessagesAfter(FIELD, 2,
+                        Filter.room("room")
+                                .afterId(1)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+    }
+
+    @Test
+    public void shouldGetMessagesBefore_affectWhenRemove() {
+        // given
+        givenMessages_affectWhenRemove();
+
+        // when then
+        // get room messages
+        messages.assertThat(1, 2, 7, 13)
+                .in(chat.getMessagesBefore(ROOM, null,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(3, 4, 11, 14)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(5, 6, 12)
+                .in(chat.getMessagesBefore(FIELD, 1,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(9)
+                .in(chat.getMessagesBefore(FIELD, 2,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+
+
+        // when
+        removeSeveralMessages_affectWhenRemove();
+
+        // when then
+        // get room messages
+        messages.assertThat(1, 7, 13)
+                .in(chat.getMessagesBefore(ROOM, null,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get topic messages
+        messages.assertThat(3, 11, 14)
+                .in(chat.getMessagesBefore(ROOM_TOPIC, 1,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat(5, 12)
+                .in(chat.getMessagesBefore(FIELD, 1,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+
+        // when then
+        // get field messages
+        messages.assertThat()
+                .in(chat.getMessagesBefore(FIELD, 2,
+                        Filter.room("room")
+                                .beforeId(14)
+                                .inclusive(true)
+                                .count(10)
+                                .get()));
+    }
+
+    private void removeSeveralMessages_affectWhenRemove() {
+        // remove several messages
+        // id = 2  // message in room, will be topic2
+        chat.deleteMessage("room", 2, "player");
+
+        // id = 4  // message for topic1
+        chat.deleteMessage("room", 4, "player");
+
+        // id = 6  // message for field1
+        chat.deleteMessage("room", 6, "player");
+
+        // id = 9  // message for field1
+        chat.deleteMessage("room", 9, "player");
+
+        // id = 10 // message for topic2
+        chat.deleteMessage("room", 10, "player");
+    }
+
+    private void givenMessages_affectWhenRemove() {
+        messages.post("room", "player");                // id = 1  // message in room, will be topic1
+        messages.post("room", "player");                // id = 2  // message in room, will be topic2
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 3  // message for room topic1
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 4  // message for room topic1
+        messages.post("room", "player", 1, FIELD);      // id = 5  // message for field1
+        messages.post("room", "player", 1, FIELD);      // id = 6  // message for field1
+        messages.post("room", "player");                // id = 7  // just another one message in room
+        messages.post("room", "player", 2, ROOM_TOPIC); // id = 8  // message for room topic2
+        messages.post("room", "player", 2, FIELD);      // id = 9  // message for field1
+        messages.post("room", "player", 2, ROOM_TOPIC); // id = 10 // message for room topic2
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 11 // message for room topic1
+        messages.post("room", "player", 1, FIELD);      // id = 12 // message for field1
+        messages.post("room", "player");                // id = 13 // just another one message in room
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 14 // message for room topic1
+    }
+
+    @Test
+    public void shouldGetAllMessages_caseTopic() {
+        // given
+        messages.post("room", "player");                // id = 1 // message in room, will be topic 1
+        messages.post("room", "player");                // id = 2 // message in room, will be topic 2
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 3 // message for topic1
+        messages.post("room", "player");                // id = 4 // just another one message in room
+        messages.post("room", "player", 2, ROOM_TOPIC); // id = 5 // message for topic2
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 6 // message for topic1
+        messages.post("room", "player");                // id = 7 // just another one message in room
+        messages.post("room", "player", 1, ROOM_TOPIC); // id = 8 // message for topic1
+
+        // when then
+        // all for room
+        messages.assertThat(1, 2, 4, 7)
                 .in(chat.getMessages(ROOM, null,
                         Filter.room("room")
                                 .count(10)
@@ -1510,51 +2142,51 @@ public class ChatTest {
 
         // when then
         // all for topic 1 message in room
-        assertThat(3, 6, 8)
-                .in(chat.getMessages(TOPIC, 1,
+        messages.assertThat(3, 6, 8)
+                .in(chat.getMessages(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(MAX)
                                 .get()));
 
-        assertThat(6, 8)
-                .in(chat.getMessages(TOPIC, 1,
+        messages.assertThat(6, 8)
+                .in(chat.getMessages(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .count(2)
                                 .get()));
 
         // when then
         // all for topic 2 message in room
-        assertThat(5)
-                .in(chat.getMessages(TOPIC, 2,
+        messages.assertThat(5)
+                .in(chat.getMessages(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(MAX)
                                 .get()));
 
-        assertThat(5)
-                .in(chat.getMessages(TOPIC, 2,
+        messages.assertThat(5)
+                .in(chat.getMessages(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .count(1)
                                 .get()));
 
         // when then
         // get topic message like room message
-        assertThat()
-                .in(chat.getMessages(TOPIC, 3,
+        messages.assertThat()
+                .in(chat.getMessages(ROOM_TOPIC, 3,
                         Filter.room("room")
                                 .count(MAX)
                                 .get()));
 
         // when then
         // all for non topic message in room
-        assertThat()
-                .in(chat.getMessages(TOPIC, 4,
+        messages.assertThat()
+                .in(chat.getMessages(ROOM_TOPIC, 4,
                         Filter.room("room")
                                 .count(MAX)
                                 .get()));
 
         // when then
         // between messages in case between 3 ... 8
-        assertThat(4, 7)
+        messages.assertThat(4, 7)
                 .in(chat.getMessagesBetween(ROOM, null,
                         Filter.room("room")
                                 .afterId(3)
@@ -1562,32 +2194,32 @@ public class ChatTest {
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(3, 6, 8)
-                .in(chat.getMessagesBetween(TOPIC, 1,
+        messages.assertThat(3, 6, 8)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .afterId(3)
                                 .beforeId(8)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat(6)
-                .in(chat.getMessagesBetween(TOPIC, 1,
+        messages.assertThat(6)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 1,
                         Filter.room("room")
                                 .afterId(3)
                                 .beforeId(8)
                                 .inclusive(false)
                                 .get()));
 
-        assertThat(5)
-                .in(chat.getMessagesBetween(TOPIC, 2,
+        messages.assertThat(5)
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 2,
                         Filter.room("room")
                                 .afterId(3)
                                 .beforeId(8)
                                 .inclusive(true)
                                 .get()));
 
-        assertThat()
-                .in(chat.getMessagesBetween(TOPIC, 3,
+        messages.assertThat()
+                .in(chat.getMessagesBetween(ROOM_TOPIC, 3,
                         Filter.room("room")
                                 .afterId(3)
                                 .beforeId(8)
@@ -1598,58 +2230,71 @@ public class ChatTest {
     @Test
     public void shouldGetLastFieldId() {
         // when then
-        addMessage("room", "player");      // room  chat
+        messages.post("room", "player");      // room  chat
         assertEquals(0, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player");      // room  chat
+        messages.post("room", "player");      // room  chat
         assertEquals(0, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player", 1, FIELD);  // field chat
+        messages.post("room", "player", 1, FIELD);  // field chat
         assertEquals(1, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player");      // room  chat
+        messages.post("room", "player");      // room  chat
         assertEquals(1, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player", 1, TOPIC);   // topic chat
+        messages.post("room", "player", 1, ROOM_TOPIC);   // topic chat
         assertEquals(1, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player", 2, TOPIC);   // topic chat
+        messages.post("room", "player", 2, ROOM_TOPIC);   // topic chat
         assertEquals(1, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player", 3, FIELD);  // field chat
+        messages.post("room", "player", 3, FIELD);  // field chat
         assertEquals(3, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player", 51, FIELD); // field chat
+        messages.post("room", "player", 51, FIELD); // field chat
         assertEquals(51, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player", 2, FIELD);  // field chat
+        messages.post("room", "player", 2, FIELD);  // field chat
         assertEquals(51, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player");      // room  chat
+        messages.post("room", "player");      // room  chat
         assertEquals(51, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player", 60, TOPIC);  // topic chat
+        messages.post("room", "player", 60, ROOM_TOPIC);  // topic chat
         assertEquals(51, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player", 1, TOPIC);   // topic chat
+        messages.post("room", "player", 1, ROOM_TOPIC);   // topic chat
         assertEquals(51, chat.getLastFieldId());
 
         // when then
         assertEquals(51, chat.getLastFieldId());
 
         // when then
-        addMessage("room", "player", 62, FIELD); // field chat
+        messages.post("room", "player", 62, FIELD); // field chat
         assertEquals(62, chat.getLastFieldId());
     }
+
+    @Test
+    public void shouldGetLastFieldId_doNotAffectWhenRemove() {
+        // given
+        shouldGetLastFieldId();
+
+        // when then
+        messages.removeAll(FIELD, 62, "room",
+                "[Chat.Message(id=13, topicId=62, type=FIELD(3), room=room, playerId=player, recipientId=null, time=1615232723345, text=message13)]");
+
+        assertEquals(62, chat.getLastFieldId());
+    }
+
 }

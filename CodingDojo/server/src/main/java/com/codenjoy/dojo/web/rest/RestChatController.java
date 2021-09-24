@@ -39,6 +39,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.dao.Chat.FOR_ALL;
+
 /**
  * Rest сервис для работы с чатом.
  *
@@ -121,8 +123,8 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.postMessage(ChatType.ROOM, null,
-                room, message.getText(),
+        return chat.postMessageForRoom(
+                message.getText(), room,
                 user.getId());
     }
 
@@ -149,8 +151,8 @@ public class RestChatController {
     {
         validator.checkUser(user);
 
-        return chat.postMessage(ChatType.TOPIC, id,
-                room, message.getText(),
+        return chat.postMessageForTopic(id,
+                message.getText(), room,
                 user.getId());
     }
 
@@ -176,7 +178,7 @@ public class RestChatController {
         validator.checkUser(user);
 
         return chat.postMessageForField(message.getText(),
-                room, user.getId());
+                room, user.getId(), FOR_ALL);
     }
 
     /**
@@ -285,7 +287,7 @@ public class RestChatController {
                 .inclusive(inclusive)
                 .get();
 
-        return chat.getFieldMessages(room, user.getId(), filter);
+        return chat.getFieldMessages(user.getId(), filter);
     }
 
     /**

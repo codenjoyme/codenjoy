@@ -52,6 +52,11 @@ public class AppConfig {
     }
 
     @Bean
+    public PlayerTransport chatPlayerTransport() {
+        return new PlayerTransportImpl();
+    }
+
+    @Bean
     public DebugService debugService(@Value("${log.debug}") boolean active,
                                      @Value("${log.filter}") String[] filter)
     {

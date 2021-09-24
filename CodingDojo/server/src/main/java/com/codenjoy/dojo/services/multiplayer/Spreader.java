@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
+import com.codenjoy.dojo.services.Player;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +66,9 @@ public class Spreader {
             add(room, gameRoom);
         }
 
-        return gameRoom.join(deal);
+        GameField field = gameRoom.join(deal);
+        deal.chat().postField("Player joined the field", room);
+        return field;
     }
 
     private void add(String room, GameRoom gameRoom) {
@@ -85,13 +88,17 @@ public class Spreader {
      * оставаться на борде не имеет смысла
      */
     public List<Deal> remove(Deal deal, Sweeper sweeper) {
-        Optional<GameRoom> optional = roomsFor(deal);
+        Optional<GameRoom> optional = roomFor(deal);
 
         if (!optional.isPresent()) {
             return Arrays.asList();
         }
 
         GameRoom room = optional.get();
+
+        deal.chat().postField("Player left the field", deal.getRoom());
+        deal.getGame().close();
+
         List<Deal> removed = room.remove(deal, sweeper);
 
         removeIfEmpty(room);
@@ -112,20 +119,36 @@ public class Spreader {
                 .forEach(key -> rooms.remove(key, room));
     }
 
-    private Optional<GameRoom> roomsFor(Deal deal) {
+    private Optional<GameRoom> roomFor(Deal deal) {
         return rooms.values().stream()
                 .filter(room -> room.containsDeal(deal))
                 .findFirst();
     }
 
-    private Optional<GameRoom> roomsFor(GameField field) {
+    private Optional<GameRoom> roomFor(GameField field) {
         return rooms.values().stream()
                 .filter(room -> room.isFor(field))
                 .findFirst();
     }
 
+    public List<Player> players(String roomName) {
+        return rooms.values().stream()
+                .filter(room -> room.name().equals(roomName))
+                .flatMap(room -> room.deals().stream())
+                .map(Deal::getPlayer)
+                .collect(toList());
+    }
+
+    public List<Player> players(int fieldId) {
+        return rooms.values().stream()
+                .filter(room -> fields.id(room.field()) == fieldId)
+                .flatMap(room -> room.deals().stream())
+                .map(Deal::getPlayer)
+                .collect(toList());
+    }
+
     public boolean contains(Deal deal) {
-        return !roomsFor(deal).isEmpty();
+        return !roomFor(deal).isEmpty();
     }
 
     public boolean isRoomStaffed(GameField field) {
@@ -133,7 +156,7 @@ public class Spreader {
             throw new IllegalArgumentException("Field is null");
         }
 
-        return roomsFor(field)
+        return roomFor(field)
                 .orElseThrow(() -> new IllegalStateException(
                         "There is no room for field: " + field.hashCode()))
                 .isStuffed();
@@ -144,7 +167,12 @@ public class Spreader {
     }
 
     public Optional<GameRoom> gameRoom(String room, String playerId) {
-        return rooms.get(room).stream()
+        // так надо потому, что в rooms обычно комнаты будут 'room',
+        // но для levels типов уровней будут 'room[N]', где N уровень
+        // TODO #7D4 быть может стоит как-то 'иначее' называть комнаты для levels?
+        return rooms.keys().stream()
+                .filter(key -> key.equals(room) || key.startsWith(room + "["))
+                .flatMap(key -> rooms.get(key).stream())
                 .filter(r -> r.containsPlayer(playerId))
                 .findFirst();
     }

@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -36,13 +35,18 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static com.codenjoy.dojo.services.Deals.*;
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
-import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.DISPOSABLE;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class DealsTest extends AbstractDealsTest {
@@ -801,7 +805,7 @@ public class DealsTest extends AbstractDealsTest {
         assertRooms("{0=[player1, player2]}");
 
         // when
-        deals.reload("player1", Sweeper.on().lastAlone());
+        deals.reload(deals.get("player1"), Sweeper.on().lastAlone());
 
         // then
         // created new field for player3
@@ -821,7 +825,7 @@ public class DealsTest extends AbstractDealsTest {
         assertRooms("{0=[player1, player2]}");
 
         // when
-        deals.reload("player1", Sweeper.off());
+        deals.reload(deals.get("player1"), Sweeper.off());
 
         // then
         assertRooms("{0=[player2], 1=[player1]}");
@@ -1086,12 +1090,12 @@ public class DealsTest extends AbstractDealsTest {
         ArgumentCaptor<LevelProgress> captor = ArgumentCaptor.forClass(LevelProgress.class);
         Player player = deals.get(playerId).getPlayer();
         if (expected == null) {
-            verifyNoMoreInteractions(player.getEventListener());
+            verifyNoMoreInteractions(player.getInfo());
         } else {
-            verify(player.getEventListener(), times(ONCE)).levelChanged(captor.capture());
+            verify(player.getInfo(), times(ONCE)).levelChanged(captor.capture());
             assertEquals(expected, captor.getValue().toString());
         }
-        reset(player.getEventListener());
+        reset(player.getInfo());
     }
 
     @Test
@@ -2152,7 +2156,9 @@ public class DealsTest extends AbstractDealsTest {
     @Test
     public void testAdd_gamePlayerGetTeamIdFromSave() {
         // given
-        Player player = new Player("player", "url", new FirstGameType(), null, null);
+        Player player = createPlayer();
+        deals.remove(player.getId(), Sweeper.off());
+
         int teamId = 3;
         PlayerSave playerSave = new PlayerSave("player", teamId, "url", "game", "room", 0, "{}");
 
@@ -2167,7 +2173,8 @@ public class DealsTest extends AbstractDealsTest {
     @Test
     public void testAdd_gamePlayerDefaultTeamIdBecauseNullSave() {
         // given
-        Player player = new Player("player", "url", new FirstGameType(), null, null);
+        Player player = createPlayer();
+        deals.remove(player.getId(), Sweeper.off());
 
         // when
         deals.add(player, "room", PlayerSave.NULL);
@@ -2180,7 +2187,8 @@ public class DealsTest extends AbstractDealsTest {
     @Test
     public void testAdd_gamePlayerDefaultTeamIdBecauseNoSave() {
         // given
-        Player player = new Player("player", "url", new FirstGameType(), null, null);
+        Player player = createPlayer();
+        deals.remove(player.getId(), Sweeper.off());
 
         // when
         deals.add(player, "room", null);

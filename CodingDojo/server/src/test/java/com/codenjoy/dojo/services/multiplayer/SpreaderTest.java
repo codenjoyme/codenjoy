@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.multiplayer;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,9 +26,13 @@ import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.FieldService;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.stuff.SmartAssert;
 import com.google.common.collect.Iterators;
+import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -38,10 +42,11 @@ import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertSame;
 import static org.mockito.Mockito.*;
 
+// TODO try @SpringBootTest
 public class SpreaderTest {
 
     private final Spreader spreader = new Spreader(){{
@@ -50,12 +55,14 @@ public class SpreaderTest {
     private FieldService fieldService;
     private final String room = "room";
     private final MultiplayerType multiplayerType = MultiplayerType.MULTIPLE;
+    private final MultiplayerType levelsType = MultiplayerType.SINGLE_LEVELS.apply(5);
     private final Supplier<GameField> getField = () -> newField();
     private List<GameField> fields = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
 
     private Player newPlayer() {
         Player result = new Player("player" + players.size());
+        result.setInfo(mock(Information.class));
         players.add(result);
         return result;
     }
@@ -70,8 +77,14 @@ public class SpreaderTest {
         GamePlayer gamePlayer = new GamePlayer(event -> {}, settings) {};
         Game game = new Single(gamePlayer, null);
         Deal result = new Deal(newPlayer(), game, room);
+        ChatDealsUtils.setupChat(result);
         result.setTeamId(teamId);
         return result;
+    }
+
+    @After
+    public void after() {
+        SmartAssert.checkResult();
     }
 
     @Test
@@ -152,7 +165,7 @@ public class SpreaderTest {
     }
 
     @Test
-    public void testGetGameRoom() {
+    public void testGetGameRoom_caseMultiplayerType() {
         // given
         int roomSize = 10;
         SettingsReader settings = settings(roomSize, 1);
@@ -177,24 +190,57 @@ public class SpreaderTest {
         assertSame(room1, room2);
 
         assertEquals(room, room1.name());
-        assertEquals(2, room1.countPlayers());
-        assertEquals(true, room1.containsPlayer(deal1.getPlayerId()));
-        assertEquals(true, room1.containsPlayer(deal2.getPlayerId()));
-        assertEquals(true, room1.containsDeal(deal1));
-        assertEquals(true, room1.containsDeal(deal2));
-        assertEquals(true, room1.containsTeam(0));
-        assertEquals(false, room1.containsTeam(1));
-        assertEquals(false, room1.isEmpty());
-        assertEquals(true, room1.isFree());
-        assertEquals(2, room1.countMembers(0));
-        assertEquals(0, room1.countMembers(1));
-        assertEquals(2, room1.countPlayers());
-        assertEquals(true, room1.isFor(room1.field()));
-        assertEquals(true, room1.deals().containsAll(Arrays.asList(deal1, deal2)));
+        assertOtherFields(room1, deal1, deal2);
+    }
+
+    private void assertOtherFields(GameRoom room, Deal deal1, Deal deal2) {
+        assertEquals(2, room.countPlayers());
+        assertEquals(true, room.containsPlayer(deal1.getPlayerId()));
+        assertEquals(true, room.containsPlayer(deal2.getPlayerId()));
+        assertEquals(true, room.containsDeal(deal1));
+        assertEquals(true, room.containsDeal(deal2));
+        assertEquals(true, room.containsTeam(0));
+        assertEquals(false, room.containsTeam(1));
+        assertEquals(false, room.isEmpty());
+        assertEquals(true, room.isFree());
+        assertEquals(2, room.countMembers(0));
+        assertEquals(0, room.countMembers(1));
+        assertEquals(2, room.countPlayers());
+        assertEquals(true, room.isFor(room.field()));
+        assertEquals(true, room.deals().containsAll(Arrays.asList(deal1, deal2)));
 
         // when then
         assertEquals(false, spreader.gameRoom("otherRoom", deal1.getPlayerId()).isPresent());
-        assertEquals(false, spreader.gameRoom(room, "otherPlayer").isPresent());
+        assertEquals(false, spreader.gameRoom(this.room, "otherPlayer").isPresent());
+    }
+
+    @Test
+    public void testGetGameRoom_caseLevelType() {
+        // given
+        int roomSize = 10;
+        SettingsReader settings = settings(roomSize, 1);
+
+        Deal deal1 = newDeal(0, settings);
+        Deal deal2 = newDeal(0, settings);
+
+        spreader.fieldFor(deal1, room, levelsType, roomSize, 0, getField);
+        spreader.fieldFor(deal2, room, levelsType, roomSize, 0, getField);
+
+        // when
+        Optional<GameRoom> optional1 = spreader.gameRoom(room, deal1.getPlayerId());
+        Optional<GameRoom> optional2 = spreader.gameRoom(room, deal2.getPlayerId());
+
+        // then
+        assertEquals(true, optional1.isPresent());
+        GameRoom room1 = optional1.get();
+
+        assertEquals(true, optional2.isPresent());
+        GameRoom room2 = optional2.get();
+
+        assertSame(room1, room2);
+
+        assertEquals(room + "[0]", room1.name());
+        assertOtherFields(room1, deal1, deal2);
     }
 
     @Test

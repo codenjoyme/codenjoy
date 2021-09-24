@@ -24,45 +24,48 @@ package com.codenjoy.dojo.services;
 
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+@Slf4j
 public class WebSocketRunnerMock {
 
     private final String server;
-    private final String userName;
+    private final String id;
     private final String code;
     private Session session;
     private WebSocketClient wsClient;
     private String answer;
-    private static boolean started;
+    private boolean replyToServerImmediately;
+    private AtomicBoolean started = new AtomicBoolean();
     private String request;
-    private static boolean closed;
+    private AtomicBoolean closed = new AtomicBoolean();
     private int times;
     private boolean onlyOnce;
     private boolean answered;
-    public List<String> messages = new LinkedList<>();
+    private List<String> messages = new LinkedList<>();
+    private Throwable error;
 
-    public WebSocketRunnerMock(String server, String userName, String code) {
+    public WebSocketRunnerMock(String server, String id, String code) {
         this.server = server;
-        this.userName = userName;
+        this.id = id;
         this.code = code;
+        replyToServerImmediately = false;
         reset();
     }
 
+    @SneakyThrows
     public void start() {
         new Thread(() -> {
-            start(server, userName, code);
+            start(server, id, code);
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {
@@ -76,28 +79,37 @@ public class WebSocketRunnerMock {
 
         }).start();
 
-        System.out.println("client starting...");
-        while (!started) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        log.info("Client starting...");
+        while (!started.get()) {
+            Thread.sleep(10);
         }
     }
 
     public void stop() {
-        session.close();
+        if (session != null) {
+            session.close();
+        }
+    }
+
+    public String messages() {
+        String result = messages.toString().replace("\"", "'");
+        messages.clear();
+        return result;
+    }
+
+    public boolean isEmpty() {
+        return messages.isEmpty();
     }
 
     @SneakyThrows
-    private void start(String server, String userName, String code)  {
+    private void start(String server, String id, String code)  {
         wsClient = new WebSocketClient();
         wsClient.start();
 
-        URI uri = new URI(server + "?user=" + userName + "&code=" + code);
-        System.out.println("Connecting to: " + uri);
-        session = wsClient.connect(new ClientSocket(), uri).get(5000, TimeUnit.MILLISECONDS);
+        URI uri = new URI(server + "?user=" + id + "&code=" + code);
+        log.info("Connecting to: " + uri);
+        session = wsClient.connect(new ClientSocket(), uri)
+                .get(500, TimeUnit.MILLISECONDS);
     }
 
     public WebSocketRunnerMock willAnswer(String answer) {
@@ -105,7 +117,7 @@ public class WebSocketRunnerMock {
         return this;
     }
 
-    public String getRequest() {
+    public String request() {
         return request;
     }
 
@@ -116,8 +128,8 @@ public class WebSocketRunnerMock {
         times = 1;
         onlyOnce = false;
         answered = false;
-        closed = false;
-        started = false;
+        closed.set(false);
+        started.set(false);
     }
 
     public WebSocketRunnerMock times(int times) {
@@ -130,44 +142,69 @@ public class WebSocketRunnerMock {
         return this;
     }
 
+    public void replyToServerImmediately(boolean input) {
+        replyToServerImmediately = input;
+    }
+
     @WebSocket
     public class ClientSocket {
 
         @OnWebSocketConnect
         public void onConnect(Session session) {
-            System.out.println("client started!");
-            started = true;
+            log.info("Client started");
+            if (WebSocketRunnerMock.this.session == null) {
+                WebSocketRunnerMock.this.session = session;
+            }
+            started.set(true);
         }
 
         @OnWebSocketClose
         public void onClose(int closeCode, String message) {
-            System.out.println("client closed!");
-            closed = true;
+            log.info("Client closed");
+            closed.set(false);
         }
 
         @OnWebSocketMessage
         public void onMessage(String data) {
-            System.out.println("client got message: " + data);
+            log.info("Client got message: " + data);
             messages.add(data);
 
             if (answer == null) {
-                throw new IllegalArgumentException("Answer is null!");
-            }
-            if (!answered) {
-                for (int index = 0; index < times; index++) {
-                    send();
+                if (replyToServerImmediately) {
+                    throw new IllegalArgumentException("Answer is null!");
+                } else {
+                    log.warn("Answer is null. Cant say to server reply.");
                 }
-                if (onlyOnce) {
-                    answered = true;
+            } else {
+                if (!answered) {
+                    for (int index = 0; index < times; index++) {
+                        sendToServer(answer);
+                    }
+                    if (onlyOnce) {
+                        answered = true;
+                    }
                 }
             }
 
             request = data;
         }
+
+        @OnWebSocketError
+        public void onError(Session session, Throwable reason) {
+            error = reason;
+        }
     }
 
     @SneakyThrows
-    private void send() {
-        session.getRemote().sendString(answer);
+    public void sendToServer(String message) {
+        while (session == null || session.getRemote() == null) {
+            Thread.sleep(10);
+        }
+        log.info("Client send: " + message);
+        session.getRemote().sendString(message);
+    }
+
+    public Throwable error() {
+        return error;
     }
 }

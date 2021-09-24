@@ -22,12 +22,15 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.client.*;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.controller.chat.ChatController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -50,6 +53,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+// TODO try @SpringBootTest
 public class PlayerServiceImplIntegrationTest {
 
     private PlayerService service;
@@ -64,6 +68,7 @@ public class PlayerServiceImplIntegrationTest {
     private GameService gameService;
     private Controller screenController;
     private RoomService roomService;
+    private Controller chatController;
     private Controller playerController;
     private Deals deals;
     private Registration registration;
@@ -85,6 +90,11 @@ public class PlayerServiceImplIntegrationTest {
 
                 PlayerServiceImplIntegrationTest.this.screenController
                         = this.screenController = mock(Controller.class);
+
+                PlayerServiceImplIntegrationTest.this.chatController
+                        = this.chatController = mock(ChatController.class);
+
+                ChatDealsUtils.setupChat(chatController);
 
                 PlayerServiceImplIntegrationTest.this.gameService
                         = this.gameService = mock(GameService.class);
@@ -118,6 +128,8 @@ public class PlayerServiceImplIntegrationTest {
                         = this.semifinal = mock(SemifinalService.class);
 
                 this.isAiNeeded = true;
+
+                init();
             }
 
             @Override
@@ -129,7 +141,6 @@ public class PlayerServiceImplIntegrationTest {
                 runners.put(id, runner);
                 return runner;
             }
-
         };
     }
 

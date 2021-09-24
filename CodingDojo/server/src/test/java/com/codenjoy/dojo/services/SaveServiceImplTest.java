@@ -24,6 +24,8 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.helper.ChatDealsUtils;
+import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
@@ -45,6 +47,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+// TODO try @SpringBootTest
 public class SaveServiceImplTest {
 
     private Registration registration;
@@ -60,9 +63,10 @@ public class SaveServiceImplTest {
     public static final boolean NOT_REGISTERED = false;
 
     @Before
-    public void setUp() {
+    public void setup() {
         saveService = new SaveServiceImpl(){{
             this.deals = SaveServiceImplTest.this.deals = new Deals();
+            ChatDealsUtils.setupChat(deals, null);
             this.deals.spreader = new Spreader(){{
                 fields = mock(FieldService.class);
             }};
@@ -108,7 +112,7 @@ public class SaveServiceImplTest {
         when(player.getCallbackUrl()).thenReturn("http://" + id + ":1234");
         when(player.getEmail()).thenReturn(null);        // берется из registration
         when(player.getReadableName()).thenReturn(null); // берется из registration
-        when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
+        when(player.getInfo()).thenReturn(mock(Information.class));
         long now = timeService.now();
         when(player.getLastResponse()).thenReturn(now);
         when(playerService.get(id)).thenReturn(player);
