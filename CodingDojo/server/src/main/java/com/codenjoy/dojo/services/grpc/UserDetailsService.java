@@ -57,8 +57,9 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
     public void getUserDetailsById(UserDetailsIdRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
         String id = request.getId();
         String email = this.registration.getEmailById(id);
+        String slackEmail = this.registration.getSlackEmailById(id);
 
-        responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).build());
+        responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).setSlackEmail(slackEmail).build());
         responseObserver.onCompleted();
     }
 
