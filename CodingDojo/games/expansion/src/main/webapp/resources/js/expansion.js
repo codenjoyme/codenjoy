@@ -62,11 +62,12 @@ var boardAllPageLoad = function() {
     // https://stackoverflow.com/a/32754249
     String.prototype.splitAll = function() {
         var target = this;
-        var delimiters = arguments;
-        var result = [target];
-        if (typeof (delimiters) == 'string') {
-            delimiters = [delimiters];
+        var delimiters = [];
+        for (var i = 0; i < arguments.length; i++) {
+            delimiters.push(arguments[i]);
         }
+
+        var result = [target];
         while (delimiters.length > 0) {
             for (var i = 0; i < result.length; i++) {
                 var tempSplit = result[i].split(delimiters[0]);
