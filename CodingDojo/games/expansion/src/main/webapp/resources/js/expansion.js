@@ -119,18 +119,18 @@ var boardAllPageLoad = function() {
     $(document.body).show();
 }
 
-// overrides the method in the canvases-expansion.js
 setup.onBoardAllPageLoad = function() {
-    loadArrowImages();
-
     boardAllPageLoad();
 
     $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
 }
 
-// ========================== user page ==========================
-
-setup.onBoardPageLoad = setup.onBoardAllPageLoad;
+// overrides the method in the canvases-expansion.js
+var previous = setup.onBoardPageLoad;
+setup.onBoardPageLoad = function() {
+    previous();
+    setup.onBoardAllPageLoad();
+}
 
 // ========================== demo stuff ==========================
 
