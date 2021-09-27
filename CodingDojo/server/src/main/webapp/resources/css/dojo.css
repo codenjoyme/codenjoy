@@ -259,6 +259,14 @@ span.pow {
     font-size: 11px;
 }
 
+#leaderboard .small-round {
+    font-size: 18px;
+}
+
+#leaderboard .smaller-round {
+    font-size: 10px;
+}
+
 .glasses {
     width: calc(100% - 530px);
     float: left;

@@ -59,11 +59,25 @@ var boardAllPageLoad = function() {
         };
     }
 
-    // https://stackoverflow.com/a/17606289
-    String.prototype.replaceAll = function(search, replacement) {
+    // https://stackoverflow.com/a/32754249
+    String.prototype.splitAll = function() {
         var target = this;
-        return target.split(search).join(replacement);
-    };
+        var delimiters = arguments;
+        var result = [target];
+        if (typeof (delimiters) == 'string') {
+            delimiters = [delimiters];
+        }
+        while (delimiters.length > 0) {
+            for (var i = 0; i < result.length; i++) {
+                var tempSplit = result[i].split(delimiters[0]);
+                result = result.slice(0, i)
+                    .concat(tempSplit)
+                    .concat(result.slice(i + 1));
+            }
+            delimiters.shift();
+        }
+        return result;
+    }
 
     initLeadersTable(setup.contextPath, setup.playerId, setup.code,
         function(count, you, link, name, team, score) {
@@ -74,7 +88,27 @@ var boardAllPageLoad = function() {
                 star = 'second';
             }
 
+            // TODO мы снова все парсим, чтобы разложить по div со стилями,
+            //    быть может лучше в json передавать в разных полях составляющие?
             var details = score.details;
+            var parts = details.splitAll('%(∑', ')[i', ']');
+            var averageString = parts[0];
+            var scoreAmount = parts[1];
+            var roundCount = parts[2];
+            var rounds = parts[3];
+
+            var l1 = 10;
+            var l2 = l1 + 20;
+            var rounds1 = rounds.substring(0, l1);
+            var dots = '...';
+            if (rounds.length > l1) {
+                var rounds2 = rounds.substring(l1, l2);
+                if (rounds.length > l2) {
+                    rounds2 = rounds2 + dots;
+                }
+            } else {
+                rounds2 = '';
+            }
 
             return '<tr>' +
                     '<td><span class="' + star + ' star">' + count + '<span></td>' +
@@ -82,7 +116,12 @@ var boardAllPageLoad = function() {
                         '<span class="team-pow">' + team + '</span>' +
                         '<span>' + you + '</span>' +
                     '</td>' +
-                    '<td class="left">' + details + '</td>' +
+                    '<td class="left">' +
+                        '<span>' + averageString + '<span class="small-round">%</span>' +
+                        '(∑' + scoreAmount + ')</span>' +
+                        '<span class="small-round">' + '[i' + roundCount + ']' + rounds1 + '</span>' +
+                        '<span class="smaller-round">' + rounds2 + '</span>' +
+                    '</td>' +
                 '</tr>';
         },
         function(score) {
