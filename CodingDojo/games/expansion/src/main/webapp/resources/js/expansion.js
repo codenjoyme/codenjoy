@@ -33,7 +33,6 @@ if (typeof setup == 'undefined') {
     }
 }
 
-setup.isDrawByOrder = true;
 setup.enablePlayerInfo = false;
 setup.enablePlayerInfoLevel = false;
 setup.showBody = false;
