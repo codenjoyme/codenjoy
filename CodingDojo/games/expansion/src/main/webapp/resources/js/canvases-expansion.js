@@ -353,3 +353,5 @@ setup.drawBoard = function(drawer) {
         console.log(err);
     }
 }
+
+loadArrowImages();

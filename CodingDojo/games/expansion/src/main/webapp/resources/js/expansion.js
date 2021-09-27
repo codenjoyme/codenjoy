@@ -120,8 +120,6 @@ var boardAllPageLoad = function() {
 }
 
 setup.onBoardAllPageLoad = function() {
-    loadArrowImages();
-
     boardAllPageLoad();
 
     $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
