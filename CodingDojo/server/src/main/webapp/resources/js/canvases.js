@@ -252,7 +252,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 if (setup.isFillOrStrechBackground) {
                     canvas.fillImage(name);
                 } else {
-                    canvas.strechImage(name);
+                    canvas.stretchImage(name);
                 }
             }
         }
@@ -531,7 +531,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             );
         }
 
-        var strechImage = function(color) {
+        var stretchImage = function(color) {
             var image = images[color];
             ctx.drawImage(
                 image,
@@ -606,7 +606,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         return {
             fillImage : fillImage,
-            strechImage : strechImage,
+            stretchImage : stretchImage,
+            drawImage : drawImage,
             drawPlot : drawPlot,
             drawText: drawText,
             clear : clear,
