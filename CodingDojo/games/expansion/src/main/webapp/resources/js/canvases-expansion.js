@@ -354,4 +354,7 @@ setup.drawBoard = function(drawer) {
     }
 }
 
-loadArrowImages();
+// overriden by the method in the expansion.js
+setup.onBoardAllPageLoad = function() {
+    loadArrowImages();
+}
