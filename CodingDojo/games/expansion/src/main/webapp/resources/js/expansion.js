@@ -74,38 +74,15 @@ var boardAllPageLoad = function() {
                 star = 'second';
             }
 
-            var scoreAmount = score.score;
-            var roundCount = score.rounds.length;
-            var average = (roundCount == 0) ? 0 : (scoreAmount/roundCount);
-            average = 100*average/4.0;
-            var averageRound = parseFloat(Math.round(average * 100) / 100).toFixed(2);
-            var averageString = ("" + averageRound).padStart(4, ' ').replaceAll(' ', '&nbsp;');
-            var l1 = 10;
-            var l2 = l1 + 20;
-            var rounds = score.rounds.reverse().join('');
-            var rounds1 = rounds.substring(0, l1);
-            var dots = '...';
-            if (rounds.length > l1) {
-                var rounds2 = rounds.substring(l1, l2);
-                if (rounds.length > l2) {
-                    rounds2 = rounds2 + dots;
-                }
-            } else {
-                rounds2 = '';
-            }
+            var details = score.details;
 
             return '<tr>' +
-                '<td><span class="' + star + ' star">' + count + '<span></td>' +
-                '<td>' + '<a href="' + link + '">' + name + '</a>' +
-                    '<span class="team-pow">' + team + '</span>' +
-                    '<span>' + you + '</span>' +
-                '</td>' +
-                '<td class="left">' +
-                '<span>' + averageString + '<span class="small-round">%</span>' +
-                '(∑' + scoreAmount + ')</span>' +
-                '<span class="small-round">' + '[i' + roundCount + ']' + rounds1 + '</span>' +
-                '<span class="smaller-round">' + rounds2 + '</span>' +
-                '</td>' +
+                    '<td><span class="' + star + ' star">' + count + '<span></td>' +
+                    '<td>' + '<a href="' + link + '">' + name + '</a>' +
+                        '<span class="team-pow">' + team + '</span>' +
+                        '<span>' + you + '</span>' +
+                    '</td>' +
+                    '<td class="left">' + details + '</td>' +
                 '</tr>';
         },
         function(score) {

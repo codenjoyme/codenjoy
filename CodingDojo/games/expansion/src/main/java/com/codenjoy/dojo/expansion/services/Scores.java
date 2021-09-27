@@ -30,15 +30,23 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.stream.Collectors.joining;
+
 public class Scores implements PlayerScores {
 
     private static final Logger log = LoggerFactory.getLogger(Hero.class);
 
-    public final static String SCORE = "score";
+    public static final String SCORE = "score";
     public static final String ROUNDS = "rounds";
+    public static final String DETAILS = "details";
 
     private volatile int score;
     private JSONObject scores;
+    private DecimalFormat format;
 
     public Scores(Object startScore) {
         if (startScore instanceof Integer) {
@@ -48,6 +56,7 @@ public class Scores implements PlayerScores {
             this.score = object.getInt(SCORE);
         }
         scores = new JSONObject();
+        format = new DecimalFormat("0.00");
         clearRounds();
     }
 
@@ -92,8 +101,29 @@ public class Scores implements PlayerScores {
     @Override
     public JSONObject getScore() {
         scores.put(SCORE, score);
+        scores.put(DETAILS, details());
         return scores;
     }
+
+    private String details() {
+        List<Object> list = rounds().toList();
+        int count = list.size();
+        int sum = list.stream()
+                .map(it -> (Integer) it)
+                .mapToInt(it -> it).sum();
+        double average = (count == 0) ? 0 : (100 * sum) / (count * 4.0);
+        average = 1.0D * Math.round(average * 100) / 100;
+        Collections.reverse(list);
+        String rounds = list.stream()
+                .map(Object::toString)
+                .collect(joining(""));
+        return String.format("%s%%(∑%s)[i%s]%s",
+                format.format(average),
+                score,
+                count,
+                rounds);
+    }
+
     @Override
     public void event(Object input) {
         Events events = (Events)input;
