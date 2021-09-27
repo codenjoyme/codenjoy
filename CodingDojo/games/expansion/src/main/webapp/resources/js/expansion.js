@@ -119,17 +119,17 @@ var boardAllPageLoad = function() {
     $(document.body).show();
 }
 
-setup.onBoardAllPageLoad = function() {
-    boardAllPageLoad();
-
-    $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
-}
-
 // overrides the method in the canvases-expansion.js
 var previous = setup.onBoardPageLoad;
 setup.onBoardPageLoad = function() {
-    previous();
     setup.onBoardAllPageLoad();
+}
+
+setup.onBoardAllPageLoad = function() {
+    previous();
+    boardAllPageLoad();
+
+    $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
 }
 
 // ========================== demo stuff ==========================
