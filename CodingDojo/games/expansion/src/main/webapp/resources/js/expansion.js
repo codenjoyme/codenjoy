@@ -67,7 +67,7 @@ var boardAllPageLoad = function() {
     };
 
     initLeadersTable(setup.contextPath, setup.playerId, setup.code,
-        function(count, you, link, name, score, maxLength, level) {
+        function(count, you, link, name, team, score) {
             var star = '';
             if (count == 1) {
                 star = 'first';
@@ -97,7 +97,10 @@ var boardAllPageLoad = function() {
 
             return '<tr>' +
                 '<td><span class="' + star + ' star">' + count + '<span></td>' +
-                '<td>' + you + '<a href="' + link + '">' + name + '</a></td>' +
+                '<td>' + '<a href="' + link + '">' + name + '</a>' +
+                    '<span class="team-pow">' + team + '</span>' +
+                    '<span>' + you + '</span>' +
+                '</td>' +
                 '<td class="left">' +
                     '<span>' + averageString + '<span class="small-round">%</span>' +
                     '(∑' + scoreAmount + ')</span>' +
