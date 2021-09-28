@@ -97,8 +97,8 @@ function initBoardComponents(setup) {
 
     if (setup.enableChat && setup.authorizedPlayerId) {
         var onConnect = function(chatControl) {
-            initChat(setup.contextPath, chatControl, ROOM_TYPE);
-            initChat(setup.contextPath, chatControl, FIELD_TYPE);
+            initChat(setup.contextPath, setup.authorizedPlayerId, chatControl, ROOM_TYPE);
+            initChat(setup.contextPath, setup.authorizedPlayerId, chatControl, FIELD_TYPE);
         };
 
         initChatWebSocket(setup.room,

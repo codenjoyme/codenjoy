@@ -23,7 +23,7 @@
 var ROOM_TYPE = 'room';
 var FIELD_TYPE = 'field';
 
-function initChat(contextPath, chatControl, type) {
+function initChat(contextPath, playerId, chatControl, type) {
     var tab = $('#' + type + '-chat-tab');
     var root = $('.id-' + type + '-chat ');
     var firstMessageInChat = null;
@@ -306,7 +306,7 @@ function initChat(contextPath, chatControl, type) {
             var deleteButton = $(this);
             var messageId = id(deleteButton.parent());
             var message = getMessage(html, messageId);
-            if (message.attr('player') != setup.authorizedPlayerId) {
+            if (message.attr('player') != playerId) {
                 deleteButton.remove();
                 return;
             }
