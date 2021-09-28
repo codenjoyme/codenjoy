@@ -104,6 +104,7 @@ public class BoardController {
 
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
+        model.addAttribute("repository", player.getRepositoryUrl());
         return justBoard ? "board-only" : "board";
     }
 

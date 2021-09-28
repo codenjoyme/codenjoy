@@ -26,7 +26,7 @@
 <div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
     <div class="tabs">
         <label id="leaderboard-tab" class="tv-tab" for="tv-tab-1">Leaderboard</label>
-        <label id="chat-tab" class="tv-tab" for="tv-tab-2">Chat</label>
+        <a href="${repository}"> Repository URL</a>
     </div>
 
     <input class="tv-radio" id="tv-tab-1" name="tv-group" type="radio" checked="checked"/>
