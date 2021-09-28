@@ -259,6 +259,10 @@ span.pow {
     font-size: 11px;
 }
 
+#leaderboard .inline {
+    display: inline-flex;
+}
+
 .glasses {
     width: calc(100% - 530px);
     float: left;

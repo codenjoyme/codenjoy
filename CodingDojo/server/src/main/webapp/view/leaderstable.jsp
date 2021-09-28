@@ -26,7 +26,7 @@
 <table id="table-logs" class="table table-striped leaderboard-table">
     <thead>
         <th width="5%">
-            <span>
+            <span class="inline">
                 <c:choose>
                     <c:when test="${code != null}">
                         <a href="${ctx}/board/room/${room}?code=${code}">#</a>
@@ -36,6 +36,7 @@
                     </c:otherwise>
                 </c:choose>
                 <c:if test="${authorizedPlayerId != null}">
+                    &nbsp;
                     <a href="${ctx}/board/player/${authorizedPlayerId}?code=${code}">@</a>
                 </c:if>
             </span>
