@@ -306,7 +306,7 @@ function initChat(contextPath, chatControl, type) {
             var deleteButton = $(this);
             var messageId = id(deleteButton.parent());
             var message = getMessage(html, messageId);
-            if (message.attr('player') != setup.playerId) {
+            if (message.attr('player') != setup.authorizedPlayerId) {
                 deleteButton.remove();
                 return;
             }
