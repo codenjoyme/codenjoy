@@ -24,11 +24,6 @@ var ROOM_TYPE = 'room';
 var FIELD_TYPE = 'field';
 
 function initChat(contextPath, chatControl, type) {
-
-    if (!setup.enableChat || !setup.authenticated) {
-        return;
-    }
-
     var tab = $('#' + type + '-chat-tab');
     var root = $('.id-' + type + '-chat ');
     var firstMessageInChat = null;

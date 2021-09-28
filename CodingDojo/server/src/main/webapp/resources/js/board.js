@@ -23,7 +23,6 @@
 pages = pages || {};
 
 pages.board = function() {
-    setup.authenticated = getSettings('authenticated');
     setup.game = getSettings('game');
     setup.room = getSettings('room');
     setup.authorizedPlayerId = getSettings('authorizedPlayerId');
@@ -96,8 +95,8 @@ function initBoardComponents(setup) {
         }
     }
 
-    if (setup.enableChat) {
-        let onConnect = function(chatControl) {
+    if (setup.enableChat && setup.authorizedPlayerId) {
+        var onConnect = function(chatControl) {
             initChat(setup.contextPath, chatControl, ROOM_TYPE);
             initChat(setup.contextPath, chatControl, FIELD_TYPE);
         };
