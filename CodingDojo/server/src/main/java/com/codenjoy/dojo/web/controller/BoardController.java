@@ -202,11 +202,13 @@ public class BoardController {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
+        String id = null;
         if (user != null && code == null) {
             code = user.getCode();
+            id = user.getId();
         }
 
-        populateBoardAttributes(model, user.getId(), code,
+        populateBoardAttributes(model, id, code,
                 game, room, player.getGameOnly(), null, null, true);
         return "board";
     }
