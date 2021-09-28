@@ -39,8 +39,8 @@ public class ThirdGameSettings extends SettingsImpl
 
     public enum Keys implements Key {
 
-        PARAMETER5("Parameter 5"),
-        PARAMETER6("Parameter 6");
+        PARAMETER5("Parameter 5"), // false - will be MULTIPLE, true - SINGLE_LEVELS
+        PARAMETER6("Parameter 6"); // count levels
 
         private String key;
 
