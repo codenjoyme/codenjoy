@@ -133,7 +133,7 @@ public class Spreader {
 
     public List<Player> players(String roomName) {
         return rooms.values().stream()
-                .filter(room -> room.name().equals(roomName))
+                .filter(room -> isSame(room.name(), roomName))
                 .flatMap(room -> room.deals().stream())
                 .map(Deal::getPlayer)
                 .collect(toList());
@@ -167,14 +167,18 @@ public class Spreader {
     }
 
     public Optional<GameRoom> gameRoom(String room, String playerId) {
-        // так надо потому, что в rooms обычно комнаты будут 'room',
-        // но для levels типов уровней будут 'room[N]', где N уровень
-        // TODO #7D4 быть может стоит как-то 'иначее' называть комнаты для levels?
         return rooms.keys().stream()
-                .filter(key -> key.equals(room) || key.startsWith(room + "["))
+                .filter(key -> isSame(key, room))
                 .flatMap(key -> rooms.get(key).stream())
                 .filter(r -> r.containsPlayer(playerId))
                 .findFirst();
+    }
+
+    // так надо потому, что в rooms обычно комнаты будут 'room',
+    // но для levels типов уровней будут 'room[N]', где N уровень
+    // TODO #7D4 быть может стоит как-то 'иначее' называть комнаты для levels?
+    private boolean isSame(String key, String room) {
+        return key.equals(room) || key.startsWith(room + "[");
     }
 
 }

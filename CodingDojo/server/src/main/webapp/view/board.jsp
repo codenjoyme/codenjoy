@@ -40,10 +40,16 @@
     <script src="${ctx}/resources/js/${gameOnly}.js"></script>
 </head>
 <body style="display:none;">
-    <sec:authorize access="isAuthenticated()">
-        <c:set var="authenticated" scope="request" value="true"/>
-    </sec:authorize>
-    <div id="settings" page="${page}" authenticated="${authenticated}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <div id="settings"
+         page="${page}"
+         contextPath="${ctx}"
+         game="${game}"
+         room="${room}"
+         playerId="${playerId}"
+         readableName="${readableName}"
+         authorizedPlayerId="${authorizedPlayerId}"
+         code="${code}"
+         allPlayersScreen="${allPlayersScreen}"></div>
 
     <%@include file="forkMe.jsp"%>
 

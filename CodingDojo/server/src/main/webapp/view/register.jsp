@@ -39,7 +39,11 @@ License along with this program.  If not, see
     <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" waitApprove="${wait_approve}"></div>
+    <div id="settings"
+         page="${page}"
+         contextPath="${ctx}"
+         game="${game}"
+         waitApprove="${wait_approve}"></div>
 
     <div class="header-container">
         <div class="container-fluid">

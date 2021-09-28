@@ -40,6 +40,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 
+import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER5;
+import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER6;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
@@ -79,6 +81,39 @@ public class DealsServiceTest {
         with.login.join("player2", "room");
 
         Deal deal3 = with.login.register("player3", "ip", "room", "first");
+        with.login.join("player3", "room");
+
+        int field1 = fields.id(deal1.getField());
+        int field2 = fields.id(deal2.getField());
+        int field3 = fields.id(deal3.getField());
+
+        assertEquals("[1, 2, 3]", Arrays.asList(field1, field2, field3).toString());
+
+        // when then
+        assertSameFieldPlayers(field1, "[player1]");
+        assertSameFieldPlayers(field2, "[player2]");
+        assertSameFieldPlayers(field3, "[player3]");
+
+        // when then
+        assertSameRoomPlayers("room", "[player1, player2, player3]");
+    }
+
+    @Test
+    public void shouldPlayersInField_playersInRoom_forSingleLevelsGame() {
+        // given
+        // will be SINGLE_LEVELS with 3 levels
+        with.rooms.settings("room", "third")
+                .bool(ROUNDS_ENABLED, false)
+                .bool(PARAMETER6, true) // SINGLE_LEVELS
+                .integer(PARAMETER5, 3); // 3 levels
+
+        Deal deal1 = with.login.register("player1", "ip", "room", "third");
+        with.login.join("player1", "room");
+
+        Deal deal2 = with.login.register("player2", "ip", "room", "third");
+        with.login.join("player2", "room");
+
+        Deal deal3 = with.login.register("player3", "ip", "room", "third");
         with.login.join("player3", "room");
 
         int field1 = fields.id(deal1.getField());

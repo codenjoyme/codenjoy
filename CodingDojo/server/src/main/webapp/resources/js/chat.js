@@ -23,13 +23,10 @@
 var ROOM_TYPE = 'room';
 var FIELD_TYPE = 'field';
 
-function initChat(contextPath, chatControl, type) {
-
+function initChat(type, room, playerId, contextPath, chatControl) {
+    var tab = $('#' + type + '-chat-tab');
     var root = $('.id-' + type + '-chat ');
     var firstMessageInChat = null;
-
-    // запросы field и room чата несколько отличаются, вот на этот хвостик
-    var urlSuffix = (type == ROOM_TYPE) ? '' : '/field';
 
     // в случае если это field-чат тут будем хранить
     // field id которое придет с первым сообщением к нам
@@ -101,7 +98,7 @@ function initChat(contextPath, chatControl, type) {
     var deleteMessage = function(messageId) {
         chatControl.send('delete', {
             id : messageId,
-            room : setup.room
+            room : room
         });
     }
 
@@ -109,7 +106,7 @@ function initChat(contextPath, chatControl, type) {
         var command = (type == ROOM_TYPE) ? 'postRoom' : 'postField';
         chatControl.send(command, {
             text : message,
-            room : setup.room
+            room : room
         });
     }
 
@@ -120,7 +117,7 @@ function initChat(contextPath, chatControl, type) {
             beforeId : beforeId,
             inclusive : inclusive,
             count : count,
-            room : setup.room
+            room : room
         });
     }
 
@@ -309,7 +306,7 @@ function initChat(contextPath, chatControl, type) {
             var deleteButton = $(this);
             var messageId = id(deleteButton.parent());
             var message = getMessage(html, messageId);
-            if (message.attr('player') != setup.playerId) {
+            if (message.attr('player') != playerId) {
                 deleteButton.remove();
                 return;
             }
@@ -451,10 +448,6 @@ function initChat(contextPath, chatControl, type) {
         return true;
     }
 
-    if (!setup.enableChat || !setup.authenticated) {
-        return;
-    }
-
     var postMessageButton = root.find('.id-post-message');
     var newMessage = root.find('.id-new-message');
     var chatContainer = root.find('.id-chat-container');
@@ -468,4 +461,5 @@ function initChat(contextPath, chatControl, type) {
     initScrolling();
     chat.show();
     chatTab.show();
+    tab.removeClass('hidden');
 }

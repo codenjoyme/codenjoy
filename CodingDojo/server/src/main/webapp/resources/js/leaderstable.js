@@ -143,7 +143,7 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
 
             var you = '';
             if (!!playerId) {
-                you = (name == readableNames[playerId])?"*":"";
+                you = (name == readableNames[playerId]) ? "*" : "";
             }
 
             count++;

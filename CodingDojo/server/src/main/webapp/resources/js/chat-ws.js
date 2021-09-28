@@ -20,7 +20,6 @@
  * #L%
  */
 function initChatWebSocket(room, playerId, code, contextPath, onConnect) {
-
     var constructUrl = function() {
         var link = document.createElement('a');
         link.setAttribute('href', window.location.href);

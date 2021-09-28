@@ -40,7 +40,11 @@
 
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" room="${room}"></div>
+    <div id="settings"
+         page="${page}"
+         contextPath="${ctx}"
+         game="${game}"
+         room="${room}"></div>
 
     <%@include file="forkMe.jsp"%>
 
