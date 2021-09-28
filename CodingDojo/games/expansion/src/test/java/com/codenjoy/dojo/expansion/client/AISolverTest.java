@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class AISolverTest {
 
@@ -169,9 +169,9 @@ public class AISolverTest {
                     "-=#-=#-=#-=#-=#-=#'" +
                 "}",
                 "╔════┐" +
-                "║1...│" +
-                "║O...│" +
-                "║O...│" +
+                "║1OOO│" +
+                "║....│" +
+                "║OOO.│" +
                 "║OOO$│" +
                 "└────┘",
                 "------" +
@@ -186,7 +186,7 @@ public class AISolverTest {
         List<Direction> way = AISolver.getShortestWay(board, from, board.getGold());
 
         // then
-        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, RIGHT, DOWN]", way.toString());
+        assertEquals("[DOWN, RIGHT, RIGHT, RIGHT, DOWN, DOWN]", way.toString());
     }
 
     @Test
