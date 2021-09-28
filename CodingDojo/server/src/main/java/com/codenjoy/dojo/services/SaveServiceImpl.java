@@ -220,6 +220,10 @@ public class SaveServiceImpl implements SaveService {
         return result;
     }
 
+    public List<String> getUserIdsFromSaves(){
+        return saver.getSavedList();
+    }
+
     private void setDataFromRegistration(PlayerInfo info, String name) {
         registration.getUserById(name)
                 .ifPresent((user) -> {
