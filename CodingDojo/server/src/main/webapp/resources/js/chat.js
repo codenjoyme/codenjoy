@@ -23,7 +23,7 @@
 var ROOM_TYPE = 'room';
 var FIELD_TYPE = 'field';
 
-function initChat(contextPath, playerId, chatControl, type) {
+function initChat(room, contextPath, playerId, chatControl, type) {
     var tab = $('#' + type + '-chat-tab');
     var root = $('.id-' + type + '-chat ');
     var firstMessageInChat = null;
@@ -98,7 +98,7 @@ function initChat(contextPath, playerId, chatControl, type) {
     var deleteMessage = function(messageId) {
         chatControl.send('delete', {
             id : messageId,
-            room : setup.room
+            room : room
         });
     }
 
@@ -106,7 +106,7 @@ function initChat(contextPath, playerId, chatControl, type) {
         var command = (type == ROOM_TYPE) ? 'postRoom' : 'postField';
         chatControl.send(command, {
             text : message,
-            room : setup.room
+            room : room
         });
     }
 
@@ -117,7 +117,7 @@ function initChat(contextPath, playerId, chatControl, type) {
             beforeId : beforeId,
             inclusive : inclusive,
             count : count,
-            room : setup.room
+            room : room
         });
     }
 
