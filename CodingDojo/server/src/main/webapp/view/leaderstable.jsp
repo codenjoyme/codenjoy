@@ -26,14 +26,19 @@
 <table id="table-logs" class="table table-striped leaderboard-table">
     <thead>
         <th width="5%">
-            <c:choose>
-                <c:when test="${code != null}">
-                    <a href="${ctx}/board/room/${room}?code=${code}">#</a>
-                </c:when>
-                <c:otherwise>
-                    <a href="${ctx}/board/room/${room}">#</a>
-                </c:otherwise>
-            </c:choose>
+            <span>
+                <c:choose>
+                    <c:when test="${code != null}">
+                        <a href="${ctx}/board/room/${room}?code=${code}">#</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${ctx}/board/room/${room}">#</a>
+                    </c:otherwise>
+                </c:choose>
+                <c:if test="${authorizedPlayerId != null}">
+                    <a href="${ctx}/board/player/${authorizedPlayerId}?code=${code}">@</a>
+                </c:if>
+            </span>
         </th>
         <th width="55%">
             <div class="score-header">
