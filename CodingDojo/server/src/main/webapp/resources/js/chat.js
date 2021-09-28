@@ -23,7 +23,7 @@
 var ROOM_TYPE = 'room';
 var FIELD_TYPE = 'field';
 
-function initChat(room, contextPath, playerId, chatControl, type) {
+function initChat(type, room, playerId, contextPath, chatControl) {
     var tab = $('#' + type + '-chat-tab');
     var root = $('.id-' + type + '-chat ');
     var firstMessageInChat = null;

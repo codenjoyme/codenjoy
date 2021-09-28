@@ -97,12 +97,14 @@ function initBoardComponents(setup) {
 
     if (setup.enableChat && setup.authorizedPlayerId) {
         var onConnect = function(chatControl) {
-            initChat(setup.room, setup.contextPath, setup.authorizedPlayerId, chatControl, ROOM_TYPE);
-            initChat(setup.room, setup.contextPath, setup.authorizedPlayerId, chatControl, FIELD_TYPE);
+            initChat(ROOM_TYPE, setup.room, setup.authorizedPlayerId,
+                setup.contextPath, chatControl);
+            initChat(FIELD_TYPE, setup.room, setup.authorizedPlayerId,
+                setup.contextPath, chatControl);
         };
 
-        initChatWebSocket(setup.room,
-            setup.authorizedPlayerId, setup.code, setup.contextPath, onConnect);
+        initChatWebSocket(setup.room, setup.authorizedPlayerId,
+            setup.code, setup.contextPath, onConnect);
     }
 
     if (setup.enableDonate) {
