@@ -26,8 +26,8 @@
 <div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
     <div class="tabs">
         <label id="leaderboard-tab" class="tv-tab" for="tv-tab-1">Leaderboard</label>
-        <label id="room-chat-tab" class="tv-tab" for="tv-tab-2">Room chat</label>
-        <label id="field-chat-tab" class="tv-tab" for="tv-tab-3">Field chat</label>
+        <label id="room-chat-tab" class="tv-tab hidden" for="tv-tab-2">Room chat</label>
+        <label id="field-chat-tab" class="tv-tab hidden" for="tv-tab-3">Field chat</label>
     </div>
 
     <input class="tv-radio" id="tv-tab-1" name="tv-group" type="radio" checked="checked"/>

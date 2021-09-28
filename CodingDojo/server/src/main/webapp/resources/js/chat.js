@@ -29,6 +29,7 @@ function initChat(contextPath, chatControl, type) {
         return;
     }
 
+    var tab = $('#' + type + '-chat-tab');
     var root = $('.id-' + type + '-chat ');
     var firstMessageInChat = null;
 
@@ -465,4 +466,5 @@ function initChat(contextPath, chatControl, type) {
     initScrolling();
     chat.show();
     chatTab.show();
+    tab.removeClass('hidden');
 }
