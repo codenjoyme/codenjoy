@@ -43,7 +43,7 @@ License along with this program.  If not, see
          page="${page}"
          contextPath="${ctx}"
          game="${game}"
-         waitApprove="${wait_approve}"/>
+         waitApprove="${wait_approve}"></div>
 
     <div class="header-container">
         <div class="container-fluid">

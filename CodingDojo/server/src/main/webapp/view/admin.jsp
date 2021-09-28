@@ -44,7 +44,7 @@
          page="${page}"
          contextPath="${ctx}"
          game="${game}"
-         room="${room}"/>
+         room="${room}"></div>
 
     <%@include file="forkMe.jsp"%>
 

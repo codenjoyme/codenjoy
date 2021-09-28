@@ -37,7 +37,7 @@
 <body>
     <div id="settings"
          page="${page}"
-         contextPath="${ctx}"/>
+         contextPath="${ctx}"></div>
 
     <%@include file="forkMe.jsp"%>
 

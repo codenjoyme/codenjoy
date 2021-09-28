@@ -62,7 +62,7 @@
          game="${game}"
          room="${room}"
          playerId="${playerId}"
-         readableName="${readableName}"/>
+         readableName="${readableName}"></div>
 
     <div id="board_page">
         <%@include file="canvases.jsp"%>

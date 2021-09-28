@@ -44,7 +44,7 @@
          readableName="${readableName}"
          authorizedPlayerId="${authorizedPlayerId}"
          code="${code}"
-         allPlayersScreen="${allPlayersScreen}"/>
+         allPlayersScreen="${allPlayersScreen}"></div>
 
     <div id="board_page">
         <%@include file="canvases.jsp"%>

@@ -49,7 +49,7 @@
          readableName="${readableName}"
          authorizedPlayerId="${authorizedPlayerId}"
          code="${code}"
-         allPlayersScreen="${allPlayersScreen}"/>
+         allPlayersScreen="${allPlayersScreen}"></div>
 
     <%@include file="forkMe.jsp"%>
 
