@@ -112,8 +112,8 @@ function initBoardComponents(setup) {
     }
 
     if (typeof initJoystick == 'function') {
-        if (!!setup.playerId) {
-            initJoystick(setup.playerId, setup.registered,
+        if (!!setup.authorizedPlayerId) {
+            initJoystick(setup.authorizedPlayerId, setup.registered,
                 setup.code, setup.contextPath);
         }
     }
