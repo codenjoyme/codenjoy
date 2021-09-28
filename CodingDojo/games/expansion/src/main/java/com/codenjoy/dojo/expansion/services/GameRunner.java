@@ -59,11 +59,9 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
 
     private static final Logger log = LoggerFactory.getLogger(GameRunner.class);
 
-    private GameSettings settings; // TODO make stateless
-
     @Override
     public GameSettings getSettings() {
-        return settings = ((settings != null) ? settings : new GameSettings());
+        return new GameSettings();
     }
 
     @Override
