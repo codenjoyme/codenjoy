@@ -26,6 +26,7 @@ pages.board = function() {
     setup.authenticated = getSettings('authenticated');
     setup.game = getSettings('game');
     setup.room = getSettings('room');
+    setup.authorizedPlayerId = getSettings('authorizedPlayerId');
     setup.playerId = getSettings('playerId');
     setup.readableName = getSettings('readableName');
     setup.code = getSettings('code');
@@ -102,7 +103,7 @@ function initBoardComponents(setup) {
         };
 
         initChatWebSocket(setup.room,
-            setup.playerId, setup.code, setup.contextPath, onConnect);
+            setup.authorizedPlayerId, setup.code, setup.contextPath, onConnect);
     }
 
     if (setup.enableDonate) {
