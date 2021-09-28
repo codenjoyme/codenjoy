@@ -25,11 +25,12 @@ var FIELD_TYPE = 'field';
 
 function initChat(contextPath, chatControl, type) {
 
+    if (!setup.enableChat || !setup.authenticated) {
+        return;
+    }
+
     var root = $('.id-' + type + '-chat ');
     var firstMessageInChat = null;
-
-    // запросы field и room чата несколько отличаются, вот на этот хвостик
-    var urlSuffix = (type == ROOM_TYPE) ? '' : '/field';
 
     // в случае если это field-чат тут будем хранить
     // field id которое придет с первым сообщением к нам
@@ -449,10 +450,6 @@ function initChat(contextPath, chatControl, type) {
         // сообщаем там на верху, чтобы не продолжали то
         // что делали раньше - неактуально уже
         return true;
-    }
-
-    if (!setup.enableChat || !setup.authenticated) {
-        return;
     }
 
     var postMessageButton = root.find('.id-post-message');
