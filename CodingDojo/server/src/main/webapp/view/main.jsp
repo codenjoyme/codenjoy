@@ -36,7 +36,7 @@
 <body>
     <div id="settings" page="${page}" contextPath="${ctx}" game="${game}"></div>
 
-    <%@include file="forkMe.jsp"%>
+
 
     <div class="page-header">
         <h1>Hi ${(user!=null)?user:ip} !</h1>
