@@ -226,7 +226,7 @@ public class BoardController {
             return "redirect:/register";
         }
         GameType gameType = player.getGameType(); // TODO а тут точно сеттинги румы а не игры?
-        if (gameType.getMultiplayerType(gameType.getSettings()) != MultiplayerType.SINGLE) {
+        if (gameType.getMultiplayerType(gameType.getSettings()).isMultiplayer()) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
