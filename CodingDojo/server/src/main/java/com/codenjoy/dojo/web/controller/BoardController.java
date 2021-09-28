@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.MULTIPLE;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
@@ -197,15 +198,14 @@ public class BoardController {
             // TODO а это тут вообще надо?
             return "redirect:/register?" + "room" + "=" + room;
         }
-        GameType gameType = player.getGameType();
-        if (gameType.getMultiplayerType(gameType.getSettings()).isMultiple()) {
+        if (isMultiplayerType(player)) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
         String id = null;
-        if (user != null && code == null) {
-            code = user.getCode();
+        if (user != null) {
             id = user.getId();
+            code = (code == null) ? user.getCode() : code;
         }
 
         populateBoardAttributes(model, id, code,
@@ -225,8 +225,7 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register";
         }
-        GameType gameType = player.getGameType(); // TODO а тут точно сеттинги румы а не игры?
-        if (gameType.getMultiplayerType(gameType.getSettings()).isMultiplayer()) {
+        if (isMultiplayerType(player)) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
@@ -234,8 +233,14 @@ public class BoardController {
         return "board";
     }
 
+    private boolean isMultiplayerType(Player player) {
+        GameType gameType = player.getGameType();
+        // TODO а тут точно сеттинги румы а не игры?
+        return gameType.getMultiplayerType(gameType.getSettings()).is(MULTIPLE);
+    }
+
     private String code(@RequestParam("code") String code) {
-        return (code != null)?"?code=" + code:"";
+        return (code == null) ? "" : ("?code=" + code);
     }
 
 }
