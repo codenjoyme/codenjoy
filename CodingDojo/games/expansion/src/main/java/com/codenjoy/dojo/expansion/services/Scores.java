@@ -43,6 +43,7 @@ public class Scores implements PlayerScores {
     public static final String SCORE = "score";
     public static final String ROUNDS = "rounds";
     public static final String DETAILS = "details";
+    public static final double QUARTER = 25.0;
 
     private volatile int score;
     private JSONObject scores;
@@ -106,22 +107,29 @@ public class Scores implements PlayerScores {
     }
 
     private String details() {
-        List<Object> list = rounds().toList();
+        List<Integer> list = (List)rounds().toList();
         int count = list.size();
-        int sum = list.stream()
-                .map(it -> (Integer) it)
-                .mapToInt(it -> it).sum();
-        double average = (count == 0) ? 0 : (100 * sum) / (count * 4.0);
-        average = 1.0D * Math.round(average * 100) / 100;
+
+        double average = twoDecimalPlaces(QUARTER *
+                list.stream()
+                        .mapToInt(it -> it)
+                        .average().orElse(0.0));
+
         Collections.reverse(list);
+
         String rounds = list.stream()
                 .map(Object::toString)
                 .collect(joining(""));
+
         return String.format("%s%%(∑%s)[i%s]%s",
                 format.format(average),
                 score,
                 count,
                 rounds);
+    }
+
+    private double twoDecimalPlaces(double average) {
+        return 1.0D * Math.round(average * 100) / 100;
     }
 
     @Override
