@@ -37,7 +37,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static com.codenjoy.dojo.games.battlecity.Element.*;
+import static com.codenjoy.dojo.games.battlecity.Element.PRIZE_BREAKING_WALLS;
+import static com.codenjoy.dojo.games.battlecity.Element.PRIZE_IMMORTALITY;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
@@ -361,16 +362,13 @@ public class Battlecity extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void remove(Player player) {   // TODO test me
-        players.remove(player);
+    protected void onAdd(Player player) {
+        player.newHero(this);
     }
 
     @Override
-    public void newGame(Player player) {
-        if (!players.contains(player)) {
-            players.add(player);
-        }
-        player.newHero(this);
+    protected void onRemove(Player player) {
+        // do nothing
     }
 
     public int size() {

@@ -24,16 +24,18 @@ package com.codenjoy.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.expansion.model.levels.Levels;
+import com.codenjoy.dojo.expansion.model.levels.items.Hero;
+import com.codenjoy.dojo.expansion.services.Events;
 import com.codenjoy.dojo.expansion.services.GameSettings;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.dojo.expansion.model.levels.items.Hero;
-import com.codenjoy.dojo.expansion.services.Events;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +57,11 @@ public class Player extends GamePlayer<Hero, IField> {
         this.name = name;
         isWin = false;
         setupPrinter();
+    }
+
+    @Override
+    public boolean shouldLeave() {
+        return !hero.isAlive();
     }
 
     private void setupPrinter() {

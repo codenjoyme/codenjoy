@@ -26,10 +26,12 @@ package com.codenjoy.dojo.expansion.services;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.expansion.services.Scores.DETAILS;
+import static com.codenjoy.dojo.expansion.services.Scores.SCORE;
 import static org.junit.Assert.assertEquals;
 
-
 public class ScoresTest {
+
     private Scores scores;
 
     public void lose() {
@@ -42,39 +44,51 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScores() {
+        // given
         scores = new Scores("{'score':140}");
 
+        // when
         win(1);  //+
         win(1);  //+
         win(1);  //+
         win(1);  //+
 
-        lose(); //-
+        lose();  //-
 
+        // then
         assertEquals(140 + 4 - 0, score());
     }
 
     private int score() {
-        return scores.getScore().getInt("score");
+        return scores.getScore().getInt(SCORE);
+    }
+
+    private String details() {
+        return scores.getScore().getString(DETAILS);
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
+        // given
         scores = new Scores("{'score':0}");
 
+        // when
         lose();   //-
 
+        // then
         assertEquals(0, score());
     }
 
     @Test
     public void shouldClearScore() {
+        // given
         scores = new Scores("{'score':0}");
-
         win(1);    // +
 
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, score());
     }
 
@@ -108,11 +122,58 @@ public class ScoresTest {
     }
 
     private void assertScore(int expected) {
-        assertEquals(expected, scores.getScore().getInt(Scores.SCORE));
+        assertEquals(expected, scores.getScore().getInt(SCORE));
     }
 
     private void assertRounds(String expected) {
         assertEquals(expected, scores.getScore().getJSONArray(Scores.ROUNDS).toString());
     }
 
+    @Test
+    public void shouldPrintDetails() {
+        // given
+        scores = new Scores("{'score':140}");
+
+        // when
+        win(1);
+
+        // then
+        assertEquals("25.00%(∑141)[i1]1", details());
+
+        // when
+        lose();
+
+        // then
+        assertEquals("12.50%(∑141)[i2]01", details());
+
+        // when
+        win(4);
+
+        // then
+        assertEquals("41.67%(∑145)[i3]401", details());
+
+        // when
+        win(3);
+
+        // then
+        assertEquals("50.00%(∑148)[i4]3401", details());
+
+        // when
+        lose();
+
+        // then
+        assertEquals("40.00%(∑148)[i5]03401", details());
+
+        // when
+        win(2);
+
+        // then
+        assertEquals("41.67%(∑150)[i6]203401", details());
+
+        // when
+        lose();
+
+        // then
+        assertEquals("35.71%(∑150)[i7]0203401", details());
+    }
 }

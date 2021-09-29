@@ -31,7 +31,7 @@
     </MavenSettings>
     <method v="2">
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="client/java [install]" run_configuration_type="MavenRunConfiguration" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="games [install -test +allgames]" run_configuration_type="MavenRunConfiguration" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="games [install all-games]" run_configuration_type="MavenRunConfiguration" />
     </method>
   </configuration>
 </component>

@@ -26,12 +26,6 @@ function initJoystick(playerId, registered, code, contextPath) {
         return;
     }
 
-    var container = "#div_" + playerId;
-    var actParams = $("#act_params");
-
-    function ok() {
-    }
-
     function sendCommand(command) {
         if (!setup.enableJoystick) return;
 
@@ -39,7 +33,7 @@ function initJoystick(playerId, registered, code, contextPath) {
                 data:'command=' + command + '&player=' + playerId + "&code=" + code,
                 dataType:"json",
                 cache:false,
-                complete:ok,
+                complete:function(){},
                 timeout:30000
             });
     }

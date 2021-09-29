@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER5;
+import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER6;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
 
@@ -87,7 +89,11 @@ public class ThirdGameType extends FakeGameType {
                     reader.integer(ROUNDS_PLAYERS_PER_ROOM),
                     MultiplayerType.DISPOSABLE);
         } else {
-            return MultiplayerType.MULTIPLE;
+            if (reader.bool(PARAMETER6)){
+                return MultiplayerType.SINGLE_LEVELS.apply(reader.integer(PARAMETER5));
+            } else {
+                return MultiplayerType.MULTIPLE;
+            }
         }
     }
 

@@ -34,15 +34,12 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
@@ -133,24 +130,18 @@ public class Sample implements Field {
 
     @Override
     public void newGame(Player player) {
-        if (!players.contains(player)) {
-            players.add(player);
+        if (players.contains(player)) {
+            remove(player);
         }
+        players.add(player);
         player.newHero(this);
-        removeAloneHeroes();
-    }
-
-    // TODO DF3D попробовать избавиться от этого метода
-    private void removeAloneHeroes() {
-        heroes().removeNotSame(players.stream().
-                map(GamePlayer::getHero)
-                .collect(toList()));
     }
 
     @Override
     public void remove(Player player) {
-        players.remove(player);
-        removeAloneHeroes();
+        if (players.remove(player)) {
+            heroes().removeExact(player.getHero());
+        }
     }
 
     @Override

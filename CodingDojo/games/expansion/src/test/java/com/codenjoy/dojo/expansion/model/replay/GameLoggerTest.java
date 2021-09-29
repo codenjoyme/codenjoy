@@ -24,6 +24,7 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 
 import com.codenjoy.dojo.expansion.model.AbstractMultiplayerTest;
+import com.codenjoy.dojo.expansion.model.SoftSpreader;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -45,6 +46,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
     @Before
     public void setup() {
         super.setup();
+        SoftSpreader.NEW_GAME_WHEN_GAME_OVER = false;
 
         gameDataFolder = new File("gameData");
         for (File file : getFiles()) {
@@ -319,6 +321,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
 
         // when
         spreader.tickAll();
+        spreader.newGameForAllGameOver();
 
         assertF("-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n" +
@@ -690,6 +693,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
         // when
         // new game
         spreader.tickAll();
+        spreader.newGameForAllGameOver();
 
         layer2 =
                 "----" +

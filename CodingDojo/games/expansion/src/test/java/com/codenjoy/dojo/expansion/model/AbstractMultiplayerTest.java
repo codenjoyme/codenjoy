@@ -23,15 +23,17 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.model.levels.*;
+import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.Events;
 import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -41,7 +43,7 @@ import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.*;
+import java.util.Arrays;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
@@ -117,10 +119,8 @@ public abstract class AbstractMultiplayerTest {
                 .leaveForceCount(1)
                 .regionsScores(0)
                 .roundTicks(10000)
-                .waitingOthers(false)
                 .defenderHasAdvantage(false)
-                .singleTrainingMode(isSingleTrainingOrMultiple())
-                .shufflePlayers(false);
+                .singleTrainingMode(isSingleTrainingOrMultiple());
 
         spreader = new SoftSpreader(new GameRunner(){
             @Override

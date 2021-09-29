@@ -30,15 +30,24 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.stream.Collectors.joining;
+
 public class Scores implements PlayerScores {
 
     private static final Logger log = LoggerFactory.getLogger(Hero.class);
 
-    public final static String SCORE = "score";
+    public static final String SCORE = "score";
     public static final String ROUNDS = "rounds";
+    public static final String DETAILS = "details";
+    public static final double QUARTER = 25.0;
 
     private volatile int score;
     private JSONObject scores;
+    private DecimalFormat format;
 
     public Scores(Object startScore) {
         if (startScore instanceof Integer) {
@@ -48,6 +57,7 @@ public class Scores implements PlayerScores {
             this.score = object.getInt(SCORE);
         }
         scores = new JSONObject();
+        format = new DecimalFormat("0.00");
         clearRounds();
     }
 
@@ -92,8 +102,36 @@ public class Scores implements PlayerScores {
     @Override
     public JSONObject getScore() {
         scores.put(SCORE, score);
+        scores.put(DETAILS, details());
         return scores;
     }
+
+    private String details() {
+        List<Integer> list = (List)rounds().toList();
+        int count = list.size();
+
+        double average = twoDecimalPlaces(QUARTER *
+                list.stream()
+                        .mapToInt(it -> it)
+                        .average().orElse(0.0));
+
+        Collections.reverse(list);
+
+        String rounds = list.stream()
+                .map(Object::toString)
+                .collect(joining(""));
+
+        return String.format("%s%%(∑%s)[i%s]%s",
+                format.format(average),
+                score,
+                count,
+                rounds);
+    }
+
+    private double twoDecimalPlaces(double average) {
+        return 1.0D * Math.round(average * 100) / 100;
+    }
+
     @Override
     public void event(Object input) {
         Events events = (Events)input;

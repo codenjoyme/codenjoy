@@ -23,9 +23,9 @@
 pages = pages || {};
 
 pages.board = function() {
-    setup.authenticated = getSettings('authenticated');
     setup.game = getSettings('game');
     setup.room = getSettings('room');
+    setup.authorizedPlayerId = getSettings('authorizedPlayerId');
     setup.playerId = getSettings('playerId');
     setup.readableName = getSettings('readableName');
     setup.code = getSettings('code');
@@ -95,14 +95,16 @@ function initBoardComponents(setup) {
         }
     }
 
-    if (setup.enableChat) {
-        let onConnect = function(chatControl) {
-            initChat(setup.contextPath, chatControl, ROOM_TYPE);
-            initChat(setup.contextPath, chatControl, FIELD_TYPE);
+    if (setup.enableChat && setup.authorizedPlayerId) {
+        var onConnect = function(chatControl) {
+            initChat(ROOM_TYPE, setup.room, setup.authorizedPlayerId,
+                setup.contextPath, chatControl);
+            initChat(FIELD_TYPE, setup.room, setup.authorizedPlayerId,
+                setup.contextPath, chatControl);
         };
 
-        initChatWebSocket(setup.room,
-            setup.playerId, setup.code, setup.contextPath, onConnect);
+        initChatWebSocket(setup.room, setup.authorizedPlayerId,
+            setup.code, setup.contextPath, onConnect);
     }
 
     if (setup.enableDonate) {
@@ -110,8 +112,8 @@ function initBoardComponents(setup) {
     }
 
     if (typeof initJoystick == 'function') {
-        if (!!setup.playerId) {
-            initJoystick(setup.playerId, setup.registered,
+        if (!!setup.authorizedPlayerId) {
+            initJoystick(setup.authorizedPlayerId, setup.registered,
                 setup.code, setup.contextPath);
         }
     }

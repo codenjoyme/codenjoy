@@ -25,9 +25,7 @@ package com.codenjoy.dojo.expansion.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.games.expansion.Board;
 import com.codenjoy.dojo.expansion.client.AISolver;
-import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.Ticker;
@@ -35,6 +33,8 @@ import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.LevelsFactory;
 import com.codenjoy.dojo.expansion.model.replay.GameLoggerImpl;
+import com.codenjoy.dojo.games.expansion.Board;
+import com.codenjoy.dojo.games.expansion.Element;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
@@ -59,11 +59,9 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
 
     private static final Logger log = LoggerFactory.getLogger(GameRunner.class);
 
-    private GameSettings settings; // TODO make stateless
-
     @Override
     public GameSettings getSettings() {
-        return settings = ((settings != null) ? settings : new GameSettings());
+        return new GameSettings();
     }
 
     @Override
@@ -149,16 +147,6 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
     @Override
     public Class<? extends ClientBoard> getBoard() {
         return Board.class;
-    }
-
-    @Override
-    public void tick() {
-        processAdminCommands();
-    }
-
-    private void processAdminCommands() {
-        // TODO попробовать решить это другим способом
-        new CommandParser(this).parse(getSettings());
     }
 
     @Override

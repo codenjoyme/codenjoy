@@ -23,12 +23,11 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.services.GameSettings;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.expansion.model.AbstractMultiplayerTest.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
 @Ignore("TODO: пофиксить создание игры")
@@ -38,11 +37,7 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
     public void setup() {
         super.setup();
 
-        settings
-//                .lobbyEnable(true)
-//                .lobbyCapacity(4)
-                .defenderHasAdvantage(false)
-                .shufflePlayers(false);
+        settings.defenderHasAdvantage(false);
     }
 
     public static final String LOBBY_LEVEL =
@@ -1433,12 +1428,8 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
         final int LOBBY_CAPACITY = 8;
         final int ROUNDS = 10;
 
-        boolean old1 = settings.waitingOthers();
-//        int old2 = settings.lobbyCapacity();
         int old3 = settings.roundTicks();
         try {
-            settings.waitingOthers(true);
-//            settings.lobbyCapacity(LOBBY_CAPACITY);
             settings.roundTicks(ROUNDS);
 
             givenLevels();
@@ -1553,7 +1544,6 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertL(level2, PLAYER9);
             assertE(forces2, PLAYER9);
         } finally {
-            settings.waitingOthers(old1);
 //            settings.lobbyCapacity(old2);
             settings.roundTicks(old3);
         }
@@ -1564,14 +1554,8 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
         final int LOBBY_CAPACITY = 8;
         final int ROUNDS = 10;
 
-        boolean old1 = settings.waitingOthers();
-//        int old2 = settings.lobbyCapacity();
         int old3 = settings.roundTicks();
-//        boolean old4 = settings.lobbyEnable();
         try {
-//            settings.lobbyEnable(true);
-            settings.waitingOthers(true);
-//            settings.lobbyCapacity(LOBBY_CAPACITY);
             settings.roundTicks(ROUNDS);
 
             givenLevels();
@@ -1713,10 +1697,7 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertE(forces1, PLAYER5);
 
         } finally {
-            settings.waitingOthers(old1);
-//            settings.lobbyCapacity(old2);
             settings.roundTicks(old3);
-//            settings.lobbyEnable(old4);
         }
     }
 

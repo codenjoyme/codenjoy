@@ -31,21 +31,20 @@ import com.codenjoy.dojo.expansion.services.Events;
 import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.games.expansion.Forces;
 import com.codenjoy.dojo.games.expansion.ForcesMoves;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.JsonUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -71,7 +70,6 @@ public class Expansion implements Tickable, IField {
     private boolean nothingChanged;
 
     private List<Player> players;
-    private List<Player> losers;
     private int roundTicks;
 
     public Expansion(Level level, Ticker ticker, Dice dice, GameLogger gameLogger, boolean multiple, GameSettings settings) {
@@ -91,7 +89,6 @@ public class Expansion implements Tickable, IField {
     private void cleanAfterGame() {
         roundTicks = 0;
         nothingChanged = true;
-        losers = new LinkedList();
         if (isMultiplayer) {
             gameLogger.start(this);
         }
@@ -105,14 +102,12 @@ public class Expansion implements Tickable, IField {
 
         ticker.tick();
 
-        if (isWaitingOthers()) return;
-
         roundTicks++;
 
         if (log.isDebugEnabled()) {
             log.debug("Expansion processing board calculations. " +
                             "State before processing {}",
-                    toString());
+                    this);
         }
 
         if (isMultiplayer) {
@@ -135,22 +130,24 @@ public class Expansion implements Tickable, IField {
             }
 
             if (winner != null) {
-                resetAllPlayers();
+                allHeroesDie();
+                return;
             }
         }
 
         if (settings.roundLimitedInTime()) {
             if (roundTicks >= settings.roundTicks()) {
                 for (Player player : players) {
-                    if (losers.contains(player)) continue;
                     player.event(DRAW_MULTIPLE);
                 }
-                resetAllPlayers();
+                allHeroesDie();
 
                 if (log.isDebugEnabled()) {
                     log.debug("Expansion round is out. All players will be removed! {}",
-                            toString());
+                            this);
                 }
+
+                return;
             }
         }
 
@@ -186,22 +183,12 @@ public class Expansion implements Tickable, IField {
         }
     }
 
-    private void resetAllPlayers() {
-        // fist time remove all players
-        List<Player> reset = removeAllPlayers();
-        // then add they to this board
-        for (Player player : reset) {
-            newGame(player);
+    private void allHeroesDie() {
+        for (Player player : players) {
+            player.getHero().die();
+            player.destroyHero();
         }
-    }
-
-    @NotNull
-    private List<Player> removeAllPlayers() {
-        List<Player> result = new LinkedList<>(players);
-        for (Player player : result) {
-            remove(player);
-        }
-        return result;
+        cleanAfterGame();
     }
 
     private void attack() {
@@ -318,7 +305,6 @@ public class Expansion implements Tickable, IField {
     }
 
     private Events checkStatus(Player player, Hero hero) {
-        if (losers.contains(player)) return null;
         if (players.size() == 1) {
             List<Cell> freeCells = level.cellsWith(
                     cell -> cell.getItems(HeroForces.class).isEmpty() &&
@@ -341,19 +327,10 @@ public class Expansion implements Tickable, IField {
             return WIN_MULTIPLE;
         }
         if (!exists) {
-            losers.add(player);
             player.getHero().die();
             return LOSE;
         }
         return null;
-    }
-
-    private boolean isWaitingOthers() {
-        return isMultiplayer && settings.waitingOthers() && gameNotStarted() && players.size() != 4;
-    }
-
-    private boolean gameNotStarted() {
-        return roundTicks == 0;
     }
 
     @Override
@@ -382,7 +359,7 @@ public class Expansion implements Tickable, IField {
     public Start getFreeBase() {
         List<Start> bases = level.items(Start.class);
 
-        Collections.sort(bases, (o1, o2) -> Integer.compare(o1.index(), o2.index()));
+        Collections.sort(bases, Comparator.comparingInt(Start::index));
 
         Start free = null;
         for (Start place : bases) {
@@ -475,29 +452,35 @@ public class Expansion implements Tickable, IField {
         return level.cellsWith(cell -> cell.busy(hero)).size();
     }
 
+    // TODO move to RoundField when time is right
     @Override
     public void newGame(Player player) {
-        if (losers.contains(player)) {
-            return;
+        if (players.contains(player)) {
+            remove(player);
         }
+        players.add(player);
+        onAdd(player);
+    }
 
-        if (!players.contains(player)) {
-            players.add(player);
-        }
+    protected void onAdd(Player player) {
         player.newHero(this);
         if (isMultiplayer) {
             gameLogger.register(player);
         }
     }
 
-    @Override
-    public void remove(Player player) {
-        losers.remove(player); // TODO test me
-        players.remove(player);
+    protected void onRemove(Player player) {
         player.destroyHero();
         if (players.isEmpty()) {
             cleanAfterGame();
         }
+    }
+
+    // TODO move to RoundField when time is right
+    @Override
+    public void remove(Player player) {
+        players.remove(player);
+        onRemove(player);
     }
 
     @Override
@@ -521,7 +504,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public List<Player> getPlayers() {
-        return new LinkedList(players);
+        return new LinkedList<>(players);
     }
 
     @Override
@@ -571,8 +554,6 @@ public class Expansion implements Tickable, IField {
                 put("players", players());
                 put("id", id());
                 put("isMultiple", isMultiplayer);
-                put("losers", Player.lg(losers));
-                put("waitingOthers", isWaitingOthers());
                 put("roundTicks", roundTicks);
                 put("level", printer());
             }};

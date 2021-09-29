@@ -43,7 +43,7 @@ public class ExpansionGameLoggerTest {
 
     @Before
     public void setup() {
-        settings = new GameSettings().waitingOthers(false);
+        settings = new GameSettings();
     }
 
     @Test

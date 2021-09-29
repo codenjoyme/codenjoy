@@ -23,11 +23,7 @@ package com.codenjoy.dojo.expansion.client;
  */
 
 
-import com.codenjoy.dojo.games.expansion.AbstractSolver;
-import com.codenjoy.dojo.games.expansion.Board;
-import com.codenjoy.dojo.games.expansion.Command;
-import com.codenjoy.dojo.games.expansion.Forces;
-import com.codenjoy.dojo.games.expansion.ForcesMoves;
+import com.codenjoy.dojo.games.expansion.*;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -67,11 +63,13 @@ public class AISolver extends AbstractSolver {
 
     public static DeikstraFindWay.Possible possible(Board board) {
         List<Point> barriers = board.barriers();
+        List<Point> holes = board.holes();
 
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point point) {
-                return !barriers.contains(point);
+                return !barriers.contains(point)
+                        && !holes.contains(point);
             }
         };
     }

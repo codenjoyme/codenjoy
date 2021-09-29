@@ -30,7 +30,10 @@ import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.MULTIPLE;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
@@ -91,11 +95,12 @@ public class BoardController {
         validator.checkCode(code, CAN_BE_NULL);
 
         Player player = playerService.get(id);
+        String onBehalfPlayerId = registration.getIdByCode(code);
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register?id=" + id;
         }
 
-        populateBoardAttributes(model, code, player, false);
+        populateBoardAttributes(model, onBehalfPlayerId, code, player, false);
 
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
@@ -116,26 +121,31 @@ public class BoardController {
             return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game);
         }
 
-        populateBoardAttributes(model, player.getCode(), player, false);
+        populateBoardAttributes(model, player.getId(), player.getCode(), player, false);
         return "board";
     }
 
-    private void populateBoardAttributes(ModelMap model, String code, Player player, boolean allPlayersScreen) {
-        populateBoardAttributes(model, code, player.getGame(), player.getRoom(), player.getGameOnly(), player.getId(),
+    private void populateBoardAttributes(ModelMap model, String onBehalfPlayerId, String code, Player player, boolean allPlayersScreen) {
+        populateBoardAttributes(model, onBehalfPlayerId, code, player.getGame(), player.getRoom(), player.getGameOnly(), player.getId(),
                 player.getReadableName(), allPlayersScreen);
     }
 
-    private void populateBoardAttributes(ModelMap model, String code, String game, String room, String gameOnly,
+    private void populateBoardAttributes(ModelMap model, String onBehalfPlayerId, String code, String game, String room, String gameOnly,
                                          String playerId, String readableName, boolean allPlayersScreen) {
         model.addAttribute("code", code);
         model.addAttribute("game", game);
         model.addAttribute("room", room);
-        model.addAttribute("allPlayersScreen", false);
         model.addAttribute("gameOnly", gameOnly);
+        model.addAttribute("authorizedPlayerId", (isAuthenticated()) ? onBehalfPlayerId : null);
         model.addAttribute("playerId", playerId);
         model.addAttribute("readableName", readableName);
         model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
+    }
+
+    private boolean isAuthenticated() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
@@ -148,16 +158,12 @@ public class BoardController {
         validator.checkRoom(room, CANT_BE_NULL);
 
         Optional<Registration.User> user = registration.getUserById(id);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             return "redirect:/register?id=" + id;
         }
 
-        model.addAttribute("game", game);
-        model.addAttribute("room", room);
-        model.addAttribute("gameOnly", GameServiceImpl.removeNumbers(game));
-        model.addAttribute("playerId", user.get().getId());
-        model.addAttribute("readableName", user.get().getReadableName());
-
+        populateBoardAttributes(model, id, null, null, null, GameServiceImpl.removeNumbers(game),
+                id, user.get().getReadableName(), false);
         return "board-log";
     }
 
@@ -192,16 +198,18 @@ public class BoardController {
             // TODO а это тут вообще надо?
             return "redirect:/register?" + "room" + "=" + room;
         }
-        GameType gameType = player.getGameType();
-        if (gameType.getMultiplayerType(gameType.getSettings()).isMultiple()) {
+        if (isMultiplayerType(player)) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
-        if (user != null && code == null) {
-            code = user.getCode();
+        String id = null;
+        if (user != null) {
+            id = user.getId();
+            code = (code == null) ? user.getCode() : code;
         }
 
-        populateBoardAttributes(model, code, game, room, player.getGameOnly(), null, null, true);
+        populateBoardAttributes(model, id, code,
+                game, room, player.getGameOnly(), null, null, true);
         return "board";
     }
 
@@ -217,23 +225,22 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register";
         }
-        GameType gameType = player.getGameType(); // TODO а тут точно сеттинги румы а не игры?
-        if (gameType.getMultiplayerType(gameType.getSettings()) != MultiplayerType.SINGLE) {
+        if (isMultiplayerType(player)) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
-        model.addAttribute("code", code);
-        model.addAttribute("game", player.getGame());
-        model.addAttribute("room", player.getRoom());
-        model.addAttribute("gameOnly", player.getGameOnly());
-        model.addAttribute("playerId", player.getId());
-        model.addAttribute("readableName", player.getReadableName());
-        model.addAttribute("allPlayersScreen", true);
+        populateBoardAttributes(model, id, code, player, true);
         return "board";
     }
 
+    private boolean isMultiplayerType(Player player) {
+        GameType gameType = player.getGameType();
+        // TODO а тут точно сеттинги румы а не игры?
+        return gameType.getMultiplayerType(gameType.getSettings()).is(MULTIPLE);
+    }
+
     private String code(@RequestParam("code") String code) {
-        return (code != null)?"?code=" + code:"";
+        return (code == null) ? "" : ("?code=" + code);
     }
 
 }

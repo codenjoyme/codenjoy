@@ -34,7 +34,10 @@
     <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}"></div>
+    <div id="settings"
+         page="${page}"
+         contextPath="${ctx}"
+         game="${game}"></div>
 
     <%@include file="forkMe.jsp"%>
 
