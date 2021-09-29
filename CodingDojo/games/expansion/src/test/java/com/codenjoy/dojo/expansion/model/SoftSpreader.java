@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 
 public class SoftSpreader {
 
-    public static boolean NEW_GAME_WHEN_GAME_OVER = true;
+    public static boolean NEW_GAME_WHEN_GAME_OVER;
 
     private List<EventListener> listeners;
     private List<Single> games;
@@ -31,6 +31,7 @@ public class SoftSpreader {
     private final GameSettings settings;
 
     public SoftSpreader(GameRunner gameRunner) {
+        NEW_GAME_WHEN_GAME_OVER = true;
         this.gameRunner = gameRunner;
         settings = gameRunner.getSettings();
 
