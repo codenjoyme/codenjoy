@@ -72,8 +72,7 @@ public class GameTest {
                 .leaveForceCount(1)
                 .regionsScores(0)
                 .roundTicks(10000)
-                .defenderHasAdvantage(false)
-                .shufflePlayers(false);
+                .defenderHasAdvantage(false);
     }
 
     private void dice(int... ints) {

@@ -90,9 +90,6 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
         bool(SINGLE_TRAINING_MODE, false);
 
-        bool(WAITING_OTHERS, true);
-        bool(SHUFFLE_PLAYERS_AFTER_LOBBY, true);
-
         integer(WIN_ON_MULTIPLE_SCORE, 4);
         integer(DRAW_ON_MULTIPLE_SCORE, 1);
         integer(TICKS_PER_ROUND, 600);
@@ -154,10 +151,6 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         return integer(BOARD_SIZE);
     }
 
-    public boolean waitingOthers() {
-        return bool(WAITING_OTHERS);
-    }
-
     public int leaveForceCount() {
         return integer(LEAVE_FORCES);
     }
@@ -180,10 +173,6 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public int roundTicks() {
         return integer(TICKS_PER_ROUND);
-    }
-
-    public boolean shufflePlayers() {
-        return bool(SHUFFLE_PLAYERS_AFTER_LOBBY);
     }
 
     public boolean gameLoggingEnable() {
@@ -252,16 +241,6 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
 
     public GameSettings roundTicks(int value) {
         integer(TICKS_PER_ROUND, value);
-        return this;
-    }
-
-    public GameSettings shufflePlayers(boolean value) {
-        bool(SHUFFLE_PLAYERS_AFTER_LOBBY, value);
-        return this;
-    }
-
-    public GameSettings waitingOthers(boolean value) {
-        bool(WAITING_OTHERS, value);
         return this;
     }
 

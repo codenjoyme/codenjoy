@@ -9,16 +9,15 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Single;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 public class SoftSpreader {
+
+    public static boolean NEW_GAME_WHEN_GAME_OVER = true;
 
     private List<EventListener> listeners;
     private List<Single> games;
@@ -196,13 +195,36 @@ public class SoftSpreader {
     }
 
     public void tickAll() {
+        tickAll(games);
+    }
+
+    public void newGameForAllGameOver() {
+        newGameForAllGameOver(games);
+    }
+
+    public static void tickAll(List<? extends Game> games) {
         games.stream()
-                .filter(single -> single != null)
-                .map(Single::getField)
+                .filter(Objects::nonNull)
+                .map(Game::getField)
                 .distinct()
-                .filter(field -> field != null)
+                .filter(Objects::nonNull)
                 .forEach(GameField::tick);
-        gameRunner.tick();
+
+        if (NEW_GAME_WHEN_GAME_OVER) {
+            newGameForAllGameOver(games);
+        }
+    }
+
+    public static void newGameForAllGameOver(List<? extends Game> games) {
+        games.stream()
+                .filter(Objects::nonNull)
+                .filter(Game::isGameOver)
+                .forEach(single -> {
+                    GameField field = single.getField();
+                    single.close();
+                    single.on(field);
+                    single.newGame();
+                });
     }
 
     public IField field(int player) {
@@ -238,7 +260,7 @@ public class SoftSpreader {
         return player(index).getField().id();
     }
 
-    private Player player(int index) {
+    public Player player(int index) {
         return (Player)single(index).getPlayer();
     }
 
@@ -250,11 +272,9 @@ public class SoftSpreader {
         return (Hero)single(index).getJoystick();
     }
 
-    // если игрок походил то в его комнате считаем, что уже все заполнено
+    // если игрок походил, то в его комнате считаем, что уже все заполнено
     public void roomIsBusy(int index) {
-        if (!settings.waitingOthers()) {
-            Expansion current = currents.get(index);
-            fullness.put(current.id(), current.allBases());
-        }
+        Expansion current = currents.get(index);
+        fullness.put(current.id(), current.allBases());
     }
 }

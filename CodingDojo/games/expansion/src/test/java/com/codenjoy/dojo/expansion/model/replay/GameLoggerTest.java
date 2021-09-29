@@ -24,6 +24,7 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 
 import com.codenjoy.dojo.expansion.model.AbstractMultiplayerTest;
+import com.codenjoy.dojo.expansion.model.SoftSpreader;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -411,6 +412,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
     @Test
     public void shouldPrintHeroIsNotAliveWhen3PlayersAndOneIsDie() {
         // given
+        SoftSpreader.NEW_GAME_WHEN_GAME_OVER = false;
         settings.gameLoggingEnable(true);
 
         String single =
@@ -584,6 +586,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
     @Test
     public void shouldCreateNewFileWhenGoToAnotherGameAfterRoundOver() {
         // given
+        SoftSpreader.NEW_GAME_WHEN_GAME_OVER = false;
         settings.gameLoggingEnable(true);
 
         String single =
@@ -690,6 +693,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
         // when
         // new game
         spreader.tickAll();
+        spreader.newGameForAllGameOver();
 
         layer2 =
                 "----" +

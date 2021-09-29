@@ -82,7 +82,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
     public void shouldNoWaitTillAllPlayersCollectedTogether_ifNoSpecialMode() {
         // given
         givenFl(MULTIPLE_LEVEL);
-        settings.waitingOthers(false);
         createPlayers(3);
 
         assertE("-------" +
@@ -127,133 +126,118 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldWaitTillAllPlayersCollectedTogether_ifSpecialMode() {
-        boolean old = settings.waitingOthers();
-        try {
-            // given
-            settings.waitingOthers(true);
+    public void shouldDontWaitTillAllPlayersCollectedTogether_ifSpecialMode() {
+        // given
+        givenFl(MULTIPLE_LEVEL);
+        createPlayers(3);
 
-            givenFl(MULTIPLE_LEVEL);
-            createPlayers(3);
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
 
-            assertE("-------" +
-                    "-----♥-" +
-                    "-------" +
-                    "-------" +
-                    "-------" +
-                    "-♣---♦-" +
-                    "-------", PLAYER1);
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-            assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#00A-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+        // when
+        // try to go
+        hero(PLAYER3, 1, 1).up();
 
-            // when
-            // try to go
-            hero(PLAYER3, 1, 1).up();
+        spreader.tickAll();
 
-            spreader.tickAll();
+        // then
+        // can do it
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-♣-----" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
 
-            // then
-            // cant do it
-            assertE("-------" +
-                    "-----♥-" +
-                    "-------" +
-                    "-------" +
-                    "-------" +
-                    "-♣---♦-" +
-                    "-------", PLAYER1);
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001-=#-=#-=#-=#-=#\n" +
+                "-=#00B-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-            assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#00A-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+        // but find the attempt
+        assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':1}}]," +
+                        "'movements':[{'count':1,'direction':'UP','region':{'x':1,'y':1}}]}}," +
+                        "'coordinate':{'x':1,'y':1},'level':0,'multiplayer':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER3).getHero())));
 
-            // but find the attempt
-            assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':1}}]," +
-                            "'movements':[{'count':1,'direction':'UP','region':{'x':1,'y':1}}]}}," +
-                            "'coordinate':{'x':1,'y':1},'level':0,'multiplayer':true}",
-                    JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER3).getHero())));
+        // when
+        // if register one more player // TODO тут что-то не чистое происходит
+        createPlayers(1);
 
-            // when
-            // but if register one more player
-            createPlayers(1);
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-♣-----" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
 
-            assertE("-------" +
-                    "-♠---♥-" +
-                    "-------" +
-                    "-------" +
-                    "-------" +
-                    "-♣---♦-" +
-                    "-------", PLAYER1);
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001-=#-=#-=#-=#-=#\n" +
+                "-=#00B-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-            assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#00A-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#00A-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+        // when
+        // try to go
+        hero(PLAYER3, 1, 1).right();
 
-            // when
-            // try to go
-            hero(PLAYER3, 1, 1).up();
+        spreader.tickAll();
 
-            spreader.tickAll();
+        // then
+        // can do it
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-♣-----" +
+                "-♣♣--♦-" +
+                "-------", PLAYER1);
 
-            // then
-            // can do it
-            assertE("-------" +
-                    "-♠---♥-" +
-                    "-------" +
-                    "-------" +
-                    "-♣-----" +
-                    "-♣---♦-" +
-                    "-------", PLAYER1);
-
-            assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#00A-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#001-=#-=#-=#-=#-=#\n" +
-                    "-=#00B-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
-        } finally {
-            settings.waitingOthers(old);
-        }
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001-=#-=#-=#-=#-=#\n" +
+                "-=#00C001-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
     }
 
     @Test
     public void shouldOnlyOnePlayerWins() {
-        boolean old = settings.waitingOthers();
-        try {
-            // given
-            settings.waitingOthers(true);
+        // given
+        givenFl("╔═════┐" +
+                "║4...1│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║3...2│" +
+                "└─────┘");
+        createPlayers(4);
 
-            // given
-            givenFl("╔═════┐" +
-                    "║4...1│" +
-                    "║.....│" +
-                    "║.....│" +
-                    "║.....│" +
-                    "║3...2│" +
-                    "└─────┘");
-            createPlayers(4);
-
-            // when then
-            atackFirstPlayer();
-            atackSecondPlayer();
-            attackThirdPlayerAndWin();
-        } finally {
-            settings.waitingOthers(old);
-        }
+        // when then
+        attackFirstPlayer();
+        attackSecondPlayer();
+        attackThirdPlayerAndWin();
     }
 
     private void attackThirdPlayerAndWin() {
@@ -303,20 +287,23 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         verify(PLAYER3).event(WIN());
         verifyNoMoreInteractions(PLAYER4);
 
+        assertEquals(true, spreader.player(PLAYER1).isAlive());
+        assertEquals(true, spreader.player(PLAYER3).isAlive());
+
         assertE("-------" +
-                "-♠---♥-" +
+                "-----♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-♣---♦-" +
+                "-----♦-" +
                 "-------", PLAYER1);
 
         assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
         spreader.tickAll();
@@ -327,7 +314,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         verifyNoMoreInteractions(PLAYER4);
     }
 
-    private void atackSecondPlayer() {
+    private void attackSecondPlayer() {
         // move to another enemy
         for (int i = 0; i < 20; i++) {
             hero(PLAYER3, 1, 1).right();
@@ -371,6 +358,11 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         verifyNoMoreInteractions(PLAYER3);
         verifyNoMoreInteractions(PLAYER4);
 
+        assertEquals(true, spreader.player(PLAYER1).isAlive());
+        assertEquals(true, spreader.player(PLAYER2).isAlive()); // was false
+        spreader.destroy(PLAYER2);
+        assertEquals(true, spreader.player(PLAYER3).isAlive());
+
         assertE("-------" +
                 "-----♥-" +
                 "-♣-----" +
@@ -388,7 +380,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
     }
 
-    private void atackFirstPlayer() {
+    private void attackFirstPlayer() {
         // then
         assertE("-------" +
                 "-♠---♥-" +
@@ -449,6 +441,12 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         verifyNoMoreInteractions(PLAYER3);
         verify(PLAYER4).event(LOSE());
 
+        assertEquals(true, spreader.player(PLAYER1).isAlive());
+        assertEquals(true, spreader.player(PLAYER2).isAlive());
+        assertEquals(true, spreader.player(PLAYER3).isAlive());
+        assertEquals(true, spreader.player(PLAYER4).isAlive()); // was false
+        spreader.destroy(PLAYER4);
+
         assertE("-------" +
                 "-----♥-" +
                 "-♣-----" +
@@ -468,53 +466,43 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
     @Test
     public void shouldLosePlayersCanGetInfoAboutGame() {
-        boolean old = settings.waitingOthers();
-        try {
-            // given
-            settings.waitingOthers(true);
+        // given
+        givenFl("╔═════┐" +
+                "║4...1│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║3...2│" +
+                "└─────┘");
+        createPlayers(4);
 
-            // given
-            givenFl("╔═════┐" +
-                    "║4...1│" +
-                    "║.....│" +
-                    "║.....│" +
-                    "║.....│" +
-                    "║3...2│" +
-                    "└─────┘");
-            createPlayers(4);
+        // when
+        attackFirstPlayer();
 
+        // and go to new base
+        hero(PLAYER3, 1, 4).up();
+        spreader.tickAll();
 
-            // when
-            atackFirstPlayer();
+        assertE("-------" +
+                "-♣---♥-" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
 
-            // and go to new base
-            hero(PLAYER3, 1, 4).up();
-            spreader.tickAll();
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001-=#-=#-=#00A-=#\n" +
+                "-=#00B-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#00U-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-            assertE("-------" +
-                    "-♣---♥-" +
-                    "-♣-----" +
-                    "-♣-----" +
-                    "-♣-----" +
-                    "-♣---♦-" +
-                    "-------", PLAYER1);
-
-            assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#001-=#-=#-=#00A-=#\n" +
-                    "-=#00B-=#-=#-=#-=#-=#\n" +
-                    "-=#014-=#-=#-=#-=#-=#\n" +
-                    "-=#014-=#-=#-=#-=#-=#\n" +
-                    "-=#00U-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
-
-            // then
-            assertBoardData(PLAYER1, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'round':63,'rounds':10000,'tick':63}");
-            assertBoardData(PLAYER2, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'myBase':{'x':5,'y':1},'myColor':1,'offset':{'x':0,'y':0},'round':63,'rounds':10000,'tick':63}");
-            assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'round':63,'rounds':10000,'tick':63}");
-            assertBoardData(PLAYER4, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'myBase':{'x':1,'y':5},'myColor':3,'offset':{'x':0,'y':0},'round':63,'rounds':10000,'tick':63}");
-        } finally {
-            settings.waitingOthers(old);
-        }
+        // then
+        assertBoardData(PLAYER1, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'round':63,'rounds':10000,'tick':63}");
+        assertBoardData(PLAYER2, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'myBase':{'x':5,'y':1},'myColor':1,'offset':{'x':0,'y':0},'round':63,'rounds':10000,'tick':63}");
+        assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'round':63,'rounds':10000,'tick':63}");
     }
 
     @Test
@@ -522,10 +510,8 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         // given
         shouldOnlyOnePlayerWins();
 
-        assertBoardData(PLAYER1, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'round':1,'rounds':10000,'tick':188}");
-        assertBoardData(PLAYER2, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'myBase':{'x':5,'y':1},'myColor':1,'offset':{'x':0,'y':0},'round':1,'rounds':10000,'tick':188}");
-        assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'round':1,'rounds':10000,'tick':188}");
-        assertBoardData(PLAYER4, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'myBase':{'x':1,'y':5},'myColor':3,'offset':{'x':0,'y':0},'round':1,'rounds':10000,'tick':188}");
+        assertBoardData(PLAYER1, "{'available':10,'forces':'-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','------------♥---------------------------♦--------'],'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'round':1,'rounds':10000,'tick':188}");
+        assertBoardData(PLAYER3, "{'available':10,'forces':'-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','------------♥---------------------------♦--------'],'myBase':{'x':5,'y':1},'myColor':1,'offset':{'x':0,'y':0},'round':1,'rounds':10000,'tick':188}");
     }
 
     @Test
@@ -536,7 +522,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        settings.waitingOthers(false);
         createPlayers(4);
 
         assertE("-----" +
@@ -581,7 +566,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        settings.waitingOthers(false);
         createPlayers(4);
 
         assertE("-----" +
@@ -625,7 +609,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        settings.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 2, 3).down();
@@ -673,7 +656,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        settings.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 2, 3).down();
@@ -720,7 +702,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        settings.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 2, 3).down();
@@ -770,7 +751,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║.12│" +
                 "║...│" +
                 "└───┘");
-        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("-----" +
@@ -813,7 +793,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -882,7 +861,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -951,7 +929,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -1035,7 +1012,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║.....│" +
                 "║3...2│" +
                 "└─────┘");
-        settings.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 5, 5).down();
@@ -1144,7 +1120,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
     }
 
     @Test
-    public void shouldCantResetAfterLose() {
+    public void shouldTicksAfterLose() {
         // given
         shouldLosePlayersCanGetInfoAboutGame();
 
@@ -1165,7 +1141,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
         // when
-        hero(PLAYER4).reset();
         spreader.tickAll();
         spreader.tickAll();
 
@@ -1196,7 +1171,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        settings.waitingOthers(false);
         createPlayers(2);
 
         // when
@@ -1325,7 +1299,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║...2│" +
                 "└────┘");
-        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -1377,7 +1350,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        settings.waitingOthers(false);
         createPlayers(1);
 
         assertF("-=#-=#-=#-=#-=#-=#\n" +
@@ -1525,7 +1497,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "└───┘" +
                 "     " +
                 "     ");
-        settings.waitingOthers(false);
         createPlayers(1);
 
         assertF("-=#-=#-=#-=#-=#\n" +
@@ -1589,7 +1560,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║OOO│" +
                 "└───┘" +
                 "     ");
-        settings.waitingOthers(false);
         createPlayers(1);
 
         assertF("-=#-=#-=#-=#-=#\n" +
@@ -1669,7 +1639,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║.4.....│  ║.....3.│" +
                 "└╗.....┌┘  └╗.....┌┘" +
                 " └─────┘    └─────┘ ");
-        settings.waitingOthers(false);
 
         Map<String, Integer> playerHeroes = new HashMap<>();
         Map<String, Integer> heroes = new HashMap<>();
@@ -1760,7 +1729,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
         String hero = line.substring(line.indexOf(s3) + s3.length(), line.indexOf(s4));
 
         String s1 = " gets message from client ";
-        String message = line.substring(line.indexOf(s1) + s1.length(), line.length());
+        String message = line.substring(line.indexOf(s1) + s1.length());
 
         return Arrays.asList(hero, message);
     }
@@ -1791,7 +1760,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                     "║.....│" +
                     "║3...2│" +
                     "└─────┘");
-            settings.waitingOthers(false);
             createPlayers(4);
 
             assertE("-------" +
@@ -1917,7 +1885,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║.....│" +
                 "║3...2│" +
                 "└─────┘");
-        settings.waitingOthers(false);
         createPlayers(2);
 
         spreader.tickAll();
@@ -1973,7 +1940,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║...│" +
                 "║...│" +
                 "└───┘");
-        settings.waitingOthers(false);
         createPlayers(2);
 
         // when then
@@ -2066,7 +2032,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║...│" +
                 "║...│" +
                 "└───┘");
-        settings.waitingOthers(false);
         createPlayers(2);
 
         // when then
@@ -2162,7 +2127,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                     "║...│" +
                     "║...│" +
                     "└───┘");
-            settings.waitingOthers(false);
             createPlayers(2);
 
             // when then
@@ -2230,7 +2194,6 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                     "║...│" +
                     "║...│" +
                     "└───┘");
-            settings.waitingOthers(false);
             createPlayers(2);
 
             // when then
@@ -2458,67 +2421,62 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
     @Test
     public void shouldContinueWorkingWhenWaitForAndOnePlayerGoOutDuringTheGame() {
-        boolean old = settings.waitingOthers();
-        try {
-            // given
-            settings.waitingOthers(true);
+        // given
+        // TODO settings.waitingOthers(true);
 
-            givenFl(MULTIPLE_LEVEL);
-            createPlayers(4);
+        givenFl(MULTIPLE_LEVEL);
+        createPlayers(4);
 
-            // when
-            // try to go
-            hero(PLAYER3, 1, 1).up();
+        // when
+        // try to go
+        hero(PLAYER3, 1, 1).up();
 
-            spreader.tickAll();
+        spreader.tickAll();
 
-            // then
-            // can do it
-            assertE("-------" +
-                    "-♠---♥-" +
-                    "-------" +
-                    "-------" +
-                    "-♣-----" +
-                    "-♣---♦-" +
-                    "-------", PLAYER1);
+        // then
+        // can do it
+        assertE("-------" +
+                "-♠---♥-" +
+                "-------" +
+                "-------" +
+                "-♣-----" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
 
-            assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#00A-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#001-=#-=#-=#-=#-=#\n" +
-                    "-=#00B-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001-=#-=#-=#-=#-=#\n" +
+                "-=#00B-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-            // when
-            spreader.destroy(PLAYER3);
-            spreader.tickAll();
+        // when
+        spreader.destroy(PLAYER3);
+        spreader.tickAll();
 
-            // when
-            // try to go
-            hero(PLAYER1, 5, 5).down();
+        // when
+        // try to go
+        hero(PLAYER1, 5, 5).down();
 
-            spreader.tickAll();
+        spreader.tickAll();
 
-            // then
-            // can do it
-            assertE("-------" +
-                    "-♠---♥-" +
-                    "-----♥-" +
-                    "-------" +
-                    "-------" +
-                    "-----♦-" +
-                    "-------", PLAYER1);
+        // then
+        // can do it
+        assertE("-------" +
+                "-♠---♥-" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-------", PLAYER1);
 
-            assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#00A-=#-=#-=#00B-=#\n" +
-                    "-=#-=#-=#-=#-=#001-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n" +
-                    "-=#-=#-=#-=#-=#00A-=#\n" +
-                    "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
-        } finally {
-            settings.waitingOthers(old);
-        }
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00B-=#\n" +
+                "-=#-=#-=#-=#-=#001-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
     }
 }

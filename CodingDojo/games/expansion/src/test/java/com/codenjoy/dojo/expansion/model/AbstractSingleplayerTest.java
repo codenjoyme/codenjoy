@@ -77,9 +77,7 @@ public class AbstractSingleplayerTest {
         factory = new PrinterFactoryImpl();
 
         settings = gameRunner.getSettings()
-                .waitingOthers(false)
-                .singleTrainingMode(false)
-                .shufflePlayers(false);
+                .singleTrainingMode(false);
     }
 
     protected void givenFl(String... boards) {
@@ -152,12 +150,7 @@ public class AbstractSingleplayerTest {
     }
 
     protected void tickAll() {
-        for (Game game : games) {
-            if (game != null) {
-                game.getField().tick();
-            }
-        }
-        gameRunner.tick(); // this codenjoy server will do after all game ticks
+        SoftSpreader.tickAll(games);
     }
 
     protected void doit(int times, Runnable whatToDo) {
