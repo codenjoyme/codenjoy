@@ -452,24 +452,35 @@ public class Expansion implements Tickable, IField {
         return level.cellsWith(cell -> cell.busy(hero)).size();
     }
 
+    // TODO move to RoundField when time is right
     @Override
     public void newGame(Player player) {
-        if (!players.contains(player)) {
-            players.add(player);
+        if (players.contains(player)) {
+            remove(player);
         }
+        players.add(player);
+        onAdd(player);
+    }
+
+    protected void onAdd(Player player) {
         player.newHero(this);
         if (isMultiplayer) {
             gameLogger.register(player);
         }
     }
 
-    @Override
-    public void remove(Player player) {
-        players.remove(player);
+    protected void onRemove(Player player) {
         player.destroyHero();
         if (players.isEmpty()) {
             cleanAfterGame();
         }
+    }
+
+    // TODO move to RoundField when time is right
+    @Override
+    public void remove(Player player) {
+        players.remove(player);
+        onRemove(player);
     }
 
     @Override
