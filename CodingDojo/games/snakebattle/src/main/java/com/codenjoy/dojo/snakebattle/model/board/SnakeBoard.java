@@ -430,11 +430,14 @@ public class SnakeBoard extends RoundField<Player> implements Field {
                 .collect(toList());
     }
 
-    public void newGame(Player player) {
-        if (!players.contains(player)) {
-            players.add(player);
-        }
+    @Override
+    protected void onAdd(Player player) {
         player.newHero(this);
+    }
+
+    @Override
+    protected void onRemove(Player player) {
+        // do nothing
     }
 
     @Override
