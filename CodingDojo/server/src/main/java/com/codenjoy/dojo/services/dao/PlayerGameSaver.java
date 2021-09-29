@@ -201,4 +201,14 @@ public class PlayerGameSaver implements GameSaver {
         );
     }
 
+    @Override
+    public String getRepositoryURLByPlayerId(String id) {
+        return pool.select("SELECT repository_url FROM saves " +
+                        "WHERE player_id = ?",
+                new Object[]{id},
+                rs -> rs.next() ? rs.getString("repository_url") : null
+        );
+    }
+
+
 }

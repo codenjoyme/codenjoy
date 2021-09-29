@@ -47,4 +47,7 @@ public interface GameSaver {
     Map<String, String> getEventsList();
 
     String getRoomNameByPlayerId(String id);
-}
+
+    String getRepositoryURLByPlayerId(String id);
+
+    }
