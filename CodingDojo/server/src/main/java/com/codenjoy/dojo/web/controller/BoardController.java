@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
@@ -62,6 +63,7 @@ public class BoardController {
     private final ConfigProperties properties;
     private final RegistrationService registrationService;
     private final GameServerService gameServerService;
+    private final PlayerGameSaver playerGameSaver;
 
     @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
@@ -104,6 +106,7 @@ public class BoardController {
 
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
+        model.addAttribute("repositoryURL", playerGameSaver.getRepositoryURLByPlayerId(id));
         return justBoard ? "board-only" : "board";
     }
 

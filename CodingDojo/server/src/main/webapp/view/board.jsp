@@ -45,7 +45,7 @@
     </sec:authorize>
     <div id="settings" page="${page}" authenticated="${authenticated}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
-    <%@include file="forkMe.jsp"%>
+
 
     <div id="board_page">
         <div id="donate" style="display:none;">

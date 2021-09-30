@@ -230,7 +230,9 @@ public class RegistrationService {
         if (player == NullPlayer.INSTANCE) {
             return "login";
         }
-        saveService.save(player);
+        if(!saveService.getUserIdsFromSaves().contains(player.getId())) {
+            saveService.save(player);
+        }
         return getBoardUrl(code, player.getId(), game);
     }
 
