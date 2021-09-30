@@ -369,7 +369,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private void quiet(Runnable runnable) {
-        ((Tickable)() -> runnable.run()).quietTick();
+        ((Tickable) () -> runnable.run()).quietTick();
     }
 
     // for testing only
