@@ -406,14 +406,19 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public void setLevel(String playerId, JSONObject save) {
-        if (save == null) {
-            return;
+        lock.writeLock().lock();
+        try {
+            if (save == null) {
+                return;
+            }
+            PlayerGame playerGame = get(playerId);
+            String room = playerGame.getRoom();
+            Game game = playerGame.getGame();
+            reload(game, room, save);
+            playerGame.fireOnLevelChanged();
+        } finally {
+            lock.writeLock().unlock();
         }
-        PlayerGame playerGame = get(playerId);
-        String room = playerGame.getRoom();
-        Game game = playerGame.getGame();
-        reload(game, room, save);
-        playerGame.fireOnLevelChanged();
     }
 
     // TODO а что если я поменяю комнату с изменением игры?
