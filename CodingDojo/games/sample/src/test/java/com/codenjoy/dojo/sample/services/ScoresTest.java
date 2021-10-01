@@ -43,6 +43,10 @@ public class ScoresTest {
         scores.event(Events.WIN);
     }
 
+    public void winRound() {
+        scores.event(Events.WIN_ROUND);
+    }
+
     @Before
     public void setup() {
         settings = new GameSettings();
@@ -60,9 +64,13 @@ public class ScoresTest {
 
         lose();
 
+        winRound();
+        winRound();
+
         assertEquals(140
                 + 4 * settings.integer(WIN_SCORE)
-                - settings.integer(LOSE_PENALTY),
+                - 1 * settings.integer(LOSE_PENALTY)
+                + 2 * settings.integer(WIN_ROUND_SCORE),
                 scores.getScore());
     }
 

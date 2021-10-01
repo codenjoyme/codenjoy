@@ -34,7 +34,10 @@ import java.util.List;
 import static com.codenjoy.dojo.games.sample.Element.*;
 
 /**
- * Полезный утилитный класс для получения объектов на поле из текстового вида.
+ * Полезный класс для получения объектов на поле из текстового вида.
+ *
+ * Обрати внимание на множество методов поиска find Наследуемых
+ * от {@link AbstractLevel}.
  */
 public class Level extends AbstractLevel {
 
@@ -58,6 +61,10 @@ public class Level extends AbstractLevel {
         return find(Wall::new, WALL);
     }
 
+    /**
+     * @param field {@link PointField} который будет основным
+     *         хранилищем объектов на поле.
+     */
     @Override
     protected void fill(PointField field) {
         field.addAll(walls());

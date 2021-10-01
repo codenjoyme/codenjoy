@@ -24,13 +24,15 @@ package com.codenjoy.dojo.sampletext.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.sampletext.services.GameSettings.Keys.LOSE_PENALTY;
 import static com.codenjoy.dojo.sampletext.services.GameSettings.Keys.WIN_SCORE;
 
 /**
  * Класс, который умеет подсчитывать очки за те или иные действия.
- * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
+ * Обычно хочется, чтобы константы очков не были захардкоджены,
+ * потому используй объект {@link Settings} для их хранения.
  */
 public class Scores implements PlayerScores {
 

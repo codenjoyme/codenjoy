@@ -30,7 +30,11 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 /**
- * Артефакт: Стена на поле
+ * Артефакт - стена на поле.
+ *
+ * Если артефакт пассивный, то он умеет только рисовать себя, но
+ * встречаются и более активные артефакты, тогда тут может быть размещена их логика.
+ * Яркий тому пример {@link com.codenjoy.dojo.sample.model.Hero}.
  */
 public class Wall extends PointImpl implements State<Element, Player> {
 
