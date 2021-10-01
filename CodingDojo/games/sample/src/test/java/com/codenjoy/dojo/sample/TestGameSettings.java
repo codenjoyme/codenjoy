@@ -31,9 +31,9 @@ public class TestGameSettings extends GameSettings {
 
     public TestGameSettings() {
         bool(ROUNDS_ENABLED, false);
-        integer(WIN_SCORE, 1);
-        integer(WIN_ROUND_SCORE, 10);
-        integer(LOSE_PENALTY, 5);
+        integer(WIN_SCORE, 30);
+        integer(LOSE_PENALTY, 100);
+        integer(WIN_ROUND_SCORE, 200);
 
         // тут можно переопределить настройки для всех тестов
     }
