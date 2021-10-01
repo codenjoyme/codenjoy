@@ -31,10 +31,10 @@ import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,7 +46,7 @@ import java.util.function.Supplier;
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
  */
-public class Sample implements Field {
+public class Sample extends RoundField<Player> implements Field {
 
     private PointField field;
     private List<Player> players;
@@ -54,6 +54,8 @@ public class Sample implements Field {
     private GameSettings settings;
 
     public Sample(Dice dice, GameSettings settings) {
+        super(Events.START_ROUND, Events.WIN_ROUND, Events.LOSE, settings);
+
         this.dice = dice;
         this.settings = settings;
         this.field = new PointField();
@@ -66,13 +68,39 @@ public class Sample implements Field {
     public void clearScore() {
         settings.level().saveTo(field);
         field.init(this);
+
+        // other clear score actions
+
+        super.clearScore();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
-    public void tick() {
+    public void onAdd(Player player) {
+        player.newHero(this);
+    }
+
+    @Override
+    public void onRemove(Player player) {
+        heroes().removeExact(player.getHero());
+    }
+
+    @Override
+    protected List<Player> players() {
+        return players;
+    }
+
+    @Override
+    public void cleanStuff() {
+        // clean all temporary stuff before next tick
+    }
+
+    @Override
+    protected void setNewObjects() {
+        // add new object after rewarding winner
+    }
+
+    @Override
+    public void tickField() {
         for (Player player : players) {
             Hero hero = player.getHero();
 
@@ -85,14 +113,6 @@ public class Sample implements Field {
 
                 freeRandom(null)
                         .ifPresent(point -> field.add(new Gold(point)));
-            }
-        }
-
-        for (Player player : players) {
-            Hero hero = player.getHero();
-
-            if (!hero.isAlive()) {
-                player.event(Events.LOSE);
             }
         }
     }

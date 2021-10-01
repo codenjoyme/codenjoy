@@ -25,12 +25,15 @@ package com.codenjoy.dojo.sample;
 import com.codenjoy.dojo.sample.services.GameSettings;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 
 public class TestGameSettings extends GameSettings {
 
     public TestGameSettings() {
-        integer(WIN_SCORE, 30);
-        integer(LOSE_PENALTY, 100);
+        bool(ROUNDS_ENABLED, false);
+        integer(WIN_SCORE, 1);
+        integer(WIN_ROUND_SCORE, 10);
+        integer(LOSE_PENALTY, 5);
 
         // тут можно переопределить настройки для всех тестов
     }

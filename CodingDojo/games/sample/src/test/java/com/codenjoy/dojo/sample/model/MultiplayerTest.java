@@ -167,7 +167,7 @@ public class MultiplayerTest extends AbstractGameTest {
 
         // then
         assertF("☼☼☼☼☼☼\n" +
-                "☼X   ☼\n" +
+                "☼Y   ☼\n" +
                 "☼☺   ☼\n" +
                 "☼ ☻  ☼\n" +
                 "☼    ☼\n" +

@@ -102,7 +102,7 @@ public abstract class AbstractGameTest {
         return player;
     }
 
-    protected TestGameSettings settings() {
+    protected GameSettings settings() {
         return new TestGameSettings();
     }
 

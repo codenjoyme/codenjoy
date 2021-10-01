@@ -24,25 +24,34 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.sample.services.GameSettings;
+import com.codenjoy.dojo.sample.services.Scores;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-
-import java.util.Optional;
+import com.codenjoy.dojo.services.round.RoundGamePlayer;
 
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки.
  * Тут же ивенты передабтся лиснеру фреймворка.
  */
-public class Player extends GamePlayer<Hero, Field> {
+public class Player extends RoundGamePlayer<Hero, Field> {
 
     public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
     @Override
+    public void event(Object event) {
+        getHero().addScore(Scores.scoreFor(settings(), event));
+        super.event(event);
+    }
+
+    @Override
     public Hero createHero(Point pt) {
         return new Hero(pt);
+    }
+
+    private GameSettings settings() {
+        return (GameSettings) settings;
     }
 
 }

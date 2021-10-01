@@ -27,7 +27,7 @@ import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 /**
  * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
@@ -35,17 +35,17 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
  * Ну и конечно же он имплементит {@see State}, а значит может быть отрисован на поле.
  * Часть этих интерфейсов объявлены в {@see PlayerHero}, а часть явно тут.
  */
-public class Hero extends PlayerHero<Field> implements State<Element, Player> {
+public class Hero extends RoundPlayerHero<Field> implements State<Element, Player> {
 
-    private boolean alive;
+    private int score;
     private Direction direction;
     private boolean bomb;
 
-    public Hero(Point xy) {
-        super(xy);
+    public Hero(Point pt) {
+        super(pt);
+        score = 0;
         direction = null;
         bomb = false;
-        alive = true;
     }
 
     @Override
@@ -57,42 +57,42 @@ public class Hero extends PlayerHero<Field> implements State<Element, Player> {
 
     @Override
     public void down() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.RIGHT;
     }
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         bomb = true;
     }
 
     @Override
     public void tick() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         if (bomb) {
             field.setBomb(this);
@@ -103,7 +103,7 @@ public class Hero extends PlayerHero<Field> implements State<Element, Player> {
             Point to = direction.change(this.copy());
 
             if (field.bombs().contains(to)) {
-                alive = false;
+                die();
                 field.bombs().removeAt(to);
             }
 
@@ -115,14 +115,13 @@ public class Hero extends PlayerHero<Field> implements State<Element, Player> {
     }
 
     @Override
-    public boolean isAlive() {
-        return alive;
-    }
-
-    @Override
     public Element state(Player player, Object... alsoAtPoint) {
-        if (!isAlive()) {
-            return Element.DEAD_HERO;
+        if (!isActiveAndAlive()) {
+            if (this == player.getHero()) {
+                return Element.DEAD_HERO;
+            } else {
+                return Element.OTHER_DEAD_HERO;
+            }
         }
 
         if (this == player.getHero()) {
@@ -130,5 +129,18 @@ public class Hero extends PlayerHero<Field> implements State<Element, Player> {
         } else {
             return Element.OTHER_HERO;
         }
+    }
+
+    @Override
+    public int scores() {
+        return score;
+    }
+
+    public void clearScores() {
+        score = 0;
+    }
+
+    public void addScore(int added) {
+        score = Math.max(0, score + added);
     }
 }
