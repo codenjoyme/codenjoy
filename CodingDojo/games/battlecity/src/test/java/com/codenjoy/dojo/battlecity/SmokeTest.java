@@ -23,31 +23,37 @@ package com.codenjoy.dojo.battlecity;
  */
 
 
-import com.codenjoy.dojo.games.battlecity.Board;
-import com.codenjoy.dojo.battlecity.services.ai.AISolver;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
-import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.battlecity.services.ai.AISolver;
+import com.codenjoy.dojo.games.battlecity.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.LEVEL_MAP;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.SHOW_MY_TANK_UNDER_TREE;
-import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
+    private Smoke smoke;
+    private Dice dice;
+
+    @Before
+    public void setup() {
+        smoke = new Smoke();
+        dice = smoke.dice();
+    }
+
     @Test
     public void test() {
-        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
-
         // about 4.5 sec
         int ticks = 1000;
 
-        Smoke.play(ticks, "SmokeTest.data",
+        smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {

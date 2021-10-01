@@ -161,10 +161,12 @@ All names should be lowercase
 ```
 public class DryRunGame {
     public static void main(String[] args) {
-        LocalGameRunner.run(new GameRunner(),
-                new KeyboardSolver(),
-                // new AISolver(new RandomDice()),
-                new Board());
+        new LocalGameRunner()
+                .with(new GameRunner())
+                .add(new KeyboardSolver(),
+                        // new AISolver(new RandomDice()),
+                        new Board())
+                .run();
     }
 }
 ```

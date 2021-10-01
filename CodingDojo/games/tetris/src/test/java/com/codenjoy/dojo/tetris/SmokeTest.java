@@ -23,31 +23,38 @@ package com.codenjoy.dojo.tetris;
  */
 
 
-import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.games.tetris.Board;
-import com.codenjoy.dojo.tetris.services.ai.AISolver;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.levels.level.AllFigureLevels;
 import com.codenjoy.dojo.tetris.services.GameRunner;
 import com.codenjoy.dojo.tetris.services.GameSettings;
+import com.codenjoy.dojo.tetris.services.ai.AISolver;
 import com.codenjoy.dojo.utils.Smoke;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
-import static org.junit.Assert.assertEquals;
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GAME_LEVELS;
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GLASS_SIZE;
 
 public class SmokeTest {
 
+    private Smoke smoke;
+    private Dice dice;
+
+    @Before
+    public void setup() {
+        smoke = new Smoke();
+        dice = smoke.dice(1000, 200);
+    }
+
     @Test
     public void test() {
-        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 1000, 200);
-
         // about 8 sec
         int ticks = 1000;
 
-        Smoke.play(ticks, "SmokeTest.data",
+        smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {
