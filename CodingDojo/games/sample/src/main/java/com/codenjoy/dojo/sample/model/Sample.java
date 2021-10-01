@@ -178,6 +178,7 @@ public class Sample extends RoundField<Player> implements Field {
                 Bomb.class);
     }
 
+    // TODO test me
     @Override
     public List<Player> load(String board, Supplier<Player> creator) {
         Level level = new Level(board);
