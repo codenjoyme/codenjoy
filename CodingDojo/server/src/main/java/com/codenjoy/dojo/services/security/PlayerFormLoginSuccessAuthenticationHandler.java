@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.security;
  * #L%
  */
 
+import com.codenjoy.dojo.services.SaveServiceImpl;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.controller.AdminController;
 import lombok.RequiredArgsConstructor;
@@ -41,13 +42,14 @@ import java.io.IOException;
 public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final RegistrationService registrationService;
+    private final SaveServiceImpl saveService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         Registration.User principal = (Registration.User) authentication.getPrincipal();
-        String game = registrationService.getGameByUserId(principal.getId());
+        String game = saveService.getGameFromUserId(principal.getId());
         String room = game; // TODO ROOM тут надо получить room как-то
         String repositoryUrl = registrationService.getRepository(principal.getGitHubUsername());
 
