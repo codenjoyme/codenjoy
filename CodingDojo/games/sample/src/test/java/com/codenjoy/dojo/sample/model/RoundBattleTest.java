@@ -371,6 +371,16 @@ public class RoundBattleTest extends AbstractGameTest {
                 "☻$$  \n" +
                 "☻☺   \n", 2);
 
+        // cleaned after new round
+        assertEquals(0, hero(0).scores());
+        assertEquals(0, hero(1).scores());
+        assertEquals(0, hero(2).scores());
+
+        // but we want to change heroes scores
+        hero(0).addScore(100);
+        hero(1).addScore(100);
+        hero(2).addScore(100);
+
         assertEquals(100, hero(0).scores());
         assertEquals(100, hero(1).scores());
         assertEquals(100, hero(2).scores());
