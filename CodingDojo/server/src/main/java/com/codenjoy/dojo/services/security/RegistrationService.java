@@ -263,4 +263,8 @@ public class RegistrationService {
     public String getRepository(String gitHubUsername) {
         return gameServerService.createOrGetRepository(gitHubUsername);
     }
+
+    public String getGameByUserId(String userId){
+        return saveService.getGameFromUserId(userId);
+    }
 }

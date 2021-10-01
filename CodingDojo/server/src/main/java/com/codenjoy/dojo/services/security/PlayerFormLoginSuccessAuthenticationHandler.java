@@ -47,7 +47,7 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthen
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         Registration.User principal = (Registration.User) authentication.getPrincipal();
-        String game = request.getParameter("game");
+        String game = registrationService.getGameByUserId(principal.getId());
         String room = game; // TODO ROOM тут надо получить room как-то
         String repositoryUrl = registrationService.getRepository(principal.getGitHubUsername());
 
