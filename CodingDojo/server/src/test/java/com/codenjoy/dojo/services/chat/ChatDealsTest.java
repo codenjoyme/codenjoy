@@ -179,7 +179,7 @@ public class ChatDealsTest {
                     "☼    ☼\n" +
                     "☼$$$ ☼\n" +
                     "☼ $  ☼\n" +
-                    "☼X ☺ ☼\n" +
+                    "☼Y ☺ ☼\n" +
                     "☼☼☼☼☼☼\n",
                 deal1.getGame().getBoardAsString());
 
