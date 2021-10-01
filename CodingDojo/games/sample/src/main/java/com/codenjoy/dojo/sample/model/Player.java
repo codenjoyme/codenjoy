@@ -30,8 +30,10 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.round.RoundGamePlayer;
 
 /**
- * Класс игрока. Тут кроме героя может подсчитываться очки.
- * Тут же ивенты передабтся лиснеру фреймворка.
+ * Класс игрока, инкапсулирующий в себе героя {@link #getHero()},
+ * поле {@link #field} на котором играем, настройки игры {@link #settings}
+ * и самое главное слушатель (со стороны фреймворка) событий игры для этого
+ * игрока {@link #listener}.
  */
 public class Player extends RoundGamePlayer<Hero, Field> {
 

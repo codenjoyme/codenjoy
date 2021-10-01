@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sample.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.sample.services.Events.*;
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
@@ -31,7 +32,7 @@ import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 /**
  * Класс, который умеет подсчитывать очки за те или иные действия.
  * Обычно хочется, чтобы константы очков не были захардкоджены,
- * потому используй объект {@see Settings} для их хранения.
+ * потому используй объект {@link Settings} для их хранения.
  */
 public class Scores implements PlayerScores {
 

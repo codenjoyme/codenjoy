@@ -30,7 +30,11 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 /**
- * Артефакт: Бомба на поле
+ * Артефакт - бомба на поле.
+ *
+ * Если артефакт пассивный, то он умеет только рисовать себя, но
+ * встречаются и более активные артефакты, тогда тут может быть размещена их логика.
+ * Яркий тому пример {@link com.codenjoy.dojo.sample.model.Hero}.
  */
 public class Bomb extends PointImpl implements State<Element, Player> {
 

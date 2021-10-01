@@ -39,7 +39,10 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
- * Генератор игор - реализация {@see GameType}
+ * Генератор игр - реализация {@link GameType}.
+ * Эта абстрактная фабрика собирает все реализации интерфейсов воедино.
+ * Игровой фреймворк на основе эьтой точки входа в игру строит все
+ * жизненно важные объекты.
  */
 public class GameRunner extends AbstractGameType<GameSettings> {
 

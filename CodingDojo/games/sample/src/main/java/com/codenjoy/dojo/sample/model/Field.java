@@ -33,8 +33,8 @@ import com.codenjoy.dojo.services.round.RoundGameField;
 import java.util.Optional;
 
 /**
- * Так случилось что доска знает про героя, а герой про доску.
- * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
+ * Объекты на поле хотят взаимодействовать с полем и делают они
+ * с помощью этого интерфейса.
  */
 public interface Field extends RoundGameField<Player> {
 

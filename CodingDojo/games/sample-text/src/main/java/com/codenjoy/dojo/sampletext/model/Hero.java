@@ -30,9 +30,13 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import java.util.Arrays;
 
 /**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
- * Эти интерфейсы объявлены в {@see PlayerHero}.
+ * Это реализация героя. Обрати внимание, что он реализует {@link Joystick},
+ * а значит может быть управляем фреймворком.
+ *
+ * Так же он реализует {@link Tickable}, что значит - есть
+ * возможность его оповещать о каждом тике игры.
+ *
+ * Эти интерфейсы объявлены в {@link PlayerHero}.
  */
 public class Hero extends PlayerHero<Field> implements MessageJoystick {
 

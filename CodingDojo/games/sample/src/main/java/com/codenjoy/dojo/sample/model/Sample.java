@@ -43,8 +43,16 @@ import java.util.function.Supplier;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
+ * Если какой-то из жителей борды вдруг захочет узнать что-то
+ * у нее, то лучше ему дать интерфейс {@link Field}.
+ *
+ * Борда реализует метод {@link #tickField()} чтобы быть
+ * уведомленной о каждом тике игры.
+ *
+ * Чтобы поддерживать много-раундовые матчи борда наследует
+ * {@link RoundField}. Этот малый берет на себя всю логистику
+ * связанную с ожиданием игроков между раундами, обратным отсчетом
+ * времени перед стартом раунда и т.д.
  */
 public class Sample extends RoundField<Player> implements Field {
 
@@ -99,6 +107,10 @@ public class Sample extends RoundField<Player> implements Field {
         // add new object after rewarding winner
     }
 
+    /**
+     * Сердце поля. Каждую секунду фреймворк будет тикать этот метод.
+     * Важно помнить, что если раунд не начался - сигнал сюда не дойдет.
+     */
     @Override
     public void tickField() {
         for (Player player : players) {
@@ -149,15 +161,6 @@ public class Sample extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void newGame(Player player) {
-        if (players.contains(player)) {
-            remove(player);
-        }
-        players.add(player);
-        player.newHero(this);
-    }
-
-    @Override
     public void remove(Player player) {
         if (players.remove(player)) {
             heroes().removeExact(player.getHero());
@@ -169,8 +172,17 @@ public class Sample extends RoundField<Player> implements Field {
         return settings;
     }
 
+    /**
+     * @return Объект участвующий в прорисовке поля.
+     *
+     */
     @Override
     public BoardReader reader() {
+        /**
+         * Внимание! Порядок важен.
+         * В этом порядке будут опрашиваться состояния через метод
+         * {@link com.codenjoy.dojo.services.State#state(Object, Object...)}
+         */
         return field.reader(
                 Hero.class,
                 Wall.class,
@@ -178,6 +190,16 @@ public class Sample extends RoundField<Player> implements Field {
                 Bomb.class);
     }
 
+    /**
+     * Метод для быстрой инициализации текущего поля из строкового представления.
+     *
+     * Актуально для сервиса, отвечающего на вопрос - каким будет следующий тик
+     * при такой конфигурации поля.
+     *
+     * @param board Текстовое представление поля.
+     * @param creator Метод создающий объекты-игроков для этих целей.
+     * @return Список созданных игроков в новом измененном поле.
+     */
     // TODO test me
     @Override
     public List<Player> load(String board, Supplier<Player> creator) {
@@ -192,6 +214,11 @@ public class Sample extends RoundField<Player> implements Field {
         level.saveTo(field);
         return result;
     }
+
+    /**
+     * Дальше идут методы для получения быстрого доступа
+     * к объектам разных типов на поле.
+     */
 
     @Override
     public Accessor<Gold> gold() {
