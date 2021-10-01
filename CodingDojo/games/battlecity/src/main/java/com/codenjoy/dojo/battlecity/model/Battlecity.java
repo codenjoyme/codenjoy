@@ -85,11 +85,6 @@ public class Battlecity extends RoundField<Player> implements Field {
     }
 
     @Override
-    protected void setNewObjects() {
-        // do nothing
-    }
-
-    @Override
     public void cleanStuff() {
         removeDeadItems();
     }
