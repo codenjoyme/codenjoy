@@ -23,30 +23,36 @@ package com.codenjoy.dojo.minesweeper;
  */
 
 
-import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.games.minesweeper.Board;
-import com.codenjoy.dojo.minesweeper.services.ai.AISolver;
 import com.codenjoy.dojo.minesweeper.services.Events;
 import com.codenjoy.dojo.minesweeper.services.GameRunner;
 import com.codenjoy.dojo.minesweeper.services.GameSettings;
+import com.codenjoy.dojo.minesweeper.services.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
 import com.codenjoy.dojo.utils.TestUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.BOARD_SIZE;
 import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.MINES_ON_BOARD;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class SmokeTest {
 
+    private Smoke smoke;
+    private Dice dice;
+
+    @Before
+    public void setup() {
+        smoke = new Smoke();
+        dice = smoke.dice();
+    }
+
     @Test
     public void test() {
-        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
-
         // about 5 sec
         int ticks = 1000;
 
@@ -56,7 +62,7 @@ public class SmokeTest {
             assertFalse(actual.contains(Events.FORGET_CHARGE.name()));
         };
 
-        Smoke.play(ticks, "SmokeTest.data",
+        smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {

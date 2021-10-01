@@ -23,13 +23,13 @@ package com.codenjoy.dojo.a2048;
  */
 
 
-import com.codenjoy.dojo.a2048.services.ai.AISolver;
 import com.codenjoy.dojo.a2048.services.GameRunner;
 import com.codenjoy.dojo.a2048.services.GameSettings;
-import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.a2048.services.ai.AISolver;
 import com.codenjoy.dojo.games.a2048.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -38,15 +38,22 @@ import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.SIZE;
 
 public class SmokeTest {
 
+    private Smoke smoke;
+    private Dice dice;
+
+    @Before
+    public void setup() {
+        smoke = new Smoke();
+        dice = smoke.dice();
+    }
+
     @Test
     public void test() {
-        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
-
         // about 7s
         int maxDeep = 5;
         int ticks = 1000;
 
-        Smoke.play(ticks, "SmokeTest.data",
+        smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {

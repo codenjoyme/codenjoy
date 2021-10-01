@@ -24,37 +24,44 @@ package com.codenjoy.dojo.icancode;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.games.icancode.Board;
-import com.codenjoy.dojo.icancode.services.ai.AISolver;
 import com.codenjoy.dojo.icancode.model.Level;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.icancode.services.Levels;
+import com.codenjoy.dojo.icancode.services.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
-import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
+    private Smoke smoke;
+    private Dice dice;
+
+    @Before
+    public void setup() {
+        smoke = new Smoke();
+        dice = smoke.dice();
+    }
+
     @Test
     public void test() {
-        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
-
         // about 8s
         int ticks = 1000;
-        Solver ai = getDummySolver(dice);
+        Solver<?> ai = getDummySolver(dice);
 
-        LocalGameRunner.showPlayers = "3";
-        LocalGameRunner.printScores = true;
+        smoke.settings().showPlayers("3");
+        smoke.settings().printScores(true);
         boolean printBoardOnly = false;
-        Smoke.play(ticks, "SmokeTest.data", printBoardOnly,
+
+        smoke.play(ticks, "SmokeTest.data", printBoardOnly,
                 new GameRunner() {
                     @Override
                     public Dice getDice() {
@@ -102,7 +109,7 @@ public class SmokeTest {
                 Arrays.asList(new Board(), new Board(), new Board(), new Board(), new Board()));
     }
 
-    public Solver getDummySolver(Dice dice) {
+    public Solver<?> getDummySolver(Dice dice) {
         int[] index = {0};
         List<String> commands = Arrays.asList(
                 "ACT(-1)",

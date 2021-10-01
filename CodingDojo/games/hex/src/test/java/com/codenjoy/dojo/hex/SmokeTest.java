@@ -24,33 +24,37 @@ package com.codenjoy.dojo.hex;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.games.hex.Board;
-import com.codenjoy.dojo.hex.services.ai.AISolver;
 import com.codenjoy.dojo.hex.services.GameRunner;
 import com.codenjoy.dojo.hex.services.GameSettings;
+import com.codenjoy.dojo.hex.services.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.Smoke;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
+    private Smoke smoke;
+    private Dice dice;
+    private Supplier<Solver> solver;
+
+    @Before
+    public void setup() {
+        smoke = new Smoke();
+        dice = smoke.dice();
+        solver = () -> new AISolver(dice);
+    }
+
     @Test
     public void test() {
-        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 100, 200);
-
         // about 13 sec
         int players = 5;
         int ticks = 1000;
-        Supplier<Solver> solver = () -> new AISolver(dice);
 
-        Smoke.play(ticks, "SmokeTest.data",
+        smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {
@@ -62,9 +66,6 @@ public class SmokeTest {
                         return new GameSettings();
                     }
                 },
-                Stream.generate(solver)
-                        .limit(players).collect(toList()),
-                Stream.generate(() -> new Board())
-                        .limit(players).collect(toList()));
+                players, solver, Board::new);
     }
 }

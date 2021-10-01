@@ -22,7 +22,7 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.client.local.DiceGenerator;
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codenjoy.dojo.client.local.DiceGenerator.SOUL;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 
 @Import(ThreeGamesConfiguration.class)
@@ -42,12 +43,13 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
     public static final int TICKS = 20;
     public static final int INDEX_FROM_1 = 1;
 
-    private Dice dice = LocalGameRunner.getDice("435874345435874365843564398", TICKS, 200);
     private List<String> messages = new LinkedList<>();
     private Consumer<String> out = message -> {
         messages.add(message);
         // System.out.println(message);
     };
+    private Dice dice = new DiceGenerator(out)
+            .getDice(SOUL, TICKS, 200);
 
     // play(Pc,Tc,PpR,TpR, 100);
     //      Pc/Tc>PpR/TpR     - числа участников в каждой команде должно хватить на укомплектацию борды

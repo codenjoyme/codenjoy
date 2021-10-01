@@ -23,33 +23,40 @@ package com.codenjoy.dojo.spacerace;
  */
 
 
-import com.codenjoy.dojo.client.local.LocalGameRunner;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.games.spacerace.Board;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.spacerace.services.GameRunner;
+import com.codenjoy.dojo.spacerace.services.GameSettings;
 import com.codenjoy.dojo.spacerace.services.ai.AI2Solver;
 import com.codenjoy.dojo.spacerace.services.ai.AI3Solver;
 import com.codenjoy.dojo.spacerace.services.ai.AISolver;
-import com.codenjoy.dojo.spacerace.services.GameRunner;
-import com.codenjoy.dojo.spacerace.services.GameSettings;
 import com.codenjoy.dojo.utils.Smoke;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.LEVEL_MAP;
-import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
+    private Smoke smoke;
+    private Dice dice;
+
+    @Before
+    public void setup() {
+        smoke = new Smoke();
+        dice = smoke.dice(1000, 200);
+    }
+
     @Test
     public void test() {
-        Dice dice = LocalGameRunner.getDice("435874345435874365843564398", 1000, 200);
-
         // about 2.5 sec
         int ticks = 1000;
 
-        LocalGameRunner.showPlayers = "1,2";
-        Smoke.play(ticks, "SmokeTest.data",
+        smoke.settings().showPlayers("1,2");
+
+        smoke.play(ticks, "SmokeTest.data",
                 new GameRunner() {
                     @Override
                     public Dice getDice() {

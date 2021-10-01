@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services.chat;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.client.local.DiceGenerator;
 import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.RealGameConfiguration;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
@@ -91,7 +91,7 @@ public class ChatDealsTest {
         // given
         // mock dice for game in room
         with.rooms.mockDice(game,
-                LocalGameRunner.getDice("435874345435874365843564398", 100, 200));
+                new DiceGenerator(System.out::println).getDice());
 
         // game type will be a multiple
         with.rooms.settings(room, game)
