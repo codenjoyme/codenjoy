@@ -35,6 +35,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Random;
 
+import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
@@ -461,9 +462,8 @@ public class ChatTest {
     }
 
     public static String toString(List<Chat.Message> messages) {
-        return messages.toString()
-                .replace("), Chat.Message(",
-                        "), \nChat.Message(");
+        return split(messages,
+                "), \nChat.Message(");
     }
 
     @Test

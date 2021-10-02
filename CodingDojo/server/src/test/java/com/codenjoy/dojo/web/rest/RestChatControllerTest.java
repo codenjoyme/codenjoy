@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -1312,9 +1313,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     private String fix(String string) {
-        return quote(string)
-                .replace("},{", "},\n{")
-                .replace("','text':", "',\n    'text':");
+        return split(quote(string),
+                "},\n{",
+                "',\n\t'text':");
     }
 
     @Test

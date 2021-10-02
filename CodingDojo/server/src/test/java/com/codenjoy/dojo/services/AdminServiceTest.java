@@ -50,7 +50,7 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PlayerServiceImplTest.setupTimeService;
 import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName;
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
-import static com.codenjoy.dojo.utils.TestUtils.split;
+import static com.codenjoy.dojo.client.Utils.split;
 import static java.util.stream.Collectors.joining;
 
 @RunWith(SpringRunner.class)

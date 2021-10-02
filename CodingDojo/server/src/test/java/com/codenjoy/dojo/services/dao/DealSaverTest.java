@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.codenjoy.dojo.utils.TestUtils.split;
+import static com.codenjoy.dojo.client.Utils.split;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
