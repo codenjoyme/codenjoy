@@ -29,13 +29,12 @@ import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.sample.services.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.utils.Smoke;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.function.Supplier;
-
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LEVEL_MAP;
 
 public class SmokeTest {
 
@@ -67,8 +66,10 @@ public class SmokeTest {
 
                     @Override
                     public GameSettings getSettings() {
+                        int level = LevelProgress.levelsStartsFrom1;
                         return new TestGameSettings()
-                                .string(LEVEL_MAP,
+                                .clearLevelMaps(level)
+                                .setLevelMap(level,
                                         "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                                         "☼            $     ☼\n" +
                                         "☼        $         ☼\n" +

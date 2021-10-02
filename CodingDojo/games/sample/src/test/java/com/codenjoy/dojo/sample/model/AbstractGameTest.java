@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -41,7 +42,6 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -84,9 +84,10 @@ public abstract class AbstractGameTest {
     }
 
     public void givenFl(String map) {
-        settings.string(LEVEL_MAP, map);
-        field = new Sample(dice, settings);
-        settings.level().heroes().forEach(hero -> givenPlayer(hero));
+        int level = LevelProgress.levelsStartsFrom1;
+        settings.setLevelMaps(level, map);
+        field = new Sample(dice, level, settings);
+        settings.level(level, dice).heroes().forEach(hero -> givenPlayer(hero));
     }
 
     public Player givenPlayer(Point pt) {

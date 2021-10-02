@@ -32,6 +32,7 @@ import com.codenjoy.dojo.sample.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElement;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -41,7 +42,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 /**
  * Генератор игр - реализация {@link GameType}.
  * Эта абстрактная фабрика собирает все реализации интерфейсов воедино.
- * Игровой фреймворк на основе эьтой точки входа в игру строит все
+ * Игровой фреймворк на основе этой точки входа в игру строит все
  * жизненно важные объекты.
  */
 public class GameRunner extends AbstractGameType<GameSettings> {
@@ -58,12 +59,13 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new Sample(getDice(), settings);
+        return new Sample(getDice(), levelNumber, settings);
     }
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
-        return v(settings.level().size());
+        // TODO решить что-то с этим наконец
+        return v(settings.level(LevelProgress.levelsStartsFrom1, getDice()).size());
     }
 
     @Override

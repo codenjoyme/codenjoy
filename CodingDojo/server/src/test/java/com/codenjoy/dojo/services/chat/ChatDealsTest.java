@@ -94,8 +94,8 @@ public class ChatDealsTest {
                 new DiceGenerator(System.out::println).getDice());
 
         // game type will be a multiple
-        with.rooms.settings(room, game)
-                .string(LEVEL_MAP,
+        with.rooms.levelsSettings(room, game)
+                .setLevelMaps(1,
                         "☼☼☼☼☼☼\n" +
                         "☼    ☼\n" +
                         "☼ $$ ☼\n" +

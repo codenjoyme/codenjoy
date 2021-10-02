@@ -5,7 +5,7 @@ package com.codenjoy.dojo.services.whatsnext;
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 - 2021 Codenjoy
- * %%
+ * %%WhatsNextServiceTest
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -116,7 +116,7 @@ public class WhatsNextServiceTest {
                 "| (1) ☼ X ☼      \n" +
                 "| (1) ☼   ☼      \n" +
                 "| (1) ☼☼☼☼☼      \n" +
-                "| (1) Events:[LOSE => -100]\n" +
+                "| (1) Events:[LOSE => -20]\n" +
                 "|                \n" +
                 "+----------------\n");
     }
