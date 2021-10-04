@@ -84,13 +84,14 @@ public abstract class AbstractGameTest {
     }
 
     public void givenFl(String map) {
-        int level = LevelProgress.levelsStartsFrom1;
-        settings.setLevelMaps(level, map);
+        int levelNumber = LevelProgress.levelsStartsFrom1;
+        settings.setLevelMaps(levelNumber, map);
+        Level level = settings.level(levelNumber, dice);
         field = new Sample(dice, level, settings);
-        settings.level(level, dice).heroes().forEach(hero -> givenPlayer(hero));
+        level.heroes().forEach(this::givenPlayer);
     }
 
-    public Player givenPlayer(Point pt) {
+    public void givenPlayer(Point pt) {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
         Player player = new Player(listener, settings);
@@ -100,7 +101,6 @@ public abstract class AbstractGameTest {
         dice(pt.getX(), pt.getY());
         game.on(field);
         game.newGame();
-        return player;
     }
 
     protected GameSettings settings() {

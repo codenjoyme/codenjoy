@@ -475,4 +475,77 @@ public class GameTest extends AbstractGameTest {
 
         events.verifyAllEvents("[WIN]");
     }
+
+    @Test
+    public void shouldClearField_whenClearScoresOnGame() {
+        // given
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺$☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+
+        hero().right();
+        hero().act();
+        dice(1, 1);
+        tick();
+
+        assertF("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ x☺☼\n" +
+                "☼$  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "[WIN]");
+
+        assertEquals(30, hero(0).scores());
+
+        hero().up();
+        tick();
+
+        assertF("☼☼☼☼☼\n" +
+                "☼  ☺☼\n" +
+                "☼ x ☼\n" +
+                "☼$  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        // when
+        dice(1, 2); // new hero position
+        field.clearScore();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼☺ $☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertEquals(0, hero(0).scores());
+    }
+
+    @Test
+    public void shouldHeroCanWalk_whenClearScoresOnGame() {
+        // given
+        shouldClearField_whenClearScoresOnGame();
+
+        // when
+        hero(0).right();
+        tick();
+
+        hero(0).right();
+        dice(1, 3);
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼$  ☼\n" +
+                "☼  ☺☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "[WIN]");
+    }
 }

@@ -59,7 +59,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new Sample(getDice(), levelNumber, settings);
+        Level level = settings.level(levelNumber, getDice());
+        return new Sample(getDice(), level, settings);
     }
 
     @Override

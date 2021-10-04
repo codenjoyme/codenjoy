@@ -56,13 +56,13 @@ import java.util.function.Supplier;
  */
 public class Sample extends RoundField<Player> implements Field {
 
-    private int level;
+    private Level level;
     private PointField field;
     private List<Player> players;
     private Dice dice;
     private GameSettings settings;
 
-    public Sample(Dice dice, int level, GameSettings settings) {
+    public Sample(Dice dice, Level level, GameSettings settings) {
         super(Events.START_ROUND, Events.WIN_ROUND, Events.LOSE, settings);
 
         this.level = level;
@@ -76,7 +76,7 @@ public class Sample extends RoundField<Player> implements Field {
 
     @Override
     public void clearScore() {
-        settings.level(level, dice).saveTo(field);
+        level.saveTo(field);
         field.init(this);
 
         // other clear score actions
