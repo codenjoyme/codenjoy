@@ -95,7 +95,7 @@ public abstract class AbstractGameTest {
         // other field preparation stuff
     }
 
-    public void givenPlayer(Point pt) {
+    private void givenPlayer(Hero hero) {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
@@ -105,7 +105,7 @@ public abstract class AbstractGameTest {
         Game game = new Single(player, printer);
         games.add(game);
 
-        dice(pt.getX(), pt.getY());
+        dice(hero.getX(), hero.getY());
         game.on(field);
         game.newGame();
     }
