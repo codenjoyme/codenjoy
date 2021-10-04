@@ -88,17 +88,23 @@ public abstract class AbstractGameTest {
         int levelNumber = LevelProgress.levelsStartsFrom1;
         settings.setLevelMaps(levelNumber, maps);
         Level level = settings.level(levelNumber, dice);
+
         field = new Sample(dice, level, settings);
         level.heroes().forEach(this::givenPlayer);
+
+        // other field preparation stuff
     }
 
     public void givenPlayer(Point pt) {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
+
         Player player = new Player(listener, settings);
         players.add(player);
+
         Game game = new Single(player, printer);
         games.add(game);
+
         dice(pt.getX(), pt.getY());
         game.on(field);
         game.newGame();
