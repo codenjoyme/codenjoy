@@ -90,8 +90,7 @@ public class ChatDealsTest {
     public void shouldPostAllScoresMessagesIntoChat() {
         // given
         // mock dice for game in room
-        with.rooms.mockDice(game,
-                new DiceGenerator(System.out::println).getDice());
+        with.rooms.mockDice(game, new DiceGenerator().getDice());
 
         // game type will be a multiple
         with.rooms.levelsSettings(room, game)
