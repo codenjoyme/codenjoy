@@ -83,9 +83,9 @@ public abstract class AbstractGameTest {
         }
     }
 
-    public void givenFl(String map) {
+    public void givenFl(String... maps) {
         int levelNumber = LevelProgress.levelsStartsFrom1;
-        settings.setLevelMaps(levelNumber, map);
+        settings.setLevelMaps(levelNumber, maps);
         Level level = settings.level(levelNumber, dice);
         field = new Sample(dice, level, settings);
         level.heroes().forEach(this::givenPlayer);

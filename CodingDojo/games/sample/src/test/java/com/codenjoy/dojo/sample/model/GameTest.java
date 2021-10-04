@@ -548,4 +548,56 @@ public class GameTest extends AbstractGameTest {
         events.verifyAllEvents(
                 "[WIN]");
     }
+
+    @Test
+    public void shouldSameLevel_whenClearScoresOnGame_andSeveralLevelsInTheSettings() {
+        // given
+        dice(1); // second level selected
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺$☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n",
+
+                "☼☼☼☼☼\n" +
+                "☼ $ ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼ $ ☼\n" +
+                "☼☼☼☼☼\n",
+
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero().up();
+        hero().act();
+        dice(1, 1);
+        tick();
+
+        assertF("☼☼☼☼☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼ x ☼\n" +
+                "☼$$ ☼\n" +
+                "☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "[WIN]");
+
+        assertEquals(30, hero(0).scores());
+
+        // when
+        dice(3, 3); // new hero position
+        field.clearScore();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼ $☺☼\n" +
+                "☼   ☼\n" +
+                "☼ $ ☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertEquals(0, hero(0).scores());
+    }
 }
