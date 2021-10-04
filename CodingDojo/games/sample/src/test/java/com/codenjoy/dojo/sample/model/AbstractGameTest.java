@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.TestGameSettings;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.sample.services.GameSettings;
@@ -54,7 +55,7 @@ public abstract class AbstractGameTest {
     private List<Player> players;
 
     private Dice dice;
-    private PrinterFactory printer;
+    private PrinterFactory<Element, Player> printer;
     protected Sample field;
     protected GameSettings settings;
     protected EventsListenersAssert events;
@@ -67,7 +68,7 @@ public abstract class AbstractGameTest {
 
         dice = mock(Dice.class);
         settings = settings();
-        printer = new PrinterFactoryImpl();
+        printer = new PrinterFactoryImpl<>();
         events = new EventsListenersAssert(() -> listeners, Events.class);
     }
 
