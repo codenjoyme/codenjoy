@@ -139,3 +139,192 @@
         Если сырцы уже есть и собирается конкретная игра, то не билдится games что может привести в некоторым проблемам. Как его install без все игрушек?
     Engine
         Вынести jdbc коннекторы в отдельную библиотеку
+
+------------ chat ---------
+	Сделать topic-чат
+	Постить все системные сообщения от имени System, а не от имени пользователей,
+		а лучше дать возможность игре говорить от имени кого посылается сообщение
+	Сделать игровые настройки Field чата, с возможностью отключать постинг любых типов авто-сообщений в чат
+	Разобраться с первым сообщением system Field '10678' created
+		Его почему-то пишет что можно удалить
+		С другой стороны это не реальное сообщение, а лог и лучше удалить его
+	Когда я на лидерборде кликаю на http://127.0.0.1:8080/codenjoy-contest/board/room/mollymage?code=000000000000 то потом пытаюсь подключиться через вебсокеты чата как null player id
+		2021-09-17T00:41:31.131 [qtp1692777022-41] WARN  c.c.d.t.ws.PlayerSocketCreator - Unauthorized access [[code=[000000000000], user=[null]]] from 127.0.0.1
+		2021-09-17T00:41:31.133 [qtp1692777022-41] ERROR c.c.dojo.services.ErrorTicketService - [TICKET:URL] c820fad0e89b0f81cb3b44a29019ea34:http://127.0.0.1:8080/codenjoy-contest/error [/codenjoy-contest/chat-ws?user=null&code=000000000000] java.lang.IllegalAccessException: Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.
+		[TICKET:URL] c820fad0e89b0f81cb3b44a29019ea34:http://127.0.0.1:8080/codenjoy-contest/error [/codenjoy-contest/chat-ws?user=null&code=000000000000] java.lang.IllegalAccessException: Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.
+		2021-09-17T00:41:37.263 [qtp1692777022-262] ERROR c.c.d.t.a.SecureAuthenticationService - Error during check user on authenticate for user null with code 000000000000. We will drop this user.
+		java.lang.IllegalArgumentException: Player id is invalid: 'null'
+			at com.codenjoy.dojo.web.controller.Validator.checkPlayerId(Validator.java:129)
+			at com.codenjoy.dojo.web.controller.Validator.checkPlayerCode(Validator.java:217)
+			at com.codenjoy.dojo.transport.auth.SecureAuthenticationService.authenticate(SecureAuthenticationService.java:57)
+			at com.codenjoy.dojo.transport.ws.PlayerSocketCreator.createWebSocket(PlayerSocketCreator.java:54)
+			at com.codenjoy.dojo.transport.ws.PlayerSocketCreator.createWebSocket(PlayerSocketCreator.java:40)
+-	Кодревью Ромы, попробовать заинлайнить Controller в сам сервис
+	Многопоточность
+		Когда на бытсро работающих тиках порядка 10мс быстро рефрешить сз браузера борду, случается дедлок. Перед ним в логе написало
+			2021-09-17T00:46:07.091 [qtp1692777022-248] ERROR c.c.d.s.c.chat.ChatResponseHandler - Request error: player: 0, error: {}
+			org.eclipse.jetty.io.EofException: null
+				at org.eclipse.jetty.io.ChannelEndPoint.flush(ChannelEndPoint.java:279)
+				at org.eclipse.jetty.io.WriteFlusher.flush(WriteFlusher.java:422)
+				at org.eclipse.jetty.io.WriteFlusher.write(WriteFlusher.java:277)
+				at org.eclipse.jetty.io.AbstractEndPoint.write(AbstractEndPoint.java:381)
+				at org.eclipse.jetty.websocket.common.io.FrameFlusher.flush(FrameFlusher.java:264)
+				at org.eclipse.jetty.websocket.common.io.FrameFlusher.process(FrameFlusher.java:193)
+				at org.eclipse.jetty.util.IteratingCallback.processing(IteratingCallback.java:241)
+				at org.eclipse.jetty.util.IteratingCallback.iterate(IteratingCallback.java:223)
+				at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.outgoingFrame(AbstractWebSocketConnection.java:581)
+				at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.close(AbstractWebSocketConnection.java:181)
+				at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.onFillable(AbstractWebSocketConnection.java:510)
+				at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.onFillable(AbstractWebSocketConnection.java:440)
+				at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)
+				at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)
+				at org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)
+				at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336)
+				at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313)
+				at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171)
+				at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:129)
+				at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:375)
+				at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:773)
+				at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:905)
+				at java.base/java.lang.Thread.run(Thread.java:834)
+			Caused by: java.io.IOException: An established connection was aborted by the software in your host machine
+				at java.base/sun.nio.ch.SocketDispatcher.writev0(Native Method)
+				at java.base/sun.nio.ch.SocketDispatcher.writev(SocketDispatcher.java:55)
+				at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:182)
+				at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:130)
+				at java.base/sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:496)
+				at java.base/java.nio.channels.SocketChannel.write(SocketChannel.java:507)
+				at org.eclipse.jetty.io.ChannelEndPoint.flush(ChannelEndPoint.java:273)
+				... 22 common frames omitted
+			2021-09-17T00:46:32.049 [qtp1692777022-263] ERROR c.c.d.s.c.chat.ChatResponseHandler - Request error: player: 0, error: {}
+			org.eclipse.jetty.io.EofException: null
+				at org.eclipse.jetty.io.ChannelEndPoint.flush(ChannelEndPoint.java:279)
+				at org.eclipse.jetty.io.WriteFlusher.flush(WriteFlusher.java:422)
+				at org.eclipse.jetty.io.WriteFlusher.write(WriteFlusher.java:277)
+				at org.eclipse.jetty.io.AbstractEndPoint.write(AbstractEndPoint.java:381)
+				at org.eclipse.jetty.websocket.common.io.FrameFlusher.flush(FrameFlusher.java:264)
+				at org.eclipse.jetty.websocket.common.io.FrameFlusher.process(FrameFlusher.java:188)
+				at org.eclipse.jetty.util.IteratingCallback.processing(IteratingCallback.java:241)
+				at org.eclipse.jetty.util.IteratingCallback.iterate(IteratingCallback.java:223)
+				at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.outgoingFrame(AbstractWebSocketConnection.java:581)
+				at org.eclipse.jetty.websocket.common.extensions.AbstractExtension.nextOutgoingFrame(AbstractExtension.java:157)
+				at org.eclipse.jetty.websocket.common.extensions.compress.PerMessageDeflateExtension.nextOutgoingFrame(PerMessageDeflateExtension.java:125)
+				at org.eclipse.jetty.websocket.common.extensions.compress.CompressExtension.access$1100(CompressExtension.java:44)
+				at org.eclipse.jetty.websocket.common.extensions.compress.CompressExtension$Flusher.compress(CompressExtension.java:579)
+				at org.eclipse.jetty.websocket.common.extensions.compress.CompressExtension$Flusher.deflate(CompressExtension.java:478)
+				at org.eclipse.jetty.websocket.common.extensions.compress.CompressExtension$Flusher.process(CompressExtension.java:458)
+				at org.eclipse.jetty.util.IteratingCallback.processing(IteratingCallback.java:241)
+				at org.eclipse.jetty.util.IteratingCallback.iterate(IteratingCallback.java:223)
+				at org.eclipse.jetty.websocket.common.extensions.compress.CompressExtension.outgoingFrame(CompressExtension.java:241)
+				at org.eclipse.jetty.websocket.common.extensions.ExtensionStack$Flusher.process(ExtensionStack.java:403)
+				at org.eclipse.jetty.util.IteratingCallback.processing(IteratingCallback.java:241)
+				at org.eclipse.jetty.util.IteratingCallback.iterate(IteratingCallback.java:223)
+				at org.eclipse.jetty.websocket.common.extensions.ExtensionStack.outgoingFrame(ExtensionStack.java:280)
+				at org.eclipse.jetty.websocket.common.WebSocketSession.outgoingFrame(WebSocketSession.java:360)
+				at org.eclipse.jetty.websocket.common.WebSocketRemoteEndpoint.uncheckedSendFrame(WebSocketRemoteEndpoint.java:322)
+				at org.eclipse.jetty.websocket.common.WebSocketRemoteEndpoint.blockingWrite(WebSocketRemoteEndpoint.java:109)
+				at org.eclipse.jetty.websocket.common.WebSocketRemoteEndpoint.sendString(WebSocketRemoteEndpoint.java:400)
+				at com.codenjoy.dojo.transport.ws.PlayerSocket.sendMessage(PlayerSocket.java:105)
+				at com.codenjoy.dojo.transport.ws.SocketsHandlerPair.sendMessage(SocketsHandlerPair.java:67)
+				at com.codenjoy.dojo.transport.ws.PlayerTransportImpl.sendState(PlayerTransportImpl.java:89)
+				at com.codenjoy.dojo.services.controller.chat.ChatController.sendState(ChatController.java:96)
+				at com.codenjoy.dojo.services.controller.chat.ChatController$1.created(ChatController.java:87)
+				at com.codenjoy.dojo.services.chat.ChatControlImpl.lambda$inform$0(ChatControlImpl.java:64)
+				at java.base/java.util.Arrays$ArrayList.forEach(Arrays.java:4390)
+				at com.codenjoy.dojo.services.chat.ChatControlImpl.inform(ChatControlImpl.java:64)
+				at com.codenjoy.dojo.services.chat.ChatControlImpl.informCreated(ChatControlImpl.java:68)
+				at com.codenjoy.dojo.services.chat.ChatControlImpl.getAllField(ChatControlImpl.java:102)
+				at com.codenjoy.dojo.services.controller.chat.ChatCommand.lambda$new$2(ChatCommand.java:51)
+				at com.codenjoy.dojo.services.controller.chat.ChatCommand.process(ChatCommand.java:60)
+				at com.codenjoy.dojo.services.controller.chat.ChatResponseHandler.onResponse(ChatResponseHandler.java:53)
+				at com.codenjoy.dojo.transport.ws.PlayerSocket.onWebSocketText(PlayerSocket.java:68)
+				at jdk.internal.reflect.GeneratedMethodAccessor151.invoke(Unknown Source)
+				at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+				at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+				at org.eclipse.jetty.websocket.common.events.annotated.CallableMethod.call(CallableMethod.java:70)
+				at org.eclipse.jetty.websocket.common.events.annotated.OptionalSessionCallableMethod.call(OptionalSessionCallableMethod.java:72)
+				at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onTextMessage(JettyAnnotatedEventDriver.java:301)
+				at org.eclipse.jetty.websocket.common.message.SimpleTextMessage.messageComplete(SimpleTextMessage.java:69)
+				at org.eclipse.jetty.websocket.common.events.AbstractEventDriver.appendMessage(AbstractEventDriver.java:67)
+				at org.eclipse.jetty.websocket.common.events.JettyAnnotatedEventDriver.onTextFrame(JettyAnnotatedEventDriver.java:287)
+				at org.eclipse.jetty.websocket.common.events.AbstractEventDriver.incomingFrame(AbstractEventDriver.java:152)
+				at org.eclipse.jetty.websocket.common.WebSocketSession.incomingFrame(WebSocketSession.java:326)
+				at org.eclipse.jetty.websocket.common.extensions.AbstractExtension.nextIncomingFrame(AbstractExtension.java:148)
+				at org.eclipse.jetty.websocket.common.extensions.compress.PerMessageDeflateExtension.nextIncomingFrame(PerMessageDeflateExtension.java:113)
+				at org.eclipse.jetty.websocket.common.extensions.compress.CompressExtension.forwardIncoming(CompressExtension.java:168)
+				at org.eclipse.jetty.websocket.common.extensions.compress.PerMessageDeflateExtension.incomingFrame(PerMessageDeflateExtension.java:92)
+				at org.eclipse.jetty.websocket.common.extensions.ExtensionStack.incomingFrame(ExtensionStack.java:202)
+				at org.eclipse.jetty.websocket.common.Parser.notifyFrame(Parser.java:225)
+				at org.eclipse.jetty.websocket.common.Parser.parseSingleFrame(Parser.java:259)
+				at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.onFillable(AbstractWebSocketConnection.java:459)
+				at org.eclipse.jetty.websocket.common.io.AbstractWebSocketConnection.onFillable(AbstractWebSocketConnection.java:440)
+				at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)
+				at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:105)
+				at org.eclipse.jetty.io.ChannelEndPoint$1.run(ChannelEndPoint.java:104)
+				at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336)
+				at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313)
+				at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171)
+				at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:129)
+				at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:375)
+				at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:773)
+				at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:905)
+				at java.base/java.lang.Thread.run(Thread.java:834)
+			Caused by: java.io.IOException: An established connection was aborted by the software in your host machine
+				at java.base/sun.nio.ch.SocketDispatcher.writev0(Native Method)
+				at java.base/sun.nio.ch.SocketDispatcher.writev(SocketDispatcher.java:55)
+				at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:182)
+				at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:130)
+				at java.base/sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:496)
+				at java.base/java.nio.channels.SocketChannel.write(SocketChannel.java:507)
+				at org.eclipse.jetty.io.ChannelEndPoint.flush(ChannelEndPoint.java:273)
+				... 70 common frames omitted
+			Disconnected from the target VM, address: '127.0.0.1:52934', transport: 'socket'
+			2021-09-17T00:48:45.151 [Thread-29] INFO  o.e.jetty.server.AbstractConnector - Stopped ServerConnector@3cc5219e{HTTP/1.1, (http/1.1)}{0.0.0.0:8080}
+			2021-09-17T00:48:45.152 [Thread-29] INFO  org.eclipse.jetty.server.session - node0 Stopped scavenging
+			2021-09-17T00:48:45.155 [Thread-29] INFO  o.e.j.s.h.ContextHandler.application - Destroying Spring FrameworkServlet 'dispatcherServlet'
+			2021-09-17T00:48:45.159 [Thread-29] INFO  o.e.j.server.handler.ContextHandler - Stopped o.s.b.w.e.j.JettyEmbeddedWebAppContext@13629663{application,/codenjoy-contest,[org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory$LoaderHidingResource@3bffefc5],STOPPED}
+			Process finished with exit code -1
+	Написать стресс тест, который будет одновременно в разных потоках делать много различных действий и скейлиться в зависимости от его настроек. Поставить его погонять на ночь на большом количестве тиков и посмотреть что будет, в лог выводить все в DEBUG режиме.
+
+----------------------------
+MultiLevels подход
+	Sample
+✓		Сделать общий подход для создания многокуровневых игр с возможностью обновлять это все дело на админке
+✓			Есть потребность выбирать уровни в GameField createGame(int levelNumber, GameSettings settings) {
+✓			Есть потребность выбирать уровни рендомно во время того же createGame из заданного набора levelNumber (если их там несколько)
+✓			Есть потребность менять это все дело на админке
+✓				level[1,1]=
+✓				level[1,2]=
+✓				level[1,3]=
+✓				level[2,1]=
+✓				level[2,2]=
+✓				level[2,3]=
+✓				level[3]=
+✓				level[4]=
+            Админка
+                Есть потребность в добавлении нового сеттинга на админке
+                Выделить новый блок сеттингов из левела
+
+----------------------------
+Sample
+    Добавить в клиенты разных языков программирования новый спрайт Sample, если там нет sample - добавить контента как с молли и клиффом
+    Выделить Sample в отдельный сабрепо
+    Сделать readme.md
+
+----------------------------
+Сабрепо
+    Сделать все сабрепо у меня как git:// с той опцией что Рома сделал чтобы не коммитить это на сервер, но на локали можно было работать без постоянного ввода пароля
+
+----------------------------
+Протестировать очистку очков героя в round играх
+    Clifford
+    Snakebattle
+    MollyMage
+    Sample - выделить из того сложного теста кусочек
+    Battlecity
+
+----------------------------
+Рефакторинг
+✓	Utils.elementsMap(board, Element.values()).toString()
+✓	    // TODO to use engine.TestUtils.split here
+✓	    .replace("]], ", "]],\n").replace("[], ", "[],\n"));
