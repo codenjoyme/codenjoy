@@ -37,7 +37,7 @@ import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 public class Scores implements PlayerScores {
 
     private volatile int score;
-    private GameSettings settings;
+    private final GameSettings settings;
 
     public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
@@ -78,6 +78,6 @@ public class Scores implements PlayerScores {
 
     @Override
     public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        this.score = Integer.parseInt(score.toString());
     }
 }
