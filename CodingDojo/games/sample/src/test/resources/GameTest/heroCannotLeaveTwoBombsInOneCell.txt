@@ -42,6 +42,8 @@ assertF(
 ☼☼☼☼☼,
 0)
 
+events().verifyAllEvents([LOSE], [])
+
 field().newGame(player(0))
 
 tick()

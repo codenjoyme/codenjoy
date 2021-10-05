@@ -26,6 +26,8 @@ assertF(
 ☼☼☼☼☼,
 0)
 
+events().verifyAllEvents([WIN], [])
+
 hero(0).scores() = 30
 
 hero(0).up()
@@ -71,3 +73,5 @@ assertF(
 ☼   ☼
 ☼☼☼☼☼,
 0)
+
+events().verifyAllEvents([WIN], [])

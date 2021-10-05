@@ -44,13 +44,43 @@ assertF(
 ☼☼☼☼☼☼,
 2)
 
-tick()
+events().verifyAllEvents(
+listener(0) => []
+listener(1) => []
+listener(2) => [],
+[])
 
 tick()
 
-tick()
+events().verifyAllEvents(
+listener(0) => [[....4....]]
+listener(1) => [[....4....]]
+listener(2) => [[....4....]],
+[])
 
 tick()
+
+events().verifyAllEvents(
+listener(0) => [[...3...]]
+listener(1) => [[...3...]]
+listener(2) => [[...3...]],
+[])
+
+tick()
+
+events().verifyAllEvents(
+listener(0) => [[..2..]]
+listener(1) => [[..2..]]
+listener(2) => [[..2..]],
+[])
+
+tick()
+
+events().verifyAllEvents(
+listener(0) => [[.1.]]
+listener(1) => [[.1.]]
+listener(2) => [[.1.]],
+[])
 
 assertF(
 ☼☼☼☼☼☼
@@ -86,6 +116,12 @@ hero(1).right()
 hero(2).up()
 
 tick()
+
+events().verifyAllEvents(
+listener(0) => [START_ROUND, [Round 1]]
+listener(1) => [START_ROUND, [Round 1]]
+listener(2) => [START_ROUND, [Round 1]],
+[])
 
 assertF(
 ☼☼☼☼☼☼

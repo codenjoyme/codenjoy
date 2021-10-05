@@ -45,6 +45,12 @@ assertF(
 ☼☼☼☼☼☼,
 0)
 
+events().verifyAllEvents(
+listener(0) => []
+listener(1) => [LOSE]
+listener(2) => [],
+[])
+
 dice(4, 1)
 
 tick()

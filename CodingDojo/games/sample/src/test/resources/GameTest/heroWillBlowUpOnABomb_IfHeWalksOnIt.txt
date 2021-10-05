@@ -24,4 +24,6 @@ assertF(
 ☼☼☼☼☼,
 0)
 
+events().verifyAllEvents([LOSE], [])
+
 hero(0).isAlive() = false

@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -462,6 +463,37 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         addCall("hero", index);
 
         return new HeroWrapper(super.hero(index));
+    }
+
+    public class EventsWrapper extends EventsListenersAssert {
+
+        private final EventsListenersAssert events;
+
+        public EventsWrapper(EventsListenersAssert events) {
+            super(null, null);    // fake
+            this.events = events;
+        }
+
+        @Override
+        public void verifyNoEvents(Integer... indexes) {
+            appendCall(".verifyNoEvents", Arrays.asList(indexes));
+            events.verifyNoEvents(indexes);
+            end();
+        }
+
+        @Override
+        public void verifyAllEvents(String expected, Integer... indexes) {
+            appendCall(".verifyAllEvents", expected, Arrays.asList(indexes));
+            events.verifyAllEvents(expected, indexes);
+            end();
+        }
+    }
+
+    @Override
+    public EventsListenersAssert events() {
+        addCall("events");
+
+        return new EventsWrapper(super.events());
     }
 
 }

@@ -29,3 +29,9 @@ assertF(
 ☼    ☼
 ☼☼☼☼☼☼,
 0)
+
+events().verifyAllEvents(
+listener(0) => []
+listener(1) => [WIN]
+listener(2) => [],
+[])

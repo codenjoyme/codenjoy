@@ -23,3 +23,5 @@ assertF(
 ☼   ☼
 ☼☼☼☼☼,
 0)
+
+events().verifyAllEvents([WIN], [])
