@@ -43,8 +43,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public TestName name = new TestName();
     private List<String> messages;
     private int deep;
-    private boolean delayNextCall;
-    private String delayedCall;
+    private boolean delay;
+    private String delayed;
     private boolean callRealAssert;
 
     @Before
@@ -52,7 +52,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public void setup() {
         messages = new LinkedList<>();
         deep = 0;
-        delayNextCall = false;
+        delay = false;
         callRealAssert = false;
 
         addCall("setup");
@@ -88,7 +88,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         if (messages.isEmpty()) {
             append = false;
         }
-        if (delayNextCall) {
+        if (delay) {
             append = true;
         }
         if (!append) {
@@ -105,8 +105,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
                 method,
                 data);
 
-        if (delayNextCall) {
-            delayedCall = message;
+        if (delay) {
+            delayed = message;
             return;
         }
 
@@ -181,13 +181,13 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private void end() {
-        if (!delayNextCall) {
+        if (!delay) {
             deep--;
         }
     }
 
     private void disableDelayedCall() {
-        delayNextCall = false;
+        delay = false;
     }
 
     @Override
@@ -291,8 +291,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private String delayedCall() {
-        String result = delayedCall;
-        delayedCall = null;
+        String result = delayed;
+        delayed = null;
         return result;
     }
 
@@ -306,7 +306,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private void delayNextCall() {
-        delayNextCall = true;
+        delay = true;
     }
 
     class HeroWrapper extends Hero {
