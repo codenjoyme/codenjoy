@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.TestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.*;
 import org.junit.rules.TestName;
 import org.mockito.stubbing.OngoingStubbing;
@@ -49,14 +50,18 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     @Rule
     public TestName name = new TestName();
     private List<String> messages;
+    private int deep;
 
     @Before
     @Override
     public void setup() {
         messages = new LinkedList<>();
+        deep = 0;
         log("setup");
 
         super.setup();
+
+        logEnd();
     }
 
     @After
@@ -67,11 +72,22 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private void log(String method, Object... parameters) {
-        messages.add(String.format("%s(%s)\n",
+        deep++;
+        messages.add(String.format("%s%s%s(%s)",
+                (deep == 1) ? "\n" : "",
+                deep(),
                 method,
                 Arrays.deepToString(parameters)
                         .replaceAll("^\\[", "")
                         .replaceAll("\\]$", "")));
+    }
+
+    private String deep() {
+        return StringUtils.leftPad("", 4*(deep - 1), ' ');
+    }
+
+    private void logEnd() {
+        deep--;
     }
 
     @Override
@@ -79,6 +95,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         log("dice", ints);
 
         super.dice(ints);
+
+        logEnd();
     }
 
     @Override
@@ -86,6 +104,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         log("givenFl", maps);
 
         super.givenFl(maps);
+
+        logEnd();
     }
 
     @Override
@@ -93,6 +113,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         log("givenPlayer", hero);
 
         super.givenPlayer(hero);
+
+        logEnd();
     }
 
     @Override
@@ -100,6 +122,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         log("tick");
 
         super.tick();
+
+        logEnd();
     }
 
     // getters & asserts
@@ -109,27 +133,41 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         log("assertF", expected, index);
 
         super.assertF(expected, index);
+
+        logEnd();
     }
 
     @Override
     public Game game(int index) {
         log("game", index);
 
-        return super.game(index);
+        Game result = super.game(index);
+
+        logEnd();
+
+        return result;
     }
 
     @Override
     public Player player(int index) {
         log("player", index);
 
-        return super.player(index);
+        Player result = super.player(index);
+
+        logEnd();
+
+        return result;
     }
 
     @Override
     public Hero hero(int index) {
         log("hero", index);
 
-        return super.hero(index);
+        Hero result = super.hero(index);
+
+        logEnd();
+
+        return result;
     }
 
 }
