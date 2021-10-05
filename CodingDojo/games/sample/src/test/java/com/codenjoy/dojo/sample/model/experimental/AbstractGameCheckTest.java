@@ -39,6 +39,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -73,13 +74,64 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     private void log(String method, Object... parameters) {
         deep++;
+        String data = Arrays.stream(parameters)
+                .map(param -> asString(param))
+                .map(string -> string.replaceAll("\n$", ""))
+                .collect(Collectors.joining("\n"));
+        data = (data.contains("\n") ? "\n" : "") + data;
         messages.add(String.format("%s%s%s(%s)",
                 (deep == 1) ? "\n" : "",
                 deep(),
                 method,
-                Arrays.deepToString(parameters)
-                        .replaceAll("^\\[", "")
-                        .replaceAll("\\]$", "")));
+                data));
+    }
+
+    private String asString(Object object) {
+        if (object.getClass().isArray()) {
+            return arrayToString(object)
+                    .replaceAll("^\\[", "")
+                    .replaceAll("\\]$", "");
+        } else {
+            return object.toString();
+        }
+    }
+
+    private String arrayToString(Object object) {
+        Class<?> type = object.getClass().getComponentType();
+        if (type.isPrimitive()) {
+            if (boolean.class.isAssignableFrom(type)) {
+                return Arrays.toString((boolean[]) object);
+            }
+
+            if (byte.class.isAssignableFrom(type)) {
+                return Arrays.toString((byte[]) object);
+            }
+
+            if (char.class.isAssignableFrom(type)) {
+                return Arrays.toString((char[]) object);
+            }
+
+            if (double.class.isAssignableFrom(type)) {
+                return Arrays.toString((double[]) object);
+            }
+
+            if (float.class.isAssignableFrom(type)) {
+                return Arrays.toString((float[]) object);
+            }
+
+            if (int.class.isAssignableFrom(type)) {
+                return Arrays.toString((int[]) object);
+            }
+
+            if (long.class.isAssignableFrom(type)) {
+                return Arrays.toString((long[]) object);
+            }
+
+            if (short.class.isAssignableFrom(type)) {
+                return Arrays.toString((short[]) object);
+            }
+        }
+        return Arrays.deepToString((Object[]) object);
     }
 
     private String deep() {

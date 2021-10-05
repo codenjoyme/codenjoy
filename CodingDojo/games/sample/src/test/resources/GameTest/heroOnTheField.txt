@@ -1,21 +1,20 @@
+
 setup()
 
-givenFl(☼☼☼☼☼
+givenFl(
+☼☼☼☼☼
+☼   ☼
+☼ ☺ ☼
+☼   ☼
+☼☼☼☼☼)
+    givenPlayer([2,2])
+        dice(2, 2)
+
+assertF(
+☼☼☼☼☼
 ☼   ☼
 ☼ ☺ ☼
 ☼   ☼
 ☼☼☼☼☼
-)
-
-givenPlayer([2,2])
-
-dice([2, 2])
-
-assertF(☼☼☼☼☼
-☼   ☼
-☼ ☺ ☼
-☼   ☼
-☼☼☼☼☼
-, 0)
-
-game(0)
+0)
+    game(0)

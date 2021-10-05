@@ -1,42 +1,39 @@
+
 setup()
 
-givenFl(☼☼☼☼☼
+givenFl(
+☼☼☼☼☼
+☼   ☼
+☼ ☺ ☼
+☼   ☼
+☼☼☼☼☼)
+    givenPlayer([2,2])
+        dice(2, 2)
+
+hero(0)
+    game(0)
+
+tick()
+
+assertF(
+☼☼☼☼☼
 ☼   ☼
 ☼ ☺ ☼
 ☼   ☼
 ☼☼☼☼☼
-)
-
-givenPlayer([2,2])
-
-dice([2, 2])
+0)
+    game(0)
 
 hero(0)
-
-game(0)
+    game(0)
 
 tick()
 
-assertF(☼☼☼☼☼
-☼   ☼
-☼ ☺ ☼
-☼   ☼
+assertF(
 ☼☼☼☼☼
-, 0)
-
-game(0)
-
-hero(0)
-
-game(0)
-
-tick()
-
-assertF(☼☼☼☼☼
 ☼   ☼
 ☼ x ☼
 ☼ ☺ ☼
 ☼☼☼☼☼
-, 0)
-
-game(0)
+0)
+    game(0)
