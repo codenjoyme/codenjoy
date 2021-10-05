@@ -307,7 +307,7 @@ public class RoundBattleTest extends AbstractGameTest {
 
         // новые координаты для героя
         dice(3, 4);
-        field.newGame(player(2)); // это сделает сервер в ответ на isAlive = false
+        field().newGame(player(2)); // это сделает сервер в ответ на isAlive = false
 
         // then
         // игрок уже живой но неактивный до начала следующего раунда

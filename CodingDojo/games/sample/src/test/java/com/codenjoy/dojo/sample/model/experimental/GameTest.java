@@ -417,7 +417,7 @@ public class GameTest extends AbstractGameCheckTest {
         events.verifyAllEvents("[LOSE]");
 
         // when
-        field.newGame(player());
+        field().newGame(player());
         tick();
 
         // then
@@ -517,7 +517,7 @@ public class GameTest extends AbstractGameCheckTest {
 
         // when
         dice(1, 2); // new hero position
-        field.clearScore();
+        field().clearScore();
 
         // then
         assertF("☼☼☼☼☼\n" +

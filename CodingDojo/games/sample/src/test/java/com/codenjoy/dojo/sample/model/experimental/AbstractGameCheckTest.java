@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sample.model.experimental;
 import com.codenjoy.dojo.sample.model.AbstractGameTest;
 import com.codenjoy.dojo.sample.model.Hero;
 import com.codenjoy.dojo.sample.model.Player;
+import com.codenjoy.dojo.sample.model.Sample;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,12 +46,15 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public TestName name = new TestName();
     private List<String> messages;
     private int deep;
+    private boolean delayNextCall;
+    private String delayedCall;
 
     @Before
     @Override
     public void setup() {
         messages = new LinkedList<>();
         deep = 0;
+        delayNextCall = false;
         addCall("setup");
 
         super.setup();
@@ -77,6 +81,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         if (messages.isEmpty()) {
             append = false;
         }
+        if (delayNextCall) {
+            append = true;
+        }
         if (!append) {
             deep++;
         }
@@ -90,6 +97,11 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
                 (!append) ? deep() : "",
                 method,
                 data);
+
+        if (delayNextCall) {
+            delayedCall = message;
+            return;
+        }
 
         if (!append) {
             messages.add(message);
@@ -108,7 +120,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private String asString(Object object) {
-        if (object.getClass().isArray()) {
+        if (object == null) {
+            return "null";
+        } else if (object.getClass().isArray()) {
             return arrayToString(object)
                     .replaceAll("^\\[", "")
                     .replaceAll("\\]$", "");
@@ -160,7 +174,13 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private void end() {
-        deep--;
+        if (!delayNextCall) {
+            deep--;
+        }
+    }
+
+    private void disableDelayedCall() {
+        delayNextCall = false;
     }
 
     @Override
@@ -233,6 +253,53 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return result;
     }
 
+    class SampleWrapper extends Sample {
+
+        private final Sample sample;
+
+        public SampleWrapper(Sample sample) {
+            super(null, null, sample.settings());
+            this.sample = sample;
+        }
+
+        @Override
+        public void newGame(Player player) {
+            disableDelayedCall();
+            appendCall(".newGame", delayedCall());
+            sample.newGame(player);
+            end();
+        }
+
+        @Override
+        public void clearScore() {
+            if (sample == null) return; // for super(null, null, sample.settings());
+
+            disableDelayedCall();
+            appendCall(".clearScore");
+            sample.clearScore();
+            end();
+        }
+    }
+
+    private String delayedCall() {
+        String result = delayedCall;
+        delayedCall = null;
+        return result;
+    }
+
+    @Override
+    public Sample field() {
+        addCall("field");
+        delayNextCall();
+
+        Sample result = new SampleWrapper(super.field());
+        return result;
+    }
+
+    private void delayNextCall() {
+        delayNextCall = true;
+    }
+
     class HeroWrapper extends Hero {
 
         private final Hero hero;
@@ -301,7 +368,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         addCall("hero", index);
 
         Hero result = new HeroWrapper(super.hero(index));
-
         return result;
     }
 

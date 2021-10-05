@@ -42,6 +42,8 @@ assertF(
 
 dice(1, 2)
 
+field().clearScore()
+
 assertF(
 ☼☼☼☼☼
 ☼   ☼

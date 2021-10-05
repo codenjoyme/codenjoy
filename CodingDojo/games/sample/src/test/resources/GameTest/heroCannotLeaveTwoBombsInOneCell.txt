@@ -42,7 +42,7 @@ assertF(
 ☼☼☼☼☼
 0)
 
-player(0)
+field().newGame(player(0))
 
 tick()
 

@@ -30,7 +30,6 @@ import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -56,7 +55,7 @@ public abstract class AbstractGameTest {
 
     private Dice dice;
     private PrinterFactory<Element, Player> printer;
-    protected Sample field;
+    private Sample field;
     protected GameSettings settings;
     protected EventsListenersAssert events;
 
@@ -119,6 +118,10 @@ public abstract class AbstractGameTest {
     }
 
     // getters & asserts
+
+    public Sample field() {
+        return field;
+    }
 
     public void assertF(String expected, int index) {
         assertEquals(expected, game(index).getBoardAsString());
