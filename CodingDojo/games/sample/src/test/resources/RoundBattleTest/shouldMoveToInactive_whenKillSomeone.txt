@@ -1,6 +1,10 @@
 
 setup()
 
+settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+
+settings.integer(ROUNDS_TIME_BEFORE_START, 1)
+
 givenFl(
      
      
@@ -21,7 +25,7 @@ assertF(
      
      
  ☺   
-☻☻   
+☻☻   ,
 0)
 
 assertF(
@@ -29,7 +33,7 @@ assertF(
      
      
  ☻   
-☺☻   
+☺☻   ,
 1)
 
 assertF(
@@ -37,7 +41,7 @@ assertF(
      
      
  ☻   
-☻☺   
+☻☺   ,
 2)
 
 hero(0).act()
@@ -59,7 +63,7 @@ assertF(
      
   ☺  
  x   
-☻☻   
+☻☻   ,
 0)
 
 hero(2)
@@ -77,7 +81,7 @@ hero(2)
      
   ☺  
  Y   
-☻    
+☻    ,
 0)
         tick()
         dice(3, 4)
@@ -91,5 +95,5 @@ hero(2)
      
   ☺  
      
-☻    
+☻    ,
 0)

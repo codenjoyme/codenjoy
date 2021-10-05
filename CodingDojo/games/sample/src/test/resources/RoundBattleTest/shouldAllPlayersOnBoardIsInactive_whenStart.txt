@@ -1,6 +1,8 @@
 
 setup()
 
+settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+
 givenFl(
      
      
@@ -19,7 +21,7 @@ assertF(
      
      
  X   
-YY   
+YY   ,
 0)
 
 assertF(
@@ -27,7 +29,7 @@ assertF(
      
      
  Y   
-XY   
+XY   ,
 1)
 
 assertF(
@@ -35,5 +37,5 @@ assertF(
      
      
  Y   
-YX   
+YX   ,
 2)

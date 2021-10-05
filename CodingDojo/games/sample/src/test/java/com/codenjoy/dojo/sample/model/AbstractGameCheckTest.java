@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +36,9 @@ import org.junit.rules.TestName;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
@@ -94,10 +97,14 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         if (!append) {
             deep++;
         }
-        String data = Arrays.stream(parameters)
+        List<String> params = Arrays.stream(parameters)
                 .map(param -> asString(param))
                 .map(string -> string.replaceAll("\n$", ""))
-                .collect(Collectors.joining("\n"));
+                .collect(toList());
+        boolean multiline = params.stream()
+                .anyMatch(param -> param.contains("\n"));
+        String data = params.stream()
+                .collect(joining(multiline ? ",\n" : ", "));
         data = (data.contains("\n") ? "\n" : "") + data;
         String message = String.format("%s%s%s(%s)",
                 (!append && deep == 1) ? "\n" : "",
@@ -304,6 +311,47 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         delayOff();
 
         return new SampleWrapper(super.field());
+    }
+
+    class SettingsWrapper extends GameSettings {
+
+        private final GameSettings settings;
+
+        public SettingsWrapper(GameSettings settings) {
+            super();  // fake
+            this.settings = settings;
+        }
+
+        @Override
+        public GameSettings integer(Key key, int value) {
+            if (settings == null) return this; // check for fake
+
+            addCall("settings.integer", key, value);
+
+            settings.integer(key, value);
+
+            end();
+
+            return this;
+        }
+
+        @Override
+        public GameSettings bool(Key key, boolean value) {
+            if (settings == null) return this; // check for fake
+
+            addCall("settings.bool", key, value);
+
+            settings.bool(key, value);
+
+            end();
+
+            return this;
+        }
+    }
+
+    @Override
+    public GameSettings settings() {
+        return new SettingsWrapper(super.settings());
     }
 
     class HeroWrapper extends Hero {

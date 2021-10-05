@@ -56,7 +56,7 @@ public abstract class AbstractGameTest {
     private Dice dice;
     private PrinterFactory<Element, Player> printer;
     private Sample field;
-    protected GameSettings settings;
+    private GameSettings settings;
     protected EventsListenersAssert events;
 
     @Before
@@ -66,7 +66,7 @@ public abstract class AbstractGameTest {
         games = new LinkedList<>();
 
         dice = mock(Dice.class);
-        settings = settings();
+        settings = givenSettings();
         printer = new PrinterFactoryImpl<>();
         events = new EventsListenersAssert(() -> listeners, Events.class);
     }
@@ -109,7 +109,7 @@ public abstract class AbstractGameTest {
         game.newGame();
     }
 
-    protected GameSettings settings() {
+    protected GameSettings givenSettings() {
         return new TestGameSettings();
     }
 
@@ -118,6 +118,10 @@ public abstract class AbstractGameTest {
     }
 
     // getters & asserts
+
+    public GameSettings settings() {
+        return settings;
+    }
 
     public Sample field() {
         return field;

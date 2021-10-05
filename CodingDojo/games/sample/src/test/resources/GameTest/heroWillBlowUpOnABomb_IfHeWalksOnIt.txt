@@ -21,7 +21,7 @@ assertF(
 ☼   ☼
 ☼ X ☼
 ☼   ☼
-☼☼☼☼☼
+☼☼☼☼☼,
 0)
 
 hero(0).isAlive() = false

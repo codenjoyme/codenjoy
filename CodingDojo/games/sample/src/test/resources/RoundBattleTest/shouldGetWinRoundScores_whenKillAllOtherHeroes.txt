@@ -1,6 +1,16 @@
 
 setup()
 
+settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+
+settings.integer(ROUNDS_TIME_BEFORE_START, 1)
+
+settings.integer(WIN_SCORE, 10)
+
+settings.integer(LOSE_PENALTY, 50)
+
+settings.integer(WIN_ROUND_SCORE, 100)
+
 givenFl(
      
      
@@ -23,21 +33,21 @@ hero(0)
      
      
 ☺$$  
-☻☻   
+☻☻   ,
 0)
             assertF(
      
      
      
 ☻$$  
-☺☻   
+☺☻   ,
 1)
             assertF(
      
      
      
 ☻$$  
-☻☺   
+☻☺   ,
 2)
             hero(0).scores() = 0
             hero(1).scores() = 0
@@ -65,7 +75,7 @@ hero(0)
      
      
 xx☺  
-☻☻   
+☻☻   ,
 0)
                         hero(1).up()
                         tick()
@@ -74,21 +84,21 @@ xx☺
      
      
 Yx☺  
- ☻   
+ ☻   ,
 0)
                         assertF(
      
      
      
 Xx☻  
- ☻   
+ ☻   ,
 1)
                         assertF(
      
      
      
 Yx☻  
- ☺   
+ ☺   ,
 2)
                         hero(0).scores() = 20
                         hero(1).scores() = 0
@@ -100,21 +110,21 @@ Yx☻
      
      
 YY☺  
-     
+     ,
 0)
                         assertF(
      
      
      
 XY☻  
-     
+     ,
 1)
                         assertF(
      
      
      
 YX☻  
-     
+     ,
 2)
                         hero(0).scores() = 120
                         hero(1).scores() = 0

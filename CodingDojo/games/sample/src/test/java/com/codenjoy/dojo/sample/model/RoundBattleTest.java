@@ -31,8 +31,8 @@ import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 public class RoundBattleTest extends AbstractGameCheckTest {
 
     @Override
-    protected GameSettings settings() {
-        return super.settings()
+    protected GameSettings givenSettings() {
+        return super.givenSettings()
                 .bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TIME_BEFORE_START, 5)
                 .integer(ROUNDS_PER_MATCH, 3)
@@ -46,7 +46,7 @@ public class RoundBattleTest extends AbstractGameCheckTest {
     @Test
     public void shouldAllPlayersOnBoardIsInactive_whenStart() {
         // given
-        settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3);
+        settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3);
 
         givenFl("     \n" +
                 "     \n" +
@@ -216,7 +216,7 @@ public class RoundBattleTest extends AbstractGameCheckTest {
     @Test
     public void shouldMoveToInactive_whenKillSomeone() {
         // given
-        settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+        settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3)
                 .integer(ROUNDS_TIME_BEFORE_START, 1); // TODO а что будет если тут 0 игра хоть начнется?
 
         givenFl("     \n" +
@@ -327,7 +327,7 @@ public class RoundBattleTest extends AbstractGameCheckTest {
     @Test
     public void shouldGetWinRoundScores_whenKillAllOtherHeroes() {
         // given
-        settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+        settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3)
                 .integer(ROUNDS_TIME_BEFORE_START, 1)
                 .integer(WIN_SCORE, 10)
                 .integer(LOSE_PENALTY, 50)

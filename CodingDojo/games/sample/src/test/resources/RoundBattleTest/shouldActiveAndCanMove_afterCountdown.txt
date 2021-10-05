@@ -1,6 +1,8 @@
 
 setup()
 
+settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+
 givenFl(
      
      
@@ -19,7 +21,7 @@ assertF(
      
      
  X   
-YY   
+YY   ,
 0)
 
 assertF(
@@ -27,7 +29,7 @@ assertF(
      
      
  Y   
-XY   
+XY   ,
 1)
 
 assertF(
@@ -35,7 +37,7 @@ assertF(
      
      
  Y   
-YX   
+YX   ,
 2)
 
 tick()
@@ -51,7 +53,7 @@ assertF(
      
      
  X   
-YY   
+YY   ,
 0)
 
 assertF(
@@ -59,7 +61,7 @@ assertF(
      
      
  Y   
-XY   
+XY   ,
 1)
 
 assertF(
@@ -67,7 +69,7 @@ assertF(
      
      
  Y   
-YX   
+YX   ,
 2)
 
 hero(0).up()
@@ -83,7 +85,7 @@ assertF(
      
      
  ☺   
-☻☻   
+☻☻   ,
 0)
 
 assertF(
@@ -91,7 +93,7 @@ assertF(
      
      
  ☻   
-☺☻   
+☺☻   ,
 1)
 
 assertF(
@@ -99,7 +101,7 @@ assertF(
      
      
  ☻   
-☻☺   
+☻☺   ,
 2)
 
 hero(0).up()
@@ -115,7 +117,7 @@ assertF(
      
  ☺   
 ☻    
-  ☻  
+  ☻  ,
 0)
 
 assertF(
@@ -123,7 +125,7 @@ assertF(
      
  ☻   
 ☺    
-  ☻  
+  ☻  ,
 1)
 
 assertF(
@@ -131,5 +133,5 @@ assertF(
      
  ☻   
 ☻    
-  ☺  
+  ☺  ,
 2)
