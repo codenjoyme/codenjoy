@@ -38,8 +38,7 @@ assertF(
 ☼☼☼☼☼
 0)
 
-hero(0).scores()
- = 30
+hero(0).scores() = 30
 
 hero(0).up()
 
@@ -63,5 +62,4 @@ assertF(
 ☼☼☼☼☼
 0)
 
-hero(0).scores()
- = 0
+hero(0).scores() = 0

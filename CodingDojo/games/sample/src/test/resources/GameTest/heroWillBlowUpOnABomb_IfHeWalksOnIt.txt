@@ -10,8 +10,7 @@ givenFl(
     givenPlayer([2,1])
         dice(2, 1)
 
-hero(0).isAlive()
- = true
+hero(0).isAlive() = true
 
 hero(0).up()
 
@@ -25,5 +24,4 @@ assertF(
 ☼☼☼☼☼
 0)
 
-hero(0).isAlive()
- = false
+hero(0).isAlive() = false

@@ -55,7 +55,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         super.setup();
 
-        logEnd();
+        end();
     }
 
     @After
@@ -94,13 +94,17 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         if (!append) {
             messages.add(message);
         } else {
-            int index = messages.size() - 1;
-            messages.set(index, messages.get(index) + message);
+            append(message);
         }
     }
 
-    private void logAdd(Object data) {
-        messages.add(String.format(" = %s", data.toString()));
+    private void append(String message) {
+        int index = messages.size() - 1;
+        messages.set(index, messages.get(index) + message);
+    }
+
+    private void appendResult(Object data) {
+        append(String.format(" = %s", data.toString()));
     }
 
     private String asString(Object object) {
@@ -155,7 +159,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return StringUtils.leftPad("", 4*(deep - 1), ' ');
     }
 
-    private void logEnd() {
+    private void end() {
         deep--;
     }
 
@@ -165,7 +169,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         super.dice(ints);
 
-        logEnd();
+        end();
     }
 
     @Override
@@ -174,7 +178,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         super.givenFl(maps);
 
-        logEnd();
+        end();
     }
 
     @Override
@@ -183,7 +187,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         super.givenPlayer(hero);
 
-        logEnd();
+        end();
     }
 
     @Override
@@ -192,7 +196,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         super.tick();
 
-        logEnd();
+        end();
     }
 
     // getters & asserts
@@ -204,7 +208,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         super.assertF(expected, index);
 
-        logEnd();
+        end();
     }
 
     @Override
@@ -224,7 +228,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         Player result = super.player(index);
 
-        logEnd();
+        end();
 
         return result;
     }
@@ -242,43 +246,43 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         public void up() {
             appendCall(".up");
             hero.up();
-            logEnd();
+            end();
         }
 
         @Override
         public void down() {
             appendCall(".down");
             hero.down();
-            logEnd();
+            end();
         }
 
         @Override
         public void left() {
             appendCall(".left");
             hero.left();
-            logEnd();
+            end();
         }
 
         @Override
         public void right() {
             appendCall(".right");
             hero.right();
-            logEnd();
+            end();
         }
 
         @Override
         public void act(int... p) {
             appendCall(".act", p);
             hero.act(p);
-            logEnd();
+            end();
         }
 
         @Override
         public boolean isAlive() {
             appendCall(".isAlive");
             boolean result = hero.isAlive();
-            logAdd(result);
-            logEnd();
+            appendResult(result);
+            end();
             return result;
         }
 
@@ -286,8 +290,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         public int scores() {
             appendCall(".scores");
             int result = hero.scores();
-            logAdd(result);
-            logEnd();
+            appendResult(result);
+            end();
             return result;
         }
     }
