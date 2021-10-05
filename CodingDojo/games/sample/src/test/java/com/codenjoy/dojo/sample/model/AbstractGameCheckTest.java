@@ -86,7 +86,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     protected void checkFile() {
         TestUtils.assertSmokeFile(this.getClass().getSimpleName()
-                + "/" + test.getMethodName() +  ".txt", messages);
+                + "/" + test.getMethodName() +  ".data", messages);
     }
 
     public void assertEquals(Object expected, Object actual) {
