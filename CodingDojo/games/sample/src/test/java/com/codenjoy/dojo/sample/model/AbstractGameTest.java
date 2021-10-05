@@ -73,7 +73,7 @@ public abstract class AbstractGameTest {
     }
 
     @After
-    public void tearDown() {
+    public void after() {
         events.verifyNoEvents();
     }
 
@@ -95,7 +95,7 @@ public abstract class AbstractGameTest {
         // other field preparation stuff
     }
 
-    private void givenPlayer(Hero hero) {
+    protected void givenPlayer(Hero hero) {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
