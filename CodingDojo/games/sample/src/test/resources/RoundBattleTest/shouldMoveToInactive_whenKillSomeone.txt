@@ -1,0 +1,95 @@
+
+setup()
+
+givenFl(
+     
+     
+     
+ ☺   
+☺☺   )
+    givenPlayer([1,1])
+        dice(1, 1)
+    givenPlayer([0,0])
+        dice(0, 0)
+    givenPlayer([1,0])
+        dice(1, 0)
+
+tick()
+
+assertF(
+     
+     
+     
+ ☺   
+☻☻   
+0)
+
+assertF(
+     
+     
+     
+ ☻   
+☺☻   
+1)
+
+assertF(
+     
+     
+     
+ ☻   
+☻☺   
+2)
+
+hero(0).act()
+
+tick()
+
+hero(0).right()
+
+tick()
+
+hero(0).up()
+
+tick()
+
+tick()
+
+assertF(
+     
+     
+  ☺  
+ x   
+☻☻   
+0)
+
+hero(2)
+    hero(2).isAlive() = true
+    player(2)
+    player(2)
+    hero(2).up()
+    tick()
+    hero(2)
+        hero(2).isAlive() = false
+        player(2)
+        player(2)
+        assertF(
+     
+     
+  ☺  
+ Y   
+☻    
+0)
+        tick()
+        dice(3, 4)
+        field().newGame(player(2))
+        hero(2)
+            hero(2).isAlive() = true
+            player(2)
+            player(2)
+            assertF(
+   Y 
+     
+  ☺  
+     
+☻    
+0)

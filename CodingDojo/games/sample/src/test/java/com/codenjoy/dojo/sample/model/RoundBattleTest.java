@@ -27,9 +27,8 @@ import org.junit.Test;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
-import static org.junit.Assert.assertEquals;
 
-public class RoundBattleTest extends AbstractGameTest {
+public class RoundBattleTest extends AbstractGameCheckTest {
 
     @Override
     protected GameSettings settings() {

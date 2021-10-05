@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model.experimental;
+package com.codenjoy.dojo.sample.model;
 
 /*-
  * #%L
@@ -23,10 +23,6 @@ package com.codenjoy.dojo.sample.model.experimental;
  */
 
 
-import com.codenjoy.dojo.sample.model.AbstractGameTest;
-import com.codenjoy.dojo.sample.model.Hero;
-import com.codenjoy.dojo.sample.model.Player;
-import com.codenjoy.dojo.sample.model.Sample;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -70,7 +66,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     @Override
     public void after() {
         super.after();
-        TestUtils.assertSmokeFile("GameTest/" + name.getMethodName() +  ".txt", messages);
+        TestUtils.assertSmokeFile(this.getClass().getSimpleName()
+                + "/" + name.getMethodName() +  ".txt", messages);
     }
 
     public void assertEquals(Object expected, Object actual) {

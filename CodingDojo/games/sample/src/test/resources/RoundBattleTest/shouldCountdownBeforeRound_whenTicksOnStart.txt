@@ -1,0 +1,47 @@
+
+setup()
+
+givenFl(
+     
+     
+     
+ ☺   
+☺☺   )
+    givenPlayer([1,1])
+        dice(1, 1)
+    givenPlayer([0,0])
+        dice(0, 0)
+    givenPlayer([1,0])
+        dice(1, 0)
+
+assertF(
+     
+     
+     
+ X   
+YY   
+0)
+
+assertF(
+     
+     
+     
+ Y   
+XY   
+1)
+
+assertF(
+     
+     
+     
+ Y   
+YX   
+2)
+
+tick()
+
+tick()
+
+tick()
+
+tick()

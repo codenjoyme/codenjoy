@@ -25,9 +25,7 @@ package com.codenjoy.dojo.sample.model;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
-public class MultiplayerTest extends AbstractGameTest {
+public class MultiplayerTest extends AbstractGameCheckTest {
 
     @Test
     public void severalHeroesCanAppearOnTheMap() {

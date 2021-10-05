@@ -1,0 +1,27 @@
+
+setup()
+
+givenFl(
+☼☼☼☼☼☼
+☼☺ ☺ ☼
+☼    ☼
+☼ ☺  ☼
+☼    ☼
+☼☼☼☼☼☼)
+    givenPlayer([1,4])
+        dice(1, 4)
+    givenPlayer([3,4])
+        dice(3, 4)
+    givenPlayer([2,2])
+        dice(2, 2)
+
+tick()
+
+assertF(
+☼☼☼☼☼☼
+☼☺   ☼
+☼    ☼
+☼ ☻  ☼
+☼    ☼
+☼☼☼☼☼☼
+0)
