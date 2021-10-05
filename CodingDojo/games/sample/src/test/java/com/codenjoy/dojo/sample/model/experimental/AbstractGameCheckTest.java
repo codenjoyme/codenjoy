@@ -23,28 +23,21 @@ package com.codenjoy.dojo.sample.model.experimental;
  */
 
 
-import com.codenjoy.dojo.sample.TestGameSettings;
-import com.codenjoy.dojo.sample.model.*;
-import com.codenjoy.dojo.sample.services.GameSettings;
-import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.sample.model.AbstractGameTest;
+import com.codenjoy.dojo.sample.model.Hero;
+import com.codenjoy.dojo.sample.model.Player;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.rules.TestName;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
@@ -58,7 +51,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public void setup() {
         messages = new LinkedList<>();
         deep = 0;
-        log("setup");
+        addCall("setup");
 
         super.setup();
 
@@ -72,18 +65,42 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         TestUtils.assertSmokeFile("GameTest/" + name.getMethodName() +  ".txt", messages);
     }
 
-    private void log(String method, Object... parameters) {
-        deep++;
+    private void addCall(String method, Object... parameters) {
+        log(method, false, parameters);
+    }
+
+    private void appendCall(String method, Object... parameters) {
+        log(method, true, parameters);
+    }
+
+    private void log(String method, boolean append, Object... parameters) {
+        if (messages.isEmpty()) {
+            append = false;
+        }
+        if (!append) {
+            deep++;
+        }
         String data = Arrays.stream(parameters)
                 .map(param -> asString(param))
                 .map(string -> string.replaceAll("\n$", ""))
                 .collect(Collectors.joining("\n"));
         data = (data.contains("\n") ? "\n" : "") + data;
-        messages.add(String.format("%s%s%s(%s)",
-                (deep == 1) ? "\n" : "",
-                deep(),
+        String message = String.format("%s%s%s(%s)",
+                (!append && deep == 1) ? "\n" : "",
+                (!append) ? deep() : "",
                 method,
-                data));
+                data);
+
+        if (!append) {
+            messages.add(message);
+        } else {
+            int index = messages.size() - 1;
+            messages.set(index, messages.get(index) + message);
+        }
+    }
+
+    private void logAdd(Object data) {
+        messages.add(String.format(" = %s", data.toString()));
     }
 
     private String asString(Object object) {
@@ -144,7 +161,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public void dice(int... ints) {
-        log("dice", ints);
+        addCall("dice", ints);
 
         super.dice(ints);
 
@@ -153,7 +170,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public void givenFl(String... maps) {
-        log("givenFl", maps);
+        addCall("givenFl", maps);
 
         super.givenFl(maps);
 
@@ -162,7 +179,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     protected void givenPlayer(Hero hero) {
-        log("givenPlayer", hero);
+        addCall("givenPlayer", hero);
 
         super.givenPlayer(hero);
 
@@ -171,7 +188,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public void tick() {
-        log("tick");
+        addCall("tick");
 
         super.tick();
 
@@ -182,7 +199,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public void assertF(String expected, int index) {
-        log("assertF", expected, index);
+        Object actual = super.game(index).getBoardAsString();
+        addCall("assertF", actual, index);
 
         super.assertF(expected, index);
 
@@ -191,18 +209,18 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public Game game(int index) {
-        log("game", index);
+//        log("game", index);
 
         Game result = super.game(index);
 
-        logEnd();
+//        logEnd();
 
         return result;
     }
 
     @Override
     public Player player(int index) {
-        log("player", index);
+        addCall("player", index);
 
         Player result = super.player(index);
 
@@ -211,13 +229,74 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return result;
     }
 
+    class HeroWrapper extends Hero {
+
+        private final Hero hero;
+
+        public HeroWrapper(Hero hero) {
+            super(hero);
+            this.hero = hero;
+        }
+
+        @Override
+        public void up() {
+            appendCall(".up");
+            hero.up();
+            logEnd();
+        }
+
+        @Override
+        public void down() {
+            appendCall(".down");
+            hero.down();
+            logEnd();
+        }
+
+        @Override
+        public void left() {
+            appendCall(".left");
+            hero.left();
+            logEnd();
+        }
+
+        @Override
+        public void right() {
+            appendCall(".right");
+            hero.right();
+            logEnd();
+        }
+
+        @Override
+        public void act(int... p) {
+            appendCall(".act", p);
+            hero.act(p);
+            logEnd();
+        }
+
+        @Override
+        public boolean isAlive() {
+            appendCall(".isAlive");
+            boolean result = hero.isAlive();
+            logAdd(result);
+            logEnd();
+            return result;
+        }
+
+        @Override
+        public int scores() {
+            appendCall(".scores");
+            int result = hero.scores();
+            logAdd(result);
+            logEnd();
+            return result;
+        }
+    }
+
     @Override
     public Hero hero(int index) {
-        log("hero", index);
+        addCall("hero", index);
 
-        Hero result = super.hero(index);
-
-        logEnd();
+        Hero result = new HeroWrapper(super.hero(index));
 
         return result;
     }

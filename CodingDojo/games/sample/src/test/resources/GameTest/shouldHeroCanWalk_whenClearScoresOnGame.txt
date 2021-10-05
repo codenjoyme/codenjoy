@@ -10,11 +10,9 @@ givenFl(
     givenPlayer([2,2])
         dice(2, 2)
 
-hero(0)
-    game(0)
+hero(0).right()
 
-hero(0)
-    game(0)
+hero(0).act()
 
 dice(1, 1)
 
@@ -27,13 +25,11 @@ assertF(
 ☼$  ☼
 ☼☼☼☼☼
 0)
-    game(0)
 
-hero(0)
-    game(0)
+hero(0).scores()
+ = 30
 
-hero(0)
-    game(0)
+hero(0).up()
 
 tick()
 
@@ -44,7 +40,6 @@ assertF(
 ☼$  ☼
 ☼☼☼☼☼
 0)
-    game(0)
 
 dice(1, 2)
 
@@ -55,18 +50,15 @@ assertF(
 ☼   ☼
 ☼☼☼☼☼
 0)
-    game(0)
 
-hero(0)
-    game(0)
+hero(0).scores()
+ = 0
 
-hero(0)
-    game(0)
+hero(0).right()
 
 tick()
 
-hero(0)
-    game(0)
+hero(0).right()
 
 dice(1, 3)
 
@@ -79,4 +71,3 @@ assertF(
 ☼   ☼
 ☼☼☼☼☼
 0)
-    game(0)

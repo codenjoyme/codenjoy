@@ -10,8 +10,7 @@ givenFl(
     givenPlayer([3,2])
         dice(3, 2)
 
-hero(0)
-    game(0)
+hero(0).left()
 
 tick()
 
@@ -22,7 +21,6 @@ assertF(
 ☼   ☼
 ☼☼☼☼☼
 0)
-    game(0)
 
 tick()
 
@@ -33,4 +31,3 @@ assertF(
 ☼   ☼
 ☼☼☼☼☼
 0)
-    game(0)
