@@ -66,7 +66,8 @@ public abstract class AbstractGameTest {
         games = new LinkedList<>();
 
         dice = mock(Dice.class);
-        settings = givenSettings();
+        settings = new TestGameSettings();
+        setupSettings();
         printer = new PrinterFactoryImpl<>();
         events = new EventsListenersAssert(() -> listeners, Events.class);
     }
@@ -113,8 +114,8 @@ public abstract class AbstractGameTest {
         Assert.assertEquals(expected, actual);
     }
 
-    protected GameSettings givenSettings() {
-        return new TestGameSettings();
+    protected void setupSettings() {
+        // do something with settings
     }
 
     public void tick() {
