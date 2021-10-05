@@ -58,7 +58,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         messages = new LinkedList<>();
         deep = 0;
         delay = false;
-        callRealAssert = true;
+        callRealAssert = false;
 
         addCall("before");
         super.setup();
