@@ -76,6 +76,15 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         super.after();
         end();
 
+        checkFile();
+    }
+
+    protected String messages() {
+        return messages.stream()
+                .collect(joining("\n"));
+    }
+
+    protected void checkFile() {
         TestUtils.assertSmokeFile(this.getClass().getSimpleName()
                 + "/" + test.getMethodName() +  ".txt", messages);
     }
@@ -261,6 +270,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public Game game(int index) {
 //        log("game", index);
 
+        // TODO add wrapper
         Game result = super.game(index);
 
 //        logEnd();
@@ -303,30 +313,30 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return new PlayerWrapper(super.player(index));
     }
 
-    class SampleWrapper extends Sample {
+    class FieldWrapper extends Sample {
 
-        private final Sample sample;
+        private final Sample field;
 
-        public SampleWrapper(Sample sample) {
-            super(null, null, sample.settings()); // fake
-            this.sample = sample;
+        public FieldWrapper(Sample field) {
+            super(null, null, field.settings()); // fake
+            this.field = field;
         }
 
         @Override
         public void newGame(Player player) {
             delayOn();
             appendCall(".newGame", delayed());
-            sample.newGame(((PlayerWrapper)player).player);
+            field.newGame(((PlayerWrapper)player).player);
             end();
         }
 
         @Override
         public void clearScore() {
-            if (sample == null) return; // check for fake
+            if (field == null) return; // check for fake
 
             delayOn();
             appendCall(".clearScore");
-            sample.clearScore();
+            field.clearScore();
             end();
         }
     }
@@ -342,7 +352,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         addCall("field");
         delayOff();
 
-        return new SampleWrapper(super.field());
+        return new FieldWrapper(super.field());
     }
 
     class SettingsWrapper extends GameSettings {
@@ -359,9 +369,18 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             if (settings == null) return this; // check for fake
 
             addCall("settings.integer", key, value);
-
             settings.integer(key, value);
+            end();
 
+            return this;
+        }
+
+        @Override
+        public GameSettings string(Key key, String value) {
+            if (settings == null) return this; // check for fake
+
+            addCall("settings.string", key, value);
+            settings.string(key, value);
             end();
 
             return this;
@@ -372,9 +391,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             if (settings == null) return this; // check for fake
 
             addCall("settings.bool", key, value);
-
             settings.bool(key, value);
-
             end();
 
             return this;
