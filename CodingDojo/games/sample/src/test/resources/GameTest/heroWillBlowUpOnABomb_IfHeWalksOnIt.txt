@@ -1,0 +1,35 @@
+setup()
+
+givenFl(☼☼☼☼☼
+☼   ☼
+☼ x ☼
+☼ ☺ ☼
+☼☼☼☼☼
+)
+
+givenPlayer([2,1])
+
+dice([2, 1])
+
+hero(0)
+
+game(0)
+
+hero(0)
+
+game(0)
+
+tick()
+
+assertF(☼☼☼☼☼
+☼   ☼
+☼ X ☼
+☼   ☼
+☼☼☼☼☼
+, 0)
+
+game(0)
+
+hero(0)
+
+game(0)
