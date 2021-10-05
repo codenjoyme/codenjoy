@@ -38,6 +38,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static org.mockito.Mockito.mock;
 
 public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
@@ -259,15 +260,39 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return result;
     }
 
+    class PlayerWrapper extends Player {
+
+        private final Player player;
+
+        public PlayerWrapper(Player player) {
+            super(null, mock(GameSettings.class)); // fake
+            this.player = player;
+        }
+
+        @Override
+        public boolean shouldLeave() {
+            appendCall(".shouldLeave");
+            boolean result = player.shouldLeave();
+            appendResult(result);
+            end();
+            return result;
+        }
+
+        @Override
+        public boolean wantToStay() {
+            appendCall(".wantToStay");
+            boolean result = player.wantToStay();
+            appendResult(result);
+            end();
+            return result;
+        }
+    }
+
     @Override
     public Player player(int index) {
         addCall("player", index);
 
-        Player result = super.player(index);
-
-        end();
-
-        return result;
+        return new PlayerWrapper(super.player(index));
     }
 
     class SampleWrapper extends Sample {
@@ -283,7 +308,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         public void newGame(Player player) {
             delayOn();
             appendCall(".newGame", delayed());
-            sample.newGame(player);
+            sample.newGame(((PlayerWrapper)player).player);
             end();
         }
 
