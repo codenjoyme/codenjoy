@@ -186,8 +186,12 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         }
     }
 
-    private void disableDelayedCall() {
+    private void delayOn() {
         delay = false;
+    }
+
+    private void delayOff() {
+        delay = true;
     }
 
     @Override
@@ -273,7 +277,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         @Override
         public void newGame(Player player) {
-            disableDelayedCall();
+            delayOn();
             appendCall(".newGame", delayedCall());
             sample.newGame(player);
             end();
@@ -283,7 +287,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         public void clearScore() {
             if (sample == null) return; // for super(null, null, sample.settings());
 
-            disableDelayedCall();
+            delayOn();
             appendCall(".clearScore");
             sample.clearScore();
             end();
@@ -299,14 +303,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     @Override
     public Sample field() {
         addCall("field");
-        delayNextCall();
+        delayOff();
 
-        Sample result = new SampleWrapper(super.field());
-        return result;
-    }
-
-    private void delayNextCall() {
-        delay = true;
+        return new SampleWrapper(super.field());
     }
 
     class HeroWrapper extends Hero {
@@ -376,8 +375,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public Hero hero(int index) {
         addCall("hero", index);
 
-        Hero result = new HeroWrapper(super.hero(index));
-        return result;
+        return new HeroWrapper(super.hero(index));
     }
 
 }
