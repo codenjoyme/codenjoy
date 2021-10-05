@@ -1,19 +1,22 @@
 
-setup()
+before()
 
-givenFl(
-☼☼☼☼☼
-☼   ☼
-☼ ☺ ☼
-☼   ☼
-☼☼☼☼☼)
-    givenPlayer([2,2])
-        dice(2, 2)
+heroOnTheField()
+    givenFl(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺ ☼
+        ☼   ☼
+        ☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+    assertF(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺ ☼
+        ☼   ☼
+        ☼☼☼☼☼,
+        0)
 
-assertF(
-☼☼☼☼☼
-☼   ☼
-☼ ☺ ☼
-☼   ☼
-☼☼☼☼☼,
-0)
+after()
+    events().verifyNoEvents([])

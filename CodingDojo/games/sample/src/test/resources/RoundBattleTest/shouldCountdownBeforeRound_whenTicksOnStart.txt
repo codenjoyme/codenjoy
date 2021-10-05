@@ -1,5 +1,5 @@
 
-setup()
+before()
     settings.bool(ROUNDS_ENABLED, true)
     settings.integer(ROUNDS_TIME_BEFORE_START, 5)
     settings.integer(ROUNDS_PER_MATCH, 3)
@@ -7,83 +7,74 @@ setup()
     settings.integer(ROUNDS_TIME, 10)
     settings.integer(ROUNDS_TIME_FOR_WINNER, 2)
 
-settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+shouldCountdownBeforeRound_whenTicksOnStart()
+    settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+    givenFl(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ ☺  ☼
+        ☼☺☺  ☼
+        ☼☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+        givenPlayer([1,1])
+            dice(1, 1)
+        givenPlayer([2,1])
+            dice(2, 1)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ X  ☼
+        ☼YY  ☼
+        ☼☼☼☼☼☼,
+        0)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ Y  ☼
+        ☼XY  ☼
+        ☼☼☼☼☼☼,
+        1)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ Y  ☼
+        ☼YX  ☼
+        ☼☼☼☼☼☼,
+        2)
+    events().verifyAllEvents(
+        listener(0) => []
+        listener(1) => []
+        listener(2) => [],
+        [])
+    tick()
+    events().verifyAllEvents(
+        listener(0) => [[....4....]]
+        listener(1) => [[....4....]]
+        listener(2) => [[....4....]],
+        [])
+    tick()
+    events().verifyAllEvents(
+        listener(0) => [[...3...]]
+        listener(1) => [[...3...]]
+        listener(2) => [[...3...]],
+        [])
+    tick()
+    events().verifyAllEvents(
+        listener(0) => [[..2..]]
+        listener(1) => [[..2..]]
+        listener(2) => [[..2..]],
+        [])
+    tick()
+    events().verifyAllEvents(
+        listener(0) => [[.1.]]
+        listener(1) => [[.1.]]
+        listener(2) => [[.1.]],
+        [])
 
-givenFl(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼ ☺  ☼
-☼☺☺  ☼
-☼☼☼☼☼☼)
-    givenPlayer([2,2])
-        dice(2, 2)
-    givenPlayer([1,1])
-        dice(1, 1)
-    givenPlayer([2,1])
-        dice(2, 1)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼ X  ☼
-☼YY  ☼
-☼☼☼☼☼☼,
-0)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼ Y  ☼
-☼XY  ☼
-☼☼☼☼☼☼,
-1)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼ Y  ☼
-☼YX  ☼
-☼☼☼☼☼☼,
-2)
-
-events().verifyAllEvents(
-listener(0) => []
-listener(1) => []
-listener(2) => [],
-[])
-
-tick()
-
-events().verifyAllEvents(
-listener(0) => [[....4....]]
-listener(1) => [[....4....]]
-listener(2) => [[....4....]],
-[])
-
-tick()
-
-events().verifyAllEvents(
-listener(0) => [[...3...]]
-listener(1) => [[...3...]]
-listener(2) => [[...3...]],
-[])
-
-tick()
-
-events().verifyAllEvents(
-listener(0) => [[..2..]]
-listener(1) => [[..2..]]
-listener(2) => [[..2..]],
-[])
-
-tick()
-
-events().verifyAllEvents(
-listener(0) => [[.1.]]
-listener(1) => [[.1.]]
-listener(2) => [[.1.]],
-[])
+after()
+    events().verifyNoEvents([])

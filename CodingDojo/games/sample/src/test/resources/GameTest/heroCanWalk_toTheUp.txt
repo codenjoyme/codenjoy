@@ -1,23 +1,24 @@
 
-setup()
+before()
 
-givenFl(
-☼☼☼☼☼
-☼   ☼
-☼ ☺ ☼
-☼   ☼
-☼☼☼☼☼)
-    givenPlayer([2,2])
-        dice(2, 2)
+heroCanWalk_toTheUp()
+    givenFl(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺ ☼
+        ☼   ☼
+        ☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+    hero(0).up()
+    tick()
+    assertF(
+        ☼☼☼☼☼
+        ☼ ☺ ☼
+        ☼   ☼
+        ☼   ☼
+        ☼☼☼☼☼,
+        0)
 
-hero(0).up()
-
-tick()
-
-assertF(
-☼☼☼☼☼
-☼ ☺ ☼
-☼   ☼
-☼   ☼
-☼☼☼☼☼,
-0)
+after()
+    events().verifyNoEvents([])

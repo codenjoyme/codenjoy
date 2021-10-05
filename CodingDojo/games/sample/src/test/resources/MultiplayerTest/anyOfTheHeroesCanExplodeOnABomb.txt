@@ -1,65 +1,57 @@
 
-setup()
+before()
 
-givenFl(
-☼☼☼☼☼☼
-☼☺ ☺ ☼
-☼    ☼
-☼ ☺  ☼
-☼    ☼
-☼☼☼☼☼☼)
-    givenPlayer([1,4])
-        dice(1, 4)
-    givenPlayer([3,4])
-        dice(3, 4)
-    givenPlayer([2,2])
-        dice(2, 2)
+anyOfTheHeroesCanExplodeOnABomb()
+    givenFl(
+        ☼☼☼☼☼☼
+        ☼☺ ☺ ☼
+        ☼    ☼
+        ☼ ☺  ☼
+        ☼    ☼
+        ☼☼☼☼☼☼)
+        givenPlayer([1,4])
+            dice(1, 4)
+        givenPlayer([3,4])
+            dice(3, 4)
+        givenPlayer([2,2])
+            dice(2, 2)
+    hero(0).down()
+    hero(0).act()
+    hero(1).left()
+    tick()
+    assertF(
+        ☼☼☼☼☼☼
+        ☼x☻  ☼
+        ☼☺   ☼
+        ☼ ☻  ☼
+        ☼    ☼
+        ☼☼☼☼☼☼,
+        0)
+    hero(1).left()
+    tick()
+    assertF(
+        ☼☼☼☼☼☼
+        ☼Y   ☼
+        ☼☺   ☼
+        ☼ ☻  ☼
+        ☼    ☼
+        ☼☼☼☼☼☼,
+        0)
+    events().verifyAllEvents(
+        listener(0) => []
+        listener(1) => [LOSE]
+        listener(2) => [],
+        [])
+    dice(4, 1)
+    tick()
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼☺   ☼
+        ☼ ☻  ☼
+        ☼   ☻☼
+        ☼☼☼☼☼☼,
+        0)
 
-hero(0).down()
-
-hero(0).act()
-
-hero(1).left()
-
-tick()
-
-assertF(
-☼☼☼☼☼☼
-☼x☻  ☼
-☼☺   ☼
-☼ ☻  ☼
-☼    ☼
-☼☼☼☼☼☼,
-0)
-
-hero(1).left()
-
-tick()
-
-assertF(
-☼☼☼☼☼☼
-☼Y   ☼
-☼☺   ☼
-☼ ☻  ☼
-☼    ☼
-☼☼☼☼☼☼,
-0)
-
-events().verifyAllEvents(
-listener(0) => []
-listener(1) => [LOSE]
-listener(2) => [],
-[])
-
-dice(4, 1)
-
-tick()
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼☺   ☼
-☼ ☻  ☼
-☼   ☻☼
-☼☼☼☼☼☼,
-0)
+after()
+    events().verifyNoEvents([])

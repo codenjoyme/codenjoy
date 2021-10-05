@@ -1,29 +1,30 @@
 
-setup()
+before()
 
-givenFl(
-☼☼☼☼☼☼
-☼☺ ☺ ☼
-☼    ☼
-☼ ☺  ☼
-☼    ☼
-☼☼☼☼☼☼)
-    givenPlayer([1,4])
-        dice(1, 4)
-    givenPlayer([3,4])
-        dice(3, 4)
-    givenPlayer([2,2])
-        dice(2, 2)
+heroesCanBeRestartedInTheGame()
+    givenFl(
+        ☼☼☼☼☼☼
+        ☼☺ ☺ ☼
+        ☼    ☼
+        ☼ ☺  ☼
+        ☼    ☼
+        ☼☼☼☼☼☼)
+        givenPlayer([1,4])
+            dice(1, 4)
+        givenPlayer([3,4])
+            dice(3, 4)
+        givenPlayer([2,2])
+            dice(2, 2)
+    dice(4, 1)
+    tick()
+    assertF(
+        ☼☼☼☼☼☼
+        ☼☺   ☼
+        ☼    ☼
+        ☼ ☻  ☼
+        ☼   ☻☼
+        ☼☼☼☼☼☼,
+        0)
 
-dice(4, 1)
-
-tick()
-
-assertF(
-☼☼☼☼☼☼
-☼☺   ☼
-☼    ☼
-☼ ☻  ☼
-☼   ☻☼
-☼☼☼☼☼☼,
-0)
+after()
+    events().verifyNoEvents([])

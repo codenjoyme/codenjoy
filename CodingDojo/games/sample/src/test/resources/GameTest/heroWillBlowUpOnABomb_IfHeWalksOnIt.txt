@@ -1,29 +1,27 @@
 
-setup()
+before()
 
-givenFl(
-☼☼☼☼☼
-☼   ☼
-☼ x ☼
-☼ ☺ ☼
-☼☼☼☼☼)
-    givenPlayer([2,1])
-        dice(2, 1)
+heroWillBlowUpOnABomb_IfHeWalksOnIt()
+    givenFl(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ x ☼
+        ☼ ☺ ☼
+        ☼☼☼☼☼)
+        givenPlayer([2,1])
+            dice(2, 1)
+    hero(0).isAlive() = true
+    hero(0).up()
+    tick()
+    assertF(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ X ☼
+        ☼   ☼
+        ☼☼☼☼☼,
+        0)
+    events().verifyAllEvents([LOSE], [])
+    hero(0).isAlive() = false
 
-hero(0).isAlive() = true
-
-hero(0).up()
-
-tick()
-
-assertF(
-☼☼☼☼☼
-☼   ☼
-☼ X ☼
-☼   ☼
-☼☼☼☼☼,
-0)
-
-events().verifyAllEvents([LOSE], [])
-
-hero(0).isAlive() = false
+after()
+    events().verifyNoEvents([])

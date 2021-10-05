@@ -1,5 +1,5 @@
 
-setup()
+before()
     settings.bool(ROUNDS_ENABLED, true)
     settings.integer(ROUNDS_TIME_BEFORE_START, 5)
     settings.integer(ROUNDS_PER_MATCH, 3)
@@ -7,45 +7,45 @@ setup()
     settings.integer(ROUNDS_TIME, 10)
     settings.integer(ROUNDS_TIME_FOR_WINNER, 2)
 
-settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+shouldAllPlayersOnBoardIsInactive_whenStart()
+    settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+    givenFl(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ ☺  ☼
+        ☼☺☺  ☼
+        ☼☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+        givenPlayer([1,1])
+            dice(1, 1)
+        givenPlayer([2,1])
+            dice(2, 1)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ X  ☼
+        ☼YY  ☼
+        ☼☼☼☼☼☼,
+        0)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ Y  ☼
+        ☼XY  ☼
+        ☼☼☼☼☼☼,
+        1)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ Y  ☼
+        ☼YX  ☼
+        ☼☼☼☼☼☼,
+        2)
 
-givenFl(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼ ☺  ☼
-☼☺☺  ☼
-☼☼☼☼☼☼)
-    givenPlayer([2,2])
-        dice(2, 2)
-    givenPlayer([1,1])
-        dice(1, 1)
-    givenPlayer([2,1])
-        dice(2, 1)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼ X  ☼
-☼YY  ☼
-☼☼☼☼☼☼,
-0)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼ Y  ☼
-☼XY  ☼
-☼☼☼☼☼☼,
-1)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼ Y  ☼
-☼YX  ☼
-☼☼☼☼☼☼,
-2)
+after()
+    events().verifyNoEvents([])

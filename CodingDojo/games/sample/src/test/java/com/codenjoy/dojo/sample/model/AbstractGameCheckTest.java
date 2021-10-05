@@ -44,7 +44,7 @@ import static org.mockito.Mockito.mock;
 public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Rule
-    public TestName name = new TestName();
+    public TestName test = new TestName();
     private List<String> messages;
     private int deep;
     private boolean delay;
@@ -59,19 +59,24 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         delay = false;
         callRealAssert = false;
 
-        addCall("setup");
-
+        addCall("before");
         super.setup();
-
         end();
+
+        addCall(test.getMethodName());
     }
 
     @After
     @Override
     public void after() {
+        end(); // end test
+
+        addCall("after");
         super.after();
+        end();
+
         TestUtils.assertSmokeFile(this.getClass().getSimpleName()
-                + "/" + name.getMethodName() +  ".txt", messages);
+                + "/" + test.getMethodName() +  ".txt", messages);
     }
 
     public void assertEquals(Object expected, Object actual) {
@@ -107,6 +112,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         String data = params.stream()
                 .collect(joining(multiline ? ",\n" : ", "));
         data = (data.contains("\n") ? "\n" : "") + data;
+        data = data.replace("\n", "\n" + leftPad() + leftPad());
         String message = String.format("%s%s%s(%s)",
                 (!append && deep == 1) ? "\n" : "",
                 (!append) ? leftPad() : "",

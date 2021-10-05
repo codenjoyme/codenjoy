@@ -1,27 +1,26 @@
 
-setup()
+before()
 
-givenFl(
-☼☼☼☼☼
-☼   ☼
-☼ ☺$☼
-☼   ☼
-☼☼☼☼☼)
-    givenPlayer([2,2])
-        dice(2, 2)
+ifThereIsNoPlaceForGold_thenTheProgramDoesNotFreeze()
+    givenFl(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺$☼
+        ☼   ☼
+        ☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+    dice(0, 0)
+    hero(0).right()
+    tick()
+    assertF(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼  ☺☼
+        ☼   ☼
+        ☼☼☼☼☼,
+        0)
+    events().verifyAllEvents([WIN], [])
 
-dice(0, 0)
-
-hero(0).right()
-
-tick()
-
-assertF(
-☼☼☼☼☼
-☼   ☼
-☼  ☺☼
-☼   ☼
-☼☼☼☼☼,
-0)
-
-events().verifyAllEvents([WIN], [])
+after()
+    events().verifyNoEvents([])

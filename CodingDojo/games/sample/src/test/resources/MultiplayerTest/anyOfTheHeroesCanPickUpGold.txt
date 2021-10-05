@@ -1,37 +1,36 @@
 
-setup()
+before()
 
-givenFl(
-☼☼☼☼☼☼
-☼☺ ☺$☼
-☼    ☼
-☼ ☺  ☼
-☼    ☼
-☼☼☼☼☼☼)
-    givenPlayer([1,4])
-        dice(1, 4)
-    givenPlayer([3,4])
-        dice(3, 4)
-    givenPlayer([2,2])
-        dice(2, 2)
+anyOfTheHeroesCanPickUpGold()
+    givenFl(
+        ☼☼☼☼☼☼
+        ☼☺ ☺$☼
+        ☼    ☼
+        ☼ ☺  ☼
+        ☼    ☼
+        ☼☼☼☼☼☼)
+        givenPlayer([1,4])
+            dice(1, 4)
+        givenPlayer([3,4])
+            dice(3, 4)
+        givenPlayer([2,2])
+            dice(2, 2)
+    hero(1).right()
+    dice(1, 2)
+    tick()
+    assertF(
+        ☼☼☼☼☼☼
+        ☼☺  ☻☼
+        ☼    ☼
+        ☼$☻  ☼
+        ☼    ☼
+        ☼☼☼☼☼☼,
+        0)
+    events().verifyAllEvents(
+        listener(0) => []
+        listener(1) => [WIN]
+        listener(2) => [],
+        [])
 
-hero(1).right()
-
-dice(1, 2)
-
-tick()
-
-assertF(
-☼☼☼☼☼☼
-☼☺  ☻☼
-☼    ☼
-☼$☻  ☼
-☼    ☼
-☼☼☼☼☼☼,
-0)
-
-events().verifyAllEvents(
-listener(0) => []
-listener(1) => [WIN]
-listener(2) => [],
-[])
+after()
+    events().verifyNoEvents([])

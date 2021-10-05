@@ -1,25 +1,25 @@
 
-setup()
+before()
 
-givenFl(
-☼☼☼☼☼
-☼   ☼
-☼ ☺ ☼
-☼   ☼
-☼☼☼☼☼)
-    givenPlayer([2,2])
-        dice(2, 2)
+heroCanLeaveTheBombUnderHim_andAtTheSameMomentMoveToTheSide()
+    givenFl(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺ ☼
+        ☼   ☼
+        ☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+    hero(0).act()
+    hero(0).down()
+    tick()
+    assertF(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ x ☼
+        ☼ ☺ ☼
+        ☼☼☼☼☼,
+        0)
 
-hero(0).act()
-
-hero(0).down()
-
-tick()
-
-assertF(
-☼☼☼☼☼
-☼   ☼
-☼ x ☼
-☼ ☺ ☼
-☼☼☼☼☼,
-0)
+after()
+    events().verifyNoEvents([])

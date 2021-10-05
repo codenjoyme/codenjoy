@@ -1,5 +1,5 @@
 
-setup()
+before()
     settings.bool(ROUNDS_ENABLED, true)
     settings.integer(ROUNDS_TIME_BEFORE_START, 5)
     settings.integer(ROUNDS_PER_MATCH, 3)
@@ -7,216 +7,165 @@ setup()
     settings.integer(ROUNDS_TIME, 10)
     settings.integer(ROUNDS_TIME_FOR_WINNER, 2)
 
-settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+shouldGetWinRoundScores_whenKillAllOtherHeroes()
+    settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+    settings.integer(ROUNDS_TIME_BEFORE_START, 1)
+    settings.integer(WIN_SCORE, 10)
+    settings.integer(LOSE_PENALTY, 50)
+    settings.integer(WIN_ROUND_SCORE, 100)
+    givenFl(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼☺$$ ☼
+        ☼☺☺  ☼
+        ☼☼☼☼☼☼)
+        givenPlayer([1,2])
+            dice(1, 2)
+        givenPlayer([1,1])
+            dice(1, 1)
+        givenPlayer([2,1])
+            dice(2, 1)
+    hero(0).addScore(100)
+    hero(1).addScore(100)
+    hero(2).addScore(100)
+    tick()
+    events().verifyAllEvents(
+        listener(0) => [START_ROUND, [Round 1]]
+        listener(1) => [START_ROUND, [Round 1]]
+        listener(2) => [START_ROUND, [Round 1]],
+        [])
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼☺$$ ☼
+        ☼☻☻  ☼
+        ☼☼☼☼☼☼,
+        0)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼☻$$ ☼
+        ☼☺☻  ☼
+        ☼☼☼☼☼☼,
+        1)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼☻$$ ☼
+        ☼☻☺  ☼
+        ☼☼☼☼☼☼,
+        2)
+    hero(0).scores() = 0
+    hero(1).scores() = 0
+    hero(2).scores() = 0
+    hero(0).addScore(100)
+    hero(1).addScore(100)
+    hero(2).addScore(100)
+    hero(0).scores() = 100
+    hero(1).scores() = 100
+    hero(2).scores() = 100
+    hero(0).act()
+    hero(0).right()
+    tick()
+    events().verifyAllEvents(
+        listener(0) => [WIN]
+        listener(1) => []
+        listener(2) => [],
+        [])
+    hero(0).scores() = 110
+    hero(1).scores() = 100
+    hero(2).scores() = 100
+    hero(0).act()
+    hero(0).right()
+    tick()
+    events().verifyAllEvents(
+        listener(0) => [WIN]
+        listener(1) => []
+        listener(2) => [],
+        [])
+    hero(0).scores() = 120
+    hero(1).scores() = 100
+    hero(2).scores() = 100
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼xx☺ ☼
+        ☼☻☻  ☼
+        ☼☼☼☼☼☼,
+        0)
+    hero(1).up()
+    tick()
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼Yx☺ ☼
+        ☼ ☻  ☼
+        ☼☼☼☼☼☼,
+        0)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼Xx☻ ☼
+        ☼ ☻  ☼
+        ☼☼☼☼☼☼,
+        1)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼Yx☻ ☼
+        ☼ ☺  ☼
+        ☼☼☼☼☼☼,
+        2)
+    events().verifyAllEvents(
+        listener(0) => []
+        listener(1) => [LOSE]
+        listener(2) => [],
+        [])
+    hero(0).scores() = 120
+    hero(1).scores() = 50
+    hero(2).scores() = 100
+    hero(2).up()
+    tick()
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼YY☺ ☼
+        ☼    ☼
+        ☼☼☼☼☼☼,
+        0)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼XY☻ ☼
+        ☼    ☼
+        ☼☼☼☼☼☼,
+        1)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼YX☻ ☼
+        ☼    ☼
+        ☼☼☼☼☼☼,
+        2)
+    events().verifyAllEvents(
+        listener(0) => [WIN_ROUND]
+        listener(1) => []
+        listener(2) => [LOSE],
+        [])
+    hero(0).scores() = 220
+    hero(1).scores() = 50
+    hero(2).scores() = 50
 
-settings.integer(ROUNDS_TIME_BEFORE_START, 1)
-
-settings.integer(WIN_SCORE, 10)
-
-settings.integer(LOSE_PENALTY, 50)
-
-settings.integer(WIN_ROUND_SCORE, 100)
-
-givenFl(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼☺$$ ☼
-☼☺☺  ☼
-☼☼☼☼☼☼)
-    givenPlayer([1,2])
-        dice(1, 2)
-    givenPlayer([1,1])
-        dice(1, 1)
-    givenPlayer([2,1])
-        dice(2, 1)
-
-hero(0).addScore(100)
-
-hero(1).addScore(100)
-
-hero(2).addScore(100)
-
-tick()
-
-events().verifyAllEvents(
-listener(0) => [START_ROUND, [Round 1]]
-listener(1) => [START_ROUND, [Round 1]]
-listener(2) => [START_ROUND, [Round 1]],
-[])
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼☺$$ ☼
-☼☻☻  ☼
-☼☼☼☼☼☼,
-0)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼☻$$ ☼
-☼☺☻  ☼
-☼☼☼☼☼☼,
-1)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼☻$$ ☼
-☼☻☺  ☼
-☼☼☼☼☼☼,
-2)
-
-hero(0).scores() = 0
-
-hero(1).scores() = 0
-
-hero(2).scores() = 0
-
-hero(0).addScore(100)
-
-hero(1).addScore(100)
-
-hero(2).addScore(100)
-
-hero(0).scores() = 100
-
-hero(1).scores() = 100
-
-hero(2).scores() = 100
-
-hero(0).act()
-
-hero(0).right()
-
-tick()
-
-events().verifyAllEvents(
-listener(0) => [WIN]
-listener(1) => []
-listener(2) => [],
-[])
-
-hero(0).scores() = 110
-
-hero(1).scores() = 100
-
-hero(2).scores() = 100
-
-hero(0).act()
-
-hero(0).right()
-
-tick()
-
-events().verifyAllEvents(
-listener(0) => [WIN]
-listener(1) => []
-listener(2) => [],
-[])
-
-hero(0).scores() = 120
-
-hero(1).scores() = 100
-
-hero(2).scores() = 100
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼xx☺ ☼
-☼☻☻  ☼
-☼☼☼☼☼☼,
-0)
-
-hero(1).up()
-
-tick()
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼Yx☺ ☼
-☼ ☻  ☼
-☼☼☼☼☼☼,
-0)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼Xx☻ ☼
-☼ ☻  ☼
-☼☼☼☼☼☼,
-1)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼Yx☻ ☼
-☼ ☺  ☼
-☼☼☼☼☼☼,
-2)
-
-events().verifyAllEvents(
-listener(0) => []
-listener(1) => [LOSE]
-listener(2) => [],
-[])
-
-hero(0).scores() = 120
-
-hero(1).scores() = 50
-
-hero(2).scores() = 100
-
-hero(2).up()
-
-tick()
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼YY☺ ☼
-☼    ☼
-☼☼☼☼☼☼,
-0)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼XY☻ ☼
-☼    ☼
-☼☼☼☼☼☼,
-1)
-
-assertF(
-☼☼☼☼☼☼
-☼    ☼
-☼    ☼
-☼YX☻ ☼
-☼    ☼
-☼☼☼☼☼☼,
-2)
-
-events().verifyAllEvents(
-listener(0) => [WIN_ROUND]
-listener(1) => []
-listener(2) => [LOSE],
-[])
-
-hero(0).scores() = 220
-
-hero(1).scores() = 50
-
-hero(2).scores() = 50
+after()
+    events().verifyNoEvents([])

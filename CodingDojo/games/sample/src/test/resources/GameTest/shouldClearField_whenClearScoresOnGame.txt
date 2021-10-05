@@ -1,57 +1,47 @@
 
-setup()
+before()
 
-givenFl(
-☼☼☼☼☼
-☼   ☼
-☼ ☺$☼
-☼   ☼
-☼☼☼☼☼)
-    givenPlayer([2,2])
-        dice(2, 2)
+shouldClearField_whenClearScoresOnGame()
+    givenFl(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺$☼
+        ☼   ☼
+        ☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+    hero(0).right()
+    hero(0).act()
+    dice(1, 1)
+    tick()
+    assertF(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ x☺☼
+        ☼$  ☼
+        ☼☼☼☼☼,
+        0)
+    events().verifyAllEvents([WIN], [])
+    hero(0).scores() = 30
+    hero(0).up()
+    tick()
+    assertF(
+        ☼☼☼☼☼
+        ☼  ☺☼
+        ☼ x ☼
+        ☼$  ☼
+        ☼☼☼☼☼,
+        0)
+    dice(1, 2)
+    field().clearScore()
+    assertF(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼☺ $☼
+        ☼   ☼
+        ☼☼☼☼☼,
+        0)
+    hero(0).scores() = 0
 
-hero(0).right()
-
-hero(0).act()
-
-dice(1, 1)
-
-tick()
-
-assertF(
-☼☼☼☼☼
-☼   ☼
-☼ x☺☼
-☼$  ☼
-☼☼☼☼☼,
-0)
-
-events().verifyAllEvents([WIN], [])
-
-hero(0).scores() = 30
-
-hero(0).up()
-
-tick()
-
-assertF(
-☼☼☼☼☼
-☼  ☺☼
-☼ x ☼
-☼$  ☼
-☼☼☼☼☼,
-0)
-
-dice(1, 2)
-
-field().clearScore()
-
-assertF(
-☼☼☼☼☼
-☼   ☼
-☼☺ $☼
-☼   ☼
-☼☼☼☼☼,
-0)
-
-hero(0).scores() = 0
+after()
+    events().verifyNoEvents([])
