@@ -12,42 +12,46 @@ settings.integer(LOSE_PENALTY, 50)
 settings.integer(WIN_ROUND_SCORE, 100)
 
 givenFl(
-     
-     
-     
-☺$$  
-☺☺   )
-    givenPlayer([0,1])
-        dice(0, 1)
-    givenPlayer([0,0])
-        dice(0, 0)
-    givenPlayer([1,0])
-        dice(1, 0)
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼☺$$ ☼
+☼☺☺  ☼
+☼☼☼☼☼☼)
+    givenPlayer([1,2])
+        dice(1, 2)
+    givenPlayer([1,1])
+        dice(1, 1)
+    givenPlayer([2,1])
+        dice(2, 1)
 
 hero(0)
     hero(1)
         hero(2)
             tick()
             assertF(
-     
-     
-     
-☺$$  
-☻☻   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼☺$$ ☼
+☼☻☻  ☼
+☼☼☼☼☼☼,
 0)
             assertF(
-     
-     
-     
-☻$$  
-☺☻   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼☻$$ ☼
+☼☺☻  ☼
+☼☼☼☼☼☼,
 1)
             assertF(
-     
-     
-     
-☻$$  
-☻☺   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼☻$$ ☼
+☼☻☺  ☼
+☼☼☼☼☼☼,
 2)
             hero(0).scores() = 0
             hero(1).scores() = 0
@@ -71,34 +75,38 @@ hero(0)
                         hero(1).scores() = 0
                         hero(2).scores() = 0
                         assertF(
-     
-     
-     
-xx☺  
-☻☻   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼xx☺ ☼
+☼☻☻  ☼
+☼☼☼☼☼☼,
 0)
                         hero(1).up()
                         tick()
                         assertF(
-     
-     
-     
-Yx☺  
- ☻   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼Yx☺ ☼
+☼ ☻  ☼
+☼☼☼☼☼☼,
 0)
                         assertF(
-     
-     
-     
-Xx☻  
- ☻   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼Xx☻ ☼
+☼ ☻  ☼
+☼☼☼☼☼☼,
 1)
                         assertF(
-     
-     
-     
-Yx☻  
- ☺   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼Yx☻ ☼
+☼ ☺  ☼
+☼☼☼☼☼☼,
 2)
                         hero(0).scores() = 20
                         hero(1).scores() = 0
@@ -106,25 +114,28 @@ Yx☻
                         hero(2).up()
                         tick()
                         assertF(
-     
-     
-     
-YY☺  
-     ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼YY☺ ☼
+☼    ☼
+☼☼☼☼☼☼,
 0)
                         assertF(
-     
-     
-     
-XY☻  
-     ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼XY☻ ☼
+☼    ☼
+☼☼☼☼☼☼,
 1)
                         assertF(
-     
-     
-     
-YX☻  
-     ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼YX☻ ☼
+☼    ☼
+☼☼☼☼☼☼,
 2)
                         hero(0).scores() = 120
                         hero(1).scores() = 0

@@ -4,38 +4,42 @@ setup()
 settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
 
 givenFl(
-     
-     
-     
- ☺   
-☺☺   )
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼ ☺  ☼
+☼☺☺  ☼
+☼☼☼☼☼☼)
+    givenPlayer([2,2])
+        dice(2, 2)
     givenPlayer([1,1])
         dice(1, 1)
-    givenPlayer([0,0])
-        dice(0, 0)
-    givenPlayer([1,0])
-        dice(1, 0)
+    givenPlayer([2,1])
+        dice(2, 1)
 
 assertF(
-     
-     
-     
- X   
-YY   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼ X  ☼
+☼YY  ☼
+☼☼☼☼☼☼,
 0)
 
 assertF(
-     
-     
-     
- Y   
-XY   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼ Y  ☼
+☼XY  ☼
+☼☼☼☼☼☼,
 1)
 
 assertF(
-     
-     
-     
- Y   
-YX   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼ Y  ☼
+☼YX  ☼
+☼☼☼☼☼☼,
 2)

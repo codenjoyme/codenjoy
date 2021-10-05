@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
@@ -75,7 +74,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     public void assertEquals(Object expected, Object actual) {
         if (callRealAssert) {
-            Assert.assertEquals(expected, actual);
+            super.assertEquals(expected, actual);
         }
     }
 

@@ -48,30 +48,34 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         // given
         settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3);
 
-        givenFl("     \n" +
-                "     \n" +
-                "     \n" +
-                " ☺   \n" +
-                "☺☺   \n");
+        givenFl("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☺  ☼\n" +
+                "☼☺☺  ☼\n" +
+                "☼☼☼☼☼☼\n");
 
         // when then
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " X   \n" +
-                "YY   \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ X  ☼\n" +
+                "☼YY  ☼\n" +
+                "☼☼☼☼☼☼\n");
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " Y   \n" +
-                "XY   \n", 1);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼XY  ☼\n" +
+                "☼☼☼☼☼☼\n", 1);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " Y   \n" +
-                "YX   \n", 2);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼YX  ☼\n" +
+                "☼☼☼☼☼☼\n", 2);
     }
 
     // после старта идет отсчет обратного времени
@@ -131,23 +135,26 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         shouldCountdownBeforeRound_whenTicksOnStart();
 
         // пока еще не активны
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " X   \n" +
-                "YY   \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ X  ☼\n" +
+                "☼YY  ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " Y   \n" +
-                "XY   \n", 1);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼XY  ☼\n" +
+                "☼☼☼☼☼☼\n", 1);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " Y   \n" +
-                "YX   \n", 2);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼YX  ☼\n" +
+                "☼☼☼☼☼☼\n", 2);
 
         // when
         // и я не могу ничего поделать с ними
@@ -165,23 +172,26 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "listener(2) => [START_ROUND, [Round 1]]\n");
 
         // можно играть - игроки видны как активные
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " ☺   \n" +
-                "☻☻   \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☺  ☼\n" +
+                "☼☻☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " ☻   \n" +
-                "☺☻   \n", 1);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼☺☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 1);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " ☻   \n" +
-                "☻☺   \n", 2);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼☻☺  ☼\n" +
+                "☼☼☼☼☼☼\n", 2);
 
         // when
         // ... и когда я муваю героев, они откликаются
@@ -192,23 +202,26 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         tick();
 
         // then
-        assertF("     \n" +
-                "     \n" +
-                " ☺   \n" +
-                "☻    \n" +
-                "  ☻  \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ ☺  ☼\n" +
+                "☼☻   ☼\n" +
+                "☼  ☻ ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
-        assertF("     \n" +
-                "     \n" +
-                " ☻   \n" +
-                "☺    \n" +
-                "  ☻  \n", 1);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼☺   ☼\n" +
+                "☼  ☻ ☼\n" +
+                "☼☼☼☼☼☼\n", 1);
 
-        assertF("     \n" +
-                "     \n" +
-                " ☻   \n" +
-                "☻    \n" +
-                "  ☺  \n", 2);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼☻   ☼\n" +
+                "☼  ☺ ☼\n" +
+                "☼☼☼☼☼☼\n", 2);
     }
 
     // если один игрок вынесет другого, но на поле есть еще игроки,
@@ -219,11 +232,12 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3)
                 .integer(ROUNDS_TIME_BEFORE_START, 1); // TODO а что будет если тут 0 игра хоть начнется?
 
-        givenFl("     \n" +
-                "     \n" +
-                "     \n" +
-                " ☺   \n" +
-                "☺☺   \n");
+        givenFl("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☺  ☼\n" +
+                "☼☺☺  ☼\n" +
+                "☼☼☼☼☼☼\n");
 
         // when
         tick();
@@ -234,23 +248,26 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "listener(1) => [START_ROUND, [Round 1]]\n" +
                 "listener(2) => [START_ROUND, [Round 1]]\n");
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " ☺   \n" +
-                "☻☻   \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☺  ☼\n" +
+                "☼☻☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " ☻   \n" +
-                "☺☻   \n", 1);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼☺☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 1);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                " ☻   \n" +
-                "☻☺   \n", 2);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼☻☺  ☼\n" +
+                "☼☼☼☼☼☼\n", 2);
 
         // when
         // когда я выношу одного игрока
@@ -266,11 +283,12 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         tick();
 
         // then
-        assertF("     \n" +
-                "     \n" +
-                "  ☺  \n" +
-                " x   \n" +
-                "☻☻   \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼  ☺ ☼\n" +
+                "☼ x  ☼\n" +
+                "☼☻☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
         // игрок активный и живой
         assertEquals(true, hero(2).isActive());
@@ -290,11 +308,12 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         assertEquals(true, player(2).wantToStay());
         assertEquals(false, player(2).shouldLeave());
 
-        assertF("     \n" +
-                "     \n" +
-                "  ☺  \n" +
-                " Y   \n" +
-                "☻    \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼  ☺ ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼☻   ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
@@ -305,22 +324,23 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         tick();
 
         // новые координаты для героя
-        dice(3, 4);
+        dice(4, 4);
         field().newGame(player(2)); // это сделает сервер в ответ на isAlive = false
 
         // then
-        // игрок уже живой но неактивный до начала следующего раунда
+        // игрок уже живой, но неактивный до начала следующего раунда
         assertEquals(false, hero(2).isActive());
         assertEquals(true, hero(2).isAlive());
         // тут без изменений
         assertEquals(true, player(2).wantToStay());
         assertEquals(false, player(2).shouldLeave());
 
-        assertF("   Y \n" +
-                "     \n" +
-                "  ☺  \n" +
-                "     \n" +
-                "☻    \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼   Y☼\n" +
+                "☼  ☺ ☼\n" +
+                "☼    ☼\n" +
+                "☼☻   ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
     }
 
     // если один игрок вынесет обоих, то должен получить за это очки
@@ -333,11 +353,12 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 .integer(LOSE_PENALTY, 50)
                 .integer(WIN_ROUND_SCORE, 100);
 
-        givenFl("     \n" +
-                "     \n" +
-                "     \n" +
-                "☺$$  \n" +
-                "☺☺   \n");
+        givenFl("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☺$$ ☼\n" +
+                "☼☺☺  ☼\n" +
+                "☼☼☼☼☼☼\n");
 
         hero(0).addScore(100);
         hero(1).addScore(100);
@@ -352,23 +373,26 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "listener(1) => [START_ROUND, [Round 1]]\n" +
                 "listener(2) => [START_ROUND, [Round 1]]\n");
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "☺$$  \n" +
-                "☻☻   \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☺$$ ☼\n" +
+                "☼☻☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "☻$$  \n" +
-                "☺☻   \n", 1);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☻$$ ☼\n" +
+                "☼☺☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 1);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "☻$$  \n" +
-                "☻☺   \n", 2);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☻$$ ☼\n" +
+                "☼☻☺  ☼\n" +
+                "☼☼☼☼☼☼\n", 2);
 
         // cleaned after new round
         assertEquals(0, hero(0).scores());
@@ -415,34 +439,38 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         assertEquals(100, hero(2).scores());
 
         // then
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "xx☺  \n" +
-                "☻☻   \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼xx☺ ☼\n" +
+                "☼☻☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
         // when
         hero(1).up();
         tick();
 
         // then
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "Yx☺  \n" +
-                " ☻   \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼Yx☺ ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "Xx☻  \n" +
-                " ☻   \n", 1);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼Xx☻ ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼☼☼☼☼☼\n", 1);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "Yx☻  \n" +
-                " ☺   \n", 2);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼Yx☻ ☼\n" +
+                "☼ ☺  ☼\n" +
+                "☼☼☼☼☼☼\n", 2);
 
         events.verifyAllEvents(
                 "listener(0) => []\n" +
@@ -458,23 +486,26 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         tick();
 
         // then
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "YY☺  \n" +
-                "     \n", 0);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼YY☺ ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", 0);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "XY☻  \n" +
-                "     \n", 1);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼XY☻ ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", 1);
 
-        assertF("     \n" +
-                "     \n" +
-                "     \n" +
-                "YX☻  \n" +
-                "     \n", 2);
+        assertF("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼YX☻ ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n", 2);
 
         events.verifyAllEvents(
                 "listener(0) => [WIN_ROUND]\n" +

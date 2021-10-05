@@ -6,42 +6,46 @@ settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
 settings.integer(ROUNDS_TIME_BEFORE_START, 1)
 
 givenFl(
-     
-     
-     
- ☺   
-☺☺   )
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼ ☺  ☼
+☼☺☺  ☼
+☼☼☼☼☼☼)
+    givenPlayer([2,2])
+        dice(2, 2)
     givenPlayer([1,1])
         dice(1, 1)
-    givenPlayer([0,0])
-        dice(0, 0)
-    givenPlayer([1,0])
-        dice(1, 0)
+    givenPlayer([2,1])
+        dice(2, 1)
 
 tick()
 
 assertF(
-     
-     
-     
- ☺   
-☻☻   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼ ☺  ☼
+☼☻☻  ☼
+☼☼☼☼☼☼,
 0)
 
 assertF(
-     
-     
-     
- ☻   
-☺☻   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼ ☻  ☼
+☼☺☻  ☼
+☼☼☼☼☼☼,
 1)
 
 assertF(
-     
-     
-     
- ☻   
-☻☺   ,
+☼☼☼☼☼☼
+☼    ☼
+☼    ☼
+☼ ☻  ☼
+☼☻☺  ☼
+☼☼☼☼☼☼,
 2)
 
 hero(0).act()
@@ -59,11 +63,12 @@ tick()
 tick()
 
 assertF(
-     
-     
-  ☺  
- x   
-☻☻   ,
+☼☼☼☼☼☼
+☼    ☼
+☼  ☺ ☼
+☼ x  ☼
+☼☻☻  ☼
+☼☼☼☼☼☼,
 0)
 
 hero(2)
@@ -77,23 +82,25 @@ hero(2)
         player(2)
         player(2)
         assertF(
-     
-     
-  ☺  
- Y   
-☻    ,
+☼☼☼☼☼☼
+☼    ☼
+☼  ☺ ☼
+☼ Y  ☼
+☼☻   ☼
+☼☼☼☼☼☼,
 0)
         tick()
-        dice(3, 4)
+        dice(4, 4)
         field().newGame(player(2))
         hero(2)
             hero(2).isAlive() = true
             player(2)
             player(2)
             assertF(
-   Y 
-     
-  ☺  
-     
-☻    ,
+☼☼☼☼☼☼
+☼   Y☼
+☼  ☺ ☼
+☼    ☼
+☼☻   ☼
+☼☼☼☼☼☼,
 0)

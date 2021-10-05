@@ -36,13 +36,13 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -107,6 +107,10 @@ public abstract class AbstractGameTest {
         dice(hero.getX(), hero.getY());
         game.on(field);
         game.newGame();
+    }
+
+    public void assertEquals(Object expected, Object actual) {
+        Assert.assertEquals(expected, actual);
     }
 
     protected GameSettings givenSettings() {
