@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
@@ -48,6 +49,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     private int deep;
     private boolean delayNextCall;
     private String delayedCall;
+    private boolean callRealAssert;
 
     @Before
     @Override
@@ -55,6 +57,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         messages = new LinkedList<>();
         deep = 0;
         delayNextCall = false;
+        callRealAssert = false;
+
         addCall("setup");
 
         super.setup();
@@ -67,6 +71,12 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public void after() {
         super.after();
         TestUtils.assertSmokeFile("GameTest/" + name.getMethodName() +  ".txt", messages);
+    }
+
+    public void assertEquals(Object expected, Object actual) {
+        if (callRealAssert) {
+            Assert.assertEquals(expected, actual);
+        }
     }
 
     private void addCall(String method, Object... parameters) {
@@ -226,7 +236,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         Object actual = super.game(index).getBoardAsString();
         addCall("assertF", actual, index);
 
-        super.assertF(expected, index);
+        if (callRealAssert) {
+            super.assertF(expected, index);
+        }
 
         end();
     }
