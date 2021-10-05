@@ -30,6 +30,7 @@ import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ComparisonFailure;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 
@@ -57,7 +58,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         messages = new LinkedList<>();
         deep = 0;
         delay = false;
-        callRealAssert = false;
+        callRealAssert = true;
 
         addCall("before");
         super.setup();
@@ -483,15 +484,34 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         @Override
         public void verifyNoEvents(Integer... indexes) {
             appendCall(".verifyNoEvents", Arrays.asList(indexes));
-            events.verifyNoEvents(indexes);
             end();
+
+            try {
+                events.verifyNoEvents(indexes);
+            } catch (ComparisonFailure failure) {
+                verifyAllEvents(indexes);
+
+                if (callRealAssert) {
+                    throw failure;
+                }
+           }
+        }
+
+        private String verifyAllEvents(Integer[] indexes) {
+            String actual = events.getEvents(indexes);
+            appendCall(".verifyAllEvents", actual, Arrays.asList(indexes));
+            end();
+
+            return actual;
         }
 
         @Override
         public void verifyAllEvents(String expected, Integer... indexes) {
-            appendCall(".verifyAllEvents", expected, Arrays.asList(indexes));
-            events.verifyAllEvents(expected, indexes);
-            end();
+            String actual = verifyAllEvents(indexes);
+
+            if (callRealAssert) {
+                assertEquals(expected, actual);
+            }
         }
     }
 

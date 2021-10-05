@@ -111,6 +111,7 @@ public abstract class AbstractGameTest {
     }
 
     public void assertEquals(Object expected, Object actual) {
+        // TODO to use there SmartAssert
         Assert.assertEquals(expected, actual);
     }
 
