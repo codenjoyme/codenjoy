@@ -77,14 +77,14 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private void addCall(String method, Object... parameters) {
-        log(method, false, parameters);
+        call(method, false, parameters);
     }
 
     private void appendCall(String method, Object... parameters) {
-        log(method, true, parameters);
+        call(method, true, parameters);
     }
 
-    private void log(String method, boolean append, Object... parameters) {
+    private void call(String method, boolean append, Object... parameters) {
         if (messages.isEmpty()) {
             append = false;
         }
@@ -101,7 +101,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         data = (data.contains("\n") ? "\n" : "") + data;
         String message = String.format("%s%s%s(%s)",
                 (!append && deep == 1) ? "\n" : "",
-                (!append) ? deep() : "",
+                (!append) ? leftPad() : "",
                 method,
                 data);
 
@@ -176,7 +176,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return Arrays.deepToString((Object[]) object);
     }
 
-    private String deep() {
+    private String leftPad() {
         return StringUtils.leftPad("", 4*(deep - 1), ' ');
     }
 
