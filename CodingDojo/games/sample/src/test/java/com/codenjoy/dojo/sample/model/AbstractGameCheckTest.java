@@ -230,8 +230,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         end();
     }
 
-    // getters & asserts
-
     @Override
     public void assertF(String expected, int index) {
         Object actual = super.game(index).getBoardAsString();
@@ -271,21 +269,21 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         private final Sample sample;
 
         public SampleWrapper(Sample sample) {
-            super(null, null, sample.settings());
+            super(null, null, sample.settings()); // fake
             this.sample = sample;
         }
 
         @Override
         public void newGame(Player player) {
             delayOn();
-            appendCall(".newGame", delayedCall());
+            appendCall(".newGame", delayed());
             sample.newGame(player);
             end();
         }
 
         @Override
         public void clearScore() {
-            if (sample == null) return; // for super(null, null, sample.settings());
+            if (sample == null) return; // check for fake
 
             delayOn();
             appendCall(".clearScore");
@@ -294,7 +292,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         }
     }
 
-    private String delayedCall() {
+    private String delayed() {
         String result = delayed;
         delayed = null;
         return result;
