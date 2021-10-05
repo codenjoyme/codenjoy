@@ -407,12 +407,28 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         }
 
         @Override
+        public boolean isActive() {
+            appendCall(".isActive");
+            boolean result = hero.isActive();
+            appendResult(result);
+            end();
+            return result;
+        }
+
+        @Override
         public int scores() {
             appendCall(".scores");
             int result = hero.scores();
             appendResult(result);
             end();
             return result;
+        }
+
+        @Override
+        public void addScore(int added) {
+            appendCall(".addScore", added);
+            hero.addScore(added);
+            end();
         }
     }
 

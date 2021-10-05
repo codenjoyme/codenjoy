@@ -71,17 +71,27 @@ assertF(
 ☼☼☼☼☼☼,
 0)
 
-hero(2)
-    hero(2).isAlive() = true
-    player(2)
-    player(2)
-    hero(2).up()
-    tick()
-    hero(2)
-        hero(2).isAlive() = false
-        player(2)
-        player(2)
-        assertF(
+hero(2).isActive() = true
+
+hero(2).isAlive() = true
+
+player(2)
+
+player(2)
+
+hero(2).up()
+
+tick()
+
+hero(2).isActive() = true
+
+hero(2).isAlive() = false
+
+player(2)
+
+player(2)
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼  ☺ ☼
@@ -89,14 +99,22 @@ hero(2)
 ☼☻   ☼
 ☼☼☼☼☼☼,
 0)
-        tick()
-        dice(4, 4)
-        field().newGame(player(2))
-        hero(2)
-            hero(2).isAlive() = true
-            player(2)
-            player(2)
-            assertF(
+
+tick()
+
+dice(4, 4)
+
+field().newGame(player(2))
+
+hero(2).isActive() = false
+
+hero(2).isAlive() = true
+
+player(2)
+
+player(2)
+
+assertF(
 ☼☼☼☼☼☼
 ☼   Y☼
 ☼  ☺ ☼

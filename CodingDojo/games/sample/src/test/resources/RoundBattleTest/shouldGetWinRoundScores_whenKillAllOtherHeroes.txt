@@ -25,11 +25,15 @@ givenFl(
     givenPlayer([2,1])
         dice(2, 1)
 
-hero(0)
-    hero(1)
-        hero(2)
-            tick()
-            assertF(
+hero(0).addScore(100)
+
+hero(1).addScore(100)
+
+hero(2).addScore(100)
+
+tick()
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -37,7 +41,8 @@ hero(0)
 ☼☻☻  ☼
 ☼☼☼☼☼☼,
 0)
-            assertF(
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -45,7 +50,8 @@ hero(0)
 ☼☺☻  ☼
 ☼☼☼☼☼☼,
 1)
-            assertF(
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -53,28 +59,50 @@ hero(0)
 ☼☻☺  ☼
 ☼☼☼☼☼☼,
 2)
-            hero(0).scores() = 0
-            hero(1).scores() = 0
-            hero(2).scores() = 0
-            hero(0)
-                hero(1)
-                    hero(2)
-                        hero(0).scores() = 0
-                        hero(1).scores() = 0
-                        hero(2).scores() = 0
-                        hero(0).act()
-                        hero(0).right()
-                        tick()
-                        hero(0).scores() = 10
-                        hero(1).scores() = 0
-                        hero(2).scores() = 0
-                        hero(0).act()
-                        hero(0).right()
-                        tick()
-                        hero(0).scores() = 20
-                        hero(1).scores() = 0
-                        hero(2).scores() = 0
-                        assertF(
+
+hero(0).scores() = 0
+
+hero(1).scores() = 0
+
+hero(2).scores() = 0
+
+hero(0).addScore(100)
+
+hero(1).addScore(100)
+
+hero(2).addScore(100)
+
+hero(0).scores() = 100
+
+hero(1).scores() = 100
+
+hero(2).scores() = 100
+
+hero(0).act()
+
+hero(0).right()
+
+tick()
+
+hero(0).scores() = 110
+
+hero(1).scores() = 100
+
+hero(2).scores() = 100
+
+hero(0).act()
+
+hero(0).right()
+
+tick()
+
+hero(0).scores() = 120
+
+hero(1).scores() = 100
+
+hero(2).scores() = 100
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -82,9 +110,12 @@ hero(0)
 ☼☻☻  ☼
 ☼☼☼☼☼☼,
 0)
-                        hero(1).up()
-                        tick()
-                        assertF(
+
+hero(1).up()
+
+tick()
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -92,7 +123,8 @@ hero(0)
 ☼ ☻  ☼
 ☼☼☼☼☼☼,
 0)
-                        assertF(
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -100,7 +132,8 @@ hero(0)
 ☼ ☻  ☼
 ☼☼☼☼☼☼,
 1)
-                        assertF(
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -108,12 +141,18 @@ hero(0)
 ☼ ☺  ☼
 ☼☼☼☼☼☼,
 2)
-                        hero(0).scores() = 20
-                        hero(1).scores() = 0
-                        hero(2).scores() = 0
-                        hero(2).up()
-                        tick()
-                        assertF(
+
+hero(0).scores() = 120
+
+hero(1).scores() = 50
+
+hero(2).scores() = 100
+
+hero(2).up()
+
+tick()
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -121,7 +160,8 @@ hero(0)
 ☼    ☼
 ☼☼☼☼☼☼,
 0)
-                        assertF(
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -129,7 +169,8 @@ hero(0)
 ☼    ☼
 ☼☼☼☼☼☼,
 1)
-                        assertF(
+
+assertF(
 ☼☼☼☼☼☼
 ☼    ☼
 ☼    ☼
@@ -137,6 +178,9 @@ hero(0)
 ☼    ☼
 ☼☼☼☼☼☼,
 2)
-                        hero(0).scores() = 120
-                        hero(1).scores() = 0
-                        hero(2).scores() = 0
+
+hero(0).scores() = 220
+
+hero(1).scores() = 50
+
+hero(2).scores() = 50
