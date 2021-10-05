@@ -57,7 +57,7 @@ public abstract class AbstractGameTest {
     private PrinterFactory<Element, Player> printer;
     private Sample field;
     private GameSettings settings;
-    protected EventsListenersAssert events;
+    private EventsListenersAssert events;
 
     @Before
     public void setup() {
@@ -129,6 +129,10 @@ public abstract class AbstractGameTest {
 
     public Sample field() {
         return field;
+    }
+
+    public EventsListenersAssert events() {
+        return events;
     }
 
     public void assertF(String expected, int index) {

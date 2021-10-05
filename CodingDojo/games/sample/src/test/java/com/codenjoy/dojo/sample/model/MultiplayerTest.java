@@ -171,7 +171,7 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
-        events.verifyAllEvents(
+        events().verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => [LOSE]\n" +
                 "listener(2) => []\n");
@@ -216,7 +216,7 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
-        events.verifyAllEvents(
+        events().verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => [WIN]\n" +
                 "listener(2) => []\n");
