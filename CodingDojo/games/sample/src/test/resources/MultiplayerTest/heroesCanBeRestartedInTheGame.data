@@ -16,6 +16,7 @@ heroesCanBeRestartedInTheGame()
         givenPlayer([2,2])
             dice(2, 2)
     dice(4, 1)
+    game(1).newGame()
     tick()
     assertF(
         ☼☼☼☼☼☼

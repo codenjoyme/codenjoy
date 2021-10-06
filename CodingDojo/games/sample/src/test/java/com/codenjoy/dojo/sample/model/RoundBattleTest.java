@@ -300,7 +300,7 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         tick();
 
         // then
-        // игрок активный, но неживой (cервер ему сделает newGame)
+        // игрок активный, но неживой (сервер ему сделает newGame)
         assertEquals(true, hero(2).isActive());
         assertEquals(false, hero(2).isAlive());
         // тут без изменений

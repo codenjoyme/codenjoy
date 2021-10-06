@@ -176,36 +176,33 @@ public class WrapperManager {
         // setup proxy
         ProxyFactory factory = new ProxyFactory();
         factory.setSuperclass(delegate.getClass());
-        factory.setFilter(method -> {
-            if (!Modifier.isPublic(method.getModifiers())) {
-                return false;
-            }
-
-            if (included.isEmpty()) {
-                return findFirst(method, excluded).isEmpty();
-            } else {
-                return findFirst(method, included).isPresent();
-            }
-        });
 
         // methods handler
         MethodHandler handler = (self, method, proceed, args) -> {
-            Pending last = pending.disable();
-            prolongLastCall(delegate);
-            appendCall("." + method.getName(), getArgs(args, last));
+            boolean process = isProcess(excluded, included, method);
+
+            if (process) {
+                Pending last = pending.disable();
+                prolongLastCall(delegate);
+                appendCall("." + method.getName(), getArgs(args, last));
+            }
+
             unwrapAll(args);
             Object result = method.invoke(delegate, args);
-            if (!method.getReturnType().equals(void.class)) {
-                boolean showResult = true;
-                Optional<String> pattern = findFirst(method, included);
-                if (pattern.isPresent()) {
-                    showResult &= !pattern.get().contains("[-R]");
+
+            if (process) {
+                if (!method.getReturnType().equals(void.class)) {
+                    boolean showResult = true;
+                    Optional<String> pattern = findFirst(method, included);
+                    if (pattern.isPresent()) {
+                        showResult &= !pattern.get().contains("[-R]");
+                    }
+                    if (showResult) {
+                        appendResult(result);
+                    }
                 }
-                if (showResult) {
-                    appendResult(result);
-                }
+                end();
             }
-            end();
 
             return findWrapper(result);
         };
@@ -217,6 +214,18 @@ public class WrapperManager {
             return wrapper;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private boolean isProcess(List<String> excluded, List<String> included, Method method) {
+        if (!Modifier.isPublic(method.getModifiers())) {
+            return false;
+        }
+
+        if (included.isEmpty()) {
+            return findFirst(method, excluded).isEmpty();
+        } else {
+            return findFirst(method, included).isPresent();
         }
     }
 

@@ -15,6 +15,7 @@ heroesCanBeRemovedFromTheGame()
             dice(3, 4)
         givenPlayer([2,2])
             dice(2, 2)
+    game(1).close()
     tick()
     assertF(
         ☼☼☼☼☼☼

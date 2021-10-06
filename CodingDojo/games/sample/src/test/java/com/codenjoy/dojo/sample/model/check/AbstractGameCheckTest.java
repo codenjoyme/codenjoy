@@ -168,13 +168,10 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public Game game(int index) {
-//        log("game", index);
-
-        // TODO add wrapper
-        Game result = super.game(index);
-
-//        logEnd();
-
+        Game result = manager.objectSpy(super.game(index), false,
+                "getPlayer",
+                "getHero");
+        manager.caller("game", result, index);
         return result;
     }
 
