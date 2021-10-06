@@ -72,12 +72,9 @@ shouldMoveToInactive_whenKillSomeone()
     hero(2).isAlive() = true
     player(2).wantToStay() = true
     player(2).shouldLeave() = false
-    game().getHero() = [2,1]
     hero(2).up()
     tick()
-    game().getHero() = [2,2]
     hero(2).isActive() = true
-    game().getHero() = [2,2]
     hero(2).isAlive() = false
     player(2).wantToStay() = true
     player(2).shouldLeave() = false
@@ -97,9 +94,7 @@ shouldMoveToInactive_whenKillSomeone()
     tick()
     dice(4, 4)
     field().newGame(player(2))
-    game().getHero() = [4,4]
     hero(2).isActive() = false
-    game().getHero() = [4,4]
     hero(2).isAlive() = true
     player(2).wantToStay() = true
     player(2).shouldLeave() = false
