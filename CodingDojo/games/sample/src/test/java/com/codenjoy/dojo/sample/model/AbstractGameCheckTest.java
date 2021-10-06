@@ -262,36 +262,28 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     @Override
     public void dice(int... ints) {
         addCall("dice", ints);
-
         super.dice(ints);
-
         end();
     }
 
     @Override
     public void givenFl(String... maps) {
         addCall("givenFl", maps);
-
         super.givenFl(maps);
-
         end();
     }
 
     @Override
     protected void givenPlayer(Hero hero) {
         addCall("givenPlayer", hero);
-
         super.givenPlayer(hero);
-
         end();
     }
 
     @Override
     public void tick() {
         addCall("tick");
-
         super.tick();
-
         end();
     }
 
@@ -299,11 +291,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public void assertF(String expected, int index) {
         Object actual = super.game(index).getBoardAsString();
         addCall("assertF", actual, index);
-
         if (callRealAssert) {
             super.assertF(expected, index);
         }
-
         end();
     }
 
@@ -520,7 +510,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         public void verifyNoEvents(Integer... indexes) {
             appendCall(".verifyNoEvents", Arrays.asList(indexes));
             end();
-
             try {
                 events.verifyNoEvents(indexes);
             } catch (ComparisonFailure failure) {
@@ -536,14 +525,12 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             String actual = events.getEvents(indexes);
             appendCall(".verifyAllEvents", actual, Arrays.asList(indexes));
             end();
-
             return actual;
         }
 
         @Override
         public void verifyAllEvents(String expected, Integer... indexes) {
             String actual = verifyAllEvents(indexes);
-
             if (callRealAssert) {
                 assertEquals(expected, actual);
             }
@@ -553,7 +540,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     @Override
     public EventsListenersAssert events() {
         addCall("events");
-
         return new EventsWrapper(super.events());
     }
 
