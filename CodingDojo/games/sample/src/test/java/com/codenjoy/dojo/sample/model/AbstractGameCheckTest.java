@@ -259,73 +259,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         }
     }
 
-    @Override
-    public void dice(int... ints) {
-        addCall("dice", ints);
-        super.dice(ints);
-        end();
-    }
-
-    @Override
-    public void givenFl(String... maps) {
-        addCall("givenFl", maps);
-        super.givenFl(maps);
-        end();
-    }
-
-    @Override
-    protected void givenPlayer(Hero hero) {
-        addCall("givenPlayer", hero);
-        super.givenPlayer(hero);
-        end();
-    }
-
-    @Override
-    public void tick() {
-        addCall("tick");
-        super.tick();
-        end();
-    }
-
-    @Override
-    public void assertF(String expected, int index) {
-        Object actual = super.game(index).getBoardAsString();
-        addCall("assertF", actual, index);
-        if (callRealAssert) {
-            super.assertF(expected, index);
-        }
-        end();
-    }
-
-    @Override
-    public Game game(int index) {
-//        log("game", index);
-
-        // TODO add wrapper
-        Game result = super.game(index);
-
-//        logEnd();
-
-        return result;
-    }
-
-    @Override
-    public Player player(int index) {
-        Player result = objectSpy(super.player(index), false);
-        addCall("player", index);
-        return result;
-    }
-
-    @Override
-    public Sample field() {
-        Sample result = objectSpy(super.field(), true,
-                "newGame",
-                "clearScore");
-        caller = new Caller("field", result);
-        pending.enable();
-        return result;
-    }
-
     static class Caller {
         private String name;
         private Object wrapper;
@@ -336,23 +269,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             this.wrapper = wrapper;
             this.args = args;
         }
-    }
-
-    @Override
-    public GameSettings settings() {
-        GameSettings result = objectSpy(super.settings(), true,
-                "[-R]SettingsReader:integer",
-                "[-R]SettingsReader:string",
-                "[-R]SettingsReader:bool");
-        caller = new Caller("settings", result);
-        return result;
-    }
-
-    @Override
-    public Hero hero(int index) {
-        Hero result = objectSpy(super.hero(index), false, "itsMe");
-        caller = new Caller("hero", result, index);
-        return result;
     }
 
     private <T> T objectSpy(T delegate, boolean include, String... methods) {
@@ -541,6 +457,90 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public EventsListenersAssert events() {
         addCall("events");
         return new EventsWrapper(super.events());
+    }
+
+    @Override
+    public void dice(int... ints) {
+        addCall("dice", ints);
+        super.dice(ints);
+        end();
+    }
+
+    @Override
+    public void givenFl(String... maps) {
+        addCall("givenFl", maps);
+        super.givenFl(maps);
+        end();
+    }
+
+    @Override
+    protected void givenPlayer(Hero hero) {
+        addCall("givenPlayer", hero);
+        super.givenPlayer(hero);
+        end();
+    }
+
+    @Override
+    public void tick() {
+        addCall("tick");
+        super.tick();
+        end();
+    }
+
+    @Override
+    public void assertF(String expected, int index) {
+        Object actual = super.game(index).getBoardAsString();
+        addCall("assertF", actual, index);
+        if (callRealAssert) {
+            super.assertF(expected, index);
+        }
+        end();
+    }
+
+    @Override
+    public Game game(int index) {
+//        log("game", index);
+
+        // TODO add wrapper
+        Game result = super.game(index);
+
+//        logEnd();
+
+        return result;
+    }
+
+    @Override
+    public Player player(int index) {
+        Player result = objectSpy(super.player(index), false);
+        addCall("player", index);
+        return result;
+    }
+
+    @Override
+    public Sample field() {
+        Sample result = objectSpy(super.field(), true,
+                "newGame",
+                "clearScore");
+        caller = new Caller("field", result);
+        pending.enable();
+        return result;
+    }
+
+    @Override
+    public GameSettings settings() {
+        GameSettings result = objectSpy(super.settings(), true,
+                "[-R]SettingsReader:integer",
+                "[-R]SettingsReader:string",
+                "[-R]SettingsReader:bool");
+        caller = new Caller("settings", result);
+        return result;
+    }
+
+    @Override
+    public Hero hero(int index) {
+        Hero result = objectSpy(super.hero(index), false, "itsMe");
+        caller = new Caller("hero", result, index);
+        return result;
     }
 
 }
