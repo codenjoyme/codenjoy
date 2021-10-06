@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.sample.services.GameSettings;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -38,11 +39,8 @@ import org.junit.Rule;
 import org.junit.rules.TestName;
 
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.mock;
@@ -56,11 +54,13 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     private boolean delay;
     private String delayed;
     private boolean callRealAssert;
+    private Map<Object, Object> wrappers;
 
     @Before
     @Override
     public void setup() {
         messages = new LinkedList<>();
+        wrappers = new HashMap<>();
         deep = 0;
         delay = false;
         callRealAssert = false;
@@ -215,11 +215,11 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         }
     }
 
-    private void delayOn() {
+    private void delayOff() {
         delay = false;
     }
 
-    private void delayOff() {
+    private void delayOn() {
         delay = true;
     }
 
@@ -283,39 +283,15 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return result;
     }
 
-    class PlayerWrapper extends Player {
-
-        private final Player player;
-
-        public PlayerWrapper(Player player) {
-            super(null, mock(GameSettings.class)); // fake
-            this.player = player;
-        }
-
-        @Override
-        public boolean shouldLeave() {
-            appendCall(".shouldLeave");
-            boolean result = player.shouldLeave();
-            appendResult(result);
-            end();
-            return result;
-        }
-
-        @Override
-        public boolean wantToStay() {
-            appendCall(".wantToStay");
-            boolean result = player.wantToStay();
-            appendResult(result);
-            end();
-            return result;
-        }
-    }
-
     @Override
     public Player player(int index) {
         addCall("player", index);
+        delayOn();
 
-        return new PlayerWrapper(super.player(index));
+        return objectSpy(super.player(index),
+                Arrays.asList(),
+                new Class<?>[]{EventListener.class, GameSettings.class},
+                new Object[]{mock(EventListener.class), mock(GameSettings.class)});
     }
 
     class FieldWrapper extends Sample {
@@ -329,9 +305,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         @Override
         public void newGame(Player player) {
-            delayOn();
+            delayOff();
             appendCall(".newGame", delayed());
-            field.newGame(((PlayerWrapper)player).player);
+            field.newGame(unwrap(player));
             end();
         }
 
@@ -339,11 +315,15 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         public void clearScore() {
             if (field == null) return; // check for fake
 
-            delayOn();
+            delayOff();
             appendCall(".clearScore");
             field.clearScore();
             end();
         }
+    }
+
+    private <T> T unwrap(T wrapper) {
+        return (T) wrappers.get(wrapper);
     }
 
     private String delayed() {
@@ -355,7 +335,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     @Override
     public Sample field() {
         addCall("field");
-        delayOff();
+        delayOn();
 
         return new FieldWrapper(super.field());
     }
@@ -411,18 +391,34 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     @Override
     public Hero hero(int index) {
         addCall("hero", index);
+        delayOn();
 
         return objectSpy(super.hero(index),
+                Arrays.asList("itsMe"),
                 new Class<?>[]{Point.class},
-                new Object[]{pt(0, 0)});
+                new Object[]{mock(Point.class)});
     }
 
-    private <T> T objectSpy(T delegate, Class<?>[] constructorTypes, Object[] constructorArgs) {
+    private <T> T objectSpy(T delegate, List<String> inputSkip, Class<?>[] constructorTypes, Object[] constructorArgs) {
+        List<String> skip = new LinkedList<>(inputSkip);
+        skip.addAll(Arrays.asList("equals", "hashCode", "toString"));
+
         ProxyFactory factory = new ProxyFactory();
         factory.setSuperclass(delegate.getClass());
-        factory.setFilter(method -> Modifier.isPublic(method.getModifiers()));
+        factory.setFilter(method -> {
+            if (!Modifier.isPublic(method.getModifiers())) {
+                return false;
+            }
+
+            if (skip.contains(method.getName())) {
+                return false;
+            }
+
+            return true;
+        });
 
         MethodHandler handler = (self, method, proceed, args) -> {
+            delayOff();
             appendCall("." + method.getName(), args);
             Object result = method.invoke(delegate, args);
             if (!method.getReturnType().equals(void.class)) {
@@ -433,7 +429,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         };
 
         try {
-            return (T) factory.create(constructorTypes, constructorArgs, handler);
+            T wrapper = (T) factory.create(constructorTypes, constructorArgs, handler);
+            wrappers.put(wrapper, delegate);
+            return wrapper;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
