@@ -63,7 +63,7 @@ public class Sample extends RoundField<Player> implements Field {
     private GameSettings settings;
 
     public Sample() {
-        // do nothing
+        // do nothing, for testing only
     }
 
     public Sample(Dice dice, Level level, GameSettings settings) {

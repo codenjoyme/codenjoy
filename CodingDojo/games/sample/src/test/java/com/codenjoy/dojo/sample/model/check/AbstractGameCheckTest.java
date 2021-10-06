@@ -169,23 +169,23 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public Game game(int index) {
-        Game result = manager.objectSpy(super.game(index), false,
-                "getPlayer");
+        Game result = manager.objectSpy(super.game(index),
+                "[-]getPlayer");
         manager.caller("game", result, index);
         return result;
     }
 
     @Override
     public Player player(int index) {
-        Player result = manager.objectSpy(super.player(index), false,
-                "getHero");
+        Player result = manager.objectSpy(super.player(index),
+                "[-]getHero");
         manager.caller("player", result, index);
         return result;
     }
 
     @Override
     public Sample field() {
-        Sample result = manager.objectSpy(super.field(), true,
+        Sample result = manager.objectSpy(super.field(),
                 "newGame",
                 "clearScore");
         manager.caller("field", result);
@@ -195,7 +195,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public GameSettings settings() {
-        GameSettings result = manager.objectSpy(super.settings(), true,
+        GameSettings result = manager.objectSpy(super.settings(),
                 "[-R]SettingsReader:integer",
                 "[-R]SettingsReader:string",
                 "[-R]SettingsReader:bool");
@@ -205,8 +205,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public Hero hero(int index) {
-        Hero result = manager.objectSpy(super.hero(index), false,
-                "itsMe");
+        Hero result = manager.objectSpy(super.hero(index),
+                "[-]itsMe");
         manager.caller("hero", result, index);
         return result;
     }
