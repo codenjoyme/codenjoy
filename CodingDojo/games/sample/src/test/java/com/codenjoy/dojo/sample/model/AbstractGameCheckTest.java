@@ -34,6 +34,9 @@ import org.junit.ComparisonFailure;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -403,90 +406,39 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return new SettingsWrapper(super.settings());
     }
 
-    class HeroWrapper extends Hero {
-
-        private final Hero hero;
-
-        public HeroWrapper(Hero hero) {
-            super(hero);
-            this.hero = hero;
-        }
-
-        @Override
-        public void up() {
-            appendCall(".up");
-            hero.up();
-            end();
-        }
-
-        @Override
-        public void down() {
-            appendCall(".down");
-            hero.down();
-            end();
-        }
-
-        @Override
-        public void left() {
-            appendCall(".left");
-            hero.left();
-            end();
-        }
-
-        @Override
-        public void right() {
-            appendCall(".right");
-            hero.right();
-            end();
-        }
-
-        @Override
-        public void act(int... p) {
-            appendCall(".act", p);
-            hero.act(p);
-            end();
-        }
-
-        @Override
-        public boolean isAlive() {
-            appendCall(".isAlive");
-            boolean result = hero.isAlive();
-            appendResult(result);
-            end();
-            return result;
-        }
-
-        @Override
-        public boolean isActive() {
-            appendCall(".isActive");
-            boolean result = hero.isActive();
-            appendResult(result);
-            end();
-            return result;
-        }
-
-        @Override
-        public int scores() {
-            appendCall(".scores");
-            int result = hero.scores();
-            appendResult(result);
-            end();
-            return result;
-        }
-
-        @Override
-        public void addScore(int added) {
-            appendCall(".addScore", added);
-            hero.addScore(added);
-            end();
-        }
-    }
-
     @Override
     public Hero hero(int index) {
         addCall("hero", index);
 
-        return new HeroWrapper(super.hero(index));
+        return objectSpy(super.hero(index));
+    }
+
+    private Method findMethod(Class<?> clazz, Method method) {
+        try {
+            return clazz.getDeclaredMethod(method.getName(), method.getParameterTypes());
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
+
+    private <T> T objectSpy(T delegate) {
+        InvocationHandler handler = (Object proxy, Method method, Object[] args) -> {
+            Method m = findMethod(delegate.getClass(), method);
+            if (m == null) {
+                return null;
+            }
+            appendCall("." + m.getName(), args);
+            Object result = m.invoke(delegate, args);
+            if (m.getReturnType() != null) {
+                appendResult(result);
+                end();
+            }
+            return result;
+        };
+        return (T) Proxy.newProxyInstance(
+                this.getClass().getClassLoader(),
+                delegate.getClass().getInterfaces(),
+                handler);
     }
 
     public class EventsWrapper extends EventsListenersAssert {
