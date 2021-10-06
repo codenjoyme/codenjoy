@@ -60,7 +60,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     private String delayed;
     private boolean callRealAssert;
     private BidiMap<Object, Object> wrappers;
-    private String method;
     private Caller caller;
 
     @Before
@@ -108,8 +107,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private void addCall(String method, Object... parameters) {
-        this.method = method;
-        caller = null;
         call(method, false, parameters);
     }
 
@@ -464,7 +461,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         }
         if (wrappers.containsValue(object)) {
             Object result = wrappers.getKey(object);
-            caller = new Caller(method, result);
+            if (caller != null && caller.wrapper != result) {
+                caller = new Caller(caller.name, result);
+            }
             return result;
         }
         return object;
