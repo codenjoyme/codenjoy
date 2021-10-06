@@ -10,12 +10,12 @@ package com.codenjoy.dojo.sample.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -90,8 +90,42 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     static class Pending {
-        boolean delay;
-        String delayed;
+        private boolean enabled = false;
+        private String value = null;
+
+        public void value(String value) {
+            this.value = value;
+        }
+
+        public boolean enabled() {
+            return enabled;
+        }
+
+        public boolean hasValue() {
+            return value != null;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        private Pending copy() {
+            Pending result = new Pending();
+            result.value = value;
+            result.enabled = enabled;
+            return result;
+        }
+
+        public Pending disable() {
+            Pending result = copy();
+            enabled = false;
+            value = null;
+            return result;
+        }
+
+        public void enable() {
+            enabled = true;
+        }
     }
 
     protected String messages() {
@@ -122,7 +156,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         if (messages.isEmpty()) {
             append = false;
         }
-        if (pending.delay) {
+        if (pending.enabled()) {
             append = true;
         }
         if (!append) {
@@ -144,8 +178,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
                 method,
                 data);
 
-        if (pending.delay) {
-            pending.delayed = message;
+        if (pending.enabled()) {
+            pending.value(message);
             return;
         }
 
@@ -220,18 +254,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private void end() {
-        if (!pending.delay) {
+        if (!pending.enabled()) {
             deep--;
         }
-    }
-
-    private void delayOff() {
-        pending.delay = false;
-        pending.delayed = null;
-    }
-
-    private void delayOn() {
-        pending.delay = true;
     }
 
     @Override
@@ -307,7 +332,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
                 "newGame",
                 "clearScore");
         caller = new Caller("field", result);
-        delayOn();
+        pending.enable();
         return result;
     }
 
@@ -377,11 +402,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         // methods handler
         MethodHandler handler = (self, method, proceed, args) -> {
-            boolean delay = this.pending.delay;
-            String delayed = this.pending.delayed;
-            delayOff();
+            Pending last = pending.disable();
             prolongLastCall(delegate);
-            appendCall("." + method.getName(), getArgs(args, delay, delayed));
+            appendCall("." + method.getName(), getArgs(args, last));
             unwrapAll(args);
             Object result = method.invoke(delegate, args);
             if (!method.getReturnType().equals(void.class)) {
@@ -409,13 +432,13 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         }
     }
 
-    private Object[] getArgs(Object[] args, boolean delay, String delayed) {
-        if (delay) {
-            if (delayed == null) {
+    private Object[] getArgs(Object[] args, Pending pending) {
+        if (pending.enabled()) {
+            if (!pending.hasValue()) {
                 return new Object[0];
             }
 
-            return new Object[]{delayed};
+            return new Object[]{pending.value()};
         }
 
         return args;
