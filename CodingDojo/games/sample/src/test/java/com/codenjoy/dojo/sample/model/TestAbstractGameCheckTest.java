@@ -268,7 +268,8 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         dice(1, 3);
         field().newGame(player(1));
 
-        dice(2, 1);
+        dice(2, 1,
+            2, 2);
         field().clearScore();
 
         tick();
@@ -296,7 +297,7 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
                 "    field().newGame(player(0))\n" +
                 "    dice(1, 3)\n" +
                 "    field().newGame(player(1))\n" +
-                "    dice(2, 1)\n" +
+                "    dice(2, 1, 2, 2)\n" +
                 "    field().clearScore()\n" +
                 "    tick()");
     }

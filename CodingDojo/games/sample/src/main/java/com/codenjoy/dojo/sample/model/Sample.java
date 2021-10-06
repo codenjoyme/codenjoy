@@ -62,6 +62,10 @@ public class Sample extends RoundField<Player> implements Field {
     private Dice dice;
     private GameSettings settings;
 
+    public Sample() {
+        // do nothing
+    }
+
     public Sample(Dice dice, Level level, GameSettings settings) {
         super(Events.START_ROUND, Events.WIN_ROUND, Events.LOSE, settings);
 

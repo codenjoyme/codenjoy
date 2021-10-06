@@ -223,6 +223,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     private void delayOff() {
         delay = false;
+        delayed = null;
     }
 
     private void delayOn() {
@@ -291,41 +292,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public Player player(int index) {
+        Player result = objectSpy(super.player(index), false);
         addCall("player", index);
-
-        return objectSpy(super.player(index), false);
-    }
-
-    class FieldWrapper extends Sample {
-
-        private final Sample field;
-
-        public FieldWrapper(Sample field) {
-            super(null, null, field.settings()); // fake
-            this.field = field;
-        }
-
-        @Override
-        public void newGame(Player player) {
-            delayOff();
-            appendCall(".newGame", delayed());
-            field.newGame(unwrap(player));
-            end();
-        }
-
-        @Override
-        public void clearScore() {
-            if (field == null) return; // check for fake
-
-            delayOff();
-            appendCall(".clearScore");
-            field.clearScore();
-            end();
-        }
-    }
-
-    private <T> T unwrap(T wrapper) {
-        return (T) wrappers.get(wrapper);
+        return result;
     }
 
     private String delayed() {
@@ -336,10 +305,12 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
     @Override
     public Sample field() {
-        addCall("field");
+        Sample result = objectSpy(super.field(), true,
+                "newGame",
+                "clearScore");
+        caller = new Caller("field", result);
         delayOn();
-
-        return new FieldWrapper(super.field());
+        return result;
     }
 
     static class Caller {
@@ -408,8 +379,20 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         // methods handler
         MethodHandler handler = (self, method, proceed, args) -> {
+            boolean delay = this.delay;
+            String delayed = this.delayed;
+            delayOff();
             prolongLastCall(delegate);
-            appendCall("." + method.getName(), args);
+            if (delay) {
+                if (delayed == null) {
+                    appendCall("." + method.getName());
+                } else {
+                    appendCall("." + method.getName(), delayed);
+                }
+            } else {
+                appendCall("." + method.getName(), args);
+            }
+            unwrapAll(args);
             Object result = method.invoke(delegate, args);
             if (!method.getReturnType().equals(void.class)) {
                 boolean showResult = true;
@@ -433,6 +416,15 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             return wrapper;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void unwrapAll(Object[] args) {
+        for (int index = 0; index < args.length; index++) {
+            Object arg = args[index];
+            if (wrappers.containsKey(arg)) {
+                args[index] = wrappers.get(arg);
+            }
         }
     }
 
