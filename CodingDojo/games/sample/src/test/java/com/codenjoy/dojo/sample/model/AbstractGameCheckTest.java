@@ -360,16 +360,15 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
                 "[-R]SettingsReader:integer",
                 "[-R]SettingsReader:string",
                 "[-R]SettingsReader:bool");
-
         caller = new Caller("settings", result);
         return result;
     }
 
     @Override
     public Hero hero(int index) {
-        addCall("hero", index);
-
-        return objectSpy(super.hero(index), false, "itsMe");
+        Hero result = objectSpy(super.hero(index), false, "itsMe");
+        caller = new Caller("hero", result, index);
+        return result;
     }
 
     private <T> T objectSpy(T delegate, boolean include, String... methods) {
