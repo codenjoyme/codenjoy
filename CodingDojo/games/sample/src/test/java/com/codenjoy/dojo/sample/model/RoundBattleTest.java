@@ -22,6 +22,7 @@ package com.codenjoy.dojo.sample.model;
  * #L%
  */
 
+import com.codenjoy.dojo.sample.model.check.AbstractGameCheckTest;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;

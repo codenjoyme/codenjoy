@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.sample.model.check;
 
 /*-
  * #%L
@@ -23,7 +23,10 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
-import com.codenjoy.dojo.sample.model.check.WrapperManager;
+import com.codenjoy.dojo.sample.model.AbstractGameTest;
+import com.codenjoy.dojo.sample.model.Hero;
+import com.codenjoy.dojo.sample.model.Player;
+import com.codenjoy.dojo.sample.model.Sample;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.TestUtils;
