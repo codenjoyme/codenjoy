@@ -25,8 +25,11 @@ package com.codenjoy.dojo.sample.model;
 
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.ProxyFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -34,13 +37,12 @@ import org.junit.ComparisonFailure;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.mock;
@@ -410,35 +412,31 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public Hero hero(int index) {
         addCall("hero", index);
 
-        return objectSpy(super.hero(index));
+        return objectSpy(super.hero(index),
+                new Class<?>[]{Point.class},
+                new Object[]{pt(0, 0)});
     }
 
-    private Method findMethod(Class<?> clazz, Method method) {
-        try {
-            return clazz.getDeclaredMethod(method.getName(), method.getParameterTypes());
-        } catch (NoSuchMethodException e) {
-            return null;
-        }
-    }
+    private <T> T objectSpy(T delegate, Class<?>[] constructorTypes, Object[] constructorArgs) {
+        ProxyFactory factory = new ProxyFactory();
+        factory.setSuperclass(delegate.getClass());
+        factory.setFilter(method -> Modifier.isPublic(method.getModifiers()));
 
-    private <T> T objectSpy(T delegate) {
-        InvocationHandler handler = (Object proxy, Method method, Object[] args) -> {
-            Method m = findMethod(delegate.getClass(), method);
-            if (m == null) {
-                return null;
-            }
-            appendCall("." + m.getName(), args);
-            Object result = m.invoke(delegate, args);
-            if (m.getReturnType() != null) {
+        MethodHandler handler = (self, method, proceed, args) -> {
+            appendCall("." + method.getName(), args);
+            Object result = method.invoke(delegate, args);
+            if (!method.getReturnType().equals(void.class)) {
                 appendResult(result);
-                end();
             }
+            end();
             return result;
         };
-        return (T) Proxy.newProxyInstance(
-                this.getClass().getClassLoader(),
-                delegate.getClass().getInterfaces(),
-                handler);
+
+        try {
+            return (T) factory.create(constructorTypes, constructorArgs, handler);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public class EventsWrapper extends EventsListenersAssert {
