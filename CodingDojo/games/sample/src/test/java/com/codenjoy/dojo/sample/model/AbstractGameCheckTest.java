@@ -24,9 +24,7 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.sample.services.GameSettings;
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import javassist.util.proxy.MethodHandler;
@@ -38,6 +36,7 @@ import org.junit.ComparisonFailure;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
@@ -288,10 +287,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         addCall("player", index);
         delayOn();
 
-        return objectSpy(super.player(index),
-                Arrays.asList(),
-                new Class<?>[]{EventListener.class, GameSettings.class},
-                new Object[]{mock(EventListener.class), mock(GameSettings.class)});
+        return objectSpy(super.player(index));
     }
 
     class FieldWrapper extends Sample {
@@ -393,16 +389,23 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         addCall("hero", index);
         delayOn();
 
-        return objectSpy(super.hero(index),
-                Arrays.asList("itsMe"),
-                new Class<?>[]{Point.class},
-                new Object[]{mock(Point.class)});
+        return objectSpy(super.hero(index), "itsMe");
     }
 
-    private <T> T objectSpy(T delegate, List<String> inputSkip, Class<?>[] constructorTypes, Object[] constructorArgs) {
-        List<String> skip = new LinkedList<>(inputSkip);
+    private <T> T objectSpy(T delegate, String... inputSkip) {
+        // methods that we dont override
+        List<String> skip = new LinkedList<>(Arrays.asList(inputSkip));
         skip.addAll(Arrays.asList("equals", "hashCode", "toString"));
 
+        // default constructor parameters fake
+        Constructor<?> constructor = delegate.getClass().getDeclaredConstructors()[0];
+        Class<?>[] types = constructor.getParameterTypes();
+        Object[] typesValues = new Object[types.length];
+        for (int index = 0; index < types.length; index++) {
+            typesValues[index] = mock(types[index]);
+        }
+
+        // setup proxy
         ProxyFactory factory = new ProxyFactory();
         factory.setSuperclass(delegate.getClass());
         factory.setFilter(method -> {
@@ -417,6 +420,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             return true;
         });
 
+        // methods handler
         MethodHandler handler = (self, method, proceed, args) -> {
             delayOff();
             appendCall("." + method.getName(), args);
@@ -428,8 +432,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             return result;
         };
 
+        // create proxy
         try {
-            T wrapper = (T) factory.create(constructorTypes, constructorArgs, handler);
+            T wrapper = (T) factory.create(types, typesValues, handler);
             wrappers.put(wrapper, delegate);
             return wrapper;
         } catch (Exception e) {
