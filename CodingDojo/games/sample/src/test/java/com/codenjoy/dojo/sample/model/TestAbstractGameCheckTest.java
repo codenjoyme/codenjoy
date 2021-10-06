@@ -91,7 +91,7 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
     }
 
     private void assertMessages(String expected) {
-        Assert.assertEquals(expected, messages());
+        Assert.assertEquals(expected, manager.messages());
     }
 
     @Test

@@ -35,7 +35,7 @@ public class Pending {
         return result;
     }
 
-    public void enable() {
-        enabled = true;
+    public void enabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
