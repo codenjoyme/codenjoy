@@ -56,8 +56,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public TestName test = new TestName();
     private List<String> messages;
     private int deep;
-    private boolean delay;
-    private String delayed;
+    private Pending pending;
     private boolean callRealAssert;
     private BidiMap<Object, Object> wrappers;
     private Caller caller;
@@ -68,7 +67,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         messages = new LinkedList<>();
         wrappers = new DualHashBidiMap<>();
         deep = 0;
-        delay = false;
+        pending = new Pending();
         callRealAssert = false;
 
         addCall("before");
@@ -88,6 +87,11 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         end();
 
         checkFile();
+    }
+
+    static class Pending {
+        boolean delay;
+        String delayed;
     }
 
     protected String messages() {
@@ -118,7 +122,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         if (messages.isEmpty()) {
             append = false;
         }
-        if (delay) {
+        if (pending.delay) {
             append = true;
         }
         if (!append) {
@@ -140,8 +144,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
                 method,
                 data);
 
-        if (delay) {
-            delayed = message;
+        if (pending.delay) {
+            pending.delayed = message;
             return;
         }
 
@@ -216,18 +220,18 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private void end() {
-        if (!delay) {
+        if (!pending.delay) {
             deep--;
         }
     }
 
     private void delayOff() {
-        delay = false;
-        delayed = null;
+        pending.delay = false;
+        pending.delayed = null;
     }
 
     private void delayOn() {
-        delay = true;
+        pending.delay = true;
     }
 
     @Override
@@ -294,12 +298,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     public Player player(int index) {
         Player result = objectSpy(super.player(index), false);
         addCall("player", index);
-        return result;
-    }
-
-    private String delayed() {
-        String result = delayed;
-        delayed = null;
         return result;
     }
 
@@ -379,8 +377,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         // methods handler
         MethodHandler handler = (self, method, proceed, args) -> {
-            boolean delay = this.delay;
-            String delayed = this.delayed;
+            boolean delay = this.pending.delay;
+            String delayed = this.pending.delayed;
             delayOff();
             prolongLastCall(delegate);
             appendCall("." + method.getName(), getArgs(args, delay, delayed));
