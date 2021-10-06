@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.mocks.FirstInactivityGameType;
 import com.codenjoy.dojo.services.mocks.SecondSemifinalGameType;
 import com.codenjoy.dojo.services.room.RoomService;
-import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import io.cucumber.java.Before;
 import org.junit.After;
 import org.junit.Test;
@@ -47,10 +47,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.PlayerServiceImplTest.setupTimeService;
 import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName;
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
-import static com.codenjoy.dojo.client.Utils.split;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.joining;
 
 @RunWith(SpringRunner.class)
