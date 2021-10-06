@@ -30,6 +30,7 @@ import com.codenjoy.dojo.sample.model.Sample;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.utils.check.WrapperManager;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import org.junit.After;
 import org.junit.Before;
