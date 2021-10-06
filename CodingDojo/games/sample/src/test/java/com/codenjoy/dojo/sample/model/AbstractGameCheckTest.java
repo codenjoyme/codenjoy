@@ -383,15 +383,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             String delayed = this.delayed;
             delayOff();
             prolongLastCall(delegate);
-            if (delay) {
-                if (delayed == null) {
-                    appendCall("." + method.getName());
-                } else {
-                    appendCall("." + method.getName(), delayed);
-                }
-            } else {
-                appendCall("." + method.getName(), args);
-            }
+            appendCall("." + method.getName(), getArgs(args, delay, delayed));
             unwrapAll(args);
             Object result = method.invoke(delegate, args);
             if (!method.getReturnType().equals(void.class)) {
@@ -417,6 +409,18 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Object[] getArgs(Object[] args, boolean delay, String delayed) {
+        if (delay) {
+            if (delayed == null) {
+                return new Object[0];
+            }
+
+            return new Object[]{delayed};
+        }
+
+        return args;
     }
 
     private void unwrapAll(Object[] args) {
