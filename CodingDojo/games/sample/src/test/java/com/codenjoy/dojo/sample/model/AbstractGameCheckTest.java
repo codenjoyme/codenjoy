@@ -287,7 +287,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         addCall("player", index);
         delayOn();
 
-        return objectSpy(super.player(index));
+        return objectSpy(super.player(index), false);
     }
 
     class FieldWrapper extends Sample {
@@ -389,13 +389,16 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         addCall("hero", index);
         delayOn();
 
-        return objectSpy(super.hero(index), "itsMe");
+        return objectSpy(super.hero(index), false, "itsMe");
     }
 
-    private <T> T objectSpy(T delegate, String... inputSkip) {
+    private <T> T objectSpy(T delegate, boolean include, String... methods) {
         // methods that we dont override
-        List<String> skip = new LinkedList<>(Arrays.asList(inputSkip));
-        skip.addAll(Arrays.asList("equals", "hashCode", "toString"));
+        List<String> excluded = new LinkedList<>();
+        List<String> included = new LinkedList<>();
+        excluded.addAll(Arrays.asList("equals", "hashCode", "toString"));
+        (include ? included : excluded)
+                .addAll(Arrays.asList(methods));
 
         // default constructor parameters fake
         Constructor<?> constructor = delegate.getClass().getDeclaredConstructors()[0];
@@ -413,11 +416,11 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
                 return false;
             }
 
-            if (skip.contains(method.getName())) {
-                return false;
+            if (included.isEmpty()) {
+                return !excluded.contains(method.getName());
+            } else {
+                return included.contains(method.getName());
             }
-
-            return true;
         });
 
         // methods handler
