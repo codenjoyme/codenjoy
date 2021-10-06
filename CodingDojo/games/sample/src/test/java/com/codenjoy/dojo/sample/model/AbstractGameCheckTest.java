@@ -37,6 +37,7 @@ import org.junit.Rule;
 import org.junit.rules.TestName;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
@@ -336,52 +337,15 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return new FieldWrapper(super.field());
     }
 
-    class SettingsWrapper extends GameSettings {
-
-        private final GameSettings settings;
-
-        public SettingsWrapper(GameSettings settings) {
-            super();  // fake
-            this.settings = settings;
-        }
-
-        @Override
-        public GameSettings integer(Key key, int value) {
-            if (settings == null) return this; // check for fake
-
-            addCall("settings.integer", key, value);
-            settings.integer(key, value);
-            end();
-
-            return this;
-        }
-
-        @Override
-        public GameSettings string(Key key, String value) {
-            if (settings == null) return this; // check for fake
-
-            addCall("settings.string", key, value);
-            settings.string(key, value);
-            end();
-
-            return this;
-        }
-
-        @Override
-        public GameSettings bool(Key key, boolean value) {
-            if (settings == null) return this; // check for fake
-
-            addCall("settings.bool", key, value);
-            settings.bool(key, value);
-            end();
-
-            return this;
-        }
-    }
-
     @Override
     public GameSettings settings() {
-        return new SettingsWrapper(super.settings());
+        addCall("settings");
+        delayOn();
+
+        return objectSpy(super.settings(), true,
+                "[-R]SettingsReader:integer",
+                "[-R]SettingsReader:string",
+                "[-R]SettingsReader:bool");
     }
 
     @Override
@@ -417,9 +381,9 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             }
 
             if (included.isEmpty()) {
-                return !excluded.contains(method.getName());
+                return findFirst(method, excluded).isEmpty();
             } else {
-                return included.contains(method.getName());
+                return findFirst(method, included).isPresent();
             }
         });
 
@@ -429,7 +393,14 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
             appendCall("." + method.getName(), args);
             Object result = method.invoke(delegate, args);
             if (!method.getReturnType().equals(void.class)) {
-                appendResult(result);
+                boolean showResult = true;
+                Optional<String> pattern = findFirst(method, included);
+                if (pattern.isPresent()) {
+                    showResult &= !pattern.get().contains("[-R]");
+                }
+                if (showResult) {
+                    appendResult(result);
+                }
             }
             end();
             return result;
@@ -443,6 +414,28 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Optional<String> findFirst(Method method, List<String> list) {
+        return list.stream()
+                .filter(it -> {
+                    if (it.startsWith("[")) {
+                        it = it.substring(it.lastIndexOf("]") + 1);
+                    }
+
+                    if (it.contains(":")) {
+                        return it.equals(methodName(method));
+                    }
+
+                    return it.equals(method.getName());
+                })
+                .findFirst();
+    }
+
+    private String methodName(Method method) {
+        return String.format("%s:%s",
+                method.getReturnType().getSimpleName(),
+                method.getName());
     }
 
     public class EventsWrapper extends EventsListenersAssert {
