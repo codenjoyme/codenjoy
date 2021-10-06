@@ -356,4 +356,60 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
                 "    events().verifyAllEvents(listener(1) => [], [1])\n" +
                 "    tick()");
     }
+
+    @Test
+    public void testGame() {
+        // when
+        givenFl("☼☼☼☼☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        // when
+        // TODO подумать как сделать так, чтобы это не игнорилось
+        game().getPlayer().getHero().isAlive();
+
+        // TODO подумать как сделать так, чтобы это не игнорилось
+        game().getPlayer().isWin();
+
+        dice(1, 1);
+        game().newGame();
+
+        dice(1, 2,
+            1, 3);
+        game(1).clearScore();
+
+        game(0).isGameOver();
+
+        game(1).getSave();
+
+        tick();
+
+        // then
+        assertMessages("\n" +
+                "before()\n" +
+                "    settings().bool(ROUNDS_ENABLED, true)\n" +
+                "    settings().integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
+                "\n" +
+                "testGame()\n" +
+                "    givenFl(\n" +
+                "        ☼☼☼☼☼\n" +
+                "        ☼ ☺ ☼\n" +
+                "        ☼ ☺ ☼\n" +
+                "        ☼   ☼\n" +
+                "        ☼☼☼☼☼)\n" +
+                "        givenPlayer([2,3])\n" +
+                "            dice(2, 3)\n" +
+                "        givenPlayer([2,2])\n" +
+                "            dice(2, 2)\n" +
+                "    dice(1, 1)\n" +
+                "    game(0).newGame()\n" +
+                "    dice(1, 2, 1, 3)\n" +
+                "    game(1).clearScore()\n" +
+                "    game(0).isGameOver() = false\n" +
+                "    game(1).getSave() = {}\n" +
+                "    tick()");
+    }
+
 }
