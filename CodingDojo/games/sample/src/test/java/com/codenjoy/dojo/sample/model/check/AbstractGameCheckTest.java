@@ -178,7 +178,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     @Override
     public Player player(int index) {
         Player result = manager.objectSpy(super.player(index),
-                "[-]getHero");
+                "[-]getHero",
+                "[-R]inTeam");
         manager.caller("player", result, index);
         return result;
     }
