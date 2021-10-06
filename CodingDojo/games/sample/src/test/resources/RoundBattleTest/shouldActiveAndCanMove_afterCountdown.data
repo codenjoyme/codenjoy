@@ -1,14 +1,14 @@
 
 before()
-    settings.bool(ROUNDS_ENABLED, true)
-    settings.integer(ROUNDS_TIME_BEFORE_START, 5)
-    settings.integer(ROUNDS_PER_MATCH, 3)
-    settings.integer(ROUNDS_MIN_TICKS_FOR_WIN, 1)
-    settings.integer(ROUNDS_TIME, 10)
-    settings.integer(ROUNDS_TIME_FOR_WINNER, 2)
+    settings().bool(ROUNDS_ENABLED, true)
+    settings().integer(ROUNDS_TIME_BEFORE_START, 5)
+    settings().integer(ROUNDS_PER_MATCH, 3)
+    settings().integer(ROUNDS_MIN_TICKS_FOR_WIN, 1)
+    settings().integer(ROUNDS_TIME, 10)
+    settings().integer(ROUNDS_TIME_FOR_WINNER, 2)
 
 shouldActiveAndCanMove_afterCountdown()
-    settings.integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+    settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3)
     givenFl(
         ☼☼☼☼☼☼
         ☼    ☼

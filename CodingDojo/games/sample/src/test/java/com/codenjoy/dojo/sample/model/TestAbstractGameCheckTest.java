@@ -69,8 +69,8 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         // then
         assertMessages("\n" +
                 "before()\n" +
-                "    settings.bool(ROUNDS_ENABLED, true)\n" +
-                "    settings.integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
+                "    settings().bool(ROUNDS_ENABLED, true)\n" +
+                "    settings().integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
                 "\n" +
                 "testGivenAssert()\n" +
                 "    givenFl(\n" +
@@ -123,8 +123,8 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         // then
         assertMessages("\n" +
                 "before()\n" +
-                "    settings.bool(ROUNDS_ENABLED, true)\n" +
-                "    settings.integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
+                "    settings().bool(ROUNDS_ENABLED, true)\n" +
+                "    settings().integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
                 "\n" +
                 "testHero()\n" +
                 "    givenFl(\n" +
@@ -173,8 +173,8 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         // then
         assertMessages("\n" +
                 "before()\n" +
-                "    settings.bool(ROUNDS_ENABLED, true)\n" +
-                "    settings.integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
+                "    settings().bool(ROUNDS_ENABLED, true)\n" +
+                "    settings().integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
                 "\n" +
                 "testPlayer()\n" +
                 "    givenFl(\n" +
@@ -222,8 +222,8 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         // then
         assertMessages("\n" +
                 "before()\n" +
-                "    settings.bool(ROUNDS_ENABLED, true)\n" +
-                "    settings.integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
+                "    settings().bool(ROUNDS_ENABLED, true)\n" +
+                "    settings().integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
                 "\n" +
                 "testSettings()\n" +
                 "    givenFl(\n" +
@@ -236,12 +236,12 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
                 "            dice(2, 3)\n" +
                 "        givenPlayer([2,2])\n" +
                 "            dice(2, 2)\n" +
-                "    settings.bool(ROUNDS_ENABLED, true)\n" +
-                "    settings.integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
-                "    settings.bool(ROUNDS_ENABLED, false)\n" +
-                "    settings.integer(ROUNDS_TIME_FOR_WINNER, 10)\n" +
-                "    settings.string(LEVELS_MAP, ☺)\n" +
-                "    settings.string(\n" +
+                "    settings().bool(ROUNDS_ENABLED, true)\n" +
+                "    settings().integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
+                "    settings().bool(ROUNDS_ENABLED, false)\n" +
+                "    settings().integer(ROUNDS_TIME_FOR_WINNER, 10)\n" +
+                "    settings().string(LEVELS_MAP, ☺)\n" +
+                "    settings().string(\n" +
                 "        LEVELS_MAP,\n" +
                 "        ☺☺☺\n" +
                 "        ☺ ☺\n" +
@@ -276,8 +276,8 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         // then
         assertMessages("\n" +
                 "before()\n" +
-                "    settings.bool(ROUNDS_ENABLED, true)\n" +
-                "    settings.integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
+                "    settings().bool(ROUNDS_ENABLED, true)\n" +
+                "    settings().integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
                 "\n" +
                 "testFieldDice()\n" +
                 "    givenFl(\n" +
@@ -325,8 +325,8 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         // then
         assertMessages("\n" +
                 "before()\n" +
-                "    settings.bool(ROUNDS_ENABLED, true)\n" +
-                "    settings.integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
+                "    settings().bool(ROUNDS_ENABLED, true)\n" +
+                "    settings().integer(ROUNDS_TIME_BEFORE_START, 5)\n" +
                 "\n" +
                 "testEvents()\n" +
                 "    givenFl(\n" +

@@ -29,6 +29,8 @@ import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -39,7 +41,10 @@ import org.junit.rules.TestName;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -54,13 +59,15 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     private boolean delay;
     private String delayed;
     private boolean callRealAssert;
-    private Map<Object, Object> wrappers;
+    private BidiMap<Object, Object> wrappers;
+    private String method;
+    private Caller caller;
 
     @Before
     @Override
     public void setup() {
         messages = new LinkedList<>();
-        wrappers = new HashMap<>();
+        wrappers = new DualHashBidiMap<>();
         deep = 0;
         delay = false;
         callRealAssert = false;
@@ -101,6 +108,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     }
 
     private void addCall(String method, Object... parameters) {
+        this.method = method;
+        caller = null;
         call(method, false, parameters);
     }
 
@@ -286,7 +295,6 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
     @Override
     public Player player(int index) {
         addCall("player", index);
-        delayOn();
 
         return objectSpy(super.player(index), false);
     }
@@ -337,26 +345,41 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         return new FieldWrapper(super.field());
     }
 
+    static class Caller {
+        private String name;
+        private Object wrapper;
+        private Object[] args;
+
+        public Caller(String name, Object wrapper, Object... args) {
+            this.name = name;
+            this.wrapper = wrapper;
+            this.args = args;
+        }
+    }
+
     @Override
     public GameSettings settings() {
-        addCall("settings");
-        delayOn();
-
-        return objectSpy(super.settings(), true,
+        GameSettings result = objectSpy(super.settings(), true,
                 "[-R]SettingsReader:integer",
                 "[-R]SettingsReader:string",
                 "[-R]SettingsReader:bool");
+
+        caller = new Caller("settings", result);
+        return result;
     }
 
     @Override
     public Hero hero(int index) {
         addCall("hero", index);
-        delayOn();
 
         return objectSpy(super.hero(index), false, "itsMe");
     }
 
     private <T> T objectSpy(T delegate, boolean include, String... methods) {
+        if (wrappers.containsValue(delegate)) {
+            return (T) wrappers.getKey(delegate);
+        }
+
         // methods that we dont override
         List<String> excluded = new LinkedList<>();
         List<String> included = new LinkedList<>();
@@ -389,7 +412,7 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
 
         // methods handler
         MethodHandler handler = (self, method, proceed, args) -> {
-            delayOff();
+            prolongLastCall(delegate);
             appendCall("." + method.getName(), args);
             Object result = method.invoke(delegate, args);
             if (!method.getReturnType().equals(void.class)) {
@@ -403,7 +426,8 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
                 }
             }
             end();
-            return result;
+
+            return findWrapper(result);
         };
 
         // create proxy
@@ -414,6 +438,36 @@ public abstract class AbstractGameCheckTest extends AbstractGameTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private <T> void prolongLastCall(T delegate) {
+        if (caller == null) {
+            return;
+        }
+
+        if (wrappers.containsValue(delegate)
+                && wrappers.getKey(delegate) != caller.wrapper)
+        {
+            caller = null;
+            return;
+        }
+
+        addCall(caller.name, caller.args);
+    }
+
+    private Object findWrapper(Object object) {
+        if (object == null) {
+            return null;
+        }
+        if (wrappers.containsKey(object)) {
+            return object;
+        }
+        if (wrappers.containsValue(object)) {
+            Object result = wrappers.getKey(object);
+            caller = new Caller(method, result);
+            return result;
+        }
+        return object;
     }
 
     private Optional<String> findFirst(Method method, List<String> list) {
