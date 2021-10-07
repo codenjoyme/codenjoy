@@ -46,11 +46,7 @@ shouldActiveAndCanMove_afterCountdown()
         ☼YX  ☼
         ☼☼☼☼☼☼,
         2)
-    events().verifyAllEvents(
-        listener(0) => []
-        listener(1) => []
-        listener(2) => [],
-        [])
+    events().verifyAllEvents(, [])
     tick()
     events().verifyAllEvents(
         listener(0) => [[....4....]]

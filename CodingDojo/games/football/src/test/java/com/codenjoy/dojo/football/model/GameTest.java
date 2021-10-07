@@ -597,7 +597,7 @@ public class GameTest {
         game.tick();
 
         assertEquals(true, player.isAlive());
-        events.verifyAllEvents("[]");
+        events.verifyAllEvents("");
 
         assertE("☼☼☼∙⌂⌂☼☼☼\n" +   // TODO тут как-то не очень
                 "☼       ☼\n" +

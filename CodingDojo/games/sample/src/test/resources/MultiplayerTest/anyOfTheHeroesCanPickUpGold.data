@@ -26,11 +26,7 @@ anyOfTheHeroesCanPickUpGold()
         ☼    ☼
         ☼☼☼☼☼☼,
         0)
-    events().verifyAllEvents(
-        listener(0) => []
-        listener(1) => [WIN]
-        listener(2) => [],
-        [])
+    events().verifyAllEvents(listener(1) => [WIN], [])
 
 after()
     events().verifyNoEvents([])

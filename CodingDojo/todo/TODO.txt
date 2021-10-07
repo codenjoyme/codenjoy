@@ -328,8 +328,8 @@ Sample
 ✓	Utils.elementsMap(board, Element.values()).toString()
 ✓	    // TODO to use engine.TestUtils.split here
 ✓	    .replace("]], ", "]],\n").replace("[], ", "[],\n"));
-    не выводить пустые сообщения, только для тех лиснеров, где что-то было
-        events.verifyAllEvents(
-                "listener(0) => [GET_CLUE_KNIFE(1)]\n" +
-                "listener(1) => []\n" +
-                "listener(2) => []\n");
+✓    не выводить пустые сообщения, только для тех лиснеров, где что-то было
+✓        events.verifyAllEvents(
+✓                "listener(0) => [GET_CLUE_KNIFE(1)]\n" +
+✓                "listener(1) => []\n" +
+✓                "listener(2) => []\n");

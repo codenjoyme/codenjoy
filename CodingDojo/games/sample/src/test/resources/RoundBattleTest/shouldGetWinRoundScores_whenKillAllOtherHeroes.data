@@ -71,22 +71,14 @@ shouldGetWinRoundScores_whenKillAllOtherHeroes()
     hero(0).act()
     hero(0).right()
     tick()
-    events().verifyAllEvents(
-        listener(0) => [WIN]
-        listener(1) => []
-        listener(2) => [],
-        [])
+    events().verifyAllEvents(listener(0) => [WIN], [])
     hero(0).scores() = 110
     hero(1).scores() = 100
     hero(2).scores() = 100
     hero(0).act()
     hero(0).right()
     tick()
-    events().verifyAllEvents(
-        listener(0) => [WIN]
-        listener(1) => []
-        listener(2) => [],
-        [])
+    events().verifyAllEvents(listener(0) => [WIN], [])
     hero(0).scores() = 120
     hero(1).scores() = 100
     hero(2).scores() = 100
@@ -124,11 +116,7 @@ shouldGetWinRoundScores_whenKillAllOtherHeroes()
         ☼ ☺  ☼
         ☼☼☼☼☼☼,
         2)
-    events().verifyAllEvents(
-        listener(0) => []
-        listener(1) => [LOSE]
-        listener(2) => [],
-        [])
+    events().verifyAllEvents(listener(1) => [LOSE], [])
     hero(0).scores() = 120
     hero(1).scores() = 50
     hero(2).scores() = 100
@@ -160,7 +148,6 @@ shouldGetWinRoundScores_whenKillAllOtherHeroes()
         2)
     events().verifyAllEvents(
         listener(0) => [WIN_ROUND]
-        listener(1) => []
         listener(2) => [LOSE],
         [])
     hero(0).scores() = 220

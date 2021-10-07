@@ -86,11 +86,7 @@ shouldMoveToInactive_whenKillSomeone()
         ☼☻   ☼
         ☼☼☼☼☼☼,
         0)
-    events().verifyAllEvents(
-        listener(0) => []
-        listener(1) => []
-        listener(2) => [LOSE],
-        [])
+    events().verifyAllEvents(listener(2) => [LOSE], [])
     tick()
     dice(4, 4)
     field().newGame(player(2))

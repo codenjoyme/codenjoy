@@ -2812,8 +2812,7 @@ public class GameTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
-                "listener(1) => [KILL_YOUR_TANK]\n" +
-                "listener(2) => []\n");
+                "listener(1) => [KILL_YOUR_TANK]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -2842,7 +2841,6 @@ public class GameTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO_TANK[2]]\n" +
-                "listener(1) => []\n" +
                 "listener(2) => [KILL_YOUR_TANK]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -3197,8 +3195,7 @@ public class GameTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
-                "listener(1) => [KILL_YOUR_TANK]\n" +
-                "listener(2) => []\n");
+                "listener(1) => [KILL_YOUR_TANK]\n");
 
         hero(0).right();
         game.tick();
@@ -3228,7 +3225,6 @@ public class GameTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO_TANK[2]]\n" +
-                "listener(1) => []\n" +
                 "listener(2) => [KILL_YOUR_TANK]\n");
 
         game.tick();
@@ -6697,8 +6693,7 @@ public class GameTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
-                "listener(1) => [KILL_YOUR_TANK]\n" +
-                "listener(2) => []\n");
+                "listener(1) => [KILL_YOUR_TANK]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
@@ -7312,7 +7307,6 @@ public class GameTest {
         assertPrize(hero(0), "[]");
         assertPrize(hero(1), "[PRIZE_IMMORTALITY]");
         events.verifyAllEvents(
-                "listener(0) => []\n" +
                 "listener(1) => [CATCH_PRIZE[1]]\n");
 
         hero(1).up();
@@ -7513,7 +7507,6 @@ public class GameTest {
         assertPrize(hero(0), "[]");
         assertPrize(hero(1), "[PRIZE_IMMORTALITY]");
         events.verifyAllEvents(
-                "listener(0) => []\n" +
                 "listener(1) => [CATCH_PRIZE[1]]\n");
 
         hero(1).up();
@@ -7647,7 +7640,6 @@ public class GameTest {
         assertPrize(hero(0), "[]");
         assertPrize(hero(1), "[PRIZE_IMMORTALITY]");
         events.verifyAllEvents(
-                "listener(0) => []\n" +
                 "listener(1) => [CATCH_PRIZE[1]]\n");
 
         hero(1).up();
@@ -7873,7 +7865,6 @@ public class GameTest {
 
         assertPrize(hero(1), "[PRIZE_IMMORTALITY]");
         events.verifyAllEvents(
-                "listener(0) => []\n" +
                 "listener(1) => [CATCH_PRIZE[1]]\n");
 
         hero(1).up();
@@ -8007,7 +7998,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n");
 
         assertPrize(hero(0), "[]");
-        events.verifyAllEvents("[]");
+        events.verifyAllEvents("");
     }
 
     @Test
@@ -8456,8 +8447,7 @@ public class GameTest {
 
         assertPrize(hero(0), "[PRIZE_BREAKING_WALLS]");
         events.verifyAllEvents(
-                "listener(0) => [CATCH_PRIZE[2]]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [CATCH_PRIZE[2]]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬╬╬  ☼\n" +
@@ -8711,8 +8701,7 @@ public class GameTest {
 
         assertPrize(hero(0), "[PRIZE_IMMORTALITY]");
         events.verifyAllEvents(
-                "listener(0) => [CATCH_PRIZE[1]]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [CATCH_PRIZE[1]]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -8791,8 +8780,7 @@ public class GameTest {
 
         assertPrize(hero(0), "[PRIZE_IMMORTALITY]");
         events.verifyAllEvents(
-                "listener(0) => [CATCH_PRIZE[1]]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [CATCH_PRIZE[1]]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -9560,8 +9548,7 @@ public class GameTest {
 
         assertPrize(hero(0), "[PRIZE_WALKING_ON_WATER]");
         events.verifyAllEvents(
-                "listener(0) => [CATCH_PRIZE[3]]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [CATCH_PRIZE[3]]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -10051,8 +10038,7 @@ public class GameTest {
 
         assertPrize(hero(0), "[PRIZE_BREAKING_WALLS]");
         events.verifyAllEvents(
-                "listener(0) => [CATCH_PRIZE[2]]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [CATCH_PRIZE[2]]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬╬╬  ☼\n" +
@@ -10732,8 +10718,7 @@ public class GameTest {
 
         assertPrize(hero(0), "[PRIZE_VISIBILITY]");
         events.verifyAllEvents(
-                "listener(0) => [CATCH_PRIZE[4]]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [CATCH_PRIZE[4]]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼  %% ☼\n" +
@@ -10912,8 +10897,7 @@ public class GameTest {
 
         assertPrize(hero(0), "[PRIZE_VISIBILITY]");
         events.verifyAllEvents(
-                "listener(0) => [CATCH_PRIZE[4]]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [CATCH_PRIZE[4]]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼  %% ☼\n" +

@@ -83,10 +83,7 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         // given
         shouldAllPlayersOnBoardIsInactive_whenStart();
 
-        events().verifyAllEvents(
-                "listener(0) => []\n" +
-                "listener(1) => []\n" +
-                "listener(2) => []\n");
+        events().verifyAllEvents("");
 
         // when
         tick();
@@ -315,8 +312,6 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "☼☼☼☼☼☼\n", 0);
 
         events().verifyAllEvents(
-                "listener(0) => []\n" +
-                "listener(1) => []\n" +
                 "listener(2) => [LOSE]\n");
 
         // when
@@ -414,9 +409,7 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         tick();
 
         events().verifyAllEvents(
-                "listener(0) => [WIN]\n" +
-                "listener(1) => []\n" +
-                "listener(2) => []\n");
+                "listener(0) => [WIN]\n");
 
         assertEquals(110, hero(0).scores());
         assertEquals(100, hero(1).scores());
@@ -429,9 +422,7 @@ public class RoundBattleTest extends AbstractGameCheckTest {
         tick();
 
         events().verifyAllEvents(
-                "listener(0) => [WIN]\n" +
-                "listener(1) => []\n" +
-                "listener(2) => []\n");
+                "listener(0) => [WIN]\n");
 
         assertEquals(120, hero(0).scores());
         assertEquals(100, hero(1).scores());
@@ -472,9 +463,7 @@ public class RoundBattleTest extends AbstractGameCheckTest {
                 "☼☼☼☼☼☼\n", 2);
 
         events().verifyAllEvents(
-                "listener(0) => []\n" +
-                "listener(1) => [LOSE]\n" +
-                "listener(2) => []\n");
+                "listener(1) => [LOSE]\n");
 
         assertEquals(120, hero(0).scores());
         assertEquals(50, hero(1).scores());
@@ -508,7 +497,6 @@ public class RoundBattleTest extends AbstractGameCheckTest {
 
         events().verifyAllEvents(
                 "listener(0) => [WIN_ROUND]\n" +
-                "listener(1) => []\n" +
                 "listener(2) => [LOSE]\n");
 
         assertEquals(220, hero(0).scores());

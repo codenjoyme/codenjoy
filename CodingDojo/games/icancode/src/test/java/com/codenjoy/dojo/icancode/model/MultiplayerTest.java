@@ -193,8 +193,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -230,8 +229,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -284,8 +282,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -349,8 +346,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -386,8 +382,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -423,8 +418,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -475,8 +469,7 @@ public class MultiplayerTest {
         tick(single2);
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -539,7 +532,6 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => []\n" +
                 "listener(1) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
@@ -574,8 +566,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -608,7 +599,6 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => []\n" +
                 "listener(1) => [WIN(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
@@ -1666,8 +1656,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [LOSE(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
                 "╔═══┐" +
@@ -1704,7 +1693,6 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => []\n" +
                 "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n");
         assertL(single1,
                 "╔═══┐" +
@@ -1842,8 +1830,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -1864,8 +1851,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -1886,8 +1872,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -1908,8 +1893,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -1930,8 +1914,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -3062,8 +3045,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -3084,8 +3066,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -3106,8 +3087,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -3128,8 +3108,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -3150,8 +3129,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -3499,8 +3477,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         hero1().left();
         tick();
@@ -3541,8 +3518,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         hero1().up();
         tick();
@@ -3583,8 +3559,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         hero1().right();
         tick();
@@ -3625,8 +3600,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, multiple)]\n");
 
 
         hero1().right();
@@ -3944,8 +3918,7 @@ public class MultiplayerTest {
 
         // then
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=0, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=0, kill=0, single)]\n");
 
         assertL(single1,
                 "╔══┐" +
@@ -4154,7 +4127,7 @@ public class MultiplayerTest {
                 "------" +
                 "------");
 
-        events.verifyAllEvents("" +
+        events.verifyAllEvents(
                 "listener(0) => [KILL_HERO(gold=0, kill=1, multiple)]\n" +
                 "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n");
     }
@@ -4223,12 +4196,11 @@ public class MultiplayerTest {
 
         String events = this.events.getEvents();
         try {
-            assertEquals("listener(0) => []\n" +
+            assertEquals(
                     "listener(1) => [LOSE(gold=0, kill=0, multiple)]\n",
                     events);
         } catch (ComparisonFailure e) {
-            assertEquals("listener(0) => [LOSE(gold=0, kill=0, multiple)]\n" +
-                    "listener(1) => []\n",
+            assertEquals("listener(0) => [LOSE(gold=0, kill=0, multiple)]\n",
                     events);
         }
     }
@@ -5233,8 +5205,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=1, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=1, kill=0, single)]\n");
 
         // then
         assertL(single1,
@@ -5259,8 +5230,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=1, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=1, kill=0, single)]\n");
 
         // then
         assertL(single1,
@@ -5285,8 +5255,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=1, kill=0, single)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=1, kill=0, single)]\n");
 
         // then
         assertL(single1,
@@ -5311,8 +5280,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=1, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=1, kill=0, multiple)]\n");
 
         // then
         assertL(single1,
@@ -5337,8 +5305,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents(
-                "listener(0) => [WIN(gold=1, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=1, kill=0, multiple)]\n");
 
         // then
         assertL(single1,
@@ -5452,8 +5419,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents( // this is multiple - score is ok
-                "listener(0) => [WIN(gold=1, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=1, kill=0, multiple)]\n");
 
         // then
         assertL(single1,
@@ -5478,8 +5444,7 @@ public class MultiplayerTest {
         tick();
 
         events.verifyAllEvents( // this is multiple - score is ok
-                "listener(0) => [WIN(gold=1, kill=0, multiple)]\n" +
-                "listener(1) => []\n");
+                "listener(0) => [WIN(gold=1, kill=0, multiple)]\n");
 
         // then
         assertL(single1,
