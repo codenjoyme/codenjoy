@@ -24,10 +24,10 @@ shouldMoveToInactive_whenKillSomeone()
         givenPlayer([2,1])
             dice(2, 1)
     tick()
-    events().verifyAllEvents(
+    events().getEvents() = 
         listener(0) => [START_ROUND, [Round 1]]
         listener(1) => [START_ROUND, [Round 1]]
-        listener(2) => [START_ROUND, [Round 1]])
+        listener(2) => [START_ROUND, [Round 1]]
     assertF(
         ☼☼☼☼☼☼
         ☼    ☼
@@ -85,7 +85,8 @@ shouldMoveToInactive_whenKillSomeone()
         ☼☻   ☼
         ☼☼☼☼☼☼,
         0)
-    events().verifyAllEvents(listener(2) => [LOSE])
+    events().getEvents() = 
+        listener(2) => [LOSE]
     tick()
     dice(4, 4)
     field().newGame(player(2))
@@ -103,4 +104,4 @@ shouldMoveToInactive_whenKillSomeone()
         0)
 
 after()
-    events().verifyAllEvents()
+    events().getEvents() = 

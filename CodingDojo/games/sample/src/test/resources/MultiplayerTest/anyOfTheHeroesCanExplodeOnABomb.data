@@ -37,7 +37,8 @@ anyOfTheHeroesCanExplodeOnABomb()
         ☼    ☼
         ☼☼☼☼☼☼,
         0)
-    events().verifyAllEvents(listener(1) => [LOSE])
+    events().getEvents() = 
+        listener(1) => [LOSE]
     game(1).isGameOver() = true
     dice(4, 1)
     game(1).newGame()
@@ -52,4 +53,4 @@ anyOfTheHeroesCanExplodeOnABomb()
         0)
 
 after()
-    events().verifyAllEvents()
+    events().getEvents() = 

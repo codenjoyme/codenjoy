@@ -32,7 +32,7 @@ shouldSameLevel_whenClearScoresOnGame_andSeveralLevelsInTheSettings()
         ☼$  ☼
         ☼☼☼☼☼,
         0)
-    events().verifyAllEvents([WIN])
+    events().getEvents() = [WIN]
     hero(0).scores() = 30
     hero(0).up()
     tick()
@@ -55,4 +55,4 @@ shouldSameLevel_whenClearScoresOnGame_andSeveralLevelsInTheSettings()
     hero(0).scores() = 0
 
 after()
-    events().verifyAllEvents()
+    events().getEvents() = 

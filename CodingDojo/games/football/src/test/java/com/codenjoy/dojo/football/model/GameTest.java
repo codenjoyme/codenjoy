@@ -66,6 +66,10 @@ public class GameTest {
         }
     }
 
+    public void verifyAllEvents(String expected) {
+        assertEquals(expected, events.getEvents());
+    }
+
     private void givenFl(String board) {
         Level level = new Level(board);
         hero = level.hero().get(0);
@@ -476,7 +480,7 @@ public class GameTest {
         game.tick();
 
         assertEquals(true, player.isAlive());
-        events.verifyAllEvents("");
+        verifyAllEvents("");
 
         assertE("☼☼☼x⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -490,7 +494,7 @@ public class GameTest {
         game.tick();
 
         assertEquals(false, player.isAlive());
-        events.verifyAllEvents("[TOP_GOAL, WIN]");
+        verifyAllEvents("[TOP_GOAL, WIN]");
 
         assertE("☼☼☼x⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -504,7 +508,7 @@ public class GameTest {
         game.newGame(player);
 
         assertEquals(true, player.isAlive());
-        events.verifyAllEvents("");
+        verifyAllEvents("");
         
         assertE("☼☼☼⌂⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -542,7 +546,7 @@ public class GameTest {
         game.tick();
 
         assertEquals(true, player.isAlive());
-        events.verifyAllEvents("");
+        verifyAllEvents("");
 
         assertE("☼☼☼x⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -556,7 +560,7 @@ public class GameTest {
         game.tick();
 
         assertEquals(false, player.isAlive());
-        events.verifyAllEvents("[TOP_GOAL, WIN]");
+        verifyAllEvents("[TOP_GOAL, WIN]");
 
         assertE("☼☼☼x⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -570,7 +574,7 @@ public class GameTest {
         game.newGame(player);
 
         assertEquals(true, player.isAlive());
-        events.verifyAllEvents("");
+        verifyAllEvents("");
 
         assertE("☼☼☼⌂⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -597,7 +601,7 @@ public class GameTest {
         game.tick();
 
         assertEquals(true, player.isAlive());
-        events.verifyAllEvents("");
+        verifyAllEvents("");
 
         assertE("☼☼☼∙⌂⌂☼☼☼\n" +   // TODO тут как-то не очень
                 "☼       ☼\n" +
@@ -612,7 +616,7 @@ public class GameTest {
         game.newGame(player);
 
         assertEquals(true, player.isAlive());
-        events.verifyAllEvents("");
+        verifyAllEvents("");
 
         assertE("☼☼☼∙⌂⌂☼☼☼\n" +
                 "☼       ☼\n" +

@@ -40,7 +40,8 @@ import static com.codenjoy.dojo.icancode.model.ICanCode.CONTEST;
 import static com.codenjoy.dojo.icancode.model.ICanCode.TRAINING;
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.Direction.UP;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 public class PerkTest extends AbstractGameTest {
@@ -86,7 +87,7 @@ public class PerkTest extends AbstractGameTest {
         // then
         game.tick();
 
-        events.verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
+        verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
 
         assertE("------" +
                 "--☺---" +

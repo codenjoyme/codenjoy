@@ -340,7 +340,7 @@ public class GameTest extends AbstractGameCheckTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events().verifyAllEvents("[LOSE]");
+        verifyAllEvents("[LOSE]");
         assertEquals(false, hero().isAlive());
     }
 
@@ -413,7 +413,7 @@ public class GameTest extends AbstractGameCheckTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events().verifyAllEvents("[LOSE]");
+        verifyAllEvents("[LOSE]");
 
         // when
         field().newGame(player());
@@ -448,7 +448,7 @@ public class GameTest extends AbstractGameCheckTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events().verifyAllEvents("[WIN]");
+        verifyAllEvents("[WIN]");
     }
 
     @Test(timeout = 1000)
@@ -472,7 +472,7 @@ public class GameTest extends AbstractGameCheckTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events().verifyAllEvents("[WIN]");
+        verifyAllEvents("[WIN]");
     }
 
     @Test
@@ -500,7 +500,7 @@ public class GameTest extends AbstractGameCheckTest {
                 "☼$  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events().verifyAllEvents(
+        verifyAllEvents(
                 "[WIN]");
 
         assertEquals(30, hero(0).scores());
@@ -548,7 +548,7 @@ public class GameTest extends AbstractGameCheckTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events().verifyAllEvents(
+        verifyAllEvents(
                 "[WIN]");
     }
 

@@ -20,7 +20,7 @@ heroCanPickUpGoldOnTheMap_afterWhichItWillAppearInANewPlace()
         ☼   ☼
         ☼☼☼☼☼,
         0)
-    events().verifyAllEvents([WIN])
+    events().getEvents() = [WIN]
 
 after()
-    events().verifyAllEvents()
+    events().getEvents() = 

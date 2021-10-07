@@ -74,7 +74,7 @@ public abstract class AbstractGameTest {
 
     @After
     public void after() {
-        events().verifyAllEvents("");
+        verifyAllEvents("");
         SmartAssert.checkResult(getClass());
     }
 
@@ -124,6 +124,10 @@ public abstract class AbstractGameTest {
     }
 
     // getters & asserts
+
+    public void verifyAllEvents(String expected) {
+        assertEquals(expected, events().getEvents());
+    }
 
     public GameSettings settings() {
         return settings;

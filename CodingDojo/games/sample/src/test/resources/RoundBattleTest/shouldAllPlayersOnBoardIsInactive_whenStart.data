@@ -48,4 +48,4 @@ shouldAllPlayersOnBoardIsInactive_whenStart()
         2)
 
 after()
-    events().verifyAllEvents()
+    events().getEvents() = 

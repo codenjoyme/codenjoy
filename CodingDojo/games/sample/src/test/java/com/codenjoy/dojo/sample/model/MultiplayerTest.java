@@ -172,7 +172,7 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
-        events().verifyAllEvents(
+        verifyAllEvents(
                 "listener(1) => [LOSE]\n");
 
         assertEquals(true, game(1).isGameOver());
@@ -215,7 +215,7 @@ public class MultiplayerTest extends AbstractGameCheckTest {
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
-        events().verifyAllEvents(
+        verifyAllEvents(
                 "listener(1) => [WIN]\n");
     }
 

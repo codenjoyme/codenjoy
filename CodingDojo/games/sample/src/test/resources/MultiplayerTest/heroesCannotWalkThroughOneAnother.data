@@ -28,4 +28,4 @@ heroesCannotWalkThroughOneAnother()
         0)
 
 after()
-    events().verifyAllEvents()
+    events().getEvents() = 

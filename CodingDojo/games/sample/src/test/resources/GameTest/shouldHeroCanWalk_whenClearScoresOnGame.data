@@ -21,7 +21,7 @@ shouldHeroCanWalk_whenClearScoresOnGame()
         ☼$  ☼
         ☼☼☼☼☼,
         0)
-    events().verifyAllEvents([WIN])
+    events().getEvents() = [WIN]
     hero(0).scores() = 30
     hero(0).up()
     tick()
@@ -54,7 +54,7 @@ shouldHeroCanWalk_whenClearScoresOnGame()
         ☼   ☼
         ☼☼☼☼☼,
         0)
-    events().verifyAllEvents([WIN])
+    events().getEvents() = [WIN]
 
 after()
-    events().verifyAllEvents()
+    events().getEvents() = 

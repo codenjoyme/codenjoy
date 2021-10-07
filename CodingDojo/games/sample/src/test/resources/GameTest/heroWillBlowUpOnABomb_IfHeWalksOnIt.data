@@ -20,8 +20,8 @@ heroWillBlowUpOnABomb_IfHeWalksOnIt()
         ☼   ☼
         ☼☼☼☼☼,
         0)
-    events().verifyAllEvents([LOSE])
+    events().getEvents() = [LOSE]
     hero(0).isAlive() = false
 
 after()
-    events().verifyAllEvents()
+    events().getEvents() = 

@@ -68,7 +68,7 @@ public abstract class AbstractGameTest {
     private EventListener listener;
     protected Player player;
     protected GameSettings settings;
-    protected EventsListenersAssert events;
+    private EventsListenersAssert events;
 
     @Before
     public void setup() {
@@ -91,7 +91,7 @@ public abstract class AbstractGameTest {
 
     @After
     public void tearDown() {
-        events.verifyAllEvents("");
+        verifyAllEvents("");
     }
 
     protected void ticks(int count) {
@@ -151,7 +151,11 @@ public abstract class AbstractGameTest {
         }
         return levels;
     }
-
+    
+    public void verifyAllEvents(String expected) {
+        assertEquals(expected, events.getEvents());
+    }
+    
     protected OngoingStubbing<Integer> generateFemale() {
         return dice(1);
     }

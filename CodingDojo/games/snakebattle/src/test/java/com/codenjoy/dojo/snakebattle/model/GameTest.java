@@ -64,7 +64,7 @@ public class GameTest {
 
     @After
     public void after() {
-        events.verifyAllEvents("");
+        verifyAllEvents("");
     }
 
     private void givenFl(String board) {
@@ -89,6 +89,10 @@ public class GameTest {
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
+    }
+
+    public void verifyAllEvents(String expected) {
+        assertEquals(expected, events.getEvents());
     }
 
     // карта со своей змейкой
@@ -196,7 +200,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[GOLD]");
+        verifyAllEvents("[GOLD]");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -228,7 +232,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[APPLE]");
+        verifyAllEvents("[APPLE]");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -259,7 +263,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[DIE]");
+        verifyAllEvents("[DIE]");
 
         assertEquals(false, hero.isAlive());
         assertEquals(true, hero.isActive());
@@ -306,7 +310,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[STONE]");
+        verifyAllEvents("[STONE]");
 
         assertEquals(true, hero.isAlive());
         assertEquals(true, hero.isActive());
@@ -604,7 +608,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[APPLE]");
+        verifyAllEvents("[APPLE]");
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼         ☼" +
@@ -634,7 +638,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[APPLE]");
+        verifyAllEvents("[APPLE]");
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼         ☼" +
@@ -664,7 +668,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[APPLE]");
+        verifyAllEvents("[APPLE]");
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼         ☼" +
@@ -716,7 +720,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[DIE]");
+        verifyAllEvents("[DIE]");
 
         assertEquals(false, hero.isAlive());
         assertEquals(true, hero.isActive());
@@ -1089,7 +1093,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[FLYING]");
+        verifyAllEvents("[FLYING]");
 
         assertEquals(10, hero.getFlyingCount());
         assertEquals(true, hero.isFlying());
@@ -1235,7 +1239,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[FLYING]");
+        verifyAllEvents("[FLYING]");
 
         assertEquals(9, hero.size());
 
@@ -1310,7 +1314,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[FURY]");
+        verifyAllEvents("[FURY]");
 
         assertEquals(10, hero.getFuryCount());
         assertEquals(true, hero.isFury());
@@ -1343,7 +1347,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyAllEvents("[STONE]");
+        verifyAllEvents("[STONE]");
 
         assertEquals(8, hero.getFuryCount());
         assertEquals(0, hero.getFlyingCount());
@@ -1596,7 +1600,7 @@ public class GameTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        events.verifyAllEvents("[DIE]");
+        verifyAllEvents("[DIE]");
     }
 
 }

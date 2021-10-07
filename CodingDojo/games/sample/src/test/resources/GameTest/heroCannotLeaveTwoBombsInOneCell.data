@@ -32,7 +32,7 @@ heroCannotLeaveTwoBombsInOneCell()
         ☼   ☼
         ☼☼☼☼☼,
         0)
-    events().verifyAllEvents([LOSE])
+    events().getEvents() = [LOSE]
     field().newGame(player(0))
     tick()
     assertF(
@@ -44,4 +44,4 @@ heroCannotLeaveTwoBombsInOneCell()
         0)
 
 after()
-    events().verifyAllEvents()
+    events().getEvents() = 
