@@ -22,11 +22,11 @@ package com.codenjoy.dojo.services.controller.chat;
  * #L%
  */
 
-import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import org.junit.After;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 public class ChatRequestTest {
 

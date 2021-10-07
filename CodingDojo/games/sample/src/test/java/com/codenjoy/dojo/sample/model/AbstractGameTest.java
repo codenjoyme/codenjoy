@@ -23,17 +23,19 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.games.sample.Element;
 import com.codenjoy.dojo.sample.TestGameSettings;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
@@ -41,8 +43,6 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LEVEL_MAP;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -54,10 +54,10 @@ public abstract class AbstractGameTest {
     private List<Player> players;
 
     private Dice dice;
-    private PrinterFactory printer;
-    protected Sample field;
-    protected GameSettings settings;
-    protected EventsListenersAssert events;
+    private PrinterFactory<Element, Player> printer;
+    private Sample field;
+    private GameSettings settings;
+    private EventsListenersAssert events;
 
     @Before
     public void setup() {
@@ -66,14 +66,16 @@ public abstract class AbstractGameTest {
         games = new LinkedList<>();
 
         dice = mock(Dice.class);
-        settings = settings();
-        printer = new PrinterFactoryImpl();
+        settings = new TestGameSettings();
+        setupSettings();
+        printer = new PrinterFactoryImpl<>();
         events = new EventsListenersAssert(() -> listeners, Events.class);
     }
 
     @After
-    public void tearDown() {
-        events.verifyNoEvents();
+    public void after() {
+        verifyAllEvents("");
+        SmartAssert.checkResult(getClass());
     }
 
     public void dice(int... ints) {
@@ -83,27 +85,38 @@ public abstract class AbstractGameTest {
         }
     }
 
-    public void givenFl(String map) {
-        settings.string(LEVEL_MAP, map);
-        field = new Sample(dice, settings);
-        settings.level().heroes().forEach(hero -> givenPlayer(hero));
+    public void givenFl(String... maps) {
+        int levelNumber = LevelProgress.levelsStartsFrom1;
+        settings.setLevelMaps(levelNumber, maps);
+        Level level = settings.level(levelNumber, dice);
+
+        field = new Sample(dice, level, settings);
+        level.heroes().forEach(this::givenPlayer);
+
+        // other field preparation stuff
     }
 
-    public Player givenPlayer(Point pt) {
+    protected void givenPlayer(Hero hero) {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
+
         Player player = new Player(listener, settings);
         players.add(player);
+
         Game game = new Single(player, printer);
         games.add(game);
-        dice(pt.getX(), pt.getY());
+
+        dice(hero.getX(), hero.getY());
         game.on(field);
         game.newGame();
-        return player;
     }
 
-    protected GameSettings settings() {
-        return new TestGameSettings();
+    public void assertEquals(Object expected, Object actual) {
+        SmartAssert.assertEquals(expected, actual);
+    }
+
+    protected void setupSettings() {
+        // do something with settings
     }
 
     public void tick() {
@@ -111,6 +124,22 @@ public abstract class AbstractGameTest {
     }
 
     // getters & asserts
+
+    public void verifyAllEvents(String expected) {
+        assertEquals(expected, events().getEvents());
+    }
+
+    public GameSettings settings() {
+        return settings;
+    }
+
+    public Sample field() {
+        return field;
+    }
+
+    public EventsListenersAssert events() {
+        return events;
+    }
 
     public void assertF(String expected, int index) {
         assertEquals(expected, game(index).getBoardAsString());

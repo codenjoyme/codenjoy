@@ -34,6 +34,7 @@ import com.codenjoy.dojo.snakebattle.services.Events;
 import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.utils.events.EventsListenersAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,9 +43,6 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-/**
- * @author Kors
- */
 public class GameTest {
 
     private SnakeBoard game;
@@ -62,6 +60,11 @@ public class GameTest {
         settings = new TestGameSettings();
         printer = new PrinterFactoryImpl();
         events = new EventsListenersAssert(() -> Arrays.asList(listener), Events.class);
+    }
+
+    @After
+    public void after() {
+        verifyAllEvents("");
     }
 
     private void givenFl(String board) {
@@ -86,6 +89,10 @@ public class GameTest {
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
+    }
+
+    public void verifyAllEvents(String expected) {
+        assertEquals(expected, events.getEvents());
     }
 
     // карта со своей змейкой
@@ -193,7 +200,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyEvents(listener, "[GOLD]");
+        verifyAllEvents("[GOLD]");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -225,7 +232,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyEvents(listener, "[APPLE]");
+        verifyAllEvents("[APPLE]");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -256,7 +263,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyEvents(listener, "[DIE]");
+        verifyAllEvents("[DIE]");
 
         assertEquals(false, hero.isAlive());
         assertEquals(true, hero.isActive());
@@ -303,7 +310,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyEvents(listener, "[STONE]");
+        verifyAllEvents("[STONE]");
 
         assertEquals(true, hero.isAlive());
         assertEquals(true, hero.isActive());
@@ -601,6 +608,8 @@ public class GameTest {
 
         game.tick();
 
+        verifyAllEvents("[APPLE]");
+
         assertE("☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼         ☼" +
                 "☼         ☼" +
@@ -629,6 +638,8 @@ public class GameTest {
 
         game.tick();
 
+        verifyAllEvents("[APPLE]");
+
         assertE("☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼         ☼" +
                 "☼         ☼" +
@@ -656,6 +667,8 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼☼☼☼");
 
         game.tick();
+
+        verifyAllEvents("[APPLE]");
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼         ☼" +
@@ -707,7 +720,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyEvents(listener, "[DIE]");
+        verifyAllEvents("[DIE]");
 
         assertEquals(false, hero.isAlive());
         assertEquals(true, hero.isActive());
@@ -1080,6 +1093,8 @@ public class GameTest {
 
         game.tick();
 
+        verifyAllEvents("[FLYING]");
+
         assertEquals(10, hero.getFlyingCount());
         assertEquals(true, hero.isFlying());
 
@@ -1224,6 +1239,8 @@ public class GameTest {
 
         game.tick();
 
+        verifyAllEvents("[FLYING]");
+
         assertEquals(9, hero.size());
 
         assertE("☼☼☼☼☼☼☼" +
@@ -1297,6 +1314,8 @@ public class GameTest {
 
         game.tick();
 
+        verifyAllEvents("[FURY]");
+
         assertEquals(10, hero.getFuryCount());
         assertEquals(true, hero.isFury());
 
@@ -1327,6 +1346,8 @@ public class GameTest {
                 "☼☼☼☼☼☼☼☼☼");
 
         game.tick();
+
+        verifyAllEvents("[STONE]");
 
         assertEquals(8, hero.getFuryCount());
         assertEquals(0, hero.getFlyingCount());
@@ -1578,6 +1599,8 @@ public class GameTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
+        verifyAllEvents("[DIE]");
     }
 
 }

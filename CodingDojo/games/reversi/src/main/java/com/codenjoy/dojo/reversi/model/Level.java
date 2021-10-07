@@ -28,7 +28,7 @@ import com.codenjoy.dojo.reversi.model.items.Break;
 import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.field.AbstractLevel;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.codenjoy.dojo.games.reversi.Element.*;
@@ -44,7 +44,7 @@ public class Level extends AbstractLevel {
     }
 
     public List<Chip> chips(Field field) {
-        return find(new HashMap<>() {{
+        return find(new LinkedHashMap<>() {{
             put(WHITE, pt -> new Chip(true, pt, field));
             put(WHITE_TURN, pt -> new Chip(true, pt, field));
             put(BLACK, pt -> new Chip(false, pt, field));

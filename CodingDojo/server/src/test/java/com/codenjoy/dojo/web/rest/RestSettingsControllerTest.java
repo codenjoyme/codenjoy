@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.web.rest.RestSettingsController.GENERAL;
 import static com.codenjoy.dojo.web.rest.RestSettingsController.SETTINGS;
 

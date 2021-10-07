@@ -1,0 +1,107 @@
+
+before()
+    settings().bool(ROUNDS_ENABLED, true)
+    settings().integer(ROUNDS_TIME_BEFORE_START, 5)
+    settings().integer(ROUNDS_PER_MATCH, 3)
+    settings().integer(ROUNDS_MIN_TICKS_FOR_WIN, 1)
+    settings().integer(ROUNDS_TIME, 10)
+    settings().integer(ROUNDS_TIME_FOR_WINNER, 2)
+
+shouldMoveToInactive_whenKillSomeone()
+    settings().integer(ROUNDS_PLAYERS_PER_ROOM, 3)
+    settings().integer(ROUNDS_TIME_BEFORE_START, 1)
+    givenFl(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ ☺  ☼
+        ☼☺☺  ☼
+        ☼☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+        givenPlayer([1,1])
+            dice(1, 1)
+        givenPlayer([2,1])
+            dice(2, 1)
+    tick()
+    events().getEvents() = 
+        listener(0) => [START_ROUND, [Round 1]]
+        listener(1) => [START_ROUND, [Round 1]]
+        listener(2) => [START_ROUND, [Round 1]]
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ ☺  ☼
+        ☼☻☻  ☼
+        ☼☼☼☼☼☼,
+        0)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ ☻  ☼
+        ☼☺☻  ☼
+        ☼☼☼☼☼☼,
+        1)
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼    ☼
+        ☼ ☻  ☼
+        ☼☻☺  ☼
+        ☼☼☼☼☼☼,
+        2)
+    hero(0).act()
+    tick()
+    hero(0).right()
+    tick()
+    hero(0).up()
+    tick()
+    tick()
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼  ☺ ☼
+        ☼ x  ☼
+        ☼☻☻  ☼
+        ☼☼☼☼☼☼,
+        0)
+    hero(2).isActive() = true
+    hero(2).isAlive() = true
+    player(2).wantToStay() = true
+    player(2).shouldLeave() = false
+    hero(2).up()
+    tick()
+    hero(2).isActive() = true
+    hero(2).isAlive() = false
+    player(2).wantToStay() = true
+    player(2).shouldLeave() = false
+    assertF(
+        ☼☼☼☼☼☼
+        ☼    ☼
+        ☼  ☺ ☼
+        ☼ Y  ☼
+        ☼☻   ☼
+        ☼☼☼☼☼☼,
+        0)
+    events().getEvents() = 
+        listener(2) => [LOSE]
+    tick()
+    dice(4, 4)
+    field().newGame(player(2))
+    hero(2).isActive() = false
+    hero(2).isAlive() = true
+    player(2).wantToStay() = true
+    player(2).shouldLeave() = false
+    assertF(
+        ☼☼☼☼☼☼
+        ☼   Y☼
+        ☼  ☺ ☼
+        ☼    ☼
+        ☼☻   ☼
+        ☼☼☼☼☼☼,
+        0)
+
+after()
+    events().getEvents() = 

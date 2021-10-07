@@ -179,7 +179,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
 
         has(UnstoppableLaserPerk.class);
 
-        events.verifyAllEvents("[KILL_HERO(gold=0, kill=1, single)]");
+        verifyAllEvents("[KILL_HERO(gold=0, kill=1, single)]");
 
         // when
         game.tick();
@@ -271,7 +271,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------");
 
         has(UnstoppableLaserPerk.class);
-        events.verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
+        verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
 
         // when
         game.tick();
@@ -416,7 +416,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------");
 
         has(UnstoppableLaserPerk.class);
-        events.verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
+        verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
 
         // whan
         game.tick();
@@ -449,7 +449,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------");
 
         has(UnstoppableLaserPerk.class);
-        events.verifyAllEvents("[KILL_HERO(gold=0, kill=1, single)]");
+        verifyAllEvents("[KILL_HERO(gold=0, kill=1, single)]");
 
         // when
         game.tick();

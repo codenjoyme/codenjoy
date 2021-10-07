@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.helper.ChatDealsUtils;
 import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
-import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import com.google.common.collect.Iterators;
 import org.junit.After;
 import org.junit.Test;
@@ -42,8 +42,8 @@ import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_PLAYERS_PER_ROOM;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_TEAMS_PER_ROOM;
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
-import static com.codenjoy.dojo.stuff.SmartAssert.assertSame;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertSame;
 import static org.mockito.Mockito.*;
 
 // TODO try @SpringBootTest

@@ -33,6 +33,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.*;
 
+import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER3;
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER4;
@@ -169,7 +170,7 @@ public class GameServiceTest {
             }
         }
 
-        assertEquals(com.codenjoy.dojo.utils.TestUtils.split(errors, "\n,"),
+        assertEquals(split(errors, "\n,"),
                 true, errors.isEmpty());
     }
 

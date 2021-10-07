@@ -1,0 +1,26 @@
+
+before()
+
+heroCanPickUpGoldOnTheMap_afterWhichItWillAppearInANewPlace()
+    givenFl(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺$☼
+        ☼   ☼
+        ☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+    dice(1, 3)
+    hero(0).right()
+    tick()
+    assertF(
+        ☼☼☼☼☼
+        ☼$  ☼
+        ☼  ☺☼
+        ☼   ☼
+        ☼☼☼☼☼,
+        0)
+    events().getEvents() = [WIN]
+
+after()
+    events().getEvents() = 

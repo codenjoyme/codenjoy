@@ -85,7 +85,7 @@ import static com.codenjoy.dojo.services.helper.ChatDealsUtils.setupReadableName
 import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.codenjoy.dojo.utils.JsonUtils.clean;
-import static com.codenjoy.dojo.utils.TestUtils.split;
+import static com.codenjoy.dojo.client.Utils.split;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.fest.reflect.core.Reflection.field;

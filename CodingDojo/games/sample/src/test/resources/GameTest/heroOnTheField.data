@@ -1,0 +1,22 @@
+
+before()
+
+heroOnTheField()
+    givenFl(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺ ☼
+        ☼   ☼
+        ☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+    assertF(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺ ☼
+        ☼   ☼
+        ☼☼☼☼☼,
+        0)
+
+after()
+    events().getEvents() = 

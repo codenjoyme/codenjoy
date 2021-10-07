@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.helper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.level.LevelsSettings;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import lombok.AllArgsConstructor;
@@ -47,6 +48,10 @@ public class RoomHelper {
         GameType type = rooms.create(room, games.getGameType(game));
         SettingsReader settings = (SettingsReader) type.getSettings();
         return settings;
+    }
+
+    public LevelsSettings levelsSettings(String room, String game) {
+        return (LevelsSettings) settings(room, game);
     }
 
     public void removeAll() {

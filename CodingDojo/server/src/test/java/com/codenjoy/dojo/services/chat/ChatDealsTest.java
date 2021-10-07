@@ -29,7 +29,7 @@ import com.codenjoy.dojo.config.RealGameConfiguration;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.helper.Helpers;
-import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,8 +42,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LOSE_PENALTY;
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.WIN_SCORE;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CodenjoyContestApplication.class,
@@ -90,12 +91,11 @@ public class ChatDealsTest {
     public void shouldPostAllScoresMessagesIntoChat() {
         // given
         // mock dice for game in room
-        with.rooms.mockDice(game,
-                new DiceGenerator(System.out::println).getDice());
+        with.rooms.mockDice(game, new DiceGenerator().getDice());
 
         // game type will be a multiple
-        with.rooms.settings(room, game)
-                .string(LEVEL_MAP,
+        with.rooms.levelsSettings(room, game)
+                .setLevelMaps(1,
                         "☼☼☼☼☼☼\n" +
                         "☼    ☼\n" +
                         "☼ $$ ☼\n" +

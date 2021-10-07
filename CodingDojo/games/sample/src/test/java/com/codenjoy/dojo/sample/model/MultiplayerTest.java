@@ -23,11 +23,10 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.check.AbstractGameCheckTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
-public class MultiplayerTest extends AbstractGameTest {
+public class MultiplayerTest extends AbstractGameCheckTest {
 
     @Test
     public void severalHeroesCanAppearOnTheMap() {
@@ -173,10 +172,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
-        events.verifyAllEvents(
-                "listener(0) => []\n" +
-                "listener(1) => [LOSE]\n" +
-                "listener(2) => []\n");
+        verifyAllEvents(
+                "listener(1) => [LOSE]\n");
 
         assertEquals(true, game(1).isGameOver());
 
@@ -218,10 +215,8 @@ public class MultiplayerTest extends AbstractGameTest {
                 "☼    ☼\n" +
                 "☼☼☼☼☼☼\n", 0);
 
-        events.verifyAllEvents(
-                "listener(0) => []\n" +
-                "listener(1) => [WIN]\n" +
-                "listener(2) => []\n");
+        verifyAllEvents(
+                "listener(1) => [WIN]\n");
     }
 
     @Test

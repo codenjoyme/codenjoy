@@ -34,8 +34,8 @@ import org.springframework.context.annotation.Import;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static com.codenjoy.dojo.utils.JsonUtils.toStringSorted;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.*;
 
 @Import(ThreeGamesConfiguration.class)

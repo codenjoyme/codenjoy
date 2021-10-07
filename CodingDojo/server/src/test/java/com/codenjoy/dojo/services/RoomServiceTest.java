@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
-import static com.codenjoy.dojo.utils.TestUtils.split;
+import static com.codenjoy.dojo.client.Utils.split;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

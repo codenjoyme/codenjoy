@@ -39,7 +39,7 @@ import java.util.*;
 import static com.codenjoy.dojo.services.TestUtils.assertUsersEqual;
 import static com.codenjoy.dojo.services.security.GameAuthorities.ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthorities.USER;
-import static com.codenjoy.dojo.utils.TestUtils.split;
+import static com.codenjoy.dojo.client.Utils.split;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
