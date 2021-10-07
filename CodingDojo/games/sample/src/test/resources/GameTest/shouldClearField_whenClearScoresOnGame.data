@@ -44,4 +44,4 @@ shouldClearField_whenClearScoresOnGame()
     hero(0).scores() = 0
 
 after()
-    events().verifyNoEvents([])
+    events().verifyAllEvents(, [])

@@ -24,4 +24,4 @@ heroWillBlowUpOnABomb_IfHeWalksOnIt()
     hero(0).isAlive() = false
 
 after()
-    events().verifyNoEvents([])
+    events().verifyAllEvents(, [])

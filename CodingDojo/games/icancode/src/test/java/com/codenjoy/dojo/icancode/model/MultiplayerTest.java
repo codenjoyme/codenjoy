@@ -89,7 +89,7 @@ public class MultiplayerTest {
 
     @After
     public void tearDown() {
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     private void dice(int... ints) {
@@ -300,7 +300,7 @@ public class MultiplayerTest {
         tick();
 
         // then
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertL(single1,
                 "╔══┐" +
@@ -337,7 +337,7 @@ public class MultiplayerTest {
         hero1().act(-1);
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         // when
         settings.bool(CHEATS, true);
@@ -436,7 +436,7 @@ public class MultiplayerTest {
         tick();
 
         // then
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertL(single1,
                 "╔══┐" +
@@ -630,7 +630,7 @@ public class MultiplayerTest {
         tick(single2); // started
 
         // then
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertL(single1,
                 "╔══┐" +
@@ -663,7 +663,7 @@ public class MultiplayerTest {
         tick(single2);
 
         // then
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertL(single1,
                 "╔══┐" +
@@ -729,7 +729,7 @@ public class MultiplayerTest {
         tick(single2); // started
 
         // then
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertL(single1,
                 "╔══┐" +
@@ -1227,7 +1227,7 @@ public class MultiplayerTest {
                 "-----" +
                 "-----");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     @Test
@@ -3641,7 +3641,7 @@ public class MultiplayerTest {
         tick();
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero1().down();
         tick();
@@ -3681,7 +3681,7 @@ public class MultiplayerTest {
         tick();
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero1().left();
         tick();
@@ -3721,7 +3721,7 @@ public class MultiplayerTest {
         tick();
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero1().up();
         tick();
@@ -3761,7 +3761,7 @@ public class MultiplayerTest {
         tick();
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero1().right();
         tick();
@@ -3801,7 +3801,7 @@ public class MultiplayerTest {
         tick();
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         player1TryLoadLevel(500);
         tick();
@@ -3841,7 +3841,7 @@ public class MultiplayerTest {
         tick();
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero1().left();
         tick();
@@ -4043,7 +4043,7 @@ public class MultiplayerTest {
         tick();
 
         // then
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertE(single1,
                 "------" +
@@ -5346,7 +5346,7 @@ public class MultiplayerTest {
         tick();
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         // then
         assertL(single1,
@@ -5370,7 +5370,7 @@ public class MultiplayerTest {
         tick();
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         // then
         assertL(single1,
@@ -5394,7 +5394,7 @@ public class MultiplayerTest {
         tick();
         tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         // then
         assertL(single1,

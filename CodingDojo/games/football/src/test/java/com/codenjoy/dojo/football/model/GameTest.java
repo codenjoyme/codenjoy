@@ -476,7 +476,7 @@ public class GameTest {
         game.tick();
 
         assertEquals(true, player.isAlive());
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertE("☼☼☼x⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -504,7 +504,7 @@ public class GameTest {
         game.newGame(player);
 
         assertEquals(true, player.isAlive());
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
         
         assertE("☼☼☼⌂⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -542,7 +542,7 @@ public class GameTest {
         game.tick();
 
         assertEquals(true, player.isAlive());
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertE("☼☼☼x⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -570,7 +570,7 @@ public class GameTest {
         game.newGame(player);
 
         assertEquals(true, player.isAlive());
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertE("☼☼☼⌂⌂☼☼☼\n" +
                 "☼      ☼\n" +
@@ -612,7 +612,7 @@ public class GameTest {
         game.newGame(player);
 
         assertEquals(true, player.isAlive());
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertE("☼☼☼∙⌂⌂☼☼☼\n" +
                 "☼       ☼\n" +

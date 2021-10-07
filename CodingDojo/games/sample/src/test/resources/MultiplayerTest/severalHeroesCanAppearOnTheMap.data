@@ -41,4 +41,4 @@ severalHeroesCanAppearOnTheMap()
         2)
 
 after()
-    events().verifyNoEvents([])
+    events().verifyAllEvents(, [])

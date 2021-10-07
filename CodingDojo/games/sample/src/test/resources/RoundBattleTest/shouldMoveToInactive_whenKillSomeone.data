@@ -104,4 +104,4 @@ shouldMoveToInactive_whenKillSomeone()
         0)
 
 after()
-    events().verifyNoEvents([])
+    events().verifyAllEvents(, [])

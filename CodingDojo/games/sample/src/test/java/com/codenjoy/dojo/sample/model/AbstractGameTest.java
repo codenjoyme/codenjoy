@@ -74,7 +74,7 @@ public abstract class AbstractGameTest {
 
     @After
     public void after() {
-        events().verifyNoEvents();
+        events().verifyAllEvents("");
         SmartAssert.checkResult(getClass());
     }
 

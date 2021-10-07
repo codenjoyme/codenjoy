@@ -28,4 +28,4 @@ heroesCanBeRestartedInTheGame()
         0)
 
 after()
-    events().verifyNoEvents([])
+    events().verifyAllEvents(, [])

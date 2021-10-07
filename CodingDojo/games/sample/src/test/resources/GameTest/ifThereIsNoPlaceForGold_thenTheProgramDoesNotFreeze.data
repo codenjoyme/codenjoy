@@ -23,4 +23,4 @@ ifThereIsNoPlaceForGold_thenTheProgramDoesNotFreeze()
     events().verifyAllEvents([WIN], [])
 
 after()
-    events().verifyNoEvents([])
+    events().verifyAllEvents(, [])

@@ -155,4 +155,4 @@ shouldGetWinRoundScores_whenKillAllOtherHeroes()
     hero(2).scores() = 50
 
 after()
-    events().verifyNoEvents([])
+    events().verifyAllEvents(, [])

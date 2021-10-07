@@ -523,7 +523,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertEquals(false, player.isWin());
         assertEquals(true, player.isAlive());
@@ -880,7 +880,7 @@ public class GameTest extends AbstractGameTest {
         game.tick();
 
         // then
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     @Test

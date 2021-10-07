@@ -88,7 +88,7 @@ public class GameTest {
 
     @After
     public void tearDown() {
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     private Tank hero(int index) {
@@ -653,7 +653,7 @@ public class GameTest {
 
         dice(DICE_NO_SLIDING);
         game.tick();
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -667,7 +667,7 @@ public class GameTest {
                 "☼    ▲    ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -755,7 +755,7 @@ public class GameTest {
 
         dice(DICE_NO_SLIDING);
         game.tick();
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼    #    ☼\n" +
@@ -769,7 +769,7 @@ public class GameTest {
                 "☼    ▲    ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -1001,7 +1001,7 @@ public class GameTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         // RIGHT -> UP выполняется занос
         hero(0).right();
@@ -3181,7 +3181,7 @@ public class GameTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         game.tick();
 
@@ -3211,7 +3211,7 @@ public class GameTest {
                 "☼ ► •˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         game.tick();
 
@@ -3237,7 +3237,7 @@ public class GameTest {
                 "☼ ►   ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     private void assertW(String expected) {
@@ -6706,7 +6706,7 @@ public class GameTest {
         assertEquals(false, hero(1).isAlive());
         game.tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
@@ -7228,7 +7228,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -7291,7 +7291,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(1).up();
         game.tick();
@@ -7360,7 +7360,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -7426,7 +7426,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -7491,7 +7491,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(1).up();
         game.tick();
@@ -7559,7 +7559,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -7624,7 +7624,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(1).up();
         game.tick();
@@ -7738,7 +7738,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         dice(DICE_IMMORTALITY);
         hero(0).up();
@@ -7809,7 +7809,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         hero(1).left();
@@ -7850,7 +7850,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(1).left();
         game.tick();
@@ -8047,7 +8047,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         ai(0).down();
         hero(0).act();
@@ -8061,7 +8061,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         ai(0).up();
         game.tick();
@@ -8098,7 +8098,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     @Test
@@ -8138,7 +8138,7 @@ public class GameTest {
                 "☼ ▲╬  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -8342,7 +8342,7 @@ public class GameTest {
                 "☼  ╬  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -8503,7 +8503,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         dice(DICE_BREAKING_WALLS);
         game.tick();
@@ -8597,7 +8597,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         dice(DICE_BREAKING_WALLS);
         game.tick();
@@ -8693,7 +8693,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         hero(1).left();
@@ -8732,7 +8732,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     @Test
@@ -8772,7 +8772,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         hero(1).left();
@@ -8803,7 +8803,7 @@ public class GameTest {
 
         game.tick();
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -8897,7 +8897,7 @@ public class GameTest {
                 "☼¿    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -8935,7 +8935,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     @Test
@@ -8986,7 +8986,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         ai(0).down();
@@ -9026,7 +9026,7 @@ public class GameTest {
                 "☼¿    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         ai(0).up();
         ai(0).act();
@@ -9455,7 +9455,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -9540,7 +9540,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         hero(1).up();
@@ -9619,7 +9619,7 @@ public class GameTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         game.tick();
@@ -9717,7 +9717,7 @@ public class GameTest {
                 "☼  ▲  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         assertPrize(hero(0), "[]");
 
@@ -10030,7 +10030,7 @@ public class GameTest {
                 "☼▲ ˄  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         hero(1).up();
@@ -10634,7 +10634,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         ai(0).up();
@@ -10710,7 +10710,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         hero(1).up();
@@ -10777,7 +10777,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         ai(0).up();
@@ -10889,7 +10889,7 @@ public class GameTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         hero(0).up();
         hero(1).up();

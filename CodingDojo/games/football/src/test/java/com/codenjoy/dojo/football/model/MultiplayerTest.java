@@ -121,7 +121,7 @@ public class MultiplayerTest {
 
     @After
     public void tearDown() {
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     private void dice(int x, int y) {
@@ -366,7 +366,7 @@ public class MultiplayerTest {
                 "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
                 "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         field.tick();
 
@@ -438,7 +438,7 @@ public class MultiplayerTest {
                 "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
                 "☼☼#=☼☼ ☼☼x⌂☼☼ ☼☼#=☼☼\n");
 
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
 
         game2.getJoystick().down();
         field.tick();

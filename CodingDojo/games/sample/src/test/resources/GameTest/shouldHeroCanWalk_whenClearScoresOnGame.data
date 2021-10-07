@@ -57,4 +57,4 @@ shouldHeroCanWalk_whenClearScoresOnGame()
     events().verifyAllEvents([WIN], [])
 
 after()
-    events().verifyNoEvents([])
+    events().verifyAllEvents(, [])

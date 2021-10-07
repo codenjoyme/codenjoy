@@ -91,7 +91,7 @@ public abstract class AbstractGameTest {
 
     @After
     public void tearDown() {
-        events.verifyNoEvents();
+        events.verifyAllEvents("");
     }
 
     protected void ticks(int count) {

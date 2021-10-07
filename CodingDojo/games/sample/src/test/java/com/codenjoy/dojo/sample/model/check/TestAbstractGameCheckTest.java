@@ -313,10 +313,10 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
 
         // when
 
-        events().verifyNoEvents();
-        events().verifyNoEvents(0, 1);
-        events().verifyNoEvents(1);
-        events().verifyNoEvents(0);
+        events().verifyAllEvents("");
+        events().verifyAllEvents("", 0, 1);
+        events().verifyAllEvents("", 1);
+        events().verifyAllEvents("", 0);
         events().verifyAllEvents("");
         events().verifyAllEvents("", 0, 1);
         events().verifyAllEvents("", 0);
@@ -340,20 +340,14 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
                 "            dice(2, 3)\n" +
                 "        givenPlayer([2,2])\n" +
                 "            dice(2, 2)\n" +
-                "    events().verifyNoEvents([])\n" +
-                "    events().verifyNoEvents([0, 1])\n" +
-                "    events().verifyNoEvents([1])\n" +
-                "    events().verifyNoEvents([0])\n" +
-                "    events().verifyAllEvents(\n" +
-                "        listener(0) => []\n" +
-                "        listener(1) => [],\n" +
-                "        [])\n" +
-                "    events().verifyAllEvents(\n" +
-                "        listener(0) => []\n" +
-                "        listener(1) => [],\n" +
-                "        [0, 1])\n" +
-                "    events().verifyAllEvents(listener(0) => [], [0])\n" +
-                "    events().verifyAllEvents(listener(1) => [], [1])\n" +
+                "    events().verifyAllEvents(, [])\n" +
+                "    events().verifyAllEvents(, [0, 1])\n" +
+                "    events().verifyAllEvents(, [1])\n" +
+                "    events().verifyAllEvents(, [0])\n" +
+                "    events().verifyAllEvents(, [])\n" +
+                "    events().verifyAllEvents(, [0, 1])\n" +
+                "    events().verifyAllEvents(, [0])\n" +
+                "    events().verifyAllEvents(, [1])\n" +
                 "    tick()");
     }
 
