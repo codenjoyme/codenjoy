@@ -30,4 +30,4 @@ eachHeroCanBeControlledIndependentlyInOneTickOfTheGame()
         0)
 
 after()
-    events().verifyAllEvents(, [])
+    events().verifyAllEvents()

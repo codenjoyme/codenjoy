@@ -21,7 +21,7 @@ shouldClearField_whenClearScoresOnGame()
         ☼$  ☼
         ☼☼☼☼☼,
         0)
-    events().verifyAllEvents([WIN], [])
+    events().verifyAllEvents([WIN])
     hero(0).scores() = 30
     hero(0).up()
     tick()
@@ -44,4 +44,4 @@ shouldClearField_whenClearScoresOnGame()
     hero(0).scores() = 0
 
 after()
-    events().verifyAllEvents(, [])
+    events().verifyAllEvents()

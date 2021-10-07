@@ -314,13 +314,6 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         // when
 
         events().verifyAllEvents("");
-        events().verifyAllEvents("", 0, 1);
-        events().verifyAllEvents("", 1);
-        events().verifyAllEvents("", 0);
-        events().verifyAllEvents("");
-        events().verifyAllEvents("", 0, 1);
-        events().verifyAllEvents("", 0);
-        events().verifyAllEvents("", 1);
         tick();
 
         // then
@@ -340,14 +333,7 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
                 "            dice(2, 3)\n" +
                 "        givenPlayer([2,2])\n" +
                 "            dice(2, 2)\n" +
-                "    events().verifyAllEvents(, [])\n" +
-                "    events().verifyAllEvents(, [0, 1])\n" +
-                "    events().verifyAllEvents(, [1])\n" +
-                "    events().verifyAllEvents(, [0])\n" +
-                "    events().verifyAllEvents(, [])\n" +
-                "    events().verifyAllEvents(, [0, 1])\n" +
-                "    events().verifyAllEvents(, [0])\n" +
-                "    events().verifyAllEvents(, [1])\n" +
+                "    events().verifyAllEvents()\n" +
                 "    tick()");
     }
 

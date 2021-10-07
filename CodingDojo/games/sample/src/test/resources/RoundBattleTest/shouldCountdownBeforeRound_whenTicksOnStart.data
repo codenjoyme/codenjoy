@@ -46,31 +46,27 @@ shouldCountdownBeforeRound_whenTicksOnStart()
         ☼YX  ☼
         ☼☼☼☼☼☼,
         2)
-    events().verifyAllEvents(, [])
+    events().verifyAllEvents()
     tick()
     events().verifyAllEvents(
         listener(0) => [[....4....]]
         listener(1) => [[....4....]]
-        listener(2) => [[....4....]],
-        [])
+        listener(2) => [[....4....]])
     tick()
     events().verifyAllEvents(
         listener(0) => [[...3...]]
         listener(1) => [[...3...]]
-        listener(2) => [[...3...]],
-        [])
+        listener(2) => [[...3...]])
     tick()
     events().verifyAllEvents(
         listener(0) => [[..2..]]
         listener(1) => [[..2..]]
-        listener(2) => [[..2..]],
-        [])
+        listener(2) => [[..2..]])
     tick()
     events().verifyAllEvents(
         listener(0) => [[.1.]]
         listener(1) => [[.1.]]
-        listener(2) => [[.1.]],
-        [])
+        listener(2) => [[.1.]])
 
 after()
-    events().verifyAllEvents(, [])
+    events().verifyAllEvents()
