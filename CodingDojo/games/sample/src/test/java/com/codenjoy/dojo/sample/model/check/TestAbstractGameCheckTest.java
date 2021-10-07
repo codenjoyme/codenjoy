@@ -36,16 +36,6 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
     }
 
     @Override
-    public void assertEquals(Object expected, Object actual) {
-        // do nothing
-    }
-
-    @Override
-    public void after() {
-        // do nothing
-    }
-
-    @Override
     public void setupSettings() {
         settings().bool(ROUNDS_ENABLED, true)
                 .integer(ROUNDS_TIME_BEFORE_START, 5);
@@ -62,7 +52,7 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
 
         assertF("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼ ☺ ☼\n" +
+                "☼ X ☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -168,6 +158,7 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         player().shouldLeave();
         player(0).shouldLeave();
         player(1).wantToStay();
+        player().getHero().right(); // TODO это игнорится
         tick();
 
         // then
@@ -259,6 +250,11 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
                 "☼☼☼☼☼\n");
 
         // when
+        // TODO если расскомментировать, то ненапечатается следующая dice(1, 1);
+        // field();
+        // field().isFree(pt(1, 1));
+        // field().isFree(pt(1, 1));
+
         dice(1, 1);
         field().newGame(player(0));
 
@@ -307,14 +303,19 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
         // when
         givenFl("☼☼☼☼☼\n" +
                 "☼ ☺ ☼\n" +
-                "☼ ☺ ☼\n" +
+                "☼ ☺$☼\n" +
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
         // when
-
-        events().verifyAllEvents("");
+        verifyAllEvents("");
         tick();
+
+        hero(1).right();
+        tick();
+        verifyAllEvents(
+                "listener(0) => [[....4....], [...3...]]\n" +
+                "listener(1) => [[....4....], [...3...]]\n");
 
         // then
         assertMessages("\n" +
@@ -326,15 +327,20 @@ public class TestAbstractGameCheckTest extends AbstractGameCheckTest {
                 "    givenFl(\n" +
                 "        ☼☼☼☼☼\n" +
                 "        ☼ ☺ ☼\n" +
-                "        ☼ ☺ ☼\n" +
+                "        ☼ ☺$☼\n" +
                 "        ☼   ☼\n" +
                 "        ☼☼☼☼☼)\n" +
                 "        givenPlayer([2,3])\n" +
                 "            dice(2, 3)\n" +
                 "        givenPlayer([2,2])\n" +
                 "            dice(2, 2)\n" +
-                "    events().verifyAllEvents()\n" +
-                "    tick()");
+                "    events().getEvents() = \n" +
+                "    tick()\n" +
+                "    hero(1).right()\n" +
+                "    tick()\n" +
+                "    events().getEvents() = \n" +
+                "        listener(0) => [[....4....], [...3...]]\n" +
+                "        listener(1) => [[....4....], [...3...]]");
     }
 
     @Test
