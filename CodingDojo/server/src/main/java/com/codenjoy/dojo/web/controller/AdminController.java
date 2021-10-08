@@ -392,7 +392,6 @@ public class AdminController {
         // готовим данные для странички
         AdminSettings settings = adminService.getAdminSettings(gameType, room);
         model.addAttribute("adminSettings", settings);
-        model.addAttribute("recording", actionLogger.isWorking());
         model.addAttribute("autoSave", autoSaver.isWorking());
         model.addAttribute("debugLog", debugService.isWorking());
         model.addAttribute("opened", playerService.isRegistrationOpened());

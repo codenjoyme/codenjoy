@@ -144,7 +144,7 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${recording}">
+                    <c:when test="${adminSettings.recording}">
                         <b>The recording is active</b></br>
                         <a href="${ctx}/admin/recording/stop?room=${adminSettings.room}#recordGame">Stop recording</a>.
                     </c:when>

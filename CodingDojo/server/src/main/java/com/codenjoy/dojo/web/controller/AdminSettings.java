@@ -56,6 +56,7 @@ public class AdminSettings {
     private String gameVersion;
     private Boolean active;
     private Boolean roomOpened;
+    private Boolean recording;
 
     // used to send data to jsp
     private SemifinalSettingsImpl semifinal;
