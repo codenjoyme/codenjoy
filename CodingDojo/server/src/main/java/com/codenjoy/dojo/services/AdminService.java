@@ -297,6 +297,7 @@ public class AdminService {
         result.setDebugLog(debugService.isWorking());
         result.setOpened(playerService.isRegistrationOpened());
         result.setGamesRooms(roomService.gamesRooms());
+        result.setPlayersCount(playerService.getRoomCounts());
 
         return result;
     }

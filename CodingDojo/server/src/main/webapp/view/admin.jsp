@@ -96,7 +96,7 @@
                             <a class="bold-room-${roomItem == room}"
                                room="${roomItem}"
                                href="${ctx}/admin?room=${roomItem}">
-                                    ${roomItem}<span class="pow">${playersCount.get(roomItem)}</span></a>&nbsp;
+                                    ${roomItem}<span class="pow">${adminSettings.playersCount.get(roomItem)}</span></a>&nbsp;
                         </c:forEach>
                     </td>
                 </tr>

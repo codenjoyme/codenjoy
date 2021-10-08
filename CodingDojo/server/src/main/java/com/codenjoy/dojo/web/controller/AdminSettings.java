@@ -34,6 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -62,6 +63,7 @@ public class AdminSettings {
     private Boolean debugLog;
     private Boolean opened;
     private GamesRooms gamesRooms;
+    private Map<String, Integer> playersCount;
 
     // used to send data to jsp
     private SemifinalSettingsImpl semifinal;
