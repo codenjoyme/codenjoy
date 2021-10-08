@@ -52,6 +52,8 @@ public class AdminSettings {
     private String generateRoom;
     private String timerPeriod;
     private String progress;
+    private int semifinalTick;
+    private String gameVersion;
 
     // used to send data to jsp
     private SemifinalSettingsImpl semifinal;
@@ -60,5 +62,4 @@ public class AdminSettings {
     private LevelsSettingsImpl levels;
     private List<Parameter> other;
 
-    private int semifinalTick;
 }

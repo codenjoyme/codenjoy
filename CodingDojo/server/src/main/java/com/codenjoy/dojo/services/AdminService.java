@@ -284,6 +284,7 @@ public class AdminService {
         result.setSemifinalTick(semifinal.getTime(room));
         result.setGame(gameType.name());
         result.setRoom(room);
+        result.setGameVersion(gameType.getVersion());
 
         return result;
     }
