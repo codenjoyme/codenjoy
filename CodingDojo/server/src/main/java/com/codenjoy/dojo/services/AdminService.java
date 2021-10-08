@@ -295,6 +295,7 @@ public class AdminService {
         result.setRecording(actionLogger.isWorking());
         result.setAutoSave(autoSaver.isWorking());
         result.setDebugLog(debugService.isWorking());
+        result.setOpened(playerService.isRegistrationOpened());
 
         return result;
     }
