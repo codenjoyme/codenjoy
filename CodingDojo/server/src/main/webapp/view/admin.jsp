@@ -466,31 +466,61 @@
         </form:form>
     </c:if>
 
-    <c:if test="${parameters.size() != 0}">
+    <c:if test="${not empty adminSettings.other}">
         <form:form modelAttribute="adminSettings" action="admin#gameSettings" method="POST">
             <table class="admin-table" id="gameSettings">
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
                 </tr>
-                <c:forEach items="${settings}" var="element" varStatus="status">
+                <c:forEach items="${adminSettings.other}" var="element" varStatus="status">
                     <tr>
                         <td>${element.name}</td>
                         <c:choose>
                             <c:when test="${element.type == 'selectbox'}">
-                                <td><form:select path="parameters[${status.index}]"
+                                <td><form:select path="otherValues[${status.index}]"
                                         items="${element.options}"/></td>
                             </c:when>
                             <c:when test="${element.type == 'editbox' && !element.multiline}">
-                                <td><form:input path="parameters[${status.index}]"/></td>
+                                <td><form:input path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'editbox' && element.multiline}">
-                                <td><form:textarea rows="5" cols="50" path="parameters[${status.index}]"/></td>
+                                <td><form:textarea rows="5" cols="50" path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'checkbox'}">
-                                <td><form:checkbox path="parameters[${status.index}]"/></td>
+                                <td><form:checkbox path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:otherwise>
-                                <td>${parameter.value}</td>
+                                <td>${element.value}</td>
+                            </c:otherwise>
+                        </c:choose>
+                    </tr>
+                </c:forEach>
+                <tr>
+                    <td>
+                        <input type="hidden" name="game" value="${game}"/>
+                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="submit" value="Save"/>
+                    </td>
+                </tr>
+            </table>
+        </form:form>
+    </c:if>
+
+    <c:if test="${not empty adminSettings.levels.parameters}">
+        <form:form modelAttribute="adminSettings" action="admin#levels" method="POST">
+            <table class="admin-table" id="levels">
+                <tr colspan="2">
+                    <td><b>Game levels settings</b></td>
+                </tr>
+                <c:forEach items="${adminSettings.levels.parameters}" var="element" varStatus="status">
+                    <tr>
+                        <td>${element.name}</td>
+                        <c:choose>
+                            <c:when test="${element.type == 'editbox' && element.multiline}">
+                                <td><form:textarea rows="5" cols="50" path="levelsValues[${status.index}]"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${element.value}</td>
                             </c:otherwise>
                         </c:choose>
                     </tr>

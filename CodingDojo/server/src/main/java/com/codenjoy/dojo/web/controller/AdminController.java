@@ -26,6 +26,8 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.level.LevelsSettings;
+import com.codenjoy.dojo.services.level.LevelsSettingsImpl;
 import com.codenjoy.dojo.services.log.DebugService;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.room.RoomService;
@@ -51,8 +53,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.incativity.InactivitySettings.INACTIVITY;
+import static com.codenjoy.dojo.services.level.LevelsSettings.LEVELS;
 import static com.codenjoy.dojo.services.round.RoundSettingsImpl.ROUNDS;
 import static com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl.SEMIFINAL;
 import static java.util.function.Predicate.not;
@@ -353,6 +357,15 @@ public class AdminController {
             }
         }
 
+        if (settings.getLevels() != null) {
+            try {
+                levelsSettings(room)
+                        .updateFrom(settings.getLevels().getParameters());
+            } catch (Exception e) {
+                // do nothing
+            }
+        }
+
         if (settings.getRounds() != null) {
             try {
                 roundSettings(room)
@@ -387,10 +400,15 @@ public class AdminController {
             setEnable(games);
         }
 
+        Settings gameSettings = gameService.getGameType(game, room).getSettings();
         List<Exception> errors = new LinkedList<>();
-        if (settings.getParameters() != null) {
-            List<Object> updated = settings.getParameters();
-            updateParameters(game, room, updated, errors);
+        if (settings.getOtherValues() != null) {
+            List<Object> updated = settings.getOtherValues();
+            updateParameters(gameSettings, onlyUngrouped(), updated, errors);
+        }
+        if (settings.getLevelsValues() != null) {
+            List<Object> updated = settings.getLevelsValues();
+            updateParameters(gameSettings, onlyLevels(), updated, errors);
         }
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException("There are errors during save settings: " + errors.toString());
@@ -415,6 +433,10 @@ public class AdminController {
         return RoundSettings.get(roomService.settings(room));
     }
 
+    private LevelsSettingsImpl levelsSettings(String room) {
+        return LevelsSettings.get(roomService.settings(room));
+    }
+
     private void setEnable(List<Parameter> games) {
         List<String> opened = new LinkedList<>();
         List<String> allGames = gameService.getGames();
@@ -431,10 +453,12 @@ public class AdminController {
         roomService.setOpenedGames(opened);
     }
 
-    public void updateParameters(String game, String room, List<Object> updated, List<Exception> errors) {
-        Settings gameSettings = gameService.getGameType(game, room).getSettings();
-        List<Parameter> actual = gameSettings.getParameters();
-        removeSemifinalAndRoundsAndInactivity(actual);
+    public void updateParameters(Settings gameSettings, Predicate<Parameter> filter,
+                                 List<Object> updated, List<Exception> errors)
+    {
+        List<Parameter> actual = gameSettings.getParameters().stream()
+                .filter(filter)
+                .collect(toList());
         for (int index = 0; index < actual.size(); index++) {
             try {
                 Parameter parameter = actual.get(index);
@@ -447,13 +471,16 @@ public class AdminController {
         }
     }
 
-    // I don't think it's the best solution
-    // Had troubles struggling with this removing
-    // TODO: consider not removing but filtering
-    public void removeSemifinalAndRoundsAndInactivity(List<Parameter> params) {
-        params.removeIf(p -> p.getName().startsWith(SEMIFINAL)
-                            || p.getName().startsWith(ROUNDS)
-                            || p.getName().startsWith(INACTIVITY));
+    public Predicate<Parameter> onlyUngrouped() {
+        return Predicate.not(
+                p -> p.getName().startsWith(SEMIFINAL)
+                        || p.getName().startsWith(ROUNDS)
+                        || p.getName().startsWith(LEVELS)
+                        || p.getName().startsWith(INACTIVITY));
+    }
+
+    public Predicate<Parameter> onlyLevels() {
+        return p -> p.getName().startsWith(LEVELS);
     }
 
     public void generateNewPlayers(String game, String room, String mask, int count) {
@@ -556,9 +583,6 @@ public class AdminController {
         }
 
         // готовим данные для странички
-        Settings gameSettings = gameType.getSettings();
-        List<Parameter> parameters = new LinkedList<>(gameSettings.getParameters());
-        model.addAttribute("settings", parameters);
         model.addAttribute("semifinalTick", semifinal.getTime(room));
         model.addAttribute("game", game);
         model.addAttribute("room", room);
@@ -574,7 +598,7 @@ public class AdminController {
         model.addAttribute("autoSave", autoSaver.isWorking());
         model.addAttribute("debugLog", debugService.isWorking());
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        AdminSettings settings = getAdminSettings(parameters, room);
+        AdminSettings settings = getAdminSettings(gameType, room);
         model.addAttribute("adminSettings", settings);
         List<PlayerInfo> saves = saveService.getSaves(room);
         model.addAttribute("gamesRooms", roomService.gamesRooms());
@@ -584,19 +608,27 @@ public class AdminController {
         return "admin";
     }
 
-    public AdminSettings getAdminSettings(List<Parameter> parameters, String room) {
+    public AdminSettings getAdminSettings(GameType gameType, String room) {
         AdminSettings result = new AdminSettings();
 
         // сохраняем для отображения semifinal settings pojo
-        result.setSemifinal(semifinalSettings(room));
+        result.setSemifinal(semifinalSettings(room)); // TODO тут снова берем getSettings().getParameters()
         // сохраняем для отображения round settings pojo
-        result.setRounds(roundSettings(room));
+        result.setRounds(roundSettings(room)); // TODO тут снова берем getSettings().getParameters()
+        // сохраняем для отображения round settings pojo
+        LevelsSettingsImpl levels = levelsSettings(room);  // TODO тут снова берем getSettings().getParameters()
+        result.setLevels(levels); // TODO а точно тут нада эту строчку?
+        result.setLevelsValues(levels
+                .getParameters().stream()
+                .map(Parameter::getValue)
+                .collect(toList()));
         // сохраняем для отображения inactivity settings pojo
         result.setInactivity(adminService.inactivitySettings(room));
-        // удаляем semifinal и rounds параметры
-        removeSemifinalAndRoundsAndInactivity(parameters);
-        // а теперь сохраняем отдельно ключики оставшихся параметров
-        result.setParameters(parameters.stream()
+        // отдельно оставшиеся параметры
+        List<Parameter> parameters = gameType.getSettings().getParameters();
+        parameters.removeIf(Predicate.not(onlyUngrouped()));
+        result.setOther(parameters);
+        result.setOtherValues(parameters.stream()
                 .map(Parameter::getValue)
                 .collect(toList()));
 
