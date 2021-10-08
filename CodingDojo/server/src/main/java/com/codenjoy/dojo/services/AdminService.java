@@ -270,6 +270,21 @@ public class AdminService {
     public AdminSettings getAdminSettings(GameType gameType, String room) {
         AdminSettings result = new AdminSettings();
 
+        setupSettings(gameType, room, result);
+
+        // TODO #4FS тут проверить
+        List<String> enabled = roomService.openedGames();
+        result.setGames(gameService.getGames().stream()
+                .map(name -> enabled.contains(name))
+                .collect(toList()));
+
+        List<PlayerInfo> saves = saveService.getSaves(room);
+        result.setPlayers(preparePlayers(room, saves));
+
+        return result;
+    }
+
+    private void setupSettings(GameType gameType, String room, AdminSettings result) {
         // сохраняем для отображения semifinal settings pojo
         result.setSemifinal(semifinalSettings(room)); // TODO тут снова берем getSettings().getParameters()
         // сохраняем для отображения round settings pojo
@@ -290,17 +305,6 @@ public class AdminService {
         result.setOtherValues(parameters.stream()
                 .map(Parameter::getValue)
                 .collect(toList()));
-
-        // TODO #4FS тут проверить
-        List<String> enabled = roomService.openedGames();
-        result.setGames(gameService.getGames().stream()
-                .map(name -> enabled.contains(name))
-                .collect(toList()));
-
-        List<PlayerInfo> saves = saveService.getSaves(room);
-        result.setPlayers(preparePlayers(room, saves));
-
-        return result;
     }
 
     private List<PlayerInfo> preparePlayers(String room, List<PlayerInfo> players) {
