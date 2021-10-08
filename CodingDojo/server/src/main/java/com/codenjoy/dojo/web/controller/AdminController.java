@@ -27,11 +27,9 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.log.DebugService;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
-import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
@@ -56,7 +54,6 @@ public class AdminController {
 
     public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
 
-    private final TimerService timerService;
     private final PlayerService playerService;
     private final SaveService saveService;
     private final GameService gameService;
@@ -65,7 +62,6 @@ public class AdminController {
     private final DebugService debugService;
     private final Registration registration;
     private final ViewDelegationService viewDelegationService;
-    private final SemifinalService semifinal;
     private final RoomService roomService;
 
     private final AdminService adminService;
@@ -76,7 +72,7 @@ public class AdminController {
                                    @RequestParam("data") String save,
                                    HttpServletRequest request)
     {
-        saveService.load(id, getGameName(request), getGameRoom(request), save);
+        saveService.load(id, game(request), room(request), save);
         return "redirect:/board/player/" + id;
     }
 
@@ -103,7 +99,7 @@ public class AdminController {
 
     @GetMapping("/player/saveAll")
     public String saveAllGames(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         saveService.saveAll(room);
         return getAdmin(room);
     }
@@ -120,7 +116,7 @@ public class AdminController {
 
     @GetMapping("/player/loadAll")
     public String loadAllGames(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         saveService.loadAll(room);
         return getAdmin(room);
     }
@@ -136,7 +132,7 @@ public class AdminController {
 
     @GetMapping("/player/ai/reloadAll")
     public String reloadAllAI(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
 
         playerService.getAllInRoom(room).stream()
                 .filter(not(Player::hasAi))
@@ -158,7 +154,7 @@ public class AdminController {
 
     @GetMapping("/player/gameOverAll")
     public String gameOverAllPlayers(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         playerService.removeAll(room);
         return getAdmin(room);
     }
@@ -174,7 +170,7 @@ public class AdminController {
 
     @GetMapping("/player/save/removeAll")
     public String removePlayerSave(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         saveService.removeAllSaves(room);
         return getAdmin(room);
     }
@@ -191,7 +187,7 @@ public class AdminController {
 
     @GetMapping("/player/registration/removeAll")
     public String removePlayerRegistration(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         saveService.getSaves(room)
                 .forEach(player -> registration.remove(player.getId()));
         return getAdmin(room);
@@ -201,7 +197,7 @@ public class AdminController {
 
     @GetMapping("/player/reloadAll")
     public String resetAllPlayers(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         saveService.saveAll(room);
         playerService.removeAll(room);
         saveService.loadAll(room);
@@ -210,14 +206,14 @@ public class AdminController {
 
     @GetMapping("/game/scores/cleanAll")
     public String cleanAllPlayersScores(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         playerService.cleanAllScores(room);
         return getAdmin(room);
     }
 
     @GetMapping("/game/board/reloadAll")
     public String reloadAllPlayersRooms(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         playerService.reloadAllRooms(room);
         return getAdmin(request);
     }
@@ -240,14 +236,14 @@ public class AdminController {
 
     @GetMapping("/room/registration/stop")
     public String openRoom(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         roomService.setOpened(room, false);
         return getAdmin(request);
     }
 
     @GetMapping("/room/registration/start")
     public String closeRoom(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         roomService.setOpened(room, true);
         return getAdmin(request);
     }
@@ -256,14 +252,14 @@ public class AdminController {
 
     @GetMapping("/game/pause")
     public String pauseGame(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         roomService.setActive(room, false);
         return getAdmin(request);
     }
 
     @GetMapping("/game/resume")
     public String resumeGame(HttpServletRequest request) {
-        String room = getGameRoom(request);
+        String room = room(request);
         roomService.setActive(room, true);
         return getAdmin(request);
     }
@@ -329,7 +325,7 @@ public class AdminController {
     }
 
     private String getAdmin(HttpServletRequest request) {
-        return getAdmin(getGameRoom(request));
+        return getAdmin(room(request));
     }
 
     private String getAdmin(String room) {
@@ -348,68 +344,35 @@ public class AdminController {
                            @RequestParam(value = "room", required = false) String room,
                            @RequestParam(value = "game", required = false) String game,
                            @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
-                               Boolean gameSpecificAdminPage)
+                               boolean gameSpecificAdminPage)
     {
         // каждый из этих параметров может быть null, "", "null"
         room = Validator.isEmpty(room) ? null : room;
         game = Validator.isEmpty(game) ? null : game;
 
-        // если не установили оба, идем на дифолтовую админку
-        if (room == null && game == null) {
+        AdminSettings data = adminService.loadAdminPage(game, room);
+
+        if (data == null) {
             return getAdmin();
         }
 
-        // ну может хоть имя игры указали?
-        if (room == null) {
-            room = game;
-        }
-
-        // если нет такой room, првоеряем есть ли game
-        if (!roomService.exists(room)) {
-            GameType gameType = gameService.getGameType(game);
-            if (gameType instanceof NullGameType) {
-                // если нет - дифлотовая админка
-                return getAdmin();
-            }
-            // иначе создаем новую комнату, которую тут же будем админить
-            roomService.create(room, gameType);
-        }
-
-        // получаем уже законным образом имя игры по комнате
-        game = roomService.game(room);
-
-        // проверяем не надо ли нам перейти на кастомную страничку
-        if (gameSpecificAdminPage && game != null) {
+        // проверяем не надо ли нам перейти на custom страничку
+        if (gameSpecificAdminPage && data.getGame() != null) {
             return viewDelegationService.adminView(game);
         }
 
-        // получаем тип игры
-        GameType gameType = gameService.getGameType(game, room);
-        if (gameType instanceof NullGameType) {
-            return getAdmin();
-        }
-
-        // готовим данные для странички
-        model.addAttribute("data",
-                adminService.getAdminSettings(gameType, room));
-
+        model.addAttribute("data", data);
         return "admin";
     }
 
-    private String getGameRoom(HttpServletRequest request) {
+    private String room(HttpServletRequest request) {
         String result = request.getParameter("room");
-        if (Validator.isEmpty(result)) {
-            return null;
-        }
-        return result;
+        return Validator.isEmpty(result) ? null : result;
     }
 
-    private String getGameName(HttpServletRequest request) {
+    private String game(HttpServletRequest request) {
         String result = request.getParameter("game");
-        if (Validator.isEmpty(result)) {
-            return null;
-        }
-        return result;
+        return Validator.isEmpty(result) ? null : result;
     }
 
 }

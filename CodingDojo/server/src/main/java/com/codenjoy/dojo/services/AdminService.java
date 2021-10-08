@@ -29,11 +29,11 @@ import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.level.LevelsSettings;
 import com.codenjoy.dojo.services.level.LevelsSettingsImpl;
 import com.codenjoy.dojo.services.log.DebugService;
+import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.security.GameAuthorities;
-import com.codenjoy.dojo.services.security.ViewDelegationService;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import com.codenjoy.dojo.services.settings.CheckBox;
@@ -70,11 +70,10 @@ public class AdminService {
     private final AutoSaver autoSaver;
     private final DebugService debugService;
     private final Registration registration;
-    private final ViewDelegationService viewDelegationService;
     private final SemifinalService semifinal;
     private final RoomService roomService;
 
-    public void updateInactivity(String room, InactivitySettings updated) {
+    void updateInactivity(String room, InactivitySettings updated) {
         InactivitySettingsImpl actual = inactivitySettings(room);
         boolean changed = actual
                 .update(updated)
@@ -88,7 +87,7 @@ public class AdminService {
         }
     }
 
-    public InactivitySettingsImpl inactivitySettings(String room) {
+    private InactivitySettingsImpl inactivitySettings(String room) {
         return InactivitySettings.get(roomService.settings(room));
     }
 
@@ -191,7 +190,7 @@ public class AdminService {
         roomService.setOpenedGames(opened);
     }
 
-    public void updateParameters(Settings gameSettings, Predicate<Parameter> filter,
+    private void updateParameters(Settings gameSettings, Predicate<Parameter> filter,
                                  List<Object> updated, List<Exception> errors)
     {
         List<Parameter> actual = gameSettings.getParameters().stream()
@@ -216,7 +215,7 @@ public class AdminService {
         return value;
     }
 
-    public Predicate<Parameter> onlyUngrouped() {
+    private Predicate<Parameter> onlyUngrouped() {
         return Predicate.not(
                 p -> p.getName().startsWith(SEMIFINAL)
                         || p.getName().startsWith(ROUNDS)
@@ -224,11 +223,11 @@ public class AdminService {
                         || p.getName().startsWith(INACTIVITY));
     }
 
-    public Predicate<Parameter> onlyLevels() {
+    private Predicate<Parameter> onlyLevels() {
         return p -> p.getName().startsWith(LEVELS);
     }
 
-    public void generateNewPlayers(String game, String room, String mask, int count) {
+    private void generateNewPlayers(String game, String room, String mask, int count) {
         int numLength = String.valueOf(count).length();
 
         int created = 0;
@@ -255,7 +254,7 @@ public class AdminService {
         }
     }
 
-    public SemifinalSettingsImpl semifinalSettings(String room) {
+    private SemifinalSettingsImpl semifinalSettings(String room) {
         return semifinal.semifinalSettings(room);
     }
 
@@ -267,7 +266,42 @@ public class AdminService {
         return LevelsSettings.get(roomService.settings(room));
     }
 
-    public AdminSettings getAdminSettings(GameType gameType, String room) {
+    public AdminSettings loadAdminPage(String game, String room) {
+        // если не установили оба - default админкf
+        if (room == null && game == null) {
+            return null;
+        }
+
+        // ну может хоть имя игры указали?
+        if (room == null) {
+            room = game;
+        }
+
+        // если нет такой room, проверяем есть ли game
+        if (!roomService.exists(room)) {
+            GameType gameType = gameService.getGameType(game);
+            if (gameType instanceof NullGameType) {
+                // если нет - default админка
+                return null;
+            }
+            // иначе создаем новую комнату, которую тут же будем администрировать
+            roomService.create(room, gameType);
+        }
+
+        // получаем уже законным образом имя игры по комнате
+        game = roomService.game(room);
+
+        // получаем тип игры
+        GameType gameType = gameService.getGameType(game, room);
+        if (gameType instanceof NullGameType) {
+            return null;
+        }
+
+        // готовим данные для странички
+        return getAdminSettings(gameType, room);
+    }
+
+    private AdminSettings getAdminSettings(GameType gameType, String room) {
         AdminSettings result = new AdminSettings();
 
         setupSettings(gameType, room, result);
