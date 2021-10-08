@@ -87,7 +87,7 @@ pages.admin = function() {
             data = defaultRegistrationSettings();
         }
         if (!data.defaultGameMode) {
-            data.defaultGameMode = $("#default-game-mode option:first").val();
+            data.defaultGameMode = $('#default-game-mode option:first').val();
         }
 
         $('#show-game-modes').prop('checked', data.showGameModes);
@@ -172,10 +172,18 @@ pages.admin = function() {
         });
     }
 
+    var setupTextAreas = function() {
+        $('textarea').on('input', function(){
+            this.style.height = '';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    }
+
     // ------------------------ init ----------------------
-    validatePlayerRegistration("#adminSettings");
+    validatePlayerRegistration('#adminSettings');
     initHotkeys();
     loadRegSettings();
     setupSaveUserDetails();
     setupSpanHref();
+    setupTextAreas();
 }
