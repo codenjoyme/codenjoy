@@ -244,7 +244,7 @@
                 <td><b>Load save (progress) for all</b></td>
             </tr>
             <tr>
-                <td><input type="text" class="player-save" name="progress" value="${defaultProgress}"/></td>
+                <td><form:input path="progress"/></td>
             </tr>
             <tr>
                 <td>

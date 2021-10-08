@@ -289,6 +289,7 @@ public class AdminService {
         result.setGenerateCount(30);
         result.setGenerateRoom(room);
         result.setTimerPeriod((int) timerService.getPeriod());
+        result.setProgress(gameService.getDefaultProgress(gameType));
 
         return result;
     }
