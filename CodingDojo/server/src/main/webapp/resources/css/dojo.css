@@ -114,6 +114,12 @@ span.pow {
     height:24px;
 }
 
+.admin-table textarea {
+    line-height: 0.90em;
+    height: 80px;
+    width: 300px;
+}
+
 .admin-table input[readonly="true"] {
     background-color: papayawhip;
 }
