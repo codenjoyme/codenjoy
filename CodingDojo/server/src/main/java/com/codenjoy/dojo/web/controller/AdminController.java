@@ -598,12 +598,9 @@ public class AdminController {
         model.addAttribute("autoSave", autoSaver.isWorking());
         model.addAttribute("debugLog", debugService.isWorking());
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        AdminSettings settings = getAdminSettings(gameType, room);
-        model.addAttribute("adminSettings", settings);
-        List<PlayerInfo> saves = saveService.getSaves(room);
+        model.addAttribute("adminSettings", getAdminSettings(gameType, room));
         model.addAttribute("gamesRooms", roomService.gamesRooms());
         model.addAttribute("playersCount", playerService.getRoomCounts());
-        settings.setPlayers(preparePlayers(model, room, saves));
 
         return "admin";
     }
@@ -638,6 +635,9 @@ public class AdminController {
                 .map(name -> enabled.contains(name))
                 .collect(toList()));
 
+        List<PlayerInfo> saves = saveService.getSaves(room);
+        result.setPlayers(preparePlayers(room, saves));
+
         return result;
     }
 
@@ -657,14 +657,11 @@ public class AdminController {
         return result;
     }
 
-    private List<PlayerInfo> preparePlayers(Model model, String room, List<PlayerInfo> players) {
+    private List<PlayerInfo> preparePlayers(String room, List<PlayerInfo> players) {
         for (PlayerInfo player : players) {
             player.setHidden(!room.equals(player.getRoom()));
         }
 
-        if (!players.isEmpty()) {
-            model.addAttribute("players", players);
-        }
         return players;
     }
 

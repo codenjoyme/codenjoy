@@ -536,7 +536,7 @@
         </form:form>
     </c:if>
 
-    <c:if test="${players != null || savedGames != null}">
+    <c:if test="${not empty adminSettings.players || savedGames != null}">
         <form:form modelAttribute="adminSettings" action="admin#savePlayersGame" method="POST">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="4">
@@ -578,7 +578,7 @@
                     </td>
                     <td class="header">Save data&nbsp;&nbsp;</td>
                 </tr>
-                <c:forEach items="${players}" var="player" varStatus="status">
+                <c:forEach items="${adminSettings.players}" var="player" varStatus="status">
                     <c:choose>
                         <c:when test="${player.hidden}">
                             <tr style="display:none;">
