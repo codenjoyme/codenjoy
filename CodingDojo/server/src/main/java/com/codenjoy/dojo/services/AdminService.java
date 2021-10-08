@@ -294,6 +294,7 @@ public class AdminService {
         result.setRoomOpened(roomService.isOpened(room));
         result.setRecording(actionLogger.isWorking());
         result.setAutoSave(autoSaver.isWorking());
+        result.setDebugLog(debugService.isWorking());
 
         return result;
     }

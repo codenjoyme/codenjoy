@@ -161,7 +161,7 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${debugLog}">
+                    <c:when test="${adminSettings.debugLog}">
                         <b>The debug in progress</b></br>
                         <a href="${ctx}/admin/debug/stop?room=${adminSettings.room}#debug">Stop debug</a>.
                     </c:when>

@@ -58,6 +58,7 @@ public class AdminSettings {
     private Boolean roomOpened;
     private Boolean recording;
     private Boolean autoSave;
+    private Boolean debugLog;
 
     // used to send data to jsp
     private SemifinalSettingsImpl semifinal;
