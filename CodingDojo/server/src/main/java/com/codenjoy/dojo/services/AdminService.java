@@ -296,6 +296,7 @@ public class AdminService {
         result.setAutoSave(autoSaver.isWorking());
         result.setDebugLog(debugService.isWorking());
         result.setOpened(playerService.isRegistrationOpened());
+        result.setGamesRooms(roomService.gamesRooms());
 
         return result;
     }

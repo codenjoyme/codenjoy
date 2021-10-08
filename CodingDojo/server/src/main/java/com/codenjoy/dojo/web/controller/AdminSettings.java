@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.PlayerInfo;
 import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.level.LevelsSettingsImpl;
+import com.codenjoy.dojo.services.room.GamesRooms;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -60,6 +61,7 @@ public class AdminSettings {
     private Boolean autoSave;
     private Boolean debugLog;
     private Boolean opened;
+    private GamesRooms gamesRooms;
 
     // used to send data to jsp
     private SemifinalSettingsImpl semifinal;

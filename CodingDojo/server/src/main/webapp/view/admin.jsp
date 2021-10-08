@@ -80,7 +80,7 @@
                     <b>Active games for participants</b>
                 </td>
             </tr>
-            <c:forEach items="${gamesRooms.all}" var="gameRooms" varStatus="status">
+            <c:forEach items="${adminSettings.gamesRooms.all}" var="gameRooms" varStatus="status">
                 <tr game="${gameRooms.game}">
                     <td class="rightStep">
                         <form:checkbox id="enable-games-${gameRooms.game}" path="games[${status.index}]"/>
