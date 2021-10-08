@@ -484,7 +484,7 @@
                                 <td><form:input path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'editbox' && element.multiline}">
-                                <td><form:textarea rows="5" cols="50" path="otherValues[${status.index}]"/></td>
+                                <td><form:textarea class="map" path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'checkbox'}">
                                 <td><form:checkbox path="otherValues[${status.index}]"/></td>
