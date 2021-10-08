@@ -517,7 +517,7 @@
                         <td>${element.name}</td>
                         <c:choose>
                             <c:when test="${element.type == 'editbox' && element.multiline}">
-                                <td><form:textarea rows="5" cols="50" path="levelsValues[${status.index}]"/></td>
+                                <td><form:textarea class="map" path="levelsValues[${status.index}]"/></td>
                             </c:when>
                             <c:otherwise>
                                 <td>${element.value}</td>
