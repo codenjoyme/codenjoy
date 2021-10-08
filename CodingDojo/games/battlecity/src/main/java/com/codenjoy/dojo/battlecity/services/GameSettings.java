@@ -23,21 +23,21 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
-import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
+import com.codenjoy.dojo.games.battlecity.Element;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettings;
 import com.codenjoy.dojo.services.settings.Chance;
-import com.codenjoy.dojo.services.incativity.InactivitySettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.games.battlecity.Element.*;
 import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.games.battlecity.Element.*;
 import static com.codenjoy.dojo.services.settings.Chance.CHANCE_RESERVED;
 
 public class GameSettings extends SettingsImpl
@@ -74,7 +74,7 @@ public class GameSettings extends SettingsImpl
         KILL_OTHER_HERO_TANK_SCORE("[Score] Kill other hero tank score"),
         KILL_OTHER_AI_TANK_SCORE("[Score] Kill other AI tank score"),
 
-        LEVEL_MAP("[Level] map");
+        LEVEL_MAP("[Map] map");
 
         private String key;
 
