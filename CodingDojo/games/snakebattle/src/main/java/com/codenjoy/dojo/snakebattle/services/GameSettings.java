@@ -45,7 +45,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
         DIE_PENALTY("[Score] Die penalty"),
         STONE_SCORE("[Score] Stone score"),
         EAT_SCORE("[Score] Eat enemy score"),
-        LEVEL_MAP("[Level] Map");
+        LEVEL_MAP("[Map] Map");
 
         private String key;
 
