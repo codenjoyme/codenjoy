@@ -178,7 +178,7 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${autoSave}">
+                    <c:when test="${adminSettings.autoSave}">
                         <b>The auto save in progress</b></br>
                         <a href="${ctx}/admin/autoSave/stop?room=${adminSettings.room}#autoSave">Stop auto save</a>.
                     </c:when>
