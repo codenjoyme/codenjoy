@@ -291,6 +291,7 @@ public class AdminService {
         result.setTimerPeriod((int) timerService.getPeriod());
         result.setProgress(gameService.getDefaultProgress(gameType));
         result.setActive(roomService.isActive(room));
+        result.setRoomOpened(roomService.isOpened(room));
 
         return result;
     }

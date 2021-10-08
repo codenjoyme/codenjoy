@@ -212,7 +212,7 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${roomOpened}">
+                    <c:when test="${adminSettings.roomOpened}">
                         <b><spring:message key="registration.room.active"/></b></br>
                         <a href="${ctx}/admin/room/registration/stop?room=${adminSettings.room}#closeRoomRegistration">Close room registration</a>.
                     </c:when>
