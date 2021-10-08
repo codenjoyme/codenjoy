@@ -392,9 +392,6 @@ public class AdminController {
         // готовим данные для странички
         AdminSettings settings = adminService.getAdminSettings(gameType, room);
         model.addAttribute("adminSettings", settings);
-        model.addAttribute("generateNameMask", "demo%");
-        model.addAttribute("generateCount", "30");
-        model.addAttribute("generateRoom", room);
         model.addAttribute("timerPeriod", timerService.getPeriod());
         model.addAttribute("defaultProgress", gameService.getDefaultProgress(gameType));
         model.addAttribute("active", roomService.isActive(room));

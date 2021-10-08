@@ -285,6 +285,9 @@ public class AdminService {
         result.setGame(gameType.name());
         result.setRoom(room);
         result.setGameVersion(gameType.getVersion());
+        result.setGenerateNameMask("demo%");
+        result.setGenerateCount("30");
+        result.setGenerateRoom(room);
 
         return result;
     }

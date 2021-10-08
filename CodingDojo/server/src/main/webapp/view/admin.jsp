@@ -329,9 +329,9 @@
                 <td>Count</td>
                 <td>RoomName</td>
             <tr>
-                <td><input type="text" name="generateNameMask" value="${generateNameMask}"/></td>
-                <td><input type="text" name="generateCount" value="${generateCount}"/></td>
-                <td><input type="text" name="generateRoom" value="${generateRoom}"/></td>
+                <td><form:input path="generateNameMask"/></td>
+                <td><form:input path="generateCount"/></td>
+                <td><form:input path="generateRoom"/></td>
             </tr>
             <tr>
                 <td>
