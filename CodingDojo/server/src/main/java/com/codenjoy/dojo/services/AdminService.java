@@ -282,6 +282,8 @@ public class AdminService {
         result.setPlayers(preparePlayers(room, saves));
 
         result.setSemifinalTick(semifinal.getTime(room));
+        result.setGame(gameType.name());
+        result.setRoom(room);
 
         return result;
     }

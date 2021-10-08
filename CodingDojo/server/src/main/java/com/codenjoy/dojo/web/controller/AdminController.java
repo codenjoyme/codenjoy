@@ -392,8 +392,6 @@ public class AdminController {
         // готовим данные для странички
         AdminSettings settings = adminService.getAdminSettings(gameType, room);
         model.addAttribute("adminSettings", settings);
-        model.addAttribute("game", game);
-        model.addAttribute("room", room);
         model.addAttribute("gameVersion", gameType.getVersion());
         model.addAttribute("generateNameMask", "demo%");
         model.addAttribute("generateCount", "30");
