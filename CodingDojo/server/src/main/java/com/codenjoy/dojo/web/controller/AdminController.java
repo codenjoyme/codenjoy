@@ -390,8 +390,8 @@ public class AdminController {
         }
 
         // готовим данные для странички
-        AdminSettings settings = adminService.getAdminSettings(gameType, room);
-        model.addAttribute("adminSettings", settings);
+        model.addAttribute("data",
+                adminService.getAdminSettings(gameType, room));
 
         return "admin";
     }
