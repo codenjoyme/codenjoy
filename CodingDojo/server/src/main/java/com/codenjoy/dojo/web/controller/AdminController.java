@@ -390,7 +390,8 @@ public class AdminController {
         }
 
         // готовим данные для странички
-        model.addAttribute("semifinalTick", semifinal.getTime(room));
+        AdminSettings settings = adminService.getAdminSettings(gameType, room);
+        model.addAttribute("adminSettings", settings);
         model.addAttribute("game", game);
         model.addAttribute("room", room);
         model.addAttribute("gameVersion", gameType.getVersion());
@@ -405,7 +406,6 @@ public class AdminController {
         model.addAttribute("autoSave", autoSaver.isWorking());
         model.addAttribute("debugLog", debugService.isWorking());
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("adminSettings", adminService.getAdminSettings(gameType, room));
         model.addAttribute("gamesRooms", roomService.gamesRooms());
         model.addAttribute("playersCount", playerService.getRoomCounts());
 

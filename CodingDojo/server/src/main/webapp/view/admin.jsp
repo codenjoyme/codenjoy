@@ -408,7 +408,7 @@
                 </tr>
                 <tr>
                     <td>Current tick</td>
-                    <td>${semifinalTick}</td>
+                    <td>${adminSettings.semifinalTick}</td>
                 <tr>
                 <tr>
                     <td>Percentage or quantitative criterion</td>

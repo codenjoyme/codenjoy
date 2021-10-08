@@ -281,6 +281,8 @@ public class AdminService {
         List<PlayerInfo> saves = saveService.getSaves(room);
         result.setPlayers(preparePlayers(room, saves));
 
+        result.setSemifinalTick(semifinal.getTime(room));
+
         return result;
     }
 

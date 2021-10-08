@@ -60,4 +60,5 @@ public class AdminSettings {
     private LevelsSettingsImpl levels;
     private List<Parameter> other;
 
+    private int semifinalTick;
 }
