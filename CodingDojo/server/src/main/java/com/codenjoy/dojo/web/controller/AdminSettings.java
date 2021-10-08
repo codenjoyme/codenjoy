@@ -46,6 +46,7 @@ public class AdminSettings {
     // used to get data from jsp
     private List<Object> otherValues;
     private List<Object> levelsValues;
+    private List<Object> levelsKeys;
 
     private String game;
     private String room;

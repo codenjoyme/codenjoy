@@ -161,6 +161,12 @@ public class AdminService {
         if (settings.getLevelsValues() != null) {
             List<Object> updated = settings.getLevelsValues();
             updateParameters(gameSettings, onlyLevels(), updated, errors);
+
+            if (settings.getLevelsKeys() != null) {
+                addNewParameters(gameSettings,
+                        settings.getLevelsKeys(),
+                        settings.getLevelsValues());
+            }
         }
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException("There are errors during save settings: " + errors.toString());
@@ -171,6 +177,20 @@ public class AdminService {
             int count = settings.getGenerateCount();
             String generateRoom = settings.getGenerateRoom();
             generateNewPlayers(game, generateRoom, mask, count);
+        }
+    }
+
+    private void addNewParameters(Settings gameSettings, List<Object> keys, List<Object> values) {
+        for (int index = 0; index < keys.size(); index++) {
+            Object key = keys.get(index);
+            if (key == null) {
+                continue;
+            }
+            Object value = values.get(index);
+            gameSettings.addEditBox((String) key)
+                    .type(String.class)
+                    .multiline()
+                    .update(value);
         }
     }
 

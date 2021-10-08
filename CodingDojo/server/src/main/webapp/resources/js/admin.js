@@ -179,6 +179,35 @@ pages.admin = function() {
         });
     }
 
+    var setupNewLevelMap = function() {
+        $('#addNewLevelMap').click(function(){
+            var last = $('#levels tr[index]').last();
+            var lastIndex = parseInt(last.attr('index'));
+            var lastKey = last.find('.levelKey').html();
+            if (!lastKey) {
+                lastKey = last.find('input').val();
+            }
+            lastKey = lastKey.replace('[Level] Map[', '').replace(']', '').split(',');
+            if (lastKey.length == 1) {
+                var levelNumber = parseInt(lastKey[0]) + 1;
+                var newKey = levelNumber;
+            } else if (lastKey.length == 2) {
+                var levelNumber = parseInt(lastKey[0]);
+                var mapNumber = parseInt(lastKey[1]) + 1;
+                var newKey = levelNumber + ',' + mapNumber;
+            } else {
+                throw 'Parsing error';
+            }
+            var index = lastIndex + 1;
+            var newMapSettings = $('#levels script')
+                .tmpl([{
+                    index : index,
+                    key : newKey
+                }]);
+            newMapSettings.insertBefore('#levels .levelsButtons');
+        });
+    }
+
     // ------------------------ init ----------------------
     validatePlayerRegistration('#adminSettings');
     initHotkeys();
@@ -186,4 +215,5 @@ pages.admin = function() {
     setupSaveUserDetails();
     setupSpanHref();
     setupTextAreas();
+    setupNewLevelMap();
 }
