@@ -54,6 +54,7 @@ public class AdminSettings {
     private String progress;
     private Integer semifinalTick;
     private String gameVersion;
+    private Boolean active;
 
     // used to send data to jsp
     private SemifinalSettingsImpl semifinal;

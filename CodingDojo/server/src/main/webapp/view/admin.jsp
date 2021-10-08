@@ -115,7 +115,7 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${active}">
+                    <c:when test="${adminSettings.active}">
                         <b><spring:message key="game.active"/></b></br>
                         <a href="${ctx}/admin/game/pause?room=${adminSettings.room}#pauseGame">Pause game</a>.
                     </c:when>
