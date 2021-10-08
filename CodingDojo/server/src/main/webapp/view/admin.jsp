@@ -127,7 +127,7 @@
             </td>
             <form:form modelAttribute="adminSettings" action="admin#pauseGame" method="POST">
                 <tr>
-                    <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
+                    <td><form:input path="timerPeriod"/></td>
                 </tr>
                 <tr>
                     <td>

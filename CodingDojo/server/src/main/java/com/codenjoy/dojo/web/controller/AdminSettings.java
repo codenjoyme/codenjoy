@@ -48,11 +48,11 @@ public class AdminSettings {
     private String game;
     private String room;
     private String generateNameMask;
-    private String generateCount;
+    private Integer generateCount;
     private String generateRoom;
-    private String timerPeriod;
+    private Integer timerPeriod;
     private String progress;
-    private int semifinalTick;
+    private Integer semifinalTick;
     private String gameVersion;
 
     // used to send data to jsp

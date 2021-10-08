@@ -138,7 +138,7 @@ public class AdminService {
 
         if (settings.getTimerPeriod() != null) {
             try {
-                timerService.changePeriod(Integer.parseInt(settings.getTimerPeriod()));
+                timerService.changePeriod(settings.getTimerPeriod());
             } catch (NumberFormatException e) {
                 // do nothing
             }
@@ -169,7 +169,7 @@ public class AdminService {
 
         if (settings.getGenerateNameMask() != null) {
             String mask = settings.getGenerateNameMask();
-            int count = Integer.parseInt(settings.getGenerateCount());
+            int count = settings.getGenerateCount();
             String generateRoom = settings.getGenerateRoom();
             generateNewPlayers(game, generateRoom, mask, count);
         }
@@ -286,8 +286,9 @@ public class AdminService {
         result.setRoom(room);
         result.setGameVersion(gameType.getVersion());
         result.setGenerateNameMask("demo%");
-        result.setGenerateCount("30");
+        result.setGenerateCount(30);
         result.setGenerateRoom(room);
+        result.setTimerPeriod((int) timerService.getPeriod());
 
         return result;
     }
