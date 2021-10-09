@@ -172,14 +172,14 @@ pages.admin = function() {
         });
     }
 
-    var setupTextArea = function(elements) {
+    var setupLevelsMapArea = function(elements) {
         elements.on('input', function(){
             this.style.height = '';
             this.style.height = this.scrollHeight + 'px';
         });
     }
 
-    var setupNewLevelMap = function() {
+    var setupLevelsNewMapButton = function() {
         $('#addNewLevelMap').click(function(){
             var last = $('#levels tr[index]').last();
             var lastIndex = parseInt(last.attr('index'));
@@ -207,7 +207,7 @@ pages.admin = function() {
             // TODO почему-то это не работает после вставки элемента
             //      scrollHeight = высоте контрола, а не тому что в нем
             //      реально содержится
-            setupTextArea(newMapSettings);
+            setupLevelsMapArea(newMapSettings);
             newMapSettings.insertBefore('#levels .levelsButtons');
         });
     }
@@ -218,6 +218,6 @@ pages.admin = function() {
     loadRegSettings();
     setupSaveUserDetails();
     setupSpanHref();
-    setupTextArea($('textarea'));
-    setupNewLevelMap();
+    setupLevelsMapArea($('textarea'));
+    setupLevelsNewMapButton();
 }
