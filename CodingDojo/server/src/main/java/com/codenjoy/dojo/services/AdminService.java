@@ -37,6 +37,7 @@ import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.semifinal.SemifinalService;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
 import com.codenjoy.dojo.services.settings.CheckBox;
+import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.AdminSettings;
@@ -197,16 +198,23 @@ public class AdminService {
             // создаем список новых (клонированных) параметров
             // с уже измененными именами и значениями
             List<Parameter> destination = transform.entrySet().stream()
+                    .filter(entry -> StringUtils.isNotEmpty(entry.getValue().getKey()))
                     .map(entry -> {
                         String key = entry.getKey();
                         Pair<String, String> pair = entry.getValue();
                         String newKey = pair.getKey();
                         String value = pair.getValue();
 
-                        Parameter parameter = source.get(key);
-                        Parameter cloned = parameter.clone(newKey);
-                        cloned.update(value);
-                        return cloned;
+                        Parameter from = source.get(key);
+                        if (from == null) {
+                            return new EditBox(newKey)
+                                    .type(String.class)
+                                    .multiline()
+                                    .def(value);
+                        }
+
+                        return from.clone(newKey)
+                                .update(value);
                     })
                     .sorted(comparing(Parameter::getName))
                     .collect(toList());

@@ -543,6 +543,10 @@
                 <script template type="text/x-jquery-tmpl">
                     <tr index="{%= index %}">
                         <td>
+                            <input id="levelsKeys{%= index %}"
+                                   name="levelsKeys[{%= index %}]"
+                                   type="hidden"
+                                   value="[Level] Map[{%= key %}]"></input>
                             <input id="levelsNewKeys{%= index %}"
                                    name="levelsNewKeys[{%= index %}]"
                                    type="text"
