@@ -183,8 +183,21 @@ pages.admin = function() {
         $('#addNewLevelMap').click(function(){
             var last = $('#levels tr[index]').last();
             var lastIndex = parseInt(last.attr('index'));
-            var lastKey = last.find('input[with="key"]').val();
-            lastKey = lastKey.replace('[Level] Map[', '').replace(']', '').split(',');
+
+            var lastKeys = [];
+            $('#levels input[with="key"]').each(function(){
+                var value = $(this).val();
+                if (!!value) {
+                    lastKeys.push(value.replace('[Level] Map[', '').replace(']', ''));
+                }
+            });
+            if (lastKeys.length == 0) {
+                lastKeys.push("[Level] Map[1]");
+            }
+            lastKeys.sort();
+
+            var lastKey = lastKeys[lastKeys.length - 1].split(',');
+
             if (lastKey.length == 1) {
                 var levelNumber = parseInt(lastKey[0]) + 1;
                 var newKey = levelNumber;
