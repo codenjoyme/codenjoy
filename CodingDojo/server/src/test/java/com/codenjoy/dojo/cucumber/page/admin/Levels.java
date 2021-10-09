@@ -25,6 +25,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
 import com.codenjoy.dojo.cucumber.page.Page;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.util.Lists;
 import org.openqa.selenium.By;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -34,13 +35,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.cucumber.page.WebDriverWrapper.getText;
+import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static com.codenjoy.dojo.cucumber.utils.PageUtils.xpath;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static java.lang.String.format;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
@@ -53,6 +56,7 @@ public class Levels {
     public static final Function<Integer, By> MAP_KEY = index -> MAP.apply(format("='%s'", index), "key");
     public static final Function<Integer, By> MAP_VALUE = index -> MAP.apply(format("='%s'", index), "value");
     public static final By SAVE_BUTTON = xpath(LEVELS + "//input[@value='Save']");
+    public static final By ADD_BUTTON = xpath(LEVELS + "//input[@value='Add']");
 
     // page objects
     private final Page page;
@@ -95,10 +99,20 @@ public class Levels {
 
     @Override
     public String toString() {
-        return map().toString();
+        List<Map.Entry<String, String>> entries = Lists.newArrayList(map().entrySet());
+        return IntStream.range(0, entries.size())
+                .mapToObj(index -> String.format("(%s)%s=%s",
+                        index,
+                        entries.get(index).getKey().replace("[Level] Map", ""),
+                        entries.get(index).getValue()))
+                .collect(joining(", "));
     }
 
     public void save() {
         web.elementBy(SAVE_BUTTON).click();
+    }
+
+    public void add() {
+        web.elementBy(ADD_BUTTON).click();
     }
 }

@@ -441,4 +441,9 @@ public class StepDefinitions {
     public void saveAllLevelMaps() {
         admin.levels().save();
     }
+
+    @When("Add new map")
+    public void addNewMap() {
+        admin.levels().add();
+    }
 }

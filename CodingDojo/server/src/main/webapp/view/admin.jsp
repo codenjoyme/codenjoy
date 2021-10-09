@@ -558,6 +558,7 @@
                         <td>
                             <textarea id="levelsValues{%= index %}"
                                       name="levelsValues[{%= index %}]"
+                                      with="value"
                                       class="map"></textarea>
                         </td>
                     </tr>

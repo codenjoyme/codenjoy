@@ -70,13 +70,8 @@ public class ThirdGameSettings extends SettingsImpl
 
         setLevelMap(1, 1, "map1");
         setLevelMap(1, 2, "map2");
-        setLevelMap(1, 3, "map3");
-        setLevelMap(1, 4, "map4");
-        setLevelMap(2,    "map5");
-        setLevelMap(3, 1, "map6");
-        setLevelMap(3, 2, "map7");
-        setLevelMap(4, 1, "map8");
-        setLevelMap(4, 2, "map9");
+        setLevelMap(2,    "map3");
+        setLevelMap(3, 1, "map4");
     }
 
     public SettingsReader playersAndTeamsPerRoom(int players, int teams) {
