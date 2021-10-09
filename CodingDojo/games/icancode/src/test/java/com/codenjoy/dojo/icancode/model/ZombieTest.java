@@ -348,7 +348,7 @@ public class ZombieTest extends AbstractGameTest {
                 "------" +
                 "------");
 
-        events.verifyAllEvents("[LOSE(gold=0, kill=0, single)]");
+        verifyAllEvents("[LOSE(gold=0, kill=0, single)]");
         assertEquals(false, hero.isAlive());
         assertEquals(false, hero.isWin());
 
@@ -431,7 +431,7 @@ public class ZombieTest extends AbstractGameTest {
         game.tick();
 
         // then
-        events.verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
+        verifyAllEvents("[KILL_ZOMBIE(gold=0, kill=1, single)]");
         assertE("------" +
                 "--☺---" +
                 "------" +

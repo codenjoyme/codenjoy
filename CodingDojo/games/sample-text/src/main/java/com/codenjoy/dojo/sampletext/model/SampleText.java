@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sampletext.model;
 
 import com.codenjoy.dojo.sampletext.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -35,8 +36,10 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
+ * Если какой-то из жителей борды вдруг захочет узнать что-то
+ * у нее, то лучше ему дать интефейс {@link Field}
+ * Борда реализует интерфейс {@link Tickable} чтобы быть
+ * уведомленной о каждом тике игры. Обрати внимание на {@link #tick()}
  */
 public class SampleText implements Field {
 

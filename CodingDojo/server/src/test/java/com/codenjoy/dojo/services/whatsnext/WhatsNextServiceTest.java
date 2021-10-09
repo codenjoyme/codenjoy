@@ -5,7 +5,7 @@ package com.codenjoy.dojo.services.whatsnext;
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 - 2021 Codenjoy
- * %%
+ * %%WhatsNextServiceTest
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -24,12 +24,12 @@ package com.codenjoy.dojo.services.whatsnext;
 
 import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 public class WhatsNextServiceTest {
 
@@ -116,7 +116,7 @@ public class WhatsNextServiceTest {
                 "| (1) ☼ X ☼      \n" +
                 "| (1) ☼   ☼      \n" +
                 "| (1) ☼☼☼☼☼      \n" +
-                "| (1) Events:[LOSE => -100]\n" +
+                "| (1) Events:[LOSE => -20]\n" +
                 "|                \n" +
                 "+----------------\n");
     }

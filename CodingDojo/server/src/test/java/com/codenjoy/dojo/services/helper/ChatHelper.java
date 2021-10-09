@@ -37,8 +37,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.chat.ChatType.ROOM;
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
 
 @Lazy
@@ -94,7 +95,7 @@ public class ChatHelper {
     }
 
     public void checkField(String player, String room, String expected) {
-        check(getField(player, room), expected); // TODO add split /n
+        check(getField(player, room), expected);
     }
 
     private List<PMessage> getField(String player, String room) {
@@ -147,8 +148,8 @@ public class ChatHelper {
 
     public void check(List<PMessage> messages, String expected) {
         assertEquals(expected,
-                messages.toString()
-                        .replace(", playerId", ", \n    playerId")
-                        .replace("), PMessage(", "), \nPMessage("));
+                split(messages,
+                        ", \n\tplayerId",
+                        "), \nPMessage("));
     }
 }

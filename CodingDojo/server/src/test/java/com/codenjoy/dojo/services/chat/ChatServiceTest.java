@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import org.junit.After;
 import org.junit.Before;
@@ -49,9 +49,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.client.Utils.split;
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.joining;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -810,11 +811,11 @@ public class ChatServiceTest {
     }
 
     private void assertListener(String expected) {
-        assertEquals(expected, logs.stream()
-                .collect(joining(",\n"))
-                .replace(", playerId", ", \n        playerId")
-                .replace("PMessage(", "\n    PMessage(")
-                .replace(", listener", ", \nlistener"));
+        assertEquals(expected,
+                split(logs.stream().collect(joining(",\n")),
+                        ", \n\t\tplayerId",
+                        "\n\tPMessage(",
+                        ", \nlistener"));
         logs.clear();
     }
 

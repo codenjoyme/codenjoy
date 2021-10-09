@@ -31,13 +31,12 @@ import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.Function;
 
+import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static com.codenjoy.dojo.cucumber.utils.PageUtils.xpath;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
-import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)

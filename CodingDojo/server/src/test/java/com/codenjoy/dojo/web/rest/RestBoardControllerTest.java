@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 @Import(ThreeGamesConfiguration.class)
 public class RestBoardControllerTest extends AbstractRestControllerTest {

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.info.Information;
 import com.codenjoy.dojo.services.info.ScoresCollector;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +48,7 @@ public class WhatsNextService {
     // для создания игры.
     public String calculate(GameType gameType, String board, String allActions) {
         Settings settings = gameType.getSettings();
-        GameField game = gameType.createGame(0, settings);
+        GameField game = gameType.createGame(LevelProgress.levelsStartsFrom1, settings);
         List<Information> infos = new LinkedList<>();
         List<GamePlayer> players  = game.load(board, () -> {
             PlayerScores scores = gameType.getPlayerScores(1000, settings);

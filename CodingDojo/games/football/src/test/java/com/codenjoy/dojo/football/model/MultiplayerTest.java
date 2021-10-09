@@ -121,11 +121,15 @@ public class MultiplayerTest {
 
     @After
     public void tearDown() {
-        events.verifyNoEvents();
+        verifyAllEvents("");
     }
 
     private void dice(int x, int y) {
         when(dice.next(anyInt())).thenReturn(x, y);
+    }
+
+    public void verifyAllEvents(String expected) {
+        assertEquals(expected, events.getEvents());
     }
 
     // TODO попробовать этот подход в других Multiplayer играх
@@ -366,7 +370,7 @@ public class MultiplayerTest {
                 "☼☺   ☼ ☼♣   ☼ ☼♦   ☼\n" +
                 "☼☼==☼☼ ☼☼⌂⌂☼☼ ☼☼==☼☼\n");
 
-        events.verifyNoEvents();
+        verifyAllEvents("");
 
         field.tick();
 
@@ -381,7 +385,7 @@ public class MultiplayerTest {
         assertEquals(true, game2.isGameOver());
         assertEquals(true, game3.isGameOver());
         
-        events.verifyAllEvents(
+        verifyAllEvents(
                 "listener(0) => [TOP_GOAL, WIN]\n" +
                 "listener(1) => [TOP_GOAL, LOSE]\n" +
                 "listener(2) => [TOP_GOAL, WIN]\n");
@@ -438,7 +442,7 @@ public class MultiplayerTest {
                 "☼☺ ♦ ☼ ☼♣ ♣ ☼ ☼♦ ☺ ☼\n" +
                 "☼☼#=☼☼ ☼☼x⌂☼☼ ☼☼#=☼☼\n");
 
-        events.verifyNoEvents();
+        verifyAllEvents("");
 
         game2.getJoystick().down();
         field.tick();
@@ -454,7 +458,7 @@ public class MultiplayerTest {
         assertEquals(true, game2.isGameOver());
         assertEquals(true, game3.isGameOver());
 
-        events.verifyAllEvents(
+        verifyAllEvents(
                 "listener(0) => [BOTTOM_GOAL, LOSE]\n" +
                 "listener(1) => [BOTTOM_GOAL, WIN]\n" +
                 "listener(2) => [BOTTOM_GOAL, LOSE]\n");

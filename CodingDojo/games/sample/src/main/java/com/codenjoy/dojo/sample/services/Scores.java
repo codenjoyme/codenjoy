@@ -24,18 +24,20 @@ package com.codenjoy.dojo.sample.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.settings.Settings;
 
+import static com.codenjoy.dojo.sample.services.Events.*;
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 
 /**
  * Класс, который умеет подсчитывать очки за те или иные действия.
- * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
+ * Обычно хочется, чтобы константы очков не были захардкоджены,
+ * потому используй объект {@link Settings} для их хранения.
  */
 public class Scores implements PlayerScores {
 
     private volatile int score;
-
-    private GameSettings settings;
+    private final GameSettings settings;
 
     public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
@@ -54,16 +56,28 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.WIN)) {
-            score += settings.integer(WIN_SCORE);
-        } else if (event.equals(Events.LOSE)) {
-            score -= settings.integer(LOSE_PENALTY);
-        }
+        score += scoreFor(settings, event);
         score = Math.max(0, score);
+    }
+
+    public static int scoreFor(GameSettings settings, Object event) {
+        if (WIN.equals(event)) {
+            return settings.integer(WIN_SCORE);
+        }
+
+        if (WIN_ROUND.equals(event)) {
+            return settings.integer(WIN_ROUND_SCORE);
+        }
+
+        if (LOSE.equals(event)) {
+            return - settings.integer(LOSE_PENALTY);
+        }
+
+        return 0;
     }
 
     @Override
     public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+        this.score = Integer.parseInt(score.toString());
     }
 }

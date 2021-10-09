@@ -28,7 +28,7 @@ import com.codenjoy.dojo.quadro.model.items.RedChip;
 import com.codenjoy.dojo.quadro.model.items.YellowChip;
 import com.codenjoy.dojo.services.field.AbstractLevel;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.codenjoy.dojo.games.quadro.Element.RED;
@@ -41,9 +41,9 @@ public class Level extends AbstractLevel {
     }
 
     public ChipSet chips() {
-        List<Chip> chips = find(new HashMap<>() {{
-            put(YELLOW, pt -> new YellowChip(pt));
-            put(RED, pt -> new RedChip(pt));
+        List<Chip> chips = find(new LinkedHashMap<>() {{
+            put(YELLOW, YellowChip::new);
+            put(RED, RedChip::new);
         }});
 
         return new ChipSet(){{

@@ -31,6 +31,7 @@ import com.codenjoy.dojo.sampletext.model.Player;
 import com.codenjoy.dojo.sampletext.model.SampleText;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -43,7 +44,7 @@ import org.json.JSONObject;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
- * Генератор игор - реализация {@see GameType}
+ * Генератор игор - реализация {@link GameType}.
  */
 public class GameRunner extends AbstractGameType<GameSettings>{
 

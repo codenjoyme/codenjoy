@@ -25,6 +25,7 @@ package com.codenjoy.dojo.cucumber.page;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.cucumber.page.admin.ActiveGames;
 import com.codenjoy.dojo.cucumber.page.admin.Inactivity;
+import com.codenjoy.dojo.cucumber.page.admin.Levels;
 import com.codenjoy.dojo.cucumber.page.admin.Players;
 import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.PlayerService;
@@ -32,16 +33,14 @@ import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.log.DebugService;
 import lombok.RequiredArgsConstructor;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.function.BiFunction;
 
-import static com.codenjoy.dojo.cucumber.utils.PageUtils.xpath;
+import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
-import static org.junit.Assert.assertEquals;
 
 @Component
 @RequiredArgsConstructor
@@ -66,6 +65,7 @@ public class AdminPage implements Closeable {
     private final ActiveGames activeGames;
     private final Inactivity inactivity;
     private final Players players;
+    private final Levels levels;
 
     @Override
     public void close() {
@@ -161,5 +161,9 @@ public class AdminPage implements Closeable {
 
     public void clickLoadAll() {
         players.loadAllLink().click();
+    }
+
+    public Levels levels() {
+        return levels;
     }
 }

@@ -43,8 +43,8 @@
     <div id="settings"
          page="${page}"
          contextPath="${ctx}"
-         game="${game}"
-         room="${room}"></div>
+         game="${data.game}"
+         room="${data.room}"></div>
 
     <%@include file="forkMe.jsp"%>
 
@@ -55,12 +55,12 @@
     <table class="admin-table" id="gameVersion">
         <tr>
             <td>
-                <b>Room:</b> ${room}
+                <b>Room:</b> ${data.room}
             </td>
         <tr>
         </tr>
             <td>
-                <b>Game:</b> ${game}
+                <b>Game:</b> ${data.game}
             </td>
         </tr>
         <tr>
@@ -68,19 +68,19 @@
                 <b>Game version:</b>
             </td>
             <td style="width:500px;">
-                <textarea rows="3" cols="45">${gameVersion}</textarea>
+                <textarea rows="3" cols="45">${data.gameVersion}</textarea>
             </td>
         </tr>
     </table>
 
-    <form:form modelAttribute="adminSettings" action="admin#activeGames" method="POST">
+    <form:form modelAttribute="data" action="admin#activeGames" method="POST">
         <table class="admin-table" id="activeGames">
             <tr>
                 <td colspan="3" style="width:300px;">
                     <b>Active games for participants</b>
                 </td>
             </tr>
-            <c:forEach items="${gamesRooms.all}" var="gameRooms" varStatus="status">
+            <c:forEach items="${data.gamesRooms.all}" var="gameRooms" varStatus="status">
                 <tr game="${gameRooms.game}">
                     <td class="rightStep">
                         <form:checkbox id="enable-games-${gameRooms.game}" path="games[${status.index}]"/>
@@ -96,15 +96,15 @@
                             <a class="bold-room-${roomItem == room}"
                                room="${roomItem}"
                                href="${ctx}/admin?room=${roomItem}">
-                                    ${roomItem}<span class="pow">${playersCount.get(roomItem)}</span></a>&nbsp;
+                                    ${roomItem}<span class="pow">${data.playersCount.get(roomItem)}</span></a>&nbsp;
                         </c:forEach>
                     </td>
                 </tr>
             </c:forEach>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${game}"/>
-                    <input type="hidden" name="room" value="${room}"/>
+                    <input type="hidden" name="game" value="${data.game}"/>
+                    <input type="hidden" name="room" value="${data.room}"/>
                     <input type="submit" value="Save"/>
                 </td>
             </tr>
@@ -115,24 +115,24 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${active}">
+                    <c:when test="${data.active}">
                         <b><spring:message key="game.active"/></b></br>
-                        <a href="${ctx}/admin/game/pause?room=${room}#pauseGame">Pause game</a>.
+                        <a href="${ctx}/admin/game/pause?room=${data.room}#pauseGame">Pause game</a>.
                     </c:when>
                     <c:otherwise>
                         <b><spring:message key="game.suspended"/></b></br>
-                        <a href="${ctx}/admin/game/resume?room=${room}#pauseGame">Resume game</a>.
+                        <a href="${ctx}/admin/game/resume?room=${data.room}#pauseGame">Resume game</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
-            <form:form modelAttribute="adminSettings" action="admin#pauseGame" method="POST">
+            <form:form modelAttribute="data" action="admin#pauseGame" method="POST">
                 <tr>
-                    <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
+                    <td><form:input path="timerPeriod"/></td>
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${game}"/>
-                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="hidden" name="game" value="${data.game}"/>
+                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Set"/>
                     </td>
                 </tr>
@@ -144,13 +144,13 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${recording}">
+                    <c:when test="${data.recording}">
                         <b>The recording is active</b></br>
-                        <a href="${ctx}/admin/recording/stop?room=${room}#recordGame">Stop recording</a>.
+                        <a href="${ctx}/admin/recording/stop?room=${data.room}#recordGame">Stop recording</a>.
                     </c:when>
                     <c:otherwise>
                         <b>The recording was suspended</b></br>
-                        <a href="${ctx}/admin/recording/start?room=${room}#recordGame">Start recording</a>.
+                        <a href="${ctx}/admin/recording/start?room=${data.room}#recordGame">Start recording</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -161,13 +161,13 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${debugLog}">
+                    <c:when test="${data.debugLog}">
                         <b>The debug in progress</b></br>
-                        <a href="${ctx}/admin/debug/stop?room=${room}#debug">Stop debug</a>.
+                        <a href="${ctx}/admin/debug/stop?room=${data.room}#debug">Stop debug</a>.
                     </c:when>
                     <c:otherwise>
                         <b>The debug was suspended</b></br>
-                        <a href="${ctx}/admin/debug/start?room=${room}#debug">Start debug</a>.
+                        <a href="${ctx}/admin/debug/start?room=${data.room}#debug">Start debug</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -178,13 +178,13 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${autoSave}">
+                    <c:when test="${data.autoSave}">
                         <b>The auto save in progress</b></br>
-                        <a href="${ctx}/admin/autoSave/stop?room=${room}#autoSave">Stop auto save</a>.
+                        <a href="${ctx}/admin/autoSave/stop?room=${data.room}#autoSave">Stop auto save</a>.
                     </c:when>
                     <c:otherwise>
                         <b>The auto save was suspended</b></br>
-                        <a href="${ctx}/admin/autoSave/start?room=${room}#autoSave">Start auto save</a>.
+                        <a href="${ctx}/admin/autoSave/start?room=${data.room}#autoSave">Start auto save</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -195,13 +195,13 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${opened}">
+                    <c:when test="${data.opened}">
                         <b><spring:message key="registration.active"/></b></br>
-                        <a href="${ctx}/admin/registration/stop?room=${room}#closeRegistration">Close registration</a>.
+                        <a href="${ctx}/admin/registration/stop?room=${data.room}#closeRegistration">Close registration</a>.
                     </c:when>
                     <c:otherwise>
                         <b><spring:message key="registration.closed"/></b></br>
-                        <a href="${ctx}/admin/registration/start?room=${room}#closeRegistration">Open registration</a>.
+                        <a href="${ctx}/admin/registration/start?room=${data.room}#closeRegistration">Open registration</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -212,13 +212,13 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${roomOpened}">
+                    <c:when test="${data.roomOpened}">
                         <b><spring:message key="registration.room.active"/></b></br>
-                        <a href="${ctx}/admin/room/registration/stop?room=${room}#closeRoomRegistration">Close room registration</a>.
+                        <a href="${ctx}/admin/room/registration/stop?room=${data.room}#closeRoomRegistration">Close room registration</a>.
                     </c:when>
                     <c:otherwise>
                         <b><spring:message key="registration.room.closed"/></b></br>
-                        <a href="${ctx}/admin/room/registration/start?room=${room}#closeRoomRegistration">Open room registration</a>.
+                        <a href="${ctx}/admin/room/registration/start?room=${data.room}#closeRoomRegistration">Open room registration</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -231,25 +231,25 @@
                 <td><b>Clean / Reset</b></td>
             </tr>
             <td>
-                <a href="${ctx}/admin/game/scores/cleanAll?room=${room}#cleanGame">Clean all scores</a>. </br>
-                <a href="${ctx}/admin/game/board/reloadAll?room=${room}#cleanGame">Reload all rooms</a>. Not working for !disposable rooms. </br>
-                <a href="${ctx}/admin/player/reloadAll?room=${room}#cleanGame">Reload all players</a>. Through saves: saveAll -> removeAll -> loadAll
+                <a href="${ctx}/admin/game/scores/cleanAll?room=${data.room}#cleanGame">Clean all scores</a>. </br>
+                <a href="${ctx}/admin/game/board/reloadAll?room=${data.room}#cleanGame">Reload all rooms</a>. Not working for !disposable rooms. </br>
+                <a href="${ctx}/admin/player/reloadAll?room=${data.room}#cleanGame">Reload all players</a>. Through saves: saveAll -> removeAll -> loadAll
             </td>
         </tr>
     </table>
 
-    <form:form modelAttribute="adminSettings" action="admin#loadSaveForAll" method="POST">
+    <form:form modelAttribute="data" action="admin#loadSaveForAll" method="POST">
         <table class="admin-table" id="loadSaveForAll">
             <tr>
                 <td><b>Load save (progress) for all</b></td>
             </tr>
             <tr>
-                <td><input type="text" class="player-save" name="progress" value="${defaultProgress}"/></td>
+                <td><form:input path="progress"/></td>
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${game}"/>
-                    <input type="hidden" name="room" value="${room}"/>
+                    <input type="hidden" name="game" value="${data.game}"/>
+                    <input type="hidden" name="room" value="${data.room}"/>
                     <input type="submit" value="Apply for all"/>
                 </td>
             </tr>
@@ -319,7 +319,7 @@
         </tr>
     </table>
 
-    <form:form modelAttribute="adminSettings" action="admin#createNewUsers" method="POST">
+    <form:form modelAttribute="data" action="admin#createNewUsers" method="POST">
         <table class="admin-table" id="createNewUsers">
             <tr colspan="2">
                 <td><b>Create new users</b></td>
@@ -329,22 +329,22 @@
                 <td>Count</td>
                 <td>RoomName</td>
             <tr>
-                <td><input type="text" name="generateNameMask" value="${generateNameMask}"/></td>
-                <td><input type="text" name="generateCount" value="${generateCount}"/></td>
-                <td><input type="text" name="generateRoom" value="${generateRoom}"/></td>
+                <td><form:input path="generateNameMask"/></td>
+                <td><form:input path="generateCount"/></td>
+                <td><form:input path="generateRoom"/></td>
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${game}"/>
-                    <input type="hidden" name="room" value="${room}"/>
+                    <input type="hidden" name="game" value="${data.game}"/>
+                    <input type="hidden" name="room" value="${data.room}"/>
                     <input type="submit" value="Create"/>
                 </td>
             </tr>
         </table>
     </form:form>
 
-    <c:if test="${not empty adminSettings.rounds.parameters}">
-        <form:form modelAttribute="adminSettings" action="admin#rounds" method="POST">
+    <c:if test="${not empty data.rounds.parameters}">
+        <form:form modelAttribute="data" action="admin#rounds" method="POST">
             <table class="admin-table" id="rounds">
                 <tr colspan="2">
                     <td><b>Rounds settings</b></td>
@@ -383,8 +383,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${game}"/>
-                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="hidden" name="game" value="${data.game}"/>
+                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>
@@ -392,8 +392,8 @@
         </form:form>
     </c:if>
 
-    <c:if test="${not empty adminSettings.semifinal.parameters}">
-        <form:form modelAttribute="adminSettings" action="admin#semifinal" method="POST">
+    <c:if test="${not empty data.semifinal.parameters}">
+        <form:form modelAttribute="data" action="admin#semifinal" method="POST">
             <table class="admin-table" id="semifinal">
                 <tr colspan="2">
                     <td><b>Semifinal settings</b></td>
@@ -408,7 +408,7 @@
                 </tr>
                 <tr>
                     <td>Current tick</td>
-                    <td>${semifinalTick}</td>
+                    <td>${data.semifinalTick}</td>
                 <tr>
                 <tr>
                     <td>Percentage or quantitative criterion</td>
@@ -432,8 +432,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${game}"/>
-                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="hidden" name="game" value="${data.game}"/>
+                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>
@@ -441,8 +441,8 @@
         </form:form>
     </c:if>
 
-    <c:if test="${not empty adminSettings.inactivity.parameters}">
-        <form:form modelAttribute="adminSettings" action="admin#inactivity" method="POST">
+    <c:if test="${not empty data.inactivity.parameters}">
+        <form:form modelAttribute="data" action="admin#inactivity" method="POST">
             <table class="admin-table" id="inactivity">
                 <tr colspan="2">
                     <td><b>Inactivity settings</b></td>
@@ -457,8 +457,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${game}"/>
-                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="hidden" name="game" value="${data.game}"/>
+                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>
@@ -466,39 +466,39 @@
         </form:form>
     </c:if>
 
-    <c:if test="${parameters.size() != 0}">
-        <form:form modelAttribute="adminSettings" action="admin#gameSettings" method="POST">
+    <c:if test="${not empty data.other}">
+        <form:form modelAttribute="data" action="admin#gameSettings" method="POST">
             <table class="admin-table" id="gameSettings">
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
                 </tr>
-                <c:forEach items="${settings}" var="element" varStatus="status">
+                <c:forEach items="${data.other}" var="element" varStatus="status">
                     <tr>
                         <td>${element.name}</td>
                         <c:choose>
                             <c:when test="${element.type == 'selectbox'}">
-                                <td><form:select path="parameters[${status.index}]"
+                                <td><form:select path="otherValues[${status.index}]"
                                         items="${element.options}"/></td>
                             </c:when>
                             <c:when test="${element.type == 'editbox' && !element.multiline}">
-                                <td><form:input path="parameters[${status.index}]"/></td>
+                                <td><form:input path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'editbox' && element.multiline}">
-                                <td><form:textarea rows="5" cols="50" path="parameters[${status.index}]"/></td>
+                                <td><form:textarea class="map" path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'checkbox'}">
-                                <td><form:checkbox path="parameters[${status.index}]"/></td>
+                                <td><form:checkbox path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:otherwise>
-                                <td>${parameter.value}</td>
+                                <td>${element.value}</td>
                             </c:otherwise>
                         </c:choose>
                     </tr>
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${game}"/>
-                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="hidden" name="game" value="${data.game}"/>
+                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>
@@ -506,8 +506,77 @@
         </form:form>
     </c:if>
 
-    <c:if test="${players != null || savedGames != null}">
-        <form:form modelAttribute="adminSettings" action="admin#savePlayersGame" method="POST">
+    <c:if test="${not empty data.levels.parameters}">
+        <form:form modelAttribute="data" action="admin#levels" method="POST">
+            <table class="admin-table" id="levels">
+                <tr colspan="2">
+                    <td><b>Game levels settings</b></td>
+                </tr>
+                <c:forEach items="${data.levels.parameters}" var="element" varStatus="status">
+                    <tr index="${status.index}">
+                        <td>
+                            <input id="levelsKeys${status.index}"
+                                   name="levelsKeys[${status.index}]"
+                                   type="hidden"
+                                   with="newKey"
+                                   value="${element.name}"/>
+                            <input id="levelsNewKeys${status.index}"
+                                   name="levelsNewKeys[${status.index}]"
+                                   type="text"
+                                   with="key"
+                                   value="${element.name}"/>
+                        </td>
+                        <c:choose>
+                            <c:when test="${element.type == 'editbox' && element.multiline}">
+                                <td>
+                                    <form:textarea
+                                        class="map"
+                                        with="value"
+                                        path="levelsValues[${status.index}]"/>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${element.value}</td>
+                            </c:otherwise>
+                        </c:choose>
+                    </tr>
+                </c:forEach>
+                <script template type="text/x-jquery-tmpl">
+                    <tr index="{%= index %}">
+                        <td>
+                            <input id="levelsKeys{%= index %}"
+                                   name="levelsKeys[{%= index %}]"
+                                   type="hidden"
+                                   with="newKey"
+                                   value="[Level] Map[{%= key %}]"></input>
+                            <input id="levelsNewKeys{%= index %}"
+                                   name="levelsNewKeys[{%= index %}]"
+                                   type="text"
+                                   with="key"
+                                   value="[Level] Map[{%= key %}]"></input>
+                        </td>
+                        <td>
+                            <textarea id="levelsValues{%= index %}"
+                                      name="levelsValues[{%= index %}]"
+                                      with="value"
+                                      class="map"></textarea>
+                        </td>
+                    </tr>
+                </script>
+                <tr class="levelsButtons">
+                    <td>
+                        <input type="hidden" name="game" value="${data.game}"/>
+                        <input type="hidden" name="room" value="${data.room}"/>
+                        <input type="button" id="addNewLevelMap" value="Add"/>
+                        <input type="submit" value="Save"/>
+                    </td>
+                </tr>
+            </table>
+        </form:form>
+    </c:if>
+
+    <c:if test="${not empty data.players || savedGames != null}">
+        <form:form modelAttribute="data" action="admin#savePlayersGame" method="POST">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="4">
                     <td><b>Registered Players</b></td>
@@ -525,30 +594,30 @@
                     <td class="header">Joystick&nbsp;&nbsp;</td>
                     <td class="header">GameName&nbsp;&nbsp;</td>
                     <td>
-                        <a href="${ctx}/admin/player/saveAll?room=${room}#savePlayersGame">SaveAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/saveAll?room=${data.room}#savePlayersGame">SaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/loadAll?room=${room}#savePlayersGame">LoadAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/loadAll?room=${data.room}#savePlayersGame">LoadAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/save/removeAll?room=${room}#savePlayersGame">RemoveSaveAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/save/removeAll?room=${data.room}#savePlayersGame">RemoveSaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/registration/removeAll?room=${room}#savePlayersGame">RemoveRegAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/registration/removeAll?room=${data.room}#savePlayersGame">RemoveRegAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/gameOverAll?room=${room}#savePlayersGame">GameOverAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/gameOverAll?room=${data.room}#savePlayersGame">GameOverAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/board/room/${room}">ViewGameAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/board/room/${data.room}">ViewGameAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">PlayerLogAll</td>
                     <td>
-                        <a href="${ctx}/admin/player/ai/reloadAll?room=${room}#savePlayersGame">LoadAIAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/ai/reloadAll?room=${data.room}#savePlayersGame">LoadAIAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">Save data&nbsp;&nbsp;</td>
                 </tr>
-                <c:forEach items="${players}" var="player" varStatus="status">
+                <c:forEach items="${data.players}" var="player" varStatus="status">
                     <c:choose>
                         <c:when test="${player.hidden}">
                             <tr style="display:none;">
@@ -582,11 +651,11 @@
                                         <td>UDLRA</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${ctx}/board/room/${room}">${room}</a></td>
-                                <td><a href="${ctx}/admin/player/${player.id}/save?room=${room}#savePlayersGame">Save</a></td>
+                                <td><a href="${ctx}/board/room/${data.room}">${data.room}</a></td>
+                                <td><a href="${ctx}/admin/player/${player.id}/save?room=${data.room}#savePlayersGame">Save</a></td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${room}#savePlayersGame">Load</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#savePlayersGame">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -594,7 +663,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${room}#savePlayersGame">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#savePlayersGame">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
@@ -602,17 +671,17 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${room}#savePlayersGame">RemoveReg</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#savePlayersGame">RemoveReg</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveReg</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?room=${room}#savePlayersGame">GameOver</a></td>
+                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?room=${data.room}#savePlayersGame">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${game}&room=${room}">PlayerLog</a></td>
+                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${data.game}&room=${data.room}">PlayerLog</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>PlayerLog</td>
@@ -623,7 +692,7 @@
                                         <td>Loaded</td>
                                     </c:when>
                                     <c:otherwise>
-                                        <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${room}#savePlayersGame">LoadAI</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${data.room}#savePlayersGame">LoadAI</a></td>
                                     </c:otherwise>
                                 </c:choose>
                                 <c:choose>
@@ -647,11 +716,11 @@
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
                                 <td>&nbsp;<span class="input-ticks-inactive"></span>&nbsp;</td>
                                 <td>UDLRA</td>
-                                <td><a href="${ctx}/board/room/${room}">${room}</a></td>
+                                <td><a href="${ctx}/board/room/${data.room}">${data.room}</a></td>
                                 <td>Save</td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${room}#savePlayersGame">Load</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${data.room}#savePlayersGame">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -659,7 +728,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${room}#savePlayersGame">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${data.room}#savePlayersGame">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
@@ -667,7 +736,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${room}#savePlayersGame">RemoveReg</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${data.room}#savePlayersGame">RemoveReg</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveReg</td>
@@ -677,7 +746,7 @@
                                 <td>ViewGame</td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${game}&room=${room}">PlayerLog</a></td>
+                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${data.game}&room=${data.room}">PlayerLog</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>PlayerLog</td>
@@ -698,8 +767,8 @@
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="hidden" name="game" value="${game}"/>
-                        <input type="hidden" name="room" value="${room}"/>
+                        <input type="hidden" name="game" value="${data.game}"/>
+                        <input type="hidden" name="room" value="${data.room}"/>
                         <input type="submit" value="Save all"/>
                     </td>
                 </tr>

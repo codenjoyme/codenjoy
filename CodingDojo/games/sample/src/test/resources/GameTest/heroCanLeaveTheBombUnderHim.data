@@ -1,0 +1,33 @@
+
+before()
+
+heroCanLeaveTheBombUnderHim()
+    givenFl(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺ ☼
+        ☼   ☼
+        ☼☼☼☼☼)
+        givenPlayer([2,2])
+            dice(2, 2)
+    hero(0).act()
+    tick()
+    assertF(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ ☺ ☼
+        ☼   ☼
+        ☼☼☼☼☼,
+        0)
+    hero(0).down()
+    tick()
+    assertF(
+        ☼☼☼☼☼
+        ☼   ☼
+        ☼ x ☼
+        ☼ ☺ ☼
+        ☼☼☼☼☼,
+        0)
+
+after()
+    events().getEvents() = 

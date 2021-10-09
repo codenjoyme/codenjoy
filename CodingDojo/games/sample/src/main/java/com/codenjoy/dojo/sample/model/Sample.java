@@ -31,10 +31,10 @@ import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.field.Accessor;
 import com.codenjoy.dojo.services.field.PointField;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.round.RoundField;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,17 +43,33 @@ import java.util.function.Supplier;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
+ * Если какой-то из жителей борды вдруг захочет узнать что-то
+ * у нее, то лучше ему дать интерфейс {@link Field}.
+ *
+ * Борда реализует метод {@link #tickField()} чтобы быть
+ * уведомленной о каждом тике игры.
+ *
+ * Чтобы поддерживать много-раундовые матчи борда наследует
+ * {@link RoundField}. Этот малый берет на себя всю логистику
+ * связанную с ожиданием игроков между раундами, обратным отсчетом
+ * времени перед стартом раунда и т.д.
  */
-public class Sample implements Field {
+public class Sample extends RoundField<Player> implements Field {
 
+    private Level level;
     private PointField field;
     private List<Player> players;
     private Dice dice;
     private GameSettings settings;
 
-    public Sample(Dice dice, GameSettings settings) {
+    public Sample() {
+        // do nothing, for testing only
+    }
+
+    public Sample(Dice dice, Level level, GameSettings settings) {
+        super(Events.START_ROUND, Events.WIN_ROUND, Events.LOSE, settings);
+
+        this.level = level;
         this.dice = dice;
         this.settings = settings;
         this.field = new PointField();
@@ -64,15 +80,45 @@ public class Sample implements Field {
 
     @Override
     public void clearScore() {
-        settings.level().saveTo(field);
+        level.saveTo(field);
         field.init(this);
+
+        // other clear score actions
+
+        super.clearScore();
+    }
+
+    @Override
+    public void onAdd(Player player) {
+        player.newHero(this);
+    }
+
+    @Override
+    public void onRemove(Player player) {
+        heroes().removeExact(player.getHero());
+    }
+
+    @Override
+    protected List<Player> players() {
+        return players;
+    }
+
+    @Override
+    public void cleanStuff() {
+        // clean all temporary stuff before next tick
+    }
+
+    @Override
+    protected void setNewObjects() {
+        // add new object after rewarding winner
     }
 
     /**
-     * @see Tickable#tick()
+     * Сердце поля. Каждую секунду фреймворк будет тикать этот метод.
+     * Важно помнить, что если раунд не начался - сигнал сюда не дойдет.
      */
     @Override
-    public void tick() {
+    public void tickField() {
         for (Player player : players) {
             Hero hero = player.getHero();
 
@@ -85,14 +131,6 @@ public class Sample implements Field {
 
                 freeRandom(null)
                         .ifPresent(point -> field.add(new Gold(point)));
-            }
-        }
-
-        for (Player player : players) {
-            Hero hero = player.getHero();
-
-            if (!hero.isAlive()) {
-                player.event(Events.LOSE);
             }
         }
     }
@@ -129,15 +167,6 @@ public class Sample implements Field {
     }
 
     @Override
-    public void newGame(Player player) {
-        if (players.contains(player)) {
-            remove(player);
-        }
-        players.add(player);
-        player.newHero(this);
-    }
-
-    @Override
     public void remove(Player player) {
         if (players.remove(player)) {
             heroes().removeExact(player.getHero());
@@ -149,8 +178,17 @@ public class Sample implements Field {
         return settings;
     }
 
+    /**
+     * @return Объект участвующий в прорисовке поля.
+     *
+     */
     @Override
     public BoardReader reader() {
+        /**
+         * Внимание! Порядок важен.
+         * В этом порядке будут опрашиваться состояния через метод
+         * {@link com.codenjoy.dojo.services.State#state(Object, Object...)}
+         */
         return field.reader(
                 Hero.class,
                 Wall.class,
@@ -158,6 +196,17 @@ public class Sample implements Field {
                 Bomb.class);
     }
 
+    /**
+     * Метод для быстрой инициализации текущего поля из строкового представления.
+     *
+     * Актуально для сервиса, отвечающего на вопрос - каким будет следующий тик
+     * при такой конфигурации поля.
+     *
+     * @param board Текстовое представление поля.
+     * @param creator Метод создающий объекты-игроков для этих целей.
+     * @return Список созданных игроков в новом измененном поле.
+     */
+    // TODO test me
     @Override
     public List<Player> load(String board, Supplier<Player> creator) {
         Level level = new Level(board);
@@ -171,6 +220,11 @@ public class Sample implements Field {
         level.saveTo(field);
         return result;
     }
+
+    /**
+     * Дальше идут методы для получения быстрого доступа
+     * к объектам разных типов на поле.
+     */
 
     @Override
     public Accessor<Gold> gold() {

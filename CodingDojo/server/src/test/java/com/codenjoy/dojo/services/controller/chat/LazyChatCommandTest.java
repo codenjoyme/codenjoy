@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 import com.codenjoy.dojo.services.chat.ChatAuthority;
-import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -31,7 +31,7 @@ import org.mockito.InOrder;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class LazyChatCommandTest {

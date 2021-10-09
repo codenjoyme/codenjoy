@@ -22,7 +22,8 @@ package com.codenjoy.dojo.services.entity.server;
  * #L%
  */
 
-import com.codenjoy.dojo.services.settings.*;
+import com.codenjoy.dojo.services.settings.EditBox;
+import com.codenjoy.dojo.services.settings.Parameter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,7 +31,6 @@ import lombok.Setter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
@@ -152,7 +152,7 @@ public class PParameter {
             }
 
             @Override
-            public Parameter clone() {
+            public Parameter clone(String newName) {
                 return this;
             }
         };

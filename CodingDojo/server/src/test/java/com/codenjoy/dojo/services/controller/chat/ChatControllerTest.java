@@ -44,7 +44,7 @@ import java.util.Arrays;
 
 import static com.codenjoy.dojo.services.chat.ChatType.*;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.joining;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

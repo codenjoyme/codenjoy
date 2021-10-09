@@ -39,8 +39,8 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @Slf4j

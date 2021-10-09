@@ -27,7 +27,7 @@ import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
 import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.services.multiplayer.Spreader;
-import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.utils.smart.SmartAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +43,7 @@ import java.util.Arrays;
 import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER5;
 import static com.codenjoy.dojo.services.mocks.ThirdGameSettings.Keys.PARAMETER6;
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 import static java.util.stream.Collectors.toList;
 
 @RunWith(SpringRunner.class)

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.pong.model;
 
 import com.codenjoy.dojo.services.field.AbstractLevel;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.codenjoy.dojo.games.pong.Element.*;
@@ -42,7 +42,7 @@ public class Level extends AbstractLevel {
     }
 
     public List<Wall> walls() {
-        return find(new HashMap<>() {{
+        return find(new LinkedHashMap<>() {{
             put(VERTICAL_WALL, pt -> new Wall(pt, VERTICAL));
             put(HORIZONTAL_WALL, pt -> new Wall(pt, HORIZONTAL));
         }});

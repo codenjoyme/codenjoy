@@ -25,12 +25,16 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.PlayerInfo;
 import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
+import com.codenjoy.dojo.services.level.LevelsSettingsImpl;
+import com.codenjoy.dojo.services.room.GamesRooms;
 import com.codenjoy.dojo.services.round.RoundSettingsImpl;
 import com.codenjoy.dojo.services.semifinal.SemifinalSettingsImpl;
+import com.codenjoy.dojo.services.settings.Parameter;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -38,16 +42,36 @@ public class AdminSettings {
 
     private List<PlayerInfo> players;
     private List<Object> games;  // // TODO #4FS тут boolean
-    private List<Object> parameters;
+
+    // used to get data from jsp
+    private List<Object> otherValues;
+    private List<Object> levelsValues;
+    private List<Object> levelsKeys;
+    private List<Object> levelsNewKeys;
+
     private String game;
     private String room;
     private String generateNameMask;
-    private String generateCount;
+    private Integer generateCount;
     private String generateRoom;
-    private String timerPeriod;
+    private Integer timerPeriod;
     private String progress;
+    private Integer semifinalTick;
+    private String gameVersion;
+    private Boolean active;
+    private Boolean roomOpened;
+    private Boolean recording;
+    private Boolean autoSave;
+    private Boolean debugLog;
+    private Boolean opened;
+    private GamesRooms gamesRooms;
+    private Map<String, Integer> playersCount;
+
+    // used to send data to jsp
     private SemifinalSettingsImpl semifinal;
     private RoundSettingsImpl rounds;
     private InactivitySettingsImpl inactivity;
+    private LevelsSettingsImpl levels;
+    private List<Parameter> other;
 
 }

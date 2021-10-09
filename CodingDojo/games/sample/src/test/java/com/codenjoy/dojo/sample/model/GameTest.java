@@ -23,11 +23,10 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.check.AbstractGameCheckTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
-public class GameTest extends AbstractGameTest {
+public class GameTest extends AbstractGameCheckTest {
 
     @Test
     public void heroOnTheField() {
@@ -341,7 +340,7 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events.verifyAllEvents("[LOSE]");
+        verifyAllEvents("[LOSE]");
         assertEquals(false, hero().isAlive());
     }
 
@@ -414,10 +413,10 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events.verifyAllEvents("[LOSE]");
+        verifyAllEvents("[LOSE]");
 
         // when
-        field.newGame(player());
+        field().newGame(player());
         tick();
 
         // then
@@ -449,7 +448,7 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events.verifyAllEvents("[WIN]");
+        verifyAllEvents("[WIN]");
     }
 
     @Test(timeout = 1000)
@@ -473,6 +472,109 @@ public class GameTest extends AbstractGameTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        events.verifyAllEvents("[WIN]");
+        verifyAllEvents("[WIN]");
+    }
+
+    @Test
+    public void shouldClearField_whenClearScoresOnGame() {
+        // given
+        givenFl("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺$☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        // when then
+        assertWalkThenClearScores();
+    }
+
+    private void assertWalkThenClearScores() {
+        hero().right();
+        hero().act();
+        dice(1, 1);
+        tick();
+
+        assertF("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ x☺☼\n" +
+                "☼$  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents(
+                "[WIN]");
+
+        assertEquals(30, hero(0).scores());
+
+        hero().up();
+        tick();
+
+        assertF("☼☼☼☼☼\n" +
+                "☼  ☺☼\n" +
+                "☼ x ☼\n" +
+                "☼$  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        // when
+        dice(1, 2); // new hero position
+        field().clearScore();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼☺ $☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertEquals(0, hero(0).scores());
+    }
+
+    @Test
+    public void shouldHeroCanWalk_whenClearScoresOnGame() {
+        // given
+        shouldClearField_whenClearScoresOnGame();
+
+        // when
+        hero(0).right();
+        tick();
+
+        hero(0).right();
+        dice(1, 3);
+        tick();
+
+        // then
+        assertF("☼☼☼☼☼\n" +
+                "☼$  ☼\n" +
+                "☼  ☺☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyAllEvents(
+                "[WIN]");
+    }
+
+    @Test
+    public void shouldSameLevel_whenClearScoresOnGame_andSeveralLevelsInTheSettings() {
+        // given
+        dice(1); // second level selected
+        givenFl("☼☼☼☼☼\n" +
+                "☼ $ ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼ $ ☼\n" +
+                "☼☼☼☼☼\n",
+
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺$☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n",
+
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        // when then
+        assertWalkThenClearScores();
     }
 }

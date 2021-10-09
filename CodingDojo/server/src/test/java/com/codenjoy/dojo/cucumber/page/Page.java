@@ -29,8 +29,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
-import static org.junit.Assert.assertEquals;
 
 // Please use this manual for xpath
 // http://www.zvon.org/xxl/XPathTutorial/Output_rus/example1.html
