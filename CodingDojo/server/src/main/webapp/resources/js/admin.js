@@ -179,25 +179,27 @@ pages.admin = function() {
         });
     }
 
+    var getLargestLevelKey = function() {
+        var result = [];
+        $('#levels input[with="key"]').each(function(){
+            var value = $(this).val();
+            if (!!value) {
+                result.push(value.replace('[Level] Map[', '').replace(']', ''));
+            }
+        });
+        if (result.length == 0) {
+            return "0";
+        }
+
+        result.sort();
+        return result.pop();
+    }
+
     var setupLevelsNewMapButton = function() {
         $('#addNewLevelMap').click(function(){
             var last = $('#levels tr[index]').last();
             var lastIndex = parseInt(last.attr('index'));
-
-            var lastKeys = [];
-            $('#levels input[with="key"]').each(function(){
-                var value = $(this).val();
-                if (!!value) {
-                    lastKeys.push(value.replace('[Level] Map[', '').replace(']', ''));
-                }
-            });
-            if (lastKeys.length == 0) {
-                lastKeys.push("[Level] Map[1]");
-            }
-            lastKeys.sort();
-
-            var lastKey = lastKeys[lastKeys.length - 1].split(',');
-
+            var lastKey = getLargestLevelKey().split(',');
             if (lastKey.length == 1) {
                 var levelNumber = parseInt(lastKey[0]) + 1;
                 var newKey = levelNumber;
@@ -208,10 +210,10 @@ pages.admin = function() {
             } else {
                 throw 'Parsing error';
             }
-            var index = lastIndex + 1;
+            var newIndex = lastIndex + 1;
             var newMapSettings = $('#levels script')
                 .tmpl([{
-                    index : index,
+                    index : newIndex,
                     key : newKey
                 }]);
             // TODO почему-то это не работает после вставки элемента
