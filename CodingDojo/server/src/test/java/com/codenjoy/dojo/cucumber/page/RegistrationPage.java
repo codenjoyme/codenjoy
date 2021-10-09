@@ -34,8 +34,8 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.cucumber.page.Page.CODE;
+import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
-import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
