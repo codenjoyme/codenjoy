@@ -47,6 +47,7 @@ public class AdminSettings {
     private List<Object> otherValues;
     private List<Object> levelsValues;
     private List<Object> levelsKeys;
+    private List<Object> levelsNewKeys;
 
     private String game;
     private String room;

@@ -153,3 +153,86 @@ Scenario: Admin can turn on / turn off kick for inactive players
 
   Then Player 'user1@mail.com' is kicked true
   And Player 'user2@mail.com' is kicked false
+
+Scenario: Administrator can change level maps
+  Given User registered with name 'Stiven Pupkin', email 'user@mail.com', password 'password', city 'Moon', tech skills 'Java', company 'Home', experience '10 years'
+
+  When Login as 'user@mail.com' 'password' in game 'third'
+  Then Websocket client 'client' connected successfully to the '/board/player/<PLAYER_ID>?code=<CODE>'
+  When Click logout
+
+  Given Login to Admin page
+  When Select game room 'third'
+  Then All levels are '(0)[1,1]=map1, (1)[1,2]=map2, (2)[2]=map3, (3)[3,1]=map4'
+
+  # change map
+  When Change map value at 0 to 'MAP1'
+  When Change map value at 2 to 'MAP3'
+  When Save all level maps
+
+  When Try open Admin page
+  When Select game room 'third'
+  Then All levels are '(0)[1,1]=MAP1, (1)[1,2]=map2, (2)[2]=MAP3, (3)[3,1]=map4'
+
+  # change order
+  When Change map key at 0 to '[Level] Map[2]'
+  When Change map key at 2 to '[Level] Map[1,1]'
+  When Save all level maps
+
+  When Try open Admin page
+  When Select game room 'third'
+  Then All levels are '(0)[1,1]=MAP3, (1)[1,2]=map2, (2)[2]=MAP1, (3)[3,1]=map4'
+
+  # remove maps
+  When Change map key at 1 to ''
+  When Change map key at 3 to ''
+  When Save all level maps
+
+  When Try open Admin page
+  When Select game room 'third'
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1'
+
+  # add new map
+  When Add new map
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3]='
+
+  When Change map key at 2 to '[Level] Map[3,1]'
+  When Change map value at 2 to 'new1'
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1'
+
+  When Add new map
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]='
+  When Change map value at 3 to 'new2'
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2'
+  When Save all level maps
+
+  When Try open Admin page
+  When Select game room 'third'
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2'
+
+  # add new map with change map and order
+  When Add new map
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2, (4)[3,3]='
+  When Change map key at 4 to '[Level] Map[1,2]'
+  When Change map value at 4 to 'new3'
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2, (4)[1,2]=new3'
+  When Save all level maps
+
+  When Try open Admin page
+  When Select game room 'third'
+  Then All levels are '(0)[1,1]=MAP3, (1)[1,2]=new3, (2)[2]=MAP1, (3)[3,1]=new1, (4)[3,2]=new2'
+
+  # add new map with remove maps
+  When Change map key at 1 to ''
+  When Change map key at 3 to ''
+  When Change map key at 4 to ''
+  Then All levels are '(0)[1,1]=MAP3, (1)<EMPTY1>=new3, (2)[2]=MAP1, (3)<EMPTY2>=new1, (4)<EMPTY3>=new2'
+  When Add new map
+  Then All levels are '(0)[1,1]=MAP3, (1)<EMPTY1>=new3, (2)[2]=MAP1, (3)<EMPTY2>=new1, (4)<EMPTY3>=new2, (5)[3]='
+  When Change map value at 5 to 'MAP2'
+  Then All levels are '(0)[1,1]=MAP3, (1)<EMPTY1>=new3, (2)[2]=MAP1, (3)<EMPTY2>=new1, (4)<EMPTY3>=new2, (5)[3]=MAP2'
+  When Save all level maps
+
+  When Try open Admin page
+  When Select game room 'third'
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3]=MAP2'

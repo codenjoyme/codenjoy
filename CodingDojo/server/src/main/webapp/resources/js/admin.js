@@ -172,22 +172,34 @@ pages.admin = function() {
         });
     }
 
-    var setupTextArea = function(elements) {
+    var setupLevelsMapArea = function(elements) {
         elements.on('input', function(){
             this.style.height = '';
             this.style.height = this.scrollHeight + 'px';
         });
     }
 
-    var setupNewLevelMap = function() {
+    var getLargestLevelKey = function() {
+        var result = [];
+        $('#levels input[with="key"]').each(function(){
+            var value = $(this).val();
+            if (!!value) {
+                result.push(value.replace('[Level] Map[', '').replace(']', ''));
+            }
+        });
+        if (result.length == 0) {
+            return "0";
+        }
+
+        result.sort();
+        return result.pop();
+    }
+
+    var setupLevelsNewMapButton = function() {
         $('#addNewLevelMap').click(function(){
             var last = $('#levels tr[index]').last();
             var lastIndex = parseInt(last.attr('index'));
-            var lastKey = last.find('.levelKey').html();
-            if (!lastKey) {
-                lastKey = last.find('input').val();
-            }
-            lastKey = lastKey.replace('[Level] Map[', '').replace(']', '').split(',');
+            var lastKey = getLargestLevelKey().split(',');
             if (lastKey.length == 1) {
                 var levelNumber = parseInt(lastKey[0]) + 1;
                 var newKey = levelNumber;
@@ -198,16 +210,16 @@ pages.admin = function() {
             } else {
                 throw 'Parsing error';
             }
-            var index = lastIndex + 1;
+            var newIndex = lastIndex + 1;
             var newMapSettings = $('#levels script')
                 .tmpl([{
-                    index : index,
+                    index : newIndex,
                     key : newKey
                 }]);
             // TODO почему-то это не работает после вставки элемента
             //      scrollHeight = высоте контрола, а не тому что в нем
             //      реально содержится
-            setupTextArea(newMapSettings);
+            setupLevelsMapArea(newMapSettings);
             newMapSettings.insertBefore('#levels .levelsButtons');
         });
     }
@@ -218,6 +230,6 @@ pages.admin = function() {
     loadRegSettings();
     setupSaveUserDetails();
     setupSpanHref();
-    setupTextArea($('textarea'));
-    setupNewLevelMap();
+    setupLevelsMapArea($('textarea'));
+    setupLevelsNewMapButton();
 }

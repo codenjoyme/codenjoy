@@ -514,10 +514,26 @@
                 </tr>
                 <c:forEach items="${data.levels.parameters}" var="element" varStatus="status">
                     <tr index="${status.index}">
-                        <td><span class="levelKey">${element.name}</span></td>
+                        <td>
+                            <input id="levelsKeys${status.index}"
+                                   name="levelsKeys[${status.index}]"
+                                   type="hidden"
+                                   with="newKey"
+                                   value="${element.name}"/>
+                            <input id="levelsNewKeys${status.index}"
+                                   name="levelsNewKeys[${status.index}]"
+                                   type="text"
+                                   with="key"
+                                   value="${element.name}"/>
+                        </td>
                         <c:choose>
                             <c:when test="${element.type == 'editbox' && element.multiline}">
-                                <td><form:textarea class="map" path="levelsValues[${status.index}]"/></td>
+                                <td>
+                                    <form:textarea
+                                        class="map"
+                                        with="value"
+                                        path="levelsValues[${status.index}]"/>
+                                </td>
                             </c:when>
                             <c:otherwise>
                                 <td>${element.value}</td>
@@ -530,12 +546,19 @@
                         <td>
                             <input id="levelsKeys{%= index %}"
                                    name="levelsKeys[{%= index %}]"
+                                   type="hidden"
+                                   with="newKey"
+                                   value="[Level] Map[{%= key %}]"></input>
+                            <input id="levelsNewKeys{%= index %}"
+                                   name="levelsNewKeys[{%= index %}]"
                                    type="text"
+                                   with="key"
                                    value="[Level] Map[{%= key %}]"></input>
                         </td>
                         <td>
                             <textarea id="levelsValues{%= index %}"
                                       name="levelsValues[{%= index %}]"
+                                      with="value"
                                       class="map"></textarea>
                         </td>
                     </tr>
