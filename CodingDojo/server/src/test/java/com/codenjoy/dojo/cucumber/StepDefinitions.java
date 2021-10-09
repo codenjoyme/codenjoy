@@ -432,6 +432,11 @@ public class StepDefinitions {
         admin.levels().mapValue(index, map);
     }
 
+    @When("Change map key at {int} to {string}")
+    public void changeMapKey(int index, String key) {
+        admin.levels().mapKey(index, key);
+    }
+
     @When("Save all level maps")
     public void saveAllLevelMaps() {
         admin.levels().save();

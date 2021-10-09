@@ -165,6 +165,7 @@ Scenario: Administrator can change level maps
   When Select game room 'third'
   Then All levels are '{[Level] Map[1,1]=map1, [Level] Map[1,2]=map2, [Level] Map[1,3]=map3, [Level] Map[1,4]=map4, [Level] Map[2]=map5, [Level] Map[3,1]=map6, [Level] Map[3,2]=map7, [Level] Map[4,1]=map8, [Level] Map[4,2]=map9}'
 
+  # change map
   When Change map value at 0 to 'changedMap1'
   When Change map value at 2 to 'changedMap3'
   When Save all level maps
@@ -172,3 +173,13 @@ Scenario: Administrator can change level maps
   When Try open Admin page
   When Select game room 'third'
   Then All levels are '{[Level] Map[1,1]=changedMap1, [Level] Map[1,2]=map2, [Level] Map[1,3]=changedMap3, [Level] Map[1,4]=map4, [Level] Map[2]=map5, [Level] Map[3,1]=map6, [Level] Map[3,2]=map7, [Level] Map[4,1]=map8, [Level] Map[4,2]=map9}'
+
+  # change order
+  When Change map key at 0 to '[Level] Map[1,3]'
+  When Change map key at 2 to '[Level] Map[1,1]'
+  When Save all level maps
+
+  When Try open Admin page
+  When Select game room 'third'
+  Then All levels are '{[Level] Map[1,1]=changedMap3, [Level] Map[1,2]=map2, [Level] Map[1,3]=changedMap1, [Level] Map[1,4]=map4, [Level] Map[2]=map5, [Level] Map[3,1]=map6, [Level] Map[3,2]=map7, [Level] Map[4,1]=map8, [Level] Map[4,2]=map9}'
+
