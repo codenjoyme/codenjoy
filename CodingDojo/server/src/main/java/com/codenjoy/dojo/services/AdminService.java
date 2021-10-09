@@ -167,60 +167,7 @@ public class AdminService {
             updateParameters(gameSettings, onlyUngrouped(), updated, errors);
         }
         if (settings.getLevelsValues() != null) {
-            // исходные параметры, мы их сохраняем потому как там есть default
-            // и другие базовые настройки
-            Map<String, Parameter> source = gameSettings.getParameters().stream()
-                    .filter(onlyLevels())
-                    .collect(toMap(Parameter::getName, identity()));
-
-            // валидация, мало ли придет с фронта несвязанные списки
-            List<Object> keys = settings.getLevelsKeys();
-            List<Object> newKeys = settings.getLevelsNewKeys();
-            List<Object> values = settings.getLevelsValues();
-            if (keys.size() != newKeys.size() || keys.size() != values.size()) {
-                throw new IllegalStateException(String.format(
-                        "Found inconsistent Levels settings state. " +
-                        "There are three lists with different size: " +
-                                "keys:%s, new-keys:%s, values:%s",
-                        keys.size(), newKeys.size(), values.size()));
-            }
-
-            // карта превращений
-            Map<String, Pair<String, String>> transform = new HashMap<>();
-            for (int index = 0; index < keys.size(); index++) {
-                String key = (String) keys.get(index);
-                String newKey = (String) newKeys.get(index);
-                String value = (String) values.get(index);
-
-                transform.put(key, Pair.of(newKey, value));
-            }
-
-            // создаем список новых (клонированных) параметров
-            // с уже измененными именами и значениями
-            List<Parameter> destination = transform.entrySet().stream()
-                    .filter(entry -> StringUtils.isNotEmpty(entry.getValue().getKey()))
-                    .map(entry -> {
-                        String key = entry.getKey();
-                        Pair<String, String> pair = entry.getValue();
-                        String newKey = pair.getKey();
-                        String value = pair.getValue();
-
-                        Parameter from = source.get(key);
-                        if (from == null) {
-                            return new EditBox(newKey)
-                                    .type(String.class)
-                                    .multiline()
-                                    .def(value);
-                        }
-
-                        return from.clone(newKey)
-                                .update(value);
-                    })
-                    .sorted(comparing(Parameter::getName))
-                    .collect(toList());
-
-            // удаляем старые параметры и добавляем новые
-            gameSettings.replaceAll(Lists.newArrayList(source.keySet()), destination);
+            updateLevels(settings, gameSettings);
         }
 
         if (!errors.isEmpty()) {
@@ -233,6 +180,63 @@ public class AdminService {
             String generateRoom = settings.getGenerateRoom();
             generateNewPlayers(game, generateRoom, mask, count);
         }
+    }
+
+    private void updateLevels(AdminSettings settings, Settings gameSettings) {
+        // исходные параметры, мы их сохраняем потому как там есть default
+        // и другие базовые настройки
+        Map<String, Parameter> source = gameSettings.getParameters().stream()
+                .filter(onlyLevels())
+                .collect(toMap(Parameter::getName, identity()));
+
+        // валидация, мало ли придет с фронта несвязанные списки
+        List<Object> keys = settings.getLevelsKeys();
+        List<Object> newKeys = settings.getLevelsNewKeys();
+        List<Object> values = settings.getLevelsValues();
+        if (keys.size() != newKeys.size() || keys.size() != values.size()) {
+            throw new IllegalStateException(String.format(
+                    "Found inconsistent Levels settings state. " +
+                    "There are three lists with different size: " +
+                            "keys:%s, new-keys:%s, values:%s",
+                    keys.size(), newKeys.size(), values.size()));
+        }
+
+        // карта превращений
+        Map<String, Pair<String, String>> transform = new HashMap<>();
+        for (int index = 0; index < keys.size(); index++) {
+            String key = (String) keys.get(index);
+            String newKey = (String) newKeys.get(index);
+            String value = (String) values.get(index);
+
+            transform.put(key, Pair.of(newKey, value));
+        }
+
+        // создаем список новых (клонированных) параметров
+        // с уже измененными именами и значениями
+        List<Parameter> destination = transform.entrySet().stream()
+                .filter(entry -> StringUtils.isNotEmpty(entry.getValue().getKey()))
+                .map(entry -> {
+                    String key = entry.getKey();
+                    Pair<String, String> pair = entry.getValue();
+                    String newKey = pair.getKey();
+                    String value = pair.getValue();
+
+                    Parameter from = source.get(key);
+                    if (from == null) {
+                        return new EditBox(newKey)
+                                .type(String.class)
+                                .multiline()
+                                .def(value);
+                    }
+
+                    return from.clone(newKey)
+                            .update(value);
+                })
+                .sorted(comparing(Parameter::getName))
+                .collect(toList());
+
+        // удаляем старые параметры и добавляем новые
+        gameSettings.replaceAll(Lists.newArrayList(source.keySet()), destination);
     }
 
     private void setEnable(List<Parameter> games) {
