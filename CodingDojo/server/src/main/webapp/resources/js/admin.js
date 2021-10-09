@@ -217,5 +217,4 @@ pages.admin = function() {
     setupSpanHref();
     setupLevelsMapArea($('textarea'));
     setupLevelsNewMapButton();
-    setupLevelsNewMapButton();
 }
