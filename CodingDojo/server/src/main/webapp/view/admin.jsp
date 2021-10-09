@@ -550,6 +550,7 @@
                             <input id="levelsNewKeys{%= index %}"
                                    name="levelsNewKeys[{%= index %}]"
                                    type="text"
+                                    with="key"
                                    value="[Level] Map[{%= key %}]"></input>
                         </td>
                         <td>
