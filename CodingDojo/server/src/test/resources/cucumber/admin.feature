@@ -210,6 +210,18 @@ Scenario: Administrator can change level maps
   When Select game room 'third'
   Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2'
 
-  # add new with change map
   # add new with change order
+  When Add new map
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2, (4)[3,3]='
+  When Change map key at 4 to '[Level] Map[1,2]'
+  When Change map value at 4 to 'new3'
+  Then All levels are '(0)[1,1]=MAP3, (1)[2]=MAP1, (2)[3,1]=new1, (3)[3,2]=new2, (4)[1,2]=new3'
+  When Save all level maps
+
+  When Try open Admin page
+  When Select game room 'third'
+  Then All levels are '(0)[1,1]=MAP3, (1)[1,2]=new3, (2)[2]=MAP1, (3)[3,1]=new1, (4)[3,2]=new2'
+
   # add new with remove map
+
+  # add new with change map
