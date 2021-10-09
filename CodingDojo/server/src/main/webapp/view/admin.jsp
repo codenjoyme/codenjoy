@@ -484,7 +484,7 @@
                                 <td><form:input path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'editbox' && element.multiline}">
-                                <td><form:textarea rows="5" cols="50" path="otherValues[${status.index}]"/></td>
+                                <td><form:textarea class="map" path="otherValues[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'checkbox'}">
                                 <td><form:checkbox path="otherValues[${status.index}]"/></td>
@@ -513,11 +513,27 @@
                     <td><b>Game levels settings</b></td>
                 </tr>
                 <c:forEach items="${data.levels.parameters}" var="element" varStatus="status">
-                    <tr>
-                        <td>${element.name}</td>
+                    <tr index="${status.index}">
+                        <td>
+                            <input id="levelsKeys${status.index}"
+                                   name="levelsKeys[${status.index}]"
+                                   type="hidden"
+                                   with="newKey"
+                                   value="${element.name}"/>
+                            <input id="levelsNewKeys${status.index}"
+                                   name="levelsNewKeys[${status.index}]"
+                                   type="text"
+                                   with="key"
+                                   value="${element.name}"/>
+                        </td>
                         <c:choose>
                             <c:when test="${element.type == 'editbox' && element.multiline}">
-                                <td><form:textarea rows="5" cols="50" path="levelsValues[${status.index}]"/></td>
+                                <td>
+                                    <form:textarea
+                                        class="map"
+                                        with="value"
+                                        path="levelsValues[${status.index}]"/>
+                                </td>
                             </c:when>
                             <c:otherwise>
                                 <td>${element.value}</td>
@@ -525,10 +541,33 @@
                         </c:choose>
                     </tr>
                 </c:forEach>
-                <tr>
+                <script template type="text/x-jquery-tmpl">
+                    <tr index="{%= index %}">
+                        <td>
+                            <input id="levelsKeys{%= index %}"
+                                   name="levelsKeys[{%= index %}]"
+                                   type="hidden"
+                                   with="newKey"
+                                   value="[Level] Map[{%= key %}]"></input>
+                            <input id="levelsNewKeys{%= index %}"
+                                   name="levelsNewKeys[{%= index %}]"
+                                   type="text"
+                                   with="key"
+                                   value="[Level] Map[{%= key %}]"></input>
+                        </td>
+                        <td>
+                            <textarea id="levelsValues{%= index %}"
+                                      name="levelsValues[{%= index %}]"
+                                      with="value"
+                                      class="map"></textarea>
+                        </td>
+                    </tr>
+                </script>
+                <tr class="levelsButtons">
                     <td>
                         <input type="hidden" name="game" value="${data.game}"/>
                         <input type="hidden" name="room" value="${data.room}"/>
+                        <input type="button" id="addNewLevelMap" value="Add"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>

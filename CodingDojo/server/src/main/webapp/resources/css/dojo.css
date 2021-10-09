@@ -114,8 +114,13 @@ span.pow {
     height:24px;
 }
 
-.admin-table textarea {
-    line-height: 0.90em;
+.admin-table td {
+    vertical-align: middle;
+}
+
+.admin-table textarea.map {
+    line-height: 0.6em;
+    overflow-y: hidden;
     height: 80px;
     width: 300px;
 }

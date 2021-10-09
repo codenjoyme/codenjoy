@@ -87,7 +87,7 @@ pages.admin = function() {
             data = defaultRegistrationSettings();
         }
         if (!data.defaultGameMode) {
-            data.defaultGameMode = $("#default-game-mode option:first").val();
+            data.defaultGameMode = $('#default-game-mode option:first').val();
         }
 
         $('#show-game-modes').prop('checked', data.showGameModes);
@@ -172,10 +172,64 @@ pages.admin = function() {
         });
     }
 
+    var setupLevelsMapArea = function(elements) {
+        elements.on('input', function(){
+            this.style.height = '';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    }
+
+    var getLargestLevelKey = function() {
+        var result = [];
+        $('#levels input[with="key"]').each(function(){
+            var value = $(this).val();
+            if (!!value) {
+                result.push(value.replace('[Level] Map[', '').replace(']', ''));
+            }
+        });
+        if (result.length == 0) {
+            return "0";
+        }
+
+        result.sort();
+        return result.pop();
+    }
+
+    var setupLevelsNewMapButton = function() {
+        $('#addNewLevelMap').click(function(){
+            var last = $('#levels tr[index]').last();
+            var lastIndex = parseInt(last.attr('index'));
+            var lastKey = getLargestLevelKey().split(',');
+            if (lastKey.length == 1) {
+                var levelNumber = parseInt(lastKey[0]) + 1;
+                var newKey = levelNumber;
+            } else if (lastKey.length == 2) {
+                var levelNumber = parseInt(lastKey[0]);
+                var mapNumber = parseInt(lastKey[1]) + 1;
+                var newKey = levelNumber + ',' + mapNumber;
+            } else {
+                throw 'Parsing error';
+            }
+            var newIndex = lastIndex + 1;
+            var newMapSettings = $('#levels script')
+                .tmpl([{
+                    index : newIndex,
+                    key : newKey
+                }]);
+            // TODO почему-то это не работает после вставки элемента
+            //      scrollHeight = высоте контрола, а не тому что в нем
+            //      реально содержится
+            setupLevelsMapArea(newMapSettings);
+            newMapSettings.insertBefore('#levels .levelsButtons');
+        });
+    }
+
     // ------------------------ init ----------------------
-    validatePlayerRegistration("#adminSettings");
+    validatePlayerRegistration('#adminSettings');
     initHotkeys();
     loadRegSettings();
     setupSaveUserDetails();
     setupSpanHref();
+    setupLevelsMapArea($('textarea'));
+    setupLevelsNewMapButton();
 }

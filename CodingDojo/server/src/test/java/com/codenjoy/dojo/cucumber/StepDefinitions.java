@@ -421,4 +421,29 @@ public class StepDefinitions {
         String url = board.leaderboard().allBoardsLink();
         page.open(url);
     }
+
+    @Then("All levels are {string}")
+    public void allLevelsAre(String map) {
+        admin.levels().assertMaps(map);
+    }
+
+    @When("Change map value at {int} to {string}")
+    public void changeMapValue(int index, String map) {
+        admin.levels().mapValue(index, map);
+    }
+
+    @When("Change map key at {int} to {string}")
+    public void changeMapKey(int index, String key) {
+        admin.levels().mapKey(index, key);
+    }
+
+    @When("Save all level maps")
+    public void saveAllLevelMaps() {
+        admin.levels().save();
+    }
+
+    @When("Add new map")
+    public void addNewMap() {
+        admin.levels().add();
+    }
 }

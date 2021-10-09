@@ -148,8 +148,7 @@ public class AdminService {
         }
 
         if (settings.getGames() != null) {
-            List<Parameter> games = (List) settings.getGames();
-            setEnable(games);
+            setEnable((List) settings.getGames());
         }
 
         Settings gameSettings = gameService.getGameType(game, room).getSettings();
@@ -159,9 +158,13 @@ public class AdminService {
             updateParameters(gameSettings, onlyUngrouped(), updated, errors);
         }
         if (settings.getLevelsValues() != null) {
-            List<Object> updated = settings.getLevelsValues();
-            updateParameters(gameSettings, onlyLevels(), updated, errors);
+            gameSettings.updateAll(
+                    onlyLevels(),
+                    settings.getLevelsKeys(),
+                    settings.getLevelsNewKeys(),
+                    settings.getLevelsValues());
         }
+
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException("There are errors during save settings: " + errors.toString());
         }
@@ -224,7 +227,7 @@ public class AdminService {
     }
 
     private Predicate<Parameter> onlyLevels() {
-        return p -> p.getName().startsWith(LEVELS);
+        return parameter -> parameter.getName().startsWith(LEVELS);
     }
 
     private void generateNewPlayers(String game, String room, String mask, int count) {
@@ -347,6 +350,14 @@ public class AdminService {
         result.setLevelsValues(levels
                 .getParameters().stream()
                 .map(Parameter::getValue)
+                .collect(toList()));
+        result.setLevelsKeys(levels
+                .getParameters().stream()
+                .map(Parameter::getName)
+                .collect(toList()));
+        result.setLevelsNewKeys(levels
+                .getParameters().stream()
+                .map(Parameter::getName)
                 .collect(toList()));
         // сохраняем для отображения inactivity settings pojo
         result.setInactivity(inactivitySettings(room));

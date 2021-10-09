@@ -25,15 +25,14 @@ package com.codenjoy.dojo.cucumber.page;
 import com.codenjoy.dojo.services.ErrorTicketService;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
-import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)

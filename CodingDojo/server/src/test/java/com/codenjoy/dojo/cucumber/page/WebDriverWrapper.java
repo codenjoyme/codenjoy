@@ -37,6 +37,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
@@ -111,6 +112,18 @@ public class WebDriverWrapper implements Closeable {
 
     public void text(By by, String text) {
         text(elementBy(by), text);
+    }
+
+    public String text(By by) {
+        WebElement element = elementBy(by);
+        return getText(element);
+    }
+
+    public static String getText(WebElement element) {
+        if (Arrays.asList("input", "textarea").contains(element.getTagName())) {
+            return element.getAttribute("value");
+        }
+        return element.getText();
     }
 
     private void text(WebElement element, String text) {
