@@ -518,6 +518,7 @@
                             <input id="levelsKeys${status.index}"
                                    name="levelsKeys[${status.index}]"
                                    type="hidden"
+                                   with="newKey"
                                    value="${element.name}"/>
                             <input id="levelsNewKeys${status.index}"
                                    name="levelsNewKeys[${status.index}]"
@@ -546,11 +547,12 @@
                             <input id="levelsKeys{%= index %}"
                                    name="levelsKeys[{%= index %}]"
                                    type="hidden"
+                                   with="newKey"
                                    value="[Level] Map[{%= key %}]"></input>
                             <input id="levelsNewKeys{%= index %}"
                                    name="levelsNewKeys[{%= index %}]"
                                    type="text"
-                                    with="key"
+                                   with="key"
                                    value="[Level] Map[{%= key %}]"></input>
                         </td>
                         <td>

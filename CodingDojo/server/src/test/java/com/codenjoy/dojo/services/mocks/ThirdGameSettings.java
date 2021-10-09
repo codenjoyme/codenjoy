@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.mocks;
  * #L%
  */
 
+import com.codenjoy.dojo.services.level.LevelsSettings;
 import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -35,6 +36,7 @@ import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 
 public class ThirdGameSettings extends SettingsImpl
         implements SettingsReader<ThirdGameSettings>,
+                   LevelsSettings<ThirdGameSettings>,
                    RoundSettings<ThirdGameSettings> {
 
     public enum Keys implements Key {
@@ -62,8 +64,19 @@ public class ThirdGameSettings extends SettingsImpl
     public ThirdGameSettings() {
         init();
         initRound();
+        initLevels();
 
         playersAndTeamsPerRoom(4, 2);
+
+        setLevelMap(1, 1, "map1");
+        setLevelMap(1, 2, "map2");
+        setLevelMap(1, 3, "map3");
+        setLevelMap(1, 4, "map4");
+        setLevelMap(2,    "map5");
+        setLevelMap(3, 1, "map6");
+        setLevelMap(3, 2, "map7");
+        setLevelMap(4, 1, "map8");
+        setLevelMap(4, 2, "map9");
     }
 
     public SettingsReader playersAndTeamsPerRoom(int players, int teams) {

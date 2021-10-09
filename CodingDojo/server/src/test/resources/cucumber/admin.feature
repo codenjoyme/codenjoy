@@ -153,3 +153,22 @@ Scenario: Admin can turn on / turn off kick for inactive players
 
   Then Player 'user1@mail.com' is kicked true
   And Player 'user2@mail.com' is kicked false
+
+Scenario: Administrator can change level maps
+  Given User registered with name 'Stiven Pupkin', email 'user@mail.com', password 'password', city 'Moon', tech skills 'Java', company 'Home', experience '10 years'
+
+  When Login as 'user@mail.com' 'password' in game 'third'
+  Then Websocket client 'client' connected successfully to the '/board/player/<PLAYER_ID>?code=<CODE>'
+  When Click logout
+
+  Given Login to Admin page
+  When Select game room 'third'
+  Then All levels are '{[Level] Map[1,1]=map1, [Level] Map[1,2]=map2, [Level] Map[1,3]=map3, [Level] Map[1,4]=map4, [Level] Map[2]=map5, [Level] Map[3,1]=map6, [Level] Map[3,2]=map7, [Level] Map[4,1]=map8, [Level] Map[4,2]=map9}'
+
+  When Change map value at 0 to 'changedMap1'
+  When Change map value at 2 to 'changedMap3'
+  When Save all level maps
+
+  When Try open Admin page
+  When Select game room 'third'
+  Then All levels are '{[Level] Map[1,1]=changedMap1, [Level] Map[1,2]=map2, [Level] Map[1,3]=changedMap3, [Level] Map[1,4]=map4, [Level] Map[2]=map5, [Level] Map[3,1]=map6, [Level] Map[3,2]=map7, [Level] Map[4,1]=map8, [Level] Map[4,2]=map9}'
