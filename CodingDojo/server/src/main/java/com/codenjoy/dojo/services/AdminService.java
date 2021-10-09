@@ -40,21 +40,28 @@ import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.AdminSettings;
+import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.incativity.InactivitySettings.INACTIVITY;
 import static com.codenjoy.dojo.services.level.LevelsSettings.LEVELS;
 import static com.codenjoy.dojo.services.round.RoundSettings.ROUNDS;
 import static com.codenjoy.dojo.services.semifinal.SemifinalSettings.SEMIFINAL;
+import static java.util.Comparator.comparing;
+import static java.util.function.Function.identity;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @Component
@@ -159,15 +166,55 @@ public class AdminService {
             updateParameters(gameSettings, onlyUngrouped(), updated, errors);
         }
         if (settings.getLevelsValues() != null) {
-            List<Object> updated = settings.getLevelsValues();
-            updateParameters(gameSettings, onlyLevels(), updated, errors);
+            // исходные параметры, мы их сохраняем потому как там есть default
+            // и другие базовые настройки
+            Map<String, Parameter> source = gameSettings.getParameters().stream()
+                    .filter(onlyLevels())
+                    .collect(toMap(Parameter::getName, identity()));
 
-            if (settings.getLevelsKeys() != null) {
-                addNewParameters(gameSettings,
-                        settings.getLevelsKeys(),
-                        settings.getLevelsValues());
+            // валидация, мало ли придет с фронта несвязанные списки
+            List<Object> keys = settings.getLevelsKeys();
+            List<Object> newKeys = settings.getLevelsNewKeys();
+            List<Object> values = settings.getLevelsValues();
+            if (keys.size() != newKeys.size() || keys.size() != values.size()) {
+                throw new IllegalStateException(String.format(
+                        "Found inconsistent Levels settings state. " +
+                        "There are three lists with different size: " +
+                                "keys:%s, new-keys:%s, values:%s",
+                        keys.size(), newKeys.size(), values.size()));
             }
+
+            // карта превращений
+            Map<String, Pair<String, String>> transform = new HashMap<>();
+            for (int index = 0; index < keys.size(); index++) {
+                String key = (String) keys.get(index);
+                String newKey = (String) newKeys.get(index);
+                String value = (String) values.get(index);
+
+                transform.put(key, Pair.of(newKey, value));
+            }
+
+            // создаем список новых (клонированных) параметров
+            // с уже измененными именами и значениями
+            List<Parameter> destination = transform.entrySet().stream()
+                    .map(entry -> {
+                        String key = entry.getKey();
+                        Pair<String, String> pair = entry.getValue();
+                        String newKey = pair.getKey();
+                        String value = pair.getValue();
+
+                        Parameter parameter = source.get(key);
+                        Parameter cloned = parameter.clone(newKey);
+                        cloned.update(value);
+                        return cloned;
+                    })
+                    .sorted(comparing(Parameter::getName))
+                    .collect(toList());
+
+            // удаляем старые параметры и добавляем новые
+            gameSettings.replaceAll(Lists.newArrayList(source.keySet()), destination);
         }
+
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException("There are errors during save settings: " + errors.toString());
         }
@@ -177,20 +224,6 @@ public class AdminService {
             int count = settings.getGenerateCount();
             String generateRoom = settings.getGenerateRoom();
             generateNewPlayers(game, generateRoom, mask, count);
-        }
-    }
-
-    private void addNewParameters(Settings gameSettings, List<Object> keys, List<Object> values) {
-        for (int index = 0; index < keys.size(); index++) {
-            Object key = keys.get(index);
-            if (key == null) {
-                continue;
-            }
-            Object value = values.get(index);
-            gameSettings.addEditBox((String) key)
-                    .type(String.class)
-                    .multiline()
-                    .update(value);
         }
     }
 
@@ -367,6 +400,14 @@ public class AdminService {
         result.setLevelsValues(levels
                 .getParameters().stream()
                 .map(Parameter::getValue)
+                .collect(toList()));
+        result.setLevelsKeys(levels
+                .getParameters().stream()
+                .map(Parameter::getName)
+                .collect(toList()));
+        result.setLevelsNewKeys(levels
+                .getParameters().stream()
+                .map(Parameter::getName)
                 .collect(toList()));
         // сохраняем для отображения inactivity settings pojo
         result.setInactivity(inactivitySettings(room));

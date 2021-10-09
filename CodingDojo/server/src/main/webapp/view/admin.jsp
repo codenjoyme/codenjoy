@@ -514,10 +514,25 @@
                 </tr>
                 <c:forEach items="${data.levels.parameters}" var="element" varStatus="status">
                     <tr index="${status.index}">
-                        <td><span class="levelKey">${element.name}</span></td>
+                        <td>
+                            <input id="levelsKeys${status.index}"
+                                   name="levelsKeys[${status.index}]"
+                                   type="hidden"
+                                   value="${element.name}"/>
+                            <input id="levelsNewKeys${status.index}"
+                                   name="levelsNewKeys[${status.index}]"
+                                   type="text"
+                                   with="key"
+                                   value="${element.name}"/>
+                        </td>
                         <c:choose>
                             <c:when test="${element.type == 'editbox' && element.multiline}">
-                                <td><form:textarea class="map" path="levelsValues[${status.index}]"/></td>
+                                <td>
+                                    <form:textarea
+                                        class="map"
+                                        with="value"
+                                        path="levelsValues[${status.index}]"/>
+                                </td>
                             </c:when>
                             <c:otherwise>
                                 <td>${element.value}</td>
@@ -528,8 +543,8 @@
                 <script template type="text/x-jquery-tmpl">
                     <tr index="{%= index %}">
                         <td>
-                            <input id="levelsKeys{%= index %}"
-                                   name="levelsKeys[{%= index %}]"
+                            <input id="levelsNewKeys{%= index %}"
+                                   name="levelsNewKeys[{%= index %}]"
                                    type="text"
                                    value="[Level] Map[{%= key %}]"></input>
                         </td>
