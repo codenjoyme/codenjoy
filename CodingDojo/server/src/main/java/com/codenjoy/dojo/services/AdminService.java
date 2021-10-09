@@ -156,8 +156,7 @@ public class AdminService {
         }
 
         if (settings.getGames() != null) {
-            List<Parameter> games = (List) settings.getGames();
-            setEnable(games);
+            setEnable((List) settings.getGames());
         }
 
         Settings gameSettings = gameService.getGameType(game, room).getSettings();
@@ -167,7 +166,10 @@ public class AdminService {
             updateParameters(gameSettings, onlyUngrouped(), updated, errors);
         }
         if (settings.getLevelsValues() != null) {
-            updateLevels(settings, gameSettings);
+            updateLevels(gameSettings,
+                    settings.getLevelsKeys(),
+                    settings.getLevelsNewKeys(),
+                    settings.getLevelsValues());
         }
 
         if (!errors.isEmpty()) {
@@ -182,7 +184,11 @@ public class AdminService {
         }
     }
 
-    private void updateLevels(AdminSettings settings, Settings gameSettings) {
+    private void updateLevels(Settings gameSettings,
+                              List<Object> keys,
+                              List<Object> newKeys,
+                              List<Object> values)
+    {
         // исходные параметры, мы их сохраняем потому как там есть default
         // и другие базовые настройки
         Map<String, Parameter> source = gameSettings.getParameters().stream()
@@ -190,9 +196,6 @@ public class AdminService {
                 .collect(toMap(Parameter::getName, identity()));
 
         // валидация, мало ли придет с фронта несвязанные списки
-        List<Object> keys = settings.getLevelsKeys();
-        List<Object> newKeys = settings.getLevelsNewKeys();
-        List<Object> values = settings.getLevelsValues();
         if (keys.size() != newKeys.size() || keys.size() != values.size()) {
             throw new IllegalStateException(String.format(
                     "Found inconsistent Levels settings state. " +
