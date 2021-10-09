@@ -25,6 +25,7 @@ package com.codenjoy.dojo.cucumber.page.admin;
 import com.codenjoy.dojo.cucumber.page.Page;
 import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.openqa.selenium.By;
 import org.springframework.context.annotation.Scope;
@@ -85,10 +86,15 @@ public class Levels {
     }
 
     public Map<String, String> map() {
+        final int[] id = {0};
         return new LinkedHashMap<>(){{
             List<String> keys = keys();
             for (int index = 0; index < keys.size(); index++) {
-                this.put(mapKey(index), mapValue(index));
+                String key = mapKey(index);
+                if (StringUtils.isEmpty(key)) {
+                    key = "<EMPTY" + (++id[0]) + ">";
+                }
+                this.put(key, mapValue(index));
             }
         }};
     }
