@@ -48,18 +48,9 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthen
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        Registration.User principal = (Registration.User) authentication.getPrincipal();
-        String game = saveService.getGameFromUserId(principal.getId());
-        String room = game; // TODO ROOM тут надо получить room как-то
-        String repositoryUrl = registrationService.getRepository(principal.getGitHubUsername());
 
-        if (game == null) {
-            getRedirectStrategy().sendRedirect(request, response, AdminController.URI);
-            return;
-        }
 
-        String targetUrl = "/" + registrationService.register(principal.getId(),
-                principal.getCode(), game, room, request.getRemoteAddr(), repositoryUrl, principal.getSlackEmail());
+        String targetUrl = "/" ;
 
         log.debug("Redirecting to  URL: " + targetUrl);
 

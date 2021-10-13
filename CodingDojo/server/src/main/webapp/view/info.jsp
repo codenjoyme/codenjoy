@@ -30,4 +30,9 @@
             How to play ${gameOnly}
         </a>
     </h3>
+    <h4>
+        <a href="${ctx}/">
+            <button class="btn-submit" id="register-button" type="button">Back to game select</button>
+        </a>
+    </h4>
 </div>

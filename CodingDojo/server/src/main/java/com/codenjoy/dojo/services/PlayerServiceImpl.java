@@ -274,10 +274,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void updateScore(String gitHubUsername, long score) {
+    public void updateScore(String gitHubUsername, String game, long score) {
         String id = registration.getIdByGitHubUsername(gitHubUsername);
         updateScoreList(id, score);
-        saver.updateScore(id, score, System.currentTimeMillis());
+        saver.updateScore(id, game, score, System.currentTimeMillis());
     }
 
     private void updateScoreList(String id, long score) {

@@ -101,15 +101,8 @@ public class RegistrationValidator implements Validator {
         validatePassword(errors, player);
         validateGithub(errors, player);
         validateSlackEmail(errors, player);
-        validateGame(errors, player);
     }
 
-    private void validateGame(Errors errors, Player player) {
-        String game = rooms.getGameName(player.getGame());
-        if (!validator.isGameName(game, CANT_BE_NULL)) {
-            errors.rejectValue(GAME, INVALID_GAME, new Object[]{game}, null);
-        }
-    }
 
     private void validateSlackEmail(Errors errors, Player player) {
         String slackEmail = player.getSlackEmail();

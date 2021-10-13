@@ -25,7 +25,9 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -47,6 +49,7 @@ public class RegistrationController {
 
     private PlayerService playerService;
     private RoomsAliaser rooms;
+    private Registration registration;
     private RegistrationValidator registrationValidator;
     private RegistrationService registrationService;
 
@@ -80,7 +83,6 @@ public class RegistrationController {
     private void populateCommonRegistrationModel(Model model, boolean isAdminLogin) {
         model.addAttribute("adminLogin", isAdminLogin);
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("games", rooms.alises());
     }
 
     @PostMapping()
@@ -91,14 +93,12 @@ public class RegistrationController {
             return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getFullName(), player.getReadableName(), player.getGitHubUsername(), player.getSlackEmail());
         }
 
-        String game = rooms.getGameName(player.getGame());
-        String room = game; // TODO ROOM взять room с формы регистрации, либо если не установлено взять как тут
-
-        player.setGame(game);
 
         if (player.getId() == null) {
             player.setId(Hash.getRandomId());
         }
-        return registrationService.register(player, room, result, request, model);
+        registration.register(player.getId(), player.getEmail(), player.getFullName(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles(), player.getGitHubUsername(), player.getSlackEmail());
+
+        return "redirect:/login";//registrationService.register(player, room, result, request, model);
     }
 }

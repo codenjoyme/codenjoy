@@ -43,6 +43,7 @@ public class DojoPlayerServiceTest {
 
     public static final String OLD_GITHUB_USERNAME = "dummy-username";
     public static final String NEW_GITHUB_USERNAME = "new-username";
+    public static final String GAME_NAME = "random-game";
     public static final String GITHUB_USERNAME = "username";
     public static final long SCORE = 5L;
 
@@ -61,13 +62,13 @@ public class DojoPlayerServiceTest {
     @Test
     public void updateUserScore() {
         //Arrange
-        doNothing().when(playerService).updateScore(GITHUB_USERNAME, SCORE);
+        doNothing().when(playerService).updateScore(GITHUB_USERNAME, GAME_NAME,  SCORE);
 
         //Act
-        dojoPlayerService.updateUserScore(GITHUB_USERNAME, SCORE);
+        dojoPlayerService.updateUserScore(GITHUB_USERNAME, GAME_NAME, SCORE);
 
         //Assert
-        verify(playerService, times(1)).updateScore(GITHUB_USERNAME, SCORE);
+        verify(playerService, times(1)).updateScore(GITHUB_USERNAME, GAME_NAME, SCORE);
         verify(updateHandler, times(1)).sendUpdate(GITHUB_USERNAME, SCORE);
     }
 

@@ -40,15 +40,9 @@ function initRegistration(waitApprove, contextPath) {
         $("#password").prop("disabled", status);
         $("#gitHubUsername").prop("disabled", status);
         $("#slackEmail").prop("disabled", status);
-        $("#game select").prop("disabled", status)
-        $("#gameType select").prop("disabled", status)
     }
 
     var KEYS = {
-        game: {
-            name: "game",
-            type: "gameType"
-        },
         userData: {
             email: "registration-email",
             fullName: "registration-fullName",
@@ -88,9 +82,6 @@ function initRegistration(waitApprove, contextPath) {
             if ($.isEmptyObject(data)) {
                 data = defaultRegistrationSettings();
             }
-
-            var gamesCount = $('#game select > option').length;
-            display('#game', gamesCount > 1);
 
             // will display in fillFormFromLocalStorage
             // display('#gameType', data.showGames);
@@ -227,7 +218,7 @@ function initRegistration(waitApprove, contextPath) {
         };
 
         $('#submit-button').click(submitForm);
-        $('#email, #password, #game, #gameType, #skills, #fullName, #readableName, #data1, #data2, #data3, #data4, #gitHubUsername, #slackEmail').keypress(function (e) {
+        $('#email, #password, #skills, #fullName, #readableName, #data1, #data2, #data3, #data4, #gitHubUsername, #slackEmail').keypress(function (e) {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 submitForm();
@@ -243,72 +234,10 @@ function initRegistration(waitApprove, contextPath) {
         }
     }
 
-    function loadGameNameSelect(key, selector, onSelect) {
-        var value = localStorage.getItem(key);
 
-        var params = new URLSearchParams(window.location.search);
-        if (params.has('game')) {
-            var data = params.get('game');
-            if (!!data) {
-                value = data;
-            }
-        }
 
-        var select = $(selector).find('select');
-        if (!!value) {
-            select.val(value);
-        }
-
-        select.off();
-        select.change(function() {
-            onSelect(select.val());
-        });
-        onSelect(select.val());
-    }
-
-    function loadGameTypeSelect(key, selector, def) {
-        var value = localStorage.getItem(key);
-        var select = $(selector).find('select');
-        if (!!value && !$(selector).attr('hidden')) {
-            select.val(value);
-        } else {
-            if (!!def) {
-                select.val(def);
-            }
-        }
-    }
-
-    function fillGameTypes(selector, game, gameTypes) {
-        var select = $(selector).find('select');
-        select.children().remove();
-
-        var current = null;
-        for (var index in gameTypes) {
-            var types = gameTypes[index];
-            if (game == index && !!types) {
-                current = types;
-                break;
-            }
-        }
-
-        for (var index in current) {
-            var name = current[index].name;
-            var title = current[index].title;
-            select.append('<option value="' + name + '">' + title + '</option>');
-        }
-
-        return select;
-    }
 
     function fillFormFromLocalStorage(data) {
-        loadGameNameSelect(KEYS.game.name, '#game', function(game) {
-            var select = fillGameTypes('#gameType', game, data.gameTypes);
-
-            var isVisible = (select.find('option').length > 0 && !!data.showGames);
-            display('#gameType', isVisible);
-
-            loadGameTypeSelect(KEYS.game.type, '#gameType', data.defaultGame);
-        });
         loadInput(KEYS.userData.email, '#email');
         loadInput(KEYS.userData.fullName, '#fullName');
         loadInput(KEYS.userData.readableName, '#readableName');
@@ -321,8 +250,6 @@ function initRegistration(waitApprove, contextPath) {
     }
 
     function saveDataToLocalStorage() {
-        localStorage.setItem(KEYS.game.type, $('#gameType').find('option:selected').val());
-        localStorage.setItem(KEYS.game.name, $('#game').find('option:selected').text());
         localStorage.setItem(KEYS.userData.email, $('#email input').val());
         localStorage.setItem(KEYS.userData.fullName, $('#fullName input').val());
         localStorage.setItem(KEYS.userData.readableName, $('#readableName input').val());

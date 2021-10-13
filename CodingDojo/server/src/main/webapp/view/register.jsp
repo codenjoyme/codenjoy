@@ -39,7 +39,7 @@ License along with this program.  If not, see
     <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" waitApprove="${wait_approve}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" waitApprove="${wait_approve}"></div>
 
     <div class="header-container">
         <div class="container-fluid">
@@ -145,20 +145,6 @@ License along with this program.  If not, see
                         <form:input type="slackEmail" placeholder="Slack email(optional)" path="slackEmail"/>
                         <span class="icon fa"></span>
                     </div>
-                    <c:if test="${not adminLogin}">
-                        <div id="game" class="field valid" hidden>
-                            <form:select id="gameSelect" items="${games}" path="game"/>
-                            <form:errors path="game" cssClass="error" />
-                        </div>
-
-                        <div id="gameType" class="field valid" hidden>
-                            <select placeholder="Select your game" name="game">
-                                <!--option value="Type1">Type1</option-->
-                                <!--option value="Type2">Type2</option-->
-                                <!--option value="Type3">Type3</option-->
-                            </select>
-                        </div>
-                    </c:if>
                     <button class="btn-submit" id="submit-button" type="button">Sign up</button>
                 </c:if>
             </div>

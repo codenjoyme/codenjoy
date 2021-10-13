@@ -39,6 +39,7 @@ import static org.mockito.Mockito.when;
 public class PlayerServiceImplTests {
 
     public static final String GITHUB_USERNAME = "username";
+    public static final String GAME_NAME = "random-game";
 
     @InjectMocks
     private PlayerServiceImpl playerService;
@@ -68,7 +69,7 @@ public class PlayerServiceImplTests {
         when(playerGame.getPlayer()).thenReturn(player);
 
         //Act
-        playerService.updateScore(GITHUB_USERNAME, 5);
+        playerService.updateScore(GITHUB_USERNAME, GAME_NAME, 5);
 
         //Assert
         verify(registration, times(1)).getIdByGitHubUsername(GITHUB_USERNAME);

@@ -49,14 +49,6 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
     public void onLogoutSuccess(HttpServletRequest request,
                                 HttpServletResponse response,
                                 Authentication authentication) throws IOException, ServletException {
-        if (authentication != null) {
-            Registration.User principal = (Registration.User) authentication.getPrincipal();
-            String id = principal.getId();
-            if (playerService.contains(id)) {
-                saveService.update(id);
-                playerService.remove(id);
-            }
-        }
         super.onLogoutSuccess(request, response, authentication);
     }
 

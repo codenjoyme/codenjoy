@@ -224,8 +224,8 @@ public class SaveServiceImpl implements SaveService {
         return saver.getRoomNameByPlayerId(userId);
     }
 
-    public List<String> getUserIdsFromSaves(){
-        return saver.getSavedList();
+    public List<String> getGamesByUserId(String id){
+        return saver.getUserGames(id);
     }
 
     private void setDataFromRegistration(PlayerInfo info, String name) {
