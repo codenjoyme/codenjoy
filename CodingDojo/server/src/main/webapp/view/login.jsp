@@ -102,22 +102,7 @@ License along with this program.  If not, see
                     <div id="password-md5" hidden>
                         <input type="hidden" name="password"/>
                     </div>
-                    <c:if test="${!adminLogin}">
-                        <div id="game" class="field valid" hidden>
-                            <select name="game">
-                                <c:forEach items="${games}" var="item" >
-                                    <option value="${item}">${item}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <div id="gameType" class="field valid" hidden>
-                            <select placeholder="Select your game" name="game">
-                                <!--option value="Type1">Type1</option-->
-                                <!--option value="Type2">Type2</option-->
-                                <!--option value="Type3">Type3</option-->
-                            </select>
-                        </div>
-                    </c:if>
+
                     <button class="btn-submit" id="submit-button" type="button">Sign in</button>
                     <a href="${ctx}/register">
                         <button class="btn-submit" id="register-button" type="button">Sign Up</button>

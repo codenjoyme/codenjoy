@@ -263,4 +263,5 @@ public class RegistrationService {
     public String getRepository(String gitHubUsername) {
         return gameServerService.createOrGetRepository(gitHubUsername);
     }
+
 }

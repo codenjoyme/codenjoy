@@ -94,7 +94,7 @@ logging:
 github:
   host:
     name: ${gameserver.host}
-    port: 8081
+      port: 8081
 grpc:
   server:
     port: 9090
@@ -103,3 +103,4 @@ grpc:
 events:
   eventsServers:
     kata: ${gameserver.host}:9091
+    bomberman: ${gameserver.host}:9091

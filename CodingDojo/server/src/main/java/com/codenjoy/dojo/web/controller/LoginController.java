@@ -56,7 +56,6 @@ public class LoginController {
 
     private void populateModel(Model model, boolean isAdmin) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("games", rooms.alises());
         model.addAttribute("adminLogin", isAdmin);
     }
 

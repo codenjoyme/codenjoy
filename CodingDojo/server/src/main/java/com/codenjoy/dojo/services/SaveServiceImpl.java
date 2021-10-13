@@ -220,6 +220,10 @@ public class SaveServiceImpl implements SaveService {
         return result;
     }
 
+    public String getGameFromUserId(String userId){
+        return saver.getRoomNameByPlayerId(userId);
+    }
+
     public List<String> getUserIdsFromSaves(){
         return saver.getSavedList();
     }
