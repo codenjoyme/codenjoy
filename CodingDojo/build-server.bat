@@ -16,7 +16,10 @@ IF "%GAMES_TO_RUN%"=="all" (
 ) else (
     cd %ROOT%\games
     call %ROOT%\mvnw clean install -N
-    
+
+    cd %ROOT%\clients\java
+    call %ROOT%\mvnw clean install -DskipTests
+
     cd %ROOT%\games\engine
     call %ROOT%\mvnw clean install -DskipTests
     

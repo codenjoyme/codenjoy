@@ -52,6 +52,10 @@ To run a project with your game, do the following:
 - build one game
   * run `mvn clean install -N -DskipTests=true` in the `\CodingDojo\games`
      project to install only games parent project
+  * run `mvn clean install -DskipTests=true` in the `\CodingDojo\clients\java`
+     project to install java client
+  * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\engine`
+     project to install games engine
   * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\yourgame`
      project to install your game
   * run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,yourgame,debug -Dcontext=/codenjoy-contest -Dserver.port=8080 -Pyourgame`
