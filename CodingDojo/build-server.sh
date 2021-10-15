@@ -17,8 +17,11 @@ if [ "$GAMES_TO_RUN" == "all" ] ; then
     "$ROOT/mvnw" clean package -DskipTests -DallGames
 else
     cd "$ROOT/games" || return
-     "$ROOT/mvnw" clean install -N
-    
+    "$ROOT/mvnw" clean install -N
+
+    cd "$ROOT/clients/java" || return
+    "$ROOT/mvnw" clean install -DskipTests
+
     cd "$ROOT/games/engine" || return
     "$ROOT/mvnw" clean install -DskipTests
     
