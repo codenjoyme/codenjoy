@@ -14,6 +14,8 @@ IF "%LANGUAGE%"=="pseudo" (
 
     set BUILD_LANGUAGE=pseudo
     call :build
+	
+	goto :eof
 )
 
 IF "%LANGUAGE%"=="php" (
