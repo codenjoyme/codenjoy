@@ -6,18 +6,6 @@ echo        [44;93m!                   Now we are building clients...          
 echo        [44;93m+-------------------------------------------------------------------------+[0m
 echo on
 
-set BUILD_LANGUAGE=%LANGUAGE%
-
-IF "%LANGUAGE%"=="pseudo" (
-    set BUILD_LANGUAGE=java
-    call :build
-
-    set BUILD_LANGUAGE=pseudo
-    call :build
-	
-	goto :eof
-)
-
 IF "%LANGUAGE%"=="php" (
     call :php
 )
@@ -26,13 +14,10 @@ IF "%LANGUAGE%"=="python" (
     call :python
 )
 
-call :build
-goto :eof
+cd %LANGUAGE%
+call 2-build.bat
+cd %CLIENTS_ROOT%
 
-:build
-    cd %BUILD_LANGUAGE%
-    call 2-build.bat
-    cd %CLIENTS_ROOT%
 goto :eof
 
 :php
