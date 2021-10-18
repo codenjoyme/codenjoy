@@ -8,4 +8,4 @@ echo on
 
 cd %LANGUAGE%
 call 1-download-env.bat
-cd %ROOT%
+cd %CLIENTS_ROOT%

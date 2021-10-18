@@ -1,6 +1,8 @@
 if "%GAME_TO_RUN%"=="" ( set GAME_TO_RUN=mollymage)
 if "%BOARD_URL%"==""   ( set BOARD_URL=http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000)
-if "%LANGUAGE%"==""    ( set LANGUAGE=java)
+if "%LANGUAGE%"==""    ( set LANGUAGE=pseudo)
+
+set CLIENTS_ROOT=%CD%
 
 if "%SKIP_TESTS%"=="" ( set SKIP_TESTS=true)
 

@@ -16,7 +16,7 @@ IF "%LANGUAGE%"=="python" (
 
 cd %LANGUAGE%
 call 4-test.bat
-cd %ROOT%
+cd %CLIENTS_ROOT%
 
 goto :eof
 

@@ -30,7 +30,7 @@ goto :eof
 :build
     cd %BUILD_LANGUAGE%
     call 2-build.bat
-    cd %ROOT%
+    cd %CLIENTS_ROOT%
 goto :eof
 
 :php
