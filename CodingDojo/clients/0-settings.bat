@@ -30,8 +30,6 @@ rem if "%INSTALL_LOCALLY%"=="true" ( set GIT=%GIT_HOME%\cmd\git)
 
 rem if "%JAVA_CLIENT_HOME%"==""       ( set JAVA_CLIENT_HOME=%ROOT%\java)
 rem if "%PSEUDO_CLIENT_HOME%"==""     ( set PSEUDO_CLIENT_HOME=%ROOT%\pseudo)
-rem if "%PSEUDO_RULES%"==""           ( set PSEUDO_RULES=%PSEUDO_CLIENT_HOME%\rules)
-rem if "%PSEUDO_HERO_ELEMENTS%"==""   ( set PSEUDO_HERO_ELEMENTS=HERO,POTION_HERO,DEAD_HERO)
 rem if "%JAVASCRIPT_CLIENT_HOME%"=="" ( set JAVASCRIPT_CLIENT_HOME=%ROOT%\java-script)
 rem if "%GO_CLIENT_HOME%"==""         ( set GO_CLIENT_HOME=%ROOT%\go)
 rem if "%PHP_CLIENT_HOME%"==""        ( set PHP_CLIENT_HOME=%ROOT%\php)
