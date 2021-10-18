@@ -16,9 +16,8 @@ IF "%LANGUAGE%"=="python" (
     call :python
 )
 
-
 cd %LANGUAGE%
-call 3-test.bat
+call 4-test.bat
 cd %ROOT%
 
 call :ask

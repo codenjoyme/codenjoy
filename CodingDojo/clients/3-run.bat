@@ -17,7 +17,7 @@ IF "%LANGUAGE%"=="python" (
 )
 
 cd %LANGUAGE%
-call 2-run.bat
+call 3-run.bat
 cd %ROOT%
 
 call :ask
@@ -29,7 +29,6 @@ goto :eof
 :python
     SET PATH=%PYTHON_HOME%;%PATH%
 goto :eof
-
 
 :ask
     echo Press any key to continue

@@ -8,21 +8,14 @@ echo        +-------------------------------------------------------------------
 echo [0m
 echo on
 
-IF "%LANGUAGE%"=="java" (
-    call :java
-)
+set BUILD_LANGUAGE=%LANGUAGE%
 
 IF "%LANGUAGE%"=="pseudo" (
-    call :java
-    call :pseudo
-)
+    set BUILD_LANGUAGE=java
+    call :build
 
-IF "%LANGUAGE%"=="java-script" (
-    call :node
-)
-
-IF "%LANGUAGE%"=="go" (
-    call :go
+    set BUILD_LANGUAGE=pseudo
+    call :build
 )
 
 IF "%LANGUAGE%"=="php" (
@@ -32,61 +25,33 @@ IF "%LANGUAGE%"=="php" (
 IF "%LANGUAGE%"=="python" (
     call :python
 )
-                
-echo off
-echo [44;93m
-echo        +-------------------------------------+
-echo        !      Now you can run 3-run.bat      !
-echo        +-------------------------------------+
-echo [0m
-echo on
 
+call :build
 call :ask
 
-goto :eof
-
-:java
-    cd %JAVA_CLIENT_HOME%
-    call 1-build.bat
-    cd %ROOT%
-goto :eof
-
-:pseudo
-    cd %PSEUDO_CLIENT_HOME%
-    call 1-build.bat
-    cd %ROOT%
-goto :eof
-
-:node
-    cd %JAVASCRIPT_CLIENT_HOME%
-    call 1-build.bat
-    cd %ROOT%
-goto :eof
-
-:go
-    cd %GO_CLIENT_HOME%
-    call 1-build.bat
+:build
+    cd %BUILD_LANGUAGE%
+    call 2-build.bat
     cd %ROOT%
 goto :eof
 
 :php
     SET PATH=%PHP_HOME%;%PATH%
-    @echo %PATH%
-    cd %PHP_CLIENT_HOME%
-    call 1-build.bat
-    cd %ROOT%
 goto :eof
 
 :python
     SET PATH=%PYTHON_HOME%;%PATH%
-    cd %PYTHON_CLIENT_HOME%
-    call 1-build.bat
-    cd %ROOT%
 goto :eof
 
-
-
 :ask
+    echo off
+    echo [44;93m
+    echo        +-------------------------------------+
+    echo        !      Now you can run 3-run.bat      !
+    echo        +-------------------------------------+
+    echo [0m
+    echo on
+
     echo Press any key to continue
     pause >nul
 goto :eof
