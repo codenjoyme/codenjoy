@@ -30,6 +30,9 @@ public interface GameServerService {
     @Retryable(value = Exception.class)
     String createOrGetRepository(String gitHubUsername);
 
+    @Retryable(value = Exception.class)
+    String createOrGetRepositoryWithGame(String gitHubUsername, String game);
+
     @Recover
     String recover(String gitHubUsername);
 }
