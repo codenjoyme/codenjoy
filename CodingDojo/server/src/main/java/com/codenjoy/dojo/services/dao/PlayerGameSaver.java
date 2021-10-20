@@ -51,7 +51,8 @@ public class PlayerGameSaver implements GameSaver {
                         "game_name varchar(255)," +
                         "score varchar(255)," +
                         "save varchar(255)," +
-                        "repository_url varchar(255));");
+                        "repository_url varchar(255)," +
+                        "subscribed BOOLEAN);");
     }
 
     void removeDatabase() {
@@ -61,8 +62,8 @@ public class PlayerGameSaver implements GameSaver {
     @Override
     public void saveGame(Player player, String save, long time) {
         pool.update("INSERT INTO saves " +
-                        "(time, player_id, callback_url, room_name, game_name, score, save, repository_url) " +
-                        "VALUES (?,?,?,?,?,?,?,?);",
+                        "(time, player_id, callback_url, room_name, game_name, score, save, repository_url, subscribed) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?);",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
                         player.getId(),
                         player.getCallbackUrl(),
@@ -70,7 +71,8 @@ public class PlayerGameSaver implements GameSaver {
                         player.getGame(),
                         player.getScore(),
                         save,
-                        player.getRepositoryUrl()
+                        player.getRepositoryUrl(),
+                        true
                 });
     }
 
@@ -227,5 +229,31 @@ public class PlayerGameSaver implements GameSaver {
         );
     }
 
+    @Override
+    public boolean getSubscribedByPlayerId(String id) {
+        return pool.select("SELECT subscribed FROM saves " +
+                        "WHERE player_id = ?",
+                new Object[]{id},
+                rs -> rs.next() ? rs.getBoolean("subscribed") : null
+        );
+    }
+
+    public void subscribeByPlayerId(String id){
+        if(getSubscribedByPlayerId(id)){
+            pool.update("UPDATE saves" +
+                    "SET subscribed=false" +
+                    "WHERE player_id = ?",
+                    new Object[]{id});
+        }
+    }
+
+    public void unsubscribeByPlayerId(String id){
+        if(!getSubscribedByPlayerId(id)){
+            pool.update("UPDATE saves" +
+                            "SET subscribed=true" +
+                            "WHERE player_id = ?",
+                    new Object[]{id});
+        }
+    }
 
 }

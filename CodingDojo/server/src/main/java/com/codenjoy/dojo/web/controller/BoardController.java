@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.Feedback;
 import com.codenjoy.dojo.services.GameServerService;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
@@ -38,13 +39,17 @@ import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Optional;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
@@ -107,6 +112,9 @@ public class BoardController {
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
         model.addAttribute("repositoryURL", playerGameSaver.getRepositoryURLByPlayerId(id));
+        model.addAttribute("subscribed", playerGameSaver.getSubscribedByPlayerId(id));
+        System.out.println("0" + playerGameSaver.getSubscribedByPlayerId(id));
+
         return justBoard ? "board-only" : "board";
     }
 
@@ -165,6 +173,8 @@ public class BoardController {
         model.addAttribute("github", github);
         model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
+        model.addAttribute("subscribed", playerGameSaver.getSubscribedByPlayerId(playerId));
+        System.out.println("1" + playerGameSaver.getSubscribedByPlayerId(playerId));
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
@@ -248,7 +258,7 @@ public class BoardController {
         if (gameType.getMultiplayerType(gameType.getSettings()) != MultiplayerType.SINGLE) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
-
+        Feedback feedback = new Feedback();
         model.addAttribute("code", code);
         model.addAttribute("game", player.getGame());
         model.addAttribute("room", player.getRoom());
@@ -257,7 +267,16 @@ public class BoardController {
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("github", player.getGitHubUsername());
         model.addAttribute("allPlayersScreen", true);
+        model.addAttribute("feedback", feedback);
+        model.addAttribute("feedbackText", feedback.getFeedbackText());
+
         return "board";
+    }
+
+    @PostMapping("/feedback")
+    public void subscribeOrUnsubscribe(@Valid Feedback feedback, BindingResult result, HttpServletRequest request, Model model){
+        System.out.println("hello here" + feedback.getPlayerId());
+//        playerGameSaver.unsubscribeByPlayerId(playerId);
     }
 
     private String code(@RequestParam("code") String code) {
