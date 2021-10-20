@@ -66,6 +66,11 @@ public class PostgresDBConfig {
     }
 
     @Bean
+    public Feedback feedback() {
+        return new Feedback(connectionThreadPollFactory());
+    }
+
+    @Bean
     public Registration registration(@Value("${admin.login}") String adminLogin,
                                      @Value("${admin.password}") String adminPassword) {
         return new Registration(connectionThreadPollFactory(), adminLogin, adminPassword,
