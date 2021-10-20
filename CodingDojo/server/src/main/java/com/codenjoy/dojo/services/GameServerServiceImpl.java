@@ -45,6 +45,11 @@ public class GameServerServiceImpl implements GameServerService {
     }
 
     @Override
+    public String createOrGetRepositoryWithGame(String gitHubUsername, String game) {
+        return restTemplate.getForObject(createHostUrl() + gitHubUsername + "-" + game, String.class);
+    }
+
+    @Override
     public String recover(String gitHubUsername) {
         return REPOSITORY_NOT_FOUND;
     }

@@ -312,7 +312,7 @@ public class PlayerServiceImpl implements PlayerService {
 
             player.setGitHubUsername(registration.getGitHubUsernameById(player.getId()));
 
-            player.setRepositoryUrl(gameServerService.createOrGetRepository(player.getGitHubUsername()));
+            player.setRepositoryUrl(gameServerService.createOrGetRepositoryWithGame(player.getGitHubUsername(), player.getGame()));
 
             player.setGameType(gameType);
             PlayerGame playerGame = playerGames.add(player, room, save);

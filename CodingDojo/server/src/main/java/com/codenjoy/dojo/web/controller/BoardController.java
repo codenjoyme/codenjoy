@@ -136,7 +136,7 @@ public class BoardController {
                              @AuthenticationPrincipal Registration.User user) {
         validator.checkGame(game, CANT_BE_NULL);
         validator.checkRoom(room, CANT_BE_NULL);
-        String repositoryUrl = gameServerService.createOrGetRepository(user.getGitHubUsername());
+        String repositoryUrl = gameServerService.createOrGetRepositoryWithGame(user.getGitHubUsername(), game);
 
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {

@@ -10,7 +10,7 @@
         <version>1.1.1</version>
     </parent>
 
-    <artifactId>${module.name}-engine</artifactId>
+    <artifactId>bomberman-engine</artifactId>
 
     <properties>
         <module.name>bomberman</module.name>
@@ -60,10 +60,10 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>buildnumber-maven-plugin</artifactId>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
