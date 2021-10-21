@@ -6,16 +6,6 @@ echo        [44;93m!                   Now we are building clients...          
 echo        [44;93m+-------------------------------------------------------------------------+[0m
 echo on
 
-IF "%LANGUAGE%"=="php" (
-    call :php
-)
-
 cd %LANGUAGE%
 call 4-test.bat
 cd %CLIENTS_ROOT%
-
-goto :eof
-
-:php
-    SET PATH=%PHP_HOME%;%PATH%
-goto :eof
