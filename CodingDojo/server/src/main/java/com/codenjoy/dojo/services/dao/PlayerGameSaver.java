@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -147,13 +148,14 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void updateScore(String playerId, long score, long time) {
+    public void updateScore(String playerId, String gameName, long score, long time) {
         pool.update("UPDATE saves " +
                         "SET time = ?, score = ?" +
-                        "WHERE player_id = ?;",
+                        "WHERE player_id = ? AND game_name = ?;",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
                         score,
-                        playerId
+                        playerId,
+                        gameName
                 });
     }
 
@@ -186,6 +188,21 @@ public class PlayerGameSaver implements GameSaver {
                         String roomName = rs.getString("room_name");
                         String gameName = rs.getString("game_name");
                         result.put(roomName, gameName);
+                    }
+                    return result;
+                }
+        );
+    }
+
+    @Override
+    public List<String> getUserGames(String id) {
+        return pool.select("SELECT DISTINCT game_name FROM saves WHERE player_id = ?;",
+                new Object[]{id},
+                rs -> {
+                    List<String> result = new ArrayList<>();
+                    while (rs.next()) {
+                        String gameName = rs.getString("game_name");
+                        result.add(gameName);
                     }
                     return result;
                 }

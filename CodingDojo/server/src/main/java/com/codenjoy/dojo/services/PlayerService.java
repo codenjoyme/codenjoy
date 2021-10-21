@@ -31,7 +31,7 @@ public interface PlayerService extends Tickable {
 
     Player register(PlayerSave save);
 
-    void updateScore(String gitHubUsername, long score);
+    void updateScore(String gitHubUsername, String game, long score);
 
     List<Player> getAll();
 

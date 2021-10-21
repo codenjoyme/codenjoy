@@ -56,9 +56,9 @@ public class DojoPlayerService {
         return registration.updateGitHubUsername(username, newUsername);
     }
 
-    public void updateUserScore(String username, long score) {
+    public void updateUserScore(String username, String game, long score) {
 
         updateHandler.sendUpdate(username, score);
-        playerService.updateScore(username, score);
+        playerService.updateScore(username, game, score);
     }
 }

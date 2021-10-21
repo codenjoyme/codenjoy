@@ -201,10 +201,6 @@ public class RegistrationService {
             }
         }
 
-        String game = request.getParameter("game");
-        if (!model.containsAttribute("bad_game")) {
-            validator.checkGame(game, CAN_BE_NULL);
-        }
 
         Player player = new Player();
         player.setEmail(email);
@@ -213,7 +209,6 @@ public class RegistrationService {
         player.setReadableName(name);
         player.setGitHubUsername(github);
         player.setSlackEmail(slackEmail);
-        player.setGame(rooms.getAlias(game));
         if (!model.containsAttribute("player")) {
             model.addAttribute("player", player);
         }
@@ -230,7 +225,7 @@ public class RegistrationService {
         if (player == NullPlayer.INSTANCE) {
             return "login";
         }
-        if(!saveService.getUserIdsFromSaves().contains(player.getId())) {
+        if(!saveService.getGamesByUserId(id).contains(game)) {
             saveService.save(player);
         }
         return getBoardUrl(code, player.getId(), game);
@@ -256,7 +251,6 @@ public class RegistrationService {
 
     private String getRegister(Model model) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("games", rooms.alises());
         return "register";
     }
 

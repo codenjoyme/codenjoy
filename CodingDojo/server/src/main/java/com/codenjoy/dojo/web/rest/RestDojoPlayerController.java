@@ -44,10 +44,11 @@ public class RestDojoPlayerController {
         return dojoPlayerService.updateGitHubUsername(username, newUsername);
     }
 
-    @PostMapping("/update/{username}/score")
+    @PostMapping("/update/{username}/{game}/score")
     public void updateUserScore(@PathVariable("username") String username,
+                                @PathVariable("game") String game,
                                 @RequestBody long score) {
 
-        dojoPlayerService.updateUserScore(username, score);
+        dojoPlayerService.updateUserScore(username, game, score);
     }
 }

@@ -40,11 +40,13 @@ public interface GameSaver {
 
     void delete(String id);
 
-    void updateScore(String playerId, long score, long time);
+    void updateScore(String playerId, String gameName, long score, long time);
 
     List<PlayerSave> loadAllSaves();
 
     Map<String, String> getEventsList();
+
+    List<String> getUserGames(String id);
 
     String getRoomNameByPlayerId(String id);
 

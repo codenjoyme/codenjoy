@@ -22,12 +22,11 @@ package com.codenjoy.dojo.services.security;
  * #L%
  */
 
-import com.codenjoy.dojo.services.SaveServiceImpl;
-import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.controller.AdminController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -41,28 +40,34 @@ import java.io.IOException;
 // TODO: mark as '!sso' profile
 public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final RegistrationService registrationService;
-    private final SaveServiceImpl saveService;
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String TARGET_URL = "/";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        Registration.User principal = (Registration.User) authentication.getPrincipal();
-        String game = saveService.getGameFromUserId(principal.getId());
-        String room = game; // TODO ROOM тут надо получить room как-то
-        String repositoryUrl = registrationService.getRepository(principal.getGitHubUsername());
 
-        if (game == null) {
+        redirectUser(request, response, authentication);
+    }
+
+    private void redirectUser(HttpServletRequest request,
+                              HttpServletResponse response,
+                              Authentication authentication) throws IOException {
+
+        if (isAdmin(authentication)) {
             getRedirectStrategy().sendRedirect(request, response, AdminController.URI);
             return;
         }
 
-        String targetUrl = "/" + registrationService.register(principal.getId(),
-                principal.getCode(), game, room, request.getRemoteAddr(), repositoryUrl, principal.getSlackEmail());
+        log.debug("Redirecting to  URL: " + TARGET_URL);
+        getRedirectStrategy().sendRedirect(request, response, TARGET_URL);
+    }
 
-        log.debug("Redirecting to  URL: " + targetUrl);
-
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+    private boolean isAdmin(Authentication authentication) {
+        return authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(el -> el.equals(ROLE_ADMIN));
     }
 }

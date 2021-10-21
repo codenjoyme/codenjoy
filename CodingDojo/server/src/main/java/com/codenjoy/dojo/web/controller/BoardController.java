@@ -120,9 +120,12 @@ public class BoardController {
             return "redirect:/login?" + "game" + "=" + game;
         }
 
-        // TODO ROOM а надо ли тут этот метод вообще, ниже есть более универсальный? 
+        // TODO ROOM а надо ли тут этот метод вообще, ниже есть более универсальный?
         // TODO ROOM так как есть rest методы то может вообще убрать отсюда этих двоих?
         String room = game;
+
+        registrationService.register(user.getId(),user.getCode(),game, room, request.getRemoteAddr(), user.getGitHubUsername(),user.getSlackEmail());
+
         return rejoinGame(model, game, room, request, user);
     }
 
