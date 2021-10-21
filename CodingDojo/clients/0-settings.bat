@@ -17,7 +17,3 @@ echo on
 
 rem Set to true if you want to ignore jdk and maven installed on the system
 if "%INSTALL_LOCALLY%"=="" ( set INSTALL_LOCALLY=true)
-
-rem if "%INSTALL_LOCALLY%"=="true" ( set GIT_HOME=%ROOT%\.gitTool)
-rem if "%INSTALL_LOCALLY%"=="true" ( set GIT=%GIT_HOME%\cmd\git)
-rem if "%ARCH_GIT%"==""          ( set ARCH_GIT=https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-64-bit.zip)
