@@ -20,11 +20,4 @@ if "%INSTALL_LOCALLY%"=="" ( set INSTALL_LOCALLY=true)
 
 rem if "%INSTALL_LOCALLY%"=="true" ( set GIT_HOME=%ROOT%\.gitTool)
 rem if "%INSTALL_LOCALLY%"=="true" ( set GIT=%GIT_HOME%\cmd\git)
-
-rem if "%PHP_CLIENT_HOME%"==""        ( set PHP_CLIENT_HOME=%ROOT%\php)
-rem if "%PHP_HOME%"==""               ( set PHP_HOME=%ROOT%\.php)
-
 rem if "%ARCH_GIT%"==""          ( set ARCH_GIT=https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-64-bit.zip)
-rem if "%ARCH_PHP%"==""          ( set ARCH_PHP=https://windows.php.net/downloads/releases/archives/php-8.0.8-nts-Win32-vs16-x64.zip)
-rem if "%ARCH_PHP_COMPOSER%"=="" ( set ARCH_PHP_COMPOSER=https://getcomposer.org/download/latest-2.x/composer.phar)
-rem if "%ARCH_PYTHON%"==""       ( )
