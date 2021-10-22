@@ -65,7 +65,7 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldGet_WithoutAdminRole() {
+    public void shouldGet_withoutAdminRole() {
         // setUp key
         assertEquals("{}", post(200, "/rest/settings/first/" + NO_ROOM_NAME + "/key", "value"));
         // when login as User
@@ -76,7 +76,7 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void ShouldNotPost_WithoutAdminRole() {
+    public void shouldNotPost_withoutAdminRole() {
         // given no admin rights
         with.login.asUserRole();
 
