@@ -15,5 +15,5 @@ echo        [44;93mBOARD_URL=%BOARD_URL%[0m
 echo        [44;93mLANGUAGE=%LANGUAGE%[0m
 echo on
 
-rem Set to true if you want to ignore jdk and maven installed on the system
+rem Set to true if you want to ignore jdk and maven installation on the system
 if "%INSTALL_LOCALLY%"=="" ( set INSTALL_LOCALLY=true)
