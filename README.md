@@ -19,6 +19,9 @@ Information
  * [Codenjoy Site (in Russian)](http://codenjoy.com)
  * [Codenjoy Demo Server](http://codenjoy.com/codenjoy-contest)
  * [Codenjoy GitHub](https://github.com/codenjoyme/codenjoy/) (GNU GPL v3)
+   * **[IMPORTANT]** clone the project codenjoy master branch with submodules (with `--recursive` option) 
+     * `git clone --recursive https://github.com/codenjoyme/codenjoy.git`
+   * latest version is on the `develop` branch (maybe unstable) 
  * [Codenjoy team](http://codenjoy.com/portal/?page_id=51)
 
 Programming manuals
