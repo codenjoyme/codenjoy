@@ -27,6 +27,7 @@ import com.codenjoy.dojo.lunolet.model.Level;
 import com.codenjoy.dojo.lunolet.model.LevelManager;
 
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
@@ -37,8 +38,15 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class PrintLevels {
 
+    public static final String PATH = "./src/main/webapp/resources/help/lunolet-levels.html";
+
     public static void main(String[] args) throws IOException {
-        try (PrintWriter writer = new PrintWriter("src/main/webapp/resources/help/lunolet-levels.html", UTF_8)) {
+        File file = new File(PATH);
+        if (!file.exists()) {
+            file = new File("./games/lunolet/" + PATH);
+        }
+        System.out.println(file.getAbsolutePath());
+        try (PrintWriter writer = new PrintWriter(file, UTF_8)) {
             writer.println("<html>");
             writer.println("<head>");
             writer.println("    <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">");
