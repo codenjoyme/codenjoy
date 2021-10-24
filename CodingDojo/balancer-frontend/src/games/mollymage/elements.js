@@ -68,17 +68,17 @@ export default [
     },
     {
         image:       enemy_hero,
-        title:       `ENEMY_HERO ('♡')`,
+        title:       `ENEMY_HERO ('ö')`,
         description: `Моллі ворога.`,
     },
     {
         image:       other_potion_hero,
-        title:       `ENEMY_POTION_HERO ('♤')`,
+        title:       `ENEMY_POTION_HERO ('Ö')`,
         description: `Моллі ворога, яка сидить на зіллі що має вибухнути.`
     },
     {
         image:       other_dead_hero,
-        title:       `ENEMY_DEAD_HERO ('♧')`,
+        title:       `ENEMY_DEAD_HERO ('ø')`,
         description: `Так виглядає мертва Моллі ворога.
 Якщо це ви її підірвали - ви отримаєте бонусні бали.`
     },

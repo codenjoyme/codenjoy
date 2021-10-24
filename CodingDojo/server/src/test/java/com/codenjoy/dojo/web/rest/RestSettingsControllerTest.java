@@ -26,7 +26,10 @@ import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
 
@@ -38,12 +41,14 @@ import static com.codenjoy.dojo.web.rest.RestSettingsController.SETTINGS;
 public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
     public static final String NO_ROOM_NAME = null;
+    public static final String ACCESS_IS_DENIED = "org.springframework.security.access.AccessDeniedException: Access is denied";
 
     private Settings first;
     private Settings second;
 
     @Before
     public void setup() {
+        with.login.asAdmin();
         super.setup();
 
         first = games.getGameType("first", "first").getSettings();
@@ -57,6 +62,27 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
         second.addSelect("three", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option1");
         second.addEditBox("four").type(String.class).def("some-data");
+    }
+
+    @Test
+    public void shouldGet_withoutAdminRole() {
+        // setUp key
+        assertEquals("{}", post(200, "/rest/settings/first/" + NO_ROOM_NAME + "/key", "value"));
+        // when login as User
+        with.login.asUserRole();
+
+        // then try get Key
+        assertEquals("value", get("/rest/settings/first/" + NO_ROOM_NAME + "/key"));
+    }
+
+    @Test
+    public void shouldNotPost_withoutAdminRole() {
+        // given no admin rights
+        with.login.asUserRole();
+
+        // when POST
+        // then should get Access denied message
+        assertPostError(ACCESS_IS_DENIED, "/rest/settings/first/" + NO_ROOM_NAME + "/key", "value");
     }
 
     @Test

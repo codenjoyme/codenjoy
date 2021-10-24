@@ -25,6 +25,7 @@
         <module>clients/pseudo</module>
         <module>games</module>
         <module>server</module>
+        <module>client-runner</module>
         <module>balancer</module>
         <module>utilities</module>
     </modules>

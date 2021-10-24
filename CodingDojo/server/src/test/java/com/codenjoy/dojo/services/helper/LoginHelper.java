@@ -57,6 +57,11 @@ public class LoginHelper {
         );
     }
 
+    public void asUserRole() {
+        register("somePlayer", "ip", "validRoom", "first");
+        asUser("somePlayer", "somePlayer");
+    }
+
     public void asUser(String playerId, String password) {
         Player player = players.get(playerId);
         if (player == NullPlayer.INSTANCE) {

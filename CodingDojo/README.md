@@ -42,6 +42,8 @@ Run Codenjoy server from sources
 
 To run a project with your game, do the following:
 - clone the project from the [codenjoy main repository](https://github.com/codenjoyme/codenjoy)
+    with submodules
+  * `git clone --recursive https://github.com/codenjoyme/codenjoy.git`
 - configure Codenjoy server by modifying the settings in files:
   * [\CodingDojo\server\src\main\resources\application.yml](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/server/src/main/resources/application.yml)
     * you can change any of these properties in runtime by using parameters 
