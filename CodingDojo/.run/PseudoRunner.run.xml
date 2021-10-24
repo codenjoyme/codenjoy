@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="PseudoRunner" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="com.codenjoy.dojo.Runner" />
+    <option name="MAIN_CLASS_NAME" value="com.codenjoy.dojo.pseudo.Runner" />
     <module name="pseudo-client" />
     <option name="PROGRAM_PARAMETERS" value="mollymage http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000 .\clients\pseudo\rules" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.codenjoy.dojo.*" />
+        <option name="PATTERN" value="com.codenjoy.dojo.pseudo.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
