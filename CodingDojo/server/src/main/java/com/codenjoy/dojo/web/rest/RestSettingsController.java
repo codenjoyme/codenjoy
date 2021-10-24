@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.Encoding;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.dao.GameData;
+import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
@@ -34,6 +35,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
@@ -89,6 +91,7 @@ public class RestSettingsController {
         return gameData.get(game, key);
     }
 
+    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
     @PostMapping("/{game}/{room}/{key}")
     public String set(@PathVariable("game") String game,
                       @PathVariable("room") String room,
