@@ -24,7 +24,6 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.client.local.DiceGenerator;
 import com.codenjoy.dojo.config.RealGameConfiguration;
-import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.GameService;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -43,11 +42,9 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
     private final String game = "sample";
     private final String room = "room";
 
-    private Deal deal1;
     private final String player1 = "player1";
     private String code1;
 
-    private Deal deal2;
     private final String player2 = "player2";
     private String code2;
 
@@ -75,28 +72,23 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
                 .integer(LOSE_PENALTY, 100);
 
 
-        with.time.nowIs(12345L);
-        deal1 = with.login.register(player1, "ip", room, game);
+        with.login.register(player1, "ip", room, game);
         code1 = with.login.code(player1);
         with.login.asUser(player1, player1);
-        int field1 = with.login.fieldId(player1);
-
-        with.time.nowIs(12346L);
-        deal2 = with.login.register(player2, "ip", room, game);
+       
+        with.login.register(player2, "ip", room, game);
         code2 = with.login.code(player2);
         with.login.asUser(player2, player2);
-        int field2 = with.login.fieldId(player2);
-
-        assertEquals(field1, field2);
 
         // then
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼☻ ☺ ☼\n" +
-                    "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼☻ ☺ ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
     }
 
     @Test
@@ -114,13 +106,14 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
         players.tick();
 
         // then
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼$$$ ☼\n" +
-                    "☼☻$☺ ☼\n" +
-                    "☼x   ☼\n" +
-                    "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼$$$ ☼\n" +
+                "☼☻$☺ ☼\n" +
+                "☼x   ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
     }
 
     @Test
@@ -138,13 +131,14 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
         players.tick();
 
         // then
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼☻ ☺ ☼\n" +
-                    "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼☻ ☺ ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
     }
 
     @Test
@@ -162,13 +156,14 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
         players.tick();
 
         // then
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼$$$ ☼\n" +
-                    "☼☻$☺ ☼\n" +
-                    "☼x   ☼\n" +
-                    "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼$$$ ☼\n" +
+                "☼☻$☺ ☼\n" +
+                "☼x   ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
     }
 
     @Test
@@ -186,13 +181,14 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
         players.tick();
 
         // then
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼☻ ☺ ☼\n" +
-                    "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼☻ ☺ ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
     }
 
     @Test
@@ -207,13 +203,14 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
         players.tick();
 
         // then
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼☻ ☺ ☼\n" +
-                    "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼☻ ☺ ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
     }
 
     @Test
@@ -231,13 +228,14 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
         players.tick();
 
         // then
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼$$$ ☼\n" +
-                    "☼☻$☺ ☼\n" +
-                    "☼x   ☼\n" +
-                        "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼$$$ ☼\n" +
+                "☼☻$☺ ☼\n" +
+                "☼x   ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
     }
 
     private void joystick(String expected, String player, String code, String command) {

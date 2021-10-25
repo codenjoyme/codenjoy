@@ -62,7 +62,6 @@ public class RestJoystickController {
         joystick(id, command);
     }
 
-
     @GetMapping(("/player/{player}/do/{command}"))
     @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
     public void adminJoystick(@PathVariable("player") String id,
