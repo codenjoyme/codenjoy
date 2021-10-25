@@ -26,10 +26,7 @@ import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
 
@@ -69,7 +66,7 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         // setUp key
         assertEquals("{}", post(200, "/rest/settings/first/" + NO_ROOM_NAME + "/key", "value"));
         // when login as User
-        with.login.asUserRole();
+        with.login.asUser();
 
         // then try get Key
         assertEquals("value", get("/rest/settings/first/" + NO_ROOM_NAME + "/key"));
@@ -78,7 +75,7 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldNotPost_withoutAdminRole() {
         // given no admin rights
-        with.login.asUserRole();
+        with.login.asUser();
 
         // when POST
         // then should get Access denied message

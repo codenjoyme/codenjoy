@@ -136,13 +136,14 @@ public class ChatDealsTest {
         with.chat.cleanField(player1, room);
         with.chat.cleanField(player2, room);
 
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼ $$ ☼\n" +
-                    "☼☻ ☺ ☼\n" +
-                    "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼ $$ ☼\n" +
+                "☼☻ ☺ ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
 
         // when
         joystick1.up();
@@ -151,13 +152,14 @@ public class ChatDealsTest {
         players.tick();
 
         // then
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼$$$ ☼\n" +
-                    "☼☻$☺ ☼\n" +
-                    "☼x   ☼\n" +
-                    "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼$$$ ☼\n" +
+                "☼☻$☺ ☼\n" +
+                "☼x   ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
 
         with.chat.checkField(player1, room,
                 "[PMessage(id=3, text=WIN => +30, room=room, type=3, topicId=1, \n" +
@@ -175,13 +177,14 @@ public class ChatDealsTest {
         players.tick();
 
         // then
-        assertEquals("☼☼☼☼☼☼\n" +
-                    "☼    ☼\n" +
-                    "☼$$$ ☼\n" +
-                    "☼ $  ☼\n" +
-                    "☼Y ☺ ☼\n" +
-                    "☼☼☼☼☼☼\n",
-                deal1.getGame().getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼$$$ ☼\n" +
+                "☼ $  ☼\n" +
+                "☼Y ☺ ☼\n" +
+                "☼☼☼☼☼☼\n",
+                with.rooms.board(player1));
 
         with.chat.checkField(player1, room,
                 "[]");

@@ -29,9 +29,7 @@ function initJoystick(playerId, registered, code, contextPath) {
     function sendCommand(command) {
         if (!setup.enableJoystick) return;
 
-        $.ajax({ url:contextPath + "/joystick",
-                data:'command=' + command + '&player=' + playerId + "&code=" + code,
-                dataType:"json",
+        $.ajax({ url:contextPath + "/rest/joystick/player/" + playerId + '/code/' + code + '/do/' + command,
                 cache:false,
                 complete:function(){},
                 timeout:30000

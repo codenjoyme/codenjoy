@@ -640,11 +640,11 @@
                                 <c:choose>
                                     <c:when test="${player.code != null}">
                                         <td class="joystick">
-                                            <span class="a" href="${ctx}/joystick?command=up&player=${player.id}&code=${player.code}#savePlayersGame">U</span>
-                                            <span class="a" href="${ctx}/joystick?command=down&player=${player.id}&code=${player.code}#savePlayersGame">D</span>
-                                            <span class="a" href="${ctx}/joystick?command=left&player=${player.id}&code=${player.code}#savePlayersGame">L</span>
-                                            <span class="a" href="${ctx}/joystick?command=right&player=${player.id}&code=${player.code}#savePlayersGame">R</span>
-                                            <span class="a" href="${ctx}/joystick?command=act&player=${player.id}&code=${player.code}#savePlayersGame">A</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/up#savePlayersGame">U</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/down#savePlayersGame">D</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/left#savePlayersGame">L</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/right#savePlayersGame">R</span>
+                                            <span class="a" href="${ctx}/rest/joystick/player/${player.id}/do/act#savePlayersGame">A</span>
                                         </td>
                                     </c:when>
                                     <c:otherwise>
