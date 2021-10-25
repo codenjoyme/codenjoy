@@ -57,9 +57,10 @@ public class LoginHelper {
         );
     }
 
-    public void asUserRole() {
-        register("somePlayer", "ip", "validRoom", "first");
+    public Deal asUser() {
+        Deal deal = register("somePlayer", "ip", "validRoom", "first");
         asUser("somePlayer", "somePlayer");
+        return deal;
     }
 
     public void asUser(String playerId, String password) {
@@ -124,5 +125,9 @@ public class LoginHelper {
 
     public int fieldId(String player) {
         return fields.id(deals.get(player).getField());
+    }
+
+    public String code(String id) {
+        return registration.getCodeById(id);
     }
 }
