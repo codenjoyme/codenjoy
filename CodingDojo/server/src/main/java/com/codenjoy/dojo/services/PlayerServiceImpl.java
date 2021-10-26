@@ -54,6 +54,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
@@ -276,13 +277,14 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void updateScore(String gitHubUsername, String game, long score) {
         String id = registration.getIdByGitHubUsername(gitHubUsername);
-        updateScoreList(id, score);
+        updateScoreList(id, game, score);
         saver.updateScore(id, game, score, System.currentTimeMillis());
     }
 
-    private void updateScoreList(String id, long score) {
-        for (PlayerGame playerGame : playerGames.getAll()) {
-            Player player = playerGame.getPlayer();
+    private void updateScoreList(String id, String game, long score) {
+        Optional<PlayerGame> playerGame = playerGames.getAll().stream().filter(pg ->pg.getRoom().equals(game) && pg.getPlayerId().equals(id)).findFirst();
+        if(playerGame.isPresent()) {
+            Player player = playerGame.get().getPlayer();
             if (player.getId().equals(id)) {
                 player.setScore(score);
             }

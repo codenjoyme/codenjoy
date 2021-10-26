@@ -59,13 +59,16 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
         String email = this.registration.getEmailById(id);
         String slackEmail = this.registration.getSlackEmailById(id);
 
+        System.out.println(id);
+        System.out.println(email);
+        System.out.println(slackEmail);
         responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).setSlackEmail(slackEmail).build());
         responseObserver.onCompleted();
     }
 
     @Override
     public void getUserDetailsByUsername(UserDetailsUsernameRequest request, StreamObserver<UserDetailsResponse> responseObserver) {
-        String username = request.getUsername();
+        String username = removeGameFromUsername(request.getUsername());
         String id = this.registration.getIdByGitHubUsername(username);
         String email = this.registration.getEmailById(id);
 
@@ -93,5 +96,19 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+    }
+
+    private String removeGameFromUsername(String username){
+        if(username.split("-").length>1){
+            String game = getGame(username);
+            return username.replace("-" + game, "");
+        }
+        return username;
+    }
+
+
+    private String getGame(String username){
+        String[] splitUsername = username.split("-");
+        return splitUsername[splitUsername.length-1];
     }
 }
