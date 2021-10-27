@@ -221,7 +221,7 @@ public class RegistrationService {
     }
 
     public String register(String id, String code, String game, String room, String ip, String githubUsername, String slackEmail) {
-        Player player = playerService.register(id, game, room, ip, getRepository(githubUsername), slackEmail);
+        Player player = playerService.register(id, game, room, ip, getRepository(githubUsername, game), slackEmail);
         if (player == NullPlayer.INSTANCE) {
             return "login";
         }
@@ -254,8 +254,8 @@ public class RegistrationService {
         return "register";
     }
 
-    public String getRepository(String gitHubUsername) {
-        return gameServerService.createOrGetRepository(gitHubUsername);
+    public String getRepository(String gitHubUsername, String game) {
+        return gameServerService.createOrGetRepositoryWithGame(gitHubUsername, game);
     }
 
 }
