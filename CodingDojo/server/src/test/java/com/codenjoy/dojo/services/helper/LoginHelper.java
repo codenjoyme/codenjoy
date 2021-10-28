@@ -57,6 +57,12 @@ public class LoginHelper {
         );
     }
 
+    public Deal asUser() {
+        Deal deal = register("somePlayer", "ip", "validRoom", "first");
+        asUser("somePlayer", "somePlayer");
+        return deal;
+    }
+
     public void asUser(String playerId, String password) {
         Player player = players.get(playerId);
         if (player == NullPlayer.INSTANCE) {
@@ -119,5 +125,9 @@ public class LoginHelper {
 
     public int fieldId(String player) {
         return fields.id(deals.get(player).getField());
+    }
+
+    public String code(String id) {
+        return registration.getCodeById(id);
     }
 }

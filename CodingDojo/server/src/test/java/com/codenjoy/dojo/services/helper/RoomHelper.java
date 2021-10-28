@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.helper;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Deals;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
@@ -43,6 +44,7 @@ public class RoomHelper {
 
     private RoomService rooms;
     private GameServiceImpl games;
+    private Deals deals;
 
     public SettingsReader settings(String room, String game) {
         GameType type = rooms.create(room, games.getGameType(game));
@@ -71,5 +73,9 @@ public class RoomHelper {
                     when(spy.getDice()).thenReturn(dice);
                     return spy;
                 });
+    }
+
+    public String board(String id) {
+        return (String) deals.get(id).getGame().getBoardAsString();
     }
 }

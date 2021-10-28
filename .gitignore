@@ -41,3 +41,5 @@
 **/node_modules/
 **/package-lock.json
 .DS_Store
+/CodingDojo/minify-maven-plugin
+/CodingDojo/markdown-page-generator-plugin
