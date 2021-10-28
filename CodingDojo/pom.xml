@@ -22,6 +22,8 @@
 
     <modules>
         <module>clients/java</module>
+        <module>clients/scala</module>
+        <module>clients/kotlin</module>
         <module>clients/pseudo</module>
         <module>games</module>
         <module>server</module>
