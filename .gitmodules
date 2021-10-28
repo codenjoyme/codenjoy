@@ -64,3 +64,6 @@
 [submodule "CodingDojo/games/clifford"]
 	path = CodingDojo/games/clifford
 	url = https://github.com/codenjoyme/codenjoy-clifford.git
+[submodule "kotlin"]
+	path = CodingDojo/clients/kotlin
+	url = https://github.com/codenjoyme/codenjoy-kotlin-client.git
