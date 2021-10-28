@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import { book } from '../../routes';
 import Game from '../../games';
 import Company1Logo from '../../styles/images/logos/Company1Logo.png';
-import Company2Logo from '../../styles/images/logos/Company2Logo.svg';
+import Company2Logo from '../../styles/images/logos/Company2Logo.png';
 
 // own
 import Styles from './styles.module.css';
