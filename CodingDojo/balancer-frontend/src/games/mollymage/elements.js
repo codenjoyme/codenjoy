@@ -19,7 +19,7 @@ import boom from './images/sprite/boom.png';
 import dead_hero from './images/sprite/dead_hero.png';
 import dead_ghost from './images/sprite/dead_ghost.png';
 import treasure_box from './images/sprite/treasure_box.png';
-import opened_treasure_box from './images/sprite/opened_treasure_box.png';
+import opening_treasure_box from './images/sprite/opening_treasure_box.png';
 import ghost from './images/sprite/ghost.png';
 import none from './images/sprite/none.png';
 import other_potion_hero from './images/sprite/other_potion_hero.png';
