@@ -22,24 +22,32 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <br><br>
-<div>
+    <div>
         <c:choose>
             <c:when test="${subscribed}">
-                <input type="checkbox" id="email" name="email" checked onclick="unsubscribe()"/>
+                <input type="checkbox" id="email" name="email" checked onclick="subOrUnsub()"/>
                 <label style="width:80%" for="email">
                     <font size="3">Receive email notifications.</font>
                 </label>
-                <form:form id="form" modelAttribute="feedback" action="/board/feedback" method="POST" hidden>
-                    <label><font size="3">  How can we better the notifications?</font></label>
-                    <textarea id="feedback" style="resize: none;width:100%;" value="${feedbackText}" not-empty></textarea>
-                    <button class="btn-submit" id="submit-button" type="submit" onclick="click()">Submit</button>
-                </form:form>
+                <form id="form" object = "${feedbackModel}" action="${ctx}/board/feedback" method="POST" hidden>
+                    <div id="data" for="form">
+                        <form:input type="text" path="data"/>
+                    </div>
+                    <label field="${fromPlayerId}" value = "${playerId}" hidden></label>
+                    <label field="${forGame}" value = "${game}" hidden></label>
+                    <label for="feedback"><font size="3">  How can we better the notifications?</font></label>
+                    <textarea id="feedback" for="form" style="resize: none;width:100%;" field="${feedbackText}" not-empty></textarea>
+                    <button class="btn-submit" id="submit-button" for="form" type="submit" name="action" value="unsubscribe">Submit</button>
+                </form>
             </c:when>
             <c:otherwise>
-                <input type="checkbox" id="email" name="email" onclick="subscribeForNotifications()"/>
+                <input type="checkbox" id="email" name="email" onclick="subOrUnsub()"/>
                 <label style="width:80%" for="email">
                     <font size="3">Receive email notifications.</font>
                 </label>
+                <form id="form" modelAttribute="feedback" action="${ctx}/board/feedback" method="POST" hidden>
+                    <button class="btn-submit" id="submit-button" for="form" type="submit" name="action" value="subscribe">Submit</button>
+                </form>
             </c:otherwise>
         </c:choose>
 </div>
