@@ -239,18 +239,18 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     public void subscribeByPlayerId(String id){
-        if(getSubscribedByPlayerId(id)){
-            pool.update("UPDATE saves" +
-                    "SET subscribed=false" +
+        if(!getSubscribedByPlayerId(id)){
+            pool.update("UPDATE saves " +
+                    "SET subscribed=true " +
                     "WHERE player_id = ?",
                     new Object[]{id});
         }
     }
 
     public void unsubscribeByPlayerId(String id){
-        if(!getSubscribedByPlayerId(id)){
-            pool.update("UPDATE saves" +
-                            "SET subscribed=true" +
+        if(getSubscribedByPlayerId(id)){
+            pool.update("UPDATE saves " +
+                            "SET subscribed=false " +
                             "WHERE player_id = ?",
                     new Object[]{id});
         }

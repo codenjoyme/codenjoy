@@ -66,8 +66,8 @@ public class PostgresDBConfig {
     }
 
     @Bean
-    public Feedback feedback() {
-        return new Feedback(connectionThreadPollFactory());
+    public FeedbackSaver feedback() {
+        return new FeedbackSaver(connectionThreadPollFactory());
     }
 
     @Bean

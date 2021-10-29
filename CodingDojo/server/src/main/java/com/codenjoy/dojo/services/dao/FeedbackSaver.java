@@ -25,11 +25,11 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 
-public class Feedback {
+public class FeedbackSaver {
 
     private CrudConnectionThreadPool pool;
 
-    public Feedback(ConnectionThreadPoolFactory factory) {
+    public FeedbackSaver(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS feedback (" +
                         "player_id varchar(255), " +

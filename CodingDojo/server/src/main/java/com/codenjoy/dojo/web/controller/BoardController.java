@@ -24,12 +24,13 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.Feedback;
+import com.codenjoy.dojo.services.FeedbackModel;
 import com.codenjoy.dojo.services.GameServerService;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.dao.FeedbackSaver;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -39,17 +40,15 @@ import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.Optional;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
@@ -61,6 +60,8 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 public class BoardController {
 
     public static final String URI = "/board";
+    public static final String ACTION_SUBSCRIBE = "subscribe";
+    public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
 
     private final PlayerService playerService;
     private final Registration registration;
@@ -69,6 +70,7 @@ public class BoardController {
     private final RegistrationService registrationService;
     private final GameServerService gameServerService;
     private final PlayerGameSaver playerGameSaver;
+    private final FeedbackSaver feedbackSaver;
 
     @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
@@ -113,7 +115,6 @@ public class BoardController {
         model.addAttribute("justBoard", justBoard);
         model.addAttribute("repositoryURL", playerGameSaver.getRepositoryURLByPlayerId(id));
         model.addAttribute("subscribed", playerGameSaver.getSubscribedByPlayerId(id));
-        System.out.println("0" + playerGameSaver.getSubscribedByPlayerId(id));
 
         return justBoard ? "board-only" : "board";
     }
@@ -132,7 +133,7 @@ public class BoardController {
         // TODO ROOM так как есть rest методы то может вообще убрать отсюда этих двоих?
         String room = game;
 
-        registrationService.register(user.getId(),user.getCode(),game, room, request.getRemoteAddr(), user.getGitHubUsername(),user.getSlackEmail());
+        registrationService.register(user.getId(), user.getCode(), game, room, request.getRemoteAddr(), user.getGitHubUsername(), user.getSlackEmail());
 
         return rejoinGame(model, game, room, request, user);
     }
@@ -174,7 +175,14 @@ public class BoardController {
         model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
         model.addAttribute("subscribed", playerGameSaver.getSubscribedByPlayerId(playerId));
-        System.out.println("1" + playerGameSaver.getSubscribedByPlayerId(playerId));
+
+        FeedbackModel feedbackModel = new FeedbackModel();
+        model.addAttribute("feedbackModel", feedbackModel);
+        model.addAttribute("feedbackText", feedbackModel.getFeedbackText());
+        model.addAttribute("forGame", feedbackModel.getForGame());
+        model.addAttribute("fromPlayerId", feedbackModel.getFromPlayerId());
+
+        System.out.println("THIS IS SUBSCRIPTION RN " + playerGameSaver.getSubscribedByPlayerId(playerId));
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
@@ -258,7 +266,6 @@ public class BoardController {
         if (gameType.getMultiplayerType(gameType.getSettings()) != MultiplayerType.SINGLE) {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
-        Feedback feedback = new Feedback();
         model.addAttribute("code", code);
         model.addAttribute("game", player.getGame());
         model.addAttribute("room", player.getRoom());
@@ -267,20 +274,38 @@ public class BoardController {
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("github", player.getGitHubUsername());
         model.addAttribute("allPlayersScreen", true);
-        model.addAttribute("feedback", feedback);
-        model.addAttribute("feedbackText", feedback.getFeedbackText());
-
         return "board";
     }
 
     @PostMapping("/feedback")
-    public void subscribeOrUnsubscribe(@Valid Feedback feedback, BindingResult result, HttpServletRequest request, Model model){
-        System.out.println("hello here" + feedback.getPlayerId());
-//        playerGameSaver.unsubscribeByPlayerId(playerId);
+    public String subscribeOrUnsubscribe(@ModelAttribute FeedbackModel feedbackModel, @RequestParam String action) {
+        System.out.println(feedbackModel.getFromPlayerId());
+        System.out.println(feedbackModel.getForGame());
+        System.out.println(feedbackModel.getFeedbackText());
+        switch (action) {
+            case ACTION_SUBSCRIBE:
+                System.out.println("ACTION SUB");
+                playerGameSaver.subscribeByPlayerId("n98kemhssiopw16ebe3n");
+                break;
+            case ACTION_UNSUBSCRIBE:
+                System.out.println("ACTION UNSUB");
+                playerGameSaver.unsubscribeByPlayerId("n98kemhssiopw16ebe3n");
+                addFeedback(feedbackModel);
+                break;
+        }
+        return boardAll(new ModelMap(), "2448438658076794470");
     }
 
     private String code(@RequestParam("code") String code) {
         return (code != null) ? "?code=" + code : "";
     }
 
+    private void addFeedback(FeedbackModel feedbackModel) {
+        String playerId = feedbackModel.getFromPlayerId();
+        String game = feedbackModel.getForGame();
+        String feedbackText = feedbackModel.getFeedbackText();
+        System.out.println("TRYING TO ADD " + playerId + game + feedbackText);
+
+        feedbackSaver.saveFeedback(playerId, game, feedbackText);
+    }
 }
