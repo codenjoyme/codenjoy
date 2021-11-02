@@ -20,4 +20,4 @@
 -- #L%
 ---
 ALTER TABLE messages
-    ADD COLUMN type int DEFAULT 1 NOT NULL;
+        ADD COLUMN deleted boolean DEFAULT FALSE NOT NULL;
