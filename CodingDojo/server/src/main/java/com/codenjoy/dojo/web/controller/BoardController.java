@@ -106,7 +106,6 @@ public class BoardController {
 
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
-        model.addAttribute("repositoryURL", playerGameSaver.getRepositoryURLByPlayerId(id));
         return justBoard ? "board-only" : "board";
     }
 
@@ -140,7 +139,7 @@ public class BoardController {
 
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {
-            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game, repositoryUrl, player.getSlackEmail());
+            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), room, game, user.getGitHubUsername(), player.getSlackEmail());
         }
 
         populateBoardAttributes(model, player.getCode(), player, false);
@@ -165,6 +164,7 @@ public class BoardController {
         model.addAttribute("github", github);
         model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
+        model.addAttribute("repositoryURL", playerGameSaver.getRepositoryByPlayerIdForGame(playerId, game));
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
