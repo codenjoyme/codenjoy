@@ -29,6 +29,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+/**
+ * Сервис отвечает за поиск юзера по его email со стороны SpringSecurity.
+ * Скажем, если во время авторизации (Basic auth) в Postman для какого-то get запроса
+ * передается Username/Password то Spring захочет получить инфу про юзера через этот метод,
+ * а уже внутри себя проверит Password (который, к слову, md5(realPassword) должен быть).
+ */
 @Component
 @RequiredArgsConstructor
 public class GameUserDetailsService implements UserDetailsService {
