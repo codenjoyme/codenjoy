@@ -32,7 +32,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -48,6 +51,7 @@ import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
+@Slf4j
 public class Registration {
 
     public static final int ADMIN_USER_ID = 0;
@@ -137,15 +141,28 @@ public class Registration {
                     .orElseGet(() -> registerApproved(id, email, readableName)));
         return result;
     }
-    
+
+    /**
+     * Регистрирует пользователя в профиле oauth2 по данным пришедшим из oauth-сервера.
+     *
+     * Пароль будет сгенерирован автоматически.
+     *
+     * Обычно пароль на фронте хешируется md5, а перед отправкой в базу
+     * бекенд проводит еще одно кодирование с помощью
+     * {@link org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder}.
+     *
+     * Проверка кредов затем будет происходить в
+     * {@link org.springframework.security.authentication.dao.DaoAuthenticationProvider#additionalAuthenticationChecks(UserDetails, UsernamePasswordAuthenticationToken)}
+     */
     public User registerApproved(String id, String email, String readableName) {
         if (StringUtils.isEmpty(id)) {
             id = Hash.getRandomId();
         }
-        String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
+        String rawPassword = randomAlphanumeric(properties.getAutoGenPasswordLen());
+        String hashPassword = Hash.md5(rawPassword);
 
         User user = register(id, email, readableName,
-                password, "{}", GameAuthorities.USER.roles());
+                hashPassword, "{}", GameAuthorities.USER.roles());
 
         if (!properties.isEmailVerificationNeeded()) {
             approve(user.getCode());
