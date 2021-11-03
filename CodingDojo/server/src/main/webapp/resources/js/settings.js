@@ -20,76 +20,7 @@
  * #L%
  */
 
-pages = pages || {};
-
-pages.register = function() {
-    setup.contextPath = getSettings('contextPath');
-    setup.waitApprove = getSettings('waitApprove');
-
-    initRegistration(setup.waitApprove, setup.contextPath);
-
-    initHotkeys();
-}
-
-function initRegistration(waitApprove, contextPath) {
-    window.alert("opa zdravei");
-    var disable = function(status) {
-        $("#submit").prop("disabled", status);
-        $("#feedback").prop("disabled", status);
-    }
-
-    function display(element, isVisible) {
-        element = $(element);
-        if (isVisible) {
-            element.removeAttr('hidden');
-            element.show();
-        } else {
-            element.attr('hidden', 'hidden');
-            element.hide();
-        }
-    }
-
-    function loadFeedbackPage() {
-        var configurable = function (name) {
-                if (!$('#' + name).length) {
-                    return;
-                }
-                checkEls[name] = function (value) {
-                if ($('#' + name)[0].hasAttribute('hidden')) {
-                    return false;
-                }
-                if ($('#' + name)[0].hasAttribute('not-empty')) {
-                    return notEmpty(value);
-                }
-                return false;
-            };
-        };
-
-        configurable('feedback');
-
-        var submitForm = function () {
-            if ($('form .not-valid').length == 0) {
-                $('#data input').val();
-                $('#form').submit();
-            }
-        };
-
-        $('#submit-button').click(submitForm);
-        $('#feedback').keypress(function (e) {
-            var code = (e.keyCode ? e.keyCode : e.which);
-            if (code == 13) {
-                submitForm();
-                e.preventDefault();
-            }
-        });
-    }
-}
-function click(){
-    window.alert("here");
-    $('#submit-button').click(submitForm);
-}
-
-function subOrUnsub() {
+function subOrUnSub() {
     var x = document.getElementById('form');
     if (x.hidden) {
         x.hidden = false;
@@ -97,4 +28,3 @@ function subOrUnsub() {
         x.hidden = true;
     }
 }
-

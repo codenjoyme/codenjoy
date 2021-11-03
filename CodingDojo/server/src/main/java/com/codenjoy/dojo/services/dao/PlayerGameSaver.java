@@ -230,29 +230,31 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public boolean getSubscribedByPlayerId(String id) {
+    public boolean getSubscribedByPlayerIdForGame(String id, String game) {
         return pool.select("SELECT subscribed FROM saves " +
-                        "WHERE player_id = ?",
-                new Object[]{id},
+                        "WHERE player_id = ? AND game_name = ?",
+                new Object[]{id, game},
                 rs -> rs.next() ? rs.getBoolean("subscribed") : null
         );
     }
 
-    public void subscribeByPlayerId(String id){
-        if(!getSubscribedByPlayerId(id)){
+    public void subscribeByPlayerId(String id, String game){
+        if(!getSubscribedByPlayerIdForGame(id, game)){
             pool.update("UPDATE saves " +
                     "SET subscribed=true " +
-                    "WHERE player_id = ?",
-                    new Object[]{id});
+                    "WHERE player_id = ? AND game_name = ?",
+                    new Object[]{id,
+                    game});
         }
     }
 
-    public void unsubscribeByPlayerId(String id){
-        if(getSubscribedByPlayerId(id)){
+    public void unsubscribeByPlayerId(String id, String game){
+        if(getSubscribedByPlayerIdForGame(id, game)){
             pool.update("UPDATE saves " +
                             "SET subscribed=false " +
-                            "WHERE player_id = ?",
-                    new Object[]{id});
+                            "WHERE player_id = ? AND game_name = ?",
+                    new Object[]{id,
+                    game});
         }
     }
 

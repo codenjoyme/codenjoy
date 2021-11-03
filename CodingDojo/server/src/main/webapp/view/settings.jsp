@@ -25,27 +25,28 @@
     <div>
         <c:choose>
             <c:when test="${subscribed}">
-                <input type="checkbox" id="email" name="email" checked onclick="subOrUnsub()"/>
+                <input type="checkbox" id="email" name="email" checked onclick="subOrUnSub()"/>
                 <label style="width:80%" for="email">
                     <font size="3">Receive email notifications.</font>
                 </label>
-                <form id="form" object = "${feedbackModel}" action="${ctx}/board/feedback" method="POST" hidden>
-                    <div id="data" for="form">
-                        <form:input type="text" path="data"/>
-                    </div>
-                    <label field="${fromPlayerId}" value = "${playerId}" hidden></label>
-                    <label field="${forGame}" value = "${game}" hidden></label>
+                <form id="form" action="${ctx}/board/feedback" method="POST" hidden>
+                    <textarea id="playerId" name="playerId" for="form" hidden>"${playerId}"</textarea>
+                    <textarea id="game" name="game" for="form" hidden>"${game}"</textarea>
+                    <textarea id="code" name="code" for="form" hidden>"${code}"</textarea>
                     <label for="feedback"><font size="3">  How can we better the notifications?</font></label>
-                    <textarea id="feedback" for="form" style="resize: none;width:100%;" field="${feedbackText}" not-empty></textarea>
+                    <textarea id="feedback" name="feedback" for="form" style="resize: none;width:100%;" required></textarea>
                     <button class="btn-submit" id="submit-button" for="form" type="submit" name="action" value="unsubscribe">Submit</button>
                 </form>
             </c:when>
             <c:otherwise>
-                <input type="checkbox" id="email" name="email" onclick="subOrUnsub()"/>
+                <input type="checkbox" id="email" name="email" onclick="subOrUnSub()"/>
                 <label style="width:80%" for="email">
                     <font size="3">Receive email notifications.</font>
                 </label>
-                <form id="form" modelAttribute="feedback" action="${ctx}/board/feedback" method="POST" hidden>
+                <form id="form" action="${ctx}/board/feedback" method="POST" hidden>
+                    <textarea id="playerId" name="playerId" for="form" hidden>"${playerId}"</textarea>
+                    <textarea id="game" name="game" for="form" hidden>"${game}"</textarea>
+                    <textarea id="code" name="code" for="form" hidden>"${code}"</textarea>
                     <button class="btn-submit" id="submit-button" for="form" type="submit" name="action" value="subscribe">Submit</button>
                 </form>
             </c:otherwise>

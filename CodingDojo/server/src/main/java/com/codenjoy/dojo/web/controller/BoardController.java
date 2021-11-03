@@ -24,7 +24,6 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.FeedbackModel;
 import com.codenjoy.dojo.services.GameServerService;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
@@ -42,7 +41,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,7 +112,6 @@ public class BoardController {
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
         model.addAttribute("repositoryURL", playerGameSaver.getRepositoryURLByPlayerId(id));
-        model.addAttribute("subscribed", playerGameSaver.getSubscribedByPlayerId(id));
 
         return justBoard ? "board-only" : "board";
     }
@@ -174,15 +171,7 @@ public class BoardController {
         model.addAttribute("github", github);
         model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
-        model.addAttribute("subscribed", playerGameSaver.getSubscribedByPlayerId(playerId));
-
-        FeedbackModel feedbackModel = new FeedbackModel();
-        model.addAttribute("feedbackModel", feedbackModel);
-        model.addAttribute("feedbackText", feedbackModel.getFeedbackText());
-        model.addAttribute("forGame", feedbackModel.getForGame());
-        model.addAttribute("fromPlayerId", feedbackModel.getFromPlayerId());
-
-        System.out.println("THIS IS SUBSCRIPTION RN " + playerGameSaver.getSubscribedByPlayerId(playerId));
+        model.addAttribute("subscribed", playerGameSaver.getSubscribedByPlayerIdForGame(playerId, game));
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
@@ -278,34 +267,27 @@ public class BoardController {
     }
 
     @PostMapping("/feedback")
-    public String subscribeOrUnsubscribe(@ModelAttribute FeedbackModel feedbackModel, @RequestParam String action) {
-        System.out.println(feedbackModel.getFromPlayerId());
-        System.out.println(feedbackModel.getForGame());
-        System.out.println(feedbackModel.getFeedbackText());
+    public String subscribeOrUnsubscribe(@RequestParam String action, HttpServletRequest request) {
+        String playerId = request.getParameter("playerId").replace("\"", "");
+        String game = request.getParameter("game").replace("\"", "");
+        String feedbackText = request.getParameter("feedback");
+
         switch (action) {
             case ACTION_SUBSCRIBE:
-                System.out.println("ACTION SUB");
-                playerGameSaver.subscribeByPlayerId("n98kemhssiopw16ebe3n");
+                playerGameSaver.subscribeByPlayerId(playerId, game);
                 break;
             case ACTION_UNSUBSCRIBE:
-                System.out.println("ACTION UNSUB");
-                playerGameSaver.unsubscribeByPlayerId("n98kemhssiopw16ebe3n");
-                addFeedback(feedbackModel);
+                playerGameSaver.unsubscribeByPlayerId(playerId, game);
+                feedbackSaver.saveFeedback(playerId, game, feedbackText);
                 break;
         }
-        return boardAll(new ModelMap(), "2448438658076794470");
+
+        String code = request.getParameter("code").replace("\"", "");
+        return "redirect:/board/player/" + playerId + code(code);
     }
 
     private String code(@RequestParam("code") String code) {
         return (code != null) ? "?code=" + code : "";
     }
 
-    private void addFeedback(FeedbackModel feedbackModel) {
-        String playerId = feedbackModel.getFromPlayerId();
-        String game = feedbackModel.getForGame();
-        String feedbackText = feedbackModel.getFeedbackText();
-        System.out.println("TRYING TO ADD " + playerId + game + feedbackText);
-
-        feedbackSaver.saveFeedback(playerId, game, feedbackText);
-    }
 }

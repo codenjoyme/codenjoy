@@ -52,6 +52,6 @@ public interface GameSaver {
 
     String getRepositoryURLByPlayerId(String id);
 
-    boolean getSubscribedByPlayerId(String id);
+    boolean getSubscribedByPlayerIdForGame(String id, String game);
 
     }
