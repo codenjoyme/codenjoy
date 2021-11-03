@@ -220,11 +220,12 @@ public class PlayerGameSaver implements GameSaver {
         );
     }
 
-    @Override
-    public String getRepositoryURLByPlayerId(String id) {
+    public String getRepositoryByPlayerIdForGame(String id, String game) {
         return pool.select("SELECT repository_url FROM saves " +
-                        "WHERE player_id = ?",
-                new Object[]{id},
+                        "WHERE player_id = ? AND game_name = ?",
+                new Object[]{id,
+                        game
+                },
                 rs -> rs.next() ? rs.getString("repository_url") : null
         );
     }
