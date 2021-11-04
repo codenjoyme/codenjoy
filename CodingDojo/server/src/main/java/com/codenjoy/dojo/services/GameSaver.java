@@ -50,6 +50,6 @@ public interface GameSaver {
 
     String getRoomNameByPlayerId(String id);
 
-    String getRepositoryURLByPlayerId(String id);
+    String getRepositoryByPlayerIdForGame(String id, String game);
 
     }

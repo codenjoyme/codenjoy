@@ -127,7 +127,7 @@ public class RestRoomController {
         if (!gameService.exists(game)) {
             return null;
         }
-        String repositoryUrl = gameServerService.createOrGetRepository(user.getGitHubUsername());
+        String repositoryUrl = gameServerService.createOrGetRepositoryWithGame(user.getGitHubUsername(), game);
 
         Player player = playerService.register(user.getId(), game, room, request.getRemoteAddr(), repositoryUrl, user.getSlackEmail());
 

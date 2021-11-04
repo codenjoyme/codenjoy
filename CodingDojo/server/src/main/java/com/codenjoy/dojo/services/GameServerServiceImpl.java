@@ -29,7 +29,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class GameServerServiceImpl implements GameServerService {
     public static final String REPOSITORY_NOT_FOUND = "Repository not found!";
-
     private final ConfigProperties config;
     private final RestTemplate restTemplate;
 
@@ -41,7 +40,12 @@ public class GameServerServiceImpl implements GameServerService {
 
     @Override
     public String createOrGetRepository(String gitHubUsername) {
-        return restTemplate.getForObject(createHostUrl() + gitHubUsername, String.class);
+        return restTemplate.getForObject(createHostUrl(gitHubUsername,""), String.class);
+    }
+
+    @Override
+    public String createOrGetRepositoryWithGame(String gitHubUsername, String game) {
+        return restTemplate.getForObject(createHostUrl(gitHubUsername, game), String.class);
     }
 
     @Override
@@ -49,8 +53,9 @@ public class GameServerServiceImpl implements GameServerService {
         return REPOSITORY_NOT_FOUND;
     }
 
-    private String createHostUrl() {
+    private String createHostUrl(String username, String game) {
         return "http://" + config.getGitHubHostName() + ":" +
-                config.getGitHubPort() + "/repository?username=";
+                config.getGitHubPort() + "/repository?username="
+                + username + "&game=" + game;
     }
 }
