@@ -173,8 +173,9 @@ public class AdminController {
     // ----------------
 
     @GetMapping("/player/{player}/save/remove")
-    public String removePlayerSave(@PathVariable("player") String id,
-                                   HttpServletRequest request) {
+    public String cleanPlayerScoreAndRemovePlayerSave(@PathVariable("player") String id,
+                                                      HttpServletRequest request) {
+        playerService.cleanScores(id);
         saveService.removeSave(id);
         return getAdmin(request);
     }
