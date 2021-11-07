@@ -19,7 +19,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using System;
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using SnakeBattle.Interfaces;

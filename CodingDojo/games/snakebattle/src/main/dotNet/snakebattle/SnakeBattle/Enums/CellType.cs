@@ -19,7 +19,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using System.ComponentModel;
+
+using System.ComponentModel;
 
 namespace SnakeBattle.Enums
 {
