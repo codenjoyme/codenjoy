@@ -103,6 +103,7 @@ public class Level extends AbstractLevel {
     }
 
     public List<Cell> cells() {
+        // TODO а тут точно надо Element.HIDDEN?
         return find((pt, el) -> {
                     int i = xy.getLength(pt.getX(), pt.getY());
                     boolean visible = mask.charAt(i) != HIDDEN.ch();
