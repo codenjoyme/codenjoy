@@ -19,7 +19,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using SnakeBattle.Services;
+
+using SnakeBattle.Services;
 
 namespace SnakeBattle.Interfaces.Utilities
 {

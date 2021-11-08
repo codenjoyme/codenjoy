@@ -25,7 +25,7 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.client.local.DiceGenerator;
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.utils.SmokeUtils;
 import com.codenjoy.dojo.web.rest.pojo.PTeam;
 import org.junit.Test;
 import org.springframework.context.annotation.Import;
@@ -133,7 +133,7 @@ public class RestTeamControllerApprovalsTest extends AbstractTeamControllerTest 
         }
 
         // then
-        TestUtils.assertSmokeFile(name(playersCount, teamsCount, playersPerRoom, teamsPerRoom), messages);
+        SmokeUtils.assertSmokeFile(name(playersCount, teamsCount, playersPerRoom, teamsPerRoom), messages);
     }
 
     private String name(int playersCount, int teamsCount, int playersPerRoom, int teamsPerRoom) {

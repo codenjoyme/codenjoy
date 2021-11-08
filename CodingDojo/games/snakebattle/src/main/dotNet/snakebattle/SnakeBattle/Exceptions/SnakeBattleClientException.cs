@@ -19,7 +19,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using System;
+
+using System;
 using System.Runtime.Serialization;
 
 namespace SnakeBattle.Exceptions
