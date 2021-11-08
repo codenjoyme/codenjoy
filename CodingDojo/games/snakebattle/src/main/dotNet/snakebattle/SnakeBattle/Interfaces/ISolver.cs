@@ -19,7 +19,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using SnakeBattle.Enums;
+
+using SnakeBattle.Enums;
 using SnakeBattle.Interfaces.Services;
 
 namespace SnakeBattle.Interfaces

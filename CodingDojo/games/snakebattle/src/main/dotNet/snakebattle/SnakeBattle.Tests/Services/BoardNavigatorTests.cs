@@ -19,7 +19,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using FluentAssertions;
+
+using FluentAssertions;
 using NUnit.Framework;
 using SnakeBattle.Enums;
 using SnakeBattle.Models;

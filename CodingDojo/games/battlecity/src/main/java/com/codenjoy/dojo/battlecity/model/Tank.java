@@ -30,7 +30,9 @@ import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.games.battlecity.Element;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.services.round.Timer;
 
@@ -38,9 +40,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.games.battlecity.Element.PRIZE_BREAKING_WALLS;
 import static com.codenjoy.dojo.games.battlecity.Element.PRIZE_WALKING_ON_WATER;
-import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Tank extends RoundPlayerHero<Field> implements State<Element, Player> {
@@ -270,7 +272,7 @@ public class Tank extends RoundPlayerHero<Field> implements State<Element, Playe
     }
 
     public void take(Prize prize) {
-        getPlayer().event(Events.CATCH_PRIZE.apply(Integer.valueOf("" + prize.elements().ch)));
+        getPlayer().event(Events.CATCH_PRIZE.apply(Integer.valueOf("" + prize.elements().ch())));
         prizes.add(prize);
     }
 

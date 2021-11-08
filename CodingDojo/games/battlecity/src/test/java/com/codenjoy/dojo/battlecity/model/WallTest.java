@@ -102,6 +102,6 @@ public class WallTest {
         for (Direction direction : directions) {
             wall.destroyFrom(direction);
         }
-        assertEquals(expected, wall.state(null).ch);
+        assertEquals(expected, wall.state(null).ch());
     }
 }
