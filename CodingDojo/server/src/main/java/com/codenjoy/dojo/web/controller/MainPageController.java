@@ -50,6 +50,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Controller
 @AllArgsConstructor
@@ -76,8 +77,8 @@ public class MainPageController {
         validator.checkGame(game, CANT_BE_NULL);
 
         String language = properties.getHelpLanguage();
-        String suffix = (StringUtils.isEmpty(language)) ? "" : ("-" + language);
-        return "redirect:resources/help/" + game + suffix + ".html";
+        String suffix = (isEmpty(language)) ? "" : ("-" + language);
+        return String.format("redirect:resources/%s/help/index%s.html", game, suffix);
     }
 
     @GetMapping("/")
@@ -145,10 +146,4 @@ public class MainPageController {
         model.addAttribute("donateCode", properties.getDonateCode());
         return "donate-form";
     }
-
-    @RequestMapping("/help")
-    public String help() {
-        return "help";
-    }
-
 }
