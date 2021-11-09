@@ -26,6 +26,8 @@ import com.codenjoy.dojo.services.grpc.EventService;
 import com.codenjoy.dojo.services.grpc.LeaderboardService;
 import com.codenjoy.dojo.services.grpc.UserDetailsService;
 import com.dojo.common.GrpcServer;
+import com.dojo.common.channel.GrpcChannel;
+import com.dojo.notifications.QueryServiceGrpc;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,13 +37,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class GrpcConfig {
 
+    private final GrpcChannel dojoChannel;
     private final GrpcServer grpcServer;
 
     public GrpcConfig(@Value("${grpc.executor.pool.size}") final int applicationExecutorPoolSize,
                       @Value("${grpc.server.port}") final int port,
+                      @Value("${grpc.dojo.host}") final String host,
+                      @Value("${grpc.dojo.port}") final int dojoPort,
                       final LeaderboardService leaderboardService,
                       final UserDetailsService userDetailsService,
                       final EventService eventService) {
+        this.dojoChannel = new GrpcChannel(host, dojoPort);
         this.grpcServer = new GrpcServer(applicationExecutorPoolSize, port, leaderboardService, userDetailsService, eventService);
     }
 
@@ -50,4 +56,8 @@ public class GrpcConfig {
         return grpcServer;
     }
 
+    @Bean
+    public QueryServiceGrpc.QueryServiceBlockingStub getQueryBlockingStub() {
+        return QueryServiceGrpc.newBlockingStub(this.dojoChannel.getManagedChannel());
+    }
 }
