@@ -495,9 +495,9 @@
                     <version>${markdown-page-generator.version}</version>
                     <configuration>
                         <transformRelativeMarkdownLinks>true</transformRelativeMarkdownLinks>
-                        <inputDirectory>${basedir}/src/main/webapp/resources/help</inputDirectory>
+                        <inputDirectory>${basedir}/src/main/webapp/resources/${module.name}/help</inputDirectory>
                         <inputEncoding>UTF-8</inputEncoding>
-                        <outputDirectory>${project.build.outputDirectory}/resources/help</outputDirectory>
+                        <outputDirectory>${project.build.outputDirectory}/resources/${module.name}/help</outputDirectory>
                         <outputEncoding>UTF-8</outputEncoding>
                     </configuration>
                     <executions>
