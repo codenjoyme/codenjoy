@@ -67,3 +67,6 @@
 [submodule "CodingDojo/clients/kotlin"]
 	path = CodingDojo/clients/kotlin
 	url = https://github.com/codenjoyme/codenjoy-kotlin-client.git
+[submodule "CodingDojo/clients/csharp"]
+	path = CodingDojo/clients/csharp
+	url = https://github.com/codenjoyme/codenjoy-csharp-client.git
