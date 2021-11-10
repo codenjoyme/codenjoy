@@ -11,6 +11,7 @@ And you can write one that will be your own.
 Set up a development environment
 --------------
 All you need to develop a game is jdk11, maven3, git client and IDE Idea.
+All you need to develop a game is jdk11, maven3, git client and IDE Idea.
 
 - install a git client locally, for example, [tortoise git](https://code.google.com/p/tortoisegit/)
 - create an account on [github](http://github.com) or [bitbucket](http://bitbucket.org)
@@ -170,7 +171,7 @@ Those mandatory settings are:
 For oauth2 try run `clean install spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug,oauth2 -Dcontext=/codenjoy-contest -DallGames -DOAUTH2_AUTH_SERVER_URL=https://authorization-server.com/core -DOAUTH2_AUTH_URI=/connect/authorize -DOAUTH2_CLIENT_ID=dojo -DOAUTH2_CLIENT_SECRET=secret -DOAUTH2_TOKEN_URI=/connect/token -DOAUTH2_USERINFO_URI=/connect/userinfo -DCLIENT_NAME=dojo`
 Then try go to [/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) from browser, follow authorize steps and play the game.
 
-For sso try run `clean install spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug,oauth2 -Dcontext=/codenjoy-contest -DallGames -DOAUTH2_AUTH_SERVER_URL=https://authorization-server.com/core -DOAUTH2_AUTH_URI=/connect/authorize -DOAUTH2_CLIENT_ID=dojo -DOAUTH2_CLIENT_SECRET=secret -DOAUTH2_TOKEN_URI=/connect/token -DOAUTH2_USERINFO_URI=/connect/userinfo -DCLIENT_NAME=dojo`
+For sso try run `clean install spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug,sso -Dcontext=/codenjoy-contest -DallGames -DOAUTH2_AUTH_SERVER_URL=https://authorization-server.com/core -DOAUTH2_AUTH_URI=/connect/authorize -DOAUTH2_CLIENT_ID=dojo -DOAUTH2_CLIENT_SECRET=secret -DOAUTH2_TOKEN_URI=/connect/token -DOAUTH2_USERINFO_URI=/connect/userinfo -DCLIENT_NAME=dojo`
 Then try go to [/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) from browser, follow authorize steps and play the game.
 ```
 <oauth>
