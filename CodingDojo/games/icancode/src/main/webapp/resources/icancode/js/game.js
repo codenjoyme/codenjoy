@@ -82,7 +82,7 @@ var initHelpLink = function() {
 }
 var initAdditionalLink = function() {
     if (setup.onlyLeaderBoard) {
-        $('#additional-link').attr('href', setup.contextPath + '/resources/user/icancode-servers.zip')
+        $('#additional-link').attr('href', setup.contextPath + '/resources/icancode/user/clients.zip')
         $('#additional-link').text('Get client')
     }
 }
