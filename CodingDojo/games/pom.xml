@@ -41,8 +41,8 @@
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
         <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
 
-        <user.resources>src/main/webapp/resources/user</user.resources>
-        <client.sources.file>${module.name}-servers.zip</client.sources.file>
+        <user.resources>src/main/webapp/resources/${module.name}/user</user.resources>
+        <client.sources.file>clients.zip</client.sources.file>
         <client.sources>${user.resources}/${client.sources.file}</client.sources>
         <dojo.package>java/com/codenjoy/dojo</dojo.package>
         <java.client.file>resources/user/java-client.zip</java.client.file>
@@ -456,7 +456,7 @@
                                     </zip>
 
                                     <copy file="${client.sources}"
-                                          todir="target/classes/resources/user"/>
+                                          todir="target/classes/resources/${module.name}/user"/>
                                 </target>
                             </configuration>
                         </execution>
