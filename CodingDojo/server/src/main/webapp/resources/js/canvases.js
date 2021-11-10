@@ -93,7 +93,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             var color = elements[index];
             plots[ch] = color;
             var subFolder = (!!sprites) ? sprites + '/' : '';
-            plotsUrls[color] = contextPath + '/resources/sprite/' + justGame(game) + '/' + subFolder + color + '.png';
+            plotsUrls[color] = contextPath + '/resources/' + justGame(game) + '/sprite/' + subFolder + color + '.png';
 
             var image = new Image();
             image.onload = function() {
