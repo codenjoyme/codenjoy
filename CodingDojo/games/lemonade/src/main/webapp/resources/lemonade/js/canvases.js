@@ -450,7 +450,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
             sprites = [];
         for(var i=0;i<spriteElements.length;i++){
             var name = spriteElements[i];
-            (sprites[name] = new Image()).src = contextPath + '/resources/sprite/lemonade/' + name + '.png';
+            (sprites[name] = new Image()).src = contextPath + '/resources/lemonade/sprite/' + name + '.png';
         }
     }
 }

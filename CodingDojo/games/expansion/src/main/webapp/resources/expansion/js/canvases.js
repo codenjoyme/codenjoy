@@ -40,7 +40,7 @@ var loadStuff = function() {
 var sprites = {};
 var directions = ['up', 'right_up', 'right', 'right_down', 'down', 'left_down', 'left', 'left_up'];
 var loadImage = function(name) {
-    var url = setup.contextPath + '/resources/sprite/' + setup.game + '/' + name + '.png';
+    var url = setup.contextPath + '/resources/' + setup.game + '/sprite/' + name + '.png';
     var image = new Image();
     image.onload = function() {
         // do nothing
