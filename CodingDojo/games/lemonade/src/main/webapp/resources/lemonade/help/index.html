@@ -184,18 +184,12 @@
 
                         <p>Игрок <a href="/codenjoy-contest/register?gameName=lemonade">
                             регистрируется на сервере</a>, указывая свой email.<br/>
-                            Далее необходимо скачать, настроить и запустить клиента, который подключается к серверу через веб-сокеты:
+                            Далее необходимо <a href="/codenjoy-contest/resources/lemonade/user/clients.zip">скачать</a>, настроить и запустить клиента, который подключается к серверу через веб-сокеты.
+                            Если внутри архива нет нужного языка, придётся написать свой клиент.
                         </p>
-                        <ul>
-                            <li><a href="/codenjoy-contest/resources/user/lemonade-servers.zip">Java-клиент</a>;</li>
-                            <li><a href="/codenjoy-contest/resources/user/lemonade-csharp-client.zip">C# клиент</a>;</li>
-                            <li><a href="/codenjoy-contest/resources/user/lemonade-javascript-client.zip">JavaScript клиент</a>;</li>
-                            <li><a href="/codenjoy-contest/resources/user/lemonade-python-client.zip">Python клиент</a>.</li>
-                        </ul>
-                        <p>Если в этом списке нет нужного языка, придётся написать свой клиент.</p>
 
                         <p>После регистрации на сервере в адресной строке браузера вы увидите URL вида:</p>
-                        <pre>http://epruryaw0576.moscow.epam.com:43022/codenjoy-contest/board/player/np0mlqtjasknp3554pi4?code=12345678901234567890</pre>
+                        <pre>http://codenjoy.com:8080/codenjoy-contest/board/player/np0mlqtjasknp3554pi4?code=12345678901234567890</pre>
                         <p>
                             В коде вашего клиента вам нужно найти похожую строчку и заменить её на URL из вашего браузера &ndash; тем самым, вы задаёте логин/пароль для доступа к серверу.
                             Затем запустите ваш клиент и убедитесь, что сервер получает команды вашего клиента.
