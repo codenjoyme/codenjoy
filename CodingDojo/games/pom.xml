@@ -495,10 +495,15 @@
                     <version>${markdown-page-generator.version}</version>
                     <configuration>
                         <transformRelativeMarkdownLinks>true</transformRelativeMarkdownLinks>
+
                         <inputDirectory>${basedir}/src/main/webapp/resources/${module.name}/help</inputDirectory>
                         <inputEncoding>UTF-8</inputEncoding>
+
                         <outputDirectory>${project.build.outputDirectory}/resources/${module.name}/help</outputDirectory>
                         <outputEncoding>UTF-8</outputEncoding>
+
+                        <headerHtmlFile>${basedir}/src/main/webapp/resources/${module.name}/help/header.html</headerHtmlFile>
+                        <footerHtmlFile>${basedir}/src/main/webapp/resources/${module.name}/help/footer.html</footerHtmlFile>
                     </configuration>
                     <executions>
                         <execution>

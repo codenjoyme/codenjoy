@@ -2,7 +2,7 @@
   #%L
   Codenjoy - it's a dojo-like platform from developers to developers.
   %%
-  Copyright (C) 2018 Codenjoy
+  Copyright (C) 2021 Codenjoy
   %%
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as
@@ -23,21 +23,22 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>2048 codenjoy — как играть? | Игры на работе</title>
-    <link href="../css/all.min.css" media="all" type="text/css" rel="stylesheet">
-    <link href="../css/custom.css" rel="stylesheet">
+    <base href="../../../">
+    <link href="resources/css/all.min.css" media="all" type="text/css" rel="stylesheet">
+    <link href="resources/css/custom.css" rel="stylesheet">
 
-    <script src="../js/all.min.js"></script>
+    <script src="resources/js/all.min.js"></script>
 </head>
 <body style="background-color: white;"
       class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
 <div id="settings" page="rules"></div>
-<a href="https://github.com/codenjoyme/codenjoy"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="../../resources/img/fork-me.png" alt="Fork me on GitHub"></a>
+<a href="https://github.com/codenjoyme/codenjoy"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="resources/img/fork-me.png" alt="Fork me on GitHub"></a>
 <div id="page" class="hfeed">
     <div id="main">
         <div id="primary">
             <div id="content" role="main">
                 <header class="entry-header">
-                    <h1 class="entry-title">2048 codenjoy — как играть? <a target="_self" href="index-en.html">[EN]</a> </h1>
+                    <h1 class="entry-title">2048 codenjoy — как играть? <a href="resources/a2048/help/index-en.html">[EN]</a> </h1>
                 </header>
 
                 <div class="entry-content">
@@ -73,7 +74,7 @@
                         <p>Итак, игрок <a href="register?gameName=a2048">
                             регистрируется на сервере</a>, указывая свой email</p>
 
-                        <p>Далее необходимо подключиться <a href="resources/user/a2048-servers.zip">из кода</a>
+                        <p>Далее необходимо подключиться <a href="resources/a2048/user/clients.zip">из кода</a>
                             к серверу через вебсокеты. Это Maven проект, и он подойдет он для игры на JVM языках.
                             Как его запустить смотри в корне проекта в файле README.txt</p>
 
@@ -108,32 +109,8 @@
 48884
 84422
 22222</pre>
-                        <p>Расшифровка символов</p>
+                        <p><a href="resources/a2048/help/elements.html">Расшифровка символов</a></p>
 
-                        <pre>_x('x') - препятствие, через которое цифра не пройдет
-_2('2')
-_4('4')
-_8('8')
-_16('A')
-_32('B')
-_64('C')
-_128('D')
-_256('E')
-_512('F')
-_1024('G')
-_2048('H')
-_4096('I')
-_8192('J')
-_16384('K')
-_32768('L')
-_65536('M')
-_131072('N')
-_262144('O')
-_524288('P')
-_1048576('Q')
-_2097152('R')
-_4194304('S')
-NONE(' ')</pre>
                         <p>Игра пошаговая, каждую секунду сервер посылает твоему клиенту
                             (боту) состояние обновленного поля на текущий момент и ожидает
                             ответа команды. За следующую секунду игрок должен успеть
