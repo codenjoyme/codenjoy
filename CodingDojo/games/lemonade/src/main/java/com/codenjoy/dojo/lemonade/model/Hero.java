@@ -23,7 +23,7 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
-import com.codenjoy.dojo.games.lemonade.WeatherForecast;
+import com.codenjoy.dojo.games.lemonade.Element;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
@@ -135,7 +135,7 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
         int day = simulator.getDay();
         double lemonadeCost = simulator.getLemonadeCost();
         double assets = simulator.getAssets();
-        WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
+        Element weatherForecast = Enum.valueOf(Element.class, simulator.getWeatherForecast().replace(' ', '_'));
         boolean isBankrupt = simulator.isBankrupt();
         boolean isGameOver = isGameOver();
 

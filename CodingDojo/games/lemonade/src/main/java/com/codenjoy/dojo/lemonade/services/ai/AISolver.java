@@ -26,7 +26,7 @@ package com.codenjoy.dojo.lemonade.services.ai;
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.lemonade.Board;
-import com.codenjoy.dojo.games.lemonade.WeatherForecast;
+import com.codenjoy.dojo.games.lemonade.Element;
 import com.codenjoy.dojo.services.Dice;
 
 public class AISolver implements Solver<Board> {
@@ -46,9 +46,9 @@ public class AISolver implements Solver<Board> {
         double lemonadeCost = board.getLemonadeCost();
         // let's spend some of our assets on the lemonade
         double divider = 3.2;
-        if (board.getWeatherForecast() == WeatherForecast.CLOUDY)
+        if (board.getWeatherForecast() == Element.CLOUDY)
             divider = 4.0;
-        else if (board.getWeatherForecast() == WeatherForecast.HOT_AND_DRY)
+        else if (board.getWeatherForecast() == Element.HOT_AND_DRY)
             divider = 2.2;
         int lemonadeToMake = (int)Math.floor(board.getAssets() / divider / lemonadeCost);
         // let's make one sign for every 8 glasses of lemonade
@@ -61,9 +61,9 @@ public class AISolver implements Solver<Board> {
             signsToMake = 0;
         // make the price depending on weather report
         int lemonadePriceCents = 8;
-        if (board.getWeatherForecast() == WeatherForecast.CLOUDY)
+        if (board.getWeatherForecast() == Element.CLOUDY)
             lemonadePriceCents = 5;
-        else if (board.getWeatherForecast() == WeatherForecast.HOT_AND_DRY)
+        else if (board.getWeatherForecast() == Element.HOT_AND_DRY)
             lemonadePriceCents = 10;
 
         String answer = toAnswerString(lemonadeToMake, signsToMake, lemonadePriceCents);
