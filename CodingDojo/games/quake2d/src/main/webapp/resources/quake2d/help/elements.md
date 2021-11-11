@@ -3,14 +3,14 @@
 ## Symbol breakdown
 | Sprite | Code | Description |
 | -------- | -------- | -------- |
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/none.png" style="width:40px;" /> | `NONE(' ')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/wall.png" style="width:40px;" /> | `WALL('☼')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/hero.png" style="width:40px;" /> | `HERO('☺')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/super_other_hero.png" style="width:40px;" /> | `SUPER_OTHER_HERO('Š')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/bullet.png" style="width:40px;" /> | `BULLET('*')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/other_hero.png" style="width:40px;" /> | `OTHER_HERO('☻')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/dead_hero.png" style="width:40px;" /> | `DEAD_HERO('X')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/super_defence.png" style="width:40px;" /> | `SUPER_DEFENCE('#')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/health_package.png" style="width:40px;" /> | `HEALTH_PACKAGE('+')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/super_weapon.png" style="width:40px;" /> | `SUPER_WEAPON('~')` |  | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/robot.png" style="width:40px;" /> | `ROBOT('!')` |  | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/none.png" style="width:40px;" /> | `NONE(' ')` | Пустое место – по которому может двигаться герой. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/wall.png" style="width:40px;" /> | `WALL('☼')` | Стена, через которую нельзя пройти. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/hero.png" style="width:40px;" /> | `HERO('☺')` | Твой герой | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/other_hero.png" style="width:40px;" /> | `OTHER_HERO('☻')` | Герои других игроков. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/dead_hero.png" style="width:40px;" /> | `DEAD_HERO('X')` | Твой герой погиб. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/super_other_hero.png" style="width:40px;" /> | `SUPER_OTHER_HERO('Š')` | Герои других игроков под модификаторами. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/bullet.png" style="width:40px;" /> | `BULLET('*')` | Пуля, ее надо стралять ). | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/super_defence.png" style="width:40px;" /> | `SUPER_DEFENCE('#')` | Модификатор. Дополнительная защита. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/health_package.png" style="width:40px;" /> | `HEALTH_PACKAGE('+')` | Модификатор. Дополнительная защита. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/super_weapon.png" style="width:40px;" /> | `SUPER_WEAPON('~')` | Модификатор. Дополнительная атака. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/quake2d/src/main/webapp/resources/quake2d/sprite/robot.png" style="width:40px;" /> | `ROBOT('!')` | Робот. | 

@@ -1,5 +1,5 @@
 <header class="entry-header">
-    <h1 class="entry-title">2048 Codenjoy — how to play? <a href="resources/a2048/help/index.html">[RU]</a> </h1>
+    <h1 class="entry-title">2048 Codenjoy — how to play? <a href="../../../resources/a2048/help/index.html">[RU]</a> </h1>
 </header>
 
 <div class="entry-content">
@@ -34,10 +34,10 @@ what is the sum of these two digits.</p>
 <p>The player with the largest number of points is considered to
 be a winner (prior to the due date).</p>
 
-<p>Then the player <a href="register?gameName=a2048">
+<p>Then the player <a href="/codenjoy-contest/register?gameName=a2048">
 registers on the server</a>, by indicating her/his Email.</p>
 
-<p>Then you should connect <a href="resources/a2048/user/clients.zip">from code</a>
+<p>Then you should connect <a href="../../../resources/a2048/user/clients.zip">from code</a>
 to the server via Web Sockets. This is the Maven project and it will suit for
 playing in JVM languages. To know how to launch it, refer to the root of README.txt</p>
 
@@ -72,7 +72,8 @@ the left bottom corner.</p>
 48884
 84422
 22222</pre>
-<p><a href="resources/a2048/help/elements.html">Interpretation of characters</a></p>
+
+[Interpretation of characters](elements.md)
 
 <p>The game is turn-based, every second the server sends to its
 client (bot) the state of the updated field at the moment and

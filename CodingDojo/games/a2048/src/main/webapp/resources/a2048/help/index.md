@@ -1,5 +1,5 @@
 <header class="entry-header">
-    <h1 class="entry-title">2048 codenjoy — как играть? <a href="resources/a2048/help/index-en.html">[EN]</a> </h1>
+    <h1 class="entry-title">2048 codenjoy — как играть? <a href="../../../resources/a2048/help/index-en.html">[EN]</a> </h1>
 </header>
 
 <div class="entry-content">
@@ -32,10 +32,10 @@ http://codenjoy.com/codenjoy-contest</a></p>
 
 <p>Побеждает игрок с большим числом очков (до условленного времени). </p>
 
-<p>Итак, игрок <a href="register?gameName=a2048">
+<p>Итак, игрок <a href="/codenjoy-contest/register?gameName=a2048">
 регистрируется на сервере</a>, указывая свой email</p>
 
-<p>Далее необходимо подключиться <a href="resources/a2048/user/clients.zip">из кода</a>
+<p>Далее необходимо подключиться <a href="../../../resources/a2048/user/clients.zip">из кода</a>
 к серверу через вебсокеты. Это Maven проект, и он подойдет он для игры на JVM языках.
 Как его запустить смотри в корне проекта в файле README.txt</p>
 
@@ -70,7 +70,8 @@ http://codenjoy.com/codenjoy-contest</a></p>
 48884
 84422
 22222</pre>
-<p><a href="resources/a2048/help/elements.html">Расшифровка символов</a></p>
+
+[Расшифровка символов](elements.md)
 
 <p>Игра пошаговая, каждую секунду сервер посылает твоему клиенту
 (боту) состояние обновленного поля на текущий момент и ожидает

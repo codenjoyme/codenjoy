@@ -141,7 +141,7 @@ If this is an unfamiliar concept,
 [we recommend this book by Ken Beck](http://www.ozon.ru/context/detail/id/1501671/).
 - maven will automatically assemble the game source for the client
 in a zip file, as shown here
-[sample-servers.zip](http://codenjoy.com/codenjoy-contest/resources/user/sample-servers.zip)
+[sample-clients.zip](http://codenjoy.com/codenjoy-contest/resources/sample/user/clients.zip)
 Note that the `pom.xml` file has a `maven-antrun-plugin` section,
 [where ant assembles](https://github.com/codenjoyme/codenjoy-game/blob/master/pom.xml#L223) this zip. It includes the pom.xml file, the `Elements`
 class from the model package, and everything from the `client` package

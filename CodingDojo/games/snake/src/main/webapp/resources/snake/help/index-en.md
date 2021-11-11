@@ -1,0 +1,109 @@
+﻿<header class="entry-header">
+<h1 class="entry-title">Snake Codenjoy — how do you play it?</h1>
+</header>
+
+<div class="entry-content">
+<div class="page-restrict-output">
+
+<p>A gaming demo-server is available online 24/7
+for review at <a href="http://codenjoy.com/codenjoy-contest">
+http://codenjoy.com/codenjoy-contest</a></p>
+
+<p>This is an open-source game. In order to create your own game, fix
+errors in the current version, or make any other changes, you must begin with
+<a href="https://github.com/codenjoyme/codenjoy">forking the project</a>.
+The root of the repository contains the file <em>readme.md</em> with a description of next steps.</p>
+
+<p>In case of any questions, contact <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+or email <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+
+<h2>What is the point of the game?</h2>
+
+<p>You must create a custom bot for the snake to beat all the other bots
+by gathering the most points. Each player is playing on their own field. The snake can move
+to blank cells in all four directions.</p>
+
+<p>On its way, the snake can encounter an apple, a stone, its own tail and a wall.
+If the snake eats an apple, it grows longer by 1. If it hits a stone,                            it shrinks by 10 cells. If it is shorter than 10 cells and it hits a stone, it dies.
+If the snake runs into itself or a wall, it dies.</p>
+
+<p>Each eaten apple gives the player bonus points 
+equal to the size of the snake at the time when the apple is eaten. 
+Points may be deduced for letting the snake die (by default, the value is 0, confirm this rule with the event organizer).
+Points are cumulative. The winner is the player with the most points (within the predefined
+time limit). A dead snake disappears immediately and a new one appears on the field.</p>
+
+<p>Players <a href="/codenjoy-contest/register?gameName=snake">
+register on the server</a> using their email address.</p>
+
+<p>After that, they must connect <a href="../../../resources/snake/user/clients.zip">from the code</a>
+to the server via websockets. This is a Maven project and it is suitable for playing using JVM languages.                            For instructions on how to launch it, see README.txt in the root of the project.
+It also contains all supported languages.</p>
+
+<p>If a specific language is absent from the list, you'll have to write your own client (and then share it with us! Here: apofig@gmail.com)</p>
+
+<p>Address for connecting to the game server http://codenjoy.com:</p>
+
+<pre>ws://codenjoy.com:80/codenjoy-contest/ws?user=3edq63tw0bq4w4iem7nb&code=12345678901234567890</pre>
+
+<p>Address for connecting to the game server installed in a local network:</p>
+
+<pre>ws://server_ip:8080/codenjoy-contest/ws?user=3edq63tw0bq4w4iem7nb&code=12345678901234567890</pre>
+
+<p>Here 'user' - player id, the 'code' is your security token, you can get one from the address
+bar of your browser after registering/logging in.</p>
+
+<p>After connecting, the client will receive a regular (every second) line
+of symbols which are the encoded value of the field. Format:</p>
+
+<pre>^board=(.*)$</pre>
+
+<p>using this regexp you can bite out the line of the board.
+Example of a line from the server:</p>
+
+<pre>board=☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼             ☼☼      ☻      ☼☼            ☺☼☼            ▲☼☼            ║☼☼            ║☼☼            ║☼☼            ╙☼☼             ☼☼             ☼☼             ☼☼             ☼☼             ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+
+<p>Line length equals the area of the field. Inserting a line break symbol                            each sqrt(length(string)) of symbols will produce a readable
+depiction of the field.</p>
+
+<pre>☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
+☼             ☼
+☼      ☻      ☼
+☼            ☺☼
+☼            ▲☼
+☼            ║☼
+☼            ║☼
+☼            ║☼
+☼            ╙☼
+☼             ☼
+☼             ☼
+☼             ☼
+☼             ☼
+☼             ☼
+☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+
+<p>The first line symbol corresponds with the cell located in the bottom left corner and has the coordinates [0, 0]. In this example, this is the position of the snake's head
+(symbol ▲) — [13, 10], and stone (symbol ☻) - [7, 12].</p>
+
+[Interpretation of characters](elements.md)
+
+<p>If the client is made using your chosen software development language,
+you will have a chance to use a more high-level API: 
+Board — encapsulating the line with useful methods for searching elements on the board, and
+YourSolver — an empty class with one method — you'll have to fill it with smart logic.</p>
+
+<p>The game is a step-by-step process which has the server send its client (bot)
+the present state of the updated field, and then wait for the response of the command for the snake.
+Within the next second the player much give a command to the snake.
+If they don't manage to give one in time, the snake will move automatically (until it finds a wall).</p>
+
+<p>There are several commands: UP, DOWN, LEFT, RIGHT which lead to turning the snake's head
+in the required direction. I would like to remind you that the snake moves mechanically under its own inertia.</p>
+
+<p>First, make the snake listen to your commands. If there is no client for your language, 
+it becomes slightly more complicated — you will have to write a WebSocket for the client. 
+Thus, you prepare for the main game. Your next job is to write a bot 
+which will follow a specific strategy on the field and will win.</p>
+
+</div>
+</div>

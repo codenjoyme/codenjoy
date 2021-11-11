@@ -4,7 +4,7 @@
 | Sprite | Code | Description |
 | -------- | -------- | -------- |
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sample/src/main/webapp/resources/sample/sprite/none.png" style="width:40px;" /> | `NONE(' ')` | Empty place where the hero can go. | 
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sample/src/main/webapp/resources/sample/sprite/wall.png" style="width:40px;" /> | `WALL('☼')` | Wall you can't walk through. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sample/src/main/webapp/resources/sample/sprite/wall.png" style="width:40px;" /> | `WALL('☼')` | Wall you cant walk through. | 
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sample/src/main/webapp/resources/sample/sprite/hero.png" style="width:40px;" /> | `HERO('☺')` | Your hero. | 
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sample/src/main/webapp/resources/sample/sprite/other_hero.png" style="width:40px;" /> | `OTHER_HERO('☻')` | Heroes of other players. | 
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sample/src/main/webapp/resources/sample/sprite/dead_hero.png" style="width:40px;" /> | `DEAD_HERO('X')` | Your hero died. His body will disappear in the next tick. | 

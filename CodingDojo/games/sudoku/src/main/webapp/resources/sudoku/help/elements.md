@@ -3,7 +3,7 @@
 ## Symbol breakdown
 | Sprite | Code | Description |
 | -------- | -------- | -------- |
-|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sudoku/src/main/webapp/resources/sudoku/sprite/none.png" style="width:40px;" /> | `NONE(' ')` | Отгадай, что тут за цифра. | 
+|<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sudoku/src/main/webapp/resources/sudoku/sprite/none.png" style="width:40px;" /> | `NONE(' ')` | Пустое место – циферку в котором предстоит отгадать. | 
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sudoku/src/main/webapp/resources/sudoku/sprite/border.png" style="width:40px;" /> | `BORDER('☼')` | Граница, проигнорируй ее - она не учитывается в координатах. | 
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sudoku/src/main/webapp/resources/sudoku/sprite/hidden.png" style="width:40px;" /> | `HIDDEN('*')` | Если число не отображается на поле. | 
 |<img src="https://github.com/codenjoyme/codenjoy/raw/master/CodingDojo/games/sudoku/src/main/webapp/resources/sudoku/sprite/one.png" style="width:40px;" /> | `ONE('1')` | Цифра 1. | 
