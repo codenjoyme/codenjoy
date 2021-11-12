@@ -62,7 +62,7 @@ public class SmokeTest {
                         return new GameSettings();
                     }
                 },
-                Arrays.asList(new AISolver()),
+                Arrays.asList(new AISolver(dice)),
                 Arrays.asList(new Board()));
     }
 }

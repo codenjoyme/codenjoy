@@ -38,11 +38,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class PrintLevels {
 
-    public static final String PATH = "./src/main/webapp/resources/help/lunolet-levels.html";
+    public static final String PATH = "./src/main/webapp/resources/lunolet/help/levels.html";
 
     public static void main(String[] args) throws IOException {
         File file = new File(PATH);
-        if (!file.exists()) {
+        if (!file.getAbsolutePath().replace('\\', '/').contains("games/lunolet")) {
             file = new File("./games/lunolet/" + PATH);
         }
         System.out.println(file.getAbsolutePath());

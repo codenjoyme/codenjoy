@@ -103,84 +103,7 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>${maven-clean-plugin.version}</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>${user.resources}</directory>
-                            <includes>
-                                <include>**/${module.name}-servers.zip</include>
-                                <include>**/${module.name}-csharp-client.zip</include>
-                                <include>**/${module.name}-javascript-client.zip</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>${maven-antrun.version}</version>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <inherited>false</inherited>
-                        <configuration combine.self="override">
-                            <target>
-                                <!-- TODO to use basic client build method on games/pom.xml -->
-                                <zip destfile="${client.sources}"
-                                     basedir="."
-                                     includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
-                                           src/main/java/com/codenjoy/dojo/${module.name}/client/swing/*.java,
-                                           src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
-                                           src/main/java/com/codenjoy/dojo/${module.name}/model/VesselState.java,
-                                           src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
-                                           README.*,
-                                           src/license/**,
-                                           **/pom.xml"
-                                     excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
-                                           src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
-                                           **/target/**,
-                                           **/clients/**,
-                                           **/utils/**"
-                                     update="true"/>
-
-                                <zip destfile="${client.sources}"
-                                     basedir="."
-                                     includes="src/main/**"
-                                     excludes="src/main/java/**,
-                                            src/main/webapp/**,
-                                            src/main/resources/**,
-                                            **/target/**,
-                                            **/clients/**,
-                                            **/utils/**"
-                                     update="true"/>
-
-                                <zip destfile="${client.csharp-sources}"
-                                     basedir="src/main/clients/csharp"
-                                     includes="**/*"
-                                     excludes="**/bin/**,
-                                            **/obj/**,
-                                            **/packages/**"
-                                     update="true"/>
-
-                                <zip destfile="${client.javascript-sources}"
-                                     basedir="src/main/clients/javascript"
-                                     includes="**/*"
-                                     update="true"/>
-
-                                <copy todir="target/classes/resources/user">
-                                    <fileset dir="${user.resources}"/>
-                                </copy>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -209,7 +132,7 @@
                     <arguments>
                         <argument>-classpath</argument>
                         <classpath/>
-                        <argument>com.codenjoy.dojo.lunolet.utility.PrintLevels</argument>
+                        <argument>com.codenjoy.dojo.${module.name}.utility.PrintLevels</argument>
                     </arguments>
                 </configuration>
             </plugin>

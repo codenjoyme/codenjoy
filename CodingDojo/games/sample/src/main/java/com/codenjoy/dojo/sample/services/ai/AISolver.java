@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sample.services.ai;
  */
 
 
+import com.codenjoy.dojo.JavaRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.sample.Board;
 import com.codenjoy.dojo.services.Dice;
@@ -41,7 +42,7 @@ import static com.codenjoy.dojo.games.sample.Element.GOLD;
  * Реализуй его как хочешь, хоть на Random (только используй для этого
  * {@link Dice} что приходит через конструктор).
  *
- * Для его запуска воспользуйся подходом {@link com.codenjoy.dojo.Runner}
+ * Для его запуска воспользуйся подходом {@link JavaRunner}
  * TODO сделать этот подход удобным, а то как сейчас вообще запускать?
  */
 public class AISolver implements Solver<Board> {

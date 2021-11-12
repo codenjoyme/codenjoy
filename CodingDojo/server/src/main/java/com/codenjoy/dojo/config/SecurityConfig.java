@@ -138,7 +138,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .contentSecurityPolicy(
                                 "default-src 'self';" +
                                 "script-src 'self' 'unsafe-eval' 'unsafe-inline';" +
-                                "img-src 'self' data:;" +
+                                "img-src 'self' data: github.com raw.githubusercontent.com;" +
                                 "connect-src 'self' ws: wss: http: https:;" +
                                 "font-src 'self';" +
                                 "style-src 'self' 'unsafe-inline';")

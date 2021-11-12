@@ -26,7 +26,7 @@ package com.codenjoy.dojo.lemonade.services;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.lemonade.Board;
-import com.codenjoy.dojo.games.lemonade.WeatherForecast;
+import com.codenjoy.dojo.games.lemonade.Element;
 import com.codenjoy.dojo.lemonade.model.Lemonade;
 import com.codenjoy.dojo.lemonade.model.Player;
 import com.codenjoy.dojo.lemonade.services.ai.AISolver;
@@ -72,7 +72,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public CharElement[] getPlots() {
-        return WeatherForecast.values();
+        return Element.values();
     }
 
     @Override

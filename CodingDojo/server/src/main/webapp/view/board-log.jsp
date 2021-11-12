@@ -53,7 +53,7 @@
     </style>
 
     <script src="${ctx}/resources/js/all.js"></script>
-    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
+    <script src="${ctx}/resources/${gameOnly}/js/canvases.js"></script>
 </head>
 <body style="display:none;">
     <div id="settings"
