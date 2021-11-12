@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.games.lunolet.Board;
 import com.codenjoy.dojo.games.lunolet.VesselState;
 import com.codenjoy.dojo.lunolet.utility.PrintLevels;
+import com.codenjoy.dojo.services.Dice;
 
 import java.awt.geom.Point2D;
 
@@ -36,9 +37,13 @@ public class AISolver implements Solver<Board> {
     private double mass;
     private double angle;
 
+    public AISolver(Dice dice) {
+        // do nothing
+    }
+
     @Override
     public String get(Board board) {
-        if(Math.abs(board.getHSpeed()) < 1e-5 && board.getVSpeed() > 5)
+        if (Math.abs(board.getHSpeed()) < 1e-5 && board.getVSpeed() > 5)
             return "message('go 0, 0, 1')";
 
         mass = 0.0;
