@@ -1,140 +1,142 @@
-<header class="entry-header">
-<h1 class="entry-title">Kata Codenjoy — how to play?</h1>
-</header>
+<meta charset="UTF-8">
 
-<div class="entry-content">
-<div class="page-restrict-output">
-    
-<p>The game server is available for familiarization reasons
-<a href="http://codenjoy.com/codenjoy-contest">
-http://codenjoy.com/codenjoy-contest</a></p>
+## Intro
 
-<p>This is the open source game. To realize your game, correct errors in the current
+The game server is available for familiarization reasons
+[http://codenjoy.com/codenjoy-contest](http://codenjoy.com/codenjoy-contest).
+
+This is the open source game. To realize your game, correct errors in the current
 version and make the other corrections, you should
-<a href="https://github.com/codenjoyme/codenjoy">fork the project</a> at first.
+[fork the project](https://github.com/codenjoyme/codenjoy) at first.
 There is the description in the Readme.md file in the repository root.
-It is specified in the description what to do next.</p>
+It is specified in the description what to do next.
 
-<p> If any questions, please write in <a href="skype:alexander.baglay">skype:alexander.baglay</a>
-or Email <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+If any questions, please write in [skype:alexander.baglay](skype:alexander.baglay)
+or Email [apofig@gmail.com](mailto:apofig@gmail.com).
 
-<h2>What is the gist of the game?</h2>
+Game project (for writing your bot) can be
+found [here](../../../resources/kata/user/clients.zip)
 
-<p>There is multitude of algorithmic problems in the queue. You are expected
+## What is the game about
+
+Keep in mind: when writing your bot you should stick to its movement logic.
+The rest of the game is ready for you.
+
+There is multitude of algorithmic problems in the queue. You are expected
 to solve them one by one in a contest with the colleagues. For that,
 you need to write a native bot which will resolve all these puzzles.
-Each player plays in her/his own field. </p>
+Each player plays in her/his own field. 
 
-<p>The player with the largest number of points is considered to be a winner
+The player with the largest number of points is considered to be a winner
 (prior to the due date). The points are counted for the each passed
 test (invigorating points) and for the solution of the whole puzzle.
 The faster the puzzle is solved, the more points are assigned to the
-player.</p>
+player.
 
-<p>The game is against the clock, you can make a break between algorithms.
+The game is against the clock, you can make a break between algorithms.
 The points are calculated depending on the algorithm complexity and the
-time spent.</p>
+time spent.
 
-<p>Important! Verifying tests appear one by one as far as correct answers
+Important! Verifying tests appear one by one as far as correct answers
 are given. If the answer is wrong, the new verifying test will not
-appear until the player corrects her/his algorithm.</p>
+appear until the player corrects her/his algorithm.
 
-<p>When all the tests on the server are over, the player goes to sleep,
+When all the tests on the server are over, the player goes to sleep,
 and the timer is switched off. When ready, the player can launch the
-next puzzle by the message('StartNextLevel') command. The timer will
+next puzzle by the `message('StartNextLevel')` command. The timer will
 run and the time starts to be counted. If the player wants to skip the
-puzzle, the message('SkipThisLevel') command should be applied.
-Attention: you cannot return the skipped level.</p>
+puzzle, the `message('SkipThisLevel')` command should be applied.
+**Attention**: you cannot return the skipped level.
 
-<p>You can read the puzzle description by clicking the Level:N field which
+You can read the puzzle description by clicking the Level:N field which
 is located under the player’s name above the field. An alert is open
-with the description of the puzzle.</p>
+with the description of the puzzle.
 
-<p>Numbering of puzzles starts with 0 and first puzzle is implemented to
+Numbering of puzzles starts with 0 and first puzzle is implemented to
 check client’s connection to the server. Points are not counted for the
-first puzzle solution.</p>
+first puzzle solution.
 
-<p>This is the open source game. To realize your algorithm-puzzle, you should
+This is the open source game. To realize your algorithm-puzzle, you should
 implement the following interface:
-CodingDojo\games\kata\src\main\java\com\codenjoy\dojo\kata\model\levels\Level.javа
-and locate it nearby in the ‘algorithms’ package.
-You can <a href="https://github.com/codenjoyme/codenjoy">fork the project</a>
+`CodingDojo\games\kata\src\main\java\com\codenjoy\dojo\kata\model\levels\Level.javа`
+and locate it nearby in the `algorithms` package.
+You can [fork the project](https://github.com/codenjoyme/codenjoy)
 at first. Then you should proceed to the Readme.md file in the
-repository root and read instructions.</p>
+repository root and read instructions.
 
-<p>Therefore, the player <a href="/codenjoy-contest/register?gameName=kata">
-registers on the server</a> by indicating her/his Email.</p>
+## Connect to the server
 
-<p>Then you should connect
-<a href="../../../resources/kata/user/clients.zip">from code</a>
+Player has to [registers on the server](../../../register?gameName=kata)
+using their email address
+
+Then you should connect [from code](../../../resources/kata/user/clients.zip)
 to the server via Web Sockets. This is the Maven project and it will suit
 for playing in JVM languages. The .NET and JavaScript clients are available
 as well. To know how to launch a client, refer to README.txt in the root
-of the project.</p>
+of the project.
 
-<p>For the other languages, you should write a native client (and then to share
-it with us by using Email apofig@gmail.com)</p>
+For the other languages, you should write a native client (and then to share
+it with us by using Email apofig@gmail.com)
 
-<p>Address to connect the game on the http://codenjoy.com server:</p>
+Address to connect the game on the http://codenjoy.com server:
 
-<pre>ws://codenjoy.com:80/codenjoy-contest/ws?user=3edq63tw0bq4w4iem7nb&code=12345678901234567890</pre>
+`ws://codenjoy.com:80/codenjoy-contest/ws?user=[user]&code=[code]`
 
-<p>Address to connect the game on the server deployed in the local area network (LAN):</p>
+Address to connect the game on the server deployed in the local area network (LAN):
 
-<pre>ws://server_ip:8080/codenjoy-contest/ws?user=3edq63tw0bq4w4iem7nb&code=12345678901234567890</pre>
+`ws://[server]:8080/codenjoy-contest/ws?user=[user]&code=[code]`
 
-<p>Here 'user' is your player id and 'code' is your security token, you can get it from browser address bar after registration/login.</p>
+Here `[server]` - ip/domain address of server, `[user]` is your 
+player id and `[code]` is your security token - you can get 
+it from browser address bar after registration/login.
 
-<p>After connection, the client will regularly (every second) receive JSON
-with information on the actions performed. The format:</p>
+## Message format
+
+After connection, the client will regularly (every second) receive JSON
+with information on the actions performed. The format:
 
 <pre>{
-'description':'Puzzle description.',
-'history':[
-{
-'answer':'answer1',
-'question':'question1',
-'valid':true
-},
-{
-'answer':'answer1',
-'question':'question2',
-'valid':true
-}
-],
-'level':0,
-'nextQuestion':'question3',
-'questions':[
-'question1',
-'question2',
-'question3'
-]
+  'description':'Puzzle description.',
+  'history':[
+    {
+      'answer':'answer1',
+      'question':'question1',
+      'valid':true
+    },
+    {
+      'answer':'answer1',
+      'question':'question2',
+       'valid':true
+    }
+  ],
+  'level':0,
+  'nextQuestion':'question3',
+  'questions':[
+    'question1',
+    'question2',
+    'question3'
+  ]
 }</pre>
 
-<p>You do not need to work with this JSON if you have a JVM/JS/.NET client.
+You do not need to work with this JSON if you have a JVM/JS/.NET client.
 To know how to launch a client, refer to the README.txt. in the
-root of the project.</p>
+root of the project.
 
-<p>The game is turn-based, every second the server sends to your client
+The game is turn-based, every second the server sends to your client
 (bot) questions on the currently active tests and expects a response.
 Within the next second, the player should give this response. If the
 player lost his/her chance, it is not a big deal: nothing will happen
-and the server will repeat its questions.</p>
+and the server will repeat its questions.
 
-<p>Responses are given by the message command. Its format is that each
+Responses are given by the message command. Its format is that each
 question in input JSON should be answered. All responses are packed
 to the array (see below). It is better not to skip questions, the
 order of questions should correspond to the order of questions in input
-JSON.</p>
+JSON.
 
-<pre>
-message('['answer1','answer2','answer3']')
-</pre>
+`message('['answer1','answer2','answer3']')`
 
-<p>The first task is to write a client’s WebSocket which will connect to the
+The first task is to write a client’s WebSocket which will connect to the
 server. Then you should “force” the server to listen to the client answer.
 This is the way the gamer will prepare herself/himself to the main game.
-The main goal is to play meaningfully and win.</p>
-
-</div>
-</div>
+The main goal is to play meaningfully and win.
