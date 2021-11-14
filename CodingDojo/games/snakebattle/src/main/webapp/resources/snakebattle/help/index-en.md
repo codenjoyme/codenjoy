@@ -113,14 +113,14 @@ field image.
 ☼☼                           ☼
 ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
 
-This is what you see on UI:
-
-![](./board.jpg)
-
 The first character of the line corresponds to a cell located on the
 left-top corner and has the `[0, 28]` coordinate. The following example
 shows the position of the hero (the `▲` character) – `[7,16]`. left-bottom
 corner has the `[0, 0]` coordinate.
+
+This is what you see on UI
+
+![](board.jpg)
 
 ## Symbol breakdown
 
@@ -145,6 +145,8 @@ in its current direction until stopped by a wall.
   e.g. `LEFT,ACT` or `ACT,LEFT`.
 
 ## Points
+
+The parameters will change[*](index-md.md#ask) as the game progresses.
 
 ## Cases
 
@@ -176,6 +178,8 @@ in its current direction until stopped by a wall.
 
 ## <a id="ask"></a> Ask Sensei
 
+You can always see the settings of the current game
+[here](/codenjoy-contest/rest/settings/player).
 Please ask Sensei about current game settings. You can find Sensei in
 the chat that the organizers have provided to discuss issues.
 
@@ -228,7 +232,7 @@ skype [kk.ilya](skype:kk.ilya).
 
 It's an open source game. To implement your version of it,
 to fix bugs and to add any other logic simply
-[fork it](https://github.com/codenjoyme/codenjoy).
+[fork it](https://github.com/codenjoyme/codenjoy.git).
 All instructions are in Readme.md file, you'll know what to do next once you read it.
 
 If you have any questions reach me in [skype alexander.baglay](skype:alexander.baglay)

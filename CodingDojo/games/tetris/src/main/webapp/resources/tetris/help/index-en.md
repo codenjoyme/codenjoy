@@ -167,6 +167,9 @@ winning the game.
 
 ## Points
 
+The parameters will change[*](index-md.md#ask) as the game progresses.
+The default values are shown below:
+
 There are bonus and penalty points in this game.
 For one landed figure you get the number of points equal to its complexity.
 The simplest figure is `O` - 1 point, then `I` - 2 points,
@@ -193,6 +196,8 @@ Reach out to the host-Sensei for details.
 
 ## <a id="ask"></a> Ask Sensei
 
+You can always see the settings of the current game
+[here](/codenjoy-contest/rest/settings/player).
 Please ask Sensei about current game settings. You can find Sensei in
 the chat that the organizers have provided to discuss issues.
 
@@ -226,7 +231,7 @@ level API for working with the board are implemented already.
 
 It's an open source game. To implement your version of it,
 to fix bugs and to add any other logic simply
-[fork it](https://github.com/codenjoyme/codenjoy).
+[fork it](https://github.com/codenjoyme/codenjoy.git).
 All instructions are in Readme.md file, you'll know what to do next once you read it.
 
 If you have any questions reach me in [skype alexander.baglay](skype:alexander.baglay)
