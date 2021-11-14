@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.Tickable;
 
 public class Ball extends PointImpl implements State<Element, Player>, Tickable {
 
-    private static final int DEFAULT_IMPULSE = 3; //после удара игрока мяч летит сам 3 такта
+    private static final int DEFAULT_IMPULSE = 3; //после удара игрока мяч летит сам 3  тика
     private static final int MAX_POWER = 3;       //после удара игрока мяч летит сразу на 3 клетки
     private Direction direction;
     private Field field;

@@ -477,7 +477,7 @@ public class RandomArtifactGeneratorTest {
     }
 
     // Яблоко не может появиться на месте прошлого яблока,
-    // потому как там за следующим тактом будет голова змеи
+    // потому как там за следующим тиком будет голова змеи
     @Test
     public void shouldNotAppleAtOldApplePlace() {
         for (int y = 0; y < BOARD_SIZE; y ++) {
