@@ -15,7 +15,7 @@ If any questions, please write in [skype:alexander.baglay](skype:alexander.bagla
 or Email [apofig@gmail.com](mailto:apofig@gmail.com).
 
 Game project (for writing your bot) can be
-found [here](../../../resources/kata/user/clients.zip)
+found [here](https://github.com/codenjoyme/codenjoy-clients.git)
 
 ## What is the game about
 
@@ -56,39 +56,34 @@ Numbering of puzzles starts with 0 and first puzzle is implemented to
 check client’s connection to the server. Points are not counted for the
 first puzzle solution.
 
-This is the open source game. To realize your algorithm-puzzle, you should
+## Connect to the server
+
+So, the player [registers on the server](../../../register?gameName=kata)
+and joining the game.
+
+Then you should connect from client code to the server via websockets.
+This [collection of clients](https://github.com/codenjoyme/codenjoy-clients.git)
+for different programming languages will help you. How to start a
+client please check at the root of the project in the README.md file.
+
+To realize your algorithm-puzzle, you should
 implement the following interface:
 `CodingDojo\games\kata\src\main\java\com\codenjoy\dojo\kata\model\levels\Level.javа`
 and locate it nearby in the `algorithms` package.
-You can [fork the project](https://github.com/codenjoyme/codenjoy)
-at first. Then you should proceed to the Readme.md file in the
-repository root and read instructions.
 
-## Connect to the server
+If you can't find your programming language, you're gonna
+have to write your client (and then send us to the mail:
+[apofig@gmail.com](mailto:apofig@gmail.com))
 
-Player has to [registers on the server](../../../register?gameName=kata)
-using their email address
+Address to connect the game on the server looks like this (you can
+copy it from your game room):
 
-Then you should connect [from code](../../../resources/kata/user/clients.zip)
-to the server via Web Sockets. This is the Maven project and it will suit
-for playing in JVM languages. The .NET and JavaScript clients are available
-as well. To know how to launch a client, refer to README.txt in the root
-of the project.
+`https://[server]/codenjoy-contest/board/player/[user]?code=[code]`
 
-For the other languages, you should write a native client (and then to share
-it with us by using Email apofig@gmail.com)
-
-Address to connect the game on the http://codenjoy.com server:
-
-`ws://codenjoy.com:80/codenjoy-contest/ws?user=[user]&code=[code]`
-
-Address to connect the game on the server deployed in the local area network (LAN):
-
-`ws://[server]:8080/codenjoy-contest/ws?user=[user]&code=[code]`
-
-Here `[server]` - ip/domain address of server, `[user]` is your 
-player id and `[code]` is your security token - you can get 
-it from browser address bar after registration/login.
+Here `[server]` - domain/id of server, `[user]` is your player id
+and `[code]` is your security token. Make sure you keep the code
+safe from prying eyes. Any participant, knowing your code, can
+play on your behalf.
 
 ## Message format
 
@@ -118,15 +113,23 @@ with information on the actions performed. The format:
   ]
 }</pre>
 
-You do not need to work with this JSON if you have a JVM/JS/.NET client.
+You do not need to work with this JSON if you have a realized client.
 To know how to launch a client, refer to the README.txt. in the
 root of the project.
+
+## What to do
 
 The game is turn-based, every second the server sends to your client
 (bot) questions on the currently active tests and expects a response.
 Within the next second, the player should give this response. If the
 player lost his/her chance, it is not a big deal: nothing will happen
 and the server will repeat its questions.
+
+Your goal is to make the hero move according to your algorithm. The
+algorithm must earn points as much as possible. The ultimate goal is
+winning the game.
+
+## Commands
 
 Responses are given by the message command. Its format is that each
 question in input JSON should be answered. All responses are packed
@@ -136,7 +139,42 @@ JSON.
 
 `message('['answer1','answer2','answer3']')`
 
+## Points
+
+## Cases
+
+## <a id="ask"></a> Ask Sensei
+
+Please ask Sensei about current game settings. You can find Sensei in
+the chat that the organizers have provided to discuss issues.
+
+## Hints
+
 The first task is to write a client’s WebSocket which will connect to the
 server. Then you should “force” the server to listen to the client answer.
 This is the way the gamer will prepare herself/himself to the main game.
 The main goal is to play meaningfully and win.
+
+## Clients and API
+
+The client code does not give a considerable handicap to gamers because
+you should spend time to puzzle out the code. However, it is pleasant
+to note that the logic of communication with the server plus some high
+level API for working with the board are implemented already.
+
+* `Solver`
+  An empty class with one method — you'll have to fill it with smart logic.
+* `Board` - encapsulating the line with useful methods for searching
+  elements on the board. 
+
+## Want to host an event?
+
+It's an open source game. To implement your version of it,
+to fix bugs and to add any other logic simply
+[fork it](https://github.com/codenjoyme/codenjoy).
+All instructions are in Readme.md file, you'll know what to do next once you read it.
+
+If you have any questions reach me in [skype alexander.baglay](skype:alexander.baglay)
+or email [apofig@gmail.com](mailto:apofig@gmail.com).
+
+Good luck and may the best win!

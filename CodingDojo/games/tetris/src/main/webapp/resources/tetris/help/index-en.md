@@ -15,7 +15,7 @@ If any questions, please write in [skype:alexander.baglay](skype:alexander.bagla
 or Email [apofig@gmail.com](mailto:apofig@gmail.com).
 
 Game project (for writing your bot) can be
-found [here](../../../resources/tetris/user/clients.zip)
+found [here](https://github.com/codenjoyme/codenjoy-clients.git)
 
 ## What is the game about
 
@@ -39,32 +39,38 @@ To clear a line, every square of the row has to be filled.
 
 ## Connect to the server
 
-Player has to [registers on the server](../../../register?gameName=tetris)
-using their email address.
+So, the player [registers on the server](../../../register?gameName=tetris)
+and joining the game.
 
-Next, player has to connect to the server [from code](../../../resources/tetris/user/clients.zip)
-using WebSockets. It's a maven project and it's suitable for playing using JVM languages.
-The instruction how to run it may be found at the root of the project in README.txt file.
+Then you should connect from client code to the server via websockets.
+This [collection of clients](https://github.com/codenjoyme/codenjoy-clients.git)
+for different programming languages will help you. How to start a
+client please check at the root of the project in the README.md file.
 
-Other programming languages are also supported - the sources are available in the same archive.
+If you can't find your programming language, you're gonna
+have to write your client (and then send us to the mail:
+[apofig@gmail.com](mailto:apofig@gmail.com))
 
-Address to connect the game on the http://codenjoy.com server:
+Address to connect the game on the server looks like this (you can
+copy it from your game room):
 
-`ws://codenjoy.com:80/codenjoy-contest/ws?user=[user]&code=[code]`
+`https://[server]/codenjoy-contest/board/player/[user]?code=[code]`
 
-Address to connect the game on the server deployed in the local area network (LAN):
-
-`ws://[server]:8080/codenjoy-contest/ws?user=[user]&code=[code]`
-
-Here `[server]` - ip/domain address of server, `[user]` is your
-player id and `[code]` is your security token - you can get
-it from browser address bar after registration/login.
+Here `[server]` - domain/id of server, `[user]` is your player id
+and `[code]` is your security token. Make sure you keep the code
+safe from prying eyes. Any participant, knowing your code, can
+play on your behalf.
 
 ## Message format
 
 After connection, the client will start getting a string of characters with
 the encoded state of the glass in JSON format (every second).
-The format is following:
+
+String length of `layers` property equals field area. 
+Adding hyphen every `sqrt(length(string))` symbols will give a 
+comprehensible view of the field.
+
+## Field example
 
 <pre>{
   'currentFigurePoint':{'x':4,'y':9},
@@ -133,16 +139,22 @@ you'll get a readable view of the glass.
 First char of the string corresponds to cell located on the upper left
 corner with coordinates `[0, 17]`.
 
-[Interpretation of characters](elements.md)
+## Symbol breakdown
 
-## Manipulation commands
+Please [check it here](elements.md).
+
+## What to do
 
 The game has step-by-step format. Every second server sends to your client (bot)
 the status of the updated glass and waits for response.
 The player's algorithm must make a decision where to move the figure withing next second.
 If the algorithm fails to make this decision - the figure falls one cell down.
 
-There are several commands: 
+Your goal is to make the hero move according to your algorithm. The
+algorithm must earn points as much as possible. The ultimate goal is
+winning the game.
+
+## Commands
 
 * `LEFT`, `RIGHT` – to move the figure to the left/right.
 * `DOWN` - to land the figure.
@@ -150,11 +162,10 @@ There are several commands:
 * `ACT(2)` - to rotate the figure 180 degrees.
 * `ACT(3)` - to rotate the figure 90 degrees counterclockwise.
 * `ACT(0,0)` - zeroing glass (as well as for its overflow penalty points will be taken).
+* Movement/rotation/landing commands can be combined by separating them with a comma -
+  this means that a given chain of commands will be executed in one tact.
 
-Movement/rotation/landing commands can be combined by separating them with a comma -
-this means that a given chain of commands will be executed in one tact.
-
-## Scoring
+## Points
 
 There are bonus and penalty points in this game.
 For one landed figure you get the number of points equal to its complexity.
@@ -178,24 +189,38 @@ during limited amount of time (final competition).
 Scoring rules as well as rules of determining the winner may change.
 Reach out to the host-Sensei for details.
 
-## Client
+## Cases
 
-If [the client](../../../resources/tetris/user/clients.zip)
-is written using programming language you're using -
-you may have a great possibility to use a higher-level API:
-`Board` class - which encapsulates JSON of state,
-and `GlassBoard` - which encapsulates tetris glass,
-has useful methods for analyzing free and occupied cells in the glass.
-`YourSolver` class - empty class with one method `getAnswer(Board board)`.
-You'll have to put your intelligent logic there. You can also put
-your new method inside `Board` and `GlassBoard` classes.
+## <a id="ask"></a> Ask Sensei
+
+Please ask Sensei about current game settings. You can find Sensei in
+the chat that the organizers have provided to discuss issues.
+
+## Hints
 
 First of all you'll have to choose the programming language.
 Next, open WebSocket client in IDE and run it.
 Details may be found inside Readme.txt in the root of project.
 You'll connect to the server following that instructions.
-Next, you'll have to get the falling figures to obey your commands,
-play a smart game and win!
+Next, you'll have to get the falling figures to obey your commands.
+
+## Clients and API
+
+The client code does not give a considerable handicap to gamers because
+you should spend time to puzzle out the code. However, it is pleasant
+to note that the logic of communication with the server plus some high
+level API for working with the board are implemented already.
+
+* `Solver`
+  An empty class with one method — you'll have to fill it with smart logic.
+* `Direcion`
+  Possible commands for this game.
+* `Point`
+  `x`, `y` coordinates.
+* `Element`
+  Type of the element on the board.
+* `Board` - encapsulating the line with useful methods for searching
+  elements on the board.
 
 ## Want to host an event?
 
@@ -206,3 +231,5 @@ All instructions are in Readme.md file, you'll know what to do next once you rea
 
 If you have any questions reach me in [skype alexander.baglay](skype:alexander.baglay)
 or email [apofig@gmail.com](mailto:apofig@gmail.com).
+
+Good luck and may the best win!

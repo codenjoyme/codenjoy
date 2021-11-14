@@ -15,7 +15,7 @@ If any questions, please write in [skype:alexander.baglay](skype:alexander.bagla
 or Email [apofig@gmail.com](mailto:apofig@gmail.com).
 
 Game project (for writing your bot) can be
-found [here](../../../resources/snake/user/clients.zip)
+found [here](https://github.com/codenjoyme/codenjoy-clients.git)
 
 ## What is the game about
 
@@ -38,26 +38,27 @@ time limit). A dead snake disappears immediately and a new one appears on the fi
 
 ## Connect to the server
 
-Player has to [registers on the server](../../../register?gameName=snake)
-using their email address.
+So, the player [registers on the server](../../../register?gameName=snake)
+and joining the game.
 
-After that, they must connect [from code](../../../resources/snake/user/clients.zip)
-to the server via websockets. This is a Maven project and it is suitable for playing using JVM languages.                            For instructions on how to launch it, see README.txt in the root of the project.
-It also contains all supported languages.
+Then you should connect from client code to the server via websockets.
+This [collection of clients](https://github.com/codenjoyme/codenjoy-clients.git)
+for different programming languages will help you. How to start a
+client please check at the root of the project in the README.md file.
 
-If a specific language is absent from the list, you'll have to write your own client (and then share it with us! Here: apofig@gmail.com)
+If you can't find your programming language, you're gonna
+have to write your client (and then send us to the mail:
+[apofig@gmail.com](mailto:apofig@gmail.com))
 
-Address to connect the game on the http://codenjoy.com server:
+Address to connect the game on the server looks like this (you can
+copy it from your game room):
 
-`ws://codenjoy.com:80/codenjoy-contest/ws?user=[user]&code=[code]`
+`https://[server]/codenjoy-contest/board/player/[user]?code=[code]`
 
-Address to connect the game on the server deployed in the local area network (LAN):
-
-`ws://[server]:8080/codenjoy-contest/ws?user=[user]&code=[code]`
-
-Here `[server]` - ip/domain address of server, `[user]` is your
-player id and `[code]` is your security token - you can get
-it from browser address bar after registration/login.
+Here `[server]` - domain/id of server, `[user]` is your player id
+and `[code]` is your security token. Make sure you keep the code
+safe from prying eyes. Any participant, knowing your code, can
+play on your behalf.
 
 ## Message format
 
@@ -66,15 +67,18 @@ of symbols which are the encoded value of the field. Format:
 
 `^board=(.*)$`
 
-Using this regexp you can bite out the line of the board.
-Example of a line from the server:
+You can use this regular expression to extract a board from
+the resulting string.
 
 ## Field example
 
+Here is an example of a string from the server.
+
 <pre>board=☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼             ☼☼      ☻      ☼☼            ☺☼☼            ▲☼☼            ║☼☼            ║☼☼            ║☼☼            ╙☼☼             ☼☼             ☼☼             ☼☼             ☼☼             ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
 
-Line length equals the area of the field. Inserting a line break symbol                            each `sqrt(length(string))` of symbols will produce a readable
-depiction of the field.
+The line length is equal to the field square. If to insert a wrapping
+character (carriage return) every `sqrt(length(string))` characters,
+you obtain the readable image of the field.
 
 <pre>☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 ☼             ☼
@@ -92,25 +96,72 @@ depiction of the field.
 ☼             ☼
 ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
 
-The first line symbol corresponds with the cell located in the bottom left corner and has the coordinates [0, 0]. In this example, this is the position of the snake's head
-(symbol ▲) — [13, 10], and stone (symbol ☻) - [7, 12].
+The first line symbol corresponds with the cell located in the bottom 
+left corner and has the coordinates `[0, 0]`. In this example, this is 
+the position of the snake's head
+(symbol `▲`) — `[13, 10]`, and stone (symbol `☻`) - `[7, 12]`.
 
-[Interpretation of characters](elements.md)
+## Symbol breakdown
 
-If the client is made using your chosen software development language,
-you will have a chance to use a more high-level API: 
-Board — encapsulating the line with useful methods for searching elements on the board, and
-YourSolver — an empty class with one method — you'll have to fill it with smart logic.
+Please [check it here](elements.md).
+
+## What to do
 
 The game is a step-by-step process which has the server send its client (bot)
-the present state of the updated field, and then wait for the response of the command for the snake.
-Within the next second the player much give a command to the snake.
-If they don't manage to give one in time, the snake will move automatically (until it finds a wall).
+the present state of the updated field, and then wait for the response 
+of the command for the snake. Within the next second the player much 
+give a command to the snake. If they don't manage to give one in time, 
+the snake will move automatically (until it finds a wall).
 
-There are several commands: UP, DOWN, LEFT, RIGHT which lead to turning the snake's head
-in the required direction. I would like to remind you that the snake moves mechanically under its own inertia.
+Your goal is to make the hero move according to your algorithm. The
+algorithm must earn points as much as possible. The ultimate goal is
+winning the game.
 
-First, make the snake listen to your commands. If there is no client for your language, 
-it becomes slightly more complicated — you will have to write a WebSocket for the client. 
-Thus, you prepare for the main game. Your next job is to write a bot 
-which will follow a specific strategy on the field and will win.
+## Commands
+
+There are several commands
+* `UP`, `DOWN`, `LEFT`, `RIGHT` - which lead to turning 
+  the snake's head in the required direction. I would like to remind you 
+  that the snake moves mechanically under its own inertia.
+
+## Points
+
+## Cases
+
+## <a id="ask"></a> Ask Sensei
+
+Please ask Sensei about current game settings. You can find Sensei in
+the chat that the organizers have provided to discuss issues.
+
+## Hints
+
+First, make the snake listen to your commands. If there is no client for 
+your language, it becomes slightly more complicated — you will have to 
+write a WebSocket for the client. Thus, you prepare for the main game. 
+Your next job is to write a bot which will follow a specific strategy on 
+the field and will win.
+
+## Clients and API
+
+The client code does not give a considerable handicap to gamers because
+you should spend time to puzzle out the code. However, it is pleasant
+to note that the logic of communication with the server plus some high
+level API for working with the board are implemented already.
+* `Board` - encapsulating the line with useful methods for searching
+  elements on the board.
+* `Solver` - an empty class with one method — you'll have to
+  fill it with smart logic.
+* `Element` - describe all symbols at board.
+* `Direcion` - possible commands for this game.
+
+## Want to host an event?
+
+It's an open source game. To implement your version of it,
+to fix bugs and to add any other logic simply
+[fork it](https://github.com/codenjoyme/codenjoy).
+All instructions are in Readme.md file, you'll know what to do next once you read it.
+
+If you have any questions reach me in [skype alexander.baglay](skype:alexander.baglay)
+or email [apofig@gmail.com](mailto:apofig@gmail.com).
+
+Good luck and may the best win!

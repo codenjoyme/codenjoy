@@ -15,7 +15,7 @@ If any questions, please write in [skype:alexander.baglay](skype:alexander.bagla
 or Email [apofig@gmail.com](mailto:apofig@gmail.com).
 
 Game project (for writing your bot) can be
-found [here](../../../resources/snakebattle/user/clients.zip)
+found [here](https://github.com/codenjoyme/codenjoy-clients.git)
 
 ## What is the game about
 
@@ -37,36 +37,50 @@ round (start event).
 
 ## Connect to the server
 
-Player has to [register on the server](../../../register?gameName=snakebattle)
-using their email address.
+So, the player [registers on the server](../../../register?gameName=snakebattle)
+and joining the game.
 
-After that they have to connect to server [from code](../../../resources/snakebattle/user/clients.zip)
-through websockets. This is a Maven project and it will work for games on JVM languages.
-Refer to README.txt in the root to see how to launch it.
+Then you should connect from client code to the server via websockets.
+This [collection of clients](https://github.com/codenjoyme/codenjoy-clients.git)
+for different programming languages will help you. How to start a
+client please check at the root of the project in the README.md file.
 
-For other languages you will have to write your own client and share it with us via email: apofig@gmail.com
+If you can't find your programming language, you're gonna
+have to write your client (and then send us to the mail:
+[apofig@gmail.com](mailto:apofig@gmail.com))
 
-Address to connect the game on the http://codenjoy.com server:
+Address to connect the game on the server looks like this (you can
+copy it from your game room):
 
-`ws://codenjoy.com:80/codenjoy-contest/ws?user=[user]&code=[code]`
+`https://[server]/codenjoy-contest/board/player/[user]?code=[code]`
 
-Address to connect the game on the server deployed in the local area network (LAN):
-
-`ws://[server]:8080/codenjoy-contest/ws?user=[user]&code=[code]`
-
-Here `[server]` - ip/domain address of server, `[user]` is your
-player id and `[code]` is your security token - you can get
-it from browser address bar after registration/login.
+Here `[server]` - domain/id of server, `[user]` is your player id
+and `[code]` is your security token. Make sure you keep the code
+safe from prying eyes. Any participant, knowing your code, can
+play on your behalf.
 
 ## Message format
 
 After the connection is established, the client will regularly (every second)
 receive a symbol string with encoded state of the field.
 
-String length equals field area. Adding hyphen every `sqrt(length(string))`
-symbols will give a comprehensible view of the field..
+The format is as follows:
+
+`^board=(.*)$`
+
+You can use this regular expression to extract a board from
+the resulting string.
 
 ## Field example
+
+Here is an example of a string from the server.
+
+<pre>☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼  ○                       ●☼☼#                           ☼☼☼      ☼#         ●         ☼☼☼                           ☼☼#                        æ  ☼☼☼                ☼#      │  ☼☼☼      ☼☼☼        ☼  ☼   │  ☼☼#      ☼          ☼  ☼   │  ☼☼☼      ☼        ● ☼  ☼   │  ☼☼☼      ☼☼☼æ       ○   ● ┌┘  ☼☼#         │    ☼#     <─┘ ● ☼☼☼     ○<──┘  ●           æ  ☼☼☼     ▲             ☼   ˄│  ☼☼#     ║                 └┘  ☼☼☼     ║                     ☼☼☼     ║           ☼#     ●● ☼☼#     ║ ☼☼ ☼                ☼☼☼     ║    ☼                ☼☼☼  ●  ║ ☼☼ ☼                ☼☼#     ║    ☼             ●  ☼☼☼ ● ╘═╝   ☼#                ☼☼☼     ●           ○         ☼☼#                  ☼☼☼   ●  ☼☼☼                        ● ●☼☼☼               ☼☼☼#        ☼☼#                           ☼☼☼                           ☼☼☼                           ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+
+The length of the string is equal to the area of the field.
+If you insert a hyphen character strings every
+`sqrt(length(string))` characters, then you will get a readable
+field image.
 
 <pre>☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 ☼☼  ○                       ●☼
@@ -99,50 +113,59 @@ symbols will give a comprehensible view of the field..
 ☼☼                           ☼
 ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
 
-Sprite UI:
+This is what you see on UI:
 
-![Board](./board.jpg)
+![](./board.jpg)
 
-[Interpretation of characters](elements.md)
+The first character of the line corresponds to a cell located on the
+left-top corner and has the `[0, 28]` coordinate. The following example
+shows the position of the hero (the `▲` character) – `[7,16]`. left-bottom
+corner has the `[0, 0]` coordinate.
 
-Snake's body elements can be found in the Elements file.
+## Symbol breakdown
+
+Please [check it here](elements.md).
+
+## What to do
 
 The game is turn-based: Each second, the server sends the updated state of the
 field to the client and waits for response. Within the next second the player
 must give the snake a command. If no command is given, the snake moves inertially
 in its current direction until stopped by a wall.
 
-There are five commands:
-* UP, DOWN, LEFT, RIGHT - they move the snake one cell in the
-  corresponding direction;
-* ACT - drop a stone (if the snake has previously eaten at
-  least one). The stone is left at the end of snake's tail. With the help of stones
-  players can set obstacles and block enemies.
+## Commands
 
-Movement and ACT commands can be combined, separating them by comma. During one game
-cycle the snake will drop a stone and move, e.g. (LEFT, ACT) or (ACT, LEFT).
+* `UP`, `DOWN`, `LEFT`, `RIGHT` - they move the snake one cell in the
+  corresponding direction.
+* `ACT` - drop a stone (if the snake has previously eaten at
+  least one). The stone is left at the end of snake's tail. With the help 
+  of stones players can set obstacles and block enemies.
+* Movement and `ACT` commands can be combined, separating them by comma. 
+  During one game cycle the snake will drop a stone and move, 
+  e.g. `LEFT,ACT` or `ACT,LEFT`.
 
-Your goal is to make the snake move according to your algorithm. The algorithm must
-block and destroy enemy snakes with the help of bonuses (pills). The ultimate goal
-is winning the game.
+## Points
 
-## Battle rules
+## Cases
 
-### Negative impact:
+### Negative impact
+
 - Snake that hits a wall, dies.
 - Snake that hits another snake, dies.
 - Snake must be at least two cells long or it dies.
 - Snake that eats a stone becomes three cells shorter, and, if that
   makes it shorter than two cells - it dies.
 
-### Positive impact:
+### Positive impact
+
 - Snake that eats an apple becomes longer by one cell.
 - Snake that eats a flying pill flies over stones and other snakes for 10 moves.
 - Snake that eats a fury pill can bite off parts of other snakes and eat stones without
   negative effects for 10 moves.
 - Snake that eats gold gets bonus points.
 
-### Exceptional cases:
+### Exceptional cases
+
 - Snakes can bite off their own tails, becoming shorter without any negative effects.
 - If two snakes collide head-on, the shortest snake dies. The surviving snake becomes
   shorter - by the length of the dead one (if that makes it shorter than two cells, it dies as well).
@@ -151,10 +174,19 @@ is winning the game.
 - If two snakes collide, the under the fury pill always wins.
 - If two furious snakes collide, common collision rules are used.
 
-Good luck and let the smartest ass win!
+## <a id="ask"></a> Ask Sensei
 
-## Hints:
-For your algorithm you can use the existing class DeikstraFindWay and getShortestWay() metod in particular.
+Please ask Sensei about current game settings. You can find Sensei in
+the chat that the organizers have provided to discuss issues.
+
+## Hints
+
+Your goal is to make the snake move according to your algorithm. The algorithm must
+block and destroy enemy snakes with the help of bonuses (pills). The ultimate goal
+is winning the game.
+
+For your algorithm you can use the existing class DeikstraFindWay and 
+getShortestWay() metod in particular.
 
 If you are not sure what to do try to implement the following algorithms:
 
@@ -164,12 +196,42 @@ If you are not sure what to do try to implement the following algorithms:
 - Avoid longer enemies and ones under fury pill.
 - Block the supposed path of the enemy by your tail.
 
-Maximum number of players is defined by the number of respawn points. 15 for the current map.
+Maximum number of players is defined by the number of respawn points. 
+15 for the current map.
+
+## Clients and API
+
+The client code does not give a considerable handicap to gamers because
+you should spend time to puzzle out the code. However, it is pleasant
+to note that the logic of communication with the server plus some high
+level API for working with the board are implemented already.
+
+* `Solver`
+  An empty class with one method — you'll have to fill it with smart logic.
+* `Direcion`
+  Possible commands for this game.
+* `Point`
+  `x`, `y` coordinates.
+* `Element`
+  Type of the element on the board.
+* `Board` - encapsulating the line with useful methods for searching
+  elements on the board. 
+
+## Game author
 
 If you have any questions feel free to contact me:
 Author **Корсиков Илья**,
 email [kors.ilya@gmail.com](mailto:kors.ilya@gmail.com),
 skype [kk.ilya](skype:kk.ilya).
 
-Or skype [alexander.baglay](skype:alexander.baglay) or
-email [apofig@gmail.com](mailto:apofig@gmail.com).
+## Want to host an event?
+
+It's an open source game. To implement your version of it,
+to fix bugs and to add any other logic simply
+[fork it](https://github.com/codenjoyme/codenjoy).
+All instructions are in Readme.md file, you'll know what to do next once you read it.
+
+If you have any questions reach me in [skype alexander.baglay](skype:alexander.baglay)
+or email [apofig@gmail.com](mailto:apofig@gmail.com).
+
+Good luck and may the best win!

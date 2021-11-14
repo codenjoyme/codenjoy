@@ -19,7 +19,7 @@ The game is based on
 Thank Authors for the idea.
 
 Game project (for writing your bot) can be
-found [here](../../../resources/snakebattle/user/clients.zip)
+found [here](https://github.com/codenjoyme/codenjoy-clients.git)
 
 ## What is the game about
 
@@ -39,26 +39,27 @@ be a winner (prior to the due date).
 
 ## Connect to the server
 
-Player has to [registers on the server](../../../register?gameName=a2048)
-using their email address.
+So, the player [registers on the server](../../../register?gameName=s2048)
+and joining the game.
 
-Then you should connect [from code](../../../resources/a2048/user/clients.zip)
-to the server via Web Sockets. This is the Maven project and it will suit for
-playing in JVM languages. To know how to launch it, refer to the root of README.txt
+Then you should connect from client code to the server via websockets.
+This [collection of clients](https://github.com/codenjoyme/codenjoy-clients.git)
+for different programming languages will help you. How to start a
+client please check at the root of the project in the README.md file.
 
-For the other languages, you should write a native client (and then to share it with us by Email: apofig@gmail.com)
+If you can't find your programming language, you're gonna
+have to write your client (and then send us to the mail:
+[apofig@gmail.com](mailto:apofig@gmail.com))
 
-Address to connect the game on the http://codenjoy.com server:
+Address to connect the game on the server looks like this (you can
+copy it from your game room):
 
-`ws://codenjoy.com:80/codenjoy-contest/ws?user=[user]&code=[code]`
+`https://[server]/codenjoy-contest/board/player/[user]?code=[code]`
 
-Address to connect the game on the server deployed in the local area network (LAN):
-
-`ws://[server]:8080/codenjoy-contest/ws?user=[user]&code=[code]`
-
-Here `[server]` - ip/domain address of server, `[user]` is your
-player id and `[code]` is your security token - you can get
-it from browser address bar after registration/login.
+Here `[server]` - domain/id of server, `[user]` is your player id
+and `[code]` is your security token. Make sure you keep the code
+safe from prying eyes. Any participant, knowing your code, can
+play on your behalf.
 
 ## Message format
 
@@ -67,7 +68,12 @@ characters with the encoded state of the field. The format:
 
 `^board=(.*)$`
 
-With the help of regexp you can obtain a board line. Example of the line from the server:
+You can use this regular expression to extract a board from
+the resulting string.
+
+## Field example
+
+Here is an example of a string from the server.
 
 <pre>board=8A4AA2BB88488848442222222</pre>
 
@@ -82,16 +88,69 @@ the left bottom corner.
 84422
 22222</pre>
 
-[Interpretation of characters](elements.md)
+## Symbol breakdown
 
-The game is turn-based, every second the server sends to its
-client (bot) the state of the updated field at the moment and
-expects a response of the team. Within the next second, the
-player should give a command. If the player lost his/her chance,
-nothing changes
+Please [check it here](elements.md).
+
+## What to do
+
+The game is turn-based: Each second, the server sends the updated state
+of the field to the client and waits for response. Within the next
+second the player must give the hero a command. If no command is
+given, the hero will stand still.
+
+Your goal is to make the hero move according to your algorithm. The
+algorithm must earn points as much as possible. The ultimate goal is
+winning the game.
+
+## Commands
+
+* `UP`, `DOWN`, `LEFT`, `RIGHT` - “force” digits in the specified
+  direction.
+
+## Points
+
+## Cases
+
+## <a id="ask"></a> Ask Sensei
+
+Please ask Sensei about current game settings. You can find Sensei in
+the chat that the organizers have provided to discuss issues.
+
+## Hints
 
 The first task is to write a client’s WebSocket which will
 connect to the server. Then you should “force” digits on the
 field to listen to the commands. This is the way the gamer
 will prepare herself/himself to the main game. The primary
 goal is to play meaningfully and win.
+
+## Clients and API
+
+The client code does not give a considerable handicap to gamers because
+you should spend time to puzzle out the code. However, it is pleasant
+to note that the logic of communication with the server plus some high
+level API for working with the board are implemented already.
+
+* `Solver`
+  An empty class with one method — you'll have to fill it with smart logic.
+* `Direcion`
+  Possible commands for this game.
+* `Point`
+  `x`, `y` coordinates.
+* `Element`
+  Type of the element on the board.
+* `Board` - encapsulating the line with useful methods for searching
+  elements on the board. 
+
+## Want to host an event?
+
+It's an open source game. To implement your version of it,
+to fix bugs and to add any other logic simply
+[fork it](https://github.com/codenjoyme/codenjoy).
+All instructions are in Readme.md file, you'll know what to do next once you read it.
+
+If you have any questions reach me in [skype alexander.baglay](skype:alexander.baglay)
+or email [apofig@gmail.com](mailto:apofig@gmail.com).
+
+Good luck and may the best win!
