@@ -168,7 +168,8 @@ level API for working with the board are implemented already.
 
 * `Solver`
   An empty class with one method — you'll have to fill it with smart logic.
-* `Board` - encapsulating the line with useful methods for searching
+* `Board` 
+  Encapsulating the line with useful methods for searching
   elements on the board. 
 
 ## Want to host an event?
