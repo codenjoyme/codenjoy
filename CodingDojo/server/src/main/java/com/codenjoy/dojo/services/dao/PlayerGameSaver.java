@@ -73,7 +73,7 @@ public class PlayerGameSaver implements GameSaver {
                         save,
                         player.getRepositoryUrl(),
                         true
-                });
+        });
     }
 
     @Override
@@ -229,34 +229,4 @@ public class PlayerGameSaver implements GameSaver {
                 rs -> rs.next() ? rs.getString("repository_url") : null
         );
     }
-
-    @Override
-    public boolean getSubscribedByPlayerIdForGame(String id, String game) {
-        return pool.select("SELECT subscribed FROM saves " +
-                        "WHERE player_id = ? AND game_name = ?",
-                new Object[]{id, game},
-                rs -> rs.next() ? rs.getBoolean("subscribed") : null
-        );
-    }
-
-    public void subscribeByPlayerId(String id, String game){
-        if(!getSubscribedByPlayerIdForGame(id, game)){
-            pool.update("UPDATE saves " +
-                    "SET subscribed=true " +
-                    "WHERE player_id = ? AND game_name = ?",
-                    new Object[]{id,
-                    game});
-        }
-    }
-
-    public void unsubscribeByPlayerId(String id, String game){
-        if(getSubscribedByPlayerIdForGame(id, game)){
-            pool.update("UPDATE saves " +
-                            "SET subscribed=false " +
-                            "WHERE player_id = ? AND game_name = ?",
-                    new Object[]{id,
-                    game});
-        }
-    }
-
 }
