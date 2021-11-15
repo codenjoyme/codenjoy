@@ -32,10 +32,14 @@ import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.FeedbackSaver;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.dao.SubscriptionSaver;
+import com.codenjoy.dojo.services.grpc.QueryClient;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.playerdata.QuerySubscription;
 import com.codenjoy.dojo.services.security.RegistrationService;
+import com.dojo.notifications.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -47,7 +51,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
@@ -69,6 +75,8 @@ public class BoardController {
     private final GameServerService gameServerService;
     private final PlayerGameSaver playerGameSaver;
     private final FeedbackSaver feedbackSaver;
+    private final SubscriptionSaver subscriptionSaver;
+    private final QueryClient queryClient;
 
     @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
@@ -130,6 +138,11 @@ public class BoardController {
 
         registrationService.register(user.getId(), user.getCode(), game, room, request.getRemoteAddr(), user.getGitHubUsername(), user.getSlackEmail());
 
+        if(subscriptionSaver.isFirstSubscription(user.getId(), game)) {
+            String slackEmail = registration.getSlackEmailById(user.getId());
+            queryClient.getQueriesForContest(game).forEach(query -> subscriptionSaver.saveSubscription(user.getId(), query.getId(), true, !(slackEmail.equals("")), game));
+        }
+
         return rejoinGame(model, game, room, request, user);
     }
 
@@ -169,7 +182,7 @@ public class BoardController {
         model.addAttribute("github", github);
         model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
-        model.addAttribute("subscribed", playerGameSaver.getSubscribedByPlayerIdForGame(playerId, game));
+        model.addAttribute("subscribed", getQueriesForGame(playerId, game));
         model.addAttribute("repositoryURL", playerGameSaver.getRepositoryByPlayerIdForGame(playerId, game));
     }
 
@@ -272,14 +285,11 @@ public class BoardController {
         String game = request.getParameter("game").replace("\"", "");
         String feedbackText = request.getParameter("feedback");
 
-        switch (action) {
-            case ACTION_SUBSCRIBE:
-                playerGameSaver.subscribeByPlayerId(playerId, game);
-                break;
-            case ACTION_UNSUBSCRIBE:
-                playerGameSaver.unsubscribeByPlayerId(playerId, game);
-                feedbackSaver.saveFeedback(playerId, game, feedbackText);
-                break;
+        List<Query> queries = queryClient.getQueriesForContest(game);
+        for (int i = 1; i <= queries.size(); i++) {
+
+            subscriptionSaver.updateEmailSubscription(playerId, String.valueOf(i), getCheckBoxValue(i,"email", request), game);
+            subscriptionSaver.updateSlackSubscription(playerId, String.valueOf(i), getCheckBoxValue(i, "slackEmail", request), game);
         }
 
         String code = request.getParameter("code").replace("\"", "");
@@ -290,4 +300,20 @@ public class BoardController {
         return (code != null) ? "?code=" + code : "";
     }
 
+    private List<QuerySubscription> getQueriesForGame(String playerId, String game){
+        List<Query> queries = queryClient.getQueriesForContest(game);
+
+        return queries.stream()
+                .map(query -> new QuerySubscription(query,
+                        subscriptionSaver.getEmailValueForQuery(playerId, String.valueOf(query.getId()), game),
+                        subscriptionSaver.getSlackValueForQuery(playerId, String.valueOf(query.getId()), game)))
+                .collect(Collectors.toList());
+
+    }
+    private boolean getCheckBoxValue(int queryId, String forWhichCheckBox, HttpServletRequest request){
+//        if(request.getParameter("email" + queryId) == null){
+//            return true;
+//        }
+        return Boolean.parseBoolean(request.getParameter(forWhichCheckBox + queryId));
+    }
 }

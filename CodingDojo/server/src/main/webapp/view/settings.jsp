@@ -23,32 +23,65 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <br><br>
     <div>
-        <c:choose>
-            <c:when test="${subscribed}">
-                <input type="checkbox" id="email" name="email" checked onclick="subOrUnSub()"/>
-                <label style="width:80%" for="email">
-                    <font size="3">Receive email notifications.</font>
-                </label>
-                <form id="form" action="${ctx}/board/feedback" method="POST" hidden>
+        <label style="width:80%" for="email">
+            <font size="3">Receive email notifications.</font>
+        </label>
+        <form id="form" action="${ctx}/board/feedback" method="POST">
+            <c:forEach items="${subscribed}" var="currentSubscription">
+                <table>
+                    <tr>
+                      <c:choose>
+                        <c:when test="${currentSubscription.emailSubscription}">
+                            <td>
+                                <input type="checkbox"
+                                 id="email${currentSubscription.query.id}"
+                                  name="email${currentSubscription.query.id}"
+                                   value="${currentSubscription.emailSubscription}"
+                                    checked
+                                     onclick="changeValue('email${currentSubscription.query.id}')"/>
+                            </td>
+                        </c:when>
+                        <c:otherwise>
+                            <td>
+                                <input type="checkbox"
+                                 id="email${currentSubscription.query.id}"
+                                  name="email${currentSubscription.query.id}"
+                                   value="${currentSubscription.emailSubscription}"
+                                    onclick="changeValue('email${currentSubscription.query.id}')"/>
+                            </td>
+                        </c:otherwise>
+                      </c:choose>
+                      <c:choose>
+                        <c:when test="${currentSubscription.slackSubscription}">
+                            <td>
+                                <input type="checkbox"
+                                 id="slackEmail${currentSubscription.query.id}"
+                                  name="slackEmail${currentSubscription.query.id}"
+                                   value="${currentSubscription.slackSubscription}"
+                                    checked onclick="changeValue('slackEmail${currentSubscription.query.id}')"/>
+                            </td>
+                        </c:when>
+                        <c:otherwise>
+                            <td>
+                                <input type="checkbox"
+                                 id="slackEmail${currentSubscription.query.id}"
+                                  name="slackEmail${currentSubscription.query.id}"
+                                   value="${currentSubscription.slackSubscription}"
+                                    onclick="changeValue('slackEmail${currentSubscription.query.id}')"/>
+                            </td>
+                        </c:otherwise>
+                      </c:choose>
+                      <td><c:out value="${currentSubscription.query.id}."/></td>
+                      <td><c:out value="${currentSubscription.query.description}"/></td>
+                    </tr>
+                </table>
+            </c:forEach>
+
                     <textarea id="playerId" name="playerId" for="form" hidden>"${playerId}"</textarea>
                     <textarea id="game" name="game" for="form" hidden>"${game}"</textarea>
                     <textarea id="code" name="code" for="form" hidden>"${code}"</textarea>
                     <label for="feedback"><font size="3">  How can we better the notifications?</font></label>
-                    <textarea id="feedback" name="feedback" for="form" style="resize: none;width:100%;" required></textarea>
-                    <button class="btn-submit" id="submit-button" for="form" type="submit" name="action" value="unsubscribe">Submit</button>
+                    <textarea id="feedback" name="feedback" for="form" style="resize: none;width:100%;"></textarea>
+                    <button class="btn-submit" id="submit-button" for="form" type="submit" name="action" value="unsubscribe" onclick="reset()">Submit</button>
                 </form>
-            </c:when>
-            <c:otherwise>
-                <input type="checkbox" id="email" name="email" onclick="subOrUnSub()"/>
-                <label style="width:80%" for="email">
-                    <font size="3">Receive email notifications.</font>
-                </label>
-                <form id="form" action="${ctx}/board/feedback" method="POST" hidden>
-                    <textarea id="playerId" name="playerId" for="form" hidden>"${playerId}"</textarea>
-                    <textarea id="game" name="game" for="form" hidden>"${game}"</textarea>
-                    <textarea id="code" name="code" for="form" hidden>"${code}"</textarea>
-                    <button class="btn-submit" id="submit-button" for="form" type="submit" name="action" value="subscribe">Submit</button>
-                </form>
-            </c:otherwise>
-        </c:choose>
 </div>
