@@ -11,6 +11,10 @@ version and make the other corrections, you should
 There is the description in the Readme.md file in the repository root.
 It is specified in the description what to do next.
 
+To implement your puzzle algorithm, you need to implement
+interface `CodingDojo\games\kata\src\main\java\com\codenjoy\dojo\kata\model\levels\Level.javа`
+and put it in the `algorithms` package.
+
 If any questions, please write in [skype:alexander.baglay](skype:alexander.baglay)
 or Email [apofig@gmail.com](mailto:apofig@gmail.com).
 
