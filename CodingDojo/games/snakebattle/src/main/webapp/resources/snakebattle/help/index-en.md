@@ -59,6 +59,12 @@ and `[code]` is your security token. Make sure you keep the code
 safe from prying eyes. Any participant, knowing your code, can
 play on your behalf.
 
+In the client code, you need to find a similar line and replace it
+with your URL - thereby, you set the login / password to access the
+server. Then start your client and make sure the server receives
+your client's commands. After that, you can start working on the
+logic of the bot.
+
 ## Message format
 
 After the connection is established, the client will regularly (every second)
