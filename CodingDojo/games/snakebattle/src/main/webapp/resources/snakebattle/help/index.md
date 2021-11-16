@@ -242,22 +242,6 @@ C помощью этого regexp можно выкусить строку до
   Сколько элементов заданного типа есть вокруг клетки с point?
 * `Element getAt(Point point);`
   Элемент в текущей клетке.
-* `Point getHero();`
-  Позиция моего героя на доске.
-* `boolean isGameOver();`
-  Жив ли мой герой?
-* `Collection<Point> getOtherHeroes();`
-  Позиции всех остальных героев на доске.
-* `Collection<Point> getEnemyHeroes();`
-  Позиции всех вражеских героев на доске (в случае командной игры).
-* `Collection<Point> getBarriers();`
-  Позиции всех объектов препятствующих движению.
-* `boolean isBarrierAt(Point point);`
-  Есть ли препятствие в клеточке point?
-* `Collection<Point> getRobbers();`
-  Позиции всех воров.
-* `Collection<Point> getWalls();`
-  Позиции всех стен.
 * и так далее...
 
 ## Автор игры
