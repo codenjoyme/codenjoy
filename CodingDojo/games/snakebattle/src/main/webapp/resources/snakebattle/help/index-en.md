@@ -27,8 +27,9 @@ same field. Snake can move to empty cells in four directions but cannot move to 
 
 On its path a snake can encounter stones, gold, fury pills, flying pills, aplles or other
 snakes. If the snake eats a stone it becomse shorter by 4 cells. If its length is less
-than 2, it dies. For gold, aplles and dead competitors the snake gets bonus points.
-For its own death and eaten stones the snake gets demerit points.
+than 2, it dies. For gold, aplles and dead competitors the snake gets 
+bonus points[*](index.md#ask).
+For its own death and eaten stones the snake gets demerit points[*](index.md#ask).
 The points are summed up.
 
 The player with most points when time expires wins. A dead snake immediately
@@ -124,7 +125,7 @@ left-top corner and has the `[0, 28]` coordinate. The following example
 shows the position of the hero (the `▲` character) – `[7,16]`. left-bottom
 corner has the `[0, 0]` coordinate.
 
-This is what you see on UI
+This is what you see on UI:
 
 ![](board.jpg)
 
@@ -196,7 +197,7 @@ block and destroy enemy snakes with the help of bonuses (pills). The ultimate go
 is winning the game.
 
 For your algorithm you can use the existing class DeikstraFindWay and 
-getShortestWay() metod in particular.
+getShortestWay() method in particular.
 
 If you are not sure what to do try to implement the following algorithms:
 
@@ -241,7 +242,7 @@ level API for working with the board are implemented already.
   Element in the current cell.
 * etc... 
 
-## Game author
+## Game Author
 
 If you have any questions feel free to contact me:
 Author **Корсиков Илья**,
