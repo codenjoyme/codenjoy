@@ -123,7 +123,6 @@ public class BoardController {
         // TODO ROOM так как есть rest методы то может вообще убрать отсюда этих двоих?
         String room = game;
 
-        registrationService.register(user.getId(),user.getCode(),game, room, request.getRemoteAddr(), user.getGitHubUsername(),user.getSlackEmail());
 
         return rejoinGame(model, game, room, request, user);
     }
@@ -135,7 +134,6 @@ public class BoardController {
                              @AuthenticationPrincipal Registration.User user) {
         validator.checkGame(game, CANT_BE_NULL);
         validator.checkRoom(room, CANT_BE_NULL);
-        String repositoryUrl = gameServerService.createOrGetRepositoryWithGame(user.getGitHubUsername(), game);
 
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {
