@@ -31,6 +31,7 @@ import com.codenjoy.dojo.kata.model.levels.Algorithm;
 import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.model.levels.LevelsLoader;
 import com.codenjoy.dojo.kata.model.levels.NullAlgorithm;
+import com.codenjoy.dojo.services.Dice;
 
 import java.util.List;
 
@@ -38,6 +39,10 @@ public class AISolver extends AbstractTextSolver {
 
     private AbstractTextBoard board;
     private List<Level> levels = LevelsLoader.getAlgorithms();
+
+    public AISolver(Dice dice) {
+        // do nothing
+    }
 
     @Override
     public Strings getAnswers(int level, Strings questions) {

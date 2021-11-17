@@ -24,10 +24,10 @@ pages = pages || {};
 pages.help = function() {
     setup.contextPath = getSettings('contextPath');
 
-    $("#games").change(function () {
-        var val = $("#games").val();
-        if (val == '') return;
-        window.location.href = setup.contextPath + "/resources/user/" + val + "-servers.zip";
+    $('#games').change(function () {
+        var game = $('#games').val();
+        if (game == '') return;
+        window.location.href = setup.contextPath + '/resources/' + game + '/user/clients.zip';
     });
 
     initHotkeys();

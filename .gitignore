@@ -23,7 +23,7 @@
 /CodingDojo/games/.git_
 /CodingDojo/games/**/libs
 /CodingDojo/games/**/README.txt
-/CodingDojo/games/**/webapp/resources/user/*.zip
+/CodingDojo/games/**/webapp/resources/**/user/*.zip
 /**/pitest/**
 /CodingDojo/*-portable
 /CodingDojo/stuff
@@ -43,3 +43,4 @@
 .DS_Store
 /CodingDojo/minify-maven-plugin
 /CodingDojo/markdown-page-generator-plugin
+/CodingDojo/codenjoy-clients

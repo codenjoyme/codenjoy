@@ -58,11 +58,7 @@ function initHotkeys() {
         } else if (adminKey && ev.keyCode == 72) { // ... + H (Help)
             window.open(contextPath + '/help');
         } else if (adminKey && ev.keyCode == 85) { // ... + U (rUles)
-            if (game == '') {
-                window.open(contextPath + '/help');
-            } else {
-                window.open(contextPath + '/resources/help/' + game + '.html');
-            }
+            window.open(contextPath + '/help?game=' + game);
         } else {
             adminKey = false;
         }

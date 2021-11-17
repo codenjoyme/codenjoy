@@ -22,19 +22,19 @@ package com.codenjoy.dojo.lemonade.model;
  * #L%
  */
 
-import com.codenjoy.dojo.games.lemonade.WeatherForecast;
+import com.codenjoy.dojo.games.lemonade.Element;
 import org.json.JSONObject;
 
 public class Question {
     private final int day;
     private final double lemonadeCost;
     private final double assets;
-    private final WeatherForecast weatherForecast;
+    private final Element weatherForecast;
     private final String messages;
     private final boolean isBankrupt;
     private final boolean isGameOver;
 
-    public Question(int day, double lemonadeCost, double assets, WeatherForecast weatherForecast, String messages,
+    public Question(int day, double lemonadeCost, double assets, Element weatherForecast, String messages,
                     boolean isBankrupt, boolean isGameOver) {
 
         this.day = day;

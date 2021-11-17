@@ -24,24 +24,32 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.client.Encoding;
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.Deals;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.dao.GameData;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
+import java.util.List;
+import java.util.Map;
 
+import static com.codenjoy.dojo.services.AdminService.onlyUngrouped;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+import static java.util.stream.Collectors.toMap;
 
 @RestController
 @RequestMapping(RestSettingsController.URI)
@@ -52,9 +60,30 @@ public class RestSettingsController {
     public static final String SETTINGS = "_settings_";
     public static final String GENERAL = "general";
 
+    private Deals deals;
     private GameService gameService;
     private GameData gameData;
     private Validator validator;
+
+    @GetMapping("/player")
+    @Secured(GameAuthoritiesConstants.ROLE_USER)
+    public Map<String, String> getForPlayer(@AuthenticationPrincipal Registration.User user) {
+        if (user == null) {
+            throw new IllegalArgumentException(
+                    "Please join the game to check room settings");
+        }
+        String id = user.getId();
+
+        Deal deal = deals.get(id);
+        GameType gameType = deal.getGameType();
+
+        List<Parameter> parameters = gameType.getSettings().getParameters();
+
+        return parameters.stream()
+                .filter(onlyUngrouped())
+                .collect(toMap(Parameter::getName,
+                        parameter -> String.valueOf(parameter.getValue())));
+    }
 
     @GetMapping("/{game}/{room}/{key}")
     public String get(@PathVariable("game") String game,

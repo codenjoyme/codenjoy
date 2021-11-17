@@ -39,6 +39,8 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
     public static final String NO_ROOM_NAME = null;
     public static final String ACCESS_IS_DENIED = "org.springframework.security.access.AccessDeniedException: Access is denied";
+    private static final String PLEASE_JOIN = "java.lang.IllegalArgumentException: Please join the game to check room settings";
+    private static final String AUTH_ERROR = "org.springframework.security.authentication.AuthenticationCredentialsNotFoundException: An Authentication object was not found in the SecurityContext";
 
     private Settings first;
     private Settings second;
@@ -177,5 +179,25 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     private void assertReplaceN(String expected, String input) {
         assertEquals("{}", post(200, "/rest/settings/second/" + NO_ROOM_NAME + "/four", quotes(input)));
         assertEquals(expected, get("/rest/settings/second/" + NO_ROOM_NAME + "/four"));
+    }
+
+    @Test
+    public void shouldGetForPlayer() {
+        // as admin (player not in game)
+        // when then
+        assertGetError(PLEASE_JOIN,
+                "/rest/settings/player");
+
+        // as user (player in game)
+        // when then
+        with.login.asUser();
+        assertEquals("{'Parameter 1':'15','Parameter 2':'true'}",
+                quote(get("/rest/settings/player")));
+
+        // logout (player not in game)
+        // when then
+        with.login.asNone();
+        assertGetError(AUTH_ERROR,
+                "/rest/settings/player");
     }
 }

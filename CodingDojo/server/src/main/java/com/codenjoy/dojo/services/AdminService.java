@@ -218,7 +218,7 @@ public class AdminService {
         return value;
     }
 
-    private Predicate<Parameter> onlyUngrouped() {
+    public static Predicate<Parameter> onlyUngrouped() {
         return Predicate.not(
                 p -> p.getName().startsWith(SEMIFINAL)
                         || p.getName().startsWith(ROUNDS)
