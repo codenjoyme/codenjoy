@@ -5,6 +5,9 @@ if "%LANGUAGE%"==""    ( set LANGUAGE=java)
 rem Set to true if you want to ignore dev-tools installed on the System
 if "%INSTALL_LOCALLY%"=="" ( set INSTALL_LOCALLY=true)
 
+rem For pseudo client only
+if "%PSEUDO_RULES%"==""    ( set PSEUDO_RULES=%CD%\pseudo\rules)
+
 set CLIENTS_ROOT=%CD%
 
 if "%SKIP_TESTS%"=="" ( set SKIP_TESTS=true)
