@@ -67,3 +67,6 @@
 [submodule "CodingDojo/clients/kotlin"]
 	path = CodingDojo/clients/kotlin
 	url = https://github.com/codenjoyme/codenjoy-kotlin-client.git
+[submodule "CodingDojo/games/verland"]
+	path = CodingDojo/games/verland
+	url = git@github.com:codenjoyme/codenjoy-verland.git
