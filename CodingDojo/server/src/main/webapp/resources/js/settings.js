@@ -29,11 +29,18 @@ function subOrUnSub() {
     }
 }
 
+function pop() {
+    var popup = document.getElementById('myPopup');
+    popup.classList.toggle('show');
+}
+
 function changeValue(name) {
     var x = document.getElementById(name);
     if(x.value == 'true'){
         x.value = 'false';
+        x.checked = false;
     } else {
         x.value = 'true';
+        x.checked = true;
     }
 }

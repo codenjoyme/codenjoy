@@ -19,6 +19,28 @@
   <http://www.gnu.org/licenses/gpl-3.0.html>.
   #L%
   --%>
+
+<style>
+.popup {
+    display: inline-block;
+}
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #b1b1b1;
+    text-align: center;
+    border-radius: 6px;
+    padding: 20px;
+    position:relative;
+    top:50px;
+    right:150px;
+}
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+</style>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <br><br>
@@ -76,12 +98,17 @@
                     </tr>
                 </table>
             </c:forEach>
+            <textarea id="playerId" name="playerId" for="form" hidden>"${playerId}"</textarea>
+            <textarea id="game" name="game" for="form" hidden>"${game}"</textarea>
+            <textarea id="code" name="code" for="form" hidden>"${code}"</textarea>
 
-                    <textarea id="playerId" name="playerId" for="form" hidden>"${playerId}"</textarea>
-                    <textarea id="game" name="game" for="form" hidden>"${game}"</textarea>
-                    <textarea id="code" name="code" for="form" hidden>"${code}"</textarea>
-                    <label for="feedback"><font size="3">  How can we better the notifications?</font></label>
-                    <textarea id="feedback" name="feedback" for="form" style="resize: none;width:100%;"></textarea>
+            <a onclick="pop()"><font size="20px">Submit</font></a>
+            <div class="popup">
+                <span class="popuptext" id="myPopup">
+                    Give us your feedback:
+                    <textarea id="feedback" name="feedback" for="form" style="resize:none;width:100%;"></textarea>
                     <button class="btn-submit" id="submit-button" for="form" type="submit" name="action" value="unsubscribe" onclick="reset()">Submit</button>
-                </form>
+                </span>
+            </div>
+        </form>
 </div>
