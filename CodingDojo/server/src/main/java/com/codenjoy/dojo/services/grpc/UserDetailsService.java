@@ -22,8 +22,6 @@ package com.codenjoy.dojo.services.grpc;
  * #L%
  */
 
-
-
 import com.codenjoy.dojo.User;
 import com.codenjoy.dojo.UserDetailsIdRequest;
 import com.codenjoy.dojo.UserDetailsResponse;
@@ -31,7 +29,10 @@ import com.codenjoy.dojo.UserDetailsServiceGrpc;
 import com.codenjoy.dojo.UserDetailsUsernameRequest;
 import com.codenjoy.dojo.UserRequest;
 import com.codenjoy.dojo.UserResponse;
+import com.codenjoy.dojo.UserSubscriptionRequest;
+import com.codenjoy.dojo.UserSubscriptionResponse;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.dao.SubscriptionSaver;
 import com.codenjoy.dojo.web.rest.RestBoardController;
 import com.codenjoy.dojo.web.rest.pojo.PScores;
 import io.grpc.stub.StreamObserver;
@@ -46,11 +47,13 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
 
     private final Registration registration;
     private final RestBoardController restBoardController;
+    private final SubscriptionSaver subscriptionSaver;
 
     @Autowired
-    public UserDetailsService(Registration registration, RestBoardController restBoardController) {
+    public UserDetailsService(Registration registration, RestBoardController restBoardController, SubscriptionSaver subscriptionSaver) {
         this.registration = registration;
         this.restBoardController = restBoardController;
+        this.subscriptionSaver = subscriptionSaver;
     }
 
     @Override
@@ -59,10 +62,14 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
         String email = this.registration.getEmailById(id);
         String slackEmail = this.registration.getSlackEmailById(id);
 
-        System.out.println(id);
-        System.out.println(email);
-        System.out.println(slackEmail);
-        responseObserver.onNext(UserDetailsResponse.newBuilder().setId(id).setEmail(email).setSlackEmail(slackEmail).build());
+        responseObserver.onNext(
+                UserDetailsResponse.newBuilder()
+                        .setId(id)
+                        .setEmail(email)
+                        .setSlackEmail(slackEmail)
+                        .build()
+        );
+
         responseObserver.onCompleted();
     }
 
@@ -95,6 +102,24 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
         .build();
 
         responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getUserSubscriptionsForContest(UserSubscriptionRequest request, StreamObserver<UserSubscriptionResponse> responseObserver) {
+        String playerId = request.getId();
+        String requestId = String.valueOf(request.getRequestId());
+        String gameName = request.getGame();
+        boolean emailSubscription = subscriptionSaver.getEmailValueForQuery(playerId, requestId,  gameName);
+        boolean slackSubscription = subscriptionSaver.getSlackValueForQuery(playerId, requestId, gameName);
+
+        responseObserver.onNext(
+                UserSubscriptionResponse.newBuilder()
+                        .setEmailSubscription(emailSubscription)
+                        .setSlackSubscription(slackSubscription)
+                        .build()
+        );
+
         responseObserver.onCompleted();
     }
 

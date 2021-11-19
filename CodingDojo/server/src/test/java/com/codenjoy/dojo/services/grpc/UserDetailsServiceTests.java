@@ -29,6 +29,7 @@ import com.codenjoy.dojo.UserRequest;
 import com.codenjoy.dojo.UserResponse;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.dao.SubscriptionSaver;
 import com.codenjoy.dojo.web.rest.RestBoardController;
 import com.codenjoy.dojo.web.rest.pojo.PScores;
 import io.grpc.stub.StreamObserver;
@@ -74,13 +75,16 @@ public class UserDetailsServiceTests {
     @Mock
     private RestBoardController restBoardController;
 
+    @Mock
+    private SubscriptionSaver subscriptionSaver;
+
     private UserDetailsService userDetailsService;
 
     @Before
     public void init() {
         this.request = UserDetailsIdRequest.newBuilder().setId(USER_ID).build();
         this.response = UserDetailsResponse.newBuilder().setId(USER_ID).setEmail(EMAIL).build();
-        this.userDetailsService = new UserDetailsService(registration, restBoardController);
+        this.userDetailsService = new UserDetailsService(registration, restBoardController, subscriptionSaver);
         this.userRequest = UserRequest.newBuilder().setContestId(CONTEST_ID).build();
         this.userResponse = UserResponse.newBuilder()
                 .addUser(User.newBuilder().setId(USER_ID).setUsername(GITHUB).setName("Player").setRole(ADMIN).build())
