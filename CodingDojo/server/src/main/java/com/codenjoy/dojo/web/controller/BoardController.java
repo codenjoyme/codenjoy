@@ -64,8 +64,6 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 public class BoardController {
 
     public static final String URI = "/board";
-    public static final String ACTION_SUBSCRIBE = "subscribe";
-    public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
 
     private final PlayerService playerService;
     private final Registration registration;
@@ -138,10 +136,11 @@ public class BoardController {
 
         registrationService.register(user.getId(), user.getCode(), game, room, request.getRemoteAddr(), user.getGitHubUsername(), user.getSlackEmail());
 
-        if(subscriptionSaver.isFirstSubscription(user.getId(), game)) {
-            String slackEmail = registration.getSlackEmailById(user.getId());
-            queryClient.getQueriesForContest(game).forEach(query -> subscriptionSaver.saveSubscription(user.getId(), query.getId(), true, !(slackEmail.equals("")), game));
-        }
+        List<Query> allActiveQueries = queryClient.getQueriesForContest(game);
+        List<String> userQueryIds = subscriptionSaver.getUserQueriesForContest(user.getId(), game);
+
+        subscribeToNewQueries(user, allActiveQueries, userQueryIds, game);
+        removeOldQueries(user, allActiveQueries, userQueryIds, game);
 
         return rejoinGame(model, game, room, request, user);
     }
@@ -280,17 +279,21 @@ public class BoardController {
     }
 
     @PostMapping("/feedback")
-    public String subscribeOrUnsubscribe(@RequestParam String action, HttpServletRequest request) {
+    public String subscribeOrUnsubscribe(HttpServletRequest request) {
         String playerId = request.getParameter("playerId").replace("\"", "");
         String game = request.getParameter("game").replace("\"", "");
         String feedbackText = request.getParameter("feedback");
+        System.out.println(feedbackText);
 
+//        if (!feedbackText.equals("")) {
+//            System.out.println(feedbackText);
         List<Query> queries = queryClient.getQueriesForContest(game);
         for (int i = 1; i <= queries.size(); i++) {
-
-            subscriptionSaver.updateEmailSubscription(playerId, String.valueOf(i), getCheckBoxValue(i,"email", request), game);
+            subscriptionSaver.updateEmailSubscription(playerId, String.valueOf(i), getCheckBoxValue(i, "email", request), game);
             subscriptionSaver.updateSlackSubscription(playerId, String.valueOf(i), getCheckBoxValue(i, "slackEmail", request), game);
         }
+        feedbackSaver.saveFeedback(playerId, game, feedbackText);
+//        }
 
         String code = request.getParameter("code").replace("\"", "");
         return "redirect:/board/player/" + playerId + code(code);
@@ -310,10 +313,24 @@ public class BoardController {
                 .collect(Collectors.toList());
 
     }
-    private boolean getCheckBoxValue(int queryId, String forWhichCheckBox, HttpServletRequest request){
+
+    private boolean getCheckBoxValue(int queryId, String forWhichCheckBox, HttpServletRequest request) {
 //        if(request.getParameter("email" + queryId) == null){
 //            return true;
 //        }
         return Boolean.parseBoolean(request.getParameter(forWhichCheckBox + queryId));
+    }
+
+    private void subscribeToNewQueries(Registration.User user, List<Query> allActiveQueries, List<String> userQueryIds, String game){
+        String slackEmail = registration.getSlackEmailById(user.getId());
+        allActiveQueries.stream()
+                .filter(query -> !userQueryIds.contains(String.valueOf(query.getId())))
+                .forEach(query -> subscriptionSaver.saveSubscription(user.getId(), query.getId(), true, !(slackEmail.equals("")), game));
+
+    }
+
+    private void removeOldQueries(Registration.User user, List<Query> allActiveQueries, List<String> userQueryIds, String game){
+        List<String> allActiveIds = allActiveQueries.stream().map(query -> String.valueOf(query.getId())).collect(Collectors.toList());
+        userQueryIds.stream().filter(s -> !allActiveIds.contains(s)).forEach(query -> subscriptionSaver.tryDeleteSubscription(user.getId(),String.valueOf(query), game));
     }
 }

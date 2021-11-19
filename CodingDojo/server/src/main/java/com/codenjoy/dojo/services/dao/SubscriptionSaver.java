@@ -25,6 +25,9 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 
+import java.util.LinkedList;
+import java.util.List;
+
 
 public class SubscriptionSaver {
 
@@ -44,8 +47,25 @@ public class SubscriptionSaver {
         pool.removeDatabase();
     }
 
+    public List<String> getUserQueriesForContest(String playerId, String game){
+        return pool.select("SELECT * FROM subscriptions " +
+                            "WHERE player_id = ? AND game_name = ?;",
+                new Object[]{
+                        playerId,
+                        game
+                },
+                rs -> {
+                    List<String> result = new LinkedList<>();
+                    while (rs.next()) {
+                        String id = rs.getString("query_id");
+                        result.add(id);
+                    }
+                    return result;
+                }
+        );
+    }
+
     public void saveSubscription(String playerId, int queryId, boolean email, boolean slack, String game) {
-        System.out.println("SAVING " + email + " " + slack);
         pool.update("INSERT INTO subscriptions " +
                         "(player_id, query_id, emailSubscription, slackSubscription, game_name) " +
                         "VALUES (?,?,?,?,?);",
@@ -53,6 +73,16 @@ public class SubscriptionSaver {
                         queryId,
                         email,
                         slack,
+                        game
+                });
+    }
+
+    public void tryDeleteSubscription(String playerId, String queryId, String game) {
+        pool.update("DELETE FROM subscriptions " +
+                        "WHERE player_id = ? AND query_id = ? AND game_name = ?;",
+                new Object[]{
+                        playerId,
+                        queryId,
                         game
                 });
     }
@@ -86,7 +116,7 @@ public class SubscriptionSaver {
                 new Object[]{playerId,
                         queryId,
                         game},
-                rs -> rs.next() ? rs.getBoolean("emailSubscription") : null
+                rs -> !rs.next() || rs.getBoolean("emailSubscription")
         );
     }
 
@@ -98,16 +128,6 @@ public class SubscriptionSaver {
                         queryId,
                         game},
                 rs -> rs.next() ? rs.getBoolean("slackSubscription") : null
-        );
-    }
-
-    public boolean isFirstSubscription(String playerId,  String game) {
-        return pool.select("SELECT emailSubscription " +
-                        "FROM subscriptions " +
-                        "WHERE player_id = ? AND game_name = ?;",
-                new Object[]{playerId,
-                        game},
-                rs -> !rs.next()
         );
     }
 }
