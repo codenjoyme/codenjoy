@@ -26,4 +26,5 @@ install_jvm() {
 
 install_all "run.bat"
 install_all "run.sh"
+install_all ".env"
 install_jvm "jvm_stuff.bat" "stuff.bat"
