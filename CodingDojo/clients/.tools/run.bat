@@ -34,6 +34,7 @@
 
 :restart
     set OPTION=
+    SET BUILD_ARGS=
     goto :start
 
 :init_colors 
@@ -74,17 +75,23 @@
 
 :read_env
     echo Reading enviromnent from .env file
-    FOR /F "tokens=*" %%i in ('type .env') do (
-        SET %%i
-        call :color "%CL_INFO%" "%%i"
-    )
+    for /f "tokens=*" %%i in ('type .env') do call :process_env "%%i"
+    set BUILD_ARGS=%BUILD_ARGS:~1%
+    goto :eof
+    
+:process_env
+    set line=%~1%
+    set %line%
+    for /f "tokens=1* delims==" %%a in ("%line%") do set v=%%b
+    set BUILD_ARGS=%BUILD_ARGS% %v%
+    call :color "%CL_INFO%" "%line%"
     goto :eof
 
 :print_color
 	call :color "%CL_COMMAND%" "%*"
 	call %* > %TOOLS%\out
 	for /f "tokens=*" %%s in (%TOOLS%\out) do (
-         call :color "%CL_INFO%" "%%s"
+        call :color "%CL_INFO%" "%%s"
     )
     del /Q %TOOLS%\out
     goto :eof
