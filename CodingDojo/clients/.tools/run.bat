@@ -142,7 +142,7 @@
     chcp %CODE_PAGE%
     set TOOLS=%ROOT%\.tools
     set ARCH=%TOOLS%\7z\7za.exe
-    rem Set to true if you want to ignore go installation on the system
+    rem Set to true if you want to ignore platform installation on the system
     if "%INSTALL_LOCALLY%"==""     ( set INSTALL_LOCALLY=true)
     call stuff :settings
     goto :eof
