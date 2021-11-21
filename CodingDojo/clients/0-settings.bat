@@ -1,5 +1,5 @@
 if "%GAME_TO_RUN%"=="" ( set GAME_TO_RUN=mollymage)
-if "%BOARD_URL%"==""   ( set BOARD_URL=http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000)
+if "%SERVER_URL%"==""   ( set SERVER_URL=http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000)
 if "%LANGUAGE%"==""    ( set LANGUAGE=java)
 
 rem Set to true if you want to ignore dev-tools installed on the System
@@ -17,6 +17,6 @@ chcp %CODE_PAGE%
 
 echo off
 echo        [44;93mGAME_TO_RUN=%GAME_TO_RUN%[0m
-echo        [44;93mBOARD_URL=%BOARD_URL%[0m
+echo        [44;93mSERVER_URL=%SERVER_URL%[0m
 echo        [44;93mLANGUAGE=%LANGUAGE%[0m
 echo on
