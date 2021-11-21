@@ -1,19 +1,29 @@
 #!/usr/bin/env bash
 
-install() {
-   file=$1
-   cp $file ../cpp/
-   cp $file ../csharp/
-   cp $file ../go/
-   cp $file ../java/
-   cp $file ../java-script/
-   cp $file ../kotlin/
-   cp $file ../php/
-   cp $file ../pseudo/
-   cp $file ../python/
-   cp $file ../ruby/
-   cp $file ../scala/   
+install_all() {
+   from=$1
+   cp $from ../cpp/
+   cp $from ../csharp/
+   cp $from ../go/
+   cp $from ../java/
+   cp $from ../java-script/
+   cp $from ../kotlin/
+   cp $from ../php/
+   cp $from ../pseudo/
+   cp $from ../python/
+   cp $from ../ruby/
+   cp $from ../scala/   
 }
 
-install "run.bat"
-install "run.sh"
+install_jvm() {
+   from=$1
+   to=$2
+   cp $from ../java/$to
+   cp $from ../kotlin/$to
+   cp $from ../pseudo/$to
+   cp $from ../scala/$to   
+}
+
+install_all "run.bat"
+install_all "run.sh"
+install_jvm "jvm_stuff.bat" "stuff.bat"
