@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 
-cp run.sh ../cpp/
-cp run.sh ../csharp/
-cp run.sh ../go/
-cp run.sh ../java/
-cp run.sh ../java-script/
-cp run.sh ../kotlin/
-cp run.sh ../php/
-cp run.sh ../pseudo/
-cp run.sh ../python/
-cp run.sh ../ruby/
-cp run.sh ../scala/
+install() {
+   file=$1
+   cp $file ../cpp/
+   cp $file ../csharp/
+   cp $file ../go/
+   cp $file ../java/
+   cp $file ../java-script/
+   cp $file ../kotlin/
+   cp $file ../php/
+   cp $file ../pseudo/
+   cp $file ../python/
+   cp $file ../ruby/
+   cp $file ../scala/   
+}
+
+install "run.bat"
+install "run.sh"
