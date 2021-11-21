@@ -35,7 +35,6 @@ eval_echo_color() {
     command=$2
     color $color "$command"
     echo
-
     eval $command
 }
 
@@ -43,28 +42,26 @@ ask() {
     ask_message $CL_QUESTION "Press any key to continue"
 }
 
-ask_result=""
+ASK_RESULT=""
 ask_message() {
     color=$1
     message=$2
     color $color "$message"
-    read ask_result
+    read ASK_RESULT
 }
 
 sep() {
     color $CL_COMMAND "---------------------------------------------------------------------------------------"
 }
 
-build_args=""
+BUILD_ARGS=""
 read_env() {
     for entry in $(cat $ROOT/.env)
     do
         if [[ ! $entry == \#* ]]
         then
             export $entry
-            
-            build_args+=" --build-arg $entry"
-            
+            BUILD_ARGS+=" --build-arg $entry"
             color $CL_INFO "$entry"          
         fi
     done
@@ -72,16 +69,13 @@ read_env() {
 
 color $CL_HEADER "Setup variables..."
 echo
-
     eval_echo "ROOT=$PWD"
-
     read_env
 
 color $CL_HEADER "Installing docker..."
 echo
-
     ask_message $CL_QUESTION "There is a need to update the system and install docker. Should we install (y/n)?"
-    if [[ "$ask_result" == "y" ]]; then
+    if [[ "$ASK_RESULT" == "y" ]]; then
         if [ "$EUID" -ne 0 ]; then
           color $COLOR5 "Please run as root"
           exit
@@ -112,16 +106,12 @@ echo
 
 color $CL_HEADER "Building client..."
 echo
-       
-    eval_echo "DOCKER_BUILDKIT=1 docker build -t client-server -f Dockerfile ./ $build_args"
+    eval_echo "DOCKER_BUILDKIT=1 docker build -t client-server -f Dockerfile ./ $BUILD_ARGS"
 
 color $CL_HEADER "Starting client..."
 echo
-
     eval_echo "docker container rm client-server --force"
-
     eval_echo "docker run --name client-server -d client-server"
-
     eval_echo "docker logs --follow client-server"
 
 ask
