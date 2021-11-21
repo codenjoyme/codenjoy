@@ -12,7 +12,7 @@ CL_COMMAND=94
 CL_QUESTION=95
 CL_INFO=93
 
-eval_echo_color_output() {
+eval_echo_color() {
     command=$1
     output=$($command)
     color $CL_COMMAND "$command"
@@ -27,13 +27,7 @@ color() {
 
 eval_echo() {
     command=$1
-    eval_echo_color $CL_COMMAND "$command"
-}
-
-eval_echo_color() {
-    color=$1
-    command=$2
-    color $color "$command"
+    color $CL_COMMAND "$command"
     echo
     eval $command
 }
@@ -99,7 +93,7 @@ echo
         eval_echo "systemctl status docker --no-pager"
         eval_echo "usermod -aG docker $USER"
 
-        eval_echo_color_output "docker -v"
+        eval_echo_color "docker -v"
     else
         color $CL_INFO "Skipped"
     fi
