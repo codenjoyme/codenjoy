@@ -63,6 +63,18 @@
     call %command%
     goto :eof
 
+:eval_echo_color
+    set input=%~1%
+    rem replace all “ with "
+    call set command=%%input:“="%%
+    call :color "%CL_COMMAND%" "%input%"
+    call %command% > %TOOLS%\out
+	for /f "tokens=*" %%s in (%TOOLS%\out) do (
+        call :color "%CL_INFO%" "%%s"
+    )
+    del /Q %TOOLS%\out
+    goto :eof
+
 :ask_option
     call :color "%CL_QUESTION%" "What would you like to do: [d]ownload env, [b]uild, [t]est, [r]un or [q]uit?"
     set /p CODE=
@@ -85,15 +97,6 @@
     for /f "tokens=1* delims==" %%a in ("%line%") do set v=%%b
     set BUILD_ARGS=%BUILD_ARGS% %v%
     call :color "%CL_INFO%" "%line%"
-    goto :eof
-
-:print_color
-	call :color "%CL_COMMAND%" "%*"
-	call %* > %TOOLS%\out
-	for /f "tokens=*" %%s in (%TOOLS%\out) do (
-        call :color "%CL_INFO%" "%%s"
-    )
-    del /Q %TOOLS%\out
     goto :eof
 
 :color

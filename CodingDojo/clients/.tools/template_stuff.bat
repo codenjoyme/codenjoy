@@ -43,11 +43,11 @@ call run :init_colors
     goto :eof
 
 :version
-    call run :print_color %LANG% version
+    call run :eval_echo_color ‘%LANG% version‘
     goto :eof
 
 :build
-    call run :print_color %LANG% build
+    call run :eval_echo ‘%LANG% build‘
     goto :eof
 
 :test    
