@@ -15,7 +15,7 @@
 :run_library
     rem run run.bat as library
     set input=%* 
-    rem replace all ‘ to "
+    rem replace all ‘ with "
     call set all=%%input:‘="%%
     call %all%
     goto :eof      
@@ -56,7 +56,7 @@
 
 :eval_echo
     set input=%~1%
-    rem replace all “ to "
+    rem replace all “ with "
     call set command=%%input:“="%%
     call :color "%CL_COMMAND%" "%input%"
     call %command%
@@ -156,6 +156,7 @@
 
 :build
     call :color "%CL_HEADER%" "Building client..."
+    call stuff :version
     call stuff :build
     goto :eof
 
