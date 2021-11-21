@@ -22,7 +22,6 @@ call run :init_colors
     goto :eof          
 
 :settings
-
     if "%INSTALL_LOCALLY%"=="true" ( set JAVA_HOME=)
     if "%INSTALL_LOCALLY%"=="true" ( set MAVEN_HOME=)
 
