@@ -283,17 +283,15 @@ public class BoardController {
         String playerId = request.getParameter("playerId").replace("\"", "");
         String game = request.getParameter("game").replace("\"", "");
         String feedbackText = request.getParameter("feedback");
-        System.out.println(feedbackText);
 
-//        if (!feedbackText.equals("")) {
-//            System.out.println(feedbackText);
-        List<Query> queries = queryClient.getQueriesForContest(game);
-        for (int i = 1; i <= queries.size(); i++) {
-            subscriptionSaver.updateEmailSubscription(playerId, String.valueOf(i), getCheckBoxValue(i, "email", request), game);
-            subscriptionSaver.updateSlackSubscription(playerId, String.valueOf(i), getCheckBoxValue(i, "slackEmail", request), game);
+        if (!feedbackText.equals("")) {
+            List<Query> queries = queryClient.getQueriesForContest(game);
+            for (int i = 1; i <= queries.size(); i++) {
+                subscriptionSaver.updateEmailSubscription(playerId, String.valueOf(i), getCheckBoxValue(i, "email", request), game);
+                subscriptionSaver.updateSlackSubscription(playerId, String.valueOf(i), getCheckBoxValue(i, "slackEmail", request), game);
+            }
+            feedbackSaver.saveFeedback(playerId, game, feedbackText);
         }
-        feedbackSaver.saveFeedback(playerId, game, feedbackText);
-//        }
 
         String code = request.getParameter("code").replace("\"", "");
         return "redirect:/board/player/" + playerId + code(code);
@@ -303,7 +301,7 @@ public class BoardController {
         return (code != null) ? "?code=" + code : "";
     }
 
-    private List<QuerySubscription> getQueriesForGame(String playerId, String game){
+    private List<QuerySubscription> getQueriesForGame(String playerId, String game) {
         List<Query> queries = queryClient.getQueriesForContest(game);
 
         return queries.stream()
@@ -315,13 +313,10 @@ public class BoardController {
     }
 
     private boolean getCheckBoxValue(int queryId, String forWhichCheckBox, HttpServletRequest request) {
-//        if(request.getParameter("email" + queryId) == null){
-//            return true;
-//        }
         return Boolean.parseBoolean(request.getParameter(forWhichCheckBox + queryId));
     }
 
-    private void subscribeToNewQueries(Registration.User user, List<Query> allActiveQueries, List<String> userQueryIds, String game){
+    private void subscribeToNewQueries(Registration.User user, List<Query> allActiveQueries, List<String> userQueryIds, String game) {
         String slackEmail = registration.getSlackEmailById(user.getId());
         allActiveQueries.stream()
                 .filter(query -> !userQueryIds.contains(String.valueOf(query.getId())))
@@ -329,8 +324,8 @@ public class BoardController {
 
     }
 
-    private void removeOldQueries(Registration.User user, List<Query> allActiveQueries, List<String> userQueryIds, String game){
+    private void removeOldQueries(Registration.User user, List<Query> allActiveQueries, List<String> userQueryIds, String game) {
         List<String> allActiveIds = allActiveQueries.stream().map(query -> String.valueOf(query.getId())).collect(Collectors.toList());
-        userQueryIds.stream().filter(s -> !allActiveIds.contains(s)).forEach(query -> subscriptionSaver.tryDeleteSubscription(user.getId(),String.valueOf(query), game));
+        userQueryIds.stream().filter(s -> !allActiveIds.contains(s)).forEach(query -> subscriptionSaver.tryDeleteSubscription(user.getId(), String.valueOf(query), game));
     }
 }

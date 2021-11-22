@@ -48,9 +48,9 @@
         <label style="width:80%" for="email">
             <font size="3">Receive email notifications.</font>
         </label>
-        <form id="form" action="${ctx}/board/feedback" method="POST">
-            <c:forEach items="${subscribed}" var="currentSubscription">
-                <table>
+        <form id="form" name="form" action="${ctx}/board/feedback" method="POST">
+            <table>
+                <c:forEach items="${subscribed}" var="currentSubscription">
                     <tr>
                       <c:choose>
                         <c:when test="${currentSubscription.emailSubscription}">
@@ -96,18 +96,18 @@
                       <td><c:out value="${currentSubscription.query.id}."/></td>
                       <td><c:out value="${currentSubscription.query.description}"/></td>
                     </tr>
-                </table>
-            </c:forEach>
-            <textarea id="playerId" name="playerId" for="form" hidden>"${playerId}"</textarea>
-            <textarea id="game" name="game" for="form" hidden>"${game}"</textarea>
-            <textarea id="code" name="code" for="form" hidden>"${code}"</textarea>
+                </c:forEach>
+            </table>
+            <textarea id="playerId" name="playerId" hidden>"${playerId}"</textarea>
+            <textarea id="game" name="game" hidden>"${game}"</textarea>
+            <textarea id="code" name="code" hidden>"${code}"</textarea>
 
             <a onclick="pop()"><font size="20px">Submit</font></a>
             <div class="popup">
                 <span class="popuptext" id="myPopup">
                     Give us your feedback:
-                    <textarea id="feedback" name="feedback" for="form" style="resize:none;width:100%;"></textarea>
-                    <button class="btn-submit" id="submit-button" for="form" type="submit" name="action" value="unsubscribe" onclick="reset()">Submit</button>
+                    <textarea id="feedback" name="feedback" for="form" style="resize:none;width:100%;" required></textarea>
+                    <button class="btn-submit" id="submit-button" for="form" type="submit">Submit</button>
                 </span>
             </div>
         </form>
