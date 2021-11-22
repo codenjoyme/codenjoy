@@ -24,7 +24,6 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.GameServerService;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.Player;
@@ -70,7 +69,6 @@ public class BoardController {
     private final Validator validator;
     private final ConfigProperties properties;
     private final RegistrationService registrationService;
-    private final GameServerService gameServerService;
     private final PlayerGameSaver playerGameSaver;
     private final FeedbackSaver feedbackSaver;
     private final SubscriptionSaver subscriptionSaver;
@@ -152,7 +150,6 @@ public class BoardController {
                              @AuthenticationPrincipal Registration.User user) {
         validator.checkGame(game, CANT_BE_NULL);
         validator.checkRoom(room, CANT_BE_NULL);
-        String repositoryUrl = gameServerService.createOrGetRepositoryWithGame(user.getGitHubUsername(), game);
 
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {

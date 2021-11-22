@@ -24,11 +24,14 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.grpc.handler.UpdateHandler;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DojoPlayerService {
+
+    private static final Logger LOGGER = DLoggerFactory.getLogger(DojoPlayerService.class);
 
     private final Registration registration;
     private final GameServerServiceImpl gameServerService;
@@ -57,8 +60,21 @@ public class DojoPlayerService {
     }
 
     public void updateUserScore(String username, String game, long score) {
-
+        if (usernameNotPresent(username)) {
+            log(username);
+            return;
+        }
         updateHandler.sendUpdate(username, score);
         playerService.updateScore(username, game, score);
+    }
+
+    private boolean usernameNotPresent(String username) {
+        return registration.getIdByGitHubUsername(username) == null;
+    }
+
+    private void log(String username) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Update score failed. User with github username: {} is not present in the database.", username);
+        }
     }
 }

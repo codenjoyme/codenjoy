@@ -48,7 +48,6 @@ public class RestDojoPlayerController {
     public void updateUserScore(@PathVariable("username") String username,
                                 @PathVariable("game") String game,
                                 @RequestBody long score) {
-        username = username.replace("-" + game, "");
         dojoPlayerService.updateUserScore(username, game, score);
     }
 }
