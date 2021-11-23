@@ -26,7 +26,7 @@ load 'solver.rb'
 require 'websocket-client-simple'
 
 # Check ARGS
-usage = %Q(\n\nPlease run 'ruby runner.rb BOARD_URL'\n\nExample:\nruby runner.rb http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890\n\n)
+usage = %Q(\n\nPlease run 'ruby runner.rb SERVER_URL'\n\nExample:\nruby runner.rb http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890\n\n)
 
 raise usage unless ARGV[0]
 
