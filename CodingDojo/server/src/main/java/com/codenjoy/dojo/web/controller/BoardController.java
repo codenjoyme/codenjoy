@@ -111,6 +111,8 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
+        setUpQueries(player.getId(), game);
+
         populateBoardAttributes(model, code, player, false);
 
         justBoard = justBoard != null && justBoard;
@@ -133,12 +135,6 @@ public class BoardController {
         String room = game;
 
         registrationService.register(user.getId(), user.getCode(), game, room, request.getRemoteAddr(), user.getGitHubUsername(), user.getSlackEmail());
-
-        List<Query> allActiveQueries = queryClient.getQueriesForContest(game);
-        List<String> userQueryIds = subscriptionSaver.getUserQueriesForContest(user.getId(), game);
-
-        subscribeToNewQueries(user, allActiveQueries, userQueryIds, game);
-        removeOldQueries(user, allActiveQueries, userQueryIds, game);
 
         return rejoinGame(model, game, room, request, user);
     }
@@ -179,6 +175,7 @@ public class BoardController {
         model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
         model.addAttribute("subscribed", getQueriesForGame(playerId, game));
+        model.addAttribute("isSlackSubscribed", !registration.getSlackEmailById(playerId).equals(""));
         model.addAttribute("repositoryURL", playerGameSaver.getRepositoryByPlayerIdForGame(playerId, game));
     }
 
@@ -313,16 +310,11 @@ public class BoardController {
         return Boolean.parseBoolean(request.getParameter(forWhichCheckBox + queryId));
     }
 
-    private void subscribeToNewQueries(Registration.User user, List<Query> allActiveQueries, List<String> userQueryIds, String game) {
-        String slackEmail = registration.getSlackEmailById(user.getId());
-        allActiveQueries.stream()
-                .filter(query -> !userQueryIds.contains(String.valueOf(query.getId())))
-                .forEach(query -> subscriptionSaver.saveSubscription(user.getId(), query.getId(), true, !(slackEmail.equals("")), game));
+    private void setUpQueries(String userId, String game){
+        List<Query> allActiveQueries = queryClient.getQueriesForContest(game);
+        List<String> userQueryIds = subscriptionSaver.getUserQueriesForContest(userId, game);
 
-    }
-
-    private void removeOldQueries(Registration.User user, List<Query> allActiveQueries, List<String> userQueryIds, String game) {
-        List<String> allActiveIds = allActiveQueries.stream().map(query -> String.valueOf(query.getId())).collect(Collectors.toList());
-        userQueryIds.stream().filter(s -> !allActiveIds.contains(s)).forEach(query -> subscriptionSaver.tryDeleteSubscription(user.getId(), String.valueOf(query), game));
+        queryClient.subscribeToNewQueries(userId, allActiveQueries, userQueryIds, game);
+        queryClient.removeOldQueries(userId, allActiveQueries, userQueryIds, game);
     }
 }

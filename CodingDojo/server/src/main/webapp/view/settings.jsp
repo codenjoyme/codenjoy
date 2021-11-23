@@ -85,11 +85,22 @@
                         </c:when>
                         <c:otherwise>
                             <td>
-                                <input type="checkbox"
-                                 id="slackEmail${currentSubscription.query.id}"
-                                  name="slackEmail${currentSubscription.query.id}"
-                                   value="${currentSubscription.slackSubscription}"
-                                    onclick="changeValue('slackEmail${currentSubscription.query.id}')"/>
+                            <c:choose>
+                                <c:when test="${isSlackSubscribed}">
+                                    <input type="checkbox"
+                                        id="slackEmail${currentSubscription.query.id}"
+                                         name="slackEmail${currentSubscription.query.id}"
+                                         value="${currentSubscription.slackSubscription}"
+                                          onclick="changeValue('slackEmail${currentSubscription.query.id}')"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <input type="checkbox"
+                                        id="slackEmail${currentSubscription.query.id}"
+                                         name="slackEmail${currentSubscription.query.id}"
+                                         value="${currentSubscription.slackSubscription}"
+                                          disabled/>
+                                </c:otherwise>
+                            </c:choose>
                             </td>
                         </c:otherwise>
                       </c:choose>

@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services.grpc;
  */
 
 
+import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.dao.SubscriptionSaver;
 import com.dojo.notifications.Query;
 import com.dojo.notifications.QueryRequest;
 import com.dojo.notifications.QueryResponse;
@@ -32,15 +34,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class QueryClient {
 
     private final QueryServiceGrpc.QueryServiceBlockingStub queryServiceBlockingStub;
+    private final Registration registration;
+    private final SubscriptionSaver subscriptionSaver;
 
     @Autowired
-    public QueryClient(QueryServiceGrpc.QueryServiceBlockingStub queryServiceBlockingStub) {
+    public QueryClient(QueryServiceGrpc.QueryServiceBlockingStub queryServiceBlockingStub, Registration registration, SubscriptionSaver subscriptionSaver) {
         this.queryServiceBlockingStub = queryServiceBlockingStub;
+        this.registration = registration;
+        this.subscriptionSaver = subscriptionSaver;
     }
 
     public List<Query> getQueriesForContest(String game) {
@@ -48,5 +55,18 @@ public class QueryClient {
         QueryResponse response = queryServiceBlockingStub.getQueryRequestsForContest(request);
 
         return response.getQueryList();
+    }
+
+    public void subscribeToNewQueries(String userId, List<Query> allActiveQueries, List<String> userQueryIds, String game) {
+        String slackEmail = registration.getSlackEmailById(userId);
+        allActiveQueries.stream()
+                .filter(query -> !userQueryIds.contains(String.valueOf(query.getId())))
+                .forEach(query -> subscriptionSaver.saveSubscription(userId, query.getId(), true, !(slackEmail.equals("")), game));
+
+    }
+
+    public void removeOldQueries(String userId, List<Query> allActiveQueries, List<String> userQueryIds, String game) {
+        List<String> allActiveIds = allActiveQueries.stream().map(query -> String.valueOf(query.getId())).collect(Collectors.toList());
+        userQueryIds.stream().filter(s -> !allActiveIds.contains(s)).forEach(query -> subscriptionSaver.tryDeleteSubscription(userId, String.valueOf(query), game));
     }
 }
