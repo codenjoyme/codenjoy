@@ -310,7 +310,7 @@ public class BoardController {
         return Boolean.parseBoolean(request.getParameter(forWhichCheckBox + queryId));
     }
 
-    private void setUpQueries(String userId, String game){
+    private void setUpQueries(String userId, String game) {
         List<Query> allActiveQueries = queryClient.getQueriesForContest(game);
         List<String> userQueryIds = subscriptionSaver.getUserQueriesForContest(userId, game);
 

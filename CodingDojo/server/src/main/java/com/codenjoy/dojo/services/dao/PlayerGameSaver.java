@@ -72,7 +72,7 @@ public class PlayerGameSaver implements GameSaver {
                         player.getScore(),
                         save,
                         player.getRepositoryUrl()
-        });
+                });
     }
 
     @Override

@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services.grpc;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -99,7 +99,7 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
                     .setName(name)
                     .setRole(role).build();
         }).collect(Collectors.toList()))
-        .build();
+                .build();
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -110,7 +110,7 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
         String playerId = request.getId();
         String requestId = String.valueOf(request.getRequestId());
         String gameName = request.getGame();
-        boolean emailSubscription = subscriptionSaver.getEmailValueForQuery(playerId, requestId,  gameName);
+        boolean emailSubscription = subscriptionSaver.getEmailValueForQuery(playerId, requestId, gameName);
         boolean slackSubscription = subscriptionSaver.getSlackValueForQuery(playerId, requestId, gameName);
 
         responseObserver.onNext(
@@ -123,17 +123,16 @@ public class UserDetailsService extends UserDetailsServiceGrpc.UserDetailsServic
         responseObserver.onCompleted();
     }
 
-    private String removeGameFromUsername(String username){
-        if(username.split("-").length>1){
+    private String removeGameFromUsername(String username) {
+        if (username.split("-").length > 1) {
             String game = getGame(username);
             return username.replace("-" + game, "");
         }
         return username;
     }
 
-
-    private String getGame(String username){
+    private String getGame(String username) {
         String[] splitUsername = username.split("-");
-        return splitUsername[splitUsername.length-1];
+        return splitUsername[splitUsername.length - 1];
     }
 }
