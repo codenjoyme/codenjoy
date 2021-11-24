@@ -24,7 +24,7 @@ require_relative 'solver.rb'
 require 'websocket-client-simple'
 
 # Check ARGS
-usage = %Q(\n\nPlease run 'ruby runner.rb BOARD_URL'\n\nExample:\nruby runner.rb http://dojorena.com/codenjoy-contest/board/player/rmtsf91ee1xitijsdtxz\?code\=7743500744161891908\n\n)
+usage = %Q(\n\nPlease run 'ruby runner.rb SERVER_URL'\n\nExample:\nruby runner.rb http://dojorena.com/codenjoy-contest/board/player/rmtsf91ee1xitijsdtxz\?code\=7743500744161891908\n\n)
 
 # WebSocket object to connect to Codenjoy server
 ws_url = ARGV[0].dup
