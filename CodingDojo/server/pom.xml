@@ -609,6 +609,21 @@
             </dependencies>
         </profile>
         <profile>
+            <id>verland</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>verland-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>xonix</id>
             <activation>
                 <property>

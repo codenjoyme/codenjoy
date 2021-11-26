@@ -43,4 +43,4 @@
 .DS_Store
 /CodingDojo/minify-maven-plugin
 /CodingDojo/markdown-page-generator-plugin
-/CodingDojo/codenjoy-clients
+/codenjoy-clients
