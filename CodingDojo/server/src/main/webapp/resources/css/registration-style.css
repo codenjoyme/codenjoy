@@ -46,15 +46,6 @@ input:-webkit-autofill {
     text-shadow: none !important;
 }
 
-.header-container {
-    background-color: #666;
-    border-bottom: 6px solid #ecc134;
-}
-
-.header .container {
-    height: 50px;
-}
-
 .nav-item a {
     transition: color .5s;
 }
@@ -179,6 +170,7 @@ a:visited {
 
 .inputs {
     padding: 35px 25px 25px;
+    color: #fff;
 }
 
 .error-message {
