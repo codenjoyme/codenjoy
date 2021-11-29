@@ -24,7 +24,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
-    <div class="tabs">
+    <div class="tabs cEgRKs">
         <label id="leaderboard-tab" class="tv-tab" for="tv-tab-1">Leaderboard</label>
         <label id="settings-tab" class="tv-tab" for="tv-tab-3">Settings</label>
         <a href="${repositoryURL}"> Repository URL</a>
