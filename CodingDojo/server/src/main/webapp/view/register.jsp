@@ -41,38 +41,6 @@ License along with this program.  If not, see
 <body>
     <div id="settings" page="${page}" contextPath="${ctx}" waitApprove="${wait_approve}"></div>
 
-    <div class="header-container">
-        <div class="container-fluid">
-            <header class="header">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
-                    <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <c:if test="${activeProfiles.contains('icancode')}">
-                        <!-- TODO to remove from here -->
-                        <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/robot-logo.png"></a>
-                        <span class="title icancode-title">ICanCode</span>
-                    </c:if>
-                </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                    <nav class="nav pull-right text-right">
-                        <ul class="nav-list">
-                            <li class="title icancode-title inline"><a id="additional-link" href="#"></a></li>
-                            <li class="title icancode-title inline"><a id="help-link" href="#"></a></li>
-                            <sec:authorize access="isAuthenticated()">
-                                <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
-                            </sec:authorize>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
-        </div>
-    </div>
     <div class="container-fluid">
         <form:form class="form-registr" id="form" modelAttribute="player" action="register" method="POST">
             <h2 class="form-title">Sign up</h2>
@@ -150,16 +118,35 @@ License along with this program.  If not, see
             </div>
         </form:form>
     </div>
-    <footer class="footer">
-        <div class="container-fluid">
-            <nav class="footer-nav">
-                <ul class="footer-list">
-                    <li class="footer-item inline"><a href="http://codenjoy.com" target="blank">About DOJO</a></li>
-                    <li class="footer-item inline"><a href="https://github.com/codenjoyme/codenjoy" target="blank">Codenjoy on GitHub</a></li>
-                    <li class="footer-item inline"><a href="mailto:codenjoyme@gmail.com" target="blank">Ask me anything</a></li>
-                </ul>
-            </nav>
-        </div>
-    </footer>
+        <footer class="default page-footer">
+            <div class="default footer-container">
+                <div class="default footer-elements">
+                    <div class="default copyrights">
+                        <span class="default copyrights-lines">© 2021 EPAM Systems inc. All rights reserved.</span>
+                        <span class="default copyrights-lines">
+                        Powered by
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTQiIGhlaWdodD0iMTkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbD0iI0ZGRiI+CiAgICA8cGF0aCBkPSJNMTAuMTg4IDguNTA1djMuNDZjMCAuODg3LjQzMiAxLjMxNyAxLjMyMyAxLjMxN2guMzg3Yy44OTEgMCAxLjMyMy0uNDMgMS4zMjMtMS4zMTdWMTAuMjdoMi4wMzR2MS42MjJjMCAyLjIyMy0xLjEyNSAzLjM3LTMuMzg0IDMuMzdoLS40MzJjLTIuMjMyIDAtMy4zODQtMS4xMi0zLjM4NC0zLjEwMVYzLjY2NmMwLTIuNDgzIDEuMTI1LTMuNjMgMy4zODQtMy42M2guNDMyYzIuMjMyIDAgMy4zODQgMS4xMiAzLjM4NCAzLjM3djUuMDgxaC01LjA1OHYuMDE4aC0uMDA5em0wLTIuMDM0aDIuOTk3VjMuMzE2YzAtLjg4Ny0uNDMyLTEuMzE3LTEuMzIzLTEuMzE3aC0uMzMzYy0uODkxIDAtMS4zMjMuNDMtMS4zMjMgMS4zMTd2My4xNTVoLS4wMTh6TTE2LjY0MS4yMTVoMi4xMDZ2Ljk2Yy41MDQtLjUzIDEuMzY4LTEuMTIxIDIuNTY1LTEuMTIxIDEuOCAwIDIuNjgyIDEuMTkyIDIuNjgyIDIuOTR2OS4zMTFjMCAxLjc2Ni0uODkxIDIuOTQtMi42ODIgMi45NC0xLjIyNCAwLTIuMDYxLS41NzQtMi41NjUtMS4wNzZ2NC44MDRoLTIuMTA2Vi4yMTV6bTIuMTA2IDEyLjI3OGMuNTc2LjUwMiAxLjI1MS43NjIgMS45NDQuNzYyLjc2NSAwIDEuMjI0LS4zNTggMS4yMjQtMS4yMTlWMy4yNTNjMC0uODYtLjQzMi0xLjIxOS0xLjIyNC0xLjIxOS0uNjkzIDAtMS4zNjguMjg3LTEuOTQ0Ljc2MnY5LjY5N3pNMjUuMjcyIDkuOTEyYzAtMS44MzcuNjAzLTIuNTggMi4yMDUtMy4xMjhsMi44MjYtLjk1OVYzLjMxNmMwLS44ODctLjQzMi0xLjM2Mi0xLjMyMy0xLjM2MmgtLjMzM2MtLjg5MSAwLTEuMzIzLjQ3NS0xLjMyMyAxLjM2MnYyLjA5N0gyNS4yOVYzLjM4OGMwLTIuMjIzIDEuMTI1LTMuMzcgMy4zODQtMy4zN2guNDA1YzIuMjMyIDAgMy4zODQgMS4xMiAzLjM4NCAzLjM3djExLjY3OGgtMi4xMDZ2LS45MzNjLS41NzYuNTQ3LTEuMzY4IDEuMTAzLTIuNTY1IDEuMTAzLTEuNjgzIDAtMi40NjYtLjk2LTIuNDY2LTIuNjI2VjkuOTEyaC0uMDU0em01LjA0IDIuNjUzVjcuNjcybC0xLjkxNy43MTdjLS43NjUuMzEzLTEuMDM1LjY5LTEuMDM1IDEuNTV2Mi4yNjhjMCAuNzE3LjM2IDEuMDc1IDEuMDM1IDEuMDc1LjYzOS0uMDI3IDEuMjE1LS4yNDIgMS45MTctLjcxN3oiLz4KICAgIDxwYXRoIGQ9Ik00MC45MDUgMTUuMDc1aC0yLjEwNlYzLjExYzAtLjc0NC0uMzYtMS4wNzYtMS4wMDgtMS4wNzYtLjU3NiAwLTEuMTk3LjIxNi0xLjk0NC43NDR2MTIuMjk3aC0yLjEwNlYuMjE1aDIuMTA2di45NkMzNi40NS42IDM3LjI2LjA1MyAzOC40MTIuMDUzYzEuMDggMCAxLjguNDMgMi4xNzggMS4yMTkuNzQ3LS42NDYgMS42MjktMS4yMiAyLjg1My0xLjIyIDEuNjI5IDAgMi40NjYgMS4wMDUgMi40NjYgMi42Mjd2MTIuNDEyaC0yLjEwNlYzLjExYzAtLjc0NC0uMzYtMS4wNzYtMS4wMDgtMS4wNzYtLjU3NiAwLTEuMTk3LjIxNi0xLjk0NC43NDR2MTIuMjk3aC4wNTR6Ii8+CiAgICA8cGF0aCBmaWxsPSIjMDBCNUQxIiBkPSJNNS4zOTEgMS41NzdWNC4zMkwxLjg2MyA3LjY2M2wzLjUyOCAzLjI5OHYyLjc5NkwwIDguNjkzVjYuNjg2ek01NCA2LjY4NnYyLjAwN2wtNS4zOTEgNS4wNjR2LTIuNzk2bDMuNTI4LTMuMjk4LTMuNTI4LTMuMzYxVjEuNTc3eiIvPgo8L3N2Zz4=" alt="EPAM Systems" class="default epm-logo">
+                        </span>
+                    </div>
+                    <ul data-aid="footer" class="default buttons-list">
+                        <li class="button-specification">
+                            <a class="default button-link" href="/events">Events</a>
+                        </li>
+                        <li class="button-specification">
+                            <a aria-current="page" class="default button-link" href="/games">Games</a>
+                        </li>
+                        <li class="button-specification">
+                            <a class="default button-link" href="/organizer">Organizer</a>
+                        </li>
+                        <li class="button-specification">
+                            <a class="default button-link" href="/manuals">Manuals</a>
+                        </li>
+                        <li class="button-specification">
+                            <a class="default button-link" href="/about-us">About Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
 </body>
 </html>
