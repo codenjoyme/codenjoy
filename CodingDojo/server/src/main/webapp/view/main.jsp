@@ -37,10 +37,33 @@
     <div id="settings" page="${page}" contextPath="${ctx}" game="${game}"></div>
 
 
+<section class = "all-games-section">
+    <div class="section-label-container">
+        <p class="section-paragraph">All games</p>
+        <div class="game-choice">
+            <c:forEach items="${games}" var="game">
+            <div class="single-game">
+                <div data-aid="game" class="sprite-and-name">
+                    <a id="rejoin-${game.key}" class = "join" href="${ctx}/board/rejoining/${game.key}">
+                    <div class="game-sprite">
+                        <img src="resources/img/${game.value}.png" width = "100%">
+                    </div>
 
-    <div class="page-header">
-        <h1>Hi ${(user!=null)?user:ip} !</h1>
+                    <div class="game-info">
+                        <div data-aid="title" class="game-name">Game for ${game.value}</div>
+                        <div class="game-language">
+                            <a class="styles__Tag-sc-1lizcb7-0 cVnVNc" href="/tags/tag=Java">Java</a>
+                            <span class="styles__Comma-sc-1lizcb7-1 dRMbhX">&nbsp;</span>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            </c:forEach>
+        </div>
     </div>
+</section>
+
     <div class="main-page">
         <div>
             <sec:authorize access="!isAuthenticated()">

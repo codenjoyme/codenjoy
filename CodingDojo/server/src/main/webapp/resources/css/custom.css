@@ -54,7 +54,7 @@ body{
 .header-bar{
     font-size: 62.5%;
     box-sizing: border-box;
-    padding: 2.35rem 0px;
+    padding: 2.05rem 0px;
     background: rgb(48, 54, 68);
 }
 
@@ -267,4 +267,155 @@ body{
 .add-border{
   border: 1px solid black;
   border-collapse: collapse;
+}
+
+.all-games-section{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --font-family: 'Source Sans Pro', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 2rem 0px;
+    background-color: rgb(37, 41, 52);
+}
+
+.section-label-container{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --font-family: 'Source Sans Pro', sans-serif;
+    box-sizing: border-box;
+    padding: 0;
+    width: 100%;
+    margin: 0px auto;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    max-width: 123rem;
+}
+
+.section-paragraph{
+    color: rgb(212, 212, 212);
+    font-size: 2rem;
+    line-height: 2.5rem;
+    padding: 2.4rem 0px 1.6rem;
+}
+
+.game-choice{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --font-family: 'Source Sans Pro', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -1.5rem;
+    margin-left: -1.5rem;
+}
+
+.single-game{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --font-family: 'Source Sans Pro', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    margin-bottom: 3rem;
+    flex: 0 0 33.3333%;
+}
+
+.sprite-and-name{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.6rem;
+    background: rgb(48, 54, 68);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0.2rem 1.6rem 0px;
+    cursor: pointer;
+    transition: all 0.2s ease 0s;
+    outline: none;
+}
+
+.join{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --font-family: 'Source Sans Pro', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.game-sprite{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --font-family: 'Source Sans Pro', sans-serif;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
+    height: 15.1rem;
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    padding: 0.8rem;
+    border-radius: 0.6rem 0.6rem 0px 0px;
+    background: linear-gradient(rgba(27, 30, 38, 0.79) 0%, rgba(13, 13, 13, 0) 100%) 0% 0% / cover;
+}
+
+.game-info{
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-size: 62.5%;
+    font-family: var(--font-family);
+    --swiper-theme-color: #007aff;
+    --swiper-navigation-size: 44px;
+    --font-family: 'Source Sans Pro', sans-serif;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 1.6rem 1.6rem 1.4rem;
+}
+
+.game-name{
+    padding: 0px 0px 0.8rem;
+    font-size: 2rem;
+    color: rgb(255, 255, 255);
+}
+
+.game-language{
+    display: flex;
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap;
+    color: rgb(0, 132, 234);
+    font-size: 1.4rem;
 }
