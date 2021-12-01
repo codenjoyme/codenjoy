@@ -199,15 +199,6 @@ a:visited {
     background-color: #99ba40;
 }
 
-footer {
-    height: 40px;
-    background-color: #323132;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-
 .footer-item a {
     transition: color .5s;
     color: rgba(255, 255, 255, .5);

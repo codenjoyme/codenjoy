@@ -79,6 +79,7 @@ License along with this program.  If not, see
             </div>
         </form:form>
     </div>
+    <br>
         <footer class="default page-footer">
             <div class="default footer-container">
                 <div class="default footer-elements">
