@@ -23,14 +23,10 @@ package com.codenjoy.dojo.expansion.client
  */
 
 
-import com.codenjoy.dojo.services.QDirection
-import com.codenjoy.dojo.games.expansion.Forces
-import com.codenjoy.dojo.games.expansion.ForcesMoves
-import com.codenjoy.dojo.games.expansion.AbstractSolver
-import com.codenjoy.dojo.games.expansion.Board
-import com.codenjoy.dojo.games.expansion.Command
+import com.codenjoy.dojo.games.expansion.*
 import com.codenjoy.dojo.services.Dice
 import com.codenjoy.dojo.services.PointImpl.pt
+import com.codenjoy.dojo.services.QDirection
 import com.codenjoy.dojo.services.RandomDice
 
 /**
@@ -64,7 +60,7 @@ class YourKotlinSolver(dice: Dice) : AbstractSolver() {
 /**
  * Run this method for connect to the server and start the game
  */
-fun main(args: Array<String>) {
+fun main() {
     AbstractSolver.connectClient(
             // paste here board page url from browser after registration
             "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=18899199021366816317",

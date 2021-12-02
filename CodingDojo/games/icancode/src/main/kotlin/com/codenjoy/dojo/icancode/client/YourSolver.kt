@@ -39,12 +39,11 @@ class YourKotlinSolver(dice: Dice?) : AbstractSolver(dice) {
         with(board) {
             if (!isMeAlive) return Command.doNothing()
 
-            var goals = gold
-            if (goals.isEmpty()) {
-                goals = exits
-            }
-
             // TODO your code here
+            // var goals = gold
+            // if (goals.isEmpty()) {
+            //    goals = exits
+            // }
 
             return Command.go(Direction.RIGHT)
         }
@@ -53,7 +52,7 @@ class YourKotlinSolver(dice: Dice?) : AbstractSolver(dice) {
 /**
  * Run this method for connect to the server and start the game
  */
-fun main(args: Array<String>) {
+fun main() {
     AbstractSolver.connectClient(
             // paste here board page url from browser after registration
             "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789",
