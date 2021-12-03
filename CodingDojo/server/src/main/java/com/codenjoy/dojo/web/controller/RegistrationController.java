@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Collection;
 
 @Controller
 @RequestMapping(RegistrationController.URI)
@@ -57,7 +58,6 @@ public class RegistrationController {
     private Registration registration;
     private RegistrationValidator registrationValidator;
     private RegistrationService registrationService;
-    private GithubUsernamesCache githubUsernamesCache;
 
     @InitBinder
     private void initBinder(WebDataBinder webDataBinder) {
@@ -94,18 +94,29 @@ public class RegistrationController {
                 player.setId(Hash.getRandomId());
             }
 
-            registration.register(player.getId(), player.getEmail(), player.getFullName(), player.getReadableName(),
+            boolean successfulRegistration = registerPlayer(player.getId(), player.getEmail(), player.getFullName(), player.getReadableName(),
                     player.getPassword(), player.getData(), GameAuthorities.USER.roles(), player.getGitHubUsername(), player.getSlackEmail());
 
-            return LOGIN_PAGE;
+            if (successfulRegistration) {
+                return LOGIN_PAGE;
+            }
+
+            return redirectToRegistrationForm(request, model, player, null, player.getEmail(),
+                    player.getFullName(), player.getReadableName(), player.getGitHubUsername(), player.getSlackEmail());
         }
 
         return redirectToRegistrationForm(request, model, player, null, player.getEmail(),
                 player.getFullName(), player.getReadableName(), player.getGitHubUsername(), player.getSlackEmail());
     }
 
-    private boolean hasUniqueGithubUsername(String githubUsername) {
-        return githubUsernamesCache.isUniqueGithubUsername(githubUsername);
+    private boolean registerPlayer(String id, String email, String fullName, String readableName,
+                                   String password, String data, Collection<String> roles, String gitHubUsername, String slackEmail) {
+        registration.register(id, email, fullName, readableName, password, data, roles, gitHubUsername, slackEmail);
+        return registration.cacheContainsGithubUsername(gitHubUsername);
+    }
+
+    private boolean hasUniqueGithubUsername(String gitHubUsername) {
+        return registration.checkCacheIfUniqueGithubUsername(gitHubUsername);
     }
 
     private boolean noValidationErrors(BindingResult result) {
