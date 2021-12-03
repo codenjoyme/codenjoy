@@ -23,9 +23,11 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
+import com.codenjoy.dojo.web.controller.exception.UserRegistrationException;
+
 import java.sql.Connection;
 
 @FunctionalInterface
 public interface For<T> {
-    T run(Connection connection);
+    T run(Connection connection) throws UserRegistrationException;
 }
