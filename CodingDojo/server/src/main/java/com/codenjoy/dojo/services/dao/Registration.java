@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.security.GameAuthorities;
+import com.codenjoy.dojo.web.controller.GithubUsernamesCache;
+import com.codenjoy.dojo.web.controller.exception.UserRegistrationException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -54,10 +56,13 @@ public class Registration {
     private CrudConnectionThreadPool pool;
     private PasswordEncoder passwordEncoder;
     private ConfigProperties properties;
+    private GithubUsernamesCache githubUsernamesCache;
 
-    public Registration(ConnectionThreadPoolFactory factory, String adminEmail, String adminPassword, PasswordEncoder passwordEncoder, ConfigProperties properties, boolean initAdminUser) {
+    public Registration(ConnectionThreadPoolFactory factory, String adminEmail, String adminPassword, PasswordEncoder passwordEncoder,
+                        ConfigProperties properties, boolean initAdminUser, GithubUsernamesCache githubUsernamesCache) {
         this.passwordEncoder = passwordEncoder;
         this.properties = properties;
+        this.githubUsernamesCache = githubUsernamesCache;
         adminPassword = passwordEncoder.encode(Hash.md5(adminPassword));
         List<String> initialScripts = new ArrayList<>();
         initialScripts.add("CREATE TABLE IF NOT EXISTS users (" +
@@ -140,10 +145,22 @@ public class Registration {
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
 
-        pool.update("INSERT INTO users (id, email, fullName, readable_name, email_approved, password, code, data, roles, github_username, slackEmail) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
-                new Object[]{id, email, fullName, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles), gitHubUsername, slackEmail});
+        try {
+            pool.registerUser("INSERT INTO users (id, email, fullName, readable_name, email_approved, password, code, data, roles, github_username, slackEmail) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
+                    new Object[]{id, email, fullName, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles), gitHubUsername, slackEmail});
+        } catch (UserRegistrationException e) {
+            githubUsernamesCache.removeByGithubUsername(gitHubUsername);
+        }
 
         return getUserByCode(code);
+    }
+
+    public boolean cacheContainsGithubUsername(String gitHubUsername) {
+        return githubUsernamesCache.containsGithubUsername(gitHubUsername);
+    }
+
+    public boolean checkCacheIfUniqueGithubUsername(String gitHubUsername) {
+        return githubUsernamesCache.isUniqueGithubUsername(gitHubUsername);
     }
 
     public String login(String id, String password) {
