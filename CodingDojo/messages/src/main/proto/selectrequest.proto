@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package notifications;
+
+option java_package = "com.dojo.notifications";
+option java_multiple_files = true;
+
+message QueryRequest{
+  string contestId = 1;
+}
+
+message QueryResponse{
+  repeated Query query = 1;
+}
+
+message Query{
+  int32 id = 1;
+  string description = 2;
+}
+
+service QueryService{
+  rpc getQueryRequestsForContest(QueryRequest) returns (QueryResponse);
+}

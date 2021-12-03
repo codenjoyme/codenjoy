@@ -1,0 +1,36 @@
+{
+  "methodConfig": [
+    {
+      "name": [
+        {
+          "service": "codeexecution.DockerService"
+        },
+        {
+          "service": "codenjoy.EventService"
+        },
+        {
+          "service": "codenjoy.LeaderboardService"
+        },
+        {
+          "service": "codenjoy.UserDetailsService"
+        },
+        {
+          "service": "notifications.QueryService"
+        }
+      ],
+      "retryPolicy": {
+        "maxAttempts": 1000,
+        "initialBackoff": "2s",
+        "maxBackoff": "10s",
+        "backoffMultiplier": 4,
+        "retryableStatusCodes": [
+          "UNAVAILABLE",
+          "CANCELLED",
+          "NOT_FOUND",
+          "DEADLINE_EXCEEDED",
+          "DATA_LOSS"
+        ]
+      }
+    }
+  ]
+}

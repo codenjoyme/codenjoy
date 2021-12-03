@@ -51,7 +51,8 @@ public class PlayerGameSaver implements GameSaver {
                         "game_name varchar(255)," +
                         "score varchar(255)," +
                         "save varchar(255)," +
-                        "repository_url varchar(255));");
+                        "repository_url varchar(255));"
+        );
     }
 
     void removeDatabase() {
@@ -227,6 +228,4 @@ public class PlayerGameSaver implements GameSaver {
                 rs -> rs.next() ? rs.getString("repository_url") : null
         );
     }
-
-
 }
