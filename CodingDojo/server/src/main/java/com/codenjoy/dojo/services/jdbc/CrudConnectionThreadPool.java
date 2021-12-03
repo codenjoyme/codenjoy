@@ -10,18 +10,20 @@ package com.codenjoy.dojo.services.jdbc;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
+
+import com.codenjoy.dojo.web.controller.exception.UserRegistrationException;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -31,7 +33,7 @@ import java.util.function.Supplier;
 public class CrudConnectionThreadPool extends ConnectionThreadPool {
 
     public CrudConnectionThreadPool(int count, Supplier<Connection> factory) {
-       super(count, factory);
+        super(count, factory);
     }
 
     public <T> T select(String query, Object[] parameters, ObjectMapper<T> mapper) {
@@ -54,6 +56,19 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
 
     public int update(String query) {
         return update(query, new Object[0]);
+    }
+
+    public int registerUser(String query, Object[] parameters) throws UserRegistrationException {
+        return run(connection -> {
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                for (int index = 0; index < parameters.length; index++) {
+                    stmt.setObject(index + 1, parameters[index]);
+                }
+                return stmt.executeUpdate();
+            } catch (SQLException e) {
+                throw new UserRegistrationException(String.format("Error when update '%s': %s", query, e));
+            }
+        });
     }
 
     public int update(String query, Object[] parameters) {
