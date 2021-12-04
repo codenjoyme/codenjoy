@@ -49,9 +49,12 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping(RestBoardController.URI)
 @AllArgsConstructor
 public class RestBoardController {
+
+    public static final String URI = "/rest";
+    public static final String HEALTH = "/health";
 
     private GameService gameService;
     private RestRegistrationController registrationController;
@@ -63,6 +66,11 @@ public class RestBoardController {
     private DealsView dealsView;
     private SaveService saveService;
     private ActionLogger actionLogger;
+
+    @GetMapping(HEALTH)
+    public String checkHealth() {
+        return "ok";
+    }
 
     @GetMapping("/context")
     public String getContext() {
