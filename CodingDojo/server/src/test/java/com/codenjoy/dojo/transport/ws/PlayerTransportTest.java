@@ -58,14 +58,18 @@ public class PlayerTransportTest {
         answerClient(webSocket);
 
         // when send state
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        transport.sendState("id", data());
 
         // then
         verify(webSocket.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+    }
+
+    private LinkedHashMap<String, Integer> data() {
+        return new LinkedHashMap<>(){{
+            put("one", 1);
+            put("two", 2);
+            put("three", 3);
+        }};
     }
 
     private void answerClient(PlayerSocket webSocket) {
@@ -119,11 +123,7 @@ public class PlayerTransportTest {
         transport.setDefaultFilter(data -> ((Map)data).keySet());
 
         // when
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        transport.sendState("id", data());
 
         // then
         verify(webSocket.getSession().getRemote()).sendString("[one, two, three]");
@@ -153,11 +153,7 @@ public class PlayerTransportTest {
         answerClient(webSocket3);
 
         // when send state
-        transport.sendState("id1", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        transport.sendState("id1", data());
 
         // then
         verify(webSocket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
@@ -191,11 +187,7 @@ public class PlayerTransportTest {
 
         // when
         String anotherId = "id2";
-        transport.sendState(anotherId, new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        transport.sendState(anotherId, data());
 
         // then
         verifyNoMoreInteractions(webSocket.getSession().getRemote());
@@ -212,11 +204,7 @@ public class PlayerTransportTest {
         answerClient(webSocket);
 
         // when send state
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        transport.sendState("id", data());
 
         // then
         verify(webSocket.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
@@ -242,11 +230,7 @@ public class PlayerTransportTest {
         transport.unregisterPlayerEndpoint("id");
 
         // when send state
-        transport.sendState("id1", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        transport.sendState("id1", data());
 
         // then
         verifyNoMoreInteractions(webSocket1.getSession().getRemote());
@@ -275,11 +259,7 @@ public class PlayerTransportTest {
         transport.unregisterPlayerSocket(webSocket2);
 
         // when send state
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        transport.sendState("id", data());
 
         // then
         verify(webSocket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
@@ -306,11 +286,7 @@ public class PlayerTransportTest {
         answerClient(webSocket3);
 
         // when send state
-        int requested = transport.sendStateToAll(new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        int requested = transport.sendStateToAll(data());
 
         // then
         assertEquals(3, requested);
@@ -376,11 +352,7 @@ public class PlayerTransportTest {
         when(webSocket1.getSession().isOpen()).thenReturn(false);
 
         // when send state
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        transport.sendState("id", data());
 
         // then
         verifyNoMoreInteractions(webSocket1.getSession().getRemote());
