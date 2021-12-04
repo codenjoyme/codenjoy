@@ -27,22 +27,28 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 @Getter
 public class StatisticService {
 
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
     private final TimeService time;
 
-    private long tickTime;
+    private long tick;
+    private String tickTime;
     private long tickDuration;
     private int screenUpdatesCount;
     private int requestControlsCount;
     private int dealsCount;
 
     public void tick() {
-        tickTime = now();
+        tick = now();
+        tickTime = format.format(tick);
     }
 
     private long now() {

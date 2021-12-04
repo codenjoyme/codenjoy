@@ -81,17 +81,17 @@
         </tr>
         <tr>
             <td>
-                <b>Deals count:</b> ${data.statistic.dealsCount}
+                <b>Deals:</b> ${data.statistic.dealsCount}
             </td>
         </tr>
         <tr>
             <td>
-                <b>Screen updates count:</b> ${data.statistic.screenUpdatesCount}
+                <b>Screen updates:</b> ${data.statistic.screenUpdatesCount}
             </td>
         </tr>
         <tr>
             <td>
-                <b>Request controls count:</b> ${data.statistic.requestControlsCount}
+                <b>Request controls:</b> ${data.statistic.requestControlsCount}
             </td>
         </tr>
         <tr>
