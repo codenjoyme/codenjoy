@@ -34,7 +34,7 @@ public interface Controller<TData, TControl> {
      * С помощью этого метода PlayerServiceImpl отправляет через ws
      * всем клиентам информацию об игре
      * @param data Данные к отправке
-     * @result count requested
+     * @return Количество клиентов, которым удалось отправить данные.
      */
     default int requestControlToAll(TData data) {
         throw new UnsupportedOperationException();
@@ -45,7 +45,7 @@ public interface Controller<TData, TControl> {
      * клиентам информацию об игре
      * @param player Плеер, которому отправляется ответ
      * @param data Данные к отправке
-     * @result count requested
+     * @return Количество клиентов, которым удалось отправить данные.
      */
     default int requestControl(Player player, TData data) {
         throw new UnsupportedOperationException();
@@ -55,14 +55,14 @@ public interface Controller<TData, TControl> {
      * В момент регистрации пользователя для него создается канал связи
      * к которому потом можно будет подключиться по ws и управлять ввереным
      * ему контролом.
-     * @param deal Игра которая начинается.
+     * @param deal Начавшаяся игра.
      */
     void register(Deal deal);
 
     /**
      * В случае, если пользователь не хочет больше играть, то и канал связи
      * закрывается.
-     * @param deal Игра которая завершилась.
+     * @param deal Завершившаяся игра.
      */
     void unregister(Deal deal);
 }
