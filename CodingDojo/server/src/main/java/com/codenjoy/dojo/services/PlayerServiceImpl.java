@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.profile.P;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.chat.ChatController;
@@ -345,23 +346,38 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
-            statistic.tick();
-
             profiler.start("PSI.tick()");
 
+P.start();
+            statistic.tick();
+P.done("statistic");
+
             actionLogger.log(deals);
+P.done("actionLogger");
             autoSaver.tick();
+P.done("autoSaver");
 
             deals.tick();
+P.done("deals");
             sendScreenUpdates();
+
+P.beginCycle("requestControls");
             requestControls();
+P.endCycle();
+P.done("requestControls.after");
+
             chatController.tick();
+P.done("chatController");
 
             inactivity.tick();
+P.done("inactivity");
             semifinal.tick();
+P.done("semifinal");
 
             statistic.dealsCount(deals.size());
             statistic.tickDuration(profiler.end());
+
+P.print();
         } catch (Error e) {
             e.printStackTrace();
             log.error("PlayerService.tick() throws", e);
@@ -392,7 +408,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void sendScreenUpdates() {
         Map<ScreenRecipient, ScreenData> map = buildScreenData();
+P.done("sendScreenUpdates.buildScreenData");
+P.beginCycle("sendScreenUpdates");
         sendScreenForWebSockets(map);
+P.endCycle();
+P.done("sendScreenUpdates.after");
     }
 
     private Map<ScreenRecipient, ScreenData> buildScreenData() {

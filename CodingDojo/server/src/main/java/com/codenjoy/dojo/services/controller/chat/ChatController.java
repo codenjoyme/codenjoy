@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 
+import com.codenjoy.dojo.profile.P;
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.chat.ChatAuthority;
@@ -98,7 +99,10 @@ public class ChatController implements Controller<String, ChatAuthority>, Tickab
         if (data == null || command == null) {
             return;
         }
+P.beginCycle("chat.sendState");
         transport.sendState(playerId, json(command, type, data));
+P.endCycle();
+P.done("chat.sendState.after");
     }
 
     private String json(String command, ChatType type, Object data) {

@@ -23,6 +23,8 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
+import com.codenjoy.dojo.profile.P;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,15 +64,20 @@ public class SocketsHandlerPair {
 
     public int sendMessage(Object data) throws IOException {
         int requested = 0;
+P.done("before");
         for (PlayerSocket socket : sockets) {
             Function<Object, Object> filter = filters.apply(socket);
+P.done("getFilter");
             if (filter == null) {
                 continue;
             }
 
-            if (socket.sendMessage(filter.apply(data).toString())) {
+            String message = filter.apply(data).toString();
+P.done("filtering");
+            if (socket.sendMessage(message)) {
                 requested++;
             }
+P.done("sending");
         }
         return requested;
     }
