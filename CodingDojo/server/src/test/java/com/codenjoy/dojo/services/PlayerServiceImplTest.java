@@ -175,6 +175,9 @@ public class PlayerServiceImplTest {
     @Autowired
     private FieldService fieldService;
 
+    @Autowired
+    private StatisticService statistic;
+
     private Information info;
 
     @Mock
@@ -411,7 +414,7 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldSendPlayerBoardFromJsonBoard() {
-        // givnm
+        // given
         Player vasia = createPlayer(VASYA);
         when(printer.print(any(), any()))
                 .thenReturn(new JSONObject("{'layers':['1234','4321']}"));
@@ -422,6 +425,28 @@ public class PlayerServiceImplTest {
         // then
         assertSentToPlayers(vasia);
         assertEquals("{\"layers\":[\"ABCD\",\"DCBA\"]}", getBoardFor(vasia));
+    }
+
+    @Test
+    public void shouldCollectStatistic_whenTick() {
+        // given
+        setupTimeService(timeService);
+        Player vasia = createPlayer(VASYA);
+        Player petia = createPlayer(PETYA);
+        Player olia = createPlayer(OLIA);
+
+        // when
+        playerService.tick();
+
+        // then
+        assertEquals("StatisticService(time=timeService bean, \n" +
+                        "tick=4000, \n" +
+                        "tickTime=1970-01-01T02:00:04.000+0200, \n" +
+                        "tickDuration=2000, \n" +
+                        "screenUpdatesCount=0, \n" +
+                        "requestControlsCount=0, \n" +
+                        "dealsCount=3)",
+                split(statistic.toString(), ", \n"));
     }
 
     @Test
@@ -437,6 +462,7 @@ public class PlayerServiceImplTest {
         assertSentToPlayers(vasia, petia);
         assertHostsCaptured(VASYA_URL, PETYA_URL);
     }
+
 
     protected void setActive(String room, boolean active) {
         when(roomService.isActive(room)).thenReturn(active);
