@@ -298,7 +298,7 @@ public class PlayerTransportTest {
 
         PlayerSocket webSocket1 = connectWebSocketClient("id1");
         PlayerSocket webSocket2 = connectWebSocketClient("id2");
-        PlayerSocket webSocket3 = connectWebSocketClient("id1");
+        PlayerSocket webSocket3 = connectWebSocketClient("id3");
 
         // when client answer
         answerClient(webSocket1);
@@ -306,13 +306,14 @@ public class PlayerTransportTest {
         answerClient(webSocket3);
 
         // when send state
-        transport.sendStateToAll(new LinkedHashMap<String, Integer>(){{
+        int requested = transport.sendStateToAll(new LinkedHashMap<String, Integer>(){{
             put("one", 1);
             put("two", 2);
             put("three", 3);
         }});
 
         // then
+        assertEquals(3, requested);
         verify(webSocket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
         verify(webSocket2.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
         verify(webSocket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
@@ -336,30 +337,22 @@ public class PlayerTransportTest {
         answerClient(webSocket2);
         answerClient(webSocket3);
 
-        // simulate errors
+        // simulate errors for two sockets
         RemoteEndpoint remote1 = webSocket1.getSession().getRemote();
         doThrow(new IOException("Error1")).when(remote1).sendString(anyString());
 
         RemoteEndpoint remote2 = webSocket2.getSession().getRemote();
         doThrow(new IOException("Error2")).when(remote2).sendString(anyString());
 
-        RemoteEndpoint remote3 = webSocket3.getSession().getRemote();
-        doThrow(new IOException("Error3")).when(remote3).sendString(anyString());
-
         // when send state
-//        try { // TODO мы не ловим больше ошибков а потому надо про другому проверить факт недосылки
-            transport.sendStateToAll(new LinkedHashMap<String, Integer>() {{
-                put("one", 1);
-                put("two", 2);
-                put("three", 3);
-            }});
+        int requested = transport.sendStateToAll(new LinkedHashMap<String, Integer>() {{
+            put("one", 1);
+            put("two", 2);
+            put("three", 3);
+        }});
 
-//            fail("Expected exception");
-//        } catch (Exception e) {
-//            // then
-//            assertEquals("Error during send state to all players: [Error1, Error2, Error3]",
-//                    e.getMessage());
-//        }
+        // then
+        assertEquals(1, requested);
     }
 
     @Test

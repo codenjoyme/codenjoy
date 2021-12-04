@@ -30,13 +30,15 @@ public interface PlayerTransport {
     /**
      * Send game state to the all players
      * @param state state
+     * @return count requested
      */
-    void sendStateToAll(Object state);
+    int sendStateToAll(Object state);
 
     /**
      * Send game state to the player by given player id.
      * @param id registered player id
      * @param state state
+     * @return true if successs
      */
     boolean sendState(String id, Object state);
 

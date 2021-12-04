@@ -34,8 +34,9 @@ public interface Controller<TData, TControl> {
      * С помощью этого метода PlayerServiceImpl отправляет через ws
      * всем клиентам информацию об игре
      * @param data Данные к отправке
+     * @result count requested
      */
-    default void requestControlToAll(TData data) {
+    default int requestControlToAll(TData data) {
         throw new UnsupportedOperationException();
     }
 

@@ -445,7 +445,8 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void sendScreenForWebSockets(Map<ScreenRecipient, ScreenData> map) {
         try {
-            screenController.requestControlToAll(map);
+            int requested = screenController.requestControlToAll(map);
+            log.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
         } catch (Exception e) {
             log.error("Unable to send screen updates to all players", e);
             e.printStackTrace();

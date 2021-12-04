@@ -39,7 +39,7 @@ public class PlayerTransportImpl implements PlayerTransport {
     private Function<Object, Object> defaultFilter;
 
     @Override
-    public void sendStateToAll(Object state) {
+    public int sendStateToAll(Object state) {
         lock.readLock().lock();
         try {
             int requested = 0;
@@ -50,8 +50,8 @@ public class PlayerTransportImpl implements PlayerTransport {
                     continue;
                 }
                 try {
-                    requested++;
                     pair.sendMessage(state);
+                    requested++;
                 } catch (Exception e) {
                     processError(pair, e);
                     messages.add(e.getClass().getSimpleName() + ": " + e.getMessage());
@@ -60,7 +60,7 @@ public class PlayerTransportImpl implements PlayerTransport {
             if (!messages.isEmpty()) {
                 log.warn("Error during send state to all players: " + messages);
             }
-            log.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
+            return requested;
         } finally {
             lock.readLock().unlock();
         }

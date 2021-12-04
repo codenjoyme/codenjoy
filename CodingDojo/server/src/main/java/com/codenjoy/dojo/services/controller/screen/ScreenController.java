@@ -49,8 +49,8 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
     }
 
     @Override
-    public void requestControlToAll(Map<ScreenRecipient, ScreenData> data) {
-        transport.sendStateToAll(data);
+    public int requestControlToAll(Map<ScreenRecipient, ScreenData> data) {
+        return transport.sendStateToAll(data);
     }
 
     @Override
