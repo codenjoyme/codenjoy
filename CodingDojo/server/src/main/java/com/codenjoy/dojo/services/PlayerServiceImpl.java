@@ -378,9 +378,7 @@ public class PlayerServiceImpl implements PlayerService {
             try {
                 String board = cacheBoards.get(player);
                 // TODO в конце концов если if (pair == null || pair.noSockets()) то ничего не отправляется, и зря гоняли но вроде как из кеша берем, так что проблем быть не должно
-                if (playerController.requestControl(player, board)) {
-                    requested++; // TODO test me
-                }
+                requested += playerController.requestControl(player, board); // TODO test me
             } catch (Exception e) {
                 log.error("Unable to send control request to player " + player.getId() +
                         " URL: " + player.getCallbackUrl(), e);

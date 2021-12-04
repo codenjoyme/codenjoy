@@ -45,8 +45,9 @@ public interface Controller<TData, TControl> {
      * клиентам информацию об игре
      * @param player Плеер, которому отправляется ответ
      * @param data Данные к отправке
+     * @result count requested
      */
-    default boolean requestControl(Player player, TData data) {
+    default int requestControl(Player player, TData data) {
         throw new UnsupportedOperationException();
     }
 

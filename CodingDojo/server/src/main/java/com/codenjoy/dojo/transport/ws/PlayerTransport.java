@@ -38,9 +38,9 @@ public interface PlayerTransport {
      * Send game state to the player by given player id.
      * @param id registered player id
      * @param state state
-     * @return true if successs
+     * @return count requested
      */
-    boolean sendState(String id, Object state);
+    int sendState(String id, Object state);
 
     /**
      * Случается, когда игрок зарегистрировался в игре на страничке регистрации
