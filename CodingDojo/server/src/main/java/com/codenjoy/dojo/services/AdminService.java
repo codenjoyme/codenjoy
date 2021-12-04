@@ -72,6 +72,7 @@ public class AdminService {
     private final Registration registration;
     private final SemifinalService semifinal;
     private final RoomService roomService;
+    private final StatisticService statistics;
 
     void updateInactivity(String room, InactivitySettings updated) {
         InactivitySettingsImpl actual = inactivitySettings(room);
@@ -335,6 +336,7 @@ public class AdminService {
         result.setOpened(playerService.isRegistrationOpened());
         result.setGamesRooms(roomService.gamesRooms());
         result.setPlayersCount(playerService.getRoomCounts());
+        result.setStatistic(statistics);
 
         return result;
     }

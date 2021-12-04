@@ -73,6 +73,34 @@
         </tr>
     </table>
 
+    <table class="admin-table" id="statistic">
+        <tr>
+            <td>
+                <b>Server time:</b> ${data.statistic.tickTime}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Deals count:</b> ${data.statistic.dealsCount}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Screen updates count:</b> ${data.statistic.screenUpdatesCount}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Request controls count:</b> ${data.statistic.requestControlsCount}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Tick duration:</b> ${data.statistic.tickDuration} ms
+            </td>
+        </tr>
+    </table>
+
     <form:form modelAttribute="data" action="admin#activeGames" method="POST">
         <table class="admin-table" id="activeGames">
             <tr>

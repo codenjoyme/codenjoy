@@ -104,6 +104,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected WhatsNextService whatsNext;
     @Autowired protected TeamService team;
     @Autowired protected ScoresCleaner scoresCleaner;
+    @Autowired protected StatisticService statistic;
 
     @Value("${game.ai}")
     protected boolean isAiNeeded;
@@ -344,6 +345,8 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
+            statistic.tick();
+
             profiler.start("PSI.tick()");
 
             actionLogger.log(deals);
@@ -357,7 +360,8 @@ public class PlayerServiceImpl implements PlayerService {
             inactivity.tick();
             semifinal.tick();
 
-            profiler.end();
+            statistic.dealsCount(deals.size());
+            statistic.tickDuration(profiler.end());
         } catch (Error e) {
             e.printStackTrace();
             log.error("PlayerService.tick() throws", e);
@@ -382,7 +386,8 @@ public class PlayerServiceImpl implements PlayerService {
                         " URL: " + player.getCallbackUrl(), e);
             }
         }
-        log.debug("tick().requestControls() {} players", requested);
+
+        statistic.requestControlsCount(requested);
     }
 
     private void sendScreenUpdates() {
@@ -446,7 +451,7 @@ public class PlayerServiceImpl implements PlayerService {
     private void sendScreenForWebSockets(Map<ScreenRecipient, ScreenData> map) {
         try {
             int requested = screenController.requestControlToAll(map);
-            log.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
+            statistic.screenUpdatesCount(requested);
         } catch (Exception e) {
             log.error("Unable to send screen updates to all players", e);
             e.printStackTrace();
