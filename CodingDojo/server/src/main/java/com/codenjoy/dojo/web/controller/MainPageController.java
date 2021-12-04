@@ -57,6 +57,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public class MainPageController {
 
     public static final String HELP_URI = "/help";
+    public static final SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 
     private PlayerService playerService;
     private Registration registration;
@@ -142,7 +143,7 @@ public class MainPageController {
 
     @GetMapping("/donate")
     public String donate(ModelMap model) {
-        model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        model.addAttribute("today", DAY_TIME_FORMATTER.format(new Date()));
         model.addAttribute("donateCode", properties.getDonateCode());
         return "donate-form";
     }

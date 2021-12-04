@@ -47,7 +47,7 @@ public class ErrorTicketService {
 
     private static final String ERROR_MESSAGE = "Something wrong with your request. " +
             "Please save you ticker number and ask site administrator.";
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private final static SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     private final DebugService debug;
     private final TimeService time;
@@ -126,7 +126,7 @@ public class ErrorTicketService {
     }
 
     private String now() {
-        return format.format(Calendar.getInstance().getTime());
+        return DAY_TIME_FORMATTER.format(Calendar.getInstance().getTime());
     }
 
     private boolean skip(String message) {

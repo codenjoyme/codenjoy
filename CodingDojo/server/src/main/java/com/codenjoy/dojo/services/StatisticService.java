@@ -35,7 +35,7 @@ import java.text.SimpleDateFormat;
 @Getter
 public class StatisticService {
 
-    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private static final SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     private final TimeService time;
 
@@ -48,7 +48,7 @@ public class StatisticService {
 
     public void tick() {
         tick = now();
-        tickTime = format.format(tick);
+        tickTime = DAY_TIME_FORMATTER.format(tick);
     }
 
     private long now() {

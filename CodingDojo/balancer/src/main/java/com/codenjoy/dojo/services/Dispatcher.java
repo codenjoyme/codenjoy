@@ -58,7 +58,7 @@ public class Dispatcher {
     @Autowired GameServer game;
     @Autowired TimerService timer;
 
-    private static SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private final static SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     private volatile long lastTime;
 
