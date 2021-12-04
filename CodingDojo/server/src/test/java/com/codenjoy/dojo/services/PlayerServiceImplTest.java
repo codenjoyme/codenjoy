@@ -596,9 +596,10 @@ public class PlayerServiceImplTest {
                 "[user1: 1000], [user2: 2000], [user3: 3000], [user4: 4000]");
     }
 
-    public static void setupTimeService(TimeService timeService) {
+    public static void setupTimeService(TimeService service) {
+        reset(service);
         AtomicLong time = new AtomicLong(1);
-        when(timeService.now())
+        when(service.now())
                 .thenAnswer(inv -> time.getAndIncrement() * 1000L);
     }
 

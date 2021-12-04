@@ -37,8 +37,6 @@ import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 public class StatisticServiceTest extends AbstractControllerTest<String, Joystick> {
 
-    public static final String INITIAL_REQUEST = "any data";
-
     @Autowired
     private PlayerController controller;
 
@@ -51,8 +49,11 @@ public class StatisticServiceTest extends AbstractControllerTest<String, Joystic
     @MockBean
     private TimeService timeService;
 
-    @Before
-    public void setup() {
+    private String endpoint;
+
+    private void setup(String endpoint) {
+        this.endpoint = endpoint;
+
         super.setup();
 
         createPlayer("player1", "room", "first");
@@ -62,13 +63,14 @@ public class StatisticServiceTest extends AbstractControllerTest<String, Joystic
         replyToServerImmediately(true);
 
         with.login.asNone();
+
+        setupTimeService(timeService);
     }
 
     @Override
     protected String endpoint() {
-        return "ws";
+        return endpoint;
     }
-
 
     @Override
     protected Controller<String, Joystick> controller() {
@@ -78,7 +80,8 @@ public class StatisticServiceTest extends AbstractControllerTest<String, Joystic
     @Test
     public void shouldRequestControlsCount() {
         // given
-        setupTimeService(timeService);
+        setup("ws");
+
         client(0).willAnswer("LEFT").start();
         client(1).willAnswer("RIGHT").start();
 
@@ -112,6 +115,54 @@ public class StatisticServiceTest extends AbstractControllerTest<String, Joystic
                         "requestControlsCount=1, \n" +
                         "dealsCount=3)",
                 split(statistic.toString(), ", \n"));
+    }
+
+    @Test
+    public void shouldScreenUpdatesCount() {
+        // given
+        setup("screen-ws");
+
+        client(0).start();
+        requestScreenData(0);
+        client(1).start();
+        requestScreenData(1);
+
+        // when
+        players.tick();
+        waitForServerReceived(false);
+
+        // then
+        assertEquals("StatisticService(time=timeService bean, \n" +
+                        "tick=1000, \n" +
+                        "tickTime=1970-01-01T02:00:01.000+0200, \n" +
+                        "tickDuration=2000, \n" +
+                        "screenUpdatesCount=2, \n" +
+                        "requestControlsCount=0, \n" +
+                        "dealsCount=3)",
+                split(statistic.toString(), ", \n"));
+
+        // given
+        client(2).start();
+        requestScreenData(2);
+
+        // when
+        players.tick();
+        waitForServerReceived(false);
+
+        // then
+        assertEquals("StatisticService(time=timeService bean, \n" +
+                        "tick=7000, \n" +
+                        "tickTime=1970-01-01T02:00:07.000+0200, \n" +
+                        "tickDuration=2000, \n" +
+                        "screenUpdatesCount=1, \n" +
+                        "requestControlsCount=0, \n" +
+                        "dealsCount=3)",
+                split(statistic.toString(), ", \n"));
+    }
+
+    private void requestScreenData(int index) {
+        client(index).sendToServer("{'name':getScreen, 'allPlayersScreen':true, " +
+                "'players':[], 'room':'room'}");
     }
 
 }

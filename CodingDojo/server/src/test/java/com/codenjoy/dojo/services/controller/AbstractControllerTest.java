@@ -92,7 +92,6 @@ public abstract class AbstractControllerTest<TData, TControl> {
     @Value("${server.servlet.context-path}")
     private String contextPath;
 
-    @Before
     protected void setup() {
         tearDown();
 
