@@ -28,7 +28,10 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
@@ -36,11 +39,11 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collector.Characteristics.*;
 
 @Slf4j
 @AllArgsConstructor
@@ -48,6 +51,7 @@ public class ScreenResponseHandler implements ResponseHandler {
 
     private PlayerTransport transport;
     private Player player;
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void onResponse(PlayerSocket socket, String message) {
@@ -57,10 +61,10 @@ public class ScreenResponseHandler implements ResponseHandler {
         }
 
         transport.setFilterFor(socket,
-                data -> new JSONObject(filter((Map<Player, PlayerData>) data, request)));
+                data -> filter((Map<Player, PlayerData>) data, request));
     }
 
-    private Map<Player, PlayerData> filter(Map<Player, PlayerData> data,
+    private JSONObject filter(Map<Player, PlayerData> data,
                                            GetScreenJSONRequest request)
     {
         Stream<Map.Entry<Player, PlayerData>> stream = data.entrySet().stream()
@@ -69,7 +73,47 @@ public class ScreenResponseHandler implements ResponseHandler {
         if (request.isAllPlayers()) {
             stream = stream.filter(distinctByKey(entry -> entry.getValue().getGroup().toString()));
         }
-        return stream.collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return stream.collect(toJson());
+    }
+
+    private Collector<Map.Entry<Player, PlayerData>, JSONObject, JSONObject> toJson() {
+        return new Collector<>() {
+            @Override
+            public Supplier<JSONObject> supplier() {
+                return JSONObject::new;
+            }
+
+            @Override
+            public BiConsumer<JSONObject, Map.Entry<Player, PlayerData>> accumulator() {
+                return (all, entry) -> all.put(entry.getKey().getId(),
+                        new JSONObject(toJson(entry.getValue())));
+            }
+
+            @SneakyThrows
+            private String toJson(PlayerData data) {
+                return mapper.writeValueAsString(data);
+            }
+
+            @Override
+            public BinaryOperator<JSONObject> combiner() {
+                return (one, another) -> {
+                    for (String key : another.keySet()) {
+                        one.put(key, another.get(key));
+                    }
+                    return one;
+                };
+            }
+
+            @Override
+            public Function<JSONObject, JSONObject> finisher() {
+                return Function.identity();
+            }
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return Sets.newHashSet(IDENTITY_FINISH, UNORDERED, CONCURRENT);
+            }
+        };
     }
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
