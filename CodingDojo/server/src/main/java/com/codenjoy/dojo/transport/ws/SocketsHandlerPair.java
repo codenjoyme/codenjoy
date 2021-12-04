@@ -64,20 +64,16 @@ public class SocketsHandlerPair {
 
     public int sendMessage(Object data) throws IOException {
         int requested = 0;
-P.done("before");
         for (PlayerSocket socket : sockets) {
             Function<Object, Object> filter = filters.apply(socket);
-P.done("getFilter");
             if (filter == null) {
                 continue;
             }
 
             String message = filter.apply(data).toString();
-P.done("filtering");
             if (socket.sendMessage(message)) {
                 requested++;
             }
-P.done("sending");
         }
         return requested;
     }

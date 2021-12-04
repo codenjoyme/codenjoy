@@ -99,10 +99,7 @@ public class ChatController implements Controller<String, ChatAuthority>, Tickab
         if (data == null || command == null) {
             return;
         }
-P.beginCycle("chat.sendState");
         transport.sendState(playerId, json(command, type, data));
-P.endCycle();
-P.done("chat.sendState.after");
     }
 
     private String json(String command, ChatType type, Object data) {
