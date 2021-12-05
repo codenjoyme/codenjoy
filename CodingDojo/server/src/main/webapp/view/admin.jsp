@@ -201,6 +201,17 @@
                     </c:choose>
                 </td>
             </tr>
+            <tr class="info">
+                <td>
+                    Feel free to choose any package or class you want.</br>
+                    Format is 'NAME:LEVEL', where:</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;NAME    = PACKAGE | PACKAGE.CLASS</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;PACKAGE = 'com.codenjoy.dojo.services'</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;CLASS   = 'GameServiceImpl'</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;LEVEL   = 'ALL' | 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF</br>
+                    You can combine several loggers together, just press Enter and write in new line.
+                </td>
+            </tr>
             <tr>
                 <td>
                     <form:textarea rows="3" cols="45" path="loggersLevels"/>
