@@ -96,6 +96,12 @@ label.error {
     padding: 10px;
 }
 
+.admin-table .info textarea {
+    font-size: 12px;
+    line-height: 12px
+}
+
+
 .admin-table .rightStep {
     padding-right: 20px;
 }

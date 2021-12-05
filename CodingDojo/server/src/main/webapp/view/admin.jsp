@@ -214,7 +214,7 @@
             </tr>
             <tr>
                 <td>
-                    <form:textarea rows="3" cols="45" path="loggersLevels"/>
+                    <form:textarea rows="5" cols="90" path="loggersLevels"/>
                 </td>
             </tr>
             <tr>
