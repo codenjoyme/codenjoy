@@ -91,19 +91,21 @@ public class PlayerSocket {
         handler.onError(this, cause);
     }
 
-    public void sendMessage(String message) throws IOException {
+    public boolean sendMessage(String message) throws IOException {
         if (session == null) {
-            return;
+            return false;
         }
         if (inTurn) {
             if (clientTurn) {
-                return;
+                return false;
             }
         }
         clientTurn = true;
         if (session.isOpen()) {
             session.getRemote().sendString(message);
+            return true;
         }
+        return false;
     }
 
     public void setHandler(ResponseHandler handler) {

@@ -36,41 +36,46 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class PlayerTransportTest {
 
     private PlayerTransport transport;
-    private List<ResponseHandler> handlers = new LinkedList<>();
     private AuthenticationService authentication;
     private PlayerSocketCreator creator;
-    private LinkedList<ServletUpgradeResponse> responses = new LinkedList<>();
+    private final LinkedList<ServletUpgradeResponse> responses = new LinkedList<>();
 
     @Test
-    public void shouldSendDataToWebSocketClient_caseClientSendFirst_withUniqueSocketFilter() throws IOException {
+    public void shouldSendDataToWebSocketClient_caseClientSendFirst_withUniqueSocketFilter() throws Exception {
         // given
         createServices(PlayerSocket.CLIENT_SENDS_FIRST);
         createServerWebSocket("id");
-        PlayerSocket webSocket = connectWebSocketClient("id");
+        PlayerSocket socket = connectWebSocketClient("id");
 
         // when client answer
-        answerClient(webSocket);
+        answerClient(socket);
 
         // when send state
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
+        int requested = transport.sendState("id", data());
+
+        // then
+        assertEquals(1, requested);
+        verify(socket.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+    }
+
+    private LinkedHashMap<String, Integer> data() {
+        return new LinkedHashMap<>(){{
             put("one", 1);
             put("two", 2);
             put("three", 3);
-        }});
-
-        // then
-        verify(webSocket.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        }};
     }
 
-    private void answerClient(PlayerSocket webSocket) {
-        webSocket.onWebSocketText("to upper case"); // CLIENT_SEND_FIRST
-        transport.setFilterFor(webSocket,
+    private void answerClient(PlayerSocket socket) {
+        socket.onWebSocketText("to upper case"); // CLIENT_SEND_FIRST
+        transport.setFilterFor(socket,
                 data -> data.toString().toUpperCase());
     }
 
@@ -87,16 +92,18 @@ public class PlayerTransportTest {
     private PlayerSocket connectWebSocketClient(String authId) {
         when(authentication.authenticate(any(HttpServletRequest.class))).thenReturn(authId);
 
-        PlayerSocket webSocket = createWebSocket();
+        PlayerSocket socket = createWebSocket();
 
-        if (webSocket == null) return null;
+        if (socket == null) {
+            throw new IllegalArgumentException("Socket is null");
+        }
 
         Session session = mock(Session.class);
         when(session.isOpen()).thenReturn(true);
         RemoteEndpoint remote = mock(RemoteEndpoint.class);
         when(session.getRemote()).thenReturn(remote);
-        webSocket.onWebSocketConnect(session);
-        return webSocket;
+        socket.onWebSocketConnect(session);
+        return socket;
     }
 
     private PlayerSocket createWebSocket() {
@@ -109,289 +116,281 @@ public class PlayerTransportTest {
     }
 
     @Test
-    public void shouldSendDataToWebSocketClient_caseServerSendFirst_withDefaultFilter() throws IOException {
+    public void shouldSendDataToWebSocketClient_caseServerSendFirst_withDefaultFilter() throws Exception {
         // given
         createServices(PlayerSocket.SERVER_SENDS_FIRST);
         createServerWebSocket("id");
-        PlayerSocket webSocket = connectWebSocketClient("id");
+        PlayerSocket socket = connectWebSocketClient("id");
 
         // given
         transport.setDefaultFilter(data -> ((Map)data).keySet());
 
         // when
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        int requested = transport.sendState("id", data());
 
         // then
-        verify(webSocket.getSession().getRemote()).sendString("[one, two, three]");
+        assertEquals(1, requested);
+        verify(socket.getSession().getRemote()).sendString("[one, two, three]");
     }
 
     private void createServerWebSocket(String authId) {
         ResponseHandler handler = mock(ResponseHandler.class);
         transport.registerPlayerEndpoint(authId, handler);
-        handlers.add(handler);
     }
 
     @Test
-    public void shouldSendDataToWebSocketClient_caseClientSendFirst_forSeveralClients() throws IOException {
+    public void shouldSendDataToWebSocketClient_caseClientSendFirst_forSeveralClients() throws Exception {
         // given
         createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id1");
         createServerWebSocket("id2");
 
-        PlayerSocket webSocket1 = connectWebSocketClient("id1");
-        PlayerSocket webSocket2 = connectWebSocketClient("id2");
-        PlayerSocket webSocket3 = connectWebSocketClient("id1");
+        PlayerSocket socket1 = connectWebSocketClient("id1");
+        PlayerSocket socket2 = connectWebSocketClient("id2");
+        PlayerSocket socket3 = connectWebSocketClient("id1");
 
         // when client answer
-        answerClient(webSocket1);
-        answerClient(webSocket2);
-        answerClient(webSocket3);
+        answerClient(socket1);
+        answerClient(socket2);
+        answerClient(socket3);
 
         // when send state
-        transport.sendState("id1", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        int requested = transport.sendState("id1", data());
 
         // then
-        verify(webSocket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
-        verifyNoMoreInteractions(webSocket2.getSession().getRemote());
-        verify(webSocket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        assertEquals(2, requested);
+        verify(socket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verifyNoMoreInteractions(socket2.getSession().getRemote());
+        verify(socket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
     }
 
     @Test
-    public void shouldSendError_whenUserIsNotAuthenticate() throws IOException {
+    public void shouldSendError_whenUserIsNotAuthenticate() throws Exception {
         // given
         createServices(PlayerSocket.SERVER_SENDS_FIRST);
         createServerWebSocket("id");
 
         // when
-        PlayerSocket webSocket = connectWebSocketClient(null);
+        try {
+            connectWebSocketClient(null);
+            fail("Expected exception");
+        } catch (IllegalArgumentException exception) {
+            assertEquals("Socket is null", exception.getMessage());
+        }
 
         // then
-        // verify(webSocket.getSession().getRemote()).sendString("Unregistered user");
-        assertEquals(null, webSocket);
         verify(responses.get(0)).sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
     }
 
     @Test
-    public void shouldSendState_whenNoWebSockets() throws IOException {
+    public void shouldSendState_whenNoWebSockets() {
         // given
         createServices(PlayerSocket.SERVER_SENDS_FIRST);
 
-        // no webSocket
+        // no socket
         createServerWebSocket("id1");
-        PlayerSocket webSocket = connectWebSocketClient("id1");
+        PlayerSocket socket = connectWebSocketClient("id1");
 
         // when
         String anotherId = "id2";
-        transport.sendState(anotherId, new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        int requested = transport.sendState(anotherId, data());
 
         // then
-        verifyNoMoreInteractions(webSocket.getSession().getRemote());
+        assertEquals(0, requested);
+        verifyNoMoreInteractions(socket.getSession().getRemote());
     }
 
     @Test
-    public void shouldSendDataToWebSocketClient_caseClientConnectedBeforeServerSocketCreated() throws IOException {
+    public void shouldSendDataToWebSocketClient_caseClientConnectedBeforeServerSocketCreated() throws Exception {
         // given
         createServices(PlayerSocket.CLIENT_SENDS_FIRST);
-        PlayerSocket webSocket = connectWebSocketClient("id");
+        PlayerSocket socket = connectWebSocketClient("id");
         createServerWebSocket("id");
 
         // when client answer
-        answerClient(webSocket);
+        answerClient(socket);
 
         // when send state
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        int requested = transport.sendState("id", data());
 
         // then
-        verify(webSocket.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        assertEquals(1, requested);
+        verify(socket.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
     }
 
     @Test
-    public void shouldNotSendToClients_whenUnregisterPlayerEndpoint() throws IOException {
+    public void shouldNotSendToClients_whenUnregisterPlayerEndpoint() {
         // given
         createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id");
 
-        PlayerSocket webSocket1 = connectWebSocketClient("id");
-        PlayerSocket webSocket2 = connectWebSocketClient("id");
-        PlayerSocket webSocket3 = connectWebSocketClient("id");
+        PlayerSocket socket1 = connectWebSocketClient("id");
+        PlayerSocket socket2 = connectWebSocketClient("id");
+        PlayerSocket socket3 = connectWebSocketClient("id");
 
         // when client answer
-        answerClient(webSocket1);
-        answerClient(webSocket2);
-        answerClient(webSocket3);
+        answerClient(socket1);
+        answerClient(socket2);
+        answerClient(socket3);
 
         // when unregister server
         transport.unregisterPlayerEndpoint("id");
 
         // when send state
-        transport.sendState("id1", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        int requested = transport.sendState("id1", data());
 
         // then
-        verifyNoMoreInteractions(webSocket1.getSession().getRemote());
-        verifyNoMoreInteractions(webSocket2.getSession().getRemote());
-        verifyNoMoreInteractions(webSocket3.getSession().getRemote());
+        assertEquals(0, requested);
+        verifyNoMoreInteractions(socket1.getSession().getRemote());
+        verifyNoMoreInteractions(socket2.getSession().getRemote());
+        verifyNoMoreInteractions(socket3.getSession().getRemote());
     }
 
     @Test
-    public void shouldNotSendToClients_whenUnregisterPlayerSockets() throws IOException {
+    public void shouldNotSendToClients_whenUnregisterPlayerSockets() throws Exception {
         // given
         createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id");
 
-        PlayerSocket webSocket1 = connectWebSocketClient("id");
-        PlayerSocket webSocket2 = connectWebSocketClient("id");
-        PlayerSocket webSocket3 = connectWebSocketClient("id");
+        PlayerSocket socket1 = connectWebSocketClient("id");
+        PlayerSocket socket2 = connectWebSocketClient("id");
+        PlayerSocket socket3 = connectWebSocketClient("id");
 
         // when client answer
-        answerClient(webSocket1);
-        answerClient(webSocket2);
-        answerClient(webSocket3);
+        answerClient(socket1);
+        answerClient(socket2);
+        answerClient(socket3);
 
         // when unregister client
-        when(webSocket2.getSession().isOpen()).thenReturn(false);
-        transport.unregisterPlayerSocket(webSocket2);
+        when(socket2.getSession().isOpen()).thenReturn(false);
+        transport.unregisterPlayerSocket(socket2);
 
         // when send state
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        int requested = transport.sendState("id", data());
 
         // then
-        verify(webSocket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
-        verifyNoMoreInteractions(webSocket2.getSession().getRemote());
-        verify(webSocket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        assertEquals(2, requested);
+        verify(socket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verifyNoMoreInteractions(socket2.getSession().getRemote());
+        verify(socket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
     }
 
     @Test
-    public void shouldAllClientsGetMessage_whenSendDataToAllWebSocketClients() throws IOException {
-        // given
-        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
-
-        createServerWebSocket("id1");
-        createServerWebSocket("id2");
-        createServerWebSocket("id3");
-
-        PlayerSocket webSocket1 = connectWebSocketClient("id1");
-        PlayerSocket webSocket2 = connectWebSocketClient("id2");
-        PlayerSocket webSocket3 = connectWebSocketClient("id1");
-
-        // when client answer
-        answerClient(webSocket1);
-        answerClient(webSocket2);
-        answerClient(webSocket3);
-
-        // when send state
-        transport.sendStateToAll(new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
-
-        // then
-        verify(webSocket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
-        verify(webSocket2.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
-        verify(webSocket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
-    }
-
-    @Test
-    public void shouldCollectErrors_whenSendDataToAllWebSocketClients() throws IOException {
-        // given
-        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
-
-        createServerWebSocket("id1");
-        createServerWebSocket("id2");
-        createServerWebSocket("id3");
-
-        PlayerSocket webSocket1 = connectWebSocketClient("id1");
-        PlayerSocket webSocket2 = connectWebSocketClient("id2");
-        PlayerSocket webSocket3 = connectWebSocketClient("id3");
-
-        // when client answer
-        answerClient(webSocket1);
-        answerClient(webSocket2);
-        answerClient(webSocket3);
-
-        // simulate errors
-        RemoteEndpoint remote1 = webSocket1.getSession().getRemote();
-        doThrow(new IOException("Error1")).when(remote1).sendString(anyString());
-
-        RemoteEndpoint remote2 = webSocket2.getSession().getRemote();
-        doThrow(new IOException("Error2")).when(remote2).sendString(anyString());
-
-        RemoteEndpoint remote3 = webSocket3.getSession().getRemote();
-        doThrow(new IOException("Error3")).when(remote3).sendString(anyString());
-
-        // when send state
-//        try { // TODO мы не ловим больше ошибков а потому надо про другому проверить факт недосылки
-            transport.sendStateToAll(new LinkedHashMap<String, Integer>() {{
-                put("one", 1);
-                put("two", 2);
-                put("three", 3);
-            }});
-
-//            fail("Expected exception");
-//        } catch (Exception e) {
-//            // then
-//            assertEquals("Error during send state to all players: [Error1, Error2, Error3]",
-//                    e.getMessage());
-//        }
-    }
-
-    @Test
-    public void shouldUnregisterPlayerSocket_whenClientClose() throws IOException {
+    public void shouldSendToClients_whenOnlyOneClient() throws Exception {
         // given
         createServices(PlayerSocket.CLIENT_SENDS_FIRST);
 
         createServerWebSocket("id");
 
-        PlayerSocket webSocket1 = connectWebSocketClient("id");
-        PlayerSocket webSocket2 = connectWebSocketClient("id");
-        PlayerSocket webSocket3 = connectWebSocketClient("id");
+        PlayerSocket socket1 = connectWebSocketClient("id");
+        PlayerSocket socket2 = connectWebSocketClient("id");
+        PlayerSocket socket3 = connectWebSocketClient("id");
 
         // when client answer
-        answerClient(webSocket1);
-        answerClient(webSocket2);
-        answerClient(webSocket3);
-
-        // when close websocket
-        webSocket1.onWebSocketClose(123, "close reason");
-        when(webSocket1.getSession().isOpen()).thenReturn(false);
+        answerClient(socket1);
+        answerClient(socket2);
+        answerClient(socket3);
 
         // when send state
-        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
-            put("one", 1);
-            put("two", 2);
-            put("three", 3);
-        }});
+        int requested = transport.sendState("id", data());
 
         // then
-        verifyNoMoreInteractions(webSocket1.getSession().getRemote());
-        verify(webSocket2.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
-        verify(webSocket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        assertEquals(3, requested);
+        verify(socket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verify(socket2.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verify(socket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+    }
+
+    @Test
+    public void shouldAllClientsGetMessage_whenSendDataToAllWebSocketClients() throws Exception {
+        // given
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
+
+        createServerWebSocket("id1");
+        createServerWebSocket("id2");
+        createServerWebSocket("id3");
+
+        PlayerSocket socket1 = connectWebSocketClient("id1");
+        PlayerSocket socket2 = connectWebSocketClient("id2");
+        PlayerSocket socket3 = connectWebSocketClient("id3");
+
+        // when client answer
+        answerClient(socket1);
+        answerClient(socket2);
+        answerClient(socket3);
+
+        // when send state
+        int requested = transport.sendStateToAll(data());
+
+        // then
+        assertEquals(3, requested);
+        verify(socket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verify(socket2.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verify(socket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+    }
+
+    @Test
+    public void shouldCollectErrors_whenSendDataToAllWebSocketClients() throws Exception {
+        // given
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
+
+        createServerWebSocket("id1");
+        createServerWebSocket("id2");
+        createServerWebSocket("id3");
+
+        PlayerSocket socket1 = connectWebSocketClient("id1");
+        PlayerSocket socket2 = connectWebSocketClient("id2");
+        PlayerSocket socket3 = connectWebSocketClient("id3");
+
+        // when client answer
+        answerClient(socket1);
+        answerClient(socket2);
+        answerClient(socket3);
+
+        // simulate errors for two sockets
+        RemoteEndpoint remote1 = socket1.getSession().getRemote();
+        doThrow(new IOException("Error1")).when(remote1).sendString(anyString());
+
+        RemoteEndpoint remote2 = socket2.getSession().getRemote();
+        doThrow(new IOException("Error2")).when(remote2).sendString(anyString());
+
+        // when send state
+        int requested = transport.sendStateToAll(data());
+
+        // then
+        assertEquals(1, requested);
+    }
+
+    @Test
+    public void shouldUnregisterPlayerSocket_whenClientClose() throws Exception {
+        // given
+        createServices(PlayerSocket.CLIENT_SENDS_FIRST);
+
+        createServerWebSocket("id");
+
+        PlayerSocket socket1 = connectWebSocketClient("id");
+        PlayerSocket socket2 = connectWebSocketClient("id");
+        PlayerSocket socket3 = connectWebSocketClient("id");
+
+        // when client answer
+        answerClient(socket1);
+        answerClient(socket2);
+        answerClient(socket3);
+
+        // when close websocket
+        socket1.onWebSocketClose(123, "close reason");
+        when(socket1.getSession().isOpen()).thenReturn(false);
+
+        // when send state
+        int requested = transport.sendState("id", data());
+
+        // then
+        assertEquals(2, requested);
+        verifyNoMoreInteractions(socket1.getSession().getRemote());
+        verify(socket2.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verify(socket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
     }
 }

@@ -46,6 +46,13 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
+    public void healthCheck() {
+        with.login.asNone();
+
+        assertEquals("ok", get("/rest/health"));
+    }
+
+    @Test
     public void playerWantsToPlay() {
         String code = registration.getCodeById("somePlayer");
         String expected = "{\n" +

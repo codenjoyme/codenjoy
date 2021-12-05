@@ -57,8 +57,8 @@
             <td>
                 <b>Room:</b> ${data.room}
             </td>
-        <tr>
         </tr>
+        <tr>
             <td>
                 <b>Game:</b> ${data.game}
             </td>
@@ -69,6 +69,34 @@
             </td>
             <td style="width:500px;">
                 <textarea rows="3" cols="45">${data.gameVersion}</textarea>
+            </td>
+        </tr>
+    </table>
+
+    <table class="admin-table" id="statistic">
+        <tr>
+            <td>
+                <b>Server time:</b> ${data.statistic.tickTime}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Deals:</b> ${data.statistic.dealsCount}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Screen updates:</b> ${data.statistic.screenUpdatesCount}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Request controls:</b> ${data.statistic.requestControlsCount}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Tick duration:</b> ${data.statistic.tickDuration} ms
             </td>
         </tr>
     </table>
@@ -328,6 +356,7 @@
                 <td>NameMask</td>
                 <td>Count</td>
                 <td>RoomName</td>
+            </tr>
             <tr>
                 <td><form:input path="generateNameMask"/></td>
                 <td><form:input path="generateCount"/></td>
@@ -352,7 +381,7 @@
                 <tr>
                     <td>Enable Rounds</td>
                     <td><form:checkbox path="rounds.roundsEnabled"/></td>
-                <tr>
+                </tr>
                 <tr>
                     <td>Players per room</td>
                     <td><form:input path="rounds.playersPerRoom"/></td>
@@ -401,7 +430,7 @@
                 <tr>
                     <td>Enable semifinal</td>
                     <td><form:checkbox path="semifinal.enabled"/></td>
-                <tr>
+                </tr>
                 <tr>
                     <td>Ticks before recalculation</td>
                     <td><form:input path="semifinal.timeout"/></td>
@@ -409,7 +438,7 @@
                 <tr>
                     <td>Current tick</td>
                     <td>${data.semifinalTick}</td>
-                <tr>
+                </tr>
                 <tr>
                     <td>Percentage or quantitative criterion</td>
                     <td><form:checkbox path="semifinal.percentage"/></td>
@@ -450,7 +479,7 @@
                 <tr>
                     <td>Enable kick inactive players</td>
                     <td><form:checkbox path="inactivity.kickEnabled"/></td>
-                <tr>
+                </tr>
                 <tr>
                     <td>Inactive ticks before kick</td>
                     <td><form:input path="inactivity.inactivityTimeout"/></td>

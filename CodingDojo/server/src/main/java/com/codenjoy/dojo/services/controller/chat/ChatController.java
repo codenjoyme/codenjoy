@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.controller.chat;
  */
 
 
+import com.codenjoy.dojo.profile.P;
 import com.codenjoy.dojo.services.Deal;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.chat.ChatAuthority;

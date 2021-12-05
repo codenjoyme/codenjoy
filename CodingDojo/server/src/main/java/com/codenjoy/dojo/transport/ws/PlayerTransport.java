@@ -30,15 +30,17 @@ public interface PlayerTransport {
     /**
      * Send game state to the all players
      * @param state state
+     * @return count requested
      */
-    void sendStateToAll(Object state);
+    int sendStateToAll(Object state);
 
     /**
      * Send game state to the player by given player id.
      * @param id registered player id
      * @param state state
+     * @return count requested
      */
-    boolean sendState(String id, Object state);
+    int sendState(String id, Object state);
 
     /**
      * Случается, когда игрок зарегистрировался в игре на страничке регистрации

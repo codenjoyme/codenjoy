@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.PlayerInfo;
+import com.codenjoy.dojo.services.StatisticService;
 import com.codenjoy.dojo.services.incativity.InactivitySettingsImpl;
 import com.codenjoy.dojo.services.level.LevelsSettingsImpl;
 import com.codenjoy.dojo.services.room.GamesRooms;
@@ -73,5 +74,6 @@ public class AdminSettings {
     private InactivitySettingsImpl inactivity;
     private LevelsSettingsImpl levels;
     private List<Parameter> other;
+    private StatisticService statistic;
 
 }

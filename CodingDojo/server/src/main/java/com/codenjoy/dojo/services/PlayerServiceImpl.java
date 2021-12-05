@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.profile.P;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.chat.ChatController;
@@ -104,6 +105,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected WhatsNextService whatsNext;
     @Autowired protected TeamService team;
     @Autowired protected ScoresCleaner scoresCleaner;
+    @Autowired protected StatisticService statistic;
 
     @Value("${game.ai}")
     protected boolean isAiNeeded;
@@ -346,18 +348,22 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             profiler.start("PSI.tick()");
 
+            statistic.tick();
+
             actionLogger.log(deals);
             autoSaver.tick();
 
             deals.tick();
             sendScreenUpdates();
             requestControls();
+
             chatController.tick();
 
             inactivity.tick();
             semifinal.tick();
 
-            profiler.end();
+            statistic.dealsCount(deals.size());
+            statistic.tickDuration(profiler.end());
         } catch (Error e) {
             e.printStackTrace();
             log.error("PlayerService.tick() throws", e);
@@ -373,16 +379,17 @@ public class PlayerServiceImpl implements PlayerService {
             Player player = deal.getPlayer();
             try {
                 String board = cacheBoards.get(player);
-                // TODO в конце концов если if (pair == null || pair.noSockets()) то ничего не отправляется, и зря гоняли но вроде как из кеша берем, так что проблем быть не должно
-                if (playerController.requestControl(player, board)) {
-                    requested++; // TODO test me
-                }
+                // TODO в конце концов если if (pair == null || pair.noSockets()) то
+                //      ничего не отправляется, и зря гоняли но вроде как из кеша берем,
+                //      так что проблем быть не должно.
+                requested += playerController.requestControl(player, board);
             } catch (Exception e) {
                 log.error("Unable to send control request to player " + player.getId() +
                         " URL: " + player.getCallbackUrl(), e);
             }
         }
-        log.debug("tick().requestControls() {} players", requested);
+
+        statistic.requestControlsCount(requested);
     }
 
     private void sendScreenUpdates() {
@@ -445,7 +452,8 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void sendScreenForWebSockets(Map<ScreenRecipient, ScreenData> map) {
         try {
-            screenController.requestControlToAll(map);
+            int requested = screenController.requestControlToAll(map);
+            statistic.screenUpdatesCount(requested);
         } catch (Exception e) {
             log.error("Unable to send screen updates to all players", e);
             e.printStackTrace();

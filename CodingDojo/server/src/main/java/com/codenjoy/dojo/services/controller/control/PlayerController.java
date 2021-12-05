@@ -42,7 +42,7 @@ public class PlayerController implements Controller<String, Joystick> {
     }
 
     @Override
-    public boolean requestControl(Player player, String board) {
+    public int requestControl(Player player, String board) {
         return transport.sendState(player.getId(), new BoardGameState(board));
     }
 
