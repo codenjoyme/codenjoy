@@ -185,22 +185,29 @@
         </tr>
     </table>
 
-    <table class="admin-table" id="debug">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.debugLog}">
-                        <b>The debug in progress</b></br>
-                        <a href="${ctx}/admin/debug/stop?room=${data.room}#debug">Stop debug</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b>The debug was suspended</b></br>
-                        <a href="${ctx}/admin/debug/start?room=${data.room}#debug">Start debug</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#debug" method="POST">
+        <table class="admin-table" id="debug">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.debugLog}">
+                            <b>The debug in progress</b></br>
+                            <a href="${ctx}/admin/debug/stop?room=${data.room}#debug">Stop debug</a>.
+                        </c:when>
+                        <c:otherwise>
+                            <b>The debug was suspended</b></br>
+                            <a href="${ctx}/admin/debug/start?room=${data.room}#debug">Start debug</a>.
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form:textarea rows="3" cols="45" path="loggers"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="autoSave">
         <tr>
