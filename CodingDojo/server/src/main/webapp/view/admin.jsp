@@ -203,7 +203,7 @@
             </tr>
             <tr>
                 <td>
-                    <form:textarea rows="3" cols="45" path="loggers"/>
+                    <form:textarea rows="3" cols="45" path="loggersLevels"/>
                 </td>
             </tr>
             <tr>

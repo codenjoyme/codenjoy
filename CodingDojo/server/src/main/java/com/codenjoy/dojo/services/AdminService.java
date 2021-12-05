@@ -45,7 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -101,8 +100,8 @@ public class AdminService {
             playerService.updateAll(settings.getPlayers());
         }
 
-        if (settings.getLoggers() != null) {
-            debugService.setLoggersLevels(Arrays.asList(settings.getLoggers().split("\n")));
+        if (settings.getLoggersLevels() != null) {
+            debugService.setLoggersLevels(settings.getLoggersLevels());
         }
 
         if (settings.getSemifinal() != null) {
@@ -326,7 +325,7 @@ public class AdminService {
 
         result.setSemifinalTick(semifinal.getTime(room));
         result.setGame(gameType.name());
-        result.setLoggers(String.join("\n", debugService.getLoggersLevels()));
+        result.setLoggersLevels(debugService.getLoggersLevels());
         result.setRoom(room);
         result.setGameVersion(gameType.getVersion());
         result.setGenerateNameMask("demo%");
