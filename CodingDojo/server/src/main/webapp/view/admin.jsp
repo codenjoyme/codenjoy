@@ -210,7 +210,6 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;CLASS   = 'GameServiceImpl'</br>
                     &nbsp;&nbsp;&nbsp;&nbsp;LEVEL   = 'ALL' | 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF</br>
                     You can combine several loggers together, just press Enter and write in new line.</br>
-                    <br>
                 </td>
             </tr>
             <tr>
