@@ -68,7 +68,7 @@
                 <b>Game version:</b>
             </td>
             <td style="width:500px;">
-                <textarea class="version small" cols="90">${data.gameVersion}</textarea>
+                <textarea class="version small" cols="95">${data.gameVersion}</textarea>
             </td>
         </tr>
     </table>
