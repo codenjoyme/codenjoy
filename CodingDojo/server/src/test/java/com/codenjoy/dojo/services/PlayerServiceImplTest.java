@@ -435,9 +435,9 @@ public class PlayerServiceImplTest {
 
         // then
         assertEquals("StatisticService(time=timeService bean, \n" +
-                        "tick=4000, \n" +
-                        "tickTime=1970-01-01T02:00:04.000+0200, \n" +
-                        "tickDuration=2000, \n" +
+                        "tick=6000, \n" +
+                        "tickTime=1970-01-01T02:00:06.000+0200, \n" +
+                        "tickDuration=3000, \n" +
                         "screenUpdatesCount=0, \n" +
                         "requestControlsCount=0, \n" +
                         "dealsCount=3)",
