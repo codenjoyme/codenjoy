@@ -68,7 +68,7 @@
                 <b>Game version:</b>
             </td>
             <td style="width:500px;">
-                <textarea rows="3" cols="45">${data.gameVersion}</textarea>
+                <textarea class="version small" cols="90">${data.gameVersion}</textarea>
             </td>
         </tr>
     </table>
@@ -214,7 +214,7 @@
             </tr>
             <tr>
                 <td>
-                    <form:textarea class="small" rows="5" cols="90" path="loggersLevels"/>
+                    <form:textarea class="loggers small" cols="90" path="loggersLevels"/>
                 </td>
             </tr>
             <tr>
