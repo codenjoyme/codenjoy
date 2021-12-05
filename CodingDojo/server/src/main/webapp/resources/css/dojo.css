@@ -100,7 +100,7 @@ label.error {
     overflow-y: hidden;
 }
 
-.admin-table .info textarea {
+.admin-table textarea.small {
     font-size: 12px;
     line-height: 12px
 }
