@@ -74,7 +74,11 @@ admin:
 log:
   debug: false
   filter: >
-    com.codenjoy
+    com.codenjoy,
+    com.codenjoy.dojo.services.jdbc,
+    org.eclipse.jetty,
+    org.springframework.mvc,
+    org.reflections
 logging:
   level:
     root: info
