@@ -206,6 +206,13 @@
                     <form:textarea rows="3" cols="45" path="loggers"/>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="game" value="${data.game}"/>
+                    <input type="hidden" name="room" value="${data.room}"/>
+                    <input type="submit" value="Update"/>
+                </td>
+            </tr>
         </table>
     </form:form>
 
