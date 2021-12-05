@@ -96,11 +96,14 @@ label.error {
     padding: 10px;
 }
 
+.admin-table textarea {
+    overflow-y: hidden;
+}
+
 .admin-table .info textarea {
     font-size: 12px;
     line-height: 12px
 }
-
 
 .admin-table .rightStep {
     padding-right: 20px;
@@ -135,7 +138,6 @@ span.pow {
 
 .admin-table textarea.map {
     line-height: 0.6em;
-    overflow-y: hidden;
     height: 80px;
     width: 300px;
 }
