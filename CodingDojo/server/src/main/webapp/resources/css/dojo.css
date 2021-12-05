@@ -87,6 +87,24 @@ label.error {
     font-size: 14px;
 }
 
+.admin-table .info {
+    font-size: 11px;
+    line-height: 10px;
+}
+
+.admin-table .info td {
+    padding: 10px;
+}
+
+.admin-table textarea {
+    overflow-y: hidden;
+}
+
+.admin-table textarea.small {
+    font-size: 12px;
+    line-height: 12px
+}
+
 .admin-table .rightStep {
     padding-right: 20px;
 }
@@ -120,7 +138,6 @@ span.pow {
 
 .admin-table textarea.map {
     line-height: 0.6em;
-    overflow-y: hidden;
     height: 80px;
     width: 300px;
 }

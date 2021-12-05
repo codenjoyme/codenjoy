@@ -172,11 +172,16 @@ pages.admin = function() {
         });
     }
 
-    var setupLevelsMapArea = function(elements) {
-        elements.on('input', function(){
-            this.style.height = '';
+    var setupLevelsMapArea = function(elements, init) {
+        var resize = function(){
+            this.style.height = 'auto';
             this.style.height = this.scrollHeight + 'px';
-        });
+        }
+
+        elements.each(function(){
+            if (!init) return;
+            resize.call(this);
+        }).on('input', resize);
     }
 
     var getLargestLevelKey = function() {
@@ -230,6 +235,8 @@ pages.admin = function() {
     loadRegSettings();
     setupSaveUserDetails();
     setupSpanHref();
-    setupLevelsMapArea($('textarea'));
+    setupLevelsMapArea($('textarea.map'), false);
+    setupLevelsMapArea($('textarea.loggers'), true);
+    setupLevelsMapArea($('textarea.version'), true);
     setupLevelsNewMapButton();
 }

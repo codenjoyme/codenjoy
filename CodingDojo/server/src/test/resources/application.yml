@@ -85,7 +85,7 @@ admin:
 log:
   debug: false
   filter: >
-    - com.codenjoy
+    com.codenjoy
 logging:
   level:
     root: info

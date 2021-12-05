@@ -68,7 +68,7 @@
                 <b>Game version:</b>
             </td>
             <td style="width:500px;">
-                <textarea rows="3" cols="45">${data.gameVersion}</textarea>
+                <textarea class="version small" cols="95">${data.gameVersion}</textarea>
             </td>
         </tr>
     </table>
@@ -185,22 +185,47 @@
         </tr>
     </table>
 
-    <table class="admin-table" id="debug">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.debugLog}">
-                        <b>The debug in progress</b></br>
-                        <a href="${ctx}/admin/debug/stop?room=${data.room}#debug">Stop debug</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b>The debug was suspended</b></br>
-                        <a href="${ctx}/admin/debug/start?room=${data.room}#debug">Start debug</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#debug" method="POST">
+        <table class="admin-table" id="debug">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.debugLog}">
+                            <b>The debug in progress</b></br>
+                            <a href="${ctx}/admin/debug/stop?room=${data.room}#debug">Stop debug</a>.
+                        </c:when>
+                        <c:otherwise>
+                            <b>The debug was suspended</b></br>
+                            <a href="${ctx}/admin/debug/start?room=${data.room}#debug">Start debug</a>.
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+            <tr class="info">
+                <td>
+                    Feel free to choose any package or class you want.</br>
+                    Format is 'NAME:LEVEL', where:</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;NAME    = PACKAGE | PACKAGE.CLASS</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;PACKAGE = 'com.codenjoy.dojo.services'</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;CLASS   = 'GameServiceImpl'</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;LEVEL   = 'ALL' | 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF</br>
+                    You can combine several loggers together, just press Enter and write in new line.</br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form:textarea class="loggers small" cols="90" path="loggersLevels"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="game" value="${data.game}"/>
+                    <input type="hidden" name="room" value="${data.room}"/>
+                    <input type="submit" value="Update"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="autoSave">
         <tr>
