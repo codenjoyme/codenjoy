@@ -32,19 +32,24 @@
     <link href="${ctx}/resources/css/all-board-only.min.css" rel="stylesheet">
 
     <style>
+        body {
+            overflow-y: auto;
+        }
         canvas {
             width: unset!important;
             cursor: unset!important;
         }
         .player_info {
             color: white!important;
+            font-family: monospace;
         }
         .player_info h2 {
-            line-height: 11px;
+            font-size: 40px;
+            line-height: 25px;
             margin: 0px;
         }
         .label-value {
-            font-size: 14px;
+            font-size: 30px;
             font-weight: 100;
         }
         .player-canvas {
