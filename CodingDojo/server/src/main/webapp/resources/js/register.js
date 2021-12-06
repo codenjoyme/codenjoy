@@ -218,7 +218,7 @@ function initRegistration(waitApprove, contextPath) {
         };
 
         $('#submit-button').click(submitForm);
-        $('#email, #password, #skills, #fullName, #readableName, #data1, #data2, #data3, #data4, #gitHubUsername, #slackEmail').keypress(function (e) {
+        $('#email, #password, #skills, #fullName, #readableName, #data1, #data2, #data3, #data4, #gitHubUsername').keypress(function (e) {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 submitForm();

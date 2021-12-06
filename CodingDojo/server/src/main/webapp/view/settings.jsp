@@ -116,11 +116,11 @@
                 <tr class= "add-border">
                     <td colspan="3">
                         <a style="align = left" onclick="pop()"><font size="3">Submit</font></a>
-                            <span id="myPopup" hidden></br>
-                                <p class="white-text">Give us your feedback: </p>
-                                <textarea id="feedback" name="feedback" for="form" style="resize:none;width:100%;" required></textarea>
-                                <button class="btn-submit" id="submit-button" for="form" type="submit">Submit</button>
-                            </span>
+                        <span id="myPopup" hidden></br>
+                            <p class="white-text">Give us your feedback: </p>
+                            <textarea id="feedback" name="feedback" for="form" style="color: black !important;resize:none;width:100%;" required></textarea>
+                            <button class="btn-submit" style="color: black !important;" id="submit-button" for="form" type="submit">Submit</button>
+                        </span>
                     </td>
                 </tr>
             </table>

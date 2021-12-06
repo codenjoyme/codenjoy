@@ -35,6 +35,7 @@ License along with this program.  If not, see
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/css/registration-style.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/css/custom.css" rel="stylesheet"/>
     <jsp:include page="common-inclusion.jsp" />
     <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 </head>
@@ -103,15 +104,14 @@ License along with this program.  If not, see
                         <input type="text" placeholder="Experience"/>
                         <span class="icon fa"></span>
                     </div>
-                    <div id="gitHubUsername" class="field not-valid">
+                    <div id="gitHubUsername" class="field not-valid" not-empty hidden required>
                         <form:errors path="gitHubUsername" cssClass="error-message" />
                         <form:input type="gitHubUsername" placeholder="Github Username" path="gitHubUsername"/>
                         <span class="icon fa"></span>
                     </div>
-                    <div id="slackEmail" class="field not-valid">
+                    <div id="slackEmail" class="field not-valid" hidden>
                         <form:errors path="slackEmail" cssClass="error-message" />
                         <form:input type="slackEmail" placeholder="Slack email(optional)" path="slackEmail"/>
-                        <span class="icon fa"></span>
                     </div>
                     <button class="btn-submit" id="submit-button" type="button">Sign up</button>
                 </c:if>

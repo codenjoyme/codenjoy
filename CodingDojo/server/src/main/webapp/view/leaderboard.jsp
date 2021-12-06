@@ -23,18 +23,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
+<div id="leaderboard" class="settings" style="display:none;flex:0 0 30%;">
     <div class="tabs cEgRKs">
-        <label id="leaderboard-tab" class="tv-tab" for="tv-tab-1">Leaderboard</label>
+        <label class="tv-tab">
+            <a class="repository" href="${repositoryURL}"> Repository URL</a>
+        </label>
         <label id="settings-tab" class="tv-tab" for="tv-tab-3">Settings</label>
-        <a href="${repositoryURL}"> Repository URL</a>
     </div>
 
-    <input class="tv-radio" id="tv-tab-1" name="tv-group" type="radio" checked="checked"/>
-    <div class="tv-content">
-        <%@include file="leaderstable.jsp"%>
-        <%@include file="info.jsp"%>
-    </div>
+
 
     <input class="tv-radio" id="tv-tab-3" name="tv-group" type="radio"/>
     <div class="tv-content">
