@@ -225,7 +225,7 @@ public class Validator {
 
     public void checkNotNull(String name, Object input) {
         if (input == null) {
-            throw new IllegalArgumentException(String.format("Object '%s' null", name));
+            throw new IllegalArgumentException(String.format("Object '%s' is null", name));
         }
     }
 

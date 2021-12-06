@@ -28,18 +28,14 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.controller.Validator;
-import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
-import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
-import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
+import com.codenjoy.dojo.web.rest.pojo.*;
 import lombok.AllArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -200,16 +196,14 @@ public class RestBoardController {
         return Collections.singletonMap("active", active);
     }
 
-    @GetMapping("/room/{room}/whats-next/{board}/{actions}")
+    @GetMapping("/room/{room}/whats-next")
     public String whatsNext(@PathVariable("room") String room,
-                            @PathVariable("board") String board,
-                            @PathVariable("actions") String actions)
+                            @NotNull @RequestBody PWhatsNext input)
     {
         validator.checkRoom(room, CANT_BE_NULL);
-        validator.checkNotNull("Board", board);
-        validator.checkNotNull("Actions", actions);
-        validator.checkNotNull("Board", board);
+        validator.checkNotNull("board", input.getBoard());
+        validator.checkNotNull("actions", input.getActions());
 
-        return playerService.whatsNext(room, board, actions);
+        return playerService.whatsNext(room, input.getBoard(), input.getActions());
     }
 }
