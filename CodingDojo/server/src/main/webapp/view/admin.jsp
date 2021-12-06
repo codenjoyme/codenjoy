@@ -55,7 +55,17 @@
     <table class="admin-table" id="gameVersion">
         <tr>
             <td>
-                <b>Room:</b> ${data.room}
+                <b>Room:</b> ${data.room}&nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a id="delete-room"
+                   href="${ctx}/admin/room/delete?room=${data.room}#gameVersion">Remove room</a>.
+            </td>
+            <td class="info">
+                You cannot delete the default game room. When you delete a room, <br>
+                all players and their saves will also be removed from it.
             </td>
         </tr>
         <tr>

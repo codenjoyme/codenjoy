@@ -34,8 +34,8 @@ import org.junit.Test;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
 import static com.codenjoy.dojo.client.Utils.split;
+import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -349,6 +349,39 @@ public class RoomServiceTest {
 
         // when
         service.removeAll();
+
+        // then
+        assertEquals("[]", service.rooms().toString());
+    }
+
+    @Test
+    public void shouldRemove() {
+        // given
+        service.create("room4", game2);
+        service.create("room2", game1);
+        service.create("room1", game1);
+        service.create("room3", game2);
+
+        // when
+        service.remove("room2");
+
+        // then
+        assertEquals("[room1, room3, room4]", service.rooms().toString());
+
+        // when
+        service.remove("room3");
+
+        // then
+        assertEquals("[room1, room4]", service.rooms().toString());
+
+        // when
+        service.remove("room4");
+
+        // then
+        assertEquals("[room1]", service.rooms().toString());
+
+        // when
+        service.remove("room1");
 
         // then
         assertEquals("[]", service.rooms().toString());
