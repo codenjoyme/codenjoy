@@ -24,9 +24,7 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.client.local.DiceGenerator;
 import com.codenjoy.dojo.config.RealGameConfiguration;
-import com.codenjoy.dojo.services.GameService;
 import org.junit.Test;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 
 import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LOSE_PENALTY;
@@ -47,9 +45,6 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
 
     private final String player2 = "player2";
     private String code2;
-
-    @SpyBean
-    private GameService games;
 
     @Override
     public void setup() {
