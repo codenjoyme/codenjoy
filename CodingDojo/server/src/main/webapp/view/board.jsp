@@ -38,6 +38,7 @@
 
     <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
     <script src="${ctx}/resources/js/${gameOnly}.js"></script>
+    <script src="${ctx}/resources/js/settings.js"></script>
 </head>
 <body style="display:none;">
     <sec:authorize access="isAuthenticated()">

@@ -34,8 +34,20 @@ message User{
   string role = 4;
 }
 
+message UserSubscriptionRequest{
+  string id = 1;
+  int32 requestId = 2;
+  string game = 3;
+}
+
+message UserSubscriptionResponse{
+  bool emailSubscription = 1;
+  bool slackSubscription = 2;
+}
+
 service UserDetailsService{
   rpc getUserDetailsById(UserDetailsIdRequest) returns (UserDetailsResponse);
   rpc getUserDetailsByUsername(UserDetailsUsernameRequest) returns (UserDetailsResponse);
   rpc getUsersForContest(UserRequest) returns (UserResponse);
+  rpc getUserSubscriptionsForContest(UserSubscriptionRequest) returns (UserSubscriptionResponse);
 }

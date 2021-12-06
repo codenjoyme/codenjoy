@@ -26,6 +26,7 @@
 <div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
     <div class="tabs">
         <label id="leaderboard-tab" class="tv-tab" for="tv-tab-1">Leaderboard</label>
+        <label id="settings-tab" class="tv-tab" for="tv-tab-3">Settings</label>
         <a href="${repositoryURL}"> Repository URL</a>
     </div>
 
@@ -35,8 +36,15 @@
         <%@include file="info.jsp"%>
     </div>
 
+    <input class="tv-radio" id="tv-tab-3" name="tv-group" type="radio"/>
+    <div class="tv-content">
+        <%@include file="settings.jsp"%>
+    </div>
+
     <input class="tv-radio" id="tv-tab-2" name="tv-group" type="radio"/>
     <div class="tv-content">
         <%@include file="chat.jsp"%>
     </div>
+
+
 </div>
