@@ -70,4 +70,13 @@ public class GithubUsernamesCache {
             readWriteLock.writeLock().unlock();
         }
     }
+
+    public void clearCache() {
+        try {
+            readWriteLock.writeLock().lock();
+            githubUsernames.clear();
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
+    }
 }
