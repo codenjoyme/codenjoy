@@ -28,7 +28,6 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.profile.P;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.controller.chat.ChatController;
@@ -176,12 +175,12 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    @Override // TODO test me
+    @Override
     public String whatsNext(String room, String board, String allActions) {
         lock.writeLock().lock();
         try {
             if (!roomService.exists(room)) {
-                return null;
+                throw new IllegalArgumentException("Room not exists: " + room);
             }
             GameType gameType = roomService.gameType(room);
             return whatsNext.calculate(gameType, board, allActions);

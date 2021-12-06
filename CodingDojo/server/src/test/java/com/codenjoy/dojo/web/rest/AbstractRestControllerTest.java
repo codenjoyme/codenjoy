@@ -151,6 +151,13 @@ public abstract class AbstractRestControllerTest {
     }
 
     @SneakyThrows
+    protected String get(int status, String uri, String data) {
+        return process(status, MockMvcRequestBuilders.get(uri, data)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(data));
+    }
+
+    @SneakyThrows
     private String post(int status, String uri) {
         return process(status, MockMvcRequestBuilders.post(uri));
     }
@@ -198,6 +205,13 @@ public abstract class AbstractRestControllerTest {
         JSONObject error = tryParseAsJson(source);
         assertEquals(message, error.getString("message"));
     }
+
+    protected void assertGetError(String message, String uri, String data) {
+        String source = get(500, uri, data);
+        JSONObject error = tryParseAsJson(source);
+        assertEquals(message, error.getString("message"));
+    }
+
     protected void assertPostError(String message, String uri, String data) {
         String source = post(500, uri, data);
         JSONObject error = tryParseAsJson(source);
