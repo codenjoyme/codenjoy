@@ -248,6 +248,19 @@ public class AdminController {
         return getAdmin(request);
     }
 
+    @GetMapping("/room/delete")
+    public String deleteRoom(HttpServletRequest request) {
+        String room = room(request);
+        // нельзя удалять единственную комнату соответствующую игре,
+        // потому что потом зайти некуда будет
+        if (!roomService.game(room).equals(room)) {
+            playerService.removeAll(room);
+            saveService.removeAllSaves(room);
+            roomService.remove(room);
+        }
+        return getAdmin(request);
+    }
+
     // ----------------
 
     @GetMapping("/game/pause")
