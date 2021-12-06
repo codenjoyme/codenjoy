@@ -478,12 +478,14 @@ public class Registration {
     }
 
     public void remove(String id) {
+        String usernameToRemoveFromCache = getGitHubUsernameById(id);
+        githubUsernamesCache.removeByGithubUsername(usernameToRemoveFromCache);
         pool.update("DELETE FROM users WHERE id = ?;",
                 new Object[]{id});
     }
 
     public void removeAll() {
+        githubUsernamesCache.clearCache();
         pool.update("DELETE FROM users WHERE roles NOT LIKE '%" + ROLE_ADMIN + "%';");
     }
-
 }
