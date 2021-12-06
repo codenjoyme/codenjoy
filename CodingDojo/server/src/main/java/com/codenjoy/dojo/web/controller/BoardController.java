@@ -280,9 +280,9 @@ public class BoardController {
 
         if (!feedbackText.equals("")) {
             List<Query> queries = queryClient.getQueriesForContest(game);
-            for (int i = 1; i <= queries.size(); i++) {
-                subscriptionSaver.updateEmailSubscription(playerId, String.valueOf(i), getCheckBoxValue(i, "email", request), game);
-                subscriptionSaver.updateSlackSubscription(playerId, String.valueOf(i), getCheckBoxValue(i, "slackEmail", request), game);
+            for(Query q : queries){
+                subscriptionSaver.updateEmailSubscription(playerId, String.valueOf(q.getId()), getCheckBoxValue(q.getId(), "email", request), game);
+                subscriptionSaver.updateSlackSubscription(playerId, String.valueOf(q.getId()), getCheckBoxValue(q.getId(), "slackEmail", request), game);
             }
             feedbackSaver.saveFeedback(playerId, game, feedbackText);
         }
