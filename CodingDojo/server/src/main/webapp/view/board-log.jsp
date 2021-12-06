@@ -40,11 +40,11 @@
             color: white!important;
         }
         .player_info h2 {
-            line-height: 11px;
+            line-height: 35px;
             margin: 0px;
         }
         .label-value {
-            font-size: 14px;
+            font-size: 30px;
             font-weight: 100;
         }
         .player-canvas {
