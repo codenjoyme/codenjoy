@@ -64,6 +64,21 @@ public class BoardController {
 
     public static final String URI = "/board";
 
+    public static final String CODE = "code";
+    public static final String GAME = "game";
+    public static final String ROOM = "room";
+    public static final String ALL_PLAYERS_SCREEN = "allPlayersScreen";
+    public static final String GAME_ONLY = "gameOnly";
+    public static final String PLAYER = "player";
+    public static final String PLAYER_ID = "playerId";
+    public static final String READABLE_NAME = "readableName";
+    public static final String GITHUB = "github";
+    public static final String PLAYER_SCORE_CLEANUP_ENABLED = "playerScoreCleanupEnabled";
+    public static final String SUBSCRIBED = "subscribed";
+    public static final String IS_SLACK_SUBSCRIBED = "isSlackSubscribed";
+    public static final String REPOSITORY_URL = "repositoryURL";
+    public static final String FEEDBACK = "feedback";
+
     private final PlayerService playerService;
     private final Registration registration;
     private final Validator validator;
@@ -76,15 +91,15 @@ public class BoardController {
 
     @GetMapping("/player/{player}")
     public String boardPlayer(ModelMap model,
-                              @PathVariable("player") String id,
+                              @PathVariable(PLAYER) String id,
                               @RequestParam(name = "only", required = false) Boolean justBoard) {
         validator.checkPlayerId(id, CANT_BE_NULL);
 
-        return boardPlayer(model, id, null, justBoard, (String) model.get("game"));
+        return boardPlayer(model, id, null, justBoard, (String) model.get(GAME));
     }
 
     @GetMapping(value = "/player/{player}", params = {"code", "remove"})
-    public String removePlayer(@PathVariable("player") String id, @RequestParam("code") String code) {
+    public String removePlayer(@PathVariable(PLAYER) String id, @RequestParam(CODE) String code) {
         validator.checkPlayerCode(id, code);
 
         Player player = playerService.get(id);
@@ -96,12 +111,12 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "/player/{player}", params = "code")
+    @GetMapping(value = "/player/{player}", params = CODE)
     public String boardPlayer(ModelMap model,
-                              @PathVariable("player") String id,
-                              @RequestParam("code") String code,
+                              @PathVariable(PLAYER) String id,
+                              @RequestParam(CODE) String code,
                               @RequestParam(name = "only", required = false) Boolean justBoard,
-                              @RequestParam(name = "game", required = false, defaultValue = "") String game) {
+                              @RequestParam(name = GAME, required = false, defaultValue = "") String game) {
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
         validator.checkGame(game, CAN_BE_NULL); // TODO а зачем тут вообще game?
@@ -121,7 +136,7 @@ public class BoardController {
     }
 
     @GetMapping("/rejoining/{game}")
-    public String rejoinGame(ModelMap model, @PathVariable("game") String game,
+    public String rejoinGame(ModelMap model, @PathVariable(GAME) String game,
                              HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user) {
         validator.checkGame(game, CANT_BE_NULL);
@@ -140,8 +155,8 @@ public class BoardController {
     }
 
     @GetMapping("/rejoining/{game}/room/{room}")
-    public String rejoinGame(ModelMap model, @PathVariable("game") String game,
-                             @PathVariable("room") String room,
+    public String rejoinGame(ModelMap model, @PathVariable(GAME) String game,
+                             @PathVariable(ROOM) String room,
                              HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user) {
         validator.checkGame(game, CANT_BE_NULL);
@@ -163,26 +178,26 @@ public class BoardController {
 
     private void populateBoardAttributes(ModelMap model, String code, String game, String room, String gameOnly,
                                          String playerId, String readableName, String github, boolean allPlayersScreen) {
-        model.addAttribute("code", code);
-        model.addAttribute("game", game);
-        model.addAttribute("room", room);
-        model.addAttribute("allPlayersScreen", false);
-        model.addAttribute("game", game);
-        model.addAttribute("gameOnly", gameOnly);
-        model.addAttribute("playerId", playerId);
-        model.addAttribute("readableName", readableName);
-        model.addAttribute("github", github);
-        model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
-        model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
-        model.addAttribute("subscribed", getQueriesForGame(playerId, game));
-        model.addAttribute("isSlackSubscribed", !registration.getSlackEmailById(playerId).equals(""));
-        model.addAttribute("repositoryURL", playerGameSaver.getRepositoryByPlayerIdForGame(playerId, game));
+        model.addAttribute(CODE, code);
+        model.addAttribute(GAME, game);
+        model.addAttribute(ROOM, room);
+        model.addAttribute(ALL_PLAYERS_SCREEN, false);
+        model.addAttribute(GAME, game);
+        model.addAttribute(GAME_ONLY, gameOnly);
+        model.addAttribute(PLAYER_ID, playerId);
+        model.addAttribute(READABLE_NAME, readableName);
+        model.addAttribute(GITHUB, github);
+        model.addAttribute(ALL_PLAYERS_SCREEN, allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
+        model.addAttribute(PLAYER_SCORE_CLEANUP_ENABLED, properties.isPlayerScoreCleanupEnabled());
+        model.addAttribute(SUBSCRIBED, getQueriesForGame(playerId, game));
+        model.addAttribute(IS_SLACK_SUBSCRIBED, !registration.getSlackEmailById(playerId).equals(""));
+        model.addAttribute(REPOSITORY_URL, playerGameSaver.getRepositoryByPlayerIdForGame(playerId, game));
     }
 
     @GetMapping(value = "/log/player/{player}", params = {"game", "room"})
     public String boardPlayerLog(ModelMap model, @PathVariable("player") String id,
-                                 @RequestParam("game") String game,
-                                 @RequestParam("room") String room) {
+                                 @RequestParam(GAME) String game,
+                                 @RequestParam(ROOM) String room) {
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkGame(game, CANT_BE_NULL);
         validator.checkRoom(room, CANT_BE_NULL);
@@ -192,12 +207,12 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
-        model.addAttribute("game", game);
-        model.addAttribute("room", room);
-        model.addAttribute("gameOnly", GameServiceImpl.removeNumbers(game));
-        model.addAttribute("playerId", user.get().getId());
-        model.addAttribute("readableName", user.get().getReadableName());
-        model.addAttribute("github", user.get().getGitHubUsername());
+        model.addAttribute(GAME, game);
+        model.addAttribute(ROOM, room);
+        model.addAttribute(GAME_ONLY, GameServiceImpl.removeNumbers(game));
+        model.addAttribute(PLAYER_ID, user.get().getId());
+        model.addAttribute(READABLE_NAME, user.get().getReadableName());
+        model.addAttribute(GITHUB, user.get().getGitHubUsername());
 
         return "board-log";
     }
@@ -213,8 +228,8 @@ public class BoardController {
 
     @GetMapping("/game/{game}")
     public String boardAllGames(ModelMap model,
-                                @PathVariable("game") String game,
-                                @RequestParam(value = "code", required = false) String code,
+                                @PathVariable(GAME) String game,
+                                @RequestParam(value = CODE, required = false) String code,
                                 @AuthenticationPrincipal Registration.User user) {
         // TODO возможно тут CAN_BE_NULL, иначе проверка (game == null) никогда не true
         validator.checkGame(game, CANT_BE_NULL);
@@ -244,8 +259,8 @@ public class BoardController {
         return "board";
     }
 
-    @GetMapping(value = "/", params = "code")
-    public String boardAll(ModelMap model, @RequestParam("code") String code) {
+    @GetMapping(value = "/", params = CODE)
+    public String boardAll(ModelMap model, @RequestParam(CODE) String code) {
         validator.checkCode(code, CAN_BE_NULL);
 
         String id = registration.getIdByCode(code);
@@ -261,22 +276,22 @@ public class BoardController {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
-        model.addAttribute("code", code);
-        model.addAttribute("game", player.getGame());
-        model.addAttribute("room", player.getRoom());
-        model.addAttribute("gameOnly", player.getGameOnly());
-        model.addAttribute("playerId", player.getId());
-        model.addAttribute("readableName", player.getReadableName());
-        model.addAttribute("github", player.getGitHubUsername());
-        model.addAttribute("allPlayersScreen", true);
+        model.addAttribute(CODE, code);
+        model.addAttribute(GAME, player.getGame());
+        model.addAttribute(ROOM, player.getRoom());
+        model.addAttribute(GAME_ONLY, player.getGameOnly());
+        model.addAttribute(PLAYER_ID, player.getId());
+        model.addAttribute(READABLE_NAME, player.getReadableName());
+        model.addAttribute(GITHUB, player.getGitHubUsername());
+        model.addAttribute(ALL_PLAYERS_SCREEN, true);
         return "board";
     }
 
     @PostMapping("/feedback")
     public String subscribeOrUnsubscribe(HttpServletRequest request) {
-        String playerId = request.getParameter("playerId").replace("\"", "");
-        String game = request.getParameter("game").replace("\"", "");
-        String feedbackText = request.getParameter("feedback");
+        String playerId = request.getParameter(PLAYER_ID).replace("\"", "");
+        String game = request.getParameter(GAME).replace("\"", "");
+        String feedbackText = request.getParameter(FEEDBACK);
 
         if (!feedbackText.equals("")) {
             List<Query> queries = queryClient.getQueriesForContest(game);
@@ -287,11 +302,11 @@ public class BoardController {
             feedbackSaver.saveFeedback(playerId, game, feedbackText);
         }
 
-        String code = request.getParameter("code").replace("\"", "");
+        String code = request.getParameter(CODE).replace("\"", "");
         return "redirect:/board/player/" + playerId + code(code);
     }
 
-    private String code(@RequestParam("code") String code) {
+    private String code(@RequestParam(CODE) String code) {
         return (code != null) ? "?code=" + code : "";
     }
 
