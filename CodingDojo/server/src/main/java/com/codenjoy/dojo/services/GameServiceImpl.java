@@ -225,7 +225,7 @@ public class GameServiceImpl implements GameService {
     }
 
     /**
-     * @return Вовзращает сейв для этой игры по умолчанию с прогрессом
+     * @return Возвращает сейв для этой игры по умолчанию с прогрессом
      * (если он предусмотрен) на первом уровне.
      */
     @Override
@@ -239,5 +239,20 @@ public class GameServiceImpl implements GameService {
             log.error("Something wrong while getDefaultProgress", e);
             return "{}";
         }
+    }
+
+    /**
+     * Метод служит тестовым целям. Порой в тестах нам очень хочется мокать поведение
+     * фабрики создающей компоненты игры, например, чтобы переопределить Dice.
+     * Пожалуйста, не используй его в production коде.
+     * @param game Игра для которой делаем замену.
+     * @param transform Функция подмены.
+     */
+    public void replace(String game, Function<GameType, GameType> transform) {
+        if (!cache.containsKey(game)) {
+            throw new IllegalArgumentException("Game not found in cache: " + game);
+        }
+
+        cache.put(game, transform.apply(cache.get(game)));
     }
 }

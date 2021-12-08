@@ -44,8 +44,8 @@ import static com.codenjoy.dojo.services.multiplayer.GamePlayer.DEFAULT_TEAM_ID;
 @Component
 public class WhatsNextService {
 
-    // не хотелось рефакторить этот метод, дабы в нем было видно, что делает сервер
-    // для создания игры.
+    // не хотелось рефакторить этот метод, дабы в нем было видно,
+    // что делает сервер для создания игры.
     public String calculate(GameType gameType, String board, String allActions) {
         Settings settings = gameType.getSettings();
         GameField game = gameType.createGame(LevelProgress.levelsStartsFrom1, settings);

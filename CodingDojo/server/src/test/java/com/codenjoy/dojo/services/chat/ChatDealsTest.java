@@ -27,7 +27,10 @@ import com.codenjoy.dojo.client.local.DiceGenerator;
 import com.codenjoy.dojo.config.Constants;
 import com.codenjoy.dojo.config.RealGameConfiguration;
 import com.codenjoy.dojo.config.TestSqliteDBLocations;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Deal;
+import com.codenjoy.dojo.services.LazyJoystick;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.helper.Helpers;
 import com.codenjoy.dojo.utils.smart.SmartAssert;
 import org.junit.After;
@@ -36,7 +39,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -58,10 +60,6 @@ public class ChatDealsTest {
     private final String room = "room";
     private final String player1 = "player1";
     private final String player2 = "player2";
-
-    // do not remove this - it used for spy-decorating for the component
-    @SpyBean
-    private GameService games;
 
     @Autowired
     private Helpers with;

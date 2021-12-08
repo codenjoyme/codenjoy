@@ -25,7 +25,6 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.RegistrationService;
@@ -162,7 +161,7 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
-        populateBoardAttributes(model, id, null, null, null, GameServiceImpl.removeNumbers(game),
+        populateBoardAttributes(model, id, null, game, room, GameServiceImpl.removeNumbers(game),
                 id, user.get().getReadableName(), false);
         return "board-log";
     }
