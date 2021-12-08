@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.level.LevelsSettings;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import lombok.AllArgsConstructor;
-import org.mockito.internal.util.MockUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -61,18 +60,11 @@ public class RoomHelper {
     }
 
     public void mockDice(String game, Dice dice) {
-        if (!MockUtil.isMock(games)) {
-            throw new IllegalStateException(
-                    "Please write '@SpyBean private GameService games;' " +
-                            "in your @SpringBootTest class");
-        }
-        when(games.getGameType(game))
-                .thenAnswer(inv -> {
-                    GameType real = (GameType) inv.callRealMethod();
-                    GameType spy = spy(real);
-                    when(spy.getDice()).thenReturn(dice);
-                    return spy;
-                });
+        games.replace(game, real -> {
+            GameType spy = spy(real);
+            when(spy.getDice()).thenReturn(dice);
+            return spy;
+        });
     }
 
     public String board(String id) {

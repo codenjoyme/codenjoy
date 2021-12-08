@@ -55,10 +55,20 @@
     <table class="admin-table" id="gameVersion">
         <tr>
             <td>
-                <b>Room:</b> ${data.room}
+                <b>Room:</b> ${data.room}&nbsp;
             </td>
-        <tr>
         </tr>
+        <tr>
+            <td>
+                <a id="delete-room"
+                   href="${ctx}/admin/room/delete?room=${data.room}#gameVersion">Remove room</a>.
+            </td>
+            <td class="info">
+                You cannot delete the default game room. When you delete a room, <br>
+                all players and their saves will also be removed from it.
+            </td>
+        </tr>
+        <tr>
             <td>
                 <b>Game:</b> ${data.game}
             </td>
@@ -68,7 +78,35 @@
                 <b>Game version:</b>
             </td>
             <td style="width:500px;">
-                <textarea rows="3" cols="45">${data.gameVersion}</textarea>
+                <textarea class="version small" cols="95">${data.gameVersion}</textarea>
+            </td>
+        </tr>
+    </table>
+
+    <table class="admin-table" id="statistic">
+        <tr>
+            <td>
+                <b>Server time:</b> ${data.statistic.tickTime}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Deals:</b> ${data.statistic.dealsCount}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Screen updates:</b> ${data.statistic.screenUpdatesCount}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Request controls:</b> ${data.statistic.requestControlsCount}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Tick duration:</b> ${data.statistic.tickDuration} ms
             </td>
         </tr>
     </table>
@@ -157,22 +195,47 @@
         </tr>
     </table>
 
-    <table class="admin-table" id="debug">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.debugLog}">
-                        <b>The debug in progress</b></br>
-                        <a href="${ctx}/admin/debug/stop?room=${data.room}#debug">Stop debug</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b>The debug was suspended</b></br>
-                        <a href="${ctx}/admin/debug/start?room=${data.room}#debug">Start debug</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#debug" method="POST">
+        <table class="admin-table" id="debug">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.debugLog}">
+                            <b>The debug in progress</b></br>
+                            <a href="${ctx}/admin/debug/stop?room=${data.room}#debug">Stop debug</a>.
+                        </c:when>
+                        <c:otherwise>
+                            <b>The debug was suspended</b></br>
+                            <a href="${ctx}/admin/debug/start?room=${data.room}#debug">Start debug</a>.
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+            <tr class="info">
+                <td>
+                    Feel free to choose any package or class you want.</br>
+                    Format is 'NAME:LEVEL', where:</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;NAME    = PACKAGE | PACKAGE.CLASS</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;PACKAGE = 'com.codenjoy.dojo.services'</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;CLASS   = 'GameServiceImpl'</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;LEVEL   = 'ALL' | 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF</br>
+                    You can combine several loggers together, just press Enter and write in new line.</br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form:textarea class="loggers small" cols="90" path="loggersLevels"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="game" value="${data.game}"/>
+                    <input type="hidden" name="room" value="${data.room}"/>
+                    <input type="submit" value="Update"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="autoSave">
         <tr>
@@ -328,6 +391,7 @@
                 <td>NameMask</td>
                 <td>Count</td>
                 <td>RoomName</td>
+            </tr>
             <tr>
                 <td><form:input path="generateNameMask"/></td>
                 <td><form:input path="generateCount"/></td>
@@ -352,7 +416,7 @@
                 <tr>
                     <td>Enable Rounds</td>
                     <td><form:checkbox path="rounds.roundsEnabled"/></td>
-                <tr>
+                </tr>
                 <tr>
                     <td>Players per room</td>
                     <td><form:input path="rounds.playersPerRoom"/></td>
@@ -401,7 +465,7 @@
                 <tr>
                     <td>Enable semifinal</td>
                     <td><form:checkbox path="semifinal.enabled"/></td>
-                <tr>
+                </tr>
                 <tr>
                     <td>Ticks before recalculation</td>
                     <td><form:input path="semifinal.timeout"/></td>
@@ -409,7 +473,7 @@
                 <tr>
                     <td>Current tick</td>
                     <td>${data.semifinalTick}</td>
-                <tr>
+                </tr>
                 <tr>
                     <td>Percentage or quantitative criterion</td>
                     <td><form:checkbox path="semifinal.percentage"/></td>
@@ -450,7 +514,7 @@
                 <tr>
                     <td>Enable kick inactive players</td>
                     <td><form:checkbox path="inactivity.kickEnabled"/></td>
-                <tr>
+                </tr>
                 <tr>
                     <td>Inactive ticks before kick</td>
                     <td><form:input path="inactivity.inactivityTimeout"/></td>

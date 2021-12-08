@@ -202,4 +202,8 @@ public class RoomService {
                 .map(RoomState::getRoom)
                 .collect(toList());
     }
+
+    public void remove(String room) {
+        rooms.remove(room);
+    }
 }

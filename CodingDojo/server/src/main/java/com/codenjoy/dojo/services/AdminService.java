@@ -72,6 +72,7 @@ public class AdminService {
     private final Registration registration;
     private final SemifinalService semifinal;
     private final RoomService roomService;
+    private final StatisticService statistics;
 
     void updateInactivity(String room, InactivitySettings updated) {
         InactivitySettingsImpl actual = inactivitySettings(room);
@@ -97,6 +98,10 @@ public class AdminService {
 
         if (settings.getPlayers() != null) {
             playerService.updateAll(settings.getPlayers());
+        }
+
+        if (settings.getLoggersLevels() != null) {
+            debugService.setLoggersLevels(settings.getLoggersLevels());
         }
 
         if (settings.getSemifinal() != null) {
@@ -270,7 +275,7 @@ public class AdminService {
     }
 
     public AdminSettings loadAdminPage(String game, String room) {
-        // если не установили оба - default админкf
+        // если не установили оба - default админкa
         if (room == null && game == null) {
             return null;
         }
@@ -320,6 +325,7 @@ public class AdminService {
 
         result.setSemifinalTick(semifinal.getTime(room));
         result.setGame(gameType.name());
+        result.setLoggersLevels(debugService.getLoggersLevels());
         result.setRoom(room);
         result.setGameVersion(gameType.getVersion());
         result.setGenerateNameMask("demo%");
@@ -335,6 +341,7 @@ public class AdminService {
         result.setOpened(playerService.isRegistrationOpened());
         result.setGamesRooms(roomService.gamesRooms());
         result.setPlayersCount(playerService.getRoomCounts());
+        result.setStatistic(statistics);
 
         return result;
     }

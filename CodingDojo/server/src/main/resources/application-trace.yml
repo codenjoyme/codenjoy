@@ -1,4 +1,10 @@
-log.debug: true
+log:
+  debug: true
+  filter: >
+    com.codenjoy,
+    com.codenjoy.dojo.services.jdbc,
+    org.eclipse.jetty,
+    org.springframework.mvc
 logging:
   level:
     com:

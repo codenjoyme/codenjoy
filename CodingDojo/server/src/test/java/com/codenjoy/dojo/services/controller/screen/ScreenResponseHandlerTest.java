@@ -58,6 +58,21 @@ public class ScreenResponseHandlerTest {
     }
 
     @Test
+    public void performanceTest() {
+        // given
+        handler.onResponse(socket,
+                "{'name':getScreen, 'allPlayersScreen':true, " +
+                        "'players':[], 'room':'room'}");
+        Function function = verifySetFilterFor();
+        Map<Player, PlayerData> map = getDummyPlayers(25);
+
+        // when then
+        for (int count = 0; count < 10000; count++) {
+            JSONObject result = (JSONObject)function.apply(map);
+        }
+    }
+
+    @Test
     public void shouldOnResponse_whenOnResponse_caseAllPlayersScreen_distinctByGroups() {
         // given
 
@@ -81,6 +96,7 @@ public class ScreenResponseHandlerTest {
                 "    'boardSize':12,\n" +
                 "    'coordinates':{\n" +
                 "      'player2':{\n" +
+                "        'additionalData':null,\n" +
                 "        'coordinate':{\n" +
                 "          'x':12,\n" +
                 "          'y':7\n" +
@@ -113,6 +129,7 @@ public class ScreenResponseHandlerTest {
                 "    'boardSize':45,\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
+                "        'additionalData':null,\n" +
                 "        'coordinate':{\n" +
                 "          'x':14,\n" +
                 "          'y':9\n" +
@@ -169,6 +186,7 @@ public class ScreenResponseHandlerTest {
                 "    'boardSize':10,\n" +
                 "    'coordinates':{\n" +
                 "      'player1':{\n" +
+                "        'additionalData':null,\n" +
                 "        'coordinate':{\n" +
                 "          'x':10,\n" +
                 "          'y':5\n" +
@@ -199,6 +217,7 @@ public class ScreenResponseHandlerTest {
                 "    'boardSize':12,\n" +
                 "    'coordinates':{\n" +
                 "      'player2':{\n" +
+                "        'additionalData':null,\n" +
                 "        'coordinate':{\n" +
                 "          'x':12,\n" +
                 "          'y':7\n" +
@@ -229,6 +248,7 @@ public class ScreenResponseHandlerTest {
                 "    'boardSize':45,\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
+                "        'additionalData':null,\n" +
                 "        'coordinate':{\n" +
                 "          'x':14,\n" +
                 "          'y':9\n" +
@@ -280,6 +300,7 @@ public class ScreenResponseHandlerTest {
                 "    'boardSize':14,\n" +
                 "    'coordinates':{\n" +
                 "      'player3':{\n" +
+                "        'additionalData':null,\n" +
                 "        'coordinate':{\n" +
                 "          'x':13,\n" +
                 "          'y':8\n" +
@@ -331,6 +352,7 @@ public class ScreenResponseHandlerTest {
                 "    'boardSize':12,\n" +
                 "    'coordinates':{\n" +
                 "      'player2':{\n" +
+                "        'additionalData':null,\n" +
                 "        'coordinate':{\n" +
                 "          'x':12,\n" +
                 "          'y':7\n" +
@@ -364,49 +386,67 @@ public class ScreenResponseHandlerTest {
     private Map<Player, PlayerData> getDummyPlayers() {
         Map<Player, PlayerData> map = new HashMap<>();
 
-        Player player1 = new Player("player1");
+        addDummyPlayers(map, "");
+
+        return map;
+    }
+
+    private Map<Player, PlayerData> getDummyPlayers(int count) {
+        Map<Player, PlayerData> map = new HashMap<>();
+
+        for (int index = 0; index < count; index++) {
+            addDummyPlayers(map, "preffix" + index + "");
+        }
+
+        return map;
+    }
+
+    private Map<Player, PlayerData> addDummyPlayers(Map<Player, PlayerData> map, String preffix) {
+
+
+        Player player1 = new Player(preffix + "player1");
         player1.setGame("game");
         player1.setRoom("room");
         map.put(player1, new PlayerData(10, "some_board1", "game",
                 134, "some_info1",
-                new LinkedHashMap<>(){{ put("player1", 100); put("player2", 200); }},
-                new LinkedHashMap<>(){{ put("player1", 1); put("player2", 2); }},
-                new LinkedHashMap<>(){{ put("player1", new HeroDataImpl(1, pt(10, 5), true)); }},
-                new LinkedHashMap<>(){{ put("player1", "Player1 Name1"); }},
-                new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }}));
+                new LinkedHashMap<>(){{ put(preffix + "player1", 100); put(preffix + "player2", 200); }},
+                new LinkedHashMap<>(){{ put(preffix + "player1", 1); put(preffix + "player2", 2); }},
+                new LinkedHashMap<>(){{ put(preffix + "player1", new HeroDataImpl(1, pt(10, 5), true)); }},
+                new LinkedHashMap<>(){{ put(preffix + "player1", preffix + "Player1 Name1"); }},
+                new LinkedList<>(){{ addAll(Arrays.asList(preffix + "player1", preffix + "player2")); }}));
 
-        Player player2 = new Player("player2");
+        Player player2 = new Player(preffix + "player2");
         player2.setGame("game");
         player2.setRoom("room");
         map.put(player2, new PlayerData(12, "some_board2", "game",
                 546, "some_info2",
-                new LinkedHashMap<>(){{ put("player1", 100); put("player2", 200); }},
-                new LinkedHashMap<>(){{ put("player1", 1); put("player2", 2); }},
-                new LinkedHashMap<>(){{ put("player2", new HeroDataImpl(2, pt(12, 7), true)); }},
-                new LinkedHashMap<>(){{ put("player2", "Player2 Name2"); }},
-                new LinkedList<>(){{ addAll(Arrays.asList("player1", "player2")); }}));
+                new LinkedHashMap<>(){{ put(preffix + "player1", 100); put(preffix + "player2", 200); }},
+                new LinkedHashMap<>(){{ put(preffix + "player1", 1); put(preffix + "player2", 2); }},
+                new LinkedHashMap<>(){{ put(preffix + "player2", new HeroDataImpl(2, pt(12, 7), true)); }},
+                new LinkedHashMap<>(){{ put(preffix + "player2", preffix + "Player2 Name2"); }},
+                new LinkedList<>(){{ addAll(Arrays.asList(preffix + "player1", preffix + "player2")); }}));
 
-        Player player4 = new Player("player4");
+        Player player4 = new Player(preffix + "player4");
         player4.setGame("game");
         player4.setRoom("room");
         map.put(player4, new PlayerData(45, "some_board4", "game",
                 765, "some_info4",
-                new LinkedHashMap<>(){{ put("player4", 400); }},
-                new LinkedHashMap<>(){{ put("player4", 4); }},
-                new LinkedHashMap<>(){{ put("player4", new HeroDataImpl(4, pt(14, 9), false)); }},
-                new LinkedHashMap<>(){{ put("player4", "Player4 Name4"); }},
-                new LinkedList<>(){{ addAll(Arrays.asList("player4")); }}));
+                new LinkedHashMap<>(){{ put(preffix + "player4", 400); }},
+                new LinkedHashMap<>(){{ put(preffix + "player4", 4); }},
+                new LinkedHashMap<>(){{ put(preffix + "player4", new HeroDataImpl(4, pt(14, 9), false)); }},
+                new LinkedHashMap<>(){{ put(preffix + "player4", preffix + "Player4 Name4"); }},
+                new LinkedList<>(){{ addAll(Arrays.asList(preffix + "player4")); }}));
 
-        Player player3 = new Player("player3");
+        Player player3 = new Player(preffix + "player3");
         player3.setGame("other_game");
         player3.setRoom("other_room");
         map.put(player3, new PlayerData(14, "some_board3", "other_game",
                 235, "some_info3",
-                new LinkedHashMap<>(){{ put("player3", 300); }},
-                new LinkedHashMap<>(){{ put("player3", 3); }},
-                new LinkedHashMap<>(){{ put("player3", new HeroDataImpl(3, pt(13, 8), false)); }},
-                new LinkedHashMap<>(){{ put("player3", "Player3 Name3"); }},
-                new LinkedList<>(){{ addAll(Arrays.asList("player3")); }}));
+                new LinkedHashMap<>(){{ put(preffix + "player3", 300); }},
+                new LinkedHashMap<>(){{ put(preffix + "player3", 3); }},
+                new LinkedHashMap<>(){{ put(preffix + "player3", new HeroDataImpl(3, pt(13, 8), false)); }},
+                new LinkedHashMap<>(){{ put(preffix + "player3", preffix + "Player3 Name3"); }},
+                new LinkedList<>(){{ addAll(Arrays.asList(preffix + "player3")); }}));
 
         return map;
     }

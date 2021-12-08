@@ -32,7 +32,7 @@ import java.util.Date;
 
 public class CodeSaver { // TODO test me
 
-    public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss-SSS");
+    private final static SimpleDateFormat DAY_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss-SSS");
 
     private static File dir;
 
@@ -45,7 +45,7 @@ public class CodeSaver { // TODO test me
 
     public static void save(String user, long date, int index, int count, String code) {
         user = clean(user);
-        String time = formatter.format(new Date(date));
+        String time = DAY_TIME_FORMATTER.format(new Date(date));
 
         try (FileWriter fw = new FileWriter(dir.getAbsolutePath() + "/" + time + "_" + user + ".js_(" + (index + 1) + "_of_" + count + ")");
              BufferedWriter bw = new BufferedWriter(fw))
