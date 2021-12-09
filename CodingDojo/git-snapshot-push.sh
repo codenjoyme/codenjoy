@@ -8,6 +8,9 @@ eval_echo() {
     eval $command
 }
 
+eval_echo "`ssh-agent -s`"
+eval_echo "ssh-add ~/.ssh/*_rsa"
+
 eval_echo "./mvnw -DaltDeploymentRepository=snapshots::default::file:repo/snapshots clean deploy -DskipTests=true -DgitDir=./../ 2>&1 | tee snapshot-deploy.log" 
 
 eval_echo "cd repo"
