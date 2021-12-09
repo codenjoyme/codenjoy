@@ -8,6 +8,9 @@ eval_echo() {
     eval $command
 }
 
+eval_echo "ssh-agent -s"
+eval_echo "ssh-add ~/.ssh/*_rsa"
+
 eval_echo "BRANCH=$(git rev-parse --abbrev-ref HEAD)"
 eval_echo "git pull origin develop"
 eval_echo "git pull origin $BRANCH"
