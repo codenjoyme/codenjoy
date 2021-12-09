@@ -26,16 +26,12 @@ import com.codenjoy.dojo.config.ThreeGamesConfiguration;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import static com.codenjoy.dojo.utils.smart.SmartAssert.assertEquals;
 
 @Import(ThreeGamesConfiguration.class)
 public class RestBoardControllerTest extends AbstractRestControllerTest {
-
-    @Autowired
-    private RestBoardController service;
 
     @Before
     public void setup() {
@@ -124,8 +120,6 @@ public class RestBoardControllerTest extends AbstractRestControllerTest {
                 "  },\n" +
                 "  'players':[\n" +
                 "    {\n" +
-                "      'callbackUrl':'ip',\n" +
-                "      'code':null,\n" +
                 "      'gameType':'first',\n" +
                 "      'id':'somePlayer',\n" +
                 "      'readableName':'somePlayer-name',\n" +
