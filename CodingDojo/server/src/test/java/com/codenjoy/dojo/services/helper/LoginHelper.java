@@ -94,7 +94,7 @@ public class LoginHelper {
     public Deal register(String id, String ip, String room, String game) {
         String password = Hash.md5(id);
         String readableName = id + "-name";
-        registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles());
+        Registration.User user = registration.register(id, id, readableName, password, "", GameAuthorities.USER.roles());
         players.register(id, game, room, ip);
         Deal deal = deals.get(id);
         if (deal == NullDeal.INSTANCE) {
@@ -104,6 +104,7 @@ public class LoginHelper {
                 resetMocks(deal);
             }
         }
+        deal.getPlayer().setCode(user.getCode());
         return deal;
     }
 
@@ -129,5 +130,9 @@ public class LoginHelper {
 
     public String code(String id) {
         return registration.getCodeById(id);
+    }
+
+    public void gameOver(String id) {
+        players.remove(id);
     }
 }

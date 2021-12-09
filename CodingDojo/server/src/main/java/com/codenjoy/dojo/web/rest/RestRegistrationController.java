@@ -23,7 +23,10 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Deals;
+import com.codenjoy.dojo.services.PlayerSave;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
@@ -58,7 +61,6 @@ public class RestRegistrationController {
         return registration.checkUser(id, code) != null;
     }
 
-    // TODO #4FS test me
     @GetMapping("/game/{game}/players")
     public List<PlayerInfo> getGamePlayers(@PathVariable("game") String game) {
         validator.checkGame(game, CANT_BE_NULL);
@@ -68,7 +70,6 @@ public class RestRegistrationController {
                 .collect(toList());
     }
 
-    // TODO #4FS test me
     @GetMapping("/room/{room}/players")
     public List<PlayerInfo> getRoomPlayers(@PathVariable("room") String room) {
         validator.checkRoom(room, CANT_BE_NULL);
@@ -107,7 +108,6 @@ public class RestRegistrationController {
         return user.getCode();
     }
 
-    // TODO test me
     @GetMapping("/player/{player}/exists")
     public boolean isPlayerExists(@PathVariable("player") String id) {
         validator.checkPlayerId(id, CANT_BE_NULL);

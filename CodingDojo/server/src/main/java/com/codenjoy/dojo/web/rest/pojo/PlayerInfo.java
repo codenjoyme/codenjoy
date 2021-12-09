@@ -29,18 +29,14 @@ import lombok.Getter;
 public class PlayerInfo {
     
     private String gameType;
-    private String callbackUrl;
     private String id;
     private String readableName;
     private String score;
-    private String code;
 
     public PlayerInfo(Player player) {
         gameType = player.getGameType().name();
-        callbackUrl = player.getCallbackUrl();
         id = player.getId();
         readableName = player.getNotNullReadableName();
         score = String.valueOf(player.getScore());
-        code = player.getCode();
     }
 }
