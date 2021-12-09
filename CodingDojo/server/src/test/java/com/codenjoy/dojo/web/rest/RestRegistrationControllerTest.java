@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.config.ThreeGamesConfiguration;
+import com.codenjoy.dojo.services.Deal;
 import org.junit.Test;
 import org.springframework.context.annotation.Import;
 
@@ -160,5 +161,57 @@ public class RestRegistrationControllerTest extends AbstractRestControllerTest {
         // when then
         assertGetError(404, "Not a json value: ''",
                 "/rest/player//exists");
+    }
+
+    @Test
+    public void shouldCheckUserLogin_success() {
+        // given
+        Deal deal1 = with.login.register("player1", "ip1", "room1", "first");
+        Deal deal2 = with.login.register("player2", "ip2", "room2", "first");
+        Deal deal3 = with.login.register("player3", "ip3", "room2", "first");
+        Deal deal4 = with.login.register("player4", "ip4", "room4", "second");
+
+        String code1 = deal1.getPlayer().getCode();
+        String code2 = deal2.getPlayer().getCode();
+        String code3 = deal3.getPlayer().getCode();
+        String code4 = deal4.getPlayer().getCode();
+        String badCode = "000000000";
+
+        with.login.gameOver("player3");
+        with.login.asUser("player1", "player1");
+
+        // when then
+        assertEquals("true",  get("/rest/player/player1/check/" + code1));   // logged in
+        assertEquals("false", get("/rest/player/player1/check/" + badCode)); //
+        assertEquals("true",  get("/rest/player/player2/check/" + code2));   // other room
+        assertEquals("false", get("/rest/player/player2/check/" + badCode)); //
+        assertEquals("true",  get("/rest/player/player3/check/" + code3));   // game over
+        assertEquals("false", get("/rest/player/player3/check/" + badCode)); //
+        assertEquals("true",  get("/rest/player/player4/check/" + code4));   // other game
+        assertEquals("false", get("/rest/player/player4/check/" + badCode)); //
+        assertEquals("false", get("/rest/player/notExistsPlayer/check/" + badCode)); // not exists
+    }
+
+    @Test
+    public void shouldCheckUserLogin_failure() {
+        // when then
+        assertGetError("java.lang.IllegalArgumentException: Player id is invalid: 'bad$player'",
+                "/rest/player/bad$player/check/0000000");
+
+        // when then
+        assertGetError("java.lang.IllegalArgumentException: Player id is invalid: 'null'",
+                "/rest/player/null/check/0000000");
+
+        // when then
+        assertGetError("java.lang.IllegalArgumentException: Player code is invalid: 'bad$Code'",
+                "/rest/player/player/check/bad$Code");
+
+        // when then
+        assertGetError("java.lang.IllegalArgumentException: Player code is invalid: 'null'",
+                "/rest/player/player/check/null");
+
+        // when then
+        assertGetError(404, "Not a json value: ''",
+                "/rest/player//check/");
     }
 }

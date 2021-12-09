@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.client.local.DiceGenerator;
 import com.codenjoy.dojo.config.RealGameConfiguration;
+import com.codenjoy.dojo.services.Deal;
 import org.junit.Test;
 import org.springframework.context.annotation.Import;
 
@@ -67,12 +68,12 @@ public class RestJoystickControllerTest extends AbstractRestControllerTest {
                 .integer(LOSE_PENALTY, 100);
 
 
-        with.login.register(player1, "ip", room, game);
-        code1 = with.login.code(player1);
+        Deal deal1 = with.login.register(player1, "ip", room, game);
+        code1 = deal1.getPlayer().getCode();
         with.login.asUser(player1, player1);
-       
-        with.login.register(player2, "ip", room, game);
-        code2 = with.login.code(player2);
+
+        Deal deal2 = with.login.register(player2, "ip", room, game);
+        code2 = deal2.getPlayer().getCode();
         with.login.asUser(player2, player2);
 
         // then
