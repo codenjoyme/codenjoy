@@ -127,4 +127,38 @@ public class RestRegistrationControllerTest extends AbstractRestControllerTest {
         return split(quote(string),
                 "'},\n{'");
     }
+
+    @Test
+    public void shouldIsPlayerExists_success() {
+        // given
+        with.login.register("player1", "ip1", "room1", "first");
+        with.login.register("player2", "ip2", "room2", "first");
+        with.login.register("player3", "ip3", "room2", "first");
+        with.login.register("player4", "ip4", "room4", "second");
+
+        with.login.gameOver("player3");
+        with.login.asUser("player1", "player1");
+
+        // when then
+        assertEquals("true", get("/rest/player/player1/exists"));           // logged in
+        assertEquals("true", get("/rest/player/player2/exists"));           // other room
+        assertEquals("false", get("/rest/player/player3/exists"));          // game over
+        assertEquals("true", get("/rest/player/player4/exists"));           // other game
+        assertEquals("false", get("/rest/player/notExistsPlayer/exists"));  // not exists
+    }
+
+    @Test
+    public void shouldIsPlayerExists_failure() {
+        // when then
+        assertGetError("java.lang.IllegalArgumentException: Player id is invalid: 'bad$player'",
+                "/rest/player/bad$player/exists");
+
+        // when then
+        assertGetError("java.lang.IllegalArgumentException: Player id is invalid: 'null'",
+                "/rest/player/null/exists");
+
+        // when then
+        assertGetError(404, "Not a json value: ''",
+                "/rest/player//exists");
+    }
 }

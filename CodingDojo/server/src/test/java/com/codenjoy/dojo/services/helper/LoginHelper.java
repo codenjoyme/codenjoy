@@ -130,4 +130,8 @@ public class LoginHelper {
     public String code(String id) {
         return registration.getCodeById(id);
     }
+
+    public void gameOver(String id) {
+        players.remove(id);
+    }
 }

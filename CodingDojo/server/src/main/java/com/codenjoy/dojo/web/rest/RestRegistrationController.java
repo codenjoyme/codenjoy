@@ -108,7 +108,6 @@ public class RestRegistrationController {
         return user.getCode();
     }
 
-    // TODO test me
     @GetMapping("/player/{player}/exists")
     public boolean isPlayerExists(@PathVariable("player") String id) {
         validator.checkPlayerId(id, CANT_BE_NULL);
