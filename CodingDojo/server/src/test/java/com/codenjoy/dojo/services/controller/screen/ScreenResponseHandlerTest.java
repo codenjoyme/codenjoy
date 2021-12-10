@@ -58,7 +58,7 @@ public class ScreenResponseHandlerTest {
     }
 
     @Test
-    public void performanceTest() {
+    public void performanceTest() { // about 20s
         // given
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':true, " +

@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services.controller.screen;
 
 
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.annotations.PerformanceOptimized;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.serializer.JSONObjectSerializer;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
@@ -32,20 +31,20 @@ import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.*;
-import java.util.stream.Collector;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @AllArgsConstructor
@@ -73,7 +72,6 @@ public class ScreenResponseHandler implements ResponseHandler {
                 data -> filter((Map<Player, PlayerData>) data, request));
     }
 
-    @PerformanceOptimized
     private String filter(Map<Player, PlayerData> data,
                                            GetScreenJSONRequest request)
     {
@@ -83,45 +81,15 @@ public class ScreenResponseHandler implements ResponseHandler {
         if (request.isAllPlayers()) {
             stream = stream.filter(distinctByKey(entry -> entry.getValue().getGroup().toString()));
         }
-        return stream.collect(toJson());
+        return toJson(stream.collect(toMap(
+                entry -> entry.getKey().getId(),
+                entry -> entry.getValue()
+        )));
     }
 
-    private Collector<Map.Entry<Player, PlayerData>, Map<String, Object>, String> toJson() {
-        return new Collector<>() {
-            @Override
-            public Supplier<Map<String, Object>> supplier() {
-                return LinkedHashMap::new;
-            }
-
-            @Override
-            public BiConsumer<Map<String, Object>, Map.Entry<Player, PlayerData>> accumulator() {
-                return (all, entry) ->
-                        all.put(entry.getKey().getId(), entry.getValue());
-            }
-
-            @SneakyThrows
-            private String toJson(Object data) {
-                return mapper.writeValueAsString(data);
-            }
-
-            @Override
-            public BinaryOperator<Map<String, Object>> combiner() {
-                return (one, another) -> {
-                    one.putAll(another);
-                    return one;
-                };
-            }
-
-            @Override
-            public Function<Map<String, Object>, String> finisher() {
-                return all -> toJson(all);
-            }
-
-            @Override
-            public Set<Characteristics> characteristics() {
-                return Sets.newHashSet();
-            }
-        };
+    @SneakyThrows
+    private String toJson(Object data) {
+        return mapper.writeValueAsString(data);
     }
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
