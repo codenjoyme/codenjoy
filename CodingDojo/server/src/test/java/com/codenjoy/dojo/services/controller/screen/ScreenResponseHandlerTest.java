@@ -58,7 +58,7 @@ public class ScreenResponseHandlerTest {
     }
 
     @Test
-    public void performanceTest() {
+    public void performanceTest() { // about 20s
         // given
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':true, " +
@@ -67,8 +67,8 @@ public class ScreenResponseHandlerTest {
         Map<Player, PlayerData> map = getDummyPlayers(25);
 
         // when then
-        for (int count = 0; count < 10000; count++) {
-            JSONObject result = (JSONObject)function.apply(map);
+        for (int count = 0; count < 100000; count++) {
+            String result = (String)function.apply(map);
         }
     }
 
@@ -87,7 +87,7 @@ public class ScreenResponseHandlerTest {
         Map<Player, PlayerData> map = getDummyPlayers();
 
         // when
-        JSONObject result = (JSONObject)function.apply(map);
+        String result = (String)function.apply(map);
 
         // then
         assertEquals("{\n" +
@@ -125,11 +125,16 @@ public class ScreenResponseHandlerTest {
                 "    }\n" +
                 "  },\n" +
                 "  'player4':{\n" +
-                "    'board':'some_board4',\n" +
+                "    'board':{\n" +
+                "      'jsonBoard':'board4'\n" +
+                "    },\n" +
                 "    'boardSize':45,\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
-                "        'additionalData':null,\n" +
+                "        'additionalData':{\n" +
+                "          'jsonData1':23,\n" +
+                "          'jsonData2':true\n" +
+                "        },\n" +
                 "        'coordinate':{\n" +
                 "          'x':14,\n" +
                 "          'y':9\n" +
@@ -146,7 +151,9 @@ public class ScreenResponseHandlerTest {
                 "    'readableNames':{\n" +
                 "      'player4':'Player4 Name4'\n" +
                 "    },\n" +
-                "    'score':765,\n" +
+                "    'score':{\n" +
+                "      'jsonScore':765\n" +
+                "    },\n" +
                 "    'scores':{\n" +
                 "      'player4':400\n" +
                 "    },\n" +
@@ -177,7 +184,7 @@ public class ScreenResponseHandlerTest {
         map.get(new Player("player2")).getScores().remove("player1");
 
         // when
-        JSONObject result = (JSONObject)function.apply(map);
+        String result = (String)function.apply(map);
 
         // then
         assertEquals("{\n" +
@@ -244,11 +251,16 @@ public class ScreenResponseHandlerTest {
                 "    }\n" +
                 "  },\n" +
                 "  'player4':{\n" +
-                "    'board':'some_board4',\n" +
+                "    'board':{\n" +
+                "      'jsonBoard':'board4'\n" +
+                "    },\n" +
                 "    'boardSize':45,\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
-                "        'additionalData':null,\n" +
+                "        'additionalData':{\n" +
+                "          'jsonData1':23,\n" +
+                "          'jsonData2':true\n" +
+                "        },\n" +
                 "        'coordinate':{\n" +
                 "          'x':14,\n" +
                 "          'y':9\n" +
@@ -265,7 +277,9 @@ public class ScreenResponseHandlerTest {
                 "    'readableNames':{\n" +
                 "      'player4':'Player4 Name4'\n" +
                 "    },\n" +
-                "    'score':765,\n" +
+                "    'score':{\n" +
+                "      'jsonScore':765\n" +
+                "    },\n" +
                 "    'scores':{\n" +
                 "      'player4':400\n" +
                 "    },\n" +
@@ -291,7 +305,7 @@ public class ScreenResponseHandlerTest {
         Map<Player, PlayerData> map = getDummyPlayers();
 
         // when
-        JSONObject result = (JSONObject)function.apply(map);
+        String result = (String)function.apply(map);
 
         // then
         assertEquals("{\n" +
@@ -343,7 +357,7 @@ public class ScreenResponseHandlerTest {
         Map<Player, PlayerData> map = getDummyPlayers();
 
         // when
-        JSONObject result = (JSONObject)function.apply(map);
+        String result = (String)function.apply(map);
 
         // then
         assertEquals("{\n" +
@@ -402,8 +416,6 @@ public class ScreenResponseHandlerTest {
     }
 
     private Map<Player, PlayerData> addDummyPlayers(Map<Player, PlayerData> map, String preffix) {
-
-
         Player player1 = new Player(preffix + "player1");
         player1.setGame("game");
         player1.setRoom("room");
@@ -429,11 +441,16 @@ public class ScreenResponseHandlerTest {
         Player player4 = new Player(preffix + "player4");
         player4.setGame("game");
         player4.setRoom("room");
-        map.put(player4, new PlayerData(45, "some_board4", "game",
-                765, "some_info4",
+        map.put(player4, new PlayerData(45, new JSONObject("{jsonBoard:\"board4\"}"), "game",
+                new JSONObject("{jsonScore:765}"), "some_info4",
                 new LinkedHashMap<>(){{ put(preffix + "player4", 400); }},
                 new LinkedHashMap<>(){{ put(preffix + "player4", 4); }},
-                new LinkedHashMap<>(){{ put(preffix + "player4", new HeroDataImpl(4, pt(14, 9), false)); }},
+                new LinkedHashMap<>(){{ put(preffix + "player4", new HeroDataImpl(4, pt(14, 9), false){
+                    @Override
+                    public Object getAdditionalData() {
+                        return new JSONObject("{jsonData1:23,jsonData2:true}");
+                    }
+                }); }},
                 new LinkedHashMap<>(){{ put(preffix + "player4", preffix + "Player4 Name4"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList(preffix + "player4")); }}));
 

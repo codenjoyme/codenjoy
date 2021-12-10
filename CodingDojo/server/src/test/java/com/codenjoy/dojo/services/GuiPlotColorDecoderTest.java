@@ -161,7 +161,7 @@ public class GuiPlotColorDecoderTest {
 
     private void assertEncode(GuiPlotColorDecoder decoder, String expected, String input) {
         assertEquals(fix(JsonUtils.toStringSorted(expected)),
-                JsonUtils.toStringSorted(decoder.encodeForBrowser(new JSONObject(input)).toString()));
+                JsonUtils.toStringSorted(decoder.encodeForBrowser(new JSONObject(input))));
     }
 
     @Test

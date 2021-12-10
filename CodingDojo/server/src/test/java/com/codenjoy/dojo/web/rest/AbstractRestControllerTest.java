@@ -201,7 +201,11 @@ public abstract class AbstractRestControllerTest {
     }
 
     protected void assertGetError(String message, String uri) {
-        String source = get(500, uri);
+        assertGetError(500, message, uri);
+    }
+
+    protected void assertGetError(int status, String message, String uri) {
+        String source = get(status, uri);
         JSONObject error = tryParseAsJson(source);
         assertEquals(message, error.getString("message"));
     }
@@ -234,9 +238,8 @@ public abstract class AbstractRestControllerTest {
         try {
             return new JSONObject(source);
         } catch (JSONException e) {
-            System.out.println("actual data is: " + source);
             return new JSONObject(){{
-                put("message", "no json value");
+                put("message", String.format("Not a json value: '%s'", source));
             }};
         }
     }

@@ -74,7 +74,6 @@ public class GuiPlotColorDecoder {
                 encoded.put(encode((String)layer));
             }
             result.put(key, encoded);
-            return result;
         }
 
         return result;

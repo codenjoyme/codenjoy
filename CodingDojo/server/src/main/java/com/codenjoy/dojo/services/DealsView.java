@@ -47,7 +47,7 @@ public class DealsView {
         Map<String, GuiPlotColorDecoder> decoders = getDecoders();
         Map<String, List<String>> groupsMap = getGroupsMap();
         Map<String, Object> scores = getScores();
-        Map<String, Object> teams = getTeams();
+        Map<String, Integer> teams = getTeams();
         Map<String, HeroData> coordinates = getCoordinates();
         Map<String, String> readableNames = getReadableNames();
 
@@ -127,7 +127,7 @@ public class DealsView {
                         deal -> deal.getPlayer().getScore()));
     }
 
-    public Map<String, Object> getTeams() {
+    public Map<String, Integer> getTeams() {
         return service.all().stream()
                 .collect(toMap(deal -> deal.getPlayer().getId(),
                         deal -> deal.getPlayer().getTeamId()));

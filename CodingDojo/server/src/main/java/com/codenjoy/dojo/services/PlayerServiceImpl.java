@@ -424,7 +424,7 @@ public class PlayerServiceImpl implements PlayerService {
                 Object score = player.getScore();
                 String message = player.getMessage();
                 Map<String, Object> scores = gameData.getScores();
-                Map<String, Object> teams = gameData.getTeams();
+                Map<String, Integer> teams = gameData.getTeams();
                 List<String> group = gameData.getGroup();
                 Map<String, HeroData> coordinates = gameData.getCoordinates();
                 Map<String, String> readableNames = gameData.getReadableNames();
