@@ -24,18 +24,17 @@ package com.codenjoy.dojo.services.controller.screen;
 
 
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.annotations.PerformanceOptimized;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
-import org.json.JSONObject;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,7 +42,8 @@ import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collector.Characteristics.*;
+import static java.util.stream.Collector.Characteristics.CONCURRENT;
+import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 @Slf4j
 @AllArgsConstructor
@@ -51,7 +51,6 @@ public class ScreenResponseHandler implements ResponseHandler {
 
     private PlayerTransport transport;
     private Player player;
-    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void onResponse(PlayerSocket socket, String message) {
@@ -64,7 +63,8 @@ public class ScreenResponseHandler implements ResponseHandler {
                 data -> filter((Map<Player, PlayerData>) data, request));
     }
 
-    private JSONObject filter(Map<Player, PlayerData> data,
+    @PerformanceOptimized
+    private String filter(Map<Player, PlayerData> data,
                                            GetScreenJSONRequest request)
     {
         Stream<Map.Entry<Player, PlayerData>> stream = data.entrySet().stream()
@@ -76,42 +76,49 @@ public class ScreenResponseHandler implements ResponseHandler {
         return stream.collect(toJson());
     }
 
-    private Collector<Map.Entry<Player, PlayerData>, JSONObject, JSONObject> toJson() {
+    private Collector<Map.Entry<Player, PlayerData>, Map<String, String>, String> toJson() {
         return new Collector<>() {
             @Override
-            public Supplier<JSONObject> supplier() {
-                return JSONObject::new;
+            public Supplier<Map<String, String>> supplier() {
+                return LinkedHashMap::new;
             }
 
             @Override
-            public BiConsumer<JSONObject, Map.Entry<Player, PlayerData>> accumulator() {
-                return (all, entry) -> all.put(entry.getKey().getId(),
-                        new JSONObject(toJson(entry.getValue())));
-            }
-
-            @SneakyThrows
-            private String toJson(PlayerData data) {
-                return mapper.writeValueAsString(data);
+            public BiConsumer<Map<String, String>, Map.Entry<Player, PlayerData>> accumulator() {
+                return (all, entry) ->
+                        all.put(entry.getKey().getId(),
+                                entry.getValue().asJson());
             }
 
             @Override
-            public BinaryOperator<JSONObject> combiner() {
+            public BinaryOperator<Map<String, String>> combiner() {
                 return (one, another) -> {
-                    for (String key : another.keySet()) {
-                        one.put(key, another.get(key));
-                    }
+                    one.putAll(another);
                     return one;
                 };
             }
 
             @Override
-            public Function<JSONObject, JSONObject> finisher() {
-                return Function.identity();
+            public Function<Map<String, String>, String> finisher() {
+                return all -> {
+                    StringBuilder builder = new StringBuilder("{");
+                    for (Map.Entry<String, String> entry : all.entrySet()) {
+                        builder.append('"')
+                                .append(entry.getKey())
+                                .append("\":")
+                                .append(entry.getValue())
+                                .append(",");
+                    }
+                    builder.deleteCharAt(builder.length() - 1)
+                            .append('}');
+
+                    return builder.toString();
+                };
             }
 
             @Override
             public Set<Characteristics> characteristics() {
-                return Sets.newHashSet(IDENTITY_FINISH, UNORDERED, CONCURRENT);
+                return Sets.newHashSet(UNORDERED, CONCURRENT);
             }
         };
     }

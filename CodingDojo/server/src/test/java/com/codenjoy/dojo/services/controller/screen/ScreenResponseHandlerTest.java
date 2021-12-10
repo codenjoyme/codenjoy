@@ -29,7 +29,6 @@ import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.utils.JsonUtils;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -67,8 +66,8 @@ public class ScreenResponseHandlerTest {
         Map<Player, PlayerData> map = getDummyPlayers(25);
 
         // when then
-        for (int count = 0; count < 10000; count++) {
-            JSONObject result = (JSONObject)function.apply(map);
+        for (int count = 0; count < 100000; count++) {
+            String result = (String)function.apply(map);
         }
     }
 
@@ -87,7 +86,7 @@ public class ScreenResponseHandlerTest {
         Map<Player, PlayerData> map = getDummyPlayers();
 
         // when
-        JSONObject result = (JSONObject)function.apply(map);
+        String result = (String)function.apply(map);
 
         // then
         assertEquals("{\n" +
@@ -125,7 +124,9 @@ public class ScreenResponseHandlerTest {
                 "    }\n" +
                 "  },\n" +
                 "  'player4':{\n" +
-                "    'board':'some_board4',\n" +
+                "    'board':{\n" +
+                "      'someJson':'board4'\n" +
+                "    },\n" +
                 "    'boardSize':45,\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
@@ -177,7 +178,7 @@ public class ScreenResponseHandlerTest {
         map.get(new Player("player2")).getScores().remove("player1");
 
         // when
-        JSONObject result = (JSONObject)function.apply(map);
+        String result = (String)function.apply(map);
 
         // then
         assertEquals("{\n" +
@@ -244,7 +245,9 @@ public class ScreenResponseHandlerTest {
                 "    }\n" +
                 "  },\n" +
                 "  'player4':{\n" +
-                "    'board':'some_board4',\n" +
+                "    'board':{\n" +
+                "      'someJson':'board4'\n" +
+                "    },\n" +
                 "    'boardSize':45,\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
@@ -291,7 +294,7 @@ public class ScreenResponseHandlerTest {
         Map<Player, PlayerData> map = getDummyPlayers();
 
         // when
-        JSONObject result = (JSONObject)function.apply(map);
+        String result = (String)function.apply(map);
 
         // then
         assertEquals("{\n" +
@@ -343,7 +346,7 @@ public class ScreenResponseHandlerTest {
         Map<Player, PlayerData> map = getDummyPlayers();
 
         // when
-        JSONObject result = (JSONObject)function.apply(map);
+        String result = (String)function.apply(map);
 
         // then
         assertEquals("{\n" +
@@ -402,8 +405,6 @@ public class ScreenResponseHandlerTest {
     }
 
     private Map<Player, PlayerData> addDummyPlayers(Map<Player, PlayerData> map, String preffix) {
-
-
         Player player1 = new Player(preffix + "player1");
         player1.setGame("game");
         player1.setRoom("room");
@@ -429,7 +430,7 @@ public class ScreenResponseHandlerTest {
         Player player4 = new Player(preffix + "player4");
         player4.setGame("game");
         player4.setRoom("room");
-        map.put(player4, new PlayerData(45, "some_board4", "game",
+        map.put(player4, new PlayerData(45, "{\"someJson\":\"board4\"}", "game",
                 765, "some_info4",
                 new LinkedHashMap<>(){{ put(preffix + "player4", 400); }},
                 new LinkedHashMap<>(){{ put(preffix + "player4", 4); }},

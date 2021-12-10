@@ -23,10 +23,13 @@ package com.codenjoy.dojo.services.playerdata;
  */
 
 
+import com.codenjoy.dojo.services.annotations.PerformanceOptimized;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -36,8 +39,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class PlayerData implements ScreenData {
 
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     private int boardSize;
-    private Object board;
+    private String board;
     private String game;
     private Object score;
     private String info;
@@ -49,6 +54,42 @@ public class PlayerData implements ScreenData {
 
     public String getInfo() {
         return (info == null) ? StringUtils.EMPTY : info;
+    }
+
+    @PerformanceOptimized
+    public String asJson() {
+        StringBuilder builder = new StringBuilder()
+                .append("{\"boardSize\":")
+                .append(boardSize)
+                .append(",\"board\":");
+
+        if (board.startsWith("{")) {
+            builder.append(board);
+        } else {
+            builder.append("\"")
+                    .append(board)
+                    .append("\"");
+        }
+
+        builder.append(",\"game\":\"")
+            .append(game)
+            .append("\",\"score\":")
+            .append(score)
+            .append(",\"teams\":")
+            .append(toJson(teams))
+            .append(",\"info\":\"")
+            .append(getInfo())
+            .append("\",\"scores\":")
+            .append(toJson(scores))
+            .append(",\"coordinates\":")
+            .append(toJson(coordinates))
+            .append(",\"readableNames\":")
+            .append(toJson(readableNames))
+            .append(",\"group\":")
+            .append(toJson(group))
+            .append("}");
+
+        return builder.toString();
     }
 
     @Override
@@ -74,6 +115,11 @@ public class PlayerData implements ScreenData {
                 coordinates,
                 readableNames,
                 group);
+    }
+
+    @SneakyThrows
+    private String toJson(Object data) {
+        return mapper.writeValueAsString(data);
     }
 
 }
