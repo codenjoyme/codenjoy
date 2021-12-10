@@ -377,7 +377,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
-            securityHeaders(http,xFrameAllowedHosts)
+            securityHeaders(http, xFrameAllowedHosts)
                         .antMatcher(AdminController.URI + "*")
                             .authorizeRequests()
                                 .anyRequest()
@@ -400,7 +400,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .exceptionHandling()
                             .accessDeniedHandler((request, response, accessDeniedException) ->
                                     response.sendRedirect(request.getContextPath()
-                                            + "/error?message=Page access is restricted"));
+                                            + "/error?message=Page access is restricted"))
+                    .and()
+                        .csrf();
             // @formatter:on
         }
     }

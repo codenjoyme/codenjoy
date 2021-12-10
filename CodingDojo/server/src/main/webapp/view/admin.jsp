@@ -149,34 +149,33 @@
         </table>
     </form:form>
 
-    <table class="admin-table" id="pauseGame">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.active}">
-                        <b><spring:message key="game.active"/></b></br>
-                        <a href="${ctx}/admin/game/pause?room=${data.room}#pauseGame">Pause game</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b><spring:message key="game.suspended"/></b></br>
-                        <a href="${ctx}/admin/game/resume?room=${data.room}#pauseGame">Resume game</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-            <form:form modelAttribute="data" action="admin#pauseGame" method="POST">
-                <tr>
-                    <td><form:input path="timerPeriod"/></td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="hidden" name="game" value="${data.game}"/>
-                        <input type="hidden" name="room" value="${data.room}"/>
-                        <input type="submit" value="Set"/>
-                    </td>
-                </tr>
-            </form:form>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#pauseGame" method="POST">
+        <table class="admin-table" id="pauseGame">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.active}">
+                            <b><spring:message key="game.active"/></b></br>
+                            <a href="${ctx}/admin/game/pause?room=${data.room}#pauseGame">Pause game</a>.
+                        </c:when>
+                        <c:otherwise>
+                            <b><spring:message key="game.suspended"/></b></br>
+                            <a href="${ctx}/admin/game/resume?room=${data.room}#pauseGame">Resume game</a>.
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            <tr>
+                <td><form:input path="timerPeriod"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="game" value="${data.game}"/>
+                    <input type="hidden" name="room" value="${data.room}"/>
+                    <input type="submit" value="Set"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="recordGame">
         <tr>
