@@ -53,6 +53,7 @@ import static com.codenjoy.dojo.services.incativity.InactivitySettings.INACTIVIT
 import static com.codenjoy.dojo.services.level.LevelsSettings.LEVELS;
 import static com.codenjoy.dojo.services.round.RoundSettings.ROUNDS;
 import static com.codenjoy.dojo.services.semifinal.SemifinalSettings.SEMIFINAL;
+import static com.codenjoy.dojo.web.controller.AdminSettings.*;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
@@ -140,12 +141,23 @@ public class AdminService {
             }
         }
 
-        if (settings.getTimerPeriod() != null) {
-            try {
-                timerService.changePeriod(settings.getTimerPeriod());
-            } catch (NumberFormatException e) {
-                // do nothing
-            }
+        switch (settings.getAction()) {
+            case SET_TIMER_PERIOD:
+                try {
+                    timerService.changePeriod(settings.getTimerPeriod());
+                } catch (NumberFormatException e) {
+                    // do nothing
+                }
+                break;
+
+            case PAUSE_GAME:
+                roomService.setActive(room, false);
+                break;
+
+            case RESUME_GAME:
+                roomService.setActive(room, true);
+                break;
+
         }
 
         if (settings.getProgress() != null) {

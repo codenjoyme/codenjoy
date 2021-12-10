@@ -156,11 +156,11 @@
                     <c:choose>
                         <c:when test="${data.active}">
                             <b><spring:message key="game.active"/></b></br>
-                            <a href="${ctx}/admin/game/pause?room=${data.room}#pauseGame">Pause game</a>.
+                            <input type="submit" name="action" value="Pause game"/>
                         </c:when>
                         <c:otherwise>
                             <b><spring:message key="game.suspended"/></b></br>
-                            <a href="${ctx}/admin/game/resume?room=${data.room}#pauseGame">Resume game</a>.
+                            <input type="submit" name="action" value="Resume game"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -171,7 +171,7 @@
                 <td>
                     <input type="hidden" name="game" value="${data.game}"/>
                     <input type="hidden" name="room" value="${data.room}"/>
-                    <input type="submit" value="Set"/>
+                    <input type="submit" name="action" value="Set timer period"/>
                 </td>
             </tr>
         </table>

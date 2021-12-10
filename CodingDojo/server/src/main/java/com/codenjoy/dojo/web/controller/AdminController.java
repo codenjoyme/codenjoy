@@ -263,22 +263,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/game/pause")
-    public String pauseGame(HttpServletRequest request) {
-        String room = room(request);
-        roomService.setActive(room, false);
-        return getAdmin(request);
-    }
-
-    @GetMapping("/game/resume")
-    public String resumeGame(HttpServletRequest request) {
-        String room = room(request);
-        roomService.setActive(room, true);
-        return getAdmin(request);
-    }
-
-    // ----------------
-
     @GetMapping("/debug/stop")
     public String stopDebug(HttpServletRequest request) {
         debugService.pause();

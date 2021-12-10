@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.log.DebugService;
+import com.codenjoy.dojo.web.controller.AdminSettings;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
@@ -113,19 +114,22 @@ public class AdminPage implements Closeable {
         return web.element("#pauseGame td b");
     }
 
-    public WebElement pauseResumeGameLink() {
-        return web.element("#pauseGame td a");
+    public WebElement pauseGameButton() {
+        return web.element("#pauseGame input[value=\"Pause game\"]");
+    }
+
+    public WebElement resumeGameButton() {
+        return web.element("#pauseGame input[value=\"Resume game\"]");
     }
 
     public void assertGameIsActive(boolean active) {
         String status = pauseResumeGameStatus().getText();
-        String linkText = pauseResumeGameLink().getText();
         if (active) {
             assertEquals("Game in this room is active", status);
-            assertEquals("Pause game", linkText);
+            assertEquals(AdminSettings.PAUSE_GAME, pauseGameButton().getAttribute("value"));
         } else {
             assertEquals("Game in this room was suspended", status);
-            assertEquals("Resume game", linkText);
+            assertEquals(AdminSettings.RESUME_GAME, resumeGameButton().getAttribute("value"));
         }
     }
 

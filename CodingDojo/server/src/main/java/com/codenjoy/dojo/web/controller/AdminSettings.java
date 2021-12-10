@@ -41,10 +41,17 @@ import java.util.Map;
 @Setter
 public class AdminSettings {
 
+    // actions
+    public static final String PAUSE_GAME = "Pause game";
+    public static final String RESUME_GAME = "Resume game";
+    public static final String SET_TIMER_PERIOD = "Set timer period";
+
     private List<PlayerInfo> players;
     private List<Object> games;  // // TODO #4FS тут boolean
 
     // used to get data from jsp
+    private String action; // submit button value
+    
     private List<Object> otherValues;
     private List<Object> levelsValues;
     private List<Object> levelsKeys;

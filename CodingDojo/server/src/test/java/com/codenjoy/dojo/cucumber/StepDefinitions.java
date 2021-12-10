@@ -263,7 +263,7 @@ public class StepDefinitions {
 
     @When("Click Pause game")
     public void clickPauseGame() {
-        admin.pauseResumeGameLink().click();
+        admin.pauseGameButton().click();
     }
 
     @Then("Game is paused")
@@ -273,7 +273,7 @@ public class StepDefinitions {
 
     @When("Click Resume game")
     public void clickResumeGame() {
-        clickPauseGame();
+        admin.resumeGameButton().click();
     }
 
     @When("Select game room {string}")
