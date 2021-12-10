@@ -258,22 +258,22 @@ public class StepDefinitions {
 
     @Then("Game is resumed")
     public void assertGameIsResumed() {
-        admin.assertGameIsActive(true);
+        admin.pauseResume().assertGameIsActive();
     }
 
     @When("Click Pause game")
     public void clickPauseGame() {
-        admin.pauseGameButton().click();
+        admin.pauseResume().pauseGame();
     }
 
     @Then("Game is paused")
     public void assertGameIsPaused() {
-        admin.assertGameIsActive(false);
+        admin.pauseResume().assertGameIsPaused();
     }
 
     @When("Click Resume game")
     public void clickResumeGame() {
-        admin.resumeGameButton().click();
+        admin.pauseResume().resumeGame();
     }
 
     @When("Select game room {string}")

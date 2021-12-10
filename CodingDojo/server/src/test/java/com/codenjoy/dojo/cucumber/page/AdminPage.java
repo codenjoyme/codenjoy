@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.log.DebugService;
-import com.codenjoy.dojo.web.controller.AdminSettings;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
@@ -65,6 +64,7 @@ public class AdminPage implements Closeable {
     private final Players players;
     private final Levels levels;
     private final TimerPeriod timerPeriod;
+    private final PauseResume pauseResume;
 
     @Override
     public void close() {
@@ -108,29 +108,6 @@ public class AdminPage implements Closeable {
         return web.element("#closeRegistration td a");
     }
 
-    public WebElement pauseResumeGameStatus() {
-        return web.element("#pauseGame td b");
-    }
-
-    public WebElement pauseGameButton() {
-        return web.button("#pauseGame", AdminSettings.PAUSE_GAME);
-    }
-
-    public WebElement resumeGameButton() {
-        return web.button("#pauseGame", AdminSettings.RESUME_GAME);
-    }
-
-    public void assertGameIsActive(boolean active) {
-        String status = pauseResumeGameStatus().getText();
-        if (active) {
-            assertEquals("Game in this room is active", status);
-            assertEquals(AdminSettings.PAUSE_GAME, pauseGameButton().getAttribute("value"));
-        } else {
-            assertEquals("Game in this room was suspended", status);
-            assertEquals(AdminSettings.RESUME_GAME, resumeGameButton().getAttribute("value"));
-        }
-    }
-
     public void selectRoom(String room) {
         activeGames.selectRoom(room);
     }
@@ -171,5 +148,9 @@ public class AdminPage implements Closeable {
 
     public TimerPeriod timerPeriod() {
         return timerPeriod;
+    }
+
+    public PauseResume pauseResume() {
+        return pauseResume;
     }
 }
