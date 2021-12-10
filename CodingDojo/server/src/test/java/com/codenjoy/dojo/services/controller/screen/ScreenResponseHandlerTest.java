@@ -29,6 +29,7 @@ import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.utils.JsonUtils;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -125,12 +126,15 @@ public class ScreenResponseHandlerTest {
                 "  },\n" +
                 "  'player4':{\n" +
                 "    'board':{\n" +
-                "      'someJson':'board4'\n" +
+                "      'jsonBoard':'board4'\n" +
                 "    },\n" +
                 "    'boardSize':45,\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
-                "        'additionalData':null,\n" +
+                "        'additionalData':{\n" +
+                "          'jsonData1':23,\n" +
+                "          'jsonData2':true\n" +
+                "        },\n" +
                 "        'coordinate':{\n" +
                 "          'x':14,\n" +
                 "          'y':9\n" +
@@ -147,7 +151,9 @@ public class ScreenResponseHandlerTest {
                 "    'readableNames':{\n" +
                 "      'player4':'Player4 Name4'\n" +
                 "    },\n" +
-                "    'score':765,\n" +
+                "    'score':{\n" +
+                "      'jsonScore':765\n" +
+                "    },\n" +
                 "    'scores':{\n" +
                 "      'player4':400\n" +
                 "    },\n" +
@@ -246,12 +252,15 @@ public class ScreenResponseHandlerTest {
                 "  },\n" +
                 "  'player4':{\n" +
                 "    'board':{\n" +
-                "      'someJson':'board4'\n" +
+                "      'jsonBoard':'board4'\n" +
                 "    },\n" +
                 "    'boardSize':45,\n" +
                 "    'coordinates':{\n" +
                 "      'player4':{\n" +
-                "        'additionalData':null,\n" +
+                "        'additionalData':{\n" +
+                "          'jsonData1':23,\n" +
+                "          'jsonData2':true\n" +
+                "        },\n" +
                 "        'coordinate':{\n" +
                 "          'x':14,\n" +
                 "          'y':9\n" +
@@ -268,7 +277,9 @@ public class ScreenResponseHandlerTest {
                 "    'readableNames':{\n" +
                 "      'player4':'Player4 Name4'\n" +
                 "    },\n" +
-                "    'score':765,\n" +
+                "    'score':{\n" +
+                "      'jsonScore':765\n" +
+                "    },\n" +
                 "    'scores':{\n" +
                 "      'player4':400\n" +
                 "    },\n" +
@@ -430,11 +441,16 @@ public class ScreenResponseHandlerTest {
         Player player4 = new Player(preffix + "player4");
         player4.setGame("game");
         player4.setRoom("room");
-        map.put(player4, new PlayerData(45, "{\"someJson\":\"board4\"}", "game",
-                765, "some_info4",
+        map.put(player4, new PlayerData(45, "{\"jsonBoard\":\"board4\"}", "game",
+                new JSONObject("{jsonScore:765}"), "some_info4",
                 new LinkedHashMap<>(){{ put(preffix + "player4", 400); }},
                 new LinkedHashMap<>(){{ put(preffix + "player4", 4); }},
-                new LinkedHashMap<>(){{ put(preffix + "player4", new HeroDataImpl(4, pt(14, 9), false)); }},
+                new LinkedHashMap<>(){{ put(preffix + "player4", new HeroDataImpl(4, pt(14, 9), false){
+                    @Override
+                    public Object getAdditionalData() {
+                        return new JSONObject("{jsonData1:23,jsonData2:true}");
+                    }
+                }); }},
                 new LinkedHashMap<>(){{ put(preffix + "player4", preffix + "Player4 Name4"); }},
                 new LinkedList<>(){{ addAll(Arrays.asList(preffix + "player4")); }}));
 

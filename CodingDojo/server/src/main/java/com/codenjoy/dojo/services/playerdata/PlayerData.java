@@ -25,12 +25,15 @@ package com.codenjoy.dojo.services.playerdata;
 
 import com.codenjoy.dojo.services.annotations.PerformanceOptimized;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.serializer.JSONObjectSerializer;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -39,7 +42,13 @@ import java.util.Map;
 @AllArgsConstructor
 public class PlayerData implements ScreenData {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper;
+    static {
+        mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(JSONObject.class, new JSONObjectSerializer());
+        mapper.registerModule(module);
+    }
 
     private int boardSize;
     private String board;
