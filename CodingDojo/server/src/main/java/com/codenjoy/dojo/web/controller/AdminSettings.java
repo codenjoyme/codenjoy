@@ -42,6 +42,7 @@ import java.util.Map;
 public class AdminSettings {
 
     // actions
+    public static final String DELETE_ROOM = "Delete room";
     public static final String PAUSE_GAME = "Pause game";
     public static final String RESUME_GAME = "Resume game";
     public static final String SET_TIMER_PERIOD = "Set timer period";

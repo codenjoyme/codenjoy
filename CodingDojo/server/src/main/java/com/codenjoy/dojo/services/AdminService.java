@@ -143,6 +143,16 @@ public class AdminService {
 
         if (!StringUtils.isEmpty(settings.getAction())) {
             switch (settings.getAction()) {
+                case DELETE_ROOM:
+                    // нельзя удалять единственную комнату соответствующую игре,
+                    // потому что потом зайти некуда будет
+                    if (!roomService.game(room).equals(room)) {
+                        playerService.removeAll(room);
+                        saveService.removeAllSaves(room);
+                        roomService.remove(room);
+                    }
+                    break;
+
                 case SET_TIMER_PERIOD:
                     try {
                         timerService.changePeriod(settings.getTimerPeriod());

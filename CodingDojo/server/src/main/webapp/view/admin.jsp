@@ -52,36 +52,40 @@
         <h1>Admin page</h1>
     </div>
 
-    <table class="admin-table" id="gameVersion">
-        <tr>
-            <td>
-                <b>Room:</b> ${data.room}&nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a id="delete-room"
-                   href="${ctx}/admin/room/delete?room=${data.room}#gameVersion">Remove room</a>.
-            </td>
-            <td class="info">
-                You cannot delete the default game room. When you delete a room, <br>
-                all players and their saves will also be removed from it.
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <b>Game:</b> ${data.game}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <b>Game version:</b>
-            </td>
-            <td style="width:500px;">
-                <textarea class="version small" cols="95">${data.gameVersion}</textarea>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#gameRoomStatus" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="gameRoomStatus">
+            <tr>
+                <td>
+                    <b>Room:</b> ${data.room}&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="action" value="Delete room"/>
+                </td>
+                <td class="info">
+                    You cannot delete the default game room. When you delete a room, <br>
+                    all players and their saves will also be removed from it.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Game:</b> ${data.game}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Game version:</b>
+                </td>
+                <td style="width:500px;">
+                    <textarea class="version small" cols="95">${data.gameVersion}</textarea>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="statistic">
         <tr>
