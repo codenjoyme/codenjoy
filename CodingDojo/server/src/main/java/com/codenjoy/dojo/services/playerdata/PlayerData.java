@@ -47,7 +47,7 @@ public class PlayerData implements ScreenData {
     private Object score;
     private String info;
     private Map<String, Object> scores;
-    private Map<String, Object> teams;
+    private Map<String, Integer> teams;
     private Map<String, HeroData> coordinates;
     private Map<String, String> readableNames;
     private List<String> group;
