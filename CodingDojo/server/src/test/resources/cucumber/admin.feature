@@ -69,6 +69,29 @@ Scenario: Admin can pause/resume game only in this room
   When Click Resume game
   Then Game is resumed
 
+Scenario: Admin can change system tick time
+  Given Login to Admin page
+  Then Check game is 'first' and room is 'first'
+  Then Timer period is 1000
+
+  When Update timer period to 1101
+  Then Timer period is 1101
+  When Click Set timer period button
+  Then Timer period is 1101
+
+  When Select game room 'second'
+  Then Check game is 'second' and room is 'second'
+  Then Timer period is 1101
+
+  When Update timer period to 1000
+  Then Timer period is 1000
+  When Click Set timer period button
+  Then Timer period is 1000
+
+  When Select game room 'first'
+  Then Check game is 'first' and room is 'first'
+  Then Timer period is 1000
+
 Scenario: When game room is paused then is no communication with websocket client
   Given User registered with name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years'
 

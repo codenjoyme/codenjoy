@@ -23,10 +23,7 @@ package com.codenjoy.dojo.cucumber.page;
  */
 
 import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.cucumber.page.admin.ActiveGames;
-import com.codenjoy.dojo.cucumber.page.admin.Inactivity;
-import com.codenjoy.dojo.cucumber.page.admin.Levels;
-import com.codenjoy.dojo.cucumber.page.admin.Players;
+import com.codenjoy.dojo.cucumber.page.admin.*;
 import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
@@ -67,6 +64,7 @@ public class AdminPage implements Closeable {
     private final Inactivity inactivity;
     private final Players players;
     private final Levels levels;
+    private final TimerPeriod timerPeriod;
 
     @Override
     public void close() {
@@ -115,11 +113,11 @@ public class AdminPage implements Closeable {
     }
 
     public WebElement pauseGameButton() {
-        return web.element("#pauseGame input[value=\"Pause game\"]");
+        return web.button("#pauseGame", AdminSettings.PAUSE_GAME);
     }
 
     public WebElement resumeGameButton() {
-        return web.element("#pauseGame input[value=\"Resume game\"]");
+        return web.button("#pauseGame", AdminSettings.RESUME_GAME);
     }
 
     public void assertGameIsActive(boolean active) {
@@ -169,5 +167,9 @@ public class AdminPage implements Closeable {
 
     public Levels levels() {
         return levels;
+    }
+
+    public TimerPeriod timerPeriod() {
+        return timerPeriod;
     }
 }

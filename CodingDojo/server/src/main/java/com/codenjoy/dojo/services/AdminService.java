@@ -141,23 +141,25 @@ public class AdminService {
             }
         }
 
-        switch (settings.getAction()) {
-            case SET_TIMER_PERIOD:
-                try {
-                    timerService.changePeriod(settings.getTimerPeriod());
-                } catch (NumberFormatException e) {
-                    // do nothing
-                }
-                break;
+        if (!StringUtils.isEmpty(settings.getAction())) {
+            switch (settings.getAction()) {
+                case SET_TIMER_PERIOD:
+                    try {
+                        timerService.changePeriod(settings.getTimerPeriod());
+                    } catch (NumberFormatException e) {
+                        // do nothing
+                    }
+                    break;
 
-            case PAUSE_GAME:
-                roomService.setActive(room, false);
-                break;
+                case PAUSE_GAME:
+                    roomService.setActive(room, false);
+                    break;
 
-            case RESUME_GAME:
-                roomService.setActive(room, true);
-                break;
+                case RESUME_GAME:
+                    roomService.setActive(room, true);
+                    break;
 
+            }
         }
 
         if (settings.getProgress() != null) {

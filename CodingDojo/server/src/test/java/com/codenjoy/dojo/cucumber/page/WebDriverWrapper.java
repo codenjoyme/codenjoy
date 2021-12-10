@@ -93,6 +93,10 @@ public class WebDriverWrapper implements Closeable {
         return driver.findElement(By.cssSelector(css));
     }
 
+    public WebElement button(String formId, String title) {
+        return element(String.format("%s input[value=\"%s\"]", formId, title));
+    }
+
     public void select(String css, String text) {
         new Select(element(css))
                 .selectByVisibleText(text);

@@ -446,4 +446,19 @@ public class StepDefinitions {
     public void addNewMap() {
         admin.levels().add();
     }
+
+    @Then("Timer period is {int}")
+    public void timerPeriodIs(int mills) {
+        admin.timerPeriod().checkIs(mills);
+    }
+
+    @When("Update timer period to {int}")
+    public void updateTimerPeriodTo(int mills) {
+        admin.timerPeriod().update(mills);
+    }
+
+    @When("Click Set timer period button")
+    public void clickSetTimerPeriodButton() {
+        admin.timerPeriod().save();
+    }
 }
