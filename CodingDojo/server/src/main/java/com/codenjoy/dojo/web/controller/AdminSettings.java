@@ -43,6 +43,7 @@ public class AdminSettings {
 
     // actions
     public static final String DELETE_ROOM = "Delete room";
+    public static final String CREATE_ROOM = "Create room";
     public static final String PAUSE_GAME = "Pause game";
     public static final String RESUME_GAME = "Resume game";
     public static final String SET_TIMER_PERIOD = "Set timer period";
@@ -61,6 +62,7 @@ public class AdminSettings {
     private String loggersLevels;
     private String game;
     private String room;
+    private String newRoom;
     private String generateNameMask;
     private Integer generateCount;
     private String generateRoom;

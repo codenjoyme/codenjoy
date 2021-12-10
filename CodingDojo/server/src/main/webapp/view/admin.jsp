@@ -73,6 +73,15 @@
             </tr>
             <tr>
                 <td>
+                    <input type="text" name="newRoom" value=""/><br>
+                    <input type="submit" name="action" value="Create room"/>
+                </td>
+                <td class="info">
+                    We will create a new empty room and show its settings.
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <b>Game:</b> ${data.game}
                 </td>
             </tr>

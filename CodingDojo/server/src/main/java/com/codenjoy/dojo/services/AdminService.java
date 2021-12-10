@@ -150,7 +150,26 @@ public class AdminService {
                         playerService.removeAll(room);
                         saveService.removeAllSaves(room);
                         roomService.remove(room);
+                        // после зачистки перейдем в default game room
+                        room = game;
+                        settings.setRoom(room);
                     }
+                    break;
+
+                case CREATE_ROOM:
+                    room = settings.getNewRoom();
+                    // если нет такой room
+                    if (!roomService.exists(room)) {
+                        GameType gameType = gameService.getGameType(game);
+                        // проверяем есть ли game
+                        if (gameType instanceof NullGameType) {
+                            break;
+                        }
+                        // создаем новую комнату
+                        roomService.create(room, gameType);
+                    }
+                    // и тут же будем администрировать новую комнату
+                    settings.setRoom(room);
                     break;
 
                 case SET_TIMER_PERIOD:
@@ -309,18 +328,12 @@ public class AdminService {
             room = game;
         }
 
-        // если нет такой room, проверяем есть ли game
+        // если нет такой room - default админка
         if (!roomService.exists(room)) {
-            GameType gameType = gameService.getGameType(game);
-            if (gameType instanceof NullGameType) {
-                // если нет - default админка
-                return null;
-            }
-            // иначе создаем новую комнату, которую тут же будем администрировать
-            roomService.create(room, gameType);
+            return null;
         }
 
-        // получаем уже законным образом имя игры по комнате
+        // получаем имя игры по комнате
         game = roomService.game(room);
 
         // получаем тип игры

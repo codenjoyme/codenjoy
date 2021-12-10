@@ -92,6 +92,7 @@ label.error {
     line-height: 10px;
 }
 
+.admin-table .info,
 .admin-table .info td {
     padding: 10px;
 }
