@@ -409,7 +409,7 @@ public class PlayerServiceImpl implements PlayerService {
                 GameData gameData = gameDataMap.get(player.getId());
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
-                String encoded = null;
+                Object encoded = null;
                 try {
                     Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
 

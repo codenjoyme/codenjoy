@@ -55,7 +55,7 @@ public class GuiPlotColorDecoder {
         return board.toString().replaceAll("\n", "");
     }
 
-    public String encodeForBrowser(Object board) {
+    public Object encodeForBrowser(Object board) {
         if (board instanceof String) {
             return encode((String)board);
         }
@@ -76,7 +76,7 @@ public class GuiPlotColorDecoder {
             result.put(key, encoded);
         }
 
-        return result.toString();
+        return result;
     }
 
     private String encode(String board) {

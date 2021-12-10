@@ -441,7 +441,7 @@ public class ScreenResponseHandlerTest {
         Player player4 = new Player(preffix + "player4");
         player4.setGame("game");
         player4.setRoom("room");
-        map.put(player4, new PlayerData(45, "{\"jsonBoard\":\"board4\"}", "game",
+        map.put(player4, new PlayerData(45, new JSONObject("{jsonBoard:\"board4\"}"), "game",
                 new JSONObject("{jsonScore:765}"), "some_info4",
                 new LinkedHashMap<>(){{ put(preffix + "player4", 400); }},
                 new LinkedHashMap<>(){{ put(preffix + "player4", 4); }},

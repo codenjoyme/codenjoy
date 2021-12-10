@@ -175,7 +175,7 @@ public class RestBoardController {
         // TODO доделать для icancode
         result.forEach(log -> {
             Object board = tryJson(log.getBoard());
-            log.setBoard(decoder.encodeForBrowser(board));
+            log.setBoard(decoder.encodeForBrowser(board).toString());
         });
 
         return result;
