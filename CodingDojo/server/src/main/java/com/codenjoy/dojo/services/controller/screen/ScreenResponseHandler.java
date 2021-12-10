@@ -42,9 +42,6 @@ import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collector.Characteristics.CONCURRENT;
-import static java.util.stream.Collector.Characteristics.UNORDERED;
-
 @Slf4j
 @AllArgsConstructor
 public class ScreenResponseHandler implements ResponseHandler {
@@ -118,7 +115,7 @@ public class ScreenResponseHandler implements ResponseHandler {
 
             @Override
             public Set<Characteristics> characteristics() {
-                return Sets.newHashSet(UNORDERED, CONCURRENT);
+                return Sets.newHashSet();
             }
         };
     }
