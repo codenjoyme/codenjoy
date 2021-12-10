@@ -223,17 +223,17 @@ public class StepDefinitions {
 
     @Then("Registration is active")
     public void assertRegistrationIsActive() {
-        admin.assertRegistrationActive(true);
+        admin.openCloseRegistration().assertOpened();
     }
 
     @Then("Registration was closed")
     public void assertRegistrationWasClosed() {
-        admin.assertRegistrationActive(false);
+        admin.openCloseRegistration().assertClosed();
     }
 
     @When("Click Close registration")
     public void clickCloseRegistration() {
-        admin.registrationChangeActiveLink().click();
+        admin.openCloseRegistration().openCloseLink().click();
     }
 
     @When("Click Open registration")

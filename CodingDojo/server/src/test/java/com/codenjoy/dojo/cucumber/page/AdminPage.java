@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.log.DebugService;
 import lombok.RequiredArgsConstructor;
-import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -65,6 +64,7 @@ public class AdminPage implements Closeable {
     private final Levels levels;
     private final TimerPeriod timerPeriod;
     private final PauseResume pauseResume;
+    private final OpenCloseRegistration openCloseRegistration;
 
     @Override
     public void close() {
@@ -86,26 +86,6 @@ public class AdminPage implements Closeable {
 
     public void assertOnPage() {
         page.assertPage("admin");
-    }
-
-    public void assertRegistrationActive(boolean active) {
-        String status = registrationActiveStatus().getText();
-        String linkText = registrationChangeActiveLink().getText();
-        if (active) {
-            assertEquals("Server registration is active", status);
-            assertEquals("Close registration", linkText);
-        } else {
-            assertEquals("Server registration was closed", status);
-            assertEquals("Open registration", linkText);
-        }
-    }
-
-    public WebElement registrationActiveStatus() {
-        return web.element("#closeRegistration td b");
-    }
-
-    public WebElement registrationChangeActiveLink() {
-        return web.element("#closeRegistration td a");
     }
 
     public void selectRoom(String room) {
@@ -152,5 +132,9 @@ public class AdminPage implements Closeable {
 
     public PauseResume pauseResume() {
         return pauseResume;
+    }
+
+    public OpenCloseRegistration openCloseRegistration() {
+        return openCloseRegistration;
     }
 }
