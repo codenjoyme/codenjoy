@@ -63,6 +63,6 @@ public class TimerPeriod {
     }
 
     private WebElement setTimerPeriodButton() {
-        return web.button("#pauseGame", AdminSettings.SET_TIMER_PERIOD);
+        return web.button("#setTimerPeriod", AdminSettings.SET_TIMER_PERIOD);
     }
 }

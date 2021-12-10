@@ -149,8 +149,11 @@
         </table>
     </form:form>
 
-    <form:form modelAttribute="data" action="admin#pauseGame" method="POST">
-        <table class="admin-table" id="pauseGame">
+    <form:form modelAttribute="data" action="admin#pauseResumeGame" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="pauseResumeGame">
             <tr>
                 <td>
                     <c:choose>
@@ -164,13 +167,20 @@
                         </c:otherwise>
                     </c:choose>
                 </td>
+            </tr>
+        </table>
+    </form:form>
+
+    <form:form modelAttribute="data" action="admin#setTimerPeriod" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="setTimerPeriod">
             <tr>
                 <td><form:input path="timerPeriod"/></td>
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${data.game}"/>
-                    <input type="hidden" name="room" value="${data.room}"/>
                     <input type="submit" name="action" value="Set timer period"/>
                 </td>
             </tr>

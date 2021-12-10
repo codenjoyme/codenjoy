@@ -45,15 +45,15 @@ public class PauseResume {
     private final Server server;
 
     public WebElement gameStatus() {
-        return web.element("#pauseGame td b");
+        return web.element("#pauseResumeGame td b");
     }
 
     private WebElement pauseButton() {
-        return web.button("#pauseGame", AdminSettings.PAUSE_GAME);
+        return web.button("#pauseResumeGame", AdminSettings.PAUSE_GAME);
     }
 
     private WebElement resumeButton() {
-        return web.button("#pauseGame", AdminSettings.RESUME_GAME);
+        return web.button("#pauseResumeGame", AdminSettings.RESUME_GAME);
     }
 
     public void assertGameIsPaused() {
