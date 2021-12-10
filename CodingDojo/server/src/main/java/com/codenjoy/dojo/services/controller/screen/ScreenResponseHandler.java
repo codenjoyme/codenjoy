@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.controller.screen;
 
 
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.annotations.PerformanceOptimized;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.serializer.JSONObjectSerializer;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
@@ -81,6 +82,11 @@ public class ScreenResponseHandler implements ResponseHandler {
         if (request.isAllPlayers()) {
             stream = stream.filter(distinctByKey(entry -> entry.getValue().getGroup().toString()));
         }
+        return toString(stream);
+    }
+
+    @PerformanceOptimized
+    private String toString(Stream<Map.Entry<Player, PlayerData>> stream) {
         return toJson(stream.collect(toMap(
                 entry -> entry.getKey().getId(),
                 entry -> entry.getValue()
