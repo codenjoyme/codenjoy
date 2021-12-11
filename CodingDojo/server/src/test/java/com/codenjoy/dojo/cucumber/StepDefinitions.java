@@ -332,11 +332,6 @@ public class StepDefinitions {
         admin.assertRoomsAvailable(rooms);
     }
 
-    @When("Create new room {string} for game {string}")
-    public void createNewRoomForGame(String room, String game) {
-        admin.createNewRoomForGame(room, game);
-    }
-
     @Then("There are players {string} on the leaderboard")
     public void thereArePlayersOnLeaderboard(String players) {
         board.leaderboard().waitUntilNotEmpty();

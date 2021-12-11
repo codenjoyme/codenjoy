@@ -103,10 +103,6 @@ public class AdminPage implements Closeable {
         assertEquals(expected, activeGames.getRooms().toString());
     }
 
-    public void createNewRoomForGame(String room, String game) {
-        page.open(CREATE_ROOM_URL.apply(room, game));
-    }
-
     public void assertPlayersInRooms(String expected) {
         assertEquals(expected, activeGames.getPlayersInRooms().toString());
     }

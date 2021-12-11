@@ -7,8 +7,9 @@ Scenario: The user can choose which room to play in when registering and logging
   When Press register button
   Then There is list of rooms '[first, sample, second, third]' on the register form
 
-  Given Open Admin page
-  When Create new room 'first2' for game 'first'
+  Given Login to Admin page
+  Then Check game is 'first' and room is 'first'
+  When Create new room 'first2'
   Then There is list of rooms '[first, first2, sample, second, third]' on the admin page
 
   Given Open login page
