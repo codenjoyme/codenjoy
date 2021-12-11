@@ -266,22 +266,27 @@
         </table>
     </form:form>
 
-    <table class="admin-table" id="autoSave">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.autoSave}">
-                        <b>The auto save in progress</b></br>
-                        <a href="${ctx}/admin/autoSave/stop?room=${data.room}#autoSave">Stop auto save</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b>The auto save was suspended</b></br>
-                        <a href="${ctx}/admin/autoSave/start?room=${data.room}#autoSave">Start auto save</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#autoSave" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="autoSave">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.autoSave}">
+                            <b>The auto save in progress</b></br>
+                            <input type="submit" name="action" value="Stop auto save"/>
+                        </c:when>
+                        <c:otherwise>
+                            <b>The auto save was suspended</b></br>
+                            <input type="submit" name="action" value="Start auto save"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="closeRegistration">
         <tr>

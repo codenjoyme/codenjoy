@@ -257,6 +257,8 @@ public class StepDefinitions {
         login.assertFormHidden();
     }
 
+    // ------------
+
     @Then("Game is resumed")
     public void assertGameIsResumed() {
         admin.pauseResume().assertActive();
@@ -276,6 +278,8 @@ public class StepDefinitions {
     public void clickResumeGame() {
         admin.pauseResume().resumeGame();
     }
+
+    // ------------
 
     @When("Click Start game recording")
     public void clickStartGameRecording() {
@@ -297,6 +301,8 @@ public class StepDefinitions {
         admin.gameRecording().assertSuspended();
     }
 
+    // ------------
+
     @When("Click Start debug")
     public void clickStartDebug() {
         admin.debug().start();
@@ -316,6 +322,30 @@ public class StepDefinitions {
     public void assertDebugIsSuspended() {
         admin.debug().assertSuspended();
     }
+
+    // ------------
+
+    @When("Click Start auto save")
+    public void clickStartAutoSsave() {
+        admin.autoSave().start();
+    }
+
+    @Then("Auto save is started")
+    public void assertAutoSaveIsStarted() {
+        admin.autoSave().assertStarted();
+    }
+
+    @When("Click Stop auto save")
+    public void clickStopAutoSave() {
+        admin.autoSave().stop();
+    }
+
+    @Then("Auto save is suspended")
+    public void assertAutoSaveIsSuspended() {
+        admin.autoSave().assertSuspended();
+    }
+
+    // ------------
 
     @When("Select game room {string}")
     public void selectGameRoom(String room) {

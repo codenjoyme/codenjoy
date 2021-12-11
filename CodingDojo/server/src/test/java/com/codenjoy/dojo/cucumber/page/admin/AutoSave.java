@@ -37,7 +37,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class GameRecording {
+public class AutoSave {
 
     // page objects
     private final Page page;
@@ -45,25 +45,25 @@ public class GameRecording {
     private final Server server;
 
     public WebElement status() {
-        return web.element("#recordGame td b");
+        return web.element("#autoSave td b");
     }
 
     private WebElement stopButton() {
-        return web.button("#recordGame", AdminSettings.STOP_RECORDING);
+        return web.button("#autoSave", AdminSettings.STOP_AUTO_SAVE);
     }
 
     private WebElement startButton() {
-        return web.button("#recordGame", AdminSettings.START_RECORDING);
+        return web.button("#autoSave", AdminSettings.START_AUTO_SAVE);
     }
 
     public void assertSuspended() {
-        assertEquals("The recording was suspended", status().getText());
-        assertEquals(AdminSettings.START_RECORDING, startButton().getAttribute("value"));
+        assertEquals("The auto save was suspended", status().getText());
+        assertEquals(AdminSettings.START_AUTO_SAVE, startButton().getAttribute("value"));
     }
 
     public void assertStarted() {
-        assertEquals("The recording is active", status().getText());
-        assertEquals(AdminSettings.STOP_RECORDING, stopButton().getAttribute("value"));
+        assertEquals("The auto save in progress", status().getText());
+        assertEquals(AdminSettings.STOP_AUTO_SAVE, stopButton().getAttribute("value"));
     }
 
     public void stop() {

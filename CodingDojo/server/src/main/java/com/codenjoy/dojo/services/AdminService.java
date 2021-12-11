@@ -209,6 +209,14 @@ public class AdminService {
                     debugService.setLoggersLevels(settings.getLoggersLevels());
                     break;
 
+                case STOP_AUTO_SAVE:
+                    autoSaver.pause();
+                    break;
+
+                case START_AUTO_SAVE:
+                    autoSaver.resume();
+                    break;
+
             }
         }
 

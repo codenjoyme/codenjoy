@@ -44,7 +44,7 @@ public class Debug {
     private final WebDriverWrapper web;
     private final Server server;
 
-    public WebElement recordingStatus() {
+    public WebElement status() {
         return web.element("#debug td b");
     }
 
@@ -57,12 +57,12 @@ public class Debug {
     }
 
     public void assertSuspended() {
-        assertEquals("The debug was suspended", recordingStatus().getText());
+        assertEquals("The debug was suspended", status().getText());
         assertEquals(AdminSettings.START_DEBUG, startButton().getAttribute("value"));
     }
 
     public void assertStarted() {
-        assertEquals("The debug in progress", recordingStatus().getText());
+        assertEquals("The debug in progress", status().getText());
         assertEquals(AdminSettings.STOP_DEBUG, stopButton().getAttribute("value"));
     }
 

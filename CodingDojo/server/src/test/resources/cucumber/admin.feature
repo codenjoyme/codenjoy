@@ -182,6 +182,27 @@ Scenario: Admin can start/stop debug for all server
   Then Check game is 'first' and room is 'first'
   Then Debug is suspended
 
+Scenario: Admin can start/stop auto save for all server
+  Given Login to Admin page
+  Then Check game is 'first' and room is 'first'
+  Then Auto save is started
+
+  # stop auto save
+  When Click Stop auto save
+  Then Auto save is suspended
+
+  When Select game room 'second'
+  Then Check game is 'second' and room is 'second'
+  Then Auto save is suspended
+
+  # start auto save
+  When Click Start auto save
+  Then Auto save is started
+
+  When Select game room 'first'
+  Then Check game is 'first' and room is 'first'
+  Then Auto save is started
+
 Scenario: Admin can change system tick time
   Given Login to Admin page
   Then Check game is 'first' and room is 'first'

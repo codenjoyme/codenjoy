@@ -250,20 +250,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/autoSave/stop")
-    public String stopAutoSave(HttpServletRequest request) {
-        autoSaver.pause();
-        return getAdmin(request);
-    }
-
-    @GetMapping("/autoSave/start")
-    public String startAutoSave(HttpServletRequest request) {
-        autoSaver.resume();
-        return getAdmin(request);
-    }
-
-    // ----------------
-
     @PostMapping()
     public String saveSettings(AdminSettings settings,
                                BindingResult result,

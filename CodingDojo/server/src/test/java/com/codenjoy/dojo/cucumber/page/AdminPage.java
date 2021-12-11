@@ -68,6 +68,7 @@ public class AdminPage implements Closeable {
     private final GameRoomStatus gameRoomStatus;
     private final GameRecording gameRecording;
     private final Debug debug;
+    private final AutoSave autoSave;
 
     @Override
     public void close() {
@@ -147,5 +148,9 @@ public class AdminPage implements Closeable {
 
     public Debug debug() {
         return debug;
+    }
+
+    public AutoSave autoSave() {
+        return autoSave;
     }
 }
