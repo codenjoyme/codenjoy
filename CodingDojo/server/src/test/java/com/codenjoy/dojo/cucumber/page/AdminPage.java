@@ -64,7 +64,7 @@ public class AdminPage implements Closeable {
     private final Levels levels;
     private final TimerPeriod timerPeriod;
     private final PauseResume pauseResume;
-    private final OpenCloseRegistration openCloseRegistration;
+    private final ServerRegistration serverRegistration;
     private final RoomRegistration roomRegistration;
     private final GameRoomStatus gameRoomStatus;
     private final GameRecording gameRecording;
@@ -135,8 +135,8 @@ public class AdminPage implements Closeable {
         return pauseResume;
     }
 
-    public OpenCloseRegistration openCloseRegistration() {
-        return openCloseRegistration;
+    public ServerRegistration serverRegistration() {
+        return serverRegistration;
     }
 
     public RoomRegistration roomRegistration() {

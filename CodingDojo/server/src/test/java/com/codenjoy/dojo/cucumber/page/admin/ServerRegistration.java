@@ -37,7 +37,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class OpenCloseRegistration {
+public class ServerRegistration {
 
     // page objects
     private final Page page;
