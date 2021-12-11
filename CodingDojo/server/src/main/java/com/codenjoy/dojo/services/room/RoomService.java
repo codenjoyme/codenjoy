@@ -188,17 +188,19 @@ public class RoomService {
                 .orElse(-1);
     }
 
-    public void setOpenedGames(List<String> games) { // TODO #4FS тут проверить
+    public void setOpenedGames(List<String> games) {
         rooms.values().forEach(roomState -> {
             boolean opened = games.contains(roomState.getGame());
             roomState.setOpened(opened);
         });
     }
 
-    public List<String> openedGames() { // TODO #4FS тут проверить
+    public List<String> openedGames() {
         return rooms.values().stream()
                 .filter(RoomState::isOpened)
-                .map(RoomState::getRoom)
+                .map(RoomState::getGame)
+                .distinct()
+                .sorted()
                 .collect(toList());
     }
 

@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
@@ -454,6 +455,30 @@ public class RoomServiceTest {
 
         assertEquals("[]",
                 service.gameRooms("third").toString());
+    }
+
+    @Test
+    public void shouldOpenedGames() {
+        // given
+        service.create("room1", game1);
+        service.create("room2", game1);
+        service.create("room3", game2);
+        service.create("room4", game2);
+
+        // then
+        assertEquals("[first, second]", service.openedGames().toString());
+
+        // when then
+        service.setOpenedGames(Arrays.asList("second"));
+        assertEquals("[second]", service.openedGames().toString());
+
+        // when then
+        service.setOpenedGames(Arrays.asList("second", "first"));
+        assertEquals("[first, second]", service.openedGames().toString());
+
+        // when then
+        service.setOpenedGames(Arrays.asList());
+        assertEquals("[]", service.openedGames().toString());
     }
 
     @Test
