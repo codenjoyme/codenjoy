@@ -4,12 +4,12 @@ Feature: Admin page
 Scenario: User cant open admin page but Admin can
   Given User registered with name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years'
 
-  # unsuccessfull login as user
+  # unsuccessful login as user
   When Login as 'user1@mail.com' 'password1'
   And Open Admin page
   Then Error page opened with message 'Something wrong with your request. Please save you ticker number and ask site administrator.'
 
-  # successfull login as admin
+  # successful login as admin
   When Login as 'admin@codenjoyme.com' 'admin'
   And Open Admin page
   Then Admin page opened with url '/admin?room=first'
