@@ -140,13 +140,13 @@ Scenario: Admin can close/open registration only in this room
   When Click logout
 
   When Open registration page
-  # TODO check rooms options
+  Then There is list of rooms '[sample, second, third]' on the register form
   And Try to register with: name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'second', room 'second'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'second'
   Then User registered in database as 'Registration.User(email=user1@mail.com, id=<PLAYER_ID>, readableName=Stiven Pupkin, approved=1, code=<CODE>, data=Moon|Java|Home|10 years)'
 
   When Open login page
-  # TODO check rooms options
+  Then There is list of rooms '[sample, second, third]' on the login form
   And Try to login as 'user1@mail.com' with 'password1' password in room 'second'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'second'
 
@@ -162,11 +162,13 @@ Scenario: Admin can close/open registration only in this room
   When Click logout
 
   When Open registration page
+  Then There is list of rooms '[first, sample, second, third]' on the register form
   And Try to register with: name 'Eva Pupkina', email 'user2@mail.com', password 'password2', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'first', room 'first'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
   Then User registered in database as 'Registration.User(email=user2@mail.com, id=<PLAYER_ID>, readableName=Eva Pupkina, approved=1, code=<CODE>, data=Moon|Java|Home|10 years)'
 
   When Open login page
+  Then There is list of rooms '[first, sample, second, third]' on the login form
   And Try to login as 'user2@mail.com' with 'password2' password in room 'first'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
 

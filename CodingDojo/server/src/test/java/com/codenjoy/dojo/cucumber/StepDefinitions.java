@@ -426,9 +426,19 @@ public class StepDefinitions {
     }
 
     @Then("There is list of rooms {string} on the login and register form")
+    public void thereIsListOfRoomsOnLoginAndRegisterForm(String rooms) {
+        thereIsListOfRoomsOnLoginForm(rooms);
+        login.clickRegister();
+        thereIsListOfRoomsOnRegisterForm(rooms);
+    }
+
+    @Then("There is list of rooms {string} on the login form")
     public void thereIsListOfRoomsOnLoginForm(String rooms) {
         login.assertRoomsAvailable(rooms);
-        login.clickRegister();
+    }
+
+    @Then("There is list of rooms {string} on the register form")
+    public void thereIsListOfRoomsOnRegisterForm(String rooms) {
         registration.assertRoomsAvailable(rooms);
     }
 
