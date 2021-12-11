@@ -31,6 +31,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import static com.codenjoy.dojo.cucumber.utils.Assert.assertEquals;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
@@ -55,5 +56,17 @@ public class GameRoomStatus {
 
     public void removeCurrent() {
         web.button("#gameRoomStatus", AdminSettings.DELETE_ROOM).click();
+    }
+
+    public void assertRoom(String room) {
+        assertEquals(room, web.element("#room").getText());
+    }
+
+    public void assertGameVersion(String version) {
+        assertEquals(version, web.element("#gameRoomStatus textarea").getAttribute("value"));
+    }
+
+    public void assertGame(String game) {
+        assertEquals(game, web.element("#game").getText());
     }
 }

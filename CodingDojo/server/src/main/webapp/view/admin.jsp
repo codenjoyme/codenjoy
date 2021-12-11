@@ -59,7 +59,7 @@
         <table class="admin-table" id="gameRoomStatus">
             <tr>
                 <td>
-                    <b>Room:</b> ${data.room}&nbsp;
+                    <b>Room: </b><span id="room">${data.room}</span>
                 </td>
             </tr>
             <tr>
@@ -82,7 +82,7 @@
             </tr>
             <tr>
                 <td>
-                    <b>Game:</b> ${data.game}
+                    <b>Game: </b><span id="game">${data.game}</span>
                 </td>
             </tr>
             <tr>

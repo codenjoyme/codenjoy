@@ -14,6 +14,17 @@ Scenario: User cant open admin page but Admin can
   And Open Admin page
   Then Admin page opened with url '/admin?room=first'
 
+Scenario: Select any room and get game/room info
+  Given Login to Admin page
+  Then Check game is 'first' and room is 'first'
+  Then Check game is 'first' and room is 'first' on the information panel
+  Then Game version is 'version 1.11b'
+
+  When Select game room 'second'
+  Then Check game is 'second' and room is 'second'
+  Then Check game is 'second' and room is 'second' on the information panel
+  Then Game version is 'version 12'
+
 Scenario: Admin can create/remove any room but not default
   Given Login to Admin page
   Then There are players in rooms '{first=0, sample=0, second=0, third=0}' on the admin page

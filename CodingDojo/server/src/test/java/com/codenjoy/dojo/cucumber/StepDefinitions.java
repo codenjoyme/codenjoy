@@ -283,8 +283,19 @@ public class StepDefinitions {
     }
 
     @Then("Check game is {string} and room is {string}")
-    public void assertGameIs(String game, String room) {
+    public void assertGame(String game, String room) {
         admin.assertGameAndRoom(game, room);
+    }
+
+    @Then("Check game is {string} and room is {string} on the information panel")
+    public void assertGameAndRoom(String game, String room) {
+        admin.gameRoomStatus().assertRoom(room);
+        admin.gameRoomStatus().assertGame(game);
+    }
+
+    @Then("Game version is {string}")
+    public void assertGameVersion(String version) {
+        admin.gameRoomStatus().assertGameVersion(version);
     }
 
     @Then("Websocket client {string} connected successfully to the {string}")
