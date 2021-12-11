@@ -250,20 +250,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/debug/stop")
-    public String stopDebug(HttpServletRequest request) {
-        debugService.pause();
-        return getAdmin(request);
-    }
-
-    @GetMapping("/debug/start")
-    public String startDebug(HttpServletRequest request) {
-        debugService.resume();
-        return getAdmin(request);
-    }
-
-    // ----------------
-
     @GetMapping("/autoSave/stop")
     public String stopAutoSave(HttpServletRequest request) {
         autoSaver.pause();

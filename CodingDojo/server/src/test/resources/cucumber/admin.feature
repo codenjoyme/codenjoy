@@ -161,6 +161,27 @@ Scenario: Admin can start/stop recording for all server
   Then Check game is 'first' and room is 'first'
   Then Game recording is suspended
 
+Scenario: Admin can start/stop debug for all server
+  Given Login to Admin page
+  Then Check game is 'first' and room is 'first'
+  Then Debug is suspended
+
+  # start debug
+  When Click Start debug
+  Then Debug is started
+
+  When Select game room 'second'
+  Then Check game is 'second' and room is 'second'
+  Then Debug is started
+
+  # stop debug
+  When Click Stop debug
+  Then Debug is suspended
+
+  When Select game room 'first'
+  Then Check game is 'first' and room is 'first'
+  Then Debug is suspended
+
 Scenario: Admin can change system tick time
   Given Login to Admin page
   Then Check game is 'first' and room is 'first'

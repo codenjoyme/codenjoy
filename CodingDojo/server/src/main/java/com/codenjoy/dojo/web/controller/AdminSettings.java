@@ -49,6 +49,9 @@ public class AdminSettings {
     public static final String RESUME_GAME = "Resume game";
     public static final String STOP_RECORDING = "Stop recording";
     public static final String START_RECORDING = "Start recording";
+    public static final String STOP_DEBUG = "Stop debug";
+    public static final String START_DEBUG = "Start debug";
+    public static final String UPDATE_LOGGERS = "Update loggers";
     public static final String SET_TIMER_PERIOD = "Set timer period";
 
     private List<PlayerInfo> players;

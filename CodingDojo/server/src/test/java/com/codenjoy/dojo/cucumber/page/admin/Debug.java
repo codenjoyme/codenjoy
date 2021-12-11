@@ -37,7 +37,7 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 @RequiredArgsConstructor
-public class GameRecording {
+public class Debug {
 
     // page objects
     private final Page page;
@@ -45,25 +45,25 @@ public class GameRecording {
     private final Server server;
 
     public WebElement recordingStatus() {
-        return web.element("#recordGame td b");
+        return web.element("#debug td b");
     }
 
     private WebElement stopButton() {
-        return web.button("#recordGame", AdminSettings.STOP_RECORDING);
+        return web.button("#debug", AdminSettings.STOP_DEBUG);
     }
 
     private WebElement startButton() {
-        return web.button("#recordGame", AdminSettings.START_RECORDING);
+        return web.button("#debug", AdminSettings.START_DEBUG);
     }
 
     public void assertSuspended() {
-        assertEquals("The recording was suspended", recordingStatus().getText());
-        assertEquals(AdminSettings.START_RECORDING, startButton().getAttribute("value"));
+        assertEquals("The debug was suspended", recordingStatus().getText());
+        assertEquals(AdminSettings.START_DEBUG, startButton().getAttribute("value"));
     }
 
     public void assertStarted() {
-        assertEquals("The recording is active", recordingStatus().getText());
-        assertEquals(AdminSettings.STOP_RECORDING, stopButton().getAttribute("value"));
+        assertEquals("The debug in progress", recordingStatus().getText());
+        assertEquals(AdminSettings.STOP_DEBUG, stopButton().getAttribute("value"));
     }
 
     public void stop() {

@@ -56,12 +56,12 @@ public class PauseResume {
         return web.button("#pauseResumeGame", AdminSettings.RESUME_GAME);
     }
 
-    public void assertGameIsPaused() {
+    public void assertPaused() {
         assertEquals("Game in this room was suspended", gameStatus().getText());
         assertEquals(AdminSettings.RESUME_GAME, resumeButton().getAttribute("value"));
     }
 
-    public void assertGameIsActive() {
+    public void assertActive() {
         assertEquals("Game in this room is active", gameStatus().getText());
         assertEquals(AdminSettings.PAUSE_GAME, pauseButton().getAttribute("value"));
     }

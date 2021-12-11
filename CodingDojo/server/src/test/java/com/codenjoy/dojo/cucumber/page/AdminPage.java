@@ -67,6 +67,7 @@ public class AdminPage implements Closeable {
     private final OpenCloseRegistration openCloseRegistration;
     private final GameRoomStatus gameRoomStatus;
     private final GameRecording gameRecording;
+    private final Debug debug;
 
     @Override
     public void close() {
@@ -142,5 +143,9 @@ public class AdminPage implements Closeable {
 
     public GameRecording gameRecording() {
         return gameRecording;
+    }
+
+    public Debug debug() {
+        return debug;
     }
 }

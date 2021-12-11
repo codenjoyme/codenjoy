@@ -101,10 +101,6 @@ public class AdminService {
             playerService.updateAll(settings.getPlayers());
         }
 
-        if (settings.getLoggersLevels() != null) {
-            debugService.setLoggersLevels(settings.getLoggersLevels());
-        }
-
         if (settings.getSemifinal() != null) {
             try {
                 semifinalSettings(room)
@@ -199,6 +195,18 @@ public class AdminService {
 
                 case START_RECORDING:
                     actionLogger.resume();
+                    break;
+
+                case STOP_DEBUG:
+                    debugService.pause();
+                    break;
+
+                case START_DEBUG:
+                    debugService.resume();
+                    break;
+
+                case UPDATE_LOGGERS:
+                    debugService.setLoggersLevels(settings.getLoggersLevels());
                     break;
 
             }

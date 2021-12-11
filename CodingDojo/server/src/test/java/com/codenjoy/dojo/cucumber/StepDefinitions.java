@@ -259,7 +259,7 @@ public class StepDefinitions {
 
     @Then("Game is resumed")
     public void assertGameIsResumed() {
-        admin.pauseResume().assertGameIsActive();
+        admin.pauseResume().assertActive();
     }
 
     @When("Click Pause game")
@@ -269,7 +269,12 @@ public class StepDefinitions {
 
     @Then("Game is paused")
     public void assertGameIsPaused() {
-        admin.pauseResume().assertGameIsPaused();
+        admin.pauseResume().assertPaused();
+    }
+
+    @When("Click Resume game")
+    public void clickResumeGame() {
+        admin.pauseResume().resumeGame();
     }
 
     @When("Click Start game recording")
@@ -279,7 +284,7 @@ public class StepDefinitions {
 
     @Then("Game recording is started")
     public void assertGameRecordingIsStarted() {
-        admin.gameRecording().assertRecordingIsStarted();
+        admin.gameRecording().assertStarted();
     }
 
     @When("Click Stop game recording")
@@ -289,12 +294,27 @@ public class StepDefinitions {
 
     @Then("Game recording is suspended")
     public void assertGameRecordingIsSuspended() {
-        admin.gameRecording().assertRecordingIsSuspended();
+        admin.gameRecording().assertSuspended();
     }
 
-    @When("Click Resume game")
-    public void clickResumeGame() {
-        admin.pauseResume().resumeGame();
+    @When("Click Start debug")
+    public void clickStartDebug() {
+        admin.debug().start();
+    }
+
+    @Then("Debug is started")
+    public void assertDebugIsStarted() {
+        admin.debug().assertStarted();
+    }
+
+    @When("Click Stop debug")
+    public void clickStopDebug() {
+        admin.debug().stop();
+    }
+
+    @Then("Debug is suspended")
+    public void assertDebugIsSuspended() {
+        admin.debug().assertSuspended();
     }
 
     @When("Select game room {string}")

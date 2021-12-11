@@ -224,17 +224,20 @@
     </form:form>
 
     <form:form modelAttribute="data" action="admin#debug" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
         <table class="admin-table" id="debug">
             <tr>
                 <td>
                     <c:choose>
                         <c:when test="${data.debugLog}">
                             <b>The debug in progress</b></br>
-                            <a href="${ctx}/admin/debug/stop?room=${data.room}#debug">Stop debug</a>.
+                            <input type="submit" name="action" value="Stop debug"/>
                         </c:when>
                         <c:otherwise>
                             <b>The debug was suspended</b></br>
-                            <a href="${ctx}/admin/debug/start?room=${data.room}#debug">Start debug</a>.
+                            <input type="submit" name="action" value="Start debug"/>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -257,9 +260,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="game" value="${data.game}"/>
-                    <input type="hidden" name="room" value="${data.room}"/>
-                    <input type="submit" value="Update"/>
+                    <input type="submit" name="action" value="Update loggers"/>
                 </td>
             </tr>
         </table>
