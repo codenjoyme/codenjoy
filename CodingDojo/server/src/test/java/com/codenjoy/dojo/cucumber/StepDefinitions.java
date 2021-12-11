@@ -461,4 +461,14 @@ public class StepDefinitions {
     public void clickSetTimerPeriodButton() {
         admin.timerPeriod().save();
     }
+
+    @When("Create new room {string}")
+    public void createNewRoom(String room) {
+        admin.gameRoomStatus().createNew(room);
+    }
+
+    @When("Remove room")
+    public void removeRoom() {
+        admin.gameRoomStatus().removeCurrent();
+    }
 }

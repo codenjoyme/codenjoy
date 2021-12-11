@@ -14,6 +14,68 @@ Scenario: User cant open admin page but Admin can
   And Open Admin page
   Then Admin page opened with url '/admin?room=first'
 
+Scenario: Admin can create/remove any room but not default
+  Given Login to Admin page
+  Then There are players in rooms '{first=0, sample=0, second=0, third=0}' on the admin page
+
+  # create new room
+  When Select game room 'second'
+  Then Check game is 'second' and room is 'second'
+  When Create new room 'newSecond'
+  Then Check game is 'second' and room is 'newSecond'
+  Then There are players in rooms '{first=0, newSecond=0, sample=0, second=0, third=0}' on the admin page
+
+  When Open login page
+  Then There is list of rooms '[first, newSecond, sample, second, third]' on the login form
+  When Press register button
+  Then There is list of rooms '[first, newSecond, sample, second, third]' on the register form
+
+  # cant delete default game room
+  When Open Admin page
+  When Select game room 'first'
+  Then Check game is 'first' and room is 'first'
+  When Remove room
+  Then Check game is 'first' and room is 'first'
+  Then There are players in rooms '{first=0, newSecond=0, sample=0, second=0, third=0}' on the admin page
+
+  # create another one room
+  When Select game room 'third'
+  Then Check game is 'third' and room is 'third'
+  When Create new room 'newThird'
+  Then Check game is 'third' and room is 'newThird'
+  Then There are players in rooms '{first=0, newSecond=0, newThird=0, sample=0, second=0, third=0}' on the admin page
+
+  When Open login page
+  Then There is list of rooms '[first, newSecond, newThird, sample, second, third]' on the login form
+  When Press register button
+  Then There is list of rooms '[first, newSecond, newThird, sample, second, third]' on the register form
+
+  # delete room
+  When Open Admin page
+  When Select game room 'newSecond'
+  Then Check game is 'second' and room is 'newSecond'
+  When Remove room
+  Then Check game is 'second' and room is 'second'
+  Then There are players in rooms '{first=0, newThird=0, sample=0, second=0, third=0}' on the admin page
+
+  When Open login page
+  Then There is list of rooms '[first, newThird, sample, second, third]' on the login form
+  When Press register button
+  Then There is list of rooms '[first, newThird, sample, second, third]' on the register form
+
+  # delete room
+  When Open Admin page
+  When Select game room 'newThird'
+  Then Check game is 'third' and room is 'newThird'
+  When Remove room
+  Then Check game is 'third' and room is 'third'
+  Then There are players in rooms '{first=0, sample=0, second=0, third=0}' on the admin page
+
+  When Open login page
+  Then There is list of rooms '[first, sample, second, third]' on the login form
+  When Press register button
+  Then There is list of rooms '[first, sample, second, third]' on the register form
+
 Scenario: Admin can close/open registration
   Given Login to Admin page
   Then Registration is active

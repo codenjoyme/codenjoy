@@ -65,6 +65,7 @@ public class AdminPage implements Closeable {
     private final TimerPeriod timerPeriod;
     private final PauseResume pauseResume;
     private final OpenCloseRegistration openCloseRegistration;
+    private final GameRoomStatus gameRoomStatus;
 
     @Override
     public void close() {
@@ -136,5 +137,9 @@ public class AdminPage implements Closeable {
 
     public OpenCloseRegistration openCloseRegistration() {
         return openCloseRegistration;
+    }
+
+    public GameRoomStatus gameRoomStatus() {
+        return gameRoomStatus;
     }
 }
