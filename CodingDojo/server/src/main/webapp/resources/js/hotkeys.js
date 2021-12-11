@@ -53,6 +53,8 @@ function initHotkeys() {
             window.open(contextPath + '/board/log/player/'
                 + setup.playerId + '?code='
                 + setup.code + gameParam('&') + roomParam('&'));
+        } else if (adminKey && ev.keyCode == 73) { // ... + I (logIn)
+            setup.enableJoystick = !setup.enableJoystick;
         } else if (adminKey && ev.keyCode == 66) { // ... + B (Board)
             window.open(contextPath + '/board/room/' + room);
         } else if (adminKey && ev.keyCode == 72) { // ... + H (Help)
