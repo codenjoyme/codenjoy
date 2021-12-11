@@ -56,6 +56,8 @@ public class AdminSettings {
     public static final String START_AUTO_SAVE = "Start auto save";
     public static final String CLOSE_REGISTRATION = "Close registration";
     public static final String OPEN_REGISTRATION = "Open registration";
+    public static final String CLOSE_ROOM_REGISTRATION = "Close room registration";
+    public static final String OPEN_ROOM_REGISTRATION = "Open room registration";
     public static final String SET_TIMER_PERIOD = "Set timer period";
 
     private List<PlayerInfo> players;

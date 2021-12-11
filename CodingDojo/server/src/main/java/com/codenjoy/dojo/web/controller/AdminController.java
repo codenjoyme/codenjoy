@@ -220,22 +220,6 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/room/registration/stop")
-    public String openRoom(HttpServletRequest request) {
-        String room = room(request);
-        roomService.setOpened(room, false);
-        return getAdmin(request);
-    }
-
-    @GetMapping("/room/registration/start")
-    public String closeRoom(HttpServletRequest request) {
-        String room = room(request);
-        roomService.setOpened(room, true);
-        return getAdmin(request);
-    }
-
-    // ----------------
-
     @PostMapping()
     public String saveSettings(AdminSettings settings,
                                BindingResult result,

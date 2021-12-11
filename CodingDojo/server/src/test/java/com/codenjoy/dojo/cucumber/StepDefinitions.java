@@ -246,6 +246,28 @@ public class StepDefinitions {
 
     // ------------
 
+    @Then("Room registration is active")
+    public void assertRoomRegistrationIsActive() {
+        admin.roomRegistration().assertOpened();
+    }
+
+    @Then("Room registration was closed")
+    public void assertRoomRegistrationWasClosed() {
+        admin.roomRegistration().assertClosed();
+    }
+
+    @When("Click Close room registration")
+    public void clickCloseRoomRegistration() {
+        admin.roomRegistration().close();
+    }
+
+    @When("Click Open room registration")
+    public void clickOpenRoomRegistration() {
+        admin.roomRegistration().open();
+    }
+
+    // ------------
+
     @When("Open registration page")
     public void openRegistrationPage() {
         registration.open();

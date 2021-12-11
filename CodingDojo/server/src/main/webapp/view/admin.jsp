@@ -310,22 +310,27 @@
         </table>
     </form:form>
 
-    <table class="admin-table" id="closeRoomRegistration">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${data.roomOpened}">
-                        <b><spring:message key="registration.room.active"/></b></br>
-                        <a href="${ctx}/admin/room/registration/stop?room=${data.room}#closeRoomRegistration">Close room registration</a>.
-                    </c:when>
-                    <c:otherwise>
-                        <b><spring:message key="registration.room.suspended"/></b></br>
-                        <a href="${ctx}/admin/room/registration/start?room=${data.room}#closeRoomRegistration">Open room registration</a>.
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+    <form:form modelAttribute="data" action="admin#roomRegistration" method="POST">
+        <input type="hidden" name="game" value="${data.game}"/>
+        <input type="hidden" name="room" value="${data.room}"/>
+
+        <table class="admin-table" id="roomRegistration">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${data.roomOpened}">
+                            <b><spring:message key="registration.room.active"/></b></br>
+                            <input type="submit" name="action" value="Close room registration"/>
+                        </c:when>
+                        <c:otherwise>
+                            <b><spring:message key="registration.room.suspended"/></b></br>
+                            <input type="submit" name="action" value="Open room registration"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="cleanGame">
         <tr>

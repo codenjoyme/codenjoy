@@ -225,6 +225,14 @@ public class AdminService {
                     playerService.openRegistration();
                     break;
 
+                case CLOSE_ROOM_REGISTRATION:
+                    roomService.setOpened(room, false);
+                    break;
+
+                case OPEN_ROOM_REGISTRATION:
+                    roomService.setOpened(room, true);
+                    break;
+
             }
         }
 

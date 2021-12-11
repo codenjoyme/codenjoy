@@ -124,6 +124,123 @@ Scenario: Admin can close/open registration for all server
   And Try to login as 'user1@mail.com' with 'password1' password in room 'first'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
 
+Scenario: Admin can close/open registration only in this room
+  Given Login to Admin page
+  Then Check game is 'first' and room is 'first'
+  Then Room registration is active
+
+  # close room registration
+  When Click Close room registration
+  Then Room registration was closed
+
+  When Select game room 'second'
+  Then Check game is 'second' and room is 'second'
+  Then Room registration is active
+
+  When Click logout
+
+  When Open registration page
+  # TODO check rooms options
+  And Try to register with: name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'second', room 'second'
+  Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'second'
+  Then User registered in database as 'Registration.User(email=user1@mail.com, id=<PLAYER_ID>, readableName=Stiven Pupkin, approved=1, code=<CODE>, data=Moon|Java|Home|10 years)'
+
+  When Open login page
+  # TODO check rooms options
+  And Try to login as 'user1@mail.com' with 'password1' password in room 'second'
+  Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'second'
+
+  When Click logout
+
+  # open room registration
+  When Login to Admin page
+  Then Check game is 'first' and room is 'first'
+  Then Room registration was closed
+  When Click Open room registration
+  Then Room registration is active
+
+  When Click logout
+
+  When Open registration page
+  And Try to register with: name 'Eva Pupkina', email 'user2@mail.com', password 'password2', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'first', room 'first'
+  Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
+  Then User registered in database as 'Registration.User(email=user2@mail.com, id=<PLAYER_ID>, readableName=Eva Pupkina, approved=1, code=<CODE>, data=Moon|Java|Home|10 years)'
+
+  When Open login page
+  And Try to login as 'user2@mail.com' with 'password2' password in room 'first'
+  Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
+
+Scenario: Admin can close/open registration only in this room but for all games
+  Given Login to Admin page
+  Then Check game is 'first' and room is 'first'
+  Then Room registration is active
+
+  # close room registration for all rooms
+  When Click Close room registration
+  Then Room registration was closed
+
+  When Select game room 'second'
+  Then Room registration is active
+  When Click Close room registration
+  Then Room registration was closed
+
+  When Select game room 'third'
+  Then Room registration is active
+  When Click Close room registration
+  Then Room registration was closed
+
+  When Select game room 'sample'
+  Then Room registration is active
+  When Click Close room registration
+  Then Room registration was closed
+
+  When Click logout
+
+  When Open registration page
+  Then See 'Server registration was closed' registration error
+  And There is no controls on registration form
+
+  When Open login page
+  Then See 'Server registration was closed' login error
+  And There is no controls on login form
+
+  When Open admin login page
+  And Try to login as 'admin@codenjoyme.com' with 'admin' password
+  Then Admin page opened with url '/admin?room=first'
+
+  # open room registration
+  When Open Admin page
+  Then Check game is 'first' and room is 'first'
+  Then Room registration was closed
+  When Click Open room registration
+  Then Room registration is active
+
+  When Select game room 'second'
+  Then Room registration was closed
+  When Click Open room registration
+  Then Room registration is active
+
+  When Select game room 'third'
+  Then Room registration was closed
+  When Click Open room registration
+  Then Room registration is active
+
+  When Select game room 'sample'
+  Then Room registration was closed
+  When Click Open room registration
+  Then Room registration is active
+
+  When Click logout
+
+  When Open registration page
+  And Try to register with: name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years', game 'first', room 'first'
+  Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
+  Then User registered in database as 'Registration.User(email=user1@mail.com, id=<PLAYER_ID>, readableName=Stiven Pupkin, approved=1, code=<CODE>, data=Moon|Java|Home|10 years)'
+
+  When Open login page
+  And Try to login as 'user1@mail.com' with 'password1' password in room 'first'
+  Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>' in room 'first'
+
 Scenario: Admin can pause/resume game only in this room
   Given Login to Admin page
   Then Check game is 'first' and room is 'first'
