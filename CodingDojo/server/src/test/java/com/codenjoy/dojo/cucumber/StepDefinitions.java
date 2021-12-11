@@ -413,7 +413,7 @@ public class StepDefinitions {
 
     @When("Save page url as {string}")
     public void savePageUrlAs(String key) {
-        storage.save(key, page.url());
+        storage.save(key, page.url(false));
     }
 
     @When("Click AllBoards on Leaderboard")

@@ -82,11 +82,11 @@ public class Page {
     }
 
     public void assertUrl(String url) {
-        assertEquals(injectSettings(url), url());
+        assertEquals(injectSettings(url), url(true));
     }
 
-    public String url() {
-        return web.url();
+    public String url(boolean cleanAnchor) {
+        return web.url(cleanAnchor);
     }
 
     public void logout() {
